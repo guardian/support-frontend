@@ -17,10 +17,8 @@ Mappings:
 
   EnvironmentBucketMap:
     CODE:
-      "logs": "supporter-product-logs-code"
       "export": "supporter-product-export-code"
     PROD:
-      "logs": "supporter-product-logs-prod"
       "export": "supporter-product-export-prod"
 
   Constants:
@@ -220,7 +218,7 @@ Resources:
               },
               "WaitSomeTime": {
                 "Type": "Wait",
-                "Seconds": 180,
+                "Seconds": 60,
                 "Next": "FetchResults"
               },
               "FetchResults": {

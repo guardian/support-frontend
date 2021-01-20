@@ -29,9 +29,7 @@ abstract class Handler[IN, OUT](
   private def handleRequestFuture(is: InputStream, os: OutputStream, context: Context): Future[Unit] = {
     for {
       inputData <- Future.fromTry(StreamHandler.fromStream(is))
-      _ = SafeLogger.info(s"START  ${this.getClass} with $inputData")
       result <- handlerFuture(inputData, context)
-      _ = SafeLogger.info(s"FINISH ${this.getClass} with $result")
       _ <- Future.fromTry(StreamHandler.toStream(result, os))
     } yield ()
   }
