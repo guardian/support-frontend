@@ -24,8 +24,9 @@ class ZuoraResultsFetcherLambda extends Handler[ZuoraResultsFetcherState, ZuoraR
       batch = result.batches.headOption.toRight(s"No batches were returned in the batch query response for jobId ${input.jobId}").right.get
       fileId = batch.fileId.toRight(s"Batch.fileId was missing in jobId ${input.jobId}").right.get
       filename = s"${batch.name}-$fileId"
-      fileStream <- service.getResultFileStream(fileId)
-      _ <- S3Service.streamToS3(filename, fileStream)
+      fileResponse <- service.getResultFileResponse(fileId)
+      _ = assert(fileResponse.isSuccessful, s"File download for job with id ${input.jobId} failed with http code ${fileResponse.code}")
+      _ <- S3Service.streamToS3(filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
     } yield {
       SafeLogger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId ${input.jobId}")
       ZuoraResultsFetcherEndState(filename, batch.recordCount)

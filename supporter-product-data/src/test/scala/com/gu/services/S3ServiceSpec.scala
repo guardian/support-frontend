@@ -14,7 +14,7 @@ class S3ServiceSpec extends AsyncFlatSpec with Matchers {
     val initialString = "text".getBytes()
     val stream = new ByteArrayInputStream(initialString)
     S3Service
-      .streamToS3(s"test-file-${UUID.randomUUID().toString}", stream)
+      .streamToS3(s"test-file-${UUID.randomUUID().toString}", stream, initialString.length)
       .map(_ =>
         succeed
       )

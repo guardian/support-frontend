@@ -20,10 +20,10 @@ object S3Service {
     .withS3Client(s3Client)
     .build
 
-  def streamToS3(filename: String, inputStream: InputStream) = {
+  def streamToS3(filename: String, inputStream: InputStream, length: Long) = {
     // Specify server-side encryption.
     val objectMetadata = new ObjectMetadata()
-    objectMetadata.setContentLength(inputStream.available())
+    objectMetadata.setContentLength(length)
     objectMetadata.setSSEAlgorithm(ObjectMetadata.AES_256_SERVER_SIDE_ENCRYPTION)
 
     val upload = transferManager.upload(
