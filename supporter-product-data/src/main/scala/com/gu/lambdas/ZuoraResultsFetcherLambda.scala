@@ -11,7 +11,6 @@ import com.gu.services.{S3Service, ZuoraQuerierService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
-import scala.util.Try
 
 class ZuoraResultsFetcherLambda extends Handler[ZuoraResultsFetcherState, ZuoraResultsFetcherEndState]{
   override protected def handlerFuture(input: ZuoraResultsFetcherState, context: Context) = {
@@ -24,7 +23,7 @@ class ZuoraResultsFetcherLambda extends Handler[ZuoraResultsFetcherState, ZuoraR
       _ = assert(result.status == Completed, s"Job with id ${input.jobId} is still in status ${result.status}")
       batch = result.batches.headOption.toRight(s"No batches were returned in the batch query response for jobId ${input.jobId}").right.get
       fileId = batch.fileId.toRight(s"Batch.fileId was missing in jobId ${input.jobId}").right.get
-      filename = s"${batch.name}-${batch.fileId}"
+      filename = s"${batch.name}-$fileId"
       fileStream <- service.getResultFileStream(fileId)
       _ <- S3Service.streamToS3(filename, fileStream)
     } yield {
