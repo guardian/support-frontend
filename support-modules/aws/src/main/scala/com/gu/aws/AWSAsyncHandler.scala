@@ -29,7 +29,7 @@ class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response](f: (Request,
   }
 
   override def onSuccess(request: Request, result: Response): Unit = {
-    logger.debug(s"Successful result from AWS AsyncHandler $result")
+    logger.debug(s"Successful result from AWS AsyncHandler")
     promise.success(result)
   }
 
