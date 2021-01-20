@@ -8,9 +8,10 @@ import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
 import java.io.InputStream
-import java.time.{LocalDate, ZoneId}
+import java.time.LocalDate
 import scala.collection.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
+import scala.reflect.classTag
 
 class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[BatchQueryErrorResponse] {
@@ -35,7 +36,11 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   }
 
   def getResults(id: String): Future[BatchQueryResponse] =
-    get(s"batch-query/jobs/$id", authHeaders)
+    get(s"batch-query/jobs/$id", authHeaders)(
+      BatchQueryResponse.decoder, // having to explicitly pass these implicits or the compiler gets confused by ambiguous implicit values
+      BatchQueryErrorResponse.decoder,
+      classTag[BatchQueryResponse]
+    )
 
   def getResultFileStream(fileId: String): Future[InputStream] = {
     val endpoint = s"/batch-query/file/$fileId"

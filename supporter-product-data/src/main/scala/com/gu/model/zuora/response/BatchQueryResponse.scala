@@ -3,7 +3,7 @@ package com.gu.model.zuora.response
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 
-case class BatchQueryItem(name: String, fileId: String, recordCount: Integer)
+case class BatchQueryItem(name: String, fileId: String, recordCount: Int)
 
 case class BatchQueryResponse(
   id: String,

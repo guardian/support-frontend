@@ -5,7 +5,7 @@ import io.circe.generic.semiauto.deriveEncoder
 
 case class ZuoraResultsFetcherEndState(
   filename: String,
-  recordCount: Integer
+  recordCount: Int
 )
 
 object ZuoraResultsFetcherEndState{
