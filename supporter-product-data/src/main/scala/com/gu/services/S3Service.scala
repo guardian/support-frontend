@@ -20,7 +20,7 @@ object S3Service {
     .withS3Client(s3Client)
     .build
 
-  def streamToS3(inputStream: InputStream) = {
+  def streamToS3(filename: String, inputStream: InputStream) = {
     // Specify server-side encryption.
     val objectMetadata = new ObjectMetadata()
     objectMetadata.setContentLength(inputStream.available())
@@ -28,7 +28,7 @@ object S3Service {
 
     val upload = transferManager.upload(
       "supporter-product-export-code",
-      s"test-file-${UUID.randomUUID().toString}",
+      filename,
       inputStream,
       objectMetadata
     )

@@ -69,14 +69,18 @@ trait WebServiceHelper[Error <: Throwable] {
    */
   private def request[A](rb: Request.Builder)(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     for {
-      req <- wsPreExecute(rb).map(_.build())
-      _ = SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
-      response <- httpClient(req)
+      response <- getResponse(rb)
       codeBody <- Future.fromTry(getJsonBody(response))
       decodedResponse <- Future.fromTry(decodeBody[A](codeBody))
     } yield decodedResponse
 
   }
+
+  protected def getResponse(rb: Request.Builder) = for {
+    req <- wsPreExecute(rb).map(_.build())
+    _ = SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
+    response <- httpClient(req)
+  } yield response
 
   def getJsonBody[A](response: Response)(implicit ctag: ClassTag[A]): Try[CodeBody] = {
     val code = response.code().toString
@@ -172,7 +176,7 @@ trait WebServiceHelper[Error <: Throwable] {
   }
   // scalastyle:on line.size.limit
 
-  private def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap): Request.Builder =
+  protected def buildRequest(endpoint: String, headers: ParamMap, params: ParamMap): Request.Builder =
     new Request.Builder()
       .url(endpointUrl(endpoint, params))
       .headers(buildHeaders(headers))
