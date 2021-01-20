@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.model.Stage
 import com.gu.model.states.{ZuoraQuerierState, ZuoraResultsFetcherState}
+import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ZuoraQuerierService
 
@@ -16,11 +17,15 @@ class ZuoraQuerierLambda extends Handler[ZuoraQuerierState, ZuoraResultsFetcherS
   override protected def handlerFuture(input: ZuoraQuerierState, context: Context) = {
     val stage = Stage.fromEnvironment
     val today = LocalDate.now(ZoneId.of("UTC"))
+    SafeLogger.info(s"Attempting to submit query to Zuora")
     for {
       config <- ZuoraQuerierConfig.load(stage)
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.postQuery(today)
-    } yield ZuoraResultsFetcherState(today, result.id)
+    } yield {
+      SafeLogger.info(s"Successfully submitted query with jobId ${result.id}")
+      ZuoraResultsFetcherState(today, result.id)
+    }
   }
 
 }
