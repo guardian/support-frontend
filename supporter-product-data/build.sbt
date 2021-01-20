@@ -6,6 +6,7 @@ version := "0.1-SNAPSHOT"
 
 
 libraryDependencies ++= Seq(
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.568",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
