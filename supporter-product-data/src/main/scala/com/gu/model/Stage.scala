@@ -8,7 +8,7 @@ object Stage {
 
   case object DEV extends Stage("DEV")
 
-  case object CODE extends Stage("CODE")
+  case object UAT extends Stage("UAT")
 
   case object PROD extends Stage("PROD")
 
@@ -16,7 +16,7 @@ object Stage {
   implicit val decoder: Decoder[Stage] = Decoder.decodeString.emap(fromString)
 
   def fromString(str: String): Either[String, Stage] =
-    List(DEV, CODE, PROD)
+    List(DEV, UAT, PROD)
       .find(_.value == str)
       .toRight(s"Unknown batch status $str")
 

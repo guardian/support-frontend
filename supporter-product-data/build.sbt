@@ -7,6 +7,7 @@ version := "0.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "software.amazon.awssdk" % "dynamodb" % "2.13.26",
   "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.568",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
@@ -41,13 +42,13 @@ lazy val deployToCode = inputKey[Unit]("Directly update AWS lambda code from DEV
 deployToCode := {
   import scala.sys.process._
   val s3Bucket = "supporter-product-data-dist"
-  val s3Path = "CODE/supporter-product-data.jar"
+  val s3Path = "DEV/supporter-product-data.jar"
   (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
   List(
     "-SupporterProductDataQuerier-",
     "-SupporterProductDataFetcher-"
   ).foreach(functionPartial =>
-    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
+    s"aws lambda update-function-code --function-name support${functionPartial}DEV --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
   )
 
 }

@@ -7,8 +7,9 @@ Parameters:
     Type: String
     AllowedValues:
       - PROD
-      - CODE
-    Default: CODE
+      - UAT
+      - DEV
+    Default: DEV
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
@@ -199,6 +200,7 @@ Resources:
   SupporterProductDataCODE:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
+      StateMachineName: supporter-product-data-UAT
       DefinitionString:
         !Sub
         - |-
@@ -241,9 +243,56 @@ Resources:
         }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
+  SupporterProductDataUAT:
+    Type: "AWS::StepFunctions::StateMachine"
+    Properties:
+      StateMachineName: supporter-product-data-UAT
+      DefinitionString:
+        !Sub
+        - |-
+          {
+            "StartAt": "QueryZuora",
+            "States": {
+              "QueryZuora": {
+                "Type": "Task",
+                "Resource": "${querierArn}",
+                "Next": "WaitSomeTime",
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 30,
+                    "MaxAttempts": 3
+                  }]
+              },
+              "WaitSomeTime": {
+                "Type": "Wait",
+                "Seconds": 180,
+                "Next": "FetchResults"
+              },
+              "FetchResults": {
+                "Type": "Task",
+                "Resource": "${fetcherArn}",
+                "End": true,
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 60,
+                    "MaxAttempts": 20,
+                    "BackoffRate": 1.0
+                  }]
+              }
+            }
+          }
+        - {
+          querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
+          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ]
+        }
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
   SupporterProductDataPROD:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
+      StateMachineName: supporter-product-data-PROD
       DefinitionString:
         !Sub
         - |-

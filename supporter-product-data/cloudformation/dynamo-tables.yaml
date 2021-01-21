@@ -4,6 +4,10 @@ Parameters:
   TouchpointBackend:
     Description: Environment name ( DEV, UAT or PROD)
     Type: String
+    AllowedValues:
+      - PROD
+      - UAT
+      - DEV
     Default: DEV
 Mappings:
   StageVariables:
