@@ -17,6 +17,7 @@ object ExportZoqlQueries {
             FROM
             rateplan
             WHERE
+            ${ZuoraFieldNames.identityId} != null AND
             Subscription.Status = 'Active' AND
             ${ZuoraFieldNames.termEndDate} >= '$date'
     """

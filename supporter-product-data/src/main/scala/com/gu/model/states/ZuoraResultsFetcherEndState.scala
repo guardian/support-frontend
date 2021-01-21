@@ -1,7 +1,7 @@
 package com.gu.model.states
 
-import io.circe.Encoder
-import io.circe.generic.semiauto.deriveEncoder
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 case class ZuoraResultsFetcherEndState(
   filename: String,
@@ -10,4 +10,5 @@ case class ZuoraResultsFetcherEndState(
 
 object ZuoraResultsFetcherEndState{
   implicit val encoder: Encoder[ZuoraResultsFetcherEndState] = deriveEncoder
+  implicit val decoder: Decoder[ZuoraResultsFetcherEndState] = deriveDecoder
 }
