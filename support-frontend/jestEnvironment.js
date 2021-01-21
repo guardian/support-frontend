@@ -1,4 +1,4 @@
-const JSDOMEnvironment = require('jest-environment-jsdom');
+const JSDOMEnvironment = require('jest-environment-jsdom-fifteen');
 
 module.exports = class JSDomGlobalEnvironment extends JSDOMEnvironment {
   constructor(config) {

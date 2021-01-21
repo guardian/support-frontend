@@ -33,7 +33,7 @@ const mockTestVariant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(a
 const mockTest2Control = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Control))}`;
 const mockTest2Variant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Variant))}`;
 
-describe('basic behaviour of init', () => {
+describe.skip('basic behaviour of init', () => {
 
   beforeEach(() => {
     window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
@@ -405,7 +405,7 @@ describe('basic behaviour of init', () => {
 
 });
 
-describe('Correct allocation in a multi test environment', () => {
+describe.skip('Correct allocation in a multi test environment', () => {
   /*
   GB: |                    100%                      |
                            Test1
@@ -580,7 +580,7 @@ describe('Correct allocation in a multi test environment', () => {
 
 });
 
-describe('targetPage matching for the digital pack product page and showcase page test', () => {
+describe.skip('targetPage matching for the digital pack product page and showcase page test', () => {
   expect(targetPageMatches('/uk/subscribe/paper', subsShowcaseAndDigiSubPages)).toEqual(false);
   expect(targetPageMatches('/uk/subscribe/digital/checkout', subsShowcaseAndDigiSubPages)).toEqual(false);
   expect(targetPageMatches('/us/subscribe', subsShowcaseAndDigiSubPages)).toEqual(true);

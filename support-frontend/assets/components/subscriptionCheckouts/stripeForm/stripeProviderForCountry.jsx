@@ -27,6 +27,7 @@ type PropTypes = {
 function StripeProviderForCountry(props: PropTypes) {
   const [stripeObject, setStripeObject] = useState<stripeJs.Stripe | null>(null);
 
+
   const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
 
   useEffect(() => {
