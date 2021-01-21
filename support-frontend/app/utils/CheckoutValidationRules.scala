@@ -224,7 +224,7 @@ object PaperValidation {
     "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9",
     "WC1", "WC1A", "WC1B", "WC1E", "WC1H", "WC1N", "WC1R", "WC1V", "WC1X", "WC2", "WC2A", "WC2B", "WC2E", "WC2H", "WC2N", "WC2R",
     "WD1", "WD17", "WD18", "WD19", "WD23", "WD24", "WD25", "WD3", "WD4", "WD5", "WD6", "WD7",
-    "TN16",
+    "TN16"
   )
 
   val M25_NEW_PREFIXES = List(
