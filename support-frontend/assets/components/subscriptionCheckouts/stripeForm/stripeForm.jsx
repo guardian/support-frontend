@@ -156,28 +156,26 @@ const StripeForm = (props: StripeFormPropTypes) => {
     });
   };
 
-  const fetchPaymentIntent = (token) => {
-    fetchJson(
-      routes.stripeSetupIntentRecaptcha,
-      requestOptions(
-        { token, stripePublicKey: props.stripeKey, isTestUser: props.isTestUser },
-        'same-origin',
-        'POST',
-        props.csrf,
-      ),
-    )
-      .then((result) => {
-        if (result.client_secret) {
-          setSetupIntentClientSecret(result.client_secret);
-        } else {
-          throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntentRecaptcha}`);
-        }
-      }).catch((error) => {
-        logException(`Error getting Stripe client secret for subscription: ${error}`);
+  const fetchPaymentIntent = token => fetchJson(
+    routes.stripeSetupIntentRecaptcha,
+    requestOptions(
+      { token, stripePublicKey: props.stripeKey, isTestUser: props.isTestUser },
+      'same-origin',
+      'POST',
+      props.csrf,
+    ),
+  )
+    .then((result) => {
+      if (result.client_secret) {
+        setSetupIntentClientSecret(result.client_secret);
+      } else {
+        throw new Error(`Missing client_secret field in response from ${routes.stripeSetupIntentRecaptcha}`);
+      }
+    }).catch((error) => {
+      logException(`Error getting Stripe client secret for subscription: ${error}`);
 
-        setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }]);
-      });
-  };
+      setCardErrors(prevData => [...prevData, { field: 'cardNumber', message: appropriateErrorMessage('internal_error') }]);
+    });
 
   // Creates a new setupIntent upon recaptcha verification
   const setupRecurringRecaptchaCallback = () => {
@@ -192,9 +190,9 @@ const StripeForm = (props: StripeFormPropTypes) => {
     });
   };
 
-  const setupRecurringHandlers = (): void => {
+  const setupRecurringHandlers = async () => {
     if (!window.guardian.recaptchaEnabled) {
-      fetchPaymentIntent('dummy');
+      await fetchPaymentIntent('dummy');
     } else if (window.grecaptcha && window.grecaptcha.render) {
       setupRecurringRecaptchaCallback();
     } else {

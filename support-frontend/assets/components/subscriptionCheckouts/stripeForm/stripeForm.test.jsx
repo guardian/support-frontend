@@ -1,12 +1,12 @@
 import '__mocks__/stripeMock';
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
 
 describe('Stripe Form', () => {
   let props;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     props = {
       country: 'GB',
       isTestUser: true,
@@ -24,7 +24,10 @@ describe('Stripe Form', () => {
       json: async () => ({ client_secret: 'super secret' }),
     });
 
-    render(<StripeProviderForCountry {...props} />);
+    // Async render as StripeForm does a bunch of internal async set up
+    await act(async () => {
+      render(<StripeProviderForCountry {...props} />);
+    });
   });
 
   it('should have labels', async () => {
