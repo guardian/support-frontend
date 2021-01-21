@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Supporter product data tables
+Parameters:
+  TouchpointBackend:
+    Description: Environment name ( DEV, UAT or PROD)
+    Type: String
+    Default: DEV
+Mappings:
+  StageVariables:
+    DEV:
+      DynamoWriteCapacity: 1
+      DynamoReadCapacity: 5
+    UAT:
+      DynamoWriteCapacity: 1
+      DynamoReadCapacity: 5
+    PROD:
+      DynamoWriteCapacity: 10
+      DynamoReadCapacity: 200
+Resources:
+  SupporterProductDataTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "identityId"
+          AttributeType: "S"
+        - AttributeName: "ratePlanId"
+          AttributeType: "S"
+      KeySchema:
+        # https://www.dynamodbguide.com/key-concepts/#primary-key
+        # partition key
+        - AttributeName: "identityId"
+          KeyType: "HASH"
+        # sort key
+        - AttributeName: "ratePlanId"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits:
+          Fn::FindInMap: [ StageVariables, { Ref: TouchpointBackend }, DynamoReadCapacity ]
+        WriteCapacityUnits:
+          Fn::FindInMap: [ StageVariables, { Ref: TouchpointBackend }, DynamoWriteCapacity ]
+      SSESpecification:
+        SSEEnabled: true
+      TableName: !Sub SupporterProductData-${TouchpointBackend}
+      TimeToLiveSpecification:
+        AttributeName: "TTLTimestamp"
+        Enabled: true
+Outputs:
+  SupporterProductDataTable:
+    Description: This Dynamo table is used to store rate plan information about supporters
+    Value: !GetAtt [ SupporterProductDataTable, "Arn" ]
+    Export:
+      Name: !Sub ${AWS::StackName}-SupporterProductDataTable
