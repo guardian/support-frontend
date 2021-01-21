@@ -1,7 +1,9 @@
 package com.gu.services
 
 import com.gu.aws.ProfileName
-import com.gu.model.dynamo.{AttributeNames, SupporterRatePlanItem}
+import com.gu.model.FieldsToExport
+import com.gu.model.FieldsToExport._
+import com.gu.model.dynamo.SupporterRatePlanItem
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
@@ -18,20 +20,20 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
 
   def writeItem(item: SupporterRatePlanItem)(implicit executionContext: ExecutionContext) = {
     val key = Map(
-      AttributeNames.identityId -> AttributeValue.builder.s(item.identityId).build,
-      AttributeNames.ratePlanId -> AttributeValue.builder.s(item.ratePlanId).build
+      identityId.dynamoName -> AttributeValue.builder.s(item.identityId).build,
+      ratePlanId.dynamoName -> AttributeValue.builder.s(item.ratePlanId).build
     ).asJava
 
     val updateExpression =
       s"""SET
-          ${AttributeNames.productRatePlanId} = :${AttributeNames.productRatePlanId},
-          ${AttributeNames.ratePlanName} = :${AttributeNames.ratePlanName},
-          ${AttributeNames.termEndDate} = :${AttributeNames.termEndDate}
+          ${productRatePlanId.dynamoName} = :${productRatePlanId.dynamoName},
+          ${ratePlanName.dynamoName} = :${ratePlanName.dynamoName},
+          ${termEndDate.dynamoName} = :${termEndDate.dynamoName}
           """
     val attributeValues = Map(
-      ":" + AttributeNames.productRatePlanId -> AttributeValue.builder.s(item.productRatePlanId).build,
-      ":" + AttributeNames.ratePlanName -> AttributeValue.builder.s(item.ratePlanName).build,
-      ":" + AttributeNames.termEndDate -> AttributeValue.builder.s(item.termEndDate.format(DateTimeFormatter.ISO_DATE)).build,
+      ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
+      ":" + ratePlanName.dynamoName -> AttributeValue.builder.s(item.ratePlanName).build,
+      ":" + termEndDate.dynamoName -> AttributeValue.builder.s(item.termEndDate.format(DateTimeFormatter.ISO_DATE)).build,
     ).asJava
 
     val updateItemRequest = UpdateItemRequest.builder
