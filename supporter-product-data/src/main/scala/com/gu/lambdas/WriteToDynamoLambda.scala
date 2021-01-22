@@ -10,9 +10,11 @@ import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{DynamoDBService, S3Service}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 import kantan.csv._
 import kantan.csv.ops._
+
+import scala.concurrent.duration.DurationInt
 
 
 class WriteToDynamoLambda extends Handler[WriteToDynamoState, Unit] {
@@ -20,13 +22,13 @@ class WriteToDynamoLambda extends Handler[WriteToDynamoState, Unit] {
     writeToDatabase(Stage.fromEnvironment, input.filename)
 }
 
-object WriteToDynamoLambda{
+object WriteToDynamoLambda {
   def writeToDatabase(stage: Stage, filename: String) = {
     val csvStream = S3Service.streamFromS3(filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val dynamoDBService = DynamoDBService(stage)
     csvReader.foreach {
-      case Right(supporterRatePlanItem) => dynamoDBService.writeItem(supporterRatePlanItem)
+      case Right(supporterRatePlanItem) => Await.ready(dynamoDBService.writeItem(supporterRatePlanItem), 20.seconds) //TODO: see if there is a way to paralellise
       case Left(error) => SafeLogger.error(scrub"A read error occurred while trying to read an item from $filename", error)
     }
     Future.successful(())

@@ -43,11 +43,9 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
       .expressionAttributeValues(attributeValues)
       .build
 
-    val eventualUpdateItemResponse = client.updateItem(updateItemRequest).toScala.recoverWith {
+    client.updateItem(updateItemRequest).toScala.recoverWith {
       case cex: CompletionException => Future.failed(cex.getCause)
     }
-
-    eventualUpdateItemResponse.map(_ => ())
   }
 }
 
