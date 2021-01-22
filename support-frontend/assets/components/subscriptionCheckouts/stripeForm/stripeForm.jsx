@@ -273,6 +273,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     checkRecaptcha();
 
     if (stripe && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError) {
+      console.log('what up');
       setDisableButton(true);
       if (setupIntentClientSecret) {
         handleCardSetupAndPay();

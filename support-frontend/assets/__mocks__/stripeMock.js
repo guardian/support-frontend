@@ -23,7 +23,7 @@ const mockStripe = () => ({
   createPaymentMethod: jest.fn(),
   confirmCardPayment: jest.fn(),
   confirmCardSetup: jest.fn(),
-  handleCardSetup: jest.fn().mockResolvedValue({}),
+  handleCardSetup: jest.fn().mockResolvedValue({ setupIntent: { payment_method: 'mock' } }),
   paymentRequest: jest.fn(),
   _registerWrapper: jest.fn(),
 });
