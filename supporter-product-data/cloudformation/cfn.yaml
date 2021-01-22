@@ -159,7 +159,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub membership-SupporterProductDataQuerier-${Stage}
+        !Sub support-SupporterProductDataQuerier-${Stage}
       Description: "Trigger zuora export"
       Handler: "com.gu.lambdas.ZuoraQuerierLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
@@ -177,7 +177,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub membership-SupporterProductDataFetcher-${Stage}
+        !Sub support-SupporterProductDataFetcher-${Stage}
       Description: "Fetch zuora export results"
       Handler: "com.gu.lambdas.ZuoraResultsFetcherLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
@@ -195,8 +195,8 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub membership-SupporterProductDataFetcher-${Stage}
-      Description: "Fetch zuora export results"
+        !Sub support-SupporterProductDataWriteToDynamo-${Stage}
+      Description: "Write results of Zuora query to DynamoDB"
       Handler: "com.gu.lambdas.ZuoraResultsFetcherLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
@@ -233,7 +233,7 @@ Resources:
   SupporterProductDataCODE:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
-      StateMachineName: supporter-product-data-UAT
+      StateMachineName: supporter-product-data-CODE
       DefinitionString:
         !Sub
         - |-
@@ -259,7 +259,7 @@ Resources:
               "FetchResults": {
                 "Type": "Task",
                 "Resource": "${fetcherArn}",
-                "End": true,
+                "Next": "WriteToDynamo",
                 "Retry": [
                    {
                     "ErrorEquals": ["States.ALL"],
@@ -267,12 +267,25 @@ Resources:
                     "MaxAttempts": 20,
                     "BackoffRate": 1.0
                   }]
+              },
+              "WriteToDynamo": {
+                "Type": "Task",
+                "Resource": "${dynamoArn}",
+                "End": true,
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 30,
+                    "MaxAttempts": 3,
+                    "BackoffRate": 1.0
+                  }]
               }
             }
           }
         - {
           querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
-          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ]
+          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ],
+          dynamoArn: !GetAtt [ WriteToDynamoLambda, Arn ]
         }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
@@ -299,13 +312,13 @@ Resources:
               },
               "WaitSomeTime": {
                 "Type": "Wait",
-                "Seconds": 180,
+                "Seconds": 60,
                 "Next": "FetchResults"
               },
               "FetchResults": {
                 "Type": "Task",
                 "Resource": "${fetcherArn}",
-                "End": true,
+                "Next": "WriteToDynamo",
                 "Retry": [
                    {
                     "ErrorEquals": ["States.ALL"],
@@ -313,12 +326,25 @@ Resources:
                     "MaxAttempts": 20,
                     "BackoffRate": 1.0
                   }]
+              },
+              "WriteToDynamo": {
+                "Type": "Task",
+                "Resource": "${dynamoArn}",
+                "End": true,
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 30,
+                    "MaxAttempts": 3,
+                    "BackoffRate": 1.0
+                  }]
               }
             }
           }
         - {
           querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
-          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ]
+          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ],
+          dynamoArn: !GetAtt [ WriteToDynamoLambda, Arn ]
         }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
@@ -345,13 +371,13 @@ Resources:
               },
               "WaitSomeTime": {
                 "Type": "Wait",
-                "Seconds": 180,
+                "Seconds": 60,
                 "Next": "FetchResults"
               },
               "FetchResults": {
                 "Type": "Task",
                 "Resource": "${fetcherArn}",
-                "End": true,
+                "Next": "WriteToDynamo",
                 "Retry": [
                    {
                     "ErrorEquals": ["States.ALL"],
@@ -359,12 +385,25 @@ Resources:
                     "MaxAttempts": 20,
                     "BackoffRate": 1.0
                   }]
+              },
+              "WriteToDynamo": {
+                "Type": "Task",
+                "Resource": "${dynamoArn}",
+                "End": true,
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 30,
+                    "MaxAttempts": 3,
+                    "BackoffRate": 1.0
+                  }]
               }
             }
           }
         - {
           querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
-          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ]
+          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ],
+          dynamoArn: !GetAtt [ WriteToDynamoLambda, Arn ]
         }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
