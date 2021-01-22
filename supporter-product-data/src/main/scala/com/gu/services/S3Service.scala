@@ -2,7 +2,7 @@ package com.gu.services
 
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
-import com.amazonaws.services.s3.model.ObjectMetadata
+import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata}
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
 import com.gu.aws.CredentialsProvider
 
@@ -12,6 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, blocking}
 
 object S3Service {
+  val bucketName = "supporter-product-export-code"
   val s3Client = AmazonS3ClientBuilder.standard
     .withRegion(Regions.EU_WEST_1)
     .withCredentials(CredentialsProvider)
@@ -27,7 +28,7 @@ object S3Service {
     objectMetadata.setSSEAlgorithm(ObjectMetadata.AES_256_SERVER_SIDE_ENCRYPTION)
 
     val upload = transferManager.upload(
-      "supporter-product-export-code",
+      bucketName,
       filename,
       inputStream,
       objectMetadata
@@ -36,5 +37,10 @@ object S3Service {
     Future(
       blocking(upload.waitForUploadResult())
     )
+  }
+
+  def streamFromS3(filename: String) = {
+    val fullObject = s3Client.getObject(new GetObjectRequest(bucketName, filename))
+    fullObject.getObjectContent
   }
 }

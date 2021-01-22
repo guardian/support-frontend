@@ -42,18 +42,9 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
       classTag[BatchQueryResponse]
     )
 
-  def getResultFileStream(fileId: String) = {
-    val endpoint = s"/batch-query/file/$fileId"
-    getResponse(buildRequest(endpoint, authHeaders, empty)).map(_.body().byteStream())
-  }
-
   def getResultFileResponse(fileId: String) = {
     val endpoint = s"/batch-query/file/$fileId"
     getResponse(buildRequest(endpoint, authHeaders, empty))
   }
 
-  def getResultFileString(fileId: String) = {
-    val endpoint = s"/batch-query/file/$fileId"
-    getResponse(buildRequest(endpoint, authHeaders, empty)).map(_.body.string)
-  }
 }
