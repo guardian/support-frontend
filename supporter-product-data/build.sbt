@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1",
-  "com.nrinaudo" %% "kantan.csv" % "0.6.1"
+  "com.nrinaudo" %% "kantan.csv-generic" % "0.6.1"
 )
 
 riffRaffPackageType := assembly.value

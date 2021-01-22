@@ -1,7 +1,7 @@
 package com.gu.services
 
 import com.gu.aws.ProfileName
-import com.gu.model.FieldsToExport
+import com.gu.model.{FieldsToExport, Stage}
 import com.gu.model.FieldsToExport._
 import com.gu.model.dynamo.SupporterRatePlanItem
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
@@ -33,7 +33,7 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
     val attributeValues = Map(
       ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + ratePlanName.dynamoName -> AttributeValue.builder.s(item.ratePlanName).build,
-      ":" + termEndDate.dynamoName -> AttributeValue.builder.s(item.termEndDate.format(DateTimeFormatter.ISO_DATE)).build,
+      ":" + termEndDate.dynamoName -> AttributeValue.builder.s(item.termEndDate).build,
     ).asJava
 
     val updateItemRequest = UpdateItemRequest.builder
@@ -63,5 +63,5 @@ object DynamoDBService{
     .region(Region.EU_WEST_1)
     .build
 
-  def apply(stage: String) = new DynamoDBService(dynamoDBClient, s"SupporterProductData-$stage")
+  def apply(stage: Stage) = new DynamoDBService(dynamoDBClient, s"SupporterProductData-${stage.value}")
 }

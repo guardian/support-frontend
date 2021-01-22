@@ -11,8 +11,8 @@ object ExportZoqlQueries {
     s"""SELECT
           ${identityId.zuoraName},
           ${ratePlanId.zuoraName},
-          ${ratePlanName.zuoraName},
           ${productRatePlanId.zuoraName},
+          ${ratePlanName.zuoraName},
           ${termEndDate.zuoraName}
             FROM
             rateplan

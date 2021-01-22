@@ -1,12 +1,24 @@
 package com.gu.model.dynamo
 
-import java.time.LocalDate
+import com.gu.model.FieldsToExport._
+import kantan.csv.HeaderDecoder
 
 case class SupporterRatePlanItem(
   identityId: String, //Unique identifier for user
-  productRatePlanId: String, //Unique identifier for this product purchase
   ratePlanId: String, //Unique identifier for this product purchase for this user
-  ratePlanName: String,
-  termEndDate: LocalDate //Date that this subscription term ends
+  productRatePlanId: String, //Unique identifier for the product in this rate plan
+  ratePlanName: String, //Name of the product in this rate plan
+  termEndDate: String //Date that this subscription term ends
 )
+
+object SupporterRatePlanItem {
+  implicit val decoder: HeaderDecoder[SupporterRatePlanItem] =
+    HeaderDecoder.decoder(
+      identityId.zuoraName,
+      ratePlanId.zuoraName,
+      productRatePlanId.zuoraName,
+      ratePlanName.zuoraName,
+      termEndDate.zuoraName
+    )(SupporterRatePlanItem.apply)
+}
 
