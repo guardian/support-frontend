@@ -1,9 +1,10 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.gu.lambdas.WriteToDynamoLambda.writeToDatabase
 import com.gu.model.Stage
 import com.gu.model.dynamo.SupporterRatePlanItem
-import com.gu.model.states.ZuoraResultsFetcherEndState
+import com.gu.model.states.WriteToDynamoState
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{DynamoDBService, S3Service}
@@ -14,17 +15,20 @@ import kantan.csv._
 import kantan.csv.ops._
 
 
-class WriteToDatabaseLambda extends Handler[ZuoraResultsFetcherEndState, Unit] {
+class WriteToDynamoLambda extends Handler[WriteToDynamoState, Unit] {
+  override protected def handlerFuture(input: WriteToDynamoState, context: Context) =
+    writeToDatabase(Stage.fromEnvironment, input.filename)
+}
 
-  override protected def handlerFuture(input: ZuoraResultsFetcherEndState, context: Context) = {
-    val csvStream = S3Service.streamFromS3(input.filename)
+object WriteToDynamoLambda{
+  def writeToDatabase(stage: Stage, filename: String) = {
+    val csvStream = S3Service.streamFromS3(filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
-    val dynamoDBService = DynamoDBService(Stage.fromEnvironment)
+    val dynamoDBService = DynamoDBService(stage)
     csvReader.foreach {
       case Right(supporterRatePlanItem) => dynamoDBService.writeItem(supporterRatePlanItem)
-      case Left(error) => SafeLogger.error(scrub"A read error occurred while trying to read an item from ${input.filename}", error)
+      case Left(error) => SafeLogger.error(scrub"A read error occurred while trying to read an item from $filename", error)
     }
     Future.successful(())
   }
-
 }
