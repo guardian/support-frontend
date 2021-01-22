@@ -29,7 +29,7 @@ type OphanAction =
   | 'VOTE'
   | 'CLICK';
 
-type OphanComponentType =
+export type OphanComponentType =
   | 'READERS_QUESTIONS_ATOM'
   | 'QANDA_ATOM'
   | 'PROFILE_ATOM'

@@ -90,12 +90,11 @@ const getPlans = (
       title: getTitle(productOption),
       price: showPrice(price),
       href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-      onClick: sendTrackingEventsOnClick(
-        'subscribe_now_cta',
-        'Paper',
-        null,
-        [productOption, fulfilmentOption].join(),
-      ),
+      onClick: sendTrackingEventsOnClick({
+        id: `subscribe_now_cta_${[productOption, fulfilmentOption].join()}`,
+        product: 'Paper',
+        componentType: 'ACQUISITIONS_BUTTON',
+      }),
       buttonCopy: 'Subscribe now',
       priceCopy: getPriceCopyString(price, copy[fulfilmentOption][productOption]),
       offerCopy: getOfferText(price, productOption),

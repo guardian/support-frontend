@@ -73,7 +73,11 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             nudgeIcon
             aria-label="Click to download the Guardian Daily app on the Apple App Store"
             href={getDailyEditionUrl(countryGroupId)}
-            onClick={sendTrackingEventsOnClick('checkout_thankyou_daily_edition', 'DigitalPack', null)}
+            onClick={sendTrackingEventsOnClick({
+              id: 'checkout_thankyou_daily_edition',
+              product: 'DigitalPack',
+              componentType: 'ACQUISITIONS_BUTTON',
+            })}
           >
             <span css={largerFormatText}>The Guardian Editions app for iOS</span>
             <span css={smallFormatText}>Editions app for iOS</span>
@@ -86,7 +90,11 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             nudgeIcon
             aria-label="Click to download the Guardian Daily app on Google Play"
             href={androidDailyUrl}
-            onClick={sendTrackingEventsOnClick('checkout_thankyou_daily_edition', 'DigitalPack', null)}
+            onClick={sendTrackingEventsOnClick({
+              id: 'checkout_thankyou_daily_edition',
+              product: 'DigitalPack',
+              componentType: 'ACQUISITIONS_BUTTON',
+            })}
           >
             <span css={largerFormatText}>The Guardian Editions app for Android</span>
             <span css={smallFormatText}>Editions app for Android</span>
@@ -109,7 +117,11 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             nudgeIcon
             aria-label="Click to download the app on the Apple App Store"
             href={getIosAppUrl(countryGroupId)}
-            onClick={sendTrackingEventsOnClick('checkout_thankyou_app_store', 'DigitalPack', null)}
+            onClick={sendTrackingEventsOnClick({
+              id: 'checkout_thankyou_app_store',
+              product: 'DigitalPack',
+              componentType: 'ACQUISITIONS_BUTTON',
+            })}
           >
             <span css={largerFormatText}>The Guardian Live app for iOS</span>
             <span css={smallFormatText}>Live app for iOS</span>
@@ -122,7 +134,11 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             nudgeIcon
             aria-label="Click to download the app on the Google Play store"
             href={androidAppUrl}
-            onClick={sendTrackingEventsOnClick('checkout_thankyou_play_store', 'DigitalPack', null)}
+            onClick={sendTrackingEventsOnClick({
+              id: 'checkout_thankyou_play_store',
+              product: 'DigitalPack',
+              componentType: 'ACQUISITIONS_BUTTON',
+            })}
           >
             <span css={largerFormatText}>The Guardian Live app for Android</span>
             <span css={smallFormatText}>Live app for Android</span>
@@ -145,7 +161,11 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
           nudgeIcon
           aria-label="Click to sign in to the website"
           href="https://www.theguardian.com/"
-          onClick={sendTrackingEventsOnClick('checkout_thankyou_sign_in', 'DigitalPack', null)}
+          onClick={sendTrackingEventsOnClick({
+            id: 'checkout_thankyou_sign_in',
+            product: 'DigitalPack',
+            componentType: 'ACQUISITIONS_BUTTON',
+          })}
         >
           <span css={largerFormatText}>Sign into the website</span>
           <span css={smallFormatText}>Sign in</span>

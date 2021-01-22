@@ -96,7 +96,11 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
             </p>
             <ThemeProvider theme={buttonBrand}>
               <LinkButton
-                onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)}
+                onClick={sendTrackingEventsOnClick({
+                  id: 'options_cta_click',
+                  product: 'GuardianWeekly',
+                  componentType: 'ACQUISITIONS_BUTTON',
+              })}
                 priority="tertiary"
                 iconSide="right"
                 icon={<SvgArrowDownStraight />}
