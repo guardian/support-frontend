@@ -114,6 +114,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     },
   });
   const [disableButton, setDisableButton] = useState<boolean>(false);
+  const [submitReady, setSubmitReady] = useState<boolean>(false);
 
   const stripe = stripeJs.useStripe();
   const elements = stripeJs.useElements();
@@ -121,13 +122,6 @@ const StripeForm = (props: StripeFormPropTypes) => {
   /**
    * Handlers
    */
-
-  const getAllCardErrors = () => ['cardNumber', 'cardExpiry', 'cardCvc'].reduce((acc, field) => {
-    if (cardFieldsData[field].error.length > 0) {
-      acc.push({ field: [field], message: cardFieldsData[field].error });
-    }
-    return acc;
-  }, []);
 
   const handleStripeError = (errorData: any): void => {
     setPaymentWaiting(false);
@@ -201,27 +195,30 @@ const StripeForm = (props: StripeFormPropTypes) => {
   };
 
   const handleCardErrors = () => {
-    // eslint-disable-next-line array-callback-return
-    ['cardNumber', 'cardExpiry', 'cardCvc'].map((field) => {
-      if (cardFieldsData[field].empty === true) {
-        setCardFieldsData(prevData => ({
-          ...prevData,
-          [field]: {
-            ...prevData[field],
-            error: cardFieldsData[field].errorEmpty,
-          },
-        }));
-      } else if (!cardFieldsData[field].complete) {
-        setCardFieldsData(prevData => ({
-          ...prevData,
-          [field]: {
-            ...prevData[field],
-            error: prevData[field].errorIncomplete,
-          },
-        }));
+    const newCardFieldsErrors = [];
+    const newCardFieldsData = Object.entries(cardFieldsData).reduce((newData, [cardFieldName, existingFieldData]) => {
+      if (existingFieldData.empty) {
+        const error = existingFieldData.errorEmpty;
+        // eslint-disable-next-line no-param-reassign
+        newData[cardFieldName] = {
+          ...existingFieldData,
+          error,
+        };
+        newCardFieldsErrors.push({ field: [cardFieldName], message: error });
+      } else if (!existingFieldData.complete) {
+        const error = existingFieldData.errorIncomplete;
+        // eslint-disable-next-line no-param-reassign
+        newData[cardFieldName] = {
+          ...existingFieldData,
+          error,
+        };
+        newCardFieldsErrors.push({ field: [cardFieldName], message: error });
       }
-      setCardErrors(getAllCardErrors());
-    });
+      return newData;
+    }, { ...cardFieldsData });
+
+    setCardFieldsData(newCardFieldsData);
+    setCardErrors(newCardFieldsErrors);
   };
 
   const handleChange = (event) => {
@@ -271,18 +268,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     props.validateForm();
     handleCardErrors();
     checkRecaptcha();
-
-    if (stripe && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError) {
-      console.log('what up');
-      setDisableButton(true);
-      if (setupIntentClientSecret) {
-        handleCardSetupAndPay();
-      } else if (recaptchaCompleted) {
-        // User has completed the form and recaptcha, but we're still waiting for the setupIntentClientSecret to
-        // come back. A hook will complete subscription once the setupIntentClientSecret is available.
-        setPaymentWaiting(true);
-      }
-    }
+    setSubmitReady(true);
   };
 
   /**
@@ -302,6 +288,19 @@ const StripeForm = (props: StripeFormPropTypes) => {
       handleCardSetupAndPay();
     }
   }, [setupIntentClientSecret]);
+
+  useEffect(() => {
+    if (stripe && submitReady && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError) {
+      setDisableButton(true);
+      if (setupIntentClientSecret) {
+        handleCardSetupAndPay();
+      } else if (recaptchaCompleted) {
+        // User has completed the form and recaptcha, but we're still waiting for the setupIntentClientSecret to
+        // come back. A hook will complete subscription once the setupIntentClientSecret is available.
+        setPaymentWaiting(true);
+      }
+    }
+  }, [submitReady, cardErrors, recaptchaError]);
 
   /**
    * Rendering

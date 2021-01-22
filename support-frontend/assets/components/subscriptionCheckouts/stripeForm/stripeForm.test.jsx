@@ -7,16 +7,18 @@ describe('Stripe Form', () => {
   let props;
   let submitForm;
   let validateForm;
+  let setStripePaymentMethod;
 
   beforeEach(async () => {
     submitForm = jest.fn();
     validateForm = jest.fn();
+    setStripePaymentMethod = jest.fn();
 
     props = {
       country: 'GB',
       isTestUser: true,
       allErrors: [],
-      setStripePaymentMethod: jest.fn(),
+      setStripePaymentMethod,
       submitForm,
       validateForm,
       buttonText: 'Button',
@@ -35,18 +37,17 @@ describe('Stripe Form', () => {
     });
   });
 
-  it('prevents double submission of the form while setting up the card payment', async () => {
+  it('shows error messages to the user when the inputs are empty', async () => {
     const button = await screen.findByRole('button');
-    const action = act(async () => fireEvent.click(button));
-    expect(button).toBeDisabled();
-    await action;
-    expect(button).not.toBeDisabled();
+    await act(async () => fireEvent.click(button));
+    expect(await screen.findByText('Please enter a card number', { selector: 'span' })).toBeInTheDocument();
   });
 
   it('prevents form submission with empty inputs', async () => {
     const button = await screen.findByRole('button');
     await act(async () => fireEvent.click(button));
     expect(validateForm).toHaveBeenCalled();
+    expect(setStripePaymentMethod).not.toHaveBeenCalled();
     expect(submitForm).not.toHaveBeenCalled();
   });
 });
