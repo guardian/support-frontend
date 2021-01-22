@@ -33,11 +33,16 @@ const mockTestVariant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(a
 const mockTest2Control = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Control))}`;
 const mockTest2Variant = `/test.html?acquisitionData=${encodeURI(JSON.stringify(acquisitionDataMockTest2Variant))}`;
 
-describe.skip('basic behaviour of init', () => {
+describe('basic behaviour of init', () => {
 
   beforeEach(() => {
     window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
   });
+
+  afterEach(() => {
+    window.localStorage.clear();
+  });
+
 
   it('The user should be allocated in the control bucket', () => {
     document.cookie = 'GU_mvt_id=12346';
@@ -405,7 +410,10 @@ describe.skip('basic behaviour of init', () => {
 
 });
 
-describe.skip('Correct allocation in a multi test environment', () => {
+describe('Correct allocation in a multi test environment', () => {
+  afterEach(() => {
+    window.localStorage.clear();
+  });
   /*
   GB: |                    100%                      |
                            Test1
@@ -502,6 +510,7 @@ describe.skip('Correct allocation in a multi test environment', () => {
       mockTest: 'control', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=510001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
@@ -523,6 +532,7 @@ describe.skip('Correct allocation in a multi test environment', () => {
       mockTest: 'notintest', mockTest2: 'control',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=510001';
     window.history.pushState({}, 'Test Title', mockTest2Variant);
@@ -546,6 +556,7 @@ describe.skip('Correct allocation in a multi test environment', () => {
       mockTest: 'control', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=150001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
@@ -568,6 +579,7 @@ describe.skip('Correct allocation in a multi test environment', () => {
       mockTest: 'control', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=150001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
@@ -580,7 +592,7 @@ describe.skip('Correct allocation in a multi test environment', () => {
 
 });
 
-describe.skip('targetPage matching for the digital pack product page and showcase page test', () => {
+describe('targetPage matching for the digital pack product page and showcase page test', () => {
   expect(targetPageMatches('/uk/subscribe/paper', subsShowcaseAndDigiSubPages)).toEqual(false);
   expect(targetPageMatches('/uk/subscribe/digital/checkout', subsShowcaseAndDigiSubPages)).toEqual(false);
   expect(targetPageMatches('/us/subscribe', subsShowcaseAndDigiSubPages)).toEqual(true);
