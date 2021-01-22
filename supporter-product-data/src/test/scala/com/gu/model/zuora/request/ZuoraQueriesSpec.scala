@@ -20,7 +20,7 @@ class ZuoraQueriesSpec extends AnyFlatSpec with Matchers with LazyLogging {
             WHERE
             Account.IdentityId__c != null AND
             Subscription.Status = 'Active' AND
-            ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067819'
+            ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067819' AND
             Subscription.TermEndDate >= '2011-11-01'
     """
     val actual = ExportZoqlQueries.selectActiveRatePlans(date)

@@ -19,7 +19,7 @@ object ExportZoqlQueries {
             WHERE
             ${identityId.zuoraName} != null AND
             Subscription.Status = 'Active' AND
-            ProductRatePlan.Id != '$discountProductRatePlanId'
+            ProductRatePlan.Id != '$discountProductRatePlanId' AND
             ${termEndDate.zuoraName} >= '$date'
     """
 
@@ -35,7 +35,7 @@ object ExportZoqlQueries {
             WHERE
             ${identityId.zuoraName} != null AND
             Subscription.Status = 'Active' AND
-            ProductRatePlan.Id != '$discountProductRatePlanId'
+            ProductRatePlan.Id != '$discountProductRatePlanId' AND
             Subscription.TermStartDate = '$date'
     """
 }
