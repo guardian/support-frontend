@@ -1,3 +1,6 @@
+// @flow
+import React from 'react';
+
 const mockElement = () => ({
   mount: jest.fn(),
   destroy: jest.fn(),
@@ -28,11 +31,35 @@ const mockStripe = () => ({
   _registerWrapper: jest.fn(),
 });
 
+
 jest.mock('@stripe/react-stripe-js', () => {
   const stripe = jest.requireActual('@stripe/react-stripe-js');
 
+  function createStripeElementMock(elementType) {
+    return function MockStripeElement(props) {
+      function onChange(evt) {
+        // eslint-disable-next-line react/prop-types
+        return props.onChange({
+          ...evt, elementType, empty: false, complete: true,
+        });
+      }
+
+      return (
+        <input
+          type="text"
+          // eslint-disable-next-line react/prop-types
+          id={props.id}
+          onChange={onChange}
+        />
+      );
+    };
+  }
+
   return ({
     ...stripe,
+    CardNumberElement: createStripeElementMock('cardNumber'),
+    CardExpiryElement: createStripeElementMock('cardExpiry'),
+    CardCvcElement: createStripeElementMock('cardCvc'),
     Element: () => mockElement,
     useStripe: mockStripe,
     useElements: mockElements,

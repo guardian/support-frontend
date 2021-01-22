@@ -1,4 +1,4 @@
-import '__mocks__/stripeMock';
+import '__mocks__/stripeMock.jsx';
 
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
@@ -34,6 +34,25 @@ describe('Stripe Form', () => {
     // Async render as StripeForm does a bunch of internal async set up
     await act(async () => {
       render(<StripeProviderForCountry {...props} />);
+    });
+  });
+
+  describe('Form submission - valid form data', () => {
+    beforeEach(async () => {
+      const cardNumber = await screen.findByLabelText('Card number');
+      const expiry = await screen.findByLabelText('Expiry date');
+      const cvc = await screen.findByLabelText('CVC');
+      await act(async () => fireEvent.change(cardNumber, { target: { value: '4242424242424242' } }));
+      await act(async () => fireEvent.change(expiry, { target: { value: '0230' } }));
+      await act(async () => fireEvent.change(cvc, { target: { value: '123' } }));
+    });
+
+    it('allows submission when form input is valid', async () => {
+      const button = await screen.findByRole('button');
+      await act(async () => fireEvent.click(button));
+      expect(validateForm).toHaveBeenCalled();
+      expect(setStripePaymentMethod).toHaveBeenCalled();
+      expect(submitForm).toHaveBeenCalled();
     });
   });
 
