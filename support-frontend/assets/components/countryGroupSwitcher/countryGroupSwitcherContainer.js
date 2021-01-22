@@ -25,7 +25,7 @@ export default function (
       sendTrackingEventsOnClick({
         id: `toggle_country_${cgId}`,
         product: trackProduct,
-        componentType: 'ACQUISITIONS_BUTTON', // TODO: Is this accurate?
+        componentType: 'ACQUISITIONS_BUTTON',
       })();
     }
   }
