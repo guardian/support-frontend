@@ -9,11 +9,14 @@ import {
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import {
+  getAppliedPromo,
+} from 'helpers/productPrice/promotions';
 
 import Prices, { type PropTypes } from './content/prices';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { getProductPrice, getFirstValidPrice } from 'helpers/productPrice/productPrices';
 import {
   getSimplifiedPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
@@ -42,23 +45,16 @@ const getPromotionLabel = (promotion: Promotion | null) => {
   return `Save ${Math.round(promotion.discount.amount)}%`;
 };
 
-const getRelevantPromotion = ({ promotions }: ProductPrice) => {
-  if (promotions && promotions.length) {
-    return promotions[0];
-  }
-  return null;
-};
-
 const getMainDisplayPrice = (productPrice: ProductPrice, promotion?: Promotion | null): number => {
   if (promotion) {
     const introductoryPrice = promotion.introductoryPrice && promotion.introductoryPrice.price;
-    return promotion.discountedPrice || introductoryPrice || productPrice.price;
+    return getFirstValidPrice(promotion.discountedPrice, introductoryPrice, productPrice.price);
   }
   return productPrice.price;
 };
 
 const weeklyProductProps = (billingPeriod: WeeklyBillingPeriod, productPrice: ProductPrice, orderIsAGift = false) => {
-  const promotion = getRelevantPromotion(productPrice);
+  const promotion = getAppliedPromo(productPrice.promotions);
   const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
 
   const offerCopy = (promotion && promotion.landingPage && promotion.landingPage.roundel) || '';
