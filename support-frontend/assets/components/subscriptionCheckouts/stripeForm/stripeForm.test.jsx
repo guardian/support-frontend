@@ -37,17 +37,21 @@ describe('Stripe Form', () => {
     });
   });
 
-  it('shows error messages to the user when the inputs are empty', async () => {
-    const button = await screen.findByRole('button');
-    await act(async () => fireEvent.click(button));
-    expect(await screen.findByText('Please enter a card number', { selector: 'span' })).toBeInTheDocument();
-  });
+  describe('Form submission - empty fields', () => {
+    it('shows error messages to the user when the inputs are empty', async () => {
+      const button = await screen.findByRole('button');
+      await act(async () => fireEvent.click(button));
+      expect(await screen.findByText('Please enter a card number', { selector: 'span' })).toBeInTheDocument();
+      expect(await screen.findByText('Please enter an expiry date', { selector: 'span' })).toBeInTheDocument();
+      expect(await screen.findByText('Please enter a CVC number', { selector: 'span' })).toBeInTheDocument();
+    });
 
-  it('prevents form submission with empty inputs', async () => {
-    const button = await screen.findByRole('button');
-    await act(async () => fireEvent.click(button));
-    expect(validateForm).toHaveBeenCalled();
-    expect(setStripePaymentMethod).not.toHaveBeenCalled();
-    expect(submitForm).not.toHaveBeenCalled();
+    it('prevents form submission with empty inputs', async () => {
+      const button = await screen.findByRole('button');
+      await act(async () => fireEvent.click(button));
+      expect(validateForm).toHaveBeenCalled();
+      expect(setStripePaymentMethod).not.toHaveBeenCalled();
+      expect(submitForm).not.toHaveBeenCalled();
+    });
   });
 });
