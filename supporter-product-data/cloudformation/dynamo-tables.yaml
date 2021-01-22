@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Supporter product data tables
+Description: Supporter product data tables - stack name should be supporter-product-data-tables-${Stage}
 Parameters:
-  TouchpointBackend:
+  Stage:
     Description: Environment name ( DEV, UAT or PROD)
     Type: String
     AllowedValues:
@@ -39,14 +39,14 @@ Resources:
           KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits:
-          Fn::FindInMap: [ StageVariables, { Ref: TouchpointBackend }, DynamoReadCapacity ]
+          Fn::FindInMap: [ StageVariables, { Ref: Stage }, DynamoReadCapacity ]
         WriteCapacityUnits:
-          Fn::FindInMap: [ StageVariables, { Ref: TouchpointBackend }, DynamoWriteCapacity ]
+          Fn::FindInMap: [ StageVariables, { Ref: Stage }, DynamoWriteCapacity ]
       SSESpecification:
         SSEEnabled: true
-      TableName: !Sub SupporterProductData-${TouchpointBackend}
+      TableName: !Sub SupporterProductData-${Stage}
       TimeToLiveSpecification:
-        AttributeName: "TTLTimestamp"
+        AttributeName: "termEndDate"
         Enabled: true
 Outputs:
   SupporterProductDataTable:

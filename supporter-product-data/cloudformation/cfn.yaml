@@ -139,6 +139,21 @@ Resources:
                 Action:
                   - ssm:GetParametersByPath
                 Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/supporter-product-data/*
+        - PolicyName: DynamoTable
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+                - dynamodb:BatchGetItem
+                - dynamodb:DescribeTable
+              Resource:
+                Fn::ImportValue:
+                  !Sub supporter-product-data-tables-${Stage}-SupporterProductDataTable
 
   ZuoraQuerierLambda:
     Type: "AWS::Lambda::Function"
@@ -159,6 +174,24 @@ Resources:
           'Stage': !Sub ${Stage}
 
   ResultsFetcherLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub membership-SupporterProductDataFetcher-${Stage}
+      Description: "Fetch zuora export results"
+      Handler: "com.gu.lambdas.ZuoraResultsFetcherLambda::handleRequest"
+      Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
+      Code:
+        S3Bucket: supporter-product-data-dist
+        S3Key: !Sub ${Stage}/supporter-product-data.jar
+      MemorySize: 512
+      Runtime: "java8"
+      Timeout: 300
+      Environment:
+        Variables:
+          'Stage': !Sub ${Stage}
+
+  WriteToDynamoLambda:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
