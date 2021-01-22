@@ -43,7 +43,6 @@ describe('basic behaviour of init', () => {
     window.localStorage.clear();
   });
 
-
   it('The user should be allocated in the control bucket', () => {
     document.cookie = 'GU_mvt_id=12346';
     window.history.pushState({}, 'Test Title', mockTestControl);

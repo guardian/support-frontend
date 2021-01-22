@@ -1,4 +1,5 @@
-import '__mocks__/stripeMock.jsx';
+// eslint-disable-next-line import/no-unresolved
+import '__mocks__/stripeMock';
 
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
