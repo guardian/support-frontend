@@ -8,8 +8,8 @@ Parameters:
     AllowedValues:
       - PROD
       - UAT
-      - DEV
-    Default: DEV
+      - CODE
+    Default: CODE
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]

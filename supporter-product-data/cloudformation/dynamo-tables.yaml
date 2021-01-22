@@ -2,16 +2,16 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Supporter product data tables - stack name should be supporter-product-data-tables-${Stage}
 Parameters:
   Stage:
-    Description: Environment name ( DEV, UAT or PROD)
+    Description: Environment name ( CODE, UAT or PROD)
     Type: String
     AllowedValues:
       - PROD
       - UAT
-      - DEV
-    Default: DEV
+      - CODE
+    Default: CODE
 Mappings:
   StageVariables:
-    DEV:
+    CODE:
       DynamoWriteCapacity: 1
       DynamoReadCapacity: 5
     UAT:
