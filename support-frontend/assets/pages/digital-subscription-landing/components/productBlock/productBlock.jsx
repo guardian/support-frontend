@@ -2,7 +2,7 @@
 // @flow
 import React, { Component, type Node } from 'react';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -156,7 +156,10 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
       [`showDropDown${product}`]: !this.state[`showDropDown${product}`],
     });
     const clickAction = this.state[`showDropDown${product}`] ? 'open' : 'close';
-    trackComponentClick(`digital-subscriptions-landing-page--accordion--${product}--${clickAction}`);
+    sendTrackingEventsOnClick({
+      id: `digital-subscriptions-landing-page--accordion--${product}--${clickAction}`,
+      componentType: 'ACQUISITIONS_OTHER',
+    })();
   }
 
   render() {
