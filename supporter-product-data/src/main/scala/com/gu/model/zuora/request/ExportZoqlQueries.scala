@@ -19,7 +19,23 @@ object ExportZoqlQueries {
             WHERE
             ${identityId.zuoraName} != null AND
             Subscription.Status = 'Active' AND
-            ProductRatePlan.Id != '${discountProductRatePlanId}'
+            ProductRatePlan.Id != '$discountProductRatePlanId'
             ${termEndDate.zuoraName} >= '$date'
+    """
+
+  def selectRatePlansStartedOn(date: LocalDate): String =
+    s"""SELECT
+          ${identityId.zuoraName},
+          ${ratePlanId.zuoraName},
+          ${productRatePlanId.zuoraName},
+          ${ratePlanName.zuoraName},
+          ${termEndDate.zuoraName}
+            FROM
+            rateplan
+            WHERE
+            ${identityId.zuoraName} != null AND
+            Subscription.Status = 'Active' AND
+            ProductRatePlan.Id != '$discountProductRatePlanId'
+            Subscription.TermStartDate = '$date'
     """
 }

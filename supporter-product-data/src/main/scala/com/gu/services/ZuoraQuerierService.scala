@@ -28,7 +28,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
       "SupporterProductData",
       List(
         ZoqlExportQuery("New Subscriptions",
-          ExportZoqlQueries.selectActiveRatePlans(date)
+          ExportZoqlQueries.selectRatePlansStartedOn(date)
         )
       )
     )
