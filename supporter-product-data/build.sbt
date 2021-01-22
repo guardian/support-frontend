@@ -48,7 +48,8 @@ deployToCode := {
   (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
   List(
     "-SupporterProductDataQuerier-",
-    "-SupporterProductDataFetcher-"
+    "-SupporterProductDataFetcher-",
+    "-SupporterProductDataWriteToDynamo-"
   ).foreach(functionPartial =>
     s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
   )

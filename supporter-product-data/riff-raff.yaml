@@ -1,4 +1,4 @@
-stacks: [membership]
+stacks: [support]
 regions: [eu-west-1]
 deployments:
   cfn:
@@ -13,5 +13,6 @@ deployments:
       functionNames:
         - "-SupporterProductDataQuerier-"
         - "-SupporterProductDataFetcher-"
+        - "-SupporterProductDataWriteToDynamo-"
       fileName: supporter-product-data.jar
     dependencies: [cfn]
