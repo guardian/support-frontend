@@ -1,9 +1,11 @@
 package com.gu.lambdas
 
 import com.gu.model.Stage.CODE
+import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
 
+@IntegrationTest
 class WriteToDynamoSpec extends AsyncFlatSpec with Matchers{
   "WriteToDynamoLambda" should "succeed" in {
     WriteToDynamoLambda.writeToDatabase(
