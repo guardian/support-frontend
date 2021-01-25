@@ -193,8 +193,6 @@ object PaperValidation {
   def postcodeIsWithinDeliveryArea(postcode: String): Boolean =
     M25_POSTCODE_PREFIXES.contains(getPrefix(postcode))
 
-  // NOTE also in deliveryCheck.js
-
   val M25_POSTCODE_OLD_PREFIXES = List(
     "BR1", "BR2", "BR3", "BR4", "BR5", "BR6", "BR7", "BR8",
     "CR0", "CR2", "CR3", "CR4", "CR5", "CR6", "CR7", "CR8", "CR9",
