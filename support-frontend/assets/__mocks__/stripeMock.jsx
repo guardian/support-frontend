@@ -36,9 +36,14 @@ jest.mock('@stripe/react-stripe-js', () => {
   const stripe = jest.requireActual('@stripe/react-stripe-js');
 
   function createStripeElementMock(elementType) {
-    return function MockStripeElement(props) {
+
+    type MockStripeElementProps = {|
+      id: string;
+      onChange: Function;
+    |}
+
+    return function MockStripeElement(props: MockStripeElementProps) {
       function onChange(evt) {
-        // eslint-disable-next-line react/prop-types
         return props.onChange({
           ...evt, elementType, empty: false, complete: true,
         });
@@ -47,7 +52,6 @@ jest.mock('@stripe/react-stripe-js', () => {
       return (
         <input
           type="text"
-          // eslint-disable-next-line react/prop-types
           id={props.id}
           onChange={onChange}
         />

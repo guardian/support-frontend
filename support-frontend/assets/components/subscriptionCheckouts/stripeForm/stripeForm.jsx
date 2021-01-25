@@ -196,26 +196,27 @@ const StripeForm = (props: StripeFormPropTypes) => {
 
   const handleCardErrors = () => {
     const newCardFieldsErrors = [];
-    const newCardFieldsData = Object.entries(cardFieldsData).reduce((newData, [cardFieldName, existingFieldData]) => {
-      if (existingFieldData.empty) {
-        const error = existingFieldData.errorEmpty;
-        // eslint-disable-next-line no-param-reassign
-        newData[cardFieldName] = {
-          ...existingFieldData,
-          error,
-        };
-        newCardFieldsErrors.push({ field: [cardFieldName], message: error });
-      } else if (!existingFieldData.complete) {
-        const error = existingFieldData.errorIncomplete;
-        // eslint-disable-next-line no-param-reassign
-        newData[cardFieldName] = {
-          ...existingFieldData,
-          error,
-        };
-        newCardFieldsErrors.push({ field: [cardFieldName], message: error });
-      }
-      return newData;
-    }, { ...cardFieldsData });
+    const newCardFieldsData = Object.entries(cardFieldsData)
+      .reduce((newData, [cardFieldName, existingFieldData]) => {
+        if (existingFieldData.empty) {
+          const error = existingFieldData.errorEmpty;
+          // eslint-disable-next-line no-param-reassign
+          newData[cardFieldName] = {
+            ...existingFieldData,
+            error,
+          };
+          newCardFieldsErrors.push({ field: [cardFieldName], message: error });
+        } else if (!existingFieldData.complete) {
+          const error = existingFieldData.errorIncomplete;
+          // eslint-disable-next-line no-param-reassign
+          newData[cardFieldName] = {
+            ...existingFieldData,
+            error,
+          };
+          newCardFieldsErrors.push({ field: [cardFieldName], message: error });
+        }
+        return newData;
+      }, { ...cardFieldsData });
 
     setCardFieldsData(newCardFieldsData);
     setCardErrors(newCardFieldsErrors);
@@ -289,6 +290,8 @@ const StripeForm = (props: StripeFormPropTypes) => {
     }
   }, [setupIntentClientSecret]);
 
+  // Handle the payment once all state updates to the card data, errors list, etc
+  // have completed after hitting the submit button
   useEffect(() => {
     if (stripe && submitReady && props.allErrors.length === 0 && cardErrors.length === 0 && !recaptchaError) {
       setDisableButton(true);
@@ -299,6 +302,9 @@ const StripeForm = (props: StripeFormPropTypes) => {
         // come back. A hook will complete subscription once the setupIntentClientSecret is available.
         setPaymentWaiting(true);
       }
+    } else if (submitReady) {
+      // Form has errors and is not ready for submission- reset and await another submit button press
+      setSubmitReady(false);
     }
   }, [submitReady, cardErrors, recaptchaError]);
 
