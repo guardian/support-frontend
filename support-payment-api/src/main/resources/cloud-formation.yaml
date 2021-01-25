@@ -513,7 +513,7 @@ Resources:
       Properties:
         AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-        AlarmName: !Sub ${App} ${Stage} Paypal payment error in the last fifteen minutes for one-off contributions via the payment-api
+        AlarmName: !Sub ${App} ${Stage} Paypal payment error for one-off contribution via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
         Dimensions:
@@ -532,7 +532,7 @@ Resources:
       Properties:
         AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-        AlarmName: !Sub ${App} ${Stage} Stripe payment error in the last fifteen minutes for one-off contributions via the payment-api
+        AlarmName: !Sub ${App} ${Stage} Stripe payment error for one-off contribution via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
         Dimensions:
@@ -551,7 +551,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub ${App} ${Stage} Amazon Pay payment error in the last fifteen minutes for one-off contributions via the payment-api
+      AlarmName: !Sub ${App} ${Stage} Amazon Pay payment error for one-off contribution via the payment-api
       MetricName: payment-error
       Namespace: support-payment-api-PROD
       Dimensions:
