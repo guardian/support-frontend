@@ -521,7 +521,7 @@ Resources:
                   Value: Paypal
         ComparisonOperator: GreaterThanThreshold
         Threshold: 1
-        Period: 900
+        Period: 60
         EvaluationPeriods: 1
         Statistic: Sum
         TreatMissingData: notBreaching
@@ -540,7 +540,7 @@ Resources:
                   Value: Stripe
         ComparisonOperator: GreaterThanThreshold
         Threshold: 1
-        Period: 900
+        Period: 60
         EvaluationPeriods: 1
         Statistic: Sum
         TreatMissingData: notBreaching
@@ -559,7 +559,7 @@ Resources:
           Value: AmazonPay
       ComparisonOperator: GreaterThanThreshold
       Threshold: 1
-      Period: 900
+      Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
       TreatMissingData: notBreaching
@@ -575,7 +575,7 @@ Resources:
       Namespace: support-payment-api-PROD
       ComparisonOperator: GreaterThanThreshold
       Threshold: 1
-      Period: 900
+      Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
       TreatMissingData: notBreaching
