@@ -43,7 +43,7 @@ class PaypalBackend(
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] =
     paypalService.createPayment(c)
       .leftMap { error =>
-        logger.error(s"Error creating paypal payment data. Error: $error")
+        cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
         error
       }
 
@@ -103,7 +103,10 @@ class PaypalBackend(
   // Success or failure of these steps shouldn't affect the response to the client
   private def postPaymentTasks(payment: Payment, email: String, identityId: Option[Long], acquisitionData: AcquisitionData, clientBrowserInfo: ClientBrowserInfo): Unit = {
     trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo)
-      .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
+      .leftMap(trackErr => cloudWatchService.recordPostPaymentTasksError(
+        PaymentProvider.Paypal,
+        s"unable to track contribution due to error: ${trackErr.getMessage}"
+      ))
 
     val emailResult = for {
       id <- EitherT.fromOption(
@@ -115,16 +118,16 @@ class PaypalBackend(
     } yield ()
 
     emailResult.leftMap { err =>
-      logger.error(s"unable to send email: ${err.getMessage}", err)
+      cloudWatchService.recordPostPaymentTasksError(
+        PaymentProvider.Paypal,
+        s"unable to send email: ${err.getMessage}"
+      )
     }
   }
 
   private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     ContributionData.fromPaypalCharge(payment, email, identityId, clientBrowserInfo.countrySubdivisionCode)
-      .leftMap { error =>
-        logger.error(s"Error creating contribution data from paypal. Error: $error")
-        BackendError.fromPaypalAPIError(error)
-      }
+      .leftMap(BackendError.fromPaypalAPIError)
       .toEitherT[Future]
       .flatMap { contributionData =>
         val paypalAcquisition = PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
@@ -133,10 +136,6 @@ class PaypalBackend(
           submitAcquisitionToBigQuery(paypalAcquisition, contributionData),
           insertContributionDataIntoDatabase(contributionData)
         )
-      }
-      .leftMap { err =>
-        logger.error("Error tracking contribution", err)
-        err
       }
   }
 
