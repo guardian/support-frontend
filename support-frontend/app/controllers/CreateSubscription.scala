@@ -7,10 +7,12 @@ import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.workers.{BillingPeriod, User}
+import com.gu.support.config.Stage
+import com.gu.support.workers.{BillingPeriod, Contribution, DigitalPack, GuardianWeekly, Paper, User}
 import io.circe.syntax._
 import lib.PlayImplicits._
 import play.api.libs.circe.Circe
@@ -30,7 +32,8 @@ class CreateSubscription(
   testUsers: TestUserService,
   components: ControllerComponents,
   settingsProvider: AllSettingsProvider,
-  val supportUrl: String
+  val supportUrl: String,
+  stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -73,6 +76,15 @@ class CreateSubscription(
 
       respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
     } else {
+      val productName = createSupportWorkersRequest.product match {
+        case _: Contribution => "Contribution"
+        case _: DigitalPack => "DigitalPack"
+        case _: Paper => "Paper"
+        case _: GuardianWeekly => "GuardianWeekly"
+      }
+      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideValidationFailure(stage, productName)
+      AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+      SafeLogger.warn(s"validation of the request body failed $createSupportWorkersRequest")
       respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
     }
   }
