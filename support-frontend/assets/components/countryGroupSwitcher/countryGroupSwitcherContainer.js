@@ -22,7 +22,11 @@ export default function (
 
   function onCountryGroupSelect(cgId: CountryGroupId): void {
     if (trackProduct) {
-      sendTrackingEventsOnClick(`toggle_country_${cgId}`, trackProduct, null)();
+      sendTrackingEventsOnClick({
+        id: `toggle_country_${cgId}`,
+        product: trackProduct,
+        componentType: 'ACQUISITIONS_BUTTON',
+      })();
     }
   }
 

@@ -73,7 +73,11 @@ const weeklyProductProps = (billingPeriod: WeeklyBillingPeriod, productPrice: Pr
     buttonCopy: 'Subscribe now',
     href: getCheckoutUrl(billingPeriod, orderIsAGift),
     label: getPromotionLabel(promotion) || '',
-    onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
+    onClick: sendTrackingEventsOnClick({
+      id: `subscribe_now_cta-${billingPeriod}`,
+      product: 'GuardianWeekly',
+      componentType: 'ACQUISITIONS_BUTTON',
+    }),
   };
 };
 

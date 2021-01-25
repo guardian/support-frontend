@@ -27,7 +27,11 @@ function ReturnSection(props: PropTypes) {
             priority="subdued"
             aria-label="Return to The Guardian home page"
             href="https://theguardian.com"
-            onClick={sendTrackingEventsOnClick('checkout_return_home', props.subscriptionProduct, null)}
+            onClick={sendTrackingEventsOnClick({
+              id: 'checkout_return_home',
+              product: props.subscriptionProduct,
+              componentType: 'ACQUISITIONS_BUTTON',
+            })}
             modifierClasses={['visited-white-text']}
           >
             Return to The Guardian

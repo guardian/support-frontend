@@ -136,7 +136,11 @@ function PaperHero({ productPrices }: PropTypes) {
             </p>
             <ThemeProvider theme={buttonBrand}>
               <LinkButton
-                onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)}
+                onClick={sendTrackingEventsOnClick({
+                  id: 'options_cta_click',
+                  product: 'Paper',
+                  componentType: 'ACQUISITIONS_BUTTON',
+              })}
                 priority="tertiary"
                 iconSide="right"
                 icon={<SvgArrowDownStraight />}
