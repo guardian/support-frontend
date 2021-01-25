@@ -1,7 +1,7 @@
 package com.gu.services
 
 import com.gu.conf.ZuoraQuerierConfig
-import com.gu.model.zuora.request.{BatchQueryRequest, ExportZoqlQueries, ZoqlExportQuery}
+import com.gu.model.zuora.request.{BatchQueryRequest, ExportZoqlQueryObject, ZoqlExportQuery}
 import com.gu.model.zuora.response.{BatchQueryErrorResponse, BatchQueryResponse}
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
@@ -23,12 +23,12 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
     "apiAccessKeyId" -> config.username
   )
 
-  def postQuery(date: LocalDate): Future[BatchQueryResponse] = {
+  def postQuery(queryObject: ExportZoqlQueryObject, date: LocalDate): Future[BatchQueryResponse] = {
     val query = BatchQueryRequest(
       "SupporterProductData",
       List(
-        ZoqlExportQuery("New Subscriptions",
-          ExportZoqlQueries.selectRatePlansStartedOn(date)
+        ZoqlExportQuery(queryObject.name,
+          queryObject.query(date)
         )
       )
     )
