@@ -197,7 +197,7 @@ Resources:
       FunctionName:
         !Sub support-SupporterProductDataWriteToDynamo-${Stage}
       Description: "Write results of Zuora query to DynamoDB"
-      Handler: "com.gu.lambdas.ZuoraResultsFetcherLambda::handleRequest"
+      Handler: "com.gu.lambdas.WriteToDynamoLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
