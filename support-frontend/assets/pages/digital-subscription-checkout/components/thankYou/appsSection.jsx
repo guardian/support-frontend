@@ -74,7 +74,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             aria-label="Click to download the Guardian Daily app on the Apple App Store"
             href={getDailyEditionUrl(countryGroupId)}
             onClick={sendTrackingEventsOnClick({
-              id: 'checkout_thankyou_daily_edition',
+              id: 'checkout_thankyou_daily_edition_apple',
               product: 'DigitalPack',
               componentType: 'ACQUISITIONS_BUTTON',
             })}
@@ -91,7 +91,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             aria-label="Click to download the Guardian Daily app on Google Play"
             href={androidDailyUrl}
             onClick={sendTrackingEventsOnClick({
-              id: 'checkout_thankyou_daily_edition',
+              id: 'checkout_thankyou_daily_edition_android',
               product: 'DigitalPack',
               componentType: 'ACQUISITIONS_BUTTON',
             })}
@@ -118,7 +118,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             aria-label="Click to download the app on the Apple App Store"
             href={getIosAppUrl(countryGroupId)}
             onClick={sendTrackingEventsOnClick({
-              id: 'checkout_thankyou_app_store',
+              id: 'checkout_thankyou_live_app_apple',
               product: 'DigitalPack',
               componentType: 'ACQUISITIONS_BUTTON',
             })}
@@ -135,7 +135,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             aria-label="Click to download the app on the Google Play store"
             href={androidAppUrl}
             onClick={sendTrackingEventsOnClick({
-              id: 'checkout_thankyou_play_store',
+              id: 'checkout_thankyou_live_app_android',
               product: 'DigitalPack',
               componentType: 'ACQUISITIONS_BUTTON',
             })}
