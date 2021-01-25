@@ -12,7 +12,7 @@ object ExportZoqlQueries {
           ${identityId.zuoraName},
           ${ratePlanId.zuoraName},
           ${productRatePlanId.zuoraName},
-          ${ratePlanName.zuoraName},
+          ${productRatePlanName.zuoraName},
           ${termEndDate.zuoraName}
             FROM
             rateplan
@@ -28,7 +28,7 @@ object ExportZoqlQueries {
           ${identityId.zuoraName},
           ${ratePlanId.zuoraName},
           ${productRatePlanId.zuoraName},
-          ${ratePlanName.zuoraName},
+          ${productRatePlanName.zuoraName},
           ${termEndDate.zuoraName}
             FROM
             rateplan

@@ -27,12 +27,12 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
     val updateExpression =
       s"""SET
           ${productRatePlanId.dynamoName} = :${productRatePlanId.dynamoName},
-          ${ratePlanName.dynamoName} = :${ratePlanName.dynamoName},
+          ${productRatePlanName.dynamoName} = :${productRatePlanName.dynamoName},
           ${termEndDate.dynamoName} = :${termEndDate.dynamoName}
           """
     val attributeValues = Map(
       ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
-      ":" + ratePlanName.dynamoName -> AttributeValue.builder.s(item.ratePlanName).build,
+      ":" + productRatePlanName.dynamoName -> AttributeValue.builder.s(item.productRatePlanName).build,
       ":" + termEndDate.dynamoName -> AttributeValue.builder.s(item.termEndDate).build,
     ).asJava
 

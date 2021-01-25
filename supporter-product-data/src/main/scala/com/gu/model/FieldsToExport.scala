@@ -11,9 +11,9 @@ object FieldsToExport {
     "RatePlan.Id",
     "ratePlanId"
   )
-  val ratePlanName = FieldDefinition(
-    "RatePlan.Name",
-    "ratePlanName"
+  val productRatePlanName = FieldDefinition(
+    "ProductRatePlan.Name",
+    "productRatePlanName"
   )
   val productRatePlanId = FieldDefinition(
     "ProductRatePlan.Id",
