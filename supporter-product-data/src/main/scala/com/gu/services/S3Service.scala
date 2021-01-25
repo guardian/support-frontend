@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, blocking}
 
 object S3Service {
-  val bucketName = "supporter-product-export-code"
+  val bucketName = "supporter-product-data-export"
   val s3Client = AmazonS3ClientBuilder.standard
     .withRegion(Regions.EU_WEST_1)
     .withCredentials(CredentialsProvider)

@@ -61,8 +61,8 @@ object ExportZoqlQueryObject {
             WHERE
             ${identityId.zuoraName} != null AND
             ProductRatePlan.Id != '$discountProductRatePlanId' AND
-            RatePlan.AmendmentType = 'Cancellation' AND
-            RatePlan.UpdatedDate = '$date'"
+            Subscription.Status = 'Cancelled' AND
+            Subscription.CancelledDate = '$date'"
     """
   }
 

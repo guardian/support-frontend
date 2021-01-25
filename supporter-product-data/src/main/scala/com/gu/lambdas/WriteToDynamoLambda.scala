@@ -34,7 +34,7 @@ object WriteToDynamoLambda {
         SafeLogger.info(
           s"Attempting to write ${supporterRatePlanItem.productRatePlanName} " +
             s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
-        Await.ready(dynamoDBService.writeItem(supporterRatePlanItem), 20.seconds) //TODO: see if there is a way to paralellise
+        Await.ready(dynamoDBService.writeItem(supporterRatePlanItem), 20.seconds) //TODO: see if there is a way to parallelise
         SafeLogger.info(
           s"Successfully wrote ${supporterRatePlanItem.productRatePlanName} " +
             s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
