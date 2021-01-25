@@ -8,7 +8,7 @@ import org.scalatest.matchers.should.Matchers
 @IntegrationTest
 class WriteToDynamoSpec extends AsyncFlatSpec with Matchers{
   "WriteToDynamoLambda" should "succeed" in {
-    WriteToDynamoLambda.writeToDatabase(
+    WriteToDynamoLambda.writeToDynamo(
       stage = CODE,
       filename = "New Subscriptions-2c92c0867728a2e801772ade71bb56a5"
     ).map(_ =>
