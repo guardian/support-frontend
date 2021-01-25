@@ -220,128 +220,10 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: "*"
 
-  SupporterProductDataCODE:
+  SupporterProductData:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
-      StateMachineName: supporter-product-data-CODE
-      DefinitionString:
-        !Sub
-        - |-
-          {
-            "StartAt": "QueryZuora",
-            "States": {
-              "QueryZuora": {
-                "Type": "Task",
-                "Resource": "${querierArn}",
-                "Next": "WaitSomeTime",
-                "Retry": [
-                   {
-                    "ErrorEquals": ["States.ALL"],
-                    "IntervalSeconds": 30,
-                    "MaxAttempts": 3
-                  }]
-              },
-              "WaitSomeTime": {
-                "Type": "Wait",
-                "Seconds": 60,
-                "Next": "FetchResults"
-              },
-              "FetchResults": {
-                "Type": "Task",
-                "Resource": "${fetcherArn}",
-                "Next": "WriteToDynamo",
-                "Retry": [
-                   {
-                    "ErrorEquals": ["States.ALL"],
-                    "IntervalSeconds": 60,
-                    "MaxAttempts": 20,
-                    "BackoffRate": 1.0
-                  }]
-              },
-              "WriteToDynamo": {
-                "Type": "Task",
-                "Resource": "${dynamoArn}",
-                "End": true,
-                "Retry": [
-                   {
-                    "ErrorEquals": ["States.ALL"],
-                    "IntervalSeconds": 30,
-                    "MaxAttempts": 3,
-                    "BackoffRate": 1.0
-                  }]
-              }
-            }
-          }
-        - {
-          querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
-          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ],
-          dynamoArn: !GetAtt [ WriteToDynamoLambda, Arn ]
-        }
-      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
-
-  SupporterProductDataUAT:
-    Type: "AWS::StepFunctions::StateMachine"
-    Properties:
-      StateMachineName: supporter-product-data-UAT
-      DefinitionString:
-        !Sub
-        - |-
-          {
-            "StartAt": "QueryZuora",
-            "States": {
-              "QueryZuora": {
-                "Type": "Task",
-                "Resource": "${querierArn}",
-                "Next": "WaitSomeTime",
-                "Retry": [
-                   {
-                    "ErrorEquals": ["States.ALL"],
-                    "IntervalSeconds": 30,
-                    "MaxAttempts": 3
-                  }]
-              },
-              "WaitSomeTime": {
-                "Type": "Wait",
-                "Seconds": 60,
-                "Next": "FetchResults"
-              },
-              "FetchResults": {
-                "Type": "Task",
-                "Resource": "${fetcherArn}",
-                "Next": "WriteToDynamo",
-                "Retry": [
-                   {
-                    "ErrorEquals": ["States.ALL"],
-                    "IntervalSeconds": 60,
-                    "MaxAttempts": 20,
-                    "BackoffRate": 1.0
-                  }]
-              },
-              "WriteToDynamo": {
-                "Type": "Task",
-                "Resource": "${dynamoArn}",
-                "End": true,
-                "Retry": [
-                   {
-                    "ErrorEquals": ["States.ALL"],
-                    "IntervalSeconds": 30,
-                    "MaxAttempts": 3,
-                    "BackoffRate": 1.0
-                  }]
-              }
-            }
-          }
-        - {
-          querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
-          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ],
-          dynamoArn: !GetAtt [ WriteToDynamoLambda, Arn ]
-        }
-      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
-
-  SupporterProductDataPROD:
-    Type: "AWS::StepFunctions::StateMachine"
-    Properties:
-      StateMachineName: supporter-product-data-PROD
+      StateMachineName: !Sub supporter-product-data-${Stage}
       DefinitionString:
         !Sub
         - |-
@@ -399,13 +281,14 @@ Resources:
 
   SupporterProductDataScheduledRule:
     Type: "AWS::Events::Rule"
+    Condition: CreateProdResources
     Properties:
       Description: "Trigger nightly data synchronisation"
       ScheduleExpression: "cron(00 3 ? * * *)"
       State: "ENABLED"
       Targets:
         -
-          Arn: !Ref SupporterProductDataPROD
+          Arn: !Ref SupporterProductData
           Id: !Sub trigger_state_machine-${Stage}-1
           Input: |
             {
@@ -415,6 +298,7 @@ Resources:
 
   SupporterProductDataTriggerRole:
     Type: AWS::IAM::Role
+    Condition: CreateProdResources
     Properties:
       AssumeRolePolicyDocument:
         Statement:
@@ -432,7 +316,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - states:StartExecution
-                Resource: !Ref SupporterProductDataPROD
+                Resource: !Ref SupporterProductData
 
   SupporterProductDataAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -453,11 +337,11 @@ Resources:
       Namespace: AWS/States
       Dimensions:
         - Name: StateMachineArn
-          Value: !Ref SupporterProductDataPROD
+          Value: !Ref SupporterProductData
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
       TreatMissingData: notBreaching
-    DependsOn: SupporterProductDataPROD
+    DependsOn: SupporterProductData
