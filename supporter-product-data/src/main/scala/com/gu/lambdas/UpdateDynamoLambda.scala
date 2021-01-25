@@ -1,10 +1,10 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.lambdas.WriteToDynamoLambda.writeToDynamo
+import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
 import com.gu.model.Stage
 import com.gu.model.dynamo.SupporterRatePlanItem
-import com.gu.model.states.WriteToDynamoState
+import com.gu.model.states.UpdateDynamoState
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{DynamoDBService, S3Service}
@@ -17,14 +17,14 @@ import kantan.csv.ops._
 import scala.concurrent.duration.DurationInt
 
 
-class WriteToDynamoLambda extends Handler[WriteToDynamoState, Unit] {
-  override protected def handlerFuture(input: WriteToDynamoState, context: Context) = {
+class UpdateDynamoLambda extends Handler[UpdateDynamoState, Unit] {
+  override protected def handlerFuture(input: UpdateDynamoState, context: Context) = {
     SafeLogger.info(s"Starting write to dynamo task for ${input.recordCount} records from ${input.filename}")
     writeToDynamo(Stage.fromEnvironment, input.filename)
   }
 }
 
-object WriteToDynamoLambda {
+object UpdateDynamoLambda {
   def writeToDynamo(stage: Stage, filename: String) = {
     val csvStream = S3Service.streamFromS3(filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)

@@ -17,7 +17,7 @@ import scala.concurrent.duration._
 class ZuoraQuerierLambda extends Handler[ZuoraQuerierState, ZuoraResultsFetcherState] {
 
   override protected def handlerFuture(input: ZuoraQuerierState, context: Context) =
-    queryZuora(Stage.fromEnvironment, input.queryName, LocalDate.now(ZoneId.of("UTC")))
+    queryZuora(Stage.fromEnvironment, input.query, LocalDate.now(ZoneId.of("UTC")))
 
 }
 
@@ -30,7 +30,7 @@ object ZuoraQuerierLambda {
       result <- service.postQuery(query, date)
     } yield {
       SafeLogger.info(s"Successfully submitted query with jobId ${result.id}")
-      ZuoraResultsFetcherState(date, result.id)
+      ZuoraResultsFetcherState(query, result.id)
     }
   }
 }

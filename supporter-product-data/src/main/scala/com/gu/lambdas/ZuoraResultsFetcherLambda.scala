@@ -4,7 +4,8 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.lambdas.ZuoraResultsFetcherLambda.fetchResults
 import com.gu.model.Stage
-import com.gu.model.states.{WriteToDynamoState, ZuoraResultsFetcherState}
+import com.gu.model.states.{UpdateDynamoState, ZuoraResultsFetcherState}
+import com.gu.model.zuora.request.ExportZoqlQueryObject
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -13,13 +14,13 @@ import com.gu.services.{S3Service, ZuoraQuerierService}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
-class ZuoraResultsFetcherLambda extends Handler[ZuoraResultsFetcherState, WriteToDynamoState] {
+class ZuoraResultsFetcherLambda extends Handler[ZuoraResultsFetcherState, UpdateDynamoState] {
   override protected def handlerFuture(input: ZuoraResultsFetcherState, context: Context) =
-    fetchResults(Stage.fromEnvironment, input.jobId)
+    fetchResults(Stage.fromEnvironment, input.query, input.jobId)
 }
 
 object ZuoraResultsFetcherLambda {
-  def fetchResults(stage: Stage, jobId: String) = {
+  def fetchResults(stage: Stage, query: ExportZoqlQueryObject, jobId: String) = {
     SafeLogger.info(s"Attempting to fetch results for jobId $jobId")
     for {
       config <- ZuoraQuerierConfig.load(stage)
@@ -34,7 +35,7 @@ object ZuoraResultsFetcherLambda {
       _ <- S3Service.streamToS3(filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
     } yield {
       SafeLogger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
-      WriteToDynamoState(filename, batch.recordCount)
+      UpdateDynamoState(query, filename, batch.recordCount)
     }
   }
 }

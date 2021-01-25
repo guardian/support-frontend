@@ -1,12 +1,11 @@
 package com.gu.model.states
 
-import io.circe.{Decoder, Encoder}
+import com.gu.model.zuora.request.ExportZoqlQueryObject
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-
-import java.time.LocalDate
+import io.circe.{Decoder, Encoder}
 
 case class ZuoraResultsFetcherState(
-  date: LocalDate,
+  query: ExportZoqlQueryObject,
   jobId: String
 )
 

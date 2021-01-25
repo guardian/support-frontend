@@ -6,7 +6,7 @@ import io.circe.generic.semiauto.deriveDecoder
 
 
 case class ZuoraQuerierState(
-  queryName: ExportZoqlQueryObject
+  query: ExportZoqlQueryObject
 )
 
 object ZuoraQuerierState {
