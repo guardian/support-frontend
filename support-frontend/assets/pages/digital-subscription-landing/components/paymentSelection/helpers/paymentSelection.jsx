@@ -139,7 +139,7 @@ const mapStateToProps = (state: State): PropTypes => {
         price: getDisplayPrice(currencyId, fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
         onClick: sendTrackingEventsOnClick({
-          id: `subscribe_now_cta_gift_${billingPeriod}`,
+          id: `subscribe_now_cta_gift-${billingPeriod}`,
           product: 'DigitalPack',
           componentType: 'ACQUISITIONS_BUTTON',
         }),
@@ -153,7 +153,7 @@ const mapStateToProps = (state: State): PropTypes => {
         price: getDisplayPrice(currencyId, promotionalPrice || fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
         onClick: sendTrackingEventsOnClick({
-          id: `subscribe_now_cta_${billingPeriod}`,
+          id: `subscribe_now_cta-${billingPeriod}`,
           product: 'DigitalPack',
           componentType: 'ACQUISITIONS_BUTTON',
         }),
