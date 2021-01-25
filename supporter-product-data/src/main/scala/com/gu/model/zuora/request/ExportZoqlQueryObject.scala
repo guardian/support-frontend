@@ -5,7 +5,7 @@ import io.circe.Decoder
 
 import java.time.LocalDate
 
-abstract class ExportZoqlQueryObject(val name: String) {
+abstract class ExportZoqlQueryObject(val queryName: String) {
   def query(date: LocalDate): String
 }
 
@@ -70,6 +70,6 @@ object ExportZoqlQueryObject {
 
   def fromString(str: String): Either[String, ExportZoqlQueryObject] =
     List(SelectActiveRatePlans, SelectRatePlansStartedOn, SelectRatePlansCancelledOn)
-      .find(_.name == str)
+      .find(_.queryName == str)
       .toRight(s"Unknown export zoql query $str")
 }

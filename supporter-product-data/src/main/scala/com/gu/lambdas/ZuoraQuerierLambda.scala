@@ -23,7 +23,7 @@ class ZuoraQuerierLambda extends Handler[ZuoraQuerierState, ZuoraResultsFetcherS
 
 object ZuoraQuerierLambda {
   def queryZuora(stage: Stage, query: ExportZoqlQueryObject, date: LocalDate) = {
-    SafeLogger.info(s"Attempting to submit ${query.name} query to Zuora")
+    SafeLogger.info(s"Attempting to submit ${query.queryName} query to Zuora")
     for {
       config <- ZuoraQuerierConfig.load(stage)
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))

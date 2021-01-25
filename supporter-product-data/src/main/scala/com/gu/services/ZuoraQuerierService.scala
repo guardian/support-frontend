@@ -27,7 +27,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
     val query = BatchQueryRequest(
       "SupporterProductData",
       List(
-        ZoqlExportQuery(queryObject.name,
+        ZoqlExportQuery(queryObject.queryName,
           queryObject.query(date)
         )
       )
