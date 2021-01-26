@@ -2,7 +2,7 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
-import com.gu.lambdas.ZuoraResultsFetcherLambda.fetchResults
+import com.gu.lambdas.FetchResultsLambda.fetchResults
 import com.gu.model.Stage
 import com.gu.model.states.{UpdateDynamoState, ZuoraResultsFetcherState}
 import com.gu.model.zuora.request.ExportZoqlQueryObject
@@ -14,12 +14,12 @@ import com.gu.services.{S3Service, ZuoraQuerierService}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
-class ZuoraResultsFetcherLambda extends Handler[ZuoraResultsFetcherState, UpdateDynamoState] {
+class FetchResultsLambda extends Handler[ZuoraResultsFetcherState, UpdateDynamoState] {
   override protected def handlerFuture(input: ZuoraResultsFetcherState, context: Context) =
     fetchResults(Stage.fromEnvironment, input.query, input.jobId)
 }
 
-object ZuoraResultsFetcherLambda {
+object FetchResultsLambda {
   def fetchResults(stage: Stage, query: ExportZoqlQueryObject, jobId: String) = {
     SafeLogger.info(s"Attempting to fetch results for jobId $jobId")
     for {

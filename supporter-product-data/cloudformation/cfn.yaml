@@ -145,13 +145,13 @@ Resources:
                 Fn::ImportValue:
                   !Sub supporter-product-data-tables-${Stage}-SupporterProductDataTable
 
-  ZuoraQuerierLambda:
+  QueryZuoraLambda:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub support-SupporterProductDataQuerier-${Stage}
+        !Sub support-SupporterProductDataQueryZuora-${Stage}
       Description: "Trigger zuora export"
-      Handler: "com.gu.lambdas.ZuoraQuerierLambda::handleRequest"
+      Handler: "com.gu.lambdas.QueryZuoraLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
@@ -163,13 +163,13 @@ Resources:
         Variables:
           'Stage': !Sub ${Stage}
 
-  ResultsFetcherLambda:
+  FetchResultsLambda:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub support-SupporterProductDataFetcher-${Stage}
+        !Sub support-SupporterProductDataFetchResults-${Stage}
       Description: "Fetch zuora export results"
-      Handler: "com.gu.lambdas.ZuoraResultsFetcherLambda::handleRequest"
+      Handler: "com.gu.lambdas.FetchResultsLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
@@ -273,8 +273,8 @@ Resources:
             }
           }
         - {
-          querierArn: !GetAtt [ ZuoraQuerierLambda, Arn ],
-          fetcherArn: !GetAtt [ ResultsFetcherLambda, Arn ],
+          querierArn: !GetAtt [ QueryZuoraLambda, Arn ],
+          fetcherArn: !GetAtt [ FetchResultsLambda, Arn ],
           dynamoArn: !GetAtt [ UpdateDynamoLambda, Arn ]
         }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
