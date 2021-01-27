@@ -17,14 +17,11 @@ Conditions:
 Mappings:
   StageVariables:
     CODE:
-      S3Bucket:
-        - supporter-product-data-export-code
+      S3Bucket: supporter-product-data-export-code
     UAT:
-      S3Bucket:
-        - supporter-product-data-export-uat
+      S3Bucket: supporter-product-data-export-uat
     PROD:
-      S3Bucket:
-        - supporter-product-data-export-prod
+      S3Bucket: supporter-product-data-export-prod
 
 Resources:
 
