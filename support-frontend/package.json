@@ -13,8 +13,8 @@
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com --disable-host-check",
     "devrun": "npm-run-all clean webpack-dev-server",
-    "test": "echo 'Running JS tests' && jest",
-    "test-watch": "echo 'Running JS tests in watch mode' && jest --watch",
+    "test": "NODE_ENV=test echo 'Running JS tests' && jest",
+    "test-watch": "NODE_ENV=test echo 'Running JS tests in watch mode' && jest --watch",
     "stat": "yarn build-prod && webpack-bundle-analyzer public/compiled-assets/stats.json",
     "paparazzi": "paparazzi && open ./paparazzi",
     "storybook": "start-storybook --ci -p 9001 -c .storybook -s .storybook/static",
@@ -40,6 +40,10 @@
     "transform": {
       ".*": "./node_modules/babel-jest"
     },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@guardian)",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
@@ -53,8 +57,12 @@
       "target"
     ],
     "moduleNameMapper": {
-      "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
+      "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
+      "\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.js"
     },
+    "setupFilesAfterEnv": [
+      "./jestSetup"
+    ],
     "verbose": true,
     "testEnvironment": "./jestEnvironment"
   },
@@ -74,7 +82,7 @@
     "@guardian/consent-management-platform": "^6.7.4",
     "@guardian/pasteup": "^1.0.0-alpha.7",
     "@guardian/src-accordion": "^2.0.0",
-    "@guardian/src-button": "^2.1.0",
+    "@guardian/src-button": "^2.8.2",
     "@guardian/src-checkbox": "^2.7.1",
     "@guardian/src-choice-card": "^2.0.0",
     "@guardian/src-foundations": "^2.3.0",
@@ -123,6 +131,8 @@
     "@storybook/addon-storysource": "^5.3.19",
     "@storybook/addon-viewport": "^6.0.28",
     "@storybook/react": "^5.3.19",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.3",
     "autoprefixer": "^8.6.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^24.9.0",
@@ -144,6 +154,7 @@
     "flow-bin": "^0.83.0",
     "flow-typed": "^2.4.0",
     "jest": "^24.9.0",
+    "jest-environment-jsdom-fifteen": "^1.0.2",
     "json-sass-vars": "^3.0.0",
     "lodash": "^4.17.19",
     "madge": "^3.9.1",

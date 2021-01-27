@@ -40,7 +40,7 @@ export const ErrorSummary = (props: PropTypes) => (
     <InlineError css={boldText}>Some information is missing</InlineError>
     <ul>
       {props.errors.map(error => (
-        <li css={errorMessage}>
+        <li key={error.message} css={errorMessage}>
           {error.message}
         </li>))}
     </ul>
