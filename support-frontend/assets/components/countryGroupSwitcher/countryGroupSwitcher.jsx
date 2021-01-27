@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import Dialog from 'components/dialog/dialog';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import Menu, { LinkItem } from 'components/menu/menu';
 
 import {
@@ -69,6 +70,12 @@ class CountryGroupSwitcher extends Component<PropTypes, {menuOpen: boolean, boun
           styled={false}
           onStatusChange={(status) => {
             this.setState({ menuOpen: status });
+            if (status) {
+              sendTrackingEventsOnClick({
+                id: 'toggle_country',
+                componentType: 'ACQUISITIONS_BUTTON',
+              })();
+            }
           }}
         >
           <Menu style={{ top, left, position: 'absolute' }}>

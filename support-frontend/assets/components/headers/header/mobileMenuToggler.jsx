@@ -59,7 +59,7 @@ export default class MobileMenuToggler extends Component<{
             this.setState({ menuOpen: status });
             if (!status) {
               sendTrackingEventsOnClick({
-                id: 'close_mobile_menu',
+                id: 'dismiss_mobile_menu',
                 componentType: 'ACQUISITIONS_BUTTON',
               })();
             }
