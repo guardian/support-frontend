@@ -24,6 +24,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
 
   def postQuery(date: LocalDate): Future[BatchQueryResponse] = {
     val query = BatchQueryRequest(
+      config.partnerId,
       "supporter-product-data",
       List(
         ZoqlExportQuery(SelectActiveRatePlansQuery.name,

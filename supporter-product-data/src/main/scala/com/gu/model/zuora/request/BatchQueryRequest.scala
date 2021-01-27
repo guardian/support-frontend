@@ -9,6 +9,7 @@ case class ZoqlExportQuery(
 )
 
 case class BatchQueryRequest(
+  partner: String, // Makes the request stateful. See https://knowledgecenter.zuora.com/Central_Platform/API/AB_Aggregate_Query_API/BA_Stateless_and_Stateful_Modes
   name: String,
   queries: List[ZoqlExportQuery]
 )
@@ -23,8 +24,7 @@ object BatchQueryRequest{
   implicit val encoder: Encoder[BatchQueryRequest] = deriveEncoder[BatchQueryRequest].mapJsonObject(_
     .add("format", Json.fromString("csv"))
     .add("version", Json.fromString("1.1"))
-    .add("partner", Json.fromString("guardiannews4398"))  // These parameters make the request stateful
-    .add("project", Json.fromString("supporter-product-data")) // see https://knowledgecenter.zuora.com/Central_Platform/API/AB_Aggregate_Query_API/BA_Stateless_and_Stateful_Modes
+    .add("project", Json.fromString("supporter-product-data")) // Also used to make request stateful
     .add("encrypted", Json.fromString("none"))
     .add("useQueryLabels", Json.fromString("true"))
     .add("dateTimeUtc", Json.fromString("true"))

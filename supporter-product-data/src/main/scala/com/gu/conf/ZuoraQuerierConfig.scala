@@ -12,6 +12,7 @@ import scala.concurrent.Future
 
 case class ZuoraQuerierConfig(
   url: String,
+  partnerId: String,
   username: String,
   password: String
 )
@@ -30,6 +31,7 @@ object ZuoraQuerierConfig {
         val params = result.getParameters.asScala.toList
         ZuoraQuerierConfig(
           getParameterValue(configPath, "url", params),
+          getParameterValue(configPath, "partnerId", params),
           getParameterValue(configPath, "username", params),
           getParameterValue(configPath, "password", params)
         )
