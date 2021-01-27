@@ -7,6 +7,10 @@ object FieldsToExport {
     "Account.IdentityId__c",
     "identityId"
   )
+  val gifteeIdentityId = FieldDefinition(
+    "Subscription.GifteeIdentityId__c",
+    "identityId"
+  )
   val ratePlanId = FieldDefinition(
     "RatePlan.Id",
     "ratePlanId"

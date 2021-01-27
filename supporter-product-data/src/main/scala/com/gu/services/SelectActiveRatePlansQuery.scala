@@ -9,19 +9,26 @@ object SelectActiveRatePlansQuery {
 
   val name = "select-active-rate-plans"
 
+  val isNotDSGift = "Subscription.RedemptionCode__c = ''"
+  val isRedeemedDSGift = s"(Subscription.RedemptionCode__c != '' AND ${gifteeIdentityId.zuoraName} != '')"
+
   def query(date: LocalDate): String =
     s"""SELECT
           ${identityId.zuoraName},
+          ${gifteeIdentityId.zuoraName},
           ${ratePlanId.zuoraName},
           ${productRatePlanId.zuoraName},
           ${productRatePlanName.zuoraName},
-          ${termEndDate.zuoraName}
+          ${termEndDate.zuoraName},
+          Subscription.RedemptionCode__c,
+          Subscription.GifteeIdentityId__c
             FROM
             rateplan
             WHERE
-            ${identityId.zuoraName} != null AND
+            ${termEndDate.zuoraName} >= '$date' AND
             (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
             ${productRatePlanId.zuoraName} != '$discountProductRatePlanId' AND
-            ${termEndDate.zuoraName} >= '$date'
+            ${identityId.zuoraName} != null AND
+            ($isNotDSGift OR $isRedeemedDSGift)
     """
 }
