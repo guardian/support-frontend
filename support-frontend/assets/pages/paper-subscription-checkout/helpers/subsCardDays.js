@@ -40,7 +40,7 @@ const getFormattedStartDate = (startDate: Date) => {
 
 const getPaymentStartDate = (date: number, productOption: ActivePaperProducts) => {
   const day = new Date(date).getDay();
-  const delay = additionalDays[day][productOption] || additionalDays[day][productOption.replace('Plus', '')];
+  const delay = additionalDays[day][productOption];
   const delayInMils = delay * milsInADay;
   return new Date(date + delayInMils);
 };
