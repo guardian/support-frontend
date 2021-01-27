@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata}
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
 import com.gu.aws.CredentialsProvider
+import com.gu.model.Stage
+import com.gu.monitoring.SafeLogger
 
 import java.io.InputStream
 import java.util.UUID
@@ -12,7 +14,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, blocking}
 
 object S3Service {
-  val bucketName = "supporter-product-data-export"
   val s3Client = AmazonS3ClientBuilder.standard
     .withRegion(Regions.EU_WEST_1)
     .withCredentials(CredentialsProvider)
@@ -21,14 +22,16 @@ object S3Service {
     .withS3Client(s3Client)
     .build
 
-  def streamToS3(filename: String, inputStream: InputStream, length: Long) = {
+  def bucketName(stage: Stage) = s"supporter-product-data-export-${stage.value}"
+
+  def streamToS3(stage: Stage, filename: String, inputStream: InputStream, length: Long) = {
     // Specify server-side encryption.
     val objectMetadata = new ObjectMetadata()
     objectMetadata.setContentLength(length)
     objectMetadata.setSSEAlgorithm(ObjectMetadata.AES_256_SERVER_SIDE_ENCRYPTION)
 
     val upload = transferManager.upload(
-      bucketName,
+      bucketName(stage),
       filename,
       inputStream,
       objectMetadata
@@ -39,8 +42,8 @@ object S3Service {
     )
   }
 
-  def streamFromS3(filename: String) = {
-    val fullObject = s3Client.getObject(new GetObjectRequest(bucketName, filename))
+  def streamFromS3(stage: Stage, filename: String) = {
+    val fullObject = s3Client.getObject(new GetObjectRequest(bucketName(stage), filename))
     fullObject.getObjectContent
   }
 }

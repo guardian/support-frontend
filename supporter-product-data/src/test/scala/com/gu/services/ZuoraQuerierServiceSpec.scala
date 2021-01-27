@@ -33,7 +33,7 @@ class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
       config <- ZuoraQuerierConfig.load(CODE)
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       response <- service.getResultFileResponse(fileId)
-      uploadResult <- S3Service.streamToS3(s"upload-test-file-$fileId", response.body.byteStream(), response.body.contentLength)
+      uploadResult <- S3Service.streamToS3(CODE, s"upload-test-file-$fileId", response.body.byteStream(), response.body.contentLength)
     } yield uploadResult
     futureResult.map(_ =>
       succeed

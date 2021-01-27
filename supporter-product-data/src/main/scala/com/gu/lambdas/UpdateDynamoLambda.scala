@@ -26,7 +26,7 @@ class UpdateDynamoLambda extends Handler[UpdateDynamoState, Unit] {
 
 object UpdateDynamoLambda {
   def writeToDynamo(stage: Stage, filename: String) = {
-    val csvStream = S3Service.streamFromS3(filename)
+    val csvStream = S3Service.streamFromS3(stage, filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val dynamoDBService = DynamoDBService(stage)
     csvReader.foreach {
