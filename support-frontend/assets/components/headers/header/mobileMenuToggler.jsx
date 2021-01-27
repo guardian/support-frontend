@@ -3,13 +3,11 @@
 // ----- Imports ----- //
 
 import React, { Component, type Node } from 'react';
-
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
-import { clickedEvent } from 'helpers/tracking/clickTracking';
-
 import MobileMenu, { type Position } from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 export default class MobileMenuToggler extends Component<{
   utility: Node,
@@ -37,7 +35,10 @@ export default class MobileMenuToggler extends Component<{
           label="menu"
           onClick={() => {
             this.setState({ menuOpen: true });
-            clickedEvent(['header', 'menu-open'].join(' - '));
+            sendTrackingEventsOnClick({
+              id: 'open_mobile_menu',
+              componentType: 'ACQUISITIONS_BUTTON',
+            })();
             if (this.buttonRef) {
               const bounds = (this.buttonRef.getBoundingClientRect());
               this.setState({
@@ -57,7 +58,10 @@ export default class MobileMenuToggler extends Component<{
           onStatusChange={(status) => {
             this.setState({ menuOpen: status });
             if (!status) {
-              clickedEvent(['header', 'menu-dismiss'].join(' - '));
+              sendTrackingEventsOnClick({
+                id: 'close_mobile_menu',
+                componentType: 'ACQUISITIONS_BUTTON',
+              })();
             }
           }}
         >
@@ -67,7 +71,10 @@ export default class MobileMenuToggler extends Component<{
             links={links}
             onClose={() => {
               this.setState({ menuOpen: false });
-              clickedEvent(['header', 'menu-close'].join(' - '));
+              sendTrackingEventsOnClick({
+                id: 'close_mobile_menu',
+                componentType: 'ACQUISITIONS_BUTTON',
+              })();
             }}
           />
         </Dialog>
