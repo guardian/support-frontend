@@ -11,8 +11,8 @@ deployments:
     parameters:
       bucket: supporter-product-data-dist
       functionNames:
-        - "-SupporterProductDataQuerier-"
-        - "-SupporterProductDataFetcher-"
-        - "-SupporterProductDataWriteToDynamo-"
+        - "-SupporterProductDataQueryZuora-"
+        - "-SupporterProductDataFetchResults-"
+        - "-SupporterProductDataUpdateDynamo-"
       fileName: supporter-product-data.jar
     dependencies: [cfn]
