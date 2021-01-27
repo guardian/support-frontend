@@ -1,26 +1,26 @@
 package com.gu.services
 
 import com.gu.aws.ProfileName
-import com.gu.model.{FieldsToExport, Stage}
 import com.gu.model.FieldsToExport._
+import com.gu.model.Stage
 import com.gu.model.dynamo.SupporterRatePlanItem
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateItemRequest}
 
-import java.time.format.DateTimeFormatter
+import java.util.concurrent.CompletionException
 import scala.collection.JavaConverters._
 import scala.compat.java8.FutureConverters._
-import java.util.concurrent.CompletionException
 import scala.concurrent.{ExecutionContext, Future}
 
 
 class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
 
   def writeItem(item: SupporterRatePlanItem)(implicit executionContext: ExecutionContext) = {
+    val beneficiaryIdentityId = item.gifteeIdentityId.getOrElse(item.identityId)
     val key = Map(
-      identityId.dynamoName -> AttributeValue.builder.s(item.identityId).build,
+      identityId.dynamoName -> AttributeValue.builder.s(beneficiaryIdentityId).build,
       ratePlanId.dynamoName -> AttributeValue.builder.s(item.ratePlanId).build
     ).asJava
 
