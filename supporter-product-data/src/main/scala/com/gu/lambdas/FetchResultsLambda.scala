@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.lambdas.FetchResultsLambda.fetchResults
 import com.gu.model.Stage
-import com.gu.model.states.{UpdateDynamoState, ZuoraResultsFetcherState}
+import com.gu.model.states.{UpdateDynamoState, FetchResultsState}
 import com.gu.model.zuora.request.ExportZoqlQueryObject
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.monitoring.SafeLogger
@@ -14,8 +14,8 @@ import com.gu.services.{S3Service, ZuoraQuerierService}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
-class FetchResultsLambda extends Handler[ZuoraResultsFetcherState, UpdateDynamoState] {
-  override protected def handlerFuture(input: ZuoraResultsFetcherState, context: Context) =
+class FetchResultsLambda extends Handler[FetchResultsState, UpdateDynamoState] {
+  override protected def handlerFuture(input: FetchResultsState, context: Context) =
     fetchResults(Stage.fromEnvironment, input.query, input.jobId)
 }
 

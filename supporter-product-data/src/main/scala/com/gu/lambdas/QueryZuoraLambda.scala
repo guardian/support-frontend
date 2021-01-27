@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.lambdas.QueryZuoraLambda.queryZuora
 import com.gu.model.Stage
-import com.gu.model.states.{ZuoraQuerierState, ZuoraResultsFetcherState}
+import com.gu.model.states.{QueryZuoraState, FetchResultsState}
 import com.gu.model.zuora.request.ExportZoqlQueryObject
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -14,9 +14,9 @@ import java.time.{LocalDate, ZoneId}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-class QueryZuoraLambda extends Handler[ZuoraQuerierState, ZuoraResultsFetcherState] {
+class QueryZuoraLambda extends Handler[QueryZuoraState, FetchResultsState] {
 
-  override protected def handlerFuture(input: ZuoraQuerierState, context: Context) =
+  override protected def handlerFuture(input: QueryZuoraState, context: Context) =
     queryZuora(Stage.fromEnvironment, input.query, LocalDate.now(ZoneId.of("UTC")))
 
 }
