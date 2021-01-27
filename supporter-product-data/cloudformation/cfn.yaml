@@ -15,10 +15,16 @@ Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
 
 Mappings:
-  Constants:
-    Alarm:
-      Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
-      Urgent: URGENT 9-5 -
+  StageVariables:
+    CODE:
+      S3Bucket:
+        - supporter-product-data-export-code
+    UAT:
+      S3Bucket:
+        - supporter-product-data-export-uat
+    PROD:
+      S3Bucket:
+        - supporter-product-data-export-prod
 
 Resources:
 
@@ -26,7 +32,7 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       BucketName:
-        !Sub supporter-product-data-export-${Stage}
+        !FindInMap [StageVariables, !Ref Stage, S3Bucket]
       AccessControl: Private
       LifecycleConfiguration:
         Rules:
