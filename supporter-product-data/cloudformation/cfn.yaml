@@ -249,7 +249,7 @@ Resources:
               "FetchResults": {
                 "Type": "Task",
                 "Resource": "${fetcherArn}",
-                "Next": "UpdateDynamo",
+                "Next": "CheckForNewSubscriptions",
                 "Retry": [
                    {
                     "ErrorEquals": ["States.ALL"],
