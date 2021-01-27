@@ -2,14 +2,12 @@ package com.gu.services
 
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.model.Stage.CODE
-import com.gu.model.zuora.request.ExportZoqlQueryObject.SelectRatePlansStartedOn
 import com.gu.model.zuora.response.JobStatus.Submitted
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import java.io.ByteArrayInputStream
 import java.time.LocalDate
 import scala.concurrent.duration._
 
@@ -19,7 +17,7 @@ class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
     val futureResult = for {
       config <- ZuoraQuerierConfig.load(CODE)
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
-      result <- service.postQuery(SelectRatePlansStartedOn, LocalDate.now())
+      result <- service.postQuery(LocalDate.now())
     } yield result
 
     futureResult.map {
