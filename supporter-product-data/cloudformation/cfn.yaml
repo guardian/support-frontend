@@ -258,6 +258,21 @@ Resources:
                     "BackoffRate": 1.0
                   }]
               },
+              "CheckForNewSubscriptions": {
+                "Type": "Choice",
+                "Choices": [
+                  {
+                      "Variable": "$.recordCount",
+                      "NumericEquals": 0,
+                      "Next": "NoNewSubscriptions"
+                  }
+                ],
+                "Default": "UpdateDynamo"
+              },
+              "NoNewSubscriptions": {
+                "Type": "Pass",
+                "End": true
+              },
               "UpdateDynamo": {
                 "Type": "Task",
                 "Resource": "${dynamoArn}",
