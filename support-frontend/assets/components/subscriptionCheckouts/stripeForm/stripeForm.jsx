@@ -323,11 +323,9 @@ const StripeForm = (props: StripeFormPropTypes) => {
    * Rendering
    */
 
-  const cardErrorsList = getAllCardErrors();
-
   const errors = [
     ...props.allErrors,
-    ...(cardErrorsList || []),
+    ...(cardErrors || []),
     ...(recaptchaError ? [recaptchaError] : []),
   ];
 
