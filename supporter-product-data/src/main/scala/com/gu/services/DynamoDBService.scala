@@ -9,6 +9,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateItemRequest}
 
+import java.time.{LocalDate, ZoneId, ZoneOffset}
 import java.util.concurrent.CompletionException
 import scala.collection.JavaConverters._
 import scala.compat.java8.FutureConverters._
@@ -33,7 +34,7 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
     val attributeValues = Map(
       ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName.dynamoName -> AttributeValue.builder.s(item.productRatePlanName).build,
-      ":" + termEndDate.dynamoName -> AttributeValue.builder.s(item.termEndDate).build,
+      ":" + termEndDate.dynamoName -> AttributeValue.builder.n(getAdjustedTermEndDate(item.termEndDate)).build,
     ).asJava
 
     val updateItemRequest = UpdateItemRequest.builder
@@ -47,6 +48,12 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
       case cex: CompletionException => Future.failed(cex.getCause)
     }
   }
+
+  def getAdjustedTermEndDate(date: LocalDate) =
+    date.plusDays(1) // This is to avoid problems with timezones, as renewals are created early morning Pacific Time
+      .atStartOfDay
+      .toEpochSecond(ZoneOffset.UTC)
+      .toString
 }
 
 object DynamoDBService{

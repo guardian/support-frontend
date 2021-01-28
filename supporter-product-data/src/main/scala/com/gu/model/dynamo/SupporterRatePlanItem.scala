@@ -2,6 +2,9 @@ package com.gu.model.dynamo
 
 import com.gu.model.FieldsToExport._
 import kantan.csv.HeaderDecoder
+import kantan.csv.java8.defaultLocalDateCellDecoder
+
+import java.time.LocalDate
 
 case class SupporterRatePlanItem(
   identityId: String, //Unique identifier for user
@@ -9,7 +12,7 @@ case class SupporterRatePlanItem(
   ratePlanId: String, //Unique identifier for this product purchase for this user
   productRatePlanId: String, //Unique identifier for the product in this rate plan
   productRatePlanName: String, //Name of the product in this rate plan
-  termEndDate: String //Date that this subscription term ends
+  termEndDate: LocalDate //Date that this subscription term ends
 )
 
 object SupporterRatePlanItem {
