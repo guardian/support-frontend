@@ -28,7 +28,8 @@ object QueryZuoraLambda {
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.postQuery(date)
     } yield {
-      SafeLogger.info(s"Successfully submitted query with jobId ${result.id}")
+      val fullOrIncremental = if (result.batches.headOption.exists(_.full)) "full" else "incremental"
+      SafeLogger.info(s"Successfully submitted query with jobId ${result.id}, results will be $fullOrIncremental")
       FetchResultsState(result.id)
     }
   }
