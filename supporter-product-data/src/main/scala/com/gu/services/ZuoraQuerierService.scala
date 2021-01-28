@@ -25,19 +25,19 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   )
 
   def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {
-    val query = queryType match {
-      case Full => SelectActiveRatePlansQuery.fullQuery(LocalDate.now(ZoneId.of("UTC")))
-      case Incremental => SelectActiveRatePlansQuery.incrementalQuery
-    }
-    val request = BatchQueryRequest(
-      config.partnerId,
-      "supporter-product-data",
-      List(
+    val queries = queryType match {
+      case Full => List(
         ZoqlExportQuery(
           SelectActiveRatePlansQuery.name,
-          query
+          SelectActiveRatePlansQuery.query(LocalDate.now(ZoneId.of("UTC")))
         )
       )
+      case Incremental => List()
+    }
+    val request = BatchQueryRequest(
+      partner = config.partnerId,
+      name = "supporter-product-data",
+      queries = queries
     )
     postJson[BatchQueryResponse](s"batch-query/", request.asJson, authHeaders)
   }

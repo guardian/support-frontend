@@ -12,9 +12,7 @@ object SelectActiveRatePlansQuery {
   val isNotDSGift = "Subscription.RedemptionCode__c = ''"
   val isRedeemedDSGift = s"(Subscription.RedemptionCode__c != '' AND ${gifteeIdentityId.zuoraName} != '')"
 
-  def fullQuery(date: LocalDate): String = s"$incrementalQuery AND ${termEndDate.zuoraName} >= '$date'"
-
-  def incrementalQuery: String =
+  def query(date: LocalDate): String =
     s"""SELECT
           ${identityId.zuoraName},
           ${gifteeIdentityId.zuoraName},
@@ -27,6 +25,7 @@ object SelectActiveRatePlansQuery {
             FROM
             rateplan
             WHERE
+            ${termEndDate.zuoraName} >= '$date' AND
             (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
             ${productRatePlanId.zuoraName} != '$discountProductRatePlanId' AND
             ${identityId.zuoraName} != null AND
