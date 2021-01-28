@@ -22,7 +22,7 @@ class QueryZuoraLambda extends Handler[QueryZuoraState, FetchResultsState] {
 
 object QueryZuoraLambda {
   def queryZuora(stage: Stage, queryType: QueryType) = {
-    SafeLogger.info(s"Attempting to submit query to Zuora")
+    SafeLogger.info(s"Attempting to submit ${queryType.value} query to Zuora")
     for {
       config <- ZuoraQuerierConfig.load(stage)
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))

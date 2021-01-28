@@ -10,6 +10,7 @@ import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
 import java.time.{LocalDate, ZoneId, ZoneOffset}
+import java.util.UUID
 import scala.collection.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.classTag
@@ -28,7 +29,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
     val queries = queryType match {
       case Full => List(
         ZoqlExportQuery(
-          SelectActiveRatePlansQuery.name,
+          s"${SelectActiveRatePlansQuery.name}-${UUID.randomUUID().toString}",
           SelectActiveRatePlansQuery.query(LocalDate.now(ZoneId.of("UTC")))
         )
       )
