@@ -28,7 +28,7 @@ export default function CtaSubscribe() {
           href="/subscribe"
           onClick={sendTrackingEventsOnClick({
             id: 'support-page-cta-subscribe',
-            componentType: 'ACQUISITIONS_OTHER',
+            componentType: 'ACQUISITIONS_BUTTON',
           })}
         >
           Choose a Subscription

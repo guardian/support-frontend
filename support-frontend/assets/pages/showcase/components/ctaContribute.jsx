@@ -44,7 +44,7 @@ export default function CtaContribute() {
               href="/contribute"
               onClick={sendTrackingEventsOnClick({
                 id: 'support-page-cta-contribute',
-                componentType: 'ACQUISITIONS_OTHER',
+                componentType: 'ACQUISITIONS_BUTTON',
               })}
             >
             Make a Contribution

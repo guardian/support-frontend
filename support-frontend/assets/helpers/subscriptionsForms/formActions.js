@@ -9,9 +9,9 @@ import type { FormField, Stage } from './formFields';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import * as storage from 'helpers/storage';
 import {
-  trackPaymentMethodSelected,
   trackThankYouPageLoaded,
 } from 'helpers/tracking/behaviour';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -89,7 +89,10 @@ const formActionCreators = {
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
     const state = getState();
     storage.setSession('selectedPaymentMethod', paymentMethod);
-    trackPaymentMethodSelected(paymentMethod);
+    sendTrackingEventsOnClick({
+      id: `subscriptions-payment-method-selector-${paymentMethod}`,
+      componentType: 'ACQUISITIONS_OTHER',
+    })();
     if (paymentMethod === PayPal && !state.page.checkout.payPalHasLoaded) {
       showPayPal(dispatch);
     }
