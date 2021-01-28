@@ -302,7 +302,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       Description: "Trigger nightly data synchronisation"
-      ScheduleExpression: "cron(00 3 ? * * *)"
+      ScheduleExpression: "cron(0 */30 * ? * *)"
       State: "ENABLED"
       Targets:
         -
