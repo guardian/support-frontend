@@ -158,7 +158,7 @@ Resources:
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
-        S3Key: !Sub ${Stage}/supporter-product-data.jar
+        S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 512
       Runtime: "java8"
       Timeout: 300
@@ -176,7 +176,7 @@ Resources:
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
-        S3Key: !Sub ${Stage}/supporter-product-data.jar
+        S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 512
       Runtime: "java8"
       Timeout: 300
@@ -194,7 +194,7 @@ Resources:
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
-        S3Key: !Sub ${Stage}/supporter-product-data.jar
+        S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 512
       Runtime: "java8"
       Timeout: 900
