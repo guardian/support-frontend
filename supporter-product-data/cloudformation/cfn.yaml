@@ -197,7 +197,7 @@ Resources:
         S3Key: !Sub ${Stage}/supporter-product-data.jar
       MemorySize: 512
       Runtime: "java8"
-      Timeout: 300
+      Timeout: 900
       Environment:
         Variables:
           'Stage': !Sub ${Stage}
