@@ -23,6 +23,7 @@ import cats.implicits._
 import play.api.libs.circe.Circe
 import views.EmptyDiv
 import com.gu.support.encoding.CustomCodecs._
+import utils.PaperValidation
 import views.ViewHelpers.outputJson
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -119,7 +120,9 @@ class PaperSubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
       payPalConfigProvider.get(true),
-      v2recaptchaConfigPublicKey
+      v2recaptchaConfigPublicKey,
+      false,
+      Some(PaperValidation.M25_POSTCODE_PREFIXES)
     )
   }
 

@@ -47,12 +47,11 @@ class CreateSubscription(
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(new LoggingCirceParser(components).requestParser) {
       implicit request: AuthRequest[CreateSupportWorkersRequest] =>
-        handleCreateSupportWorkersRequest(request, CheckoutValidationRules.validatorFor(request.body.product))
+        handleCreateSupportWorkersRequest(request)
     }
 
   def handleCreateSupportWorkersRequest(
-    implicit request: AuthRequest[CreateSupportWorkersRequest],
-    validator: CreateSupportWorkersRequest => Boolean
+    implicit request: AuthRequest[CreateSupportWorkersRequest]
   ): Future[Result] = {
     SafeLogger.info(s"[${request.uuid}] User ${request.user.minimalUser.id} is attempting to create a new ${request.body.product} subscription")
 
@@ -66,7 +65,7 @@ class CreateSubscription(
       client.createSubscription(request, createUser(idUser, createSupportWorkersRequest), request.uuid).leftMap(error => ServerError(error.toString))
     }
 
-    if (validator(createSupportWorkersRequest)) {
+    if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
       val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user.minimalUser).leftMap(ServerError(_))
 
       val result: ApiResponseOrError[StatusResponse] = for {
