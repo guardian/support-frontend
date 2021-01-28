@@ -20,7 +20,7 @@ import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouSignIn from './ContributionThankYouSignIn';
 import ContributionThankYouSignUp from './ContributionThankYouSignUp';
-import ContributionThankYouHearMarketingConsent from './ContributionThankYouHearMarketingConsent';
+import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
 import ContributionThankYouSupportReminder from './ContributionThankYouSupportReminder';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
@@ -213,7 +213,7 @@ const ContributionThankYou = ({
   };
   const marketingConsentAction = {
     component: (
-      <ContributionThankYouHearMarketingConsent
+      <ContributionThankYouMarketingConsent
         email={email}
         csrf={csrf}
         thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
