@@ -22,7 +22,7 @@ object S3Service {
     .withS3Client(s3Client)
     .build
 
-  def bucketName(stage: Stage) = s"supporter-product-data-export-${stage.value}"
+  def bucketName(stage: Stage) = s"supporter-product-data-export-${stage.value.toLowerCase}"
 
   def streamToS3(stage: Stage, filename: String, inputStream: InputStream, length: Long) = {
     // Specify server-side encryption.
