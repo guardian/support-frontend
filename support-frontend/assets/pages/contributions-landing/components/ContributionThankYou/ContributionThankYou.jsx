@@ -118,16 +118,13 @@ const isLargeDonation = (
   amount: string,
   contributionType: ContributionType,
 ): boolean => {
-  const amountInCents = parseFloat(amount) * 100;
-  const twoHundredAndFiftyDollars = 25_000;
-  const twentyFiveDollars = 2_500;
   const largeDonations = {
-    MONTHLY: twentyFiveDollars,
-    ANNUAL: twoHundredAndFiftyDollars,
-    ONE_OFF: twoHundredAndFiftyDollars,
+    MONTHLY: 20,
+    ANNUAL: 100,
+    ONE_OFF: 100,
   };
 
-  return amountInCents >= largeDonations[contributionType];
+  return parseFloat(amount) >= largeDonations[contributionType];
 };
 
 type ContributionThankYouProps = {|
@@ -165,7 +162,7 @@ const mapStateToProps = state => ({
   thankyouPageHeadingTestVariant:
     state.common.abParticipations.thankyouPageHeadingTest === 'V1',
   largeDonationMessageTestVariant:
-    state.common.abParticipations.usThankyouPageLargeDonationTest === 'V1',
+    state.common.abParticipations.globalThankyouPageLargeDonationTest === 'V1',
 });
 
 const ContributionThankYou = ({
@@ -187,11 +184,9 @@ const ContributionThankYou = ({
   const campaignSettings = useMemo<CampaignSettings | null>(() =>
     getCampaignSettings(campaignCode));
 
-  const isLargeUSDonation =
-    countryId === 'US' && isLargeDonation(amount, contributionType);
 
   const shouldShowLargeDonationMessage =
-    largeDonationMessageTestVariant && isLargeUSDonation;
+    largeDonationMessageTestVariant && isLargeDonation(amount, contributionType);
 
   useEffect(() => {
     trackUserData(
@@ -199,7 +194,7 @@ const ContributionThankYou = ({
       contributionType,
       user.isSignedIn,
       isKnownEmail,
-      isLargeUSDonation,
+      isLargeDonation(amount, contributionType),
     );
   }, []);
 
