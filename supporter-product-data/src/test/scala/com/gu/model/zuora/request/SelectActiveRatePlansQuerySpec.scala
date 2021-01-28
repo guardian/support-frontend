@@ -28,7 +28,7 @@ class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with Lazy
             Account.IdentityId__c != null AND
             (Subscription.RedemptionCode__c = '' OR (Subscription.RedemptionCode__c != '' AND Subscription.GifteeIdentityId__c != ''))
     """
-    val actual = SelectActiveRatePlansQuery.query(date)
+    val actual = SelectActiveRatePlansQuery.fullQuery(date)
     logger.info(actual)
     actual shouldEqual expected
   }

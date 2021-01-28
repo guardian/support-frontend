@@ -310,7 +310,7 @@ Resources:
           Id: !Sub trigger_state_machine-${Stage}-1
           Input: |
             {
-            "foo":"bar"
+              "queryType":"incremental"
             }
           RoleArn: !GetAtt [ SupporterProductDataTriggerRole, Arn ]
 

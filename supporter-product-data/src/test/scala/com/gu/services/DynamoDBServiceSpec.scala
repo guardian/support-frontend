@@ -16,7 +16,7 @@ class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
     val item = SupporterRatePlanItem(
       "999999",
       None,
-      "1", "1", "Digital Subscription", "2021-01-01"
+      "1", "1", "Digital Subscription", LocalDate.parse("2021-01-01")
     )
     service.writeItem(item).map(_ => succeed)
 

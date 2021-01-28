@@ -1,13 +1,15 @@
 package com.gu.services
 
 import com.gu.conf.ZuoraQuerierConfig
+import com.gu.model.states.QueryType
+import com.gu.model.states.QueryType.{Full, Incremental}
 import com.gu.model.zuora.request.{BatchQueryRequest, ZoqlExportQuery}
 import com.gu.model.zuora.response.{BatchQueryErrorResponse, BatchQueryResponse}
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
-import java.time.LocalDate
+import java.time.{LocalDate, ZoneId, ZoneOffset}
 import scala.collection.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.classTag
@@ -22,17 +24,22 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
     "apiAccessKeyId" -> config.username
   )
 
-  def postQuery(date: LocalDate): Future[BatchQueryResponse] = {
-    val query = BatchQueryRequest(
+  def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {
+    val query = queryType match {
+      case Full => SelectActiveRatePlansQuery.fullQuery(LocalDate.now(ZoneId.of("UTC")))
+      case Incremental => SelectActiveRatePlansQuery.incrementalQuery
+    }
+    val request = BatchQueryRequest(
       config.partnerId,
       "supporter-product-data",
       List(
-        ZoqlExportQuery(SelectActiveRatePlansQuery.name,
-          SelectActiveRatePlansQuery.query(date)
+        ZoqlExportQuery(
+          SelectActiveRatePlansQuery.name,
+          query
         )
       )
     )
-    postJson[BatchQueryResponse](s"batch-query/", query.asJson, authHeaders)
+    postJson[BatchQueryResponse](s"batch-query/", request.asJson, authHeaders)
   }
 
   def getResults(id: String): Future[BatchQueryResponse] =
