@@ -31,7 +31,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
       case Full => List(
         ZoqlExportQuery(
           s"${SelectActiveRatePlansQuery.name}-${UUID.randomUUID().toString}",
-          SelectActiveRatePlansQuery.query(LocalDate.now(ZoneId.of("UTC")), config.discountProductRatePlanId)
+          SelectActiveRatePlansQuery.query(LocalDate.now(ZoneId.of("UTC")), config.discountProductRatePlanIds)
         )
       )
       case Incremental => List()

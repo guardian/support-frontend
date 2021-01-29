@@ -23,10 +23,11 @@ class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with Lazy
             Subscription.TermEndDate >= '2011-11-01' AND
             (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
             ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067819' AND
-            Account.IdentityId__c != null AND
+ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067818' AND
+            Account.IdentityId__c != null AND Account.IdentityId__c != '' AND
             (Subscription.RedemptionCode__c = '' OR (Subscription.RedemptionCode__c != '' AND Subscription.GifteeIdentityId__c != ''))
     """
-    val actual = SelectActiveRatePlansQuery.query(date, "2c92c0f852f2ebb20152f9269f067819")
+    val actual = SelectActiveRatePlansQuery.query(date, List("2c92c0f852f2ebb20152f9269f067819", "2c92c0f852f2ebb20152f9269f067818"))
     logger.info(actual)
     actual shouldEqual expected
   }
