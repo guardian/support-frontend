@@ -302,7 +302,7 @@ Resources:
               "ProcessingComplete": {
                 "Type": "Pass",
                 "End": true
-              },
+              }
             }
           }
         - {
