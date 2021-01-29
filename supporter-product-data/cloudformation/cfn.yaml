@@ -279,7 +279,7 @@ Resources:
               "UpdateDynamo": {
                 "Type": "Task",
                 "Resource": "${dynamoArn}",
-                "End": true,
+                "Next": "CheckProcessingComplete",
                 "Retry": [
                    {
                     "ErrorEquals": ["States.ALL"],
@@ -287,7 +287,22 @@ Resources:
                     "MaxAttempts": 3,
                     "BackoffRate": 1.0
                   }]
-              }
+              },
+              "CheckProcessingComplete": {
+                "Type": "Choice",
+                "Choices": [
+                  {
+                      "Variable": "$.recordCount",
+                      "NumericGreaterThanPath": "$.processedCount",
+                      "Next": "UpdateDynamo"
+                  }
+                ],
+                "Default": "ProcessingComplete"
+              },
+              "ProcessingComplete": {
+                "Type": "Pass",
+                "End": true
+              },
             }
           }
         - {
