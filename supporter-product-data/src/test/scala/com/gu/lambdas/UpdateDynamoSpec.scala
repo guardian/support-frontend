@@ -17,7 +17,7 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
         processedCount = 0
       ),
       new TimeOutCheck {
-        override def shouldFinishProcessing = false
+        override def timeRemainingMillis = 9999999
       }
     ).map(_ =>
       succeed
