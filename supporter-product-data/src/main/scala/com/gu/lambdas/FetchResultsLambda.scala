@@ -34,7 +34,11 @@ object FetchResultsLambda {
       _ <- S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
     } yield {
       SafeLogger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
-      UpdateDynamoState(filename, batch.recordCount)
+      UpdateDynamoState(
+        filename,
+        batch.recordCount,
+        processedCount = 0
+      )
     }
   }
 }

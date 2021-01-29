@@ -5,7 +5,8 @@ import io.circe.{Decoder, Encoder}
 
 case class UpdateDynamoState(
   filename: String,
-  recordCount: Int
+  recordCount: Int,
+  processedCount: Int
 )
 
 object UpdateDynamoState{
