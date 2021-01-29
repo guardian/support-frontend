@@ -3,12 +3,13 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { RadioGroup, Radio } from '@guardian/src-radio';
+import { Checkbox } from '@guardian/src-checkbox';
 import { TextArea } from '@guardian/src-text-area';
 
 import {
@@ -24,7 +25,6 @@ import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
-import { getTitle } from '../../paper-subscription-landing/helpers/products';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
@@ -76,6 +76,7 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import { titles } from 'helpers/user/details';
 import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
+import { getOrderSummaryTitle } from '../helpers/orderSummaryText';
 
 
 const marginBottom = css`
@@ -176,7 +177,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
-  const title = `${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`;
+  const title = getOrderSummaryTitle(props.productOption, props.fulfilmentOption, props.useDigitalVoucher);
   const productPrice = getProductPrice(
     props.productPrices,
     props.fulfilmentOption,
@@ -190,6 +191,13 @@ function PaperCheckoutForm(props: PropTypes) {
     const startDate = getPaymentStartDate(timeNow, props.productOption);
     formattedStartDate = getFormattedStartDate(getPaymentStartDate(timeNow, props.productOption));
     setSubsCardStartDateInState(props.setStartDate, startDate);
+  }
+
+  const [includesDigiSub, setIncludesDigiSub] = useState<boolean>(false);
+
+  function addDigitalSubscription(event) {
+    setIncludesDigiSub(event.target.checked);
+    props.setAddDigitalSubscription(event.target.checked);
   }
 
   const subsCardOrderSummary = (<OrderSummary
@@ -347,6 +355,13 @@ function PaperCheckoutForm(props: PropTypes) {
                 </Text>
               </Rows>
             </FormSection>) : null}
+          <FormSection>
+            <Checkbox
+              value="add-digital"
+              label="Add the Digital subscription"
+              onChange={addDigitalSubscription}
+            />
+          </FormSection>
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector

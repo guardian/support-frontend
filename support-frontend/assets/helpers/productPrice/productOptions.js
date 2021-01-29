@@ -34,10 +34,32 @@ export type PaperProductOptions =
   | typeof Sixday
   | typeof Everyday;
 
+export type PaperAndDigitalProductOptions =
+  | typeof SaturdayPlus
+  | typeof SundayPlus
+  | typeof WeekendPlus
+  | typeof SixdayPlus
+  | typeof EverydayPlus;
 
 const ActivePaperProductTypes = [Everyday, Sixday, Weekend, Sunday];
 
 export type ActivePaperProducts = typeof Everyday | typeof Sixday | typeof Weekend | typeof Sunday;
+
+const paperProductsWithDigital: { [key: ProductOptions]: ProductOptions } = {
+  Saturday: SaturdayPlus,
+  Sunday: SundayPlus,
+  Weekend: WeekendPlus,
+  Sixday: SixdayPlus,
+  Everyday: EverydayPlus,
+};
+
+const paperProductsWithoutDigital: { [key: ProductOptions]: ProductOptions } = {
+  SaturdayPlus: Saturday,
+  SundayPlus: Sunday,
+  WeekendPlus: Weekend,
+  SixdayPlus: Sixday,
+  EverydayPlus: Everyday,
+};
 
 export {
   NoProductOptions,
@@ -52,4 +74,6 @@ export {
   Everyday,
   EverydayPlus,
   ActivePaperProductTypes,
+  paperProductsWithDigital,
+  paperProductsWithoutDigital,
 };
