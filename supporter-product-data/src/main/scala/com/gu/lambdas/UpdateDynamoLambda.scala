@@ -86,7 +86,7 @@ object UpdateDynamoLambda {
           s"Continuing processing - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds"
         )
 
-        Await.result(writeBatch(group, dynamoDBService), 30.seconds)
+        Await.result(writeBatch(group, dynamoDBService), 120.seconds)
 
         val (_, highestProcessedIndex ) = group.last
         val newProcessedCount = highestProcessedIndex + 1
