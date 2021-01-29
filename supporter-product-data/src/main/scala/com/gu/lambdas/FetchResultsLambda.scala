@@ -28,7 +28,7 @@ object FetchResultsLambda {
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
       batch = result.batches.headOption.toRight(s"No batches were returned in the batch query response for jobId $jobId").right.get
       fileId = batch.fileId.toRight(s"Batch.fileId was missing in jobId $jobId").right.get
-      filename = s"${batch.name}-$fileId"
+      filename = s"${batch.name}-$fileId.csv"
       fileResponse <- service.getResultFileResponse(fileId)
       _ = assert(fileResponse.isSuccessful, s"File download for job with id $jobId failed with http code ${fileResponse.code}")
       _ <- S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
