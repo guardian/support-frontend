@@ -5,11 +5,16 @@ import { headline, textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { brand, neutral } from '@guardian/src-foundations/palette';
 
+const container = css`
+  &:not(:last-of-type) {
+    border-bottom: 1px solid ${neutral[86]};
+  }
+`;
+
 const title = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
   background-color: ${neutral[97]};
   padding: ${space[2]}px;
-  border-top: 1px solid ${neutral[60]};
 `;
 
 const list = css`
@@ -53,7 +58,7 @@ type OrderSummaryProductProps = {
 
 function OrderSummaryProduct(props: OrderSummaryProductProps) {
   return (
-    <div>
+    <div css={container}>
       <h4 css={title}>{props.productName}</h4>
       <ul css={list}>
         {props.productInfo.map(infoItem => (

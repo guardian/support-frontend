@@ -1,7 +1,7 @@
 import { css } from '@emotion/core';
 import { headline, body, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { background, brandAltBackground, text, border, neutral } from '@guardian/src-foundations/palette';
+import { background, brandAltBackground, brand, text, border, neutral } from '@guardian/src-foundations/palette';
 import { from, between, until } from '@guardian/src-foundations/mq';
 
 export const wrapper = css`
@@ -16,12 +16,8 @@ export const wrapper = css`
 `;
 
 export const topLine = css`
-  display: flex;
-  justify-content: space-between;
   width: calc(100%-${space[3]}px * 2);
-  align-items: center;
-  padding: ${space[3]}px;
-  border-bottom: 1px solid ${neutral[86]};
+  padding: 0 ${space[3]}px;
 
   ${until.desktop} {
     border-top: 1px solid ${neutral['93']};
@@ -43,6 +39,15 @@ export const topLine = css`
   }
 `;
 
+export const topLineBorder = css`
+  padding: ${space[3]}px 0;
+  border-bottom: 1px solid ${neutral[86]};
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const title = css`
   ${headline.xsmall({ fontWeight: 'bold' })}
 `;
@@ -50,6 +55,7 @@ export const title = css`
 export const contentBlock = css`
   display: flex;
   width: 100%;
+  border-bottom: 1px solid ${neutral[60]};
 
   ${from.tablet} {
     display: block;
@@ -124,4 +130,31 @@ export const products = css`
   ${from.desktop} {
     display: block;
   }
+`;
+
+export const infoContainer = css`
+  padding: 0 ${space[2]}px;
+`;
+
+export const info = css`
+  ${textSans.xsmall()};
+  line-height: 22px;
+  display: flex;
+  padding: ${space[2]}px 0;
+  border-top: 1px solid ${neutral[86]};
+
+  svg {
+    max-width: 22px;
+    fill: ${brand[400]};
+    margin-right: ${space[2]}px;
+  }
+`;
+
+export const total = css`
+  ${headline.xsmall({ fontWeight: 'bold' })};
+  background-color: ${neutral[97]};
+  padding: ${space[2]}px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
