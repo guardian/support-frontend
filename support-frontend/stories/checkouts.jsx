@@ -61,12 +61,8 @@ stories.add('Order Summary', () => {
             altText=""
           />
         }
-        // title="Hello"
-        // productPrice={productPrice}
-        // billingPeriod="Monthly"
         changeSubscription="/"
-        // product="Paper"
-        // fulfilmentOption="HomeDelivery"
+        total="£62.99/month"
       >
         <OrderSummaryProduct
           productName="Sixday paper"
