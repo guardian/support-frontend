@@ -6,10 +6,16 @@ import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import * as styles from './orderSummaryStyles';
 
+type MobileOrderSummary = {
+  title: string,
+  price: string,
+}
+
 type PropTypes = {
   children: Node,
   changeSubscription?: string | null,
   image: $Call<GridImageType, GridImg>,
+  mobileSummary: MobileOrderSummary,
   total: string,
 };
 
@@ -24,6 +30,10 @@ function OrderSummary(props: PropTypes) {
       </div>
       <div css={styles.contentBlock}>
         <div css={styles.imageContainer}>{props.image}</div>
+        <div css={styles.mobileSummary}>
+          <h4>{props.mobileSummary.title}</h4>
+          <p>{props.mobileSummary.price}</p>
+        </div>
       </div>
       <div css={styles.products}>
         <div>
