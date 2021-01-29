@@ -34,39 +34,47 @@ object UpdateDynamoLambda {
   val batchSize = 10
   val timeoutBufferInMillis = batchSize * 5 * 1000
 
-  def writeToDynamo(stage: Stage, state: UpdateDynamoState, timeOutCheck: TimeOutCheck) = {
+  def writeToDynamo(stage: Stage, state: UpdateDynamoState, timeOutCheck: TimeOutCheck): Future[UpdateDynamoState] = {
     val csvStream = S3Service.streamFromS3(stage, state.filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val dynamoDBService = DynamoDBService(stage)
 
-    val unProcessed = csvReader.drop(state.processedCount).zipWithIndex.toList
+    val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
 
-    val validUnprocessedRows = unProcessed.filter { case (itemOrError, _) => itemOrError.isRight }
-    val invalidRows = unProcessed.filter { case (itemOrError, _) => itemOrError.isLeft }
+    val validUnprocessed = unProcessed.filter { case (itemOrError, _) => itemOrError.isRight }
+    val invalidUnprocessed = unProcessed.filter { case (itemOrError, _) => itemOrError.isLeft }
 
-    if (invalidRows.nonEmpty)
+    if (invalidUnprocessed.nonEmpty)
       SafeLogger.error(
-        scrub"There were ${invalidRows.length} CSV read failures from file ${state.filename} with line numbers ${invalidRows.map(_._2).mkString(",")}"
+        scrub"There were ${invalidUnprocessed.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessed.map(_._2).mkString(",")}"
       )
 
-    val batches = validUnprocessedRows
+    val batches = validUnprocessed
       .map { case (itemOrError, index) => (itemOrError.right.get, index) }
       .grouped(batchSize)
 
-    val itemsProcessedInThisExecutionCount = writeBatchesUntilTimeout(batches, timeOutCheck, dynamoDBService)
+    val processedCount = writeBatchesUntilTimeout(
+      state.processedCount,
+      batches,
+      timeOutCheck,
+      dynamoDBService
+    )
 
-    Future.successful(
-      state.copy(
-        processedCount = itemsProcessedInThisExecutionCount + state.processedCount
+    Future.successful(state.copy(
+        processedCount = processedCount
       ))
   }
 
+  def getUnprocessedItems(csvReader:  CsvReader[ReadResult[SupporterRatePlanItem]], processedCount: Int) =
+    csvReader.zipWithIndex.drop(processedCount).toList
+
   def writeBatchesUntilTimeout(
+    processedCount: Int,
     groups: Iterator[List[(SupporterRatePlanItem, Int)]],
     timeOutCheck: TimeOutCheck,
     dynamoDBService: DynamoDBService
   ): Int =
-    groups.foldLeft(0) {
+    groups.foldLeft(processedCount) {
       (processedCount, group) =>
         if (timeOutCheck.timeRemainingMillis < timeoutBufferInMillis) {
           SafeLogger.info(
@@ -79,11 +87,11 @@ object UpdateDynamoLambda {
         )
 
         Await.result(writeBatch(group, dynamoDBService), 30.seconds)
-        SafeLogger.info(
-          s"${processedCount + group.length} items processed"
-        )
-        val (_, processedIndex ) = group.last
-        processedIndex + 1
+
+        val (_, highestProcessedIndex ) = group.last
+        val newProcessedCount = highestProcessedIndex + 1
+        SafeLogger.info(s"${newProcessedCount} items processed")
+        newProcessedCount
     }
 
   def writeBatch(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService) = {
