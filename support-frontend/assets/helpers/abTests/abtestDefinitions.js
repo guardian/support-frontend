@@ -4,7 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 const landingPage = '/??/contribute|thankyou(/.*)?$';
-const usLandingPageAndThankyouPage = '/us/contribute|thankyou(/.*)?$';
+const allLandingPagesAndThankyouPages = '/??/contribute|thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
@@ -51,7 +51,7 @@ export const tests: Tests = {
     seed: 2,
   },
 
-  usThankyouPageLargeDonationTest: {
+  globalThankyouPageLargeDonationTest: {
     variants: [
       {
         id: 'control',
@@ -68,7 +68,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: usLandingPageAndThankyouPage,
-    seed: 11,
+    targetPage: allLandingPagesAndThankyouPages,
+    seed: 12,
   },
 };
