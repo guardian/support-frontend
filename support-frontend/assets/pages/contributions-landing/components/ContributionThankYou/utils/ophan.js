@@ -8,6 +8,8 @@ export const OPHAN_COMPONENT_ID_SIGN_UP = 'set-password';
 export const OPHAN_COMPONENT_ID_SET_REMINDER = 'reminder-test-link-clicked';
 export const OPHAN_COMPONENT_ID_MARKETING = 'marketing-permissions';
 export const OPHAN_COMPONENT_ID_SURVEY = 'contribution-thankyou-survey';
+export const OPHAN_COMPONENT_ID_SOCIAL =
+  'contribution-thankyou-social';
 export const OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK =
   'contribution-thankyou-social-facebook';
 export const OPHAN_COMPONENT_ID_SOCIAL_TWITTER =

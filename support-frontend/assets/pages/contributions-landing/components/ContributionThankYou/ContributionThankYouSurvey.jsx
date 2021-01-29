@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { LinkButton } from '@guardian/src-button';
@@ -9,7 +9,7 @@ import ActionBody from './components/ActionBody';
 import SvgSpeechBubbleWithPlus from './components/SvgSpeechBubbleWithPlus';
 import styles from './styles';
 import { OPHAN_COMPONENT_ID_SURVEY } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
@@ -19,6 +19,11 @@ const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/NWW9XZL';
 
 const ContributionThankYouSurvey = () => {
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
+
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
+  }, []);
+
   const actionIcon = <SvgSpeechBubbleWithPlus />;
   const actionHeader = (
     <ActionHeader

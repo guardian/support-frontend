@@ -1,6 +1,6 @@
 // @flow
 // $FlowIgnore - required for hooks
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createReminderEndpoint } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import { css } from '@emotion/core';
@@ -17,7 +17,7 @@ import ActionBody from './components/ActionBody';
 import SvgClock from './components/SvgClock';
 import styles from './styles';
 import { OPHAN_COMPONENT_ID_SET_REMINDER } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import { privacyLink } from 'helpers/legal';
 
 const form = css`
@@ -86,6 +86,10 @@ const ContributionThankYouSupportReminder = ({
 }: ContributionThankYouSupportReminderProps) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
+
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_SET_REMINDER);
+  }, []);
 
   const reminderDates = getDefaultReminderDates();
 
