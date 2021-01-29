@@ -7,7 +7,7 @@ import uuidv4 from 'uuid';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -61,7 +61,10 @@ function getRadioButtons(props: PropTypes) {
           value={radio.value}
           id={radioId}
           onChange={() => {
-            trackComponentClick(`opf-${props.name}-${props.countryGroupId}-${radio.value}`);
+            sendTrackingEventsOnClick({
+              id: `opf-${props.name}-${props.countryGroupId}-${radio.value}`,
+              componentType: 'ACQUISITIONS_OTHER',
+            })();
             props.toggleAction(radio.value, props.countryGroupId);
           }}
           checked={radioChecked}
