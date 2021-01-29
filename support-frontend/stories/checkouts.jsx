@@ -49,6 +49,11 @@ stories.add('Order Summary', () => {
     },
   ];
 
+  const mobileSummary = {
+    title: 'Sixday paper + Digital',
+    price: 'You\'ll pay £62.99/month',
+  };
+
   return (
     <div style={{ maxWidth: '470px', border: '1px solid #DCDCDC' }}>
       <OrderSummary
@@ -63,6 +68,7 @@ stories.add('Order Summary', () => {
         }
         changeSubscription="/"
         total="£62.99/month"
+        mobileSummary={mobileSummary}
       >
         <OrderSummaryProduct
           productName="Sixday paper"
