@@ -29,17 +29,31 @@ object UpdateDynamoLambda {
     val csvStream = S3Service.streamFromS3(stage, filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val dynamoDBService = DynamoDBService(stage)
-    csvReader.foreach {
-      case Right(supporterRatePlanItem) =>
-        SafeLogger.info(
-          s"Attempting to write ${supporterRatePlanItem.productRatePlanName} " +
-            s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
-        Await.ready(dynamoDBService.writeItem(supporterRatePlanItem), 20.seconds) //TODO: see if there is a way to parallelise
-        SafeLogger.info(
-          s"Successfully wrote ${supporterRatePlanItem.productRatePlanName} " +
-            s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
-      case Left(error) => SafeLogger.error(scrub"A read error occurred while trying to read an item from $filename", error)
-    }
+
+    val all = csvReader.zipWithIndex.toList
+    val successful = all.filter(_._1.isRight)
+    val failed = all.filter(_._1.isLeft)
+      if (failed.nonEmpty)
+        SafeLogger.error(
+          scrub"There were ${failed.length} CSV read failures from file $filename with line numbers ${failed.map(_._2).mkString(",")}"
+        )
+
+     successful.map(_._1.right.get)
+       .zipWithIndex
+       .grouped(50)
+       .foreach(list => Await.result(writeGroup(list, dynamoDBService), 30.seconds))
     Future.successful(())
+  }
+
+  def writeGroup(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService) = {
+    val futures = list.map{
+      case (supporterRatePlanItem, index) =>
+        SafeLogger.info(
+          s"Attempting to write item index $index - ${supporterRatePlanItem.productRatePlanName} " +
+            s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
+        dynamoDBService.writeItem(supporterRatePlanItem)
+
+    }
+    Future.sequence(futures)
   }
 }
