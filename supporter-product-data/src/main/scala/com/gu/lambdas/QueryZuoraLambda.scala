@@ -7,9 +7,8 @@ import com.gu.model.Stage
 import com.gu.model.states.{FetchResultsState, QueryType, QueryZuoraState}
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.services.{SelectActiveRatePlansQuery, ZuoraQuerierService}
+import com.gu.services.ZuoraQuerierService
 
-import java.time.{LocalDate, ZoneId}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 

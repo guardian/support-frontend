@@ -1,27 +1,26 @@
 package com.gu.services
 
 import com.gu.model.FieldsToExport._
+import com.gu.model.Stage
+import com.gu.model.Stage.{CODE, PROD}
 
 import java.time.LocalDate
 
 object SelectActiveRatePlansQuery {
-  private val discountProductRatePlanId = "2c92c0f852f2ebb20152f9269f067819"
 
   val name = "select-active-rate-plans"
 
   val isNotDSGift = "Subscription.RedemptionCode__c = ''"
   val isRedeemedDSGift = s"(Subscription.RedemptionCode__c != '' AND ${gifteeIdentityId.zuoraName} != '')"
 
-  def query(date: LocalDate): String =
+  def query(date: LocalDate, discountProductRatePlanId: String): String =
     s"""SELECT
           ${identityId.zuoraName},
           ${gifteeIdentityId.zuoraName},
           ${ratePlanId.zuoraName},
           ${productRatePlanId.zuoraName},
           ${productRatePlanName.zuoraName},
-          ${termEndDate.zuoraName},
-          Subscription.RedemptionCode__c,
-          Subscription.GifteeIdentityId__c
+          ${termEndDate.zuoraName}
             FROM
             rateplan
             WHERE

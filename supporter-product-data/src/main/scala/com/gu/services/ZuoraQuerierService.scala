@@ -1,6 +1,7 @@
 package com.gu.services
 
 import com.gu.conf.ZuoraQuerierConfig
+import com.gu.model.Stage
 import com.gu.model.states.QueryType
 import com.gu.model.states.QueryType.{Full, Incremental}
 import com.gu.model.zuora.request.{BatchQueryRequest, ZoqlExportQuery}
@@ -30,7 +31,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
       case Full => List(
         ZoqlExportQuery(
           s"${SelectActiveRatePlansQuery.name}-${UUID.randomUUID().toString}",
-          SelectActiveRatePlansQuery.query(LocalDate.now(ZoneId.of("UTC")))
+          SelectActiveRatePlansQuery.query(LocalDate.now(ZoneId.of("UTC")), config.discountProductRatePlanId)
         )
       )
       case Incremental => List()

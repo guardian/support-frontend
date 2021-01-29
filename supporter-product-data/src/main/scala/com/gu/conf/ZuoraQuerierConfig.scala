@@ -14,7 +14,8 @@ case class ZuoraQuerierConfig(
   url: String,
   partnerId: String,
   username: String,
-  password: String
+  password: String,
+  discountProductRatePlanId: String
 )
 
 object ZuoraQuerierConfig {
@@ -33,7 +34,8 @@ object ZuoraQuerierConfig {
           getParameterValue(configPath, "url", params),
           getParameterValue(configPath, "partnerId", params),
           getParameterValue(configPath, "username", params),
-          getParameterValue(configPath, "password", params)
+          getParameterValue(configPath, "password", params),
+          getParameterValue(configPath, "discountProductRatePlanId", params),
         )
     }
   }

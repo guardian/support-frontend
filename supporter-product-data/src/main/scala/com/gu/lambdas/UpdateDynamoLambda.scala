@@ -33,25 +33,30 @@ object UpdateDynamoLambda {
     val all = csvReader.zipWithIndex.toList
     val successful = all.filter(_._1.isRight)
     val failed = all.filter(_._1.isLeft)
-      if (failed.nonEmpty)
-        SafeLogger.error(
-          scrub"There were ${failed.length} CSV read failures from file $filename with line numbers ${failed.map(_._2).mkString(",")}"
-        )
+    if (failed.nonEmpty)
+      SafeLogger.error(
+        scrub"There were ${failed.length} CSV read failures from file $filename with line numbers ${failed.map(_._2).mkString(",")}"
+      )
 
-     successful.map(_._1.right.get)
-       .zipWithIndex
-       .grouped(50)
-       .foreach(list => Await.result(writeGroup(list, dynamoDBService), 30.seconds))
+    successful.map(_._1.right.get)
+      .zipWithIndex
+      .grouped(50)
+      .foreach(list => Await.result(writeGroup(list, dynamoDBService), 30.seconds))
     Future.successful(())
   }
 
   def writeGroup(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService) = {
-    val futures = list.map{
+    val futures = list.map {
       case (supporterRatePlanItem, index) =>
         SafeLogger.info(
           s"Attempting to write item index $index - ${supporterRatePlanItem.productRatePlanName} " +
             s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
-        dynamoDBService.writeItem(supporterRatePlanItem)
+        dynamoDBService
+          .writeItem(supporterRatePlanItem)
+          .recover {
+            // lets log and keep going if one insert fails
+            case error: Throwable => SafeLogger.error(scrub"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
+          }
 
     }
     Future.sequence(futures)
