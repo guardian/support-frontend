@@ -21,7 +21,7 @@ import styles from './styles';
 import {
   OPHAN_COMPONENT_ID_MARKETING,
 } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 
 const checkboxContainer = css`
   margin-top: ${space[2]}px;
@@ -71,6 +71,10 @@ const ContributionThankYouMarketingConsent = ({
   const [hasConsented, setHasConsented] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
+
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_MARKETING);
+  }, []);
 
   // reset error message when consent changes
   useEffect(() => {

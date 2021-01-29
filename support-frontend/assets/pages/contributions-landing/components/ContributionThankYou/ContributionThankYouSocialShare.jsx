@@ -1,5 +1,6 @@
 // @flow
-import React from 'react';
+// $FlowIgnore - required for hooks
+import React, { useEffect } from 'react';
 import { LinkButton } from '@guardian/src-button';
 import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
@@ -14,12 +15,13 @@ import {
   getEmailShareLink,
 } from './utils/social';
 import {
+  OPHAN_COMPONENT_ID_SOCIAL,
   OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
   OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
   OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import { generateReferralCode } from '../../../../helpers/campaignReferralCodes';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
@@ -43,6 +45,10 @@ const ContributionThankYouSocialShare = ({
   createReferralCodes,
   campaignCode,
 }: ContributionThankYouSocialShareProps) => {
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_SOCIAL);
+  }, []);
+
   const referralCode =
     createReferralCodes && campaignCode
       ? generateReferralCode(email, campaignCode)
