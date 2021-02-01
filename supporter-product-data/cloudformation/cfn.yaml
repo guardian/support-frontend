@@ -19,14 +19,14 @@ Mappings:
     CODE:
       S3Bucket: supporter-product-data-export-code
       # Every 10 mins between 7am and 7pm Mon-Fri
-      scheduleRate: "cron(*/10 7-19 * * 1-5)"
+      scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
     UAT:
       S3Bucket: supporter-product-data-export-uat
-      scheduleRate: "cron(*/10 7-19 * * 1-5)"
+      scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
     PROD:
       S3Bucket: supporter-product-data-export-prod
       # Every 5 mins
-      scheduleRate: "cron(*/5 * * * *)"
+      scheduleRate: "cron(*/5 * ? * * *)"
 
 Resources:
 
