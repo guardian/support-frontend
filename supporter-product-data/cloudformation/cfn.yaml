@@ -18,13 +18,15 @@ Mappings:
   StageVariables:
     CODE:
       S3Bucket: supporter-product-data-export-code
-      scheduleRate: "rate(5 minutes)"
+      # Every 10 mins between 7am and 7pm Mon-Fri
+      scheduleRate: "*/10 7-19 * * 1-5"
     UAT:
       S3Bucket: supporter-product-data-export-uat
-      scheduleRate: "rate(10 minutes)"
+      scheduleRate: "*/10 7-19 * * 1-5"
     PROD:
       S3Bucket: supporter-product-data-export-prod
-      scheduleRate: "rate(10 minutes)"
+      # Every 5 mins
+      scheduleRate: "*/5 * * * *"
 
 Resources:
 
