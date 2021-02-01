@@ -77,6 +77,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
     Canada,
     International,
   ],
+  trackProduct: 'DigitalPack',
 });
 
 // ----- Render ----- //
