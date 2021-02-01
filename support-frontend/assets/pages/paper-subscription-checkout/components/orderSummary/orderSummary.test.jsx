@@ -1,13 +1,24 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import PaperOrderSummary from './orderSummary';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { paperProducts } from '__mocks__/productInfoMocks';
 import GridImage from 'components/gridImage/gridImage';
+import PaperOrderSummary from './orderSummary';
 
-function mockPaperCheckoutReducer() {
-  return originalState => originalState;
+function findTextAcrossElements(searchText) {
+  return (content, node) => {
+    const hasText = element => element.textContent === searchText;
+    const nodeHasText = hasText(node);
+    const childrenDontHaveText = Array.from(node.children).every(child => !hasText(child));
+
+    return nodeHasText && childrenDontHaveText;
+  };
+}
+
+function mockPaperCheckoutReducer(originalState) {
+  return originalState;
 }
 
 function renderWithStore(
@@ -25,16 +36,28 @@ function renderWithStore(
 }
 
 describe('Paper order summary', () => {
+  // Suppress warnings related to our version of Redux
+  console.warn = jest.fn();
+
   let props;
   let initialState;
 
   beforeEach(() => {
     initialState = {
-      product: 'Paper',
-      startDate: 'today',
-      productPrices: [],
-      productOption: 'meep',
-      fulfilmentOption: 'beep',
+      page: {
+        checkout: {
+          product: 'Paper',
+          billingPeriod: 'Monthly',
+          productOption: 'EverydayPlus',
+          fulfilmentOption: 'Collection',
+          productPrices: paperProducts,
+        },
+      },
+      common: {
+        settings: {
+          useDigitalVoucher: true,
+        },
+      },
     };
 
     props = {
@@ -56,7 +79,28 @@ describe('Paper order summary', () => {
     expect(await screen.findByText('Change')).toHaveAttribute('href', '/page');
   });
 
-  it('displays a secpmd product when the digital subscription is included', async () => {
+  it('displays a second product when the digital subscription is included', async () => {
     expect(await screen.findByText('Digital subscription')).toBeInTheDocument();
+  });
+
+  it('displays the correct total price', async () => {
+    const mockPrice = paperProducts['United Kingdom'].Collection.EverydayPlus.Monthly.GBP.price.toFixed(2);
+    expect(await screen.findByText(findTextAcrossElements(`Total:£${mockPrice}/month`))).toBeInTheDocument();
+  });
+
+  it('displays the correct short summary for mobile', async () => {
+    expect(await screen.findByText('Every day subscription card + Digital')).toBeInTheDocument();
+  });
+
+  it('displays the correct price for the standalone paper product', async () => {
+    const paperOnlyPrice = paperProducts['United Kingdom'].Collection.Everyday.Monthly.GBP.price;
+    expect(await screen.findByText(`You'll pay £${paperOnlyPrice}/month`)).toBeInTheDocument();
+  });
+
+  it('displays the separate price for the digital subscription', async () => {
+    const totalPrice = paperProducts['United Kingdom'].Collection.EverydayPlus.Monthly.GBP.price;
+    const paperOnlyPrice = paperProducts['United Kingdom'].Collection.Everyday.Monthly.GBP.price;
+    const digitalTotal = (totalPrice - paperOnlyPrice).toFixed(2);
+    expect(await screen.findByText(`You'll pay £${digitalTotal}/month`)).toBeInTheDocument();
   });
 });

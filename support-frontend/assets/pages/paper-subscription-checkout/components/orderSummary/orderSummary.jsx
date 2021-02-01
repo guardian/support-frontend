@@ -7,23 +7,30 @@ import { type GridImg } from 'components/gridImage/gridImage';
 import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
 
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { paperProductsWithoutDigital, type ProductOptions } from 'helpers/productPrice/productOptions';
+import { Collection, type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
-import { showPrice } from 'helpers/productPrice/productPrices';
+
+import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
+import {
+  billingPeriodNoun,
+  type BillingPeriod,
+} from 'helpers/billingPeriods';
 
 import { getOrderSummaryTitle } from '../../helpers/orderSummaryText';
 
 type PropTypes = {
   fulfilmentOption: FulfilmentOptions,
   productOption: ActivePaperProducts,
+  billingPeriod: BillingPeriod,
+  productPrices: ProductPrices,
   useDigitalVoucher: boolean,
   image: $Call<GridImageType, GridImg>,
   includesDigiSub: boolean,
   changeSubscription?: string | null,
-  total: string,
+  total: ProductPrice,
 };
 
 function getMobileSummaryTitle(
@@ -35,33 +42,58 @@ function getMobileSummaryTitle(
   return `${getOrderSummaryTitle(productOption, fulfilmentOption, useDigitalVoucher)}${includesDigiSub ? ' + Digital' : ''}`;
 }
 
+function getPriceSummary(price: string, billingPeriod: BillingPeriod) {
+  return `${price}/${billingPeriodNoun(billingPeriod).toLowerCase()}`;
+}
+
+function sensiblyGenerateDigiSubPrice(totalPrice: ProductPrice, paperPrice: ProductPrice): ProductPrice {
+  const total = totalPrice.price;
+  const paper = paperPrice.price;
+  const digiSubPrice = ((total * 100) - (paper * 100)) / 100;
+
+  return {
+    ...totalPrice,
+    price: digiSubPrice,
+  };
+}
+
 function mapStateToProps(state: WithDeliveryCheckoutState) {
   return {
     fulfilmentOption: state.page.checkout.fulfilmentOption,
     productOption: state.page.checkout.productOption,
+    billingPeriod: state.page.checkout.billingPeriod,
+    productPrices: state.page.checkout.productPrices,
     useDigitalVoucher: state.common.settings.useDigitalVoucher,
-    total: showPrice(getProductPrice(
+    total: getProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
-    ), false),
+    ),
   };
 }
 
 function PaperOrderSummary(props: PropTypes) {
+  const total = getPriceSummary(showPrice(props.total, false), props.billingPeriod);
+  // If the user has added a digi sub, we need to know the price of their selected base paper product separately
+  const basePaperPrice = props.includesDigiSub ?
+    getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption])
+    : props.total;
+
+  const digitalCost = sensiblyGenerateDigiSubPrice(props.total, basePaperPrice);
+
   const productInfoPaper = [
     {
-      mainText: 'You\'ll pay £57.99/month',
+      mainText: `You'll pay ${getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod)}`,
     },
     {
       mainText: 'Your first payment will be on 04 February 2021',
-      subText: 'Your subscription card will arrive in the post before the payment date',
+      subText: props.fulfilmentOption === Collection ? 'Your subscription card will arrive in the post before the payment date' : '',
     },
   ];
 
   const productInfoDigiSub = [
     {
-      mainText: 'You\'ll pay £5/month',
+      mainText: `You'll pay ${getPriceSummary(showPrice(digitalCost, false), props.billingPeriod)}`,
     },
   ];
 
@@ -72,18 +104,18 @@ function PaperOrderSummary(props: PropTypes) {
       props.useDigitalVoucher,
       props.includesDigiSub,
     ),
-    price: props.total,
+    price: total,
   };
 
   return (
     <OrderSummary
       image={props.image}
       changeSubscription={props.changeSubscription}
-      total="£62.99/month"
+      total={total}
       mobileSummary={mobileSummary}
     >
       <OrderSummaryProduct
-        productName="Sixday paper"
+        productName={getOrderSummaryTitle(props.productOption, props.fulfilmentOption, props.useDigitalVoucher)}
         productInfo={productInfoPaper}
       />
       {props.includesDigiSub && <OrderSummaryProduct

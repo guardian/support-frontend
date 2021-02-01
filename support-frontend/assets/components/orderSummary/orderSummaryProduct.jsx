@@ -62,9 +62,9 @@ function OrderSummaryProduct(props: OrderSummaryProductProps) {
       <h4 css={title}>{props.productName}</h4>
       <ul css={list}>
         {props.productInfo.map(infoItem => (
-          <li css={listItem}>
+          <li css={listItem} key={infoItem.mainText}>
             <div css={listItemMain}>{infoItem.mainText}</div>
-            <span>{infoItem.subText}</span>
+            {infoItem.subText && <span>{infoItem.subText}</span>}
           </li>
         ))}
       </ul>
