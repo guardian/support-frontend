@@ -18,10 +18,13 @@ Mappings:
   StageVariables:
     CODE:
       S3Bucket: supporter-product-data-export-code
+      scheduleRate: "rate(5 minutes)"
     UAT:
       S3Bucket: supporter-product-data-export-uat
+      scheduleRate: "rate(10 minutes)"
     PROD:
       S3Bucket: supporter-product-data-export-prod
+      scheduleRate: "rate(10 minutes)"
 
 Resources:
 
@@ -246,7 +249,7 @@ Resources:
               },
               "WaitSomeTime": {
                 "Type": "Wait",
-                "Seconds": 60,
+                "Seconds": 30,
                 "Next": "FetchResults"
               },
               "FetchResults": {
@@ -314,10 +317,9 @@ Resources:
 
   SupporterProductDataScheduledRule:
     Type: "AWS::Events::Rule"
-    Condition: CreateProdResources
     Properties:
-      Description: "Trigger nightly data synchronisation"
-      ScheduleExpression: "cron(0 */30 * ? * *)"
+      Description: "Trigger regular data synchronisation from Zuora"
+      ScheduleExpression: !FindInMap [StageVariables, !Ref Stage, scheduleRate]
       State: "ENABLED"
       Targets:
         -
@@ -331,7 +333,6 @@ Resources:
 
   SupporterProductDataTriggerRole:
     Type: AWS::IAM::Role
-    Condition: CreateProdResources
     Properties:
       AssumeRolePolicyDocument:
         Statement:
