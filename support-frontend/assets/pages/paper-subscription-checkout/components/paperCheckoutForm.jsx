@@ -64,8 +64,7 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { type Option } from 'helpers/types/option';
-import { Paper } from 'helpers/subscriptions';
-import OrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
+import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
@@ -76,8 +75,6 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import { titles } from 'helpers/user/details';
 import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
-import { getOrderSummaryTitle } from '../helpers/orderSummaryText';
-
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -177,12 +174,6 @@ function PaperCheckoutForm(props: PropTypes) {
   const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
-  const title = getOrderSummaryTitle(props.productOption, props.fulfilmentOption, props.useDigitalVoucher);
-  const productPrice = getProductPrice(
-    props.productPrices,
-    props.fulfilmentOption,
-    props.productOption,
-  );
   const paymentMethods = supportedPaymentMethods(props.country);
   const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
   let formattedStartDate = '';
@@ -200,7 +191,7 @@ function PaperCheckoutForm(props: PropTypes) {
     props.setAddDigitalSubscription(event.target.checked);
   }
 
-  const subsCardOrderSummary = (<OrderSummary
+  const subsCardOrderSummary = (<PaperOrderSummary
     image={
       <GridImage
         gridId="printCampaignDigitalVoucher"
@@ -209,15 +200,11 @@ function PaperCheckoutForm(props: PropTypes) {
         imgType="png"
         altText=""
       />}
-    title={title}
-    productPrice={productPrice}
-    billingPeriod="Monthly"
+    includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionProductChoices}
-    productType={Paper}
-    paymentStartDate={formattedStartDate}
   />);
 
-  const homeDeliveryOrderSummary = (<OrderSummary
+  const homeDeliveryOrderSummary = (<PaperOrderSummary
     image={
       <GridImage
         gridId="printCampaignHDdigitalVoucher"
@@ -227,11 +214,8 @@ function PaperCheckoutForm(props: PropTypes) {
         altText=""
       />
     }
-    title={title}
-    productPrice={productPrice}
-    billingPeriod="Monthly"
+    includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
-    product={Paper}
   />);
 
   return (
