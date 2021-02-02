@@ -31,6 +31,7 @@ case class AcquisitionDataRow(
   zuoraSubscriptionNumber: Option[String],
   zuoraAccountNumber: Option[String],
   contributionId: Option[String],
+  paymentId: Option[String],
   queryParameters: List[QueryParameter],
   platform: Option[String]
 )
