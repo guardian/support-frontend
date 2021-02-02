@@ -16,7 +16,7 @@ Conditions:
 
 Mappings:
   StageVariables:
-    CODE:
+    DEV:
       S3Bucket: supporter-product-data-export-dev
       # Every 10 mins between 7am and 7pm Mon-Fri
       scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
