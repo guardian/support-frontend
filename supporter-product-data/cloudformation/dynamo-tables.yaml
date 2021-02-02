@@ -9,6 +9,11 @@ Parameters:
       - UAT
       - CODE
     Default: CODE
+
+Conditions:
+  CreateProdResources: !Equals [!Ref "Stage", "PROD"]
+  CreateCodeOrUATResources: !Not [!Equals [!Ref "Stage", "PROD"]]
+
 Mappings:
   StageVariables:
     CODE:
@@ -21,7 +26,8 @@ Mappings:
       DynamoWriteCapacity: 10
       DynamoReadCapacity: 200
 Resources:
-  SupporterProductDataTable:
+  ProvisionedTable:
+    Condition: CreateProdResources
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
@@ -48,9 +54,40 @@ Resources:
       TimeToLiveSpecification:
         AttributeName: "termEndDate"
         Enabled: true
+  OnDemandTable:
+    Condition: CreateCodeOrUATResources
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "identityId"
+          AttributeType: "S"
+        - AttributeName: "ratePlanId"
+          AttributeType: "S"
+      KeySchema:
+        # https://www.dynamodbguide.com/key-concepts/#primary-key
+        # partition key
+        - AttributeName: "identityId"
+          KeyType: "HASH"
+        # sort key
+        - AttributeName: "ratePlanId"
+          KeyType: "RANGE"
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+      TableName: !Sub SupporterProductData-${Stage}
+      TimeToLiveSpecification:
+        AttributeName: "termEndDate"
+        Enabled: true
 Outputs:
-  SupporterProductDataTable:
+  ProvisionedTableOutput:
+    Condition: CreateProdResources
     Description: This Dynamo table is used to store rate plan information about supporters
-    Value: !GetAtt [ SupporterProductDataTable, "Arn" ]
+    Value: !GetAtt [ ProvisionedTable, "Arn" ]
+    Export:
+      Name: !Sub ${AWS::StackName}-SupporterProductDataTable
+  OnDemandTableOutput:
+    Condition: CreateCodeOrUATResources
+    Description: This Dynamo table is used to store rate plan information about supporters
+    Value: !GetAtt [ OnDemandTable, "Arn" ]
     Export:
       Name: !Sub ${AWS::StackName}-SupporterProductDataTable
