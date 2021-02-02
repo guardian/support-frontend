@@ -79,6 +79,7 @@ export const contentBlock = css`
 
 export const mobileSummary = css`
   ${headline.xxxsmall()};
+  width: 100%;
 
   h4 {
     font-weight: 700;

@@ -19,7 +19,8 @@ import {
   type BillingPeriod,
 } from 'helpers/billingPeriods';
 
-import { getOrderSummaryTitle } from '../../helpers/orderSummaryText';
+import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { getOrderSummaryTitle } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 
 type PropTypes = {
   fulfilmentOption: FulfilmentOptions,
@@ -39,7 +40,10 @@ function getMobileSummaryTitle(
   useDigitalVoucher: ?boolean = false,
   includesDigiSub: ?boolean = false,
 ) {
-  return `${getOrderSummaryTitle(productOption, fulfilmentOption, useDigitalVoucher)}${includesDigiSub ? ' + Digital' : ''}`;
+  return (<>
+    {getOrderSummaryTitle(productOption, fulfilmentOption, useDigitalVoucher)}
+    {includesDigiSub && <> +&nbsp;Digital</>}
+  </>);
 }
 
 function getPriceSummary(price: string, billingPeriod: BillingPeriod) {
@@ -78,18 +82,21 @@ function PaperOrderSummary(props: PropTypes) {
   const basePaperPrice = props.includesDigiSub ?
     getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption])
     : props.total;
-
   const digitalCost = sensiblyGenerateDigiSubPrice(props.total, basePaperPrice);
 
-  const productInfoPaper = [
+  const productInfoHomeDelivery = [
     {
       mainText: `You'll pay ${getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod)}`,
     },
+  ];
+  const productInfoSubsCard = [
+    ...productInfoHomeDelivery,
     {
-      mainText: 'Your first payment will be on 04 February 2021',
-      subText: props.fulfilmentOption === Collection ? 'Your subscription card will arrive in the post before the payment date' : '',
+      mainText: `Your first payment will be on ${getFormattedStartDate(getPaymentStartDate(Date.now(), props.productOption))}`,
+      subText: 'Your subscription card will arrive in the post before the payment date',
     },
   ];
+  const productInfoPaper = props.fulfilmentOption === Collection ? productInfoSubsCard : productInfoHomeDelivery;
 
   const productInfoDigiSub = [
     {
