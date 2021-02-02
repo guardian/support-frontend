@@ -101,12 +101,6 @@ Resources:
                   - logs:PutLogEvents
                   - lambda:InvokeFunction
                 Resource: "*"
-        - PolicyName: PrivateBucket
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action: s3:GetObject
-                Resource: !Sub arn:aws:s3:::gu-reader-revenue-private/membership/supporter-product-data/${Stage}/*
         - PolicyName: WorkBucket
           PolicyDocument:
             Statement:
