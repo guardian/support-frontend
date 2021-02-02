@@ -28,8 +28,7 @@ object ZuoraQuerierConfig {
     val configPath = s"/supporter-product-data/${stage.value}/zuora-config/"
 
     getParametersByPath(configPath).map {
-      result =>
-        val params = result.getParameters.asScala.toList
+      params =>
         ZuoraQuerierConfig(
           getParameterValue(configPath, "url", params),
           getParameterValue(configPath, "partnerId", params),
@@ -54,7 +53,7 @@ object ZuoraQuerierConfig {
       .withRecursive(false)
       .withWithDecryption(true)
 
-    AwsAsync(client.getParametersByPathAsync, request)
+    AwsAsync(client.getParametersByPathAsync, request).map(_.getParameters.asScala.toList)
   }
 
 }
