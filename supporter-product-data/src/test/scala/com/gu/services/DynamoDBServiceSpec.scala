@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.model.Stage.CODE
+import com.gu.model.Stage.DEV
 import com.gu.model.dynamo.SupporterRatePlanItem
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -12,7 +12,7 @@ import java.time.LocalDate
 class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
 
   "DynamoDBService" should "stream be able to insert an item" in {
-    val service = DynamoDBService(CODE)
+    val service = DynamoDBService(DEV)
     val item = SupporterRatePlanItem(
       "999999",
       None,

@@ -2,7 +2,7 @@ package com.gu.services
 
 import com.gu.model.FieldsToExport._
 import com.gu.model.Stage
-import com.gu.model.Stage.{CODE, PROD}
+import com.gu.model.Stage.{DEV, PROD}
 
 import java.time.LocalDate
 

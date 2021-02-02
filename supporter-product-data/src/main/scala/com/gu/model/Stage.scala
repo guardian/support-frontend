@@ -6,7 +6,7 @@ sealed abstract class Stage(val value: String)
 
 object Stage {
 
-  case object CODE extends Stage("CODE")
+  case object DEV extends Stage("DEV")
 
   case object UAT extends Stage("UAT")
 
@@ -16,12 +16,12 @@ object Stage {
   implicit val decoder: Decoder[Stage] = Decoder.decodeString.emap(fromString)
 
   def fromString(str: String): Either[String, Stage] =
-    List(CODE, UAT, PROD)
+    List(DEV, UAT, PROD)
       .find(_.value == str)
       .toRight(s"Unknown batch status $str")
 
   def fromEnvironment = fromString(Option(System.getenv("Stage"))
-    .getOrElse("CODE"))
-    .getOrElse(Stage.CODE)
+    .getOrElse("DEV"))
+    .getOrElse(Stage.DEV)
 
 }

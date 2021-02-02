@@ -2,17 +2,17 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Supporter product data tables - stack name should be supporter-product-data-tables-${Stage}
 Parameters:
   Stage:
-    Description: Environment name ( CODE, UAT or PROD)
+    Description: Environment name
     Type: String
     AllowedValues:
       - PROD
       - UAT
-      - CODE
-    Default: CODE
+      - DEV
+    Default: DEV
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
-  CreateCodeOrUATResources: !Not [!Equals [!Ref "Stage", "PROD"]]
+  CreateDevOrUatResources: !Not [ !Equals [ !Ref "Stage", "PROD"]]
 
 Resources:
   ProvisionedTable:
@@ -42,7 +42,7 @@ Resources:
         AttributeName: "termEndDate"
         Enabled: true
   OnDemandTable:
-    Condition: CreateCodeOrUATResources
+    Condition: CreateDevOrUatResources
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
@@ -73,7 +73,7 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}-SupporterProductDataTable
   OnDemandTableOutput:
-    Condition: CreateCodeOrUATResources
+    Condition: CreateDevOrUatResources
     Description: This Dynamo table is used to store rate plan information about supporters
     Value: !GetAtt [ OnDemandTable, "Arn" ]
     Export:

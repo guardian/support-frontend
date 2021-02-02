@@ -8,8 +8,8 @@ Parameters:
     AllowedValues:
       - PROD
       - UAT
-      - CODE
-    Default: CODE
+      - DEV
+    Default: DEV
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
@@ -17,7 +17,7 @@ Conditions:
 Mappings:
   StageVariables:
     CODE:
-      S3Bucket: supporter-product-data-export-code
+      S3Bucket: supporter-product-data-export-dev
       # Every 10 mins between 7am and 7pm Mon-Fri
       scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
     UAT:
