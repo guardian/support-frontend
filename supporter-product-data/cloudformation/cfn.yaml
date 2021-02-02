@@ -31,50 +31,20 @@ Mappings:
 Resources:
 
   SupporterProductExportBucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
     Properties:
       BucketName:
         !FindInMap [StageVariables, !Ref Stage, S3Bucket]
       AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
       LifecycleConfiguration:
         Rules:
           - Id: DeleteAllOldFiles
-            Prefix: ""
-            Status: Enabled
-            ExpirationInDays: 365
-          - Id: DeleteOldFilesZuora
-            Prefix: "zuora"
             Status: Enabled
             ExpirationInDays: 14
-      VersioningConfiguration:
-        Status: "Enabled"
-
-  EncryptBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    DependsOn: SupporterProductExportBucket
-    Properties:
-      Bucket: !Sub ${SupporterProductExportBucket}
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Sid: DenyIncorrectEncryptionHeader
-            Effect: Deny
-            Principal: "*"
-            Action: s3:PutObject
-            Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}/*
-            Condition:
-              StringNotEquals:
-                s3:x-amz-server-side-encryption:
-                  - AES256
-                  - aws:kms
-          - Sid: DenyUnEncryptedObjectUploads
-            Effect: Deny
-            Principal: "*"
-            Action: s3:PutObject
-            Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}/*
-            Condition:
-              'Null':
-                s3:x-amz-server-side-encryption: 'true'
 
   SupporterProductDataLambdaRole:
     Type: AWS::IAM::Role
