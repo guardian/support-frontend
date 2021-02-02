@@ -367,7 +367,7 @@ Resources:
           - 'Failed to extract supporter product data from Zuora'
       AlarmDescription: !Join
         - ' '
-        - - 'Impact - members-data-api attribute data may be incorrect. Fix SupporterProductData ASAP!'
+        - - 'Impact - New subscribers will not get their digital benefits.'
           - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
       MetricName: ExecutionsFailed
       Namespace: AWS/States
