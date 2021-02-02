@@ -320,7 +320,7 @@ Resources:
       Targets:
         -
           Arn: !Ref SupporterProductData
-          Id: !Sub trigger_state_machine-${Stage}-1
+          Id: !Sub trigger_supporter_product_data_state_machine-${Stage}
           Input: |
             {
               "queryType":"incremental"
