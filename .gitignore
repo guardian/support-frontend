@@ -2,6 +2,7 @@
 .bundle
 .idea
 .idea_modules
+*.iml
 *.sublime-project
 *.sublime-workspace
 .vscode
