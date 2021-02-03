@@ -19,7 +19,6 @@ import {
   type BillingPeriod,
 } from 'helpers/billingPeriods';
 
-import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { getOrderSummaryTitle } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 
 type PropTypes = {
@@ -31,6 +30,7 @@ type PropTypes = {
   image: $Call<GridImageType, GridImg>,
   includesDigiSub: boolean,
   changeSubscription?: string | null,
+  startDate?: string,
   total: ProductPrice,
 };
 
@@ -92,7 +92,7 @@ function PaperOrderSummary(props: PropTypes) {
   const productInfoSubsCard = [
     ...productInfoHomeDelivery,
     {
-      mainText: `Your first payment will be on ${getFormattedStartDate(getPaymentStartDate(Date.now(), props.productOption))}`,
+      mainText: props.startDate ? `Your first payment will be on ${props.startDate}` : '',
       subText: 'Your subscription card will arrive in the post before the payment date',
     },
   ];
@@ -135,6 +135,7 @@ function PaperOrderSummary(props: PropTypes) {
 
 PaperOrderSummary.defaultProps = {
   changeSubscription: '',
+  startDate: '',
 };
 
 export default connect(mapStateToProps)(PaperOrderSummary);

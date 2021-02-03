@@ -9,7 +9,6 @@ import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { RadioGroup, Radio } from '@guardian/src-radio';
-import { Checkbox } from '@guardian/src-checkbox';
 import { TextArea } from '@guardian/src-text-area';
 
 import {
@@ -17,7 +16,6 @@ import {
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/routes';
-
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
@@ -64,10 +62,8 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { type Option } from 'helpers/types/option';
-import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import EndSummaryMobile from 'pages/paper-subscription-checkout/components/endSummary/endSummaryMobile';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
@@ -75,6 +71,9 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import { titles } from 'helpers/user/details';
 import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
+
+import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
+import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -186,7 +185,7 @@ function PaperCheckoutForm(props: PropTypes) {
 
   const [includesDigiSub, setIncludesDigiSub] = useState<boolean>(false);
 
-  function addDigitalSubscription(event) {
+  function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
     setIncludesDigiSub(event.target.checked);
     props.setAddDigitalSubscription(event.target.checked);
   }
@@ -200,6 +199,7 @@ function PaperCheckoutForm(props: PropTypes) {
         imgType="png"
         altText=""
       />}
+    startDate={formattedStartDate}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionProductChoices}
   />);
@@ -339,13 +339,9 @@ function PaperCheckoutForm(props: PropTypes) {
                 </Text>
               </Rows>
             </FormSection>) : null}
-          <FormSection>
-            <Checkbox
-              value="add-digital"
-              label="Add the Digital subscription"
-              onChange={addDigitalSubscription}
-            />
-          </FormSection>
+          {/* <FormSection> */}
+          <AddDigiSubCta addDigitalSubscription={addDigitalSubscription} />
+          {/* </FormSection> */}
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
@@ -404,7 +400,6 @@ function PaperCheckoutForm(props: PropTypes) {
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}
           />
-          <EndSummaryMobile paymentStartDate={formattedStartDate} />
           <DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
         </Form>
       </Layout>
