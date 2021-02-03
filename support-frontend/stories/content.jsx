@@ -4,18 +4,30 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
 
-import List from 'components/list/list';
+import { List, ListWithSubText } from 'components/list/list';
 import Tabs from 'components/tabs/tabs';
 
 const stories = storiesOf('Content components', module);
 
 stories.add('List', () => (
-  <List items={[
-    { explainer: 'This is a list' },
-    { explainer: 'You can put items in it, even if they\'re long sentences that will definitely overflow and wrap on mobile' },
-    { explainer: 'It\'s very nice' },
-  ]}
-  />
+  <div style={{ padding: '8px' }}>
+    <List items={[
+      { explainer: 'This is a list' },
+      { explainer: 'You can put items in it, even if they\'re long sentences that will definitely overflow and wrap on mobile' },
+      { explainer: 'It\'s very nice' },
+    ]}
+    />
+
+    <ListWithSubText
+      bulletColour="dark"
+      bulletSize="small"
+      items={[
+      { explainer: 'This is a list', subText: 'With optional sub text' },
+      { explainer: 'It\'s useful in several situations', subText: 'Like when you want to add extra information for each list item' },
+      { explainer: 'But you don\'t have to use it' },
+    ]}
+    />
+  </div>
 ));
 
 stories.add('Tabs', () => {
