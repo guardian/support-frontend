@@ -35,17 +35,17 @@ stories.add('Date Picker', () => {
 stories.add('Order Summary', () => {
   const productInfoPaper = [
     {
-      mainText: 'You\'ll pay £57.99/month',
+      explainer: 'You\'ll pay £57.99/month',
     },
     {
-      mainText: 'Your first payment will be on 04 February 2021',
+      explainer: 'Your first payment will be on 04 February 2021',
       subText: 'Your subscription card will arrive in the post before the payment date',
     },
   ];
 
   const productInfoDigiSub = [
     {
-      mainText: 'You\'ll pay £5/month',
+      explainer: 'You\'ll pay £5/month',
     },
   ];
 

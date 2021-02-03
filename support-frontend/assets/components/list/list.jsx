@@ -5,9 +5,9 @@ import { css } from '@emotion/core';
 import { brand, brandAlt } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { body, textSans } from '@guardian/src-foundations/typography';
+import { body } from '@guardian/src-foundations/typography';
 
-type ListItemText = {
+export type ListItemText = {
   explainer: string,
   subText?: string
 }
@@ -19,6 +19,7 @@ type ListPropTypes = {
   items: ListItemText[],
   bulletSize?: ListBulletSize,
   bulletColour?: ListBulletColour,
+  cssOverrides?: string,
 }
 
 type ListItemProps = {
@@ -28,6 +29,7 @@ type ListItemProps = {
 }
 
 const list = css`
+  ${body.medium()};
   margin: 0 0 20px;
 
   ${from.desktop} {
@@ -77,13 +79,8 @@ const listItemBulletDark = css`
 `;
 
 const listItemContent = css`
-  ${body.medium()};
   margin-left: ${space[2]}px;
   max-width: 90%;
-`;
-
-const listItemContentSans = css`
-  ${textSans.medium()};
 `;
 
 const listItemMainText = css`
@@ -128,7 +125,7 @@ function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
         bulletSizes[size],
       ]}
       />
-      <div css={[listItemContent, listItemContentSans]}>
+      <div css={listItemContent}>
         <span css={listItemMainText}>{item.explainer}</span>
         {item.subText && <span>{item.subText}</span>}
       </div>
@@ -143,7 +140,7 @@ ListItemWithSubtext.defaultProps = {
 
 function List(props: ListPropTypes) {
   return (
-    <ul css={list}>
+    <ul css={[list, props.cssOverrides]}>
       {props.items.map(item => (
         <ListItem item={item} colour={props.bulletColour} size={props.bulletSize} />
     ))}
@@ -154,11 +151,12 @@ function List(props: ListPropTypes) {
 List.defaultProps = {
   bulletSize: 'large',
   bulletColour: 'light',
+  cssOverrides: '',
 };
 
 function ListWithSubText(props: ListPropTypes) {
   return (
-    <ul css={list}>
+    <ul css={[list, props.cssOverrides]}>
       {props.items.map(item => (
         <ListItemWithSubtext item={item} colour={props.bulletColour} size={props.bulletSize} />
     ))}
@@ -169,6 +167,7 @@ function ListWithSubText(props: ListPropTypes) {
 ListWithSubText.defaultProps = {
   bulletSize: 'large',
   bulletColour: 'light',
+  cssOverrides: '',
 };
 
 export { List, ListWithSubText };
