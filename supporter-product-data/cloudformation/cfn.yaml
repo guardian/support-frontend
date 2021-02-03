@@ -341,7 +341,7 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       Period: 60
-      EvaluationPeriods: 1
+      EvaluationPeriods: 60
       Statistic: Sum
       TreatMissingData: notBreaching
     DependsOn: SupporterProductData
