@@ -7,7 +7,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import seedrandom from 'seedrandom';
 
 import * as cookie from 'helpers/cookie';
-import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -345,7 +344,7 @@ const init = (
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   const serverSideParticipations: ?Participations = getServerSideParticipations();
   const amountsTestParticipations: ?Participations = getAmountsTestParticipations(countryGroupId, settings);
-  return  {
+  return {
     ...participations,
     ...serverSideParticipations,
     ...amountsTestParticipations,
