@@ -15,6 +15,7 @@ export type ListItemText = {
 type ListBulletSize = 'small' | 'large';
 
 type ListBulletColour = 'light' | 'dark';
+
 type ListProps = {
   items: ListItemText[],
   bulletSize?: ListBulletSize,
@@ -97,6 +98,7 @@ const bulletSizes: { [key: ListBulletSize]: string } = {
   large: listItemBulletLarge,
   small: listItemBulletSmall,
 };
+
 function ListItem({ item, colour, size }: ListItemProps) {
   return (
     <li key={item.explainer} css={listItem}>

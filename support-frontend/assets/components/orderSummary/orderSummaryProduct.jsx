@@ -1,10 +1,9 @@
 // @flow
 import React from 'react';
 import { css } from '@emotion/core';
-import { headline } from '@guardian/src-foundations/typography';
+import { headline, textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
 import { ListWithSubText, type ListItemText } from 'components/list/list';
 
 const container = css`
