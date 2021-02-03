@@ -15,7 +15,7 @@ export type ListItemText = {
 type ListBulletSize = 'small' | 'large';
 
 type ListBulletColour = 'light' | 'dark';
-type ListPropTypes = {
+type ListProps = {
   items: ListItemText[],
   bulletSize?: ListBulletSize,
   bulletColour?: ListBulletColour,
@@ -23,7 +23,7 @@ type ListPropTypes = {
 }
 
 type ListItemProps = {
-  item: Object,
+  item: ListItemText,
   size: ListBulletSize,
   colour: ListBulletColour,
 }
@@ -138,36 +138,28 @@ ListItemWithSubtext.defaultProps = {
   colour: 'light',
 };
 
-function List(props: ListPropTypes) {
-  return (
-    <ul css={[list, props.cssOverrides]}>
-      {props.items.map(item => (
-        <ListItem item={item} colour={props.bulletColour} size={props.bulletSize} />
-    ))}
-    </ul>
-  );
+function ListWith(ListItemComponent: React$ComponentType<ListItemProps>) {
+  function ListComponent(props: ListProps) {
+    return (
+      <ul css={[list, props.cssOverrides]}>
+        {props.items.map(item => (
+          <ListItemComponent item={item} colour={props.bulletColour || 'light'} size={props.bulletSize || 'large'} />
+        ))}
+      </ul>
+    );
+  }
+
+  ListComponent.defaultProps = {
+    bulletSize: 'large',
+    bulletColour: 'light',
+    cssOverrides: '',
+  };
+
+  return ListComponent;
 }
 
-List.defaultProps = {
-  bulletSize: 'large',
-  bulletColour: 'light',
-  cssOverrides: '',
-};
+const List = ListWith(ListItem);
 
-function ListWithSubText(props: ListPropTypes) {
-  return (
-    <ul css={[list, props.cssOverrides]}>
-      {props.items.map(item => (
-        <ListItemWithSubtext item={item} colour={props.bulletColour} size={props.bulletSize} />
-    ))}
-    </ul>
-  );
-}
-
-ListWithSubText.defaultProps = {
-  bulletSize: 'large',
-  bulletColour: 'light',
-  cssOverrides: '',
-};
+const ListWithSubText = ListWith(ListItemWithSubtext);
 
 export { List, ListWithSubText };
