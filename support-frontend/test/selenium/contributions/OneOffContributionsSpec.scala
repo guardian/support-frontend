@@ -22,11 +22,6 @@ class OneOffContributionsSpec extends AnyFeatureSpec
 
   before {
     driverConfig.reset()
-    // TODO - change tests to support new Stripe Elements UI
-    webDriver.asInstanceOf[JavascriptExecutor].executeScript(
-      """window.localStorage.setItem('gu.support.abTests',""" +
-        """'{"stripeElements":"control"}')"""
-    )
   }
 
   override def beforeAll(): Unit = {
