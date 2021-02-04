@@ -5,6 +5,7 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.{GetParametersByPathRequest, Parameter}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.model.Stage
+import com.gu.model.Stage.{DEV, PROD, UAT}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.collection.JavaConverters._
@@ -34,10 +35,25 @@ object ZuoraQuerierConfig {
           getParameterValue(configPath, "partnerId", params),
           getParameterValue(configPath, "username", params),
           getParameterValue(configPath, "password", params),
-          getParameterValue(configPath, "discountProductRatePlanIds", params).split(',').toList,
+          getDiscountProductRatePlanIds(stage),
         )
     }
   }
+
+  private def getDiscountProductRatePlanIds(stage: Stage) =
+    stage match {
+      case DEV => List("2c92c0f852f2ebb20152f9269f067819")
+      case UAT => List("2c92c0f953078a5601531299dae54a4d")
+      case PROD => List(
+        "2c92a00d6f9de7f6016f9f6f52765aa4",
+        "2c92a0076ae9189c016b080c930a6186",
+        "2c92a0ff5345f9220153559d915d5c26",
+        "2c92a0fe7375d60901737c64808e4be1",
+        "2c92a0fe750b35d001750d4522f43817",
+        "2c92a00f7468817d01748bd88f0d1d6c",
+        "2c92a0117468816901748bdb3a8c1ac4"
+      )
+    }
 
   private def getParameterValue(configPath: String, name: String, params: List[Parameter]) =
     params
