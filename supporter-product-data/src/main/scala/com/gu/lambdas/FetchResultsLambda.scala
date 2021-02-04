@@ -26,8 +26,8 @@ object FetchResultsLambda {
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.getResults(jobId)
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
-      batch = result.batches.headOption.toRight(s"No batches were returned in the batch query response for jobId $jobId").right.get
-      fileId = batch.fileId.toRight(s"Batch.fileId was missing in jobId $jobId").right.get
+      batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response for jobId $jobId")
+      fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in jobId $jobId")
       filename = s"${batch.name}-$fileId.csv"
       fileResponse <- service.getResultFileResponse(fileId)
       _ = assert(fileResponse.isSuccessful, s"File download for job with id $jobId failed with http code ${fileResponse.code}")
@@ -41,4 +41,10 @@ object FetchResultsLambda {
       )
     }
   }
+
+  def getValueOrThrow[T](maybeValue: Option[T], errorMessage: String) =
+    maybeValue match {
+      case Some(value) => value
+      case None => throw new RuntimeException(errorMessage)
+    }
 }
