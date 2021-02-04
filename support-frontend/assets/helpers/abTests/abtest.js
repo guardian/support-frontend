@@ -7,7 +7,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import seedrandom from 'seedrandom';
 
 import * as cookie from 'helpers/cookie';
-import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -102,18 +101,6 @@ function getMvtId(): number {
   }
 
   return mvtId;
-}
-
-function getLocalStorageParticipations(): Participations {
-
-  const abTests = storage.getLocal('gu.support.abTests');
-
-  return abTests ? JSON.parse(abTests) : {};
-
-}
-
-function setLocalStorageParticipations(participations: Participations): void {
-  storage.setLocal('gu.support.abTests', JSON.stringify(participations));
 }
 
 function getParticipationsFromUrl(): ?Participations {
@@ -325,8 +312,12 @@ function getParticipations(
   return participations;
 }
 
+const allLandingPagesAndThankyouPages = '/??/contribute|thankyou(/.*)?$';
 function getAmountsTestParticipations(countryGroupId: CountryGroupId, settings: Settings): ?Participations {
   if (!settings.amounts) {
+    return null;
+  }
+  if (!targetPageMatches(window.location.pathname, allLandingPagesAndThankyouPages)) {
     return null;
   }
   const { test } = settings.amounts[countryGroupId];
@@ -353,17 +344,12 @@ const init = (
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   const serverSideParticipations: ?Participations = getServerSideParticipations();
   const amountsTestParticipations: ?Participations = getAmountsTestParticipations(countryGroupId, settings);
-  const localStorageParticipations: Participations = getLocalStorageParticipations();
-  const combinedParticipations: Participations = {
+  return {
     ...participations,
     ...serverSideParticipations,
     ...amountsTestParticipations,
-    ...localStorageParticipations,
     ...urlParticipations,
   };
-  setLocalStorageParticipations(combinedParticipations);
-
-  return combinedParticipations;
 };
 
 const getVariantsAsString = (participation: Participations): string => {
@@ -376,13 +362,10 @@ const getVariantsAsString = (participation: Participations): string => {
   return variants.join('; ');
 };
 
-const getCurrentParticipations = (): Participations => getLocalStorageParticipations();
-
 // ----- Exports ----- //
 
 export {
   init,
   getVariantsAsString,
-  getCurrentParticipations,
   targetPageMatches,
 };

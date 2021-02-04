@@ -25,7 +25,7 @@ function OrderSummary(props: PropTypes) {
       <div css={styles.topLine}>
         <div css={styles.topLineBorder}>
           <h3 css={styles.title}>Order summary</h3>
-          <a href={props.changeSubscription}>Change</a>
+          {props.changeSubscription && <a href={props.changeSubscription}>Change</a>}
         </div>
       </div>
       <div css={styles.contentBlock}>

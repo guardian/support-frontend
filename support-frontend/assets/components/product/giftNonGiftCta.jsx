@@ -6,6 +6,7 @@ import { space } from '@guardian/src-foundations';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { LinkButton } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 type GiftableProduct = 'digital' | 'Guardian Weekly'
 
@@ -41,6 +42,12 @@ function GiftOrPersonal({ href, product, orderIsAGift }: PropTypes) {
         priority="tertiary"
         nudgeIcon
         href={href}
+        onClick={() => {
+          sendTrackingEventsOnClick({
+            id: `${orderIsAGift ? 'personal' : 'gift'}_subscriptions_cta`,
+            componentType: 'ACQUISITIONS_BUTTON',
+          })();
+        }}
       >
         {orderIsAGift ? 'See personal subscriptions' : 'See gift subscriptions'}
       </LinkButton>

@@ -9,7 +9,7 @@ import Text, { LargeParagraph } from 'components/text/text';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { sendClickedEvent } from 'helpers/tracking/clickTracking';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/subscriptions';
@@ -48,7 +48,11 @@ function ThankYouPendingContent(props: PropTypes) {
             If you require any further assistance, you can visit
             our {(
               <a
-                onClick={sendClickedEvent('dp checkout : faq')}
+                onClick={sendTrackingEventsOnClick({
+                  id: 'faq',
+                  product: 'DigitalPack',
+                  componentType: 'ACQUISITIONS_BUTTON',
+                })}
                 href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
               >
               FAQs page
@@ -56,7 +60,11 @@ function ThankYouPendingContent(props: PropTypes) {
             )} to find answers to common user issues. Alternatively, you can also
             visit our {(
               <a
-                onClick={sendClickedEvent('dp checkout : help')}
+                onClick={sendTrackingEventsOnClick({
+                  id: 'help',
+                  product: 'DigitalPack',
+                  componentType: 'ACQUISITIONS_BUTTON',
+                })}
                 href="https://www.theguardian.com/help"
               >Help page
               </a>

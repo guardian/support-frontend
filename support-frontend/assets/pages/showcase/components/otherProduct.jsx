@@ -5,12 +5,14 @@ import Heading from 'components/heading/heading';
 import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 type PropTypes = {|
   title: string,
   description: string,
   destination: string,
   modifierClass: string,
+  trackingId: string,
 |};
 
 export default function OtherProduct(props: PropTypes) {
@@ -22,6 +24,12 @@ export default function OtherProduct(props: PropTypes) {
         icon={<ArrowRightStraight />}
         appearance="greyHollow"
         href={props.destination}
+        onClick={() => {
+          sendTrackingEventsOnClick({
+            id: props.trackingId,
+            componentType: 'ACQUISITIONS_BUTTON',
+          })();
+        }}
       >
         Find out more
       </AnchorButton>
