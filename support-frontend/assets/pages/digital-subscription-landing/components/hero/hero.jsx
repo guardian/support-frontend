@@ -32,9 +32,8 @@ type PropTypes = {
 const HeroCopy = () => (
   <>
     <p css={paragraph}>
-      With two innovative apps and ad-free reading, a digital subscription
-      gives you the richest experience of Guardian journalism. It also sustains the independent
-      reporting you love.
+      We’re free to give voice to the voiceless. The unheard. The powerless.
+      Become a digital subscriber today and help to fund our vital work.
     </p>
   </>
 );
@@ -59,8 +58,8 @@ function CampaignHeader(props: PropTypes) {
       <h1 css={pageTitle}>Digital subscription</h1>
       <div css={featureContainer}>
         <div css={textSection}>
-          <h2 css={heroHeading}>Progressive journalism<br />
-            <span css={yellowHeading}>powered by you</span>
+          <h2 css={heroHeading}>Subscribe for stories<br />
+            <span css={yellowHeading}>that must be told</span>
           </h2>
           {props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />}
           <div css={props.countryGroupId !== AUDCountries ? spaceAfter : {}}>
