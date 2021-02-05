@@ -17,9 +17,9 @@ function GiftBenefits() {
             <>
               <BenefitsHeading text="What they'll get" />
               <List items={[
-                { explainer: 'The Guardian Weekly delivered, wherever they are in the world' },
-                { explainer: 'The Guardian\'s global journalism to keep them informed' },
-                { explainer: 'The very best of The Guardian\'s puzzles' },
+                { content: 'The Guardian Weekly delivered, wherever they are in the world' },
+                { content: 'The Guardian\'s global journalism to keep them informed' },
+                { content: 'The very best of The Guardian\'s puzzles' },
               ]}
               />
             </>
@@ -31,9 +31,9 @@ function GiftBenefits() {
             <>
               <BenefitsHeading text="What you'll get" />
               <List items={[
-                { explainer: 'Your gift supports The Guardian\'s independent journalism' },
-                { explainer: 'Access to the magazine\'s digital archive' },
-                { explainer: '35% off the cover price' },
+                { content: 'Your gift supports The Guardian\'s independent journalism' },
+                { content: 'Access to the magazine\'s digital archive' },
+                { content: '35% off the cover price' },
               ]}
               />
             </>

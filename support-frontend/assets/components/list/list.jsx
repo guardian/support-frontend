@@ -8,7 +8,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { body } from '@guardian/src-foundations/typography';
 
 export type ListItemText = {
-  explainer: string,
+  content: string,
   subText?: string
 }
 
@@ -101,14 +101,14 @@ const bulletSizes: { [key: ListBulletSize]: string } = {
 
 function ListItem({ item, colour, size }: ListItemProps) {
   return (
-    <li key={item.explainer} css={listItem}>
+    <li key={item.content} css={listItem}>
       <span css={[
         listItemBullet,
         bulletColours[colour],
         bulletSizes[size],
       ]}
       />
-      <span css={listItemContent}>{item.explainer}</span>
+      <span css={listItemContent}>{item.content}</span>
     </li>
   );
 }
@@ -120,7 +120,7 @@ ListItem.defaultProps = {
 
 function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
   return (
-    <li key={item.explainer} css={listItem}>
+    <li key={item.content} css={listItem}>
       <span css={[
         listItemBullet,
         bulletColours[colour],
@@ -128,7 +128,7 @@ function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
       ]}
       />
       <div css={listItemContent}>
-        <span css={listItemMainText}>{item.explainer}</span>
+        <span css={listItemMainText}>{item.content}</span>
         {item.subText && <span>{item.subText}</span>}
       </div>
     </li>
