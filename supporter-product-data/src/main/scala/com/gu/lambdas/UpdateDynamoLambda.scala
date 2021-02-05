@@ -41,17 +41,15 @@ object UpdateDynamoLambda {
 
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
 
-    val validUnprocessed = unProcessed.filter { case (itemOrError, _) => itemOrError.isRight }
-    val invalidUnprocessed = unProcessed.filter { case (itemOrError, _) => itemOrError.isLeft }
+    val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
+    val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
 
-    if (invalidUnprocessed.nonEmpty)
+    if (invalidUnprocessedIndexes.nonEmpty)
       SafeLogger.error(
-        scrub"There were ${invalidUnprocessed.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessed.map(_._2).mkString(",")}"
+        scrub"There were ${invalidUnprocessedIndexes.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes.mkString(",")}"
       )
 
-    val batches = validUnprocessed
-      .map { case (itemOrError, index) => (itemOrError.right.get, index) }
-      .grouped(batchSize)
+    val batches = validUnprocessed.grouped(batchSize)
 
     val processedCount = writeBatchesUntilTimeout(
       state.processedCount,
@@ -90,7 +88,7 @@ object UpdateDynamoLambda {
 
         val (_, highestProcessedIndex ) = group.last
         val newProcessedCount = highestProcessedIndex + 1
-        SafeLogger.info(s"${newProcessedCount} items processed")
+        SafeLogger.info(s"$newProcessedCount items processed")
         newProcessedCount
     }
 
