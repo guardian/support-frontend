@@ -6,6 +6,7 @@ import com.amazonaws.services.simplesystemsmanagement.model.{GetParametersByPath
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.model.Stage
 import com.gu.model.Stage.{DEV, PROD, UAT}
+import com.gu.services.ParameterStoreService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.collection.JavaConverters._
@@ -20,21 +21,16 @@ case class ZuoraQuerierConfig(
 )
 
 object ZuoraQuerierConfig {
-  lazy val client = AWSSimpleSystemsManagementAsyncClientBuilder.standard()
-    .withRegion(Regions.EU_WEST_1)
-    .withCredentials(CredentialsProvider)
-    .build()
 
   def load(stage: Stage): Future[ZuoraQuerierConfig] = {
-    val configPath = s"/supporter-product-data/${stage.value}/zuora-config/"
 
-    getParametersByPath(configPath).map {
+    ParameterStoreService(stage).getParametersByPath("zuora-config").map {
       params =>
         ZuoraQuerierConfig(
-          getParameterValue(configPath, "url", params),
-          getParameterValue(configPath, "partnerId", params),
-          getParameterValue(configPath, "username", params),
-          getParameterValue(configPath, "password", params),
+          findParameterValue("url", params),
+          findParameterValue("partnerId", params),
+          findParameterValue("username", params),
+          findParameterValue("password", params),
           getDiscountProductRatePlanIds(stage),
         )
     }
@@ -55,21 +51,12 @@ object ZuoraQuerierConfig {
       )
     }
 
-  private def getParameterValue(configPath: String, name: String, params: List[Parameter]) =
+  private def findParameterValue(name: String, params: List[Parameter]) =
     params
-      .find(_.getName == configPath + name)
+      .find(_.getName.endsWith(name))
       .map(_.getValue)
       .toRight(
         new RuntimeException(s"Missing config value for parameter $name in ZuoraQuerierConfig")
       ).toTry.get
-
-  private def getParametersByPath(path: String) = {
-    val request: GetParametersByPathRequest = new GetParametersByPathRequest()
-      .withPath(path)
-      .withRecursive(false)
-      .withWithDecryption(true)
-
-    AwsAsync(client.getParametersByPathAsync, request).map(_.getParameters.asScala.toList)
-  }
 
 }

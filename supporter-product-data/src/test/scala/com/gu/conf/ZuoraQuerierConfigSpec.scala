@@ -1,6 +1,5 @@
-package conf
+package com.gu.conf
 
-import com.gu.conf.ZuoraQuerierConfig
 import com.gu.model.Stage.DEV
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
