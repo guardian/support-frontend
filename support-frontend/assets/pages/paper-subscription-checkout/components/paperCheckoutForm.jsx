@@ -21,7 +21,7 @@ import Text from 'components/text/text';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
@@ -62,7 +62,7 @@ import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidati
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { type Option } from 'helpers/types/option';
-import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import { paperProductsWithDigital, paperProductsWithoutDigital, type ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
@@ -74,6 +74,7 @@ import { options } from 'components/forms/customFields/options';
 
 import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
+import { getPriceSummary, sensiblyGenerateDigiSubPrice } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -103,7 +104,7 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
   formIsValid: Function,
   setupRecurringPayPalPayment: Function,
-  amount: number,
+  total: ProductPrice,
   useDigitalVoucher: Option<boolean>,
   productOption: ActivePaperProducts,
   fulfilmentOption: FulfilmentOptions,
@@ -125,11 +126,11 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     useDigitalVoucher: state.common.settings.useDigitalVoucher,
-    amount: getProductPrice(
+    total: getProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
-    ).price,
+    ),
   };
 }
 
@@ -182,13 +183,27 @@ function PaperCheckoutForm(props: PropTypes) {
     formattedStartDate = getFormattedStartDate(getPaymentStartDate(timeNow, props.productOption));
     setSubsCardStartDateInState(props.setStartDate, startDate);
   }
-
+  const [digiSubPriceString, setDigiSubPriceString] = useState<string>('');
   const [includesDigiSub, setIncludesDigiSub] = useState<boolean>(false);
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
     setIncludesDigiSub(event.target.checked);
     props.setAddDigitalSubscription(event.target.checked);
   }
+
+  useEffect(() => {
+    // Price of the 'Plus' product that corresponds to the selected product option
+    const plusPrice = includesDigiSub ?
+      props.total :
+      getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithDigital[props.productOption]);
+    // Price of the standard paper-only product that corresponds to the selected product option
+    const paperPrice = includesDigiSub ?
+      getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption]) :
+      props.total;
+    const digitalCost = sensiblyGenerateDigiSubPrice(plusPrice, paperPrice);
+
+    setDigiSubPriceString(getPriceSummary(showPrice(digitalCost, false), props.billingPeriod));
+  }, []);
 
   const subsCardOrderSummary = (<PaperOrderSummary
     image={
@@ -199,6 +214,7 @@ function PaperCheckoutForm(props: PropTypes) {
         imgType="png"
         altText=""
       />}
+    digiSubPrice={digiSubPriceString}
     startDate={formattedStartDate}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionProductChoices}
@@ -214,6 +230,7 @@ function PaperCheckoutForm(props: PropTypes) {
         altText=""
       />
     }
+    digiSubPrice={digiSubPriceString}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
   />);
@@ -340,7 +357,7 @@ function PaperCheckoutForm(props: PropTypes) {
               </Rows>
             </FormSection>) : null}
           {/* <FormSection> */}
-          <AddDigiSubCta addDigitalSubscription={addDigitalSubscription} />
+          <AddDigiSubCta digiSubPrice={digiSubPriceString} addDigitalSubscription={addDigitalSubscription} />
           {/* </FormSection> */}
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
@@ -392,7 +409,7 @@ function PaperCheckoutForm(props: PropTypes) {
               validateForm={props.validateForm}
               isTestUser={props.isTestUser}
               setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-              amount={props.amount}
+              amount={props.total.price}
               billingPeriod={props.billingPeriod}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
             />) : null}

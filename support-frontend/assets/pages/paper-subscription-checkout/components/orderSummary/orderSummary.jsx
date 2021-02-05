@@ -14,18 +14,16 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
 
 import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
-import {
-  billingPeriodNoun,
-  type BillingPeriod,
-} from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 
-import { getOrderSummaryTitle } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
+import { getOrderSummaryTitle, getPriceSummary } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 
 type PropTypes = {
   fulfilmentOption: FulfilmentOptions,
   productOption: ActivePaperProducts,
   billingPeriod: BillingPeriod,
   productPrices: ProductPrices,
+  digiSubPrice: string,
   useDigitalVoucher: boolean,
   image: $Call<GridImageType, GridImg>,
   includesDigiSub: boolean,
@@ -44,21 +42,6 @@ function getMobileSummaryTitle(
     {getOrderSummaryTitle(productOption, fulfilmentOption, useDigitalVoucher)}
     {includesDigiSub && <> +&nbsp;Digital</>}
   </>);
-}
-
-function getPriceSummary(price: string, billingPeriod: BillingPeriod) {
-  return `${price}/${billingPeriodNoun(billingPeriod).toLowerCase()}`;
-}
-
-function sensiblyGenerateDigiSubPrice(totalPrice: ProductPrice, paperPrice: ProductPrice): ProductPrice {
-  const total = totalPrice.price;
-  const paper = paperPrice.price;
-  const digiSubPrice = ((total * 100) - (paper * 100)) / 100;
-
-  return {
-    ...totalPrice,
-    price: digiSubPrice,
-  };
 }
 
 function mapStateToProps(state: WithDeliveryCheckoutState) {
@@ -82,7 +65,6 @@ function PaperOrderSummary(props: PropTypes) {
   const basePaperPrice = props.includesDigiSub ?
     getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption])
     : props.total;
-  const digitalCost = sensiblyGenerateDigiSubPrice(props.total, basePaperPrice);
 
   const productInfoHomeDelivery = [
     {
@@ -100,7 +82,7 @@ function PaperOrderSummary(props: PropTypes) {
 
   const productInfoDigiSub = [
     {
-      content: `You'll pay ${getPriceSummary(showPrice(digitalCost, false), props.billingPeriod)}`,
+      content: `You'll pay ${props.digiSubPrice}`,
     },
   ];
 
