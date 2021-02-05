@@ -39,6 +39,8 @@ describe('Paper order summary', () => {
   // Suppress warnings related to our version of Redux
   console.warn = jest.fn();
 
+  const productOption = 'EverydayPlus';
+
   let props;
   let initialState;
 
@@ -48,7 +50,7 @@ describe('Paper order summary', () => {
         checkout: {
           product: 'Paper',
           billingPeriod: 'Monthly',
-          productOption: 'EverydayPlus',
+          productOption,
           fulfilmentOption: 'Collection',
           productPrices: paperProducts,
         },
@@ -69,6 +71,7 @@ describe('Paper order summary', () => {
         altText=""
       />,
       includesDigiSub: true,
+      digiSubPrice: '£5/month',
       changeSubscription: '/page',
     };
 
@@ -84,7 +87,7 @@ describe('Paper order summary', () => {
   });
 
   it('displays the correct total price', async () => {
-    const mockPrice = paperProducts['United Kingdom'].Collection.EverydayPlus.Monthly.GBP.price.toFixed(2);
+    const mockPrice = paperProducts['United Kingdom'].Collection[productOption].Monthly.GBP.price.toFixed(2);
     expect(await screen.findByText(findTextAcrossElements(`Total:£${mockPrice}/month`))).toBeInTheDocument();
   });
 
@@ -93,14 +96,11 @@ describe('Paper order summary', () => {
   });
 
   it('displays the correct price for the standalone paper product', async () => {
-    const paperOnlyPrice = paperProducts['United Kingdom'].Collection.Everyday.Monthly.GBP.price;
+    const paperOnlyPrice = paperProducts['United Kingdom'].Collection[productOption.replace('Plus', '')].Monthly.GBP.price;
     expect(await screen.findByText(`You'll pay £${paperOnlyPrice}/month`)).toBeInTheDocument();
   });
 
   it('displays the separate price for the digital subscription', async () => {
-    const totalPrice = paperProducts['United Kingdom'].Collection.EverydayPlus.Monthly.GBP.price;
-    const paperOnlyPrice = paperProducts['United Kingdom'].Collection.Everyday.Monthly.GBP.price;
-    const digitalTotal = (totalPrice - paperOnlyPrice).toFixed(2);
-    expect(await screen.findByText(`You'll pay £${digitalTotal}/month`)).toBeInTheDocument();
+    expect(await screen.findByText('You\'ll pay £5/month')).toBeInTheDocument();
   });
 });
