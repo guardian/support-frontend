@@ -86,13 +86,13 @@ function PaperOrderSummary(props: PropTypes) {
 
   const productInfoHomeDelivery = [
     {
-      mainText: `You'll pay ${getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod)}`,
+      content: `You'll pay ${getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod)}`,
     },
   ];
   const productInfoSubsCard = [
     ...productInfoHomeDelivery,
     {
-      mainText: props.startDate ? `Your first payment will be on ${props.startDate}` : '',
+      content: props.startDate ? `Your first payment will be on ${props.startDate}` : '',
       subText: 'Your subscription card will arrive in the post before the payment date',
     },
   ];
@@ -100,7 +100,7 @@ function PaperOrderSummary(props: PropTypes) {
 
   const productInfoDigiSub = [
     {
-      mainText: `You'll pay ${getPriceSummary(showPrice(digitalCost, false), props.billingPeriod)}`,
+      content: `You'll pay ${getPriceSummary(showPrice(digitalCost, false), props.billingPeriod)}`,
     },
   ];
 
