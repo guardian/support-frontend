@@ -7,7 +7,7 @@ import com.gu.model.dynamo.SupporterRatePlanItem
 import com.gu.model.states.UpdateDynamoState
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
-import com.gu.services.{DynamoDBService, S3Service}
+import com.gu.services.{AlarmService, DynamoDBService, S3Service}
 import kantan.csv._
 import kantan.csv.ops._
 
@@ -38,16 +38,19 @@ object UpdateDynamoLambda {
     val csvStream = S3Service.streamFromS3(stage, state.filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val dynamoDBService = DynamoDBService(stage)
+    val alarmService = AlarmService(stage)
 
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
 
     val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
     val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
 
-    if (invalidUnprocessedIndexes.nonEmpty && state.processedCount == 0)
+    if (invalidUnprocessedIndexes.nonEmpty && state.processedCount == 0) {
       SafeLogger.error(
         scrub"There were ${invalidUnprocessedIndexes.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes.mkString(",")}"
       )
+      alarmService.triggerCsvReadAlarm
+    }
 
     val batches = validUnprocessed.grouped(batchSize)
 
@@ -55,7 +58,8 @@ object UpdateDynamoLambda {
       state.processedCount,
       batches,
       timeOutCheck,
-      dynamoDBService
+      dynamoDBService,
+      alarmService
     )
 
     Future.successful(state.copy(
@@ -70,7 +74,8 @@ object UpdateDynamoLambda {
     processedCount: Int,
     groups: Iterator[List[(SupporterRatePlanItem, Int)]],
     timeOutCheck: TimeOutCheck,
-    dynamoDBService: DynamoDBService
+    dynamoDBService: DynamoDBService,
+    alarmService: AlarmService
   ): Int =
     groups.foldLeft(processedCount) {
       (processedCount, group) =>
@@ -84,7 +89,7 @@ object UpdateDynamoLambda {
           s"Continuing processing - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds"
         )
 
-        Await.result(writeBatch(group, dynamoDBService), 120.seconds)
+        Await.result(writeBatch(group, dynamoDBService, alarmService), 120.seconds)
 
         val (_, highestProcessedIndex ) = group.last
         val newProcessedCount = highestProcessedIndex + 1
@@ -92,7 +97,7 @@ object UpdateDynamoLambda {
         newProcessedCount
     }
 
-  def writeBatch(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService) = {
+  def writeBatch(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService, alarmService: AlarmService) = {
     val futures = list.map {
       case (supporterRatePlanItem, index) =>
         SafeLogger.info(
@@ -101,8 +106,10 @@ object UpdateDynamoLambda {
         dynamoDBService
           .writeItem(supporterRatePlanItem)
           .recover {
-            // let's log and keep going if one insert fails
-            case error: Throwable => SafeLogger.error(scrub"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
+            // let's alarm and keep going if one insert fails
+            case error: Throwable =>
+              SafeLogger.error(scrub"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
+              alarmService.triggerDynamoWriteAlarm
           }
 
     }
