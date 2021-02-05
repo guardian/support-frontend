@@ -44,7 +44,7 @@ object UpdateDynamoLambda {
     val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
     val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
 
-    if (invalidUnprocessedIndexes.nonEmpty)
+    if (invalidUnprocessedIndexes.nonEmpty && state.processedCount == 0)
       SafeLogger.error(
         scrub"There were ${invalidUnprocessedIndexes.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes.mkString(",")}"
       )
