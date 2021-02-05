@@ -101,7 +101,7 @@ object UpdateDynamoLambda {
         dynamoDBService
           .writeItem(supporterRatePlanItem)
           .recover {
-            // lets log and keep going if one insert fails
+            // let's log and keep going if one insert fails
             case error: Throwable => SafeLogger.error(scrub"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
           }
 
