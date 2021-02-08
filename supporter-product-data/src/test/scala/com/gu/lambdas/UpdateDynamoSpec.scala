@@ -10,6 +10,8 @@ import kantan.csv.rfc
 import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
 
+import java.time.LocalDateTime
+
 @IntegrationTest
 class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
   "UpdateDynamoLambda" should "succeed" in {
@@ -18,7 +20,8 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
       UpdateDynamoState(
         filename = "New Subscriptions-2c92c0867728a2e801772ade71bb56a5",
         recordCount = 50,
-        processedCount = 0
+        processedCount = 0,
+        LocalDateTime.now
       ),
       new TimeOutCheck {
         override def timeRemainingMillis = 9999999

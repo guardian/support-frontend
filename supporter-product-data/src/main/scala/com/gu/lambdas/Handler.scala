@@ -1,7 +1,6 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import com.gu.monitoring.SafeLogger
 import io.circe.parser.decode
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}

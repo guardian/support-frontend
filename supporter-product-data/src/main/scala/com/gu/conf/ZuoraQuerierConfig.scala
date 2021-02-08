@@ -1,15 +1,14 @@
 package com.gu.conf
 
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementAsyncClientBuilder
-import com.amazonaws.services.simplesystemsmanagement.model.{GetParametersByPathRequest, Parameter}
-import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.amazonaws.services.simplesystemsmanagement.model.Parameter
 import com.gu.model.Stage
 import com.gu.model.Stage.{DEV, PROD, UAT}
+import com.gu.services.IncrementalTimeService.lastSuccessfulQueryTime
 import com.gu.services.ParameterStoreService
 
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 case class ZuoraQuerierConfig(
@@ -17,7 +16,8 @@ case class ZuoraQuerierConfig(
   partnerId: String,
   username: String,
   password: String,
-  discountProductRatePlanIds: List[String]
+  discountProductRatePlanIds: List[String],
+  lastSuccessfulQueryTime: Option[ZonedDateTime]
 )
 
 object ZuoraQuerierConfig {
@@ -27,11 +27,12 @@ object ZuoraQuerierConfig {
     ParameterStoreService(stage).getParametersByPath("zuora-config").map {
       params =>
         ZuoraQuerierConfig(
-          findParameterValue("url", params),
-          findParameterValue("partnerId", params),
-          findParameterValue("username", params),
-          findParameterValue("password", params),
+          findParameterOrThrow("url", params),
+          findParameterOrThrow("partnerId", params),
+          findParameterOrThrow("username", params),
+          findParameterOrThrow("password", params),
           getDiscountProductRatePlanIds(stage),
+          findParameterValue(lastSuccessfulQueryTime, params).map(ZonedDateTime.parse(_, DateTimeFormatter.ISO_DATE_TIME))
         )
     }
   }
@@ -55,8 +56,11 @@ object ZuoraQuerierConfig {
     params
       .find(_.getName.endsWith(name))
       .map(_.getValue)
-      .toRight(
-        new RuntimeException(s"Missing config value for parameter $name in ZuoraQuerierConfig")
-      ).toTry.get
+
+  private def findParameterOrThrow(name: String, params: List[Parameter]) =
+    findParameterValue(name, params).toRight(
+      new RuntimeException(s"Missing config value for parameter $name in ZuoraQuerierConfig")
+    ).toTry.get
+
 
 }

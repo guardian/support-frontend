@@ -1,13 +1,12 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.lambdas.UpdateDynamoLambda.{batchSize, writeToDynamo}
+import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
 import com.gu.model.Stage
 import com.gu.model.dynamo.SupporterRatePlanItem
 import com.gu.model.states.UpdateDynamoState
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger.Sanitizer
-import com.gu.services.{AlarmService, DynamoDBService, S3Service}
+import com.gu.services.{AlarmService, DynamoDBService, IncrementalTimeService, S3Service}
+import com.typesafe.scalalogging.StrictLogging
 import kantan.csv._
 import kantan.csv.ops._
 
@@ -25,16 +24,17 @@ class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
 
 class UpdateDynamoLambda extends Handler[UpdateDynamoState, UpdateDynamoState] {
   override protected def handlerFuture(input: UpdateDynamoState, context: Context) = {
-    SafeLogger.info(s"Starting write to dynamo task for ${input.recordCount} records from ${input.filename}")
     writeToDynamo(Stage.fromEnvironment, input, new ContextTimeOutCheck(context))
   }
 }
 
-object UpdateDynamoLambda {
+object UpdateDynamoLambda extends StrictLogging {
   val batchSize = 10
   val timeoutBufferInMillis = batchSize * 5 * 1000
 
   def writeToDynamo(stage: Stage, state: UpdateDynamoState, timeOutCheck: TimeOutCheck): Future[UpdateDynamoState] = {
+    logger.info(s"Starting write to dynamo task for ${state.recordCount} records from ${state.filename}")
+
     val csvStream = S3Service.streamFromS3(stage, state.filename)
     val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val dynamoDBService = DynamoDBService(stage)
@@ -46,8 +46,8 @@ object UpdateDynamoLambda {
     val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
 
     if (invalidUnprocessedIndexes.nonEmpty && state.processedCount == 0) {
-      SafeLogger.error(
-        scrub"There were ${invalidUnprocessedIndexes.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes.mkString(",")}"
+      logger.error(
+        s"There were ${invalidUnprocessedIndexes.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes.mkString(",")}"
       )
       alarmService.triggerCsvReadAlarm
     }
@@ -61,6 +61,9 @@ object UpdateDynamoLambda {
       dynamoDBService,
       alarmService
     )
+
+    if (processedCount == state.recordCount)
+      IncrementalTimeService(stage).putLastSuccessfulQueryTime(state.attemptedQueryTime)
 
     Future.successful(state.copy(
         processedCount = processedCount
@@ -80,12 +83,12 @@ object UpdateDynamoLambda {
     groups.foldLeft(processedCount) {
       (processedCount, group) =>
         if (timeOutCheck.timeRemainingMillis < timeoutBufferInMillis) {
-          SafeLogger.info(
+          logger.info(
             s"Aborting processing - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds"
           )
           return processedCount
         }
-        SafeLogger.info(
+        logger.info(
           s"Continuing processing - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds"
         )
 
@@ -93,14 +96,14 @@ object UpdateDynamoLambda {
 
         val (_, highestProcessedIndex ) = group.last
         val newProcessedCount = highestProcessedIndex + 1
-        SafeLogger.info(s"$newProcessedCount items processed")
+        logger.info(s"$newProcessedCount items processed")
         newProcessedCount
     }
 
   def writeBatch(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService, alarmService: AlarmService) = {
     val futures = list.map {
       case (supporterRatePlanItem, index) =>
-        SafeLogger.info(
+        logger.info(
           s"Attempting to write item index $index - ${supporterRatePlanItem.productRatePlanName} " +
             s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
         dynamoDBService
@@ -108,7 +111,7 @@ object UpdateDynamoLambda {
           .recover {
             // let's alarm and keep going if one insert fails
             case error: Throwable =>
-              SafeLogger.error(scrub"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
+              logger.error(s"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
               alarmService.triggerDynamoWriteAlarm
           }
 

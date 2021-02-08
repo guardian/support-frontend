@@ -39,7 +39,8 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
     val request = BatchQueryRequest(
       partner = config.partnerId,
       name = "supporter-product-data",
-      queries = queries
+      queries = queries,
+      incrementalTime = config.lastSuccessfulQueryTime //TODO test how this behaves with a full query
     )
     postJson[BatchQueryResponse](s"batch-query/", request.asJson, authHeaders)
   }

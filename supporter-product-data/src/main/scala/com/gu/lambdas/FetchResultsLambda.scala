@@ -6,21 +6,22 @@ import com.gu.lambdas.FetchResultsLambda.fetchResults
 import com.gu.model.Stage
 import com.gu.model.states.{FetchResultsState, UpdateDynamoState}
 import com.gu.model.zuora.response.JobStatus.Completed
-import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.services.{S3Service, SelectActiveRatePlansQuery, ZuoraQuerierService}
+import com.gu.services.{IncrementalTimeService, S3Service, ZuoraQuerierService}
+import com.typesafe.scalalogging.StrictLogging
 
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
 class FetchResultsLambda extends Handler[FetchResultsState, UpdateDynamoState] {
   override protected def handlerFuture(input: FetchResultsState, context: Context) =
-    fetchResults(Stage.fromEnvironment, input.jobId)
+    fetchResults(Stage.fromEnvironment, input.jobId, input.attemptedQueryTime)
 }
 
-object FetchResultsLambda {
-  def fetchResults(stage: Stage, jobId: String) = {
-    SafeLogger.info(s"Attempting to fetch results for jobId $jobId")
+object FetchResultsLambda extends StrictLogging{
+  def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: LocalDateTime) = {
+    logger.info(s"Attempting to fetch results for jobId $jobId")
     for {
       config <- ZuoraQuerierConfig.load(stage)
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
@@ -33,11 +34,15 @@ object FetchResultsLambda {
       _ = assert(fileResponse.isSuccessful, s"File download for job with id $jobId failed with http code ${fileResponse.code}")
       _ <- S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
     } yield {
-      SafeLogger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
+      logger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
+      if (batch.recordCount == 0)
+        IncrementalTimeService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
+
       UpdateDynamoState(
         filename,
         batch.recordCount,
-        processedCount = 0
+        processedCount = 0,
+        attemptedQueryTime
       )
     }
   }

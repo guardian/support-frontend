@@ -3,6 +3,8 @@ package com.gu.model.zuora.request
 import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
 
+import java.time.ZonedDateTime
+
 case class ZoqlExportQuery(
   name: String,
   query: String
@@ -10,6 +12,7 @@ case class ZoqlExportQuery(
 
 case class BatchQueryRequest(
   partner: String, // Makes the request stateful. See https://knowledgecenter.zuora.com/Central_Platform/API/AB_Aggregate_Query_API/BA_Stateless_and_Stateful_Modes
+  incrementalTime: Option[ZonedDateTime], // Sets the time to query from. See https://knowledgecenter.zuora.com/Central_Platform/API/AB_Aggregate_Query_API/B_Submit_Query/e_Post_Query_with_Retrieval_Time
   name: String,
   queries: List[ZoqlExportQuery]
 )
