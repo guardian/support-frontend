@@ -96,6 +96,7 @@ export const featureContainer = css`
     justify-content: space-between;
     max-width: calc(100% - 110px);
     max-width: 1100px;
+    min-height: 365px;
   }
 
   ${from.leftCol} {
