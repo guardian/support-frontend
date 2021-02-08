@@ -139,6 +139,8 @@ export const info = css`
   border-top: 1px solid ${neutral[86]};
 
   svg {
+    /* Repeat height here to fix Safari issue with inline-flex SVGs */
+    height: 22px;
     max-width: 22px;
     fill: ${brand[400]};
     margin-right: ${space[2]}px;

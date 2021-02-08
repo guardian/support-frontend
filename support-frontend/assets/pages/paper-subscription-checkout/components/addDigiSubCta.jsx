@@ -55,7 +55,7 @@ const listCopy = [
   },
   {
     content: 'Premium access to The Guardian Live app',
-    subText: 'Live feed, Dicover and daily crosswords. Download the news whenever it suits you.',
+    subText: 'Live feed, Discover and daily crosswords. Download the news whenever it suits you.',
   },
   {
     content: 'Ad-free',

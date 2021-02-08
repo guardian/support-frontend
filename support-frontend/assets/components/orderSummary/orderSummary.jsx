@@ -45,7 +45,7 @@ function OrderSummary(props: PropTypes) {
             <span>You can cancel any time</span>
           </div>
         </div>
-        <div css={styles.total}>
+        <div css={styles.total} aria-atomic="true" aria-live="polite">
           <span>Total:</span>
           <span>{props.total}</span>
         </div>
