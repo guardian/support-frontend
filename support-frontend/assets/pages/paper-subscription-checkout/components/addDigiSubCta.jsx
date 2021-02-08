@@ -6,6 +6,7 @@ import { css } from '@emotion/core';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
+import { from } from '@guardian/src-foundations/mq';
 import { Checkbox } from '@guardian/src-checkbox';
 import GridImage from 'components/gridImage/gridImage';
 import { ListWithSubText } from 'components/list/list';
@@ -40,7 +41,10 @@ const content = css`
 `;
 
 const list = css`
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
+  ${from.desktop} {
+    margin-bottom: 0;
+  }
 `;
 
 const listCopy = [

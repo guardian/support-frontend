@@ -84,6 +84,12 @@ const controlTextAreaResizing = css`
   resize: vertical;
 `;
 
+const removeTopBorder = css`
+  .component-checkout-form-section ~ & {
+    border-top: none;
+  }
+`;
+
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -356,11 +362,9 @@ function PaperCheckoutForm(props: PropTypes) {
                 </Text>
               </Rows>
             </FormSection>) : null}
-          {/* <FormSection> */}
           <AddDigiSubCta digiSubPrice={digiSubPriceString} addDigitalSubscription={addDigitalSubscription} />
-          {/* </FormSection> */}
           {paymentMethods.length > 1 ?
-            <FormSection title="How would you like to pay?">
+            <FormSection cssOverrides={removeTopBorder} title="How would you like to pay?">
               <PaymentMethodSelector
                 country="GB"
                 paymentMethod={props.paymentMethod}
