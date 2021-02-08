@@ -51,11 +51,11 @@ const listCopy = [
   {
     content: 'The Guardian Editions app',
     subText: `Each edition available to read by 6am (GMT), 7 days a week for
-    IOS and Android mobile and tablet. Download and read whenever it suits you`,
+    IOS and Android mobile and tablet. Download and read whenever it suits you.`,
   },
   {
     content: 'Premium access to The Guardian Live app',
-    subText: 'Live feed, Dicover and daily crosswords. Download the news whenever it suits you',
+    subText: 'Live feed, Dicover and daily crosswords. Download the news whenever it suits you.',
   },
   {
     content: 'Ad-free',
