@@ -100,6 +100,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - ssm:GetParametersByPath
+                  - ssm:PutParameter
                 Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/supporter-product-data/*
         - PolicyName: DynamoTable
           PolicyDocument:
@@ -358,6 +359,7 @@ Resources:
           - !Ref 'Stage'
           - 'There was a csv read failure when loading supporter product data into DynamoDB'
       AlarmDescription: !Join
+        -
         - ' '
         - - 'Impact - On or more subscriber will not get their digital benefits'
           - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
