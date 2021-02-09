@@ -62,15 +62,15 @@ object UpdateDynamoLambda extends StrictLogging {
       alarmService
     )
 
-    if (processedCount == state.recordCount)
-      ConfigService(stage).putLastSuccessfulQueryTime(state.attemptedQueryTime)
 
-    Future.successful(state.copy(
-        processedCount = processedCount
-      ))
+    val maybeSaveSuccessTime = if (processedCount == state.recordCount)
+        ConfigService(stage).putLastSuccessfulQueryTime(state.attemptedQueryTime)
+      else Future.successful(())
+
+    maybeSaveSuccessTime.map(_ => state.copy(processedCount = processedCount))
   }
 
-  def getUnprocessedItems(csvReader:  CsvReader[ReadResult[SupporterRatePlanItem]], processedCount: Int) =
+  def getUnprocessedItems(csvReader: CsvReader[ReadResult[SupporterRatePlanItem]], processedCount: Int) =
     csvReader.zipWithIndex.drop(processedCount).toList
 
   def writeBatchesUntilTimeout(
@@ -94,7 +94,7 @@ object UpdateDynamoLambda extends StrictLogging {
 
         Await.result(writeBatch(group, dynamoDBService, alarmService), 120.seconds)
 
-        val (_, highestProcessedIndex ) = group.last
+        val (_, highestProcessedIndex) = group.last
         val newProcessedCount = highestProcessedIndex + 1
         logger.info(s"$newProcessedCount items processed")
         newProcessedCount
