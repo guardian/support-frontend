@@ -4,6 +4,7 @@ import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
 
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 case class ZoqlExportQuery(
   name: String,
@@ -24,6 +25,11 @@ object ZoqlExportQuery{
 }
 
 object BatchQueryRequest{
+  implicit val zonedDateTimeEncoder: Encoder[ZonedDateTime] =
+    Encoder.encodeString.contramap(_.format(
+      DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss") // Zuora insist on this pattern
+    ))
+
   implicit val encoder: Encoder[BatchQueryRequest] = deriveEncoder[BatchQueryRequest].mapJsonObject(_
     .add("format", Json.fromString("csv"))
     .add("version", Json.fromString("1.1"))
