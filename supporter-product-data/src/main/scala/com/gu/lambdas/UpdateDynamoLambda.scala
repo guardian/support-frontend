@@ -5,7 +5,7 @@ import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
 import com.gu.model.Stage
 import com.gu.model.dynamo.SupporterRatePlanItem
 import com.gu.model.states.UpdateDynamoState
-import com.gu.services.{AlarmService, DynamoDBService, IncrementalTimeService, S3Service}
+import com.gu.services.{AlarmService, DynamoDBService, ConfigService, S3Service}
 import com.typesafe.scalalogging.StrictLogging
 import kantan.csv._
 import kantan.csv.ops._
@@ -63,7 +63,7 @@ object UpdateDynamoLambda extends StrictLogging {
     )
 
     if (processedCount == state.recordCount)
-      IncrementalTimeService(stage).putLastSuccessfulQueryTime(state.attemptedQueryTime)
+      ConfigService(stage).putLastSuccessfulQueryTime(state.attemptedQueryTime)
 
     Future.successful(state.copy(
         processedCount = processedCount

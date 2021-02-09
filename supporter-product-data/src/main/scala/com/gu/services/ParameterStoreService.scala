@@ -39,6 +39,7 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
 
     AwsAsync(client.putParameterAsync, putParameterRequest)
   }
+
 }
 
 object ParameterStoreService {

@@ -16,7 +16,7 @@ import scala.concurrent.duration._
 class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
   "ZuoraQuerierService" should "run a query successfully" in {
     val futureResult = for {
-      config <- ZuoraQuerierConfig.load(DEV)
+      config <- ConfigService(DEV).load
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.postQuery(Full)
     } yield result
@@ -31,7 +31,7 @@ class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
   it should "upload a file to S3 successfully" in {
     val fileId = "2c92c085771fa1a70177202f9ae63130"
     val futureResult = for {
-      config <- ZuoraQuerierConfig.load(DEV)
+      config <- ConfigService(DEV).load
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       response <- service.getResultFileResponse(fileId)
       uploadResult <- S3Service.streamToS3(DEV, s"upload-test-file-$fileId", response.body.byteStream(), response.body.contentLength)

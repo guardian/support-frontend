@@ -3,11 +3,11 @@ package com.gu.model.states
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 case class FetchResultsState(
   jobId: String,
-  attemptedQueryTime: LocalDateTime
+  attemptedQueryTime: ZonedDateTime
 )
 
 object FetchResultsState {

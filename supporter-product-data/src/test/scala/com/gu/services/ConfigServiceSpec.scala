@@ -1,4 +1,4 @@
-package com.gu.conf
+package com.gu.services
 
 import com.gu.model.Stage.DEV
 import com.gu.test.tags.annotations.IntegrationTest
@@ -6,14 +6,17 @@ import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
-class ZuoraQuerierConfigSpec extends AsyncFlatSpec with Matchers{
-  "ZuoraQuerierConfig" should "load from SSM" in {
-    val futureConfig = ZuoraQuerierConfig.load(DEV)
+class ConfigServiceSpec extends AsyncFlatSpec with Matchers {
+  ConfigService.getClass.getSimpleName should "load config from SSM" in {
+    val futureConfig = ConfigService(DEV).load
     futureConfig.map {
       config =>
         config.url shouldBe "https://rest.apisandbox.zuora.com/v1/"
         config.username shouldNot be("")
         config.password shouldNot be("")
+        config.discountProductRatePlanIds shouldBe List("2c92c0f852f2ebb20152f9269f067819")
+        config.lastSuccessfulQueryTime shouldBe defined
     }
   }
+
 }

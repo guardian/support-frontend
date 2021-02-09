@@ -7,10 +7,10 @@ import com.gu.model.Stage
 import com.gu.model.states.{FetchResultsState, UpdateDynamoState}
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.services.{IncrementalTimeService, S3Service, ZuoraQuerierService}
+import com.gu.services.{ConfigService, S3Service, ZuoraQuerierService}
 import com.typesafe.scalalogging.StrictLogging
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
@@ -20,10 +20,10 @@ class FetchResultsLambda extends Handler[FetchResultsState, UpdateDynamoState] {
 }
 
 object FetchResultsLambda extends StrictLogging{
-  def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: LocalDateTime) = {
+  def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime) = {
     logger.info(s"Attempting to fetch results for jobId $jobId")
     for {
-      config <- ZuoraQuerierConfig.load(stage)
+      config <- ConfigService(stage).load
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.getResults(jobId)
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
@@ -36,7 +36,7 @@ object FetchResultsLambda extends StrictLogging{
     } yield {
       logger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
       if (batch.recordCount == 0)
-        IncrementalTimeService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
+        ConfigService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
 
       UpdateDynamoState(
         filename,

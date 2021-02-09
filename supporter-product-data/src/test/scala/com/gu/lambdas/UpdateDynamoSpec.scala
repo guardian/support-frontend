@@ -7,10 +7,10 @@ import com.gu.model.states.UpdateDynamoState
 import com.gu.test.tags.annotations.IntegrationTest
 import kantan.csv.ops.toCsvInputOps
 import kantan.csv.rfc
-import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
+import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @IntegrationTest
 class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
@@ -21,7 +21,7 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
         filename = "New Subscriptions-2c92c0867728a2e801772ade71bb56a5",
         recordCount = 50,
         processedCount = 0,
-        LocalDateTime.now
+        ZonedDateTime.now
       ),
       new TimeOutCheck {
         override def timeRemainingMillis = 9999999
