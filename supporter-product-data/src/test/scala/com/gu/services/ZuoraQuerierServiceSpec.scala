@@ -28,7 +28,7 @@ class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
-  it should "upload a file to S3 successfully" in {
+  it should "stream a file to S3 successfully" in {
     val fileId = "2c92c085771fa1a70177202f9ae63130"
     val futureResult = for {
       config <- ConfigService(DEV).load

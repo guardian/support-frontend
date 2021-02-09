@@ -44,15 +44,15 @@ class ConfigService(stage: Stage) extends StrictLogging {
       )
     }
 
+  private def findParameterOrThrow(name: String, params: List[Parameter]) =
+    findParameterValue(name, params).getOrElse(
+      throw new RuntimeException(s"Missing config value for parameter $name in ZuoraQuerierConfig")
+    )
+
   private def findParameterValue(name: String, params: List[Parameter]) =
     params
       .find(_.getName.endsWith(name))
       .map(_.getValue)
-
-  private def findParameterOrThrow(name: String, params: List[Parameter]) =
-    findParameterValue(name, params).toRight(
-      new RuntimeException(s"Missing config value for parameter $name in ZuoraQuerierConfig")
-    ).toTry.get
 
   def putLastSuccessfulQueryTime(time: ZonedDateTime) = {
     val timeAsString = time.format(DateTimeFormatter.ISO_DATE_TIME)
