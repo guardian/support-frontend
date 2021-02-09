@@ -10,6 +10,7 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
+import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneId, ZoneOffset}
 import java.util.UUID
 import scala.collection.Map.empty
@@ -28,10 +29,12 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
 
   def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {
     val queries = queryType match {
-      case Full => List(
+      case Full =>
+        val now = LocalDate.now(ZoneId.of("UTC"))
+        List(
         ZoqlExportQuery(
-          s"${SelectActiveRatePlansQuery.name}-${UUID.randomUUID().toString}",
-          SelectActiveRatePlansQuery.query(LocalDate.now(ZoneId.of("UTC")), config.discountProductRatePlanIds)
+          s"${SelectActiveRatePlansQuery.name}-${now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
+          SelectActiveRatePlansQuery.query(now, config.discountProductRatePlanIds)
         )
       )
       case Incremental => List()
@@ -46,11 +49,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   }
 
   def getResults(id: String): Future[BatchQueryResponse] =
-    get(s"batch-query/jobs/$id", authHeaders)(
-      BatchQueryResponse.decoder, // having to explicitly pass these implicits or the compiler gets confused by ambiguous implicit values
-      BatchQueryErrorResponse.decoder,
-      classTag[BatchQueryResponse]
-    )
+    get[BatchQueryResponse](s"batch-query/jobs/$id", authHeaders)
 
   def getResultFileResponse(fileId: String) = {
     val endpoint = s"/batch-query/file/$fileId"
