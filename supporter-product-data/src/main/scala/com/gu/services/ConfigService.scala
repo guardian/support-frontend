@@ -51,7 +51,7 @@ class ConfigService(stage: Stage) extends StrictLogging {
 
   private def findParameterValue(name: String, params: List[Parameter]) =
     params
-      .find(_.getName.endsWith(name))
+      .find(_.getName.split('/').last == name)
       .map(_.getValue)
 
   def putLastSuccessfulQueryTime(time: ZonedDateTime) = {
