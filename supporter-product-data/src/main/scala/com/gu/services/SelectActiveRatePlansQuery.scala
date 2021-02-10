@@ -15,8 +15,8 @@ object SelectActiveRatePlansQuery {
 
   def excludeDiscountProductRatePlans(discountProductRatePlanIds: List[String]) =
     discountProductRatePlanIds
-      .map(discountProductRatePlanId => s"${productRatePlanId.zuoraName} != '$discountProductRatePlanId' AND")
-      .mkString("\n")
+      .map(discountProductRatePlanId => s"${productRatePlanId.zuoraName} != '$discountProductRatePlanId'")
+      .mkString(" AND\n")
 
   def query(date: LocalDate, discountProductRatePlanIds: List[String]): String =
     s"""SELECT
@@ -31,7 +31,7 @@ object SelectActiveRatePlansQuery {
             WHERE
             ${termEndDate.zuoraName} >= '$date' AND
             (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
-            ${excludeDiscountProductRatePlans(discountProductRatePlanIds)}
+            ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
             ${identityId.zuoraName} != null AND ${identityId.zuoraName} != '' AND
             ($isNotDSGift OR $isRedeemedDSGift)
     """

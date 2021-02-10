@@ -8,15 +8,15 @@ import org.scalatest.matchers.should.Matchers
 @IntegrationTest
 class ConfigServiceSpec extends AsyncFlatSpec with Matchers {
   ConfigService.getClass.getSimpleName should "load config from SSM" in {
-    val futureConfig = ConfigService(DEV).load
-    futureConfig.map {
-      config =>
-        config.url shouldBe "https://rest.apisandbox.zuora.com/v1/"
-        config.username shouldNot be("")
-        config.password shouldNot be("")
-        config.discountProductRatePlanIds shouldBe List("2c92c0f852f2ebb20152f9269f067819")
-        config.lastSuccessfulQueryTime shouldBe defined
-    }
+    ConfigService(DEV).load
+      .map {
+        config =>
+          config.url shouldBe "https://rest.apisandbox.zuora.com/v1/"
+          config.username shouldNot be("")
+          config.password shouldNot be("")
+          config.discountProductRatePlanIds shouldBe List("2c92c0f852f2ebb20152f9269f067819")
+          config.lastSuccessfulQueryTime shouldBe defined
+      }
   }
 
 }
