@@ -29,7 +29,8 @@ object AcquisitionDataRowMapper {
       acquisition.campaignCode.map("campaign_codes" -> List(_).asJava),
       acquisition.zuoraAccountNumber.map("zuora_account_number" -> _),
       acquisition.zuoraSubscriptionNumber.map("zuora_subscription_number" -> _),
-      acquisition.contributionId.map("contribution_id" -> _)
+      acquisition.contributionId.map("contribution_id" -> _),
+      acquisition.paymentId.map("payment_id" -> _)
     ).flatten.toMap
 
     (Map(

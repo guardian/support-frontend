@@ -72,7 +72,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       reusedExistingPaymentMethod = false,
       Direct,
       Purchase,
-      Some("subscription number"), Some("account number"), Some("contributionId"),
+      Some("subscription number"), Some("account number"), Some("contributionId"), Some("paymentId1234"),
       List(QueryParameter("foo", "bar")),
       None
     )
