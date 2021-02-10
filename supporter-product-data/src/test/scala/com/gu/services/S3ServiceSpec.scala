@@ -12,7 +12,7 @@ import scala.io.Source
 @IntegrationTest
 class S3ServiceSpec extends AsyncFlatSpec with Matchers {
 
-  "S3Service" should "stream to S3 successfully" in {
+  S3Service.getClass.getSimpleName should "stream to S3 successfully" in {
     val initialString = "text"
     val stream = new ByteArrayInputStream(initialString.getBytes())
     val filename = s"test-file-${UUID.randomUUID().toString}"

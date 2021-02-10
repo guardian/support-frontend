@@ -1,11 +1,12 @@
 package com.gu.model.zuora.response
 
-import com.gu.model.zuora.response.JobStatus.{Completed, Submitted}
+import com.gu.model.zuora.response.JobStatus.Completed
 import io.circe.parser._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class SerialisationSpec extends AnyFlatSpec with Matchers {
+
   "BatchQueryResponse" should "serialise successfully" in {
     val json =
       """
@@ -39,12 +40,12 @@ class SerialisationSpec extends AnyFlatSpec with Matchers {
     val result = decode[BatchQueryResponse](json)
     result should matchPattern {
       case Right(
-        BatchQueryResponse(
-          "2c92c0f977091c5c0177167d05f77d7c",
-          Completed,
-          List(
-            BatchQueryItem("AttributesQuery", Some("2c92c086770917c40177167e4418436c"), 220, true)
-          ))) =>
+      BatchQueryResponse(
+      "2c92c0f977091c5c0177167d05f77d7c",
+      Completed,
+      List(
+      BatchQueryItem("AttributesQuery", Some("2c92c086770917c40177167e4418436c"), 220, true)
+      ))) =>
     }
   }
 }

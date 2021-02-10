@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter
 
 @IntegrationTest
 class ParameterStoreServiceSpec extends AsyncFlatSpec with Matchers {
+
   ParameterStoreService.getClass.getSimpleName should "be able to put and get a parameter" in {
     val paramName = "integrationTestParam"
     val paramVal = LocalDateTime.now.format(DateTimeFormatter.ISO_DATE_TIME)

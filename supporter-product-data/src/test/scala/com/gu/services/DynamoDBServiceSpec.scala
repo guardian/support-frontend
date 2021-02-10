@@ -11,14 +11,15 @@ import java.time.LocalDate
 @IntegrationTest
 class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
 
-  "DynamoDBService" should "stream be able to insert an item" in {
+  DynamoDBService.getClass.getSimpleName should "stream be able to insert an item" in {
     val service = DynamoDBService(DEV)
     val item = SupporterRatePlanItem(
       "999999",
       None,
       "1", "1", "Digital Subscription", LocalDate.parse("2021-01-01")
     )
-    service.writeItem(item).map(_ => succeed)
-
+    service
+      .writeItem(item)
+      .map(_.sdkHttpResponse.statusCode shouldBe 200)
   }
 }

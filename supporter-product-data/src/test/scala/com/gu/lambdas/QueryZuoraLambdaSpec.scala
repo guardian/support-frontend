@@ -11,7 +11,6 @@ import java.time.LocalDate
 @IntegrationTest
 class QueryZuoraLambdaSpec extends AsyncFlatSpec with Matchers {
 
-  // this doesn't really test anything it is just to aid in local development
   QueryZuoraLambda.getClass.getSimpleName should "be able to run a query" in {
     QueryZuoraLambda.queryZuora(DEV, Incremental).map(
       resultState =>

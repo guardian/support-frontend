@@ -7,6 +7,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class SerialisationSpec extends AnyFlatSpec with Matchers {
+
   SupporterRatePlanItem.getClass.getSimpleName should "deserialise correctly" in {
     val results = Fixtures.loadQueryResults
 

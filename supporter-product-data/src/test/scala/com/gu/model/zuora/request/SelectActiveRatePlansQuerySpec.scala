@@ -8,6 +8,7 @@ import org.scalatest.matchers.should.Matchers
 import java.time.LocalDate
 
 class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with LazyLogging {
+
   "SelectActiveRatePlansQuery" should "be correct" in {
     val date = LocalDate.of(2011, 11, 1)
     val expected = """SELECT

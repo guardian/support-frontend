@@ -7,6 +7,7 @@ import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
 class ConfigServiceSpec extends AsyncFlatSpec with Matchers {
+
   ConfigService.getClass.getSimpleName should "load config from SSM" in {
     ConfigService(DEV).load
       .map {
