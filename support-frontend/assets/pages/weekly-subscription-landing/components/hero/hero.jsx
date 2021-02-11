@@ -26,6 +26,7 @@ type PropTypes = {|
   copy: {
     title: Node,
     paragraph: Node,
+    roundel: Node,
   };
 |};
 
@@ -56,7 +57,7 @@ const roundelCentreLine = css`
 
 
 function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
-  const roundelText = (
+  const defaultRoundelText = (
     <>
       {/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
       {/* eslint-disable-next-line jsx-a11y/aria-role */}
@@ -67,6 +68,17 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
       </div>
     </>
   );
+
+  const roundelText = copy.roundel ? (<>
+    <span
+      // eslint-disable-next-line jsx-a11y/aria-role
+      role="text"
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={
+      { __html: copy.roundel }
+    }
+    />
+  </>) : defaultRoundelText;
 
   return (
     <PageTitle

@@ -5,8 +5,6 @@
 import * as React from 'react';
 import type { Element } from 'react';
 import { Provider } from 'react-redux';
-import marked from 'marked';
-import DOMPurify from 'dompurify';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
@@ -45,13 +43,14 @@ import { giftHeroSubHeading } from './weeklySubscriptionLandingStyles';
 
 import './weeklySubscriptionLanding.scss';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import { promoQueryParam } from 'helpers/productPrice/promotions';
+import { promoQueryParam, getPromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionTermsUrl } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 
 type PageCopy = {|
   title: string | React.Node,
   firstParagraph: React.Node,
+  roundel: React.Node,
   priceCardSubHeading: string,
 |};
 
@@ -95,23 +94,15 @@ const Header = headerWithCountrySwitcherContainer({
   trackProduct: 'GuardianWeekly',
 });
 
-const getSanitisedHtml = (description: string) =>
-  // ensure we don't accidentally inject dangerous html into the page
-  DOMPurify.sanitize(
-    marked(description),
-    { ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'] },
-  );
-
-const getFirstParagraph = (promotionCopy: ?PromotionCopy) => {
-  if (promotionCopy && promotionCopy.description) {
-    const sanitised = getSanitisedHtml(promotionCopy.description);
+const getFirstParagraph = (promotionCopy: PromotionCopy) => {
+  if (promotionCopy.description) {
     return (
     /* eslint-disable react/no-danger */
       <>
         <span
           className="promotion-description"
           dangerouslySetInnerHTML={
-          { __html: sanitised }
+          { __html: promotionCopy.description }
         }
         />
       </>);
@@ -144,9 +135,11 @@ const getCopy = (promotionCopy: Object): PageCopy => {
   const defaultTitle = orderIsAGift ?
     null
     : getRegionalCopyFor(currentRegion);
+  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
   return {
-    title: promotionCopy && promotionCopy.title ? promotionCopy.title : defaultTitle,
-    firstParagraph: getFirstParagraph(promotionCopy),
+    title: sanitisedPromoCopy.title || defaultTitle,
+    firstParagraph: getFirstParagraph(sanitisedPromoCopy),
+    roundel: sanitisedPromoCopy.roundel || '',
     priceCardSubHeading: orderIsAGift ? 'Select a gift period' : 'Choose how you\'d like to pay',
   };
 };
@@ -175,6 +168,7 @@ const content = (
         copy={{
           title: copy.title,
           paragraph: copy.firstParagraph,
+          roundel: copy.roundel,
         }}
       />
       <FullWidthContainer>

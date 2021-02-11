@@ -1,4 +1,6 @@
 // @flow
+import marked from 'marked';
+import DOMPurify from 'dompurify';
 
 import { getQueryParameter } from 'helpers/url';
 import type { Option } from 'helpers/types/option';
@@ -112,6 +114,25 @@ function getPromotion(
   ).promotions);
 }
 
+function getSanitisedHtml(markdownString: string) {
+  // ensure we don't accidentally inject dangerous html into the page
+  return DOMPurify.sanitize(
+    marked(markdownString),
+    { ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'] },
+  );
+}
+
+function getPromotionCopy(promotionCopy: ?PromotionCopy): PromotionCopy {
+  if (!promotionCopy) {
+    return {};
+  }
+  return {
+    title: promotionCopy.title || '',
+    description: getSanitisedHtml(promotionCopy.description || ''),
+    roundel: getSanitisedHtml(promotionCopy.roundel || ''),
+  };
+}
+
 export {
   getPromotion,
   getAppliedPromo,
@@ -119,4 +140,5 @@ export {
   hasIntroductoryPrice,
   hasDiscount,
   promoQueryParam,
+  getPromotionCopy,
 };
