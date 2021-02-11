@@ -22,6 +22,7 @@ import { routes } from 'helpers/routes';
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
+import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
@@ -44,7 +45,8 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { orderIsAGift, productPrices } = store.getState().page;
+const { orderIsAGift, productPrices, promotionCopy } = store.getState().page;
+const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 // ----- Internationalisation ----- //
 
@@ -101,7 +103,7 @@ function LandingPage() {
     >
       {orderIsAGift ?
         <CampaignHeaderGift countryGroupId={countryGroupId} /> :
-        <CampaignHeader countryGroupId={countryGroupId} />
+        <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
       }
       {countryGroupId === AUDCountries ?
         <ProductBlockAus countryGroupId={countryGroupId} /> :

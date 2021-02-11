@@ -8,6 +8,8 @@ import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
+
 import GridImage from 'components/gridImage/gridImage';
 import {
   wrapper,
@@ -26,6 +28,7 @@ import {
 } from './heroStyles';
 
 type PropTypes = {
+  promotionCopy: PromotionCopy,
   countryGroupId: CountryGroupId,
 }
 
@@ -52,16 +55,41 @@ const HeroCopyAus = () => (
   </span>);
 
 function CampaignHeader(props: PropTypes) {
+  const title = props.promotionCopy.title || <>Subscribe for stories<br />
+    <span css={yellowHeading}>that must be told</span></>;
+
+  const promoCopy = props.promotionCopy.description ?
+    (<span
+      className="promotion-description"
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={
+    { __html: props.promotionCopy.description }
+  }
+    />)
+    : null;
+
+  const roundelText = props.promotionCopy.roundel ? (
+    <span
+      className="promotion-description"
+    // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={
+    { __html: props.promotionCopy.description }
+    }
+    />)
+    : <><span css={circleTextTop}>14 day</span>
+      <span css={circleTextBottom}>free trial</span></>;
+
+  const copy = promoCopy || props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
 
   return (
     <div css={wrapper}>
       <h1 css={pageTitle}>Digital subscription</h1>
       <div css={featureContainer}>
         <div css={textSection}>
-          <h2 css={heroHeading}>Subscribe for stories<br />
-            <span css={yellowHeading}>that must be told</span>
+          <h2 css={heroHeading}>
+            {title}
           </h2>
-          {props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />}
+          {copy}
           <div css={props.countryGroupId !== AUDCountries ? spaceAfter : {}}>
             <ThemeProvider theme={buttonBrand}>
               <Button
@@ -89,8 +117,7 @@ function CampaignHeader(props: PropTypes) {
           />
         </div>
         <div css={circle}>
-          <span css={circleTextTop}>14 day</span>
-          <span css={circleTextBottom}>free trial</span>
+          {roundelText}
         </div>
       </div>
     </div>
