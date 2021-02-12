@@ -39,8 +39,8 @@ const routes: {
   stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
 };
 
-const createReminderEndpoint = isProd() ?
-  'https://contribution-reminders.support.guardianapis.com/remind-me' : 'https://contribution-reminders-code.support.guardianapis.com/remind-me';
+const createOneOffReminderEndpoint = isProd() ?
+  'https://support.theguardian.com/reminders/create/one-off' : 'https://support.code.dev-theguardian.com/reminders/create/one-off';
 
 const countryPath = (countryGroupId: CountryGroupId) =>
   countryGroups[countryGroupId].supportInternationalisationId;
@@ -86,7 +86,7 @@ function payPalReturnUrl(cgId: CountryGroupId, email: string): string {
 
 export {
   routes,
-  createReminderEndpoint,
+  createOneOffReminderEndpoint,
   postcodeLookupUrl,
   payPalCancelUrl,
   payPalReturnUrl,
