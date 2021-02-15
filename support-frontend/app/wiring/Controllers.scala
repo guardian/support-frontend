@@ -77,7 +77,7 @@ trait Controllers {
     appConfig.supportUrl,
     fontLoader,
     appConfig.stage,
-    appConfig.recaptchaConfigProvider,
+    appConfig.recaptchaConfigProvider
   )
 
   lazy val redemptionController = new RedemptionController(

@@ -55,11 +55,7 @@ class DigitalSubscriptionController(
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = if (orderIsAGift) {
-      "Support the Guardian | The Guardian Digital Gift Subscription"
-     } else {
-       "Support the Guardian | The Guardian Digital Subscription"
-     }
+    val title = s"Support the Guardian | The Guardian Digital ${if (orderIsAGift) "Gift "}Subscription"
     val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
     val js = Left(RefPath("digitalSubscriptionLandingPage.js"))
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
@@ -77,13 +73,11 @@ class DigitalSubscriptionController(
       countryGroup <- CountryGroup.byId(countryCode)
       country <- countryGroup.countries.headOption
     } yield country).getOrElse(UK)
-
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
       ProductPromotionCopy(promotionServiceProvider
         .forUser(false), stage)
         .getCopyForPromoCode(promoCode, DigitalPack, country)
     )
-
     val readerType = if (orderIsAGift) Gift else Direct
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
     val shareImageUrl = Some("https://i.guim.co.uk/img/media/74422ad120c709448f433c34f5190e2465ffa65e/0_0_1200_1200/1200.png?width=1200&auto=format&fit=crop&quality=85&s=1407add4d016d15cc074b0f9de8f1433") // scalastyle:ignore
