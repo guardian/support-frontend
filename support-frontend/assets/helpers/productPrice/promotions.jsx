@@ -143,9 +143,10 @@ function promotionHTML(html?: string, { css = '', tag = 'span' }: PromotionHTMLM
   if (!html) {
     return null;
   }
-  return (<tag
+  const TagName = tag;
+  return (<TagName
     css={css}
-      // eslint-disable-next-line react/no-danger
+    // eslint-disable-next-line react/no-danger
     dangerouslySetInnerHTML={
     { __html: html }
   }
