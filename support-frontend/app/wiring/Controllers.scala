@@ -63,6 +63,7 @@ trait Controllers {
 
   lazy val digitalPackController = new DigitalSubscriptionController(
     priceSummaryServiceProvider,
+    promotionServiceProvider,
     assetsResolver,
     actionRefiners,
     identityService,
@@ -75,7 +76,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     fontLoader,
-    appConfig.recaptchaConfigProvider
+    appConfig.stage,
+    appConfig.recaptchaConfigProvider,
   )
 
   lazy val redemptionController = new RedemptionController(

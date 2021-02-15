@@ -260,6 +260,11 @@ export const circleTextBottom = css`
   color: ${brand[300]};
 `;
 
+export const circleTextGeneric = css`
+  ${headline.xxsmall({ fontWeight: 'bold' })};
+  color: ${brand[300]};
+`;
+
 export const spaceAfter = css`
   ${from.desktop} {
     margin-bottom: 70px;

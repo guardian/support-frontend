@@ -24,6 +24,7 @@ import {
   circle,
   circleTextTop,
   circleTextBottom,
+  circleTextGeneric,
   spaceAfter,
 } from './heroStyles';
 
@@ -59,8 +60,8 @@ function CampaignHeader(props: PropTypes) {
     <span css={yellowHeading}>that must be told</span></>;
 
   const promoCopy = props.promotionCopy.description ?
-    (<span
-      className="promotion-description"
+    (<p
+      css={paragraph}
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={
     { __html: props.promotionCopy.description }
@@ -70,16 +71,17 @@ function CampaignHeader(props: PropTypes) {
 
   const roundelText = props.promotionCopy.roundel ? (
     <span
-      className="promotion-description"
+      css={circleTextGeneric}
     // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={
-    { __html: props.promotionCopy.description }
+    { __html: props.promotionCopy.roundel }
     }
     />)
     : <><span css={circleTextTop}>14 day</span>
       <span css={circleTextBottom}>free trial</span></>;
 
-  const copy = promoCopy || props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
+  const defaultCopy = props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
+  const copy = promoCopy || defaultCopy;
 
   return (
     <div css={wrapper}>

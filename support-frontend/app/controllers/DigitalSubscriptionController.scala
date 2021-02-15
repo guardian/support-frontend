@@ -4,6 +4,8 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
+import com.gu.i18n.Country.UK
+import com.gu.i18n.CountryGroup
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
@@ -11,7 +13,7 @@ import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.{DefaultPromotions, PromoCode}
+import com.gu.support.promotions.{DefaultPromotions, PromoCode, ProductPromotionCopy, PromotionServiceProvider}
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import play.api.libs.circe.Circe
@@ -28,6 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscriptionController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
+  promotionServiceProvider: PromotionServiceProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
   identityService: IdentityService,
@@ -40,6 +43,7 @@ class DigitalSubscriptionController(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
+  stage: Stage,
   recaptchaConfigProvider: RecaptchaConfigProvider
 )(
   implicit val ec: ExecutionContext
@@ -61,12 +65,23 @@ class DigitalSubscriptionController(
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))
-    val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ DefaultPromotions.DigitalSubscription.all
+    val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val promoCodes: List[PromoCode] = queryPromos ++ DefaultPromotions.DigitalSubscription.all
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au", orderIsAGift),
       "en" -> buildCanonicalDigitalSubscriptionLink("int", orderIsAGift)
+    )
+    val country = (for {
+      countryGroup <- CountryGroup.byId(countryCode)
+      country <- countryGroup.countries.headOption
+    } yield country).getOrElse(UK)
+
+    val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
+      ProductPromotionCopy(promotionServiceProvider
+        .forUser(false), stage)
+        .getCopyForPromoCode(promoCode, DigitalPack, country)
     )
 
     val readerType = if (orderIsAGift) Gift else Direct
@@ -87,6 +102,7 @@ class DigitalSubscriptionController(
       ) {
         Html(s"""<script type="text/javascript">
           window.guardian.productPrices = ${outputJson(productPrices)}
+          window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
           window.guardian.orderIsAGift = $orderIsAGift
         </script>""")
       }).withSettingsSurrogateKey
