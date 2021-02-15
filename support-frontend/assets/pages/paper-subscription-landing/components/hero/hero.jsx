@@ -20,11 +20,13 @@ import Hero from 'components/page/hero';
 import { type ProductPrices } from 'helpers/productPrice/productPrices';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 import { getDiscountCopy } from './discountCopy';
 
 type PropTypes = {|
-  productPrices: ProductPrices
+  productPrices: ProductPrices,
+  promotionCopy: PromotionCopy,
 |}
 
 const heroCopy = css`
@@ -85,11 +87,25 @@ const tabletLineBreak = css`
   }
 `;
 
+const defaultTitle = (
+  <>
+    Guardian <br css={mobileLineBreak} />and&nbsp;Observer <br css={mobileLineBreak} />
+    newspaper subscriptions <br css={tabletLineBreak} />
+    <span css={heroTitleHighlight}>to suit every reader</span>
+  </>
+);
 
-function PaperHero({ productPrices }: PropTypes) {
+const defaultCopy = (
+  <>
+    We offer a range of packages from every day to weekend, and different subscription types depending on
+    whether you want to collect your paper in a shop or get it delivered.
+  </>
+);
+
+function PaperHero({ productPrices, promotionCopy }: PropTypes) {
   const maxSavingVsRetail = productPrices ? getMaxSavingVsRetail(productPrices) : 0;
   const { roundel } = getDiscountCopy(maxSavingVsRetail);
-  const roundelText = (
+  const defaultRoundelText = (
     <>
       {/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
       {/* eslint-disable-next-line jsx-a11y/aria-role */}
@@ -103,6 +119,25 @@ function PaperHero({ productPrices }: PropTypes) {
       </div>
     </>
   );
+
+  const title = promotionCopy.title || defaultTitle;
+
+  const copy = promotionCopy.description ?
+    (<p
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={
+    { __html: promotionCopy.description }
+  }
+    />)
+    : defaultCopy;
+
+  const roundelText = promotionCopy.roundel ? (
+    <span
+    // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={
+    { __html: promotionCopy.roundel }
+    }
+    />) : defaultRoundelText;
 
   return (
     <PageTitle
@@ -126,13 +161,10 @@ function PaperHero({ productPrices }: PropTypes) {
         >
           <section css={heroCopy}>
             <h2 css={heroTitle}>
-              Guardian <br css={mobileLineBreak} />and&nbsp;Observer <br css={mobileLineBreak} />
-              newspaper subscriptions <br css={tabletLineBreak} />
-              <span css={heroTitleHighlight}>to suit every reader</span>
+              {title}
             </h2>
             <p css={heroParagraph}>
-              We offer a range of packages from every day to weekend, and different subscription types depending on
-              whether you want to collect your paper in a shop or get it delivered.
+              {copy}
             </p>
             <ThemeProvider theme={buttonBrand}>
               <LinkButton

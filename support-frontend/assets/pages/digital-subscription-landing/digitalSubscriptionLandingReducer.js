@@ -18,8 +18,6 @@ export type State = {
 
 const { orderIsAGift } = window.guardian;
 
-console.log(getPromotionCopy());
-
 // ----- Export ----- //
 
 export default () => ({
