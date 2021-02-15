@@ -1,4 +1,5 @@
 // @flow
+import React from 'react';
 import marked from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -133,6 +134,24 @@ function getPromotionCopy(promotionCopy: ?PromotionCopy): PromotionCopy {
   };
 }
 
+type PromotionHTMLModifiers = {|
+  css?: string,
+  tag?: string
+|}
+
+function promotionHTML(html?: string, { css = '', tag = 'span' }: PromotionHTMLModifiers = {}) {
+  if (!html) {
+    return null;
+  }
+  return (<tag
+    css={css}
+      // eslint-disable-next-line react/no-danger
+    dangerouslySetInnerHTML={
+    { __html: html }
+  }
+  />);
+}
+
 export {
   getPromotion,
   getAppliedPromo,
@@ -141,4 +160,5 @@ export {
   hasDiscount,
   promoQueryParam,
   getPromotionCopy,
+  promotionHTML,
 };

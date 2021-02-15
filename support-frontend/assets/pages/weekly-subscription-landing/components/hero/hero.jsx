@@ -22,7 +22,7 @@ import {
   GBPCountries,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { fromCountryGroupId, glyph } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
@@ -67,17 +67,7 @@ const getRegionalCopyFor = (region: CountryGroupId) => (region === GBPCountries 
 
 const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) => {
   if (promotionCopy.description) {
-    return (
-    /* eslint-disable react/no-danger */
-      <>
-        <span
-          className="promotion-description"
-          dangerouslySetInnerHTML={
-          { __html: promotionCopy.description }
-        }
-        />
-      </>);
-    /* eslint-enable react/no-danger */
+    return promotionHTML(promotionCopy.description);
   }
   if (orderIsAGift) {
     return (
@@ -120,16 +110,7 @@ function WeeklyHero({ orderIsAGift, countryGroupId, promotionCopy }: PropTypes) 
 
   const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 
-  const roundelText = promotionCopy.roundel ? (<>
-    <span
-      // eslint-disable-next-line jsx-a11y/aria-role
-      role="text"
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={
-      { __html: promotionCopy.roundel }
-    }
-    />
-  </>) : defaultRoundelText;
+  const roundelText = promotionHTML(promotionCopy.description) || defaultRoundelText;
 
   return (
     <PageTitle

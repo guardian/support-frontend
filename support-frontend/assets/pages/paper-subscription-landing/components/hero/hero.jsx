@@ -20,8 +20,7 @@ import Hero from 'components/page/hero';
 import { type ProductPrices } from 'helpers/productPrice/productPrices';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
-
+import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { getDiscountCopy } from './discountCopy';
 
 type PropTypes = {|
@@ -122,22 +121,9 @@ function PaperHero({ productPrices, promotionCopy }: PropTypes) {
 
   const title = promotionCopy.title || defaultTitle;
 
-  const copy = promotionCopy.description ?
-    (<p
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={
-    { __html: promotionCopy.description }
-  }
-    />)
-    : defaultCopy;
+  const copy = promotionHTML(promotionCopy.description, { tag: 'p' }) || defaultCopy;
 
-  const roundelText = promotionCopy.roundel ? (
-    <span
-    // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={
-    { __html: promotionCopy.roundel }
-    }
-    />) : defaultRoundelText;
+  const roundelText = promotionHTML(promotionCopy.roundel) || defaultRoundelText;
 
   return (
     <PageTitle

@@ -8,7 +8,7 @@ import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 
 import GridImage from 'components/gridImage/gridImage';
 import {
@@ -59,26 +59,11 @@ function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
-  const promoCopy = promotionCopy.description ?
-    (<p
-      css={paragraph}
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={
-    { __html: promotionCopy.description }
-  }
-    />)
-    : null;
+  const promoCopy = promotionHTML(promotionCopy.description, { css: paragraph, tag: 'p' });
 
-  const roundelText = promotionCopy.roundel ? (
-    <span
-      css={circleTextGeneric}
-    // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={
-    { __html: promotionCopy.roundel }
-    }
-    />)
-    : <><span css={circleTextTop}>14 day</span>
-      <span css={circleTextBottom}>free trial</span></>;
+  const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) ||
+  <><span css={circleTextTop}>14 day</span>
+    <span css={circleTextBottom}>free trial</span></>;
 
   const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
   const copy = promoCopy || defaultCopy;
