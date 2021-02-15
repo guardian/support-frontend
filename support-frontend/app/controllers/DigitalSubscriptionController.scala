@@ -55,7 +55,7 @@ class DigitalSubscriptionController(
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = s"Support the Guardian | The Guardian Digital ${if (orderIsAGift) "Gift "}Subscription"
+    val title = s"Support the Guardian | The Guardian Digital ${if (orderIsAGift) "Gift " else ""}Subscription"
     val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
     val js = Left(RefPath("digitalSubscriptionLandingPage.js"))
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
