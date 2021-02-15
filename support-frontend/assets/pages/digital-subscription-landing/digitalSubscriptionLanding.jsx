@@ -102,7 +102,7 @@ function LandingPage() {
       footer={footer}
     >
       {orderIsAGift ?
-        <CampaignHeaderGift countryGroupId={countryGroupId} /> :
+        <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
         <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
       }
       {countryGroupId === AUDCountries ?
