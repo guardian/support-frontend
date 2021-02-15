@@ -55,32 +55,32 @@ const HeroCopyAus = () => (
     </p>
   </span>);
 
-function CampaignHeader(props: PropTypes) {
-  const title = props.promotionCopy.title || <>Subscribe for stories<br />
+function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
+  const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
-  const promoCopy = props.promotionCopy.description ?
+  const promoCopy = promotionCopy.description ?
     (<p
       css={paragraph}
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={
-    { __html: props.promotionCopy.description }
+    { __html: promotionCopy.description }
   }
     />)
     : null;
 
-  const roundelText = props.promotionCopy.roundel ? (
+  const roundelText = promotionCopy.roundel ? (
     <span
       css={circleTextGeneric}
     // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={
-    { __html: props.promotionCopy.roundel }
+    { __html: promotionCopy.roundel }
     }
     />)
     : <><span css={circleTextTop}>14 day</span>
       <span css={circleTextBottom}>free trial</span></>;
 
-  const defaultCopy = props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
+  const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
   const copy = promoCopy || defaultCopy;
 
   return (
@@ -92,7 +92,7 @@ function CampaignHeader(props: PropTypes) {
             {title}
           </h2>
           {copy}
-          <div css={props.countryGroupId !== AUDCountries ? spaceAfter : {}}>
+          <div css={countryGroupId !== AUDCountries ? spaceAfter : {}}>
             <ThemeProvider theme={buttonBrand}>
               <Button
                 priority="tertiary"
@@ -108,7 +108,7 @@ function CampaignHeader(props: PropTypes) {
         </div>
         <div css={packShot}>
           <GridImage
-            gridId={props.countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
+            gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
             srcSizes={[1000, 500, 140]}
             sizes="(max-width: 480px) 200px,
             (max-width: 740px) 100%,

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
 import { LinkButton, buttonBrand } from '@guardian/src-button';
@@ -17,17 +17,19 @@ import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 
-import { glyph, type IsoCurrency } from 'helpers/internationalisation/currency';
+import {
+  detect,
+  GBPCountries,
+  type CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import { fromCountryGroupId, glyph } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 type PropTypes = {|
   orderIsAGift: boolean;
-  currencyId: IsoCurrency;
-  copy: {
-    title: Node,
-    paragraph: Node,
-    roundel: Node,
-  };
+  countryGroupId: CountryGroupId;
+  promotionCopy: PromotionCopy;
 |};
 
 const weeklyHeroCopy = css`
@@ -55,8 +57,49 @@ const roundelCentreLine = css`
   }
 `;
 
+const giftHeroSubHeading = css`
+  font-weight: 700;
+`;
 
-function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
+const getRegionalCopyFor = (region: CountryGroupId) => (region === GBPCountries ?
+  <span>Find clarity with The Guardian&apos;s global magazine</span> :
+  <span>Read The Guardian in print</span>);
+
+const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) => {
+  if (promotionCopy.description) {
+    return (
+    /* eslint-disable react/no-danger */
+      <>
+        <span
+          className="promotion-description"
+          dangerouslySetInnerHTML={
+          { __html: promotionCopy.description }
+        }
+        />
+      </>);
+    /* eslint-enable react/no-danger */
+  }
+  if (orderIsAGift) {
+    return (
+      <>
+        <h3 css={giftHeroSubHeading}>Stay on the same page, even when you’re apart</h3>
+        <p>Share the gift of clarity with the Guardian Weekly magazine. A round-up of the world news, opinion and long
+        reads that have shaped the week, all handpicked from The Guardian and The Observer.
+        </p>
+      </>
+    );
+  }
+  return (
+    <>
+      The Guardian Weekly magazine is a round-up of the world news, opinion and long reads that have shaped the week.
+      Inside, the past seven days' most memorable stories are reframed with striking photography and insightful
+      companion pieces, all handpicked from The Guardian and The Observer.
+    </>);
+};
+
+function WeeklyHero({ orderIsAGift, countryGroupId, promotionCopy }: PropTypes) {
+  const currencyId = fromCountryGroupId(countryGroupId) || 'GBP';
+
   const defaultRoundelText = (
     <>
       {/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
@@ -69,13 +112,21 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
     </>
   );
 
-  const roundelText = copy.roundel ? (<>
+  const defaultTitle = orderIsAGift ?
+    null
+    : getRegionalCopyFor(detect());
+
+  const title = promotionCopy.title || defaultTitle;
+
+  const copy = getFirstParagraph(promotionCopy, orderIsAGift);
+
+  const roundelText = promotionCopy.roundel ? (<>
     <span
       // eslint-disable-next-line jsx-a11y/aria-role
       role="text"
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={
-      { __html: copy.roundel }
+      { __html: promotionCopy.roundel }
     }
     />
   </>) : defaultRoundelText;
@@ -101,10 +152,10 @@ function WeeklyHero({ orderIsAGift, currencyId, copy }: PropTypes) {
           <section css={weeklyHeroCopy}>
             {orderIsAGift ?
               <GiftHeadingAnimation /> :
-              <h2 css={weeklyHeroTitle}>{copy.title}</h2>
+              <h2 css={weeklyHeroTitle}>{title}</h2>
             }
             <p css={weeklyHeroParagraph}>
-              {copy.paragraph}
+              {copy}
             </p>
             <ThemeProvider theme={buttonBrand}>
               <LinkButton
