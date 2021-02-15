@@ -11,7 +11,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
-import com.gu.support.promotions.PromoCode
+import com.gu.support.promotions.{PromoCode, PromotionServiceProvider}
 import com.gu.support.workers.Monthly
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.Direct
@@ -146,12 +146,15 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
               Map(Monthly ->
                 Map(GBP -> PriceSummary(10, None, GBP, fixedTerm = false, Nil))))))
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
+      val promotionServiceProvider = mock[PromotionServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
+      val stage = mock[Stage]
       when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[ReaderType])).thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
       new DigitalSubscriptionController(
         priceSummaryServiceProvider = priceSummaryServiceProvider,
+        promotionServiceProvider =promotionServiceProvider,
         assets = assetResolver,
         actionRefiners = actionRefiner,
         identityService = identityService,
@@ -164,6 +167,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         settingsProvider = settingsProvider,
         supportUrl = "support.thegulocal.com",
         fontLoaderBundle = Left(RefPath("test")),
+        stage = stage,
         recaptchaConfigProvider
       )
     }
