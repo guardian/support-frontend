@@ -18,11 +18,8 @@ type PropTypes = {|
   addDigitalSubscription: (event: SyntheticInputEvent<HTMLInputElement>) => void
 |}
 
-const hideBorder = css`
-  border: none;
-`;
-
 const rowOverrides = css`
+  border: none;
   & > div {
     max-height: 1000px;
   }
@@ -35,6 +32,8 @@ const rowOverrides = css`
 const ctaContainer = css`
   background-color: ${neutral[97]};
   padding: 0 ${space[6]}px;
+  border-top: 1px solid ${neutral[86]};
+  border-bottom: 1px solid ${neutral[86]};
 `;
 
 const lightBorder = css`
@@ -80,8 +79,8 @@ const listCopy = [
 
 function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
   return (
-    <Accordion cssOverrides={[ctaContainer, hideBorder]} hideToggleLabel>
-      <AccordionRow cssOverrides={[hideBorder, rowOverrides]} label={`Would you like to add a Digital subscription for ${digiSubPrice}?`}>
+    <Accordion cssOverrides={ctaContainer} hideToggleLabel>
+      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a Digital subscription for ${digiSubPrice.replace(/\/(.*)/, '')}?`}>
         <div css={[imageContainer, lightBorder]}>
           <GridImage
             gridId="editionsShortPackshot"
