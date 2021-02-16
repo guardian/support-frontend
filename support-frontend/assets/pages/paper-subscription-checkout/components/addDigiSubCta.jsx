@@ -7,6 +7,7 @@ import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
+import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { Checkbox } from '@guardian/src-checkbox';
 import GridImage from 'components/gridImage/gridImage';
 import { ListWithSubText } from 'components/list/list';
@@ -16,6 +17,20 @@ type PropTypes = {|
   digiSubPrice: string;
   addDigitalSubscription: (event: SyntheticInputEvent<HTMLInputElement>) => void
 |}
+
+const hideBorder = css`
+  border: none;
+`;
+
+const rowOverrides = css`
+  & > div {
+    max-height: 1000px;
+  }
+
+  & button strong {
+    ${headline.xsmall({ fontWeight: 'bold' })}
+  }
+`;
 
 const ctaContainer = css`
   background-color: ${neutral[97]};
@@ -65,30 +80,32 @@ const listCopy = [
 
 function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
   return (
-    <section css={ctaContainer}>
-      <div css={[imageContainer, lightBorder]}>
-        <GridImage
-          gridId="editionsShortPackshot"
-          srcSizes={[500, 140]}
-          sizes="(max-width: 480px) 200px,
+    <Accordion cssOverrides={[ctaContainer, hideBorder]} hideToggleLabel>
+      <AccordionRow cssOverrides={[hideBorder, rowOverrides]} label={`Would you like to add a Digital subscription for ${digiSubPrice}?`}>
+        <div css={[imageContainer, lightBorder]}>
+          <GridImage
+            gridId="editionsShortPackshot"
+            srcSizes={[500, 140]}
+            sizes="(max-width: 480px) 200px,
             (max-width: 740px) 100%,
             500px"
-          altText="Digital subscriptions"
-          imgType="png"
-        />
-      </div>
-      <div css={[content, lightBorder]}>
-        <h2 css={heading}>What&apos;s included</h2>
-        <ListWithSubText cssOverrides={list} items={listCopy} bulletSize="small" bulletColour="dark" />
-      </div>
-      <div css={content}>
-        <Checkbox
-          value="add-digital"
-          label={`Add the Digital subscription for ${digiSubPrice}`}
-          onChange={addDigitalSubscription}
-        />
-      </div>
-    </section>
+            altText="Digital subscriptions"
+            imgType="png"
+          />
+        </div>
+        <div css={[content, lightBorder]}>
+          <h2 css={heading}>What&apos;s included</h2>
+          <ListWithSubText cssOverrides={list} items={listCopy} bulletSize="small" bulletColour="dark" />
+        </div>
+        <div css={content}>
+          <Checkbox
+            value="add-digital"
+            label={`Add the Digital subscription for ${digiSubPrice}`}
+            onChange={addDigitalSubscription}
+          />
+        </div>
+      </AccordionRow>
+    </Accordion>
   );
 }
 
