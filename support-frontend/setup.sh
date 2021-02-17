@@ -104,7 +104,7 @@ setup_nginx() {
   )
 
   for domain in ${DOMAINS[@]}; do
-    dev-nginx setup-cert $domain
+    sudo dev-nginx setup-cert $domain
   done
 
   dev-nginx link-config ${SITE_CONFIG}
