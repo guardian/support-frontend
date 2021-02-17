@@ -74,9 +74,10 @@ class DigitalSubscriptionController(
       country <- countryGroup.countries.headOption
     } yield country).getOrElse(UK)
     val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
-      ProductPromotionCopy(promotionServiceProvider
-        .forUser(false), stage)
-        .getCopyForPromoCode(promoCode, DigitalPack, country)
+      ProductPromotionCopy(
+        promotionServiceProvider.forUser(false),
+        stage
+      ).getCopyForPromoCode(promoCode, DigitalPack, country)
     )
     val readerType = if (orderIsAGift) Gift else Direct
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
