@@ -18,7 +18,7 @@ type OphanProduct =
   | 'DIGITAL_SUBSCRIPTION'
   | 'PRINT_SUBSCRIPTION';
 
-type OphanAction =
+export type OphanAction =
   | 'INSERT'
   | 'VIEW'
   | 'EXPAND'

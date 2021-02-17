@@ -20,6 +20,7 @@ stories.add('ProductOption', () => {
     href: '',
     buttonCopy: text('Button copy', 'Subscribe now'),
     onClick: () => {},
+    onView: () => {},
     label: text('Label', 'Best deal'),
   };
   return (

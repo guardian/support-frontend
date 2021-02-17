@@ -47,6 +47,7 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) =>
             buttonCopy={product.buttonCopy}
             href={product.href}
             onClick={product.onClick}
+            onView={product.onView}
             label={product.label}
           />
         )))

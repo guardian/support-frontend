@@ -9,7 +9,7 @@ import {
   Quarterly,
 } from 'helpers/billingPeriods';
 import { trackComponentEvents } from './tracking/ophan';
-import type { OphanComponentEvent, OphanComponentType } from './tracking/ophan';
+import type { OphanAction, OphanComponentEvent, OphanComponentType } from './tracking/ophan';
 import { currencies, detect } from './internationalisation/currency';
 import { isTestSwitchedOn } from 'helpers/globals';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
@@ -32,11 +32,17 @@ export type SubscriptionProduct =
   typeof PaperAndDigital;
 
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
-
 export type ComponentAbTest = {
   name: string,
   variant: string,
 };
+
+type TrackingProperties = {
+  id: string,
+  product?: SubscriptionProduct,
+  abTest?: ComponentAbTest,
+  componentType: OphanComponentType,
+}
 
 // ----- Config ----- //
 
@@ -118,17 +124,15 @@ function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): Opha
   }
 }
 
-const sendTrackingEventsOnClick = (trackingProperties: {
-  id: string,
-  product?: SubscriptionProduct,
-  abTest?: ComponentAbTest,
-  componentType: OphanComponentType,
-}): () => void => {
+const sendTrackingEvent = (trackingProperties: TrackingProperties & {
+  action: OphanAction
+}): void => {
   const {
     id,
     product,
     abTest,
     componentType,
+    action,
   } = trackingProperties;
 
   const componentEvent: OphanComponentEvent = {
@@ -137,14 +141,28 @@ const sendTrackingEventsOnClick = (trackingProperties: {
       id,
       ...(product ? { product: [ophanProductFromSubscriptionProduct(product)] } : {}),
     },
-    action: 'CLICK',
+    action,
     id,
     ...(abTest ? { abTest } : {}),
   };
 
-  return () => {
-    trackComponentEvents(componentEvent);
-  };
+  console.log('componentEvent --->', componentEvent);
+
+  trackComponentEvents(componentEvent);
+};
+
+const sendTrackingEventsOnClick = (trackingProperties: TrackingProperties): () => void => () => {
+  sendTrackingEvent({
+    ...trackingProperties,
+    action: 'CLICK',
+  });
+};
+
+const sendTrackingEventsOnView = (trackingProperties: TrackingProperties): () => void => () => {
+  sendTrackingEvent({
+    ...trackingProperties,
+    action: 'VIEW',
+  });
 };
 
 // ----- Newsstand savings ----- //
@@ -168,6 +186,7 @@ const paperHasDeliveryEnabled = (): boolean => isTestSwitchedOn('paperHomeDelive
 
 export {
   sendTrackingEventsOnClick,
+  sendTrackingEventsOnView,
   displayPrice,
   getProductPrice,
   getNewsstandSaving,

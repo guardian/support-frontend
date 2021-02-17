@@ -112,6 +112,7 @@ function Prices({
             buttonCopy={product.buttonCopy}
             href={product.href}
             onClick={product.onClick}
+            onView={product.onView}
             label={product.label}
           />
         ))}
