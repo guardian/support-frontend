@@ -146,8 +146,6 @@ const sendTrackingEvent = (trackingProperties: TrackingProperties & {
     ...(abTest ? { abTest } : {}),
   };
 
-  console.log('componentEvent --->', componentEvent);
-
   trackComponentEvents(componentEvent);
 };
 
