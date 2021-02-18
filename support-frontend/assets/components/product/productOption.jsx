@@ -77,7 +77,7 @@ const productOptionHighlight = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
 function ProductOption(props: Product) {
-  const [hasBeenSeen, setNode] = useHasBeenSeen({
+  const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
     threshold: 0.5,
     debounce: true,
   });
@@ -96,7 +96,7 @@ function ProductOption(props: Product) {
   }, [hasBeenSeen]);
 
   return (
-    <div ref={setNode} css={[productOption, props.cssOverrides]}>
+    <div ref={setElementToObserve} css={[productOption, props.cssOverrides]}>
       <div>
         <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}

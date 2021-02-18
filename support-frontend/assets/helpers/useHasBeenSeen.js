@@ -6,7 +6,7 @@ import libDebounce from 'lodash.debounce';
 
 const useHasBeenSeen = (options: IntersectionObserverOptions & { debounce?: boolean }) => {
   const [hasBeenSeen, setHasBeenSeen] = useState<boolean>(false);
-  const [node, setNode] = useState<HTMLElement | null>(null);
+  const [elementToObserve, setElementToObserve] = useState<HTMLElement | null>(null);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -33,14 +33,14 @@ const useHasBeenSeen = (options: IntersectionObserverOptions & { debounce?: bool
 
     const { current: currentObserver } = observer;
 
-    if (node) {
-      currentObserver.observe(node);
+    if (elementToObserve) {
+      currentObserver.observe(elementToObserve);
     }
 
     return () => currentObserver.disconnect();
-  }, [node, options, intersectionCallback]);
+  }, [elementToObserve, options, intersectionCallback]);
 
-  return [hasBeenSeen, setNode];
+  return [hasBeenSeen, setElementToObserve];
 };
 
 export { useHasBeenSeen };
