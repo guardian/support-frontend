@@ -8,6 +8,8 @@ import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
+import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
+
 import GridImage from 'components/gridImage/gridImage';
 import {
   wrapper,
@@ -22,10 +24,12 @@ import {
   circle,
   circleTextTop,
   circleTextBottom,
+  circleTextGeneric,
   spaceAfter,
 } from './heroStyles';
 
 type PropTypes = {
+  promotionCopy: PromotionCopy,
   countryGroupId: CountryGroupId,
 }
 
@@ -51,18 +55,29 @@ const HeroCopyAus = () => (
     </p>
   </span>);
 
-function CampaignHeader(props: PropTypes) {
+function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
+  const title = promotionCopy.title || <>Subscribe for stories<br />
+    <span css={yellowHeading}>that must be told</span></>;
+
+  const promoCopy = promotionHTML(promotionCopy.description, { css: paragraph, tag: 'p' });
+
+  const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) ||
+  <><span css={circleTextTop}>14 day</span>
+    <span css={circleTextBottom}>free trial</span></>;
+
+  const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
+  const copy = promoCopy || defaultCopy;
 
   return (
     <div css={wrapper}>
       <h1 css={pageTitle}>Digital subscription</h1>
       <div css={featureContainer}>
         <div css={textSection}>
-          <h2 css={heroHeading}>Subscribe for stories<br />
-            <span css={yellowHeading}>that must be told</span>
+          <h2 css={heroHeading}>
+            {title}
           </h2>
-          {props.countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />}
-          <div css={props.countryGroupId !== AUDCountries ? spaceAfter : {}}>
+          {copy}
+          <div css={countryGroupId !== AUDCountries ? spaceAfter : {}}>
             <ThemeProvider theme={buttonBrand}>
               <Button
                 priority="tertiary"
@@ -78,7 +93,7 @@ function CampaignHeader(props: PropTypes) {
         </div>
         <div css={packShot}>
           <GridImage
-            gridId={props.countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
+            gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
             srcSizes={[1000, 500, 140]}
             sizes="(max-width: 480px) 200px,
             (max-width: 740px) 100%,
@@ -89,8 +104,7 @@ function CampaignHeader(props: PropTypes) {
           />
         </div>
         <div css={circle}>
-          <span css={circleTextTop}>14 day</span>
-          <span css={circleTextBottom}>free trial</span>
+          {roundelText}
         </div>
       </div>
     </div>

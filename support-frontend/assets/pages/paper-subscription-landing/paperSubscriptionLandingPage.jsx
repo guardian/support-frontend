@@ -17,17 +17,15 @@ import { renderPage } from 'helpers/render';
 import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
+import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
-// import CampaignHeader from 'pages/paper-subscription-landing/components/hero/campaignHeader';
 import PaperHero from './components/hero/hero';
 import Tabs from './components/tabs';
 import Prices from './components/paperPrices';
-// import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-// import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Collection or delivery ----- //
@@ -40,7 +38,8 @@ const reactElementId = 'paper-subscription-landing-page';
 
 const store = pageInit(() => reducer(fulfilment), true);
 
-const { productPrices } = store.getState().page;
+const { productPrices, promotionCopy } = store.getState().page;
+const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 const paperSubsFooter = (
   <Footer
@@ -60,7 +59,7 @@ const content = (
       header={<Header countryGroupId={GBPCountries} />}
       footer={paperSubsFooter}
     >
-      <PaperHero productPrices={productPrices} />
+      <PaperHero productPrices={productPrices} promotionCopy={sanitisedPromoCopy} />
       <FullWidthContainer>
         <CentredContainer>
           <Block>

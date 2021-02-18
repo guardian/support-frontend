@@ -3,10 +3,12 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import com.gu.i18n.Country.UK
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.Paper
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
+import com.gu.support.promotions.{ProductPromotionCopy, PromotionServiceProvider}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.{RecaptchaConfigProvider, StringsConfig}
@@ -30,6 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PaperSubscription(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
+  promotionServiceProvider: PromotionServiceProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
   identityService: IdentityService,
@@ -41,6 +44,7 @@ class PaperSubscription(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
+  stage: Stage,
   recaptchaConfigProvider: RecaptchaConfigProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
@@ -64,6 +68,12 @@ class PaperSubscription(
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCodes)
     val shareImageUrl = Some("https://i.guim.co.uk/img/media/0a1ffb0ec7e4dbbab40421b74e4bcf5d628f4708/0_0_1200_1200/1200.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=c6c7f5b373a1ae54bc66c876a9a60031") // scalastyle:ignore
 
+    val maybePromotionCopy = promoCodes.headOption.flatMap(promoCode =>
+      ProductPromotionCopy(promotionServiceProvider
+        .forUser(false), stage)
+        .getCopyForPromoCode(promoCode, Paper, UK)
+    )
+
     Ok(views.html.main(
       title = title,
       mainElement = mainElement,
@@ -77,6 +87,7 @@ class PaperSubscription(
     ){
       Html(s"""<script type="text/javascript">
       window.guardian.productPrices = ${outputJson(productPrices)}
+      window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
       window.guardian.useDigitalVoucher = ${Paper.useDigitalVoucher}
       </script>""")
     }).withSettingsSurrogateKey
