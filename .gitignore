@@ -2,6 +2,7 @@
 .bundle
 .idea
 .idea_modules
+*.iml
 *.sublime-project
 *.sublime-workspace
 .vscode
@@ -46,3 +47,4 @@ assets/images/inline-svgs/*.svg
 /public/**/*.js.map
 /assets/javascripts/lib/bower-components/
 .yarnclean
+/.bsp/
