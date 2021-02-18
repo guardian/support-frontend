@@ -61,7 +61,7 @@ interface ReminderChoice {
   label: string;
 }
 
-const REMINDER_PLATFORM = 'WEB';
+const REMINDER_PLATFORM = 'SUPPORT';
 const REMINDER_STAGE = 'POST';
 const REMINDER_COMPONENT = 'THANKYOU';
 
