@@ -6,12 +6,13 @@ import React from 'react';
 
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
-import { Accordion, AccordionRow } from '@guardian/src-accordion';
+import { Accordion } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
+import { TabAccordionRow } from './tabAccordionRow';
 
 const flexContainerOverride = css`
   align-items: flex-start;
@@ -66,20 +67,24 @@ export const SubsCardFaqBlock = () => (
       </p>
       <div css={accordionContainer}>
         <Accordion>
-          <AccordionRow label="Collecting from multiple newsagents">
-            <p>
+          <TabAccordionRow id="collection" label="Collecting from multiple newsagents">
+            <>
+              <p>
               Present your card to a newsagent each time you collect the paper. The newsagent will scan your
               card and will be reimbursed for each transaction automatically.
-            </p>
-            <p><LinkToImovo /></p>
-          </AccordionRow>
-          <AccordionRow label="Delivery from your retailer">
-            <p>
+              </p>
+              <p><LinkToImovo /></p>
+            </>
+          </TabAccordionRow>
+          <TabAccordionRow id="delivery" label="Delivery from your retailer">
+            <>
+              <p>
               Simply give your preferred store / retailer the barcode printed on your
               Home Delivery Letter.
-            </p>
-            <p><LinkToImovo /></p>
-          </AccordionRow>
+              </p>
+              <p><LinkToImovo /></p>
+            </>
+          </TabAccordionRow>
         </Accordion>
       </div>
     </div>
