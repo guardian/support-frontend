@@ -16,7 +16,7 @@ export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
 
 const setTab = (tab: PaperFulfilmentOptions): TabActions => {
   sendTrackingEventsOnClick({
-    id: `paper_subscription_landing_page-switch_tab-${tab}`,
+    id: `Paper_${tab}-tab`, // eg. Paper_Collection-tab or Paper_HomeDelivery-tab
     product: 'Paper',
     componentType: 'ACQUISITIONS_BUTTON',
   })();
