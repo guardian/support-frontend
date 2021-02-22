@@ -7,18 +7,20 @@ import { AccordionRow } from '@guardian/src-accordion';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 type TabAccordionRowPropTypes = {|
-  id: string,
+  trackingId: string,
   label: string,
   children: React.Node,
 |};
 
 
-export const TabAccordionRow = ({ id, label, children }: TabAccordionRowPropTypes) => {
+export const TabAccordionRow = ({
+  trackingId, label, children,
+}: TabAccordionRowPropTypes) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     sendTrackingEventsOnClick({
-      id: `paper_subscription_landing_page-tab-accordion-${id}_${expanded ? 'expand' : 'minimize'}`,
+      id: `${trackingId}-${expanded ? 'expand' : 'minimize'}`,
       product: 'Paper',
       componentType: 'ACQUISITIONS_BUTTON',
     })();

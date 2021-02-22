@@ -8,12 +8,13 @@ import GridImage from 'components/gridImage/gridImage';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 import LinkTo from './linkTo';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
-import { Accordion, AccordionRow } from '@guardian/src-accordion';
+import { Accordion } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
+import { TabAccordionRow } from './tabAccordionRow';
 
 const flexContainerOverride = css`
   align-items: flex-start;
@@ -58,6 +59,8 @@ export const accordionContainer = css`
 `;
 
 // ----- Content ----- //
+const accordionTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
+
 export const ContentDeliveryFaqBlock = ({
   useDigitalVoucher,
   setTabAction,
@@ -75,7 +78,7 @@ export const ContentDeliveryFaqBlock = ({
       </p>
       <div css={accordionContainer}>
         <Accordion>
-          <AccordionRow label="Delivery details">
+          <TabAccordionRow trackingId={accordionTrackingId} label="Delivery details">
             <p>
               Your paper will arrive before 8am from Monday to Saturday and before 8.30am on Sunday.
             </p>
@@ -87,7 +90,7 @@ export const ContentDeliveryFaqBlock = ({
               You can pause your subscription for up to 36 days a year. So if you’re going away
               anywhere, you won’t have to pay for the papers that you miss.
             </p>
-          </AccordionRow>
+          </TabAccordionRow>
         </Accordion>
       </div>
     </div>
