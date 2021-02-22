@@ -12,7 +12,6 @@ type TabAccordionRowPropTypes = {|
   children: React.Node,
 |};
 
-
 export const TabAccordionRow = ({
   trackingId, label, children,
 }: TabAccordionRowPropTypes) => {
