@@ -9,6 +9,7 @@ import {
   getNewsstandSaving,
   getNewsstandSavingPercentage,
   sendTrackingEventsOnClick,
+  sendTrackingEventsOnView,
 } from 'helpers/subscriptions';
 import {
   finalPrice,
@@ -85,16 +86,18 @@ const getPlans = (
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     const promotion = getAppliedPromo(price.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
+    const trackingProperties = {
+      id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
+      product: 'Paper',
+      componentType: 'ACQUISITIONS_BUTTON',
+    };
 
     return {
       title: getTitle(productOption),
       price: showPrice(price),
       href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-      onClick: sendTrackingEventsOnClick({
-        id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
-        product: 'Paper',
-        componentType: 'ACQUISITIONS_BUTTON',
-      }),
+      onClick: sendTrackingEventsOnClick(trackingProperties),
+      onView: sendTrackingEventsOnView(trackingProperties),
       buttonCopy: 'Subscribe now',
       priceCopy: getPriceCopyString(price, copy[fulfilmentOption][productOption]),
       offerCopy: getOfferText(price, productOption),
