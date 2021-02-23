@@ -177,7 +177,7 @@ class DigitalSubscriptionController(
 class LandingCopyProvider(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
   promotionServiceProvider: PromotionServiceProvider,
-  stage: Stage,
+  stage: Stage
 ) {
 
   type PromoDetails = (ProductPrices, Option[PromotionCopy])

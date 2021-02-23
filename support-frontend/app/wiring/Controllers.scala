@@ -66,7 +66,7 @@ trait Controllers {
     new LandingCopyProvider(
       priceSummaryServiceProvider,
       promotionServiceProvider,
-      appConfig.stage,
+      appConfig.stage
     ),
     assetsResolver,
     actionRefiners,
