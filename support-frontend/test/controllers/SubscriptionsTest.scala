@@ -154,7 +154,11 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
       new DigitalSubscriptionController(
         priceSummaryServiceProvider = priceSummaryServiceProvider,
-        promotionServiceProvider =promotionServiceProvider,
+        new LandingCopyProvider(
+          priceSummaryServiceProvider = priceSummaryServiceProvider,
+          promotionServiceProvider = promotionServiceProvider,
+          stage = stage
+        ),
         assets = assetResolver,
         actionRefiners = actionRefiner,
         identityService = identityService,
@@ -167,7 +171,6 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         settingsProvider = settingsProvider,
         supportUrl = "support.thegulocal.com",
         fontLoaderBundle = Left(RefPath("test")),
-        stage = stage,
         recaptchaConfigProvider
       )
     }
