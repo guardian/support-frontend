@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
 import com.gu.i18n.Country.UK
@@ -10,10 +10,10 @@ import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.{DefaultPromotions, PromoCode, ProductPromotionCopy, PromotionServiceProvider}
+import com.gu.support.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import com.gu.support.promotions.{DefaultPromotions, ProductPromotionCopy, PromoCode, PromotionCopy, PromotionServiceProvider}
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import play.api.libs.circe.Circe
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscriptionController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  promotionServiceProvider: PromotionServiceProvider,
+  landingCopyProvider: LandingCopyProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
   identityService: IdentityService,
@@ -43,7 +43,6 @@ class DigitalSubscriptionController(
   settingsProvider: AllSettingsProvider,
   val supportUrl: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
-  stage: Stage,
   recaptchaConfigProvider: RecaptchaConfigProvider
 )(
   implicit val ec: ExecutionContext
@@ -62,23 +61,13 @@ class DigitalSubscriptionController(
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val promoCodes: List[PromoCode] = queryPromos ++ DefaultPromotions.DigitalSubscription.all
+    val (productPrices, maybePromotionCopy) = landingCopyProvider.promoDetails(queryPromos, countryCode, orderIsAGift)
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au", orderIsAGift),
       "en" -> buildCanonicalDigitalSubscriptionLink("int", orderIsAGift)
     )
-    val country = (for {
-      countryGroup <- CountryGroup.byId(countryCode)
-      country <- countryGroup.countries.headOption
-    } yield country).getOrElse(UK)
-    val maybePromotionCopy = queryPromos.headOption.flatMap(promoCode =>
-      ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
-        .getCopyForPromoCode(promoCode, DigitalPack, country)
-    )
-    val readerType = if (orderIsAGift) Gift else Direct
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
     val shareImageUrl = Some("https://i.guim.co.uk/img/media/74422ad120c709448f433c34f5190e2465ffa65e/0_0_1200_1200/1200.png?width=1200&auto=format&fit=crop&quality=85&s=1407add4d016d15cc074b0f9de8f1433") // scalastyle:ignore
     if (settings.switches.enableDigitalSubGifting.isOn || !orderIsAGift) {
       Ok(views.html.main(
@@ -181,6 +170,31 @@ class DigitalSubscriptionController(
       css,
       fontLoaderBundle
     )())
+  }
+
+}
+
+class LandingCopyProvider(
+  priceSummaryServiceProvider: PriceSummaryServiceProvider,
+  promotionServiceProvider: PromotionServiceProvider,
+  stage: Stage,
+) {
+
+  type PromoDetails = (ProductPrices, Option[PromotionCopy])
+
+  def promoDetails(queryPromos: List[String], countryCode: String, orderIsAGift: Boolean): PromoDetails = {
+    val promoCodes: List[PromoCode] = queryPromos ++ DefaultPromotions.DigitalSubscription.all
+
+    val country = (for {
+      countryGroup <- CountryGroup.byId(countryCode)
+      country <- countryGroup.countries.headOption
+    } yield country).getOrElse(UK)
+    val promoCode = queryPromos.headOption.getOrElse(DefaultPromotions.DigitalSubscription.landing)
+    val promotionCopy = ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
+      .getCopyForPromoCode(promoCode, DigitalPack, country)
+    val readerType = if (orderIsAGift) Gift else Direct
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
+    (productPrices, promotionCopy)
   }
 
 }
