@@ -18,6 +18,7 @@ object DefaultPromotions {
       )
     }
     def all: List[PromoCode] = Monthly.all ++ Annual.all
+    val landing: PromoCode = "DIGI_SUB_LANDING_PAGE"
   }
   object GuardianWeekly {
     object Gift {
