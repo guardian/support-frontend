@@ -61,27 +61,6 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val digitalPackController = new DigitalSubscriptionController(
-    priceSummaryServiceProvider,
-    new LandingCopyProvider(
-      promotionServiceProvider,
-      appConfig.stage
-    ),
-    assetsResolver,
-    actionRefiners,
-    identityService,
-    testUsers,
-    membersDataService,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    stringsConfig,
-    allSettingsProvider,
-    appConfig.supportUrl,
-    fontLoader,
-    appConfig.recaptchaConfigProvider
-  )
-
   lazy val redemptionController = new RedemptionController(
     actionRefiners,
     assetsResolver,
@@ -95,28 +74,64 @@ trait Controllers {
     zuoraGiftLookupServiceProvider
   )
 
-  lazy val paperController = new PaperSubscription(
-    priceSummaryServiceProvider,
+  private lazy val landingCopyProvider = new LandingCopyProvider(
     promotionServiceProvider,
+    appConfig.stage
+  )
+
+  lazy val digitalPackController = new DigitalSubscriptionController(
+    priceSummaryServiceProvider,
+    landingCopyProvider,
     assetsResolver,
     actionRefiners,
-    identityService,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-    fontLoader,
-    appConfig.stage,
-    appConfig.recaptchaConfigProvider
+    fontLoader
+  )
+
+  lazy val paperController = new PaperSubscription(
+    priceSummaryServiceProvider,
+    landingCopyProvider,
+    assetsResolver,
+    actionRefiners,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+    fontLoader
   )
 
   lazy val weeklyController = new WeeklySubscription(
-    authAction,
     priceSummaryServiceProvider,
-    promotionServiceProvider,
+    landingCopyProvider,
+    assetsResolver,
+    actionRefiners,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+    fontLoader
+  )
+
+  lazy val digitalPackFormController = new DigitalSubscriptionFormController(
+    priceSummaryServiceProvider,
+    assetsResolver,
+    actionRefiners,
+    identityService,
+    testUsers,
+    membersDataService,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
+    controllerComponents,
+    allSettingsProvider,
+    fontLoader,
+    appConfig.recaptchaConfigProvider
+  )
+
+  lazy val paperFormController = new PaperSubscriptionForm(
+    priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
     identityService,
@@ -124,11 +139,22 @@ trait Controllers {
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
-    stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
     fontLoader,
-    appConfig.stage,
+    appConfig.recaptchaConfigProvider
+  )
+
+  lazy val weeklyFormController = new WeeklySubscriptionForm(
+    priceSummaryServiceProvider,
+    assetsResolver,
+    actionRefiners,
+    identityService,
+    testUsers,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
+    controllerComponents,
+    allSettingsProvider,
+    fontLoader,
     appConfig.recaptchaConfigProvider
   )
 
