@@ -40,8 +40,8 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
     val dsGifts = service.getPrices(DigitalPack, Nil, Gift)
-    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Quarterly)(GBP).price shouldBe 33.99
-    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119
+    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Quarterly)(GBP).price shouldBe 36
+    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 99
 
     val dsCorporate = service.getPrices(DigitalPack, Nil, Corporate)
     dsCorporate(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 0
