@@ -31,10 +31,7 @@ const setupAmazonPayCallbacks = (countryGroupId: CountryGroupId, dispatch: Funct
       if (amazonRegion) {
         const clientId = getAmazonPayClientId(isSandbox);
         amazonLoginObject.setClientId(clientId);
-
-        if (isSandbox) {
-          amazonLoginObject.setSandboxMode(true);
-        }
+        amazonLoginObject.setSandboxMode(isSandbox);
 
         dispatch(setAmazonPayLoginObject(window.amazon.Login));
       }
