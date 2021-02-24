@@ -155,7 +155,6 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       new DigitalSubscriptionController(
         priceSummaryServiceProvider = priceSummaryServiceProvider,
         new LandingCopyProvider(
-          priceSummaryServiceProvider = priceSummaryServiceProvider,
           promotionServiceProvider = promotionServiceProvider,
           stage = stage
         ),

@@ -61,7 +61,6 @@ class DigitalSubscriptionController(
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val (productPrices, maybePromotionCopy) = landingCopyProvider.promoDetails(queryPromos, countryCode, orderIsAGift)
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),
@@ -83,8 +82,8 @@ class DigitalSubscriptionController(
         shareUrl = canonicalLink
       ) {
         Html(s"""<script type="text/javascript">
-          window.guardian.productPrices = ${outputJson(productPrices)}
-          window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
+          window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
+          window.guardian.promotionCopy = ${outputJson(landingCopyProvider.promotionCopy(queryPromos, countryCode))}
           window.guardian.orderIsAGift = $orderIsAGift
         </script>""")
       }).withSettingsSurrogateKey
@@ -172,29 +171,27 @@ class DigitalSubscriptionController(
     )())
   }
 
+  def productPrices(queryPromos: List[String], orderIsAGift: Boolean): ProductPrices = {
+    val promoCodes: List[PromoCode] = queryPromos ++ DefaultPromotions.DigitalSubscription.all
+    val readerType = if (orderIsAGift) Gift else Direct
+    priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
+  }
+
 }
 
 class LandingCopyProvider(
-  priceSummaryServiceProvider: PriceSummaryServiceProvider,
   promotionServiceProvider: PromotionServiceProvider,
   stage: Stage
 ) {
 
-  type PromoDetails = (ProductPrices, Option[PromotionCopy])
-
-  def promoDetails(queryPromos: List[String], countryCode: String, orderIsAGift: Boolean): PromoDetails = {
-    val promoCodes: List[PromoCode] = queryPromos ++ DefaultPromotions.DigitalSubscription.all
-
+  def promotionCopy(queryPromos: List[String], countryCode: String): Option[PromotionCopy] = {
     val country = (for {
       countryGroup <- CountryGroup.byId(countryCode)
       country <- countryGroup.countries.headOption
     } yield country).getOrElse(UK)
     val promoCode = queryPromos.headOption.getOrElse(DefaultPromotions.DigitalSubscription.landing)
-    val promotionCopy = ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
+    ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
       .getCopyForPromoCode(promoCode, DigitalPack, country)
-    val readerType = if (orderIsAGift) Gift else Direct
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
-    (productPrices, promotionCopy)
   }
 
 }

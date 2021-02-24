@@ -64,7 +64,6 @@ trait Controllers {
   lazy val digitalPackController = new DigitalSubscriptionController(
     priceSummaryServiceProvider,
     new LandingCopyProvider(
-      priceSummaryServiceProvider,
       promotionServiceProvider,
       appConfig.stage
     ),
