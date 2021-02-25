@@ -14,7 +14,7 @@ deployments:
     parameters:
       templatePath: cfn.yaml
       amiTags:
-        Recipe: xenial-membership
+        Recipe: bionic-membership-ARM
         AmigoStage: PROD
       amiEncrypted: true
   frontend:

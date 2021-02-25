@@ -37,7 +37,7 @@ Mappings:
     CODE:
       MaxInstances: 2
       MinInstances: 1
-      InstanceType: t3.small
+      InstanceType: t4g.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/44e9f40c-c884-40e6-a171-6769e9a8b173
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
@@ -49,7 +49,7 @@ Mappings:
       MaxInstances: 6
       MinInstances: 3
       InsufficientInstances: 2
-      InstanceType: t3.small
+      InstanceType: t4g.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/9d8ff96c-63d5-425b-88d1-f529770e5b6d
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
