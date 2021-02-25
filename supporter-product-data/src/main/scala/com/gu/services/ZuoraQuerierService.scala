@@ -11,7 +11,7 @@ import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, ZoneId, ZoneOffset}
+import java.time.{LocalDate, LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 import java.util.UUID
 import scala.collection.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,22 +28,22 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   )
 
   def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {
-    val queries = queryType match {
+    val (queries, incrementalTime) = queryType match {
       case Full =>
         val now = LocalDate.now(ZoneId.of("UTC"))
-        List(
+        (List(
         ZoqlExportQuery(
-          s"${SelectActiveRatePlansQuery.name}-${now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
+          s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
           SelectActiveRatePlansQuery.query(now, config.discountProductRatePlanIds)
         )
-      )
-      case Incremental => List()
+      ), Some(ZonedDateTime.now.minusYears(20)))
+      case Incremental => (List(), config.lastSuccessfulQueryTime) //TODO test how this behaves with a full query
     }
     val request = BatchQueryRequest(
       partner = config.partnerId,
       name = "supporter-product-data",
       queries = queries,
-      incrementalTime = config.lastSuccessfulQueryTime //TODO test how this behaves with a full query
+      incrementalTime = incrementalTime
     )
     postJson[BatchQueryResponse](s"batch-query/", request.asJson, authHeaders)
   }
