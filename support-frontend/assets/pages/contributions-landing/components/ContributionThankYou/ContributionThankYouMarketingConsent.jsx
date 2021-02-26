@@ -123,7 +123,7 @@ const ContributionThankYouMarketingConsent = ({
                 <Checkbox
                   checked={hasConsented}
                   onChange={() => setHasConsented(!hasConsented)}
-                  supporting="Get related news and offers - whether you are a contributor, subscriber, memember or would like to become one."
+                  supporting="Get related news and offers - whether you are a contributor, subscriber, member or would like to become one."
                 />
               </CheckboxGroup>
             </div>
