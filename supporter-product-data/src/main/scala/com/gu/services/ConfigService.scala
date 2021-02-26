@@ -50,7 +50,10 @@ class ConfigService(stage: Stage) extends StrictLogging {
         "2c92a0086b25c750016b32548239308d",
         "2c92a0ff74296d7201742b7daf20123d",
         "2c92a00772c5c2e90172c7ebd62a68c4",
-        "2c92a01072c5c2e20172c7efe01125c6"
+        "2c92a01072c5c2e20172c7efe01125c6",
+        // 6 for 6 these are also covered by a regular rate plan
+        "2c92a0086619bf8901661aaac94257fe",
+        "2c92a0086619bf8901661ab545f51b21"
       )
     }
 
