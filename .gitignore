@@ -50,3 +50,4 @@ assets/images/inline-svgs/*.svg
 /assets/javascripts/lib/bower-components/
 .yarnclean
 /.bsp/
+supporter-product-data/data-extracts/*.csv
