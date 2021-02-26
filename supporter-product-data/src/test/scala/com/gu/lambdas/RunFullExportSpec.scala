@@ -14,11 +14,12 @@ import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import java.nio.file.{FileSystems, Files}
+import java.io.{File, PrintWriter}
+import java.nio.file.{FileSystems, Files, StandardCopyOption}
 import java.time.ZonedDateTime
+import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
-import scala.util.Try
+import scala.io.Source
 
 @IntegrationTest
 class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
@@ -29,7 +30,7 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       fetchResultsState <- QueryZuoraLambda.queryZuora(stage, Full)
       _ <- sleep(30 * 1000)
       updateDynamoState <- fetchResults(stage, fetchResultsState.jobId, fetchResultsState.attemptedQueryTime)
-    } yield updateDynamoState.filename should startWith ("select-active-rate-plans")
+    } yield updateDynamoState.filename should endWith ("last-extract.csv")
   }
 
   def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime) = {
@@ -41,20 +42,39 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
       batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response for jobId $jobId")
       fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in jobId $jobId")
-      filename = s"${batch.name}.csv"
       fileResponse <- service.getResultFileResponse(fileId)
       _ = assert(fileResponse.isSuccessful, s"File download for job with id $jobId failed with http code ${fileResponse.code}")
-      filePath = FileSystems.getDefault.getPath(System.getProperty("user.dir"), "supporter-product-data", "data-extracts", filename)
-      _ = Files.copy(fileResponse.body.byteStream, filePath)
+      filePath = FileSystems.getDefault.getPath(System.getProperty("user.dir"), "supporter-product-data", "data-extracts", "last-extract.csv")
+      _ = Files.copy(fileResponse.body.byteStream, filePath, StandardCopyOption.REPLACE_EXISTING)
+      _ = sanitizeFieldNames(filePath.toString)
     } yield {
       logger.info(s"Successfully wrote file $filePath to S3 with ${batch.recordCount} records for jobId $jobId")
       UpdateDynamoState(
-        filename,
+        filePath.toString,
         batch.recordCount,
         processedCount = 0,
         attemptedQueryTime
       )
     }
+  }
+
+  def sanitizeFieldNames(filename: String) = {
+    val tempPath = FileSystems.getDefault.getPath(System.getProperty("user.dir"), "supporter-product-data", "data-extracts", "temp.csv")
+    val tempFile = new File(tempPath.toString)
+    val writer = new PrintWriter(tempFile)
+
+    val fileSource = Source.fromFile(filename)
+    fileSource.getLines.zipWithIndex
+      .map { case (line, lineNumber) =>
+        if (lineNumber == 0)
+          line.replace(".", "_").replace("__c", "")
+        else
+          line
+      }
+      .foreach(x => writer.println(x))
+    writer.close()
+    fileSource.close
+    tempFile.renameTo(new File(filename))
   }
 }
 
