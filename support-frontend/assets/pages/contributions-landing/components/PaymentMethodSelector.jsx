@@ -7,6 +7,7 @@ import { css } from '@emotion/core';
 
 import { connect } from 'react-redux';
 
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
 import {
@@ -196,6 +197,8 @@ const onPaymentMethodUpdate = (paymentMethod: PaymentMethod, props: PropTypes) =
       break;
     default:
   }
+
+  trackComponentClick(`contribution-payment-method-${paymentMethod}`);
 
   props.updatePaymentMethod(paymentMethod);
   props.updateSelectedExistingPaymentMethod(undefined);
