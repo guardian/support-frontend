@@ -28,7 +28,7 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   "This test is just an easy way to run an aqua query. It" should "save the results to a csv in supporter-product-data/data-extracts" in {
     for {
       fetchResultsState <- QueryZuoraLambda.queryZuora(stage, Full)
-      _ <- sleep(30 * 1000)
+      _ <- sleep(45 * 1000)
       updateDynamoState <- fetchResults(stage, fetchResultsState.jobId, fetchResultsState.attemptedQueryTime)
     } yield updateDynamoState.filename should endWith ("last-extract.csv")
   }
