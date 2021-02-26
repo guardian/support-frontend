@@ -20,6 +20,8 @@ object SelectActiveRatePlansQuery {
 
   def query(date: LocalDate, discountProductRatePlanIds: List[String]): String =
     s"""SELECT
+          RatePlan.AmendmentType,
+          Subscription.Id,
           ${identityId.zuoraName},
           ${gifteeIdentityId.zuoraName},
           ${ratePlanId.zuoraName},
@@ -31,6 +33,7 @@ object SelectActiveRatePlansQuery {
             WHERE
             ${termEndDate.zuoraName} >= '$date' AND
             (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
+            (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
             ${identityId.zuoraName} != null AND ${identityId.zuoraName} != '' AND
             ($isNotDSGift OR $isRedeemedDSGift)
