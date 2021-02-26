@@ -29,7 +29,7 @@ object FetchResultsLambda extends StrictLogging{
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
       batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response for jobId $jobId")
       fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in jobId $jobId")
-      filename = s"${batch.name}-$fileId.csv"
+      filename = s"${batch.name}.csv"
       fileResponse <- service.getResultFileResponse(fileId)
       _ = assert(fileResponse.isSuccessful, s"File download for job with id $jobId failed with http code ${fileResponse.code}")
       _ <- S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
