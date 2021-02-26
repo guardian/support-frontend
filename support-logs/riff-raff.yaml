@@ -8,4 +8,4 @@ deployments:
       templatePath: cfn.yaml
       amiTags:
         AmigoStage: PROD
-        Recipe: ubuntu-xenial-with-nginx
+        Recipe: ubuntu-bionic-arm-with-nginx
