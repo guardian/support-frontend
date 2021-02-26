@@ -54,6 +54,12 @@ const heroTitleHighlight = css`
 const heroParagraph = css`
   ${body.medium({ lineHeight: 'loose' })}
   margin-bottom: ${space[6]}px;
+
+  /* apply the same margin to paragraphs parsed from markdown from promo codes */
+  & p:not(:last-of-type) {
+    margin-bottom: ${space[9]}px;
+  }
+  
   ${from.desktop} {
     max-width: 75%;
     margin-bottom: ${space[9]}px;

@@ -59,7 +59,7 @@ function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
-  const promoCopy = promotionHTML(promotionCopy.description, { css: paragraph, tag: 'p' });
+  const promoCopy = promotionHTML(promotionCopy.description, { css: paragraph, tag: 'div' });
 
   const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) ||
   <><span css={circleTextTop}>14 day</span>

@@ -48,6 +48,11 @@ const weeklyHeroTitle = css`
 const weeklyHeroParagraph = css`
   ${body.medium({ lineHeight: 'loose' })}
   margin-bottom: ${space[9]}px;
+
+  /* apply the same margin to paragraphs parsed from markdown from promo codes */
+  & p:not(:last-of-type) {
+    margin-bottom: ${space[9]}px;
+  }
 `;
 
 const roundelCentreLine = css`

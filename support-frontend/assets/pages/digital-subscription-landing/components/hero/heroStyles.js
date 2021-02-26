@@ -156,6 +156,11 @@ export const paragraph = css`
   max-width: 100%;
   margin-bottom: ${space[9]}px;
 
+  /* apply the same margin to paragraphs parsed from markdown from promo codes */
+  & p:not(:last-of-type) {
+    margin-bottom: ${space[9]}px;
+  }
+
   ${from.mobileMedium} {
     ${body.medium()};
   }
