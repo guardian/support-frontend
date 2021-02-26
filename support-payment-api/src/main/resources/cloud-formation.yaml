@@ -121,12 +121,12 @@ Mappings:
     CODE:
       MaxInstances: 2
       MinInstances: 1
-      InstanceType: t3.small
+      InstanceType: t4g.small
 
     PROD:
       MaxInstances: 6
       MinInstances: 3
-      InstanceType: t3.small
+      InstanceType: t4g.small
 
 Resources:
   AutoScalingGroup:
