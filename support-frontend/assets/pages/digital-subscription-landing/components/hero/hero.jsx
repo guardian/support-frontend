@@ -71,7 +71,6 @@ function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
 
   const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
   const copy = promoCopy || defaultCopy;
-  console.log({ promoCopy });
 
   return (
     <div css={wrapper}>
