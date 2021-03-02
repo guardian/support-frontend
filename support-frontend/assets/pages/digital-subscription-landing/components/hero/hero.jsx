@@ -39,6 +39,10 @@ const HeroCopy = () => (
       We’re free to give voice to the voiceless. The unheard. The powerless.
       Become a digital subscriber today and help to fund our vital work.
     </p>
+    <p css={paragraph}>
+      With two innovative apps and ad-free reading, a digital subscription gives
+      you the richest experience of Guardian journalism.
+    </p>
   </>
 );
 

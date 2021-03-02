@@ -154,10 +154,9 @@ export const yellowHeading = css`
 export const paragraph = css`
   ${body.small()};
   max-width: 100%;
-  margin-bottom: ${space[9]}px;
+  margin-bottom: ${space[5]}px;
 
-  /* apply the same margin to paragraphs parsed from markdown from promo codes */
-  & p:not(:last-of-type) {
+  :last-of-type {
     margin-bottom: ${space[9]}px;
   }
 
