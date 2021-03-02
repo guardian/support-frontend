@@ -271,6 +271,7 @@ function PaperCheckoutForm(props: PropTypes) {
                   maxlength={250}
                   value={props.deliveryInstructions}
                   onChange={e => props.setDeliveryInstructions(e.target.value)}
+                  optional
                 />
                 : null
             }
