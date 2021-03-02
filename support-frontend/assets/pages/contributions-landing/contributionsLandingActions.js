@@ -64,6 +64,7 @@ export type Action =
   | { type: 'UPDATE_EMAIL', email: string }
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_BILLING_STATE', billingState: StateProvince | null }
+  | { type: 'UPDATE_BILLING_ZIP_CODE', billingZipCode: string }
   | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
@@ -182,6 +183,11 @@ const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
 const updateBillingState = (billingState: StateProvince | null): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_BILLING_STATE', billingState })));
+  };
+
+const updateBillingZipCode = (billingZipCode: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_BILLING_ZIP_CODE', billingZipCode })));
   };
 
 const updateBillingCountry = (billingCountry: IsoCountry | null): Action =>
@@ -748,6 +754,7 @@ export {
   updateLastName,
   updateEmail,
   updateBillingState,
+  updateBillingZipCode,
   updateBillingCountry,
   updateUserFormData,
   setThirdPartyPaymentLibrary,

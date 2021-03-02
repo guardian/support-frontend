@@ -64,6 +64,7 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   isTestUser: boolean,
+  zipCode: string,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -77,6 +78,7 @@ const mapStateToProps = (state: State) => ({
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
+  zipCode: state.page.form.formData.billingZipCode ?? '',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -278,13 +280,19 @@ const CardForm = (props: PropTypes) => {
 
   const handleCardSetupForRecurring = (clientSecret: string): void => {
     const cardElement = elements.getElement(CardNumberElement);
-    stripe.handleCardSetup(clientSecret, cardElement).then((result) => {
-      if (result.error) {
-        handleStripeError(result.error);
-      } else {
-        props.onPaymentAuthorised(result.setupIntent.payment_method);
-      }
-    });
+    stripe
+      .handleCardSetup(clientSecret, cardElement, {
+        payment_method_data: {
+          billing_details: { address: { postal_code: props.zipCode } },
+        },
+      })
+      .then((result) => {
+        if (result.error) {
+          handleStripeError(result.error);
+        } else {
+          props.onPaymentAuthorised(result.setupIntent.payment_method);
+        }
+      });
   };
 
   const setupRecurringHandlers = (): void => {
