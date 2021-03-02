@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -21,7 +21,10 @@ const mapStateToProps = state => ({
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     onClick: (email: string, csrf: CsrfState) => {
-      trackComponentClick('marketing-permissions');
+      sendTrackingEventsOnClick({
+        id: 'marketing-permissions',
+        componentType: 'ACQUISITIONS_OTHER',
+      })();
       sendMarketingPreferencesToIdentity(
         true, // it's TRUE because the button says Sign Me Up!
         email,

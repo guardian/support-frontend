@@ -7,7 +7,7 @@ import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 export default function CtaSubscribe() {
   return (
@@ -26,7 +26,10 @@ export default function CtaSubscribe() {
         <AnchorButton
           icon={<ArrowRightStraight />}
           href="/subscribe"
-          onClick={() => trackComponentClick('support-page-cta-subscribe')}
+          onClick={sendTrackingEventsOnClick({
+            id: 'support-page-cta-subscribe',
+            componentType: 'ACQUISITIONS_BUTTON',
+          })}
         >
           Choose a Subscription
         </AnchorButton>

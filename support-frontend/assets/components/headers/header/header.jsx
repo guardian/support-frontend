@@ -66,7 +66,7 @@ const TopNav = ({ display, getLogoRef, utility }: TopNavPropTypes) => (
         <div />
         <div className="component-header-topnav--checkout-text">
           <div className="component-header--padlock"><Padlock /></div>
-          <div>Checkout</div>
+          <h1>Checkout</h1>
         </div>
       </div>
     )}

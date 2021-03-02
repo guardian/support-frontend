@@ -21,7 +21,6 @@ class PaypalController(
   import PaypalJsonDecoder._
 
   def toErrorResult(error: PaypalApiError): Result = {
-    logger.error(s"Paypal API error: ${error.getMessage}")
     new Status(error.responseCode.getOrElse(INTERNAL_SERVER_ERROR))(ResultBody.Error(error))
   }
 

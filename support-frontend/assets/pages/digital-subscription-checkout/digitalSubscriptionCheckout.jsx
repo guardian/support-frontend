@@ -22,19 +22,36 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
 import { getQueryParameter } from 'helpers/url';
 import type { DigitalBillingPeriod, DigitalGiftBillingPeriod } from 'helpers/billingPeriods';
-import { Monthly } from 'helpers/billingPeriods';
+import { Monthly, Annual, Quarterly } from 'helpers/billingPeriods';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { DigitalPack } from 'helpers/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
+import { FocusStyleManager } from '@guardian/src-utilities';
 
 // ----- Redux Store ----- //
+
+function getInitialBillingPeriod(periodInUrl?: string): DigitalBillingPeriod | DigitalGiftBillingPeriod {
+  const { orderIsAGift } = window.guardian;
+  switch (periodInUrl) {
+    case 'Monthly':
+      return Monthly;
+    case 'Quarterly':
+      return Quarterly;
+    case 'Annual':
+      return Annual;
+    default:
+      if (orderIsAGift) {
+        return Quarterly;
+      }
+      return Monthly;
+  }
+}
+
 const billingPeriodInUrl = getQueryParameter('period');
-const initialBillingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual' || billingPeriodInUrl === 'Quarterly'
-  ? billingPeriodInUrl
-  : Monthly;
+const initialBillingPeriod = getInitialBillingPeriod(billingPeriodInUrl || '');
 
 const reducer = (commonState: CommonState) => createCheckoutReducer(
   commonState.internationalisation.countryId,
@@ -53,6 +70,8 @@ const thankyouProps = {
   countryGroupId,
   marketingConsent: (orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
 };
+
+FocusStyleManager.onlyShowFocusOnTabs();
 
 // ----- Render ----- //
 

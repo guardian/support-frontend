@@ -17,12 +17,14 @@ export default function OtherProducts() {
           description="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy The Guardian"
           destination={getPatronsLink()}
           modifierClass="patrons"
+          trackingId="patrons_cta"
         />
         <OtherProduct
           title="Masterclasses &amp; Live Events"
           description="Meet Guardian journalists and readers at our events, debates, interviews and festivals"
           destination={getMemLink('events')}
           modifierClass="masterclass"
+          trackingId="masterclass_cta"
         />
       </Text>
     </Content>

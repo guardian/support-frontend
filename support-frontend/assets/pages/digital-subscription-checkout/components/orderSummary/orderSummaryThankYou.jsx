@@ -100,12 +100,12 @@ function OrderSummaryThankYou(props: PropTypes) {
   return (
     <aside css={wrapper}>
       <div css={topLine}>
-        <h2 css={sansTitle}>{props.pending ? 'Order pending' : 'Order confirmed'}</h2>
+        <h3 css={sansTitle}>{props.pending ? 'Order pending' : 'Order confirmed'}</h3>
       </div>
       <div css={contentBlock}>
         <div css={imageContainer}>{props.image}</div>
         <div css={textBlock}>
-          <h3>{props.title}</h3>
+          <h4>{props.title}</h4>
         </div>
       </div>
     </aside>

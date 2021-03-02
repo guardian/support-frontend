@@ -1,6 +1,6 @@
 // @flow
 // $FlowIgnore - required for hooks
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
@@ -29,7 +29,7 @@ import {
   OPHAN_COMPONENT_ID_SIGN_UP,
   OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP,
 } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 
 const bodyText = css`
   ${body.small()};
@@ -97,6 +97,10 @@ const ContributionThankYouSignUp = ({
 }: ContributionThankYouSignUpProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
+
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_SIGN_UP);
+  }, []);
 
   const onReadMoreClick = () => {
     trackComponentClick(OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP);

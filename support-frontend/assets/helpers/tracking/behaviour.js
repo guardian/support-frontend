@@ -4,23 +4,6 @@ import { gaEvent } from 'helpers/tracking/googleTagManager';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 
-const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
-  gaEvent({
-    category: 'click',
-    action: 'payment-method-selected',
-    label: paymentMethod,
-  }, { paymentMethod });
-
-  trackComponentEvents({
-    component: {
-      componentType: 'ACQUISITIONS_OTHER',
-      id: 'subscriptions-payment-method-selector',
-    },
-    action: 'CLICK',
-    value: paymentMethod,
-  });
-};
-
 export type ProductCheckout = 'Contribution' | SubscriptionProduct;
 
 const trackCheckoutSubmitAttempt = (
@@ -104,7 +87,6 @@ const trackComponentLoad = (componentId: string): void => {
 };
 
 export {
-  trackPaymentMethodSelected,
   trackThankYouPageLoaded,
   trackComponentClick,
   trackCheckoutSubmitAttempt,

@@ -1,7 +1,5 @@
 package com.gu.support.workers.exceptions
 
-import java.net.{SocketException, SocketTimeoutException}
-
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
@@ -14,6 +12,9 @@ import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import com.gu.zuora.subscriptionBuilders.{BuildSubscribePromoError, BuildSubscribeRedemptionError}
 import io.circe.syntax._
 import io.circe.{DecodingFailure, ParsingFailure}
+
+import java.net.{SocketException, SocketTimeoutException}
+import javax.net.ssl.SSLException
 
 /**
  * Maps exceptions from the application to either fatal or non fatal exceptions
@@ -43,7 +44,7 @@ object ErrorHandler {
         new RetryNone(message = wshe.getMessage, cause = wshe.cause)
 
       //Timeouts/connection issues and 500s
-      case e@(_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) =>
+      case e@(_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_] | _: SSLException) =>
         new RetryUnlimited(message = e.getMessage, cause = throwable)
 
       //WebServiceClientError

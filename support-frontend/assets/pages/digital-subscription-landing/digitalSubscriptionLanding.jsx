@@ -17,8 +17,13 @@ import {
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
+import { routes } from 'helpers/routes';
 
 import Page from 'components/page/page';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import CentredContainer from 'components/containers/centredContainer';
+import { getPromotionCopy } from 'helpers/productPrice/promotions';
+
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import CampaignHeader from './components/hero/hero';
@@ -28,8 +33,8 @@ import ProductBlockAus from './components/productBlock/productBlockAus';
 import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
-import { CallToAction, CallToActionGift } from './components/cta';
-import GiftNonGiftLink from './components/giftNonGiftLink';
+import Prices from './components/prices';
+import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 // ----- Styles ----- //
 
@@ -40,7 +45,8 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { orderIsAGift, productPrices } = store.getState().page;
+const { orderIsAGift, productPrices, promotionCopy } = store.getState().page;
+const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 // ----- Internationalisation ----- //
 
@@ -58,7 +64,8 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
-const path = orderIsAGift ? '/subscribe/digital/gift' : '/subscribe/digital';
+const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
+const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
 
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   path,
@@ -72,6 +79,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
     Canada,
     International,
   ],
+  trackProduct: 'DigitalPack',
 });
 
 // ----- Render ----- //
@@ -94,15 +102,23 @@ function LandingPage() {
       footer={footer}
     >
       {orderIsAGift ?
-        <CampaignHeaderGift countryGroupId={countryGroupId} /> :
-        <CampaignHeader countryGroupId={countryGroupId} />
+        <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
+        <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
       }
       {countryGroupId === AUDCountries ?
         <ProductBlockAus countryGroupId={countryGroupId} /> :
         <ProductBlock countryGroupId={countryGroupId} />
       }
-      {orderIsAGift ? <CallToActionGift /> : <CallToAction />}
-      <GiftNonGiftLink orderIsAGift={orderIsAGift} />
+      <FullWidthContainer theme="dark" hasOverlap>
+        <CentredContainer>
+          <Prices orderIsAGift={orderIsAGift} />
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="white">
+        <CentredContainer>
+          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
+        </CentredContainer>
+      </FullWidthContainer>
     </Page>
   );
 

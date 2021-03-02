@@ -1,5 +1,6 @@
 package com.gu.config
 
+import com.gu.acquisitions.BigQueryConfigProvider
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
@@ -15,6 +16,7 @@ object Configuration {
   val loadFromS3: Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
     .getOrElse("TRUE").toBoolean)
     .getOrElse(true) //Should we load config from S3
+
 
   val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
     .getOrElse("DEV"))
@@ -39,6 +41,7 @@ case class Configuration(config: Config) {
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
   val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
   val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
+  val bigQueryConfigProvider = new BigQueryConfigProvider(config, stage)
 
   val contributionThanksQueueName = config.getString("email.thankYou.queueName")
 

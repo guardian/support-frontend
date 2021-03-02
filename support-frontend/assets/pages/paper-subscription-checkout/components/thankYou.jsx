@@ -6,7 +6,6 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/heroPicture';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
@@ -25,6 +24,7 @@ import { formatUserDate } from 'helpers/dateConversions';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { Paper } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import { HeroPicture } from './heroPicture';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
@@ -131,8 +131,8 @@ function ThankYouContent({
       <Content>
         <Text>
           <SansParagraph>
-            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick('checkout_mma', 'Paper', null)}>Manage section</a> or accessing
-            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick('checkout_my_account', 'Paper', null)}>your Guardian account</a>.
+            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_mma', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>Manage section</a> or accessing
+            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_my_account', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>your Guardian account</a>.
           </SansParagraph>
         </Text>
       </Content>

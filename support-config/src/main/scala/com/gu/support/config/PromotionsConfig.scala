@@ -3,8 +3,7 @@ package com.gu.support.config
 import com.gu.support.catalog.{ProductRatePlanChargeId, ProductRatePlanId}
 import com.typesafe.config.Config
 
-case class PromotionsConfig(discount: PromotionsDiscountConfig, tables: PromotionsTablesConfig) extends TouchpointConfig
-
+case class PromotionsConfig(discount: PromotionsDiscountConfig, tables: PromotionsTablesConfig)
 case class PromotionsTablesConfig(promotions: String, campaigns: String)
 
 case class PromotionsDiscountConfig(productRatePlanId: ProductRatePlanId, productRatePlanChargeId: ProductRatePlanChargeId)

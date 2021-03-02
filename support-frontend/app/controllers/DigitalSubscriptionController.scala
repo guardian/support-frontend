@@ -1,17 +1,19 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
+import com.gu.i18n.Country.UK
+import com.gu.i18n.CountryGroup
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.{DefaultPromotions, PromoCode}
+import com.gu.support.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import com.gu.support.promotions.{DefaultPromotions, ProductPromotionCopy, PromoCode, PromotionCopy, PromotionServiceProvider}
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import play.api.libs.circe.Circe
@@ -28,6 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscriptionController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
+  landingCopyProvider: LandingCopyProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
   identityService: IdentityService,
@@ -51,26 +54,19 @@ class DigitalSubscriptionController(
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = if (orderIsAGift) {
-      "Support the Guardian | The Guardian Digital Gift Subscription"
-     } else {
-       "Support the Guardian | The Guardian Digital Subscription"
-     }
+    val title = s"Support the Guardian | The Guardian Digital ${if (orderIsAGift) "Gift " else ""}Subscription"
     val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
     val js = Left(RefPath("digitalSubscriptionLandingPage.js"))
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))
-    val promoCodes: List[PromoCode] = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ DefaultPromotions.DigitalSubscription.all
+    val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au", orderIsAGift),
       "en" -> buildCanonicalDigitalSubscriptionLink("int", orderIsAGift)
     )
-
-    val readerType = if (orderIsAGift) Gift else Direct
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
     val shareImageUrl = Some("https://i.guim.co.uk/img/media/74422ad120c709448f433c34f5190e2465ffa65e/0_0_1200_1200/1200.png?width=1200&auto=format&fit=crop&quality=85&s=1407add4d016d15cc074b0f9de8f1433") // scalastyle:ignore
     if (settings.switches.enableDigitalSubGifting.isOn || !orderIsAGift) {
       Ok(views.html.main(
@@ -86,7 +82,8 @@ class DigitalSubscriptionController(
         shareUrl = canonicalLink
       ) {
         Html(s"""<script type="text/javascript">
-          window.guardian.productPrices = ${outputJson(productPrices)}
+          window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
+          window.guardian.promotionCopy = ${outputJson(landingCopyProvider.promotionCopy(queryPromos, countryCode))}
           window.guardian.orderIsAGift = $orderIsAGift
         </script>""")
       }).withSettingsSurrogateKey
@@ -172,6 +169,29 @@ class DigitalSubscriptionController(
       css,
       fontLoaderBundle
     )())
+  }
+
+  def productPrices(queryPromos: List[String], orderIsAGift: Boolean): ProductPrices = {
+    val promoCodes: List[PromoCode] = queryPromos ++ DefaultPromotions.DigitalSubscription.all
+    val readerType = if (orderIsAGift) Gift else Direct
+    priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes, readerType)
+  }
+
+}
+
+class LandingCopyProvider(
+  promotionServiceProvider: PromotionServiceProvider,
+  stage: Stage
+) {
+
+  def promotionCopy(queryPromos: List[String], countryCode: String): Option[PromotionCopy] = {
+    val country = (for {
+      countryGroup <- CountryGroup.byId(countryCode)
+      country <- countryGroup.countries.headOption
+    } yield country).getOrElse(UK)
+    val promoCode = queryPromos.headOption.getOrElse(DefaultPromotions.DigitalSubscription.landing)
+    ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
+      .getCopyForPromoCode(promoCode, DigitalPack, country)
   }
 
 }

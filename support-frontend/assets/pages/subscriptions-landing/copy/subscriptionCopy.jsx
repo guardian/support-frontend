@@ -130,12 +130,22 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   buttons: [{
     ctaButtonText: 'Find out more',
     link: digitalSubscriptionLanding(countryGroupId, false),
-    analyticsTracking: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', abTest, 'digital-subscription'),
+    analyticsTracking: sendTrackingEventsOnClick({
+      id: 'digipack_cta',
+      product: 'DigitalPack',
+      ...(abTest && { abTest }),
+      componentType: 'ACQUISITIONS_BUTTON',
+    }),
   },
   {
     ctaButtonText: 'See gift options',
     link: digitalSubscriptionLanding(countryGroupId, true),
-    analyticsTracking: sendTrackingEventsOnClick('digipack_cta_gift', 'DigitalPack', abTest, 'digital-subscription'),
+    analyticsTracking: sendTrackingEventsOnClick({
+      id: 'digipack_cta_gift',
+      product: 'DigitalPack',
+      ...(abTest && { abTest }),
+      componentType: 'ACQUISITIONS_BUTTON',
+    }),
     modifierClasses: '',
   }],
 });
@@ -156,12 +166,22 @@ const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, is
     {
       ctaButtonText: 'Find out more',
       link: guardianWeeklyLanding(countryGroupId, false),
-      analyticsTracking: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', abTest),
+      analyticsTracking: sendTrackingEventsOnClick({
+        id: 'weekly_cta',
+        product: 'GuardianWeekly',
+        ...(abTest && { abTest }),
+        componentType: 'ACQUISITIONS_BUTTON',
+      }),
     },
     {
       ctaButtonText: 'See gift options',
       link: guardianWeeklyLanding(countryGroupId, true),
-      analyticsTracking: sendTrackingEventsOnClick('weekly_cta_gift', 'GuardianWeekly', abTest),
+      analyticsTracking: sendTrackingEventsOnClick({
+        id: 'weekly_cta_gift',
+        product: 'GuardianWeekly',
+        ...(abTest && { abTest }),
+        componentType: 'ACQUISITIONS_BUTTON',
+      }),
       modifierClasses: '',
     },
   ],
@@ -182,7 +202,12 @@ const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bool
   buttons: [{
     ctaButtonText: 'Find out more',
     link: paperSubsUrl(false),
-    analyticsTracking: sendTrackingEventsOnClick('paper_cta', Paper, abTest, 'paper-subscription'),
+    analyticsTracking: sendTrackingEventsOnClick({
+      id: 'paper_cta',
+      product: Paper,
+      ...(abTest && { abTest }),
+      componentType: 'ACQUISITIONS_BUTTON',
+    }),
   }],
   productImage: getPaperImage(isTop),
   offer: priceCopy.discountCopy,
@@ -207,7 +232,12 @@ const paperAndDigital = (
     buttons: [{
       ctaButtonText: 'Find out more',
       link,
-      analyticsTracking: sendTrackingEventsOnClick('paper_digital_cta', PaperAndDigital, abTest, 'paper-and-digital-subscription'),
+      analyticsTracking: sendTrackingEventsOnClick({
+        id: 'paper_digital_cta',
+        product: PaperAndDigital,
+        ...(abTest && { abTest }),
+        componentType: 'ACQUISITIONS_BUTTON',
+      }),
     }],
     productImage: <PaperAndDigitalPackshot />,
     offer: getSaleCopy(PaperAndDigital, countryGroupId).bundle.subHeading,

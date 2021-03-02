@@ -72,7 +72,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   }
 
   "SubscriptionData for a 3 monthly gift subscription purchase" should "be correct" in {
-    threeMonthGiftPurchase.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f873ad73b60173b534ca586129"), List(), List()))
+    threeMonthGiftPurchase.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f8778bf8f60177915b477714aa"), List(), List()))
       import threeMonthGiftPurchase.subscription._
       autoRenew shouldBe false
       contractAcceptanceDate shouldBe saleDate
@@ -154,7 +154,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         User("", "", None, "", "", Address(None, None, None, None, None, Country.Australia)), //user
         None,
         DigitalPack(GBP, Quarterly, Gift),
-        AnalyticsInfo(false, RedemptionNoProvider),
+        AnalyticsInfo(isGiftPurchase = false, RedemptionNoProvider),
         Right(RedemptionData(RedemptionCode(testCode).toOption.get)),
         None,
         None,

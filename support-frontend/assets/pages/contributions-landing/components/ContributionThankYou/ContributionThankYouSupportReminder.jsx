@@ -1,7 +1,7 @@
 // @flow
 // $FlowIgnore - required for hooks
-import React, { useState } from 'react';
-import { createReminderEndpoint } from 'helpers/routes';
+import React, { useState, useEffect } from 'react';
+import { createOneOffReminderEndpoint } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
@@ -17,7 +17,10 @@ import ActionBody from './components/ActionBody';
 import SvgClock from './components/SvgClock';
 import styles from './styles';
 import { OPHAN_COMPONENT_ID_SET_REMINDER } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {
+  trackComponentClick,
+  trackComponentLoad,
+} from 'helpers/tracking/behaviour';
 import { privacyLink } from 'helpers/legal';
 
 const form = css`
@@ -48,115 +51,86 @@ const privacyTextLink = css`
   color: ${neutral[20]};
 `;
 
-type ReminderDate = {
-  date: Date,
-  label: string,
-  isUsEoyAppealSpecialReminder?: boolean,
+interface ReminderSignup {
+  reminderPeriod: string;
+  reminderOption: string;
+}
+
+interface ReminderChoice {
+  signup: ReminderSignup;
+  label: string;
+}
+
+const REMINDER_PLATFORM = 'SUPPORT';
+const REMINDER_STAGE = 'POST';
+const REMINDER_COMPONENT = 'THANKYOU';
+
+const getReminderPeriod = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // javascript dates run from 0-11, we want 1-12
+  const paddedMonth = month.toString().padStart(2, '0');
+
+  return `${year}-${paddedMonth}-01`;
 };
 
-const DAY_OF_MONTH_OF_DEFAULT_REMINDER = 15;
+const getReminderOption = monthsUntilDate => `${monthsUntilDate}-months`;
 
-const getReminderDateWithDefaultLabel = (monthsUntilDate: number) => {
-  const now = new Date();
-  const date = new Date(now.getFullYear(), now.getMonth() + monthsUntilDate, DAY_OF_MONTH_OF_DEFAULT_REMINDER);
-
+const getDefaultLabel = (date: Date, monthsUntilDate: number, now: Date) => {
   const month = date.toLocaleDateString('default', { month: 'long' });
   const year =
     now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
-  const label = `in ${monthsUntilDate} months (${month}${year})`;
+
+  return `in ${monthsUntilDate} months (${month}${year})`;
+};
+
+const getReminderChoiceWithDefaultLabel = (monthsUntilDate: number): ReminderChoice => {
+  const now = new Date();
+  const date = new Date(
+    now.getFullYear(),
+    now.getMonth() + monthsUntilDate,
+  );
 
   return {
-    date,
-    label,
+    label: getDefaultLabel(date, monthsUntilDate, now),
+    signup: {
+      reminderPeriod: getReminderPeriod(date),
+      reminderOption: getReminderOption(monthsUntilDate),
+    },
   };
 };
 
-const getDefaultReminderDates = (): ReminderDate[] => [
-  getReminderDateWithDefaultLabel(3),
-  getReminderDateWithDefaultLabel(6),
-  getReminderDateWithDefaultLabel(9),
+const getDefaultReminderChoices = (): ReminderChoice[] => [
+  getReminderChoiceWithDefaultLabel(3),
+  getReminderChoiceWithDefaultLabel(6),
+  getReminderChoiceWithDefaultLabel(9),
 ];
 
-const GIVING_TUESDAY: ReminderDate = {
-  date: new Date(2020, 11, 1),
-  label: 'on Giving Tuesday (1 December)',
-};
-const GIVING_TUESDAY_REMINDER_CUT_OFF = new Date(2020, 10, 27);
-
-const LAST_DAY_OF_THE_YEAR: ReminderDate = {
-  date: new Date(2020, 11, 31),
-  label: 'at the end of the year (31 December)',
-};
-const LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF = new Date(2020, 11, 28);
-
-const BOTH: ReminderDate = {
-  date: new Date(2020, 11, 1),
-  label: 'on both occasions (1 and 31 December)',
-  isUsEoyAppealSpecialReminder: true,
-};
-
-const IN_THREE_MONTHS: ReminderDate = {
-  date: new Date(2021, 2, DAY_OF_MONTH_OF_DEFAULT_REMINDER),
-  label: 'in three months (March 2021)', // slightly custom copy over default (three vs 3)
-};
-
-const NEXT_US_EOY_APPEAL: ReminderDate = {
-  date: new Date(2021, 11, 31),
-  label: 'this time next year (December 2021)',
-};
-
-const getReminderDatesForUsEndOfYearAppeal = (): ReminderDate[] => {
-  const now = new Date();
-  if (now < GIVING_TUESDAY_REMINDER_CUT_OFF) {
-    return [
-      GIVING_TUESDAY,
-      LAST_DAY_OF_THE_YEAR,
-      BOTH,
-    ];
-  } else if (now < LAST_DAY_OF_THE_YEAR_REMINDER_CUT_OFF) {
-    return [
-      LAST_DAY_OF_THE_YEAR,
-      IN_THREE_MONTHS,
-      NEXT_US_EOY_APPEAL,
-    ];
-  }
-  return getDefaultReminderDates();
-};
-
 type ContributionThankYouSupportReminderProps = {|
-  email: string,
-  isUsEndOfYearAppeal: boolean
+  email: string
 |};
 
 const ContributionThankYouSupportReminder = ({
   email,
-  isUsEndOfYearAppeal,
 }: ContributionThankYouSupportReminderProps) => {
-  const [selectedDateIndex, setSelectedDateIndex] = useState(0);
+  const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
   const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
-  const reminderDates = isUsEndOfYearAppeal ? getReminderDatesForUsEndOfYearAppeal() : getDefaultReminderDates();
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_SET_REMINDER);
+  }, []);
 
-  const selectedDateAsApiString = () => {
-    const selectedDate = reminderDates[selectedDateIndex].date;
-    const year = selectedDate.getFullYear();
-    const month = selectedDate.getMonth() + 1; // javascript dates run from 0-11, we want 1-12
-    const paddedMonth = month.toString().padStart(2, '0');
-    const day = selectedDate.getDate();
-    const paddedDay = day.toString().padStart(2, '0');
-    return `${year}-${paddedMonth}-${paddedDay} 00:00:00`;
-  };
+  const reminderChoices = getDefaultReminderChoices();
 
   const setReminder = () => {
-    fetch(createReminderEndpoint, {
+    fetch(createOneOffReminderEndpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email,
-        reminderDate: selectedDateAsApiString(),
-        isUsEoyAppealSpecialReminder: reminderDates[selectedDateIndex].isUsEoyAppealSpecialReminder,
+        reminderPlatform: REMINDER_PLATFORM,
+        reminderComponent: REMINDER_COMPONENT,
+        reminderStage: REMINDER_STAGE,
+        ...reminderChoices[selectedChoiceIndex].signup,
       }),
     }).then((response) => {
       if (!response.ok) {
@@ -206,12 +180,12 @@ const ContributionThankYouSupportReminder = ({
           </p>
           <form css={form}>
             <RadioGroup name="reminder" label="I'd like to be reminded in:">
-              {reminderDates.map((date, index) => (
+              {reminderChoices.map((choice, index) => (
                 <Radio
                   value={index}
-                  label={date.label}
-                  checked={selectedDateIndex === index}
-                  onChange={() => setSelectedDateIndex(index)}
+                  label={choice.label}
+                  checked={selectedChoiceIndex === index}
+                  onChange={() => setSelectedChoiceIndex(index)}
                 />
               ))}
             </RadioGroup>

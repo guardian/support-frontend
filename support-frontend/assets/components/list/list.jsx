@@ -2,16 +2,35 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-import { brandAlt } from '@guardian/src-foundations/palette';
+import { brand, brandAlt } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { body } from '@guardian/src-foundations/typography';
 
-type ListPropTypes = {
-  items: Array<Object>,
+export type ListItemText = {
+  content: string,
+  subText?: string
+}
+
+type ListBulletSize = 'small' | 'large';
+
+type ListBulletColour = 'light' | 'dark';
+
+type ListProps = {
+  items: ListItemText[],
+  bulletSize?: ListBulletSize,
+  bulletColour?: ListBulletColour,
+  cssOverrides?: string,
+}
+
+type ListItemProps = {
+  item: ListItemText,
+  size: ListBulletSize,
+  colour: ListBulletColour,
 }
 
 const list = css`
+  ${body.medium()};
   margin: 0 0 20px;
 
   ${from.desktop} {
@@ -31,35 +50,118 @@ const listItem = css`
 
 const listItemBullet = css`
   display: inline-block;
+  border-radius: 50%;
+  /* Sit the bullet in the vertical centre of the first line */
+  margin-top: calc((1.5em - ${space[3]}px) / 2);
+`;
+
+const listItemBulletLarge = css`
   width: ${space[3]}px;
   height: ${space[3]}px;
-  border-radius: 50%;
-  background-color: ${brandAlt[400]};
-  margin-top: ${space[1]}px;
 
   ${from.tablet} {
+    margin-top: calc((1.5em - ${space[4]}px) / 2);
     width: ${space[4]}px;
     height: ${space[4]}px;
   }
 `;
 
+const listItemBulletSmall = css`
+  width: ${space[3]}px;
+  height: ${space[3]}px;
+`;
+
+const listItemBulletLight = css`
+  background-color: ${brandAlt[400]};
+`;
+
+const listItemBulletDark = css`
+  background-color: ${brand[400]};
+`;
+
 const listItemContent = css`
-  ${body.medium()};
   margin-left: ${space[2]}px;
   max-width: 90%;
 `;
 
-function List({ items }: ListPropTypes) {
+const listItemMainText = css`
+  display: block;
+  font-weight: 700;
+`;
+
+const bulletColours: { [key: ListBulletColour]: string } = {
+  light: listItemBulletLight,
+  dark: listItemBulletDark,
+};
+
+const bulletSizes: { [key: ListBulletSize]: string } = {
+  large: listItemBulletLarge,
+  small: listItemBulletSmall,
+};
+
+function ListItem({ item, colour, size }: ListItemProps) {
   return (
-    <ul css={list}>
-      {items.map(item => (
-        <li css={listItem}>
-          <span css={listItemBullet} />
-          <span css={listItemContent}>{item.explainer}</span>
-        </li>
-    ))}
-    </ul>
+    <li key={item.content} css={listItem}>
+      <span css={[
+        listItemBullet,
+        bulletColours[colour],
+        bulletSizes[size],
+      ]}
+      />
+      <span css={listItemContent}>{item.content}</span>
+    </li>
   );
 }
 
-export default List;
+ListItem.defaultProps = {
+  size: 'large',
+  colour: 'light',
+};
+
+function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
+  return (
+    <li key={item.content} css={listItem}>
+      <span css={[
+        listItemBullet,
+        bulletColours[colour],
+        bulletSizes[size],
+      ]}
+      />
+      <div css={listItemContent}>
+        <span css={listItemMainText}>{item.content}</span>
+        {item.subText && <span>{item.subText}</span>}
+      </div>
+    </li>
+  );
+}
+
+ListItemWithSubtext.defaultProps = {
+  size: 'large',
+  colour: 'light',
+};
+
+function ListWith(ListItemComponent: React$ComponentType<ListItemProps>) {
+  function ListComponent(props: ListProps) {
+    return (
+      <ul css={[list, props.cssOverrides]}>
+        {props.items.map(item => (
+          <ListItemComponent item={item} colour={props.bulletColour || 'light'} size={props.bulletSize || 'large'} />
+        ))}
+      </ul>
+    );
+  }
+
+  ListComponent.defaultProps = {
+    bulletSize: 'large',
+    bulletColour: 'light',
+    cssOverrides: '',
+  };
+
+  return ListComponent;
+}
+
+const List = ListWith(ListItem);
+
+const ListWithSubText = ListWith(ListItemWithSubtext);
+
+export { List, ListWithSubText };

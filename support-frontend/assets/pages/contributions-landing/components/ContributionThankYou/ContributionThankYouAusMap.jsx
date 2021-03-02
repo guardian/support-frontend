@@ -1,5 +1,6 @@
 // @flow
-import React from 'react';
+// $FlowIgnore - required for hooks
+import React, { useEffect } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { LinkButton } from '@guardian/src-button';
@@ -9,7 +10,7 @@ import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
 import SvgAusMap from './components/SvgAusMap';
 import { OPHAN_COMPONENT_ID_AUS_MAP } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
@@ -18,6 +19,11 @@ const buttonContainer = css`
 const AUS_MAP_URL = 'https://support.theguardian.com/aus-2020-map?INTCMP=thankyou-page-aus-map-cta';
 
 const ContributionThankYouAusMap = () => {
+
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_AUS_MAP);
+  }, []);
+
   const actionIcon = <SvgAusMap />;
   const actionHeader = (
     <ActionHeader title="Hear from supporters across Australia" />

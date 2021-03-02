@@ -9,7 +9,7 @@ import {
   Quarterly,
 } from 'helpers/billingPeriods';
 import { trackComponentEvents } from './tracking/ophan';
-import { gaEvent } from './tracking/googleTagManager';
+import type { OphanAction, OphanComponentEvent, OphanComponentType } from './tracking/ophan';
 import { currencies, detect } from './internationalisation/currency';
 import { isTestSwitchedOn } from 'helpers/globals';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
@@ -32,22 +32,19 @@ export type SubscriptionProduct =
   typeof PaperAndDigital;
 
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
-
 export type ComponentAbTest = {
   name: string,
   variant: string,
 };
 
-const isPhysicalProduct = (product: SubscriptionProduct) => {
-  switch (product) {
-    case Paper:
-    case PaperAndDigital:
-    case GuardianWeekly:
-      return true;
-    default:
-      return false;
-  }
-};
+type TrackingProperties = {
+  id: string,
+  product?: SubscriptionProduct,
+  abTest?: ComponentAbTest,
+  componentType: OphanComponentType,
+}
+
+// ----- Config ----- //
 
 const dailyNewsstandPrice = 2.20;
 const weekendNewsstandPrice = 3.20;
@@ -58,8 +55,6 @@ const newsstandPrices: {[PaperProductOptions]: number} = {
   Weekend: weekendNewsstandPrice * 2,
   Sixday: (dailyNewsstandPrice * 5) + weekendNewsstandPrice,
 };
-
-// ----- Config ----- //
 
 export const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
@@ -85,6 +80,17 @@ const defaultBillingPeriods: {
 
 // ----- Functions ----- //
 
+const isPhysicalProduct = (product: SubscriptionProduct) => {
+  switch (product) {
+    case Paper:
+    case PaperAndDigital:
+    case GuardianWeekly:
+      return true;
+    default:
+      return false;
+  }
+};
+
 function fixDecimals(number: number): string {
   if (Number.isInteger(number)) {
     return number.toString();
@@ -95,14 +101,16 @@ function fixDecimals(number: number): string {
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   return fixDecimals(subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]);
 }
+
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
-function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
+// ----- Ophan Tracking ----- //
 
+function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
   switch (product) {
     case 'DigitalPack':
     case 'PremiumTier':
@@ -114,41 +122,46 @@ function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): Opha
     default:
       return 'PRINT_SUBSCRIPTION';
   }
-
 }
 
-function sendTrackingEventsOnClick(
-  id: string,
-  product: SubscriptionProduct,
-  abTest: ComponentAbTest | null,
-  context?: string,
-): () => void {
+const sendTrackingEvent = (trackingProperties: TrackingProperties & {
+  action: OphanAction
+}): void => {
+  const {
+    id,
+    product,
+    abTest,
+    componentType,
+    action,
+  } = trackingProperties;
 
-  const componentEvent = {
+  const componentEvent: OphanComponentEvent = {
     component: {
-      componentType: 'ACQUISITIONS_BUTTON',
+      componentType,
       id,
-      products: [ophanProductFromSubscriptionProduct(product)],
+      ...(product ? { product: [ophanProductFromSubscriptionProduct(product)] } : {}),
     },
-    action: 'CLICK',
+    action,
     id,
     ...(abTest ? { abTest } : {}),
   };
 
-  return () => {
+  trackComponentEvents(componentEvent);
+};
 
-    trackComponentEvents(componentEvent);
+const sendTrackingEventsOnClick = (trackingProperties: TrackingProperties): () => void => () => {
+  sendTrackingEvent({
+    ...trackingProperties,
+    action: 'CLICK',
+  });
+};
 
-    gaEvent({
-      category: 'click',
-      action: product,
-      label: (context ? context.concat('-') : '').concat(id),
-    });
-
-  };
-
-}
-
+const sendTrackingEventsOnView = (trackingProperties: TrackingProperties): () => void => () => {
+  sendTrackingEvent({
+    ...trackingProperties,
+    action: 'VIEW',
+  });
+};
 
 // ----- Newsstand savings ----- //
 const getMonthlyNewsStandPrice = (newsstand: number) => ((newsstand) * 52) / 12;
@@ -171,6 +184,7 @@ const paperHasDeliveryEnabled = (): boolean => isTestSwitchedOn('paperHomeDelive
 
 export {
   sendTrackingEventsOnClick,
+  sendTrackingEventsOnView,
   displayPrice,
   getProductPrice,
   getNewsstandSaving,

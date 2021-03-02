@@ -1,7 +1,6 @@
 // @flow
 
 // ----- Imports ----- //
-import React from 'react';
 import { combineReducers, type Dispatch } from 'redux';
 
 import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
@@ -24,7 +23,7 @@ import {
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import { postcodeIsWithinDeliveryArea } from 'helpers/deliveryCheck';
+import { postcodeIsWithinDeliveryArea, M25_POSTCODE_PREFIXES } from 'helpers/deliveryCheck';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
@@ -82,9 +81,13 @@ const checkpostCodeLength = (input: string | null): boolean => ((input == null) 
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, postcode: Option<string>) => {
+export const isHomeDeliveryInM25 = (
+  fulfilmentOption: Option<FulfilmentOptions>,
+  postcode: Option<string>,
+  allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
+) => {
   if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
-    return postcodeIsWithinDeliveryArea(postcode);
+    return postcodeIsWithinDeliveryArea(postcode, allowedPrefixes);
   }
   return true;
 };
@@ -124,15 +127,10 @@ const applyDeliveryAddressRules = (
   fields: FormFields,
   addressType: AddressType,
 ): FormError<FormField>[] => {
-  const error = (
-    <div className="component-form-error__summary-error">
-      The address and postcode you entered is outside of our delivery area. You may want to
-      consider purchasing a <a href="/uk/subscribe/paper">voucher subscription</a>
-    </div>);
   const homeRules = validate([
     {
       rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
-      error: formError('postCode', error),
+      error: formError('postCode', 'The address and postcode you entered is outside of our delivery area. Please go back to purchase a voucher subscription instead.'),
     },
   ]);
 

@@ -1,12 +1,13 @@
 package backend
 
+import backend.SubscribeWithGoogleBackend.dummyBigQueryTracking
 import cats.instances.future._
 import cats.data.EitherT
 import cats.syntax.validated._
 import cats.syntax.apply._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.typesafe.scalalogging.StrictLogging
-import conf.{ConfigLoader, EmailConfig, IdentityConfig, ContributionsStoreQueueConfig}
+import conf.{ConfigLoader, ContributionsStoreQueueConfig, EmailConfig, IdentityConfig}
 import model._
 import model.db.ContributionData
 import model.email.ContributorRow
@@ -52,7 +53,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
 
   private def handleAlreadyProcessedPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
     logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
-    cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+    cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
     EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleDuplicatePaymentError(
       SubscribeWithGoogleDuplicateInsertEventError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
   }
@@ -72,7 +73,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
     val trackContributionResult =
       insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, None))
         .leftMap { err =>
-          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
           logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
           err
         }.map { f =>
@@ -81,14 +82,15 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
       }
 
     val ophanTrackingResult = submitAcquisitionToOphan(googleRecordPayment, None, clientBrowserInfo).leftMap { err =>
-      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
     }
 
     BackendError.combineResults(
       trackContributionResult,
-      ophanTrackingResult
+      ophanTrackingResult,
+      dummyBigQueryTracking
     )
   }
 
@@ -96,7 +98,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
     val trackContributionResult =
       insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, Some(identity)))
         .leftMap { err =>
-          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
           logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
           err
         }.map { f =>
@@ -105,7 +107,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
       }
 
     val ophanTrackingResult = submitAcquisitionToOphan(googleRecordPayment, Some(identity), clientBrowserInfo).leftMap { err =>
-      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle,"")
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
     }
@@ -121,9 +123,11 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
     BackendError.combineResults(
       BackendError.combineResults(
         trackContributionResult,
-        ophanTrackingResult
+        ophanTrackingResult,
+        dummyBigQueryTracking
       ),
-      sendThankYouEmailResult
+      sendThankYouEmailResult,
+      dummyBigQueryTracking
     )
   }
 
@@ -174,6 +178,9 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
 }
 
 object SubscribeWithGoogleBackend {
+
+  // Not going to track this to BigQuery since subscribe to Google is no longer supported
+  val dummyBigQueryTracking = EitherT[Future, BackendError, Unit](Future.successful(Right(())))
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,

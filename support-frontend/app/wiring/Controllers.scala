@@ -39,6 +39,10 @@ trait Controllers {
     fontLoader
   )
 
+  lazy val diagnosticsController = new DiagnosticsController(
+    actionRefiners
+  )
+
   lazy val articleShareController = new ArticleShare(
     actionRefiners,
     controllerComponents,
@@ -59,6 +63,10 @@ trait Controllers {
 
   lazy val digitalPackController = new DigitalSubscriptionController(
     priceSummaryServiceProvider,
+    new LandingCopyProvider(
+      promotionServiceProvider,
+      appConfig.stage
+    ),
     assetsResolver,
     actionRefiners,
     identityService,
@@ -89,6 +97,7 @@ trait Controllers {
 
   lazy val paperController = new PaperSubscription(
     priceSummaryServiceProvider,
+    promotionServiceProvider,
     assetsResolver,
     actionRefiners,
     identityService,
@@ -100,6 +109,7 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     fontLoader,
+    appConfig.stage,
     appConfig.recaptchaConfigProvider
   )
 
@@ -129,7 +139,8 @@ trait Controllers {
     testUsers,
     controllerComponents,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    appConfig.stage
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

@@ -83,9 +83,7 @@ riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static")
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
-  "-J-XX:MaxRAMFraction=2",
-  "-J-XX:InitialRAMFraction=2",
-  "-J-XX:MaxMetaspaceSize=500m",
+  "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
   "-J-XX:+PrintGCDateStamps",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"

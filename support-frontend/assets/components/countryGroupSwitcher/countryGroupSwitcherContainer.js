@@ -21,9 +21,11 @@ export default function (
 ) {
 
   function onCountryGroupSelect(cgId: CountryGroupId): void {
-    if (trackProduct) {
-      sendTrackingEventsOnClick(`toggle_country_${cgId}`, trackProduct, null)();
-    }
+    sendTrackingEventsOnClick({
+      id: `toggle_country_${cgId}`,
+      ...(trackProduct ? { product: trackProduct } : {}),
+      componentType: 'ACQUISITIONS_OTHER',
+    })();
   }
 
   function mapStateToProps(state: { common: CommonState }): PropTypes {

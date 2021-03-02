@@ -18,7 +18,7 @@ type OphanProduct =
   | 'DIGITAL_SUBSCRIPTION'
   | 'PRINT_SUBSCRIPTION';
 
-type OphanAction =
+export type OphanAction =
   | 'INSERT'
   | 'VIEW'
   | 'EXPAND'
@@ -29,7 +29,7 @@ type OphanAction =
   | 'VOTE'
   | 'CLICK';
 
-type OphanComponentType =
+export type OphanComponentType =
   | 'READERS_QUESTIONS_ATOM'
   | 'QANDA_ATOM'
   | 'PROFILE_ATOM'

@@ -7,10 +7,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import seedrandom from 'seedrandom';
 
 import * as cookie from 'helpers/cookie';
-import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
@@ -59,13 +57,9 @@ type AcquisitionABTest = {
 
 export type Variant = {
   id: string,
-  amountsRegions?: AmountsRegions,
 }
 
-export type TestType = 'AMOUNTS' | 'OTHER';
-
 export type Test = {|
-  type: TestType,
   variants: Variant[],
   audiences: Audiences,
   isActive: boolean,
@@ -107,18 +101,6 @@ function getMvtId(): number {
   }
 
   return mvtId;
-}
-
-function getLocalStorageParticipation(): Participations {
-
-  const abTests = storage.getLocal('gu.support.abTests');
-
-  return abTests ? JSON.parse(abTests) : {};
-
-}
-
-function setLocalStorageParticipations(participations: Participations): void {
-  storage.setLocal('gu.support.abTests', JSON.stringify(participations));
 }
 
 function getParticipationsFromUrl(): ?Participations {
@@ -287,8 +269,6 @@ function getParticipations(
   country: IsoCountry,
   countryGroupId: CountryGroupId,
 ): Participations {
-
-  const currentParticipation = getLocalStorageParticipation();
   const participations: Participations = {};
 
   const acquisitionDataTest: ?AcquisitionABTest = getTestFromAcquisitionData();
@@ -317,9 +297,7 @@ function getParticipations(
       return;
     }
 
-    if (testId in currentParticipation) {
-      participations[testId] = currentParticipation[testId];
-    } else if (userInTest(test, testId, mvtId, country, countryGroupId, acquisitionDataTest)) {
+    if (userInTest(test, testId, mvtId, country, countryGroupId, acquisitionDataTest)) {
       const variantIndex = assignUserToVariant(mvtId, test, acquisitionDataTest);
       participations[testId] = test.variants[variantIndex].id;
 
@@ -334,6 +312,27 @@ function getParticipations(
   return participations;
 }
 
+const allLandingPagesAndThankyouPages = '/??/contribute|thankyou(/.*)?$';
+function getAmountsTestParticipations(countryGroupId: CountryGroupId, settings: Settings): ?Participations {
+  if (!settings.amounts) {
+    return null;
+  }
+  if (!targetPageMatches(window.location.pathname, allLandingPagesAndThankyouPages)) {
+    return null;
+  }
+  const { test } = settings.amounts[countryGroupId];
+
+  if (!test || !test.isLive) {
+    return null;
+  }
+
+  const variants = ['CONTROL', ...test.variants.map(variant => variant.name)];
+
+  const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
+
+  return { [test.name]: variants[assignmentIndex] };
+}
+
 const init = (
   country: IsoCountry,
   countryGroupId: CountryGroupId,
@@ -344,14 +343,13 @@ const init = (
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   const serverSideParticipations: ?Participations = getServerSideParticipations();
-  const combinedParticipations: Participations = {
+  const amountsTestParticipations: ?Participations = getAmountsTestParticipations(countryGroupId, settings);
+  return {
     ...participations,
-    ...urlParticipations,
     ...serverSideParticipations,
+    ...amountsTestParticipations,
+    ...urlParticipations,
   };
-  setLocalStorageParticipations(combinedParticipations);
-
-  return combinedParticipations;
 };
 
 const getVariantsAsString = (participation: Participations): string => {
@@ -364,13 +362,10 @@ const getVariantsAsString = (participation: Participations): string => {
   return variants.join('; ');
 };
 
-const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
-
 // ----- Exports ----- //
 
 export {
   init,
   getVariantsAsString,
-  getCurrentParticipations,
   targetPageMatches,
 };

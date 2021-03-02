@@ -4,7 +4,8 @@ import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.i18n.Currency
 import com.gu.support.catalog.GuardianWeekly.getProductRatePlan
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.workers.{BillingPeriod, Quarterly, SixWeekly}
+import com.gu.support.workers.{Annual, BillingPeriod, Quarterly, SixWeekly}
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.typesafe.scalalogging.LazyLogging
 
 object CatalogService {
@@ -62,8 +63,14 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     }
   }
 
-  def getProductRatePlanFromId[T <: Product](product: T, id: ProductRatePlanId): Option[ProductRatePlan[Product]] =
-    product.ratePlans(environment).find(_.id == id)
+  def getProductRatePlanFromId[T <: Product](product: T, id: ProductRatePlanId): Option[ProductRatePlan[Product]] = {
+    // These can be removed when all gift subs have been switched over from the recurring charge to the one-time charge
+    val legacyDigitalGiftRatePlans = List(
+      ProductRatePlan("2c92a0ff73add07f0173b99f14390afc", Quarterly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Three Month Gift", readerType = Gift),
+      ProductRatePlan("2c92a00773adc09d0173b99e4ded7f45", Annual, NoFulfilmentOptions, NoProductOptions, "Digital Subscription One Year Gift", readerType = Gift)
+    )
+    (product.ratePlans(environment) ++ legacyDigitalGiftRatePlans).find(_.id == id)
+  }
 
   def getPrice[T <: Product](
     product: T,

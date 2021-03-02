@@ -83,13 +83,13 @@ class ITTestReporter extends Reporter {
     event match {
       case _: TestFailed =>
         log(s"TEST FAILED - sending metric: $event")
-        putMetric(MetricName("it-test-failed"), 1.0)
+        putMetric(MetricName("it-test-failed"), 1.0).get
       case _: RunAborted =>
         log(s"RUN ABORTED - sending metric: $event")
-        putMetric(MetricName("it-test-failed"), 999999.0)
+        putMetric(MetricName("it-test-failed"), 999999.0).get
       case runCompleted: RunCompleted =>
         log(s"RUN COMPLETED - sending metric: $event")
-        putMetric(MetricName("it-test-succeeded"), runCompleted.summary.map(_.testsSucceededCount.toDouble).getOrElse(0.0))
+        putMetric(MetricName("it-test-succeeded"), runCompleted.summary.map(_.testsSucceededCount.toDouble).getOrElse(0.0)).get
       case _ =>
         log(s"event: $event")
     }

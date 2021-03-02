@@ -1,7 +1,6 @@
 // @flow
 
 import type { Option } from 'helpers/types/option';
-import type { Title } from 'helpers/user/details';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -10,9 +9,9 @@ import type { FormField, Stage } from './formFields';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import * as storage from 'helpers/storage';
 import {
-  trackPaymentMethodSelected,
   trackThankYouPageLoaded,
 } from 'helpers/tracking/behaviour';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -26,11 +25,11 @@ import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
-  | { type: 'SET_TITLE', title: Option<Title> }
+  | { type: 'SET_TITLE', title: string }
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_TITLE_GIFT', titleGiftRecipient: Option<Title> }
+  | { type: 'SET_TITLE_GIFT', titleGiftRecipient: string }
   | { type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient: string }
   | { type: 'SET_LAST_NAME_GIFT', lastNameGiftRecipient: string }
   | { type: 'SET_EMAIL_GIFT', emailGiftRecipient: string }
@@ -90,7 +89,10 @@ const formActionCreators = {
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
     const state = getState();
     storage.setSession('selectedPaymentMethod', paymentMethod);
-    trackPaymentMethodSelected(paymentMethod);
+    sendTrackingEventsOnClick({
+      id: `subscriptions-payment-method-selector-${paymentMethod}`,
+      componentType: 'ACQUISITIONS_OTHER',
+    })();
     if (paymentMethod === PayPal && !state.page.checkout.payPalHasLoaded) {
       showPayPal(dispatch);
     }

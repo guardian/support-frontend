@@ -74,6 +74,7 @@ lazy val root = (project in file("."))
   .aggregate(
     `support-frontend`,
     `support-workers`,
+    `supporter-product-data`,
     `support-models`,
     `support-config`,
     `support-internationalisation`,
@@ -82,6 +83,7 @@ lazy val root = (project in file("."))
     `support-redemptiondb`,
     `it-test-runner`,
     `module-aws`,
+    `module-bigquery`,
     `module-rest`,
     `support-payment-api`,
     `acquisition-event-producer`
@@ -111,8 +113,17 @@ lazy val `support-workers` = (project in file("support-workers"))
   .settings(
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`, `acquisition-event-producer`)
+  ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`, `acquisition-event-producer`, `module-bigquery`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`)
+
+lazy val `supporter-product-data` = (project in file("supporter-product-data"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .configs(IntegrationTest)
+  .settings(
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`module-rest`, `module-aws`)
+  .aggregate(`module-rest`, `module-aws`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
@@ -122,8 +133,8 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-models`, `support-internationalisation`, `acquisition-event-producer`)
-  .aggregate(`support-models`, `support-internationalisation`, `acquisition-event-producer`)
+  ).dependsOn(`support-models`, `support-internationalisation`, `acquisition-event-producer`, `module-bigquery`)
+  .aggregate(`support-models`, `support-internationalisation`, `acquisition-event-producer`, `module-bigquery`)
 
 lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
@@ -163,6 +174,12 @@ lazy val `module-aws` = (project in file("support-modules/aws"))
   .settings(
     libraryDependencies ++= commonDependencies
   )
+
+lazy val `module-bigquery` = (project in file("support-modules/bigquery"))
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
+  .settings(libraryDependencies ++= commonDependencies)
+  .dependsOn(`support-config`)
+
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)

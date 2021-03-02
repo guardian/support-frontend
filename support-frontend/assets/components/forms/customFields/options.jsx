@@ -3,10 +3,12 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
+import { Option } from '@guardian/src-select';
 
 // ----- Functions ----- //
 
-const options = (os: { [string]: string }): Node => Object.keys(os).map(k => <option value={k}>{os[k]}</option>);
+const options = (optionsForMapping: { [string]: string }): Node => Object.keys(optionsForMapping)
+  .map(key => <Option value={key}>{optionsForMapping[key]}</Option>);
 
 // ----- Exports ----- //
 

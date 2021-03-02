@@ -20,7 +20,7 @@ jest.mock('ophan', () => ({
 
 const emptySettings: Settings = {
   switches: { experiments: {} },
-  amounts: { },
+  amounts: { GBPCountries: {}, UnitedStates: {} },
 };
 
 const acquisitionDataMockTestControl = { componentId: 'acquisitions-subscription-banner', componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER', abTest: { name: 'mockTest', variant: 'control' } };
@@ -37,6 +37,10 @@ describe('basic behaviour of init', () => {
 
   beforeEach(() => {
     window.matchMedia = window.matchMedia || jest.fn(() => ({ matches: false }));
+  });
+
+  afterEach(() => {
+    window.localStorage.clear();
   });
 
   it('The user should be allocated in the control bucket', () => {
@@ -406,6 +410,9 @@ describe('basic behaviour of init', () => {
 });
 
 describe('Correct allocation in a multi test environment', () => {
+  afterEach(() => {
+    window.localStorage.clear();
+  });
   /*
   GB: |                    100%                      |
                            Test1
@@ -502,6 +509,7 @@ describe('Correct allocation in a multi test environment', () => {
       mockTest: 'control', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=510001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
@@ -523,6 +531,7 @@ describe('Correct allocation in a multi test environment', () => {
       mockTest: 'notintest', mockTest2: 'control',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=510001';
     window.history.pushState({}, 'Test Title', mockTest2Variant);
@@ -546,6 +555,7 @@ describe('Correct allocation in a multi test environment', () => {
       mockTest: 'control', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=150001';
     window.history.pushState({}, 'Test Title', mockTestVariant);
@@ -568,6 +578,7 @@ describe('Correct allocation in a multi test environment', () => {
       mockTest: 'control', mockTest2: 'notintest',
     };
     expect(participations).toEqual(expectedParticipations);
+    window.localStorage.clear();
 
     document.cookie = 'GU_mvt_id=150001';
     window.history.pushState({}, 'Test Title', mockTestVariant);

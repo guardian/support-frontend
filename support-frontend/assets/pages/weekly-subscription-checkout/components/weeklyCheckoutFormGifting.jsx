@@ -4,7 +4,10 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, type Dispatch } from 'redux';
+import { type Dispatch } from 'redux';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { RadioGroup, Radio } from '@guardian/src-radio';
 
 import {
   firstError,
@@ -12,13 +15,6 @@ import {
 } from 'helpers/subscriptionsForms/validation';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import { Select } from 'components/forms/select';
-import { Fieldset } from 'components/forms/fieldset';
-import { options } from 'components/forms/customFields/options';
-import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
 import Form, {
   FormSection,
   FormSectionHiddenUntilSelected,
@@ -30,7 +26,6 @@ import {
   getProductPrice,
   type ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
@@ -67,7 +62,7 @@ import {
   type SetCountryChangedAction,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
-import { Stripe, DirectDebit } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit, PayPal } from 'helpers/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Heading from 'components/heading/heading';
@@ -80,8 +75,17 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { titles } from 'helpers/user/details';
+import { Select, Option as OptionForSelect } from '@guardian/src-select';
+import { options } from 'components/forms/customFields/options';
 
 // ----- Styles ----- //
+
+const marginBottom = css`
+  margin-bottom: ${space[6]}px;
+`;
 
 // ----- Types ----- //
 
@@ -151,9 +155,6 @@ function mapDispatchToProps() {
 
 // ----- Form Fields ----- //
 
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const FieldsetWithError = withError(Fieldset);
-
 const DeliveryAddress = withStore(weeklyDeliverableCountries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(countries, 'billing', getBillingAddress);
 const days = getWeeklyDays();
@@ -170,6 +171,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
+  const paymentMethods = supportedPaymentMethods(props.billingCountry);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -205,16 +207,17 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             </Heading>
           </FormSection>
           <FormSection title="Gift recipient's details" border="bottom">
-            <SelectWithLabel
-              id="titleGift"
+            <Select
+              css={marginBottom}
+              id="title"
               label="Title"
               optional
               value={props.titleGiftRecipient}
-              setValue={props.setTitleGift}
+              onChange={e => props.setTitleGift(e.target.value)}
             >
-              <option value="">--</option>
+              <OptionForSelect>Select a title</OptionForSelect>
               {options(titles)}
-            </SelectWithLabel>
+            </Select>
             <PersonalDetailsGift
               firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
               setFirstNameGift={props.setFirstNameGift}
@@ -227,13 +230,24 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           </FormSection>
           <FormSection title="Gift delivery date">
             <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="Gift delivery date">
+              <RadioGroup
+                id="startDate"
+                error={firstError('startDate', props.formErrors)}
+                legend="Gift delivery date"
+              >
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                  const hideDate = new RegExp('-12-25$').test(machineDate);
+
+                  // Don't render input if Christmas day
+                  if (hideDate) {
+                    return null;
+                  }
+
                   return (
-                    <RadioInput
-                      appearance="group"
-                      text={userDate}
+                    <Radio
+                      label={userDate}
+                      value={userDate}
                       name={machineDate}
                       checked={machineDate === props.startDate}
                       onChange={() => props.setStartDate(machineDate)}
@@ -241,7 +255,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
                   );
                 })
                 }
-              </FieldsetWithError>
+              </RadioGroup>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
                 We will take payment on the date the recipient receives the first Guardian Weekly.
@@ -261,16 +275,17 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             </Heading>
           </FormSection>
           <FormSection title="Your details" border="bottom">
-            <SelectWithLabel
+            <Select
+              css={marginBottom}
               id="title"
               label="Title"
               optional
               value={props.title}
-              setValue={props.setTitle}
+              onChange={e => props.setTitle(e.target.value)}
             >
-              <option value="">--</option>
+              <OptionForSelect>Select a title</OptionForSelect>
               {options(titles)}
-            </SelectWithLabel>
+            </Select>
             <PersonalDetails
               firstName={props.firstName}
               setFirstName={props.setFirstName}
@@ -285,25 +300,31 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           </FormSection>
           <FormSection title="Is the billing address the same as the recipient's address?">
             <Rows>
-              <FieldsetWithError
+              <RadioGroup
+                label="Is the billing address the same as the recipient's address?"
+                hideLabel
                 id="billingAddressIsSame"
+                name="billingAddressIsSame"
+                orienntation="vertical"
                 error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the recipient\'s address?"
               >
-                <RadioInput
-                  text="Yes"
+                <Radio
+                  value="yes"
+                  label="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
                   onChange={() => setBillingAddressIsSameHandler(true)}
                 />
-                <RadioInput
-                  inputId="qa-billing-address-different"
-                  text="No"
+
+                <Radio
+                  id="qa-billing-address-different"
+                  label="No"
+                  value="no"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
                   onChange={() => setBillingAddressIsSameHandler(false)}
                 />
-              </FieldsetWithError>
+              </RadioGroup>
             </Rows>
           </FormSection>
           {
@@ -313,23 +334,16 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               </FormSection>
             : null
           }
-          <PaymentMethodSelector
-            country={props.billingCountry}
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            validationError={firstError('paymentMethod', props.formErrors)}
-            csrf={props.csrf}
-            currencyId={props.currencyId}
-            payPalHasLoaded={props.payPalHasLoaded}
-            formIsValid={props.formIsValid}
-            validateForm={props.validateForm}
-            isTestUser={props.isTestUser}
-            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            amount={price.price}
-            billingPeriod={props.billingPeriod}
-            allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
-          />
+          {paymentMethods.length > 1 ?
+            <FormSection title="How would you like to pay?">
+              <PaymentMethodSelector
+                country={props.billingCountry}
+                paymentMethod={props.paymentMethod}
+                setPaymentMethod={props.setPaymentMethod}
+                validationError={firstError('paymentMethod', props.formErrors)}
+              />
+            </FormSection> :
+          null}
           <FormSectionHiddenUntilSelected
             id="stripeForm"
             show={props.paymentMethod === Stripe}
@@ -360,6 +374,21 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               submissionErrorHeading={submissionErrorHeading}
             />
           </FormSectionHiddenUntilSelected>
+          {props.paymentMethod === PayPal ? (
+            <PayPalSubmitButton
+              paymentMethod={props.paymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              csrf={props.csrf}
+              currencyId={props.currencyId}
+              payPalHasLoaded={props.payPalHasLoaded}
+              formIsValid={props.formIsValid}
+              validateForm={props.validateForm}
+              isTestUser={props.isTestUser}
+              setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+              amount={price.price}
+              billingPeriod={props.billingPeriod}
+              allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
+            />) : null}
           <GeneralErrorMessage
             errorReason={props.submissionError}
             errorHeading={submissionErrorHeading}

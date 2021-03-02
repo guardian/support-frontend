@@ -1,6 +1,7 @@
 // @flow
 
-import React, { type Node } from 'react';
+// $FlowIgnore - required for hooks
+import React, { type Node, useEffect } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
@@ -8,25 +9,27 @@ import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
 
 export type Product = {
   title: string,
   price: string,
   children?: Node,
+  offerCopy?: Node,
   priceCopy: Node,
   buttonCopy: string,
   href: string,
   onClick: Function,
+  onView: Function,
   label?: string,
   cssOverrides?: string,
 }
 
 const productOption = css`
+  ${textSans.medium()}
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 48px minmax(66px, 1fr) 100px 86px;
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -37,11 +40,19 @@ const productOption = css`
   }
 `;
 
+const productOptionUnderline = css`
+  border-bottom: 1px solid ${neutral[86]};
+`;
+
 const productOptionTitle = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
-  border-bottom: 1px solid ${neutral[86]};
+  padding-bottom: ${space[4]}px;
+  margin-bottom: ${space[2]}px;
+`;
+
+const productOptionOfferCopy = css`
+  height: 100%;
   padding-bottom: ${space[2]}px;
-  margin-bottom: ${space[4]}px;
 `;
 
 const productOptionPrice = css`
@@ -50,7 +61,7 @@ const productOptionPrice = css`
 `;
 
 const productOptionPriceCopy = css`
-  ${textSans.medium()}
+  height: 100%;
   margin-bottom: ${space[4]}px;
 `;
 
@@ -65,14 +76,36 @@ const productOptionHighlight = css`
   padding: ${space[2]}px ${space[3]}px;
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
-
 function ProductOption(props: Product) {
+  const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
+    threshold: 0.5,
+    debounce: true,
+  });
+
+  /**
+   * The first time this runs hasBeenSeen
+   * is false, it's default value. It will run
+   * once more if the element under observation
+   * has scrolled into view, then hasBeenSeen should be
+   * true.
+  * */
+  useEffect(() => {
+    if (hasBeenSeen) {
+      props.onView();
+    }
+  }, [hasBeenSeen]);
+
   return (
-    <div css={[productOption, props.cssOverrides]}>
+    <div ref={setElementToObserve} css={[productOption, props.cssOverrides]}>
       <div>
-        <h3 css={productOptionTitle}>{props.title}</h3>
+        <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
         {props.children && props.children}
+      </div>
+      <div>
+        <p css={[productOptionOfferCopy, productOptionUnderline]}>
+          {props.offerCopy}
+        </p>
       </div>
       <div>
         {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
@@ -84,8 +117,6 @@ function ProductOption(props: Product) {
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
             href={props.href}
-            icon={<SvgArrowRightStraight />}
-            iconSide="right"
             onClick={props.onClick}
             aria-label={`${props.title}- ${props.buttonCopy}`}
           >
@@ -100,6 +131,7 @@ function ProductOption(props: Product) {
 ProductOption.defaultProps = {
   children: null,
   label: '',
+  offerCopy: '',
   cssOverrides: '',
 };
 

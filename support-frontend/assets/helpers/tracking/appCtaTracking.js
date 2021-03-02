@@ -11,7 +11,12 @@ export default function trackAppStoreLink(
 ): () => void {
   return () => {
     try {
-      sendTrackingEventsOnClick(id, product, abTest)();
+      sendTrackingEventsOnClick({
+        id,
+        product,
+        ...(abTest && { abTest }),
+        componentType: 'ACQUISITIONS_BUTTON',
+      })();
       appStoreCtaClick();
     } catch (e) {
       console.log('Error sending tracking event');

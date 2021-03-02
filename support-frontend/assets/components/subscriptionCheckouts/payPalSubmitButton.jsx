@@ -4,6 +4,8 @@
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
@@ -17,8 +19,18 @@ import { PayPal } from 'helpers/paymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { hiddenIf } from 'helpers/utilities';
 
-import 'components/forms/customFields/error.scss';
-import './subscriptionSubmitButton.scss';
+const payPalButton = css`
+  box-sizing: border-box;
+  padding: ${space[3]}px;
+`;
+
+const showButton = css`
+    max-width: 350px;
+`;
+
+const hideButton = css`
+  display: none;
+`;
 
 // ----- Types ----- //
 
@@ -45,8 +57,8 @@ function PayPalSubmitButton(props: PropTypes) {
   // because we don't want to destroy and replace the iframe each time.
   // See PayPalExpressButton for more info.
   return (
-    <div className="component-submit-button">
-      <div className={props.paymentMethod ? `component-submit-button-paypal--${props.paymentMethod}` : 'component-submit-button-paypal'}>
+    <div css={payPalButton}>
+      <div css={props.paymentMethod === PayPal ? showButton : hideButton}>
         <div
           id="component-paypal-button-checkout"
           className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}

@@ -2,24 +2,26 @@ import { postcodeIsWithinDeliveryArea, postcodeHasPrefix } from '../deliveryChec
 
 describe('Delivery Check', () => {
 
+  const homeDeliveryPostcodes = ['SE2', 'SE20', 'SE8', 'SW17', 'SE19'];
+
   describe('postcodeIsWithinDeliveryArea', () => {
     it('should return true if the postcode is in the delivery area', () => {
-      expect(postcodeIsWithinDeliveryArea('SE2 2LB')).toBeTruthy();
-      expect(postcodeIsWithinDeliveryArea('SE20 2LB')).toBeTruthy();
-      expect(postcodeIsWithinDeliveryArea('SE8 2AD')).toBeTruthy();
-      expect(postcodeIsWithinDeliveryArea('SW17 2LB')).toBeTruthy();
-      expect(postcodeIsWithinDeliveryArea('SE19 2HL')).toBeTruthy();
+      expect(postcodeIsWithinDeliveryArea('SE2 2LB', homeDeliveryPostcodes)).toBeTruthy();
+      expect(postcodeIsWithinDeliveryArea('SE20 2LB', homeDeliveryPostcodes)).toBeTruthy();
+      expect(postcodeIsWithinDeliveryArea('SE8 2AD', homeDeliveryPostcodes)).toBeTruthy();
+      expect(postcodeIsWithinDeliveryArea('SW17 2LB', homeDeliveryPostcodes)).toBeTruthy();
+      expect(postcodeIsWithinDeliveryArea('SE19 2HL', homeDeliveryPostcodes)).toBeTruthy();
     });
 
     it('should return false if postcode is outside delivery area', () => {
-      expect(postcodeIsWithinDeliveryArea('DA19 2HL')).toBeFalsy();
-      expect(postcodeIsWithinDeliveryArea('DA20 2HL')).toBeFalsy();
+      expect(postcodeIsWithinDeliveryArea('DA19 2HL', homeDeliveryPostcodes)).toBeFalsy();
+      expect(postcodeIsWithinDeliveryArea('DA20 2HL', homeDeliveryPostcodes)).toBeFalsy();
     });
 
     it('should false if input is not a valid postcode prefix', () => {
-      expect(postcodeIsWithinDeliveryArea('Se 2LB')).toBeFalsy();
-      expect(postcodeIsWithinDeliveryArea('should not work')).toBeFalsy();
-      expect(postcodeIsWithinDeliveryArea('GE1 5JK')).toBeFalsy();
+      expect(postcodeIsWithinDeliveryArea('Se 2LB', homeDeliveryPostcodes)).toBeFalsy();
+      expect(postcodeIsWithinDeliveryArea('should not work', homeDeliveryPostcodes)).toBeFalsy();
+      expect(postcodeIsWithinDeliveryArea('GE1 5JK', homeDeliveryPostcodes)).toBeFalsy();
     });
 
     it('should false if input is less than 3 characters', () => {
