@@ -267,6 +267,7 @@ function PaperCheckoutForm(props: PropTypes) {
                   css={controlTextAreaResizing}
                   id="delivery-instructions"
                   label="Delivery instructions"
+                  autocomplete="new-password"
                   supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
                   maxlength={250}
                   value={props.deliveryInstructions}
