@@ -32,7 +32,7 @@ type PropTypes = {|
   selectedAmounts: SelectedAmounts,
   selectAmount: (number | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmounts: OtherAmounts,
-  // eslint-disable-next-line react/no-unused-prop-types - it is used
+  // eslint-disable-next-line react/no-unused-prop-types
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
