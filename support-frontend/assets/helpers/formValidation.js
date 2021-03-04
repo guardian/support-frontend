@@ -44,9 +44,12 @@ export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
   return isNotEmpty(rawDate) && isNotTooFarInTheFuture(date);
 };
 
-export const checkAmount: (string, CountryGroupId, ContributionType) =>
-  boolean = (input: string, countryGroupId: CountryGroupId, contributionType: ContributionType) =>
-    isNotEmpty(input)
+export const checkAmount = (
+  input: string,
+  countryGroupId: CountryGroupId,
+  contributionType: ContributionType,
+): boolean =>
+  isNotEmpty(input)
     && isLargerOrEqual(config[countryGroupId][contributionType].min, input)
     && isSmallerOrEqual(config[countryGroupId][contributionType].max, input)
     && maxTwoDecimals(input);

@@ -24,7 +24,6 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
-import { checkAmount } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
@@ -229,9 +228,7 @@ function withProps(props: PropTypes) {
       <h2 className="hidden-heading">Make a contribution</h2>
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />
-        <ContributionAmount
-          checkOtherAmount={checkAmount}
-        />
+        <ContributionAmount />
       </div>
       <StripePaymentRequestButtonContainer
         currency={props.currency}

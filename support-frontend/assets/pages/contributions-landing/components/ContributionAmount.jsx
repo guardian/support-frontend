@@ -13,6 +13,7 @@ import {
   spokenCurrencies,
   detect,
 } from 'helpers/internationalisation/currency';
+import { checkAmount } from 'helpers/formValidation';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { formatAmount } from 'helpers/checkouts';
@@ -31,7 +32,7 @@ type PropTypes = {|
   selectedAmounts: SelectedAmounts,
   selectAmount: (number | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmounts: OtherAmounts,
-  checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
+  // eslint-disable-next-line react/no-unused-prop-types - it is used
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
@@ -115,9 +116,8 @@ function withProps(props: PropTypes) {
   const otherAmount = props.otherAmounts[props.contributionType].amount;
   const otherLabelSymbol: string = currencies[props.currency].glyph;
   const {
-    checkOtherAmount, checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
+    checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
-  const updateAmount = props.updateOtherAmount;
 
   const showWeeklyBreakdown =
     props.contributionType !== 'ONE_OFF';
@@ -126,21 +126,17 @@ function withProps(props: PropTypes) {
     <ContributionTextInputDs
       id="contributionOther"
       name="contribution-other-amount"
-      type="number"
       label={`Other amount (${otherLabelSymbol})`}
       value={otherAmount}
-      onInput={e => updateAmount(
-      (e.target: any).value,
-      props.countryGroupId,
-      props.contributionType,
-    )}
-      isValid={checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
-      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked)}
+      onInput={e => props.updateOtherAmount(
+        (e.target: any).value,
+        props.countryGroupId,
+        props.contributionType,
+      )}
+      isValid={checkAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
+      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || otherAmount)}
       errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
       autoComplete="off"
-      step={0.01}
-      min={min}
-      max={max}
       autoFocus
       required
     />
