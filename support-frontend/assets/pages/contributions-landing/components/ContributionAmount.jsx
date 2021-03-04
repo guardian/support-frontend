@@ -134,7 +134,7 @@ function withProps(props: PropTypes) {
         props.contributionType,
       )}
       isValid={checkAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
-      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || otherAmount)}
+      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount)}
       errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
       autoComplete="off"
       autoFocus
