@@ -96,6 +96,7 @@ Resources:
       ImageId: !Ref AMI
       SecurityGroups:
         - !Ref InstanceSecurityGroup
+        - !Ref WazuhSecurityGroup
       InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
       IamInstanceProfile: !Ref InstanceProfile
       AssociatePublicIpAddress: false
@@ -308,6 +309,17 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
+
+  WazuhSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VpcId
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 1514
+        ToPort: 1515
+        CidrIp: 0.0.0.0/0
 
   NoHealthyInstancesAlarm:
     Type: AWS::CloudWatch::Alarm
