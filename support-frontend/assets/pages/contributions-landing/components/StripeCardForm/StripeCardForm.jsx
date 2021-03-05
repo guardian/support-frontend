@@ -4,9 +4,11 @@
 
 // $FlowIgnore - required for hooks
 import React, { useEffect, useState, useRef } from 'react';
+import { css } from '@emotion/core';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';
+import { TextInput } from '@guardian/src-text-input';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import { Stripe } from 'helpers/paymentMethods';
@@ -64,7 +66,6 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   isTestUser: boolean,
-  zipCode: string,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -78,7 +79,6 @@ const mapStateToProps = (state: State) => ({
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
-  zipCode: state.page.form.formData.billingZipCode ?? '',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -121,6 +121,10 @@ const fieldStyle = {
   },
 };
 
+const zipCodeContainerStyles = css`
+  margin-top: 0.65rem;
+`;
+
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
   return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
@@ -153,6 +157,10 @@ const CardForm = (props: PropTypes) => {
   const elements = stripeJs.useElements();
   // Used to avoid calling grecaptcha.render twice when switching between monthly + annual
   const [calledRecaptchaRender, setCalledRecaptchaRender] = useState<boolean>(false);
+
+  const [zipCode, setZipCode] = useState('');
+
+  const updateZipCode = event => setZipCode(event.target.value);
 
   /**
    * Handlers
@@ -283,7 +291,7 @@ const CardForm = (props: PropTypes) => {
     stripe
       .handleCardSetup(clientSecret, cardElement, {
         payment_method_data: {
-          billing_details: { address: { postal_code: props.zipCode } },
+          billing_details: { address: { postal_code: zipCode } },
         },
       })
       .then((result) => {
@@ -511,7 +519,19 @@ const CardForm = (props: PropTypes) => {
 
           />
         </div>
+
       </div>
+
+      <div css={zipCodeContainerStyles}>
+        <TextInput
+          id="contributionZipCode"
+          name="contribution-zip-code"
+          label="ZIP code"
+          value={zipCode}
+          onChange={updateZipCode}
+        />
+      </div>
+
       { window.guardian.recaptchaEnabled ?
         <div
           className="ds-security-check"

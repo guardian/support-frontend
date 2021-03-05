@@ -46,7 +46,6 @@ export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 type FormData = UserFormData & {
   otherAmounts: OtherAmounts,
   billingState: StateProvince | null,
-  billingZipCode: string | null,
   billingCountry: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
@@ -191,7 +190,6 @@ function createFormReducer() {
         ANNUAL: { amount: null },
       },
       billingState: null,
-      billingZipCode: null,
       billingCountry: null,
       checkoutFormHasBeenSubmitted: false,
     },
@@ -420,9 +418,6 @@ function createFormReducer() {
 
       case 'UPDATE_BILLING_STATE':
         return { ...state, formData: { ...state.formData, billingState: action.billingState } };
-
-      case 'UPDATE_BILLING_ZIP_CODE':
-        return { ...state, formData: { ...state.formData, billingZipCode: action.billingZipCode } };
 
       case 'UPDATE_BILLING_COUNTRY':
         return { ...state, formData: { ...state.formData, billingCountry: action.billingCountry } };

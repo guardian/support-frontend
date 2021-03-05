@@ -26,7 +26,6 @@ import {
   updateLastName,
   updateEmail,
   updateBillingState,
-  updateBillingZipCode,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -40,7 +39,6 @@ type PropTypes = {|
   lastName: string,
   email: string,
   billingState: StateProvince | null,
-  billingZipCode: string,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
@@ -49,7 +47,6 @@ type PropTypes = {|
   updateLastName: (Event) => void,
   updateEmail: (Event) => void,
   updateBillingState: (Event) => void,
-  updateBillingZipCode: (Event) => void,
   checkIfEmailHasPassword: (Event) => void,
   contributionType: ContributionType,
 |};
@@ -67,7 +64,6 @@ const mapStateToProps = (state: State) => ({
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   billingState: getCheckoutFormValue(state.page.form.formData.billingState, state.page.user.stateField),
-  billingZipCode: getCheckoutFormValue(state.page.form.formData.billingZipCode, state.page.user.zipCode),
   isSignedIn: state.page.user.isSignedIn,
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
@@ -79,7 +75,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateBillingState: (event) => { dispatch(updateBillingState(event.target.value === '' ? null : event.target.value)); },
-  updateBillingZipCode: (event) => { dispatch(updateBillingZipCode(event.target.value)); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
@@ -93,7 +88,6 @@ function withProps(props: PropTypes) {
     email,
     isSignedIn,
     billingState,
-    billingZipCode,
     checkoutFormHasBeenSubmitted,
   } = props;
 
@@ -156,16 +150,6 @@ function withProps(props: PropTypes) {
         selectedState={billingState}
         isValid={checkBillingState(billingState)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-      />
-
-      <ContributionTextInputDs
-        id="contributionZipCode"
-        name="contribution-zip-code"
-        label="ZIP code"
-        value={billingZipCode}
-        onInput={props.updateBillingZipCode}
-        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        errorMessage="Please provide your zip code"
       />
     </div>
   );
