@@ -65,7 +65,7 @@ const whatNextText: { [FulfilmentOptions]: { [key: string]: Array<string> } } = 
     ],
     digitalVoucher: [
       `Keep an eye on your inbox. You should receive an email confirming the details of your subscription,
-        and another email shortly afterwards that contains details of how you can pick up your papers from tomorrow!`,
+        and another email shortly afterwards that contains details of how you can pick up your newspapers from tomorrow!`,
       `You will receive your Subscription Card in your subscriber pack in the post, along with your home
         delivery letter.`,
       `Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or
