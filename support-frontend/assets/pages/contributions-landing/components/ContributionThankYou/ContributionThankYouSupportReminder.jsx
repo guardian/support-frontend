@@ -1,7 +1,7 @@
 // @flow
 // $FlowIgnore - required for hooks
 import React, { useState, useEffect } from 'react';
-import { createOneOffReminderEndpoint } from 'helpers/routes';
+import { createOneOffReminderEndpoint, createRecurringReminderEndpoint } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
@@ -51,15 +51,22 @@ const privacyTextLink = css`
   color: ${neutral[20]};
 `;
 
-interface ReminderSignup {
-  reminderPeriod: string;
-  reminderOption: string;
-}
-
-interface ReminderChoice {
-  signup: ReminderSignup;
+interface RecurringReminderChoice {
+  type: 'RECURRING';
+  signup: {
+    reminderFrequencyMonths: number;
+  };
   label: string;
 }
+interface OneOffReminderChoice {
+  type: 'ONE_OFF';
+  signup: {
+    reminderPeriod: string;
+    reminderOption: string;
+  };
+  label: string;
+}
+type ReminderChoice = RecurringReminderChoice | OneOffReminderChoice;
 
 const REMINDER_PLATFORM = 'SUPPORT';
 const REMINDER_STAGE = 'POST';
@@ -80,10 +87,27 @@ const getDefaultLabel = (date: Date, monthsUntilDate: number, now: Date) => {
   const year =
     now.getFullYear() === date.getFullYear() ? '' : ` ${date.getFullYear()}`;
 
-  return `in ${monthsUntilDate} months (${month}${year})`;
+  return `in ${monthsUntilDate} months only (${month}${year})`;
 };
 
-const getReminderChoiceWithDefaultLabel = (monthsUntilDate: number): ReminderChoice => {
+const getRecurringReminderChoice = (): ReminderChoice => {
+  const now = new Date();
+  const startMonth = now.getMonth() + (now.getDate() >= 20 ? 1 : 0); // TODO - is this right?
+  const date = new Date(
+    now.getFullYear(),
+    startMonth,
+  );
+  const month = date.toLocaleDateString('default', { month: 'long' });
+  return {
+    type: 'RECURRING',
+    label: `Once each month (from ${month})`,
+    signup: {
+      reminderFrequencyMonths: 1,
+    },
+  };
+};
+
+const getOneOffReminderChoiceWithDefaultLabel = (monthsUntilDate: number): ReminderChoice => {
   const now = new Date();
   const date = new Date(
     now.getFullYear(),
@@ -91,6 +115,7 @@ const getReminderChoiceWithDefaultLabel = (monthsUntilDate: number): ReminderCho
   );
 
   return {
+    type: 'ONE_OFF',
     label: getDefaultLabel(date, monthsUntilDate, now),
     signup: {
       reminderPeriod: getReminderPeriod(date),
@@ -100,10 +125,19 @@ const getReminderChoiceWithDefaultLabel = (monthsUntilDate: number): ReminderCho
 };
 
 const getDefaultReminderChoices = (): ReminderChoice[] => [
-  getReminderChoiceWithDefaultLabel(3),
-  getReminderChoiceWithDefaultLabel(6),
-  getReminderChoiceWithDefaultLabel(9),
+  getRecurringReminderChoice(),
+  getOneOffReminderChoiceWithDefaultLabel(3),
+  getOneOffReminderChoiceWithDefaultLabel(6),
+  getOneOffReminderChoiceWithDefaultLabel(9),
 ];
+
+const getReminderUrl = (choice: ReminderChoice): string => {
+  if (choice.type === 'ONE_OFF') {
+    return createOneOffReminderEndpoint;
+  }
+  return createRecurringReminderEndpoint;
+
+};
 
 type ContributionThankYouSupportReminderProps = {|
   email: string
@@ -122,7 +156,10 @@ const ContributionThankYouSupportReminder = ({
   const reminderChoices = getDefaultReminderChoices();
 
   const setReminder = () => {
-    fetch(createOneOffReminderEndpoint, {
+    const choice = reminderChoices[selectedChoiceIndex];
+    const url = getReminderUrl(choice);
+
+    fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -130,7 +167,7 @@ const ContributionThankYouSupportReminder = ({
         reminderPlatform: REMINDER_PLATFORM,
         reminderComponent: REMINDER_COMPONENT,
         reminderStage: REMINDER_STAGE,
-        ...reminderChoices[selectedChoiceIndex].signup,
+        ...choice.signup,
       }),
     }).then((response) => {
       if (!response.ok) {

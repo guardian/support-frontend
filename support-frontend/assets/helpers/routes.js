@@ -41,6 +41,8 @@ const routes: {
 
 const createOneOffReminderEndpoint = isProd() ?
   'https://support.theguardian.com/reminders/create/one-off' : 'https://support.code.dev-theguardian.com/reminders/create/one-off';
+const createRecurringReminderEndpoint = isProd() ?
+  'https://support.theguardian.com/reminders/create/recurring' : 'https://support.code.dev-theguardian.com/reminders/create/recurring';
 
 const countryPath = (countryGroupId: CountryGroupId) =>
   countryGroups[countryGroupId].supportInternationalisationId;
@@ -87,6 +89,7 @@ function payPalReturnUrl(cgId: CountryGroupId, email: string): string {
 export {
   routes,
   createOneOffReminderEndpoint,
+  createRecurringReminderEndpoint,
   postcodeLookupUrl,
   payPalCancelUrl,
   payPalReturnUrl,
