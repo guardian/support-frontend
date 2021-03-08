@@ -44,9 +44,9 @@ import { isValidZipCode } from 'helpers/formValidation';
 
 // ----- Types -----//
 
-type ZipCodeFieldStatus = "NONE" | "OPTIONAL" | "REQUIRED";
+type ZipCodeFieldMode = "NONE" | "OPTIONAL" | "REQUIRED";
 
-const getZipCodeStatus = (state: State): ZipCodeFieldStatus => {
+const getZipCodeMode = (state: State): ZipCodeFieldMode => {
   const { contributionType } = state.page.form;
   if (contributionType !== 'ONE_OFF') {
     return 'NONE';
@@ -61,8 +61,8 @@ const getZipCodeStatus = (state: State): ZipCodeFieldStatus => {
   return 'NONE';
 };
 
-const shouldShowZipCodeField = (status: ZipCodeFieldStatus): boolean =>
-  status === 'OPTIONAL' || status === 'REQUIRED';
+const shouldShowZipCodeField = (mode: ZipCodeFieldMode): boolean =>
+  mode === 'OPTIONAL' || mode === 'REQUIRED';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
@@ -87,7 +87,7 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   isTestUser: boolean,
-  zipCodeFieldStatus: ZipCodeFieldStatus,
+  zipCodeFieldMode: ZipCodeFieldMode,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -101,7 +101,7 @@ const mapStateToProps = (state: State) => ({
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
-  zipCodeFieldStatus: getZipCodeStatus(state),
+  zipCodeFieldMode: getZipCodeMode(state),
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -383,7 +383,7 @@ const CardForm = (props: PropTypes) => {
       fieldStates.Expiry.name === 'Complete' &&
       fieldStates.CVC.name === 'Complete';
 
-    if (props.zipCodeFieldStatus === 'REQUIRED') {
+    if (props.zipCodeFieldMode === 'REQUIRED') {
       formIsComplete = formIsComplete && isValidZipCode(zipCode);
     }
 
@@ -400,7 +400,7 @@ const CardForm = (props: PropTypes) => {
     errorMessageFromState(fieldStates.CVC);
 
   const showZipCodeError =
-    props.checkoutFormHasBeenSubmitted && props.zipCodeFieldStatus === 'REQUIRED' && !isValidZipCode(zipCode);
+    props.checkoutFormHasBeenSubmitted && props.zipCodeFieldMode === 'REQUIRED' && !isValidZipCode(zipCode);
 
 
   const incompleteMessage = (): ?string => {
@@ -555,7 +555,7 @@ const CardForm = (props: PropTypes) => {
 
       </div>
 
-      { shouldShowZipCodeField(props.zipCodeFieldStatus) && (
+      { shouldShowZipCodeField(props.zipCodeFieldMode) && (
         <div css={zipCodeContainerStyles}>
           <TextInput
             id="contributionZipCode"
@@ -563,7 +563,7 @@ const CardForm = (props: PropTypes) => {
             label="ZIP code"
             value={zipCode}
             onChange={updateZipCode}
-            optional={props.zipCodeFieldStatus === 'OPTIONAL'}
+            optional={props.zipCodeFieldMode === 'OPTIONAL'}
             error={showZipCodeError ? 'Please enter a valid ZIP code' : null}
           />
         </div>)
