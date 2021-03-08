@@ -172,7 +172,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const collectionOption = props.useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
   const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
   const days = getDays(props.fulfilmentOption, props.productOption);
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Newspaper' : collectionOption;
   const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';

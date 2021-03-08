@@ -87,7 +87,7 @@ export const SubsCardFaqBlock = () => (
           <TabAccordionRow trackingId={collectonAccordionTrackingId} label="Collecting from multiple newsagents">
           <>
             <p>
-            Present your card to a newsagent each time you collect the paper. The newsagent will scan your
+            Present your card to a newsagent each time you collect the newspaper. The newsagent will scan your
             card and will be reimbursed for each transaction automatically.
             </p>
             <p><LinkToImovo trackingId={collectonAccordionTrackingId} /></p>

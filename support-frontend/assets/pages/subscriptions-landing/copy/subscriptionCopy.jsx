@@ -196,7 +196,7 @@ const getPaperImage = (isTop: boolean) => {
 };
 
 const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
-  title: 'Paper',
+  title: 'Newspaper',
   subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
   description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
   buttons: [{
