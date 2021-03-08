@@ -377,15 +377,23 @@ const CardForm = (props: PropTypes) => {
     }
   }, [props.setupIntentClientSecret]);
 
+  const isZipCodeFieldValid = () => {
+    // if required we always run validation
+    if (props.zipCodeFieldMode === 'REQUIRED') {
+      return isValidZipCode(zipCode);
+    }
+    // else we only run validation if non-empty
+    return zipCode !== '' ? isValidZipCode(zipCode) : true;
+  };
+
+
   useEffect(() => {
-    let formIsComplete =
+    const formIsComplete =
       fieldStates.CardNumber.name === 'Complete' &&
       fieldStates.Expiry.name === 'Complete' &&
-      fieldStates.CVC.name === 'Complete';
+      fieldStates.CVC.name === 'Complete' &&
+      isZipCodeFieldValid();
 
-    if (props.zipCodeFieldMode === 'REQUIRED') {
-      formIsComplete = formIsComplete && isValidZipCode(zipCode);
-    }
 
     props.setStripeCardFormComplete(formIsComplete);
   }, [fieldStates, zipCode]);
@@ -400,7 +408,7 @@ const CardForm = (props: PropTypes) => {
     errorMessageFromState(fieldStates.CVC);
 
   const showZipCodeError =
-    props.checkoutFormHasBeenSubmitted && props.zipCodeFieldMode === 'REQUIRED' && !isValidZipCode(zipCode);
+    props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
 
 
   const incompleteMessage = (): ?string => {
