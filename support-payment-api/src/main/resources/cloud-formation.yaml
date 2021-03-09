@@ -161,7 +161,9 @@ Resources:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref AMI
-      SecurityGroups: [!Ref InstanceSecurityGroup]
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+        - !Ref WazuhSecurityGroup
       InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
       IamInstanceProfile: !Ref InstanceProfile
       AssociatePublicIpAddress: false
@@ -273,7 +275,21 @@ Resources:
                     !Sub arn:aws:s3:::support-admin-console/CODE/*
                   ]
 
-
+  DescribeEC2Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: describe-ec2-policy
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Resource: "*"
+          Action:
+          - ec2:DescribeTags
+          - ec2:DescribeInstances
+          - autoscaling:DescribeAutoScalingGroups
+          - autoscaling:DescribeAutoScalingInstances
+      Roles:
+      - !Ref AppRole
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -371,6 +387,18 @@ Resources:
         - IpProtocol: tcp
           FromPort: 5432
           ToPort: 5432
+          CidrIp: 0.0.0.0/0
+
+  WazuhSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow outbound traffic from wazuh agent to manager
+      VpcId:
+        Ref: VpcId
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 1514
+          ToPort: 1515
           CidrIp: 0.0.0.0/0
 
   PaymentAPILogGroup:
