@@ -275,7 +275,7 @@ const CardForm = (props: PropTypes) => {
     });
   };
 
-  const setupOneOffHandlers = (): void => {
+  const setupOneOffRecaptcha = (): void => {
     if (window.guardian.recaptchaEnabled) {
       if (window.grecaptcha && window.grecaptcha.render) {
         setupRecaptchaTokenForOneOff();
@@ -283,7 +283,9 @@ const CardForm = (props: PropTypes) => {
         window.v2OnloadCallback = setupRecaptchaTokenForOneOff;
       }
     }
+  };
 
+  const setupOneOffHandlers = (): void => {
     props.setCreateStripePaymentMethod(() => {
       props.setPaymentWaiting(true);
 
@@ -329,11 +331,7 @@ const CardForm = (props: PropTypes) => {
       });
   };
 
-  const setupRecurringHandlers = (): void => {
-    // Start by requesting the client_secret for a new Payment Method.
-    // Note - because this value is requested asynchronously when the component loads,
-    // it's possible for it to arrive after the user clicks 'Contribute'.
-    // This is handled in the callback below by checking the value of paymentWaiting.
+  const setupRecurringRecaptcha = (): void => {
     if (window.guardian.recaptchaEnabled) {
       if (window.grecaptcha && window.grecaptcha.render) {
         setupRecurringRecaptchaCallback();
@@ -341,7 +339,13 @@ const CardForm = (props: PropTypes) => {
         window.v2OnloadCallback = setupRecurringRecaptchaCallback;
       }
     }
+  };
 
+  const setupRecurringHandlers = (): void => {
+    // Start by requesting the client_secret for a new Payment Method.
+    // Note - because this value is requested asynchronously when the component loads,
+    // it's possible for it to arrive after the user clicks 'Contribute'.
+    // This is handled in the callback below by checking the value of paymentWaiting.
     props.setCreateStripePaymentMethod((clientSecret: string | null) => {
       props.setPaymentWaiting(true);
 
@@ -361,12 +365,22 @@ const CardForm = (props: PropTypes) => {
   useEffect(() => {
     if (stripe && elements) {
       if (props.contributionType === 'ONE_OFF') {
-        setupOneOffHandlers();
+        setupOneOffRecaptcha();
       } else if (!calledRecaptchaRender) {
-        setupRecurringHandlers();
+        setupRecurringRecaptcha();
       }
     }
   }, [stripe, elements, props.contributionType]);
+
+  useEffect(() => {
+    if (stripe && elements) {
+      if (props.contributionType === 'ONE_OFF') {
+        setupOneOffHandlers();
+      } else {
+        setupRecurringHandlers();
+      }
+    }
+  }, [stripe, elements, props.contributionType, zipCode]);
 
   // If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
   // then go ahead and process the recurring contribution
