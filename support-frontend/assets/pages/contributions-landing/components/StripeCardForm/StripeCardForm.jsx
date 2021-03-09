@@ -342,9 +342,7 @@ const CardForm = (props: PropTypes) => {
       fieldStates.Expiry.name === 'Complete' &&
       fieldStates.CVC.name === 'Complete';
 
-    if (formIsComplete) {
-      props.setStripeCardFormComplete(formIsComplete);
-    }
+    props.setStripeCardFormComplete(formIsComplete);
   }, [fieldStates]);
 
   /**
