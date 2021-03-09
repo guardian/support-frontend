@@ -10,8 +10,9 @@ object SelectActiveRatePlansQuery {
 
   val name = "select-active-rate-plans"
 
-  val isNotDSGift = "Subscription.RedemptionCode__c = ''"
-  val isRedeemedDSGift = s"(Subscription.RedemptionCode__c != '' AND ${gifteeIdentityId.zuoraName} != '')"
+  val isNotDSGift = "(Subscription.RedemptionCode__c = '' OR Subscription.RedemptionCode__c is null)"
+  // _% in a like clause checks that the field has at least one character ie. not '' or null
+  val isRedeemedDSGift = s"(Subscription.RedemptionCode__c like '_%' AND ${gifteeIdentityId.zuoraName} like '_%')"
 
   def excludeDiscountProductRatePlans(discountProductRatePlanIds: List[String]) =
     discountProductRatePlanIds
@@ -27,6 +28,7 @@ object SelectActiveRatePlansQuery {
           ${ratePlanId.zuoraName},
           ${productRatePlanId.zuoraName},
           ${productRatePlanName.zuoraName},
+          ${contractEffectiveDate.zuoraName},
           ${termEndDate.zuoraName}
             FROM
             rateplan
@@ -35,7 +37,7 @@ object SelectActiveRatePlansQuery {
             (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
             (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
-            ${identityId.zuoraName} != null AND ${identityId.zuoraName} != '' AND
+            ${identityId.zuoraName} like '_%' AND
             ($isNotDSGift OR $isRedeemedDSGift)
     """
 
