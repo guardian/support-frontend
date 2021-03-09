@@ -124,7 +124,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
-    ): DigitalSubscriptionController = {
+    ): DigitalSubscriptionFormController = {
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
       val client = mock[SupportWorkersClient]
@@ -152,12 +152,8 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[ReaderType])).thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
-      new DigitalSubscriptionController(
+      new DigitalSubscriptionFormController(
         priceSummaryServiceProvider = priceSummaryServiceProvider,
-        new LandingCopyProvider(
-          promotionServiceProvider = promotionServiceProvider,
-          stage = stage
-        ),
         assets = assetResolver,
         actionRefiners = actionRefiner,
         identityService = identityService,
@@ -166,9 +162,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         stripeConfigProvider = stripe,
         payPalConfigProvider = payPal,
         components = stubControllerComponents(),
-        stringsConfig = new StringsConfig(),
         settingsProvider = settingsProvider,
-        supportUrl = "support.thegulocal.com",
         fontLoaderBundle = Left(RefPath("test")),
         recaptchaConfigProvider
       )

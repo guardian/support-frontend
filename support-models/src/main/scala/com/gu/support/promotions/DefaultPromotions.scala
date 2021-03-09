@@ -1,6 +1,7 @@
 package com.gu.support.promotions
 
 object DefaultPromotions {
+
   object DigitalSubscription {
     object Monthly {
       val fiftyPercentOff3Months = "DK0NT24WG"
@@ -20,6 +21,11 @@ object DefaultPromotions {
     def all: List[PromoCode] = Monthly.all ++ Annual.all
     val landing: PromoCode = "DIGI_SUB_LANDING_PAGE"
   }
+
+  object Paper {
+    val landing: PromoCode = "PAPER_LANDING_PAGE"
+  }
+
   object GuardianWeekly {
     object Gift {
       val twentyPercentOff = "GW20GIFT1Y"
@@ -32,5 +38,7 @@ object DefaultPromotions {
     }
 
     def all = Gift.all ++ NonGift.all
+    val landing: PromoCode = "WEEKLY_LANDING_PAGE"
   }
+
 }
