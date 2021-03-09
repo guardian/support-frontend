@@ -13,13 +13,14 @@ import {
   spokenCurrencies,
   detect,
 } from 'helpers/internationalisation/currency';
+import { amountIsValid } from 'helpers/formValidation';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { formatAmount } from 'helpers/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { type State } from '../contributionsLandingReducer';
-import ContributionTextInputDs from './ContributionTextInputDs';
 import ContributionAmountChoices from './ContributionAmountChoices';
+import { TextInput } from '@guardian/src-text-input';
 
 // ----- Types ----- //
 
@@ -31,7 +32,6 @@ type PropTypes = {|
   selectedAmounts: SelectedAmounts,
   selectAmount: (number | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmounts: OtherAmounts,
-  checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
@@ -115,36 +115,18 @@ function withProps(props: PropTypes) {
   const otherAmount = props.otherAmounts[props.contributionType].amount;
   const otherLabelSymbol: string = currencies[props.currency].glyph;
   const {
-    checkOtherAmount, checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
+    checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
-  const updateAmount = props.updateOtherAmount;
 
   const showWeeklyBreakdown =
     props.contributionType !== 'ONE_OFF';
 
-  const renderOtherField = () => (
-    <ContributionTextInputDs
-      id="contributionOther"
-      name="contribution-other-amount"
-      type="number"
-      label={`Other amount (${otherLabelSymbol})`}
-      value={otherAmount}
-      onInput={e => updateAmount(
-      (e.target: any).value,
-      props.countryGroupId,
-      props.contributionType,
-    )}
-      isValid={checkOtherAmount(otherAmount || '', props.countryGroupId, props.contributionType)}
-      formHasBeenSubmitted={(checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked)}
-      errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
-      autoComplete="off"
-      step={0.01}
-      min={min}
-      max={max}
-      autoFocus
-      required
-    />
-  );
+  const canShowOtherAmountErrorMessage =
+    checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount;
+  const otherAmountErrorMessage: string | null =
+    canShowOtherAmountErrorMessage && !amountIsValid(otherAmount || '', props.countryGroupId, props.contributionType) ?
+      `Please provide an amount between ${minAmount} and ${maxAmount}` :
+      null;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
@@ -162,7 +144,23 @@ function withProps(props: PropTypes) {
         shouldShowFrequencyButtons={props.contributionType !== 'ONE_OFF'}
       />
 
-      {showOther && renderOtherField()}
+      { showOther &&
+        <div className={classNameWithModifiers('form__field', ['contribution-other-amount'])}>
+          <TextInput
+            id="contributionOther"
+            label={`Other amount (${otherLabelSymbol})`}
+            value={otherAmount}
+            onBlur={e => props.updateOtherAmount(
+              (e.target: any).value,
+              props.countryGroupId,
+              props.contributionType,
+            )}
+            error={otherAmountErrorMessage}
+            autoComplete="off"
+            autoFocus
+          />
+        </div>
+      }
 
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
