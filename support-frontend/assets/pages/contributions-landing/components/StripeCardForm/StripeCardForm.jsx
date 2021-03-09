@@ -47,11 +47,6 @@ import { isValidZipCode } from 'helpers/formValidation';
 type ZipCodeFieldMode = "NONE" | "OPTIONAL" | "REQUIRED";
 
 const getZipCodeMode = (state: State): ZipCodeFieldMode => {
-  const { contributionType } = state.page.form;
-  if (contributionType !== 'ONE_OFF') {
-    return 'NONE';
-  }
-
   const variant = state.common.abParticipations.usLandingPageZipCodeFieldTest;
   if (variant === 'zip-optional') {
     return 'OPTIONAL';
@@ -318,7 +313,13 @@ const CardForm = (props: PropTypes) => {
   const handleCardSetupForRecurring = (clientSecret: string): void => {
     const cardElement = elements.getElement(CardNumberElement);
     stripe
-      .handleCardSetup(clientSecret, cardElement)
+      .handleCardSetup(clientSecret, cardElement, {
+        payment_method_data: {
+          billing_details: {
+            address: { postal_code: zipCode },
+          },
+        },
+      })
       .then((result) => {
         if (result.error) {
           handleStripeError(result.error);
@@ -393,7 +394,6 @@ const CardForm = (props: PropTypes) => {
       fieldStates.Expiry.name === 'Complete' &&
       fieldStates.CVC.name === 'Complete' &&
       isZipCodeFieldValid();
-
 
     props.setStripeCardFormComplete(formIsComplete);
   }, [fieldStates, zipCode]);
