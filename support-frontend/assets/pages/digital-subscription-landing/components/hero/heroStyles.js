@@ -154,10 +154,16 @@ export const yellowHeading = css`
 export const paragraph = css`
   ${body.small()};
   max-width: 100%;
-  margin-bottom: ${space[5]}px;
+  margin-bottom: ${space[9]}px;
 
-  :last-of-type {
-    margin-bottom: ${space[9]}px;
+  // This applies to paras coming from the promo tool
+  & p:not(:last-of-type) {
+    margin-bottom: ${space[5]}px;
+  }
+
+  // This applies to default paragraphs in the hero
+  :not(:last-of-type) {
+    margin-bottom: ${space[5]}px;
   }
 
   ${from.mobileMedium} {
