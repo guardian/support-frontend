@@ -110,6 +110,8 @@ const trackAbTests = (participations: Participations): void =>
 
 // Set referring pageViewId in localstorage if it's not already there. This is picked up by ophan, see:
 // https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/click-path-capture.coffee#L41
+// Note - the localstorage item is deleted by tracker-js as soon as it's read, see:
+// https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/core.coffee#L72
 const setRefViewId = (): void => {
   const REFPVID = getQueryParameter('REFPVID');
   if (REFPVID && !localStorage.getItem('ophan_follow')) {
