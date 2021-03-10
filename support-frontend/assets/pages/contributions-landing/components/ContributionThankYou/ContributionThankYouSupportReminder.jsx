@@ -92,7 +92,7 @@ const getDefaultLabel = (date: Date, monthsUntilDate: number, now: Date) => {
 
 const getRecurringReminderChoice = (): ReminderChoice => {
   const now = new Date();
-  const startMonth = now.getMonth() + (now.getDate() >= 20 ? 2 : 1);
+  const startMonth = now.getMonth() + 1;
   const date = new Date(
     now.getFullYear(),
     startMonth,
