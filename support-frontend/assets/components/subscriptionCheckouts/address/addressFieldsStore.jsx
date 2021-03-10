@@ -76,13 +76,11 @@ const getFormFields = (state: State): FormFields => ({
 const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
   country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
 
-const checkpostCodeLength = (input: string | null): boolean => ((input == null) || (input.length <= 20));
+const checkLength = (input: string | null, maxLength: number): boolean =>
+  ((input == null) || (input.length <= maxLength));
 
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
-
-const checkStateFieldLength = (state: string | null): boolean =>
-  ((state == null) || (state.length <= 40));
 
 export const isHomeDeliveryInM25 = (
   fulfilmentOption: Option<FulfilmentOptions>,
@@ -109,7 +107,7 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
     error: formError('postCode', `Please enter a ${addressType} postcode.`),
   },
   {
-    rule: checkpostCodeLength(fields.postCode),
+    rule: checkLength(fields.postCode, 20),
     error: formError('postCode', `Please enter a ${addressType} postcode no longer than 20 characters.`),
   },
   {
@@ -124,7 +122,7 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
     ),
   },
   {
-    rule: checkStateFieldLength(fields.state),
+    rule: checkLength(fields.state, 40),
     error: formError(
       'state',
       fields.country === 'CA' ? `Please enter a ${addressType} province/territory no longer than 40 characters` : `Please enter a ${addressType} state name no longer than 40 characters`,
