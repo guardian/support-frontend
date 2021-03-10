@@ -38,7 +38,7 @@ import {
   type CountryGroupId,
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
-import { trackAbTests } from 'helpers/tracking/ophan';
+import { trackAbTests, setRefViewId } from 'helpers/tracking/ophan';
 import { getSettings } from 'helpers/globals';
 import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
@@ -61,6 +61,7 @@ export type ReduxState<PageState> = {|
 
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
+  setRefViewId();
   googleTagManager.init(participations);
   ophan.init();
   trackAbTests(participations);

@@ -3,6 +3,7 @@
 
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
+import { getQueryParameter } from 'helpers/url';
 
 // ----- Types ----- //
 
@@ -107,8 +108,20 @@ const trackAbTests = (participations: Participations): void =>
     abTestRegister: buildOphanPayload(participations),
   });
 
+// Set referring pageViewId in localstorage if it's not already there. This is picked up by ophan, see:
+// https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/click-path-capture.coffee#L41
+const setRefViewId = (): void => {
+  const REFPVID = getQueryParameter('REFPVID');
+  if (REFPVID && !localStorage.getItem('ophan_follow')) {
+    localStorage.setItem('ophan_follow', JSON.stringify({
+      refViewId: REFPVID,
+    }));
+  }
+};
+
 export {
   trackComponentEvents,
   pageView,
   trackAbTests,
+  setRefViewId,
 };
