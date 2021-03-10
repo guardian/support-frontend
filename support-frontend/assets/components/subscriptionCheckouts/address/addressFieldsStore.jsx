@@ -127,7 +127,7 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
     rule: checkStateFieldLength(fields.state),
     error: formError(
       'state',
-      fields.country === 'CA' ? 'Please enter a province/territory no longer than 40 characters' : 'Please enter a state name no longer than 40 characters',
+      fields.country === 'CA' ? `Please enter a ${addressType} province/territory no longer than 40 characters` : `Please enter a ${addressType} state name no longer than 40 characters`,
     ),
   },
 ]);
