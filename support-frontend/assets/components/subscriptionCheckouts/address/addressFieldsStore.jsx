@@ -81,6 +81,9 @@ const checkpostCodeLength = (input: string | null): boolean => ((input == null) 
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
+const notMoreThan40Chars = (state: string | null): boolean =>
+  state.length <= 40;
+
 export const isHomeDeliveryInM25 = (
   fulfilmentOption: Option<FulfilmentOptions>,
   postcode: Option<string>,
@@ -118,6 +121,13 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
     error: formError(
       'state',
       fields.country === 'CA' ? `Please select a ${addressType} province/territory.` : `Please select a ${addressType} state.`,
+    ),
+  },
+  {
+    rule: notMoreThan40Chars(fields.state),
+    error: formError(
+      'state',
+      fields.country === 'CA' ? 'The province/territory name must be 40 characters or fewer' : 'The state name must be 40 characters or fewer',
     ),
   },
 ]);
