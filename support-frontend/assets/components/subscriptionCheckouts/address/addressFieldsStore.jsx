@@ -82,7 +82,7 @@ const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
 const checkStateFieldLength = (state: string | null): boolean =>
-  state.length <= 40;
+  ((state == null) || (state.length <= 40));
 
 export const isHomeDeliveryInM25 = (
   fulfilmentOption: Option<FulfilmentOptions>,
