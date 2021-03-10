@@ -27,6 +27,7 @@ export const isNotTooFarInTheFuture: (Date | null) => boolean = (date) => {
 };
 
 export const isValidEmail: (string | null) => boolean = input => !!input && new RegExp(emailRegexPattern).test(input);
+export const isValidZipCode = (zipCode: string) => /^\d{5}(-\d{4})?$/.test(zipCode);
 export const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
 export const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
 export const maxTwoDecimals: string => boolean = input => new RegExp('^\\d+\\.?\\d{0,2}$').test(input);

@@ -4,9 +4,11 @@
 
 // $FlowIgnore - required for hooks
 import React, { useEffect, useState, useRef } from 'react';
+import { css } from '@emotion/core';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';
+import { TextInput } from '@guardian/src-text-input';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import { Stripe } from 'helpers/paymentMethods';
@@ -38,8 +40,24 @@ import { InlineError } from '@guardian/src-user-feedback';
 import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
+import { isValidZipCode } from 'helpers/formValidation';
 
 // ----- Types -----//
+
+type ZipCodeFieldMode = "NONE" | "OPTIONAL" | "REQUIRED";
+
+const getZipCodeMode = (state: State): ZipCodeFieldMode => {
+  const variant = state.common.abParticipations.usLandingPageZipCodeFieldTest;
+  if (variant === 'zip-optional') {
+    return 'OPTIONAL';
+  } else if (variant === 'zip-required') {
+    return 'REQUIRED';
+  }
+  return 'NONE';
+};
+
+const shouldShowZipCodeField = (mode: ZipCodeFieldMode): boolean =>
+  mode === 'OPTIONAL' || mode === 'REQUIRED';
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
@@ -64,6 +82,7 @@ type PropTypes = {|
   setOneOffRecaptchaToken: string => Action,
   oneOffRecaptchaToken: string,
   isTestUser: boolean,
+  zipCodeFieldMode: ZipCodeFieldMode,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -77,6 +96,7 @@ const mapStateToProps = (state: State) => ({
   recurringRecaptchaVerified: state.page.form.stripeCardFormData.recurringRecaptchaVerified,
   formIsSubmittable: state.page.form.formIsSubmittable,
   oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
+  zipCodeFieldMode: getZipCodeMode(state),
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -119,6 +139,10 @@ const fieldStyle = {
   },
 };
 
+const zipCodeContainerStyles = css`
+  margin-top: 0.65rem;
+`;
+
 const renderVerificationCopy = (countryGroupId: CountryGroupId, contributionType: ContributionType) => {
   trackComponentLoad(`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`);
   return (<div className="form__error"> {'Please tick to verify you\'re a human'} </div>);
@@ -151,6 +175,10 @@ const CardForm = (props: PropTypes) => {
   const elements = stripeJs.useElements();
   // Used to avoid calling grecaptcha.render twice when switching between monthly + annual
   const [calledRecaptchaRender, setCalledRecaptchaRender] = useState<boolean>(false);
+
+  const [zipCode, setZipCode] = useState('');
+
+  const updateZipCode = event => setZipCode(event.target.value);
 
   /**
    * Handlers
@@ -247,7 +275,7 @@ const CardForm = (props: PropTypes) => {
     });
   };
 
-  const setupOneOffHandlers = (): void => {
+  const setupOneOffRecaptcha = (): void => {
     if (window.guardian.recaptchaEnabled) {
       if (window.grecaptcha && window.grecaptcha.render) {
         setupRecaptchaTokenForOneOff();
@@ -255,13 +283,21 @@ const CardForm = (props: PropTypes) => {
         window.v2OnloadCallback = setupRecaptchaTokenForOneOff;
       }
     }
+  };
 
+  const setupOneOffHandlers = (): void => {
     props.setCreateStripePaymentMethod(() => {
       props.setPaymentWaiting(true);
 
       const cardElement = elements.getElement(CardNumberElement);
 
-      stripe.createPaymentMethod({ type: 'card', card: cardElement }).then((result) => {
+      stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+        billing_details: {
+          address: { postal_code: zipCode },
+        },
+      }).then((result) => {
         if (result.error) {
           handleStripeError(result.error);
         } else {
@@ -278,20 +314,24 @@ const CardForm = (props: PropTypes) => {
 
   const handleCardSetupForRecurring = (clientSecret: string): void => {
     const cardElement = elements.getElement(CardNumberElement);
-    stripe.handleCardSetup(clientSecret, cardElement).then((result) => {
-      if (result.error) {
-        handleStripeError(result.error);
-      } else {
-        props.onPaymentAuthorised(result.setupIntent.payment_method);
-      }
-    });
+    stripe
+      .handleCardSetup(clientSecret, cardElement, {
+        payment_method_data: {
+          billing_details: {
+            address: { postal_code: zipCode },
+          },
+        },
+      })
+      .then((result) => {
+        if (result.error) {
+          handleStripeError(result.error);
+        } else {
+          props.onPaymentAuthorised(result.setupIntent.payment_method);
+        }
+      });
   };
 
-  const setupRecurringHandlers = (): void => {
-    // Start by requesting the client_secret for a new Payment Method.
-    // Note - because this value is requested asynchronously when the component loads,
-    // it's possible for it to arrive after the user clicks 'Contribute'.
-    // This is handled in the callback below by checking the value of paymentWaiting.
+  const setupRecurringRecaptcha = (): void => {
     if (window.guardian.recaptchaEnabled) {
       if (window.grecaptcha && window.grecaptcha.render) {
         setupRecurringRecaptchaCallback();
@@ -299,7 +339,13 @@ const CardForm = (props: PropTypes) => {
         window.v2OnloadCallback = setupRecurringRecaptchaCallback;
       }
     }
+  };
 
+  const setupRecurringHandlers = (): void => {
+    // Start by requesting the client_secret for a new Payment Method.
+    // Note - because this value is requested asynchronously when the component loads,
+    // it's possible for it to arrive after the user clicks 'Contribute'.
+    // This is handled in the callback below by checking the value of paymentWaiting.
     props.setCreateStripePaymentMethod((clientSecret: string | null) => {
       props.setPaymentWaiting(true);
 
@@ -319,12 +365,22 @@ const CardForm = (props: PropTypes) => {
   useEffect(() => {
     if (stripe && elements) {
       if (props.contributionType === 'ONE_OFF') {
-        setupOneOffHandlers();
+        setupOneOffRecaptcha();
       } else if (!calledRecaptchaRender) {
-        setupRecurringHandlers();
+        setupRecurringRecaptcha();
       }
     }
   }, [stripe, elements, props.contributionType]);
+
+  useEffect(() => {
+    if (stripe && elements) {
+      if (props.contributionType === 'ONE_OFF') {
+        setupOneOffHandlers();
+      } else {
+        setupRecurringHandlers();
+      }
+    }
+  }, [stripe, elements, props.contributionType, zipCode]);
 
   // If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
   // then go ahead and process the recurring contribution
@@ -336,14 +392,25 @@ const CardForm = (props: PropTypes) => {
     }
   }, [props.setupIntentClientSecret]);
 
+  const isZipCodeFieldValid = () => {
+    // if required we always run validation
+    if (props.zipCodeFieldMode === 'REQUIRED') {
+      return isValidZipCode(zipCode);
+    }
+    // else we only run validation if non-empty
+    return zipCode !== '' ? isValidZipCode(zipCode) : true;
+  };
+
+
   useEffect(() => {
     const formIsComplete =
       fieldStates.CardNumber.name === 'Complete' &&
       fieldStates.Expiry.name === 'Complete' &&
-      fieldStates.CVC.name === 'Complete';
+      fieldStates.CVC.name === 'Complete' &&
+      isZipCodeFieldValid();
 
     props.setStripeCardFormComplete(formIsComplete);
-  }, [fieldStates]);
+  }, [fieldStates, zipCode]);
 
   /**
    * Rendering
@@ -353,6 +420,10 @@ const CardForm = (props: PropTypes) => {
     errorMessageFromState(fieldStates.CardNumber) ||
     errorMessageFromState(fieldStates.Expiry) ||
     errorMessageFromState(fieldStates.CVC);
+
+  const showZipCodeError =
+    props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
+
 
   const incompleteMessage = (): ?string => {
     if (
@@ -503,7 +574,23 @@ const CardForm = (props: PropTypes) => {
 
           />
         </div>
+
       </div>
+
+      { shouldShowZipCodeField(props.zipCodeFieldMode) && (
+        <div css={zipCodeContainerStyles}>
+          <TextInput
+            id="contributionZipCode"
+            name="contribution-zip-code"
+            label="ZIP code"
+            value={zipCode}
+            onChange={updateZipCode}
+            optional={props.zipCodeFieldMode === 'OPTIONAL'}
+            error={showZipCodeError ? 'Please enter a valid ZIP code' : null}
+          />
+        </div>)
+      }
+
       { window.guardian.recaptchaEnabled ?
         <div
           className="ds-security-check"

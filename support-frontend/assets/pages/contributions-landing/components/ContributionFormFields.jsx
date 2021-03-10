@@ -43,11 +43,11 @@ type PropTypes = {|
   isSignedIn: boolean,
   isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  updateFirstName: Event => void,
-  updateLastName: Event => void,
-  updateEmail: Event => void,
-  updateBillingState: Event => void,
-  checkIfEmailHasPassword: Event => void,
+  updateFirstName: (Event) => void,
+  updateLastName: (Event) => void,
+  updateEmail: (Event) => void,
+  updateBillingState: (Event) => void,
+  checkIfEmailHasPassword: (Event) => void,
   contributionType: ContributionType,
 |};
 
