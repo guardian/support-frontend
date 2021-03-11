@@ -13,8 +13,8 @@ resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/pla
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "com.gu" %% "simple-configuration-ssm" % "1.5.4",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+  "com.gu" %% "simple-configuration-ssm" % "1.5.3",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
@@ -29,8 +29,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-auth-play" % "3.195",
-  "com.gu" %% "identity-test-users" % "0.6",
+  "com.gu.identity" %% "identity-auth-play" % "3.246",
+  "com.gu" %% "identity-test-users" % "0.8",
   "com.google.guava" % "guava" % "29.0-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v27" % "2.1.0",

@@ -10,11 +10,11 @@ import play.api.BuiltInComponentsFromContext
 trait Controllers {
 
   // scalastyle:off
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth with Monitoring =>
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth with Monitoring =>
   // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
-  lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes)
+  lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
   lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage)_
   lazy val fontLoader = elementForStage(RefPath("fontLoader.js"))
