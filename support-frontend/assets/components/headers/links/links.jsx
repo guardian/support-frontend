@@ -58,7 +58,7 @@ const links: HeaderNavLink[] = [
   },
   {
     href: routes.paperSubscriptionLanding,
-    text: 'Paper',
+    text: 'Newspaper',
     trackAs: 'subscriptions:paper',
     include: [GBPCountries],
     internal: true,

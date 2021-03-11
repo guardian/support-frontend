@@ -16,7 +16,7 @@ import {
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
+import { amountOrOtherAmountIsValid, isValidEmail } from 'helpers/formValidation';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
@@ -190,7 +190,7 @@ function onClick(event, props: PropTypes) {
   props.setAssociatedPaymentMethod();
   props.setStripePaymentRequestButtonClicked(props.stripeAccount);
   const amountIsValid =
-    checkAmountOrOtherAmount(
+    amountOrOtherAmountIsValid(
       props.selectedAmounts,
       props.otherAmounts,
       props.contributionType,

@@ -28,7 +28,8 @@ import {
   updateBillingState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
-import ContributionTextInputDs from './ContributionTextInputDs';
+import { classNameWithModifiers } from 'helpers/utilities';
+import { TextInput } from '@guardian/src-text-input';
 
 
 // ----- Types ----- //
@@ -42,11 +43,11 @@ type PropTypes = {|
   isSignedIn: boolean,
   isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  updateFirstName: Event => void,
-  updateLastName: Event => void,
-  updateEmail: Event => void,
-  updateBillingState: Event => void,
-  checkIfEmailHasPassword: Event => void,
+  updateFirstName: (Event) => void,
+  updateLastName: (Event) => void,
+  updateEmail: (Event) => void,
+  updateBillingState: (Event) => void,
+  checkIfEmailHasPassword: (Event) => void,
   contributionType: ContributionType,
 |};
 
@@ -93,23 +94,21 @@ function withProps(props: PropTypes) {
   return (
     <div className="form-fields">
       <h3 className="hidden-heading">Your details</h3>
-      <ContributionTextInputDs
-        id="contributionEmail"
-        name="contribution-email"
-        label="Email address"
-        value={email}
-        type="email"
-        autoComplete="email"
-        supporting="example@domain.com"
-        onInput={props.updateEmail}
-        onChange={props.checkIfEmailHasPassword}
-        isValid={checkEmail(email)}
-        pattern={emailRegexPattern}
-        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        errorMessage="Please provide a valid email address"
-        required
-        disabled={isSignedIn}
-      />
+      <div className={classNameWithModifiers('form__field', ['contribution-email'])}>
+        <TextInput
+          id="contributionEmail"
+          label="Email address"
+          value={email}
+          type="email"
+          autoComplete="email"
+          supporting="example@domain.com"
+          onInput={props.updateEmail}
+          onChange={props.checkIfEmailHasPassword}
+          pattern={emailRegexPattern}
+          error={checkoutFormHasBeenSubmitted && !checkEmail(email) ? 'Please provide a valid email address' : null}
+          disabled={isSignedIn}
+        />
+      </div>
       <Signout isSignedIn />
       <MustSignIn
         isSignedIn={props.isSignedIn}
@@ -120,32 +119,30 @@ function withProps(props: PropTypes) {
       />
       {props.contributionType !== 'ONE_OFF' ?
         <div>
-          <ContributionTextInputDs
-            id="contributionFirstName"
-            name="contribution-fname"
-            label="First name"
-            value={firstName}
-            autoComplete="given-name"
-            autoCapitalize="words"
-            onInput={props.updateFirstName}
-            isValid={checkFirstName(firstName)}
-            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-            errorMessage="Please provide your first name"
-            required
-          />
-          <ContributionTextInputDs
-            id="contributionLastName"
-            name="contribution-lname"
-            label="Last name"
-            value={lastName}
-            autoComplete="family-name"
-            autoCapitalize="words"
-            onInput={props.updateLastName}
-            isValid={checkLastName(lastName)}
-            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-            errorMessage="Please provide your last name"
-            required
-          />
+          <div className={classNameWithModifiers('form__field', ['contribution-fname'])}>
+            <TextInput
+              id="contributionFirstName"
+              label="First name"
+              value={firstName}
+              autoComplete="given-name"
+              autoCapitalize="words"
+              onInput={props.updateFirstName}
+              error={checkoutFormHasBeenSubmitted && !checkFirstName(firstName) ? 'Please provide your first name' : null}
+              required
+            />
+          </div>
+          <div className={classNameWithModifiers('form__field', ['contribution-lname'])}>
+            <TextInput
+              id="contributionLastName"
+              label="Last name"
+              value={lastName}
+              autoComplete="family-name"
+              autoCapitalize="words"
+              onInput={props.updateLastName}
+              error={checkoutFormHasBeenSubmitted && !checkLastName(lastName) ? 'Please provide your last name' : null}
+              required
+            />
+          </div>
         </div> : null
       }
       <ContributionState

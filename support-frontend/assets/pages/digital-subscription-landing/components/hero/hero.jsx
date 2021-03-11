@@ -9,6 +9,7 @@ import { Button, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import GridImage from 'components/gridImage/gridImage';
 import {
@@ -88,7 +89,15 @@ function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
                 size="default"
                 icon={<SvgArrowDownStraight />}
                 iconSide="right"
-                onClick={() => window.scrollTo(0, 1500)}
+                onClick={() => {
+                  sendTrackingEventsOnClick({
+                    id: 'options_cta_click',
+                    product: 'DigitalPack',
+                    componentType: 'ACQUISITIONS_BUTTON',
+                  })();
+
+                  window.scrollTo(0, 1500);
+                }}
               >
             See pricing options
               </Button>

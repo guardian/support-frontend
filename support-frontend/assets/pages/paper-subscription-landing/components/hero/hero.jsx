@@ -59,7 +59,7 @@ const heroParagraph = css`
   & p:not(:last-of-type) {
     margin-bottom: ${space[9]}px;
   }
-  
+
   ${from.desktop} {
     max-width: 75%;
     margin-bottom: ${space[9]}px;
@@ -103,7 +103,7 @@ const defaultTitle = (
 const defaultCopy = (
   <>
     We offer a range of packages from every day to weekend, and different subscription types depending on
-    whether you want to collect your paper in a shop or get it delivered.
+    whether you want to collect your newspaper in a shop or get it delivered.
   </>
 );
 

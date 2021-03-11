@@ -25,6 +25,7 @@ import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { Paper } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 import { HeroPicture } from './heroPicture';
+import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
@@ -64,10 +65,10 @@ const whatNextText: { [FulfilmentOptions]: { [key: string]: Array<string> } } = 
     ],
     digitalVoucher: [
       `Keep an eye on your inbox. You should receive an email confirming the details of your subscription,
-        and another email shortly afterwards that contains details of how you can pick up your papers from tomorrow!`,
+        and another email shortly afterwards that contains details of how you can pick up your newspapers from tomorrow!`,
       `You will receive your Subscription Card in your subscriber pack in the post, along with your home
         delivery letter.`,
-      `Visit your chosen participating newsagent to pick up your paper using your Subscription Card, or
+      `Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or
         arrange a home delivery using your delivery letter.`,
     ],
   },
@@ -96,6 +97,7 @@ function ThankYouContent({
   fulfilmentOption, productOption, startDate, isPending, product, useDigitalVoucher,
 }: PropTypes) {
   const hideStartDate = fulfilmentOption === Collection && useDigitalVoucher;
+  const cleanProductOption = getTitle(productOption);
   return (
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
@@ -105,8 +107,8 @@ function ThankYouContent({
           overheadingClass="--thankyou"
         >
           {isPending ?
-          `Your subscription to the ${productOption} package is being processed` :
-          `You have now subscribed to the ${productOption} package`
+          `Your subscription to the ${cleanProductOption} package is being processed` :
+          `You have now subscribed to the ${cleanProductOption} package`
   }
         </HeadingBlock>
       </HeroWrapper>
