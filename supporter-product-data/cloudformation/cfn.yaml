@@ -165,7 +165,7 @@ Resources:
       Code:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
-      MemorySize: 512
+      MemorySize: 2048
       Runtime: "java8"
       Timeout: 600
       Environment:
