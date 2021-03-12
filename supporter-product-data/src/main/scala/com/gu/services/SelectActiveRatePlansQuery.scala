@@ -16,10 +16,16 @@ object SelectActiveRatePlansQuery {
 
   def excludeDiscountProductRatePlans(discountProductRatePlanIds: List[String]) =
     discountProductRatePlanIds
-      .map(discountProductRatePlanId => s"${productRatePlanId.zuoraName} != '$discountProductRatePlanId'")
+      .map(id => s"${productRatePlanId.zuoraName} != '$id'")
       .mkString(" AND\n")
 
-  def query(date: LocalDate, discountProductRatePlanIds: List[String]): String =
+  def isCancelledSubscriptionExcludingContributions(contributionProductRatePlanIds: List[String]) = {
+    // For cancelled subscriptions we still recognise them up until the term end date, but this is not the case for contributions
+    val isNotContribution = contributionProductRatePlanIds.map(id => s"${productRatePlanId.zuoraName} != '$id'").mkString(" AND\n")
+    s"(Subscription.Status = 'Cancelled' AND $isNotContribution)"
+  }
+
+  def query(date: LocalDate, contributionProductRatePlanIds: List[String], discountProductRatePlanIds: List[String]): String =
     s"""SELECT
           RatePlan.AmendmentType,
           Subscription.Id,
@@ -33,7 +39,7 @@ object SelectActiveRatePlansQuery {
             rateplan
             WHERE
             ${termEndDate.zuoraName} >= '$date' AND
-            (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
+            (Subscription.Status = 'Active' OR ${isCancelledSubscriptionExcludingContributions(contributionProductRatePlanIds)}) AND
             (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
             ${identityId.zuoraName} like '_%' AND
