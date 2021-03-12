@@ -69,7 +69,7 @@ assemblyMergeStrategy in (IntegrationTest, assembly) := {
     oldStrategy(y)
 }
 IntegrationTest / assembly / test := {}
-IntegrationTest / assembly / aggregate := false
+assembly / aggregate := false
 
 lazy val deployToCode = inputKey[Unit]("Directly update AWS lambda code from DEV instead of via RiffRaff for faster feedback loop")
 
