@@ -40,7 +40,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { trackAbTests } from 'helpers/tracking/ophan';
 import { getSettings } from 'helpers/globals';
-import { doNotTrack } from 'helpers/tracking/doNotTrack';
 import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
 import { getAmounts } from 'helpers/abTests/helpers';
@@ -62,11 +61,9 @@ export type ReduxState<PageState> = {|
 
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
-  if (!(doNotTrack())) {
-    googleTagManager.init(participations);
-    ophan.init();
-    trackAbTests(participations);
-  }
+  googleTagManager.init(participations);
+  ophan.init();
+  trackAbTests(participations);
   // Logging.
   logger.init();
 }
@@ -180,5 +177,4 @@ function init<S, A>(
 export {
   init,
   statelessInit,
-  doNotTrack,
 };

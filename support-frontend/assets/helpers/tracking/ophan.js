@@ -3,7 +3,6 @@
 
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
-import { maybeTrack } from 'helpers/tracking/doNotTrack';
 
 // ----- Types ----- //
 
@@ -81,17 +80,15 @@ type OphanABPayload = {
 
 // ----- Functions ----- //
 
-const trackComponentEvents = (componentEvent: OphanComponentEvent) =>
-  maybeTrack(() => ophan.record({ componentEvent }));
+const trackComponentEvents = (componentEvent: OphanComponentEvent) => ophan.record({ componentEvent });
 
-const pageView = (url: string, referrer: string) =>
-  maybeTrack(() => {
-    try {
-      ophan.sendInitialEvent(url, referrer);
-    } catch (e) {
-      console.log(`Error in Ophan tracking: ${e}`);
-    }
-  });
+const pageView = (url: string, referrer: string) => {
+  try {
+    ophan.sendInitialEvent(url, referrer);
+  } catch (e) {
+    console.log(`Error in Ophan tracking: ${e}`);
+  }
+};
 
 const buildOphanPayload = (participations: Participations): OphanABPayload =>
   Object.keys(participations)
@@ -106,9 +103,9 @@ const buildOphanPayload = (participations: Participations): OphanABPayload =>
     }, {});
 
 const trackAbTests = (participations: Participations): void =>
-  maybeTrack(() => ophan.record({
+  ophan.record({
     abTestRegister: buildOphanPayload(participations),
-  }));
+  });
 
 export {
   trackComponentEvents,
