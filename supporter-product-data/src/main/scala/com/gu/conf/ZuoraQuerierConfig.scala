@@ -7,6 +7,7 @@ case class ZuoraQuerierConfig(
   partnerId: String,
   username: String,
   password: String,
+  contributionProductRatePlanIds: List[String],
   discountProductRatePlanIds: List[String],
   lastSuccessfulQueryTime: Option[ZonedDateTime]
 )

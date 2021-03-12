@@ -23,11 +23,28 @@ class ConfigService(stage: Stage) extends StrictLogging {
           findParameterOrThrow("partnerId", params),
           findParameterOrThrow("username", params),
           findParameterOrThrow("password", params),
+          getContributionProductRatePlanIds(stage),
           getDiscountProductRatePlanIds(stage),
           findParameterValue(lastSuccessfulQueryTime, params).map(ZonedDateTime.parse(_, DateTimeFormatter.ISO_DATE_TIME))
         )
     }
   }
+
+  private def getContributionProductRatePlanIds(stage: Stage) =
+    stage match {
+      case DEV => List(
+        "2c92a0fc5aacfadd015ad24db4ff5e97",
+        "2c92a0fc5e1dc084015e37f58c200eea",
+      )
+      case UAT => List(
+        "2c92c0f85ab269be015acd9d014549b7",
+        "2c92c0f95e1d5c9c015e38f8c87d19a1",
+      )
+      case PROD => List(
+        "2c92a0fc5aacfadd015ad24db4ff5e97",
+        "2c92a0fc5e1dc084015e37f58c200eea",
+      )
+    }
 
   private def getDiscountProductRatePlanIds(stage: Stage) =
     stage match {
@@ -51,6 +68,19 @@ class ConfigService(stage: Stage) extends StrictLogging {
         "2c92a0ff74296d7201742b7daf20123d",
         "2c92a00772c5c2e90172c7ebd62a68c4",
         "2c92a01072c5c2e20172c7efe01125c6",
+        "2c92a0fe5fe26834015fe33c70a24f50",
+        "2c92a0ff5e09bd67015e0a93efe86d2e",
+        "2c92a0fe65f0ac1f0165f2189bca248c",
+        "2c92a0ff65c757150165c8eab88b788e",
+        "2c92a0fc569c311201569dfbecb4215f",
+        "2c92a0fc596d31ea01598d623a297897",
+        "2c92a01072c5c2e20172c7ee96b91a7c",
+        "2c92a0fe72c5c3480172c7f1fb545f81",
+        "2c92a00872c5d4770172c7f140a32d62",
+        "2c92a01072c5c2e30172c7f0764772c9",
+        "2c92a0ff56fe33f301572314aed277fb",
+        "2c92a0fc610e738901612d83fce461fd",
+        "2c92a0fe56fe33ff015723143e4778be",
         // 6 for 6 these are also covered by a regular rate plan
         "2c92a0086619bf8901661aaac94257fe",
         "2c92a0086619bf8901661ab545f51b21"
