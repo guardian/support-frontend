@@ -1,7 +1,7 @@
 import SeleniumTestConfig.SeleniumTest
 import sbt.Keys.{organization, publishTo, resolvers, scalaVersion, skip, updateOptions}
 import sbtrelease.ReleaseStateTransformations._
-import LibraryVersions.{catsVersion, jacksonVersion}
+import LibraryVersions._
 
 import scala.sys.process._
 
@@ -211,7 +211,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
       "org.typelevel" %% "cats-core" % catsVersion,
       "com.amazonaws" % "aws-java-sdk-kinesis" % "1.11.465",
       "com.gu" %% "thrift-serializer" % "4.0.3",
-      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
+      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
     )
   )
 
