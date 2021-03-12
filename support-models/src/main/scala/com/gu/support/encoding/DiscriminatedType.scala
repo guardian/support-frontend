@@ -6,7 +6,7 @@ import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedAsObjectEncoder
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
-import io.circe._
+import io.circe.{Codec => _, _}
 import shapeless.Lazy
 
 import scala.reflect.ClassTag
@@ -29,8 +29,8 @@ class DiscriminatedType[TOPLEVEL](discriminatorFieldName: String) {
     } yield getSingle(decodeAttempts.flatten, "decoder for: " + cursor.value.toString)
   }
 
-  def codec(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): com.gu.support.encoding.Codec[TOPLEVEL] = {
-    new com.gu.support.encoding.Codec[TOPLEVEL](encoder(allCodecs), decoder(allCodecs))
+  def codec(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Codec[TOPLEVEL] = {
+    new Codec[TOPLEVEL](encoder(allCodecs), decoder(allCodecs))
   }
 
   def variant[A: ClassTag](discriminatorValue: String)(
