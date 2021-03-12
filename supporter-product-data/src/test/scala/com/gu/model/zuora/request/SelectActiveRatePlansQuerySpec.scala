@@ -24,7 +24,8 @@ class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with Lazy
             rateplan
             WHERE
             Subscription.TermEndDate >= '2011-11-01' AND
-            (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
+            (Subscription.Status = 'Active' OR (Subscription.Status = 'Cancelled' AND ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067819' AND
+ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067818')) AND
             (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067819' AND
 ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067818' AND
