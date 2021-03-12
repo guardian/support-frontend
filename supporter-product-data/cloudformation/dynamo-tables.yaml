@@ -33,7 +33,7 @@ Resources:
         - AttributeName: "ratePlanId"
           KeyType: "RANGE"
       ProvisionedThroughput:
-        ReadCapacityUnits: 200
+        ReadCapacityUnits: 20
         WriteCapacityUnits: 10
       SSESpecification:
         SSEEnabled: true
