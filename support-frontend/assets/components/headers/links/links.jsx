@@ -119,26 +119,31 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
         return { ...link, href: `/${internationalisationIDValue}${link.href}` };
       }).map(({
         href, text, trackAs, opensInNewWindow, additionalClasses,
-      }) => (
-        <li
-          className={cx(classNameWithModifiers(
+      }) => {
+        const { protocol, host, pathname } = window.location;
+        const urlWithoutParams = `${protocol}//${host}${pathname}`;
+
+        return (
+          <li
+            className={cx(classNameWithModifiers(
                 'component-header-links__li',
-                [window.location.href.endsWith(href) ? 'active' : null],
+                [urlWithoutParams.endsWith(href) ? 'active' : null],
               ), additionalClasses)}
-        >
-          <a
-            onClick={sendTrackingEventsOnClick({
+          >
+            <a
+              onClick={sendTrackingEventsOnClick({
               id: ['header-link', trackAs, location].join(' - '),
               componentType: 'ACQUISITIONS_OTHER',
             })}
-            className="component-header-links__link"
-            href={href}
-            target={opensInNewWindow ? '_blank' : null}
-          >
-            {text}
-          </a>
-        </li>
-        ))}
+              className="component-header-links__link"
+              href={href}
+              target={opensInNewWindow ? '_blank' : null}
+            >
+              {text}
+            </a>
+          </li>
+        );
+})}
     </ul>
   </nav>
 );
