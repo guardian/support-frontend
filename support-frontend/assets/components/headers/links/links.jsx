@@ -92,10 +92,14 @@ function internationalisationID(countryGroupId: ?CountryGroupId = null): ?string
 
 // Export
 
-const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
-  <nav className={classNameWithModifiers('component-header-links', [location])}>
-    <ul className="component-header-links__ul" ref={getRef}>
-      {
+const Links = ({ location, getRef, countryGroupId }: PropTypes) => {
+  const { protocol, host, pathname } = window.location;
+  const urlWithoutParams = `${protocol}//${host}${pathname}`;
+
+  return (
+    <nav className={classNameWithModifiers('component-header-links', [location])}>
+      <ul className="component-header-links__ul" ref={getRef}>
+        {
         links.filter(({ include }) => {
 
         // If there is no country group ID for the link, return true and include the link in the rendering.
@@ -119,34 +123,30 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
         return { ...link, href: `/${internationalisationIDValue}${link.href}` };
       }).map(({
         href, text, trackAs, opensInNewWindow, additionalClasses,
-      }) => {
-        const { protocol, host, pathname } = window.location;
-        const urlWithoutParams = `${protocol}//${host}${pathname}`;
-
-        return (
-          <li
-            className={cx(classNameWithModifiers(
+      }) => (
+        <li
+          className={cx(classNameWithModifiers(
                 'component-header-links__li',
                 [urlWithoutParams.endsWith(href) ? 'active' : null],
               ), additionalClasses)}
-          >
-            <a
-              onClick={sendTrackingEventsOnClick({
+        >
+          <a
+            onClick={sendTrackingEventsOnClick({
               id: ['header-link', trackAs, location].join(' - '),
               componentType: 'ACQUISITIONS_OTHER',
             })}
-              className="component-header-links__link"
-              href={href}
-              target={opensInNewWindow ? '_blank' : null}
-            >
-              {text}
-            </a>
-          </li>
-        );
-})}
-    </ul>
-  </nav>
-);
+            className="component-header-links__link"
+            href={href}
+            target={opensInNewWindow ? '_blank' : null}
+          >
+            {text}
+          </a>
+        </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
 
 Links.defaultProps = {
   getRef: null,
