@@ -3,7 +3,7 @@ package com.gu.lambdas
 import com.gu.lambdas.FetchResultsLambda.getValueOrThrow
 import com.gu.lambdas.RunFullExportSpec.sleep
 import com.gu.model.Stage
-import com.gu.model.Stage.PROD
+import com.gu.model.Stage.DEV
 import com.gu.model.states.QueryType.Full
 import com.gu.model.states.UpdateDynamoState
 import com.gu.model.zuora.response.BatchQueryResponse
@@ -17,21 +17,23 @@ import org.scalatest.matchers.should.Matchers
 
 import java.io.{File, PrintWriter}
 import java.nio.file.{FileSystems, Files, StandardCopyOption}
-import java.time.ZonedDateTime
-import scala.annotation.tailrec
+import java.time.{ZoneId, ZonedDateTime}
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.io.Source
 
 @IntegrationTest
 class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
-  val stage = PROD
+  val stage = DEV
+  val queryType = Full
 
   "This test is just an easy way to run an aqua query. It" should "save the results to a csv in supporter-product-data/data-extracts" in {
+    val attemptedQueryTime = ZonedDateTime.now(ZoneId.of("America/Los_Angeles")).minusMinutes(1)
     for {
-      fetchResultsState <- QueryZuoraLambda.queryZuora(stage, Full)
+      fetchResultsState <- QueryZuoraLambda.queryZuora(stage, queryType)
       updateDynamoState <- fetchResults(stage, fetchResultsState.jobId, fetchResultsState.attemptedQueryTime)
-    } yield updateDynamoState.filename should endWith("last-extract.csv")
+      _ <-ConfigService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
+    } yield updateDynamoState.filename should endWith(".csv")
   }
 
   def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime): Future[UpdateDynamoState] = {
@@ -57,7 +59,7 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
          fileResponse <- service.getResultFileResponse(fileId)
        _ = assert(fileResponse.isSuccessful, s"File download for job failed with http code ${fileResponse.code}")
-       filePath = FileSystems.getDefault.getPath(System.getProperty("user.dir"), "supporter-product-data", "data-extracts", "last-extract.csv")
+       filePath = FileSystems.getDefault.getPath(System.getProperty("user.dir"), "supporter-product-data", "data-extracts", s"last-$queryType-$stage.csv")
        _ = Files.copy(fileResponse.body.byteStream, filePath, StandardCopyOption.REPLACE_EXISTING)
        _ = sanitizeFieldNames(filePath.toString)
     } yield {
