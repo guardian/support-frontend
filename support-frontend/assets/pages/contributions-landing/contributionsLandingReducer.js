@@ -92,6 +92,7 @@ export type AmazonPayData = {
   paymentSelected: boolean,
   hasAccessToken: boolean,
   fatalError: boolean,
+  amazonBillingAgreementId?: string,
 }
 
 export type PayPalData = {
@@ -344,6 +345,15 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             fatalError: true,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonBillingAgreementId: action.amazonBillingAgreementId,
           },
         };
 

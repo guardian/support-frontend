@@ -102,7 +102,7 @@ function withProps(props: PropTypes) {
   );
 
   const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
-    <AmazonPayWallet isTestUser={props.isTestUser} /> :
+    <AmazonPayWallet isTestUser={props.isTestUser} contributionType={props.contributionType} /> :
     <AmazonPayLoginButton />);
 
   // We have to show/hide PayPalExpressButton rather than conditionally rendering it
