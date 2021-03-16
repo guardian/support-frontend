@@ -34,7 +34,7 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
     val attributeValues = Map(
       ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName.dynamoName -> AttributeValue.builder.s(item.productRatePlanName).build,
-      ":" + termEndDate.dynamoName -> AttributeValue.builder.n(getAdjustedTermEndDate(item.termEndDate)).build,
+      ":" + termEndDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(item.termEndDate)).build,
     ).asJava
 
     val updateItemRequest = UpdateItemRequest.builder
@@ -49,8 +49,8 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
     }
   }
 
-  def getAdjustedTermEndDate(date: LocalDate) =
-    date.plusDays(1) // This is to avoid problems with timezones, as renewals are created early morning Pacific Time
+  def asEpochSecond(date: LocalDate) =
+    date
       .atStartOfDay
       .toEpochSecond(ZoneOffset.UTC)
       .toString
