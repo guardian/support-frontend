@@ -93,6 +93,7 @@ export type AmazonPayData = {
   hasAccessToken: boolean,
   fatalError: boolean,
   amazonBillingAgreementId?: string,
+  amazonBillingAgreementConsentStatus: boolean,
 }
 
 export type PayPalData = {
@@ -175,6 +176,7 @@ function createFormReducer() {
       paymentSelected: false,
       hasAccessToken: false,
       fatalError: false,
+      amazonBillingAgreementConsentStatus: false,
     },
     payPalData: {
       hasBegunLoading: false,
@@ -354,6 +356,15 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             amazonBillingAgreementId: action.amazonBillingAgreementId,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonBillingAgreementConsentStatus: action.amazonBillingAgreementConsentStatus,
           },
         };
 

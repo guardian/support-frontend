@@ -76,6 +76,7 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
   | { type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId: string }
+  | { type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus: boolean }
   | { type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken: string }
   | { type: 'SELECT_AMOUNT', amount: number | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
@@ -254,6 +255,9 @@ const setAmazonPayOrderReferenceId = (orderReferenceId: string): Action =>
 
 const setAmazonPayBillingAgreementId = (amazonBillingAgreementId: string): Action =>
   ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId });
+
+const setAmazonPayBillingAgreementConsentStatus = (amazonBillingAgreementConsentStatus: boolean): Action =>
+  ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus });
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
@@ -763,6 +767,7 @@ export {
   setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,
   setAmazonPayBillingAgreementId,
+  setAmazonPayBillingAgreementConsentStatus,
   setAmazonPayPaymentSelected,
   selectAmount,
   updateOtherAmount,
