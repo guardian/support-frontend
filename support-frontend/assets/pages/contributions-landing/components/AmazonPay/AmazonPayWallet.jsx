@@ -35,7 +35,6 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  // setAmazonPayWalletWidgetReady: (isReady: boolean) => dispatch(setAmazonPayWalletWidgetReady(isReady)),
   setAmazonPayOrderReferenceId: (orderReferenceId: string) =>
     dispatch(setAmazonPayOrderReferenceId(orderReferenceId)),
   setAmazonPayPaymentSelected: (paymentSelected: boolean) =>

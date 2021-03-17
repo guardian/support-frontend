@@ -256,8 +256,12 @@ const setAmazonPayOrderReferenceId = (orderReferenceId: string): Action =>
 const setAmazonPayBillingAgreementId = (amazonBillingAgreementId: string): Action =>
   ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId });
 
-const setAmazonPayBillingAgreementConsentStatus = (amazonBillingAgreementConsentStatus: boolean): Action =>
-  ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus });
+const setAmazonPayBillingAgreementConsentStatus =
+  (amazonBillingAgreementConsentStatus: boolean): ((Function) => void) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus })));
+    };
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>

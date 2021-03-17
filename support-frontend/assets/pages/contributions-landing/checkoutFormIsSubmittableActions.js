@@ -25,6 +25,7 @@ import {
   setFormIsValid,
 } from './contributionsLandingActions';
 import { stripeCardFormIsIncomplete } from 'helpers/stripe';
+import { AmazonPay } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -57,6 +58,7 @@ export type FormIsValidParameters = {
   lastName: string | null,
   email: string | null,
   stripeCardFormOk: boolean,
+  amazonPayFormOk: boolean,
 }
 
 const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
@@ -70,6 +72,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     lastName,
     email,
     stripeCardFormOk,
+    amazonPayFormOk,
   } = formIsValidParameters;
 
   const hasNameFields = contributionType !== 'ONE_OFF';
@@ -80,8 +83,17 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
       true
   ) && checkEmail(email)
     && stripeCardFormOk
+    && amazonPayFormOk
     && checkStateIfApplicable(billingState, countryGroupId, contributionType)
     && amountOrOtherAmountIsValid(selectedAmounts, otherAmounts, contributionType, countryGroupId);
+};
+
+const amazonPayFormOk = (state: State) => {
+  const isAmazonPay = state.page.form.paymentMethod === AmazonPay;
+  const isOneOff = state.page.form.contributionType === 'ONE_OFF';
+  const hasConsented = state.page.form.amazonPayData.amazonBillingAgreementConsentStatus;
+
+  return !isAmazonPay || isOneOff || hasConsented;
 };
 
 const formIsValidParameters = (state: State) => ({
@@ -97,6 +109,7 @@ const formIsValidParameters = (state: State) => ({
     state.page.form.paymentMethod,
     state.page.form.stripeCardFormData.formComplete,
   ),
+  amazonPayFormOk: amazonPayFormOk(state),
 });
 
 function enableOrDisableForm() {
