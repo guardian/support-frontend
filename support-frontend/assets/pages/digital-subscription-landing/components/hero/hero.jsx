@@ -42,7 +42,8 @@ const HeroCopy = () => (
     </p>
     <p css={paragraph}>
       With two innovative apps and ad-free reading, a digital subscription gives
-      you the richest experience of Guardian journalism.
+      you the richest experience of Guardian journalism. Plus, for a limited time,
+      you can read our latest special edition - The books of&nbsp;2021
     </p>
   </>
 );
