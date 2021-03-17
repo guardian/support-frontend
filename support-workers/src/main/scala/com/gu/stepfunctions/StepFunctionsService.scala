@@ -14,7 +14,7 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.states.CreatePaymentMethodState
 import io.circe.generic.auto._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 class StepFunctionsService {

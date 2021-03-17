@@ -33,7 +33,7 @@ class PreviewPaymentScheduleSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "round Payment amounts to two decimal places" in {
-    val previewSubscribeResponse = decode[PreviewSubscribeResponse](previewSubscribeResponseJson).right.get
+    val previewSubscribeResponse = decode[PreviewSubscribeResponse](previewSubscribeResponseJson).toOption.get
 
     val charges = previewSubscribeResponse.invoiceData.flatMap(_.invoiceItem)
 

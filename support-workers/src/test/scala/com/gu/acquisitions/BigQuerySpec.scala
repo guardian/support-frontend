@@ -17,7 +17,7 @@ import org.joda.time.format.ISODateTimeFormat
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 @IntegrationTest
 class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {

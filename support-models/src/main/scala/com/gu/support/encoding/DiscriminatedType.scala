@@ -6,7 +6,7 @@ import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedAsObjectEncoder
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
-import io.circe._
+import io.circe.{Codec => _, _}
 import shapeless.Lazy
 
 import scala.reflect.ClassTag

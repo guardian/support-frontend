@@ -9,11 +9,12 @@ import com.gu.model.zuora.response.{BatchQueryErrorResponse, BatchQueryResponse}
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
+import okhttp3.Response
 
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneId, ZoneOffset}
 import java.util.UUID
-import scala.collection.Map.empty
+import scala.collection.immutable.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.classTag
 
@@ -51,7 +52,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   def getResults(id: String): Future[BatchQueryResponse] =
     get[BatchQueryResponse](s"batch-query/jobs/$id", authHeaders)
 
-  def getResultFileResponse(fileId: String) = {
+  def getResultFileResponse(fileId: String): Future[Response] = {
     val endpoint = s"/batch-query/file/$fileId"
     getResponse(buildRequest(endpoint, authHeaders, empty))
   }

@@ -83,7 +83,7 @@ class RedemptionController(
               isTestUser = isTestUser,
               stage = "checkout",
               redemptionCode = normalisedCode,
-              maybeReaderType = validationResult.right.toOption,
+              maybeReaderType = validationResult.toOption,
               maybeRedemptionError = validationResult.left.toOption,
               user = maybeUser,
               submitted = false
@@ -197,7 +197,7 @@ class RedemptionController(
       SafeLogger.info(s"Validating code ${redemptionCode}: ${validationResult}")
       Ok(RedemptionValidationResult(
         valid = validationResult.isRight,
-        readerType = validationResult.right.toOption,
+        readerType = validationResult.toOption,
         errorMessage = validationResult.left.toOption).asJson
       )
     }

@@ -28,6 +28,6 @@ class LambdaExecutionResultSpec extends AnyFlatSpec with Matchers {
       None
     )
 
-    success.asJson shouldBe parse(LambdaExecutionResultFixtures.successfulContribution).right.get
+    success.asJson shouldBe parse(LambdaExecutionResultFixtures.successfulContribution).toOption.get
   }
 }

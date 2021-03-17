@@ -82,7 +82,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       promotionService,
       ReaderType.Gift,
       SANDBOX,
-      contractEffectiveDate = saleDate).right.get
+      contractEffectiveDate = saleDate).toOption.get
 
   lazy val nonGift = GuardianWeeklySubscriptionBuilder.build(
     weekly,
@@ -92,6 +92,6 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     promotionService,
     ReaderType.Direct,
     SANDBOX,
-    contractEffectiveDate = saleDate).right.get
+    contractEffectiveDate = saleDate).toOption.get
 
 }
