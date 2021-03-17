@@ -124,7 +124,7 @@ const AmazonPayWalletComponent = (props: PropTypes) => {
 
   useEffect(() => {
     const { amazonPaymentsObject } = props.amazonPayData.amazonPayLibrary;
-    if (amazonPaymentsObject && props.amazonPayData.amazonBillingAgreementId) {
+    if (amazonPaymentsObject && props.amazonPayData.amazonBillingAgreementId && props.contributionType !== 'ONE_OFF') {
       createConsentWidget(
         amazonPaymentsObject,
         props.amazonPayData.amazonBillingAgreementId,
@@ -133,6 +133,7 @@ const AmazonPayWalletComponent = (props: PropTypes) => {
   }, [
     props.amazonPayData.amazonPayLibrary.amazonPaymentsObject,
     props.amazonPayData.amazonBillingAgreementId,
+    props.contributionType,
   ]);
 
   const {
