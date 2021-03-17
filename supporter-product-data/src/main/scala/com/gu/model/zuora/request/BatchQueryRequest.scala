@@ -1,6 +1,6 @@
 package com.gu.model.zuora.request
 
-import io.circe.{Encoder, Json, JsonObject}
+import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
 
 import java.time.ZonedDateTime
@@ -21,13 +21,6 @@ case class BatchQueryRequest(
 object ZoqlExportQuery{
   implicit val encoder: Encoder[ZoqlExportQuery] = deriveEncoder[ZoqlExportQuery].mapJsonObject(_
     .add("type", Json.fromString("zoqlexport"))
-    .add("deleted",
-      Json.fromJsonObject(
-      JsonObject(
-        ("column", Json.fromString("isDeleted")),
-        ("format", Json.fromString("Boolean"))
-      ))
-    )
   )
 }
 
