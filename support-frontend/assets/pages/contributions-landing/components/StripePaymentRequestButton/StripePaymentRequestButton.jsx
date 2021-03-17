@@ -16,7 +16,7 @@ import {
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
+import { amountOrOtherAmountIsValid, isValidEmail } from 'helpers/formValidation';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
@@ -84,6 +84,7 @@ type PropTypes = {
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   csrf: CsrfState,
+  stripePaymentRequestButtonVariant: boolean,
 };
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -99,6 +100,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   paymentMethod: state.page.form.paymentMethod,
   switches: state.common.settings.switches,
   csrf: state.page.csrf,
+  stripePaymentRequestButtonVariant: state.common.abParticipations.stripePaymentRequestButtonDec2020 === 'PRB',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -188,7 +190,7 @@ function onClick(event, props: PropTypes) {
   props.setAssociatedPaymentMethod();
   props.setStripePaymentRequestButtonClicked(props.stripeAccount);
   const amountIsValid =
-    checkAmountOrOtherAmount(
+    amountOrOtherAmountIsValid(
       props.selectedAmounts,
       props.otherAmounts,
       props.contributionType,
@@ -345,9 +347,14 @@ function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe) {
   paymentRequest.canMakePayment().then((result) => {
     const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
     if (paymentMethod) {
-      trackComponentLoad(`${paymentMethod}-displayed`);
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-      setUpPaymentListenerSca(props, stripe, paymentRequest, paymentMethod);
+      // Track the fact that it loaded, even if the user is in the control for the PRB test
+      trackComponentLoad(`${paymentMethod}-loaded`);
+
+      if (paymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonVariant) {
+        trackComponentLoad(`${paymentMethod}-displayed`);
+        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+        setUpPaymentListenerSca(props, stripe, paymentRequest, paymentMethod);
+      }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }

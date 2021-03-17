@@ -45,22 +45,22 @@ case object DigitalPack extends Product {
         productRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, "Digital Subscription Annual"),
         productRatePlan("2c92a00d71c96bac0171df3a5622740f", Monthly, "Digital Subscription Redemption Code", Corporate),
-        productRatePlan("2c92a0ff73add07f0173b99f14390afc", Quarterly, "Digital Subscription Three Month Gift", Gift),
-        productRatePlan("2c92a00773adc09d0173b99e4ded7f45", Annual, "Digital Subscription One Year Gift", Gift)
+        productRatePlan("2c92a00d779932ef0177a65430d30ac1", Quarterly, "Digital Subscription Three Month Gift", Gift),
+        productRatePlan("2c92a00c77992ba70177a6596f710265", Annual, "Digital Subscription One Year Gift", Gift)
       ),
       UAT -> List(
         productRatePlan("2c92c0f94f2acf73014f2c908f671591", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92c0f84f2ac59d014f2c94aea9199e", Annual, "Digital Subscription Annual"),
         productRatePlan("2c92c0f971c65df50171dfabef87093d", Monthly, "Digital Subscription Redemption Code", Corporate),
-        productRatePlan("2c92c0f973ad85730173b4cbe0a77f52", Quarterly, "Digital Subscription Three Month Gift", Gift),
-        productRatePlan("2c92c0f873ad73b40173b4d97cc452b1", Annual, "Digital Subscription One Year Gift", Gift)
+        productRatePlan("2c92c0f9778c090d017795ef3000352f", Quarterly, "Digital Subscription Three Month Gift", Gift),
+        productRatePlan("2c92c0f9778c0900017795da493b4f85", Annual, "Digital Subscription One Year Gift", Gift)
       ),
       SANDBOX -> List(
         productRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92c0f94bbffaaa014bc6a4212e205b", Annual, "Digital Subscription Annual"),
         productRatePlan("2c92c0f971c65dfe0171c6c1f86e603c", Monthly, "Digital Subscription Redemption Code", Corporate),
-        productRatePlan("2c92c0f873ad73b60173b534ca586129", Quarterly, "Digital Subscription Three Month Gift", Gift),
-        productRatePlan("2c92c0f873ad73b60173b534b12760ce", Annual, "Digital Subscription One Year Gift", Gift)
+        productRatePlan("2c92c0f8778bf8f60177915b477714aa", Quarterly, "Digital Subscription Three Month Gift", Gift),
+        productRatePlan("2c92c0f8778bf8cd0177a610cdf230ae", Annual, "Digital Subscription One Year Gift", Gift)
       ))
 }
 

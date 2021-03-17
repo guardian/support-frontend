@@ -30,6 +30,7 @@
   uatPayPalConfig: PayPalConfig,
   v2recaptchaConfigPublicKey: String,
   orderIsAGift: Boolean = false,
+  homeDeliveryPostcodes: Option[List[String]] = None,
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
@@ -75,6 +76,13 @@
 
       window.guardian.isTestUser = @uatMode
 
-  </script>
-  <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
+    </script>
+
+    @homeDeliveryPostcodes.map { postcodes =>
+      <script type="text/javascript">
+        window.guardian.homeDeliveryPostcodes = @Html(outputJson(postcodes))
+      </script>
+    }
+
+    <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
   }

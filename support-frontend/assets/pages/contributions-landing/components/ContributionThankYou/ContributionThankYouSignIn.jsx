@@ -20,7 +20,7 @@ import {
   OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
 } from './utils/ophan';
 import { routes } from 'helpers/routes';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 
 const bodyText = css`
   ${body.small()};
@@ -61,6 +61,10 @@ const ContributionThankYouSignIn = ({
     })
       .then(response => response.json())
       .then(data => setSignInUrl(data.signInLink));
+  }, []);
+
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_SIGN_IN);
   }, []);
 
   const actionIcon = <SvgPersonWithTick />;

@@ -48,7 +48,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   // Takes a series of parameters, send a request to PayPal, returns response.
   private def nvpRequest(params: Map[String, String]) = {
 
-    val allParams = (params ++ defaultNVPParams).mapValues(b => Seq(b))
+    val allParams = (params ++ defaultNVPParams).view.mapValues(b => Seq(b)).toMap
 
     wsClient
       .url(apiConfig.url)

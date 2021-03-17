@@ -35,7 +35,6 @@ const Header = headerWithCountrySwitcherContainer({
     NZDCountries,
     International,
   ],
-  trackProduct: 'GuardianWeekly',
 });
 
 

@@ -1,7 +1,6 @@
 // @flow
 
 // ----- Imports ----- //
-import React from 'react';
 import { combineReducers, type Dispatch } from 'redux';
 
 import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
@@ -24,7 +23,7 @@ import {
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import { postcodeIsWithinDeliveryArea } from 'helpers/deliveryCheck';
+import { postcodeIsWithinDeliveryArea, M25_POSTCODE_PREFIXES } from 'helpers/deliveryCheck';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
@@ -77,14 +76,19 @@ const getFormFields = (state: State): FormFields => ({
 const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
   country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
 
-const checkpostCodeLength = (input: string | null): boolean => ((input == null) || (input.length <= 20));
+const checkLength = (input: string | null, maxLength: number): boolean =>
+  ((input == null) || (input.length <= maxLength));
 
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-export const isHomeDeliveryInM25 = (fulfilmentOption: Option<FulfilmentOptions>, postcode: Option<string>) => {
+export const isHomeDeliveryInM25 = (
+  fulfilmentOption: Option<FulfilmentOptions>,
+  postcode: Option<string>,
+  allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
+) => {
   if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
-    return postcodeIsWithinDeliveryArea(postcode);
+    return postcodeIsWithinDeliveryArea(postcode, allowedPrefixes);
   }
   return true;
 };
@@ -103,7 +107,7 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
     error: formError('postCode', `Please enter a ${addressType} postcode.`),
   },
   {
-    rule: checkpostCodeLength(fields.postCode),
+    rule: checkLength(fields.postCode, 20),
     error: formError('postCode', `Please enter a ${addressType} postcode no longer than 20 characters.`),
   },
   {
@@ -117,6 +121,13 @@ const applyBillingAddressRules = (fields: FormFields, addressType: AddressType):
       fields.country === 'CA' ? `Please select a ${addressType} province/territory.` : `Please select a ${addressType} state.`,
     ),
   },
+  {
+    rule: checkLength(fields.state, 40),
+    error: formError(
+      'state',
+      fields.country === 'CA' ? `Please enter a ${addressType} province/territory no longer than 40 characters` : `Please enter a ${addressType} state name no longer than 40 characters`,
+    ),
+  },
 ]);
 
 const applyDeliveryAddressRules = (
@@ -124,15 +135,10 @@ const applyDeliveryAddressRules = (
   fields: FormFields,
   addressType: AddressType,
 ): FormError<FormField>[] => {
-  const error = (
-    <div className="component-form-error__summary-error">
-      The address and postcode you entered is outside of our delivery area. You may want to
-      consider purchasing a <a href="/uk/subscribe/paper">voucher subscription</a>
-    </div>);
   const homeRules = validate([
     {
       rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
-      error: formError('postCode', error),
+      error: formError('postCode', 'The address and postcode you entered is outside of our delivery area. Please go back to purchase a voucher subscription instead.'),
     },
   ]);
 

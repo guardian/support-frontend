@@ -58,6 +58,10 @@ const isNumeric = (num: ?number): boolean %checks =>
   num !== undefined &&
   !Number.isNaN(num);
 
+function getFirstValidPrice(...prices: Array<?number>) {
+  return prices.find(isNumeric) || 0;
+}
+
 function getCountryGroup(country: IsoCountry): CountryGroup {
   return countryGroups[fromCountry(country) || GBPCountries];
 }
@@ -126,6 +130,7 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 
 export {
   getProductPrice,
+  getFirstValidPrice,
   finalPrice,
   getCurrency,
   getCountryGroup,

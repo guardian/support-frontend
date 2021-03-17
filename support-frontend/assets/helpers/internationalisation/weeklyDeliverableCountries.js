@@ -98,7 +98,7 @@ const weeklyDeliverableCountries: {
   BI: 'Burundi',
   BJ: 'Benin',
   BN: 'Brunei Darussalam',
-  BO: 'Bolivia',
+  // BO: 'Bolivia',
   BQ: 'Bonaire, Saint Eustatius and Saba',
   BR: 'Brazil',
   BS: 'Bahamas',

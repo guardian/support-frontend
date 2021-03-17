@@ -4,7 +4,7 @@ import type { Element } from 'react';
 
 // helpers
 import { getDigitalCheckout } from 'helpers/externalLinks';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
@@ -25,7 +25,7 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import { isNumeric } from 'helpers/productPrice/productPrices';
+import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
 
 import { type PropTypes } from '../paymentSelection';
 
@@ -132,13 +132,19 @@ const mapStateToProps = (state: State): PropTypes => {
     promotion.landingPage &&
     promotion.landingPage.roundel ? promotion.landingPage.roundel :
       BILLING_PERIOD[digitalBillingPeriod].offer;
+    const trackingProperties = {
+      id: orderIsAGift ? `subscribe_now_cta_gift-${billingPeriod}` : `subscribe_now_cta-${billingPeriod}`,
+      product: 'DigitalPack',
+      componentType: 'ACQUISITIONS_BUTTON',
+    };
 
     return orderIsAGift ?
       {
         title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
         price: getDisplayPrice(currencyId, fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: sendTrackingEventsOnClick('subscribe_now_cta_gift', 'DigitalPack', null, billingPeriod),
+        onClick: sendTrackingEventsOnClick(trackingProperties),
+        onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(),
         offerCopy: '',
         label: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].label,
@@ -146,9 +152,10 @@ const mapStateToProps = (state: State): PropTypes => {
       } :
       {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
-        price: getDisplayPrice(currencyId, promotionalPrice || fullPrice),
+        price: getDisplayPrice(currencyId, getFirstValidPrice(promotionalPrice, fullPrice)),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriod),
+        onClick: sendTrackingEventsOnClick(trackingProperties),
+        onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
         offerCopy,
         label: BILLING_PERIOD[digitalBillingPeriod].label,

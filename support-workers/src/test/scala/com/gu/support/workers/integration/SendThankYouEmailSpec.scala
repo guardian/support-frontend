@@ -62,13 +62,14 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
         Contribution(20, GBP, Monthly),
         directDebitPaymentMethod,
         "acno",
+        "subno"
       )
     ).map { ef =>
       val resultJson = parse(ef.payload)
 
       resultJson.isRight should be(true)
 
-      new JsonValidater(resultJson.right.get)
+      new JsonValidater(resultJson.toOption.get)
         .validate("Mandate ID", mandateId)
         .validate("account name", directDebitPaymentMethod.bankTransferAccountName)
         .validate("account number", "******11")
@@ -132,6 +133,7 @@ object SendContributionEmail extends App {
       Contribution(20, GBP, Monthly),
       directDebitPaymentMethod,
       acno,
+      subno
     )
   )
   sendSingle(ef)
@@ -158,6 +160,7 @@ object SendDigitalPackCorpEmail extends App {
     SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
       billingOnlyUser,
       DigitalPack(GBP, Annual, ReaderType.Corporate),
+      acno,
       subno
     )
   ))
@@ -177,6 +180,7 @@ object SendDigitalPackGiftPurchaseEmails extends App {
       paymentSchedule,
       None,
       acno,
+      subno
     )
   ))
 

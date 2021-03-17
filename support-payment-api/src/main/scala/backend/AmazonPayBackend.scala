@@ -6,11 +6,13 @@ import com.amazon.pay.response.ipn.model.{Notification, NotificationType, Refund
 import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails, Status}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
+import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.ConfigLoader.environmentShow
 import conf._
 import model._
-import model.acquisition.AmazonPayAcquisition
+import model.acquisition.{AcquisitionDataRowBuilder, AmazonPayAcquisition}
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPayResponse, AmazonPaymentData}
 import model.db.ContributionData
@@ -21,13 +23,15 @@ import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
 
-class AmazonPayBackend(cloudWatchService: CloudWatchService,
-                       service: AmazonPayService,
-                       identityService: IdentityService,
-                       emailService: EmailService,
-                       ophanService: AnalyticsService,
-                       databaseService: ContributionsStoreService
-                      )(implicit pool: DefaultThreadPool) extends StrictLogging {
+class AmazonPayBackend(
+    cloudWatchService: CloudWatchService,
+    service: AmazonPayService,
+    identityService: IdentityService,
+    emailService: EmailService,
+    ophanService: AnalyticsService,
+    bigQueryService: BigQueryService,
+    databaseService: ContributionsStoreService
+  )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   def makePayment(amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, AmazonPayApiError, AmazonPayResponse] = {
 
@@ -61,7 +65,7 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
   private def handleResponse(response: Either[AmazonPayApiError, AuthorizationDetails] , amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo)  = {
     response.toEitherT[Future]
       .leftMap { error =>
-        logger.error(s"Something went wrong with ${amazonPayRequest.paymentData.orderReferenceId}: ${error.getMessage}")
+        logger.info(s"Something went wrong with AmazonPay orderReferenceId: ${amazonPayRequest.paymentData.orderReferenceId}")
         cloudWatchService.recordFailedPayment(error, PaymentProvider.AmazonPay)
         error
       }.semiflatMap { authDetails =>
@@ -92,12 +96,19 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
   private def postPaymentTasks(authDetails: AuthorizationDetails, email: String, acquisitionData: AmazonPayAcquisition): Unit = {
     val clientBrowserInfo = acquisitionData.clientBrowserInfo
     val identityId = acquisitionData.identityId
-    trackContribution(authDetails, acquisitionData, email, identityId, clientBrowserInfo)
+    trackContribution(authDetails, acquisitionData, email, identityId, clientBrowserInfo).leftMap { err =>
+      cloudWatchService.recordPostPaymentTasksError(
+        PaymentProvider.AmazonPay,
+        s"Error tracking contribution: ${err.getMessage}"
+      )
+    }
 
     identityId.foreach { id =>
-      sendThankYouEmail(email, acquisitionData.amazonPayment, id)
-        .leftMap { err =>
-        logger.error(s"unable to send thank you email: ${err.getMessage}")
+      sendThankYouEmail(email, acquisitionData.amazonPayment, id).leftMap { err =>
+        cloudWatchService.recordPostPaymentTasksError(
+          PaymentProvider.AmazonPay,
+          s"unable to send thank you email: ${err.getMessage}"
+        )
       }
     }
   }
@@ -106,11 +117,9 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
     val contributionData = ContributionData.fromAmazonPay(payment, identityId, email, acquisitionData.countryCode, clientBrowserInfo.countrySubdivisionCode, acquisitionData.amazonPayment.orderReferenceId)
     BackendError.combineResults(
       submitAcquisitionToOphan(acquisitionData),
+      submitAcquisitionToBigQuery(acquisitionData, contributionData),
       insertContributionDataIntoDatabase(contributionData)
-    ).leftMap { err =>
-      logger.error("Error tracking contribution", err)
-      err
-    }
+    )
   }
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
@@ -123,6 +132,14 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
   private def submitAcquisitionToOphan(acquisition: AmazonPayAcquisition): EitherT[Future, BackendError, Unit] =
     ophanService.submitAcquisition(acquisition)
       .bimap(BackendError.fromOphanError, _ => ())
+
+  private def submitAcquisitionToBigQuery(
+    acquisition: AmazonPayAcquisition,
+    contributionData: ContributionData
+  ): EitherT[Future, BackendError, Unit] =
+    bigQueryService.tableInsertRow(
+      AcquisitionDataRowBuilder.buildFromAmazonPay(acquisition, contributionData)
+    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def sendThankYouEmail(email: String, payment: AmazonPaymentData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow = ContributorRow(
@@ -161,14 +178,15 @@ class AmazonPayBackend(cloudWatchService: CloudWatchService,
 object AmazonPayBackend {
 
   private def apply(
-                    amazonPayService: AmazonPayService,
-                    databaseService: ContributionsStoreService,
-                    identityService: IdentityService,
-                    ophanService: AnalyticsService,
-                    emailService: EmailService,
-                    cloudWatchService: CloudWatchService
-                   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
-    new AmazonPayBackend(cloudWatchService, amazonPayService, identityService, emailService, ophanService, databaseService )
+    amazonPayService: AmazonPayService,
+    databaseService: ContributionsStoreService,
+    identityService: IdentityService,
+    ophanService: AnalyticsService,
+    bigQueryService: BigQueryService,
+    emailService: EmailService,
+    cloudWatchService: CloudWatchService
+  )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
+    new AmazonPayBackend(cloudWatchService, amazonPayService, identityService, emailService, ophanService, bigQueryService, databaseService)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -188,6 +206,9 @@ object AmazonPayBackend {
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       services.AnalyticsService(configLoader, env),
+      configLoader
+        .loadConfig[Environment, BigQueryConfig](env)
+        .map(new BigQueryService(_)): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

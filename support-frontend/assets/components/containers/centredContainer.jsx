@@ -2,6 +2,7 @@
 
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
+import { from } from '@guardian/src-foundations/mq';
 
 type PropTypes = {|
   cssOverrides?: string;
@@ -13,6 +14,14 @@ const centredContainer = css`
   width: 100%;
   margin: 0 auto;
   max-width: 1290px;
+
+  ${from.desktop} {
+    width: calc(100% - 110px);
+  }
+
+  ${from.leftCol} {
+    width: calc(100% - 80px);
+  }
 `;
 
 function CentredContainer(props: PropTypes) {

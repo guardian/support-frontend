@@ -8,6 +8,8 @@ case object Stripe extends PaymentProvider("Stripe")
 
 case object StripeApplePay extends PaymentProvider("StripeApplePay")
 
+case object StripePaymentRequestButton extends PaymentProvider("StripePaymentRequestButton")
+
 case object PayPal extends PaymentProvider("PayPal")
 
 case object DirectDebit extends PaymentProvider("DirectDebit")

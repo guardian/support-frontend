@@ -3,7 +3,7 @@
 
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
-import { maybeTrack } from 'helpers/tracking/doNotTrack';
+import { getQueryParameter } from 'helpers/url';
 
 // ----- Types ----- //
 
@@ -18,7 +18,7 @@ type OphanProduct =
   | 'DIGITAL_SUBSCRIPTION'
   | 'PRINT_SUBSCRIPTION';
 
-type OphanAction =
+export type OphanAction =
   | 'INSERT'
   | 'VIEW'
   | 'EXPAND'
@@ -29,7 +29,7 @@ type OphanAction =
   | 'VOTE'
   | 'CLICK';
 
-type OphanComponentType =
+export type OphanComponentType =
   | 'READERS_QUESTIONS_ATOM'
   | 'QANDA_ATOM'
   | 'PROFILE_ATOM'
@@ -81,17 +81,15 @@ type OphanABPayload = {
 
 // ----- Functions ----- //
 
-const trackComponentEvents = (componentEvent: OphanComponentEvent) =>
-  maybeTrack(() => ophan.record({ componentEvent }));
+const trackComponentEvents = (componentEvent: OphanComponentEvent) => ophan.record({ componentEvent });
 
-const pageView = (url: string, referrer: string) =>
-  maybeTrack(() => {
-    try {
-      ophan.sendInitialEvent(url, referrer);
-    } catch (e) {
-      console.log(`Error in Ophan tracking: ${e}`);
-    }
-  });
+const pageView = (url: string, referrer: string) => {
+  try {
+    ophan.sendInitialEvent(url, referrer);
+  } catch (e) {
+    console.log(`Error in Ophan tracking: ${e}`);
+  }
+};
 
 const buildOphanPayload = (participations: Participations): OphanABPayload =>
   Object.keys(participations)
@@ -106,12 +104,26 @@ const buildOphanPayload = (participations: Participations): OphanABPayload =>
     }, {});
 
 const trackAbTests = (participations: Participations): void =>
-  maybeTrack(() => ophan.record({
+  ophan.record({
     abTestRegister: buildOphanPayload(participations),
-  }));
+  });
+
+// Set referring pageViewId in localstorage if it's not already there. This is picked up by ophan, see:
+// https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/click-path-capture.coffee#L41
+// Note - the localstorage item is deleted by tracker-js as soon as it's read, see:
+// https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/core.coffee#L72
+const setRefViewId = (): void => {
+  const REFPVID = getQueryParameter('REFPVID');
+  if (REFPVID && !localStorage.getItem('ophan_follow')) {
+    localStorage.setItem('ophan_follow', JSON.stringify({
+      refViewId: REFPVID,
+    }));
+  }
+};
 
 export {
   trackComponentEvents,
   pageView,
   trackAbTests,
+  setRefViewId,
 };

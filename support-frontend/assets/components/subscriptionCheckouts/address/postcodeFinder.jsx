@@ -1,14 +1,12 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-
-import Button from 'components/button/button';
-import { Input } from 'components/forms/input';
-import { Select } from 'components/forms/select';
-import { asControlled } from 'hocs/asControlled';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
+import { TextInput } from '@guardian/src-text-input';
+import { Button, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { ThemeProvider } from 'emotion-theming';
+import { Select, Option } from '@guardian/src-select';
 
 import {
   type PostcodeFinderActionCreators,
@@ -18,8 +16,19 @@ import {
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import { type PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 
-import styles
-  from 'components/subscriptionCheckouts/address/postcodeFinder.module.scss';
+const root = css`
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: ${space[6]}px;
+`;
+
+const inputStyles = css`
+  margin-right: ${space[3]}px;
+`;
+
+const buttonStyles = css`
+  align-self: flex-end;
+`;
 
 // Types
 
@@ -34,34 +43,34 @@ type PropTypes = {|
 
 // Helpers
 const InputWithButton = ({ onClick, isLoading, ...props }) => (
-  <div className={styles.root}>
-    <Input
+  <div css={root}>
+    <TextInput
       {...props}
-      onKeyPress={(ev) => {
-        if (ev.key && ev.key === 'Enter') {
-          ev.preventDefault();
+      onKeyPress={(e) => {
+        if (e.key && e.key === 'Enter') {
+          e.preventDefault();
           onClick();
         }
       }}
-      className={styles.input}
+      css={inputStyles}
       name="postcode"
+      width={10}
     />
     {!isLoading &&
+    <ThemeProvider theme={buttonReaderRevenueBrandAlt}>
       <Button
+        priority="tertiary"
+        css={buttonStyles}
         type="button"
-        appearance="greyHollow"
         icon={null}
         onClick={onClick}
       >
         Find address
       </Button>
+    </ThemeProvider>
     }
   </div>
 );
-
-const ComposedInputWithButton = compose(withLabel, asControlled, withError)(InputWithButton);
-const ComposedSelect = compose(withLabel)(Select);
-
 
 // Main class
 
@@ -78,34 +87,34 @@ class PostcodeFinder extends Component<PropTypes> {
     } = this.props;
     return (
       <div>
-        <ComposedInputWithButton
+        <InputWithButton
           error={error}
           label="Postcode"
           onClick={() => { fetchResults(postcode); }}
           id={id}
-          setValue={(val) => {
-            setPostcode(val);
-            onPostcodeUpdate(val);
+          onChange={(e) => {
+            setPostcode(e.target.value);
+            onPostcodeUpdate(e.target.value);
           }}
           isLoading={isLoading}
           value={postcode}
         />
         {(results.length > 0) &&
-          <ComposedSelect
-            onChange={(ev) => {
-              if (results[ev.currentTarget.value]) {
-                onAddressUpdate(results[ev.currentTarget.value]);
+          <Select
+            onChange={(e) => {
+              if (results[e.currentTarget.value]) {
+                onAddressUpdate(results[e.currentTarget.value]);
               }
             }}
             forwardRef={(r) => { this.selectRef = r; }}
             id="address"
             label={`${results.length} addresses found`}
           >
-            <option value={null}>Select an address</option>
+            <Option value={null}>Select an address</Option>
               {results.map((result, key) => (
-                <option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</option>
+                <Option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</Option>
               ))}
-          </ComposedSelect>
+          </Select>
         }
       </div>
     );

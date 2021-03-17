@@ -96,6 +96,7 @@ export const featureContainer = css`
     justify-content: space-between;
     max-width: calc(100% - 110px);
     max-width: 1100px;
+    min-height: 365px;
   }
 
   ${from.leftCol} {
@@ -154,6 +155,16 @@ export const paragraph = css`
   ${body.small()};
   max-width: 100%;
   margin-bottom: ${space[9]}px;
+
+  // This applies to paras coming from the promo tool
+  & p:not(:last-of-type) {
+    margin-bottom: ${space[5]}px;
+  }
+
+  // This applies to default paragraphs in the hero
+  :not(:last-of-type) {
+    margin-bottom: ${space[5]}px;
+  }
 
   ${from.mobileMedium} {
     ${body.medium()};
@@ -256,6 +267,11 @@ export const circleTextTop = css`
 
 export const circleTextBottom = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
+  color: ${brand[300]};
+`;
+
+export const circleTextGeneric = css`
+  ${headline.xxsmall({ fontWeight: 'bold' })};
   color: ${brand[300]};
 `;
 

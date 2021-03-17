@@ -46,7 +46,12 @@ object StripeApiError {
       }
     }
 
-    val declineCode: Option[String] = condOpt(err) { case e: CardException => e.getDeclineCode }
+    val declineCode: Option[String] = condOpt(err) { case e: CardException => {
+      // If the decline_code is present then use that (happens for e.g. 'insufficient_funds')
+      // If decline_code is not present then just use the code (happens for e.g. 'incorrect_cvc').
+      // Despite this inconsistency, these are all valid decline codes: // https://stripe.com/docs/declines/codes
+      Option(e.getDeclineCode).getOrElse(e.getCode)
+    } }
 
     StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage, publicKey)
 

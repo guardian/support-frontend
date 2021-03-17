@@ -49,7 +49,7 @@ case class EmailFields(
       ),
       DataExtensionName = dataExtensionName,
       SfContactId = userId.left.toOption.map(_.id),
-      IdentityUserId = userId.right.toOption.map(_.id),
+      IdentityUserId = userId.toOption.map(_.id),
       deliveryDate.map(_.toDateTime(new LocalTime(8, 0), DateTimeZone.UTC)),
       userAttributes
     ).asJson.printWith(Printer.spaces2.copy(dropNullValues = true))

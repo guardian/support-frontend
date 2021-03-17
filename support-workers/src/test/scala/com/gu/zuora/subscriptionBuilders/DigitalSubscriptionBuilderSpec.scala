@@ -72,7 +72,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   }
 
   "SubscriptionData for a 3 monthly gift subscription purchase" should "be correct" in {
-    threeMonthGiftPurchase.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f873ad73b60173b534ca586129"), List(), List()))
+    threeMonthGiftPurchase.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f8778bf8f60177915b477714aa"), List(), List()))
       import threeMonthGiftPurchase.subscription._
       autoRenew shouldBe false
       contractAcceptanceDate shouldBe saleDate
@@ -108,11 +108,11 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val corporate =
     corporateRedemptionBuilder.build(
-      RedemptionData(RedemptionCode(testCode).right.get),
+      RedemptionData(RedemptionCode(testCode).toOption.get),
       DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate), // scalastyle:ignore null
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       SANDBOX
-    ).value.map(_.right.get)
+    ).value.map(_.toOption.get)
 
   lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2),
@@ -129,7 +129,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       SANDBOX,
       None,
       None,
-    ).right.get
+    ).toOption.get
 
   lazy val threeMonthGiftPurchase =
     subscriptionPurchaseBuilder.build(
@@ -139,7 +139,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       SANDBOX,
       Some(GeneratedGiftCode("gd03-23456789").get),// code for Quarterly ie Gift3Month
       Some(new LocalDate(2020, 12, 1)),
-    ).right.get
+    ).toOption.get
 
   lazy val threeMonthGiftRedemption: Future[Throwable] =
     new SubscriptionDataBuilder(
@@ -154,14 +154,14 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         User("", "", None, "", "", Address(None, None, None, None, None, Country.Australia)), //user
         None,
         DigitalPack(GBP, Quarterly, Gift),
-        AnalyticsInfo(false, RedemptionNoProvider),
-        Right(RedemptionData(RedemptionCode(testCode).right.get)),
+        AnalyticsInfo(isGiftPurchase = false, RedemptionNoProvider),
+        Right(RedemptionData(RedemptionCode(testCode).toOption.get)),
         None,
         None,
         SalesforceContactRecords(SalesforceContactRecord("", ""), None),
         None
       ),
       None
-    ).value.map(_.left.get)
+    ).value.map(_.left.toOption.get)
 
 }

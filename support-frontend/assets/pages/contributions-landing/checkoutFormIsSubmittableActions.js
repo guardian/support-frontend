@@ -5,7 +5,7 @@
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { type Action as UserAction } from 'helpers/user/userActions';
 import {
-  checkAmountOrOtherAmount,
+  amountOrOtherAmountIsValid,
   checkEmail,
   checkFirstName,
   checkLastName,
@@ -81,7 +81,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
   ) && checkEmail(email)
     && stripeCardFormOk
     && checkStateIfApplicable(billingState, countryGroupId, contributionType)
-    && checkAmountOrOtherAmount(selectedAmounts, otherAmounts, contributionType, countryGroupId);
+    && amountOrOtherAmountIsValid(selectedAmounts, otherAmounts, contributionType, countryGroupId);
 };
 
 const formIsValidParameters = (state: State) => ({

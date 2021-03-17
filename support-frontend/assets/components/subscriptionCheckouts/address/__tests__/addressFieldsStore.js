@@ -110,7 +110,9 @@ describe('addressFieldStore', () => {
       const fulfilmentOption = 'HomeDelivery';
       const postcode = 'SE23 2AB';
 
-      const result = isHomeDeliveryInM25(fulfilmentOption, postcode);
+      const homeDeliveryPostcodes = ['SE23'];
+
+      const result = isHomeDeliveryInM25(fulfilmentOption, postcode, homeDeliveryPostcodes);
 
       expect(result).toBeTruthy();
     });
@@ -119,7 +121,9 @@ describe('addressFieldStore', () => {
       const fulfilmentOption = 'HomeDelivery';
       const postcode = 'DA11 7NP';
 
-      const result = isHomeDeliveryInM25(fulfilmentOption, postcode);
+      const homeDeliveryPostcodes = ['SE23'];
+
+      const result = isHomeDeliveryInM25(fulfilmentOption, postcode, homeDeliveryPostcodes);
 
       expect(result).toBeFalsy();
     });
@@ -129,7 +133,9 @@ describe('addressFieldStore', () => {
       const fulfilmentOption = 'Collection';
       const postcode = 'DA11 7NP';
 
-      const result = isHomeDeliveryInM25(fulfilmentOption, postcode);
+      const homeDeliveryPostcodes = ['SE23'];
+
+      const result = isHomeDeliveryInM25(fulfilmentOption, postcode, homeDeliveryPostcodes);
 
       expect(result).toBeTruthy();
     });

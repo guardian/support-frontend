@@ -6,7 +6,6 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/heroPicture';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
@@ -25,6 +24,8 @@ import { formatUserDate } from 'helpers/dateConversions';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { Paper } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import { HeroPicture } from './heroPicture';
+import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
@@ -64,10 +65,10 @@ const whatNextText: { [FulfilmentOptions]: { [key: string]: Array<string> } } = 
     ],
     digitalVoucher: [
       `Keep an eye on your inbox. You should receive an email confirming the details of your subscription,
-        and another email shortly afterwards that contains details of how you can pick up your papers from tomorrow!`,
+        and another email shortly afterwards that contains details of how you can pick up your newspapers from tomorrow!`,
       `You will receive your Subscription Card in your subscriber pack in the post, along with your home
         delivery letter.`,
-      `Visit your chosen participating newsagent to pick up your paper using your Subscription Card, or
+      `Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or
         arrange a home delivery using your delivery letter.`,
     ],
   },
@@ -96,6 +97,7 @@ function ThankYouContent({
   fulfilmentOption, productOption, startDate, isPending, product, useDigitalVoucher,
 }: PropTypes) {
   const hideStartDate = fulfilmentOption === Collection && useDigitalVoucher;
+  const cleanProductOption = getTitle(productOption);
   return (
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
@@ -105,8 +107,8 @@ function ThankYouContent({
           overheadingClass="--thankyou"
         >
           {isPending ?
-          `Your subscription to the ${productOption} package is being processed` :
-          `You have now subscribed to the ${productOption} package`
+          `Your subscription to the ${cleanProductOption} package is being processed` :
+          `You have now subscribed to the ${cleanProductOption} package`
   }
         </HeadingBlock>
       </HeroWrapper>
@@ -131,8 +133,8 @@ function ThankYouContent({
       <Content>
         <Text>
           <SansParagraph>
-            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick('checkout_mma', 'Paper', null)}>Manage section</a> or accessing
-            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick('checkout_my_account', 'Paper', null)}>your Guardian account</a>.
+            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_mma', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>Manage section</a> or accessing
+            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_my_account', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>your Guardian account</a>.
           </SansParagraph>
         </Text>
       </Content>

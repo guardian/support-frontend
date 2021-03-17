@@ -10,11 +10,11 @@ import play.api.BuiltInComponentsFromContext
 trait Controllers {
 
   // scalastyle:off
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth with Monitoring =>
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth with Monitoring =>
   // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
-  lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes)
+  lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
   lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage)_
   lazy val fontLoader = elementForStage(RefPath("fontLoader.js"))
@@ -39,6 +39,10 @@ trait Controllers {
     fontLoader
   )
 
+  lazy val diagnosticsController = new DiagnosticsController(
+    actionRefiners
+  )
+
   lazy val articleShareController = new ArticleShare(
     actionRefiners,
     controllerComponents,
@@ -57,23 +61,6 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val digitalPackController = new DigitalSubscriptionController(
-    priceSummaryServiceProvider,
-    assetsResolver,
-    actionRefiners,
-    identityService,
-    testUsers,
-    membersDataService,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    stringsConfig,
-    allSettingsProvider,
-    appConfig.supportUrl,
-    fontLoader,
-    appConfig.recaptchaConfigProvider
-  )
-
   lazy val redemptionController = new RedemptionController(
     actionRefiners,
     assetsResolver,
@@ -87,26 +74,64 @@ trait Controllers {
     zuoraGiftLookupServiceProvider
   )
 
+  private lazy val landingCopyProvider = new LandingCopyProvider(
+    promotionServiceProvider,
+    appConfig.stage
+  )
+
+  lazy val digitalPackController = new DigitalSubscriptionController(
+    priceSummaryServiceProvider,
+    landingCopyProvider,
+    assetsResolver,
+    actionRefiners,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+    fontLoader
+  )
+
   lazy val paperController = new PaperSubscription(
+    priceSummaryServiceProvider,
+    landingCopyProvider,
+    assetsResolver,
+    actionRefiners,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+    fontLoader
+  )
+
+  lazy val weeklyController = new WeeklySubscription(
+    priceSummaryServiceProvider,
+    landingCopyProvider,
+    assetsResolver,
+    actionRefiners,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+    fontLoader
+  )
+
+  lazy val digitalPackFormController = new DigitalSubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
     identityService,
     testUsers,
+    membersDataService,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
-    stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
     fontLoader,
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val weeklyController = new WeeklySubscription(
-    authAction,
+  lazy val paperFormController = new PaperSubscriptionForm(
     priceSummaryServiceProvider,
-    promotionServiceProvider,
     assetsResolver,
     actionRefiners,
     identityService,
@@ -114,11 +139,22 @@ trait Controllers {
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
-    stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
     fontLoader,
-    appConfig.stage,
+    appConfig.recaptchaConfigProvider
+  )
+
+  lazy val weeklyFormController = new WeeklySubscriptionForm(
+    priceSummaryServiceProvider,
+    assetsResolver,
+    actionRefiners,
+    identityService,
+    testUsers,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
+    controllerComponents,
+    allSettingsProvider,
+    fontLoader,
     appConfig.recaptchaConfigProvider
   )
 
@@ -129,7 +165,8 @@ trait Controllers {
     testUsers,
     controllerComponents,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    appConfig.stage
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

@@ -87,6 +87,6 @@ class CirceEncodingBehaviourSpec extends AnyFlatSpec with Matchers with LazyLogg
       |}""".stripMargin
     val decoded = decode[StripeError](json)
     decoded.isRight should be(true)
-    decoded.right.map(_.`type`) should be(Right("invalid_request_error"))
+    decoded.map(_.`type`) should be(Right("invalid_request_error"))
   }
 }

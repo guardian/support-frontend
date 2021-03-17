@@ -5,8 +5,6 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import Text, { Title, Callout, LargeParagraph, SansParagraph } from 'components/text/text';
-import UnorderedList from 'components/list/unorderedList';
-import OrderedList from 'components/list/orderedList';
 
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
@@ -30,19 +28,4 @@ stories.add('Text', () => (
       <Title size={3}>Even more titles!</Title>
     </Text>
   </div>
-));
-
-stories.add('Lists', () => (
-  <Text title="Lists">
-    <UnorderedList items={[
-      'This is an unordered list',
-      'It looks like this',
-    ]}
-    />
-    <OrderedList items={[
-      'This one is ordered',
-      'and it looks like this',
-    ]}
-    />
-  </Text>
 ));

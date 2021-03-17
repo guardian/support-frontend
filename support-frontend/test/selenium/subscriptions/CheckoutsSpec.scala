@@ -39,6 +39,12 @@ class CheckoutsSpec extends AnyFeatureSpec
     }
   }
 
+  Feature("Digital Pack gift checkout") {
+    Scenario("User already logged in - Direct Debit checkout") {
+      testCheckout("Digital Pack gift", new DigitalPackGiftCheckout, new DigitalPackGiftProductPage, payWithStripe)
+    }
+  }
+
   Feature("Paper checkout") {
     Scenario("User already logged in - Direct Debit checkout") {
       testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
@@ -109,14 +115,14 @@ class CheckoutsSpec extends AnyFeatureSpec
     Given("they fill in the direct debit form")
     checkoutPage.fillDirectDebitForm()
 
-    When("they click to process payment")
-    checkoutPage.clickDirectDebitSubmit()
+    When("they click Confirm")
+    checkoutPage.clickDirectDebitConfirm()
 
     Given("the playback of the user's details has loaded")
     assert(checkoutPage.directDebitPlaybackHasLoaded)
 
-    When("they click to confirm their details are correct")
-    checkoutPage.clickDirectDebitConfirm()
+    When("they click Pay")
+    checkoutPage.clickDirectDebitPay()
 
     thankYouPage(checkoutPage)
   }

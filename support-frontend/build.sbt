@@ -13,15 +13,15 @@ resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/pla
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "com.gu" %% "simple-configuration-ssm" % "1.5.1",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+  "com.gu" %% "simple-configuration-ssm" % "1.5.3",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-lambda" % awsClientVersion,
-  "org.typelevel" %% "cats-core" % "1.0.1",
+  "org.typelevel" %% "cats-core" % catsVersion,
   "com.dripower" %% "play-circe" % playCirceVersion,
   "com.gu" %% "fezziwig" % "1.3",
   "io.circe" %% "circe-core" % circeVersion,
@@ -29,25 +29,26 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-auth-play" % "3.195",
-  "com.gu" %% "identity-test-users" % "0.6",
+  "com.gu.identity" %% "identity-auth-play" % "3.246",
+  "com.gu" %% "identity-test-users" % "0.8",
   "com.google.guava" % "guava" % "29.0-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
-  "com.gu.play-googleauth" %% "play-v26" % "1.0.7",
+  "com.gu.play-googleauth" %% "play-v27" % "2.1.0",
   "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "3.10.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.gu" %% "tip" % "0.6.1",
+  "com.gu" %% "tip" % "0.6.4",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   filters,
   ws
 )
+dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 sources in(Compile, doc) := Seq.empty
 
@@ -83,9 +84,7 @@ riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static")
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
-  "-J-XX:MaxRAMFraction=2",
-  "-J-XX:InitialRAMFraction=2",
-  "-J-XX:MaxMetaspaceSize=500m",
+  "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
   "-J-XX:+PrintGCDateStamps",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"

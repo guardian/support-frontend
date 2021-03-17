@@ -20,8 +20,6 @@ import Playback from './components/playback';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
 
-import './directDebitForm.scss';
-
 
 // ---- Types ----- //
 
@@ -46,12 +44,19 @@ type PropTypes = {|
   formError: ErrorReason | null,
 |};
 
+type Error ={
+  error: string,
+  message: string,
+  rule: Function,
+}
+
 type StateTypes = {
-  accountHolderName: Object,
-  sortCodeString: Object,
-  accountNumber: Object,
-  accountHolderConfirmation: Object,
+  accountHolderName: Error,
+  sortCodeString: Error,
+  accountNumber: Error,
+  accountHolderConfirmation: Error,
   accountErrorsLength: number,
+  allErrors: Array<Object>,
   allErrorsLength: number,
   canSubmit: boolean,
 }
@@ -137,6 +142,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         message: 'Please confirm you are the account holder',
         rule: accountHolderConfirmation => accountHolderConfirmation === true,
       },
+      allErrors: [],
       accountErrorsLength: 0,
       allErrorsLength: 0,
       canSubmit: false,
@@ -149,7 +155,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         ...this.state[field],
         error: '',
       },
-    });
+    }, this.getAccountErrors);
     dispatchUpdate(event);
   }
 
@@ -158,15 +164,21 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
     this.props.submitForm();
   }
 
-  getAccountErrors = (state) => {
-    const cardErrors = fieldNames.map(field =>
-      ({ message: state[field].error }));
-    return cardErrors;
+  getAccountErrors = () => {
+    const cardErrors = [];
+    fieldNames.forEach((field) => {
+      if (this.state[field].error.length > 0) {
+        cardErrors.push({ message: this.state[field].error });
+      }
+    });
+    this.setState({
+      allErrors: cardErrors,
+    });
   }
 
-  getAccountErrorsLength = (cardErrors) => {
+  getAccountErrorsLength = () => {
     let accum = 0;
-    cardErrors.forEach((item) => {
+    this.state.allErrors.forEach((item) => {
       if ((item.message).length > 0) {
         accum += 1;
       }
@@ -191,7 +203,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           }),
           // And then the error count in state is updated
           () => {
-            accountErrorsLength = this.getAccountErrorsLength(this.getAccountErrors(this.state));
+            this.getAccountErrors();
+            accountErrorsLength = this.getAccountErrorsLength();
             this.setState({
               accountErrorsLength,
             });
@@ -199,10 +212,9 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         );
       } else {
         // If the field is fine, the number of errors is updated
+        accountErrorsLength = this.getAccountErrorsLength();
         this.setState(
-          state => ({
-            accountErrorsLength: this.getAccountErrorsLength(this.getAccountErrors(state)),
-          }),
+          { accountErrorsLength },
           // And then all the error count is checked before an action is dispatched to check the account
           () => {
             if (this.state.accountErrorsLength === 0) {
@@ -216,8 +228,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
 
   render() {
     const { props, state } = this;
-    const accountErrors = this.getAccountErrors(state);
-    const accountErrorsLength = this.getAccountErrorsLength(accountErrors);
+    const accountErrorsLength = this.getAccountErrorsLength();
     const showGeneralError = props.allErrors.length === 0 && accountErrorsLength === 0 &&
     (props.submissionError !== null || (props.formError !== null && props.formError.length > 0));
 
@@ -227,7 +238,7 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
           <Form
             {...props}
             showGeneralError={showGeneralError}
-            accountErrors={accountErrors}
+            accountErrors={this.state.allErrors}
             accountErrorsLength={accountErrorsLength}
             accountHolderNameError={state.accountHolderName.error}
             accountNumberError={state.accountNumber.error}

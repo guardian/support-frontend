@@ -89,7 +89,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     email: String
   )(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse] = {
     request(s"user/type/$email")
-      .get
+      .get()
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => resp.json.validate[GetUserTypeResponse].asEither.leftMap(_.mkString(",")))

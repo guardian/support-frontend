@@ -26,7 +26,4 @@ object AmazonPayApiError {
     AmazonPayApiError(Some(code), message, Some(clientReason))
 
   }
-
-  def fromThrowable(err: Throwable): AmazonPayApiError = fromString(err.getMessage)
-
 }

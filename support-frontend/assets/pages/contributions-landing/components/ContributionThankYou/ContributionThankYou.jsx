@@ -20,9 +20,8 @@ import { LinkButton } from '@guardian/src-button';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouSignIn from './ContributionThankYouSignIn';
 import ContributionThankYouSignUp from './ContributionThankYouSignUp';
-import ContributionThankYouHearMarketingConsent from './ContributionThankYouHearMarketingConsent';
+import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
 import ContributionThankYouSupportReminder from './ContributionThankYouSupportReminder';
-import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import {
@@ -119,16 +118,13 @@ const isLargeDonation = (
   amount: string,
   contributionType: ContributionType,
 ): boolean => {
-  const amountInCents = parseFloat(amount) * 100;
-  const twoHundredAndFiftyDollars = 25_000;
-  const twentyFiveDollars = 2_500;
   const largeDonations = {
-    MONTHLY: twentyFiveDollars,
-    ANNUAL: twoHundredAndFiftyDollars,
-    ONE_OFF: twoHundredAndFiftyDollars,
+    MONTHLY: 20,
+    ANNUAL: 100,
+    ONE_OFF: 100,
   };
 
-  return amountInCents >= largeDonations[contributionType];
+  return parseFloat(amount) >= largeDonations[contributionType];
 };
 
 type ContributionThankYouProps = {|
@@ -166,7 +162,7 @@ const mapStateToProps = state => ({
   thankyouPageHeadingTestVariant:
     state.common.abParticipations.thankyouPageHeadingTest === 'V1',
   largeDonationMessageTestVariant:
-    state.common.abParticipations.usThankyouPageLargeDonationTest === 'V1',
+    state.common.abParticipations.globalThankyouPageLargeDonationTest === 'V1',
 });
 
 const ContributionThankYou = ({
@@ -187,13 +183,10 @@ const ContributionThankYou = ({
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() =>
     getCampaignSettings(campaignCode));
-  const isUsEndOfYearAppeal = countryId === 'US';
 
-  const isLargeUSDonation =
-    countryId === 'US' && isLargeDonation(amount, contributionType);
 
   const shouldShowLargeDonationMessage =
-    largeDonationMessageTestVariant && isLargeUSDonation;
+    largeDonationMessageTestVariant && isLargeDonation(amount, contributionType);
 
   useEffect(() => {
     trackUserData(
@@ -201,7 +194,7 @@ const ContributionThankYou = ({
       contributionType,
       user.isSignedIn,
       isKnownEmail,
-      isLargeUSDonation,
+      isLargeDonation(amount, contributionType),
     );
   }, []);
 
@@ -215,7 +208,7 @@ const ContributionThankYou = ({
   };
   const marketingConsentAction = {
     component: (
-      <ContributionThankYouHearMarketingConsent
+      <ContributionThankYouMarketingConsent
         email={email}
         csrf={csrf}
         thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
@@ -227,16 +220,9 @@ const ContributionThankYou = ({
     component: (
       <ContributionThankYouSupportReminder
         email={email}
-        isUsEndOfYearAppeal={isUsEndOfYearAppeal}
       />
     ),
     shouldShow: contributionType === 'ONE_OFF',
-  };
-  const SURVEY_END_DATE = new Date(Date.parse('2021-01-31'));
-  const now = new Date();
-  const surveyAction = {
-    component: <ContributionThankYouSurvey />,
-    shouldShow: isUsEndOfYearAppeal && now < SURVEY_END_DATE,
   };
   const socialShareAction = {
     component: (
@@ -246,7 +232,6 @@ const ContributionThankYou = ({
           campaignSettings && campaignSettings.createReferralCodes
         }
         campaignCode={campaignSettings && campaignSettings.campaignCode}
-        isUsEndOfYearAppeal={isUsEndOfYearAppeal}
       />
     ),
     shouldShow: true,
@@ -261,7 +246,6 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
-    surveyAction,
     socialShareAction,
   ];
 
@@ -270,7 +254,6 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
-    surveyAction,
     ausMapAction,
     socialShareAction,
   ];

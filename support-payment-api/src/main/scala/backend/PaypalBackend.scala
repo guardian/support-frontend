@@ -6,13 +6,15 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
+import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
+import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import play.api.libs.ws.WSClient
 import conf._
 import conf.ConfigLoader._
 import model._
-import model.acquisition.PaypalAcquisition
+import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
 import model.paypal._
@@ -24,12 +26,13 @@ import scala.collection.JavaConverters._
 import scala.util.Try
 
 class PaypalBackend(
-                     paypalService: PaypalService,
-                     databaseService: ContributionsStoreService,
-                     identityService: IdentityService,
-                     ophanService: AnalyticsService,
-                     emailService: EmailService,
-                     cloudWatchService: CloudWatchService
+  paypalService: PaypalService,
+  databaseService: ContributionsStoreService,
+  identityService: IdentityService,
+  ophanService: AnalyticsService,
+  bigQueryService: BigQueryService,
+  emailService: EmailService,
+  cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   /*
@@ -40,7 +43,7 @@ class PaypalBackend(
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] =
     paypalService.createPayment(c)
       .leftMap { error =>
-        logger.error(s"Error creating paypal payment data. Error: $error")
+        cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
         error
       }
 
@@ -100,7 +103,10 @@ class PaypalBackend(
   // Success or failure of these steps shouldn't affect the response to the client
   private def postPaymentTasks(payment: Payment, email: String, identityId: Option[Long], acquisitionData: AcquisitionData, clientBrowserInfo: ClientBrowserInfo): Unit = {
     trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo)
-      .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
+      .leftMap(trackErr => cloudWatchService.recordPostPaymentTasksError(
+        PaymentProvider.Paypal,
+        s"unable to track contribution due to error: ${trackErr.getMessage}"
+      ))
 
     val emailResult = for {
       id <- EitherT.fromOption(
@@ -112,26 +118,24 @@ class PaypalBackend(
     } yield ()
 
     emailResult.leftMap { err =>
-      logger.error(s"unable to send email: ${err.getMessage}", err)
+      cloudWatchService.recordPostPaymentTasksError(
+        PaymentProvider.Paypal,
+        s"unable to send email: ${err.getMessage}"
+      )
     }
   }
 
   private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     ContributionData.fromPaypalCharge(payment, email, identityId, clientBrowserInfo.countrySubdivisionCode)
-      .leftMap { error =>
-        logger.error(s"Error creating contribution data from paypal. Error: $error")
-        BackendError.fromPaypalAPIError(error)
-      }
+      .leftMap(BackendError.fromPaypalAPIError)
       .toEitherT[Future]
       .flatMap { contributionData =>
+        val paypalAcquisition = PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
         BackendError.combineResults(
-          submitAcquisitionToOphan(payment, acquisitionData, contributionData.identityId, clientBrowserInfo),
+          submitAcquisitionToOphan(paypalAcquisition),
+          submitAcquisitionToBigQuery(paypalAcquisition, contributionData),
           insertContributionDataIntoDatabase(contributionData)
         )
-      }
-      .leftMap { err =>
-        logger.error("Error tracking contribution", err)
-        err
       }
   }
 
@@ -153,9 +157,17 @@ class PaypalBackend(
       .leftMap(BackendError.fromDatabaseError)
   }
 
-  private def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] =
-    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId, clientBrowserInfo))
+  private def submitAcquisitionToOphan(paypalAcquisition: PaypalAcquisition): EitherT[Future, BackendError, Unit] =
+    ophanService.submitAcquisition(paypalAcquisition)
       .bimap(BackendError.fromOphanError, _ => ())
+
+  private def submitAcquisitionToBigQuery(
+    acquisition: PaypalAcquisition,
+    contributionData: ContributionData
+  ): EitherT[Future, BackendError, Unit] =
+    bigQueryService.tableInsertRow(
+      AcquisitionDataRowBuilder.buildFromPayPal(acquisition, contributionData)
+    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def validateRefundHook(headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] =
     paypalService.validateWebhookEvent(headers, rawJson)
@@ -192,14 +204,15 @@ class PaypalBackend(
 object PaypalBackend {
 
   private def apply(
-                     paypalService: PaypalService,
-                     databaseService: ContributionsStoreService,
-                     identityService: IdentityService,
-                     ophanService: AnalyticsService,
-                     emailService: EmailService,
-                     cloudWatchService: CloudWatchService
+    paypalService: PaypalService,
+    databaseService: ContributionsStoreService,
+    identityService: IdentityService,
+    ophanService: AnalyticsService,
+    bigQueryService: BigQueryService,
+    emailService: EmailService,
+    cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
-    new PaypalBackend(paypalService, databaseService, identityService, ophanService, emailService, cloudWatchService)
+    new PaypalBackend(paypalService, databaseService, identityService, ophanService, bigQueryService, emailService, cloudWatchService)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -220,6 +233,9 @@ object PaypalBackend {
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       services.AnalyticsService(configLoader, env),
+      configLoader
+        .loadConfig[Environment, BigQueryConfig](env)
+        .map(new BigQueryService(_)): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

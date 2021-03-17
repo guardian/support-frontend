@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import Dialog from 'components/dialog/dialog';
-import { clickedEvent } from 'helpers/tracking/clickTracking';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import Menu, { LinkItem } from 'components/menu/menu';
 
 import {
@@ -71,7 +71,10 @@ class CountryGroupSwitcher extends Component<PropTypes, {menuOpen: boolean, boun
           onStatusChange={(status) => {
             this.setState({ menuOpen: status });
             if (status) {
-              clickedEvent(['header', 'language-switcher'].join(' - '));
+              sendTrackingEventsOnClick({
+                id: 'toggle_country',
+                componentType: 'ACQUISITIONS_BUTTON',
+              })();
             }
           }}
         >

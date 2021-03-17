@@ -121,12 +121,12 @@ Mappings:
     CODE:
       MaxInstances: 2
       MinInstances: 1
-      InstanceType: t3.small
+      InstanceType: t4g.small
 
     PROD:
       MaxInstances: 6
       MinInstances: 3
-      InstanceType: t3.small
+      InstanceType: t4g.small
 
 Resources:
   AutoScalingGroup:
@@ -150,11 +150,20 @@ Resources:
         - Key: Stage
           Value: !Ref Stage
           PropagateAtLaunch: true
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref Stack
+              - !Ref Stage
+              - !Ref App
+          PropagateAtLaunch: 'true'
   LaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref AMI
-      SecurityGroups: [!Ref InstanceSecurityGroup]
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+        - !Ref WazuhSecurityGroup
       InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
       IamInstanceProfile: !Ref InstanceProfile
       AssociatePublicIpAddress: false
@@ -260,9 +269,27 @@ Resources:
               - Effect: Allow
                 Action: s3:GetObject
                 Resource:
-                  - !Sub arn:aws:s3:::support-admin-console/${Stage}/*
+                  - !If [CreateProdResources,
+                     # PROD needs both stages for test mode
+                    !Sub arn:aws:s3:::support-admin-console/*/*,
+                    !Sub arn:aws:s3:::support-admin-console/CODE/*
+                  ]
 
-
+  DescribeEC2Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: describe-ec2-policy
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Resource: "*"
+          Action:
+          - ec2:DescribeTags
+          - ec2:DescribeInstances
+          - autoscaling:DescribeAutoScalingGroups
+          - autoscaling:DescribeAutoScalingInstances
+      Roles:
+      - !Ref AppRole
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -360,6 +387,18 @@ Resources:
         - IpProtocol: tcp
           FromPort: 5432
           ToPort: 5432
+          CidrIp: 0.0.0.0/0
+
+  WazuhSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow outbound traffic from wazuh agent to manager
+      VpcId:
+        Ref: VpcId
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 1514
+          ToPort: 1515
           CidrIp: 0.0.0.0/0
 
   PaymentAPILogGroup:
@@ -503,56 +542,75 @@ Resources:
       Statistic: Sum
       TreatMissingData: breaching
 
-  ThreeOrMorePaypalPaymentErrorsIn15Mins:
+  PaypalPaymentError:
       Type: AWS::CloudWatch::Alarm
       Condition: CreateProdResources
       Properties:
         AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-        AlarmName: !Sub ${App} ${Stage} Multiple paypal errors in the last fifteen minutes for one-off contributions via the payment-api
+        AlarmName: !Sub ${App} ${Stage} Paypal payment error for one-off contribution via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
         Dimensions:
                 - Name: payment-provider
                   Value: Paypal
         ComparisonOperator: GreaterThanThreshold
-        Threshold: 3
-        Period: 900
+        Threshold: 1
+        Period: 60
         EvaluationPeriods: 1
         Statistic: Sum
         TreatMissingData: notBreaching
 
-  ThreeOrMoreStripePaymentErrorsIn15Mins:
+  StripePaymentError:
       Type: AWS::CloudWatch::Alarm
       Condition: CreateProdResources
       Properties:
         AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-        AlarmName: !Sub ${App} ${Stage} Multiple stripe errors in the last fifteen minutes for one-off contributions via the payment-api
+        AlarmName: !Sub ${App} ${Stage} Stripe payment error for one-off contribution via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
         Dimensions:
                 - Name: payment-provider
                   Value: Stripe
         ComparisonOperator: GreaterThanThreshold
-        Threshold: 3
-        Period: 900
+        Threshold: 1
+        Period: 60
         EvaluationPeriods: 1
         Statistic: Sum
         TreatMissingData: notBreaching
 
-  ThreeOrMorePostPaymentErrorsIn15Mins:
+  AmazonPayPaymentError:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub ${App} ${Stage} Amazon Pay payment error for one-off contribution via the payment-api
+      MetricName: payment-error
+      Namespace: support-payment-api-PROD
+      Dimensions:
+        - Name: payment-provider
+          Value: AmazonPay
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+      TreatMissingData: notBreaching
+
+  PostPaymentError:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub ${App} ${Stage} Multiple errors in post-payment tasks in the last fifteen minutes for one-off contributions via the payment-api
+      AlarmName: !Sub ${App} ${Stage} Failed post-payment task for one-off contributions via the payment-api
       MetricName: post-payment-tasks-error
       Namespace: support-payment-api-PROD
       ComparisonOperator: GreaterThanThreshold
       Threshold: 1
-      Period: 900
+      Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
       TreatMissingData: notBreaching

@@ -6,7 +6,7 @@ import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedAsObjectEncoder
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
-import io.circe._
+import io.circe.{Codec => _, _}
 import shapeless.Lazy
 
 import scala.reflect.ClassTag
@@ -14,19 +14,19 @@ import scala.reflect.ClassTag
 class DiscriminatedType[TOPLEVEL](discriminatorFieldName: String) {
 
   def getSingle[A](list: List[A], message: String): A = list match {
-    case Nil => throw new RuntimeException(s"no codec for: $message")
+    case Nil => throw new RuntimeException(s"no $message")
     case a :: Nil => a
-    case many => throw new RuntimeException(s"duplicate codec for: $message: $many")
+    case many => throw new RuntimeException(s"duplicate $message: $many")
   }
 
   def encoder(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Encoder[TOPLEVEL] = Encoder.instance { toplevel =>
-    getSingle(allCodecs.flatMap(_.maybeEncode(toplevel)), toplevel.toString)
+    getSingle(allCodecs.flatMap(_.maybeEncode(toplevel)), "encoder for: " + toplevel.toString)
   }
 
   def decoder(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Decoder[TOPLEVEL] = Decoder.instance { cursor =>
     for {
       decodeAttempts <- allCodecs.traverse(_.maybeDecode(cursor))
-    } yield getSingle(decodeAttempts.flatten, cursor.toString)
+    } yield getSingle(decodeAttempts.flatten, "decoder for: " + cursor.value.toString)
   }
 
   def codec(allCodecs: List[this.VariantCodec[_ <: TOPLEVEL]]): Codec[TOPLEVEL] = {

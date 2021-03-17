@@ -3,9 +3,44 @@
 // ----- Imports ----- //
 
 import React from 'react';
-
-import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import { css } from '@emotion/core';
+import { textSans } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
+import { ThemeProvider } from 'emotion-theming';
+import { Button, buttonReaderRevenueBrand, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+
+const directDebitForm = css`
+  clear: left;
+  margin-top: 20px;
+  margin-left: 0;
+`;
+
+const fieldLabel = css`
+  display: block;
+  ${textSans.medium({ fontWeight: 'bold' })};
+  margin: 8px 0 6px;
+`;
+
+const fieldData = css`
+  ${textSans.medium()};
+`;
+
+const fieldInfo = css`
+  ${textSans.small()};
+`;
+
+const fieldInfoWithMargin = css`
+  ${textSans.small()};
+  margin: ${space[2]}px 0 ${space[5]}px;
+`;
+
+const ctaContainer = css`
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+`;
 
 
 function Playback(props: {
@@ -18,55 +53,54 @@ function Playback(props: {
   allErrors: Array<Object>,
 }) {
   return (
-    <div className="component-direct-debit-form">
-      <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
+    <div css={directDebitForm}>
+      <label htmlFor="account-holder-name-input" css={fieldLabel}>
         Account name
       </label>
-      <span>
+      <span css={fieldData}>
         {props.accountHolderName}
       </span>
 
-      <label htmlFor="sort-code-input" className="component-direct-debit-form__field-label">
+      <label htmlFor="sort-code-input" css={fieldLabel}>
         Sort Code
       </label>
-      <span>
+      <span css={fieldData}>
         {props.sortCodeString}
       </span>
 
-      <label htmlFor="account-number-input" className="component-direct-debit-form__field-label">
+      <label htmlFor="account-number-input" css={fieldLabel}>
         Account number
       </label>
-      <span>
+      <span css={fieldData}>
         {props.accountNumber}
       </span>
 
-      <label htmlFor="confirmation-text__locked" className="component-direct-debit-form__field-label">
+      <label htmlFor="confirmation-text__locked" css={fieldLabel}>
         Declaration
       </label>
-      <div id="confirmation-text__locked" className="component-direct-debit-form__confirmation-text__locked">
+      <p id="confirmation-text__locked" css={fieldInfo}>
         I have confirmed that I am the account holder and that I am solely able to authorise debit
         from the account
-      </div>
-      <div className="component-direct-debit-form__confirmation-guidance">
-        If the details above are correct press confirm to set up your direct debit, otherwise press
+      </p>
+      <p css={fieldInfoWithMargin}>
+        If the details above are correct, press confirm to set up your direct debit, otherwise press
         back to make changes
-      </div>
+      </p>
 
-      <div className="component-direct-debit-form__cta-container">
-        <button
-          className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
-          onClick={props.editDirectDebitClicked}
-        >
-          <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Edit</span>
-        </button>
-        <button
-          id="qa-submit-button-2"
-          className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-          onClick={e => props.onSubmit(e)}
-        >
-          <span className="component-direct-debit-form__cta-text">{props.buttonText}</span>
-          <div className="component-direct-debit-form__arrow"><SvgArrowRightStraight /></div>
-        </button>
+      <div css={ctaContainer}>
+        <ThemeProvider theme={buttonReaderRevenueBrandAlt}>
+          <Button onClick={props.editDirectDebitClicked}>Edit</Button>
+        </ThemeProvider>
+        <ThemeProvider theme={buttonReaderRevenueBrand}>
+          <Button
+            id="qa-submit-button-2"
+            onClick={props.onSubmit}
+            icon={<SvgArrowRightStraight />}
+            iconSide="right"
+          >
+            {props.buttonText}
+          </Button>
+        </ThemeProvider>
       </div>
 
       {props.allErrors.length > 0 && (

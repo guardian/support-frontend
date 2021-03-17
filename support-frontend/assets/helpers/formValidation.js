@@ -19,8 +19,6 @@ export const isEmpty: (string | null) => boolean = input =>
 
 export const isNotEmpty: (string | null) => boolean = input => !isEmpty(input);
 
-export const isNotInThePast: (Date | null) => boolean = date => !DateUtils.isPastDay(date);
-
 export const isNotTooFarInTheFuture: (Date | null) => boolean = (date) => {
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
@@ -29,6 +27,7 @@ export const isNotTooFarInTheFuture: (Date | null) => boolean = (date) => {
 };
 
 export const isValidEmail: (string | null) => boolean = input => !!input && new RegExp(emailRegexPattern).test(input);
+export const isValidZipCode = (zipCode: string) => /^\d{5}(-\d{4})?$/.test(zipCode);
 export const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
 export const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
 export const maxTwoDecimals: string => boolean = input => new RegExp('^\\d+\\.?\\d{0,2}$').test(input);
@@ -43,32 +42,35 @@ export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(i
 
 export const checkGiftStartDate: (string | null) => boolean = (rawDate) => {
   const date = rawDate ? new Date(rawDate) : null;
-  return isNotEmpty(rawDate) && isNotInThePast(date) && isNotTooFarInTheFuture(date);
+  return isNotEmpty(rawDate) && isNotTooFarInTheFuture(date);
 };
 
-export const checkAmount: (string, CountryGroupId, ContributionType) =>
-  boolean = (input: string, countryGroupId: CountryGroupId, contributionType: ContributionType) =>
-    isNotEmpty(input)
+export const amountIsValid = (
+  input: string,
+  countryGroupId: CountryGroupId,
+  contributionType: ContributionType,
+): boolean =>
+  isNotEmpty(input)
     && isLargerOrEqual(config[countryGroupId][contributionType].min, input)
     && isSmallerOrEqual(config[countryGroupId][contributionType].max, input)
     && maxTwoDecimals(input);
 
 
-export const checkAmountOrOtherAmount: (SelectedAmounts, OtherAmounts, ContributionType, CountryGroupId) => boolean = (
+export const amountOrOtherAmountIsValid = (
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
-) => {
+): boolean => {
   let amt = '';
   if (selectedAmounts[contributionType] && selectedAmounts[contributionType] === 'other') {
     if (otherAmounts[contributionType] && otherAmounts[contributionType].amount) {
       amt = otherAmounts[contributionType].amount;
     }
-  } else if (selectedAmounts[contributionType] && selectedAmounts[contributionType].value) {
-    amt = selectedAmounts[contributionType].value;
+  } else if (selectedAmounts[contributionType]) {
+    amt = selectedAmounts[contributionType].toString();
   }
-  return checkAmount(amt, countryGroupId, contributionType);
+  return amountIsValid(amt, countryGroupId, contributionType);
 };
 
 export const checkStateIfApplicable: ((string | null), CountryGroupId, ContributionType) => boolean = (

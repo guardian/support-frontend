@@ -16,7 +16,6 @@ import thunkMiddleware from 'redux-thunk';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { renderError } from 'helpers/render';
-import { overrideAmountsForParticipations } from 'helpers/abTests/helpers';
 import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -39,11 +38,11 @@ import {
   type CountryGroupId,
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
-import { trackAbTests } from 'helpers/tracking/ophan';
+import { trackAbTests, setRefViewId } from 'helpers/tracking/ophan';
 import { getSettings } from 'helpers/globals';
-import { doNotTrack } from 'helpers/tracking/doNotTrack';
 import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
+import { getAmounts } from 'helpers/abTests/helpers';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -62,11 +61,10 @@ export type ReduxState<PageState> = {|
 
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations): void {
-  if (!(doNotTrack())) {
-    googleTagManager.init(participations);
-    ophan.init();
-    trackAbTests(participations);
-  }
+  setRefViewId();
+  googleTagManager.init(participations);
+  ophan.init();
+  trackAbTests(participations);
   // Logging.
   logger.init();
 }
@@ -88,9 +86,7 @@ function buildInitialState(
     currencyId,
   };
 
-  // Override the default amounts config with any test participations
-  const amountsWithParticipationOverrides = settings.amounts ?
-    overrideAmountsForParticipations(abParticipations, settings.amounts) : settings.amounts;
+  const amounts = getAmounts(settings, abParticipations, countryGroupId);
 
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
@@ -98,7 +94,8 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
-    settings: { ...settings, amounts: amountsWithParticipationOverrides },
+    settings,
+    amounts,
   };
 
 }
@@ -181,5 +178,4 @@ function init<S, A>(
 export {
   init,
   statelessInit,
-  doNotTrack,
 };

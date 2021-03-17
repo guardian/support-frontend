@@ -1,5 +1,6 @@
 // @flow
-import React from 'react';
+// $FlowIgnore - required for hooks
+import React, { useEffect } from 'react';
 import { LinkButton } from '@guardian/src-button';
 import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
 import ActionContainer from './components/ActionContainer';
@@ -14,12 +15,13 @@ import {
   getEmailShareLink,
 } from './utils/social';
 import {
+  OPHAN_COMPONENT_ID_SOCIAL,
   OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
   OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
   OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import { generateReferralCode } from '../../../../helpers/campaignReferralCodes';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
@@ -32,26 +34,34 @@ const buttonsContainer = css`
   }
 `;
 
-type PropTypes = { email: string, createReferralCodes: boolean, campaignCode: ?string, isUsEndOfYearAppeal: boolean }
+type ContributionThankYouSocialShareProps = {|
+  email: string,
+  createReferralCodes: boolean,
+  campaignCode: ?string
+|};
 
-const ContributionThankYouSocialShare = (props: PropTypes) => {
-  const referralCode = props.createReferralCodes && props.campaignCode ?
-    generateReferralCode(props.email, props.campaignCode) :
-    null;
+const ContributionThankYouSocialShare = ({
+  email,
+  createReferralCodes,
+  campaignCode,
+}: ContributionThankYouSocialShareProps) => {
+  useEffect(() => {
+    trackComponentLoad(OPHAN_COMPONENT_ID_SOCIAL);
+  }, []);
 
-  const header = props.isUsEndOfYearAppeal
-    ? 'Share your year-end support'
-    : 'Share your support';
-
-  const body = props.isUsEndOfYearAppeal
-    ? 'As 2020 ends and a new year begins, we need your help to reach more people. Every supporter that joins helps to sustain the Guardian’s open, independent journalism for the long term. Please invite your friends, family and followers to support us today.'
-    : 'Invite your followers to support the Guardian’s open, independent reporting.';
+  const referralCode =
+    createReferralCodes && campaignCode
+      ? generateReferralCode(email, campaignCode)
+      : null;
 
   const actionIcon = <SvgShare />;
-  const actionHeader = <ActionHeader title={header} />;
+  const actionHeader = <ActionHeader title="Share your support" />;
   const actionBody = (
     <ActionBody>
-      <p>{body}</p>
+      <p>
+        Invite your followers to support the Guardian’s open, independent
+        reporting.
+      </p>
       <div css={buttonsContainer}>
         <LinkButton
           href={getFacebookShareLink(referralCode)}
@@ -66,7 +76,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
           hideLabel
         />
         <LinkButton
-          href={getTwitterShareLink(referralCode, props.isUsEndOfYearAppeal)}
+          href={getTwitterShareLink(referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
           target="_blank"
           rel="noopener noreferrer"
@@ -88,7 +98,7 @@ const ContributionThankYouSocialShare = (props: PropTypes) => {
           hideLabel
         />
         <LinkButton
-          href={getEmailShareLink(referralCode, props.isUsEndOfYearAppeal)}
+          href={getEmailShareLink(referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
           target="_blank"
           rel="noopener noreferrer"

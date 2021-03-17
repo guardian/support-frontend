@@ -9,8 +9,7 @@ case class PayPalConfig(
   user: String,
   password: String,
   signature: String
-) extends TouchpointConfig
-
+)
 class PayPalConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[PayPalConfig](config, defaultStage) {
   def fromConfig(config: Config): PayPalConfig = {
     PayPalConfig(

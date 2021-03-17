@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "org.mockito" %% "mockito-scala" % "1.15.0" % "it,test",
@@ -30,7 +30,6 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.scala-stm" %% "scala-stm" % "0.8",
   "io.sentry" % "sentry-logback" % "1.7.4",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "com.gocardless" % "gocardless-pro" % "2.8.0"
@@ -44,7 +43,7 @@ riffRaffManifestVcsUrl := "git@github.com/guardian/support-frontend.git"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-workers/cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml")
-riffRaffArtifactResources += (file("support-workers/target/scala-2.12/support-workers-it.jar"), "it-tests/support-workers-it.jar")
+riffRaffArtifactResources += (file("support-workers/target/scala-2.13/support-workers-it.jar"), "it-tests/support-workers-it.jar")
 assemblyJarName := s"${name.value}.jar"
 assemblyMergeStrategy in assembly := {
   case PathList("models", xs@_*) => MergeStrategy.discard
@@ -69,4 +68,26 @@ assemblyMergeStrategy in (IntegrationTest, assembly) := {
     oldStrategy(y)
 }
 IntegrationTest / assembly / test := {}
-IntegrationTest / assembly / aggregate := false
+assembly / aggregate := false
+
+lazy val deployToCode = inputKey[Unit]("Directly update AWS lambda code from DEV instead of via RiffRaff for faster feedback loop")
+
+deployToCode := {
+  import scala.sys.process._
+  val s3Bucket = "support-workers-dist"
+  val s3Path = "support/CODE/support-workers/support-workers.jar"
+  (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
+  List(
+    "-CreatePaymentMethodLambda-",
+    "-CreateSalesforceContactLambda-",
+    "-CreateZuoraSubscriptionLambda-",
+    "-SendThankYouEmailLambda-",
+    "-FailureHandlerLambda-",
+    "-SendAcquisitionEventLambda-",
+    "-SendOldAcquisitionEventLambda-",
+    "-PreparePaymentMethodForReuseLambda-",
+  ).foreach(functionPartial =>
+    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
+  )
+
+}

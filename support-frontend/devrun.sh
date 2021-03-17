@@ -16,7 +16,7 @@ source_nvm() {
 
 source_nvm
 
-nvm use &
+nvm use
 yarn devrun &
 yarn storybook &
 cd ..; sbt -mem 2048 "project support-frontend" devrun

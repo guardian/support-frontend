@@ -1,13 +1,17 @@
 // @flow
 import React from 'react';
-import { firstError } from 'helpers/subscriptionsForms/validation';
-import { compose } from 'redux';
-import { asControlled } from 'hocs/asControlled';
-import { withError } from 'hocs/withError';
-import { withLabel } from 'hocs/withLabel';
-import { Input } from 'components/forms/input';
+import { TextInput } from '@guardian/src-text-input';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
+
+const marginBotom = css`
+  margin-bottom: ${space[6]}px;
+`;
 
 export type PropTypes = {
   firstNameGiftRecipient: string,
@@ -19,36 +23,35 @@ export type PropTypes = {
   formErrors: FormError<FormField>[],
 }
 
-const InputWithLabel = withLabel(Input);
-const InputWithError = compose(asControlled, withError)(InputWithLabel);
-const InputWithLabelAndError = compose(asControlled, withLabel, withError)(Input);
-
 function PersonalDetailsGift(props: PropTypes) {
   return (
     <div>
-      <InputWithError
+      <TextInput
+        css={marginBotom}
         id="firstNameGiftRecipient"
         label="First name"
         type="text"
         value={props.firstNameGiftRecipient}
-        setValue={props.setFirstNameGift}
+        onChange={e => props.setFirstNameGift(e.target.value)}
         error={firstError('firstNameGiftRecipient', props.formErrors)}
       />
-      <InputWithError
+      <TextInput
+        css={marginBotom}
         id="lastNameGiftRecipient"
         label="Last name"
         type="text"
         value={props.lastNameGiftRecipient}
-        setValue={props.setLastNameGift}
+        onChange={e => props.setLastNameGift(e.target.value)}
         error={firstError('lastNameGiftRecipient', props.formErrors)}
       />
-      <InputWithError
+      <TextInput
+        css={marginBotom}
         id="emailGiftRecipient"
         label="Email"
-        type="emailGiftRecipient"
-        value={props.emailGiftRecipient}
-        setValue={props.setEmailGift}
+        type="email"
         optional
+        onChange={e => props.setEmailGift(e.target.value)}
+        value={props.emailGiftRecipient}
         error={firstError('emailGiftRecipient', props.formErrors)}
       />
     </div>
@@ -58,28 +61,31 @@ function PersonalDetailsGift(props: PropTypes) {
 function PersonalDetailsDigitalGift(props: PropTypes) {
   return (
     <div>
-      <InputWithLabelAndError
+      <TextInput
+        css={marginBotom}
         id="firstNameGiftRecipient"
         label="First name"
         type="text"
         value={props.firstNameGiftRecipient}
-        setValue={props.setFirstNameGift}
+        onChange={e => props.setFirstNameGift(e.target.value)}
         error={firstError('firstNameGiftRecipient', props.formErrors)}
       />
-      <InputWithLabelAndError
+      <TextInput
+        css={marginBotom}
         id="lastNameGiftRecipient"
         label="Last name"
         type="text"
         value={props.lastNameGiftRecipient}
-        setValue={props.setLastNameGift}
+        onChange={e => props.setLastNameGift(e.target.value)}
         error={firstError('lastNameGiftRecipient', props.formErrors)}
       />
-      <InputWithLabelAndError
+      <TextInput
+        css={marginBotom}
         id="emailGiftRecipient"
         label="Email"
-        type="emailGiftRecipient"
+        type="email"
+        onChange={e => props.setEmailGift(e.target.value)}
         value={props.emailGiftRecipient}
-        setValue={props.setEmailGift}
         error={firstError('emailGiftRecipient', props.formErrors)}
       />
     </div>
