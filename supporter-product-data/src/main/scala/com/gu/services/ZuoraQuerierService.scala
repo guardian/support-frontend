@@ -35,7 +35,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
         (List(
         ZoqlExportQuery(
           s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
-          SelectActiveRatePlansQuery.query(now, config.contributionProductRatePlanIds, config.discountProductRatePlanIds)
+          SelectActiveRatePlansQuery.query(now, config.discountProductRatePlanIds)
         )
       ), Some(ZonedDateTime.now.minusYears(20))) // Because we are using a stateful query with incrementalTime, we use a date in the far past to get all records
       case Incremental => (List(), config.lastSuccessfulQueryTime)
