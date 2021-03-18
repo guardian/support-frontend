@@ -5,11 +5,14 @@ import com.gu.model.FieldsToExport._
 import com.gu.model.Stage
 import com.gu.model.dynamo.SupporterRatePlanItem
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
+import software.amazon.awssdk.core.retry.RetryPolicy
+import software.amazon.awssdk.core.retry.backoff.FullJitterBackoffStrategy
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateItemRequest}
 
-import java.time.{LocalDate, ZoneId, ZoneOffset}
+import java.time.{Duration, LocalDate, ZoneOffset}
 import java.util.concurrent.CompletionException
 import scala.collection.JavaConverters._
 import scala.compat.java8.FutureConverters._
@@ -56,14 +59,30 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
       .toString
 }
 
-object DynamoDBService{
+object DynamoDBService {
   lazy val CredentialsProvider = AwsCredentialsProviderChain.builder.credentialsProviders(
     ProfileCredentialsProvider.builder.profileName(ProfileName).build,
     InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
     EnvironmentVariableCredentialsProvider.create()
   ).build
 
-  val dynamoDBClient = DynamoDbAsyncClient.builder
+  val clientOverrideConfiguration = ClientOverrideConfiguration.builder.retryPolicy(
+    RetryPolicy.defaultRetryPolicy()
+      .toBuilder
+      .numRetries(20)
+      .backoffStrategy(
+        FullJitterBackoffStrategy
+          .builder
+          .baseDelay(Duration.ofMillis(500))
+          .maxBackoffTime(Duration.ofSeconds(4))
+          .build()
+      ).build()
+
+  ).build
+
+  val dynamoDBClient = DynamoDbAsyncClient.builder.overrideConfiguration(
+    clientOverrideConfiguration
+  )
     .credentialsProvider(CredentialsProvider)
     .region(Region.EU_WEST_1)
     .build

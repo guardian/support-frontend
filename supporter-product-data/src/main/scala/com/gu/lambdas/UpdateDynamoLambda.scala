@@ -29,7 +29,7 @@ class UpdateDynamoLambda extends Handler[UpdateDynamoState, UpdateDynamoState] {
 }
 
 object UpdateDynamoLambda extends StrictLogging {
-  val batchSize = 10
+  val batchSize = 5
   val timeoutBufferInMillis = batchSize * 5 * 1000
 
   def writeToDynamo(stage: Stage, state: UpdateDynamoState, timeOutCheck: TimeOutCheck): Future[UpdateDynamoState] = {
