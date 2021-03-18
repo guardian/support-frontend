@@ -94,12 +94,15 @@ type CorporateRedemption = {|
 
 type RegularExistingPaymentFields = {| billingAccountId: string |};
 
+type RegularAmazonPayPaymentFields = {| amazonPayBillingAgreementId: string |};
+
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentIntentFields |
   RegularDirectDebitPaymentFields |
   RegularExistingPaymentFields |
-  CorporateRedemption;
+  CorporateRedemption |
+  RegularAmazonPayPaymentFields;
 
 export type RegularPaymentRequestAddress = {|
   country: IsoCountry,
@@ -164,9 +167,14 @@ export type ExistingDirectDebitAuthorisation = {|
   paymentMethod: typeof ExistingDirectDebit,
   billingAccountId: string
 |};
-export type AmazonPayAuthorisation = {|
+export type AmazonPayOneOffAuthorisation = {|
   paymentMethod: typeof AmazonPay,
   orderReferenceId: string
+|}
+
+export type AmazonPayRecurringAuthorisation = {|
+  paymentMethod: typeof AmazonPay,
+  amazonPayBillingAgreementId: string
 |}
 
 // Represents an authorisation to execute payments with a given payment method.
@@ -180,7 +188,8 @@ export type PaymentAuthorisation =
   DirectDebitAuthorisation |
   ExistingCardAuthorisation |
   ExistingDirectDebitAuthorisation |
-  AmazonPayAuthorisation;
+  AmazonPayOneOffAuthorisation |
+  AmazonPayRecurringAuthorisation;
 
 // Represents the end state of the checkout process,
 // standardised across payment methods & contribution types.
@@ -219,6 +228,11 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
     case ExistingCard:
     case ExistingDirectDebit:
       return { billingAccountId: authorisation.billingAccountId };
+    case AmazonPay:
+      if (authorisation.amazonPayBillingAgreementId) {
+        return { amazonPayBillingAgreementId: authorisation.amazonPayBillingAgreementId };
+      }
+      throw new Error('Cant create a regular Amazon Pay authorisation for one off');
 
     // TODO: what is a sane way to handle such cases?
     default:

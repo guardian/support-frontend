@@ -613,6 +613,7 @@ function recurringPaymentAuthorisationHandler(
 ): Promise<PaymentResult> {
   const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
 
+  debugger;
   return dispatch(onPaymentResult(
     postRegularPaymentRequest(
       routes.recurringContribCreate,
@@ -637,6 +638,7 @@ const recurringPaymentAuthorisationHandlers = {
   DirectDebit: recurringPaymentAuthorisationHandler,
   ExistingCard: recurringPaymentAuthorisationHandler,
   ExistingDirectDebit: recurringPaymentAuthorisationHandler,
+  AmazonPay: recurringPaymentAuthorisationHandler,
 };
 
 const error = { paymentStatus: 'failure', error: 'internal_error' };
@@ -719,10 +721,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
-    AmazonPay: () => {
-      logInvalidCombination('ANNUAL', AmazonPay);
-      return Promise.resolve(error);
-    },
     None: () => {
       logInvalidCombination('ANNUAL', 'None');
       return Promise.resolve(error);
@@ -730,10 +728,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
-    AmazonPay: () => {
-      logInvalidCombination('MONTHLY', AmazonPay);
-      return Promise.resolve(error);
-    },
     None: () => {
       logInvalidCombination('MONTHLY', 'None');
       return Promise.resolve(error);
