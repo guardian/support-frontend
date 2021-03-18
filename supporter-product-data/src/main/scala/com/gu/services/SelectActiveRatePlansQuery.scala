@@ -28,7 +28,8 @@ object SelectActiveRatePlansQuery {
           ${ratePlanId.zuoraName},
           ${productRatePlanId.zuoraName},
           ${productRatePlanName.zuoraName},
-          ${termEndDate.zuoraName}
+          ${termEndDate.zuoraName},
+          Subscription.Status
             FROM
             rateplan
             WHERE
