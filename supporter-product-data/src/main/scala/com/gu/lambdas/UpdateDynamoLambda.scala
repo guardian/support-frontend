@@ -108,12 +108,12 @@ object UpdateDynamoLambda extends StrictLogging {
             s"rate plan with term end date ${supporterRatePlanItem.termEndDate} to Dynamo")
         dynamoDBService
           .writeItem(supporterRatePlanItem)
-          .recover {
-            // let's alarm and keep going if one insert fails
-            case error: Throwable =>
-              logger.error(s"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
-              alarmService.triggerDynamoWriteAlarm
-          }
+//          .recover {
+//            // let's alarm and keep going if one insert fails
+//            case error: Throwable =>
+//              logger.error(s"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
+//              alarmService.triggerDynamoWriteAlarm
+//          }
 
     }
     Future.sequence(futures)
