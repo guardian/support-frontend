@@ -12,7 +12,8 @@ case class SupporterRatePlanItem(
   ratePlanId: String, //Unique identifier for this product purchase for this user
   productRatePlanId: String, //Unique identifier for the product in this rate plan
   productRatePlanName: String, //Name of the product in this rate plan
-  termEndDate: LocalDate //Date that this subscription term ends
+  termEndDate: LocalDate, //Date that this subscription term ends
+  contractEffectiveDate: LocalDate //Date that this subscription started
 )
 
 object SupporterRatePlanItem {
@@ -23,7 +24,8 @@ object SupporterRatePlanItem {
       ratePlanId.zuoraName,
       productRatePlanId.zuoraName,
       productRatePlanName.zuoraName,
-      termEndDate.zuoraName
+      termEndDate.zuoraName,
+      contractEffectiveDate.zuoraName
     )(SupporterRatePlanItem.apply)
 }
 

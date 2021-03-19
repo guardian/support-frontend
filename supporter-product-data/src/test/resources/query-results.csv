@@ -1,4 +1,11 @@
-Account.IdentityId__c,Subscription.GifteeIdentityId__c,RatePlan.Id,ProductRatePlan.Id,ProductRatePlan.Name,Subscription.TermEndDate,Subscription.RedemptionCode__c,Subscription.GifteeIdentityId__c
-13380875,,2c92a00777427d35017744760ace4c77,2c92a0ff5345f9220153559d915d5c26,Percentage,2022-01-27,,
-13380875,,2c92a00777427d35017744760aef4c7c,2c92a0fb4edd70c8014edeaa4e972204,Digital Pack Annual,2022-01-27,,
-3204264,105320827,2c92a00b7742896c017744780f57375e,2c92a00773adc09d0173b99e4ded7f45,Digital Subscription One Year Fixed,2022-01-28,gd12-aw655rhh,105320827
+RatePlan.AmendmentType,Subscription.Id,Account.IdentityId__c,Subscription.GifteeIdentityId__c,RatePlan.Id,ProductRatePlan.Id,ProductRatePlan.Name,Subscription.ContractEffectiveDate,Subscription.TermEndDate,Subscription.Status
+NewProduct,2c92a00763afd6070163b613c16634c9,100837493,,2c92a00763afd6070163b6136f2d3279,2c92a0ff57d0a0b60157d741e722439a,Guardian Weekly Annual,2016-06-20,2019-06-23,Active
+NewProduct,2c92a00763afd6070163ca4c5a240560,16626457,,2c92a00763afd6070163ca4c596d0559,2c92a0fd58cf57000158f30ae6d06f2a,Guardian Weekly 1 Year,2011-06-10,2019-06-23,Active
+NewProduct,2c92a00763afd6070163cb092cce6080,100217808,,2c92a0ff63afe3e40163cb08e4d80fe5,2c92a0ff57d0a0b60157d741e722439a,Guardian Weekly Annual,2016-03-29,2019-06-15,Active
+"",2c92a00770ec485c0170f721f0ad3871,102389026,,2c92a00770ec485c0170f721f0d23876,2c92a0fb4edd70c8014edeaa4e972204,Digital Pack Annual,2020-03-20,2021-03-20,Active
+"",2c92a00770ec485c0170f737d2542399,102263210,,2c92a00770ec485c0170f737d3742665,2c92a0fb4edd70c8014edeaa4eae220a,Digital Pack Monthly,2020-03-20,2021-03-20,Active
+"",2c92a00770ec485c0170f74665a36962,102389231,,2c92a00770ec485c0170f74665d06966,2c92a0fc5aacfadd015ad24db4ff5e97,Monthly Contribution,2020-03-20,2021-03-20,Active
+"",2c92a00770ec485c0170f74963417b2f,102275604,,2c92a00770ec485c0170f749636a7b33,2c92a0fc5e1dc084015e37f58c200eea,Annual Contribution,2020-03-20,2021-03-20,Active
+"",2c92a00770ec485c0170f750c8341c49,17260961,,2c92a00770ec485c0170f750c8641c4d,2c92a0fb4edd70c8014edeaa4e972204,Digital Pack Annual,2020-03-20,2021-03-20,Active
+"",2c92a00770ec485c0170f7665d6e1128,11153466,,2c92a00770ec485c0170f7665d9c112c,2c92a0fc5aacfadd015ad24db4ff5e97,Monthly Contribution,2020-03-20,2021-03-20,Active
+"",2c92a00770ec485c0170f778c3681e06,2486413,,2c92a00770ec485c0170f778c38d1e0b,2c92a0fc5aacfadd015ad24db4ff5e97,Monthly Contribution,2020-03-20,2021-03-20,Active

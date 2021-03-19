@@ -27,4 +27,8 @@ object FieldsToExport {
     "Subscription.TermEndDate",
     "termEndDate"
   )
+  val contractEffectiveDate = FieldDefinition(
+    "Subscription.ContractEffectiveDate",
+    "contractEffectiveDate"
+  )
 }

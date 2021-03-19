@@ -19,6 +19,7 @@ class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with Lazy
           RatePlan.Id,
           ProductRatePlan.Id,
           ProductRatePlan.Name,
+          Subscription.ContractEffectiveDate,
           Subscription.TermEndDate,
           Subscription.Status
             FROM
