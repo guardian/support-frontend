@@ -1,7 +1,6 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.conf.ZuoraQuerierConfig
 import com.gu.lambdas.FetchResultsLambda.fetchResults
 import com.gu.model.Stage
 import com.gu.model.states.{FetchResultsState, UpdateDynamoState}
@@ -10,7 +9,8 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ConfigService, S3Service, ZuoraQuerierService}
 import com.typesafe.scalalogging.StrictLogging
 
-import java.time.ZonedDateTime
+import java.time.{ZoneOffset, ZonedDateTime}
+import java.time.format.DateTimeFormatter
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
@@ -29,7 +29,7 @@ object FetchResultsLambda extends StrictLogging{
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
       batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response for jobId $jobId")
       fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in jobId $jobId")
-      filename = s"${batch.name}.csv"
+      filename = s"select-active-rate-plans-${attemptedQueryTime.withZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}.csv"
       fileResponse <- service.getResultFileResponse(fileId)
       _ = assert(fileResponse.isSuccessful, s"File download for job with id $jobId failed with http code ${fileResponse.code}")
       _ <- S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
