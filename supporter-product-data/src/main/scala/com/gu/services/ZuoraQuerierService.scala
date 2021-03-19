@@ -1,7 +1,6 @@
 package com.gu.services
 
 import com.gu.conf.ZuoraQuerierConfig
-import com.gu.model.Stage
 import com.gu.model.states.QueryType
 import com.gu.model.states.QueryType.{Full, Incremental}
 import com.gu.model.zuora.request.{BatchQueryRequest, ZoqlExportQuery}
@@ -9,14 +8,11 @@ import com.gu.model.zuora.response.{BatchQueryErrorResponse, BatchQueryResponse}
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
-import okhttp3.Response
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
-import java.util.UUID
-import scala.collection.immutable.Map.empty
+import java.time.{LocalDateTime, ZonedDateTime}
+import scala.collection.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
-import scala.reflect.classTag
 
 class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[BatchQueryErrorResponse] {
@@ -31,11 +27,10 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {
     val (queries, incrementalTime) = queryType match {
       case Full =>
-        val now = LocalDate.now(ZoneId.of("UTC"))
         (List(
         ZoqlExportQuery(
-          s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
-          SelectActiveRatePlansQuery.query(now, config.discountProductRatePlanIds)
+          s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
+          SelectActiveRatePlansQuery.query(config.discountProductRatePlanIds)
         )
       ), Some(ZonedDateTime.now.minusYears(20))) // Because we are using a stateful query with incrementalTime, we use a date in the far past to get all records
       case Incremental => (List(), config.lastSuccessfulQueryTime)
@@ -52,7 +47,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   def getResults(id: String): Future[BatchQueryResponse] =
     get[BatchQueryResponse](s"batch-query/jobs/$id", authHeaders)
 
-  def getResultFileResponse(fileId: String): Future[Response] = {
+  def getResultFileResponse(fileId: String) = {
     val endpoint = s"/batch-query/file/$fileId"
     getResponse(buildRequest(endpoint, authHeaders, empty))
   }

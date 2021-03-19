@@ -19,7 +19,7 @@ object SelectActiveRatePlansQuery {
       .map(id => s"${productRatePlanId.zuoraName} != '$id'")
       .mkString(" AND\n")
 
-  def query(date: LocalDate, discountProductRatePlanIds: List[String]): String =
+  def query(discountProductRatePlanIds: List[String]): String =
     s"""SELECT
           RatePlan.AmendmentType,
           Subscription.Id,
@@ -33,7 +33,6 @@ object SelectActiveRatePlansQuery {
             FROM
             rateplan
             WHERE
-            ${termEndDate.zuoraName} >= '$date' AND
             (Subscription.Status = 'Active' OR Subscription.Status = 'Cancelled') AND
             (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
