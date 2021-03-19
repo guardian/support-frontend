@@ -167,14 +167,10 @@ export type ExistingDirectDebitAuthorisation = {|
   paymentMethod: typeof ExistingDirectDebit,
   billingAccountId: string
 |};
-export type AmazonPayOneOffAuthorisation = {|
+export type AmazonPayAuthorisation = {|
   paymentMethod: typeof AmazonPay,
-  orderReferenceId: string
-|}
-
-export type AmazonPayRecurringAuthorisation = {|
-  paymentMethod: typeof AmazonPay,
-  amazonPayBillingAgreementId: string
+  orderReferenceId?: string,
+  amazonPayBillingAgreementId?: string
 |}
 
 // Represents an authorisation to execute payments with a given payment method.
@@ -188,8 +184,7 @@ export type PaymentAuthorisation =
   DirectDebitAuthorisation |
   ExistingCardAuthorisation |
   ExistingDirectDebitAuthorisation |
-  AmazonPayOneOffAuthorisation |
-  AmazonPayRecurringAuthorisation;
+  AmazonPayAuthorisation;
 
 // Represents the end state of the checkout process,
 // standardised across payment methods & contribution types.

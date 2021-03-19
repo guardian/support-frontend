@@ -478,7 +478,7 @@ const amazonPayDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    orderReferenceId: authorisation.orderReferenceId,
+    orderReferenceId: authorisation.orderReferenceId ?? '',
     email: state.page.form.formData.email || '',
   },
   acquisitionData: derivePaymentApiAcquisitionData(
@@ -613,7 +613,6 @@ function recurringPaymentAuthorisationHandler(
 ): Promise<PaymentResult> {
   const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
 
-  debugger;
   return dispatch(onPaymentResult(
     postRegularPaymentRequest(
       routes.recurringContribCreate,
@@ -703,7 +702,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
-      if (paymentAuthorisation.paymentMethod === AmazonPay) {
+      if (paymentAuthorisation.paymentMethod === AmazonPay && paymentAuthorisation.orderReferenceId !== undefined) {
         return dispatch(executeAmazonPayOneOffPayment(
           amazonPayDataFromAuthorisation(paymentAuthorisation, state),
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
