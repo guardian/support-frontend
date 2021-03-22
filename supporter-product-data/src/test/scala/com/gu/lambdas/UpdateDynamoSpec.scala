@@ -14,6 +14,6 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
 
     val csvReader = results.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
 
-    UpdateDynamoLambda.getUnprocessedItems(csvReader, 2).length shouldBe 1
+    UpdateDynamoLambda.getUnprocessedItems(csvReader, 2).length shouldBe 8
   }
 }
