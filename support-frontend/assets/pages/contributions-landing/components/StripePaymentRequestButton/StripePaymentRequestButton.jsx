@@ -51,7 +51,7 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
-import {trackComponentEvents} from "../../../../helpers/tracking/ophan";
+import { trackComponentEvents } from "../../../../helpers/tracking/ophan";
 
 // ----- Types -----//
 
