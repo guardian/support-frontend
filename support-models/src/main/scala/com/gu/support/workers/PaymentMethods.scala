@@ -4,7 +4,7 @@ import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.capitalizingCodec
-import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway}
+import com.gu.support.zuora.api.{AmazonPayGatewayUSA, DirectDebitGateway, PayPalGateway, PaymentGateway}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
@@ -83,6 +83,12 @@ case class ClonedDirectDebitPaymentMethod(
   bankTransferType: String = "DirectDebitUK",
   `type`: String = "BankTransfer",
   paymentGateway: PaymentGateway = DirectDebitGateway
+) extends PaymentMethod
+
+case class AmazonPayPaymentMethod(
+  amazonPayBillingAgreementId: String,
+  `type`: String = "AmazonPay",
+  paymentGateway: PaymentGateway
 ) extends PaymentMethod
 
 object PaymentMethod {
