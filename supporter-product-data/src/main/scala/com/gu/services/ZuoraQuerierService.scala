@@ -10,7 +10,7 @@ import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDateTime, ZonedDateTime}
+import java.time.{LocalDate, LocalDateTime, ZonedDateTime}
 import scala.collection.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,7 +30,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
         (List(
         ZoqlExportQuery(
           s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
-          SelectActiveRatePlansQuery.query(config.discountProductRatePlanIds)
+          SelectActiveRatePlansQuery.query(LocalDate.now, config.discountProductRatePlanIds)
         )
       ), Some(ZonedDateTime.now.minusYears(20))) // Because we are using a stateful query with incrementalTime, we use a date in the far past to get all records
       case Incremental => (List(), config.lastSuccessfulQueryTime)
