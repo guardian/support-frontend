@@ -102,7 +102,9 @@ const getAmountBreakdown = (
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
 ): string => {
-  const currencyString = currencies[detect(countryGroupId)].glyph;
+  const currencyStringPrefix = countryGroupId === 'International' ? 'US' : '';
+  const currencyString = currencyStringPrefix + currencies[detect(countryGroupId)].glyph;
+
   const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
 
   const breakdownIntervalsPerYear = breakdownMode === 'WEEKLY' ? 52.0 : 365.0;
