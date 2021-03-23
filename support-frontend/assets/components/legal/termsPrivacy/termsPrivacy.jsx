@@ -58,9 +58,16 @@ function TermsPrivacy(props: PropTypes) {
       <div className="philanthropic-ask">
         <h4>Contribute another way</h4>
         <p>
-          Please {americasContactLink} if you would like to: make a larger single contribution
-          as an individual, contribute as a company or foundation, or would like
-          to discuss legacy gifting.
+          To contribute by mail, please make your check payable to:<br/>
+          Guardian News,<br/>
+          Church Street Station,<br/>
+          PO Box 3403,<br/>
+          New York, NY 10008-3403.
+        </p>
+        <p>
+          Please {americasContactLink} if you would like to: make a larger single contribution as an individual,
+          contribute as a company or foundation, learn about options for tax-exempt support or would
+          like to discuss legacy gifting.
         </p>
         <p>
           To contribute at a higher level on a recurring basis, you can join as a
