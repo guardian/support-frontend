@@ -127,7 +127,7 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'variant',
+        id: 'accordionOpen',
       },
     ],
     audiences: {

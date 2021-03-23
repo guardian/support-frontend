@@ -45,8 +45,11 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { orderIsAGift, productPrices, promotionCopy } = store.getState().page;
+const { common, page } = store.getState();
+const { orderIsAGift, productPrices, promotionCopy } = page;
+const { abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+const accordionOpen = abParticipations.accordionTest === 'accordionOpen';
 
 // ----- Internationalisation ----- //
 
@@ -106,8 +109,14 @@ function LandingPage() {
         <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
       }
       {countryGroupId === AUDCountries ?
-        <ProductBlockAus countryGroupId={countryGroupId} /> :
-        <ProductBlock countryGroupId={countryGroupId} />
+        <ProductBlockAus
+          countryGroupId={countryGroupId}
+          accordionOpen={accordionOpen}
+        /> :
+        <ProductBlock
+          countryGroupId={countryGroupId}
+          accordionOpen={accordionOpen}
+        />
       }
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
