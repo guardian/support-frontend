@@ -1,7 +1,7 @@
 import SeleniumTestConfig.SeleniumTest
-import sbt.Keys.{publishTo, resolvers, scalaVersion, skip, updateOptions, organization}
+import sbt.Keys.{organization, publishTo, resolvers, scalaVersion, skip, updateOptions}
 import sbtrelease.ReleaseStateTransformations._
-import LibraryVersions.jacksonVersion
+import LibraryVersions._
 
 import scala.sys.process._
 
@@ -32,12 +32,11 @@ lazy val release = Seq[ReleaseStep](
 
 inThisBuild(Seq(
   organization := "com.gu",
-  scalaVersion := "2.12.12",
+  scalaVersion := "2.13.5",
   dependencyTree / aggregate := false,
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central
-  scalacOptions += "-Ypartial-unification",
 ))
 
 lazy val releaseSettings = Seq(
@@ -75,6 +74,7 @@ lazy val root = (project in file("."))
   .aggregate(
     `support-frontend`,
     `support-workers`,
+    `supporter-product-data`,
     `support-models`,
     `support-config`,
     `support-internationalisation`,
@@ -115,6 +115,15 @@ lazy val `support-workers` = (project in file("support-workers"))
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`, `acquisition-event-producer`, `module-bigquery`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`)
+
+lazy val `supporter-product-data` = (project in file("supporter-product-data"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .configs(IntegrationTest)
+  .settings(
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`module-rest`, `module-aws`)
+  .aggregate(`module-rest`, `module-aws`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
@@ -186,7 +195,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
     bintrayOrganization := Some("guardian"),
     bintrayRepository := "ophan",
     publishMavenStyle := true,
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full), // for simulacrum
+    scalacOptions += "-Ymacro-annotations",
     libraryDependencies ++= Seq(
       "com.gu" %% "ophan-event-model" % "0.0.17" excludeAll ExclusionRule(organization = "com.typesafe.play"),
       "com.gu" %% "fezziwig" % "1.3",
@@ -196,13 +205,13 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
       "com.gu" %% "acquisitions-value-calculator-client" % "2.0.5",
       "com.squareup.okhttp3" % "okhttp" % "3.9.0",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
-      "org.typelevel" %% "simulacrum" % "1.0.0",
+      "org.typelevel" %% "simulacrum" % "1.0.1",
       "org.scalatest" %% "scalatest" % "3.1.1" % "test",
       "org.scalactic" %% "scalactic" % "3.1.1",
-      "org.typelevel" %% "cats-core" % "2.1.1",
+      "org.typelevel" %% "cats-core" % catsVersion,
       "com.amazonaws" % "aws-java-sdk-kinesis" % "1.11.465",
       "com.gu" %% "thrift-serializer" % "4.0.3",
-      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
+      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
     )
   )
 

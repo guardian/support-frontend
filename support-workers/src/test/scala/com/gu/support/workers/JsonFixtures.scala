@@ -16,7 +16,7 @@ import org.joda.time.{DateTimeZone, LocalDate}
 object JsonFixtures {
 
   def wrapFixture(string: String): ByteArrayInputStream =
-    JsonWrapper(parser.parse(string).right.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
+    JsonWrapper(parser.parse(string).toOption.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
       .asJson.noSpaces.asInputStream
 
   def userJson(id: String = idId): String =

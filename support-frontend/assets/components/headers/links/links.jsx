@@ -58,7 +58,7 @@ const links: HeaderNavLink[] = [
   },
   {
     href: routes.paperSubscriptionLanding,
-    text: 'Paper',
+    text: 'Newspaper',
     trackAs: 'subscriptions:paper',
     include: [GBPCountries],
     internal: true,
@@ -92,10 +92,14 @@ function internationalisationID(countryGroupId: ?CountryGroupId = null): ?string
 
 // Export
 
-const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
-  <nav className={classNameWithModifiers('component-header-links', [location])}>
-    <ul className="component-header-links__ul" ref={getRef}>
-      {
+const Links = ({ location, getRef, countryGroupId }: PropTypes) => {
+  const { protocol, host, pathname } = window.location;
+  const urlWithoutParams = `${protocol}//${host}${pathname}`;
+
+  return (
+    <nav className={classNameWithModifiers('component-header-links', [location])}>
+      <ul className="component-header-links__ul" ref={getRef}>
+        {
         links.filter(({ include }) => {
 
         // If there is no country group ID for the link, return true and include the link in the rendering.
@@ -123,7 +127,7 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
         <li
           className={cx(classNameWithModifiers(
                 'component-header-links__li',
-                [window.location.href.endsWith(href) ? 'active' : null],
+                [urlWithoutParams.endsWith(href) ? 'active' : null],
               ), additionalClasses)}
         >
           <a
@@ -139,9 +143,10 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
           </a>
         </li>
         ))}
-    </ul>
-  </nav>
-);
+      </ul>
+    </nav>
+  );
+};
 
 Links.defaultProps = {
   getRef: null,

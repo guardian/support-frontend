@@ -176,7 +176,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const collectionOption = props.useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
   const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
   const days = getDays(props.fulfilmentOption, props.productOption);
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Newspaper' : collectionOption;
   const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
@@ -282,9 +282,12 @@ function PaperCheckoutForm(props: PropTypes) {
                   css={controlTextAreaResizing}
                   id="delivery-instructions"
                   label="Delivery instructions"
+                  autocomplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+                  supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
                   maxlength={250}
                   value={props.deliveryInstructions}
                   onChange={e => props.setDeliveryInstructions(e.target.value)}
+                  optional
                 />
                 : null
             }

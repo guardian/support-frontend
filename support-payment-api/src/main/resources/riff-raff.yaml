@@ -6,7 +6,7 @@ deployments:
     app: payment-api
     parameters:
       amiTags:
-        Recipe: xenial-membership
+        Recipe: bionic-membership-ARM
         AmigoStage: PROD
       amiEncrypted: true
       templatePath: cfn.yaml

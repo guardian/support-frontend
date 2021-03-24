@@ -38,7 +38,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
       AnalyticsInfo(false, RedemptionNoProvider),
-      paymentMethod = Right(RedemptionData(RedemptionCode(testCode).right.get)),
+      paymentMethod = Right(RedemptionData(RedemptionCode(testCode).toOption.get)),
       firstDeliveryDate = None,
       promoCode = None,
       salesforceContacts = SalesforceContactRecords(

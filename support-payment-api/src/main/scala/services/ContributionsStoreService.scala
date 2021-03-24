@@ -12,6 +12,7 @@ import model.db.ContributionData
 import model.{InitializationError, InitializationResult, SQSThreadPool}
 import services.ContributionsStoreQueueService.Message
 
+import java.time.LocalDateTime
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -51,6 +52,9 @@ object ContributionsStoreQueueService {
   object Message {
     private implicit val messageEncoder = Encoder[Message] { message =>
       import io.circe.generic.auto._
+
+      // copied from earlier version of circe-core to prevent seconds appearing in the serialised form
+      implicit val encodeLocalDateTime: Encoder[LocalDateTime] = (a: LocalDateTime) => Json.fromString(a.toString)
 
       Json.obj {
         message match {

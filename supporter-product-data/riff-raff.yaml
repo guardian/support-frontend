@@ -1,0 +1,18 @@
+stacks: [support]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: supporter-product-data
+    parameters:
+      templatePath: cfn.yaml
+  supporter-product-data:
+    type: aws-lambda
+    parameters:
+      bucket: supporter-product-data-dist
+      functionNames:
+        - "-SupporterProductDataQueryZuora-"
+        - "-SupporterProductDataFetchResults-"
+        - "-SupporterProductDataUpdateDynamo-"
+      fileName: supporter-product-data.jar
+    dependencies: [cfn]

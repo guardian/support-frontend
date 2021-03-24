@@ -1,4 +1,7 @@
 // @flow
+import React from 'react';
+import marked from 'marked';
+import DOMPurify from 'dompurify';
 
 import { getQueryParameter } from 'helpers/url';
 import type { Option } from 'helpers/types/option';
@@ -112,6 +115,44 @@ function getPromotion(
   ).promotions);
 }
 
+function getSanitisedHtml(markdownString: string) {
+  // ensure we don't accidentally inject dangerous html into the page
+  return DOMPurify.sanitize(
+    marked(markdownString),
+    { ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'] },
+  );
+}
+
+function getPromotionCopy(promotionCopy: ?PromotionCopy): PromotionCopy {
+  if (!promotionCopy) {
+    return {};
+  }
+  return {
+    title: promotionCopy.title || '',
+    description: getSanitisedHtml(promotionCopy.description || ''),
+    roundel: getSanitisedHtml(promotionCopy.roundel || ''),
+  };
+}
+
+type PromotionHTMLModifiers = {|
+  css?: string,
+  tag?: string
+|}
+
+function promotionHTML(html?: string, { css = '', tag = 'span' }: PromotionHTMLModifiers = {}) {
+  if (!html) {
+    return null;
+  }
+  const TagName = tag;
+  return (<TagName
+    css={css}
+    // eslint-disable-next-line react/no-danger
+    dangerouslySetInnerHTML={
+    { __html: html }
+  }
+  />);
+}
+
 export {
   getPromotion,
   getAppliedPromo,
@@ -119,4 +160,6 @@ export {
   hasIntroductoryPrice,
   hasDiscount,
   promoQueryParam,
+  getPromotionCopy,
+  promotionHTML,
 };

@@ -7,7 +7,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.regions.Regions
 import services.aws.CredentialsProvider
-import com.amazonaws.services.stepfunctions.model._
+import com.amazonaws.services.stepfunctions.model.{ExecutionStatus => _, _}
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import io.circe.Encoder
 import cats.implicits._
@@ -16,7 +16,7 @@ import services.stepfunctions.StateMachineErrors.Fail
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object Client {
 

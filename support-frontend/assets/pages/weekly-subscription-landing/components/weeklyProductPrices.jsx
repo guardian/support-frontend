@@ -8,7 +8,7 @@ import {
   weeklyGiftBillingPeriods,
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/subscriptions';
 import {
   getAppliedPromo,
 } from 'helpers/productPrice/promotions';
@@ -56,8 +56,12 @@ const getMainDisplayPrice = (productPrice: ProductPrice, promotion?: Promotion |
 const weeklyProductProps = (billingPeriod: WeeklyBillingPeriod, productPrice: ProductPrice, orderIsAGift = false) => {
   const promotion = getAppliedPromo(productPrice.promotions);
   const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
-
   const offerCopy = (promotion && promotion.landingPage && promotion.landingPage.roundel) || '';
+  const trackingProperties = {
+    id: orderIsAGift ? `subscribe_now_cta_gift-${billingPeriod}` : `subscribe_now_cta-${billingPeriod}`,
+    product: 'GuardianWeekly',
+    componentType: 'ACQUISITIONS_BUTTON',
+  };
 
   return {
     title: billingPeriodTitle(billingPeriod, orderIsAGift),
@@ -73,11 +77,8 @@ const weeklyProductProps = (billingPeriod: WeeklyBillingPeriod, productPrice: Pr
     buttonCopy: 'Subscribe now',
     href: getCheckoutUrl(billingPeriod, orderIsAGift),
     label: getPromotionLabel(promotion) || '',
-    onClick: sendTrackingEventsOnClick({
-      id: `subscribe_now_cta-${billingPeriod}`,
-      product: 'GuardianWeekly',
-      componentType: 'ACQUISITIONS_BUTTON',
-    }),
+    onClick: sendTrackingEventsOnClick(trackingProperties),
+    onView: sendTrackingEventsOnView(trackingProperties),
   };
 };
 

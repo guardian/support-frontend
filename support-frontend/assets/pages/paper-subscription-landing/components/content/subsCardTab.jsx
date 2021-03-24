@@ -6,12 +6,14 @@ import React from 'react';
 
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
-import { Accordion, AccordionRow } from '@guardian/src-accordion';
+import { Accordion } from '@guardian/src-accordion';
 import { css } from '@emotion/core';
 import { neutral } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
+import { TabAccordionRow } from './tabAccordionRow';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 const flexContainerOverride = css`
   align-items: flex-start;
@@ -51,9 +53,25 @@ export const accordionContainer = css`
   }
 `;
 
-const LinkToImovo = () => <a href="https://imovo.org/guardianstorefinder" target="_blank" rel="noopener noreferrer">Find your nearest participating retailer</a>;
-
 // ----- Content ----- //
+
+const LinkToImovo = ({
+  trackingId,
+}: {
+  trackingId: string
+}) => {
+  const trackClick = sendTrackingEventsOnClick({
+    id: `${trackingId}_retailer-link`,
+    product: 'Paper',
+    componentType: 'ACQUISITIONS_OTHER',
+  });
+
+  return <a onClick={trackClick} href="https://imovo.org/guardianstorefinder" target="_blank" rel="noopener noreferrer">Find your nearest participating retailer</a>;
+};
+
+const collectonAccordionTrackingId = 'Paper_Collection-tab_Collection-accordion';
+const deliveryAccordionTrackingId = 'Paper_Collection-tab_Delivery-accordion';
+
 export const SubsCardFaqBlock = () => (
   <FlexContainer cssOverrides={flexContainerOverride}>
     <div css={faqsContainer}>
@@ -66,20 +84,24 @@ export const SubsCardFaqBlock = () => (
       </p>
       <div css={accordionContainer}>
         <Accordion>
-          <AccordionRow label="Collecting from multiple newsagents">
+          <TabAccordionRow trackingId={collectonAccordionTrackingId} label="Collecting from multiple newsagents">
+          <>
             <p>
-              Present your card to a newsagent each time you collect the paper. The newsagent will scan your
-              card and will be reimbursed for each transaction automatically.
+            Present your card to a newsagent each time you collect the newspaper. The newsagent will scan your
+            card and will be reimbursed for each transaction automatically.
             </p>
-            <p><LinkToImovo /></p>
-          </AccordionRow>
-          <AccordionRow label="Delivery from your retailer">
+            <p><LinkToImovo trackingId={collectonAccordionTrackingId} /></p>
+          </>
+          </TabAccordionRow>
+          <TabAccordionRow trackingId={deliveryAccordionTrackingId} label="Delivery from your retailer">
+          <>
             <p>
-              Simply give your preferred store / retailer the barcode printed on your
-              Home Delivery Letter.
+            Simply give your preferred store / retailer the barcode printed on your
+            Home Delivery Letter.
             </p>
-            <p><LinkToImovo /></p>
-          </AccordionRow>
+            <p><LinkToImovo trackingId={deliveryAccordionTrackingId} /></p>
+          </>
+          </TabAccordionRow>
         </Accordion>
       </div>
     </div>

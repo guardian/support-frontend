@@ -1,4 +1,4 @@
-import LibraryVersions.{awsClientVersion, jacksonVersion, circeVersion, okhttpVersion}
+import LibraryVersions.{awsClientVersion, circeVersion, jacksonDatabindVersion, jacksonVersion, okhttpVersion}
 
 name := "stripe-intent"
 description:= "Returns a stripe setup intent token so we can get authorisation of a recurring payment on the client side"
@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,

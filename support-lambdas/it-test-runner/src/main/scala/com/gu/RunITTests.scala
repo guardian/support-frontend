@@ -11,7 +11,7 @@ import org.scalatest.Reporter
 import org.scalatest.events.{Event, RunAborted, RunCompleted, TestFailed}
 import org.scalatest.tools.Runner
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.{Failure, Success, Try}
 class RunITTests extends RequestStreamHandler {
 

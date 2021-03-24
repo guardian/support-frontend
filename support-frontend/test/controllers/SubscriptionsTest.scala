@@ -11,7 +11,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
-import com.gu.support.promotions.PromoCode
+import com.gu.support.promotions.{PromoCode, PromotionServiceProvider}
 import com.gu.support.workers.Monthly
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.Direct
@@ -124,7 +124,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
-    ): DigitalSubscriptionController = {
+    ): DigitalSubscriptionFormController = {
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
       val client = mock[SupportWorkersClient]
@@ -146,11 +146,13 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
               Map(Monthly ->
                 Map(GBP -> PriceSummary(10, None, GBP, fixedTerm = false, Nil))))))
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
+      val promotionServiceProvider = mock[PromotionServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
+      val stage = mock[Stage]
       when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[ReaderType])).thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
-      new DigitalSubscriptionController(
+      new DigitalSubscriptionFormController(
         priceSummaryServiceProvider = priceSummaryServiceProvider,
         assets = assetResolver,
         actionRefiners = actionRefiner,
@@ -160,9 +162,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         stripeConfigProvider = stripe,
         payPalConfigProvider = payPal,
         components = stubControllerComponents(),
-        stringsConfig = new StringsConfig(),
         settingsProvider = settingsProvider,
-        supportUrl = "support.thegulocal.com",
         fontLoaderBundle = Left(RefPath("test")),
         recaptchaConfigProvider
       )

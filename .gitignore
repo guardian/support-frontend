@@ -2,10 +2,13 @@
 .bundle
 .idea
 .idea_modules
+*.iml
 *.sublime-project
 *.sublime-workspace
 .vscode
 .metals
+metals.sbt
+.bloop
 
 node_modules
 npm-debug.log
@@ -46,3 +49,4 @@ assets/images/inline-svgs/*.svg
 /public/**/*.js.map
 /assets/javascripts/lib/bower-components/
 .yarnclean
+/.bsp/

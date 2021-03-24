@@ -73,7 +73,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
         ImageId: !Ref AMI
-        InstanceType: t3.micro
+        InstanceType: t4g.micro
         IamInstanceProfile: !Ref KibanaProxyInstanceProfile
         BlockDeviceMappings:
         - DeviceName: /dev/sda1
@@ -119,7 +119,7 @@ Resources:
                     proxy_buffers 4 256k;
                     proxy_busy_buffers_size 256k;
                 }
-             
+
                 location ~ \/(log|sign|error|fav|forgot|change) {
                     # Forward requests to Cognito
                     proxy_pass https://subscription-logs.auth.eu-west-1.amazoncognito.com;

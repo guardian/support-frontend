@@ -35,7 +35,7 @@ class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
       InitializationError(s"error executing the parameter store request ($ctx)", err)
     }
 
-  def loadConfig[EnvType : Show, A : ClassTag : ParameterStoreLoadable[EnvType, ?]](env: EnvType): InitializationResult[A] = {
+  def loadConfig[EnvType : Show, A : ClassTag : ParameterStoreLoadable[EnvType, *]](env: EnvType): InitializationResult[A] = {
     val psl = implicitly[ParameterStoreLoadable[EnvType, A]]
     val request = psl.parametersByPathRequest(env)
     (for {

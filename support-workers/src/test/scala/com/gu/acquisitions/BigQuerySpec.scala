@@ -17,7 +17,7 @@ import org.joda.time.format.ISODateTimeFormat
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 @IntegrationTest
 class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
@@ -72,7 +72,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       reusedExistingPaymentMethod = false,
       Direct,
       Purchase,
-      Some("subscription number"), Some("account number"), Some("contributionId"),
+      Some("subscription number"), Some("account number"), Some("contributionId"), Some("paymentId1234"),
       List(QueryParameter("foo", "bar")),
       None
     )

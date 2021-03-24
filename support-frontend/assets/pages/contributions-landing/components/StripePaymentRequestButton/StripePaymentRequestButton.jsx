@@ -16,7 +16,7 @@ import {
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
+import { amountOrOtherAmountIsValid, isValidEmail } from 'helpers/formValidation';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
@@ -51,6 +51,7 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
+import { trackComponentEvents } from "../../../../helpers/tracking/ophan";
 
 // ----- Types -----//
 
@@ -190,7 +191,7 @@ function onClick(event, props: PropTypes) {
   props.setAssociatedPaymentMethod();
   props.setStripePaymentRequestButtonClicked(props.stripeAccount);
   const amountIsValid =
-    checkAmountOrOtherAmount(
+    amountOrOtherAmountIsValid(
       props.selectedAmounts,
       props.otherAmounts,
       props.contributionType,
@@ -285,6 +286,16 @@ function setUpPaymentListenerSca(
   paymentRequest.on('paymentmethod', ({ complete, paymentMethod, ...data }) => {
 
     const processPayment = () => {
+      if (paymentMethod && paymentMethod.card && paymentMethod.card.wallet) {
+        trackComponentEvents({
+          component: {
+            componentType: 'ACQUISITIONS_OTHER',
+          },
+          action: 'CLICK',
+          id: 'stripe-prb-wallet',
+          value: paymentMethod.card.wallet.type
+        })
+      }
       if (props.contributionType === 'ONE_OFF') {
         props.onPaymentAuthorised({
           paymentMethod: Stripe,

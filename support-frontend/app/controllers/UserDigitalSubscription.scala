@@ -33,5 +33,5 @@ object UserDigitalSubscription {
   }
 
   def redirectToExistingThankYouPage(implicit request: AuthRequest[Any]): Result =
-    Redirect(routes.DigitalSubscriptionController.displayThankYouExisting().url, request.queryString, status = FOUND)
+    Redirect(routes.DigitalSubscriptionFormController.displayThankYouExisting().url, request.queryString, status = FOUND)
 }

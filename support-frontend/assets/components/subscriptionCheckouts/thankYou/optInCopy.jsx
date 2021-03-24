@@ -17,7 +17,7 @@ const getProductText = (subscriptionProduct) => {
   } else if (subscriptionProduct === GuardianWeekly) {
     return 'Guardian Weekly ';
   }
-  return 'print ';
+  return 'newspaper ';
 };
 
 // ----- Component ----- //

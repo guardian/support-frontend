@@ -9,4 +9,4 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
 )
 
-dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
+dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion

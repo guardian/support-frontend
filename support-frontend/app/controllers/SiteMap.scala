@@ -14,8 +14,8 @@ class SiteMap(
 
   def sitemap: Action[AnyContent] = CachedAction() { implicit request =>
     val sitemapResponse = <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-                            { supportLandingPages }
-                            { contributeLandingPages }
+                            { supportLandingPages() }
+                            { contributeLandingPages() }
                           </urlset>
 
     Ok(sitemapResponse)
@@ -27,7 +27,7 @@ class SiteMap(
         routes.Application.showcase("uk").absoluteURL(secure = true)
       }</loc>
       <xhtml:link rel="alternate" hreflang="en-us" href={
-        contributionsLandingPageUS
+        contributionsLandingPageUS()
       }/>
       <xhtml:link rel="alternate" hreflang="en" href={
         routes.Application.showcase("uk").absoluteURL(secure = true)
@@ -39,10 +39,10 @@ class SiteMap(
   private def contributeLandingPages()(implicit req: RequestHeader) = {
     <url>
       <loc>{
-        contributionsLandingPageUS
+        contributionsLandingPageUS()
       }</loc>
       <xhtml:link rel="alternate" hreflang="en-us" href={
-        contributionsLandingPageUS
+        contributionsLandingPageUS()
       }/>
       <xhtml:link rel="alternate" hreflang="en" href={
         routes.Application.showcase("uk").absoluteURL(secure = true)

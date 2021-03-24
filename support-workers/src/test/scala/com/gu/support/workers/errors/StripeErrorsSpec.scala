@@ -84,7 +84,7 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
       """
     )
     err.isRight should be(true)
-    err.right.get.code should be(Some("card_declined"))
+    err.toOption.get.code should be(Some("card_declined"))
   }
 
   "JsonWrapped error" should "deserialise correctly" in {

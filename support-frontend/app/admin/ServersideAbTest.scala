@@ -11,7 +11,7 @@ object ServersideAbTest {
   def generateParticipations(testNames: List[String]): Map[String, Participation] =
     testNames.map(_ -> computeParticipation).toMap
 
-  def computeParticipation: Participation = if (Random.nextBoolean) Control else Variant
+  def computeParticipation: Participation = if (Random.nextBoolean()) Control else Variant
 
   sealed trait Participation
   case object Control extends Participation

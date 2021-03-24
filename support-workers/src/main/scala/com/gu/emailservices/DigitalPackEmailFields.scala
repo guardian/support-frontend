@@ -221,7 +221,7 @@ class DigitalPackEmailFields(
   private def giftRedemption(state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState) =
     wrap("digipack-gift-redemption", GifteeRedemptionAttributes(
       gift_recipient_first_name = state.user.firstName,
-      subscription_details = state.termDates.months + " month digital subscription",
+      subscription_details = s"${state.termDates.months} month digital subscription",
       gift_start_date = formatDate(state.termDates.giftStartDate),
       gift_recipient_email = state.user.primaryEmailAddress,
       gift_end_date = formatDate(state.termDates.giftEndDate),
