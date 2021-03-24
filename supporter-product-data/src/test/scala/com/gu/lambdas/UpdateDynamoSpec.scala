@@ -1,18 +1,11 @@
 package com.gu.lambdas
 
 import com.gu.Fixtures
-import com.gu.lambdas.UpdateDynamoLambda.maxBatchSize
-import com.gu.model.Stage.PROD
 import com.gu.model.dynamo.SupporterRatePlanItem
-import com.gu.model.states.UpdateDynamoState
 import kantan.csv.ops.toCsvInputOps
 import kantan.csv.rfc
-import org.joda.time.DateTime
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
-
-import java.time.ZonedDateTime
-import scala.collection.mutable.ListBuffer
 
 class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
 
