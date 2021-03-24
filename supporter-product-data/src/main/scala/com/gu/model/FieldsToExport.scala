@@ -3,6 +3,10 @@ package com.gu.model
 case class FieldDefinition(zuoraName: String, dynamoName: String)
 
 object FieldsToExport {
+  val subscriptionName = FieldDefinition(
+    "Subscription.Name",
+    "subscriptionName"
+  )
   val identityId = FieldDefinition(
     "Account.IdentityId__c",
     "identityId"
@@ -10,10 +14,6 @@ object FieldsToExport {
   val gifteeIdentityId = FieldDefinition(
     "Subscription.GifteeIdentityId__c",
     "identityId"
-  )
-  val ratePlanId = FieldDefinition(
-    "RatePlan.Id",
-    "ratePlanId"
   )
   val productRatePlanName = FieldDefinition(
     "ProductRatePlan.Name",

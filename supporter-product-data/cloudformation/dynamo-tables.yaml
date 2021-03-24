@@ -22,7 +22,7 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "identityId"
           AttributeType: "S"
-        - AttributeName: "productRatePlanId"
+        - AttributeName: "subscriptionName"
           AttributeType: "S"
       KeySchema:
         # https://www.dynamodbguide.com/key-concepts/#primary-key
@@ -30,7 +30,7 @@ Resources:
         - AttributeName: "identityId"
           KeyType: "HASH"
         # sort key
-        - AttributeName: "productRatePlanId"
+        - AttributeName: "subscriptionName"
           KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 20

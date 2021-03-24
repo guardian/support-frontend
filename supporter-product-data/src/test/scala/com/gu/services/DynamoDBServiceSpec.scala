@@ -16,7 +16,7 @@ class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
     val item = SupporterRatePlanItem(
       identityId = "999999",
       gifteeIdentityId = None,
-      ratePlanId = "2c92a00770ec485c0170f721f0d23876",
+      subscriptionName = "test-sub-name",
       productRatePlanId = "2c92a0fb4edd70c8014edeaa4e972204",
       productRatePlanName = "Digital Pack Annual",
       termEndDate = LocalDate.parse("2021-03-20"),

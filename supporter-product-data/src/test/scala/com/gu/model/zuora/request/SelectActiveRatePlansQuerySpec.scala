@@ -12,11 +12,9 @@ class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with Lazy
   "SelectActiveRatePlansQuery" should "be correct" in {
     val date = LocalDate.of(2011, 11, 1)
     val expected = """SELECT
-          RatePlan.AmendmentType,
-          Subscription.Id,
+          Subscription.Name,
           Account.IdentityId__c,
           Subscription.GifteeIdentityId__c,
-          RatePlan.Id,
           ProductRatePlan.Id,
           ProductRatePlan.Name,
           Subscription.ContractEffectiveDate,

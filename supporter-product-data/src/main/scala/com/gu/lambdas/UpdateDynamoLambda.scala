@@ -5,7 +5,6 @@ import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
 import com.gu.model.Stage
 import com.gu.model.dynamo.SupporterRatePlanItem
 import com.gu.model.states.UpdateDynamoState
-import com.gu.model.zuora.SubscriptionStatus.Cancelled
 import com.gu.services.{AlarmService, ConfigService, DynamoDBService, S3Service}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.syntax.EncoderOps

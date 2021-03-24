@@ -25,18 +25,18 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
     val beneficiaryIdentityId = item.gifteeIdentityId.getOrElse(item.identityId)
     val key = Map(
       identityId.dynamoName -> AttributeValue.builder.s(beneficiaryIdentityId).build,
-      productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build
+      subscriptionName.dynamoName -> AttributeValue.builder.s(item.subscriptionName).build
     ).asJava
 
     val updateExpression =
       s"""SET
-          ${ratePlanId.dynamoName} = :${ratePlanId.dynamoName},
+          ${productRatePlanId.dynamoName} = :${productRatePlanId.dynamoName},
           ${productRatePlanName.dynamoName} = :${productRatePlanName.dynamoName},
           ${termEndDate.dynamoName} = :${termEndDate.dynamoName},
           ${contractEffectiveDate.dynamoName} = :${contractEffectiveDate.dynamoName}
           """
     val attributeValues = Map(
-      ":" + ratePlanId.dynamoName -> AttributeValue.builder.s(item.ratePlanId).build,
+      ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName.dynamoName -> AttributeValue.builder.s(item.productRatePlanName).build,
       ":" + termEndDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(item.termEndDate)).build,
       ":" + contractEffectiveDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(item.contractEffectiveDate)).build,

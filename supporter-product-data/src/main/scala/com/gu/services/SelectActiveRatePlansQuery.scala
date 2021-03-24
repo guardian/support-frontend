@@ -21,7 +21,7 @@ object SelectActiveRatePlansQuery {
 
   /* -------- Notes on this query -----------
     * Select *
-    A number of fields in the select clause such as AmendmentType and Subscription.Id are not actually
+    A number of fields in the select clause such as contract effective date and Subscription status are not actually
     written to Dynamo, they are only included for debugging purposes. They could be removed at a later
     stage if we felt they were no longer useful.
 
@@ -55,11 +55,9 @@ object SelectActiveRatePlansQuery {
 
   def query(today: LocalDate, discountProductRatePlanIds: List[String]): String =
     s"""SELECT
-          RatePlan.AmendmentType,
-          Subscription.Id,
+          ${subscriptionName.zuoraName},
           ${identityId.zuoraName},
           ${gifteeIdentityId.zuoraName},
-          ${ratePlanId.zuoraName},
           ${productRatePlanId.zuoraName},
           ${productRatePlanName.zuoraName},
           ${contractEffectiveDate.zuoraName},
