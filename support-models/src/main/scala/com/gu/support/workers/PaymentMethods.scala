@@ -97,6 +97,7 @@ object PaymentMethod {
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = capitalizingCodec
+  implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = capitalizingCodec
 
   //Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
@@ -104,6 +105,7 @@ object PaymentMethod {
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
+    case amazonPayPaymentMethod: AmazonPayPaymentMethod => amazonPayPaymentMethod.asJson
   }
 
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
@@ -111,6 +113,7 @@ object PaymentMethod {
       Decoder[PayPalReferenceTransaction].widen,
       Decoder[CreditCardReferenceTransaction].widen,
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)
-      Decoder[DirectDebitPaymentMethod].widen
+      Decoder[DirectDebitPaymentMethod].widen,
+      Decoder[AmazonPayPaymentMethod].widen
     ).reduceLeft(_ or _)
 }
