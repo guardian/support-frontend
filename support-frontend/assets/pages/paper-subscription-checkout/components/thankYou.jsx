@@ -3,6 +3,10 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { css } from '@emotion/core';
+import { textSans, headline } from '@guardian/src-foundations/typography';
+import { from } from '@guardian/src-foundations/mq';
+import { space } from '@guardian/src-foundations';
 
 import { connect } from 'react-redux';
 
@@ -13,7 +17,7 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
-import Content from 'components/content/content';
+import Content from 'components/content/contentSimple';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
@@ -26,6 +30,8 @@ import { Paper } from 'helpers/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 import { HeroPicture } from './heroPicture';
 import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import AppsSection from './appsSection';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
@@ -35,6 +41,7 @@ type PropTypes = {
     ...FormFields,
     isPending: boolean,
     useDigitalVoucher: boolean,
+    countryGroupId: CountryGroupId,
 };
 
 // ----- Map State/Props ----- //
@@ -74,13 +81,34 @@ const whatNextText: { [FulfilmentOptions]: { [key: string]: Array<string> } } = 
   },
 };
 
+
+const subHeading = css`
+  ${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'loose' })};
+  padding-top: ${space[9]}px;
+`;
+
+const olText = css`
+  ${textSans.medium({ lineHeight: 'loose' })}
+`;
+
+const maxWidth = css`
+  ${from.desktop} {
+    max-width: 70%;
+  }
+
+  ${from.leftCol} {
+    max-width: 60%;
+  }
+`;
+
 function whatNextElement(textItems) {
   return (
-    <Text title="What happens next?">
-      <p>
-        <OrderedList items={textItems.map(item => <span>{item}</span>)} />
+    <div css={space}>
+      <h3 css={subHeading}>What happens next?</h3>
+      <p css={maxWidth}>
+        <OrderedList items={textItems.map(item => <span css={olText}>{item}</span>)} />
       </p>
-    </Text>
+    </div>
   );
 }
 
@@ -94,10 +122,18 @@ function WhatNext(fulfilmentOption, useDigitalVoucher = false) {
 
 
 function ThankYouContent({
-  fulfilmentOption, productOption, startDate, isPending, product, useDigitalVoucher,
+  fulfilmentOption,
+  productOption,
+  startDate,
+  isPending,
+  product,
+  useDigitalVoucher,
+  countryGroupId,
 }: PropTypes) {
   const hideStartDate = fulfilmentOption === Collection && useDigitalVoucher;
   const cleanProductOption = getTitle(productOption);
+  const hasDigitalSubscription = productOption.includes('Plus');
+
   return (
     <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
@@ -107,9 +143,9 @@ function ThankYouContent({
           overheadingClass="--thankyou"
         >
           {isPending ?
-          `Your subscription to the ${cleanProductOption} package is being processed` :
-          `You have now subscribed to the ${cleanProductOption} package`
-  }
+          `Your subscription to the ${cleanProductOption} ${!hasDigitalSubscription ? 'package ' : ''}is being processed` :
+          `You have now subscribed to the ${cleanProductOption} ${!hasDigitalSubscription ? 'package' : ''}`
+          }
         </HeadingBlock>
       </HeroWrapper>
       <Content>
@@ -129,6 +165,9 @@ function ThankYouContent({
           </Text>
         }
         {WhatNext(fulfilmentOption, useDigitalVoucher)}
+      </Content>
+      <Content text="Make the most of your digital subscription">
+        <AppsSection countryGroupId={countryGroupId} />
       </Content>
       <Content>
         <Text>

@@ -125,6 +125,8 @@ export const imageCatalogue: {
   editionsRowMobile: '307653cb535689ce12b93cf90cfb233cddaab3fd/0_0_1100_1100',
   editionsRowDesktop: 'a37e08fd9d3343eb629ae44b2b30127d7e31184b/0_0_1800_1080',
   editionsShortPackshot: '51b63b57ec163a262d30022d8b1ae47e6ba94897/0_7_2320_1392',
+  googlePlay: '0a3eda7d719ad8ebe3a13a9bab8fd2b3348d1f20/0_0_554_160',
+  appleStore: 'a0787d3b313f03ed87a16ced224ab4022f794bc5/0_0_554_160',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

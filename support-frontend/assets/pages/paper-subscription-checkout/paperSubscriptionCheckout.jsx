@@ -48,7 +48,11 @@ const store = pageInit(
   true,
 );
 
-const { useDigitalVoucher } = store.getState().common.settings;
+const { settings, internationalisation } = store.getState().common;
+const { useDigitalVoucher } = settings;
+const { countryGroupId } = internationalisation;
+const state = store.getState();
+console.log({ state });
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -74,8 +78,8 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<CheckoutForm />}
-        thankYouContentPending={<ThankYouContent isPending />}
-        thankYouContent={<ThankYouContent isPending={false} />}
+        thankYouContentPending={<ThankYouContent isPending countryGroupId={countryGroupId} />}
+        thankYouContent={<ThankYouContent isPending={false} countryGroupId={countryGroupId} />}
         subscriptionProduct="Paper"
       />
     </Page>

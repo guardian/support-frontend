@@ -32,7 +32,7 @@ function createFormReducer(
   const { productPrices, orderIsAGift } = window.guardian;
 
   const initialState = {
-    stage: 'checkout',
+    stage: 'thankyou',
     product,
     title: null,
     email: user.email || '',
