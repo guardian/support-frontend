@@ -46,7 +46,7 @@ Resources:
     Condition: CreateProdResources
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
-      MaxCapacity: 400
+      MaxCapacity: 500
       MinCapacity: 5
       ResourceId:
         Fn::Join:
