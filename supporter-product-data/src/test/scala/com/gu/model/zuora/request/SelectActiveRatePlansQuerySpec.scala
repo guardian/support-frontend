@@ -13,6 +13,7 @@ class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with Lazy
     val date = LocalDate.of(2011, 11, 1)
     val expected = """SELECT
           Subscription.Name,
+          Subscription.Version,
           Account.IdentityId__c,
           Subscription.GifteeIdentityId__c,
           ProductRatePlan.Id,
@@ -32,7 +33,7 @@ class SelectActiveRatePlansQuerySpec extends AnyFlatSpec with Matchers with Lazy
 ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067818' AND
             Account.IdentityId__c like '_%' AND
             ((Subscription.RedemptionCode__c = '' OR Subscription.RedemptionCode__c is null) OR (Subscription.RedemptionCode__c like '_%' AND Subscription.GifteeIdentityId__c like '_%'))
-          ORDER BY Account.IdentityId__c, Subscription.ContractEffectiveDate
+          ORDER BY Account.IdentityId__c, Subscription.ContractEffectiveDate, Subscription.Name, Subscription.Version
     """
     val actual = SelectActiveRatePlansQuery.query(
       date,

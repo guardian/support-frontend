@@ -5,6 +5,7 @@ import com.gu.model.Stage
 import com.gu.model.Stage.{DEV, PROD}
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 object SelectActiveRatePlansQuery {
 
@@ -56,6 +57,7 @@ object SelectActiveRatePlansQuery {
   def query(today: LocalDate, discountProductRatePlanIds: List[String]): String =
     s"""SELECT
           ${subscriptionName.zuoraName},
+          Subscription.Version,
           ${identityId.zuoraName},
           ${gifteeIdentityId.zuoraName},
           ${productRatePlanId.zuoraName},
@@ -68,13 +70,13 @@ object SelectActiveRatePlansQuery {
             WHERE
             (
               ${subscriptionStatus.zuoraName} = 'Active' OR
-              (${subscriptionStatus.zuoraName} = 'Cancelled' AND Subscription.TermStartDate > '${today.minusDays(366)}')
+              (${subscriptionStatus.zuoraName} = 'Cancelled' AND Subscription.TermStartDate > '${today.minusDays(366).format(DateTimeFormatter.ISO_LOCAL_DATE)}')
             ) AND
             (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
             ${identityId.zuoraName} like '_%' AND
             ($isNotDSGift OR $isRedeemedDSGift)
-          ORDER BY ${identityId.zuoraName}, ${contractEffectiveDate.zuoraName}
+          ORDER BY ${identityId.zuoraName}, ${contractEffectiveDate.zuoraName}, ${subscriptionName.zuoraName}, Subscription.Version
     """
 
 }
