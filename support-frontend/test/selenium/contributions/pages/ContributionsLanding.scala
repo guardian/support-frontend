@@ -71,11 +71,13 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     val cvc = StripeCardField("stripeCardCVCElement", "cvc")
     val zipCode = id("contributionZipCode")
 
-    def fillIn: Unit = {
+    def fillIn(hasZipCodeField: Boolean): Unit = {
       cardNumber.set("4242424242424242")
       expiryDate.set("0150")
       cvc.set("111")
-      setValue(zipCode, "90210", clear = true)
+      if (hasZipCodeField) {
+        setValue(zipCode, "90210", clear = true)
+      }
     }
   }
 
@@ -87,7 +89,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   def selectStripePayment(): Unit = clickOn(stripeSelector)
 
-  def fillInCardDetails(): Unit = CardDetailsFields.fillIn
+  def fillInCardDetails(hasZipCodeField: Boolean): Unit = CardDetailsFields.fillIn(hasZipCodeField)
 
   def selectPayPalPayment(): Unit = clickOn(payPalSelector)
 

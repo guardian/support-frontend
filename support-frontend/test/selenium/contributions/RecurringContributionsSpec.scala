@@ -49,7 +49,7 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
 
 
       And("enter card details")
-      landingPage.fillInCardDetails
+      landingPage.fillInCardDetails(hasZipCodeField = false)
 
       And("click the recaptcha")
       landingPage.clickRecaptcha
@@ -89,8 +89,8 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       landingPage.selectStripePayment()
 
       And("enter card details")
-      landingPage.fillInCardDetails
-      
+      landingPage.fillInCardDetails(hasZipCodeField = true)
+
       And("click the recaptcha")
       landingPage.clickRecaptcha
 
