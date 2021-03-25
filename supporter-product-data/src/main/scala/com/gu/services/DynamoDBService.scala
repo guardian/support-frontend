@@ -40,7 +40,7 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
           ${productRatePlanName.dynamoName} = :${productRatePlanName.dynamoName},
           ${termEndDate.dynamoName} = :${termEndDate.dynamoName},
           ${contractEffectiveDate.dynamoName} = :${contractEffectiveDate.dynamoName},
-          $expiryDateName = :$expiryDateName,
+          $expiryDateName = :$expiryDateName
           """
     val attributeValues = Map(
       ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
