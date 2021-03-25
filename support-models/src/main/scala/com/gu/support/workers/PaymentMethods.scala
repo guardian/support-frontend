@@ -86,8 +86,9 @@ case class ClonedDirectDebitPaymentMethod(
 ) extends PaymentMethod
 
 case class AmazonPayPaymentMethod(
-  tokenId: String = "AmazonBillingAgreementId",
-  secondTokenId: String,
+//  tokenId: String = "AmazonBillingAgreementId",
+  tokenId: String,
+//  secondTokenId: String,
   `type`: String = "CreditCardReferenceTransaction",  // This is how amazon pay works in zuora - as a credit card
   paymentGateway: PaymentGateway
 ) extends PaymentMethod
