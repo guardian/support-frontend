@@ -122,14 +122,12 @@ object UpdateDynamoLambda extends StrictLogging {
 
   def batchItemsWhichCanUpdateConcurrently(items: List[(SupporterRatePlanItem, Int)]): List[List[(SupporterRatePlanItem, Int)]] = {
     // 'Batch' supporterRatePlanItems up into groups which we can update in Dynamo concurrently.
-    // For this to be safe we need to make sure that no group has more than one item for the same user in it because if it does
+    // For this to be safe we need to make sure that no group has more than one item with the same subscription name in it because if it does
     // then order of execution is important and we can't guarantee this with parallel executions.
-    // It actually would be ok to have multiple records for the same user as long as none of them were cancellations but this code
-    // is complex enough without adding that logic in and we will still get most of the benefit
 
-    def batchAlreadyHasAnItemForThisUser(batch: ListBuffer[(SupporterRatePlanItem, Int)], identityId: String) =
+    def batchAlreadyHasAnItemForThisSubscription(batch: ListBuffer[(SupporterRatePlanItem, Int)], subscriptionName: String) =
       batch.exists {
-        case (item, _) => item.identityId == identityId
+        case (item, _) => item.subscriptionName == subscriptionName
       }
 
     // Using mutable state for performance reasons, it is many times faster than the immutable version
@@ -137,7 +135,7 @@ object UpdateDynamoLambda extends StrictLogging {
 
     for ((item, index) <- items) {
       val currentBatch = result.last
-      if (batchAlreadyHasAnItemForThisUser(currentBatch, item.identityId) || currentBatch.length == maxBatchSize)
+      if (batchAlreadyHasAnItemForThisSubscription(currentBatch, item.subscriptionName) || currentBatch.length == maxBatchSize)
         result += ListBuffer((item, index))
       else
         currentBatch += ((item, index))
