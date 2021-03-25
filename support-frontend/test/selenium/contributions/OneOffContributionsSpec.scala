@@ -61,7 +61,7 @@ class OneOffContributionsSpec extends AnyFeatureSpec
       landingPage.selectStripePayment()
 
       And("enter card details")
-      landingPage.fillInCardDetails
+      landingPage.fillInCardDetails(hasZipCodeField = false)
 
       And("click the recaptcha")
       landingPage.clickRecaptcha
