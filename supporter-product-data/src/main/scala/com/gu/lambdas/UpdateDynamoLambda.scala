@@ -37,12 +37,15 @@ object UpdateDynamoLambda extends StrictLogging {
   def writeToDynamo(stage: Stage, state: UpdateDynamoState, timeOutCheck: TimeOutCheck): Future[UpdateDynamoState] = {
     logger.info(s"Starting write to dynamo task for ${state.recordCount} records from ${state.filename}")
 
-    val csvStream = S3Service.streamFromS3(stage, state.filename)
-    val csvReader = csvStream.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
+    val s3Object = S3Service.streamFromS3(stage, state.filename)
+    val csvReader = s3Object.getObjectContent.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val dynamoDBService = DynamoDBService(stage)
     val alarmService = AlarmService(stage)
 
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
+
+    //Close this after retrieving all the items
+    s3Object.close()
 
     val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
     val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }

@@ -25,7 +25,7 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
     val batchedItems = UpdateDynamoLambda.batchItemsWhichCanUpdateConcurrently(items)
 
     // The test rows should batch up into 3 separate lists - there are two rows which are not
-    // suitable to run concurrently because they belong to the same user at index 6 & 7
+    // suitable to run concurrently because they belong to the same subscription at index 6 & 7
     // so the pattern is
     // - items 0 - 4 can all run concurrently and so are allocated to the same batch (up to max batch size of 5)
     // - items 5 & 6 are unrelated and so go in a batch
