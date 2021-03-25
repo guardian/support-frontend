@@ -23,6 +23,8 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
 
   def writeItem(item: SupporterRatePlanItem)(implicit executionContext: ExecutionContext) = {
     val beneficiaryIdentityId = item.gifteeIdentityId.getOrElse(item.identityId)
+    // Dynamo will delete expired subs at the start of the day, whereas the subscription actually lasts until the end of the day
+    val expiryDate = item.termEndDate.plusDays(1)
     val key = Map(
       identityId.dynamoName -> AttributeValue.builder.s(beneficiaryIdentityId).build,
       subscriptionName.dynamoName -> AttributeValue.builder.s(item.subscriptionName).build
@@ -38,7 +40,7 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
     val attributeValues = Map(
       ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName.dynamoName -> AttributeValue.builder.s(item.productRatePlanName).build,
-      ":" + termEndDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(item.termEndDate)).build,
+      ":" + termEndDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
       ":" + contractEffectiveDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(item.contractEffectiveDate)).build,
     ).asJava
 
