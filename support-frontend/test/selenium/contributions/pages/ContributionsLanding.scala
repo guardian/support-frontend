@@ -69,11 +69,13 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     val cardNumber = StripeCardField("stripeCardNumberElement", "cardnumber")
     val expiryDate = StripeCardField("stripeCardExpiryElement", "exp-date")
     val cvc = StripeCardField("stripeCardCVCElement", "cvc")
+    val zipCode = id("contributionZipCode")
 
     def fillIn: Unit = {
       cardNumber.set("4242424242424242")
       expiryDate.set("0150")
       cvc.set("111")
+      setValue(zipCode, "90210", clear = true)
     }
   }
 
