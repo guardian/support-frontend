@@ -110,7 +110,7 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "identityId"
           AttributeType: "S"
-        - AttributeName: "productRatePlanId"
+        - AttributeName: "subscriptionName"
           AttributeType: "S"
       KeySchema:
         # https://www.dynamodbguide.com/key-concepts/#primary-key
@@ -118,14 +118,14 @@ Resources:
         - AttributeName: "identityId"
           KeyType: "HASH"
         # sort key
-        - AttributeName: "productRatePlanId"
+        - AttributeName: "subscriptionName"
           KeyType: "RANGE"
       BillingMode: PAY_PER_REQUEST
       SSESpecification:
         SSEEnabled: true
       TableName: !Sub SupporterProductData-${Stage}
       TimeToLiveSpecification:
-        AttributeName: "termEndDate"
+        AttributeName: "expiryDate"
         Enabled: true
 Outputs:
   ProvisionedTableOutput:
