@@ -39,7 +39,7 @@ Resources:
         SSEEnabled: true
       TableName: !Sub SupporterProductData-${Stage}
       TimeToLiveSpecification:
-        AttributeName: "termEndDate"
+        AttributeName: "expiryDate"
         Enabled: true
 
   WriteCapacityScalableTarget:

@@ -12,6 +12,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateItemRequest}
 
+import java.time.format.DateTimeFormatter
 import java.time.{Duration, LocalDate, ZoneOffset}
 import java.util.concurrent.CompletionException
 import scala.collection.JavaConverters._
@@ -23,8 +24,11 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
 
   def writeItem(item: SupporterRatePlanItem)(implicit executionContext: ExecutionContext) = {
     val beneficiaryIdentityId = item.gifteeIdentityId.getOrElse(item.identityId)
+
     // Dynamo will delete expired subs at the start of the day, whereas the subscription actually lasts until the end of the day
     val expiryDate = item.termEndDate.plusDays(1)
+    val expiryDateName = "expiryDate"
+
     val key = Map(
       identityId.dynamoName -> AttributeValue.builder.s(beneficiaryIdentityId).build,
       subscriptionName.dynamoName -> AttributeValue.builder.s(item.subscriptionName).build
@@ -35,13 +39,15 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
           ${productRatePlanId.dynamoName} = :${productRatePlanId.dynamoName},
           ${productRatePlanName.dynamoName} = :${productRatePlanName.dynamoName},
           ${termEndDate.dynamoName} = :${termEndDate.dynamoName},
-          ${contractEffectiveDate.dynamoName} = :${contractEffectiveDate.dynamoName}
+          ${contractEffectiveDate.dynamoName} = :${contractEffectiveDate.dynamoName},
+          $expiryDateName = :$expiryDateName,
           """
     val attributeValues = Map(
       ":" + productRatePlanId.dynamoName -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName.dynamoName -> AttributeValue.builder.s(item.productRatePlanName).build,
-      ":" + termEndDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
-      ":" + contractEffectiveDate.dynamoName -> AttributeValue.builder.n(asEpochSecond(item.contractEffectiveDate)).build,
+      ":" + termEndDate.dynamoName -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
+      ":" + contractEffectiveDate.dynamoName -> AttributeValue.builder.s(asIso(item.contractEffectiveDate)).build,
+      ":" + expiryDateName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
     ).asJava
 
     val updateItemRequest = UpdateItemRequest.builder
@@ -61,6 +67,9 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
       .atStartOfDay
       .toEpochSecond(ZoneOffset.UTC)
       .toString
+
+  def asIso(date: LocalDate) =
+    date.format(DateTimeFormatter.ISO_LOCAL_DATE)
 }
 
 object DynamoDBService {
