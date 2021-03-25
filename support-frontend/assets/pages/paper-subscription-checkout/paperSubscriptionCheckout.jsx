@@ -51,8 +51,6 @@ const store = pageInit(
 const { settings, internationalisation } = store.getState().common;
 const { useDigitalVoucher } = settings;
 const { countryGroupId } = internationalisation;
-const state = store.getState();
-console.log({ state });
 
 FocusStyleManager.onlyShowFocusOnTabs();
 

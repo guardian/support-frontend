@@ -18,7 +18,7 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
-import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
+import Text, { LargeParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
@@ -87,7 +87,7 @@ const subHeading = css`
   padding-top: ${space[9]}px;
 `;
 
-const olText = css`
+const sansText = css`
   ${textSans.medium({ lineHeight: 'loose' })}
 `;
 
@@ -106,11 +106,24 @@ function whatNextElement(textItems) {
     <div css={space}>
       <h3 css={subHeading}>What happens next?</h3>
       <p css={maxWidth}>
-        <OrderedList items={textItems.map(item => <span css={olText}>{item}</span>)} />
+        <OrderedList items={textItems.map(item => <span css={sansText}>{item}</span>)} />
       </p>
     </div>
   );
 }
+
+const MyAccountLink = () =>
+  (<a
+    href={myAccountUrl}
+    onClick={sendTrackingEventsOnClick({
+      id: 'checkout_my_account',
+      product: 'Paper',
+      componentType: 'ACQUISITIONS_BUTTON',
+    })}
+  >
+    MyAccount
+   </a>);
+
 
 function WhatNext(fulfilmentOption, useDigitalVoucher = false) {
   let textItems = whatNextText[fulfilmentOption].default;
@@ -160,22 +173,21 @@ function ThankYouContent({
           )
         }
         {(startDate && !hideStartDate) &&
-          <Text title={fulfilmentOption === HomeDelivery ? 'You will receive your newspapers from' : 'You can start using your vouchers from'}>
+          <Text title={fulfilmentOption === HomeDelivery ?
+            'You will receive your newspapers from' :
+            'You can start using your vouchers from'
+          }
+          >
             <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
           </Text>
         }
         {WhatNext(fulfilmentOption, useDigitalVoucher)}
       </Content>
-      <Content text="Make the most of your digital subscription">
-        <AppsSection countryGroupId={countryGroupId} />
-      </Content>
       <Content>
-        <Text>
-          <SansParagraph>
-            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_mma', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>Manage section</a> or accessing
-            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_my_account', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>your Guardian account</a>.
-          </SansParagraph>
-        </Text>
+        <AppsSection countryGroupId={countryGroupId} productOption={productOption} />
+        <p css={sansText}>
+          To see your subscription go to <MyAccountLink />.
+        </p>
       </Content>
       <SubscriptionsSurvey product={product} />
       <Content>

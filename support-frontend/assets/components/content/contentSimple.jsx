@@ -13,30 +13,28 @@ import { type Option } from 'helpers/types/option';
 
 type PropTypes = {|
   id?: Option<string>,
-  children: Node,
+  children: Node
 |};
 
 const container = css`
   border: ${neutral[86]} 1px solid;
-  border-top: none;
+  border-bottom: none;
   width: 100%;
-  padding: 0 ${space[3]}px;
+  padding: 0 ${space[5]}px ${space[9]}px;
 `;
-
 
 // ----- Render ----- //
 
 const Content = ({
   children, id,
 }: PropTypes) => (
-  <div
-    id={id}
-  >
+  <div id={id}>
     <LeftMarginSection>
-      <div css={container}>{children}</div>
+      <div css={container}>
+        {children}
+      </div>
     </LeftMarginSection>
   </div>
-
 );
 
 Content.defaultProps = {
