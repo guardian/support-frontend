@@ -4,11 +4,24 @@
 
 import React from 'react';
 
+import { ThemeProvider } from 'emotion-theming';
+import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
+
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import Content, { Divider, NarrowContent } from 'components/content/content';
-import { LinkButton } from '@guardian/src-button';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
+
+const leftMarginForButton = css`
+  ${from.desktop} {
+    margin-left: ${space[2]}px;
+  }
+
+`;
 
 type PropTypes = {
   subscriptionProduct: SubscriptionProduct,
@@ -23,19 +36,25 @@ function ReturnSection(props: PropTypes) {
       <Divider />
       <NarrowContent>
         <div className="thank-you-stage__ctas">
-          <LinkButton
-            priority="subdued"
-            aria-label="Return to The Guardian home page"
-            href="https://theguardian.com"
-            onClick={sendTrackingEventsOnClick({
+          <ThemeProvider theme={buttonReaderRevenue}>
+            <LinkButton
+              css={leftMarginForButton}
+              priority="tertiary"
+              aria-label="Return to The Guardian home page"
+              href="https://theguardian.com"
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
+              nudgeIcon
+              onClick={sendTrackingEventsOnClick({
               id: 'checkout_return_home',
               product: props.subscriptionProduct,
               componentType: 'ACQUISITIONS_BUTTON',
             })}
-            modifierClasses={['visited-white-text']}
-          >
+              modifierClasses={['visited-white-text']}
+            >
             Return to The Guardian
-          </LinkButton>
+            </LinkButton>
+          </ThemeProvider>
         </div>
       </NarrowContent>
     </Content>

@@ -5,7 +5,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { textSans, headline } from '@guardian/src-foundations/typography';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 
 import { connect } from 'react-redux';
@@ -15,19 +15,15 @@ import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
-import Text, { LargeParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
+import { myAccountUrl } from 'helpers/externalLinks';
 import typeof MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/dateConversions';
-import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
-import { Paper } from 'helpers/subscriptions';
-import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import SubscriptionsSurvey from './subscriptionSurvey';
 import { HeroPicture } from './heroPicture';
 import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -81,18 +77,33 @@ const whatNextText: { [FulfilmentOptions]: { [key: string]: Array<string> } } = 
   },
 };
 
-
 const subHeading = css`
   ${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'loose' })};
-  padding-top: ${space[9]}px;
+  &:not(:last-of-type) {
+    margin-bottom: ${space[2]}px;
+  }
+`;
+
+const smallSpaceAround = css`
+  padding-top: ${space[1]}px;
+`;
+
+const firstSubHeadingSpacing = css`
+  padding: ${space[9]}px 0 ${space[1]}px;
+  ${until.desktop} {
+    padding: ${space[3]}px 0 ${space[1]}px;
+  }
 `;
 
 const sansText = css`
-  ${textSans.medium({ lineHeight: 'loose' })}
+  ${textSans.medium({ lineHeight: 'regular' })};
+  ${from.desktop} {
+    ${textSans.medium({ lineHeight: 'loose' })};
+  }
 `;
 
 const maxWidth = css`
-  ${from.desktop} {
+  ${from.tablet} {
     max-width: 70%;
   }
 
@@ -101,19 +112,40 @@ const maxWidth = css`
   }
 `;
 
+const listStyle = css`
+  position: relative;
+  list-style: none;
+  counter-increment: step-counter;
+  margin-bottom: ${space[3]}px;
+  padding-left: ${space[5]}px;
+  :before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 700;
+    content: counter(step-counter) ".";
+  }
+  ${textSans.medium({ lineHeight: 'regular' })}
+  ${from.desktop} {
+    ${textSans.medium({ lineHeight: 'loose' })}
+  }
+`;
+
 function whatNextElement(textItems) {
   return (
     <div css={space}>
-      <h3 css={subHeading}>What happens next?</h3>
+      <h3 css={[subHeading, firstSubHeadingSpacing]}>What happens next?</h3>
       <p css={maxWidth}>
-        <OrderedList items={textItems.map(item => <span css={sansText}>{item}</span>)} />
+        <ol>
+          {textItems.map(item => <li css={listStyle}>{item}</li>)}
+        </ol>
       </p>
     </div>
   );
 }
 
-const MyAccountLink = () =>
-  (<a
+const MyAccountLink = () => (
+  <a
     href={myAccountUrl}
     onClick={sendTrackingEventsOnClick({
       id: 'checkout_my_account',
@@ -122,7 +154,8 @@ const MyAccountLink = () =>
     })}
   >
     MyAccount
-   </a>);
+  </a>
+);
 
 
 function WhatNext(fulfilmentOption, useDigitalVoucher = false) {
@@ -139,13 +172,13 @@ function ThankYouContent({
   productOption,
   startDate,
   isPending,
-  product,
   useDigitalVoucher,
   countryGroupId,
 }: PropTypes) {
   const hideStartDate = fulfilmentOption === Collection && useDigitalVoucher;
   const cleanProductOption = getTitle(productOption);
   const hasDigitalSubscription = productOption.includes('Plus');
+  const showTopContentBlock = isPending || (startDate && !hideStartDate);
 
   return (
     <div className="thank-you-stage">
@@ -161,43 +194,47 @@ function ThankYouContent({
           }
         </HeadingBlock>
       </HeroWrapper>
-      <Content>
-        {
-          isPending && (
-            <Text>
-              <LargeParagraph>
-                Your subscription is being processed and you will
-                receive an email when it goes live.
-              </LargeParagraph>
-            </Text>
-          )
-        }
-        {(startDate && !hideStartDate) &&
-          <Text title={fulfilmentOption === HomeDelivery ?
-            'You will receive your newspapers from' :
-            'You can start using your vouchers from'
+      {showTopContentBlock && (
+        <Content divider>
+          {
+            isPending && (
+              <p css={[subHeading, smallSpaceAround]}>
+                  Your subscription is being processed and you will
+                  receive an email when it goes live.
+              </p>
+            )
           }
-          >
-            <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
-          </Text>
-        }
+          {(startDate && !hideStartDate) &&
+            <p css={[subHeading, smallSpaceAround]}>
+              <span>
+                {fulfilmentOption === HomeDelivery ?
+                  'You will receive your newspapers from' :
+                  'You can start using your vouchers from'}
+              </span>
+              <span> {formatUserDate(new Date(startDate))}</span>
+            </p>
+          }
+        </Content>
+      )}
+      <Content divider={!showTopContentBlock}>
         {WhatNext(fulfilmentOption, useDigitalVoucher)}
       </Content>
+      {hasDigitalSubscription && (
+        <Content>
+          <AppsSection countryGroupId={countryGroupId} productOption={productOption} />
+          <p css={sansText}>
+            To see your subscription go to <MyAccountLink />.
+          </p>
+        </Content>
+      )}
+      <SubscriptionsSurvey />
       <Content>
-        <AppsSection countryGroupId={countryGroupId} productOption={productOption} />
-        <p css={sansText}>
-          To see your subscription go to <MyAccountLink />.
-        </p>
-      </Content>
-      <SubscriptionsSurvey product={product} />
-      <Content>
-        <Asyncronously loader={import('components/subscriptionCheckouts/thankYou/marketingConsentContainer')}>
+        <Asyncronously loader={import('components/marketingConsent/marketingConsentPaper')}>
           {(MktConsent: MarketingConsent) => (
 
             <MktConsent />)
           }
         </Asyncronously>
-        <OptInCopy subscriptionProduct={Paper} />
       </Content>
     </div>
   );

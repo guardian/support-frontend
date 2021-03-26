@@ -52,20 +52,30 @@ const marginForButton = css`
 `;
 
 const mainHeading = css`
-  ${headline.medium({ fontWeight: 'bold', lineHeight: 'loose' })};
+  ${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
+  ${from.phablet} {
+    ${headline.medium({ fontWeight: 'bold', lineHeight: 'normal' })};
+  }
 `;
 
 const subHeading = css`
-  ${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'loose' })};
-  margin-top: ${space[9]}px;
+  margin: ${space[6]}px 0 ${space[1]}px;
+  ${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
+  ${from.desktop} {
+    margin: ${space[9]}px 0 ${space[1]}px;
+    line-height: normal;
+  }
 `;
 
 const sansText = css`
-  ${textSans.medium({ lineHeight: 'loose' })}
+  ${textSans.medium({ lineHeight: 'regular' })}
+  ${from.desktop} {
+    ${textSans.medium({ lineHeight: 'loose' })}
+  }
 `;
 
 const maxWidth = css`
-  ${from.desktop} {
+  ${from.tablet} {
     max-width: 70%;
   }
 
@@ -76,17 +86,32 @@ const maxWidth = css`
 
 const imageContainer = css`
   margin: ${space[4]}px 0 0;
-  display: block;
-  max-width: 160px;
+  display: inline-block;
+  width: 42%;
+  :first-of-type {
+      margin-right: ${space[4]}px;
+    }
   img {
     width: 100%;
   }
 
+  ${from.mobileMedium} {
+    width: 42%;
+  }
+
+  ${from.mobileLandscape} {
+    max-width: 170px;
+  }
+
   ${from.desktop} {
-    display: inline-block;
-    :first-of-type {
-      margin-right: ${space[4]}px;
-    }
+    max-width: 170px;
+  }
+`;
+
+const tinyMobileOnly = css`
+  display: block;
+  ${from.mobileLandscape} {
+    display: none;
   }
 `;
 
@@ -127,7 +152,7 @@ const AppsSection = ({ countryGroupId, productOption }: PropTypes) => (
   <>
     <h2 css={mainHeading}>Make the most of your digital subscription</h2>
     <div css={maxWidth}>
-      <h3 css={subHeading}>Download The Guardian Editions App</h3>
+      <h3 css={subHeading}>Download The Guardian<br css={tinyMobileOnly} /> Editions App</h3>
       <p css={sansText}>
         Each day&apos;s edition in one simple, elegant app. Contains the UK Daily
         the Australian Weekend and other special editions.
@@ -154,7 +179,7 @@ const AppsSection = ({ countryGroupId, productOption }: PropTypes) => (
       >
         <AppStoreImage store="googlePlay" />
       </AppStoreLink>
-      <h3 css={subHeading}>Download The Guardian Live app</h3>
+      <h3 css={subHeading}>Download The Guardian<br css={tinyMobileOnly} /> Live app</h3>
       <p css={sansText}>
         With premium access to The Guardian Live app, get breaking news, as it happens.
       </p>
