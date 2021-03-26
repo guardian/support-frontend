@@ -221,7 +221,7 @@ function ThankYouContent({
       </Content>
       {hasDigitalSubscription && (
         <Content>
-          <AppsSection countryGroupId={countryGroupId} productOption={productOption} />
+          <AppsSection countryGroupId={countryGroupId} />
           <p css={sansText}>
             To see your subscription go to <MyAccountLink />.
           </p>

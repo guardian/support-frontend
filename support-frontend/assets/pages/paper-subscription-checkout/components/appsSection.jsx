@@ -24,13 +24,11 @@ import {
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Types ----- //
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
-  productOption: ProductOptions,
 };
 
 const smallFormatText = css`
@@ -148,7 +146,7 @@ const AppStoreLink = ({
 
 // ----- Component ----- //
 
-const AppsSection = ({ countryGroupId, productOption }: PropTypes) => (
+const AppsSection = ({ countryGroupId }: PropTypes) => (
   <>
     <h2 css={mainHeading}>Make the most of your digital subscription</h2>
     <div css={maxWidth}>
