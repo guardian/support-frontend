@@ -24,13 +24,13 @@ import {
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import ProductOption from 'components/product/productOption';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Types ----- //
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
-  productOption: ProductOption,
+  productOption: ProductOptions,
 };
 
 const smallFormatText = css`
@@ -161,7 +161,7 @@ const AppsSection = ({ countryGroupId, productOption }: PropTypes) => (
         storeLink={getDailyEditionUrl(countryGroupId)}
         onClick={sendTrackingEventsOnClick({
             id: 'checkout_thankyou_daily_edition_apple',
-            product: productOption,
+            product: 'DigitalPack',
             componentType: 'ACQUISITIONS_BUTTON',
           })}
         ariaLabel="Click to download the Guardian Daily app on the Apple App Store"
@@ -172,7 +172,7 @@ const AppsSection = ({ countryGroupId, productOption }: PropTypes) => (
         storeLink={androidDailyUrl}
         onClick={sendTrackingEventsOnClick({
             id: 'checkout_thankyou_daily_edition_android',
-            product: productOption,
+            product: 'DigitalPack',
             componentType: 'ACQUISITIONS_BUTTON',
           })}
         ariaLabel="Click to download the Guardian Daily app on Google Play"
@@ -187,7 +187,7 @@ const AppsSection = ({ countryGroupId, productOption }: PropTypes) => (
         storeLink={getIosAppUrl(countryGroupId)}
         onClick={sendTrackingEventsOnClick({
             id: 'checkout_thankyou_live_app_apple',
-            product: productOption,
+            product: 'DigitalPack',
             componentType: 'ACQUISITIONS_BUTTON',
           })}
         ariaLabel="Click to download the Guardian Live app on the Apple App Store"
@@ -198,7 +198,7 @@ const AppsSection = ({ countryGroupId, productOption }: PropTypes) => (
         storeLink={androidAppUrl}
         onClick={sendTrackingEventsOnClick({
             id: 'checkout_thankyou_live_app_android',
-            product: productOption,
+            product: 'DigitalPack',
             componentType: 'ACQUISITIONS_BUTTON',
           })}
         ariaLabel="Click to download the Guardian Live app on Google Play"
