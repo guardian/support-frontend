@@ -4,6 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
+const allThankYouPages = '/thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
@@ -116,5 +117,29 @@ export const tests: Tests = {
     targetPage: digiSubLandingPages,
     seed: 16,
     optimizeId: 'oeDqGqpqT4OLrAaMJjYz6A',
+  },
+
+  thankyouPageMarketingConsentTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'v1',
+      },
+      {
+        id: 'v2',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: allThankYouPages,
+    seed: 17,
   },
 };
