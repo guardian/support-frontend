@@ -159,7 +159,7 @@ const AmazonPayWalletComponent = (props: PropTypes) => {
         { props.contributionType !== 'ONE_OFF' &&
           <div>
             { props.checkoutFormHasBeenSubmitted && !props.amazonPayData.amazonBillingAgreementConsentStatus &&
-              <InlineError>Please tick the payment consent checkbox</InlineError>
+              <InlineError>Please tick the box to agree to a recurring payment</InlineError>
             }
             <div className="consentWidgetDiv" id="ConsentWidgetDiv" />
           </div>
