@@ -261,12 +261,12 @@ function WeeklyCheckoutForm(props: PropTypes) {
               </FormSection>
             : null
           }
-          <FormSection title="When would you like your subscription to start?">
+          <FormSection title="Please select the first publication you’d like to receive">
             <Rows>
               <RadioGroup
                 id="startDate"
                 error={firstError('startDate', props.formErrors)}
-                legend="When would you like your subscription to start?"
+                legend="Please select the first publication you’d like to receive"
               >
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
@@ -291,11 +291,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
               </RadioGroup>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
-                We will take the first payment on the
-                date you receive your first Guardian Weekly.
+                  We will take the first payment on the date of your first publication.
                 </p>
                 <p className="component-text__sans">
-                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
+                  Please allow 1-7 days after publication date for your magazine to arrive,
+                  depending on national post services.
                 </p>
               </Text>
             </Rows>

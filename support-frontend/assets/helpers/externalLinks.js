@@ -50,7 +50,7 @@ const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardia
 const androidDailyUrl = 'https://play.google.com/store/apps/details?id=com.guardian.editions';
 const myAccountUrl = `${profileUrl}/account/edit`;
 const manageSubsUrl = `${manageUrl}/subscriptions`;
-
+const helpCentreUrl = `${manageUrl}/help-centre`;
 
 const memUrls: {
   [MemProduct]: string,
@@ -279,4 +279,5 @@ export {
   myAccountUrl,
   manageSubsUrl,
   homeDeliveryUrl,
+  helpCentreUrl,
 };
