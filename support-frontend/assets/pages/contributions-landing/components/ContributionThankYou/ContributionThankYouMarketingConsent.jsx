@@ -37,7 +37,14 @@ const buttonContainer = css`
 
 const ERROR_MESSAGE = 'Please tick the box below, then click \'subscribe\'';
 
-const mapStateToProps = () => ({
+
+const CONTROL_COPY = 'Get related news and offers - whether you are a contributor, subscriber, member or would like to become one.';
+const V1_COPY = 'Stay up-to-date with our latest offers and the aims of the organisation, as well as the ways to enjoy and support our journalism.';
+const V2_COPY = 'Stay up-to-date with ways to enjoy and support our journalism, the aims of the organisation and our latest offers.';
+
+const mapStateToProps = state => ({
+  thankyouPageMarketingConsentTestVariant:
+    state.common.abParticipations.thankyouPageMarketingConsentTest,
 });
 
 
@@ -60,6 +67,7 @@ type ContributionThankYouMarketingConsentProps = {|
   csrf: Csrf,
   subscribeToNewsLetter: (email: string, csrf: Csrf) => void,
   thankyouPageHeadingTestVariant: boolean,
+  thankyouPageMarketingConsentTestVariant: string,
 |};
 
 const ContributionThankYouMarketingConsent = ({
@@ -67,6 +75,7 @@ const ContributionThankYouMarketingConsent = ({
   csrf,
   subscribeToNewsLetter,
   thankyouPageHeadingTestVariant,
+  thankyouPageMarketingConsentTestVariant,
 }: ContributionThankYouMarketingConsentProps) => {
   const [hasConsented, setHasConsented] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -89,6 +98,15 @@ const ContributionThankYouMarketingConsent = ({
       setHasBeenCompleted(true);
       subscribeToNewsLetter(email, csrf);
     }
+  };
+
+  const getCheckboxCopy = () => {
+    if (thankyouPageMarketingConsentTestVariant === 'v1') {
+      return V1_COPY;
+    } else if (thankyouPageMarketingConsentTestVariant === 'v2') {
+      return V2_COPY;
+    }
+    return CONTROL_COPY;
   };
 
   const actionIcon = <SvgNotification />;
@@ -118,24 +136,13 @@ const ContributionThankYouMarketingConsent = ({
             </span>
           </p>
           <div css={checkboxContainer}>
-            <div css={styles.hideAfterTablet}>
-              <CheckboxGroup error={errorMessage}>
-                <Checkbox
-                  checked={hasConsented}
-                  onChange={() => setHasConsented(!hasConsented)}
-                  supporting="Get related news and offers - whether you are a contributor, subscriber, member or would like to become one."
-                />
-              </CheckboxGroup>
-            </div>
-            <div css={styles.hideBeforeTablet}>
-              <CheckboxGroup error={errorMessage}>
-                <Checkbox
-                  checked={hasConsented}
-                  onChange={() => setHasConsented(!hasConsented)}
-                  supporting="Contributions, subscriptions and membership: get related news and offers - whether you are a contributor, subscriber, member or would like to become one."
-                />
-              </CheckboxGroup>
-            </div>
+            <CheckboxGroup error={errorMessage}>
+              <Checkbox
+                checked={hasConsented}
+                onChange={() => setHasConsented(!hasConsented)}
+                supporting={getCheckboxCopy()}
+              />
+            </CheckboxGroup>
           </div>
           <div css={buttonContainer}>
             {
