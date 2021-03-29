@@ -88,12 +88,21 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     && amountOrOtherAmountIsValid(selectedAmounts, otherAmounts, contributionType, countryGroupId);
 };
 
-const amazonPayFormOk = (state: State) => {
-  const isAmazonPay = state.page.form.paymentMethod === AmazonPay;
-  const isOneOff = state.page.form.contributionType === 'ONE_OFF';
-  const hasConsented = state.page.form.amazonPayData.amazonBillingAgreementConsentStatus;
+const amazonPayFormOk = (state: State): boolean => {
+  if (state.page.form.paymentMethod === AmazonPay) {
+    const {
+      orderReferenceId, amazonBillingAgreementId, amazonBillingAgreementConsentStatus, paymentSelected,
+    } = state.page.form.amazonPayData;
 
-  return !isAmazonPay || isOneOff || hasConsented;
+    const oneOffOk = () => !!orderReferenceId;
+    const recurringOk = () => !!amazonBillingAgreementId && amazonBillingAgreementConsentStatus;
+
+    return paymentSelected && (
+      state.page.form.contributionType === 'ONE_OFF' ? oneOffOk() : recurringOk()
+    );
+  }
+  return true;
+
 };
 
 const formIsValidParameters = (state: State) => ({

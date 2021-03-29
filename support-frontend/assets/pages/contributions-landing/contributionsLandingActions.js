@@ -70,7 +70,7 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING' }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
   | { type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT', amazonPaymentsObject: Object }
-  | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady: boolean }
+  | { type: 'SET_AMAZON_PAY_WALLET_IS_STALE', isStale: boolean }
   | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
@@ -241,17 +241,25 @@ const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
   amazonPaymentsObject,
 });
 
-const setAmazonPayWalletWidgetReady = (isReady: boolean): Action =>
-  ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady });
+const setAmazonPayWalletIsStale = (isStale: boolean): Action =>
+  ({ type: 'SET_AMAZON_PAY_WALLET_IS_STALE', isStale });
 
 const setAmazonPayHasAccessToken: Action = ({ type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' });
 const setAmazonPayFatalError: Action = ({ type: 'SET_AMAZON_PAY_FATAL_ERROR' });
 
-const setAmazonPayPaymentSelected = (paymentSelected: boolean): Action =>
-  ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected });
+const setAmazonPayPaymentSelected =
+  (paymentSelected: boolean) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected })));
+    };
 
-const setAmazonPayOrderReferenceId = (orderReferenceId: string): Action =>
-  ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId });
+const setAmazonPayOrderReferenceId =
+  (orderReferenceId: string) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId })));
+    };
 
 const setAmazonPayBillingAgreementId = (amazonBillingAgreementId: string): Action =>
   ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId });
@@ -522,7 +530,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
             }
             if (result.error === 'amazon_pay_try_other_card') {
               // Must re-render the wallet widget in order to display amazon's error message
-              dispatch(setAmazonPayWalletWidgetReady(false));
+              dispatch(setAmazonPayWalletIsStale(true));
             }
             // Reset any updates the previous payment method had made to the form's billingCountry or billingState
             dispatch(updateBillingCountry(null));
@@ -759,7 +767,7 @@ export {
   setAmazonPayHasBegunLoading,
   setAmazonPayLoginObject,
   setAmazonPayPaymentsObject,
-  setAmazonPayWalletWidgetReady,
+  setAmazonPayWalletIsStale,
   setAmazonPayHasAccessToken,
   setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,

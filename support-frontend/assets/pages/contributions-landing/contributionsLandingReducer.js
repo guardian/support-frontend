@@ -87,7 +87,7 @@ export type AmazonPayLibrary = {
 export type AmazonPayData = {
   hasBegunLoading: boolean,
   amazonPayLibrary: AmazonPayLibrary,
-  walletWidgetReady: boolean,
+  walletIsStale: boolean,
   orderReferenceId: string | null,
   paymentSelected: boolean,
   hasAccessToken: boolean,
@@ -171,7 +171,7 @@ function createFormReducer() {
         amazonPaymentsObject: null,
       },
       loginButtonReady: false,
-      walletWidgetReady: false,
+      walletIsStale: false,
       orderReferenceId: null,
       paymentSelected: false,
       hasAccessToken: false,
@@ -305,12 +305,12 @@ function createFormReducer() {
           },
         };
 
-      case 'SET_AMAZON_PAY_WALLET_WIDGET_READY':
+      case 'SET_AMAZON_PAY_WALLET_IS_STALE':
         return {
           ...state,
           amazonPayData: {
             ...state.amazonPayData,
-            walletWidgetReady: action.isReady,
+            walletIsStale: action.isStale,
           },
         };
 
