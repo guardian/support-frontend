@@ -14,8 +14,8 @@ const productOptionDisplayNames: { [key: ProductOptions]: string } = {
   SundayPlus: 'Sunday',
   Weekend: 'Weekend',
   WeekendPlus: 'Weekend',
-  Sixday: 'Sixday',
-  SixdayPlus: 'Sixday',
+  Sixday: 'Six day',
+  SixdayPlus: 'Six day',
   Everyday: 'Every day',
   EverydayPlus: 'Every day',
 };

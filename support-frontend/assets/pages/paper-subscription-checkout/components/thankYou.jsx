@@ -5,7 +5,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { textSans, headline } from '@guardian/src-foundations/typography';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 
 import { connect } from 'react-redux';
@@ -84,17 +84,6 @@ const subHeading = css`
   }
 `;
 
-const smallSpaceAround = css`
-  padding-top: ${space[1]}px;
-`;
-
-const firstSubHeadingSpacing = css`
-  padding: ${space[9]}px 0 ${space[1]}px;
-  ${until.desktop} {
-    padding: ${space[3]}px 0 ${space[1]}px;
-  }
-`;
-
 const sansText = css`
   ${textSans.medium({ lineHeight: 'regular' })};
   ${from.desktop} {
@@ -134,7 +123,7 @@ const listStyle = css`
 function whatNextElement(textItems) {
   return (
     <div css={space}>
-      <h3 css={[subHeading, firstSubHeadingSpacing]}>What happens next?</h3>
+      <h3 css={subHeading}>What happens next?</h3>
       <p css={maxWidth}>
         <ol>
           {textItems.map(item => <li css={listStyle}>{item}</li>)}
@@ -177,7 +166,7 @@ function ThankYouContent({
 }: PropTypes) {
   const hideStartDate = fulfilmentOption === Collection && useDigitalVoucher;
   const cleanProductOption = getTitle(productOption);
-  const hasDigitalSubscription = productOption.includes('Plus');
+  const hasAddedDigitalSubscription = productOption.includes('Plus');
   const showTopContentBlock = isPending || (startDate && !hideStartDate);
 
   return (
@@ -189,8 +178,8 @@ function ThankYouContent({
           overheadingClass="--thankyou"
         >
           {isPending ?
-          `Your subscription to the ${cleanProductOption} ${!hasDigitalSubscription ? 'package ' : ''}is being processed` :
-          `You have now subscribed to the ${cleanProductOption} ${!hasDigitalSubscription ? 'package' : ''}`
+          `Your subscription to the ${cleanProductOption} ${!hasAddedDigitalSubscription ? 'package ' : ''}is being processed` :
+          `You have now subscribed to the ${cleanProductOption} ${!hasAddedDigitalSubscription ? 'package' : ''}`
           }
         </HeadingBlock>
       </HeroWrapper>
@@ -198,14 +187,14 @@ function ThankYouContent({
         <Content divider>
           {
             isPending && (
-              <p css={[subHeading, smallSpaceAround]}>
+              <p css={subHeading}>
                   Your subscription is being processed and you will
                   receive an email when it goes live.
               </p>
             )
           }
           {(startDate && !hideStartDate) &&
-            <p css={[subHeading, smallSpaceAround]}>
+            <p css={subHeading}>
               <span>
                 {fulfilmentOption === HomeDelivery ?
                   'You will receive your newspapers from' :
@@ -219,7 +208,7 @@ function ThankYouContent({
       <Content divider={!showTopContentBlock}>
         {WhatNext(fulfilmentOption, useDigitalVoucher)}
       </Content>
-      {hasDigitalSubscription && (
+      {hasAddedDigitalSubscription && (
         <Content>
           <AppsSection countryGroupId={countryGroupId} />
           <p css={sansText}>
