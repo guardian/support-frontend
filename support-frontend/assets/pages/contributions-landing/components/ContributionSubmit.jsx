@@ -99,6 +99,8 @@ function withProps(props: PropTypes) {
     props.paymentMethod,
   );
 
+  const canShowAmazonPay = () => !props.amazonPayData.fatalError;
+
   const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
     <AmazonPayWallet isTestUser={props.isTestUser} contributionType={props.contributionType} /> :
     <AmazonPayLoginButton />);
@@ -130,9 +132,9 @@ function withProps(props: PropTypes) {
         />
       </div>
         )}
-      { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
+      { props.paymentMethod === AmazonPay && canShowAmazonPay() && getAmazonPayComponent() }
 
-      {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || props.amazonPayData.hasAccessToken) ?
+      {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || (canShowAmazonPay() && props.amazonPayData.hasAccessToken)) ?
         <Button
           type="submit"
           aria-label={submitButtonCopy}

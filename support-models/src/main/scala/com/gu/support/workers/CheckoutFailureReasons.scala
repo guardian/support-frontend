@@ -55,6 +55,14 @@ object CheckoutFailureReasons {
     override def asString: String = "unknown"
   }
 
+  case object AmazonPayTryAnotherCard extends CheckoutFailureReason {
+    override def asString: String = "amazon_pay_try_other_card"
+  }
+
+  case object AmazonPayTryAgain extends CheckoutFailureReason {
+    override def asString: String = "amazon_pay_try_again"
+  }
+
   // https://stripe.com/docs/declines/codes
   def convertStripeDeclineCode(declineCode: String): Option[CheckoutFailureReason] = condOpt(declineCode) {
     case "approve_with_id" => PaymentMethodTemporarilyDeclined
@@ -98,6 +106,11 @@ object CheckoutFailureReasons {
     case "transaction_not_allowed" => PaymentMethodUnacceptable
     case "try_again_later" => PaymentMethodTemporarilyDeclined
     case "withdrawal_count_limit_exceeded" => PaymentMethodUnacceptable
+  }
+
+  def convertAmazonPayDeclineCode(declineCode: String): Option[CheckoutFailureReason] = condOpt(declineCode) {
+    case "InvalidPaymentMethod" => AmazonPayTryAnotherCard
+    case "ProcessingFailure" => AmazonPayTryAgain
   }
 
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)

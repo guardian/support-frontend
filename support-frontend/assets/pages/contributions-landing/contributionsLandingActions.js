@@ -525,12 +525,14 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               stripeAccountForContributionType[state.page.form.contributionType],
             ));
           } else {
-            if (result.error === 'amazon_pay_fatal') {
-              dispatch(setAmazonPayFatalError);
-            }
-            if (result.error === 'amazon_pay_try_other_card') {
-              // Must re-render the wallet widget in order to display amazon's error message
-              dispatch(setAmazonPayWalletIsStale(true));
+            if (paymentAuthorisation.paymentMethod === 'AmazonPay') {
+              if (result.error === 'amazon_pay_try_other_card' || result.error === 'amazon_pay_try_again') {
+                // Must re-render the wallet widget in order to display amazon's error message
+                dispatch(setAmazonPayWalletIsStale(true));
+              } else {
+                // Disable Amazon Pay
+                dispatch(setAmazonPayFatalError);
+              }
             }
             // Reset any updates the previous payment method had made to the form's billingCountry or billingState
             dispatch(updateBillingCountry(null));
