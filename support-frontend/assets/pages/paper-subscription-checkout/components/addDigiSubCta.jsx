@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
-// import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
