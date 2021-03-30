@@ -130,7 +130,8 @@ function ThankYouContent({
       </span>,
       <span>
         Your magazine will be delivered to your door.
-        Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national post services.
+        Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national
+        post services.
       </span>,
     ];
 
