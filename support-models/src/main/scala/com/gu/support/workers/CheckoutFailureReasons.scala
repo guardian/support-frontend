@@ -14,6 +14,8 @@ object CheckoutFailureReasons {
     PaymentProviderUnavailable,
     PaymentRecentlyTaken,
     AccountMismatch,
+    AmazonPayTryAnotherCard,
+    AmazonPayTryAgain,
     Unknown
   )
 
@@ -51,16 +53,16 @@ object CheckoutFailureReasons {
     override def asString = "production_test_account_mismatch"
   }
 
-  case object Unknown extends CheckoutFailureReason {
-    override def asString: String = "unknown"
-  }
-
   case object AmazonPayTryAnotherCard extends CheckoutFailureReason {
     override def asString: String = "amazon_pay_try_other_card"
   }
 
   case object AmazonPayTryAgain extends CheckoutFailureReason {
     override def asString: String = "amazon_pay_try_again"
+  }
+
+  case object Unknown extends CheckoutFailureReason {
+    override def asString: String = "unknown"
   }
 
   // https://stripe.com/docs/declines/codes
