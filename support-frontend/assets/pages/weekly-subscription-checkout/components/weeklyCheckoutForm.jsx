@@ -294,7 +294,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   We will take the first payment on the date of your first publication.
                 </p>
                 <p className="component-text__sans">
-                  Please allow 1-7 days after publication date for your magazine to arrive,
+                  Please allow 1 to 7 days after publication date for your magazine to arrive,
                   depending on national post services.
                 </p>
               </Text>
