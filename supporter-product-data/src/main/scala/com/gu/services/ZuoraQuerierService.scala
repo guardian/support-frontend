@@ -11,7 +11,7 @@ import io.circe.syntax.EncoderOps
 
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, LocalDateTime, ZonedDateTime}
-import scala.collection.Map.empty
+import scala.collection.immutable.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
 
 class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
