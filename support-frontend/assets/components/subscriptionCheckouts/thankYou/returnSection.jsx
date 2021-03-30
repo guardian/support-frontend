@@ -16,11 +16,10 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 
-const leftMarginForButton = css`
+const buttonStyles = css`
   ${from.desktop} {
     margin-left: ${space[2]}px;
   }
-
 `;
 
 type PropTypes = {
@@ -38,7 +37,7 @@ function ReturnSection(props: PropTypes) {
         <div className="thank-you-stage__ctas">
           <ThemeProvider theme={buttonReaderRevenue}>
             <LinkButton
-              css={leftMarginForButton}
+              css={buttonStyles}
               priority="tertiary"
               aria-label="Return to The Guardian home page"
               href="https://theguardian.com"
@@ -46,11 +45,10 @@ function ReturnSection(props: PropTypes) {
               iconSide="right"
               nudgeIcon
               onClick={sendTrackingEventsOnClick({
-              id: 'checkout_return_home',
-              product: props.subscriptionProduct,
-              componentType: 'ACQUISITIONS_BUTTON',
-            })}
-              modifierClasses={['visited-white-text']}
+                id: 'checkout_return_home',
+                product: props.subscriptionProduct,
+                componentType: 'ACQUISITIONS_BUTTON',
+              })}
             >
             Return to The Guardian
             </LinkButton>
