@@ -98,7 +98,9 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 
 function MarketingButton(props: ButtonPropTypes) {
-  if (props.confirmOptIn === true) {
+  const confirmedOrPending = props.confirmOptIn === true || props.requestPending === true;
+  const confirmedOptIn = props.confirmOptIn === true;
+  if (confirmedOrPending) {
     return (
       <ThemeProvider theme={buttonBrandAlt}>
         <Button
@@ -107,33 +109,19 @@ function MarketingButton(props: ButtonPropTypes) {
           icon={<SvgEnvelope />}
           disabled
         >
-        Signed up
-        </Button>
-      </ThemeProvider>
-    );
-  } else if (props.requestPending === true) {
-    return (
-      <ThemeProvider theme={buttonBrandAlt}>
-        <Button
-          css={marginForButton}
-          iconSide="right"
-          icon={<SvgEnvelope />}
-          disabled
-        >
-        Pending...
+          {confirmedOptIn ? 'Signed up' : 'Pending...'}
         </Button>
       </ThemeProvider>
     );
   }
+
   return (
     <ThemeProvider theme={buttonBrandAlt}>
       <Button
         css={marginForButton}
         iconSide="right"
         aria-label="Sign me up to news and offers from The Guardian"
-        onClick={
-          () => props.onClick(props.email, props.csrf)
-        }
+        onClick={() => props.onClick(props.email, props.csrf)}
         icon={<SvgEnvelope />}
       >
         Sign me up
