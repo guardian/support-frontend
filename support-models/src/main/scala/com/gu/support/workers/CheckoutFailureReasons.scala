@@ -16,6 +16,7 @@ object CheckoutFailureReasons {
     AccountMismatch,
     AmazonPayTryAnotherCard,
     AmazonPayTryAgain,
+    AmazonPayFatal,
     Unknown
   )
 
@@ -59,6 +60,10 @@ object CheckoutFailureReasons {
 
   case object AmazonPayTryAgain extends CheckoutFailureReason {
     override def asString: String = "amazon_pay_try_again"
+  }
+
+  case object AmazonPayFatal extends CheckoutFailureReason {
+    override def asString: String = "amazon_pay_fatal"
   }
 
   case object Unknown extends CheckoutFailureReason {
@@ -113,6 +118,7 @@ object CheckoutFailureReasons {
   def convertAmazonPayDeclineCode(declineCode: String): Option[CheckoutFailureReason] = condOpt(declineCode) {
     case "InvalidPaymentMethod" => AmazonPayTryAnotherCard
     case "ProcessingFailure" => AmazonPayTryAgain
+    case _ => AmazonPayFatal
   }
 
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
