@@ -64,7 +64,7 @@ const listCopy = [
   {
     content: 'The Guardian Editions app',
     subText: `Each edition available to read by 6am (GMT), 7 days a week for
-    IOS and Android mobile and tablet. Download and read whenever it suits you.`,
+    iOS and Android mobile and tablet. Download and read whenever it suits you.`,
   },
   {
     content: 'Premium access to The Guardian Live app',
@@ -72,16 +72,18 @@ const listCopy = [
   },
   {
     content: 'Ad-free',
-    subText: 'Enjoy our journalism uninterrupted, without adverts',
+    subText: 'Enjoy our journalism uninterrupted, without adverts.',
   },
 ];
 
 function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
-  const removeTextAfterSlash = /\/(.*)/;
+  const simplePrice = digiSubPrice.replace(/\/(.*)/, '');
+  const cleanedPrice = simplePrice.replace(/\.(.*)/, '');
+  const newPricingText = `${cleanedPrice} per month`;
 
   return (
     <Accordion cssOverrides={ctaContainer} hideToggleLabel>
-      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a Digital subscription for ${digiSubPrice.replace(removeTextAfterSlash, '')}?`}>
+      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a digital subscription for ${newPricingText}?`}>
         <div css={[imageContainer, lightBorder]}>
           <GridImage
             gridId="editionsShortPackshot"
