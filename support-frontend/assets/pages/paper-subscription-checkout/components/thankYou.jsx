@@ -168,6 +168,7 @@ function ThankYouContent({
   const cleanProductOption = getTitle(productOption);
   const hasAddedDigitalSubscription = productOption.includes('Plus');
   const showTopContentBlock = isPending || (startDate && !hideStartDate);
+  const packageName = `${cleanProductOption} ${!hasAddedDigitalSubscription ? 'package ' : ''}`;
 
   return (
     <div className="thank-you-stage">
@@ -178,8 +179,8 @@ function ThankYouContent({
           overheadingClass="--thankyou"
         >
           {isPending ?
-          `Your subscription to the ${cleanProductOption} ${!hasAddedDigitalSubscription ? 'package ' : ''}is being processed` :
-          `You have now subscribed to the ${cleanProductOption} ${!hasAddedDigitalSubscription ? 'package' : ''}`
+          `Your subscription to the ${packageName}is being processed` :
+          `You have now subscribed to the ${packageName}`
           }
         </HeadingBlock>
       </HeroWrapper>
