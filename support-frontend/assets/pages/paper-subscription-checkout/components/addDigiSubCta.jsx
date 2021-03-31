@@ -77,9 +77,11 @@ const listCopy = [
 ];
 
 function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
+  const removeTextAfterSlash = /\/(.*)/;
+
   return (
     <Accordion cssOverrides={ctaContainer} hideToggleLabel>
-      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a Digital subscription for ${digiSubPrice.replace(/\/(.*)/, '')}?`}>
+      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a Digital subscription for ${digiSubPrice.replace(removeTextAfterSlash, '')}?`}>
         <div css={[imageContainer, lightBorder]}>
           <GridImage
             gridId="editionsShortPackshot"
