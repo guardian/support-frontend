@@ -33,10 +33,7 @@ object SelectActiveRatePlansQuery {
 
     * Where *
     - Subscription.Status -    We are only interested in subs which are active or cancelled, cancelled subs will update the previous active version with the
-                               new term end date. The reason we filter cancelled subs by date is that unlike active subs which change state to expired at the
-                               end of their term, cancelled subs hang about forever and we want to avoid extracting them all with this query.
-                               The `today.minusDays(366)` part is because cancellations can be backdated to the start of the term they are cancelling - since
-                               our longest term is 12 months, going back just before this should get all relevant subs.
+                               new term end date.
 
     - RatePlan.AmendmentType - When removing a product from a subscription with an amendment a new rate plan is created with amendment type 'RemoveProduct'
                                we are not interested in these rate plans in this system.
@@ -54,7 +51,7 @@ object SelectActiveRatePlansQuery {
    resubscribes at a later date we record that correctly
    */
 
-  def query(today: LocalDate, discountProductRatePlanIds: List[String]): String =
+  def query(discountProductRatePlanIds: List[String]): String =
     s"""SELECT
           ${subscriptionName.zuoraName},
           Subscription.Version,
@@ -68,10 +65,7 @@ object SelectActiveRatePlansQuery {
             FROM
             rateplan
             WHERE
-            (
-              ${subscriptionStatus.zuoraName} = 'Active' OR
-              (${subscriptionStatus.zuoraName} = 'Cancelled' AND Subscription.TermStartDate > '${today.minusDays(366).format(DateTimeFormatter.ISO_LOCAL_DATE)}')
-            ) AND
+            (${subscriptionStatus.zuoraName} = 'Active' OR ${subscriptionStatus.zuoraName} = 'Cancelled') AND
             (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
             ${identityId.zuoraName} like '_%' AND
