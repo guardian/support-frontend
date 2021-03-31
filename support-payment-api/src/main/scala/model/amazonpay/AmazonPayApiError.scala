@@ -14,6 +14,6 @@ object AmazonPayApiError {
 
   def withReason(code: Int, message: String, reason: String): AmazonPayApiError = {
     val clientReason = CheckoutFailureReasons.convertAmazonPayDeclineCode(reason)
-    AmazonPayApiError(Some(code), message, Some(clientReason.toString))
+    AmazonPayApiError(Some(code), message, Some(clientReason.asString))
   }
 }
