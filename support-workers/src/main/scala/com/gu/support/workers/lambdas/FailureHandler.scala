@@ -133,11 +133,10 @@ object FailureHandler {
   def toCheckoutFailureReason(zuoraError: ZuoraError, paymentProvider: PaymentProvider): CheckoutFailureReason = {
     // Just get the decline code (example message from Zuora: "Transaction declined.do_not_honor - Your card was declined.")
     val trimmedError = zuoraError.Message.stripPrefix("Transaction declined.").split(" ")(0)
-    val reason = paymentProvider match {
+    paymentProvider match {
       case AmazonPay => convertAmazonPayDeclineCode(trimmedError)
-      case _ => convertStripeDeclineCode(trimmedError)
+      case _ => convertStripeDeclineCode(trimmedError).getOrElse(Unknown)
     }
-    reason.getOrElse(Unknown)
   }
 
   def toCheckoutFailureReason(stripeError: StripeError): CheckoutFailureReason = {

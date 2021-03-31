@@ -141,12 +141,11 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     ))
   }
 
-  def createAmazonPayPaymentMethod(amazonPay: AmazonPayPaymentFields, user: User): Future[AmazonPayPaymentMethod] = {
+  def createAmazonPayPaymentMethod(amazonPay: AmazonPayPaymentFields, user: User): Future[AmazonPayPaymentMethod] =
     Future.successful(
       AmazonPayPaymentMethod(
         tokenId = amazonPay.amazonPayBillingAgreementId,
         paymentGateway = AmazonPayGatewayUSA
       )
     )
-  }
 }

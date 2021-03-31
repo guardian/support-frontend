@@ -115,7 +115,7 @@ object CheckoutFailureReasons {
     case "withdrawal_count_limit_exceeded" => PaymentMethodUnacceptable
   }
 
-  def convertAmazonPayDeclineCode(declineCode: String): Option[CheckoutFailureReason] = condOpt(declineCode) {
+  def convertAmazonPayDeclineCode(declineCode: String): CheckoutFailureReason = declineCode match {
     case "InvalidPaymentMethod" => AmazonPayTryAnotherCard
     case "ProcessingFailure" => AmazonPayTryAgain
     case _ => AmazonPayFatal
