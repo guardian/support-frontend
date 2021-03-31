@@ -57,9 +57,7 @@ class DynamoDBService(client: DynamoDbAsyncClient, tableName: String) {
       .expressionAttributeValues(attributeValues)
       .build
 
-    client.updateItem(updateItemRequest).toScala.recoverWith {
-      case cex: CompletionException => Future.failed(cex.getCause)
-    }
+    client.updateItem(updateItemRequest).toScala
   }
 
   def asEpochSecond(date: LocalDate) =

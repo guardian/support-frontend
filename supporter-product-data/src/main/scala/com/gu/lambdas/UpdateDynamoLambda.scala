@@ -107,18 +107,8 @@ object UpdateDynamoLambda extends StrictLogging {
   def writeBatch(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService, alarmService: AlarmService) = {
     val futures = list.map {
       case (supporterRatePlanItem, index) =>
-        logger.info(
-          s"Attempting to write item index $index - ${supporterRatePlanItem.productRatePlanName} to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
-
-        dynamoDBService
-          .writeItem(supporterRatePlanItem)
-      //          .recover {
-      //            // let's alarm and keep going if one insert fails
-      //            case error: Throwable =>
-      //              logger.error(s"An error occurred trying to write item $supporterRatePlanItem, at index $index", error)
-      //              alarmService.triggerDynamoWriteAlarm
-      //          }
-
+        logger.info(s"Attempting to write item index $index - ${supporterRatePlanItem.productRatePlanName} to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
+        dynamoDBService.writeItem(supporterRatePlanItem)
     }
     Future.sequence(futures)
   }
