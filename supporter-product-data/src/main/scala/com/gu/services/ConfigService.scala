@@ -23,28 +23,11 @@ class ConfigService(stage: Stage) extends StrictLogging {
           findParameterOrThrow("partnerId", params),
           findParameterOrThrow("username", params),
           findParameterOrThrow("password", params),
-          getContributionProductRatePlanIds(stage),
           getDiscountProductRatePlanIds(stage),
           findParameterValue(lastSuccessfulQueryTime, params).map(ZonedDateTime.parse(_, DateTimeFormatter.ISO_DATE_TIME))
         )
     }
   }
-
-  private def getContributionProductRatePlanIds(stage: Stage) =
-    stage match {
-      case DEV => List(
-        "2c92a0fc5aacfadd015ad24db4ff5e97",
-        "2c92a0fc5e1dc084015e37f58c200eea",
-      )
-      case UAT => List(
-        "2c92c0f85ab269be015acd9d014549b7",
-        "2c92c0f95e1d5c9c015e38f8c87d19a1",
-      )
-      case PROD => List(
-        "2c92a0fc5aacfadd015ad24db4ff5e97",
-        "2c92a0fc5e1dc084015e37f58c200eea",
-      )
-    }
 
   private def getDiscountProductRatePlanIds(stage: Stage) =
     stage match {
