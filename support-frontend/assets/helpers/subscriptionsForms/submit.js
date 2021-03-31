@@ -56,6 +56,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Functions ----- //
 
@@ -278,8 +279,14 @@ function showPaymentMethod(
   }
 }
 
-function trackSubmitAttempt(paymentMethod: ?PaymentMethod, productType: SubscriptionProduct) {
-  const componentId = `subs-checkout-submit-${productType}-${paymentMethod || ''}`;
+function trackSubmitAttempt(
+  paymentMethod: ?PaymentMethod,
+  productType: SubscriptionProduct,
+  productOption: ProductOptions,
+) {
+  const componentId = productOption === 'noProductOption' ?
+    `subs-checkout-submit-${productType}-${paymentMethod || ''}` :
+    `subs-checkout-submit-${productType}-${productOption}-${paymentMethod || ''}`;
   trackCheckoutSubmitAttempt(componentId, productType, paymentMethod, productType);
 }
 
@@ -291,10 +298,10 @@ function submitForm(
   const billingCountry = addresses.billingAddress.country;
 
   const {
-    paymentMethod, product, isTestUser,
+    paymentMethod, product, productOption, isTestUser,
   } = state.page.checkout;
 
-  trackSubmitAttempt(paymentMethod, product);
+  trackSubmitAttempt(paymentMethod, product, productOption);
 
   let priceDetails = finalPrice(
     state.page.checkout.productPrices,
