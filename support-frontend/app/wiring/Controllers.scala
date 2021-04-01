@@ -164,8 +164,8 @@ trait Controllers {
     identityService,
     testUsers,
     controllerComponents,
-    allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.guardianDomain,
     appConfig.stage
   )
 
@@ -191,14 +191,10 @@ trait Controllers {
     supportWorkersClient,
     assetsResolver,
     actionRefiners,
-    membersDataService,
     identityService,
     testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
     controllerComponents,
     appConfig.guardianDomain,
-    allSettingsProvider,
     tipMonitoring
   )
 
