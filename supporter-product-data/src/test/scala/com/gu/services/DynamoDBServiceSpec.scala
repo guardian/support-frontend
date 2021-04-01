@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.model.Stage.{DEV, PROD}
+import com.gu.model.Stage.DEV
 import com.gu.model.dynamo.SupporterRatePlanItem
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec

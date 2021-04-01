@@ -33,18 +33,4 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
     batchedItems.map(_.map(_._2)) shouldBe List(List(0,1,2,3,4), List(5,6), List(7,8,9))
   }
 
-
-  //  "Run the job" should "work" in {
-  //    UpdateDynamoLambda.writeToDynamo(
-  //      PROD, UpdateDynamoState(
-  //        "select-active-rate-plans-2021-03-22T17:29:31.039.csv",
-  //        1285440,
-  //        0,
-  //        ZonedDateTime.parse("2021-03-22T10:29:31.039-07:00[America/Los_Angeles]")
-  //      ), new TimeOutCheck {
-  //        override def timeRemainingMillis = Int.MaxValue
-  //      }).map( state =>
-  //      succeed
-  //    )
-  //  }
 }
