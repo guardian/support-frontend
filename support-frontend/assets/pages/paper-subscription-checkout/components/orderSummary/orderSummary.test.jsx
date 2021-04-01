@@ -71,7 +71,7 @@ describe('Paper order summary', () => {
         altText=""
       />,
       includesDigiSub: true,
-      digiSubPrice: '£5/month',
+      digiSubPrice: '£5 per month',
       changeSubscription: '/page',
     };
 
@@ -88,7 +88,7 @@ describe('Paper order summary', () => {
 
   it('displays the correct total price', async () => {
     const mockPrice = paperProducts['United Kingdom'].Collection[productOption].Monthly.GBP.price.toFixed(2);
-    expect(await screen.findByText(findTextAcrossElements(`Total:£${mockPrice}/month`))).toBeInTheDocument();
+    expect(await screen.findByText(findTextAcrossElements(`Total:£${mockPrice} per month`))).toBeInTheDocument();
   });
 
   it('displays the correct short summary for mobile', async () => {
@@ -97,10 +97,10 @@ describe('Paper order summary', () => {
 
   it('displays the correct price for the standalone paper product', async () => {
     const paperOnlyPrice = paperProducts['United Kingdom'].Collection[productOption.replace('Plus', '')].Monthly.GBP.price;
-    expect(await screen.findByText(`You'll pay £${paperOnlyPrice}/month`)).toBeInTheDocument();
+    expect(await screen.findByText(`You'll pay £${paperOnlyPrice} per month`)).toBeInTheDocument();
   });
 
   it('displays the separate price for the digital subscription', async () => {
-    expect(await screen.findByText('You\'ll pay £5/month')).toBeInTheDocument();
+    expect(await screen.findByText('You\'ll pay £5 per month')).toBeInTheDocument();
   });
 });
