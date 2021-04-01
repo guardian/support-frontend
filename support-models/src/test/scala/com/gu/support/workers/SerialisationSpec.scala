@@ -1,17 +1,17 @@
 package com.gu.support.workers
 
-import java.util.UUID
-
 import com.gu.i18n.{Country, Currency}
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
 import com.gu.support.workers.Fixtures._
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState}
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
-import org.joda.time.LocalDate
 import org.scalatest.EitherValues
+import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AnyFlatSpec
+
+import java.util.UUID
 
 
 class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with LazyLogging with EitherValues {
@@ -41,7 +41,10 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson(Annual))
     testDecoding[CreateZuoraSubscriptionState](createDigiPackZuoraSubscriptionJson)
     testDecoding[CreateZuoraSubscriptionState](createCorporateDigiPackZuoraSubscriptionJson,
-      state => state.paymentMethod.right.value.redemptionCode.value shouldBe "fake-code-123"
+      inside(_) {
+        case state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =>
+          state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
+      }
     )
   }
 
@@ -91,17 +94,22 @@ object StatesTestData {
     acquisitionData = None
   )
 
-  val createZuoraSubscriptionState = CreateZuoraSubscriptionState(
+  val createZuoraSubscriptionState: PassThroughState = PassThroughState(
+    CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
-    paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
-    firstDeliveryDate = None,
+    paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
     promoCode = None,
-    salesforceContacts = SalesforceContactRecords(SalesforceContactRecord("sfbuy", "sfbuyacid"), None),
-    acquisitionData = None
+    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid")
+  ),
+    None,
+    None,
+    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+    DigitalPack(Currency.GBP, Monthly),
+    AnalyticsInfo(false, StripeApplePay),
+    User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+    None
   )
 
   val thankYouEmailProductTypeState: SendThankYouEmailState = ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated

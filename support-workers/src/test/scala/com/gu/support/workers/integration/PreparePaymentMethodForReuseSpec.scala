@@ -1,7 +1,5 @@
 package com.gu.support.workers.integration
 
-import java.io.ByteArrayOutputStream
-
 import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -11,43 +9,47 @@ import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.PreparePaymentMethodForReuse
-import com.gu.support.workers.states.CreateZuoraSubscriptionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionContributionState
+import com.gu.support.workers.states.PassThroughState
 import com.gu.support.workers.{AsyncLambdaSpec, CreditCardReferenceTransaction, MockContext}
-import com.gu.support.zuora.api.{StripeGatewayDefault, StripeGatewayPaymentIntentsDefault}
+import com.gu.support.zuora.api.StripeGatewayPaymentIntentsDefault
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
+import org.scalatest.Inside.inside
 
+import java.io.ByteArrayOutputStream
 import scala.concurrent.duration._
 
 @IntegrationTest
 class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
 
   "ClonePaymentMethod lambda" should "clone CreditCard Payment Method" in {
-    val addZuoraSubscription = new PreparePaymentMethodForReuse(mockServiceProvider)
+    val preparePaymentMethodForReuse = new PreparePaymentMethodForReuse(mockServiceProvider)
 
     val outStream = new ByteArrayOutputStream()
     val cardAccount = "2c92c0f87568d98001756b53a3c30b7b"
     val in = wrapFixture(getPaymentMethodJson(billingAccountId = cardAccount, userId = "100004131"))
 
 
-    addZuoraSubscription.handleRequestFuture(in, outStream, context).map { _ =>
+    preparePaymentMethodForReuse.handleRequestFuture(in, outStream, context).map { _ =>
 
-      val response = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream).get
+      val response = Encoding.in[PassThroughState](outStream.toInputStream).get
 
-      response._1.paymentMethod shouldBe Left(CreditCardReferenceTransaction(
-        tokenId = "card_EdajV2eXkZPrVV",
-        secondTokenId = "cus_EdajoRmjUSlef9",
-        creditCardNumber = "************4242",
-        creditCardCountry = Some(Country.US),
-        creditCardExpirationMonth = 2,
-        creditCardExpirationYear = 2022,
-        creditCardType = Some("Visa"),
-        paymentGateway = StripeGatewayPaymentIntentsDefault,
-        stripePaymentType = None
-      ))
+      inside(response._1.createZuoraSubscriptionState) { case state: CreateZuoraSubscriptionContributionState =>
+        state.paymentMethod shouldBe CreditCardReferenceTransaction(
+          tokenId = "card_EdajV2eXkZPrVV",
+          secondTokenId = "cus_EdajoRmjUSlef9",
+          creditCardNumber = "************4242",
+          creditCardCountry = Some(Country.US),
+          creditCardExpirationMonth = 2,
+          creditCardExpirationYear = 2022,
+          creditCardType = Some("Visa"),
+          paymentGateway = StripeGatewayPaymentIntentsDefault,
+          stripePaymentType = None
+        )
+      }
     }
 
   }

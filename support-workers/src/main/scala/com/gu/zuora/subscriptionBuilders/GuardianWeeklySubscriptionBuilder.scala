@@ -1,15 +1,12 @@
 package com.gu.zuora.subscriptionBuilders
 
-import java.util.UUID
-
-import com.gu.i18n.Country
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
-import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
 import com.gu.support.workers.{BillingPeriod, SixWeekly}
 import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscribeItem}
+import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
 import org.joda.time.{DateTimeZone, Days, LocalDate}
 
@@ -60,7 +57,8 @@ class GuardianWeeklySubscriptionBuilder(
 
   private[this] def isIntroductoryPromotion(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode]) =
     maybePromoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix) && billingPeriod == SixWeekly
-
+}
+object GuardianWeeklySubscriptionBuilder {
   def initialTermInDays(contractEffectiveDate: LocalDate, contractAcceptanceDate: LocalDate, termLengthMonths: Int): Int = {
     val termEnd = contractAcceptanceDate.plusMonths(termLengthMonths)
     Days.daysBetween(contractEffectiveDate, termEnd).getDays

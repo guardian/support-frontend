@@ -1,20 +1,19 @@
 package com.gu.support.workers.integration
 
-import java.util.UUID
-
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Fixtures.idId
-import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
+import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
-import com.gu.support.workers.lambdas.{DigitalSubscriptionGiftRedemption, HandlerResult}
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.workers._
+import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.parser.decode
 import org.mockito.ArgumentMatchers.any
 
+import java.util.UUID
 import scala.concurrent.Future
 
 @IntegrationTest
@@ -48,10 +47,10 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
         .map { _ shouldBe None }
 
       _ <- redeemSubscription(createZuoraHelper, giftCode.value, redeemSubRequestId)
-        .map(_.value.user.id shouldBe idId)
+        .map(_.user.id shouldBe idId)
 
       _ <- redeemSubscription(createZuoraHelper, giftCode.value, redeemSubRequestId) // same request
-        .map(_.value.user.id shouldBe idId)
+        .map(_.user.id shouldBe idId)
 
       subsequentRequestId = UUID.randomUUID()
       assertion <- recoverToExceptionIf[RuntimeException](
@@ -64,16 +63,13 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     createZuoraHelper: CreateZuoraSubscriptionHelper,
     codeValue: String,
     requestId: UUID
-  ): Future[HandlerResult[SendAcquisitionEventState]] = {
-    val code = RedemptionCode(codeValue).toOption.get
-    val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson(codeValue, requestId)).toOption.get
+  ): Future[SendThankYouEmailState] = {
+    val jsonState = createDigiPackGiftRedemptionJson(codeValue, requestId)
+    val state = decode[CreateZuoraSubscriptionState](jsonState).toOption.get.asInstanceOf[CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState]
 
-    DigitalSubscriptionGiftRedemption.redeemGift(
-      RedemptionData(code),
-      RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
-      state,
+    new DigitalSubscriptionGiftRedemption(
       createZuoraHelper.realZuoraGiftService,
       createZuoraHelper.realCatalogService
-    )
+    ).redeemGift(state)
   }
 }

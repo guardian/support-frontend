@@ -61,8 +61,8 @@ object CreateZuoraSubscriptionState {
     salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
-    def nextState(accountNumber: ZuoraAccountNumber)  : SendThankYouEmailState =
-      SendThankYouEmailContributionState(user, product, paymentMethod, accountNumber.value)
+    def nextState(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber)  : SendThankYouEmailState =
+      SendThankYouEmailContributionState(user, product, paymentMethod, accountNumber.value, subscriptionNumber.value)
 
   }
 
@@ -107,6 +107,7 @@ object CreateZuoraSubscriptionState {
       giftCode: GeneratedGiftCode,
       lastRedemptionDate: LocalDate,
       accountNumber: ZuoraAccountNumber,
+      subscriptionNumber: ZuoraSubscriptionNumber,
     )  : SendThankYouEmailState =
       SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
         user,
@@ -119,6 +120,7 @@ object CreateZuoraSubscriptionState {
         paymentSchedule,
         promoCode,
         accountNumber.value,
+        subscriptionNumber.value,
       )
 
   }
@@ -131,8 +133,8 @@ object CreateZuoraSubscriptionState {
     salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
-    def nextState(subscriptionNumber: ZuoraSubscriptionNumber)  : SendThankYouEmailState =
-      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, subscriptionNumber.value)
+    def nextState(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber)  : SendThankYouEmailState =
+      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, accountNumber.value, subscriptionNumber.value)
 
   }
 

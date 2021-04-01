@@ -247,47 +247,35 @@ object Fixtures {
   def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
     s"""
           {
+            "productType": "Contribution",
             $requestIdJson,
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            "salesforceContacts": $salesforceContactsJson
+            "salesForceContact": $salesforceContactJson
             }
         """
   def createDigiPackZuoraSubscriptionJson: String =
     s"""
           {
+            "productType": "DigitalSubscriptionDirectPurchase",
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            "salesforceContacts": $salesforceContactsJson
+            "salesForceContact": $salesforceContactJson
             }
         """
 
   def createCorporateDigiPackZuoraSubscriptionJson: String =
     s"""
           {
+            "productType": "DigitalSubscriptionCorporateRedemption",
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
-            "analyticsInfo": {
-              "paymentProvider": "RedemptionNoProvider",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": {"redemptionCode": "fake-code-123"},
-            "salesForceContact": $salesforceContactJson,
-            "salesforceContacts": $salesforceContactsJson
+            "redemptionData": {"redemptionCode": "fake-code-123"},
+            "salesForceContact": $salesforceContactJson
             }
         """
 

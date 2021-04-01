@@ -20,7 +20,9 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
   environment: TouchPointEnvironment,
 ) {
 
-  def build(state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState)(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscribeItem] = {
+  def build(
+    state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
+  )(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscribeItem] = {
     import state._
     val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
     val redemptionCode = redemptionData.redemptionCode

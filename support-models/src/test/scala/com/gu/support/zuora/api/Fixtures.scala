@@ -2,7 +2,7 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction, StripePaymentType}
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, GeneratedGiftCode, PayPalReferenceTransaction, StripePaymentType}
 import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
@@ -184,7 +184,7 @@ object Fixtures {
       autoRenew = false,
       initialTerm = 3,
       initialTermPeriodType = Month,
-      redemptionCode = Some("gd03-asdfghjq"),
+      redemptionCode = Some(Left(GeneratedGiftCode("gd03-asdfghjq").get)),
       giftNotificationEmailDate = Some(new LocalDate(2020, 12, 25)),
     )
   )
