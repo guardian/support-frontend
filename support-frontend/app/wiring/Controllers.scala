@@ -191,14 +191,10 @@ trait Controllers {
     supportWorkersClient,
     assetsResolver,
     actionRefiners,
-    membersDataService,
     identityService,
     testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
     controllerComponents,
     appConfig.guardianDomain,
-    allSettingsProvider,
     tipMonitoring
   )
 

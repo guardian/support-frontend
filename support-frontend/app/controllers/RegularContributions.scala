@@ -29,14 +29,10 @@ class RegularContributions(
     client: SupportWorkersClient,
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
-    membersDataService: MembersDataService,
     identityService: IdentityService,
     testUsers: TestUserService,
-    stripeConfigProvider: StripeConfigProvider,
-    payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
-    settingsProvider: AllSettingsProvider,
     tipMonitoring: Tip
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
