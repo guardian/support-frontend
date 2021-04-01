@@ -16,15 +16,15 @@ object DigitalSubscriptionCookies {
     List(
       cookie(
         name = "gu_user_features_expiry",
-        value = DateTime.now.plusDays(1).getMillis.toString,
+        value = DateTime.now.plusDays(1).getMillis.toString
       ),
       cookie(
         name = "gu_digital_subscriber",
-        value = true.toString,
+        value = true.toString
       ),
       cookie(
         name = "gu_hide_support_messaging",
-        value = true.toString,
+        value = true.toString
       ),
       cookie(
         name = "GU_AF1",

@@ -17,20 +17,20 @@ object RecurringContributionCookies {
     List(
       cookie(
         name = s"gu.contributions.recurring.contrib-timestamp.$billingPeriod",
-        value = DateTime.now.getMillis.toString,
+        value = DateTime.now.getMillis.toString
       ),
       cookie(
         name = "gu_user_features_expiry",
-        value = DateTime.now.plusDays(1).getMillis.toString,
+        value = DateTime.now.plusDays(1).getMillis.toString
       ),
       cookie(
         name = "gu_recurring_contributor",
-        value = true.toString,
+        value = true.toString
       ),
       cookie(
         name = "gu_hide_support_messaging",
-        value = true.toString,
-      ),
+        value = true.toString
+      )
     )
   }
 }
