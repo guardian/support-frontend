@@ -6,10 +6,10 @@ import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
 import com.gu.support.workers._
-import com.gu.support.workers.lambdas.DigitalSubscriptionGiftRedemption
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.test.tags.annotations.IntegrationTest
+import com.gu.zuora.productHandlers.ZuoraDigitalSubscriptionGiftRedemptionHandler
 import io.circe.parser.decode
 import org.mockito.ArgumentMatchers.any
 
@@ -67,7 +67,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     val jsonState = createDigiPackGiftRedemptionJson(codeValue, requestId)
     val state = decode[CreateZuoraSubscriptionState](jsonState).toOption.get.asInstanceOf[CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState]
 
-    new DigitalSubscriptionGiftRedemption(
+    new ZuoraDigitalSubscriptionGiftRedemptionHandler(
       createZuoraHelper.realZuoraGiftService,
       createZuoraHelper.realCatalogService
     ).redeemGift(state)

@@ -5,17 +5,16 @@ import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
 import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
 import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, CorporateCodeValidator, DynamoLookup, DynamoUpdate}
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.lambdas.{DigitalSubscriptionCorporateRedemption, DigitalSubscriptionDirectPurchase, ZuoraSubscriptionCreator}
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState}
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState}
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeRequest}
 import com.gu.support.zuora.domain
-import com.gu.zuora.ZuoraSubscribeService
-import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionCorporateRedemptionBuilder, DigitalSubscriptionPurchaseBuilder}
+import com.gu.zuora.productHandlers.{ZuoraDigitalSubscriptionCorporateRedemptionHandler, ZuoraDigitalSubscriptionDirectHandler}
+import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionCorporateRedemptionBuilder, DigitalSubscriptionDirectPurchaseBuilder}
+import com.gu.zuora.{ZuoraSubscribeService, ZuoraSubscriptionCreator}
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -71,7 +70,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       }
     }
 
-    val subscriptionCreator = new DigitalSubscriptionCorporateRedemption(
+    val subscriptionCreator = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
       new ZuoraSubscriptionCreator(
         zuora,
         () => new DateTime(2020, 6, 15, 16, 28, 57),
@@ -84,7 +83,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       ),
     )
 
-    val result = subscriptionCreator.build(state)
+    val result = subscriptionCreator.subscribe(state)
 
     result.map { sendThankYouEmailState =>
       withClue(sendThankYouEmailState) {
@@ -134,21 +133,20 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       }
     }
 
-    val subscriptionCreator = new DigitalSubscriptionDirectPurchase(
+    val subscriptionCreator = new ZuoraDigitalSubscriptionDirectHandler(
       new ZuoraSubscriptionCreator(
         zuora,
         () => new DateTime(2020, 6, 15, 16, 28, 57),
       ),
-      new DigitalSubscriptionPurchaseBuilder(
+      new DigitalSubscriptionDirectPurchaseBuilder(
         config = ZuoraDigitalPackConfig(14, 2),
         promotionService = null,// shouldn't be called for subs with no promo code
         () => new LocalDate(2020, 6, 15),
-        giftCodeGeneratorService = new GiftCodeGeneratorService,
         TouchPointEnvironments.SANDBOX,
       ),
     )
 
-    val result = subscriptionCreator.build(state)
+    val result = subscriptionCreator.subscribe(state)
 
     result.map { sendThankYouEmailState =>
       withClue(sendThankYouEmailState) {

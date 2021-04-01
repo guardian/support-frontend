@@ -7,8 +7,8 @@ import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
 import com.gu.support.workers._
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
 import com.gu.support.zuora.api.{Day, Month, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import org.joda.time.LocalDate
@@ -78,6 +78,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val gift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     SANDBOX,
+    () => saleDate,
   ).build(
     CreateZuoraSubscriptionGuardianWeeklyState(
       UUID.randomUUID(),
@@ -89,11 +90,12 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
     ),
-    contractEffectiveDate = saleDate).toOption.get.subscriptionData
+  ).toOption.get.subscriptionData
 
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     SANDBOX,
+    () => saleDate,
   ).build(
     CreateZuoraSubscriptionGuardianWeeklyState(
       UUID.randomUUID(),
@@ -105,6 +107,6 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
     ),
-    contractEffectiveDate = saleDate).toOption.get.subscriptionData
+  ).toOption.get.subscriptionData
 
 }

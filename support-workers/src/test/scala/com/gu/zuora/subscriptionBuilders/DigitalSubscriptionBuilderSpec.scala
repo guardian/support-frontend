@@ -11,8 +11,8 @@ import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState, CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState}
 import com.gu.support.workers._
+import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState, CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
@@ -112,16 +112,30 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       )
     ).value.map(_.toOption.get)
 
-  lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
+  lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2),
+    promotionService,
+    () => saleDate,
+    SANDBOX,
+  )
+
+  lazy val subscriptionGiftPurchaseBuilder = new DigitalSubscriptionGiftPurchaseBuilder(
     promotionService,
     () => saleDate,
     new GiftCodeGeneratorService,
     SANDBOX,
   )
 
+//  lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
+//    ZuoraDigitalPackConfig(14, 2),
+//    promotionService,
+//    () => saleDate,
+//    new GiftCodeGeneratorService,
+//    SANDBOX,
+//  )
+
   lazy val monthly =
-    subscriptionPurchaseBuilder.build(
+    subscriptionDirectPurchaseBuilder.build(
       CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
         UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
         User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
@@ -133,7 +147,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     ).toOption.get
 
   lazy val threeMonthGiftPurchase =
-    subscriptionPurchaseBuilder.build(
+    subscriptionGiftPurchaseBuilder.build(
       CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
         UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
         User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),

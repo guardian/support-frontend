@@ -51,7 +51,6 @@ object CreateZuoraSubscriptionState {
   }
 
   sealed trait CreateZuoraSubscriptionNewSubscriptionState extends CreateZuoraSubscriptionState // marker to say we will actually create rather than updating
-  sealed trait CreateZuoraSubscriptionDSPurchaseState extends CreateZuoraSubscriptionDigitalSubscriptionState // marker - buy, not redeem
 
   case class CreateZuoraSubscriptionContributionState(
     requestId: UUID,
@@ -61,7 +60,7 @@ object CreateZuoraSubscriptionState {
     salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
-    def nextState(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber)  : SendThankYouEmailState =
+    def nextState(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber): SendThankYouEmailState =
       SendThankYouEmailContributionState(user, product, paymentMethod, accountNumber.value, subscriptionNumber.value)
 
   }
@@ -73,7 +72,7 @@ object CreateZuoraSubscriptionState {
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState with CreateZuoraSubscriptionDSPurchaseState {
+  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
@@ -100,7 +99,7 @@ object CreateZuoraSubscriptionState {
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesforceContacts: SalesforceContactRecords,
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState with CreateZuoraSubscriptionDSPurchaseState {
+  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
