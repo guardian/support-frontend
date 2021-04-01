@@ -60,15 +60,20 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 }
 
 function PaperOrderSummary(props: PropTypes) {
-  const total = getPriceSummary(showPrice(props.total, false), props.billingPeriod);
+  const rawTotal = getPriceSummary(showPrice(props.total, false), props.billingPeriod);
+  const cleanedTotal = rawTotal.replace(/\/(.*)/, ''); // removes anything after the /
+  const total = `${cleanedTotal} per month`;
   // If the user has added a digi sub, we need to know the price of their selected base paper product separately
   const basePaperPrice = props.includesDigiSub ?
     getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption])
     : props.total;
+  const rawPrice = getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod);
+  const cleanedPrice = rawPrice.replace(/\/(.*)/, ''); // removes anything after the /
+  const accessiblePriceString = `${cleanedPrice} per month`;
 
   const productInfoHomeDelivery = [
     {
-      content: `You'll pay ${getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod)}`,
+      content: `You'll pay ${accessiblePriceString}`,
     },
   ];
   const productInfoSubsCard = [

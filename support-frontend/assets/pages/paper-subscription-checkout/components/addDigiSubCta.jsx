@@ -77,13 +77,9 @@ const listCopy = [
 ];
 
 function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
-  const simplePrice = digiSubPrice.replace(/\/(.*)/, '');
-  const cleanedPrice = simplePrice.replace(/\.(.*)/, '');
-  const newPricingText = `${cleanedPrice} per month`;
-
   return (
     <Accordion cssOverrides={ctaContainer} hideToggleLabel>
-      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a digital subscription for ${newPricingText}?`}>
+      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a digital subscription for ${digiSubPrice}?`}>
         <div css={[imageContainer, lightBorder]}>
           <GridImage
             gridId="editionsShortPackshot"

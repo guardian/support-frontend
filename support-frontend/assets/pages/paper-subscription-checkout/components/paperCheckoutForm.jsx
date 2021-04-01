@@ -191,6 +191,9 @@ function PaperCheckoutForm(props: PropTypes) {
   }
   const [digiSubPriceString, setDigiSubPriceString] = useState<string>('');
   const [includesDigiSub, setIncludesDigiSub] = useState<boolean>(false);
+  const simplePrice = digiSubPriceString.replace(/\/(.*)/, ''); // removes anything after the /
+  const cleanedPrice = simplePrice.replace(/\.(.*)/, ''); // removes decimal point if there is one
+  const expandedPricingText = `${cleanedPrice} per month`;
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
     setIncludesDigiSub(event.target.checked);
@@ -220,7 +223,7 @@ function PaperCheckoutForm(props: PropTypes) {
         imgType="png"
         altText=""
       />}
-    digiSubPrice={digiSubPriceString}
+    digiSubPrice={expandedPricingText}
     startDate={formattedStartDate}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionProductChoices}
@@ -236,7 +239,7 @@ function PaperCheckoutForm(props: PropTypes) {
         altText=""
       />
     }
-    digiSubPrice={digiSubPriceString}
+    digiSubPrice={expandedPricingText}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
   />);
@@ -365,7 +368,7 @@ function PaperCheckoutForm(props: PropTypes) {
                 </Text>
               </Rows>
             </FormSection>) : null}
-          <AddDigiSubCta digiSubPrice={digiSubPriceString} addDigitalSubscription={addDigitalSubscription} />
+          <AddDigiSubCta digiSubPrice={expandedPricingText} addDigitalSubscription={addDigitalSubscription} />
           {paymentMethods.length > 1 ?
             <FormSection cssOverrides={removeTopBorder} title="How would you like to pay?">
               <PaymentMethodSelector
