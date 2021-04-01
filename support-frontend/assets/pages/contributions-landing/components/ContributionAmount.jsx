@@ -24,6 +24,8 @@ import { TextInput } from '@guardian/src-text-input';
 
 // ----- Types ----- //
 
+type BreakdownMode = "WEEKLY" | "DAILY" | "NONE";
+
 type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
@@ -35,7 +37,18 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  breakdownMode: BreakdownMode,
 |};
+
+const getBreakdownMode = (state: State): BreakdownMode => {
+  const variant = state.common.abParticipations.landingPagePriceBreakdownTest;
+  if (variant === 'control') {
+    return 'WEEKLY';
+  } else if (variant === 'daily') {
+    return 'DAILY';
+  }
+  return 'NONE';
+};
 
 
 const mapStateToProps = (state: State) => ({
@@ -49,6 +62,7 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
+  breakdownMode: getBreakdownMode(state),
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -81,24 +95,32 @@ const amountFormatted = (amount: number, currencyString: string, countryGroupId:
   return `${currencyString}${(amount).toFixed(2)}`;
 };
 
-export const getAmountPerWeekBreakdown = (
+const getAmountBreakdown = (
+  breakdownMode: BreakdownMode,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
 ): string => {
-  const currencyString = currencies[detect(countryGroupId)].glyph;
+  const currencyStringPrefix = countryGroupId === 'International' ? 'US' : '';
+  const currencyString = currencyStringPrefix + currencies[detect(countryGroupId)].glyph;
+
   const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
 
-  let weeklyAmount: number;
+  const breakdownIntervalsPerYear = breakdownMode === 'WEEKLY' ? 52.0 : 365.0;
+  let breakdownAmount: number;
   if (contributionType === 'ANNUAL') {
-    weeklyAmount = amount / 52.0;
+    breakdownAmount = amount / breakdownIntervalsPerYear;
   } else if (contributionType === 'MONTHLY') {
-    weeklyAmount = (amount * 12) / 52.0;
+    breakdownAmount = (amount * 12) / breakdownIntervalsPerYear;
   }
 
-  if (amount && weeklyAmount) {
-    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(weeklyAmount, currencyString, countryGroupId)} each week`;
+  if ((amount && breakdownAmount)) {
+    return (`Contributing ${currencyString}${amount} works out as ${amountFormatted(
+      breakdownAmount,
+      currencyString,
+      countryGroupId,
+    )} ${breakdownMode === 'WEEKLY' ? 'each week' : 'a day'}`);
   }
 
   return '';
@@ -119,7 +141,7 @@ function withProps(props: PropTypes) {
   } = props;
 
   const showWeeklyBreakdown =
-    props.contributionType !== 'ONE_OFF';
+    props.contributionType !== 'ONE_OFF' && props.breakdownMode !== 'NONE';
 
   const canShowOtherAmountErrorMessage =
     checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount;
@@ -164,7 +186,8 @@ function withProps(props: PropTypes) {
 
       {showWeeklyBreakdown ? (
         <p className="amount-per-week-breakdown">
-          {getAmountPerWeekBreakdown(
+          {getAmountBreakdown(
+            props.breakdownMode,
             props.contributionType,
             props.countryGroupId,
             props.selectedAmounts,

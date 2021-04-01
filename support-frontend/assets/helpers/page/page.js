@@ -38,11 +38,12 @@ import {
   type CountryGroupId,
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
-import { trackAbTests, setRefViewId } from 'helpers/tracking/ophan';
+import { trackAbTests, setReferrerDataInLocalStorage } from 'helpers/tracking/ophan';
 import { getSettings } from 'helpers/globals';
 import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
 import { getAmounts } from 'helpers/abTests/helpers';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -60,8 +61,8 @@ export type ReduxState<PageState> = {|
 // ----- Functions ----- //
 
 // Sets up GA and logging.
-function analyticsInitialisation(participations: Participations): void {
-  setRefViewId();
+function analyticsInitialisation(participations: Participations, acquisitionData: ReferrerAcquisitionData): void {
+  setReferrerDataInLocalStorage(acquisitionData);
   googleTagManager.init(participations);
   ophan.init();
   trackAbTests(participations);
@@ -76,8 +77,8 @@ function buildInitialState(
   countryId: IsoCountry,
   currencyId: IsoCurrency,
   settings: Settings,
+  acquisitionData: ReferrerAcquisitionData,
 ): CommonState {
-  const acquisition = getReferrerAcquisitionData();
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   const internationalisation = {
@@ -89,8 +90,8 @@ function buildInitialState(
   const amounts = getAmounts(settings, abParticipations, countryGroupId);
 
   return {
-    campaign: acquisition ? getCampaign(acquisition) : null,
-    referrerAcquisitionData: acquisition,
+    campaign: acquisitionData ? getCampaign(acquisitionData) : null,
+    referrerAcquisitionData: acquisitionData,
     otherQueryParams,
     internationalisation,
     abParticipations,
@@ -105,7 +106,8 @@ function statelessInit() {
   const country: IsoCountry = detectCountry();
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
-  analyticsInitialisation(participations);
+  const acquisitionData = getReferrerAcquisitionData();
+  analyticsInitialisation(participations, acquisitionData);
 }
 
 // Enables redux devtools extension and optional redux-thunk.
@@ -145,11 +147,13 @@ function init<S, A>(
       });
     }
 
+    const acquisitionData = getReferrerAcquisitionData();
+
     const settings = getSettings();
     const countryGroupId: CountryGroupId = detectCountryGroup();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);
     const participations: Participations = abTest.init(countryId, countryGroupId, settings);
-    analyticsInitialisation(participations);
+    analyticsInitialisation(participations, acquisitionData);
 
     const initialState: CommonState = buildInitialState(
       participations,
@@ -157,6 +161,7 @@ function init<S, A>(
       countryId,
       currencyId,
       settings,
+      acquisitionData,
     );
     const commonReducer = createCommonReducer(initialState);
 

@@ -17,7 +17,7 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import {
   homeDeliveryUrl,
   manageSubsUrl,
-  myAccountUrl,
+  helpCentreUrl,
 } from 'helpers/externalLinks';
 import typeof MarketingConsent
   from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
@@ -72,8 +72,8 @@ const getHeading = (billingPeriod, isPending, orderIsGift) => {
 const StartDateCopy = ({ startDate, orderIsGift }: {startDate: Option<string>, orderIsGift: boolean}) => {
   if (startDate) {
     const title = orderIsGift ?
-      'The gift recipient will receive their first issue on' :
-      'You will receive your first issue on';
+      'The gift recipient\'s first issue will be published on' :
+      'Your first issue will be published on';
     return (
       <Text title={title}>
         <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
@@ -126,12 +126,12 @@ function ThankYouContent({
     ] :
     [
       <span>
-        Look out for an email from us confirming your subscription.
-        It has everything you need to know about how to manage it in the future.
+        Look out for an email from us confirming your subscription. It will contain everything you need to know.
       </span>,
       <span>
-        Your magazine will be delivered to your door.{' '}
-        <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
+        Your magazine will be delivered to your door.
+        Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national
+        post services.
       </span>,
     ];
 
@@ -162,8 +162,7 @@ function ThankYouContent({
       <Content>
         <Text>
           <SansParagraph>
-            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_my_account', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>Manage section</a> or accessing
-            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_mma', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>your Guardian account</a>.
+          You can manage your subscription by visiting <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_my_account', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>Manage My Account</a>. For any other queries please visit the <a href={helpCentreUrl} onClick={sendTrackingEventsOnClick({ id: 'checkout_help_centre', product: 'Paper', componentType: 'ACQUISITIONS_BUTTON' })}>Help Centre</a>.
           </SansParagraph>
         </Text>
       </Content>

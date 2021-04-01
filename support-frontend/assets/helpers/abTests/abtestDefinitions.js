@@ -3,11 +3,11 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
-const landingPage = '/??/contribute|thankyou(/.*)?$';
-const usLandingPage = '/us/contribute(/.*)?$';
-const allLandingPagesAndThankyouPages = '/??/contribute|thankyou(/.*)?$';
+const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
+const allThankYouPages = '/thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
+const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
   thankyouPageHeadingTest: {
@@ -27,7 +27,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: landingPage,
+    targetPage: allLandingPagesAndThankyouPages,
     seed: 1,
   },
 
@@ -73,16 +73,16 @@ export const tests: Tests = {
     seed: 12,
   },
 
-  usLandingPageZipCodeFieldTest: {
+  landingPagePriceBreakdownTest: {
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'zip-optional',
+        id: 'daily',
       },
       {
-        id: 'zip-required',
+        id: 'none',
       },
     ],
     audiences: {
@@ -93,7 +93,53 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: usLandingPage,
-    seed: 13,
+    targetPage: allLandingPagesAndThankyouPages,
+    seed: 14,
+  },
+
+  accordionTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'accordionOpen',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: digiSubLandingPages,
+    seed: 16,
+    optimizeId: 'oeDqGqpqT4OLrAaMJjYz6A',
+  },
+
+  thankyouPageMarketingConsentTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'v1',
+      },
+      {
+        id: 'v2',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: allThankYouPages,
+    seed: 17,
   },
 };
