@@ -164,8 +164,8 @@ trait Controllers {
     identityService,
     testUsers,
     controllerComponents,
-    allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.guardianDomain,
     appConfig.stage
   )
 
