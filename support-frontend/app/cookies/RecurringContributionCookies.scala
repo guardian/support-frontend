@@ -19,6 +19,8 @@ object RecurringContributionCookies {
         name = s"gu.contributions.recurring.contrib-timestamp.$billingPeriod",
         value = DateTime.now.getMillis.toString
       ),
+      // Setting the user attributes cookies used by frontend. See:
+      // https://github.com/guardian/frontend/blob/c1bdb643c2bfd3534575ee5dfd8b94ada6dd9dd6/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
       cookie(
         name = "gu_user_features_expiry",
         value = DateTime.now.plusDays(1).getMillis.toString
