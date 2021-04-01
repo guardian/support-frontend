@@ -14,7 +14,7 @@ object DigitalSubscriptionCookies {
       domain = Some(domain.value)
     )
     // Setting the user attributes cookies used by frontend. See:
-    // https://github.com/guardian/frontend/blob/c1bdb643c2bfd3534575ee5dfd8b94ada6dd9dd6/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
+    // https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
     List(
       cookie(
         name = "gu_user_features_expiry",
