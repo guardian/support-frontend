@@ -80,7 +80,11 @@ function getPaymentMethods(contributionType: ContributionType, countryId: IsoCou
   if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
     return [DirectDebit, Stripe, PayPal];
   } else if (countryId === 'US') {
-    return [Stripe, PayPal, AmazonPay];
+    // Remove this condition after we've tested in PROD
+    if (getQueryParameter('amazon-pay-recurring') === 'true') {
+      return [Stripe, PayPal, AmazonPay];
+    }
+    return [Stripe, PayPal];
   }
   return [Stripe, PayPal];
 
