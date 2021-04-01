@@ -8,8 +8,8 @@ import com.gu.support.redemption.{InvalidCode, InvalidReaderType, ValidCorporate
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
 import com.gu.support.zuora.api.ReaderType.Corporate
-import com.gu.support.zuora.api.{ReaderType, SubscribeItem}
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{buildProductSubscription, validateRatePlan}
+import com.gu.support.zuora.api._
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
 import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,12 +27,24 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
     val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
     val redemptionCode = redemptionData.redemptionCode
     val todaysDate = today()
-    val subscriptionData = buildProductSubscription(
-      requestId,
-      productRatePlanId,
-      contractAcceptanceDate = todaysDate,
-      contractEffectiveDate = todaysDate,
-      readerType = Corporate
+    val subscriptionData = SubscriptionData(
+      List(
+        RatePlanData(
+          RatePlan(productRatePlanId),
+          Nil,
+          Nil
+        )
+      ),
+      Subscription(
+        contractEffectiveDate = todaysDate,
+        contractAcceptanceDate = todaysDate,
+        termStartDate = todaysDate,
+        createdRequestId = requestId.toString,
+        readerType = Corporate,
+        autoRenew = true,
+        initialTerm = 12,
+        initialTermPeriodType = Month,
+      )
     )
 
     val redeemedSubcription = for {

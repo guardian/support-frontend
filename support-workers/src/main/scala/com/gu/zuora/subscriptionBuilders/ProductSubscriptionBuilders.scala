@@ -21,54 +21,6 @@ object ProductSubscriptionBuilders {
       case None => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription")
     }
 
-  def buildContributionSubscription(state: CreateZuoraSubscriptionContributionState, config: BillingPeriod => ZuoraContributionConfig): SubscribeItem = {
-    val contributionConfig = config(state.product.billingPeriod)
-    val subscriptionData = buildProductSubscription(
-      state.requestId,
-      contributionConfig.productRatePlanId,
-      List(
-        RatePlanChargeData(
-          ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = state.product.amount) //Pass the amount the user selected into Zuora
-        )
-      ),
-      readerType = Direct
-    )
-    SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
-  }
-
-  def buildProductSubscription(
-    createdRequestId: UUID,
-    productRatePlanId: ProductRatePlanId,
-    ratePlanCharges: List[RatePlanChargeData] = Nil,
-    contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    readerType: ReaderType,
-    autoRenew: Boolean = true,
-    initialTerm: Int = 12,
-    initialTermPeriodType: PeriodType = Month
-  ): SubscriptionData = {
-
-    SubscriptionData(
-      List(
-        RatePlanData(
-          RatePlan(productRatePlanId),
-          ratePlanCharges,
-          Nil
-        )
-      ),
-      Subscription(
-        contractEffectiveDate = contractEffectiveDate,
-        contractAcceptanceDate = contractAcceptanceDate,
-        termStartDate = contractEffectiveDate,
-        createdRequestId = createdRequestId.toString,
-        readerType = readerType,
-        autoRenew = autoRenew,
-        initialTerm = initialTerm,
-        initialTermPeriodType = initialTermPeriodType,
-      )
-    )
-  }
-
   def applyPromoCodeIfPresent(
     promotionService: PromotionService,
     maybePromoCode: Option[PromoCode],

@@ -5,9 +5,9 @@ import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, Prom
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
 import com.gu.support.workers.{BillingPeriod, SixWeekly}
-import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscribeItem}
+import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, buildProductSubscription, validateRatePlan}
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 import org.joda.time.{Days, LocalDate}
 
 class GuardianWeeklySubscriptionBuilder(
@@ -15,6 +15,7 @@ class GuardianWeeklySubscriptionBuilder(
   environment: TouchPointEnvironment,
   now: () => LocalDate
 ) {
+
   def build(state: CreateZuoraSubscriptionGuardianWeeklyState): Either[PromoError, SubscribeItem] = {
 
     val contractEffectiveDate = now()
@@ -33,15 +34,24 @@ class GuardianWeeklySubscriptionBuilder(
     else
       (12, true, Month)
 
-    val subscriptionData = buildProductSubscription(
-      requestId,
-      recurringProductRatePlanId,
-      contractAcceptanceDate = firstDeliveryDate,
-      contractEffectiveDate = contractEffectiveDate,
-      readerType = readerType,
-      autoRenew = autoRenew,
-      initialTerm = initialTerm,
-      initialTermPeriodType = initialTermPeriodType
+    val subscriptionData = SubscriptionData(
+      List(
+        RatePlanData(
+          RatePlan(recurringProductRatePlanId),
+          Nil,
+          Nil
+        )
+      ),
+      Subscription(
+        contractEffectiveDate = contractEffectiveDate,
+        contractAcceptanceDate = firstDeliveryDate,
+        termStartDate = contractEffectiveDate,
+        createdRequestId = requestId.toString,
+        readerType = readerType,
+        autoRenew = autoRenew,
+        initialTerm = initialTerm,
+        initialTermPeriodType = initialTermPeriodType,
+      )
     )
 
     applyPromoCodeIfPresent(promotionService, promoCode, user.billingAddress.country, promotionProductRatePlanId, subscriptionData).map { subscriptionData =>

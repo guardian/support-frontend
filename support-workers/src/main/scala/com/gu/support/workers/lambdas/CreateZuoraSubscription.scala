@@ -99,7 +99,9 @@ class ZuoraProductHandlers(services: Services, isTestUser: Boolean) {
 
   val zuoraContributionHandler = new ZuoraContributionHandler(
     zuoraSubscriptionCreator,
-    services.config.zuoraConfigProvider.get(isTestUser)
+    new ContributionSubscriptionBuilder(
+      services.config.zuoraConfigProvider.get(isTestUser).contributionConfig
+    )
   )
 
   val zuoraPaperHandler = new ZuoraPaperHandler(
