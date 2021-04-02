@@ -259,8 +259,7 @@ object Fixtures {
     s"""
           {
             "productType": "DigitalSubscriptionDirectPurchase",
-            $requestIdJson,
-            $userJson,
+            "billingCountry": "GB",
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson

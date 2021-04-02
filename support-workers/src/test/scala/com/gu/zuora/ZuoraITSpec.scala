@@ -78,7 +78,6 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       uatService,
       UUID.fromString("f131bfb4-bcd9-31e6-0000-00000001ac69"),
       IdentityId("104725102").get,
-      Monthly,
       () => earlyDate
     ).map {
       _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
@@ -90,7 +89,6 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       uatService,
       UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"),
       IdentityId("104725102").get,
-      Monthly,
       () => earlyDate
     ).map {
       _ should be(None)

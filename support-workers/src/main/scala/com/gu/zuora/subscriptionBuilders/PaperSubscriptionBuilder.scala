@@ -11,7 +11,8 @@ import org.joda.time.{DateTimeZone, LocalDate}
 
 class PaperSubscriptionBuilder(
   promotionService: PromotionService,
-  environment: TouchPointEnvironment
+  environment: TouchPointEnvironment,
+  subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(state: CreateZuoraSubscriptionPaperState): Either[PromoError, SubscribeItem] = {
@@ -22,35 +23,23 @@ class PaperSubscriptionBuilder(
 
     val productRatePlanId = validateRatePlan(paperRatePlan(product, environment), product.describe)
 
-    val subscriptionData = SubscriptionData(
-      List(
-        RatePlanData(
-          RatePlan(productRatePlanId),
-          Nil,
-          Nil
-        )
-      ),
-      Subscription(
-        contractEffectiveDate = contractEffectiveDate,
-        contractAcceptanceDate = firstDeliveryDate,
-        termStartDate = contractEffectiveDate,
-        createdRequestId = requestId.toString,
-        readerType = Direct,
-        autoRenew = true,
-        initialTerm = 12,
-        initialTermPeriodType = Month,
-      )
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
+      productRatePlanId,
+      contractAcceptanceDate = state.firstDeliveryDate,
+      contractEffectiveDate = contractEffectiveDate,
+      readerType = Direct
     )
 
     applyPromoCodeIfPresent(promotionService, promoCode, user.billingAddress.country, productRatePlanId, subscriptionData).map { subscriptionData =>
-      val soldToContact = SubscribeItemBuilder.buildContactDetails(
+      val soldToContact = ContactDetails.fromAddress(
         Some(user.primaryEmailAddress),
         user.firstName,
         user.lastName,
         user.deliveryAddress.get,
         user.deliveryInstructions
       )
-      SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, Some(state.paymentMethod), Some(soldToContact))
+      subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), Some(soldToContact))
     }
   }
+
 }

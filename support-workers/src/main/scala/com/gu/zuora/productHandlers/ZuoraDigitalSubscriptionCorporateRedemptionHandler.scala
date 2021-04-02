@@ -3,6 +3,7 @@ package com.gu.zuora.productHandlers
 import cats.implicits._
 import com.gu.WithLoggingSugar._
 import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, RedemptionTable}
+import com.gu.support.workers.User
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.zuora.ZuoraSubscriptionCreator
@@ -15,6 +16,7 @@ class ZuoraDigitalSubscriptionCorporateRedemptionHandler(
   zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
   corporateCodeStatusUpdater: CorporateCodeStatusUpdater,
   digitalSubscriptionCorporateRedemptionBuilder: DigitalSubscriptionCorporateRedemptionBuilder,
+  user: User,
 ) {
 
   def subscribe(state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState): Future[SendThankYouEmailState] =
@@ -22,9 +24,9 @@ class ZuoraDigitalSubscriptionCorporateRedemptionHandler(
       subscribeItem <- digitalSubscriptionCorporateRedemptionBuilder.build(state)
         .leftMap(BuildSubscribeRedemptionError).value.map(_.toTry).flatMap(Future.fromTry)
         .withEventualLogging("subscription data")
-      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(state, subscribeItem)
+      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
       _ <- corporateCodeStatusUpdater.setStatus(state.redemptionData.redemptionCode, RedemptionTable.AvailableField.CodeIsUsed)
         .withEventualLogging("update redemption code")
-    } yield state.nextState(account, sub)
+    } yield state.nextState(account, sub, user)
 
 }

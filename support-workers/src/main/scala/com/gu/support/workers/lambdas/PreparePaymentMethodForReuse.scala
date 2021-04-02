@@ -44,8 +44,6 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
     } yield HandlerResult(
       PassThroughState(
         CreateZuoraSubscriptionContributionState(
-          requestId = state.requestId,
-          user = state.user,
           product = contribution,
           paymentMethod = paymentMethod,
           salesForceContact = sfContact,

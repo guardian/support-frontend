@@ -1,12 +1,14 @@
 package com.gu.support.workers.states
 
+import com.gu.i18n.Country
+
 import java.util.UUID
 import com.gu.salesforce.Salesforce.{SalesforceContactRecords, SfContactId}
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
-import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
+import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime, decodeCountry, encodeCountryAsAlpha2}
 import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
@@ -38,47 +40,35 @@ object PassThroughState {
   implicit val codec = deriveCodec[PassThroughState]
 }
 
-sealed trait CreateZuoraSubscriptionState {
-  def requestId: UUID
-  def user: User
-  def product: ProductType
-}
+sealed trait CreateZuoraSubscriptionState
 
 object CreateZuoraSubscriptionState {
 
-  sealed trait CreateZuoraSubscriptionDigitalSubscriptionState extends CreateZuoraSubscriptionState {
-    override def product: DigitalPack
-  }
-
-  sealed trait CreateZuoraSubscriptionNewSubscriptionState extends CreateZuoraSubscriptionState // marker to say we will actually create rather than updating
-
   case class CreateZuoraSubscriptionContributionState(
-    requestId: UUID,
-    user: User,
     product: Contribution,
     paymentMethod: PaymentMethod,
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionState {
 
-    def nextState(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber): SendThankYouEmailState =
+    def nextState(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber, user: User): SendThankYouEmailState =
       SendThankYouEmailContributionState(user, product, paymentMethod, accountNumber.value, subscriptionNumber.value)
 
   }
 
   case class CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
-    requestId: UUID,
-    user: User,
+    billingCountry: Country,
     product: DigitalPack,
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
       accountNumber: ZuoraAccountNumber,
       subscriptionNumber: ZuoraSubscriptionNumber,
-    )  : SendThankYouEmailState =
+      user: User,
+    ): SendThankYouEmailState =
       SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
         user,
         product,
@@ -92,14 +82,13 @@ object CreateZuoraSubscriptionState {
   }
 
   case class CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
-    requestId: UUID,
-    user: User,
+    billingCountry: Country,
     giftRecipient: DigitalSubscriptionGiftRecipient,
     product: DigitalPack,
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesforceContacts: SalesforceContactRecords,
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
@@ -107,7 +96,8 @@ object CreateZuoraSubscriptionState {
       lastRedemptionDate: LocalDate,
       accountNumber: ZuoraAccountNumber,
       subscriptionNumber: ZuoraSubscriptionNumber,
-    )  : SendThankYouEmailState =
+      user: User,
+    ): SendThankYouEmailState =
       SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
         user,
         SfContactId(salesforceContacts.giftRecipient.get.Id),
@@ -125,45 +115,45 @@ object CreateZuoraSubscriptionState {
   }
 
   case class CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
-    requestId: UUID,
-    user: User,
     product: DigitalPack,
     redemptionData: RedemptionData,
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionState {
 
-    def nextState(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber)  : SendThankYouEmailState =
+    def nextState(
+      accountNumber: ZuoraAccountNumber,
+      subscriptionNumber: ZuoraSubscriptionNumber,
+      user: User,
+    )  : SendThankYouEmailState =
       SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, accountNumber.value, subscriptionNumber.value)
 
   }
 
   case class CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState(
-    requestId: UUID,
-    user: User,
+    userId: String,
     product: DigitalPack,
     redemptionData: RedemptionData,
-  ) extends CreateZuoraSubscriptionDigitalSubscriptionState {
+  ) extends CreateZuoraSubscriptionState {
 
-    def nextState(termDates: TermDates)  : SendThankYouEmailState =
+    def nextState(termDates: TermDates, user: User): SendThankYouEmailState =
       SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, termDates)
 
   }
 
   case class CreateZuoraSubscriptionPaperState(
-    requestId: UUID,
     user: User,
     product: Paper,
     paymentMethod: PaymentMethod,
     firstDeliveryDate: LocalDate,
     promoCode: Option[PromoCode],
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
       accountNumber: ZuoraAccountNumber,
       subscriptionNumber: ZuoraSubscriptionNumber,
-    )  : SendThankYouEmailState =
+    ): SendThankYouEmailState =
       SendThankYouEmailPaperState(
         user,
         product,
@@ -178,7 +168,6 @@ object CreateZuoraSubscriptionState {
   }
 
   case class CreateZuoraSubscriptionGuardianWeeklyState(
-    requestId: UUID,
     user: User,
     giftRecipient: Option[WeeklyGiftRecipient],
     product: GuardianWeekly,
@@ -186,13 +175,13 @@ object CreateZuoraSubscriptionState {
     firstDeliveryDate: LocalDate,
     promoCode: Option[PromoCode],
     salesforceContacts: SalesforceContactRecords,
-  ) extends CreateZuoraSubscriptionState with CreateZuoraSubscriptionNewSubscriptionState {
+  ) extends CreateZuoraSubscriptionState {
 
     def nextState(
       paymentSchedule: PaymentSchedule,
       accountNumber: ZuoraAccountNumber,
       subscriptionNumber: ZuoraSubscriptionNumber,
-    )  : SendThankYouEmailState =
+    ): SendThankYouEmailState =
       SendThankYouEmailGuardianWeeklyState(
         user,
         product,

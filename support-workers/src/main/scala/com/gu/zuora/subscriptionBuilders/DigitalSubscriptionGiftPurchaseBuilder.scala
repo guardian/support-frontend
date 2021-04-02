@@ -17,6 +17,7 @@ class DigitalSubscriptionGiftPurchaseBuilder(
   today: () => LocalDate,
   giftCodeGeneratorService: GiftCodeGeneratorService,
   environment: TouchPointEnvironment,
+  subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext): Either[PromoError, SubscribeItem] = {
@@ -31,26 +32,22 @@ class DigitalSubscriptionGiftPurchaseBuilder(
     val todaysDate = today()
     val contractAcceptanceDate = todaysDate.plusDays(0)
 
-    val subscriptionData = SubscriptionData(
-      List(RatePlanData(RatePlan(productRatePlanId), Nil, Nil)),
-      Subscription(
-        contractEffectiveDate = todaysDate,
-        contractAcceptanceDate = contractAcceptanceDate,
-        termStartDate = todaysDate,
-        createdRequestId = state.requestId.toString,
-        readerType = state.product.readerType,
-        autoRenew = false,
-        initialTerm = GiftCodeValidator.expirationTimeInMonths + 1,
-        initialTermPeriodType = Month,
-        redemptionCode = Some(giftCode).map(Left.apply),
-        giftNotificationEmailDate = Some(state.giftRecipient.deliveryDate),
-      )
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
+      productRatePlanId,
+      contractEffectiveDate = todaysDate,
+      contractAcceptanceDate = contractAcceptanceDate,
+      readerType = state.product.readerType,
+      autoRenew = false,
+      initialTerm = GiftCodeValidator.expirationTimeInMonths + 1,
+      initialTermPeriodType = Month,
+      redemptionCode = Some(giftCode).map(Left.apply),
+      giftNotificationEmailDate = Some(state.giftRecipient.deliveryDate),
     )
 
     applyPromoCodeIfPresent(
-      promotionService, state.promoCode, state.user.billingAddress.country, productRatePlanId, subscriptionData
+      promotionService, state.promoCode, state.billingCountry, productRatePlanId, subscriptionData
     ).map { subscriptionData =>
-      SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None)
+      subscribeItemBuilder.build(subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None)
     }
 
   }

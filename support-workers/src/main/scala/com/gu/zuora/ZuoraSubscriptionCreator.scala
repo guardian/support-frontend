@@ -2,37 +2,39 @@ package com.gu.zuora
 
 import com.gu.WithLoggingSugar._
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionNewSubscriptionState
-import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, PaymentSchedule, PreviewPaymentSchedule}
-import com.gu.support.zuora.api.{SubscribeItem, _}
+import com.gu.support.workers._
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
+import com.gu.support.zuora.api.{SubscribeItem, _}
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ZuoraSubscriptionCreator.checkSingleResponse
 import org.joda.time.DateTime
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ZuoraSubscriptionCreator(zuoraService: ZuoraSubscribeService, now: () => DateTime) {
+class ZuoraSubscriptionCreator(
+  zuoraService: ZuoraSubscribeService,
+  now: () => DateTime,
+  userId: String,
+  requestId: UUID,
+) {
 
   def ensureSubscriptionCreatedWithPreview(
-    state: CreateZuoraSubscriptionNewSubscriptionState,
-    subscribeItem: SubscribeItem
+    subscribeItem: SubscribeItem,
+    billingPeriod: BillingPeriod,
   ): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber, PaymentSchedule)] =
     for {
-      paymentSchedule <- PreviewPaymentSchedule.preview(subscribeItem, state.product.billingPeriod, zuoraService, checkSingleResponse)
+      paymentSchedule <- PreviewPaymentSchedule.preview(subscribeItem, billingPeriod, zuoraService, checkSingleResponse)
         .withEventualLogging("PreviewPaymentSchedule")
-      (account, sub) <- ensureSubscriptionCreated(state, subscribeItem)
+      (account, sub) <- ensureSubscriptionCreated(subscribeItem)
     } yield (account, sub, paymentSchedule)
 
-  def ensureSubscriptionCreated(
-    state: CreateZuoraSubscriptionNewSubscriptionState,
-    subscribeItem: SubscribeItem
-  ): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber)] =
+  def ensureSubscriptionCreated(subscribeItem: SubscribeItem): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber)] =
     for {
-      identityId <- Future.fromTry(IdentityId(state.user.id))
+      identityId <- Future.fromTry(IdentityId(userId))
         .withEventualLogging("identity id")
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, state.requestId, identityId, state.product.billingPeriod, now)
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, requestId, identityId, now)
         .withEventualLogging("GetSubscriptionWithCurrentRequestId")
       (account, sub) <- ZuoraSubscriptionCreator.subscribeIfApplicable(zuoraService, subscribeItem, maybeDomainSubscription)
         .withEventualLogging("subscribe")

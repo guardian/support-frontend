@@ -96,13 +96,12 @@ object StatesTestData {
 
   val createZuoraSubscriptionState: PassThroughState = PassThroughState(
     CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
-    requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    product = DigitalPack(Currency.GBP, Monthly),
-    paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
-    promoCode = None,
-    salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid")
-  ),
+      Country.UK,
+      product = DigitalPack(Currency.GBP, Monthly),
+      paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
+      promoCode = None,
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid")
+    ),
     None,
     None,
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),

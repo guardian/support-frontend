@@ -98,14 +98,17 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       )))
     }),
     () => saleDate,
-    TouchPointEnvironments.SANDBOX
+    TouchPointEnvironments.SANDBOX,
+    new SubscribeItemBuilder(
+      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+      GBP,
+    )
   )
 
   lazy val corporate =
     corporateRedemptionBuilder.build(
       CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
-        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-        User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
         DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate), // scalastyle:ignore null
         RedemptionData(RedemptionCode(testCode).toOption.get),
         SalesforceContactRecord("", ""),
@@ -117,6 +120,11 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     promotionService,
     () => saleDate,
     SANDBOX,
+    new SubscribeItemBuilder(
+      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+      GBP,
+    )
   )
 
   lazy val subscriptionGiftPurchaseBuilder = new DigitalSubscriptionGiftPurchaseBuilder(
@@ -124,6 +132,11 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     () => saleDate,
     new GiftCodeGeneratorService,
     SANDBOX,
+    new SubscribeItemBuilder(
+      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+      GBP,
+    )
   )
 
 //  lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
@@ -137,8 +150,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthly =
     subscriptionDirectPurchaseBuilder.build(
       CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
-        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-        User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+        Country.UK,
         DigitalPack(GBP, Monthly),
         PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
@@ -149,8 +161,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val threeMonthGiftPurchase =
     subscriptionGiftPurchaseBuilder.build(
       CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
-        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-        User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+        Country.UK,
         DigitalSubscriptionGiftRecipient("bob", "smith", "hi@gu.com", None, new LocalDate(2020, 12, 1)),
         DigitalPack(GBP, Quarterly, Gift),
         PayPalReferenceTransaction("baid", "hi@gu.com"),

@@ -4,7 +4,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Fixtures.idId
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
-import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson}
+import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson, user}
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -64,12 +64,14 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     codeValue: String,
     requestId: UUID
   ): Future[SendThankYouEmailState] = {
-    val jsonState = createDigiPackGiftRedemptionJson(codeValue, requestId)
+    val jsonState = createDigiPackGiftRedemptionJson(codeValue)
     val state = decode[CreateZuoraSubscriptionState](jsonState).toOption.get.asInstanceOf[CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState]
 
     new ZuoraDigitalSubscriptionGiftRedemptionHandler(
       createZuoraHelper.realZuoraGiftService,
-      createZuoraHelper.realCatalogService
+      createZuoraHelper.realCatalogService,
+      user(),
+      requestId,
     ).redeemGift(state)
   }
 }

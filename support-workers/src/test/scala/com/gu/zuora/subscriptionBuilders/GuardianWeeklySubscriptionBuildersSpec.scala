@@ -75,13 +75,19 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
 
+  lazy val subscribeItemBuilder = new SubscribeItemBuilder(
+    UUID.randomUUID(),
+    User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+    GBP,
+  )
+
   lazy val gift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     SANDBOX,
     () => saleDate,
+    subscribeItemBuilder,
   ).build(
     CreateZuoraSubscriptionGuardianWeeklyState(
-      UUID.randomUUID(),
       User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
       Some(WeeklyGiftRecipient(None, "bob", "smith", None)),
       weekly,
@@ -96,9 +102,9 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     promotionService,
     SANDBOX,
     () => saleDate,
+    subscribeItemBuilder,
   ).build(
     CreateZuoraSubscriptionGuardianWeeklyState(
-      UUID.randomUUID(),
       User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
       None,
       weekly,

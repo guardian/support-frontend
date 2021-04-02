@@ -29,7 +29,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
     val state = passThroughState.createZuoraSubscriptionState
 
-    val zuoraProductHandlers = new ZuoraProductHandlers(services, state.user.isTestUser)
+    val zuoraProductHandlers = new ZuoraProductHandlers(services, passThroughState)
     import zuoraProductHandlers._
 
     val eventualSendThankYouEmailState = state match {
@@ -55,16 +55,25 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
 }
 
-class ZuoraProductHandlers(services: Services, isTestUser: Boolean) {
+class ZuoraProductHandlers(services: Services, passThroughState: PassThroughState) {
 
+  private val isTestUser = passThroughState.user.isTestUser
   private val now = () => DateTime.now(DateTimeZone.UTC)
   private val touchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
-  private val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, now)
+  private val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, now, passThroughState.user.id, passThroughState.requestId)
 
   val zuoraDigitalSubscriptionGiftRedemptionHandler = new ZuoraDigitalSubscriptionGiftRedemptionHandler(
     services.zuoraGiftService,
     services.catalogService,
+    passThroughState.user,
+    passThroughState.requestId,
+  )
+
+  val subscribeItemBuilder = new SubscribeItemBuilder(
+    passThroughState.requestId,
+    passThroughState.user,
+    passThroughState.product.currency,
   )
 
   val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
@@ -74,7 +83,9 @@ class ZuoraProductHandlers(services: Services, isTestUser: Boolean) {
       () => now().toLocalDate,
       services.giftCodeGenerator,
       touchPointEnvironment,
+      subscribeItemBuilder,
     ),
+    passThroughState.user,
   )
 
   val zuoraDigitalSubscriptionCorporateRedemptionHandler = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
@@ -84,7 +95,9 @@ class ZuoraProductHandlers(services: Services, isTestUser: Boolean) {
       CorporateCodeValidator.withDynamoLookup(services.redemptionService),
       () => now().toLocalDate,
       touchPointEnvironment,
+      subscribeItemBuilder,
     ),
+    passThroughState.user,
   )
 
   val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
@@ -94,19 +107,23 @@ class ZuoraProductHandlers(services: Services, isTestUser: Boolean) {
       services.promotionService,
       () => now().toLocalDate,
       touchPointEnvironment,
+      subscribeItemBuilder,
     ),
+    passThroughState.user,
   )
 
   val zuoraContributionHandler = new ZuoraContributionHandler(
     zuoraSubscriptionCreator,
     new ContributionSubscriptionBuilder(
-      services.config.zuoraConfigProvider.get(isTestUser).contributionConfig
-    )
+      services.config.zuoraConfigProvider.get(isTestUser).contributionConfig,
+      subscribeItemBuilder,
+    ),
+    passThroughState.user,
   )
 
   val zuoraPaperHandler = new ZuoraPaperHandler(
     zuoraSubscriptionCreator,
-    new PaperSubscriptionBuilder(services.promotionService, touchPointEnvironment),
+    new PaperSubscriptionBuilder(services.promotionService, touchPointEnvironment, subscribeItemBuilder),
   )
 
   val zuoraGuardianWeeklyHandler = new ZuoraGuardianWeeklyHandler(
@@ -114,7 +131,8 @@ class ZuoraProductHandlers(services: Services, isTestUser: Boolean) {
     new GuardianWeeklySubscriptionBuilder(
       services.promotionService,
       touchPointEnvironment,
-      () => now().toLocalDate
+      () => now().toLocalDate,
+      subscribeItemBuilder,
     ),
   )
 

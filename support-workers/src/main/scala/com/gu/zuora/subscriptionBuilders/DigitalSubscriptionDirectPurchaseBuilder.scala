@@ -13,6 +13,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
   promotionService: PromotionService,
   today: () => LocalDate,
   environment: TouchPointEnvironment,
+  subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState): Either[PromoError, SubscribeItem] = {
@@ -22,26 +23,18 @@ class DigitalSubscriptionDirectPurchaseBuilder(
     val todaysDate = today()
     val contractAcceptanceDate = todaysDate.plusDays(config.defaultFreeTrialPeriod + config.paymentGracePeriod)
 
-    val subscriptionData = SubscriptionData(
-      List(RatePlanData(RatePlan(productRatePlanId), Nil, Nil)),
-      Subscription(
-        contractEffectiveDate = todaysDate,
-        contractAcceptanceDate = contractAcceptanceDate,
-        termStartDate = todaysDate,
-        createdRequestId = state.requestId.toString,
-        readerType = state.product.readerType,
-        autoRenew = true,
-        initialTerm = 12,
-        initialTermPeriodType = Month,
-        redemptionCode = None.map(Left.apply),
-        giftNotificationEmailDate = None,
-      )
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
+      productRatePlanId,
+      contractEffectiveDate = todaysDate,
+      contractAcceptanceDate = contractAcceptanceDate,
+      readerType = state.product.readerType,
+      initialTermPeriodType = Month,
     )
 
     applyPromoCodeIfPresent(
-      promotionService, state.promoCode, state.user.billingAddress.country, productRatePlanId, subscriptionData
+      promotionService, state.promoCode, state.billingCountry, productRatePlanId, subscriptionData
     ).map { subscriptionData =>
-      SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
+      subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
     }
 
   }

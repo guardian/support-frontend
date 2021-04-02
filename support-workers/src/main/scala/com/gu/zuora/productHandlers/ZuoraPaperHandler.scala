@@ -19,7 +19,7 @@ class ZuoraPaperHandler(
     for {
       subscribeItem <- Future.fromTry(paperSubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
-      (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(state, subscribeItem)
+      (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(subscribeItem, state.product.billingPeriod)
     } yield state.nextState(paymentSchedule, account, sub)
 
 }

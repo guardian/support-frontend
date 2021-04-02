@@ -18,6 +18,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
   codeValidator: CorporateCodeValidator,
   today: () => LocalDate,
   environment: TouchPointEnvironment,
+  subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(
@@ -27,24 +28,11 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
     val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
     val redemptionCode = redemptionData.redemptionCode
     val todaysDate = today()
-    val subscriptionData = SubscriptionData(
-      List(
-        RatePlanData(
-          RatePlan(productRatePlanId),
-          Nil,
-          Nil
-        )
-      ),
-      Subscription(
-        contractEffectiveDate = todaysDate,
-        contractAcceptanceDate = todaysDate,
-        termStartDate = todaysDate,
-        createdRequestId = requestId.toString,
-        readerType = Corporate,
-        autoRenew = true,
-        initialTerm = 12,
-        initialTermPeriodType = Month,
-      )
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
+      productRatePlanId,
+      contractAcceptanceDate = todaysDate,
+      contractEffectiveDate = todaysDate,
+      readerType = Corporate,
     )
 
     val redeemedSubcription = for {
@@ -63,7 +51,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
 
     redeemedSubcription
       .map(subscription => subscriptionData.copy(subscription = subscription))
-      .map(subscriptionData => SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, None, None))
+      .map(subscriptionData => subscribeItemBuilder.build(subscriptionData, state.salesForceContact, None, None))
   }
 
 }

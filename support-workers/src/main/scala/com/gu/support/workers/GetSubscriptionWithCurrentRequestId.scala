@@ -16,7 +16,6 @@ object GetSubscriptionWithCurrentRequestId {
     zuoraService: ZuoraSubscribeService,
     requestId: UUID,
     identityId: IdentityId,
-    billingPeriod: BillingPeriod,
     now: () => DateTime
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = for {
     accountNumbers <- zuoraService.getAccountFields(identityId, now())

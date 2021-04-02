@@ -7,36 +7,23 @@ import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 
-class ContributionSubscriptionBuilder(config: BillingPeriod => ZuoraContributionConfig) {
+class ContributionSubscriptionBuilder(
+  config: BillingPeriod => ZuoraContributionConfig,
+  subscribeItemBuilder: SubscribeItemBuilder,
+) {
 
   def build(state: CreateZuoraSubscriptionContributionState): SubscribeItem = {
     val contributionConfig = config(state.product.billingPeriod)
-    val subscriptionData = SubscriptionData(
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
+      contributionConfig.productRatePlanId,
       List(
-        RatePlanData(
-          RatePlan(contributionConfig.productRatePlanId),
-          List(
-            RatePlanChargeData(
-              ContributionRatePlanCharge(
-                contributionConfig.productRatePlanChargeId, price = state.product.amount
-              ) //Pass the amount the user selected into Zuora
-            )
-          ),
-          Nil
+        RatePlanChargeData(
+          ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = state.product.amount) //Pass the amount the user selected into Zuora
         )
       ),
-      Subscription(
-        contractEffectiveDate = LocalDate.now(DateTimeZone.UTC),
-        contractAcceptanceDate = LocalDate.now(DateTimeZone.UTC),
-        termStartDate = LocalDate.now(DateTimeZone.UTC),
-        createdRequestId = state.requestId.toString,
-        readerType = Direct,
-        autoRenew = true,
-        initialTerm = 12,
-        initialTermPeriodType = Month,
-      )
+      readerType = Direct
     )
-    SubscribeItemBuilder.buildSubscribeItem(state, subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
+    subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
   }
 
 }
