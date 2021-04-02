@@ -94,7 +94,7 @@ object StatesTestData {
     acquisitionData = None
   )
 
-  val createZuoraSubscriptionState: PassThroughState = PassThroughState(
+  val createZuoraSubscriptionState: CreateZuoraSubscriptionWrapperState = CreateZuoraSubscriptionWrapperState(
     CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
       Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),

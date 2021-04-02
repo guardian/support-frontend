@@ -7,7 +7,7 @@ import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.redemption.corporate._
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionState._
-import com.gu.support.workers.states.{PassThroughState, SendAcquisitionEventState}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionWrapperState, SendAcquisitionEventState}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.productHandlers._
 import com.gu.zuora.subscriptionBuilders._
@@ -16,12 +16,12 @@ import org.joda.time.{DateTime, DateTimeZone}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[PassThroughState, SendAcquisitionEventState](servicesProvider) {
+  extends ServicesHandler[CreateZuoraSubscriptionWrapperState, SendAcquisitionEventState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
-    passThroughState: PassThroughState,
+    passThroughState: CreateZuoraSubscriptionWrapperState,
     requestInfo: RequestInfo,
     context: Context,
     services: Services
@@ -55,7 +55,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
 }
 
-class ZuoraProductHandlers(services: Services, passThroughState: PassThroughState) {
+class ZuoraProductHandlers(services: Services, passThroughState: CreateZuoraSubscriptionWrapperState) {
 
   private val isTestUser = passThroughState.user.isTestUser
   private val now = () => DateTime.now(DateTimeZone.UTC)

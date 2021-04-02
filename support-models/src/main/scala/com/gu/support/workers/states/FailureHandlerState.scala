@@ -19,8 +19,8 @@ case class FailureHandlerStateImpl(
 ) extends FailureHandlerState
 
 trait FailureHandlerState extends MinimalFailureHandlerState {
-  def firstDeliveryDate: Option[LocalDate] // this must be changed in step with CreateZuoraSubscriptionState case classes
-  def promoCode: Option[PromoCode] // this must be changed in step with CreateZuoraSubscriptionState case classes
+  def firstDeliveryDate: Option[LocalDate]
+  def promoCode: Option[PromoCode]
 }
 
 trait MinimalFailureHandlerState extends StepFunctionUserState {

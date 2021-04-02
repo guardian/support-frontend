@@ -10,7 +10,7 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.PreparePaymentMethodForReuse
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionContributionState
-import com.gu.support.workers.states.PassThroughState
+import com.gu.support.workers.states.CreateZuoraSubscriptionWrapperState
 import com.gu.support.workers.{AsyncLambdaSpec, CreditCardReferenceTransaction, MockContext}
 import com.gu.support.zuora.api.StripeGatewayPaymentIntentsDefault
 import com.gu.test.tags.annotations.IntegrationTest
@@ -35,7 +35,7 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
 
     preparePaymentMethodForReuse.handleRequestFuture(in, outStream, context).map { _ =>
 
-      val response = Encoding.in[PassThroughState](outStream.toInputStream).get
+      val response = Encoding.in[CreateZuoraSubscriptionWrapperState](outStream.toInputStream).get
 
       inside(response._1.createZuoraSubscriptionState) { case state: CreateZuoraSubscriptionContributionState =>
         state.paymentMethod shouldBe CreditCardReferenceTransaction(

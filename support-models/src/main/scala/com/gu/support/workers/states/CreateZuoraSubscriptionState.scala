@@ -15,7 +15,7 @@ import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, W
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
 
-case class PassThroughState(
+case class CreateZuoraSubscriptionWrapperState(
   createZuoraSubscriptionState: CreateZuoraSubscriptionState,
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
@@ -36,8 +36,8 @@ case class PassThroughState(
 
 }
 
-object PassThroughState {
-  implicit val codec = deriveCodec[PassThroughState]
+object CreateZuoraSubscriptionWrapperState {
+  implicit val codec = deriveCodec[CreateZuoraSubscriptionWrapperState]
 }
 
 sealed trait CreateZuoraSubscriptionState
