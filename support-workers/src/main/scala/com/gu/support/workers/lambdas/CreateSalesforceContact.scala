@@ -25,7 +25,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
 
     services.salesforceService.createContactRecords(state.user, state.giftRecipient).flatMap { response =>
       if (response.successful) {
-        Future.successful(HandlerResult(new NextZuoraState(state, response.contactRecords).getZuoraState(), requestInfo))
+        Future.successful(HandlerResult(getCreateZuoraSubscriptionState(state, response.contactRecords), requestInfo))
       } else {
         val errorMessage = response.errorMessage.getOrElse("No error message returned")
         SafeLogger.warn(s"Error creating Salesforce contact:\n$errorMessage")
@@ -34,18 +34,14 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
     }
   }
 
-}
-
-class NextZuoraState(
-  state: CreateSalesforceContactState,
-  salesforceContactRecords: SalesforceContactRecords,
-) {
-
   val Purchase = Left
   type Redemption = Right[PaymentMethod, RedemptionData]
 
   // scalastyle:off cyclomatic.complexity
-  def getZuoraState(): CreateZuoraSubscriptionWrapperState =
+  private def getCreateZuoraSubscriptionState(
+    state: CreateSalesforceContactState,
+    salesforceContactRecords: SalesforceContactRecords,
+  ): CreateZuoraSubscriptionWrapperState =
     (state.product, state.paymentMethod) match {
       case (product: Contribution, Purchase(purchase)) =>
         state.toNextContribution(salesforceContactRecords, product, purchase)
