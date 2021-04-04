@@ -2,8 +2,11 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
+import com.gu.support.workers.PaymentSchedule
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionPaperState
 import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailPaperState
+import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.{BuildSubscribePromoError, PaperSubscriptionBuilder}
 
@@ -20,6 +23,15 @@ class ZuoraPaperHandler(
       subscribeItem <- Future.fromTry(paperSubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
       (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(subscribeItem, state.product.billingPeriod)
-    } yield state.nextState(paymentSchedule, account, sub)
+    } yield SendThankYouEmailPaperState(
+      state.user,
+      state.product,
+      state.paymentMethod,
+      paymentSchedule,
+      state.promoCode,
+      account.value,
+      sub.value,
+      state.firstDeliveryDate
+    )
 
 }

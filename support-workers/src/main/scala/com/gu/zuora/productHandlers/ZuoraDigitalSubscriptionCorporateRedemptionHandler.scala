@@ -6,6 +6,7 @@ import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, Redempti
 import com.gu.support.workers.User
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
 import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionCorporateRedemptionState
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.{BuildSubscribeRedemptionError, DigitalSubscriptionCorporateRedemptionBuilder}
 
@@ -27,6 +28,6 @@ class ZuoraDigitalSubscriptionCorporateRedemptionHandler(
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
       _ <- corporateCodeStatusUpdater.setStatus(state.redemptionData.redemptionCode, RedemptionTable.AvailableField.CodeIsUsed)
         .withEventualLogging("update redemption code")
-    } yield state.nextState(account, sub, user)
+    } yield SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, state.product, account.value, sub.value)
 
 }

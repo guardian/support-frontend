@@ -25,7 +25,7 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
 
       val result = Encoding.in[CreateZuoraSubscriptionWrapperState](outStream.toInputStream)
       result.isSuccess should be(true)
-      inside(result.get._1.createZuoraSubscriptionState) {
+      inside(result.get._1.productSpecificState) {
         case state: CreateZuoraSubscriptionContributionState =>
           state.salesForceContact.Id should be("0039E000017tZUEQA2")
       }
@@ -41,7 +41,7 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
 
       val result = Encoding.in[CreateZuoraSubscriptionWrapperState](outStream.toInputStream)
       result.isSuccess should be(true)
-      inside(result.get._1.createZuoraSubscriptionState) {
+      inside(result.get._1.productSpecificState) {
         case state: CreateZuoraSubscriptionGuardianWeeklyState =>
           state.salesforceContacts.buyer.Id should be(salesforceId)
           state.salesforceContacts.giftRecipient shouldBe defined

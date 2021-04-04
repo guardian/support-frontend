@@ -4,6 +4,7 @@ import cats.implicits._
 import com.gu.WithLoggingSugar._
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
 import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianWeeklyState
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders._
 
@@ -20,22 +21,16 @@ class ZuoraGuardianWeeklyHandler(
       subscribeItem <- Future.fromTry(guardianWeeklySubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
       (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(subscribeItem, state.product.billingPeriod)
-    } yield state.nextState(paymentSchedule, account, sub)
+    } yield SendThankYouEmailGuardianWeeklyState(
+      state.user,
+      state.product,
+      state.giftRecipient,
+      state.paymentMethod,
+      paymentSchedule,
+      state.promoCode,
+      account.value,
+      sub.value,
+      state.firstDeliveryDate
+    )
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

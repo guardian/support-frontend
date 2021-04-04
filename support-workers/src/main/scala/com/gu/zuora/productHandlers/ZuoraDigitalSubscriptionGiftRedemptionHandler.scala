@@ -7,7 +7,7 @@ import com.gu.support.redemption.{CodeRedeemedInThisRequest, CodeStatus, ValidGi
 import com.gu.support.workers.User
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState
 import com.gu.support.workers.states.SendThankYouEmailState
-import com.gu.support.workers.states.SendThankYouEmailState.TermDates
+import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailDigitalSubscriptionGiftRedemptionState, TermDates}
 import com.gu.support.zuora.api.response.{Subscription, ZuoraSuccessOrFailureResponse}
 import com.gu.zuora.ZuoraGiftService
 import org.joda.time.{Days, LocalDate}
@@ -42,7 +42,7 @@ class ZuoraDigitalSubscriptionGiftRedemptionHandler(
         )
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
-    } yield state.nextState(termDates, user)
+    } yield SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, state.product, termDates)
   }
 
 }

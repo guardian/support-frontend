@@ -37,7 +37,7 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
 
       val response = Encoding.in[CreateZuoraSubscriptionWrapperState](outStream.toInputStream).get
 
-      inside(response._1.createZuoraSubscriptionState) { case state: CreateZuoraSubscriptionContributionState =>
+      inside(response._1.productSpecificState) { case state: CreateZuoraSubscriptionContributionState =>
         state.paymentMethod shouldBe CreditCardReferenceTransaction(
           tokenId = "card_EdajV2eXkZPrVV",
           secondTokenId = "cus_EdajoRmjUSlef9",
