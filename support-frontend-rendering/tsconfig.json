@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es2018",
+        "strict": true,
+        "module": "CommonJS",
+        "noImplicitReturns": true,
+        "noUncheckedIndexedAccess": true,
+        "esModuleInterop": true,
+        "jsx": "react",
+        "outDir": "dist",
+        "typeRoots": ["./src/@types", "./node_modules/@types"],
+        "rootDirs": ["src", "stories"],
+        "baseUrl": "src",
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "src/**/*.test.ts", "src/factories/*", "src/tests/banners/*.tests.ts"]
+}
