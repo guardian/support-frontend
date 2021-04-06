@@ -142,4 +142,26 @@ export const tests: Tests = {
     targetPage: allThankYouPages,
     seed: 17,
   },
+
+  digiSubsMobileTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'minimisedPage',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: digiSubLandingPages,
+    seed: 18,
+    optimizeId: 'fJS-7sKGR66KBTYiHW-1rg',
+  },
 };

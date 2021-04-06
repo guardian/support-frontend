@@ -22,7 +22,11 @@ const priceBoxes = css`
 `;
 
 const pricesHeadline = css`
-  ${headline.medium({ fontWeight: 'bold' })};
+  ${headline.small({ fontWeight: 'bold' })};
+
+  ${from.desktop} {
+    ${headline.medium({ fontWeight: 'bold' })};
+  }
 `;
 
 const pricesSubHeadline = css`
@@ -32,7 +36,7 @@ const pricesSubHeadline = css`
 
 const ctaCopy = {
   standard: {
-    title: 'Choose one of our special offers and subscribe today',
+    title: <>Choose one of our special offers and subscribe&nbsp;today</>,
     paragraph: <>After your <strong>14-day free trial</strong>, your
       subscription will begin automatically and you can cancel any time</>,
   },
@@ -42,12 +46,12 @@ const ctaCopy = {
   },
 };
 
-function Prices({ orderIsAGift }: { orderIsAGift: boolean }) {
+function Prices({ orderIsAGift, minimisedPage }: { orderIsAGift: boolean, minimisedPage: boolean }) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
   return (
     <section css={pricesSection} id="subscribe">
-      <h2 css={pricesHeadline}>{copy.title}</h2>
-      <p css={pricesSubHeadline}>{copy.paragraph}</p>
+      {!minimisedPage && <h2 css={pricesHeadline}>{copy.title}</h2>}
+      {!minimisedPage && <p css={pricesSubHeadline}>{copy.paragraph}</p>}
       <FlexContainer cssOverrides={priceBoxes}>
         <PaymentSelection />
       </FlexContainer>

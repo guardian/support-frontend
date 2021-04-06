@@ -27,11 +27,13 @@ import {
   circleTextBottom,
   circleTextGeneric,
   spaceAfter,
+  hideOnMobile,
 } from './heroStyles';
 
 type PropTypes = {
   promotionCopy: PromotionCopy,
   countryGroupId: CountryGroupId,
+  minimisedPage: boolean,
 }
 
 const HeroCopy = () => (
@@ -61,7 +63,7 @@ const HeroCopyAus = () => (
     </p>
   </span>);
 
-function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
+function CampaignHeader({ promotionCopy, countryGroupId, minimisedPage }: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
@@ -73,11 +75,12 @@ function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
 
   const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
   const copy = promoCopy || defaultCopy;
+  const featureContainerStyles = minimisedPage ? [featureContainer, hideOnMobile] : featureContainer;
 
   return (
     <div css={wrapper}>
       <h1 css={pageTitle}>Digital subscription</h1>
-      <div css={featureContainer}>
+      <div css={featureContainerStyles}>
         <div css={textSection}>
           <h2 css={heroHeading}>
             {title}

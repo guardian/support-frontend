@@ -21,11 +21,13 @@ import {
   heavyText,
   mobileLineBreak,
   packShot,
+  hideOnMobile,
 } from './heroStyles';
 
 type PropTypes = {
   countryGroupId: CountryGroupId,
   promotionCopy: PromotionCopy,
+  minimisedPage: boolean,
 }
 
 const GiftCopy = () => (
@@ -38,13 +40,14 @@ const GiftCopy = () => (
   </span>);
 
 
-function CampaignHeaderGift({ countryGroupId, promotionCopy }: PropTypes) {
+function CampaignHeaderGift({ countryGroupId, promotionCopy, minimisedPage }: PropTypes) {
   const copy = promotionHTML(promotionCopy.description) || <GiftCopy />;
+  const featureContainerStyles = minimisedPage ? [featureContainer, hideOnMobile] : featureContainer;
 
   return (
     <div css={wrapper}>
       <h1 css={pageTitle}>Give the digital subscription</h1>
-      <div css={featureContainer}>
+      <div css={featureContainerStyles}>
         <div css={textSection}>
           <GiftHeadingAnimation />
           {copy}

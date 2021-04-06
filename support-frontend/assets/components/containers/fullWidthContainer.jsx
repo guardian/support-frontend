@@ -3,6 +3,7 @@
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { brand, brandBackground, neutral } from '@guardian/src-foundations/palette';
+import { until } from '@guardian/src-foundations/mq';
 
 type Theme = 'light' | 'dark' | 'white' | 'brand';
 
@@ -36,6 +37,7 @@ const fullWidthContainer = css`
   position: relative;
   width: 100%;
   display: flex;
+  border-top: ${brand[300]} 1px solid;
 `;
 
 // This allows part of the colour of the container to appear to overlap the previous section of the page
@@ -49,6 +51,12 @@ const fullWidthContainerOverlap = css`
     height: 88px;
     width: 100%;
     background-color: inherit;
+  }
+
+  ${until.desktop} {
+    :before {
+      height: 0;
+    }
   }
 `;
 

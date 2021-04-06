@@ -6,7 +6,7 @@ import { css } from '@emotion/core';
 
 import { headline, titlepiece, body } from '@guardian/src-foundations/typography';
 import { brand, neutral } from '@guardian/src-foundations/palette';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
@@ -214,5 +214,11 @@ export const packShot = css`
 
   ${from.wide} {
     right: 20px;
+  }
+`;
+
+export const hideOnMobile = css`
+  ${until.desktop} {
+    display: none;
   }
 `;

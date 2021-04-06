@@ -6,7 +6,7 @@ import { css } from '@emotion/core';
 
 import { headline, titlepiece, body } from '@guardian/src-foundations/typography';
 import { brand, neutral, brandAlt } from '@guardian/src-foundations/palette';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
@@ -22,12 +22,12 @@ export const wrapper = css`
     top: 0;
     left: 0;
     width: 100%;
-    height: 170px;
+    height: 150px;
     background: ${digitalSubscriptionsBlue};
     content: '';
   }
 
-  ${from.mobileLandscape} {
+  ${from.desktop} {
     padding-top: ${space[4]}px;
     :before {
       margin-top: -1px;
@@ -41,12 +41,8 @@ export const pageTitle = css`
   color: ${neutral[97]};
   z-index: 10;
   background-color: transparent;
-  padding: 0 ${space[3]}px ${space[3]}px;
+  padding: 0 ${space[3]}px ${space[4]}px;
   width: 100%;
-
-  ${from.mobileLandscape} {
-    padding-bottom: ${space[4]}px;
-  }
 
   ${from.phablet} {
     width: 100%;
@@ -284,4 +280,10 @@ export const spaceAfter = css`
     margin-bottom: 80px;
   }
 
+`;
+
+export const hideOnMobile = css`
+  ${until.desktop} {
+    display: none;
+  }
 `;

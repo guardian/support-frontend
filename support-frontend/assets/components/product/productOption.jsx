@@ -73,7 +73,7 @@ const productOptionHighlight = css`
   top: 1px;
   transform: translateY(-100%);
   text-align: center;
-  padding: ${space[2]}px ${space[3]}px;
+  padding: ${space[1]}px ${space[2]}px;
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
 function ProductOption(props: Product) {

@@ -4,6 +4,8 @@
 
 import { renderPage } from 'helpers/render';
 import React from 'react';
+import { css } from '@emotion/core';
+import { until } from '@guardian/src-foundations/mq';
 import { Provider } from 'react-redux';
 import {
   AUDCountries,
@@ -50,6 +52,7 @@ const { orderIsAGift, productPrices, promotionCopy } = page;
 const { abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 const accordionOpen = abParticipations.accordionTest === 'accordionOpen';
+const minimisedPage = abParticipations.digiSubsMobileTest === 'minimisedPage';
 
 // ----- Internationalisation ----- //
 
@@ -85,6 +88,12 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   trackProduct: 'DigitalPack',
 });
 
+const hideOnMobile = css`
+  ${until.desktop} {
+    display: none;
+  }
+`;
+
 // ----- Render ----- //
 function LandingPage() {
   const footer = (
@@ -105,22 +114,33 @@ function LandingPage() {
       footer={footer}
     >
       {orderIsAGift ?
-        <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
-        <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
-      }
-      {countryGroupId === AUDCountries ?
-        <ProductBlockAus
+        <CampaignHeaderGift
           countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
+          promotionCopy={sanitisedPromoCopy}
+          minimisedPage={minimisedPage}
         /> :
-        <ProductBlock
+        <CampaignHeader
           countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
+          promotionCopy={sanitisedPromoCopy}
+          minimisedPage={minimisedPage}
         />
       }
+      <section css={minimisedPage ? hideOnMobile : ''}>
+        {countryGroupId === AUDCountries ?
+          <ProductBlockAus
+            countryGroupId={countryGroupId}
+            accordionOpen={accordionOpen}
+          /> :
+          <ProductBlock
+            countryGroupId={countryGroupId}
+            accordionOpen={accordionOpen}
+          />
+      }
+      </section>
+
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
-          <Prices orderIsAGift={orderIsAGift} />
+          <Prices orderIsAGift={orderIsAGift} minimisedPage={minimisedPage} />
         </CentredContainer>
       </FullWidthContainer>
       <FullWidthContainer theme="white">
