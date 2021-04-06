@@ -184,7 +184,7 @@ object Fixtures {
       autoRenew = false,
       initialTerm = 3,
       initialTermPeriodType = Month,
-      redemptionCode = Some(Left(GeneratedGiftCode("gd03-asdfghjq").get)),
+      redemptionCode = Some("gd03-asdfghjq"),
       giftNotificationEmailDate = Some(new LocalDate(2020, 12, 25)),
     )
   )

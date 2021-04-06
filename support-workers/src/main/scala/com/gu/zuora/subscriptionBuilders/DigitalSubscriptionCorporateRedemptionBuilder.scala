@@ -40,7 +40,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
         EitherT(codeValidator.getStatus(redemptionCode).map {
           case ValidCorporateCode(corporateId) =>
             Right(subscriptionData.subscription.copy(
-              redemptionCode = Some(Right(redemptionCode)),
+              redemptionCode = Some(redemptionCode.value),
               corporateAccountId = Some(corporateId.corporateIdString),
               readerType = ReaderType.Corporate
             ))

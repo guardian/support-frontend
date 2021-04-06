@@ -178,7 +178,7 @@ case class Subscription(
   termType: String = "TERMED",
   readerType: ReaderType = ReaderType.Direct,
   promoCode: Option[PromoCode] = None,
-  redemptionCode: Option[Either[GeneratedGiftCode, RedemptionCode]] = None,
+  redemptionCode: Option[RawRedemptionCode] = None,
   corporateAccountId: Option[String] = None,
   giftNotificationEmailDate: Option[LocalDate] = None,
 )

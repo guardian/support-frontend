@@ -42,7 +42,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           termType = "TERMED",
           readerType = ReaderType.Corporate,
           promoCode = None,
-          redemptionCode = Some(Right(RedemptionCode(testCode).toOption.get)),
+          redemptionCode = Some(testCode),
           corporateAccountId = Some("1")
         )
       )
@@ -70,19 +70,18 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   }
 
   "SubscriptionData for a 3 monthly gift subscription purchase" should "be correct" in {
-    threeMonthGiftPurchase.subscriptionData.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f8778bf8f60177915b477714aa"), List(), List()))
-      import threeMonthGiftPurchase.subscriptionData.subscription._
-      autoRenew shouldBe false
-      contractAcceptanceDate shouldBe saleDate
-      readerType shouldBe Gift
-      redemptionCode.isDefined shouldBe true
-      redemptionCode.get.left.toOption.get.value.substring(0, 4) shouldBe "gd03"
-      initialTerm shouldBe GiftCodeValidator.expirationTimeInMonths + 1
-      initialTermPeriodType shouldBe Month
-      promoCode shouldBe None
-      corporateAccountId shouldBe None
-      giftNotificationEmailDate shouldBe Some(new LocalDate(2020, 12, 1))
-    }
+    threeMonthGiftPurchase._1.subscriptionData.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f8778bf8f60177915b477714aa"), List(), List()))
+    import threeMonthGiftPurchase._1.subscriptionData.subscription._
+    autoRenew shouldBe false
+    contractAcceptanceDate shouldBe saleDate
+    readerType shouldBe Gift
+    threeMonthGiftPurchase._2.value.substring(0, 4) shouldBe "gd03"
+    initialTerm shouldBe GiftCodeValidator.expirationTimeInMonths + 1
+    initialTermPeriodType shouldBe Month
+    promoCode shouldBe None
+    corporateAccountId shouldBe None
+    giftNotificationEmailDate shouldBe Some(new LocalDate(2020, 12, 1))
+  }
 
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
@@ -138,14 +137,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       GBP,
     )
   )
-
-//  lazy val subscriptionPurchaseBuilder = new DigitalSubscriptionPurchaseBuilder(
-//    ZuoraDigitalPackConfig(14, 2),
-//    promotionService,
-//    () => saleDate,
-//    new GiftCodeGeneratorService,
-//    SANDBOX,
-//  )
 
   lazy val monthly =
     subscriptionDirectPurchaseBuilder.build(

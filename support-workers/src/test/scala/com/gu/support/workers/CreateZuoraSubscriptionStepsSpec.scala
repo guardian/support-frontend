@@ -55,14 +55,14 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       // should not do a preview against zuora for corp/free subs
       override def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] = ???
       override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] = {
-        val maybeRedemptionCode = subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode.map(_.map(_.value))
+        val maybeRedemptionCode = subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode
         val paymentType = subscribeRequest.subscribes.head.paymentMethod.isDefined
         val autoPay = subscribeRequest.subscribes.head.account.autoPay
         val readerType = subscribeRequest.subscribes.head.subscriptionData.subscription.readerType
         val ratePlan = subscribeRequest.subscribes.head.subscriptionData.ratePlanData.head.ratePlan.productRatePlanId
         val actual = (maybeRedemptionCode, paymentType, autoPay, readerType, ratePlan)
         actual match {
-          case (Some(Right(`testCode`)), false, false, ReaderType.Corporate, "2c92c0f971c65dfe0171c6c1f86e603c") =>
+          case (Some(`testCode`), false, false, ReaderType.Corporate, "2c92c0f971c65dfe0171c6c1f86e603c") =>
             Future.successful(List(SubscribeResponseAccount("accountcorp", "subcorp", 135.67f, "ididcorp", 246.67f, "acidcorp", true)))
           case _ => Future.failed(new Throwable(s"subscribe request: $actual"))
         }

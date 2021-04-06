@@ -24,19 +24,19 @@ class ZuoraDigitalSubscriptionGiftPurchaseHandler(
 
   def subscribe(state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState): Future[SendThankYouEmailState] =
     for {
-      subscribeItem <- Future.fromTry(digitalSubscriptionGiftPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
+      subscriptionBuildResult <- Future.fromTry(digitalSubscriptionGiftPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
+      (subscribeItem, giftCode) = subscriptionBuildResult
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield {
-      val giftCode = subscribeItem.subscriptionData.subscription.redemptionCode.flatMap(_.left.toOption)
       val lastRedemptionDate = (() => now().toLocalDate) ().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
       SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
         user,
         SfContactId(state.salesforceContacts.giftRecipient.get.Id),
         state.product,
         state.giftRecipient,
-        giftCode.get,
+        giftCode,
         lastRedemptionDate,
         state.paymentMethod,
         paymentSchedule,

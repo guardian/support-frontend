@@ -3,6 +3,7 @@ package com.gu.zuora.subscriptionBuilders
 import com.gu.i18n.Currency
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.redemptions.RedemptionCode
+import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.workers.{Address, GeneratedGiftCode, PaymentMethod, SalesforceContactRecord, User}
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.SubscribeItemBuilder.buildContactDetails
@@ -57,7 +58,7 @@ class SubscribeItemBuilder(
     autoRenew: Boolean = true,
     initialTerm: Int = 12,
     initialTermPeriodType: PeriodType = Month,
-    redemptionCode: Option[Either[GeneratedGiftCode, RedemptionCode]] = None,
+    redemptionCode: Option[RawRedemptionCode] = None,
     giftNotificationEmailDate: Option[LocalDate] = None,
   ): SubscriptionData =
     SubscriptionData(

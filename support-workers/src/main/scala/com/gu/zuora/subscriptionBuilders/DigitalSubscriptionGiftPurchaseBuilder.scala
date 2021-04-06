@@ -4,6 +4,7 @@ import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
+import com.gu.support.workers.GeneratedGiftCode
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
 import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState
 import com.gu.support.zuora.api._
@@ -20,13 +21,15 @@ class DigitalSubscriptionGiftPurchaseBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState)(implicit ec: ExecutionContext): Either[PromoError, SubscribeItem] = {
+  def build(
+    state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState
+  )(implicit ec: ExecutionContext): Either[PromoError, (SubscribeItem, GeneratedGiftCode)] = {
 
     import com.gu.WithLoggingSugar._
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(state.product, environment), state.product.describe)
 
-    val giftCode = giftCodeGeneratorService.generateCode(state.product.billingPeriod)
+    val giftCode: GeneratedGiftCode = giftCodeGeneratorService.generateCode(state.product.billingPeriod)
       .withLogging("Generated code for Digital Subscription gift")
 
     val todaysDate = today()
@@ -40,14 +43,15 @@ class DigitalSubscriptionGiftPurchaseBuilder(
       autoRenew = false,
       initialTerm = GiftCodeValidator.expirationTimeInMonths + 1,
       initialTermPeriodType = Month,
-      redemptionCode = Some(giftCode).map(Left.apply),
+      redemptionCode = Some(giftCode.value),
       giftNotificationEmailDate = Some(state.giftRecipient.deliveryDate),
     )
 
     applyPromoCodeIfPresent(
       promotionService, state.promoCode, state.billingCountry, productRatePlanId, subscriptionData
     ).map { subscriptionData =>
-      subscribeItemBuilder.build(subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None)
+      val item = subscribeItemBuilder.build(subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None)
+      (item, giftCode)
     }
 
   }
