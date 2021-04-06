@@ -33,10 +33,9 @@ object S3Service {
     progressListener.future
   }
 
-  def streamFromS3(stage: Stage, filename: String) = {
-    val fullObject = s3Client.getObject(new GetObjectRequest(bucketName(stage), filename))
-    fullObject.getObjectContent
-  }
+  def streamFromS3(stage: Stage, filename: String) =
+    s3Client.getObject(new GetObjectRequest(bucketName(stage), filename))
+
 }
 
 class TransferProgressListener(filename: String) extends ProgressListener{

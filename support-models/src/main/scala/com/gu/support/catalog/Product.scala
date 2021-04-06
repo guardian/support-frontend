@@ -68,8 +68,8 @@ case object Contribution extends Product {
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[Contribution.type]]] =
     Map(
       PROD -> List(
-        ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions, "Monthly Contribution"),
-        ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions, "Annual Contribution"),
+        ProductRatePlan("2c92a0fc5aacfadd015ad24db4ff5e97", Monthly, NoFulfilmentOptions, NoProductOptions, "Monthly Contribution"),
+        ProductRatePlan("2c92a0fc5e1dc084015e37f58c200eea", Annual, NoFulfilmentOptions, NoProductOptions, "Annual Contribution"),
       ),
       UAT -> List(
         ProductRatePlan("2c92c0f85ab269be015acd9d014549b7", Monthly, NoFulfilmentOptions, NoProductOptions, "Monthly Contribution"),

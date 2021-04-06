@@ -32,8 +32,7 @@ object QueryZuoraLambda extends StrictLogging {
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.postQuery(queryType)
     } yield {
-      val fullOrIncremental = if (result.batches.headOption.exists(_.full)) "full" else "incremental"
-      logger.info(s"Successfully submitted query with jobId ${result.id}, results will be $fullOrIncremental")
+      logger.info(s"Successfully submitted query with jobId ${result.id}, results will be ${queryType.value}")
       FetchResultsState(result.id, attemptedQueryTime)
     }
   }
