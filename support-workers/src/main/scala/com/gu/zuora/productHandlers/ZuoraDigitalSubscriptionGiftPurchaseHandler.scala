@@ -26,8 +26,8 @@ class ZuoraDigitalSubscriptionGiftPurchaseHandler(
     for {
       subscribeItem <- Future.fromTry(digitalSubscriptionGiftPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
-      (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(subscribeItem, state.product.billingPeriod)
-        .withEventualLogging("update redemption code")
+      paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
+      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield {
       val giftCode = subscribeItem.subscriptionData.subscription.redemptionCode.flatMap(_.left.toOption)
       val lastRedemptionDate = (() => now().toLocalDate) ().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)

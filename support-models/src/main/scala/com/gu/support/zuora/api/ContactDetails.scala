@@ -4,7 +4,6 @@ import com.gu.i18n.Country
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.JsonHelpers.JsonObjectExtensions
-import com.gu.support.workers.Address
 import io.circe.{Decoder, Encoder}
 
 object ContactDetails {
@@ -17,7 +16,6 @@ object ContactDetails {
   implicit val encoder: Encoder[ContactDetails] = capitalizingEncoder[ContactDetails].mapJsonObject(
     _.renameField(classMemberName, customFieldName)
   )
-
 }
 
 case class ContactDetails(

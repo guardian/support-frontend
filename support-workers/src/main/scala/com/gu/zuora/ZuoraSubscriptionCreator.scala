@@ -20,15 +20,12 @@ class ZuoraSubscriptionCreator(
   requestId: UUID,
 ) {
 
-  def ensureSubscriptionCreatedWithPreview(
+  def preview(
     subscribeItem: SubscribeItem,
     billingPeriod: BillingPeriod,
-  ): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber, PaymentSchedule)] =
-    for {
-      paymentSchedule <- PreviewPaymentSchedule.preview(subscribeItem, billingPeriod, zuoraService, checkSingleResponse)
-        .withEventualLogging("PreviewPaymentSchedule")
-      (account, sub) <- ensureSubscriptionCreated(subscribeItem)
-    } yield (account, sub, paymentSchedule)
+  ): Future[PaymentSchedule] =
+    PreviewPaymentSchedule.preview(subscribeItem, billingPeriod, zuoraService, checkSingleResponse)
+      .withEventualLogging("PreviewPaymentSchedule")
 
   def ensureSubscriptionCreated(subscribeItem: SubscribeItem): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber)] =
     for {

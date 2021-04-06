@@ -22,7 +22,8 @@ class ZuoraPaperHandler(
     for {
       subscribeItem <- Future.fromTry(paperSubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
-      (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(subscribeItem, state.product.billingPeriod)
+      paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
+      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield SendThankYouEmailPaperState(
       state.user,
       state.product,

@@ -20,7 +20,8 @@ class ZuoraGuardianWeeklyHandler(
     for {
       subscribeItem <- Future.fromTry(guardianWeeklySubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
-      (account, sub, paymentSchedule) <- zuoraSubscriptionCreator.ensureSubscriptionCreatedWithPreview(subscribeItem, state.product.billingPeriod)
+      paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
+      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield SendThankYouEmailGuardianWeeklyState(
       state.user,
       state.product,
