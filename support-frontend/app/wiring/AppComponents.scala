@@ -31,7 +31,8 @@ trait AppComponents extends PlayComponents
     Some(router),
     assetsResolver,
     allSettingsProvider,
-    appConfig.stage
+    appConfig.stage,
+    wsClient
   )
   override lazy val httpErrorHandler = customHandler
   override lazy val errorController = new ErrorController(actionRefiners, customHandler)

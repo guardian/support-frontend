@@ -3,12 +3,15 @@ package lib
 import actions.CacheControl
 import com.typesafe.scalalogging.LazyLogging
 import com.gu.monitoring.SafeLogger
+import play.api.http.ContentTypes._
 import play.api.PlayException.ExceptionSource
 import play.api.{Configuration, Environment, UsefulException}
 import play.api.http.DefaultHttpErrorHandler
 import play.api.routing.Router
 import play.api.mvc.{RequestHeader, Result}
 import play.api.mvc.Results.{InternalServerError, NotFound}
+import play.api.libs.ws._
+import play.api.libs.json._
 import assets.{AssetsResolver, RefPath}
 import views.html.main
 import play.core.SourceMapper
@@ -19,6 +22,8 @@ import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
+import scala.util.Success
+import scala.util.Failure
 
 class CustomHttpErrorHandler(
     env: Environment,
@@ -27,7 +32,8 @@ class CustomHttpErrorHandler(
     router: => Option[Router],
     val assets: AssetsResolver,
     settingsProvider: AllSettingsProvider,
-    stage: Stage
+    stage: Stage,
+    ws: WSClient
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging with SettingsSurrogateKeySyntax {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
@@ -36,16 +42,22 @@ class CustomHttpErrorHandler(
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] = {
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
     val fontLoader = elementForStage(RefPath("fontLoader.js"))
-    Future.successful(
-      NotFound(main(
-        "Error 404",
-        EmptyDiv("error-404-page"),
-        Left(RefPath("error404Page.js")),
-        Left(RefPath("error404Page.css")),
-        fontLoader
-      )()(assets, request, settingsProvider.getAllSettings()))
-        .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
-        .withSettingsSurrogateKey
+    val url = "http://localhost:3000/error"
+
+    val data = Json.obj(
+      "page" -> Json.obj(
+        "errorCode" -> "404",
+        "subHeading" -> "The page you requested could not be found",
+        "copy" -> "Try again perhaps?"
+      )
+    )
+    val futureResponse: Future[WSResponse] = ws.url(url).post(data)
+
+    futureResponse.map(
+      errorPage => NotFound(errorPage.body)
+          .as(HTML)
+          .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
+          .withSettingsSurrogateKey
     )
   }
 
