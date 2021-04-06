@@ -1,12 +1,19 @@
-const html = ({ body }: { body: string }) => `
+type HtmlProps = {
+    body: string;
+    jsPath?: string;
+};
+
+const html = ({ body, jsPath }: HtmlProps): string => `
   <!DOCTYPE html>
-  <html>
+  <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body style="margin:0">
+    <body>
       <div id="app">${body}</div>
     </body>
-    <script src="js/client.js" defer></script>
+    ${jsPath ? `<script src="${jsPath}" defer></script>` : ''}
   </html>
 `;
 

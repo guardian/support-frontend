@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@emotion/babel-preset-css-prop": "^11.2.0",
     "@types/express": "^4.17.11",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
@@ -30,10 +31,14 @@
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
+    "@emotion/core": "^11.0.0",
+    "@emotion/react": "^11.1.2",
+    "@guardian/src-foundations": "^3.5.0",
+    "@guardian/src-layout": "^3.5.0",
     "emotion": "^11.0.0",
     "emotion-server": "^11.0.0",
     "express": "^4.17.1",
-    "react": "^17.0.2",
+    "react": "^17.0.1",
     "react-dom": "^17.0.2"
   }
 }
