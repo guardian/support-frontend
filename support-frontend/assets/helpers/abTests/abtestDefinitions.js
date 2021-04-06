@@ -142,4 +142,24 @@ export const tests: Tests = {
     targetPage: allThankYouPages,
     seed: 17,
   },
+  priceCardsInHeroTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: digiSubLandingPages,
+    seed: 3,
+  },
 };

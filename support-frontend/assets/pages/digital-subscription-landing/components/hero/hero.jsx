@@ -10,7 +10,7 @@ import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { type CountryGroupId, AUDCountries } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-
+import Prices from 'pages/digital-subscription-landing/components/prices';
 import GridImage from 'components/gridImage/gridImage';
 import {
   wrapper,
@@ -32,6 +32,7 @@ import {
 type PropTypes = {
   promotionCopy: PromotionCopy,
   countryGroupId: CountryGroupId,
+  showPriceCards: boolean,
 }
 
 const HeroCopy = () => (
@@ -61,7 +62,7 @@ const HeroCopyAus = () => (
     </p>
   </span>);
 
-function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
+function CampaignHeader({ promotionCopy, countryGroupId, showPriceCards }: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
@@ -74,37 +75,44 @@ function CampaignHeader({ promotionCopy, countryGroupId }: PropTypes) {
   const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
   const copy = promoCopy || defaultCopy;
 
+  const textSectionDiv = showPriceCards ? (
+    <div css={textSection}>
+      <Prices orderIsAGift={false} isInHero />
+    </div>)
+    : (
+      <div css={textSection}>
+        <h2 css={heroHeading}>
+          {title}
+        </h2>
+        {copy}
+        <div css={countryGroupId !== AUDCountries ? spaceAfter : {}}>
+          <ThemeProvider theme={buttonBrand}>
+            <Button
+              priority="tertiary"
+              size="default"
+              icon={<SvgArrowDownStraight />}
+              iconSide="right"
+              onClick={() => {
+              sendTrackingEventsOnClick({
+                id: 'options_cta_click',
+                product: 'DigitalPack',
+                componentType: 'ACQUISITIONS_BUTTON',
+              })();
+
+              window.scrollTo(0, 1500);
+            }}
+            >
+            See pricing options
+            </Button>
+          </ThemeProvider>
+        </div>
+      </div>);
+
   return (
     <div css={wrapper}>
       <h1 css={pageTitle}>Digital subscription</h1>
       <div css={featureContainer}>
-        <div css={textSection}>
-          <h2 css={heroHeading}>
-            {title}
-          </h2>
-          {copy}
-          <div css={countryGroupId !== AUDCountries ? spaceAfter : {}}>
-            <ThemeProvider theme={buttonBrand}>
-              <Button
-                priority="tertiary"
-                size="default"
-                icon={<SvgArrowDownStraight />}
-                iconSide="right"
-                onClick={() => {
-                  sendTrackingEventsOnClick({
-                    id: 'options_cta_click',
-                    product: 'DigitalPack',
-                    componentType: 'ACQUISITIONS_BUTTON',
-                  })();
-
-                  window.scrollTo(0, 1500);
-                }}
-              >
-            See pricing options
-              </Button>
-            </ThemeProvider>
-          </div>
-        </div>
+        {textSectionDiv}
         <div css={packShot}>
           <GridImage
             gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}

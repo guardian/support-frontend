@@ -50,6 +50,7 @@ const { orderIsAGift, productPrices, promotionCopy } = page;
 const { abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 const accordionOpen = abParticipations.accordionTest === 'accordionOpen';
+const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -106,7 +107,11 @@ function LandingPage() {
     >
       {orderIsAGift ?
         <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
-        <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
+        <CampaignHeader
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+          showPriceCards={showPriceCardsInHero}
+        />
       }
       {countryGroupId === AUDCountries ?
         <ProductBlockAus

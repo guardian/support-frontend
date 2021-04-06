@@ -9,9 +9,14 @@ import FlexContainer from 'components/containers/flexContainer';
 import PaymentSelection
   from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
-const pricesSection = css`
+const defaultPricesSection = css`
   padding: 0 ${space[3]}px ${space[12]}px;
 `;
+
+const headerPricesSection = css`
+  padding: 0 ${space[3]}px ${space[3]}px;
+`;
+
 const priceBoxes = css`
   margin-top: ${space[6]}px;
   justify-content: flex-start;
@@ -42,11 +47,16 @@ const ctaCopy = {
   },
 };
 
-function Prices({ orderIsAGift }: { orderIsAGift: boolean }) {
+function Prices({ orderIsAGift, isInHero }: { orderIsAGift: boolean, isInHero?: boolean}) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
+  const sectionCss = isInHero ? headerPricesSection : defaultPricesSection;
+  const titleCopy = isInHero ?
+    'Become a digital subscriber today and help to fund our vital work'
+    :
+    copy.title;
   return (
-    <section css={pricesSection} id="subscribe">
-      <h2 css={pricesHeadline}>{copy.title}</h2>
+    <section css={sectionCss} id="subscribe">
+      <h2 css={pricesHeadline}>{titleCopy}</h2>
       <p css={pricesSubHeadline}>{copy.paragraph}</p>
       <FlexContainer cssOverrides={priceBoxes}>
         <PaymentSelection />
@@ -54,5 +64,9 @@ function Prices({ orderIsAGift }: { orderIsAGift: boolean }) {
     </section>
   );
 }
+
+Prices.defaultProps = {
+  isInHero: false,
+};
 
 export default Prices;
