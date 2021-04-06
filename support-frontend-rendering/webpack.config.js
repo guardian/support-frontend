@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = function (env) {
     // default to the server configuration
     const base = {
-        entry: './src/server/index.ts',
+        entry: './src/server/index.tsx',
         output: {
             filename: 'js/server.js',
             // path needs to be an ABSOLUTE file path

@@ -6,7 +6,8 @@
   "scripts": {
     "build-server": "webpack --env platform=server",
     "build-client": "webpack --env platform=web",
-    "dev": "ts-node-dev --transpile-only src/server/index.ts",
+    "dev": "ts-node-dev --transpile-only src/server/index.tsx",
+    "watch": "webpack --env platform=server --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/js/server.js"
   },
@@ -33,9 +34,14 @@
   "dependencies": {
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.1.2",
+    "@emotion/server": "^11.0.0",
+    "@guardian/src-footer": "^3.5.0",
     "@guardian/src-foundations": "^3.5.0",
+    "@guardian/src-icons": "^3.5.0",
     "@guardian/src-layout": "^3.5.0",
+    "babel-loader": "^8.2.2",
     "emotion": "^11.0.0",
+    "emotion-normalize": "^11.0.1",
     "emotion-server": "^11.0.0",
     "express": "^4.17.1",
     "react": "^17.0.1",

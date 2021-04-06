@@ -11,6 +11,7 @@
         "typeRoots": ["./src/@types", "./node_modules/@types"],
         "rootDirs": ["src", "stories"],
         "baseUrl": "src",
+        "types": ["@emotion/react/types/css-prop"]
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "src/**/*.test.ts", "src/factories/*", "src/tests/banners/*.tests.ts"]

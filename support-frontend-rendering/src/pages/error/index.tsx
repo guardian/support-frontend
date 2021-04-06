@@ -1,4 +1,9 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/react';
+import { Container } from '@guardian/src-layout';
+import { Footer } from '@guardian/src-footer';
+import { css } from '@emotion/react';
+import { brand } from '@guardian/src-foundations';
 
 export type ErrorProps = {
     errorCode: string;
@@ -11,11 +16,23 @@ export type ErrorProps = {
 
 export default function ErrorPage({ errorCode, subHeading, copy }: ErrorProps): React.ReactElement {
     return (
-        <section>
-            <h1>Error {errorCode}</h1>
-            <h2>{subHeading}</h2>
-            <p>{copy}</p>
-        </section>
+        <div>
+            <Container>
+                <h1>Error {errorCode}</h1>
+                <h2>{subHeading}</h2>
+                <p>{copy}</p>
+            </Container>
+
+            <section
+                css={css`
+                    background-color: ${brand[400]};
+                `}
+            >
+                <Container>
+                    <Footer showBackToTop />
+                </Container>
+            </section>
+        </div>
     );
 }
 
