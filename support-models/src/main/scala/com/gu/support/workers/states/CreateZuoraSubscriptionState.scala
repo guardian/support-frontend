@@ -15,13 +15,13 @@ import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, W
 
 case class CreateZuoraSubscriptionWrapperState(
   productSpecificState: CreateZuoraSubscriptionState,
-  firstDeliveryDate: Option[LocalDate],
-  promoCode: Option[PromoCode],
   requestId: UUID,
+  user: User,
   product: ProductType,
   analyticsInfo: AnalyticsInfo,
-  user: User,
-  acquisitionData: Option[AcquisitionData],
+  firstDeliveryDate: Option[LocalDate],
+  promoCode: Option[PromoCode],
+  acquisitionData: Option[AcquisitionData]
 ) extends FailureHandlerState
 
 object CreateZuoraSubscriptionWrapperState {

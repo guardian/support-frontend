@@ -31,7 +31,7 @@ class PaperSubscriptionBuilder(
     )
 
     applyPromoCodeIfPresent(promotionService, promoCode, user.billingAddress.country, productRatePlanId, subscriptionData).map { subscriptionData =>
-      val soldToContact = ContactDetails.fromAddress(
+      val soldToContact = SubscribeItemBuilder.buildContactDetails(
         Some(user.primaryEmailAddress),
         user.firstName,
         user.lastName,

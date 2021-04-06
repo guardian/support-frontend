@@ -3,8 +3,9 @@ package com.gu.zuora.subscriptionBuilders
 import com.gu.i18n.Currency
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.redemptions.RedemptionCode
-import com.gu.support.workers.{GeneratedGiftCode, PaymentMethod, SalesforceContactRecord, User}
+import com.gu.support.workers.{Address, GeneratedGiftCode, PaymentMethod, SalesforceContactRecord, User}
 import com.gu.support.zuora.api._
+import com.gu.zuora.subscriptionBuilders.SubscribeItemBuilder.buildContactDetails
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import java.util.UUID
@@ -23,23 +24,27 @@ class SubscribeItemBuilder(
   ): SubscribeItem = {
     val billingEnabled = maybePaymentMethod.isDefined
     SubscribeItem(
-      account = Account(
-        name = salesForceContact.AccountId, //We store the Salesforce Account id in the name field
-        currency = currency,
-        crmId = salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
-        sfContactId__c = salesForceContact.Id,
-        identityId__c = user.id,
-        paymentGateway = maybePaymentMethod.map(_.paymentGateway),
-        createdRequestId__c = requestId.toString,
-        autoPay = maybePaymentMethod.isDefined
-      ),
-      billToContact = ContactDetails.fromAddress(
+      account = buildAccount(salesForceContact, maybePaymentMethod),
+      billToContact = buildContactDetails(
         Some(user.primaryEmailAddress), user.firstName, user.lastName, user.billingAddress
       ),
       soldToContact = soldToContact,
       paymentMethod = maybePaymentMethod,
       subscriptionData = subscriptionData,
       subscribeOptions = SubscribeOptions(generateInvoice = billingEnabled, processPayments = billingEnabled)
+    )
+  }
+
+  private def buildAccount(salesForceContact: SalesforceContactRecord, maybePaymentMethod: Option[PaymentMethod]) = {
+    Account(
+      name = salesForceContact.AccountId, //We store the Salesforce Account id in the name field
+      currency = currency,
+      crmId = salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
+      sfContactId__c = salesForceContact.Id,
+      identityId__c = user.id,
+      paymentGateway = maybePaymentMethod.map(_.paymentGateway),
+      createdRequestId__c = requestId.toString,
+      autoPay = maybePaymentMethod.isDefined
     )
   }
 
@@ -76,5 +81,28 @@ class SubscribeItemBuilder(
         giftNotificationEmailDate = giftNotificationEmailDate,
       )
     )
+
+}
+
+object SubscribeItemBuilder {
+
+  def buildContactDetails(
+    email: Option[String],
+    firstName: String,
+    lastName: String,
+    address: Address,
+    maybeDeliveryInstructions: Option[String] = None
+  ): ContactDetails = new ContactDetails(
+    firstName = firstName,
+    lastName = lastName,
+    workEmail = email,
+    address1 = address.lineOne,
+    address2 = address.lineTwo,
+    city = address.city,
+    postalCode = address.postCode,
+    country = address.country,
+    state = address.state,
+    deliveryInstructions = maybeDeliveryInstructions
+  )
 
 }

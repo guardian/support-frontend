@@ -102,12 +102,12 @@ object StatesTestData {
       promoCode = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid")
     ),
-    None,
-    None,
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+    User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(Currency.GBP, Monthly),
     AnalyticsInfo(false, StripeApplePay),
-    User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+    None,
+    None,
     None
   )
 

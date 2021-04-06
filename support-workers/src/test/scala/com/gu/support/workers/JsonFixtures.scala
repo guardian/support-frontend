@@ -441,12 +441,12 @@ object JsonFixtures {
         stripePaymentMethodObj,
         salesforceContact
       ),
-      None,
-      None,
       UUID.randomUUID(),
+      user(),
       Contribution(5, GBP, billingPeriod),
       AnalyticsInfo(false, Stripe),
-      user(),
+      None,
+      None,
       None
     ).asJson.spaces2
   val createDigiPackZuoraSubscriptionJson =
@@ -458,12 +458,12 @@ object JsonFixtures {
         None,
         salesforceContact
       ),
-      None,
-      None,
       UUID.randomUUID(),
+      user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(false, Stripe),
-      user(),
+      None,
+      None,
       None
     ).asJson.spaces2
 
@@ -474,12 +474,12 @@ object JsonFixtures {
         RedemptionData(RedemptionCode("it-mutable123").toOption.get),
         salesforceContact
       ),
-      None,
-      None,
       UUID.randomUUID(),
+      user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(false, Stripe),
-      user(),
+      None,
+      None,
       None
     ).asJson.spaces2
 
@@ -499,12 +499,12 @@ object JsonFixtures {
         None,
         salesforceContacts
       ),
-      None,
-      None,
       requestId,
+      user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(false, Stripe),
-      user(),
+      None,
+      None,
       None
     ).asJson.spaces2
 
@@ -524,12 +524,12 @@ object JsonFixtures {
         Some("DJP8L27FY"),
         salesforceContact
       ),
-      None,
-      None,
       UUID.randomUUID(),
+      user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(false, Stripe),
-      user(),
+      None,
+      None,
       None
     ).asJson.spaces2
 
@@ -543,12 +543,12 @@ object JsonFixtures {
         None,
         salesforceContact
       ),
-      None,
-      None,
       UUID.randomUUID(),
+      userJsonWithDeliveryAddress,
       Paper(GBP, Monthly, HomeDelivery, Everyday),
       AnalyticsInfo(false, Stripe),
-      userJsonWithDeliveryAddress,
+      None,
+      None,
       None
     ).asJson.spaces2
 
@@ -563,12 +563,12 @@ object JsonFixtures {
         maybePromoCode,
         salesforceContacts
       ),
-      Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
-      maybePromoCode,
       UUID.randomUUID(),
+      userJsonWithDeliveryAddress,
       GuardianWeekly(GBP, billingPeriod, RestOfWorld),
       AnalyticsInfo(false, Stripe),
-      userJsonWithDeliveryAddress,
+      Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
+      maybePromoCode,
       None
     ).asJson.spaces2
 
@@ -588,12 +588,12 @@ object JsonFixtures {
         None,
         salesforceContacts
       ),
-      Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
-      None,
       UUID.randomUUID(),
+      userJsonWithDeliveryAddress,
       GuardianWeekly(GBP, Quarterly, RestOfWorld),
       AnalyticsInfo(false, Stripe),
-      userJsonWithDeliveryAddress,
+      Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
+      None,
       None
     ).asJson.spaces2
 
@@ -889,12 +889,12 @@ object JsonFixtures {
         Some("DJRHYMDS8"),
         salesforceContact
       ),
-      None,
-      Some("DJRHYMDS8"),
       UUID.randomUUID(),
+      user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(false, Stripe),
-      user(),
+      None,
+      Some("DJRHYMDS8"),
       None
     ).asJson.spaces2
 

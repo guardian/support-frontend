@@ -18,25 +18,6 @@ object ContactDetails {
     _.renameField(classMemberName, customFieldName)
   )
 
-  def fromAddress(
-    email: Option[String],
-    firstName: String,
-    lastName: String,
-    address: Address,
-    maybeDeliveryInstructions: Option[String] = None
-  ): ContactDetails = new ContactDetails(
-    firstName = firstName,
-    lastName = lastName,
-    workEmail = email,
-    address1 = address.lineOne,
-    address2 = address.lineTwo,
-    city = address.city,
-    postalCode = address.postCode,
-    country = address.country,
-    state = address.state,
-    deliveryInstructions = maybeDeliveryInstructions
-  )
-
 }
 
 case class ContactDetails(

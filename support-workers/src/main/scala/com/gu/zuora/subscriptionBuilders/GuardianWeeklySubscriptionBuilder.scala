@@ -39,9 +39,9 @@ class GuardianWeeklySubscriptionBuilder(
     ).map { subscriptionData =>
       val soldToContact = state.giftRecipient match {
         case None =>
-          ContactDetails.fromAddress(Some(state.user.primaryEmailAddress), state.user.firstName, state.user.lastName, state.user.deliveryAddress.get, None)
+          SubscribeItemBuilder.buildContactDetails(Some(state.user.primaryEmailAddress), state.user.firstName, state.user.lastName, state.user.deliveryAddress.get, None)
         case Some(gR) =>
-          ContactDetails.fromAddress(gR.email, gR.firstName, gR.lastName, state.user.deliveryAddress.get, None)
+          SubscribeItemBuilder.buildContactDetails(gR.email, gR.firstName, gR.lastName, state.user.deliveryAddress.get, None)
       }
       subscribeItemBuilder.build(subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), Some(soldToContact))
     }

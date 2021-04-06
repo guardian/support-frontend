@@ -48,12 +48,12 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           paymentMethod = paymentMethod,
           salesForceContact = sfContact,
         ),
-        None,
-        None,
         state.requestId,
+        state.user,
         contribution,
         state.analyticsInfo,
-        state.user,
+        None,
+        None,
         acquisitionData = state.acquisitionData
       ),
       requestInfo
