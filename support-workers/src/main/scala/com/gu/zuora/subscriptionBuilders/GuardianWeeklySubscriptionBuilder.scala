@@ -1,6 +1,5 @@
 package com.gu.zuora.subscriptionBuilders
 
-import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
@@ -20,6 +19,8 @@ class GuardianWeeklySubscriptionBuilder(
 
   def build(state: CreateZuoraSubscriptionGuardianWeeklyState): Either[PromoError, SubscribeItem] = {
 
+    val contractEffectiveDate = now()
+
     val readerType = if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct
 
     val recurringProductRatePlanId = validateRatePlan(weeklyRatePlan(state.product, environment, readerType), state.product.describe)
@@ -28,7 +29,20 @@ class GuardianWeeklySubscriptionBuilder(
       weeklyIntroductoryRatePlan(state.product, environment).map(_.id).getOrElse(recurringProductRatePlanId)
     } else recurringProductRatePlanId
 
-    val subscriptionData = buildSubscriptionData(state, recurringProductRatePlanId)
+    val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
+      (initialTermInDays(contractEffectiveDate, state.firstDeliveryDate, state.product.billingPeriod.monthsInPeriod), false, Day)
+    else
+      (12, true, Month)
+
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
+      recurringProductRatePlanId,
+      contractAcceptanceDate = state.firstDeliveryDate,
+      contractEffectiveDate = contractEffectiveDate,
+      readerType = readerType,
+      autoRenew = autoRenew,
+      initialTerm = initialTerm,
+      initialTermPeriodType = initialTermPeriodType
+    )
 
     applyPromoCodeIfPresent(
       promotionService,
@@ -49,27 +63,6 @@ class GuardianWeeklySubscriptionBuilder(
 
   private[this] def isIntroductoryPromotion(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode]) =
     maybePromoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix) && billingPeriod == SixWeekly
-
-  private def buildSubscriptionData(state: CreateZuoraSubscriptionGuardianWeeklyState, recurringProductRatePlanId: ProductRatePlanId) = {
-    val contractEffectiveDate = now()
-
-    val readerType = if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct
-
-    val (initialTerm, autoRenew, initialTermPeriodType) = if (readerType == ReaderType.Gift)
-      (initialTermInDays(contractEffectiveDate, state.firstDeliveryDate, state.product.billingPeriod.monthsInPeriod), false, Day)
-    else
-      (12, true, Month)
-
-    subscribeItemBuilder.buildProductSubscription(
-      recurringProductRatePlanId,
-      contractAcceptanceDate = state.firstDeliveryDate,
-      contractEffectiveDate = contractEffectiveDate,
-      readerType = readerType,
-      autoRenew = autoRenew,
-      initialTerm = initialTerm,
-      initialTermPeriodType = initialTermPeriodType
-    )
-  }
 
 }
 object GuardianWeeklySubscriptionBuilder {

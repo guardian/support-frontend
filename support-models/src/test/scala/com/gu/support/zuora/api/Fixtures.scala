@@ -2,7 +2,7 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, GeneratedGiftCode, PayPalReferenceTransaction, StripePaymentType}
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction, StripePaymentType}
 import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
