@@ -3,8 +3,13 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
+// Note: When setting up a test to run on the contributions thank you page
+// you should always target both the landing page *and* the thank you page.
+// This is to ensure the participation is picked up by ophan. The client side
+// navigation from landing page to thank you page *won't* register any new
+// participations.
+
 const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
-const allThankYouPages = '/thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
@@ -119,7 +124,7 @@ export const tests: Tests = {
     optimizeId: 'oeDqGqpqT4OLrAaMJjYz6A',
   },
 
-  thankyouPageMarketingConsentTest: {
+  thankyouPageMarketingConsentTestR2: {
     variants: [
       {
         id: 'control',
@@ -139,7 +144,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: allThankYouPages,
+    targetPage: allLandingPagesAndThankyouPages,
     seed: 17,
   },
 };
