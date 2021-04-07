@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+// $FlowIgnore - required for hooks
 import React, { useState } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 
@@ -10,12 +11,11 @@ import { SvgMinus, SvgPlus } from '@guardian/src-icons';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { clickedCss, wrapper } from './feedbackWidgetStyles';
 
-type PropTypes = {
-}
+// type PropTypes = {}
 
-function FeedbackWidget({  }: PropTypes) {
+function FeedbackWidget(/* { }: PropTypes */) {
 
-  const [clicked, setClicked] = useState({positive: false, negative: false});
+  const [clicked, setClicked] = useState({ positive: false, negative: false });
 
   return (
     <div css={wrapper}>
@@ -34,10 +34,9 @@ function FeedbackWidget({  }: PropTypes) {
               componentType: 'ACQUISITIONS_BUTTON',
             })();
 
-            setClicked({positive: true, negative: false});
+            setClicked({ positive: true, negative: false });
           }}
-        >
-        </Button>
+        />
       </ThemeProvider>
       <ThemeProvider theme={buttonBrand}>
         <Button
@@ -53,10 +52,9 @@ function FeedbackWidget({  }: PropTypes) {
               componentType: 'ACQUISITIONS_BUTTON',
             })();
 
-            setClicked({positive: false, negative: true});
+            setClicked({ positive: false, negative: true });
           }}
-        >
-        </Button>
+        />
       </ThemeProvider>
 
     </div>
