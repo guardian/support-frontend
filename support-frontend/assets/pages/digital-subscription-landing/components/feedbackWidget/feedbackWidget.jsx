@@ -87,12 +87,12 @@ function FeedbackWidget() {
       </header>
       {clicked.negative && (
         <section css={feedbackLink}>
-          <p>Your feedback is really helpful; please take two minutes to tell us how we can improve this page.</p>
+          <p>Your feedback is really helpful; answer our two short questions to help us improve this page.</p>
           <LinkButton
             size="small"
             href="https://www.surveymonkey.co.uk/r/63XM7CX"
           >
-            Take our survey
+            Tell us what you think
           </LinkButton>
         </section>
       )}
