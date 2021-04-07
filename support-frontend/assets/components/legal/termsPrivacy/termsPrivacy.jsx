@@ -58,10 +58,10 @@ function TermsPrivacy(props: PropTypes) {
       <div className="philanthropic-ask">
         <h4>Contribute another way</h4>
         <p>
-          To contribute by mail, please make your check payable to:<br/>
-          Guardian News<br/>
-          Church Street Station<br/>
-          PO Box 3403<br/>
+          To contribute by mail, please make your check payable to:<br />
+          Guardian News<br />
+          Church Street Station<br />
+          PO Box 3403<br />
           New York, NY 10008-3403.
         </p>
         <p>
