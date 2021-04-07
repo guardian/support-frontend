@@ -29,6 +29,7 @@ const htmlTemplate = ({ html, title, key, ids, css, pageData = '' }: HtmlProps):
         }
     </script>`
     }
+    <iframe id="gu-font-loader-iframe" style="display:none" src="https://www.theguardian.com/font-loader"></iframe>
     </html>
     `;
 // <script src="http://localhost:3000/js/client.js" defer></script>

@@ -4,7 +4,7 @@ import { from } from '@guardian/src-foundations/mq';
 
 type PropTypes = {
     cssOverrides?: SerializedStyles;
-    children: React.ReactChild;
+    children: React.ReactNode;
 };
 
 const flexContainer = css`

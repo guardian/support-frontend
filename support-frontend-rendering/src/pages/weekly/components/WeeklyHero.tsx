@@ -8,8 +8,8 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 
-import PageTitle from './page/pageTitle';
-import Hero from './page/hero';
+import PageTitle from '../../../components/page/pageTitle';
+import Hero from '../../../components/page/hero';
 
 const weeklyHeroCopy = css`
     padding: 0 ${space[3]}px ${space[3]}px;
@@ -17,6 +17,7 @@ const weeklyHeroCopy = css`
 
 const weeklyHeroTitle = css`
     ${headline.medium({ fontWeight: 'bold' })};
+    margin-top: 0;
     margin-bottom: ${space[3]}px;
 
     ${from.tablet} {
