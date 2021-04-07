@@ -17,7 +17,8 @@ export const wrapper = css`
   width: 100%;
 
   ${from.desktop} {
-    width: 100px;
+    width: 300px;
+    right: 0;
   }
 `;
 
