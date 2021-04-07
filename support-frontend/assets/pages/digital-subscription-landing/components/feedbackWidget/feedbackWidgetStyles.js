@@ -16,7 +16,7 @@ export const wrapper = css`
   bottom: 0;
   width: 100%;
 
-  ${from.desktop} {
+  ${from.tablet} {
     width: 300px;
     right: 0;
   }

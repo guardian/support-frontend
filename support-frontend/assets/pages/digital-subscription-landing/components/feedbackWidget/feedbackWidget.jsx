@@ -65,7 +65,7 @@ function FeedbackWidget(/* { }: PropTypes */) {
       </header>
       {clicked.negative && (
         <section css={feedbackLink}>
-          <p>Please click the button to give us feedback so we can improve this page.</p>
+          <p>Your feedback is really helpful; please take two minutes to tell us how we can improve this page.</p>
           <LinkButton
             size="small"
             href=""
