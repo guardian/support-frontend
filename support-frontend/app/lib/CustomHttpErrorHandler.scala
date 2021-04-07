@@ -48,7 +48,7 @@ class CustomHttpErrorHandler(
       "page" -> Json.obj(
         "errorCode" -> "404",
         "subHeading" -> "The page you requested could not be found",
-        "copy" -> "Try again perhaps?"
+        "copy" -> "You may have followed an outdated link, or have mistyped a URL. If you believe this to be an error, please <a href=\"mailto:contribution.support@theguardian.com\">report it</a>"
       )
     )
     val futureResponse: Future[WSResponse] = ws.url(url).post(data)

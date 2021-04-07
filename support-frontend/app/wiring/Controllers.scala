@@ -6,11 +6,12 @@ import com.gu.aws.AwsCloudWatchMetricSetup.setupWarningRequest
 import controllers.{CSSElementForStage, _}
 import lib.ErrorController
 import play.api.BuiltInComponentsFromContext
+import play.api.libs.ws.ahc.AhcWSComponents
 
 trait Controllers {
 
   // scalastyle:off
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth with Monitoring =>
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth with Monitoring with AhcWSComponents =>
   // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
@@ -112,7 +113,8 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-    fontLoader
+    fontLoader,
+    wsClient
   )
 
   lazy val digitalPackFormController = new DigitalSubscriptionFormController(
