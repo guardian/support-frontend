@@ -5,13 +5,12 @@
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { config, type ContributionAmounts, type ContributionType, getAmount } from 'helpers/contributions';
+import { config, type ContributionAmounts, type ContributionType } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
   currencies,
   spokenCurrencies,
-  detect,
 } from 'helpers/internationalisation/currency';
 import { amountIsValid } from 'helpers/formValidation';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -24,8 +23,6 @@ import { TextInput } from '@guardian/src-text-input';
 
 // ----- Types ----- //
 
-type BreakdownMode = "WEEKLY" | "DAILY" | "NONE";
-
 type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
@@ -37,19 +34,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  breakdownMode: BreakdownMode,
 |};
-
-const getBreakdownMode = (state: State): BreakdownMode => {
-  const variant = state.common.abParticipations.landingPagePriceBreakdownTest;
-  if (variant === 'control') {
-    return 'WEEKLY';
-  } else if (variant === 'daily') {
-    return 'DAILY';
-  }
-  return 'NONE';
-};
-
 
 const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
@@ -62,7 +47,6 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  breakdownMode: getBreakdownMode(state),
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -88,44 +72,6 @@ const renderEmptyAmount = (id: string) => (
   </li>
 );
 
-const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
-  if (amount < 1 && countryGroupId === 'GBPCountries') {
-    return `${(amount * 100).toFixed(0)}p`;
-  }
-  return `${currencyString}${(amount).toFixed(2)}`;
-};
-
-const getAmountBreakdown = (
-  breakdownMode: BreakdownMode,
-  contributionType: ContributionType,
-  countryGroupId: CountryGroupId,
-  selectedAmounts: SelectedAmounts,
-  otherAmounts: OtherAmounts,
-): string => {
-  const currencyStringPrefix = countryGroupId === 'International' ? 'US' : '';
-  const currencyString = currencyStringPrefix + currencies[detect(countryGroupId)].glyph;
-
-  const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
-
-  const breakdownIntervalsPerYear = breakdownMode === 'WEEKLY' ? 52.0 : 365.0;
-  let breakdownAmount: number;
-  if (contributionType === 'ANNUAL') {
-    breakdownAmount = amount / breakdownIntervalsPerYear;
-  } else if (contributionType === 'MONTHLY') {
-    breakdownAmount = (amount * 12) / breakdownIntervalsPerYear;
-  }
-
-  if ((amount && breakdownAmount)) {
-    return (`Contributing ${currencyString}${amount} works out as ${amountFormatted(
-      breakdownAmount,
-      currencyString,
-      countryGroupId,
-    )} ${breakdownMode === 'WEEKLY' ? 'each week' : 'a day'}`);
-  }
-
-  return '';
-};
-
 function withProps(props: PropTypes) {
   const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
@@ -139,9 +85,6 @@ function withProps(props: PropTypes) {
   const {
     checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
-
-  const showWeeklyBreakdown =
-    props.contributionType !== 'ONE_OFF' && props.breakdownMode !== 'NONE';
 
   const canShowOtherAmountErrorMessage =
     checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount;
@@ -183,18 +126,6 @@ function withProps(props: PropTypes) {
           />
         </div>
       }
-
-      {showWeeklyBreakdown ? (
-        <p className="amount-per-week-breakdown">
-          {getAmountBreakdown(
-            props.breakdownMode,
-            props.contributionType,
-            props.countryGroupId,
-            props.selectedAmounts,
-            props.otherAmounts,
-          )}
-        </p>
-      ) : null}
     </fieldset>
   );
 }
