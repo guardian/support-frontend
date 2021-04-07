@@ -13,9 +13,7 @@ import { clickedCss, wrapper, buttonStyles, feedbackLink, header } from './feedb
 import { SvgThumbsUp } from './thumbsUp';
 import { SvgThumbsDown } from './thumbsDown';
 
-// type PropTypes = {}
-
-function FeedbackWidget(/* { }: PropTypes */) {
+function FeedbackWidget() {
 
   const [clicked, setClicked] = useState({ positive: false, negative: false });
   const positiveButtonCss = clicked.positive ? clickedCss : null;
