@@ -73,6 +73,7 @@ const header = css`
 `;
 
 export const pageTitle = css`
+    position: relative;
     ${titlepiece.small({ fontWeight: 'bold' })};
     z-index: 10;
     padding: ${space[9]}px ${space[4]}px;
@@ -91,6 +92,7 @@ export const pageTitle = css`
 `;
 
 function PageTitle({ title, theme, cssOverrides, children }: PropTypes): React.ReactElement {
+    console.log(title);
     return (
         <div css={[header, headerThemes[theme], cssOverrides]}>
             <Container>
