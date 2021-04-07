@@ -28,7 +28,7 @@ function FeedbackWidget(/* { }: PropTypes */) {
           <ThemeProvider theme={buttonBrand}>
             <Button
               priority="subdued"
-              size="default"
+              size="small"
               hideLabel
               icon={<SvgThumbsUp />}
               cssOverrides={[positiveButtonCss, buttonStyles]}
@@ -46,7 +46,7 @@ function FeedbackWidget(/* { }: PropTypes */) {
           <ThemeProvider theme={buttonBrand}>
             <Button
               priority="subdued"
-              size="default"
+              size="small"
               hideLabel
               icon={<SvgThumbsDown />}
               cssOverrides={[negativeButtonCss, buttonStyles]}

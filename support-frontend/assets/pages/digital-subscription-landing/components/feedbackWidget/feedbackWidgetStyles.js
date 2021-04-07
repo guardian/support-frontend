@@ -29,8 +29,12 @@ export const header = css`
   ${textSans.small({ fontWeight: 'bold' })};
   color: ${background.primary};
   background: ${background.ctaPrimary};
-  padding: ${space[3]}px;
-  border-radius: 3px 3px 0 0;
+  padding: ${space[2]}px ${space[3]}px;
+  border-radius: 5px 5px 0 0;
+
+  ${from.desktop} {
+    ${textSans.medium({ fontWeight: 'bold' })};
+  }
 `;
 
 export const clickedCss = css`
@@ -39,10 +43,10 @@ export const clickedCss = css`
 `;
 
 export const buttonStyles = css`
-  border: ${background.primary} solid 2px;
+  border: ${background.primary} solid 1px;
   border-radius: 50%;
   :first-of-type {
-    margin-right: ${space[3]}px;
+    margin-right: ${space[2]}px;
   }
   svg {
     display: block;
