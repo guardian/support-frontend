@@ -6,6 +6,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import createCache from '@emotion/cache';
 import Page from '../pages/Page';
 import Error, { ErrorProps } from '../pages/error';
+import WeeklyLandingPage from '../pages/weekly';
 // import Counter from '../components/Counter';
 import htmlTemplate from '../html';
 
@@ -38,6 +39,26 @@ server.post('/error', (req, res) => {
             css,
             ids,
             pageData: JSON.stringify(props),
+        }),
+    );
+});
+
+server.get('/weekly', (req, res) => {
+    const { html, css, ids } = extractCritical(
+        renderToString(
+            <CacheProvider value={cache}>
+                <Page />
+                <WeeklyLandingPage />
+            </CacheProvider>,
+        ),
+    );
+    res.send(
+        htmlTemplate({
+            html,
+            title: 'The Guardian Weekly',
+            key,
+            css,
+            ids,
         }),
     );
 });

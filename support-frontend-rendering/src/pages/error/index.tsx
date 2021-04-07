@@ -2,12 +2,13 @@
 import { jsx, css, ThemeProvider } from '@emotion/react';
 import parse from 'html-react-parser';
 import { Container } from '@guardian/src-layout';
-import { Footer } from '@guardian/src-footer';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
-import { brand, brandAlt, neutral, space } from '@guardian/src-foundations';
+import { brandAlt, neutral, space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
 import SvgSquares from './components/SvgSquares';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import Header from '../../components/Header';
+import SupportFooter from '../../components/Footer';
 
 export type ErrorProps = {
     errorCode: string;
@@ -75,12 +76,7 @@ const buttons = css`
 export default function ErrorPage({ errorCode, subHeading, copy }: ErrorProps): React.ReactElement {
     return (
         <div>
-            <div
-                css={css`
-                    background-color: ${brand[400]};
-                    height: 200px;
-                `}
-            ></div>
+            <Header />
             <div css={squaresIntro}>
                 <SvgSquares />
                 <Container>
@@ -119,18 +115,7 @@ export default function ErrorPage({ errorCode, subHeading, copy }: ErrorProps): 
                     </div>
                 </Container>
             </div>
-            <section
-                css={css`
-                    position: relative;
-                    z-index: 4;
-                    background-color: ${brand[400]};
-                    padding-top: ${space[4]}px;
-                `}
-            >
-                <Container>
-                    <Footer showBackToTop />
-                </Container>
-            </section>
+            <SupportFooter />
         </div>
     );
 }

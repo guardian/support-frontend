@@ -4,10 +4,10 @@ type HtmlProps = {
     key: string;
     ids: string[];
     css: string;
-    pageData: string;
+    pageData?: string;
 };
 
-const htmlTemplate = ({ html, title, key, ids, css, pageData }: HtmlProps): string => `
+const htmlTemplate = ({ html, title, key, ids, css, pageData = '' }: HtmlProps): string => `
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -28,13 +28,16 @@ const htmlTemplate = ({ html, title, key, ids, css, pageData }: HtmlProps): stri
     <body>
         <div id="root">${html}</div>
     </body>
-    <script>
+    ${
+        pageData &&
+        `<script>
         window.__STATE__ = {
             page: ${pageData}
         }
-    </script>
-    <script src="http://localhost:3000/js/client.js" defer></script>
-  </html>
-`;
+    </script>`
+    }
+    </html>
+    `;
+// <script src="http://localhost:3000/js/client.js" defer></script>
 
 export default htmlTemplate;
