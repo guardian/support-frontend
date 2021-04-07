@@ -21,18 +21,16 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
-    wrapperState: CreateZuoraSubscriptionState,
+    state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
     context: Context,
     services: Services
   ): FutureHandlerResult = {
 
-    val state = wrapperState.productSpecificState
-
-    val zuoraProductHandlers = new ZuoraProductHandlers(services, wrapperState)
+    val zuoraProductHandlers = new ZuoraProductHandlers(services, state)
     import zuoraProductHandlers._
 
-    val eventualSendThankYouEmailState = state match {
+    val eventualSendThankYouEmailState = state.productSpecificState match {
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
       case state: DigitalSubscriptionDirectPurchaseState =>
@@ -52,10 +50,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     eventualSendThankYouEmailState.map { nextState =>
       HandlerResult(
         SendAcquisitionEventState(
-          requestId = wrapperState.requestId,
-          analyticsInfo = wrapperState.analyticsInfo,
+          requestId = state.requestId,
+          analyticsInfo = state.analyticsInfo,
           sendThankYouEmailState = nextState,
-          acquisitionData = wrapperState.acquisitionData,
+          acquisitionData = state.acquisitionData,
         ),
         requestInfo,
       )
@@ -65,25 +63,25 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
 }
 
-class ZuoraProductHandlers(services: Services, wrapperState: CreateZuoraSubscriptionState) {
+class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState) {
 
-  private val isTestUser = wrapperState.user.isTestUser
+  private val isTestUser = state.user.isTestUser
   private val now = () => DateTime.now(DateTimeZone.UTC)
   private val touchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
-  private val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, now, wrapperState.user.id, wrapperState.requestId)
+  private val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, now, state.user.id, state.requestId)
 
   val zuoraDigitalSubscriptionGiftRedemptionHandler = new ZuoraDigitalSubscriptionGiftRedemptionHandler(
     services.zuoraGiftService,
     services.catalogService,
-    wrapperState.user,
-    wrapperState.requestId,
+    state.user,
+    state.requestId,
   )
 
   val subscribeItemBuilder = new SubscribeItemBuilder(
-    wrapperState.requestId,
-    wrapperState.user,
-    wrapperState.product.currency,
+    state.requestId,
+    state.user,
+    state.product.currency,
   )
 
   val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
@@ -95,7 +93,7 @@ class ZuoraProductHandlers(services: Services, wrapperState: CreateZuoraSubscrip
       touchPointEnvironment,
       subscribeItemBuilder,
     ),
-    wrapperState.user,
+    state.user,
   )
 
   val zuoraDigitalSubscriptionCorporateRedemptionHandler = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
@@ -107,7 +105,7 @@ class ZuoraProductHandlers(services: Services, wrapperState: CreateZuoraSubscrip
       touchPointEnvironment,
       subscribeItemBuilder,
     ),
-    wrapperState.user,
+    state.user,
   )
 
   val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
@@ -119,7 +117,7 @@ class ZuoraProductHandlers(services: Services, wrapperState: CreateZuoraSubscrip
       touchPointEnvironment,
       subscribeItemBuilder,
     ),
-    wrapperState.user,
+    state.user,
   )
 
   val zuoraContributionHandler = new ZuoraContributionHandler(
@@ -128,7 +126,7 @@ class ZuoraProductHandlers(services: Services, wrapperState: CreateZuoraSubscrip
       services.config.zuoraConfigProvider.get(isTestUser).contributionConfig,
       subscribeItemBuilder,
     ),
-    wrapperState.user,
+    state.user,
   )
 
   val zuoraPaperHandler = new ZuoraPaperHandler(
