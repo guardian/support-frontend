@@ -40,6 +40,7 @@ import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 
 import './components/digitalSubscriptionLanding.scss';
 import 'stylesheets/skeleton/skeleton.scss';
+import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 
 // ----- Redux Store ----- //
 
@@ -104,6 +105,7 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
+      <FeedbackWidget />
       {orderIsAGift ?
         <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
         <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
