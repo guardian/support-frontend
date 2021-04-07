@@ -34,7 +34,7 @@ function FeedbackWidget() {
                 cssOverrides={[positiveButtonCss, buttonStyles]}
                 onClick={() => {
               sendTrackingEventsOnClick({
-                id: 'landing_feedback_positive',
+                id: 'ds_landing_page_survey_positive',
                 product: 'DigitalPack',
                 componentType: 'SURVEYS_QUESTIONS',
               })();
@@ -52,7 +52,7 @@ function FeedbackWidget() {
                 cssOverrides={[negativeButtonCss, buttonStyles]}
                 onClick={() => {
               sendTrackingEventsOnClick({
-                id: 'landing_feedback_negative',
+                id: 'ds_landing_page_survey_negative',
                 product: 'DigitalPack',
                 componentType: 'SURVEYS_QUESTIONS',
               })();
@@ -74,7 +74,7 @@ function FeedbackWidget() {
               cssOverrides={[buttonStyles]}
               onClick={() => {
                 sendTrackingEventsOnClick({
-                  id: 'landing_feedback_close',
+                  id: 'ds_landing_page_survey_close',
                   product: 'DigitalPack',
                   componentType: 'SURVEYS_QUESTIONS',
                 })();
