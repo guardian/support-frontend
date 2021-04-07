@@ -78,30 +78,6 @@ export const tests: Tests = {
     seed: 12,
   },
 
-  landingPagePriceBreakdownTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'daily',
-      },
-      {
-        id: 'none',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 14,
-  },
-
   accordionTest: {
     variants: [
       {
