@@ -4,7 +4,7 @@
 
 import { css } from '@emotion/core';
 import { success, background, text } from '@guardian/src-foundations/palette';
-import { space } from '@guardian/src-foundations';
+import { space, brand } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { textSans } from '@guardian/src-foundations/typography';
 
@@ -31,9 +31,9 @@ export const header = css`
   background: ${background.ctaPrimary};
   padding: ${space[2]}px ${space[3]}px;
   border-radius: 5px 5px 0 0;
-  border-top: ${background.primary} solid 1px;
-  border-right: ${background.primary} solid 1px;
-  border-left: ${background.primary} solid 1px;
+  border-top: ${brand[600]} solid 1px;
+  border-right: ${brand[600]} solid 1px;
+  border-left: ${brand[600]} solid 1px;
 
   ${from.desktop} {
     ${textSans.medium({ fontWeight: 'bold' })};
@@ -46,7 +46,7 @@ export const clickedCss = css`
 `;
 
 export const buttonStyles = css`
-  border: ${background.primary} solid 1px;
+  border: ${brand[600]} solid 1px;
   border-radius: 50%;
   :first-of-type {
     margin-right: ${space[2]}px;
