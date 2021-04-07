@@ -40,6 +40,10 @@ export const header = css`
   }
 `;
 
+export const widgetTitle = css`
+  display: block;
+`;
+
 export const clickedCss = css`
   background: ${success[400]};
   border-radius: 50%;
@@ -62,7 +66,8 @@ export const feedbackLink = css`
   color: ${text.primary};
   ${textSans.small()};
   padding: ${space[3]}px;
-  p {
+  label {
+    display: block;
     margin-bottom: ${space[2]}px;
   }
 `;

@@ -105,7 +105,6 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      <FeedbackWidget />
       {orderIsAGift ?
         <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
         <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
@@ -130,6 +129,7 @@ function LandingPage() {
           <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
+      <FeedbackWidget />
     </Page>
   );
 

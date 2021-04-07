@@ -7,9 +7,8 @@ import React, { useState } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 
 import { Button, LinkButton, buttonBrand } from '@guardian/src-button';
-import { SvgCross } from '@guardian/src-icons';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { clickedCss, wrapper, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
+import { clickedCss, wrapper, widgetTitle, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
 import { SvgThumbsUp } from './thumbsUp';
 import { SvgThumbsDown } from './thumbsDown';
 
@@ -21,15 +20,18 @@ function FeedbackWidget() {
 
   return (
     <aside css={wrapper}>
-      <header css={header}>
-        <h4>{clicked.negative ? 'What can we improve?' : 'Is this page helpful?'}</h4>
-        {clicked.negative || (
+      <fieldset role="group" >
+        <div css={header}>
+          <p css={widgetTitle}>
+            {clicked.negative ? 'What can we improve?' : 'Is this page helpful?'}
+          </p>
           <span>
             <ThemeProvider theme={buttonBrand}>
               <Button
                 priority="subdued"
                 size="small"
                 hideLabel
+                aria-label="Is this page helpful? Yes, this page has the information I am looking for"
                 icon={<SvgThumbsUp />}
                 cssOverrides={[positiveButtonCss, buttonStyles]}
                 onClick={() => {
@@ -48,6 +50,7 @@ function FeedbackWidget() {
                 priority="subdued"
                 size="small"
                 hideLabel
+                aria-label="Is this page helpful? No, this page does not have the information I am looking for"
                 icon={<SvgThumbsDown />}
                 cssOverrides={[negativeButtonCss, buttonStyles]}
                 onClick={() => {
@@ -62,40 +65,26 @@ function FeedbackWidget() {
               />
             </ThemeProvider>
           </span>
-        )}
+        </div>
 
         {clicked.negative && (
-          <ThemeProvider theme={buttonBrand}>
-            <Button
-              priority="subdued"
+          <div css={feedbackLink} aria-hidden={!clicked.negative}>
+            <label htmlFor="feedbackLink" aria-live="assertive">
+              Your feedback is really helpful; answer our two short questions to help us improve this page.
+            </label>
+            <LinkButton
               size="small"
-              hideLabel
-              icon={<SvgCross />}
-              cssOverrides={[buttonStyles]}
-              onClick={() => {
-                sendTrackingEventsOnClick({
-                  id: 'landing_feedback_close',
-                  product: 'DigitalPack',
-                  componentType: 'ACQUISITIONS_BUTTON',
-                })();
-
-                setClicked({ positive: false, negative: false });
-              }}
-            />
-          </ThemeProvider>
+              id="feedbackLink"
+              aria-label="Click here to fill in a short survey about the information on this page"
+              href="https://www.surveymonkey.co.uk/r/63XM7CX"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Tell us what you think
+            </LinkButton>
+          </div>
         )}
-      </header>
-      {clicked.negative && (
-        <section css={feedbackLink}>
-          <p>Your feedback is really helpful; answer our two short questions to help us improve this page.</p>
-          <LinkButton
-            size="small"
-            href="https://www.surveymonkey.co.uk/r/63XM7CX"
-          >
-            Tell us what you think
-          </LinkButton>
-        </section>
-      )}
+      </fieldset>
     </aside>
   );
 }
