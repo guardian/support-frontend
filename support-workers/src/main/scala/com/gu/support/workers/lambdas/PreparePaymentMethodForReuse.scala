@@ -6,8 +6,8 @@ import com.gu.i18n.{Country, CountryGroup}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionContributionState
-import com.gu.support.workers.states.{CreateZuoraSubscriptionWrapperState, PreparePaymentMethodForReuseState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.ContributionState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
 
@@ -16,7 +16,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[PreparePaymentMethodForReuseState, CreateZuoraSubscriptionWrapperState](servicesProvider) {
+    extends ServicesHandler[PreparePaymentMethodForReuseState, CreateZuoraSubscriptionState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
@@ -42,8 +42,8 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         case _ => Failure(new RuntimeException("not yet supported reuse payment method for other than contributions"))
       })
     } yield HandlerResult(
-      CreateZuoraSubscriptionWrapperState(
-        CreateZuoraSubscriptionContributionState(
+      CreateZuoraSubscriptionState(
+        ContributionState(
           product = contribution,
           paymentMethod = paymentMethod,
           salesForceContact = sfContact,

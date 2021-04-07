@@ -6,8 +6,8 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.redemption.corporate._
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionState._
-import com.gu.support.workers.states.{CreateZuoraSubscriptionWrapperState, SendAcquisitionEventState, SendThankYouEmailState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState._
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.productHandlers._
 import com.gu.zuora.subscriptionBuilders._
@@ -16,12 +16,12 @@ import org.joda.time.{DateTime, DateTimeZone}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[CreateZuoraSubscriptionWrapperState, SendAcquisitionEventState](servicesProvider) {
+  extends ServicesHandler[CreateZuoraSubscriptionState, SendAcquisitionEventState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
-    wrapperState: CreateZuoraSubscriptionWrapperState,
+    wrapperState: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
     context: Context,
     services: Services
@@ -33,19 +33,19 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     import zuoraProductHandlers._
 
     val eventualSendThankYouEmailState = state match {
-      case state: CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState =>
+      case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
-      case state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState =>
+      case state: DigitalSubscriptionDirectPurchaseState =>
         zuoraDigitalSubscriptionDirectHandler.subscribe(state)
-      case state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState =>
+      case state: DigitalSubscriptionGiftPurchaseState =>
         zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(state)
-      case state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =>
+      case state: DigitalSubscriptionCorporateRedemptionState =>
         zuoraDigitalSubscriptionCorporateRedemptionHandler.subscribe(state)
-      case state: CreateZuoraSubscriptionContributionState =>
+      case state: ContributionState =>
         zuoraContributionHandler.subscribe(state)
-      case state: CreateZuoraSubscriptionPaperState =>
+      case state: PaperState =>
         zuoraPaperHandler.subscribe(state)
-      case state: CreateZuoraSubscriptionGuardianWeeklyState =>
+      case state: GuardianWeeklyState =>
         zuoraGuardianWeeklyHandler.subscribe(state)
     }
 
@@ -65,7 +65,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
 }
 
-class ZuoraProductHandlers(services: Services, wrapperState: CreateZuoraSubscriptionWrapperState) {
+class ZuoraProductHandlers(services: Services, wrapperState: CreateZuoraSubscriptionState) {
 
   private val isTestUser = wrapperState.user.isTestUser
   private val now = () => DateTime.now(DateTimeZone.UTC)

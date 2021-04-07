@@ -9,8 +9,8 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionContributionState, CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState, CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState, CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState, CreateZuoraSubscriptionGuardianWeeklyState, CreateZuoraSubscriptionPaperState}
-import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState, CreateZuoraSubscriptionWrapperState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState, DigitalSubscriptionGiftRedemptionState, GuardianWeeklyState, PaperState}
+import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.StripeGatewayDefault
 import io.circe.parser
 import io.circe.syntax._
@@ -435,8 +435,8 @@ object JsonFixtures {
       """
 
   def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionContributionState(
+    CreateZuoraSubscriptionState(
+      ContributionState(
         Contribution(5, GBP, billingPeriod),
         stripePaymentMethodObj,
         salesforceContact
@@ -450,8 +450,8 @@ object JsonFixtures {
       None
     ).asJson.spaces2
   val createDigiPackZuoraSubscriptionJson =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionDirectPurchaseState(
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
@@ -468,8 +468,8 @@ object JsonFixtures {
     ).asJson.spaces2
 
   val createDigiPackCorporateSubscriptionJson =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionCorporateRedemptionState(
         DigitalPack(GBP, Annual),
         RedemptionData(RedemptionCode("it-mutable123").toOption.get),
         salesforceContact
@@ -484,8 +484,8 @@ object JsonFixtures {
     ).asJson.spaces2
 
   def createDigiPackGiftSubscriptionJson(requestId: UUID): String =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionGiftPurchaseState(
         Country.UK,
         DigitalSubscriptionGiftRecipient(
           "Gifty",
@@ -509,15 +509,15 @@ object JsonFixtures {
     ).asJson.spaces2
 
   def createDigiPackGiftRedemptionJson(code: String): String =
-    (CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState(
+    (DigitalSubscriptionGiftRedemptionState(
       idId,
       DigitalPack(GBP, Annual),
       RedemptionData(RedemptionCode(code).toOption.get),
-    ): CreateZuoraSubscriptionState).asJson.spaces2
+    ): CreateZuoraSubscriptionProductState).asJson.spaces2
 
   val createDigiPackSubscriptionWithPromoJson =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionDirectPurchaseState(
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
@@ -534,8 +534,8 @@ object JsonFixtures {
     ).asJson.spaces2
 
   val createEverydayPaperSubscriptionJson =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionPaperState(
+    CreateZuoraSubscriptionState(
+      PaperState(
         userJsonWithDeliveryAddress,
         Paper(GBP, Monthly, HomeDelivery, Everyday),
         stripePaymentMethodObj,
@@ -553,8 +553,8 @@ object JsonFixtures {
     ).asJson.spaces2
 
   def createGuardianWeeklySubscriptionJson(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode] = None): String =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionGuardianWeeklyState(
+    CreateZuoraSubscriptionState(
+      GuardianWeeklyState(
         userJsonWithDeliveryAddress,
         None,
         GuardianWeekly(GBP, billingPeriod, RestOfWorld),
@@ -573,8 +573,8 @@ object JsonFixtures {
     ).asJson.spaces2
 
   val guardianWeeklyGiftJson =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionGuardianWeeklyState(
+    CreateZuoraSubscriptionState(
+      GuardianWeeklyState(
         userJsonWithDeliveryAddress,
         Some(WeeklyGiftRecipient(
           Some(Title.Mr),
@@ -881,8 +881,8 @@ object JsonFixtures {
     }
     """
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
-    CreateZuoraSubscriptionWrapperState(
-      CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionDirectPurchaseState(
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,

@@ -4,7 +4,7 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState}
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.EitherValues
@@ -37,12 +37,12 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
   }
 
   "CreateZuoraSubscription" should "deserialise correctly" in {
-    testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson())
-    testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson(Annual))
-    testDecoding[CreateZuoraSubscriptionState](createDigiPackZuoraSubscriptionJson)
-    testDecoding[CreateZuoraSubscriptionState](createCorporateDigiPackZuoraSubscriptionJson,
+    testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson())
+    testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson(Annual))
+    testDecoding[CreateZuoraSubscriptionProductState](createDigiPackZuoraSubscriptionJson)
+    testDecoding[CreateZuoraSubscriptionProductState](createCorporateDigiPackZuoraSubscriptionJson,
       inside(_) {
-        case state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState =>
+        case state: DigitalSubscriptionCorporateRedemptionState =>
           state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
       }
     )
@@ -94,8 +94,8 @@ object StatesTestData {
     acquisitionData = None
   )
 
-  val createZuoraSubscriptionState: CreateZuoraSubscriptionWrapperState = CreateZuoraSubscriptionWrapperState(
-    CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+  val createZuoraSubscriptionState: CreateZuoraSubscriptionState = CreateZuoraSubscriptionState(
+    DigitalSubscriptionDirectPurchaseState(
       Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),

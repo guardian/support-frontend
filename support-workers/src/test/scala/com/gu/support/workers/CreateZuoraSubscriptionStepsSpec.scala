@@ -7,7 +7,7 @@ import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoSt
 import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
 import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, CorporateCodeValidator, DynamoLookup, DynamoUpdate}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState}
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState}
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api.response._
@@ -31,7 +31,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
     val testCode = "test-code-123"
 
-    val state = CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
+    val state = DigitalSubscriptionCorporateRedemptionState(
       product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
       redemptionData = RedemptionData(RedemptionCode(testCode).toOption.get),
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
@@ -105,7 +105,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
   it should "create a Digital Pack standard (paid) subscription" in {
 
-    val state = CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+    val state = DigitalSubscriptionDirectPurchaseState(
       billingCountry = Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),

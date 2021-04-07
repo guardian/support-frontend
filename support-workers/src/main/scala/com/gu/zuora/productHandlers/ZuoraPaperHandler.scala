@@ -3,7 +3,7 @@ package com.gu.zuora.productHandlers
 import cats.implicits._
 import com.gu.WithLoggingSugar._
 import com.gu.support.workers.PaymentSchedule
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionPaperState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailPaperState
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
@@ -18,7 +18,7 @@ class ZuoraPaperHandler(
   paperSubscriptionBuilder: PaperSubscriptionBuilder,
 ) {
 
-  def subscribe(state: CreateZuoraSubscriptionPaperState): Future[SendThankYouEmailState] =
+  def subscribe(state: PaperState): Future[SendThankYouEmailState] =
     for {
       subscribeItem <- Future.fromTry(paperSubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")

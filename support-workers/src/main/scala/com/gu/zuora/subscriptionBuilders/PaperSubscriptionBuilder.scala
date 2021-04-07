@@ -3,7 +3,7 @@ package com.gu.zuora.subscriptionBuilders
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionPaperState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
@@ -15,7 +15,7 @@ class PaperSubscriptionBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: CreateZuoraSubscriptionPaperState): Either[PromoError, SubscribeItem] = {
+  def build(state: PaperState): Either[PromoError, SubscribeItem] = {
 
     import state._
 

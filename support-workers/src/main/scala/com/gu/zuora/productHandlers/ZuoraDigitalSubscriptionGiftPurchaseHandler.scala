@@ -5,7 +5,7 @@ import com.gu.WithLoggingSugar._
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionGiftPurchaseState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionGiftPurchaseState
 import com.gu.zuora.ZuoraSubscriptionCreator
@@ -22,7 +22,7 @@ class ZuoraDigitalSubscriptionGiftPurchaseHandler(
   user: User,
 ) {
 
-  def subscribe(state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState): Future[SendThankYouEmailState] =
+  def subscribe(state: DigitalSubscriptionGiftPurchaseState): Future[SendThankYouEmailState] =
     for {
       subscriptionBuildResult <- Future.fromTry(digitalSubscriptionGiftPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")

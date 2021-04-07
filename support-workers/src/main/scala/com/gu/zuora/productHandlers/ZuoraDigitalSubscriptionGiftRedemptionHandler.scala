@@ -5,7 +5,7 @@ import com.gu.support.catalog.CatalogService
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.{CodeRedeemedInThisRequest, CodeStatus, ValidGiftCode}
 import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionGiftRedemptionState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailDigitalSubscriptionGiftRedemptionState, TermDates}
 import com.gu.support.zuora.api.response.{Subscription, ZuoraSuccessOrFailureResponse}
@@ -25,7 +25,7 @@ class ZuoraDigitalSubscriptionGiftRedemptionHandler(
 ) {
 
   def redeemGift(
-    state: CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState,
+    state: DigitalSubscriptionGiftRedemptionState,
   ): Future[SendThankYouEmailState] = {
     val codeValidator = new GiftCodeValidator(zuoraService)
     val zuoraUpdater = new ZuoraUpdater(zuoraService, catalogService)

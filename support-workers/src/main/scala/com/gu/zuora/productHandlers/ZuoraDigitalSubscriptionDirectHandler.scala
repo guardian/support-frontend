@@ -3,7 +3,7 @@ package com.gu.zuora.productHandlers
 import cats.implicits._
 import com.gu.WithLoggingSugar._
 import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
 import com.gu.zuora.ZuoraSubscriptionCreator
@@ -18,7 +18,7 @@ class ZuoraDigitalSubscriptionDirectHandler(
   user: User,
 ) {
 
-  def subscribe(state: CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState): Future[SendThankYouEmailState] =
+  def subscribe(state: DigitalSubscriptionDirectPurchaseState): Future[SendThankYouEmailState] =
     for {
       subscribeItem <- Future.fromTry(digitalSubscriptionDirectPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")

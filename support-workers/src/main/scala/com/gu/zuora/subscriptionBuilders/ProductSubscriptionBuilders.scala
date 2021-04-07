@@ -8,7 +8,7 @@ import com.gu.support.config.ZuoraContributionConfig
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.CatalogDataNotFoundException
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionContributionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.ContributionState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}

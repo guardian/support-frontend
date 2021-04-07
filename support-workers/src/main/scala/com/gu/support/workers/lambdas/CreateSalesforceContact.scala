@@ -7,21 +7,21 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.{Contribution, DigitalPack, GuardianWeekly, Paper, PaymentMethod, RequestInfo, SalesforceContactRecord}
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionContributionState, CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState, CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState, CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState, CreateZuoraSubscriptionGuardianWeeklyState, CreateZuoraSubscriptionPaperState}
-import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionWrapperState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState, DigitalSubscriptionGiftRedemptionState, GuardianWeeklyState, PaperState}
+import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.ReaderType
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionWrapperState](ServiceProvider) {
+class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState](ServiceProvider) {
 
   override protected def servicesHandler(
     state: CreateSalesforceContactState,
     requestInfo: RequestInfo,
     context: Context,
     services: Services
-  ): Future[HandlerResult[CreateZuoraSubscriptionWrapperState]] = {
+  ): Future[HandlerResult[CreateZuoraSubscriptionState]] = {
     SafeLogger.debug(s"CreateSalesforceContact state: $state")
 
     services.salesforceService.createContactRecords(state.user, state.giftRecipient).flatMap { response =>
@@ -46,7 +46,7 @@ class NextState(state: CreateSalesforceContactState) {
   // scalastyle:off cyclomatic.complexity
   def build(
     salesforceContactRecords: SalesforceContactRecords,
-  ): CreateZuoraSubscriptionWrapperState =
+  ): CreateZuoraSubscriptionState =
     (product, paymentMethod) match {
       case (product: Contribution, Purchase(purchase)) =>
         toNextContribution(salesforceContactRecords, product, purchase)
@@ -70,8 +70,8 @@ class NextState(state: CreateSalesforceContactState) {
     salesforceContactRecords: SalesforceContactRecords,
     product: Contribution,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionWrapperState =
-    CreateZuoraSubscriptionWrapperState(CreateZuoraSubscriptionContributionState(
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(ContributionState(
       product,
       purchase,
       salesforceContactRecords.buyer,
@@ -80,8 +80,8 @@ class NextState(state: CreateSalesforceContactState) {
   def toNextDSRedemption(
     product: DigitalPack,
     redemptionData: RedemptionData
-  ): CreateZuoraSubscriptionWrapperState =
-    CreateZuoraSubscriptionWrapperState(CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState(
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(DigitalSubscriptionGiftRedemptionState(
       user.id,
       product,
       redemptionData,
@@ -91,8 +91,8 @@ class NextState(state: CreateSalesforceContactState) {
     salesforceContactRecord: SalesforceContactRecord,
     product: DigitalPack,
     redemptionData: RedemptionData
-  ): CreateZuoraSubscriptionWrapperState =
-    CreateZuoraSubscriptionWrapperState(CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(DigitalSubscriptionCorporateRedemptionState(
       product,
       redemptionData,
       salesforceContactRecord,
@@ -102,8 +102,8 @@ class NextState(state: CreateSalesforceContactState) {
     salesforceContactRecords: SalesforceContactRecords,
     product: GuardianWeekly,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionWrapperState =
-    CreateZuoraSubscriptionWrapperState(CreateZuoraSubscriptionGuardianWeeklyState(
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(GuardianWeeklyState(
       user,
       giftRecipient.map(_.asWeekly.get),
       product,
@@ -117,8 +117,8 @@ class NextState(state: CreateSalesforceContactState) {
     salesforceContactRecord: SalesforceContactRecord,
     product: Paper,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionWrapperState =
-    CreateZuoraSubscriptionWrapperState(CreateZuoraSubscriptionPaperState(
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(PaperState(
       user,
       product,
       purchase,
@@ -131,8 +131,8 @@ class NextState(state: CreateSalesforceContactState) {
     salesforceContactRecords: SalesforceContactRecords,
     product: DigitalPack,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionWrapperState =
-    CreateZuoraSubscriptionWrapperState(CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(DigitalSubscriptionGiftPurchaseState(
       user.billingAddress.country,
       giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
       product,
@@ -145,8 +145,8 @@ class NextState(state: CreateSalesforceContactState) {
     salesforceContactRecord: SalesforceContactRecord,
     product: DigitalPack,
     purchase: PaymentMethod
-  ): CreateZuoraSubscriptionWrapperState =
-    CreateZuoraSubscriptionWrapperState(CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(DigitalSubscriptionDirectPurchaseState(
       user.billingAddress.country,
       product,
       purchase,

@@ -6,7 +6,7 @@ import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.workers.GeneratedGiftCode
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionGiftPurchaseState
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 import org.joda.time.LocalDate
@@ -22,7 +22,7 @@ class DigitalSubscriptionGiftPurchaseBuilder(
 ) {
 
   def build(
-    state: CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState
+    state: DigitalSubscriptionGiftPurchaseState
   )(implicit ec: ExecutionContext): Either[PromoError, (SubscribeItem, GeneratedGiftCode)] = {
 
     import com.gu.WithLoggingSugar._

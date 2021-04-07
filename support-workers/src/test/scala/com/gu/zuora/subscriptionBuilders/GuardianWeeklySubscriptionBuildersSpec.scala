@@ -8,7 +8,7 @@ import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
 import com.gu.support.zuora.api.{Day, Month, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import org.joda.time.LocalDate
@@ -87,7 +87,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     () => saleDate,
     subscribeItemBuilder,
   ).build(
-    CreateZuoraSubscriptionGuardianWeeklyState(
+    GuardianWeeklyState(
       User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
       Some(WeeklyGiftRecipient(None, "bob", "smith", None)),
       weekly,
@@ -104,7 +104,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     () => saleDate,
     subscribeItemBuilder,
   ).build(
-    CreateZuoraSubscriptionGuardianWeeklyState(
+    GuardianWeeklyState(
       User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
       None,
       weekly,

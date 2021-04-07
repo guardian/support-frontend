@@ -2,7 +2,7 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.support.config.ZuoraContributionConfig
 import com.gu.support.workers.BillingPeriod
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionContributionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.ContributionState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -12,7 +12,7 @@ class ContributionSubscriptionBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: CreateZuoraSubscriptionContributionState): SubscribeItem = {
+  def build(state: ContributionState): SubscribeItem = {
     val contributionConfig = config(state.product.billingPeriod)
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       contributionConfig.productRatePlanId,

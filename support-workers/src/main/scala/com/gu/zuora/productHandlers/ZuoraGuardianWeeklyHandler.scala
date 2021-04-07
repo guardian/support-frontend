@@ -2,7 +2,7 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionGuardianWeeklyState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianWeeklyState
 import com.gu.zuora.ZuoraSubscriptionCreator
@@ -16,7 +16,7 @@ class ZuoraGuardianWeeklyHandler(
   guardianWeeklySubscriptionBuilder: GuardianWeeklySubscriptionBuilder,
 ) {
 
-  def subscribe(state: CreateZuoraSubscriptionGuardianWeeklyState): Future[SendThankYouEmailState] =
+  def subscribe(state: GuardianWeeklyState): Future[SendThankYouEmailState] =
     for {
       subscribeItem <- Future.fromTry(guardianWeeklySubscriptionBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")

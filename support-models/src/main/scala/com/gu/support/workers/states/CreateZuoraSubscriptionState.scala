@@ -13,8 +13,8 @@ import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 
-case class CreateZuoraSubscriptionWrapperState(
-  productSpecificState: CreateZuoraSubscriptionState,
+case class CreateZuoraSubscriptionState(
+  productSpecificState: CreateZuoraSubscriptionProductState,
   requestId: UUID,
   user: User,
   product: ProductType,
@@ -24,59 +24,59 @@ case class CreateZuoraSubscriptionWrapperState(
   acquisitionData: Option[AcquisitionData]
 ) extends FailureHandlerState
 
-object CreateZuoraSubscriptionWrapperState {
-  implicit val codec = deriveCodec[CreateZuoraSubscriptionWrapperState]
+object CreateZuoraSubscriptionState {
+  implicit val codec = deriveCodec[CreateZuoraSubscriptionState]
 }
 
-sealed trait CreateZuoraSubscriptionState
+sealed trait CreateZuoraSubscriptionProductState
 
-object CreateZuoraSubscriptionState {
+object CreateZuoraSubscriptionProductState {
 
-  case class CreateZuoraSubscriptionContributionState(
+  case class ContributionState(
     product: Contribution,
     paymentMethod: PaymentMethod,
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionState
+  ) extends CreateZuoraSubscriptionProductState
 
-  case class CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+  case class DigitalSubscriptionDirectPurchaseState(
     billingCountry: Country,
     product: DigitalPack,
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionState
+  ) extends CreateZuoraSubscriptionProductState
 
-  case class CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
+  case class DigitalSubscriptionGiftPurchaseState(
     billingCountry: Country,
     giftRecipient: DigitalSubscriptionGiftRecipient,
     product: DigitalPack,
     paymentMethod: PaymentMethod,
     promoCode: Option[PromoCode],
     salesforceContacts: SalesforceContactRecords,
-  ) extends CreateZuoraSubscriptionState
+  ) extends CreateZuoraSubscriptionProductState
 
-  case class CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
+  case class DigitalSubscriptionCorporateRedemptionState(
     product: DigitalPack,
     redemptionData: RedemptionData,
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionState
+  ) extends CreateZuoraSubscriptionProductState
 
-  case class CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState(
+  case class DigitalSubscriptionGiftRedemptionState(
     userId: String,
     product: DigitalPack,
     redemptionData: RedemptionData,
-  ) extends CreateZuoraSubscriptionState
+  ) extends CreateZuoraSubscriptionProductState
 
-  case class CreateZuoraSubscriptionPaperState(
+  case class PaperState(
     user: User,
     product: Paper,
     paymentMethod: PaymentMethod,
     firstDeliveryDate: LocalDate,
     promoCode: Option[PromoCode],
     salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionState
+  ) extends CreateZuoraSubscriptionProductState
 
-  case class CreateZuoraSubscriptionGuardianWeeklyState(
+  case class GuardianWeeklyState(
     user: User,
     giftRecipient: Option[WeeklyGiftRecipient],
     product: GuardianWeekly,
@@ -84,17 +84,21 @@ object CreateZuoraSubscriptionState {
     firstDeliveryDate: LocalDate,
     promoCode: Option[PromoCode],
     salesforceContacts: SalesforceContactRecords,
-  ) extends CreateZuoraSubscriptionState
+  ) extends CreateZuoraSubscriptionProductState
 
-  private val discriminatedType = new DiscriminatedType[CreateZuoraSubscriptionState]("productType")
-  implicit val codec: Codec[CreateZuoraSubscriptionState] = discriminatedType.codec(List(
-    discriminatedType.variant[CreateZuoraSubscriptionContributionState]("Contribution"),
-    discriminatedType.variant[CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState]("DigitalSubscriptionDirectPurchase"),
-    discriminatedType.variant[CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState]("DigitalSubscriptionGiftPurchase"),
-    discriminatedType.variant[CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState]("DigitalSubscriptionCorporateRedemption"),
-    discriminatedType.variant[CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState]("DigitalSubscriptionGiftRedemption"),
-    discriminatedType.variant[CreateZuoraSubscriptionPaperState]("Paper"),
-    discriminatedType.variant[CreateZuoraSubscriptionGuardianWeeklyState]("GuardianWeekly"),
+  import ExecutionTypeDiscriminators._
+
+  private val discriminatedType = new DiscriminatedType[CreateZuoraSubscriptionProductState](fieldName)
+  implicit val codec: Codec[CreateZuoraSubscriptionProductState] = discriminatedType.codec(List(
+    discriminatedType.variant[ContributionState](contribution),
+    discriminatedType.variant[DigitalSubscriptionDirectPurchaseState](digitalSubscriptionDirectPurchase),
+    discriminatedType.variant[DigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
+    discriminatedType.variant[DigitalSubscriptionCorporateRedemptionState](digitalSubscriptionCorporateRedemption),
+    discriminatedType.variant[DigitalSubscriptionGiftRedemptionState](digitalSubscriptionGiftRedemption),
+    discriminatedType.variant[PaperState](paper),
+    discriminatedType.variant[GuardianWeeklyState](guardianWeekly),
   ))
 
 }
+
+

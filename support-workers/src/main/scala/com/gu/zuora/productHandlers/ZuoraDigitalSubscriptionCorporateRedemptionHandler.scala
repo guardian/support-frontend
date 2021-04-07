@@ -4,7 +4,7 @@ import cats.implicits._
 import com.gu.WithLoggingSugar._
 import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, RedemptionTable}
 import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionCorporateRedemptionState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionCorporateRedemptionState
 import com.gu.zuora.ZuoraSubscriptionCreator
@@ -20,7 +20,7 @@ class ZuoraDigitalSubscriptionCorporateRedemptionHandler(
   user: User,
 ) {
 
-  def subscribe(state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState): Future[SendThankYouEmailState] =
+  def subscribe(state: DigitalSubscriptionCorporateRedemptionState): Future[SendThankYouEmailState] =
     for {
       subscribeItem <- digitalSubscriptionCorporateRedemptionBuilder.build(state)
         .leftMap(BuildSubscribeRedemptionError).value.map(_.toTry).flatMap(Future.fromTry)

@@ -6,8 +6,8 @@ import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.{CodeAlreadyUsed, CodeNotFound}
 import com.gu.support.workers.JsonFixtures.{createDigiPackGiftRedemptionJson, createDigiPackGiftSubscriptionJson, user}
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionGiftRedemptionState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionProductState, SendThankYouEmailState}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.productHandlers.ZuoraDigitalSubscriptionGiftRedemptionHandler
 import io.circe.parser.decode
@@ -65,7 +65,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     requestId: UUID
   ): Future[SendThankYouEmailState] = {
     val jsonState = createDigiPackGiftRedemptionJson(codeValue)
-    val state = decode[CreateZuoraSubscriptionState](jsonState).toOption.get.asInstanceOf[CreateZuoraSubscriptionDigitalSubscriptionGiftRedemptionState]
+    val state = decode[CreateZuoraSubscriptionProductState](jsonState).toOption.get.asInstanceOf[DigitalSubscriptionGiftRedemptionState]
 
     new ZuoraDigitalSubscriptionGiftRedemptionHandler(
       createZuoraHelper.realZuoraGiftService,

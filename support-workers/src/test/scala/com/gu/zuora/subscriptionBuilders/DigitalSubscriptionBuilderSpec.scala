@@ -12,7 +12,7 @@ import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.{CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState, CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState, CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
@@ -107,7 +107,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val corporate =
     corporateRedemptionBuilder.build(
-      CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState(
+      DigitalSubscriptionCorporateRedemptionState(
         DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate), // scalastyle:ignore null
         RedemptionData(RedemptionCode(testCode).toOption.get),
         SalesforceContactRecord("", ""),
@@ -140,7 +140,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val monthly =
     subscriptionDirectPurchaseBuilder.build(
-      CreateZuoraSubscriptionDigitalSubscriptionDirectPurchaseState(
+      DigitalSubscriptionDirectPurchaseState(
         Country.UK,
         DigitalPack(GBP, Monthly),
         PayPalReferenceTransaction("baid", "hi@gu.com"),
@@ -151,7 +151,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val threeMonthGiftPurchase =
     subscriptionGiftPurchaseBuilder.build(
-      CreateZuoraSubscriptionDigitalSubscriptionGiftPurchaseState(
+      DigitalSubscriptionGiftPurchaseState(
         Country.UK,
         DigitalSubscriptionGiftRecipient("bob", "smith", "hi@gu.com", None, new LocalDate(2020, 12, 1)),
         DigitalPack(GBP, Quarterly, Gift),

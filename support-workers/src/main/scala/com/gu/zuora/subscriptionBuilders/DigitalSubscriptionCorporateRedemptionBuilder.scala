@@ -6,7 +6,7 @@ import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.redemption.corporate.CorporateCodeValidator
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType, ValidCorporateCode}
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
-import com.gu.support.workers.states.CreateZuoraSubscriptionState.CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionCorporateRedemptionState
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
@@ -22,7 +22,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
 ) {
 
   def build(
-    state: CreateZuoraSubscriptionDigitalSubscriptionCorporateRedemptionState
+    state: DigitalSubscriptionCorporateRedemptionState
   )(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscribeItem] = {
     import state._
     val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
