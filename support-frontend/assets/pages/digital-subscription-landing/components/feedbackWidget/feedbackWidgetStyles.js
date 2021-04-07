@@ -31,6 +31,9 @@ export const header = css`
   background: ${background.ctaPrimary};
   padding: ${space[2]}px ${space[3]}px;
   border-radius: 5px 5px 0 0;
+  border-top: ${background.primary} solid 1px;
+  border-right: ${background.primary} solid 1px;
+  border-left: ${background.primary} solid 1px;
 
   ${from.desktop} {
     ${textSans.medium({ fontWeight: 'bold' })};
