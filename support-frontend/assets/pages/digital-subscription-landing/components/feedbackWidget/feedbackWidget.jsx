@@ -36,7 +36,7 @@ function FeedbackWidget() {
               sendTrackingEventsOnClick({
                 id: 'landing_feedback_positive',
                 product: 'DigitalPack',
-                componentType: 'ACQUISITIONS_BUTTON',
+                componentType: 'SURVEYS_QUESTIONS',
               })();
 
               setClicked({ positive: true, negative: false });
@@ -54,7 +54,7 @@ function FeedbackWidget() {
               sendTrackingEventsOnClick({
                 id: 'landing_feedback_negative',
                 product: 'DigitalPack',
-                componentType: 'ACQUISITIONS_BUTTON',
+                componentType: 'SURVEYS_QUESTIONS',
               })();
 
               setClicked({ positive: false, negative: true });
@@ -76,7 +76,7 @@ function FeedbackWidget() {
                 sendTrackingEventsOnClick({
                   id: 'landing_feedback_close',
                   product: 'DigitalPack',
-                  componentType: 'ACQUISITIONS_BUTTON',
+                  componentType: 'SURVEYS_QUESTIONS',
                 })();
 
                 setClicked({ positive: false, negative: false });
