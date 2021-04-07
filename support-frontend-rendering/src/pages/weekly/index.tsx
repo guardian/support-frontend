@@ -8,16 +8,25 @@ import SupportFooter from '../../components/Footer';
 
 import WeeklyHero, { WeeklyHeroProps } from './components/WeeklyHero';
 import Benefits from './components/content/benefits';
+import Prices from './components/content/prices';
+import { CountryCode } from './helpers/internationalisation';
+import getProductPrices, { ProductPrices } from './helpers/getProductPrices';
 
 export type WeeklyLandingProps = {
     hero: WeeklyHeroProps;
+    prices: ProductPrices;
+    countryCode: CountryCode;
 };
 
-export default function WeeklyLandingPage(props: WeeklyLandingProps): React.ReactElement {
+export default function WeeklyLandingPage({
+    hero,
+    prices,
+    countryCode,
+}: WeeklyLandingProps): React.ReactElement {
     return (
         <div>
             <Header />
-            <WeeklyHero {...props.hero} />
+            <WeeklyHero {...hero} />
             <FullWidthContainer>
                 <Container>
                     <Block>
@@ -26,10 +35,12 @@ export default function WeeklyLandingPage(props: WeeklyLandingProps): React.Reac
                 </Container>
             </FullWidthContainer>
             <FullWidthContainer theme="dark" hasOverlap>
-                <Container>how are you?</Container>
+                <Container>
+                    {countryCode && prices && <Prices {...getProductPrices(prices, countryCode)} />}
+                </Container>
             </FullWidthContainer>
             <FullWidthContainer theme="white">
-                <Container>i&apos;m fine</Container>
+                <Container>hello</Container>
             </FullWidthContainer>
             <SupportFooter />
         </div>

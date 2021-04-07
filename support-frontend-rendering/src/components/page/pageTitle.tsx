@@ -92,7 +92,6 @@ export const pageTitle = css`
 `;
 
 function PageTitle({ title, theme, cssOverrides, children }: PropTypes): React.ReactElement {
-    console.log(title);
     return (
         <div css={[header, headerThemes[theme], cssOverrides]}>
             <Container>

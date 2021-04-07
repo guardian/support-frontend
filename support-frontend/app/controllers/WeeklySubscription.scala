@@ -74,9 +74,9 @@ class WeeklySubscription(
 
     val hero = maybePromotionCopy.map(copy => Json.obj(
       "title" -> "The Guardian Weekly",
-      "roundelText" -> copy.roundel,
-      "subtitle" -> copy.title,
-      "copy" -> copy.description,
+      "roundelText" -> s"${copy.roundel.getOrElse("")}",
+      "subtitle" -> s"${copy.title.getOrElse("")}",
+      "copy" -> s"<p>${copy.description.getOrElse("")}</p>",
       "buttonCopy" -> "See pricing options",
     )).getOrElse(Json.obj(
           "title" -> "The Guardian Weekly",
@@ -92,7 +92,9 @@ class WeeklySubscription(
 
     val data = Json.obj(
       "page" -> Json.obj(
-        "hero" -> hero
+        "hero" -> hero,
+        "prices" -> outputJson(productPrices(queryPromos, orderIsAGift)),
+        "countryCode" -> countryCode
       )
     )
 

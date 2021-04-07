@@ -6,7 +6,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import createCache from '@emotion/cache';
 import Page from '../pages/Page';
 import Error, { ErrorProps } from '../pages/error';
-import WeeklyLandingPage, { WeeklyLandingProps } from '../pages/weekly';
+import WeeklyLandingPage from '../pages/weekly';
 import htmlTemplate from '../html';
 
 const port = 3000;
@@ -43,7 +43,9 @@ server.post('/error', (req, res) => {
 });
 
 server.post('/weekly', (req, res) => {
-    const props = req.body.page as WeeklyLandingProps;
+    const props = req.body.page;
+    props.prices = JSON.parse(props.prices);
+
     const { html, css, ids } = extractCritical(
         renderToString(
             <CacheProvider value={cache}>
