@@ -5,6 +5,7 @@ import FullWidthContainer from '../../components/containers/fullWidthContainer';
 import Block from '../../components/page/block';
 import Header from '../../components/Header';
 import SupportFooter from '../../components/Footer';
+import GiftNonGiftCta from '../../components/product/giftNonGiftCta';
 
 import WeeklyHero, { WeeklyHeroProps } from './components/WeeklyHero';
 import Benefits from './components/content/benefits';
@@ -40,7 +41,9 @@ export default function WeeklyLandingPage({
                 </Container>
             </FullWidthContainer>
             <FullWidthContainer theme="white">
-                <Container>hello</Container>
+                <Container>
+                    <GiftNonGiftCta product="Guardian Weekly" orderIsAGift={false} href="/" />
+                </Container>
             </FullWidthContainer>
             <SupportFooter />
         </div>

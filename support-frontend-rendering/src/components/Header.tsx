@@ -7,7 +7,7 @@ export default function Header(): React.ReactElement {
         <div
             css={css`
                 background-color: ${brand[400]};
-                height: 200px;
+                height: 120px;
             `}
         ></div>
     );
