@@ -1,6 +1,6 @@
 // @flow
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { Everyday, Sixday, Sunday, Weekend } from 'helpers/productPrice/productOptions';
+import { Everyday, Sixday } from 'helpers/productPrice/productOptions';
 
 
 export const getTitle = (productOption: ProductOptions) => {
@@ -14,14 +14,3 @@ export const getTitle = (productOption: ProductOptions) => {
   }
 };
 
-export const getShortDescription = (productOption: ProductOptions): ?string => {
-  switch (productOption) {
-    case Everyday:
-    case Weekend:
-      return 'The Guardian + The Observer';
-    case Sunday:
-      return 'The Observer';
-    default:
-      return null;
-  }
-};

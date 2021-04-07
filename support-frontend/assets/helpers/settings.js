@@ -1,7 +1,6 @@
 // @flow
 
 import { type ConfiguredAmounts, type ContributionTypes } from 'helpers/contributions';
-import { type Option } from 'helpers/types/option';
 
 export type Status = 'On' | 'Off';
 
@@ -25,5 +24,4 @@ export type Settings = {
   amounts: ConfiguredAmounts,
   contributionTypes: ContributionTypes,
   metricUrl: string,
-  useDigitalVoucher: Option<boolean>,
 };

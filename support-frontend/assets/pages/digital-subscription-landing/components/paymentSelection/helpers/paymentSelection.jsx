@@ -146,7 +146,7 @@ const mapStateToProps = (state: State): PropTypes => {
         label: trackingProperties.id,
       });
       sendTrackingEventsOnClick(trackingProperties)();
-    }
+    };
 
     return orderIsAGift ?
       {

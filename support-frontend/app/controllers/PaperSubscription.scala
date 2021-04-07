@@ -59,7 +59,6 @@ class PaperSubscription(
         s"""<script type="text/javascript">
       window.guardian.productPrices = ${outputJson(priceSummaryServiceProvider.forUser(false).getPrices(Paper, queryPromos))}
       window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
-      window.guardian.useDigitalVoucher = ${Paper.useDigitalVoucher}
       </script>"""
       )
     }
