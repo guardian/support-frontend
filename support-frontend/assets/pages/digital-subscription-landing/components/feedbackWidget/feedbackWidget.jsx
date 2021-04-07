@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 
 import { Button, LinkButton, buttonBrand } from '@guardian/src-button';
+import { SvgCross } from '@guardian/src-icons';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { clickedCss, wrapper, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
 import { SvgThumbsUp } from './thumbsUp';
@@ -24,44 +25,67 @@ function FeedbackWidget(/* { }: PropTypes */) {
     <aside css={wrapper}>
       <header css={header}>
         <h4>{clicked.negative ? 'What can we improve?' : 'Is this page helpful?'}</h4>
-        <span>
+        {clicked.negative || (
+          <span>
+            <ThemeProvider theme={buttonBrand}>
+              <Button
+                priority="subdued"
+                size="small"
+                hideLabel
+                icon={<SvgThumbsUp />}
+                cssOverrides={[positiveButtonCss, buttonStyles]}
+                onClick={() => {
+              sendTrackingEventsOnClick({
+                id: 'landing_feedback_positive',
+                product: 'DigitalPack',
+                componentType: 'ACQUISITIONS_BUTTON',
+              })();
+
+              setClicked({ positive: true, negative: false });
+            }}
+              />
+            </ThemeProvider>
+            <ThemeProvider theme={buttonBrand}>
+              <Button
+                priority="subdued"
+                size="small"
+                hideLabel
+                icon={<SvgThumbsDown />}
+                cssOverrides={[negativeButtonCss, buttonStyles]}
+                onClick={() => {
+              sendTrackingEventsOnClick({
+                id: 'landing_feedback_negative',
+                product: 'DigitalPack',
+                componentType: 'ACQUISITIONS_BUTTON',
+              })();
+
+              setClicked({ positive: false, negative: true });
+            }}
+              />
+            </ThemeProvider>
+          </span>
+        )}
+
+        {clicked.negative && (
           <ThemeProvider theme={buttonBrand}>
             <Button
               priority="subdued"
               size="small"
               hideLabel
-              icon={<SvgThumbsUp />}
-              cssOverrides={[positiveButtonCss, buttonStyles]}
+              icon={<SvgCross />}
+              cssOverrides={[buttonStyles]}
               onClick={() => {
-            sendTrackingEventsOnClick({
-              id: 'landing_feedback_positive',
-              product: 'DigitalPack',
-              componentType: 'ACQUISITIONS_BUTTON',
-            })();
+                sendTrackingEventsOnClick({
+                  id: 'landing_feedback_close',
+                  product: 'DigitalPack',
+                  componentType: 'ACQUISITIONS_BUTTON',
+                })();
 
-            setClicked({ positive: true, negative: false });
-          }}
+                setClicked({ positive: false, negative: false });
+              }}
             />
           </ThemeProvider>
-          <ThemeProvider theme={buttonBrand}>
-            <Button
-              priority="subdued"
-              size="small"
-              hideLabel
-              icon={<SvgThumbsDown />}
-              cssOverrides={[negativeButtonCss, buttonStyles]}
-              onClick={() => {
-            sendTrackingEventsOnClick({
-              id: 'landing_feedback_negative',
-              product: 'DigitalPack',
-              componentType: 'ACQUISITIONS_BUTTON',
-            })();
-
-            setClicked({ positive: false, negative: true });
-          }}
-            />
-          </ThemeProvider>
-        </span>
+        )}
       </header>
       {clicked.negative && (
         <section css={feedbackLink}>
