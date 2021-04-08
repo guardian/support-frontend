@@ -261,8 +261,12 @@ const setAmazonPayOrderReferenceId =
         ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId })));
     };
 
-const setAmazonPayBillingAgreementId = (amazonBillingAgreementId: string): Action =>
-  ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId });
+const setAmazonPayBillingAgreementId =
+  (amazonBillingAgreementId: string) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId })));
+    };
 
 const setAmazonPayBillingAgreementConsentStatus =
   (amazonBillingAgreementConsentStatus: boolean): ((Function) => void) =>
