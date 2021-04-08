@@ -70,11 +70,13 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING' }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
   | { type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT', amazonPaymentsObject: Object }
-  | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady: boolean }
+  | { type: 'SET_AMAZON_PAY_WALLET_IS_STALE', isStale: boolean }
   | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
+  | { type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId: string }
+  | { type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus: boolean }
   | { type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken: string }
   | { type: 'SELECT_AMOUNT', amount: number | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
@@ -239,17 +241,39 @@ const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
   amazonPaymentsObject,
 });
 
-const setAmazonPayWalletWidgetReady = (isReady: boolean): Action =>
-  ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady });
+const setAmazonPayWalletIsStale = (isStale: boolean): Action =>
+  ({ type: 'SET_AMAZON_PAY_WALLET_IS_STALE', isStale });
 
 const setAmazonPayHasAccessToken: Action = ({ type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' });
 const setAmazonPayFatalError: Action = ({ type: 'SET_AMAZON_PAY_FATAL_ERROR' });
 
-const setAmazonPayPaymentSelected = (paymentSelected: boolean): Action =>
-  ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected });
+const setAmazonPayPaymentSelected =
+  (paymentSelected: boolean) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected })));
+    };
 
-const setAmazonPayOrderReferenceId = (orderReferenceId: string): Action =>
-  ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId });
+const setAmazonPayOrderReferenceId =
+  (orderReferenceId: string) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId })));
+    };
+
+const setAmazonPayBillingAgreementId =
+  (amazonBillingAgreementId: string) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId })));
+    };
+
+const setAmazonPayBillingAgreementConsentStatus =
+  (amazonBillingAgreementConsentStatus: boolean): ((Function) => void) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus })));
+    };
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
@@ -466,7 +490,7 @@ const amazonPayDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    orderReferenceId: authorisation.orderReferenceId,
+    orderReferenceId: authorisation.orderReferenceId ?? '',
     email: state.page.form.formData.email || '',
   },
   acquisitionData: derivePaymentApiAcquisitionData(
@@ -505,12 +529,14 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               stripeAccountForContributionType[state.page.form.contributionType],
             ));
           } else {
-            if (result.error === 'amazon_pay_fatal') {
-              dispatch(setAmazonPayFatalError);
-            }
-            if (result.error === 'amazon_pay_try_other_card') {
-              // Must re-render the wallet widget in order to display amazon's error message
-              dispatch(setAmazonPayWalletWidgetReady(false));
+            if (paymentAuthorisation.paymentMethod === 'AmazonPay') {
+              if (result.error === 'amazon_pay_try_other_card' || result.error === 'amazon_pay_try_again') {
+                // Must re-render the wallet widget in order to display amazon's error message
+                dispatch(setAmazonPayWalletIsStale(true));
+              } else {
+                // Disable Amazon Pay
+                dispatch(setAmazonPayFatalError);
+              }
             }
             // Reset any updates the previous payment method had made to the form's billingCountry or billingState
             dispatch(updateBillingCountry(null));
@@ -625,6 +651,7 @@ const recurringPaymentAuthorisationHandlers = {
   DirectDebit: recurringPaymentAuthorisationHandler,
   ExistingCard: recurringPaymentAuthorisationHandler,
   ExistingDirectDebit: recurringPaymentAuthorisationHandler,
+  AmazonPay: recurringPaymentAuthorisationHandler,
 };
 
 const error = { paymentStatus: 'failure', error: 'internal_error' };
@@ -689,7 +716,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
-      if (paymentAuthorisation.paymentMethod === AmazonPay) {
+      if (paymentAuthorisation.paymentMethod === AmazonPay && paymentAuthorisation.orderReferenceId !== undefined) {
         return dispatch(executeAmazonPayOneOffPayment(
           amazonPayDataFromAuthorisation(paymentAuthorisation, state),
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
@@ -707,10 +734,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
-    AmazonPay: () => {
-      logInvalidCombination('ANNUAL', AmazonPay);
-      return Promise.resolve(error);
-    },
     None: () => {
       logInvalidCombination('ANNUAL', 'None');
       return Promise.resolve(error);
@@ -718,10 +741,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
-    AmazonPay: () => {
-      logInvalidCombination('MONTHLY', AmazonPay);
-      return Promise.resolve(error);
-    },
     None: () => {
       logInvalidCombination('MONTHLY', 'None');
       return Promise.resolve(error);
@@ -754,10 +773,12 @@ export {
   setAmazonPayHasBegunLoading,
   setAmazonPayLoginObject,
   setAmazonPayPaymentsObject,
-  setAmazonPayWalletWidgetReady,
+  setAmazonPayWalletIsStale,
   setAmazonPayHasAccessToken,
   setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,
+  setAmazonPayBillingAgreementId,
+  setAmazonPayBillingAgreementConsentStatus,
   setAmazonPayPaymentSelected,
   selectAmount,
   updateOtherAmount,

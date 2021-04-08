@@ -54,6 +54,8 @@ case class DirectDebitPaymentFields(
 
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
 
+case class AmazonPayPaymentFields(amazonPayBillingAgreementId: String) extends PaymentFields
+
 object PaymentFields {
   //Payment fields are input from support-frontend
   implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
@@ -61,6 +63,7 @@ object PaymentFields {
   implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentMethodPaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
   implicit val existingPaymentFieldsCodec: Codec[ExistingPaymentFields] = deriveCodec
+  implicit val amazonPayPaymentFieldsCodec: Codec[AmazonPayPaymentFields] = deriveCodec
 
   implicit val encodePaymentFields: Encoder[PaymentFields] = Encoder.instance {
     case p: PayPalPaymentFields => p.asJson
@@ -68,6 +71,7 @@ object PaymentFields {
     case s: StripePaymentMethodPaymentFields => s.asJson
     case d: DirectDebitPaymentFields => d.asJson
     case e: ExistingPaymentFields => e.asJson
+    case a: AmazonPayPaymentFields => a.asJson
   }
 
   implicit val decodePaymentFields: Decoder[PaymentFields] =
@@ -76,7 +80,8 @@ object PaymentFields {
       Decoder[StripeSourcePaymentFields].widen,
       Decoder[StripePaymentMethodPaymentFields].widen,
       Decoder[DirectDebitPaymentFields].widen,
-      Decoder[ExistingPaymentFields].widen
+      Decoder[ExistingPaymentFields].widen,
+      Decoder[AmazonPayPaymentFields].widen
     ).reduceLeft(or(_,_))
 
   final def or[A, AA >: A](a: Decoder[A], d: => Decoder[AA]): Decoder[AA] = new Decoder[AA] {

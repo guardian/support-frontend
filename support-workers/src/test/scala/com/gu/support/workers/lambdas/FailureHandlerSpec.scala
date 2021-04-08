@@ -6,12 +6,12 @@ import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, PaymentMethodUnacceptable, Unknown}
+import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, AmazonPayTryAnotherCard, PaymentMethodUnacceptable, Unknown}
 import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.states.CheckoutFailureState
-import com.gu.support.workers.{AsyncLambdaSpec, JsonFixtures, MockContext}
+import com.gu.support.workers._
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.parser.decode
@@ -156,8 +156,19 @@ class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "convert a transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
-    val reason = FailureHandler.toCheckoutFailureReason(ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."))
+    val reason = FailureHandler.toCheckoutFailureReason(
+      ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."),
+      Stripe
+    )
     reason should be(PaymentMethodUnacceptable)
+  }
+
+  it should "convert an Amazon Pay transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
+    val reason = FailureHandler.toCheckoutFailureReason(
+      ZuoraError("TRANSACTION_FAILED", "Transaction declined.InvalidPaymentMethod - Declined"),
+      AmazonPay
+    )
+    reason should be(AmazonPayTryAnotherCard)
   }
 
 }
