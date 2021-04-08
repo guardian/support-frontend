@@ -3,6 +3,7 @@
 
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // ----- Types ----- //
 
@@ -107,8 +108,23 @@ const trackAbTests = (participations: Participations): void =>
     abTestRegister: buildOphanPayload(participations),
   });
 
+// Set referring pageview data in localstorage if it's not already there. This is picked up by ophan, see:
+// https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/click-path-capture.coffee#L41
+// Note - the localstorage item is deleted by tracker-js as soon as it's read, see:
+// https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/core.coffee#L72
+const setReferrerDataInLocalStorage = (acquisitionData: ReferrerAcquisitionData): void => {
+  const { referrerUrl, referrerPageviewId } = acquisitionData;
+  if (!localStorage.getItem('ophan_follow') && referrerUrl && referrerPageviewId) {
+    localStorage.setItem('ophan_follow', JSON.stringify({
+      refViewId: referrerPageviewId,
+      ref: referrerUrl,
+    }));
+  }
+};
+
 export {
   trackComponentEvents,
   pageView,
   trackAbTests,
+  setReferrerDataInLocalStorage,
 };

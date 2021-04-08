@@ -311,7 +311,7 @@ function init(participations: Participations) {
       * Update userConsentsToGTM value when
       * consent changes via the CMP library.
     */
-    userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey] && thirdPartyTrackingConsent[googleAnalyticsKey];
+    userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey];
 
     if (userConsentsToGTM) {
       if (!scriptAdded) {

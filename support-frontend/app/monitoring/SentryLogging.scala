@@ -7,15 +7,17 @@ import config.Configuration
 import io.sentry.Sentry
 import io.sentry.logback.SentryAppender
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.{Failure, Success, Try}
 import SentryFilters._
 import ch.qos.logback.classic.Logger
 import org.slf4j.Logger.ROOT_LOGGER_NAME
 import org.slf4j.LoggerFactory
 
+import scala.collection.MapView
+
 object SentryLogging {
-  def init(config: Configuration) {
+  def init(config: Configuration): Unit = {
     config.sentryDsn match {
       case None => SafeLogger.warn("No Sentry logging configured (OK for dev)")
       case Some(sentryDSN) =>
@@ -29,7 +31,7 @@ object SentryLogging {
 
           sentryAppender.start()
 
-          val buildInfo: Map[String, String] = app.BuildInfo.toMap.mapValues(_.toString)
+          val buildInfo: Map[String, String] = app.BuildInfo.toMap.view.mapValues(_.toString).toMap
           val tags = Map("stage" -> config.stage.toString) ++ buildInfo
           sentryClient.setTags(tags.asJava)
 

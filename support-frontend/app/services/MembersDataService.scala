@@ -79,6 +79,12 @@ class MembersDataService(apiUrl: String)(implicit val ec: ExecutionContext, wsCl
   }
 
   private def validateJson[T](json: JsValue)(implicit reader: Reads[T]) =
-    json.validate[T].asEither.leftMap(JsonValidationError.apply)
+    json.validate[T].asEither.leftMap(
+      (x: collection.Seq[(JsPath, collection.Seq[PlayJsonValidationError])]) => {
+        val apply1: Seq[(JsPath, Seq[PlayJsonValidationError])] => JsonValidationError = JsonValidationError.apply _
+        val x2 = x.toSeq.map({ case (k, v) => (k, v.toSeq) }) // needed until play json uses immutable Seq - see this page:
+        // https://docs.scala-lang.org/overviews/core/collections-migration-213.html#option-1-migrate-back-to-scalacollectionseq
+        apply1(x2)
+      })
 
 }

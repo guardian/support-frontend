@@ -65,8 +65,8 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     codeValue: String,
     requestId: UUID
   ): Future[HandlerResult[SendAcquisitionEventState]] = {
-    val code = RedemptionCode(codeValue).right.get
-    val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson(codeValue, requestId)).right.get
+    val code = RedemptionCode(codeValue).toOption.get
+    val state = decode[CreateZuoraSubscriptionState](createDigiPackGiftRedemptionJson(codeValue, requestId)).toOption.get
 
     DigitalSubscriptionGiftRedemption.redeemGift(
       RedemptionData(code),

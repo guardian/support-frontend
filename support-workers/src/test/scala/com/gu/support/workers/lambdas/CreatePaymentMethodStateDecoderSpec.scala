@@ -83,7 +83,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
 
   it should "be able to decode a DigtalBundle with PayPal payment fields" in {
     val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodDigitalPackJson)
-    val result = state.right.getOrElse(fail(state.left.get.getMessage))
+    val result = state.getOrElse(fail(state.left.toOption.get.getMessage))
     result.product match {
       case digitalPack: DigitalPack => digitalPack.billingPeriod should be(Annual)
       case _ => fail()

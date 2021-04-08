@@ -12,7 +12,7 @@ import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.{Address, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
-import cookies.RecurringContributionCookie
+import cookies.RecurringContributionCookies
 import io.circe.syntax._
 import lib.PlayImplicits._
 import monitoring.PathVerification._
@@ -29,14 +29,10 @@ class RegularContributions(
     client: SupportWorkersClient,
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
-    membersDataService: MembersDataService,
     identityService: IdentityService,
     testUsers: TestUserService,
-    stripeConfigProvider: StripeConfigProvider,
-    payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
-    settingsProvider: AllSettingsProvider,
     tipMonitoring: Tip
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
@@ -97,7 +93,7 @@ class RegularContributions(
           }
         )
 
-        Accepted(statusResponse.asJson).withCookies(RecurringContributionCookie.create(guardianDomain, billingPeriod))
+        Accepted(statusResponse.asJson).withCookies(RecurringContributionCookies.create(guardianDomain, billingPeriod):_*)
       }
     )
   }

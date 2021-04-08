@@ -15,7 +15,7 @@ class CreateSalesforceContactDecoderSpec extends AnyFlatSpec with Matchers with 
 
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {
     val state = decode[CreateSalesforceContactState](createSalesForceGiftContactJson)
-    val result = state.right.get
+    val result = state.toOption.get
     result.product match {
       case contribution: Contribution => contribution.amount should be(5)
       case _ => fail()

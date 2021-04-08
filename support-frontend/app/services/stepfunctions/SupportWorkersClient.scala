@@ -214,7 +214,7 @@ class SupportWorkersClient(
   }
 
   def healthy(): Future[Boolean] =
-    underlying.status.map(_.getStatus == "ACTIVE").getOrElse(false)
+    underlying.status().map(_.getStatus == "ACTIVE").getOrElse(false)
 
 }
 

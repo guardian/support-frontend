@@ -147,7 +147,7 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
 class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
 
   it should "match a transaction declined error" in {
-    val errorResponse = Some(ZuoraErrorResponse(success = false, decode[List[ZuoraError]](JsonFixtures.zuoraErrorResponse).right.get))
+    val errorResponse = Some(ZuoraErrorResponse(success = false, decode[List[ZuoraError]](JsonFixtures.zuoraErrorResponse).toOption.get))
 
     errorResponse match {
       case Some(ZuoraErrorResponse(_, List(ZuoraError("TRANSACTION_FAILED", _)))) => succeed
@@ -181,7 +181,7 @@ object FailureHandlerManualTest extends Matchers {
     sendFailureEmail()
   }
 
-  def sendFailureEmail() {
+  def sendFailureEmail(): Unit = {
     //This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "rupert.bates@theguardian.com"
@@ -200,7 +200,7 @@ object DigiPackFailureHandlerManualTest extends Matchers {
     sendFailureEmail()
   }
 
-  def sendFailureEmail() {
+  def sendFailureEmail(): Unit = {
     //This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
@@ -221,7 +221,7 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
     sendFailureEmail()
   }
 
-  def sendFailureEmail() {
+  def sendFailureEmail(): Unit = {
     //This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
@@ -243,7 +243,7 @@ object PrintFailureHandlerTest extends Matchers {
     sendFailureEmail()
   }
 
-  def sendFailureEmail() {
+  def sendFailureEmail(): Unit = {
     //This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"

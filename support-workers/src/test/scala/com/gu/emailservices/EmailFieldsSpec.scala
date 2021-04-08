@@ -53,7 +53,7 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
        |  "IdentityUserId": "identityUserId"
        |  $insert
        |}
-      """.stripMargin).right.get
+      """.stripMargin).toOption.get
   }
 }
 

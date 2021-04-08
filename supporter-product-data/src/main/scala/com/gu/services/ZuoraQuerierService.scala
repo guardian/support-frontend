@@ -1,7 +1,6 @@
 package com.gu.services
 
 import com.gu.conf.ZuoraQuerierConfig
-import com.gu.model.Stage
 import com.gu.model.states.QueryType
 import com.gu.model.states.QueryType.{Full, Incremental}
 import com.gu.model.zuora.request.{BatchQueryRequest, ZoqlExportQuery}
@@ -11,11 +10,9 @@ import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, ZoneId, ZoneOffset}
-import java.util.UUID
-import scala.collection.Map.empty
+import java.time.{LocalDate, LocalDateTime, ZonedDateTime}
+import scala.collection.immutable.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
-import scala.reflect.classTag
 
 class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
   extends WebServiceHelper[BatchQueryErrorResponse] {
@@ -28,22 +25,21 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   )
 
   def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {
-    val queries = queryType match {
+    val (queries, incrementalTime) = queryType match {
       case Full =>
-        val now = LocalDate.now(ZoneId.of("UTC"))
-        List(
+        (List(
         ZoqlExportQuery(
-          s"${SelectActiveRatePlansQuery.name}-${now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
-          SelectActiveRatePlansQuery.query(now, config.discountProductRatePlanIds)
+          s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
+          SelectActiveRatePlansQuery.query(config.discountProductRatePlanIds)
         )
-      )
-      case Incremental => List()
+      ), Some(ZonedDateTime.now.minusYears(20))) // Because we are using a stateful query with incrementalTime, we use a date in the far past to get all records
+      case Incremental => (List(), config.lastSuccessfulQueryTime)
     }
     val request = BatchQueryRequest(
       partner = config.partnerId,
       name = "supporter-product-data",
       queries = queries,
-      incrementalTime = config.lastSuccessfulQueryTime //TODO test how this behaves with a full query
+      incrementalTime = incrementalTime
     )
     postJson[BatchQueryResponse](s"batch-query/", request.asJson, authHeaders)
   }

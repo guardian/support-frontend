@@ -27,7 +27,7 @@ object ZoqlExportQuery{
 object BatchQueryRequest{
   implicit val zonedDateTimeEncoder: Encoder[ZonedDateTime] =
     Encoder.encodeString.contramap(_.format(
-      DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss") // Zuora insist on this pattern
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss") // Zuora insist on this pattern
     ))
 
   implicit val encoder: Encoder[BatchQueryRequest] = deriveEncoder[BatchQueryRequest].mapJsonObject(_
