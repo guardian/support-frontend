@@ -101,7 +101,7 @@ class WeeklySubscription(
     val futureResponse: Future[WSResponse] = ws.url(url).post(data)
 
     val page: Future[Result] = futureResponse.map(
-      errorPage => Ok(errorPage.body)
+      pageResult => Ok(pageResult.body)
           .as(HTML)
           .withSettingsSurrogateKey
     )

@@ -37,7 +37,6 @@ server.post('/error', (req, res) => {
             key,
             css,
             ids,
-            pageData: JSON.stringify(props),
         }),
     );
 });
