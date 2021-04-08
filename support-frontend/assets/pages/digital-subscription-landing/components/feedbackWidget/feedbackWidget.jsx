@@ -14,7 +14,7 @@ import { SvgThumbsDown } from './thumbsDown';
 
 function FeedbackWidget() {
 
-  const [clicked, setClicked] = useState({ positive: false, negative: false });
+  const [clicked, setClicked] = useState({ positive: false, negative: false, open: false });
   const positiveButtonCss = clicked.positive ? clickedCss : null;
   const negativeButtonCss = clicked.negative ? clickedCss : null;
 
@@ -36,9 +36,9 @@ function FeedbackWidget() {
                 cssOverrides={[positiveButtonCss, buttonStyles]}
                 onClick={() => {
               sendTrackingEventsOnClick({
-                id: 'landing_feedback_positive',
+                id: 'ds_landing_page_survey_positive',
                 product: 'DigitalPack',
-                componentType: 'ACQUISITIONS_BUTTON',
+                componentType: 'SURVEYS_QUESTIONS',
               })();
 
               setClicked({ positive: true, negative: false });
@@ -55,19 +55,19 @@ function FeedbackWidget() {
                 cssOverrides={[negativeButtonCss, buttonStyles]}
                 onClick={() => {
               sendTrackingEventsOnClick({
-                id: 'landing_feedback_negative',
+                id: 'ds_landing_page_survey_negative',
                 product: 'DigitalPack',
-                componentType: 'ACQUISITIONS_BUTTON',
+                componentType: 'SURVEYS_QUESTIONS',
               })();
 
-              setClicked({ positive: false, negative: true });
+              setClicked({ positive: false, negative: true, open: !clicked.open });
             }}
               />
             </ThemeProvider>
           </span>
         </div>
 
-        {clicked.negative && (
+        {clicked.open && (
           <div css={feedbackLink} aria-hidden={!clicked.negative}>
             <label htmlFor="feedbackLink" aria-live="assertive">
               Your feedback is really helpful; answer our two short questions to help us improve this page.
