@@ -40,6 +40,7 @@ import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 
 import './components/digitalSubscriptionLanding.scss';
 import 'stylesheets/skeleton/skeleton.scss';
+import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 
 // ----- Redux Store ----- //
 
@@ -128,6 +129,7 @@ function LandingPage() {
           <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
+      <FeedbackWidget />
     </Page>
   );
 
