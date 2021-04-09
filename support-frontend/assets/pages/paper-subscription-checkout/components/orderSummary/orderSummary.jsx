@@ -24,7 +24,6 @@ type PropTypes = {
   billingPeriod: BillingPeriod,
   productPrices: ProductPrices,
   digiSubPrice: string,
-  useDigitalVoucher: boolean,
   image: $Call<GridImageType, GridImg>,
   includesDigiSub: boolean,
   changeSubscription?: string | null,
@@ -35,12 +34,11 @@ type PropTypes = {
 function getMobileSummaryTitle(
   productOption: ProductOptions,
   fulfilmentOption: FulfilmentOptions,
-  useDigitalVoucher: ?boolean = false,
   includesDigiSub: ?boolean = false,
 ) {
   return (<>
-    {getOrderSummaryTitle(productOption, fulfilmentOption, useDigitalVoucher)}
-    {includesDigiSub && <> +&nbsp;Digital</>}
+    {getOrderSummaryTitle(productOption, fulfilmentOption)}
+    {includesDigiSub && <> +&nbsp;digital</>}
   </>);
 }
 
@@ -50,7 +48,6 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     productOption: state.page.checkout.productOption,
     billingPeriod: state.page.checkout.billingPeriod,
     productPrices: state.page.checkout.productPrices,
-    useDigitalVoucher: state.common.settings.useDigitalVoucher,
     total: getProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
@@ -95,7 +92,6 @@ function PaperOrderSummary(props: PropTypes) {
     title: getMobileSummaryTitle(
       props.productOption,
       props.fulfilmentOption,
-      props.useDigitalVoucher,
       props.includesDigiSub,
     ),
     price: total,
@@ -109,7 +105,7 @@ function PaperOrderSummary(props: PropTypes) {
       mobileSummary={mobileSummary}
     >
       <OrderSummaryProduct
-        productName={getOrderSummaryTitle(props.productOption, props.fulfilmentOption, props.useDigitalVoucher)}
+        productName={getOrderSummaryTitle(props.productOption, props.fulfilmentOption)}
         productInfo={productInfoPaper}
       />
       {props.includesDigiSub && <OrderSummaryProduct

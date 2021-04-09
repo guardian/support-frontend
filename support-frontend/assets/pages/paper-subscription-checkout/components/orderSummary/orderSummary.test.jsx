@@ -92,7 +92,7 @@ describe('Paper order summary', () => {
   });
 
   it('displays the correct short summary for mobile', async () => {
-    expect(await screen.findByText('Every day subscription card + Digital')).toBeInTheDocument();
+    expect(await screen.findByText('Every day subscription card + digital')).toBeInTheDocument();
   });
 
   it('displays the correct price for the standalone paper product', async () => {

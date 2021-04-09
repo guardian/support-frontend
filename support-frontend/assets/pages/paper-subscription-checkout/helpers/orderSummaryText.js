@@ -23,10 +23,8 @@ const productOptionDisplayNames: { [key: ProductOptions]: string } = {
 export function getOrderSummaryTitle(
   productOption: ProductOptions,
   fulfilmentOption: FulfilmentOptions,
-  useDigitalVoucher: ?boolean = false,
 ) {
-  const collectionOption = useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
-  const fulfilmentOptionDescriptor = fulfilmentOption === HomeDelivery ? 'Paper' : collectionOption;
+  const fulfilmentOptionDescriptor = fulfilmentOption === HomeDelivery ? 'Paper' : 'Subscription card';
   return `${productOptionDisplayNames[productOption]} ${fulfilmentOptionDescriptor.toLowerCase()}`;
 }
 
