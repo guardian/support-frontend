@@ -61,8 +61,8 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import { type Option } from 'helpers/types/option';
 import { paperProductsWithDigital, paperProductsWithoutDigital, type ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import { Paper } from 'helpers/subscriptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
@@ -111,7 +111,7 @@ type PropTypes = {|
   formIsValid: Function,
   setupRecurringPayPalPayment: Function,
   total: ProductPrice,
-  useDigitalVoucher: Option<boolean>,
+  amount: number,
   productOption: ActivePaperProducts,
   fulfilmentOption: FulfilmentOptions,
 |};
@@ -131,8 +131,12 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
-    useDigitalVoucher: state.common.settings.useDigitalVoucher,
     total: getProductPrice(
+      state.page.checkout.productPrices,
+      state.page.checkout.fulfilmentOption,
+      state.page.checkout.productOption,
+    ),
+    amount: getProductPrice(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
@@ -173,20 +177,19 @@ function setSubsCardStartDateInState(setStartDate, startDate) {
 // ----- Component ----- //
 
 function PaperCheckoutForm(props: PropTypes) {
-  const collectionOption = props.useDigitalVoucher ? 'Subscription card' : 'Voucher booklet';
-  const collectionOptionDescription = props.useDigitalVoucher ? 'subscription card' : 'vouchers';
   const days = getDays(props.fulfilmentOption, props.productOption);
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Newspaper' : collectionOption;
-  const deliveryTitle = props.fulfilmentOption === HomeDelivery ? 'Where should we deliver your newspaper?' : `Where should we deliver your ${collectionOptionDescription}?`;
+  const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
+  const fulfilmentOptionDescriptor = isHomeDelivery ? 'Newspaper' : 'Subscription card';
+  const deliveryTitle = isHomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your subscription card?';
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
   const paymentMethods = supportedPaymentMethods(props.country);
-  const isSubscriptionCard = props.useDigitalVoucher && props.fulfilmentOption === Collection;
+  const isSubscriptionCard = props.fulfilmentOption === Collection;
   let formattedStartDate = '';
   if (isSubscriptionCard) {
     const timeNow = Date.now();
     const startDate = getPaymentStartDate(timeNow, props.productOption);
-    formattedStartDate = getFormattedStartDate(getPaymentStartDate(timeNow, props.productOption));
+    formattedStartDate = getFormattedStartDate(startDate);
     setSubsCardStartDateInState(props.setStartDate, startDate);
   }
   const [digiSubPriceString, setDigiSubPriceString] = useState<string>('');
@@ -242,11 +245,13 @@ function PaperCheckoutForm(props: PropTypes) {
     digiSubPrice={expandedPricingText}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
+    productType={Paper}
+    paymentStartDate={formattedStartDate}
   />);
 
   return (
     <Content modifierClasses={['your-details']}>
-      <Layout aside={isSubscriptionCard ? subsCardOrderSummary : homeDeliveryOrderSummary}>
+      <Layout aside={isHomeDelivery ? homeDeliveryOrderSummary : subsCardOrderSummary}>
         <Form onSubmit={(ev) => {
           ev.preventDefault();
           props.submitForm();
@@ -280,7 +285,7 @@ function PaperCheckoutForm(props: PropTypes) {
           <FormSection title={deliveryTitle}>
             <DeliveryAddress />
             {
-              props.fulfilmentOption === HomeDelivery ?
+              isHomeDelivery ?
                 <TextArea
                   css={controlTextAreaResizing}
                   id="delivery-instructions"
@@ -333,7 +338,7 @@ function PaperCheckoutForm(props: PropTypes) {
               </FormSection>
               : null
           }
-          {!isSubscriptionCard ? (
+          {isHomeDelivery ? (
             <FormSection title="When would you like your subscription to start?">
               <Rows>
                 <RadioGroup
