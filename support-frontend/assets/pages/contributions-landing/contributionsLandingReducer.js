@@ -85,13 +85,15 @@ export type AmazonPayLibrary = {
 }
 
 export type AmazonPayData = {
-  hasBegunLoading: boolean,
-  amazonPayLibrary: AmazonPayLibrary,
-  walletWidgetReady: boolean,
-  orderReferenceId: string | null,
-  paymentSelected: boolean,
-  hasAccessToken: boolean,
-  fatalError: boolean,
+  hasBegunLoading: boolean, // to avoid loading the sdk more than once
+  amazonPayLibrary: AmazonPayLibrary, // sdk objects
+  walletIsStale: boolean, // for re-rendering the wallet widget when an error needs to be displayed
+  hasAccessToken: boolean, // set when user logs in
+  paymentSelected: boolean, // indicates if user has selected a payment method from their wallet
+  fatalError: boolean, // for when we cannot use amazon pay
+  orderReferenceId: string | null, // for one-off contributions
+  amazonBillingAgreementId?: string, // for recurring contributions
+  amazonBillingAgreementConsentStatus: boolean, // for recurring contributions
 }
 
 export type PayPalData = {
@@ -169,11 +171,12 @@ function createFormReducer() {
         amazonPaymentsObject: null,
       },
       loginButtonReady: false,
-      walletWidgetReady: false,
+      walletIsStale: false,
       orderReferenceId: null,
       paymentSelected: false,
       hasAccessToken: false,
       fatalError: false,
+      amazonBillingAgreementConsentStatus: false,
     },
     payPalData: {
       hasBegunLoading: false,
@@ -302,12 +305,12 @@ function createFormReducer() {
           },
         };
 
-      case 'SET_AMAZON_PAY_WALLET_WIDGET_READY':
+      case 'SET_AMAZON_PAY_WALLET_IS_STALE':
         return {
           ...state,
           amazonPayData: {
             ...state.amazonPayData,
-            walletWidgetReady: action.isReady,
+            walletIsStale: action.isStale,
           },
         };
 
@@ -344,6 +347,24 @@ function createFormReducer() {
           amazonPayData: {
             ...state.amazonPayData,
             fatalError: true,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonBillingAgreementId: action.amazonBillingAgreementId,
+          },
+        };
+
+      case 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS':
+        return {
+          ...state,
+          amazonPayData: {
+            ...state.amazonPayData,
+            amazonBillingAgreementConsentStatus: action.amazonBillingAgreementConsentStatus,
           },
         };
 

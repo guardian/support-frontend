@@ -53,7 +53,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     val pattern = "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) =>
-        val checkoutFailureReason = toCheckoutFailureReason(ze)
+        val checkoutFailureReason = toCheckoutFailureReason(ze, state.analyticsInfo.paymentProvider)
         logLambdaResult(state, PaymentFailure, checkoutFailureReason, error)
         exitHandler(
           state,
@@ -130,10 +130,13 @@ object FailureHandler {
 
   private def tryToDecode[T](errorJson: ErrorJson)(implicit decoder: Decoder[T]): Option[T] = decode[T](errorJson.errorMessage).toOption
 
-  def toCheckoutFailureReason(zuoraError: ZuoraError): CheckoutFailureReason = {
-    // Just get Stripe's decline code (example message from Zuora: "Transaction declined.do_not_honor - Your card was declined.")
+  def toCheckoutFailureReason(zuoraError: ZuoraError, paymentProvider: PaymentProvider): CheckoutFailureReason = {
+    // Just get the decline code (example message from Zuora: "Transaction declined.do_not_honor - Your card was declined.")
     val trimmedError = zuoraError.Message.stripPrefix("Transaction declined.").split(" ")(0)
-    convertStripeDeclineCode(trimmedError).getOrElse(Unknown)
+    paymentProvider match {
+      case AmazonPay => convertAmazonPayDeclineCode(trimmedError)
+      case _ => convertStripeDeclineCode(trimmedError).getOrElse(Unknown)
+    }
   }
 
   def toCheckoutFailureReason(stripeError: StripeError): CheckoutFailureReason = {

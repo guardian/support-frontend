@@ -104,6 +104,7 @@ class PaperFieldsGenerator(
     ))
     case _: CreditCardReferenceTransaction => Future.successful(List("payment_method" -> "Credit/Debit Card"))
     case _: PayPalReferenceTransaction => Future.successful(List("payment_method" -> "PayPal"))
+    case _: AmazonPayPaymentMethod => Future.successful(List("payment_method" -> "AmazonPay"))
   }
 
 }

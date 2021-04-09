@@ -40,13 +40,17 @@ import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 
 import './components/digitalSubscriptionLanding.scss';
 import 'stylesheets/skeleton/skeleton.scss';
+import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { orderIsAGift, productPrices, promotionCopy } = store.getState().page;
+const { common, page } = store.getState();
+const { orderIsAGift, productPrices, promotionCopy } = page;
+const { abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+const accordionOpen = abParticipations.accordionTest === 'accordionOpen';
 
 // ----- Internationalisation ----- //
 
@@ -106,8 +110,14 @@ function LandingPage() {
         <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
       }
       {countryGroupId === AUDCountries ?
-        <ProductBlockAus countryGroupId={countryGroupId} /> :
-        <ProductBlock countryGroupId={countryGroupId} />
+        <ProductBlockAus
+          countryGroupId={countryGroupId}
+          accordionOpen={accordionOpen}
+        /> :
+        <ProductBlock
+          countryGroupId={countryGroupId}
+          accordionOpen={accordionOpen}
+        />
       }
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
@@ -119,6 +129,7 @@ function LandingPage() {
           <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
+      <FeedbackWidget />
     </Page>
   );
 

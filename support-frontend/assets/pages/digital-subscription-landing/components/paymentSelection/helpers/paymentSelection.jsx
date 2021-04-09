@@ -28,6 +28,7 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
 
 import { type PropTypes } from '../paymentSelection';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 export type PaymentOption = {
   title: string,
@@ -138,12 +139,21 @@ const mapStateToProps = (state: State): PropTypes => {
       componentType: 'ACQUISITIONS_BUTTON',
     };
 
+    const trackClick = () => {
+      gaEvent({
+        category: 'click',
+        action: 'DigitalPack',
+        label: trackingProperties.id,
+      });
+      sendTrackingEventsOnClick(trackingProperties)();
+    };
+
     return orderIsAGift ?
       {
         title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
         price: getDisplayPrice(currencyId, fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: sendTrackingEventsOnClick(trackingProperties),
+        onClick: trackClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(),
         offerCopy: '',
@@ -154,7 +164,7 @@ const mapStateToProps = (state: State): PropTypes => {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
         price: getDisplayPrice(currencyId, getFirstValidPrice(promotionalPrice, fullPrice)),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: sendTrackingEventsOnClick(trackingProperties),
+        onClick: trackClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
         offerCopy,

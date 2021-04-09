@@ -82,6 +82,7 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   campaignSettings: CampaignSettings | null,
   referrerSource: ?string,
+  amazonPayBillingAgreementId: ?string,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -115,6 +116,7 @@ const mapStateToProps = (state: State) => ({
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
+  amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
 });
 
 
@@ -150,7 +152,14 @@ const formHandlersForRecurring = {
     paymentMethod: 'ExistingDirectDebit',
     billingAccountId: props.existingPaymentMethod.billingAccountId,
   }),
-  AmazonPay: (props: PropTypes) => logInvalidCombination(props.contributionType, AmazonPay),
+  AmazonPay: (props: PropTypes) => {
+    if (props.amazonPayBillingAgreementId) {
+      props.onPaymentAuthorisation({
+        paymentMethod: 'AmazonPay',
+        amazonPayBillingAgreementId: props.amazonPayBillingAgreementId,
+      });
+    }
+  },
 };
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {

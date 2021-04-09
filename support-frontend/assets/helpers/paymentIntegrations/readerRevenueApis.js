@@ -94,12 +94,15 @@ type CorporateRedemption = {|
 
 type RegularExistingPaymentFields = {| billingAccountId: string |};
 
+type RegularAmazonPayPaymentFields = {| amazonPayBillingAgreementId: string |};
+
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentIntentFields |
   RegularDirectDebitPaymentFields |
   RegularExistingPaymentFields |
-  CorporateRedemption;
+  CorporateRedemption |
+  RegularAmazonPayPaymentFields;
 
 export type RegularPaymentRequestAddress = {|
   country: IsoCountry,
@@ -166,7 +169,8 @@ export type ExistingDirectDebitAuthorisation = {|
 |};
 export type AmazonPayAuthorisation = {|
   paymentMethod: typeof AmazonPay,
-  orderReferenceId: string
+  orderReferenceId?: string,
+  amazonPayBillingAgreementId?: string
 |}
 
 // Represents an authorisation to execute payments with a given payment method.
@@ -219,6 +223,11 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
     case ExistingCard:
     case ExistingDirectDebit:
       return { billingAccountId: authorisation.billingAccountId };
+    case AmazonPay:
+      if (authorisation.amazonPayBillingAgreementId) {
+        return { amazonPayBillingAgreementId: authorisation.amazonPayBillingAgreementId };
+      }
+      throw new Error('Cant create a regular Amazon Pay authorisation for one off');
 
     // TODO: what is a sane way to handle such cases?
     default:

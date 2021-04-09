@@ -51,7 +51,7 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
-import { trackComponentEvents } from "../../../../helpers/tracking/ophan";
+import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
 
 // ----- Types -----//
 
@@ -286,16 +286,16 @@ function setUpPaymentListenerSca(
   paymentRequest.on('paymentmethod', ({ complete, paymentMethod, ...data }) => {
 
     const processPayment = () => {
-      if (paymentMethod && paymentMethod.card && paymentMethod.card.wallet) {
-        trackComponentEvents({
-          component: {
-            componentType: 'ACQUISITIONS_OTHER',
-          },
-          action: 'CLICK',
-          id: 'stripe-prb-wallet',
-          value: paymentMethod.card.wallet.type
-        })
-      }
+      const walletType = paymentMethod && paymentMethod.card && paymentMethod.card.wallet ? paymentMethod.card.wallet.type : 'no-wallet';
+      trackComponentEvents({
+        component: {
+          componentType: 'ACQUISITIONS_OTHER',
+        },
+        action: 'CLICK',
+        id: 'stripe-prb-wallet',
+        value: walletType,
+      });
+
       if (props.contributionType === 'ONE_OFF') {
         props.onPaymentAuthorised({
           paymentMethod: Stripe,
@@ -397,10 +397,10 @@ const PaymentRequestButton = (props: PropTypes) => {
 
   useEffect(() => {
     // Call canMakePayment on the paymentRequest object only once, once the stripe object is ready
-    if (stripe) {
+    if (stripe && !props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
       initialisePaymentRequest({ ...props }, stripe);
     }
-  }, [stripe]);
+  }, [stripe, props.stripePaymentRequestButtonData.stripePaymentRequestObject]);
 
   if (
     !props.stripePaymentRequestButtonData.paymentMethod ||
