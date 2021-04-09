@@ -115,7 +115,7 @@ function withProps(props: PropTypes) {
             id="contributionOther"
             label={`Other amount (${otherLabelSymbol})`}
             value={otherAmount}
-            onBlur={e => props.updateOtherAmount(
+            onChange={e => props.updateOtherAmount(
               (e.target: any).value,
               props.countryGroupId,
               props.contributionType,
