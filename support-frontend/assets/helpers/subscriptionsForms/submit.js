@@ -56,7 +56,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { type ProductOptions, NoProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Functions ----- //
 
@@ -284,7 +284,7 @@ function trackSubmitAttempt(
   productType: SubscriptionProduct,
   productOption: ProductOptions,
 ) {
-  const componentId = productOption === 'noProductOption' ?
+  const componentId = productOption === NoProductOptions ?
     `subs-checkout-submit-${productType}-${paymentMethod || ''}` :
     `subs-checkout-submit-${productType}-${productOption}-${paymentMethod || ''}`;
   trackCheckoutSubmitAttempt(componentId, productType, paymentMethod, productType);
