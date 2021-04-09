@@ -397,10 +397,10 @@ const PaymentRequestButton = (props: PropTypes) => {
 
   useEffect(() => {
     // Call canMakePayment on the paymentRequest object only once, once the stripe object is ready
-    if (stripe) {
+    if (stripe && !props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
       initialisePaymentRequest({ ...props }, stripe);
     }
-  }, [stripe]);
+  }, [stripe, props.stripePaymentRequestButtonData.stripePaymentRequestObject]);
 
   if (
     !props.stripePaymentRequestButtonData.paymentMethod ||
