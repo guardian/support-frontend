@@ -176,9 +176,7 @@ function ThankYouContent({
           {(startDate && !hideStartDate) &&
             <p css={subHeading}>
               <span>
-                {fulfilmentOption === HomeDelivery ?
-                  'You will receive your newspapers from' :
-                  'You can start using your vouchers from'}
+                  You will receive your newspapers from
               </span>
               <span> {formatUserDate(new Date(startDate))}</span>
             </p>
