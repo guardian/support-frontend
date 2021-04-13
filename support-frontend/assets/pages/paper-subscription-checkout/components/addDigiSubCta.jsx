@@ -1,6 +1,7 @@
 // @flow
 
-import React from 'react';
+// $FlowIgnore - required for hooks
+import * as React from 'react';
 import { css } from '@emotion/core';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
@@ -10,7 +11,7 @@ import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { Checkbox } from '@guardian/src-checkbox';
 import GridImage from 'components/gridImage/gridImage';
 import { ListWithSubText } from 'components/list/list';
-
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 type PropTypes = {|
   digiSubPrice: string;
@@ -77,9 +78,25 @@ const listCopy = [
 ];
 
 function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
+  const [expanded, setExpanded] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    sendTrackingEventsOnClick({
+      id: `Paper_Checkout_DigiPlus_Accordion-${expanded ? 'expand' : 'minimize'}`,
+      product: 'Paper',
+      componentType: 'ACQUISITIONS_OTHER',
+    })();
+  }, [expanded]);
+
   return (
     <Accordion cssOverrides={ctaContainer} hideToggleLabel>
-      <AccordionRow cssOverrides={rowOverrides} label={`Would you like to add a digital subscription for ${digiSubPrice}?`}>
+      <AccordionRow
+        cssOverrides={rowOverrides}
+        label={`Would you like to add a digital subscription for ${digiSubPrice}?`}
+        onClick={() => {
+      setExpanded(!expanded);
+}}
+      >
         <div css={[imageContainer, lightBorder]}>
           <GridImage
             gridId="editionsShortPackshot"
