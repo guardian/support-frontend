@@ -98,7 +98,7 @@ function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
         <div css={content}>
           <Checkbox
             value="add-digital"
-            label={`Add the Digital subscription for ${digiSubPrice}`}
+            label={`Add the digital subscription for ${digiSubPrice}`}
             onChange={addDigitalSubscription}
           />
         </div>

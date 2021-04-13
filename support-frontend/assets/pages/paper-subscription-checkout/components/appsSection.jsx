@@ -152,8 +152,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
     <div css={maxWidth}>
       <h3 css={subHeading}>Download The Guardian<br css={tinyMobileOnly} /> Editions App</h3>
       <p css={sansText}>
-        Each day&apos;s edition in one simple, elegant app. Contains the UK Daily
-        the Australian Weekend and other special editions.
+        Each day&apos;s edition in one simple, elegant app. Contains the UK Daily, Australian Weekend and other special editions.
       </p>
       <AppStoreLink
         storeLink={getDailyEditionUrl(countryGroupId)}
