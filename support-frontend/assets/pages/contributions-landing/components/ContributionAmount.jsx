@@ -119,7 +119,7 @@ function withProps(props: PropTypes) {
         validAmounts={overrideCurrency() ? props.localAmounts : validAmounts}
         defaultAmount={defaultAmount}
         showOther={showOther}
-        selectedAmounts={overrideCurrency() ? props.localSelectedAmounts : props.selectedAmounts}
+        selectedAmounts={props.selectedAmounts}
         selectAmount={props.selectAmount}
         shouldShowFrequencyButtons={props.contributionType !== 'ONE_OFF'}
       />
