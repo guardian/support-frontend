@@ -136,15 +136,14 @@ type StateTypes = {
 type PropTypes = {
   // eslint-ignore no-unused-prop-types
   countryGroupId: CountryGroupId,
-  accordionOpen: boolean,
 }
 
 class ProductBlockAus extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
     super(props);
     this.state = {
-      showDropDownDaily: props.accordionOpen,
-      showDropDownApp: props.accordionOpen,
+      showDropDownDaily: false,
+      showDropDownApp: false,
     };
   }
 

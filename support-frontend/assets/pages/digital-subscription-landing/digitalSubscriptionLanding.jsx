@@ -46,11 +46,8 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { common, page } = store.getState();
-const { orderIsAGift, productPrices, promotionCopy } = page;
-const { abParticipations } = common;
+const { orderIsAGift, productPrices, promotionCopy } = store.getState().page;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-const accordionOpen = abParticipations.accordionTest === 'accordionOpen';
 
 // ----- Internationalisation ----- //
 
@@ -112,11 +109,9 @@ function LandingPage() {
       {countryGroupId === AUDCountries ?
         <ProductBlockAus
           countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
         /> :
         <ProductBlock
           countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
         />
       }
       <FullWidthContainer theme="dark" hasOverlap>
