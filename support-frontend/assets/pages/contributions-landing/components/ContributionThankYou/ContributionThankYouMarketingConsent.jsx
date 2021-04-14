@@ -10,9 +10,8 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
-import { Button, buttonReaderRevenue } from '@guardian/src-button';
+import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { ThemeProvider } from 'emotion-theming';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
 import ActionBody from './components/ActionBody';
@@ -66,7 +65,6 @@ type ContributionThankYouMarketingConsentProps = {|
   email: string,
   csrf: Csrf,
   subscribeToNewsLetter: (email: string, csrf: Csrf) => void,
-  thankyouPageHeadingTestVariant: boolean,
   thankyouPageMarketingConsentTestVariant: string,
 |};
 
@@ -74,7 +72,6 @@ const ContributionThankYouMarketingConsent = ({
   email,
   csrf,
   subscribeToNewsLetter,
-  thankyouPageHeadingTestVariant,
   thankyouPageMarketingConsentTestVariant,
 }: ContributionThankYouMarketingConsentProps) => {
   const [hasConsented, setHasConsented] = useState(false);
@@ -145,31 +142,16 @@ const ContributionThankYouMarketingConsent = ({
             </CheckboxGroup>
           </div>
           <div css={buttonContainer}>
-            {
-              thankyouPageHeadingTestVariant ?
-                <ThemeProvider theme={buttonReaderRevenue}>
-                  <Button
-                    onClick={onSubmit}
-                    size="default"
-                    icon={<SvgArrowRightStraight />}
-                    iconSide="right"
-                    nudgeIcon
-                    css={css`color: black;`}
-                  >
-                    Subscribe
-                  </Button>
-                </ThemeProvider> :
-                <Button
-                  onClick={onSubmit}
-                  priority={thankyouPageHeadingTestVariant ? 'secondary' : 'primary'}
-                  size="default"
-                  icon={<SvgArrowRightStraight />}
-                  iconSide="right"
-                  nudgeIcon
-                >
+            <Button
+              onClick={onSubmit}
+              priority="primary"
+              size="default"
+              icon={<SvgArrowRightStraight />}
+              iconSide="right"
+              nudgeIcon
+            >
                   Subscribe
-                </Button>
-            }
+            </Button>
           </div>
         </>
       )}

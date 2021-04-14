@@ -139,8 +139,6 @@ type ContributionThankYouProps = {|
   paymentMethod: PaymentMethod,
   countryId: IsoCountry,
   campaignCode: ?string,
-  thankyouPageHeadingTestVariant: boolean,
-  largeDonationMessageTestVariant: boolean
 |};
 
 const mapStateToProps = state => ({
@@ -159,10 +157,6 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
   campaignCode: state.common.referrerAcquisitionData.campaignCode,
-  thankyouPageHeadingTestVariant:
-    state.common.abParticipations.thankyouPageHeadingTest === 'V1',
-  largeDonationMessageTestVariant:
-    state.common.abParticipations.globalThankyouPageLargeDonationTest === 'V1',
 });
 
 const ContributionThankYou = ({
@@ -177,16 +171,10 @@ const ContributionThankYou = ({
   paymentMethod,
   countryId,
   campaignCode,
-  thankyouPageHeadingTestVariant,
-  largeDonationMessageTestVariant,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() =>
     getCampaignSettings(campaignCode));
-
-
-  const shouldShowLargeDonationMessage =
-    largeDonationMessageTestVariant && isLargeDonation(amount, contributionType);
 
   useEffect(() => {
     trackUserData(
@@ -211,7 +199,6 @@ const ContributionThankYou = ({
       <ContributionThankYouMarketingConsent
         email={email}
         csrf={csrf}
-        thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
       />
     ),
     shouldShow: true,
@@ -279,8 +266,7 @@ const ContributionThankYou = ({
           contributionType={contributionType}
           amount={amount}
           currency={currency}
-          thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
-          shouldShowLargeDonationMessage={shouldShowLargeDonationMessage}
+          shouldShowLargeDonationMessage={isLargeDonation(amount, contributionType)}
         />
       </div>
 
