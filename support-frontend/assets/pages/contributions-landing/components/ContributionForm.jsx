@@ -111,7 +111,6 @@ const mapStateToProps = (state: State) => ({
   createStripePaymentMethod: state.page.form.stripeCardFormData.createPaymentMethod,
   stripeClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   contributionType: state.page.form.contributionType,
-  currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
   selectedAmounts: state.page.form.selectedAmounts,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
@@ -125,10 +124,14 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
+
   isEligibleCountry: state.page.form.isEligibleCountry,
   localCurrency: state.page.form.localCurrency,
   localAmounts: state.page.form.localAmounts,
   useLocalCurrency: state.page.form.useLocalCurrency,
+  currency: state.page.form.useLocalCurrency
+    ? state.page.form.localCurrency
+    : state.common.internationalisation.currencyId,
 });
 
 

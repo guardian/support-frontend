@@ -24,8 +24,8 @@ import { marketingConsentReducerFor } from '../../components/marketingConsent/ma
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from '../../helpers/internationalisation/country';
-import type {IsoCurrency} from "../../helpers/internationalisation/currency";
-import {currencies, localCurrencyFromCountryCode} from "../../helpers/internationalisation/currency";
+import type {IsoCurrency} from '../../helpers/internationalisation/currency';
+import { localCurrencyFromCountryCode } from '../../helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
@@ -130,9 +130,11 @@ type FormState = {
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
   oneOffRecaptchaToken: string | null,
+
   isEligibleCountry: boolean,
   localCurrency: IsoCurrency | null,
   localAmounts: number[] | null,
+  localSelectedAmounts: SelectedAmounts,
   useLocalCurrency: boolean,
 };
 
@@ -154,6 +156,9 @@ export type State = {
 function createFormReducer() {
 
   // ----- Initial state ----- //
+
+  const geoipCountryCode =window.guardian.geoip.countryCode;
+  const isEligibleForLocalCurrency = ['SE','CH','NO','DK'].includes(geoipCountryCode);
 
   const initialState: FormState = {
     contributionType: getContributionTypeFromSession() || 'MONTHLY',
@@ -242,9 +247,10 @@ function createFormReducer() {
     tickerGoalReached: false,
     oneOffRecaptchaToken: null,
 
-    isEligibleCountry: ['SE', 'CH'].includes(window.guardian.geoip.countryCode),
-    localCurrency: localCurrencyFromCountryCode(window.guardian.geoip.countryCode),
-    localAmounts: null,
+    isEligibleCountry: isEligibleForLocalCurrency,
+    localCurrency: localCurrencyFromCountryCode(geoipCountryCode),
+    localAmounts: [50, 100, 150, 200],
+    localSelectedAmounts: { ONE_OFF: 50 },
     useLocalCurrency: false,
   };
 

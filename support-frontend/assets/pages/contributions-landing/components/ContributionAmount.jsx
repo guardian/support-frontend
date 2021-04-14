@@ -37,6 +37,7 @@ type PropTypes = {|
 
   localCurrency: IsoCurrency | null,
   localAmounts: number[] | null,
+  localSelectedAmounts: SelectedAmounts,
   useLocalCurrency: boolean,
 |};
 
@@ -54,6 +55,7 @@ const mapStateToProps = (state: State) => ({
 
   localCurrency: state.page.form.localCurrency,
   localAmounts: state.page.form.localAmounts,
+  localSelectedAmounts: state.page.form.localSelectedAmounts,
   useLocalCurrency: state.page.form.useLocalCurrency,
 });
 
@@ -101,7 +103,10 @@ function withProps(props: PropTypes) {
       `Please provide an amount between ${minAmount} and ${maxAmount}` :
       null;
 
-  const currency = () => props.useLocalCurrency ? props.localCurrency : props.currency;
+  const overrideCurrency = () => props.useLocalCurrency && props.contributionType === 'ONE_OFF'
+  const currency = () => overrideCurrency()
+      ? props.localCurrency
+      : props.currency;
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
@@ -111,10 +116,10 @@ function withProps(props: PropTypes) {
         countryGroupId={props.countryGroupId}
         currency={currency()}
         contributionType={props.contributionType}
-        validAmounts={validAmounts}
+        validAmounts={overrideCurrency() ? props.localAmounts : validAmounts}
         defaultAmount={defaultAmount}
         showOther={showOther}
-        selectedAmounts={props.selectedAmounts}
+        selectedAmounts={overrideCurrency() ? props.localSelectedAmounts : props.selectedAmounts}
         selectAmount={props.selectAmount}
         shouldShowFrequencyButtons={props.contributionType !== 'ONE_OFF'}
       />

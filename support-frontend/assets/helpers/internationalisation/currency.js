@@ -161,6 +161,8 @@ function fromString(s: string): ?IsoCurrency {
     case 'cad': return 'CAD';
     case 'sek': return 'SEK';
     case 'chf': return 'CHF';
+    case 'nok': return 'NOK';
+    case 'dkk': return 'DKK';
     default: return null;
   }
 }
