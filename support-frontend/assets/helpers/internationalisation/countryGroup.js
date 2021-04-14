@@ -13,6 +13,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 const GBPCountries: 'GBPCountries' = 'GBPCountries';
 const UnitedStates: 'UnitedStates' = 'UnitedStates';
 const AUDCountries: 'AUDCountries' = 'AUDCountries';
+const Sweden: 'Sweden' = 'Sweden';
 const EURCountries: 'EURCountries' = 'EURCountries';
 const NZDCountries: 'NZDCountries' = 'NZDCountries';
 const Canada: 'Canada' = 'Canada';
@@ -22,12 +23,13 @@ export type CountryGroupId =
   typeof GBPCountries
   | typeof UnitedStates
   | typeof AUDCountries
+  | typeof Sweden
   | typeof EURCountries
   | typeof International
   | typeof NZDCountries
   | typeof Canada;
 
-export type CountryGroupName = 'United Kingdom' | 'United States' | 'Australia' | 'Europe' | 'International' | 'New Zealand' | 'Canada';
+export type CountryGroupName = 'United Kingdom' | 'United States' | 'Australia' | 'Sweden' | 'Europe' | 'International' | 'New Zealand' | 'Canada';
 
 /*
   Note: supportInternationalizationId should match an existing
@@ -64,6 +66,12 @@ const countryGroups: CountryGroups = {
     currency: 'AUD',
     countries: ['AU', 'KI', 'NR', 'NF', 'TV'],
     supportInternationalisationId: 'au',
+  },
+  Sweden: {
+    name: 'Sweden',
+    currency: 'SEK',
+    countries: ['SE'],
+    supportInternationalisationId: 'eu',
   },
   EURCountries: {
     name: 'Europe',
@@ -127,6 +135,7 @@ function fromString(countryGroup: string): ?CountryGroupId {
     case 'GBPCountries': return GBPCountries;
     case 'UnitedStates': return UnitedStates;
     case 'AUDCountries': return AUDCountries;
+    case 'Sweden': return Sweden;
     case 'EURCountries': return EURCountries;
     case 'International': return International;
     case 'NZDCountries': return NZDCountries;
@@ -197,6 +206,7 @@ export {
   GBPCountries,
   UnitedStates,
   AUDCountries,
+  Sweden,
   EURCountries,
   NZDCountries,
   Canada,

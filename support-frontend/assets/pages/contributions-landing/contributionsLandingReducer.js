@@ -24,6 +24,7 @@ import { marketingConsentReducerFor } from '../../components/marketingConsent/ma
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from '../../helpers/internationalisation/country';
+import type {IsoCurrency} from "../../helpers/internationalisation/currency";
 
 // ----- Types ----- //
 
@@ -49,6 +50,13 @@ type FormData = UserFormData & {
   billingCountry: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
+
+// type LocalCurrencyConfig = {
+//   isEligibleCountry: boolean,
+//   localCurrency: IsoCurrency | null,
+//   localAmounts: number[] | null,
+//   useLocalCurrency: boolean,
+// };
 
 type SetPasswordData = {
   password: string,
@@ -128,6 +136,10 @@ type FormState = {
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
   oneOffRecaptchaToken: string | null,
+  isEligibleCountry: boolean,
+  localCurrency: IsoCurrency | null,
+  localAmounts: number[] | null,
+  useLocalCurrency: boolean,
 };
 
 type PageState = {
@@ -235,6 +247,10 @@ function createFormReducer() {
     formIsSubmittable: true,
     tickerGoalReached: false,
     oneOffRecaptchaToken: null,
+    isEligibleCountry: ['SE'].includes(window.guardian.geoip.countryCode),
+    localCurrency: null,
+    localAmounts: null,
+    useLocalCurrency: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -415,6 +431,9 @@ function createFormReducer() {
 
       case 'UPDATE_RECAPTCHA_TOKEN':
         return { ...state, oneOffRecaptchaToken: action.recaptchaToken };
+
+      case 'USE_LOCAL_CURRENCY':
+        return { ...state, useLocalCurrency: action.useLocalCurrency };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };

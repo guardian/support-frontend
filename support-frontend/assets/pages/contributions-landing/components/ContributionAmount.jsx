@@ -20,6 +20,7 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { TextInput } from '@guardian/src-text-input';
+import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 
 // ----- Types ----- //
 
@@ -126,6 +127,7 @@ function withProps(props: PropTypes) {
           />
         </div>
       }
+
     </fieldset>
   );
 }

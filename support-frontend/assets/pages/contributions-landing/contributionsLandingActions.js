@@ -107,6 +107,7 @@ export type Action =
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
   | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
+  | { type: 'USE_LOCAL_CURRENCY', useLocalCurrency: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -208,6 +209,8 @@ const updateOtherAmount = (otherAmount: string, contributionType: ContributionTy
 const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
+
+const setUseLocalCurrency = (useLocalCurrency: boolean): Action => ({ type: 'USE_LOCAL_CURRENCY', useLocalCurrency });
 
 const paymentFailure = (paymentError: ErrorReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
 
@@ -812,4 +815,5 @@ export {
   updateRecaptchaToken,
   loadPayPalExpressSdk,
   loadAmazonPaySdk,
+  setUseLocalCurrency,
 };

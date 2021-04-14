@@ -38,6 +38,7 @@ import { ContributionSubmit, EmptyContributionSubmit } from './ContributionSubmi
 import { type State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 import {
+  setUseLocalCurrency,
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
@@ -49,6 +50,7 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { logException } from 'helpers/logger';
+import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -83,6 +85,12 @@ type PropTypes = {|
   campaignSettings: CampaignSettings | null,
   referrerSource: ?string,
   amazonPayBillingAgreementId: ?string,
+
+  isEligibleCountry: boolean,
+  localCurrency: IsoCurrency | null,
+  localAmounts: number[] | null,
+  useLocalCurrency: boolean,
+  setUseLocalCurrency: boolean => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -117,6 +125,10 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
+  isEligibleCountry: state.page.form.isEligibleCountry,
+  localCurrency: state.page.form.localCurrency,
+  localAmounts: state.page.form.localAmounts,
+  useLocalCurrency: state.page.form.useLocalCurrency,
 });
 
 
@@ -125,6 +137,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setUseLocalCurrency: (useLocalCurrency) => { dispatch(setUseLocalCurrency(useLocalCurrency)); },
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -232,12 +245,31 @@ function withProps(props: PropTypes) {
 
   const classModifiers = ['contribution', 'with-labels'];
 
+  function toggleUseLocalCurrency() {
+    let currentState = props.useLocalCurrency;
+    let newState = !currentState
+    props.setUseLocalCurrency(newState)
+  }
+
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
       <h2 className="hidden-heading">Make a contribution</h2>
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />
         <ContributionAmount />
+        { `useLocalCurrency: ${props.useLocalCurrency}` }
+        {
+          props.contributionType === 'ONE_OFF' && props.isEligibleCountry &&
+          (
+            <CheckboxGroup cssOverrides='margin-top:16px;'>
+              <Checkbox
+                label='View in local currency'
+                defaultChecked={props.useLocalCurrency}
+                onChange={toggleUseLocalCurrency}
+              />
+            </CheckboxGroup>
+          )
+        }
       </div>
       <StripePaymentRequestButtonContainer
         currency={props.currency}

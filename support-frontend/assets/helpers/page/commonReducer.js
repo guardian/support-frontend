@@ -39,7 +39,6 @@ const getInternationalisationFromCountry = (countryId: IsoCountry, international
 
 // Sets up the common reducer with its initial state.
 function createCommonReducer(initialState: CommonState): (state?: CommonState, action: Action) => CommonState {
-
   return function commonReducer(
     state?: CommonState = initialState,
     action: Action,

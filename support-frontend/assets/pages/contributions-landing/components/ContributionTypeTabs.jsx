@@ -41,7 +41,6 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
-
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
