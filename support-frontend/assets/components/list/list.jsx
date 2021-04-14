@@ -101,7 +101,7 @@ const bulletSizes: { [key: ListBulletSize]: string } = {
 
 function ListItem({ item, colour, size }: ListItemProps) {
   return (
-    <li key={item.content} css={listItem}>
+    <li css={listItem}>
       <span css={[
         listItemBullet,
         bulletColours[colour],
@@ -120,7 +120,7 @@ ListItem.defaultProps = {
 
 function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
   return (
-    <li key={item.content} css={listItem}>
+    <li css={listItem}>
       <span css={[
         listItemBullet,
         bulletColours[colour],
@@ -145,7 +145,7 @@ function ListWith(ListItemComponent: React$ComponentType<ListItemProps>) {
     return (
       <ul css={[list, props.cssOverrides]}>
         {props.items.map(item => (
-          <ListItemComponent item={item} colour={props.bulletColour || 'light'} size={props.bulletSize || 'large'} />
+          <ListItemComponent key={item.content} item={item} colour={props.bulletColour || 'light'} size={props.bulletSize || 'large'} />
         ))}
       </ul>
     );

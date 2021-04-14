@@ -10,7 +10,8 @@ import { isTestUser } from 'helpers/user/user';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { NoProductOptions, paperProductsWithDigital,
+  paperProductsWithoutDigital } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
   getWeeklyFulfilmentOption,
@@ -153,6 +154,13 @@ function createFormReducer(
 
       case 'SET_GIFT_DELIVERY_DATE':
         return { ...state, giftDeliveryDate: action.giftDeliveryDate, formErrors: removeError('giftDeliveryDate', state.formErrors) };
+
+      case 'SET_ADD_DIGITAL_SUBSCRIPTION':
+        return {
+          ...state,
+          productOption: action.addDigital ?
+            paperProductsWithDigital[state.productOption] : paperProductsWithoutDigital[state.productOption],
+        };
 
       default:
         return state;
