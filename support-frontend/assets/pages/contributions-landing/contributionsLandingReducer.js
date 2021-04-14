@@ -25,7 +25,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from '../../helpers/internationalisation/country';
 import type {IsoCurrency} from "../../helpers/internationalisation/currency";
-import {currencies} from "../../helpers/internationalisation/currency";
+import {currencies, localCurrencyFromCountryCode} from "../../helpers/internationalisation/currency";
 
 // ----- Types ----- //
 
@@ -242,8 +242,8 @@ function createFormReducer() {
     tickerGoalReached: false,
     oneOffRecaptchaToken: null,
 
-    isEligibleCountry: ['SE'].includes(window.guardian.geoip.countryCode),
-    localCurrency: 'SEK',
+    isEligibleCountry: ['SE', 'CH'].includes(window.guardian.geoip.countryCode),
+    localCurrency: localCurrencyFromCountryCode(window.guardian.geoip.countryCode),
     localAmounts: null,
     useLocalCurrency: false,
   };

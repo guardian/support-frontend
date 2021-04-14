@@ -9,6 +9,7 @@ import {
   type CountryGroupId,
   countryGroups,
 } from './countryGroup';
+import type {IsoCountry} from "./country";
 
 // ----- Types ----- //
 
@@ -19,7 +20,10 @@ export type IsoCurrency =
   | 'EUR'
   | 'NZD'
   | 'CAD'
-  | 'SEK';
+  | 'SEK'
+  | 'CHF'
+  | 'NOK'
+  | 'DKK';
 
 export type Currency = {|
   glyph: string,
@@ -69,6 +73,24 @@ const currencies: {
     isSuffixGlyph: true,
     isPaddedGlyph: true,
   },
+  CHF: {
+    glyph: 'fr.',
+    extendedGlyph: 'fr.',
+    isSuffixGlyph: true,
+    isPaddedGlyph: true,
+  },
+  NOK: {
+    glyph: 'kr',
+    extendedGlyph: 'kr',
+    isSuffixGlyph: true,
+    isPaddedGlyph: true,
+  },
+  DKK: {
+    glyph: 'kr.',
+    extendedGlyph: 'kr.',
+    isSuffixGlyph: true,
+    isPaddedGlyph: true,
+  },
 };
 
 const spokenCurrencies: {
@@ -102,6 +124,18 @@ const spokenCurrencies: {
     singular: 'krona',
     plural: 'kronor',
   },
+  CHF: {
+    singular: 'franc',
+    plural: 'francs',
+  },
+  NOK: {
+    singular: 'krone',
+    plural: 'kroner',
+  },
+  DKK: {
+    singular: 'krone',
+    plural: 'kroner',
+  },
 };
 
 
@@ -126,6 +160,17 @@ function fromString(s: string): ?IsoCurrency {
     case 'nzd': return 'NZD';
     case 'cad': return 'CAD';
     case 'sek': return 'SEK';
+    case 'chf': return 'CHF';
+    default: return null;
+  }
+}
+
+function localCurrencyFromCountryCode(countryCode: IsoCountry): ?IsoCurrency {
+  switch (countryCode.toLowerCase()) {
+    case 'se': return 'SEK';
+    case 'ch': return 'CHF';
+    case 'no': return 'NOK';
+    case 'dk': return 'DKK';
     default: return null;
   }
 }
@@ -153,6 +198,7 @@ export {
   detect,
   spokenCurrencies,
   fromCountryGroupId,
+  localCurrencyFromCountryCode,
   currencies,
   glyph,
   extendedGlyph,

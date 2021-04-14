@@ -257,7 +257,6 @@ function withProps(props: PropTypes) {
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />
         <ContributionAmount />
-        { `useLocalCurrency: ${props.useLocalCurrency}` }
         {
           props.contributionType === 'ONE_OFF' && props.isEligibleCountry &&
           (
