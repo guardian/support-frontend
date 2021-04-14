@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
-import { type StateProvince } from 'helpers/internationalisation/country';
+import {fromString, type StateProvince} from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
@@ -25,6 +25,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from '../../helpers/internationalisation/country';
 import type {IsoCurrency} from "../../helpers/internationalisation/currency";
+import {currencies} from "../../helpers/internationalisation/currency";
 
 // ----- Types ----- //
 
@@ -50,13 +51,6 @@ type FormData = UserFormData & {
   billingCountry: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
-
-// type LocalCurrencyConfig = {
-//   isEligibleCountry: boolean,
-//   localCurrency: IsoCurrency | null,
-//   localAmounts: number[] | null,
-//   useLocalCurrency: boolean,
-// };
 
 type SetPasswordData = {
   password: string,
@@ -247,8 +241,9 @@ function createFormReducer() {
     formIsSubmittable: true,
     tickerGoalReached: false,
     oneOffRecaptchaToken: null,
+
     isEligibleCountry: ['SE'].includes(window.guardian.geoip.countryCode),
-    localCurrency: null,
+    localCurrency: 'SEK',
     localAmounts: null,
     useLocalCurrency: false,
   };

@@ -20,7 +20,6 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { TextInput } from '@guardian/src-text-input';
-import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 
 // ----- Types ----- //
 
@@ -35,6 +34,10 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+
+  localCurrency: IsoCurrency | null,
+  localAmounts: number[] | null,
+  useLocalCurrency: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -48,6 +51,10 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
+
+  localCurrency: state.page.form.localCurrency,
+  localAmounts: state.page.form.localAmounts,
+  useLocalCurrency: state.page.form.useLocalCurrency,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -94,13 +101,15 @@ function withProps(props: PropTypes) {
       `Please provide an amount between ${minAmount} and ${maxAmount}` :
       null;
 
+  const currency = () => props.useLocalCurrency ? props.localCurrency : props.currency;
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
 
       <ContributionAmountChoices
         countryGroupId={props.countryGroupId}
-        currency={props.currency}
+        currency={currency()}
         contributionType={props.contributionType}
         validAmounts={validAmounts}
         defaultAmount={defaultAmount}

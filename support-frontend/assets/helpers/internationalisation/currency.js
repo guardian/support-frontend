@@ -24,6 +24,8 @@ export type IsoCurrency =
 export type Currency = {|
   glyph: string,
   extendedGlyph: string,
+  isSuffixGlyph: boolean | null,
+  isPaddedGlyph: boolean | null,
 |};
 
 export type SpokenCurrency = {|
@@ -64,6 +66,8 @@ const currencies: {
   SEK: {
     glyph: 'kr',
     extendedGlyph: 'kr',
+    isSuffixGlyph: true,
+    isPaddedGlyph: true,
   },
 };
 
@@ -140,6 +144,8 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
 
 const glyph = (c: IsoCurrency): string => currencies[c].glyph;
 const extendedGlyph = (c: IsoCurrency): string => currencies[c].extendedGlyph;
+const isSuffixGlyph = (c: IsoCurrency): string => currencies[c].isSuffixGlyph;
+const isPaddedGlyph = (c: IsoCurrency): string => currencies[c].isPaddedGlyph;
 
 // ----- Exports ----- //
 
@@ -150,4 +156,6 @@ export {
   currencies,
   glyph,
   extendedGlyph,
+  isSuffixGlyph,
+  isPaddedGlyph,
 };
