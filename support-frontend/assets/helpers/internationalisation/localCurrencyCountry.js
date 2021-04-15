@@ -19,7 +19,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
-        defaultAmount: 50
+        defaultAmount: 100
       },
     },
   },
@@ -30,7 +30,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [5, 10, 15, 20],
-        defaultAmount: 5
+        defaultAmount: 10
       },
     },
   },
@@ -41,7 +41,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
-        defaultAmount: 50
+        defaultAmount: 100
       },
     },
   },
@@ -52,7 +52,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
-        defaultAmount: 50
+        defaultAmount: 100
       },
     },
   },

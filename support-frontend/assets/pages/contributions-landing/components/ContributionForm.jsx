@@ -26,7 +26,7 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type {ContributionAmounts, OtherAmounts, SelectedAmounts} from 'helpers/contributions';
 import type { CampaignSettings } from 'helpers/campaigns';
 
 import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
@@ -40,7 +40,7 @@ import { type State } from 'pages/contributions-landing/contributionsLandingRedu
 import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
-  createOneOffPayPalPayment,
+  createOneOffPayPalPayment, selectAmount,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -86,6 +86,7 @@ type PropTypes = {|
   referrerSource: ?string,
   amazonPayBillingAgreementId: ?string,
   localCurrencyCountry: LocalCurrencyCountry | null,
+  amounts: ContributionAmounts,
   useLocalCurrency: boolean,
   setUseLocalCurrency: boolean => void,
 |};
@@ -124,6 +125,7 @@ const mapStateToProps = (state: State) => ({
   localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
   currency: state.common.internationalisation.countryId,
+  amounts: state.common.amounts,
 });
 
 
@@ -134,7 +136,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   setUseLocalCurrency: (useLocalCurrency) => {
     dispatch(setUseLocalCurrency(useLocalCurrency));
-    dispatch(setUseLocalAmounts(useLocalCurrency))
+    dispatch(setUseLocalAmounts(useLocalCurrency));
   },
 });
 
@@ -244,9 +246,7 @@ function withProps(props: PropTypes) {
   const classModifiers = ['contribution', 'with-labels'];
 
   function toggleUseLocalCurrency() {
-    let currentState = props.useLocalCurrency;
-    let newState = !currentState
-    props.setUseLocalCurrency(newState)
+    props.setUseLocalCurrency(!props.useLocalCurrency)
   }
 
   return (
