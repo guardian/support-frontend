@@ -12,7 +12,6 @@ import type { Tests } from './abtest';
 const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
-const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
   thankyouPageHeadingTest: {
@@ -76,28 +75,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: allLandingPagesAndThankyouPages,
     seed: 12,
-  },
-
-  accordionTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'accordionOpen',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: digiSubLandingPages,
-    seed: 16,
-    optimizeId: 'oeDqGqpqT4OLrAaMJjYz6A',
   },
 
   thankyouPageMarketingConsentTestR2: {
