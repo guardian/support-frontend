@@ -19,7 +19,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
-
+import { setUseLocalCurrency } from '../../../helpers/page/commonActions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
@@ -38,7 +38,6 @@ import { ContributionSubmit, EmptyContributionSubmit } from './ContributionSubmi
 import { type State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 import {
-  setUseLocalCurrency,
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
@@ -51,6 +50,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { logException } from 'helpers/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
+import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -85,10 +85,7 @@ type PropTypes = {|
   campaignSettings: CampaignSettings | null,
   referrerSource: ?string,
   amazonPayBillingAgreementId: ?string,
-
-  isEligibleCountry: boolean,
-  localCurrency: IsoCurrency | null,
-  localAmounts: number[] | null,
+  localCurrencyCountry: LocalCurrencyCountry | null,
   useLocalCurrency: boolean,
   setUseLocalCurrency: boolean => void,
 |};
@@ -124,14 +121,9 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
-
-  isEligibleCountry: state.page.form.isEligibleCountry,
-  localCurrency: state.page.form.localCurrency,
-  localAmounts: state.page.form.localAmounts,
-  useLocalCurrency: state.page.form.useLocalCurrency,
-  currency: state.page.form.useLocalCurrency
-    ? state.page.form.localCurrency
-    : state.common.internationalisation.currencyId,
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
+  currency: state.common.internationalisation.countryId,
 });
 
 
@@ -261,11 +253,11 @@ function withProps(props: PropTypes) {
         <ContributionTypeTabs />
         <ContributionAmount />
         {
-          props.contributionType === 'ONE_OFF' && props.isEligibleCountry &&
+          props.localCurrencyCountry && props.contributionType === 'ONE_OFF' &&
           (
             <CheckboxGroup cssOverrides='margin-top:16px;'>
               <Checkbox
-                label='View in local currency'
+                label={`View in local currency ${props.localCurrencyCountry.flagEmoji}`}
                 defaultChecked={props.useLocalCurrency}
                 onChange={toggleUseLocalCurrency}
               />

@@ -52,11 +52,8 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-
-  localCurrency: state.page.form.localCurrency,
-  localAmounts: state.page.form.localAmounts,
-  localSelectedAmounts: state.page.form.localSelectedAmounts,
-  useLocalCurrency: state.page.form.useLocalCurrency,
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -105,7 +102,7 @@ function withProps(props: PropTypes) {
 
   const overrideCurrency = () => props.useLocalCurrency && props.contributionType === 'ONE_OFF'
   const currency = () => overrideCurrency()
-      ? props.localCurrency
+      ? props.localCurrencyCountry.currency
       : props.currency;
 
   return (
@@ -116,7 +113,7 @@ function withProps(props: PropTypes) {
         countryGroupId={props.countryGroupId}
         currency={currency()}
         contributionType={props.contributionType}
-        validAmounts={overrideCurrency() ? props.localAmounts : validAmounts}
+        validAmounts={validAmounts}
         defaultAmount={defaultAmount}
         showOther={showOther}
         selectedAmounts={props.selectedAmounts}

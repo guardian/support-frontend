@@ -13,13 +13,18 @@ export type SetCountryAction = { type: 'SET_COUNTRY_INTERNATIONALISATION', count
 export type Action =
   | SetCountryAction
   | { type: 'SET_EXISTING_PAYMENT_METHODS', existingPaymentMethods: ExistingPaymentMethod[] }
-  | { type: 'SET_CONTRIBUTION_TYPES', contributionTypes: ContributionTypes };
+  | { type: 'SET_CONTRIBUTION_TYPES', contributionTypes: ContributionTypes }
+  | { type: 'SET_USE_LOCAL_CURRENCY', useLocalCurrency: boolean };
 
 
 // ----- Action Creators ----- //
 
 function setCountry(country: IsoCountry): SetCountryAction {
   return { type: 'SET_COUNTRY_INTERNATIONALISATION', country };
+}
+
+function setUseLocalCurrency(useLocalCurrency: boolean): Action {
+  return { type: 'SET_USE_LOCAL_CURRENCY', useLocalCurrency };
 }
 
 function setExistingPaymentMethods(existingPaymentMethods: ExistingPaymentMethod[]): Action {
@@ -36,4 +41,5 @@ export {
   setCountry,
   setExistingPaymentMethods,
   setContributionTypes,
+  setUseLocalCurrency,
 };

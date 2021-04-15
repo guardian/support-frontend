@@ -13,11 +13,14 @@ import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionAmounts } from 'helpers/contributions';
+import {localCurrencyCountries} from "../internationalisation/localCurrencyCountry";
 
 export type Internationalisation = {|
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   countryId: IsoCountry,
+  localCurrencyCountry: IsoCountry,
+  useLocalCurrency: boolean,
 |};
 
 export type CommonState = {
@@ -52,6 +55,15 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           internationalisation: {
             ...state.internationalisation,
             ...getInternationalisationFromCountry(action.country, state.internationalisation),
+          },
+        };
+
+      case 'SET_USE_LOCAL_CURRENCY':
+        return {
+          ...state,
+          internationalisation: {
+            ...state.internationalisation,
+            useLocalCurrency: action.useLocalCurrency,
           },
         };
 

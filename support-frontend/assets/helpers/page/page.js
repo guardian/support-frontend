@@ -44,6 +44,8 @@ import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
 import { getAmounts } from 'helpers/abTests/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import {localCurrencyCountries} from "../internationalisation/localCurrencyCountry";
+import type {LocalCurrencyCountry} from "../internationalisation/localCurrencyCountry";
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -78,6 +80,8 @@ function buildInitialState(
   currencyId: IsoCurrency,
   settings: Settings,
   acquisitionData: ReferrerAcquisitionData,
+  localCurrencyCountry: LocalCurrencyCountry | null,
+  useLocalCurrency: boolean,
 ): CommonState {
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
@@ -85,6 +89,8 @@ function buildInitialState(
     countryGroupId,
     countryId,
     currencyId,
+    localCurrencyCountry,
+    useLocalCurrency,
   };
 
   const amounts = getAmounts(settings, abParticipations, countryGroupId);
@@ -162,6 +168,8 @@ function init<S, A>(
       currencyId,
       settings,
       acquisitionData,
+      localCurrencyCountries[window.guardian.geoip.countryCode],
+      false,
     );
     const commonReducer = createCommonReducer(initialState);
 

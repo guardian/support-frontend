@@ -26,6 +26,8 @@ import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existi
 import type { IsoCountry } from '../../helpers/internationalisation/country';
 import type {IsoCurrency} from '../../helpers/internationalisation/currency';
 import { localCurrencyFromCountryCode } from '../../helpers/internationalisation/currency';
+import {localCurrencyCountries} from "../../helpers/internationalisation/localCurrencyCountry";
+import type {LocalCurrencyCountry} from "../../helpers/internationalisation/localCurrencyCountry";
 
 // ----- Types ----- //
 
@@ -130,12 +132,6 @@ type FormState = {
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
   oneOffRecaptchaToken: string | null,
-
-  isEligibleCountry: boolean,
-  localCurrency: IsoCurrency | null,
-  localAmounts: number[] | null,
-  localSelectedAmounts: SelectedAmounts,
-  useLocalCurrency: boolean,
 };
 
 type PageState = {
@@ -156,9 +152,6 @@ export type State = {
 function createFormReducer() {
 
   // ----- Initial state ----- //
-
-  const geoipCountryCode =window.guardian.geoip.countryCode;
-  const isEligibleForLocalCurrency = ['SE','CH','NO','DK'].includes(geoipCountryCode);
 
   const initialState: FormState = {
     contributionType: getContributionTypeFromSession() || 'MONTHLY',
@@ -246,12 +239,6 @@ function createFormReducer() {
     formIsSubmittable: true,
     tickerGoalReached: false,
     oneOffRecaptchaToken: null,
-
-    isEligibleCountry: isEligibleForLocalCurrency,
-    localCurrency: localCurrencyFromCountryCode(geoipCountryCode),
-    localAmounts: [50, 100, 150, 200],
-    localSelectedAmounts: { ONE_OFF: 50 },
-    useLocalCurrency: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
