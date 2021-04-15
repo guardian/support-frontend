@@ -76,7 +76,7 @@ case class ContributorRow(
     case "CAD" => "CA$"
     case "NZD" => "NZ$"
     case "SEK" => "kr"
-    case "CHF" => "fr"
+    case "CHF" => "fr."
     case "NOK" => "kr"
     case "DKK" => "kr."
     case _ => "$"
