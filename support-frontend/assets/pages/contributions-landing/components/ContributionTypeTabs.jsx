@@ -23,6 +23,7 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import {setUseLocalCurrency} from "../../../helpers/page/commonActions";
 
 // ----- Types ----- //
 
@@ -53,6 +54,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
     const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
+    dispatch(setUseLocalCurrency(false));
   },
 });
 
