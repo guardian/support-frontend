@@ -81,21 +81,6 @@ const renderEmptyAmount = (id: string) => (
 
 function withProps(props: PropTypes) {
   const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
-
-  const overrideCurrency = () => props.useLocalCurrency && props.contributionType === 'ONE_OFF'
-  const currency = () => overrideCurrency()
-    ? props.localCurrencyCountry.currency
-    : props.currency;
-
-  const amounts = () => overrideCurrency()
-    ? props.localCurrencyCountry.amounts
-    : validAmounts
-
-  const defaultAmt = () => overrideCurrency()
-    ? props.localCurrencyCountry.defaultAmount
-    : defaultAmount
-
-
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
@@ -107,7 +92,6 @@ function withProps(props: PropTypes) {
   const {
     checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
-
   const canShowOtherAmountErrorMessage =
     checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount;
   const otherAmountErrorMessage: string | null =

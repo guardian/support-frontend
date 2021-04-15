@@ -257,7 +257,7 @@ function withProps(props: PropTypes) {
           (
             <CheckboxGroup cssOverrides='margin-top:16px;'>
               <Checkbox
-                label={`View in local currency ${props.localCurrencyCountry.flagEmoji}`}
+                label={`View in local currency (${props.localCurrencyCountry.currency})`}
                 defaultChecked={props.useLocalCurrency}
                 onChange={toggleUseLocalCurrency}
               />

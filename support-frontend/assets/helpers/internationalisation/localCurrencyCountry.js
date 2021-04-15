@@ -5,7 +5,6 @@ import type { SelectedAmounts } from '../contributions';
 export type LocalCurrencyCountry = {
   countryCode: IsoCountry,
   countryName: string,
-  flagEmoji: string,
   currency: IsoCurrency,
   amounts: number[],
   defaultAmount: number,
@@ -18,7 +17,6 @@ export const localCurrencyCountries: {
   SE: {
     countryCode: 'SE',
     countryName: 'Sweden',
-    flagEmoji: '🇸🇪',
     currency: 'SEK',
     amounts: [50, 100, 150, 200],
     defaultAmount: 50,
@@ -29,7 +27,6 @@ export const localCurrencyCountries: {
   CH: {
     countryCode: 'CH',
     countryName: 'Switzerland',
-    flagEmoji: '🇨🇭',
     currency: 'CHF',
     amounts: [5, 10, 15, 20],
     defaultAmount: 10,
@@ -40,7 +37,6 @@ export const localCurrencyCountries: {
   NO: {
     countryCode: 'NO',
     countryName: 'Norway',
-    flagEmoji: '🇳🇴',
     currency: 'NOK',
     amounts: [50, 100, 150, 200],
     defaultAmount: 50,
@@ -51,7 +47,6 @@ export const localCurrencyCountries: {
   DK: {
     countryCode: 'DK',
     countryName: 'Denmark',
-    flagEmoji: '🇩🇰',
     currency: 'DKK',
     amounts: [50, 100, 150, 200],
     defaultAmount: 50,
