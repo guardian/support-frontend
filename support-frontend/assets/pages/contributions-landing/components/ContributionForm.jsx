@@ -19,7 +19,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
-import {setUseLocalCurrency, toggleLocalCurrency} from '../../../helpers/page/commonActions';
+import {setUseLocalAmounts, setUseLocalCurrency, toggleLocalCurrency} from '../../../helpers/page/commonActions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
@@ -132,7 +132,10 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setUseLocalCurrency: (useLocalCurrency) => { dispatch(setUseLocalCurrency(useLocalCurrency)); },
+  setUseLocalCurrency: (useLocalCurrency) => {
+    dispatch(setUseLocalCurrency(useLocalCurrency));
+    dispatch(setUseLocalAmounts(useLocalCurrency))
+  },
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the

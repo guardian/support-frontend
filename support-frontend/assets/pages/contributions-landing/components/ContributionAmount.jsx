@@ -20,6 +20,7 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { TextInput } from '@guardian/src-text-input';
+import type {LocalCurrencyCountry} from "../../../helpers/internationalisation/localCurrencyCountry";
 
 // ----- Types ----- //
 
@@ -34,11 +35,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-
-  localCurrency: IsoCurrency | null,
-  localAmounts: number[] | null,
-  localSelectedAmounts: SelectedAmounts,
-  useLocalCurrency: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -52,8 +48,6 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
-  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

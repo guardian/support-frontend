@@ -13,8 +13,7 @@ import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionAmounts } from 'helpers/contributions';
-import {localCurrencyCountries} from "../internationalisation/localCurrencyCountry";
-import type {LocalCurrencyCountry} from "../internationalisation/localCurrencyCountry";
+import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 export type Internationalisation = {|
   currencyId: IsoCurrency,
@@ -32,6 +31,7 @@ export type CommonState = {
   abParticipations: Participations,
   settings: Settings,
   amounts: ContributionAmounts,
+  defaultAmounts: ContributionAmounts,
   internationalisation: Internationalisation,
   existingPaymentMethods?: ExistingPaymentMethod[],
 };
@@ -70,6 +70,14 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
               : state.internationalisation.defaultCurrency,
             useLocalCurrency: action.useLocalCurrency,
           },
+        };
+
+      case 'SET_USE_LOCAL_AMOUNTS':
+        return {
+          ...state,
+          amounts: action.useLocalAmounts
+            ? state.internationalisation.localCurrencyCountry.amounts
+            : state.defaultAmounts,
         };
 
       case 'SET_EXISTING_PAYMENT_METHODS': {
