@@ -48,6 +48,8 @@ const store = pageInit(
   true,
 );
 
+const { countryGroupId } = store.getState().common.internationalisation;
+
 FocusStyleManager.onlyShowFocusOnTabs();
 
 // ----- Render ----- //
@@ -71,8 +73,8 @@ const content = (
     >
       <CheckoutStage
         checkoutForm={<CheckoutForm />}
-        thankYouContentPending={<ThankYouContent isPending />}
-        thankYouContent={<ThankYouContent isPending={false} />}
+        thankYouContentPending={<ThankYouContent isPending countryGroupId={countryGroupId} />}
+        thankYouContent={<ThankYouContent isPending={false} countryGroupId={countryGroupId} />}
         subscriptionProduct="Paper"
       />
     </Page>

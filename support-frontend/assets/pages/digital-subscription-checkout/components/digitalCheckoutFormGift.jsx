@@ -68,6 +68,7 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import { countries } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 const controlTextAreaResizing = css`
   resize: vertical;
@@ -136,7 +137,7 @@ function mapDispatchToProps() {
       // differently to other payment methods. All others are tracked in submit.js
       const { paymentMethod } = state.page.checkout;
       if (paymentMethod === PayPal) {
-        trackSubmitAttempt(PayPal, DigitalPack);
+        trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
       }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,

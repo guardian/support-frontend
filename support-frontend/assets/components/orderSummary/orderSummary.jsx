@@ -7,8 +7,8 @@ import { type GridImg } from 'components/gridImage/gridImage';
 import * as styles from './orderSummaryStyles';
 
 type MobileOrderSummary = {
-  title: string,
-  price: string,
+  title: Node,
+  price: Node,
 }
 
 type PropTypes = {
@@ -16,7 +16,7 @@ type PropTypes = {
   changeSubscription?: string | null,
   image: $Call<GridImageType, GridImg>,
   mobileSummary: MobileOrderSummary,
-  total: string,
+  total: Node,
 };
 
 function OrderSummary(props: PropTypes) {
@@ -45,7 +45,7 @@ function OrderSummary(props: PropTypes) {
             <span>You can cancel any time</span>
           </div>
         </div>
-        <div css={styles.total}>
+        <div css={styles.total} aria-atomic="true" aria-live="polite">
           <span>Total:</span>
           <span>{props.total}</span>
         </div>
