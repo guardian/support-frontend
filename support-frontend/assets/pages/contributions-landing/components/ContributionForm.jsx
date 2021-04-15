@@ -19,7 +19,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
-import { setUseLocalCurrency } from '../../../helpers/page/commonActions';
+import {setUseLocalCurrency, toggleLocalCurrency} from '../../../helpers/page/commonActions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';

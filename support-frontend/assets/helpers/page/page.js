@@ -80,8 +80,6 @@ function buildInitialState(
   currencyId: IsoCurrency,
   settings: Settings,
   acquisitionData: ReferrerAcquisitionData,
-  localCurrencyCountry: LocalCurrencyCountry | null,
-  useLocalCurrency: boolean,
 ): CommonState {
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
@@ -89,8 +87,9 @@ function buildInitialState(
     countryGroupId,
     countryId,
     currencyId,
-    localCurrencyCountry,
-    useLocalCurrency,
+    localCurrencyCountry: localCurrencyCountries[window.guardian.geoip.countryCode],
+    useLocalCurrency: false,
+    defaultCurrency: currencyId,
   };
 
   const amounts = getAmounts(settings, abParticipations, countryGroupId);
@@ -168,8 +167,6 @@ function init<S, A>(
       currencyId,
       settings,
       acquisitionData,
-      localCurrencyCountries[window.guardian.geoip.countryCode],
-      false,
     );
     const commonReducer = createCommonReducer(initialState);
 
