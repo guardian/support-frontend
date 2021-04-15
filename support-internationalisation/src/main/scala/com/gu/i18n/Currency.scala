@@ -43,21 +43,21 @@ object Currency {
   case object SEK extends Currency {
     override def glyph: String = "SEK"
     override def prefix: Option[String] = Some("SE")
-    override def iso: String = "SEK"
+    override def iso: String = "kr"
   }
   case object CHF extends Currency {
     override def glyph: String = "CHF"
     override def prefix: Option[String] = Some("CH")
-    override def iso: String = "CHF"
+    override def iso: String = "fr"
   }
   case object NOK extends Currency {
     override def glyph: String = "NOK"
     override def prefix: Option[String] = Some("NO")
-    override def iso: String = "NOK"
+    override def iso: String = "kr"
   }
   case object DKK extends Currency {
     override def glyph: String = "DKK"
     override def prefix: Option[String] = Some("DK")
-    override def iso: String = "DKK"
+    override def iso: String = "kr."
   }
 }
