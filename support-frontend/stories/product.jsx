@@ -6,10 +6,13 @@ import { text, withKnobs } from '@storybook/addon-knobs';
 import { SvgInfo } from '@guardian/src-icons';
 
 import ProductOption from 'components/product/productOption';
+import ProductOptionSmall from 'components/product/productOptionSmall';
 import ProductInfoChip from 'components/product/productInfoChip';
 
 const stories = storiesOf('Product', module)
-  .addDecorator(withKnobs);
+  .addDecorator(withKnobs({
+    escapeHTML: false,
+  }));
 
 stories.add('ProductOption', () => {
   const product = {
@@ -30,6 +33,40 @@ stories.add('ProductOption', () => {
     >
       <ProductOption
         {...product}
+      />
+    </div>
+  );
+});
+
+stories.add('ProductOptionSmall', () => {
+  const product1 = {
+    offerCopy: text('Offer copy - first option', '50% off for 3 months'),
+    priceCopy: text('Price copy - first option', 'You\'ll pay £5.99/month for 3 months, then £11.99 per month'),
+    href: '',
+    buttonCopy: text('Button copy - first option', 'Subscribe monthly for £5.99'),
+    onClick: () => {},
+    onView: () => {},
+  };
+
+  const product2 = {
+    offerCopy: text('Offer copy - second option', 'Save 20% against monthly in the first year'),
+    priceCopy: text('Price copy - second option', 'You\'ll pay £99 for 1 year, then £119 per year'),
+    href: '',
+    buttonCopy: text('Button copy - second option', 'Subscribe annually for £99'),
+    onClick: () => {},
+    onView: () => {},
+  };
+
+  return (
+    <div style={{
+  width: '320px', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: '20px', backgroundColor: '#04204B',
+}}
+    >
+      <ProductOptionSmall
+        {...product1}
+      />
+      <ProductOptionSmall
+        {...product2}
       />
     </div>
   );
