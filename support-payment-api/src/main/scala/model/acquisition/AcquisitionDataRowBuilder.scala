@@ -7,7 +7,18 @@ import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, PayPal, Stripe, S
 import com.gu.support.acquisitions._
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
-import model.Currency.{AUD => ModelAUD, CAD => ModelCAD, EUR => ModelEUR, GBP => ModelGBP, NZD => ModelNZD, USD => ModelUSD}
+import model.Currency.{
+  AUD => ModelAUD,
+  CAD => ModelCAD,
+  EUR => ModelEUR,
+  GBP => ModelGBP,
+  NZD => ModelNZD,
+  USD => ModelUSD,
+  SEK => ModelSEK,
+  CHF => ModelCHF,
+  NOK => ModelNOK,
+  DKK => ModelDKK,
+}
 import model.db.ContributionData
 import model.stripe.StripePaymentMethod
 import ophan.thrift.event.{AbTest, QueryParameter => ThriftQueryParam}
@@ -151,6 +162,10 @@ object AcquisitionDataRowBuilder {
       case ModelAUD => AUD
       case ModelCAD => CAD
       case ModelNZD => NZD
+      case ModelSEK => SEK
+      case ModelCHF => CHF
+      case ModelNOK => NOK
+      case ModelDKK => DKK
     }
 
   def mapQueryParams(maybeThriftParameters: Option[Set[ThriftQueryParam]]) =
