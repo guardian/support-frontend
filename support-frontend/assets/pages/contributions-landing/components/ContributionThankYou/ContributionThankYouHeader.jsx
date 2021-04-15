@@ -77,10 +77,13 @@ const ContributionThankYouHeader = ({
       paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
 
     if (thankyouPageHeadingTestVariant && !payPalOneOff && amount) {
+      const currencyObj = currencies[currency];
+      const glyph = currencyObj.isPaddedGlyph ? ` ${currencyObj.glyph} ` : currencyObj.glyph
+      const valueWithGlyph = (currencyObj.isSuffixGlyph ? `${amount}${glyph}` : `${glyph}${amount}`).trim()
+
       const currencyAndAmount = (
         <span css={amountText}>
-          {currencies[currency].glyph}
-          {amount}
+          {valueWithGlyph}
         </span>
       );
 
