@@ -8,7 +8,7 @@ import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 
-export type Product = {
+export type ProductSmall = {
   offerCopy: string,
   priceCopy: Node,
   buttonCopy: string,
@@ -39,7 +39,7 @@ const priceCopyStyles = css`
   margin-top: ${space[2]}px;
 `;
 
-function ProductOptionSmall(props: Product) {
+function ProductOptionSmall(props: ProductSmall) {
   return (
     <div css={[productOptionSmallStyles, props.cssOverrides]}>
       <p css={offerCopyStyles}>{props.offerCopy}</p>
