@@ -14,7 +14,8 @@ export type Action =
   | SetCountryAction
   | { type: 'SET_EXISTING_PAYMENT_METHODS', existingPaymentMethods: ExistingPaymentMethod[] }
   | { type: 'SET_CONTRIBUTION_TYPES', contributionTypes: ContributionTypes }
-  | { type: 'SET_USE_LOCAL_CURRENCY', useLocalCurrency: boolean }
+  | { type: 'SET_CURRENCY_ID', useLocalCurrency: boolean }
+  | { type: 'SET_USE_LOCAL_CURRENCY_FLAG', useLocalCurrency: boolean }
   | { type: 'SET_USE_LOCAL_AMOUNTS', useLocalAmounts: boolean };
 
 
@@ -24,8 +25,12 @@ function setCountry(country: IsoCountry): SetCountryAction {
   return { type: 'SET_COUNTRY_INTERNATIONALISATION', country };
 }
 
-function setUseLocalCurrency(useLocalCurrency: boolean): Action {
-  return { type: 'SET_USE_LOCAL_CURRENCY', useLocalCurrency };
+function setCurrencyId(useLocalCurrency: boolean): Action {
+  return { type: 'SET_CURRENCY_ID', useLocalCurrency };
+}
+
+function setUseLocalCurrencyFlag(useLocalCurrency: boolean): Action {
+  return { type: 'SET_USE_LOCAL_CURRENCY_FLAG', useLocalCurrency };
 }
 
 function setUseLocalAmounts(useLocalAmounts: boolean): Action {
@@ -46,6 +51,7 @@ export {
   setCountry,
   setExistingPaymentMethods,
   setContributionTypes,
-  setUseLocalCurrency,
+  setUseLocalCurrencyFlag,
+  setCurrencyId,
   setUseLocalAmounts,
 };

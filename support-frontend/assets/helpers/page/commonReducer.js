@@ -60,14 +60,22 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           },
         };
 
-      case 'SET_USE_LOCAL_CURRENCY':
+      case 'SET_CURRENCY_ID':
         return {
           ...state,
-          internationalisation : {
+          internationalisation: {
             ...state.internationalisation,
             currencyId: action.useLocalCurrency
               ? state.internationalisation.localCurrencyCountry.currency
               : state.internationalisation.defaultCurrency,
+          }
+        }
+
+      case 'SET_USE_LOCAL_CURRENCY_FLAG':
+        return {
+          ...state,
+          internationalisation : {
+            ...state.internationalisation,
             useLocalCurrency: action.useLocalCurrency,
           },
         };
