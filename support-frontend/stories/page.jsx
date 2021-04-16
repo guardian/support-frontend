@@ -52,7 +52,7 @@ stories.add('Hero', () => (
 ));
 
 stories.add('HeroRoundel', () => (
-  <div style={{ width: '25%', paddingTop: '100px' }}>
+  <div style={{ paddingTop: '100px' }}>
     <CentredContainer>
       <HeroRoundel theme="digital">
         <div>
