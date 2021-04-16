@@ -88,7 +88,8 @@ type PropTypes = {|
   localCurrencyCountry: LocalCurrencyCountry | null,
   amounts: ContributionAmounts,
   useLocalCurrency: boolean,
-  setUseLocalCurrency: boolean => void,
+  setUseLocalCurrency: (boolean, LocalCurrencyCountry | null) => void,
+  defaultOneOffAmount: number | null;
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -126,6 +127,7 @@ const mapStateToProps = (state: State) => ({
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
   currency: state.common.internationalisation.currencyId,
   amounts: state.common.amounts,
+  defaultOneOffAmount: state.common.defaultAmounts['ONE_OFF'].defaultAmount,
 });
 
 
@@ -134,10 +136,16 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setUseLocalCurrency: (useLocalCurrency) => {
+  setUseLocalCurrency: (useLocalCurrency, localCurrencyCountry, defaultOneOffAmount) => {
     dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
     dispatch(setCurrencyId(useLocalCurrency));
     dispatch(setUseLocalAmounts(useLocalCurrency));
+    dispatch(selectAmount(
+      useLocalCurrency
+        ? localCurrencyCountry.amounts['ONE_OFF'].defaultAmount
+        : defaultOneOffAmount,
+      'ONE_OFF'
+    ))
   },
 });
 
@@ -248,7 +256,11 @@ function withProps(props: PropTypes) {
   const classModifiers = ['contribution', 'with-labels'];
 
   function toggleUseLocalCurrency() {
-    props.setUseLocalCurrency(!props.useLocalCurrency)
+    props.setUseLocalCurrency(
+      !props.useLocalCurrency,
+      props.localCurrencyCountry,
+      props.defaultOneOffAmount,
+    )
   }
 
   return (
