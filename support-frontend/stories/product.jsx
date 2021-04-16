@@ -28,7 +28,7 @@ stories.add('ProductOption', () => {
   };
   return (
     <div style={{
- width: '100%', height: '400px', display: 'flex', alignItems: 'center', padding: '16px', backgroundColor: '#04204B',
+ width: '100%', height: '400px', display: 'flex', alignItems: 'center', padding: '16px', backgroundColor: '#041F4A',
 }}
     >
       <ProductOption
@@ -39,6 +39,13 @@ stories.add('ProductOption', () => {
 });
 
 stories.add('ProductOptionSmall', () => {
+  const containerStyles = {
+    width: '320px',
+    padding: '20px',
+    backgroundColor: '#04204B',
+    marginRight: '20px',
+  };
+
   const product1 = {
     offerCopy: text('Offer copy - first option', '50% off for 3 months'),
     priceCopy: text('Price copy - first option', 'You\'ll pay £5.99/month for 3 months, then £11.99 per month'),
@@ -58,16 +65,27 @@ stories.add('ProductOptionSmall', () => {
   };
 
   return (
-    <div style={{
-  width: '320px', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: '20px', backgroundColor: '#04204B',
-}}
-    >
-      <ProductOptionSmall
-        {...product1}
-      />
-      <ProductOptionSmall
-        {...product2}
-      />
+    <div style={{ display: 'flex' }}>
+      <div style={containerStyles}>
+        <ProductOptionSmall
+          {...product1}
+        />
+      </div>
+
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        ...containerStyles,
+      }}
+      >
+        <ProductOptionSmall
+          {...product1}
+        />
+        <ProductOptionSmall
+          {...product2}
+        />
+      </div>
     </div>
   );
 });

@@ -5,6 +5,7 @@ import { storiesOf } from '@storybook/react';
 import { radios, withKnobs } from '@storybook/addon-knobs';
 
 import Hero from 'components/page/hero';
+import HeroRoundel from 'components/page/heroRoundel';
 import PageTitle from 'components/page/pageTitle';
 import Block from 'components/page/block';
 import GridImage from 'components/gridImage/gridImage';
@@ -46,6 +47,19 @@ stories.add('Hero', () => (
   <div style={{ width: '100%', paddingTop: '100px' }}>
     <CentredContainer>
       {DemoHero}
+    </CentredContainer>
+  </div>
+));
+
+stories.add('HeroRoundel', () => (
+  <div style={{ width: '25%', paddingTop: '100px' }}>
+    <CentredContainer>
+      <HeroRoundel theme="digital">
+        <div>
+          <div style={{ fontSize: '42px' }}>14 day</div>
+          <div>free trial</div>
+        </div>
+      </HeroRoundel>
     </CentredContainer>
   </div>
 ));
