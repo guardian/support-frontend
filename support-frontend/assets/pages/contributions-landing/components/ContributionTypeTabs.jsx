@@ -23,7 +23,7 @@ import type {
   ContributionTypeSetting,
 } from 'helpers/contributions';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
-import {setUseLocalAmounts, setUseLocalCurrency} from "../../../helpers/page/commonActions";
+import { setCurrencyId, setUseLocalAmounts } from '../../../helpers/page/commonActions';
 
 // ----- Types ----- //
 
@@ -34,6 +34,7 @@ type PropTypes = {|
   switches: Switches,
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  useLocalCurrency: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -42,6 +43,7 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
   contributionTypes: state.common.settings.contributionTypes,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -50,13 +52,17 @@ const mapDispatchToProps = (dispatch: Function) => ({
     switches: Switches,
     countryId: IsoCountry,
     countryGroupId: CountryGroupId,
+    useLocalCurrency: boolean,
   ) => {
     const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
     if (contributionType !== 'ONE_OFF') {
-      dispatch(setUseLocalCurrency(false));
+      dispatch(setCurrencyId(false));
       dispatch(setUseLocalAmounts(false));
+    } else {
+      dispatch(setCurrencyId(useLocalCurrency));
+      dispatch(setUseLocalAmounts(useLocalCurrency));
     }
   },
 });
@@ -84,6 +90,7 @@ function withProps(props: PropTypes) {
                 props.switches,
                 props.countryId,
                 props.countryGroupId,
+                props.useLocalCurrency,
               )
           }
           checked={props.contributionType === contributionType}
@@ -113,6 +120,7 @@ function withProps(props: PropTypes) {
                   props.switches,
                   props.countryId,
                   props.countryGroupId,
+                  props.useLocalCurrency,
                 )
               }
               checked={props.contributionType === contributionType}
