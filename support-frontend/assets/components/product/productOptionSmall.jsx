@@ -3,7 +3,7 @@
 import React, { type Node } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
-import { brand, neutral } from '@guardian/src-foundations/palette';
+import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
@@ -18,7 +18,7 @@ export type Product = {
 }
 
 const productOptionSmallStyles = css`
-  color: ${neutral[100]};
+  color: inherit;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

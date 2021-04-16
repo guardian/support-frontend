@@ -26,7 +26,6 @@ const heroRoundelStyles = css`
   padding: ${space[1]}px;
   border-radius: 50%;
   ${headline.xxsmall({ fontWeight: 'bold' })};
-  z-index: 20;
 
   ${from.tablet} {
     width: calc(100% + ${space[6]}px);
@@ -42,7 +41,7 @@ const heroRoundelStyles = css`
   }
 `;
 
-const roundelBrandAlt = css`
+const roundelBase = css`
   background-color: ${brandAlt[400]};
   color: ${neutral[7]};
 `;
@@ -53,7 +52,7 @@ const roundelDigital = css`
   border: 2px solid ${brandAlt[400]};
 `;
 
-type RoundelTheme = 'brandAlt' | 'digital';
+type RoundelTheme = 'base' | 'digital';
 
 type PropTypes = {|
   children: Node,
@@ -62,11 +61,11 @@ type PropTypes = {|
 |}
 
 const themes: { [RoundelTheme]: string } = {
-  brandAlt: roundelBrandAlt,
+  base: roundelBase,
   digital: roundelDigital,
 };
 
-function HeroRoundel({ children, cssOverrides, theme = 'brandAlt' }: PropTypes) {
+function HeroRoundel({ children, cssOverrides, theme = 'base' }: PropTypes) {
   return (
     <div css={[heroRoundelStyles, themes[theme], cssOverrides]}>
       {children}
@@ -76,7 +75,7 @@ function HeroRoundel({ children, cssOverrides, theme = 'brandAlt' }: PropTypes) 
 
 HeroRoundel.defaultProps = {
   cssOverrides: '',
-  theme: 'brandAlt',
+  theme: 'base',
 };
 
 export default HeroRoundel;

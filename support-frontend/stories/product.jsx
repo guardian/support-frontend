@@ -43,6 +43,7 @@ stories.add('ProductOptionSmall', () => {
     width: '320px',
     padding: '20px',
     backgroundColor: '#04204B',
+    color: 'white',
     marginRight: '20px',
   };
 
