@@ -44,7 +44,7 @@ const V2_COPY = 'Stay up-to-date with ways to enjoy and support our journalism, 
 
 const mapStateToProps = state => ({
   thankyouPageMarketingConsentTestVariant:
-    state.common.abParticipations.thankyouPageMarketingConsentTest,
+    state.common.abParticipations.thankyouPageMarketingConsentTestR3,
 });
 
 

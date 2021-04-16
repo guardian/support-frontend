@@ -79,8 +79,12 @@ function getContributionTypeFromUrl(): ?ContributionType {
 function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
   if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
     return [DirectDebit, Stripe, PayPal];
-  } else if (contributionType === 'ONE_OFF' && countryId === 'US') {
-    return [Stripe, PayPal, AmazonPay];
+  } else if (countryId === 'US') {
+    // Remove this condition after we've tested in PROD
+    if (contributionType === 'ONE_OFF' || getQueryParameter('amazon-pay-recurring') === 'true') {
+      return [Stripe, PayPal, AmazonPay];
+    }
+    return [Stripe, PayPal];
   }
   return [Stripe, PayPal];
 

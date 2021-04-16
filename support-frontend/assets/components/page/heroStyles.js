@@ -1,13 +1,11 @@
 // @flow
 
 import { css } from '@emotion/core';
-import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
+import { brand, neutral } from '@guardian/src-foundations/palette';
 import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { headline, body } from '@guardian/src-foundations/typography';
-
-const roundelSizeMob = 120;
-const roundelSize = 180;
+import { roundelSizeMob } from './heroRoundel';
 
 export const hero = css`
   position: relative;
@@ -73,37 +71,6 @@ export const heroRoundelContainer = css`
 
   ${from.tablet} {
   right: ${space[12]}px;
-  }
-`;
-
-export const heroRoundel = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  float: right;
-  text-align: center;
-  transform: translateY(-67%);
-  min-width: ${roundelSizeMob}px;
-  max-width: ${roundelSize}px;
-  width: calc(100% + ${space[3]}px);
-  padding: ${space[1]}px;
-  border-radius: 50%;
-  background-color: ${brandAlt[400]};
-  color: ${neutral[7]};
-  ${headline.xxsmall({ fontWeight: 'bold' })};
-  z-index: 20;
-
-  ${from.tablet} {
-    width: calc(100% + ${space[6]}px);
-    transform: translateY(-50%);
-    ${headline.small({ fontWeight: 'bold' })};
-  }
-
-  /* Combined with float on the main element, this makes the height match the content width for a perfect circle
-  cf. https://medium.com/@kz228747/height-equals-width-pure-css-1c79794e470c */
-  &::before {
-    content: "";
-    margin-top: 100%;
   }
 `;
 

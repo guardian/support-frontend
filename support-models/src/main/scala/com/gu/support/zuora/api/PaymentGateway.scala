@@ -23,6 +23,7 @@ object PaymentGateway {
     case ZuoraInstanceDirectDebitGateway.name => ZuoraInstanceDirectDebitGateway
     case StripeGatewayPaymentIntentsDefault.name => StripeGatewayPaymentIntentsDefault
     case StripeGatewayPaymentIntentsAUD.name => StripeGatewayPaymentIntentsAUD
+    case AmazonPayGatewayUSA.name => AmazonPayGatewayUSA
   }
 
   implicit val encoder: Encoder[PaymentGateway] = Encoder.encodeString.contramap[PaymentGateway](_.name)
@@ -59,4 +60,8 @@ case object DirectDebitGateway extends PaymentGateway {
 case object ZuoraInstanceDirectDebitGateway extends PaymentGateway {
   // not sure why there are two GoCardless gateways in Zuora - but having it declared here allows it be re-used
   val name = "GoCardless - Zuora Instance"
+}
+
+case object AmazonPayGatewayUSA extends PaymentGateway {
+  val name = "Amazon Pay - Contributions USA"
 }

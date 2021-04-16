@@ -90,8 +90,6 @@ function withProps(props: PropTypes) {
   // if all payment methods are switched off, do not display the button
   const formClassName = 'form--contribution';
   const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
-  const amazonPaymentReady = () =>
-    !props.amazonPayData.fatalError && props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
 
   const submitButtonCopy = getContributeButtonCopyWithPaymentType(
     props.contributionType,
@@ -101,8 +99,10 @@ function withProps(props: PropTypes) {
     props.paymentMethod,
   );
 
+  const amazonPayEnabled = () => !props.amazonPayData.fatalError;
+
   const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
-    <AmazonPayWallet isTestUser={props.isTestUser} /> :
+    <AmazonPayWallet isTestUser={props.isTestUser} contributionType={props.contributionType} /> :
     <AmazonPayLoginButton />);
 
   // We have to show/hide PayPalExpressButton rather than conditionally rendering it
@@ -132,9 +132,11 @@ function withProps(props: PropTypes) {
         />
       </div>
         )}
-      { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
+      { props.paymentMethod === AmazonPay && amazonPayEnabled() && getAmazonPayComponent() }
 
-      {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
+      {!showPayPalRecurringButton && (
+        props.paymentMethod !== AmazonPay || (amazonPayEnabled() && props.amazonPayData.hasAccessToken)
+      ) ?
         <Button
           type="submit"
           aria-label={submitButtonCopy}

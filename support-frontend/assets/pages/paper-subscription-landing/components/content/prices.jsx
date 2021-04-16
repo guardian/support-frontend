@@ -22,7 +22,6 @@ export type PropTypes = {|
   activeTab: ActiveTabState,
   setTabAction: typeof setTab,
   products: Product[],
-  useDigitalVoucher: boolean,
 |};
 
 const pricesSection = css`
@@ -94,7 +93,7 @@ const DiscountCalloutMaybe = () => {
 };
 
 function Prices({
-  activeTab, setTabAction, products, useDigitalVoucher,
+  activeTab, setTabAction, products,
 }: PropTypes) {
   const infoText = `${activeTab === HomeDelivery ? 'Delivery is included. ' : ''}You can cancel your subscription at any time`;
   return (
@@ -122,7 +121,7 @@ function Prices({
             activeTab === Collection ?
               <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo> :
               <LinkTo tab={Collection} setTabAction={setTabAction}>
-                  Switch to {useDigitalVoucher ? 'Subscription card' : 'Vouchers'}
+                  Switch to Subscription card
               </LinkTo>
           }
       </div>

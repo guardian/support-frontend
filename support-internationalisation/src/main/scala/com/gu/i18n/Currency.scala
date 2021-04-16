@@ -8,7 +8,7 @@ sealed trait Currency {
 }
 
 object Currency {
-  val all = List(GBP, USD, AUD, CAD, EUR, NZD)
+  val all = List(GBP, USD, AUD, CAD, EUR, NZD, SEK, CHF, NOK, DKK)
 
   def fromString(s: String): Option[Currency] = all.find(_.iso == s)
 
@@ -40,5 +40,24 @@ object Currency {
     override def prefix: Option[String] = Some("NZ")
     override def iso: String = "NZD"
   }
-
+  case object SEK extends Currency {
+    override def glyph: String = "kr"
+    override def prefix: Option[String] = Some("SE")
+    override def iso: String = "SEK"
+  }
+  case object CHF extends Currency {
+    override def glyph: String = "fr."
+    override def prefix: Option[String] = Some("CH")
+    override def iso: String = "CHF"
+  }
+  case object NOK extends Currency {
+    override def glyph: String = "kr"
+    override def prefix: Option[String] = Some("NO")
+    override def iso: String = "NOK"
+  }
+  case object DKK extends Currency {
+    override def glyph: String = "kr."
+    override def prefix: Option[String] = Some("DK")
+    override def iso: String = "DKK"
+  }
 }

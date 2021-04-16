@@ -139,7 +139,7 @@ const sendTrackingEvent = (trackingProperties: TrackingProperties & {
     component: {
       componentType,
       id,
-      ...(product ? { product: [ophanProductFromSubscriptionProduct(product)] } : {}),
+      products: product ? [ophanProductFromSubscriptionProduct(product)] : [],
     },
     action,
     id,

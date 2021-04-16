@@ -40,6 +40,7 @@ import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 
 import './components/digitalSubscriptionLanding.scss';
 import 'stylesheets/skeleton/skeleton.scss';
+import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 
 // ----- Redux Store ----- //
 
@@ -49,7 +50,6 @@ const { common, page } = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
 const { abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-const accordionOpen = abParticipations.accordionTest === 'accordionOpen';
 const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
@@ -116,11 +116,9 @@ function LandingPage() {
       {countryGroupId === AUDCountries ?
         <ProductBlockAus
           countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
         /> :
         <ProductBlock
           countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
         />
       }
       <FullWidthContainer theme="dark" hasOverlap>
@@ -133,6 +131,7 @@ function LandingPage() {
           <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
+      <FeedbackWidget />
     </Page>
   );
 

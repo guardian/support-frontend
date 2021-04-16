@@ -63,6 +63,7 @@ import EndSummaryMobile from 'pages/digital-subscription-checkout/components/end
 import type { Participations } from 'helpers/abTests/abtest';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Types ----- //
 
@@ -127,7 +128,7 @@ function mapDispatchToProps() {
       // differently to other payment methods. All others are tracked in submit.js
       const { paymentMethod } = state.page.checkout;
       if (paymentMethod === PayPal) {
-        trackSubmitAttempt(PayPal, DigitalPack);
+        trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
       }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
