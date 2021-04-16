@@ -33,7 +33,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   contributionTypes: ContributionTypes,
-  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
   useLocalCurrency: boolean,
 |};
 
