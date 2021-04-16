@@ -77,7 +77,7 @@ export const tests: Tests = {
     seed: 12,
   },
 
-  thankyouPageMarketingConsentTestR2: {
+  thankyouPageMarketingConsentTestR3: {
     variants: [
       {
         id: 'control',
@@ -98,6 +98,6 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     targetPage: allLandingPagesAndThankyouPages,
-    seed: 17,
+    seed: 18,
   },
 };
