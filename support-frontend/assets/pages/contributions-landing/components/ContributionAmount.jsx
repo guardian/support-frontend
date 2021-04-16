@@ -20,7 +20,6 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { TextInput } from '@guardian/src-text-input';
-import type {LocalCurrencyCountry} from "../../../helpers/internationalisation/localCurrencyCountry";
 
 // ----- Types ----- //
 
