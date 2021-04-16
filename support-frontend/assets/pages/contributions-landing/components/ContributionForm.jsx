@@ -124,7 +124,7 @@ const mapStateToProps = (state: State) => ({
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
   localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
-  currency: state.common.internationalisation.countryId,
+  currency: state.common.internationalisation.currencyId,
   amounts: state.common.amounts,
 });
 
@@ -183,6 +183,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       }
     },
     PayPal: (props: PropTypes) => {
+      console.log('PayPal props', props)
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
         currency: props.currency,
