@@ -112,19 +112,14 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: [
-          {
-            test: /node_modules/,
-            exclude: [
-              /@guardian\/(?!(automat-modules))/,
-            ],
-          },
-        ],
         loader: 'babel-loader',
       },
       {
         test: /\.(png|jpg|gif|ico)$/,
-        loader: 'file-loader?name=[path][name].[hash].[ext]',
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[hash].[ext]',
+        }
       },
       {
         test: /\.svg$/,
@@ -148,7 +143,10 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       },
       {
         test: /\.(ttf|woff|woff2)$/,
-        loader: 'file-loader?name=[path][name].[ext]',
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
       },
       {
         test: /\.scss$/,
