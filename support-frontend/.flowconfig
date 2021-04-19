@@ -1,10 +1,11 @@
 [ignore]
-.*/node_modules/preact/.*
 .*node_modules/webpack-cli/.*
 .*target/.*
 .*/__tests__/.*
 
 [untyped]
+.*/node_modules/preact/.*
+.*/node_modules/react-select/.*
 .*node_modules/@emotion/.*
 .*node_modules/emotion-theming/.*
 .*node_modules/@emotion/babel-preset-css-prop.*

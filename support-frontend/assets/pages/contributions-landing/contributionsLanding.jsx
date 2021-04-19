@@ -126,9 +126,11 @@ const router = (
             const { search } = props.location;
             const queryParams = new URLSearchParams(search);
             const localCurrencyCountryId = queryParams.get('local-currency-country-id');
+            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId];
 
             return contributionsLandingPage({
-              localCurrencyCountry: localCurrencyCountries[localCurrencyCountryId],
+              campaignCodeParameter: null,
+              localCurrencyCountry,
             });
           }}
         />
@@ -139,10 +141,12 @@ const router = (
             const { search } = props.location;
             const queryParams = new URLSearchParams(search);
             const localCurrencyCountryId = queryParams.get('local-currency-country-id');
+            const campaignCodeParameter = props.match.params.campaignCode;
+            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId];
 
             return contributionsLandingPage({
-              campaignCodeParameter: props.match.params.campaignCode,
-              localCurrencyCountry: localCurrencyCountries[localCurrencyCountryId],
+              campaignCodeParameter,
+              localCurrencyCountry,
             });
           }}
         />

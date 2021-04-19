@@ -28,8 +28,8 @@ export type IsoCurrency =
 export type Currency = {|
   glyph: string,
   extendedGlyph: string,
-  isSuffixGlyph: boolean | null,
-  isPaddedGlyph: boolean | null,
+  isSuffixGlyph: boolean,
+  isPaddedGlyph: boolean,
 |};
 
 export type SpokenCurrency = {|
@@ -46,48 +46,60 @@ const currencies: {
   GBP: {
     glyph: '£',
     extendedGlyph: '£',
+    isSuffixGlyph: false,
+    isPaddedGlyph: false,
   },
   USD: {
     glyph: '$',
     extendedGlyph: 'US$',
+    isSuffixGlyph: false,
+    isPaddedGlyph: false,
   },
   AUD: {
     glyph: '$',
     extendedGlyph: 'AU$',
+    isSuffixGlyph: false,
+    isPaddedGlyph: false,
   },
   EUR: {
     glyph: '€',
     extendedGlyph: '€',
+    isSuffixGlyph: false,
+    isPaddedGlyph: false,
   },
   NZD: {
     glyph: '$',
     extendedGlyph: 'NZ$',
+    isSuffixGlyph: false,
+    isPaddedGlyph: false,
   },
   CAD: {
     glyph: '$',
     extendedGlyph: 'CA$',
+    isSuffixGlyph: false,
+    isPaddedGlyph: false,
   },
   SEK: {
     glyph: 'kr',
-    extendedGlyph: 'kr',
+    extendedGlyph: 'SEK',
     isSuffixGlyph: true,
     isPaddedGlyph: true,
   },
   CHF: {
     glyph: 'fr.',
-    extendedGlyph: 'fr.',
+    extendedGlyph: 'CHF',
     isSuffixGlyph: true,
     isPaddedGlyph: true,
   },
   NOK: {
     glyph: 'kr',
-    extendedGlyph: 'kr',
+    extendedGlyph: 'NOK',
     isSuffixGlyph: true,
     isPaddedGlyph: true,
   },
   DKK: {
     glyph: 'kr.',
-    extendedGlyph: 'kr.',
+    extendedGlyph: 'DKK',
     isSuffixGlyph: true,
     isPaddedGlyph: true,
   },
@@ -191,8 +203,8 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
 
 const glyph = (c: IsoCurrency): string => currencies[c].glyph;
 const extendedGlyph = (c: IsoCurrency): string => currencies[c].extendedGlyph;
-const isSuffixGlyph = (c: IsoCurrency): string => currencies[c].isSuffixGlyph;
-const isPaddedGlyph = (c: IsoCurrency): string => currencies[c].isPaddedGlyph;
+const isSuffixGlyph = (c: IsoCurrency): boolean => currencies[c].isSuffixGlyph;
+const isPaddedGlyph = (c: IsoCurrency): boolean => currencies[c].isPaddedGlyph;
 
 // ----- Exports ----- //
 

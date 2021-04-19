@@ -33,6 +33,10 @@ function TermsPrivacy(props: PropTypes) {
     AUD: 185,
     CAD: 167,
     NZD: 200,
+    SEK: 0,
+    CHF: 0,
+    NOK: 0,
+    DKK: 0,
   };
   const getRegionalAmountString = (): string => {
     const currency: IsoCurrency = fromCountryGroupId(props.countryGroupId) || 'GBP';

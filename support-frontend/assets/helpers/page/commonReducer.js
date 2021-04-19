@@ -19,7 +19,7 @@ export type Internationalisation = {|
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   countryId: IsoCountry,
-  localCurrencyCountry: LocalCurrencyCountry | null,
+  localCurrencyCountry?: LocalCurrencyCountry,
   useLocalCurrency: boolean,
   defaultCurrency: IsoCurrency,
 |};
@@ -65,7 +65,7 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           ...state,
           internationalisation: {
             ...state.internationalisation,
-            currencyId: action.useLocalCurrency
+            currencyId: (action.useLocalCurrency && state.internationalisation.localCurrencyCountry)
               ? state.internationalisation.localCurrencyCountry.currency
               : state.internationalisation.defaultCurrency,
           },
@@ -92,7 +92,7 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
       case 'SET_USE_LOCAL_AMOUNTS':
         return {
           ...state,
-          amounts: action.useLocalAmounts
+          amounts: (action.useLocalAmounts && state.internationalisation.localCurrencyCountry)
             ? state.internationalisation.localCurrencyCountry.amounts
             : state.defaultAmounts,
         };

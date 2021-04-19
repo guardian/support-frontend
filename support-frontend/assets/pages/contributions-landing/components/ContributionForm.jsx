@@ -91,11 +91,11 @@ type PropTypes = {|
   campaignSettings: CampaignSettings | null,
   referrerSource: ?string,
   amazonPayBillingAgreementId: ?string,
-  localCurrencyCountry: LocalCurrencyCountry | null,
+  localCurrencyCountry: ?LocalCurrencyCountry,
   amounts: ContributionAmounts,
   useLocalCurrency: boolean,
-  setUseLocalCurrency: (boolean, LocalCurrencyCountry | null, number) => void,
-  setLocalCurrencyCountry: LocalCurrencyCountry => void,
+  setUseLocalCurrency: (boolean, ?LocalCurrencyCountry, ?number) => void,
+  setLocalCurrencyCountry: (LocalCurrencyCountry | null) => void,
   defaultOneOffAmount: number | null;
 |};
 
@@ -260,10 +260,12 @@ function onSubmit(props: PropTypes): Event => void {
 function withProps(props: PropTypes) {
   const baseClass = 'form';
   const classModifiers = ['contribution', 'with-labels'];
-  const shouldOfferLocalCurrency = props.localCurrencyCountry && props.contributionType === 'ONE_OFF';
+  // const shouldOfferLocalCurrency = props.localCurrencyCountry && props.contributionType === 'ONE_OFF';
 
   useEffect(() => {
-    props.setLocalCurrencyCountry(props.localCurrencyCountry);
+    if (props.localCurrencyCountry) {
+      props.setLocalCurrencyCountry(props.localCurrencyCountry);
+    }
   }, [props.localCurrencyCountry]);
 
   function toggleUseLocalCurrency() {
@@ -281,7 +283,7 @@ function withProps(props: PropTypes) {
         <ContributionTypeTabs />
         <ContributionAmount />
         {
-          shouldOfferLocalCurrency &&
+          props.localCurrencyCountry && props.contributionType === 'ONE_OFF' &&
           (
             <CheckboxGroup cssOverrides="margin-top:16px;">
               <Checkbox

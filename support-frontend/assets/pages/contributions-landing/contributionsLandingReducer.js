@@ -416,9 +416,6 @@ function createFormReducer() {
       case 'UPDATE_RECAPTCHA_TOKEN':
         return { ...state, oneOffRecaptchaToken: action.recaptchaToken };
 
-      case 'USE_LOCAL_CURRENCY':
-        return { ...state, useLocalCurrency: action.useLocalCurrency };
-
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };
 
