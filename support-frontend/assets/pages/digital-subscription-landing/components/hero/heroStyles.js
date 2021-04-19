@@ -83,5 +83,12 @@ export const spaceAfter = css`
   ${from.leftCol} {
     margin-bottom: 80px;
   }
+`;
 
+export const mobileLineBreak = css`
+  display: block;
+
+  ${from.desktop} {
+    display: none;
+  }
 `;

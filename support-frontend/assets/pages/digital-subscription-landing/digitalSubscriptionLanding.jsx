@@ -27,7 +27,6 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import { DigitalHero } from './components/hero/hero';
-import CampaignHeaderGift from './components/heroGift/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
 import './digitalSubscriptionLanding.scss';
@@ -50,7 +49,7 @@ const { common, page } = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
 const { abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
+const showPriceCardsInHero = !orderIsAGift && abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -105,14 +104,12 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      {orderIsAGift ?
-        <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
-        <DigitalHero
-          countryGroupId={countryGroupId}
-          promotionCopy={sanitisedPromoCopy}
-          showPriceCards={showPriceCardsInHero}
-        />
-      }
+      <DigitalHero
+        orderIsAGift={orderIsAGift}
+        countryGroupId={countryGroupId}
+        promotionCopy={sanitisedPromoCopy}
+        showPriceCards={showPriceCardsInHero}
+      />
       {countryGroupId === AUDCountries ?
         <ProductBlockAus
           countryGroupId={countryGroupId}

@@ -10,7 +10,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
-// import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
+import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 
 import {
   AUDCountries,
@@ -28,12 +28,14 @@ import {
   circleTextBottom,
   circleTextGeneric,
   spaceAfter,
+  mobileLineBreak,
 } from './heroStyles';
 
 type PropTypes = {
   promotionCopy: PromotionCopy,
   countryGroupId: CountryGroupId,
   showPriceCards: boolean,
+  orderIsAGift: boolean,
 }
 
 const HeroCopy = () => (
@@ -63,6 +65,14 @@ const HeroCopyAus = () => (
     </p>
   </>);
 
+const GiftCopy = () => (
+  <p css={paragraph}>
+    <span css={heavyText}>Share what matters most,<br css={mobileLineBreak} /> even when apart</span><br />
+        Show that you care with the gift of a digital gift subscription. Your loved ones will get the
+        richest, ad-free experience of our independent journalism and your gift will help fund our work.
+  </p>
+);
+
 const defaultRoundel = (
   <div>
     <div css={circleTextTop}>14 day</div>
@@ -71,7 +81,9 @@ const defaultRoundel = (
 );
 
 
-function DigitalHero({ promotionCopy, countryGroupId, showPriceCards }: PropTypes) {
+function DigitalHero({
+  promotionCopy, countryGroupId, orderIsAGift, showPriceCards,
+}: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
@@ -79,12 +91,13 @@ function DigitalHero({ promotionCopy, countryGroupId, showPriceCards }: PropType
 
   const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || defaultRoundel;
 
-  const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
+  const nonGiftCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
+  const defaultCopy = orderIsAGift ? <GiftCopy /> : nonGiftCopy;
   const copy = promoCopy || defaultCopy;
 
   return (
     <PageTitle
-      title="Digital subscription"
+      title={orderIsAGift ? 'Give the digital subscription' : 'Digital subscription'}
       theme="digital"
     >
       <CentredContainer>
@@ -99,10 +112,13 @@ function DigitalHero({ promotionCopy, countryGroupId, showPriceCards }: PropType
             altText="Digital subscriptions"
             imgType="png"
           />}
-          roundelText={roundelText}
+          roundelText={orderIsAGift ? null : roundelText}
         >
           <section css={heroCopy}>
-            <h2 css={heroTitle}>{title}</h2>
+            {orderIsAGift ?
+              <GiftHeadingAnimation /> :
+              <h2 css={heroTitle}>{title}</h2>
+            }
             <div>
               {copy}
             </div>
