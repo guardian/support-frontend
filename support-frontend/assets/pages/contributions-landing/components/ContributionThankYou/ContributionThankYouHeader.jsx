@@ -53,7 +53,6 @@ type ContributionThankYouHeaderProps = {|
   contributionType: ContributionType,
   amount: string,
   currency: IsoCurrency,
-  thankyouPageHeadingTestVariant: boolean,
   shouldShowLargeDonationMessage: boolean
 |};
 
@@ -66,7 +65,6 @@ const ContributionThankYouHeader = ({
   contributionType,
   amount,
   currency,
-  thankyouPageHeadingTestVariant,
   shouldShowLargeDonationMessage,
 }: ContributionThankYouHeaderProps) => {
   const title = (): React.Node => {
@@ -76,7 +74,7 @@ const ContributionThankYouHeader = ({
     const payPalOneOff =
       paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
 
-    if (thankyouPageHeadingTestVariant && !payPalOneOff && amount) {
+    if (!payPalOneOff && amount) {
       const currencyAndAmount = (
         <span css={amountText}>
           {currencies[currency].glyph}
