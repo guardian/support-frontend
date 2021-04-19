@@ -179,6 +179,7 @@ function updateTotal(props: PropTypes) {
         label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
         amount: props.amount * 100,
       },
+      currency: props.currency.toLowerCase(),
     });
   }
 }
