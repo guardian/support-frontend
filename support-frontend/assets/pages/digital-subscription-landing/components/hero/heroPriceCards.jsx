@@ -4,15 +4,31 @@
 
 import React from 'react';
 import { css } from '@emotion/core';
+import { from, until } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 
 import ProductOptionSmall from 'components/product/productOptionSmall';
 
 const priceCardContainer = css`
-  border-left: 1px solid ${brand[600]};
-  padding: 0 ${space[5]}px;
+  width: 100%;
+  padding: 0 ${space[3]}px;
   margin: ${space[5]}px 0;
+  margin-top: -${space[3]}px;
+
+  ${from.tablet} {
+    margin-top: ${space[2]}px;
+    padding: 0 ${space[5]}px;
+    border-top: none;
+    border-left: 1px solid ${brand[600]};
+    max-width: 320px;
+  }
+`;
+
+const priceCardTopBorder = css`
+  ${until.tablet} {
+    border-top: 1px solid ${brand[600]};
+  }
 `;
 
 const product1 = {
@@ -37,7 +53,7 @@ const product2 = {
 export function HeroPriceCards() {
   return (
     <div css={priceCardContainer}>
-      <ProductOptionSmall {...product1} />
+      <ProductOptionSmall cssOverrides={priceCardTopBorder} {...product1} />
       <ProductOptionSmall {...product2} />
     </div>
   );

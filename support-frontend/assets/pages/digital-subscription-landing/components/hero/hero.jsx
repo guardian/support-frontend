@@ -31,6 +31,8 @@ import {
   circleTextGeneric,
   spaceAfter,
   mobileLineBreak,
+  hideOnMobile,
+  testRoundelOverrides,
 } from './heroStyles';
 
 type PropTypes = {
@@ -42,12 +44,12 @@ type PropTypes = {
 
 const HeroCopy = () => (
   <>
-    <p css={paragraph}>
+    <p css={[paragraph, hideOnMobile]}>
       We’re free to give voice to the voiceless. The unheard. The powerless.
       Become a digital subscriber today and help to fund our vital work.
     </p>
     <p css={paragraph}>
-      With two innovative apps and ad-free reading, a digital subscription gives
+      With <span css={heavyText}>two innovative apps and ad-free reading,</span> a digital subscription gives
       you the richest experience of Guardian journalism. Plus, for a limited time,
       you can read our latest special edition - The books of&nbsp;2021
     </p>
@@ -115,7 +117,7 @@ function DigitalHero({
             imgType="png"
           />}
           roundel={
-            <HeroRoundel theme={showPriceCards ? 'digital' : 'base'}>
+            <HeroRoundel cssOverrides={showPriceCards ? testRoundelOverrides : ''} theme={showPriceCards ? 'digital' : 'base'}>
               {orderIsAGift ? null : roundelText}
             </HeroRoundel>
           }

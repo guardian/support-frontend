@@ -22,7 +22,6 @@ const productOptionSmallStyles = css`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 290px;
   padding: ${space[6]}px 0;
   padding-right: ${space[4]}px;
 

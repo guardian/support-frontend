@@ -3,7 +3,7 @@
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
-import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
+import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { titlepiece } from '@guardian/src-foundations/typography';
 
@@ -77,10 +77,11 @@ const header = css`
 export const pageTitle = css`
   ${titlepiece.small({ fontWeight: 'bold' })};
   z-index: 10;
-  padding: ${space[9]}px ${space[4]}px;
+  padding: ${space[4]}px ${space[4]}px ${space[9]}px;
   width: 100%;
 
   ${from.phablet} {
+    padding-top: ${space[9]}px;
     width: 100%;
     align-self: center;
   }
