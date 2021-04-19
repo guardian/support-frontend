@@ -18,6 +18,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { HeroPriceCards } from './heroPriceCards';
 import {
   heroCopy,
   heroTitle,
@@ -102,7 +103,7 @@ function DigitalHero({
     >
       <CentredContainer>
         <Hero
-          image={<GridImage
+          image={showPriceCards ? <HeroPriceCards /> : <GridImage
             gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
             srcSizes={[1000, 500, 140]}
             sizes="(max-width: 480px) 200px,
@@ -122,26 +123,28 @@ function DigitalHero({
             <div>
               {copy}
             </div>
-            <div css={countryGroupId === AUDCountries ? '' : spaceAfter}>
-              <ThemeProvider theme={buttonBrand}>
-                <LinkButton
-                  href="#subscribe"
-                  priority="tertiary"
-                  size="default"
-                  icon={<SvgArrowDownStraight />}
-                  iconSide="right"
-                  onClick={() => {
-                    sendTrackingEventsOnClick({
-                      id: 'options_cta_click',
-                      product: 'DigitalPack',
-                      componentType: 'ACQUISITIONS_BUTTON',
-                    })();
-                }}
-                >
-                  See pricing options
-                </LinkButton>
-              </ThemeProvider>
-            </div>
+            {!showPriceCards &&
+              <div css={countryGroupId === AUDCountries ? '' : spaceAfter}>
+                <ThemeProvider theme={buttonBrand}>
+                  <LinkButton
+                    href="#subscribe"
+                    priority="tertiary"
+                    size="default"
+                    icon={<SvgArrowDownStraight />}
+                    iconSide="right"
+                    onClick={() => {
+                      sendTrackingEventsOnClick({
+                        id: 'options_cta_click',
+                        product: 'DigitalPack',
+                        componentType: 'ACQUISITIONS_BUTTON',
+                      })();
+                  }}
+                  >
+                    See pricing options
+                  </LinkButton>
+                </ThemeProvider>
+              </div>
+            }
           </section>
         </Hero>
       </CentredContainer>

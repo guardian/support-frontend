@@ -45,11 +45,12 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { common, page } = store.getState();
+const { page } = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
-const { abParticipations } = common;
+// const { abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-const showPriceCardsInHero = !orderIsAGift && abParticipations.priceCardsInHeroTest === 'variant';
+const showPriceCardsInHero = !orderIsAGift && true;
+// abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
 
