@@ -125,8 +125,8 @@ const router = (
           render={(props) => {
             const { search } = props.location;
             const queryParams = new URLSearchParams(search);
-            const localCurrencyCountryId = queryParams.get('local-currency-country-id');
-            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId];
+            const localCurrencyCountryId = queryParams.get('local-currency-country') || '';
+            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId.toUpperCase()];
 
             return contributionsLandingPage({
               campaignCodeParameter: null,
@@ -140,9 +140,9 @@ const router = (
           render={(props) => {
             const { search } = props.location;
             const queryParams = new URLSearchParams(search);
-            const localCurrencyCountryId = queryParams.get('local-currency-country-id');
+            const localCurrencyCountryId = queryParams.get('local-currency-country') || '';
             const campaignCodeParameter = props.match.params.campaignCode;
-            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId];
+            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId.toUpperCase()];
 
             return contributionsLandingPage({
               campaignCodeParameter,
