@@ -4,7 +4,7 @@
 
 import { css } from '@emotion/core';
 import { headline, body } from '@guardian/src-foundations/typography';
-import { brand, brandAlt } from '@guardian/src-foundations/palette';
+import { brandAlt } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 
@@ -62,17 +62,14 @@ export const heavyText = css`
 
 export const circleTextTop = css`
   ${headline.medium({ fontWeight: 'bold' })};
-  color: ${brand[300]};
 `;
 
 export const circleTextBottom = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
-  color: ${brand[300]};
 `;
 
 export const circleTextGeneric = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
-  color: ${brand[300]};
 `;
 
 export const spaceAfter = css`

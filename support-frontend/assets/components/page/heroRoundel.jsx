@@ -52,7 +52,7 @@ const roundelDigital = css`
   border: 2px solid ${brandAlt[400]};
 `;
 
-type RoundelTheme = 'base' | 'digital';
+export type RoundelTheme = 'base' | 'digital';
 
 type PropTypes = {|
   children: Node,

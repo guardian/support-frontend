@@ -10,6 +10,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
+import HeroRoundel from 'components/page/heroRoundel';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 
 import {
@@ -113,7 +114,11 @@ function DigitalHero({
             altText="Digital subscriptions"
             imgType="png"
           />}
-          roundelText={orderIsAGift ? null : roundelText}
+          roundel={
+            <HeroRoundel theme={showPriceCards ? 'digital' : 'base'}>
+              {orderIsAGift ? null : roundelText}
+            </HeroRoundel>
+          }
         >
           <section css={heroCopy}>
             {orderIsAGift ?
