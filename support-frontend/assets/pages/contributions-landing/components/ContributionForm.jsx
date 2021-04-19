@@ -199,7 +199,6 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       }
     },
     PayPal: (props: PropTypes) => {
-      console.log('PayPal props', props);
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
         currency: props.currency,
