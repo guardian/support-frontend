@@ -14,27 +14,6 @@ const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
-  thankyouPageHeadingTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 1,
-  },
-
   stripePaymentRequestButtonDec2020: {
     variants: [
       {
@@ -56,28 +35,7 @@ export const tests: Tests = {
     seed: 2,
   },
 
-  globalThankyouPageLargeDonationTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 12,
-  },
-
-  thankyouPageMarketingConsentTestR2: {
+  thankyouPageMarketingConsentTestR3: {
     variants: [
       {
         id: 'control',
@@ -98,6 +56,6 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     targetPage: allLandingPagesAndThankyouPages,
-    seed: 17,
+    seed: 18,
   },
 };
