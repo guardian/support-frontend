@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { from, until } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
@@ -11,6 +11,8 @@ import { space } from '@guardian/src-foundations';
 import ProductOptionSmall from 'components/product/productOptionSmall';
 
 const priceCardContainer = css`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   padding: 0 ${space[3]}px;
   margin: ${space[5]}px 0;
@@ -21,13 +23,30 @@ const priceCardContainer = css`
     padding: 0 ${space[5]}px;
     border-top: none;
     border-left: 1px solid ${brand[600]};
-    max-width: 320px;
   }
 `;
 
+const priceCardFloat = css`
+  /* ${until.tablet} {
+    float: left;
+  } */
+`;
+
 const priceCardTopBorder = css`
+  width: 100%;
   ${until.tablet} {
     border-top: 1px solid ${brand[600]};
+  }
+`;
+
+const roundelContainer = css`
+  display: block;
+  float: right;
+  height: 200px;
+  transform: translate(${space[1]}px, 50%);
+
+  ${from.tablet} {
+    display: none;
   }
 `;
 
@@ -49,12 +68,21 @@ const product2 = {
   onView: () => {},
 };
 
+type PropTypes = {|
+  roundel: Node,
+|}
 
-export function HeroPriceCards() {
+
+export function HeroPriceCards(props: PropTypes) {
   return (
     <div css={priceCardContainer}>
-      <ProductOptionSmall cssOverrides={priceCardTopBorder} {...product1} />
-      <ProductOptionSmall {...product2} />
+      <div css={priceCardTopBorder} >
+        <div css={roundelContainer}>
+          {props.roundel}
+        </div>
+        <ProductOptionSmall cssOverrides={priceCardFloat} {...product1} />
+        <ProductOptionSmall cssOverrides={priceCardFloat} {...product2} />
+      </div>
     </div>
   );
 }

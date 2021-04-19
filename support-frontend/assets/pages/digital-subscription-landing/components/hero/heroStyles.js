@@ -5,7 +5,7 @@
 import { css } from '@emotion/core';
 import { headline, body } from '@guardian/src-foundations/typography';
 import { brandAlt } from '@guardian/src-foundations/palette';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 
 export const heroCopy = css`
@@ -90,12 +90,6 @@ export const mobileLineBreak = css`
   }
 `;
 
-export const hideOnMobile = css`
-  ${until.tablet} {
-    display: none;
-  }
-`;
-
 export const testRoundelOverrides = css`
   display: none;
 
@@ -103,4 +97,8 @@ export const testRoundelOverrides = css`
     display: flex;
     transform: translate(${space[6]}px, -75%);
   }
+`;
+
+export const testEmbeddedRoundel = css`
+  transform: translateY(0);
 `;

@@ -20,7 +20,7 @@ function FeedbackWidget() {
 
   return (
     <aside css={wrapper}>
-      <fieldset role="group" >
+      <fieldset role="group">
         <div css={header}>
           <p css={widgetTitle}>
             {clicked.negative ? 'What can we improve?' : 'Is this page helpful?'}

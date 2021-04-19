@@ -31,8 +31,8 @@ import {
   circleTextGeneric,
   spaceAfter,
   mobileLineBreak,
-  hideOnMobile,
   testRoundelOverrides,
+  testEmbeddedRoundel,
 } from './heroStyles';
 
 type PropTypes = {
@@ -43,17 +43,11 @@ type PropTypes = {
 }
 
 const HeroCopy = () => (
-  <>
-    <p css={[paragraph, hideOnMobile]}>
-      We’re free to give voice to the voiceless. The unheard. The powerless.
-      Become a digital subscriber today and help to fund our vital work.
-    </p>
-    <p css={paragraph}>
-      With <span css={heavyText}>two innovative apps and ad-free reading,</span> a digital subscription gives
-      you the richest experience of Guardian journalism. Plus, for a limited time,
-      you can read our latest special edition - The books of&nbsp;2021
-    </p>
-  </>
+  <p css={paragraph}>
+    With <span css={heavyText}>two innovative apps and ad-free reading,</span> a digital subscription gives
+    you the richest experience of Guardian journalism. Plus, for a limited time,
+    you can read our latest special edition - The books of&nbsp;2021
+  </p>
 );
 
 const HeroCopyAus = () => (
@@ -106,7 +100,11 @@ function DigitalHero({
     >
       <CentredContainer>
         <Hero
-          image={showPriceCards ? <HeroPriceCards /> : <GridImage
+          image={showPriceCards ? <HeroPriceCards roundel={
+            <HeroRoundel cssOverrides={testEmbeddedRoundel} theme="digital">
+              {roundelText}
+            </HeroRoundel>}
+          /> : <GridImage
             gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
             srcSizes={[1000, 500, 140]}
             sizes="(max-width: 480px) 200px,
@@ -116,10 +114,10 @@ function DigitalHero({
             altText="Digital subscriptions"
             imgType="png"
           />}
-          roundel={
-            <HeroRoundel cssOverrides={showPriceCards ? testRoundelOverrides : ''} theme={showPriceCards ? 'digital' : 'base'}>
-              {orderIsAGift ? null : roundelText}
-            </HeroRoundel>
+          roundel={orderIsAGift ? null :
+          <HeroRoundel cssOverrides={showPriceCards ? testRoundelOverrides : ''} theme={showPriceCards ? 'digital' : 'base'}>
+            {roundelText}
+          </HeroRoundel>
           }
         >
           <section css={heroCopy}>
@@ -131,26 +129,26 @@ function DigitalHero({
               {copy}
             </div>
             {!showPriceCards &&
-              <div css={countryGroupId === AUDCountries ? '' : spaceAfter}>
-                <ThemeProvider theme={buttonBrand}>
-                  <LinkButton
-                    href="#subscribe"
-                    priority="tertiary"
-                    size="default"
-                    icon={<SvgArrowDownStraight />}
-                    iconSide="right"
-                    onClick={() => {
+            <div css={countryGroupId === AUDCountries ? '' : spaceAfter}>
+              <ThemeProvider theme={buttonBrand}>
+                <LinkButton
+                  href="#subscribe"
+                  priority="tertiary"
+                  size="default"
+                  icon={<SvgArrowDownStraight />}
+                  iconSide="right"
+                  onClick={() => {
                       sendTrackingEventsOnClick({
                         id: 'options_cta_click',
                         product: 'DigitalPack',
                         componentType: 'ACQUISITIONS_BUTTON',
                       })();
                   }}
-                  >
+                >
                     See pricing options
-                  </LinkButton>
-                </ThemeProvider>
-              </div>
+                </LinkButton>
+              </ThemeProvider>
+            </div>
             }
           </section>
         </Hero>

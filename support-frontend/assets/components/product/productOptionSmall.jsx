@@ -14,7 +14,7 @@ export type ProductSmall = {
   buttonCopy: string,
   href: string,
   onClick: Function,
-  cssOverrides?: string,
+  cssOverrides?: string | string[],
 }
 
 const productOptionSmallStyles = css`
@@ -42,7 +42,7 @@ const priceCopyStyles = css`
 
 function ProductOptionSmall(props: ProductSmall) {
   return (
-    <div css={[productOptionSmallStyles, props.cssOverrides]}>
+    <span css={[productOptionSmallStyles, props.cssOverrides]}>
       <p css={offerCopyStyles}>{props.offerCopy}</p>
       <ThemeProvider theme={buttonReaderRevenue}>
         <LinkButton
@@ -53,7 +53,7 @@ function ProductOptionSmall(props: ProductSmall) {
         </LinkButton>
       </ThemeProvider>
       <p css={priceCopyStyles}>{props.priceCopy}</p>
-    </div>
+    </span>
   );
 }
 
