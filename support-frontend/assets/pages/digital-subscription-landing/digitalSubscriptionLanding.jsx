@@ -26,7 +26,7 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import CampaignHeader from './components/hero/hero';
+import { DigitalHero } from './components/hero/hero';
 import CampaignHeaderGift from './components/heroGift/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
@@ -107,7 +107,7 @@ function LandingPage() {
     >
       {orderIsAGift ?
         <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
-        <CampaignHeader
+        <DigitalHero
           countryGroupId={countryGroupId}
           promotionCopy={sanitisedPromoCopy}
           showPriceCards={showPriceCardsInHero}

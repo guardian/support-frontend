@@ -9,7 +9,7 @@ import { titlepiece } from '@guardian/src-foundations/typography';
 
 import CentredContainer from '../containers/centredContainer';
 
-import { guardianWeeklyBlue, paperSubscriptionsBlue } from 'stylesheets/emotion/colours';
+import { digitalSubscriptionsBlue, guardianWeeklyBlue, paperSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 type ThemeType = 'showcase' | 'digital' | 'weekly' | 'paper';
 
@@ -22,7 +22,7 @@ type PropTypes = {|
 
 const themeColors: { [key: ThemeType]: string } = {
   weekly: guardianWeeklyBlue,
-  digital: brand[300],
+  digital: digitalSubscriptionsBlue,
   showcase: brandAlt[400],
   paper: paperSubscriptionsBlue,
 };
