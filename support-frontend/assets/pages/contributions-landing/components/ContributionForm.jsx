@@ -260,7 +260,6 @@ function onSubmit(props: PropTypes): Event => void {
 function withProps(props: PropTypes) {
   const baseClass = 'form';
   const classModifiers = ['contribution', 'with-labels'];
-  // const shouldOfferLocalCurrency = props.localCurrencyCountry && props.contributionType === 'ONE_OFF';
 
   useEffect(() => {
     if (props.localCurrencyCountry) {
