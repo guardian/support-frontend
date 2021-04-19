@@ -22,6 +22,7 @@ import ContributionThankYouSignIn from './ContributionThankYouSignIn';
 import ContributionThankYouSignUp from './ContributionThankYouSignUp';
 import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
 import ContributionThankYouSupportReminder from './ContributionThankYouSupportReminder';
+import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import {
@@ -211,6 +212,12 @@ const ContributionThankYou = ({
     ),
     shouldShow: contributionType === 'ONE_OFF',
   };
+
+  const surveyAction = {
+    component: <ContributionThankYouSurvey />,
+    shouldShow: true,
+  };
+
   const socialShareAction = {
     component: (
       <ContributionThankYouSocialShare
@@ -233,6 +240,7 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
+    surveyAction,
     socialShareAction,
   ];
 
@@ -241,6 +249,7 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
+    surveyAction,
     ausMapAction,
     socialShareAction,
   ];
