@@ -86,7 +86,6 @@ function buildInitialState(
     countryGroupId,
     countryId,
     currencyId,
-    localCurrencyCountry: localCurrencyCountries[window.guardian.geoip.countryCode],
     useLocalCurrency: false,
     defaultCurrency: currencyId,
   };

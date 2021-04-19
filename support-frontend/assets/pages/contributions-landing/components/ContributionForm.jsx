@@ -19,7 +19,12 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
-import { setCurrencyId, setUseLocalAmounts, setUseLocalCurrencyFlag } from '../../../helpers/page/commonActions';
+import {
+  setCurrencyId,
+  setLocalCurrencyCountry,
+  setUseLocalAmounts,
+  setUseLocalCurrencyFlag
+} from '../../../helpers/page/commonActions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
@@ -51,6 +56,7 @@ import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpe
 import { logException } from 'helpers/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
+import {useEffect} from "preact/compat";
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -88,7 +94,8 @@ type PropTypes = {|
   localCurrencyCountry: LocalCurrencyCountry | null,
   amounts: ContributionAmounts,
   useLocalCurrency: boolean,
-  setUseLocalCurrency: (boolean, LocalCurrencyCountry | null) => void,
+  setUseLocalCurrency: (boolean, LocalCurrencyCountry | null, number) => void,
+  setLocalCurrencyCountry: LocalCurrencyCountry => void,
   defaultOneOffAmount: number | null;
 |};
 
@@ -123,7 +130,6 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
-  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
   currency: state.common.internationalisation.currencyId,
   amounts: state.common.amounts,
@@ -136,6 +142,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setLocalCurrencyCountry: (localCurrencyCountry) => { dispatch(setLocalCurrencyCountry(localCurrencyCountry)) },
   setUseLocalCurrency: (useLocalCurrency, localCurrencyCountry, defaultOneOffAmount) => {
     dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
     dispatch(setCurrencyId(useLocalCurrency));
@@ -252,8 +259,12 @@ function onSubmit(props: PropTypes): Event => void {
 
 function withProps(props: PropTypes) {
   const baseClass = 'form';
-
   const classModifiers = ['contribution', 'with-labels'];
+  const shouldOfferLocalCurrency = props.localCurrencyCountry && props.contributionType === 'ONE_OFF';
+
+  useEffect(() => {
+    props.setLocalCurrencyCountry(props.localCurrencyCountry)
+  }, [props.localCurrencyCountry]);
 
   function toggleUseLocalCurrency() {
     props.setUseLocalCurrency(
@@ -270,7 +281,7 @@ function withProps(props: PropTypes) {
         <ContributionTypeTabs />
         <ContributionAmount />
         {
-          props.localCurrencyCountry && props.contributionType === 'ONE_OFF' &&
+          shouldOfferLocalCurrency &&
           (
             <CheckboxGroup cssOverrides='margin-top:16px;'>
               <Checkbox

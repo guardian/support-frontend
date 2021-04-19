@@ -5,6 +5,7 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionTypes } from 'helpers/contributions';
+import type {LocalCurrencyCountry} from "../internationalisation/localCurrencyCountry";
 
 // ----- Types ----- //
 
@@ -16,8 +17,8 @@ export type Action =
   | { type: 'SET_CONTRIBUTION_TYPES', contributionTypes: ContributionTypes }
   | { type: 'SET_CURRENCY_ID', useLocalCurrency: boolean }
   | { type: 'SET_USE_LOCAL_CURRENCY_FLAG', useLocalCurrency: boolean }
-  | { type: 'SET_USE_LOCAL_AMOUNTS', useLocalAmounts: boolean };
-
+  | { type: 'SET_USE_LOCAL_AMOUNTS', useLocalAmounts: boolean }
+  | { type: 'SET_LOCAL_CURRENCY_COUNTRY', localCurrencyCountry: LocalCurrencyCountry };
 
 // ----- Action Creators ----- //
 
@@ -27,6 +28,10 @@ function setCountry(country: IsoCountry): SetCountryAction {
 
 function setCurrencyId(useLocalCurrency: boolean): Action {
   return { type: 'SET_CURRENCY_ID', useLocalCurrency };
+}
+
+function setLocalCurrencyCountry(localCurrencyCountry: LocalCurrencyCountry): Action {
+  return { type: 'SET_LOCAL_CURRENCY_COUNTRY', localCurrencyCountry };
 }
 
 function setUseLocalCurrencyFlag(useLocalCurrency: boolean): Action {
@@ -54,4 +59,5 @@ export {
   setUseLocalCurrencyFlag,
   setCurrencyId,
   setUseLocalAmounts,
+  setLocalCurrencyCountry
 };
