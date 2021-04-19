@@ -30,9 +30,8 @@ import { setUserStateActions } from './setUserStateActions';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
 import { FocusStyleManager } from '@guardian/src-utilities';
-import type {IsoCountry} from "../../helpers/internationalisation/country";
-import {localCurrencyCountries} from "../../helpers/internationalisation/localCurrencyCountry";
-import type {LocalCurrencyCountry} from "../../helpers/internationalisation/localCurrencyCountry";
+import { localCurrencyCountries } from '../../helpers/internationalisation/localCurrencyCountry';
+import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 
 
 if (!isDetailsSupported) {
@@ -130,7 +129,7 @@ const router = (
 
             return contributionsLandingPage({
               localCurrencyCountry: localCurrencyCountries[localCurrencyCountryId],
-            })
+            });
           }}
         />
         <Route
@@ -144,7 +143,7 @@ const router = (
             return contributionsLandingPage({
               campaignCodeParameter: props.match.params.campaignCode,
               localCurrencyCountry: localCurrencyCountries[localCurrencyCountryId],
-            })
+            });
           }}
         />
         <Route

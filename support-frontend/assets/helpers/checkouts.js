@@ -139,15 +139,15 @@ function getPaymentDescription(contributionType: ContributionType, paymentMethod
 }
 
 const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: number, verbose: boolean): string => {
-  const glyph = currency.isPaddedGlyph ? ` ${currency.glyph} ` : currency.glyph
+  const glyph = currency.isPaddedGlyph ? ` ${currency.glyph} ` : currency.glyph;
 
   if (verbose) {
-    return `${amount} ${amount === 1 ? spokenCurrency.singular : spokenCurrency.plural}`
-  } else {
-    const valueWithGlyph = currency.isSuffixGlyph ? `${amount}${glyph}` : `${glyph}${amount}`
-    return valueWithGlyph.trim()
+    return `${amount} ${amount === 1 ? spokenCurrency.singular : spokenCurrency.plural}`;
   }
-}
+  const valueWithGlyph = currency.isSuffixGlyph ? `${amount}${glyph}` : `${glyph}${amount}`;
+  return valueWithGlyph.trim();
+
+};
 
 const getContributeButtonCopy = (
   contributionType: ContributionType,

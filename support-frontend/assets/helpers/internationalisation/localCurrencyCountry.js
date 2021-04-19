@@ -1,6 +1,8 @@
+// @flow
+
 import type { IsoCountry } from './country';
 import type { IsoCurrency } from './currency';
-import type {ContributionAmounts, SelectedAmounts} from '../contributions';
+import type { ContributionAmounts } from '../contributions';
 
 export type LocalCurrencyCountry = {
   countryCode: IsoCountry,
@@ -19,7 +21,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
-        defaultAmount: 50
+        defaultAmount: 50,
       },
     },
   },
@@ -30,7 +32,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [5, 10, 15, 20],
-        defaultAmount: 5
+        defaultAmount: 5,
       },
     },
   },
@@ -41,7 +43,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
-        defaultAmount: 50
+        defaultAmount: 50,
       },
     },
   },
@@ -52,7 +54,7 @@ export const localCurrencyCountries: {
     amounts: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
-        defaultAmount: 50
+        defaultAmount: 50,
       },
     },
   },

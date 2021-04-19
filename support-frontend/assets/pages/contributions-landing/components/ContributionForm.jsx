@@ -23,7 +23,7 @@ import {
   setCurrencyId,
   setLocalCurrencyCountry,
   setUseLocalAmounts,
-  setUseLocalCurrencyFlag
+  setUseLocalCurrencyFlag,
 } from '../../../helpers/page/commonActions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
@@ -31,7 +31,7 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type {ContributionAmounts, OtherAmounts, SelectedAmounts} from 'helpers/contributions';
+import type { ContributionAmounts, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { CampaignSettings } from 'helpers/campaigns';
 
 import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
@@ -56,7 +56,7 @@ import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpe
 import { logException } from 'helpers/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
-import {useEffect} from "preact/compat";
+import { useEffect } from 'preact/compat';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -133,7 +133,7 @@ const mapStateToProps = (state: State) => ({
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
   currency: state.common.internationalisation.currencyId,
   amounts: state.common.amounts,
-  defaultOneOffAmount: state.common.defaultAmounts['ONE_OFF'].defaultAmount,
+  defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
 });
 
 
@@ -142,17 +142,17 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setLocalCurrencyCountry: (localCurrencyCountry) => { dispatch(setLocalCurrencyCountry(localCurrencyCountry)) },
+  setLocalCurrencyCountry: (localCurrencyCountry) => { dispatch(setLocalCurrencyCountry(localCurrencyCountry)); },
   setUseLocalCurrency: (useLocalCurrency, localCurrencyCountry, defaultOneOffAmount) => {
     dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
     dispatch(setCurrencyId(useLocalCurrency));
     dispatch(setUseLocalAmounts(useLocalCurrency));
     dispatch(selectAmount(
       useLocalCurrency
-        ? localCurrencyCountry.amounts['ONE_OFF'].defaultAmount
+        ? localCurrencyCountry.amounts.ONE_OFF.defaultAmount
         : defaultOneOffAmount,
-      'ONE_OFF'
-    ))
+      'ONE_OFF',
+    ));
   },
 });
 
@@ -199,7 +199,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       }
     },
     PayPal: (props: PropTypes) => {
-      console.log('PayPal props', props)
+      console.log('PayPal props', props);
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
         currency: props.currency,
@@ -263,7 +263,7 @@ function withProps(props: PropTypes) {
   const shouldOfferLocalCurrency = props.localCurrencyCountry && props.contributionType === 'ONE_OFF';
 
   useEffect(() => {
-    props.setLocalCurrencyCountry(props.localCurrencyCountry)
+    props.setLocalCurrencyCountry(props.localCurrencyCountry);
   }, [props.localCurrencyCountry]);
 
   function toggleUseLocalCurrency() {
@@ -271,7 +271,7 @@ function withProps(props: PropTypes) {
       !props.useLocalCurrency,
       props.localCurrencyCountry,
       props.defaultOneOffAmount,
-    )
+    );
   }
 
   return (
@@ -283,7 +283,7 @@ function withProps(props: PropTypes) {
         {
           shouldOfferLocalCurrency &&
           (
-            <CheckboxGroup cssOverrides='margin-top:16px;'>
+            <CheckboxGroup cssOverrides="margin-top:16px;">
               <Checkbox
                 label={`View in local currency (${props.localCurrencyCountry.currency})`}
                 defaultChecked={props.useLocalCurrency}

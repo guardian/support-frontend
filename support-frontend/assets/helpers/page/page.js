@@ -44,7 +44,6 @@ import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
 import { getAmounts } from 'helpers/abTests/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore

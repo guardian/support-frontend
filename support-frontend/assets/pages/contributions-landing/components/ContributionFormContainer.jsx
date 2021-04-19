@@ -15,7 +15,7 @@ import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type {LocalCurrencyCountry} from "../../../helpers/internationalisation/localCurrencyCountry";
+import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
 
 
 // ----- Types ----- //

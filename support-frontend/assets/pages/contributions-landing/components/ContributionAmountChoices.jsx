@@ -47,7 +47,6 @@ type ContributionAmountChoicesProps = {|
   contributionType: ContributionType,
   validAmounts: number[],
   defaultAmount: number,
-  testCurrencyAmounts?: number[],
   showOther: boolean,
   selectedAmounts: SelectedAmounts,
   selectAmount: (

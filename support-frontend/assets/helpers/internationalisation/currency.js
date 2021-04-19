@@ -9,7 +9,7 @@ import {
   type CountryGroupId,
   countryGroups,
 } from './countryGroup';
-import type {IsoCountry} from "./country";
+import type { IsoCountry } from './country';
 
 // ----- Types ----- //
 
