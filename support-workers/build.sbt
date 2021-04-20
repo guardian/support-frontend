@@ -82,6 +82,7 @@ deployToCode := {
     "-CreateSalesforceContactLambda-",
     "-CreateZuoraSubscriptionLambda-",
     "-SendThankYouEmailLambda-",
+    "-UpdateSupporterProductDataLambda-",
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
     "-SendOldAcquisitionEventLambda-",

@@ -18,9 +18,9 @@ import scala.concurrent.Future
 
 case class StateNotValidException(message: String) extends RuntimeException(message)
 
-class SendThankYouEmail(servicesProvider: ServiceProvider = ServiceProvider)
+class SendThankYouEmail(serviceProvider: ServiceProvider = ServiceProvider)
   extends SubsetServicesHandler[SendAcquisitionEventState, List[SendMessageResult], SendThankYouEmailState](
-    servicesProvider,
+    serviceProvider,
     _.sendThankYouEmailState
   ) {
 
