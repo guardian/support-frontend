@@ -58,7 +58,7 @@ States:
       States:
         UpdateSupporterProduct:
           Type: Task
-          Resource: "${UpdateSupporterProductData.Arn}"
+          Resource: "${UpdateSupporterProductDataLambda.Arn}"
           End: True
           {{> retry}}
     - StartAt: SendAcquisitionEvent
