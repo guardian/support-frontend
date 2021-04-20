@@ -123,8 +123,8 @@ lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .settings(
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`module-rest`, `module-aws`)
-  .aggregate(`module-rest`, `module-aws`)
+  ).dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
+  .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)

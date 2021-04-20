@@ -11,8 +11,8 @@ import java.time.LocalDate
 @IntegrationTest
 class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
 
-  DynamoDBService.getClass.getSimpleName should "be able to insert an item" in {
-    val service = DynamoDBService(DEV)
+  SupporterDataDynamoService.getClass.getSimpleName should "be able to insert an item" in {
+    val service = SupporterDataDynamoService(DEV)
     val item = SupporterRatePlanItem(
       identityId = "999999",
       gifteeIdentityId = None,

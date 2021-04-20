@@ -6,6 +6,7 @@ import kantan.csv.ops.toCsvInputOps
 import kantan.csv.rfc
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 
 class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
 
