@@ -55,12 +55,12 @@ States:
           End: True
           {{> emailRetry}}
     - StartAt: UpdateSupporterProductData
-        States:
-          SendAcquisitionEvent:
-            Type: Task
-            Resource: "${UpdateSupporterProductData.Arn}"
-            End: True
-            {{> retry}}
+      States:
+        UpdateSupporterProduct:
+          Type: Task
+          Resource: "${UpdateSupporterProductData.Arn}"
+          End: True
+          {{> retry}}
     - StartAt: SendAcquisitionEvent
       States:
         SendAcquisitionEvent:
