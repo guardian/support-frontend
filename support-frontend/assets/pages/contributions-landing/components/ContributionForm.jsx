@@ -21,7 +21,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 import {
   setCurrencyId,
-  setLocalCurrencyCountry,
   setUseLocalAmounts,
   setUseLocalCurrencyFlag,
 } from '../../../helpers/page/commonActions';
@@ -56,7 +55,6 @@ import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpe
 import { logException } from 'helpers/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
-import { useEffect } from 'preact/compat';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -95,7 +93,6 @@ type PropTypes = {|
   amounts: ContributionAmounts,
   useLocalCurrency: boolean,
   setUseLocalCurrency: (boolean, ?LocalCurrencyCountry, ?number) => void,
-  setLocalCurrencyCountry: (LocalCurrencyCountry | null) => void,
   defaultOneOffAmount: number | null;
 |};
 
@@ -130,6 +127,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
   currency: state.common.internationalisation.currencyId,
   amounts: state.common.amounts,
@@ -142,7 +140,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setLocalCurrencyCountry: (localCurrencyCountry) => { dispatch(setLocalCurrencyCountry(localCurrencyCountry)); },
   setUseLocalCurrency: (useLocalCurrency, localCurrencyCountry, defaultOneOffAmount) => {
     dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
     dispatch(setCurrencyId(useLocalCurrency));
@@ -259,12 +256,6 @@ function onSubmit(props: PropTypes): Event => void {
 function withProps(props: PropTypes) {
   const baseClass = 'form';
   const classModifiers = ['contribution', 'with-labels'];
-
-  useEffect(() => {
-    if (props.localCurrencyCountry) {
-      props.setLocalCurrencyCountry(props.localCurrencyCountry);
-    }
-  }, [props.localCurrencyCountry]);
 
   function toggleUseLocalCurrency() {
     props.setUseLocalCurrency(

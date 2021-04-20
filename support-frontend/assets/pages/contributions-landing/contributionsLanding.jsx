@@ -30,8 +30,6 @@ import { setUserStateActions } from './setUserStateActions';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
 import { FocusStyleManager } from '@guardian/src-utilities';
-import { localCurrencyCountries } from '../../helpers/internationalisation/localCurrencyCountry';
-import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 
 
 if (!isDetailsSupported) {
@@ -96,11 +94,7 @@ const backgroundImageSrc = campaignSettings && campaignSettings.backgroundImage 
 
 FocusStyleManager.onlyShowFocusOnTabs(); // https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility
 
-type ContributionsLandingPageProps = {
-  campaignCodeParameter: ?string,
-  localCurrencyCountry: ?LocalCurrencyCountry,
-}
-const contributionsLandingPage = (props: ContributionsLandingPageProps) => (
+const contributionsLandingPage = (campaignCodeParameter: ?string) => (
   <Page
     classModifiers={['new-template', 'contribution-form', ...cssModifiers]}
     header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
@@ -109,8 +103,7 @@ const contributionsLandingPage = (props: ContributionsLandingPageProps) => (
   >
     <ContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-      campaignCodeParameter={props.campaignCodeParameter}
-      localCurrencyCountry={props.localCurrencyCountry}
+      campaignCodeParameter={campaignCodeParameter}
     />
   </Page>
 );
@@ -122,33 +115,12 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/"
-          render={(props) => {
-            const { search } = props.location;
-            const queryParams = new URLSearchParams(search);
-            const localCurrencyCountryId = queryParams.get('local-currency-country') || '';
-            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId.toUpperCase()];
-
-            return contributionsLandingPage({
-              campaignCodeParameter: null,
-              localCurrencyCountry,
-            });
-          }}
+          render={() => contributionsLandingPage()}
         />
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
-          render={(props) => {
-            const { search } = props.location;
-            const queryParams = new URLSearchParams(search);
-            const localCurrencyCountryId = queryParams.get('local-currency-country') || '';
-            const campaignCodeParameter = props.match.params.campaignCode;
-            const localCurrencyCountry = localCurrencyCountries[localCurrencyCountryId.toUpperCase()];
-
-            return contributionsLandingPage({
-              campaignCodeParameter,
-              localCurrencyCountry,
-            });
-          }}
+          render={props => contributionsLandingPage(props.match.params.campaignCode)}
         />
         <Route
           exact

@@ -15,7 +15,6 @@ import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
 
 
 // ----- Types ----- //
@@ -31,7 +30,6 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
-  localCurrencyCountry: ?LocalCurrencyCountry,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -140,7 +138,6 @@ function withProps(props: PropTypes) {
             <ContributionForm
               onPaymentAuthorisation={onPaymentAuthorisation}
               campaignSettings={campaignSettings}
-              localCurrencyCountry={props.localCurrencyCountry}
             />
           </div>
         }
