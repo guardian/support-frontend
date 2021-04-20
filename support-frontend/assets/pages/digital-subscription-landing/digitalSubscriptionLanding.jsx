@@ -35,6 +35,8 @@ import digitalSubscriptionLandingReducer
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
+import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
+
 // ----- Styles ----- //
 
 import './components/digitalSubscriptionLanding.scss';
@@ -44,6 +46,8 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
+
+const priceList = getHeroCtaProps(store.getState());
 
 const { page } = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
@@ -110,6 +114,7 @@ function LandingPage() {
         countryGroupId={countryGroupId}
         promotionCopy={sanitisedPromoCopy}
         showPriceCards={showPriceCardsInHero}
+        priceList={priceList}
       />
       {countryGroupId === AUDCountries ?
         <ProductBlockAus

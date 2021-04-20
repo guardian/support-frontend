@@ -59,26 +59,17 @@ const fitAroundAbove = css`
   }
 `;
 
-const product1 = {
-  offerCopy: '50% off for 3 months',
-  priceCopy: 'You\'ll pay £5.99/month for 3 months, then £11.99 per month',
-  href: '',
-  buttonCopy: 'Subscribe monthly for £5.99',
-  onClick: () => {},
-  onView: () => {},
-};
-
-const product2 = {
-  offerCopy: 'Save 20% against monthly in the first year',
-  priceCopy: 'You\'ll pay £99 for 1 year, then £119 per year',
-  href: '',
-  buttonCopy: 'Subscribe annually for £99',
-  onClick: () => {},
-  onView: () => {},
-};
-
+// const product1 = {
+//   offerCopy: '50% off for 3 months',
+//   priceCopy: 'You\'ll pay £5.99/month for 3 months, then £11.99 per month',
+//   href: '',
+//   buttonCopy: 'Subscribe monthly for £5.99',
+//   onClick: () => {},
+//   onView: () => {},
+// };
 type PropTypes = {|
   roundel: Node,
+  priceList: any[]
 |}
 
 
@@ -89,8 +80,8 @@ export function HeroPriceCards(props: PropTypes) {
         <div css={roundelContainer}>
           {props.roundel}
         </div>
-        <ProductOptionSmall cssOverrides={fitAroundBelow} {...product1} />
-        <ProductOptionSmall cssOverrides={fitAroundAbove} {...product2} />
+        <ProductOptionSmall cssOverrides={fitAroundBelow} {...props.priceList[0]} />
+        <ProductOptionSmall cssOverrides={fitAroundAbove} {...props.priceList[1]} />
       </div>
     </div>
   );

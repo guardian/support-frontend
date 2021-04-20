@@ -71,6 +71,16 @@ const BILLING_PERIOD = {
           <span className="product-option__price-detail">14 day free trial</span>
         </span>;
     },
+    heroCtaCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const display = price => getDisplayPrice(currencyId, price);
+      return promotionalPrice ?
+        `You'll pay ${display(promotionalPrice)} then ${display(displayPrice)} per month` :
+        `You'll pay ${display(displayPrice)} per month`;
+    },
+    heroButtonText: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const price = promotionalPrice || displayPrice;
+      return `Subscribe monthly for ${getDisplayPrice(currencyId, price)}`;
+    },
     offer: '',
     label: '',
   },
@@ -86,6 +96,16 @@ const BILLING_PERIOD = {
         <span>
           <span className="product-option__price-detail">per month</span>
         </span>;
+    },
+    heroCtaCopy: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const display = price => getDisplayPrice(currencyId, price);
+      return promotionalPrice ?
+        `You'll pay ${display(promotionalPrice)} then ${display(displayPrice)} per year` :
+        `You'll pay ${display(displayPrice)} per year`;
+    },
+    heroButtonText: (currencyId: IsoCurrency, displayPrice: number, promotionalPrice: Option<number>) => {
+      const price = promotionalPrice || displayPrice;
+      return `Subscribe annually for ${getDisplayPrice(currencyId, price)}`;
     },
     offer: 'Save an additional 21%',
     label: 'Best Deal',
@@ -111,6 +131,47 @@ const BILLING_PERIOD_GIFT = {
     offer: '',
     label: 'Best Deal',
   },
+};
+
+const getHeroCtaProps = (state: State): $Shape<Product>[] => {
+  const { productPrices } = state.page;
+  const { countryGroupId, currencyId } = state.common.internationalisation;
+  const productOptions = getProductOptions(productPrices, countryGroupId);
+
+  const createPaymentOption = (billingPeriod: BillingPeriod): $Shape<Product> => {
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+    const productPrice = getProductPrice(productOptions, billingPeriod, currencyId);
+    const fullPrice = productPrice.price;
+    const promotion = getAppliedPromo(productPrice.promotions);
+    const promoCode = promotion ? promotion.promoCode : null;
+    const promotionalPrice = promotion && isNumeric(promotion.discountedPrice) ? promotion.discountedPrice : null;
+    const offerCopy = promotion &&
+    promotion.landingPage &&
+    promotion.landingPage.roundel ? promotion.landingPage.roundel :
+      BILLING_PERIOD[digitalBillingPeriod].offer;
+    const trackingProperties = {
+      id: `subscribe_now__hero_cta-${billingPeriod}`,
+      product: 'DigitalPack',
+      componentType: 'ACQUISITIONS_BUTTON',
+    };
+
+    return {
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, false),
+      onClick: sendTrackingEventsOnClick(trackingProperties),
+      priceCopy: BILLING_PERIOD[digitalBillingPeriod].heroCtaCopy(currencyId, fullPrice, promotionalPrice),
+      offerCopy,
+      buttonCopy: BILLING_PERIOD[digitalBillingPeriod].heroButtonText(currencyId, fullPrice, promotionalPrice),
+    };
+  };
+
+  return Object.keys(productOptions).sort((optA, optB) => {
+    if (optA === 'Annual') {
+      return 1;
+    } else if (optB === 'Annual') {
+      return -1;
+    }
+    return 0;
+  }).map(createPaymentOption);
 };
 
 // state
@@ -169,5 +230,6 @@ const mapStateToProps = (state: State): PropTypes => {
 };
 
 export {
+  getHeroCtaProps,
   mapStateToProps,
 };

@@ -40,6 +40,7 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   showPriceCards: boolean,
   orderIsAGift: boolean,
+  priceList: any[],
 }
 
 const HeroCopy = () => (
@@ -80,7 +81,7 @@ const defaultRoundel = (
 
 
 function DigitalHero({
-  promotionCopy, countryGroupId, orderIsAGift, showPriceCards,
+  promotionCopy, countryGroupId, orderIsAGift, showPriceCards, priceList,
 }: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
@@ -100,10 +101,12 @@ function DigitalHero({
     >
       <CentredContainer>
         <Hero
-          image={showPriceCards ? <HeroPriceCards roundel={
-            <HeroRoundel cssOverrides={testEmbeddedRoundel} theme="digital">
-              {roundelText}
-            </HeroRoundel>}
+          image={showPriceCards ? <HeroPriceCards
+            priceList={priceList}
+            roundel={
+              <HeroRoundel cssOverrides={testEmbeddedRoundel} theme="digital">
+                {roundelText}
+              </HeroRoundel>}
           /> : <GridImage
             gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
             srcSizes={[1000, 500, 140]}
