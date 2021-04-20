@@ -75,6 +75,7 @@ lazy val root = (project in file("."))
     `support-frontend`,
     `support-workers`,
     `supporter-product-data`,
+    `supporter-product-data-dynamo`,
     `support-models`,
     `support-config`,
     `support-internationalisation`,
@@ -124,6 +125,13 @@ lazy val `supporter-product-data` = (project in file("supporter-product-data"))
     libraryDependencies ++= commonDependencies
   ).dependsOn(`module-rest`, `module-aws`)
   .aggregate(`module-rest`, `module-aws`)
+
+lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
+  .settings(
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`module-aws`)
+  .aggregate(`module-aws`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
