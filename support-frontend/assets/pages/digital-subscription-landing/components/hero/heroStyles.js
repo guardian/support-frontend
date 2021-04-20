@@ -13,7 +13,7 @@ export const heroCopy = css`
 `;
 
 export const heroTitle = css`
-  ${headline.medium({ fontWeight: 'bold' })};
+  ${headline.xsmall({ fontWeight: 'bold' })};
   margin-bottom: ${space[3]}px;
 
   ${from.tablet} {
@@ -28,7 +28,7 @@ export const yellowHeading = css`
 export const paragraph = css`
   ${body.small()};
   max-width: 100%;
-  margin-bottom: ${space[9]}px;
+  margin-bottom: ${space[6]}px;
 
   // This applies to paras coming from the promo tool
   & p:not(:last-of-type) {
@@ -47,6 +47,7 @@ export const paragraph = css`
   ${from.phablet} {
     ${body.medium()};
     max-width: 85%;
+    margin-bottom: ${space[9]}px;
   }
 
   ${from.desktop} {

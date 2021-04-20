@@ -3,6 +3,7 @@
 import React, { type Node } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
+import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
@@ -22,11 +23,15 @@ const productOptionSmallStyles = css`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: ${space[6]}px 0;
+  padding: ${space[1]}px 0 ${space[6]}px;
   padding-right: ${space[4]}px;
 
   &:not(:last-of-type) {
     border-bottom: 1px solid ${brand[600]};
+  }
+
+  ${from.tablet} {
+    padding-top: ${space[6]}px;
   }
 `;
 
