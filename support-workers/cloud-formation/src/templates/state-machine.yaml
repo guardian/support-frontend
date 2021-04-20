@@ -56,7 +56,7 @@ States:
           {{> emailRetry}}
     - StartAt: UpdateSupporterProductData
       States:
-        UpdateSupporterProduct:
+        UpdateSupporterProductData:
           Type: Task
           Resource: "${UpdateSupporterProductDataLambda.Arn}"
           End: True
