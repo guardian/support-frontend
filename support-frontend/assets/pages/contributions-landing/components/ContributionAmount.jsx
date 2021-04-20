@@ -85,7 +85,6 @@ function withProps(props: PropTypes) {
   const {
     checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
-
   const canShowOtherAmountErrorMessage =
     checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount;
   const otherAmountErrorMessage: string | null =
@@ -126,6 +125,7 @@ function withProps(props: PropTypes) {
           />
         </div>
       }
+
     </fieldset>
   );
 }
