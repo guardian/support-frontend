@@ -11,6 +11,7 @@ import { space } from '@guardian/src-foundations';
 import ProductOptionSmall from 'components/product/productOptionSmall';
 
 const priceCardContainer = css`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -26,12 +27,6 @@ const priceCardContainer = css`
   }
 `;
 
-const priceCardFloat = css`
-  /* ${until.tablet} {
-    float: left;
-  } */
-`;
-
 const priceCardTopBorder = css`
   width: 100%;
   ${until.tablet} {
@@ -40,13 +35,27 @@ const priceCardTopBorder = css`
 `;
 
 const roundelContainer = css`
-  display: block;
-  float: right;
-  height: 200px;
-  transform: translate(${space[1]}px, 50%);
+  position: absolute;
+  right: -${space[2]}px;
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 100%;
 
   ${from.tablet} {
     display: none;
+  }
+`;
+
+const fitAroundBelow = css`
+  & > p:last-of-type {
+    max-width: calc(100% - 80px);
+  }
+`;
+
+const fitAroundAbove = css`
+  & > p:first-of-type {
+    max-width: calc(100% - 80px);
   }
 `;
 
@@ -76,12 +85,12 @@ type PropTypes = {|
 export function HeroPriceCards(props: PropTypes) {
   return (
     <div css={priceCardContainer}>
-      <div css={priceCardTopBorder} >
+      <div css={priceCardTopBorder}>
         <div css={roundelContainer}>
           {props.roundel}
         </div>
-        <ProductOptionSmall cssOverrides={priceCardFloat} {...product1} />
-        <ProductOptionSmall cssOverrides={priceCardFloat} {...product2} />
+        <ProductOptionSmall cssOverrides={fitAroundBelow} {...product1} />
+        <ProductOptionSmall cssOverrides={fitAroundAbove} {...product2} />
       </div>
     </div>
   );

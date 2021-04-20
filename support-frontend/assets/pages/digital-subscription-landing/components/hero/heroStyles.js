@@ -61,11 +61,19 @@ export const heavyText = css`
 `;
 
 export const circleTextTop = css`
-  ${headline.medium({ fontWeight: 'bold' })};
+  ${headline.small({ fontWeight: 'bold' })};
+
+  ${from.tablet} {
+    ${headline.medium({ fontWeight: 'bold' })};
+  }
 `;
 
 export const circleTextBottom = css`
-  ${headline.xsmall({ fontWeight: 'bold' })};
+  ${headline.xxsmall({ fontWeight: 'bold' })};
+
+  ${from.tablet} {
+    ${headline.xsmall({ fontWeight: 'bold' })};
+  }
 `;
 
 export const circleTextGeneric = css`
