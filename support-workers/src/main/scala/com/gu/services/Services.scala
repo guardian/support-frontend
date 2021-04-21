@@ -17,6 +17,7 @@ import com.gu.support.redemption.corporate.RedemptionTable
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
 import com.gu.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD, UAT => DynamoStageUAT}
+import com.gu.supporterdata.services.SupporterDataDynamoService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._

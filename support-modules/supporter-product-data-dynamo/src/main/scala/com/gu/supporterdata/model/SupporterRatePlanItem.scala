@@ -1,4 +1,4 @@
-package com.gu.model.dynamo
+package com.gu.supporterdata.model
 
 import java.time.LocalDate
 
@@ -11,5 +11,3 @@ case class SupporterRatePlanItem(
   termEndDate: LocalDate, //Date that this subscription term ends
   contractEffectiveDate: LocalDate //Date that this subscription started
 )
-
-

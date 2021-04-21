@@ -1,9 +1,9 @@
-package com.gu.services
+package com.gu.supporterdata.services
 
 import com.gu.aws.ProfileName
+import com.gu.supporterdata.model.FieldNames._
 import com.gu.model.Stage
-import com.gu.model.dynamo.FieldNames._
-import com.gu.model.dynamo.SupporterRatePlanItem
+import com.gu.supporterdata.model.SupporterRatePlanItem
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
 import software.amazon.awssdk.core.retry.RetryPolicy
@@ -14,9 +14,9 @@ import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateIte
 
 import java.time.format.DateTimeFormatter
 import java.time.{Duration, LocalDate, ZoneOffset}
-import scala.jdk.CollectionConverters._
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.{ExecutionContext, Future}
+import scala.jdk.CollectionConverters._
 
 
 class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String) {

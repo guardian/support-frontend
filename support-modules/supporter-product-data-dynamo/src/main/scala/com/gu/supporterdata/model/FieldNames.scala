@@ -1,5 +1,4 @@
-package com.gu.model.dynamo
-
+package com.gu.supporterdata.model
 
 object FieldNames {
   val subscriptionName = "subscriptionName"

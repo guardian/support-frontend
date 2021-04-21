@@ -6,6 +6,7 @@ import kantan.csv.rfc
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
+import com.gu.supporterdata.model.SupporterRatePlanItem
 
 class SerialisationSpec extends AnyFlatSpec with Matchers {
 

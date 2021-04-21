@@ -1,6 +1,7 @@
 package com.gu.model.dynamo
 
 import com.gu.model.ZuoraFieldNames.{contractEffectiveDate, gifteeIdentityId, identityId, productRatePlanId, productRatePlanName, subscriptionName, termEndDate}
+import com.gu.supporterdata.model.SupporterRatePlanItem
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import kantan.csv.HeaderDecoder

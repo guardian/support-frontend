@@ -1,12 +1,14 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.model.dynamo.SupporterRatePlanItem
-import com.gu.services.{ServiceProvider, Services, SupporterDataDynamoService}
+import com.gu.{model, supporterdata}
+import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog._
 import com.gu.support.workers.RequestInfo
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailContributionState, SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState, SendThankYouEmailDigitalSubscriptionGiftRedemptionState, SendThankYouEmailGuardianWeeklyState, SendThankYouEmailPaperState}
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
+import com.gu.supporterdata.model.SupporterRatePlanItem
+import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.gu.threadpools.CustomPool.executionContext
 
 import java.time.LocalDate
@@ -49,7 +51,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
         catalogService
           .getProductRatePlan(Contribution, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
-            SupporterRatePlanItem(
+            supporterdata.model.SupporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               gifteeIdentityId = None,
@@ -62,7 +64,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
-            SupporterRatePlanItem(
+            supporterdata.model.SupporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               gifteeIdentityId = None,
@@ -75,7 +77,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
-            SupporterRatePlanItem(
+            supporterdata.model.SupporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               gifteeIdentityId = None,
@@ -90,7 +92,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
         catalogService
           .getProductRatePlan(GuardianWeekly, product.billingPeriod, product.fulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
-            SupporterRatePlanItem(
+            supporterdata.model.SupporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               gifteeIdentityId = None,
@@ -103,7 +105,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
         catalogService
           .getProductRatePlan(Paper, product.billingPeriod, product.fulfilmentOptions, product.productOptions)
           .map(productRatePlan =>
-            SupporterRatePlanItem(
+            supporterdata.model.SupporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               gifteeIdentityId = None,

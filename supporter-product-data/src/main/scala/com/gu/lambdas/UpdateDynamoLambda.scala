@@ -3,10 +3,11 @@ package com.gu.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
 import com.gu.model.Stage
-import com.gu.model.dynamo.SupporterRatePlanItem
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.states.UpdateDynamoState
-import com.gu.services.{AlarmService, ConfigService, S3Service, SupporterDataDynamoService}
+import com.gu.services.{AlarmService, ConfigService, S3Service}
+import com.gu.supporterdata.model.SupporterRatePlanItem
+import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.syntax.EncoderOps
 import kantan.csv._
