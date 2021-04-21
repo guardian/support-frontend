@@ -13,6 +13,9 @@ import { fixDecimals } from 'helpers/subscriptions';
 import {
   type Product,
 } from 'components/product/productOption';
+import {
+  type ProductSmall,
+} from 'components/product/productOptionSmall';
 
 import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
@@ -114,12 +117,14 @@ const BILLING_PERIOD_GIFT = {
   },
 };
 
-const getHeroCtaProps = (state: State): $Shape<Product>[] => {
-  const { productPrices } = state.page;
-  const { countryGroupId, currencyId } = state.common.internationalisation;
+const getHeroCtaProps = (
+  productPrices: ProductPrices,
+  currencyId: IsoCurrency,
+  countryGroupId: CountryGroupId,
+): ProductSmall[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
-  const createPaymentOption = (billingPeriod: BillingPeriod): $Shape<Product> => {
+  const createPaymentOption = (billingPeriod: BillingPeriod): ProductSmall => {
     const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
     const productPrice = getProductPrice(productOptions, billingPeriod, currencyId);
     const promotion = getAppliedPromo(productPrice.promotions);

@@ -29,8 +29,7 @@ import headerWithCountrySwitcherContainer
 import { DigitalHero } from './components/hero/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
-// import './digitalSubscriptionLanding.scss';
-import digitalSubscriptionLandingReducer
+import digitalSubscriptionLandingReducer, { type State }
   from './digitalSubscriptionLandingReducer';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
@@ -47,12 +46,17 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const priceList = getHeroCtaProps(store.getState());
-
-const { page } = store.getState();
+const { page, common }: State = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
-// const { abParticipations } = common;
+const { internationalisation } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+
+// For CTAs in hero test
+const heroPriceList = getHeroCtaProps(
+  productPrices,
+  internationalisation.currencyId,
+  internationalisation.countryGroupId,
+);
 const showPriceCardsInHero = !orderIsAGift && true;
 // abParticipations.priceCardsInHeroTest === 'variant';
 
@@ -114,7 +118,7 @@ function LandingPage() {
         countryGroupId={countryGroupId}
         promotionCopy={sanitisedPromoCopy}
         showPriceCards={showPriceCardsInHero}
-        priceList={priceList}
+        priceList={heroPriceList}
       />
       {countryGroupId === AUDCountries ?
         <ProductBlockAus
