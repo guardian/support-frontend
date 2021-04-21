@@ -2,14 +2,14 @@ package com.gu.lambdas
 
 import com.gu.lambdas.FetchResultsLambda.getValueOrThrow
 import com.gu.lambdas.RunFullExportSpec.sleep
-import com.gu.model.Stage
-import com.gu.model.Stage._
+import com.gu.supporterdata.model.Stage._
 import com.gu.model.states.QueryType._
 import com.gu.model.states.UpdateDynamoState
 import com.gu.model.zuora.response.BatchQueryResponse
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ConfigService, ZuoraQuerierService}
+import com.gu.supporterdata.model.Stage
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AsyncFlatSpec

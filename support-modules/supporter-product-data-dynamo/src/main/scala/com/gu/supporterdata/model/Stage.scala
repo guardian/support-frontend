@@ -1,4 +1,4 @@
-package com.gu.model
+package com.gu.supporterdata.model
 
 sealed abstract class Stage(val value: String)
 

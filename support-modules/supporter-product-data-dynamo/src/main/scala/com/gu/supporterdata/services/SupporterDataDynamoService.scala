@@ -2,8 +2,7 @@ package com.gu.supporterdata.services
 
 import com.gu.aws.ProfileName
 import com.gu.supporterdata.model.FieldNames._
-import com.gu.model.Stage
-import com.gu.supporterdata.model.SupporterRatePlanItem
+import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
 import software.amazon.awssdk.core.retry.RetryPolicy

@@ -1,8 +1,8 @@
 package com.gu.services
 
 import com.gu.model.ZuoraFieldNames._
-import com.gu.model.Stage
-import com.gu.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

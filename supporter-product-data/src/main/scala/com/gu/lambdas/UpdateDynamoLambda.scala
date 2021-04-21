@@ -2,11 +2,11 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
-import com.gu.model.Stage
+import com.gu.model.StageHelpers
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.states.UpdateDynamoState
 import com.gu.services.{AlarmService, ConfigService, S3Service}
-import com.gu.supporterdata.model.SupporterRatePlanItem
+import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.syntax.EncoderOps
@@ -28,7 +28,7 @@ class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
 
 class UpdateDynamoLambda extends Handler[UpdateDynamoState, UpdateDynamoState] {
   override protected def handlerFuture(input: UpdateDynamoState, context: Context) = {
-    writeToDynamo(Stage.fromEnvironment, input, new ContextTimeOutCheck(context))
+    writeToDynamo(StageHelpers.fromEnvironment, input, new ContextTimeOutCheck(context))
   }
 }
 
