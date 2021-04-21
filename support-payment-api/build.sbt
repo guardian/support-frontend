@@ -53,6 +53,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
 )
 
+resolvers += Resolver.bintrayRepo("guardian", "ophan")
 resolvers += Resolver.sonatypeRepo("releases")
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
