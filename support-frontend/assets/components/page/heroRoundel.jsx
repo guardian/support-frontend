@@ -8,7 +8,7 @@ import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
-export const roundelSizeMob = 120;
+export const roundelSizeMob = 100;
 export const roundelSize = 180;
 
 

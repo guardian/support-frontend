@@ -61,18 +61,26 @@ export const heavyText = css`
   font-weight: 600;
 `;
 
-export const circleTextTop = css`
-  ${headline.small({ fontWeight: 'bold' })};
+export const circleTextContainer = css`
+  padding: ${space[2]}px;
 
   ${from.tablet} {
+    padding: ${space[1]}px;
+  }
+`;
+
+export const circleTextTop = css`
+  ${headline.xsmall({ fontWeight: 'bold' })};
+
+  ${from.mobileLandscape} {
     ${headline.medium({ fontWeight: 'bold' })};
   }
 `;
 
 export const circleTextBottom = css`
-  ${headline.xxsmall({ fontWeight: 'bold' })};
+  ${headline.xxxsmall({ fontWeight: 'bold' })};
 
-  ${from.tablet} {
+  ${from.mobileLandscape} {
     ${headline.xsmall({ fontWeight: 'bold' })};
   }
 `;

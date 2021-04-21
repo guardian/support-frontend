@@ -39,7 +39,6 @@ const roundelContainer = css`
   right: -${space[2]}px;
   display: flex;
   align-items: center;
-  width: auto;
   height: 100%;
 
   ${from.tablet} {

@@ -29,7 +29,7 @@ import headerWithCountrySwitcherContainer
 import { DigitalHero } from './components/hero/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
-import './digitalSubscriptionLanding.scss';
+// import './digitalSubscriptionLanding.scss';
 import digitalSubscriptionLandingReducer
   from './digitalSubscriptionLandingReducer';
 import Prices from './components/prices';
@@ -39,7 +39,7 @@ import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSe
 
 // ----- Styles ----- //
 
-import './components/digitalSubscriptionLanding.scss';
+// import './components/digitalSubscriptionLanding.scss';
 import 'stylesheets/skeleton/skeleton.scss';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 

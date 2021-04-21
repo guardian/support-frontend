@@ -29,6 +29,7 @@ import {
   circleTextTop,
   circleTextBottom,
   circleTextGeneric,
+  circleTextContainer,
   spaceAfter,
   mobileLineBreak,
   testRoundelOverrides,
@@ -73,7 +74,7 @@ const GiftCopy = () => (
 );
 
 const defaultRoundel = (
-  <div>
+  <div css={circleTextContainer}>
     <div css={circleTextTop}>14 day</div>
     <div css={circleTextBottom}>free trial</div>
   </div>
