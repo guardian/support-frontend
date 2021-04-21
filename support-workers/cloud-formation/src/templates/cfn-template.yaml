@@ -115,7 +115,20 @@ Resources:
               - dynamodb:GetItem
               - dynamodb:UpdateItem
               Resource: !FindInMap [StageVariables, !Ref Stage, RedemptionTables]
-
+        - PolicyName: SupporterProductDataDynamoTable
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:PutItem
+              - dynamodb:GetItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+              - dynamodb:BatchGetItem
+              - dynamodb:DescribeTable
+              Resource:
+                Fn::ImportValue:
+                  !Sub supporter-product-data-tables-${Stage}-SupporterProductDataTable
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
     Properties:
