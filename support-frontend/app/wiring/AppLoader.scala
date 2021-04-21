@@ -1,22 +1,15 @@
 package wiring
 
-import com.gu.aws.ProfileName
-import com.gu.conf._
+import java.io.File
+
+import com.gu.aws.CredentialsProvider
 import com.gu.{AppIdentity, AwsIdentity, DevIdentity}
+import com.gu.conf._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.ApplicationLoader.Context
 import play.api._
-import software.amazon.awssdk.auth.credentials._
-
-import java.io.File
 
 class AppLoader extends ApplicationLoader with StrictLogging {
-
-  lazy val CredentialsProvider = AwsCredentialsProviderChain.builder.credentialsProviders(
-    ProfileCredentialsProvider.builder.profileName(ProfileName).build,
-    InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
-    EnvironmentVariableCredentialsProvider.create()
-  ).build
 
   private def getParameterStoreConfig(initialConfiguration: Configuration): Configuration = {
     val identity = AppIdentity.whoAmI(defaultAppName = "support-frontend", CredentialsProvider)
