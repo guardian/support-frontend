@@ -1,13 +1,14 @@
 // @flow
 
 import { fixDecimals } from 'helpers/subscriptions';
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
   billingPeriodNoun as upperCaseNoun,
+  billingPeriodAdverb,
   Quarterly,
+  type BillingPeriod,
 } from 'helpers/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
+import { glyph as shortGlyph, extendedGlyph } from 'helpers/internationalisation/currency';
 import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
 import {
   getAppliedPromo,
@@ -109,8 +110,10 @@ function getPriceDescription(
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
   compact: boolean = false,
+  useExtendedGlyph: boolean = true,
 ): string {
-  const glyph = extendedGlyph(productPrice.currency);
+  const glyphFn = useExtendedGlyph ? extendedGlyph : shortGlyph;
+  const glyph = glyphFn(productPrice.currency);
   const promotion = getAppliedPromo(productPrice.promotions);
 
   if (hasIntroductoryPrice(promotion)) {
@@ -171,9 +174,28 @@ function getSimplifiedPriceDescription(
   return `${termPrepositon} ${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}`;
 }
 
+function getAdverbialSubscriptionDescription(
+  productPrice: ProductPrice,
+  billingPeriod: BillingPeriod,
+) {
+  const glyph = shortGlyph(productPrice.currency);
+  const promotion = getAppliedPromo(productPrice.promotions);
+  let { price } = productPrice;
+
+  if (promotion && promotion.introductoryPrice) {
+    // eslint-disable-next-line prefer-destructuring
+    price = promotion.introductoryPrice.price;
+  } else if (promotion && promotion.discountedPrice) {
+    price = promotion.discountedPrice;
+  }
+
+  return `Subscribe ${billingPeriodAdverb(billingPeriod).toLowerCase()} for ${displayPrice(glyph, price)}`;
+}
+
 export {
   displayPrice,
   getPriceDescription,
   getAppliedPromoDescription,
   getSimplifiedPriceDescription,
+  getAdverbialSubscriptionDescription,
 };
