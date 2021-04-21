@@ -78,14 +78,20 @@ const listCopy = [
 ];
 
 function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
+  const initialRender = React.useRef(true);
   const [expanded, setExpanded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    sendTrackingEventsOnClick({
-      id: `Paper_Checkout_DigiPlus_Accordion-${expanded ? 'expand' : 'minimize'}`,
-      product: 'Paper',
-      componentType: 'ACQUISITIONS_OTHER',
-    })();
+    // don't call sendTrackingEventsOnClick on initialRender
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      sendTrackingEventsOnClick({
+        id: `Paper_Checkout_DigiPlus_Accordion-${expanded ? 'expand' : 'minimize'}`,
+        product: 'Paper',
+        componentType: 'ACQUISITIONS_OTHER',
+      })();
+    }
   }, [expanded]);
 
   return (
