@@ -2,7 +2,6 @@ package com.gu.support.catalog
 
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.i18n.Currency
-import com.gu.support.catalog.GuardianWeekly.getProductRatePlan
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.{Annual, BillingPeriod, Quarterly, SixWeekly}
 import com.gu.support.zuora.api.ReaderType.Gift
@@ -14,8 +13,16 @@ object CatalogService {
 
 class CatalogService(val environment: TouchPointEnvironment, jsonProvider: CatalogJsonProvider) extends LazyLogging {
 
-  private[this] def getRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions)
-    = getProductRatePlan(environment, billingPeriod, fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
+  def getProductRatePlan(
+    product: Product,
+    billingPeriod: BillingPeriod,
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: ProductOptions
+  ) =
+    product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions)
+
+  private[this] def getGWRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions)
+    = getProductRatePlan(GuardianWeekly, billingPeriod, fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
 
   private[this] def fetchQuarterlyPrice(
     quarterlyId: ProductRatePlanId,
@@ -32,8 +39,8 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     // promotion. It is much more use from the point of view of the site to have the subscription
     // price, ie. the quarterly price as the £6 is available through the introductory promotion object
     val ratePlanIdsToSwap = Map(
-      getRatePlanId(SixWeekly, Domestic) -> getRatePlanId(Quarterly, Domestic),
-      getRatePlanId(SixWeekly, RestOfWorld) -> getRatePlanId(Quarterly, RestOfWorld)
+      getGWRatePlanId(SixWeekly, Domestic) -> getGWRatePlanId(Quarterly, Domestic),
+      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(Quarterly, RestOfWorld)
     )
 
     Catalog(

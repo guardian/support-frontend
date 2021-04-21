@@ -10,11 +10,13 @@ import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
 import com.gu.support.acquisitions.BigQueryService
 import com.gu.support.catalog.CatalogService
+import com.gu.support.config.Stages.{CODE, DEV, PROD}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.corporate.RedemptionTable
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
+import com.gu.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD, UAT => DynamoStageUAT}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -43,5 +45,14 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
   lazy val bigQueryService = new BigQueryService(bigQueryConfigProvider.get(isTestUser))
+  val supporterDynamoStage = Configuration.stage match {
+    case DEV if isTestUser => DynamoStageUAT
+    case DEV => DynamoStageDEV
+    case CODE if isTestUser => DynamoStageUAT
+    case CODE => DynamoStageDEV
+    case PROD if isTestUser => DynamoStageUAT
+    case PROD => DynamoStagePROD
+  }
+  lazy val supporterDataDynamoService = SupporterDataDynamoService(supporterDynamoStage)
 }
 

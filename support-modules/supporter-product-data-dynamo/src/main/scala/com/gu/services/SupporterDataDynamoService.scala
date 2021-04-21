@@ -10,18 +10,18 @@ import software.amazon.awssdk.core.retry.RetryPolicy
 import software.amazon.awssdk.core.retry.backoff.FullJitterBackoffStrategy
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
-import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateItemRequest}
+import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateItemRequest, UpdateItemResponse}
 
 import java.time.format.DateTimeFormatter
 import java.time.{Duration, LocalDate, ZoneOffset}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.compat.java8.FutureConverters._
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String) {
 
-  def writeItem(item: SupporterRatePlanItem)(implicit executionContext: ExecutionContext) = {
+  def writeItem(item: SupporterRatePlanItem)(implicit executionContext: ExecutionContext): Future[UpdateItemResponse] = {
     val beneficiaryIdentityId = item.gifteeIdentityId.getOrElse(item.identityId)
 
     // Dynamo will delete expired subs at the start of the day, whereas the subscription actually lasts until the end of the day

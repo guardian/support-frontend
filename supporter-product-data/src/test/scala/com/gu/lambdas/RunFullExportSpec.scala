@@ -29,7 +29,7 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   val sanitizeFieldNamesAfterDownload = false
   val updateLastSuccessfulQueryTime = false
 
-  "This test is just an easy way to run an aqua query. It" should "save the results to a csv in supporter-product-data/data-extracts" in {
+  "This test is just an easy way to run an aqua query. It" should "save the results to a csv in supporter-product-data/data-extracts" ignore {
     val attemptedQueryTime = LocalDateTime.parse("2021-03-15T16:27:02.429").atZone(ZoneId.of("America/Los_Angeles")).minusMinutes(1)
     for {
       fetchResultsState <- QueryZuoraLambda.queryZuora(stage, queryType)

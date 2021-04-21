@@ -114,7 +114,14 @@ lazy val `support-workers` = (project in file("support-workers"))
   .settings(
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`, `acquisition-event-producer`, `module-bigquery`)
+  ).dependsOn(
+  `support-services`,
+  `support-models` % "test->test;it->test;compile->compile",
+  `support-config`,
+  `support-internationalisation`,
+  `acquisition-event-producer`,
+  `module-bigquery`,
+  `supporter-product-data-dynamo`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`)
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
