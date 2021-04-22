@@ -36,7 +36,6 @@ object UpdateDynamoLambda extends StrictLogging {
   val maxBatchSize = 5
   val timeoutBufferInMillis = maxBatchSize * 5 * 1000
 
-
   def writeToDynamo(stage: Stage, state: UpdateDynamoState, timeOutCheck: TimeOutCheck): Future[UpdateDynamoState] = {
     logger.info(s"Starting write to dynamo task for ${state.recordCount} records from ${state.filename}")
 

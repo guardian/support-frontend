@@ -43,7 +43,6 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
           new RuntimeException(s"Unable to update the SupporterProductData dynamo table because we couldn't create a SupporterRatePlanItem from state: $state")
         )
     }
-
   }
 
   def getSupporterRatePlanItemFromState(state: SendThankYouEmailState, catalogService: CatalogService): Option[SupporterRatePlanItem] =
@@ -52,81 +51,75 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
         catalogService
           .getProductRatePlan(Contribution, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
-            supporterdata.model.SupporterRatePlanItem(
+            supporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
-              gifteeIdentityId = None,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = "support-workers added Contribution",
-              termEndDate = LocalDate.now.plusYears(1),
-              contractEffectiveDate = LocalDate.now
             ))
       case SendThankYouEmailDigitalSubscriptionDirectPurchaseState(user, product, _, _, _, _, subscriptionNumber) =>
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
-            supporterdata.model.SupporterRatePlanItem(
+            supporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
-              gifteeIdentityId = None,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = "support-workers added Digital Subscription",
-              termEndDate = LocalDate.now.plusYears(1),
-              contractEffectiveDate = LocalDate.now
             ))
       case SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, _, subscriptionNumber) =>
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Corporate)
           .map(productRatePlan =>
-            supporterdata.model.SupporterRatePlanItem(
+            supporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
-              gifteeIdentityId = None,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = "support-workers added Gift Digital Subscription",
-              termEndDate = LocalDate.now.plusYears(1),
-              contractEffectiveDate = LocalDate.now
             ))
       case SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, subscriptionNumber, _) =>
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Gift)
           .map(productRatePlan =>
-            supporterdata.model.SupporterRatePlanItem(
+            supporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
-              gifteeIdentityId = None,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = "support-workers added Guardian Weekly",
-              termEndDate = LocalDate.now.plusYears(1),
-              contractEffectiveDate = LocalDate.now
             ))
       case SendThankYouEmailGuardianWeeklyState(user, product, giftRecipient, _, _, _, _, subscriptionNumber, _) =>
         val readerType = if(giftRecipient.isDefined) Gift else Direct
         catalogService
           .getProductRatePlan(GuardianWeekly, product.billingPeriod, product.fulfilmentOptions, NoProductOptions, readerType)
           .map(productRatePlan =>
-            supporterdata.model.SupporterRatePlanItem(
+            supporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
-              gifteeIdentityId = None,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = "support-workers added Guardian Weekly",
-              termEndDate = LocalDate.now.plusYears(1),
-              contractEffectiveDate = LocalDate.now
             ))
       case SendThankYouEmailPaperState(user, product, _, _, _, _, subscriptionNumber, _) =>
         catalogService
           .getProductRatePlan(Paper, product.billingPeriod, product.fulfilmentOptions, product.productOptions)
           .map(productRatePlan =>
-            supporterdata.model.SupporterRatePlanItem(
+            supporterRatePlanItem(
               subscriptionName = subscriptionNumber,
               identityId = user.id,
-              gifteeIdentityId = None,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = s"support-workers added ${product.productOptions.toString}",
-              termEndDate = LocalDate.now.plusYears(1),
-              contractEffectiveDate = LocalDate.now
             ))
       case _ => None
     }
+
+  def supporterRatePlanItem(subscriptionName: String, identityId: String, productRatePlanId: String, productRatePlanName: String) =
+    SupporterRatePlanItem(
+      subscriptionName = subscriptionName,
+      identityId = identityId,
+      gifteeIdentityId = None,
+      productRatePlanId = productRatePlanId,
+      productRatePlanName = productRatePlanName,
+      termEndDate = LocalDate.now.plusYears(1),
+      contractEffectiveDate = LocalDate.now
+    )
+
 }
