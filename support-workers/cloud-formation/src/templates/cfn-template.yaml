@@ -31,6 +31,7 @@ Mappings:
       RedemptionTables:
       - arn:aws:dynamodb:*:*:table/redemption-codes-DEV
       - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
+      SupporterProductDataTable: supporter-product-data-tables-DEV-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
     PROD:
       DynamoDBTables:
@@ -39,6 +40,7 @@ Mappings:
       RedemptionTables:
       - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
       - arn:aws:dynamodb:*:*:table/redemption-codes-PROD
+      SupporterProductDataTable: supporter-product-data-tables-PROD-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
 Resources:
   LambdaExecutionRole:
@@ -127,8 +129,8 @@ Resources:
               - dynamodb:BatchGetItem
               - dynamodb:DescribeTable
               Resource:
-                Fn::ImportValue:
-                  !Sub supporter-product-data-tables-${Stage}-SupporterProductDataTable
+              - Fn::ImportValue: supporter-product-data-tables-UAT-SupporterProductDataTable
+              - Fn::ImportValue: !FindInMap [ StageVariables, !Ref Stage, SupporterProductDataTable ]
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
     Properties:
