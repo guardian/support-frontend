@@ -11,6 +11,7 @@ module.exports = () => {
   require('./errorSummary');
   require('./footer.jsx');
   require('./images.jsx');
+  require('./interactives.jsx');
   require('./internationalisation.jsx');
   require('./header.jsx');
   require('./menu.jsx');
