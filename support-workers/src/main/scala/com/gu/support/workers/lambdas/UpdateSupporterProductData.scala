@@ -7,6 +7,7 @@ import com.gu.support.catalog._
 import com.gu.support.workers.RequestInfo
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailContributionState, SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState, SendThankYouEmailDigitalSubscriptionGiftRedemptionState, SendThankYouEmailGuardianWeeklyState, SendThankYouEmailPaperState}
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
+import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import com.gu.supporterdata.model.SupporterRatePlanItem
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.gu.threadpools.CustomPool.executionContext
@@ -75,7 +76,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
             ))
       case SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, _, subscriptionNumber) =>
         catalogService
-          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
+          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Corporate)
           .map(productRatePlan =>
             supporterdata.model.SupporterRatePlanItem(
               subscriptionName = subscriptionNumber,
@@ -86,11 +87,23 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
               termEndDate = LocalDate.now.plusYears(1),
               contractEffectiveDate = LocalDate.now
             ))
-      case SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, _) => None // TODO need a subscription number here
-      case SendThankYouEmailGuardianWeeklyState(user, product, _, _, _, _, _, subscriptionNumber, _) =>
-        // TODO do we care that for a GW gifter, the product is not actually theirs?
+      case SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, subscriptionNumber, _) =>
         catalogService
-          .getProductRatePlan(GuardianWeekly, product.billingPeriod, product.fulfilmentOptions, NoProductOptions)
+          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Gift)
+          .map(productRatePlan =>
+            supporterdata.model.SupporterRatePlanItem(
+              subscriptionName = subscriptionNumber,
+              identityId = user.id,
+              gifteeIdentityId = None,
+              productRatePlanId = productRatePlan.id,
+              productRatePlanName = "support-workers added Guardian Weekly",
+              termEndDate = LocalDate.now.plusYears(1),
+              contractEffectiveDate = LocalDate.now
+            ))
+      case SendThankYouEmailGuardianWeeklyState(user, product, giftRecipient, _, _, _, _, subscriptionNumber, _) =>
+        val readerType = if(giftRecipient.isDefined) Gift else Direct
+        catalogService
+          .getProductRatePlan(GuardianWeekly, product.billingPeriod, product.fulfilmentOptions, NoProductOptions, readerType)
           .map(productRatePlan =>
             supporterdata.model.SupporterRatePlanItem(
               subscriptionName = subscriptionNumber,

@@ -4,7 +4,8 @@ import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.i18n.Currency
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.{Annual, BillingPeriod, Quarterly, SixWeekly}
-import com.gu.support.zuora.api.ReaderType.Gift
+import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.typesafe.scalalogging.LazyLogging
 
 object CatalogService {
@@ -17,9 +18,10 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     product: Product,
     billingPeriod: BillingPeriod,
     fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions
+    productOptions: ProductOptions,
+    readerType: ReaderType = Direct,
   ) =
-    product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions)
+    product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions, readerType)
 
   private[this] def getGWRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions)
     = getProductRatePlan(GuardianWeekly, billingPeriod, fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
@@ -84,10 +86,11 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     currency: Currency,
     billingPeriod: BillingPeriod,
     fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions
+    productOptions: ProductOptions,
+    readerType: ReaderType = Direct
   ): Option[Price] = {
     for {
-      productRatePlan <- product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions)
+      productRatePlan <- product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions, readerType)
       priceList <- getPriceList(productRatePlan)
       price <- priceList.prices.find(_.currency == currency)
     } yield price
