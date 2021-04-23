@@ -22,6 +22,8 @@ import { routes } from 'helpers/routes';
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
+import Block from 'components/page/block';
+
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
@@ -119,14 +121,20 @@ function LandingPage() {
         showPriceCards={showPriceCardsInHero}
         priceList={heroPriceList}
       />
-      {countryGroupId === AUDCountries ?
-        <ProductBlockAus
-          countryGroupId={countryGroupId}
-        /> :
-        <ProductBlock
-          countryGroupId={countryGroupId}
-        />
-      }
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block>
+            {countryGroupId === AUDCountries ?
+              <ProductBlockAus
+                countryGroupId={countryGroupId}
+              /> :
+              <ProductBlock
+                countryGroupId={countryGroupId}
+              />
+          }
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />

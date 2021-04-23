@@ -20,6 +20,7 @@ const priceCardContainer = css`
   margin-top: -${space[3]}px;
 
   ${from.tablet} {
+    max-width: 450px;
     margin-top: ${space[2]}px;
     padding: 0 ${space[5]}px;
     border-top: none;

@@ -45,11 +45,15 @@ type PropTypes = {
 }
 
 const HeroCopy = () => (
-  <p css={paragraph}>
-    With <span css={heavyText}>two innovative apps and ad-free reading,</span> a digital subscription gives
-    you the richest experience of Guardian journalism. Plus, for a limited time,
-    you can read our latest special edition - The books of&nbsp;2021
-  </p>
+  <>
+    <p css={paragraph}>
+      <span css={heavyText}>With two innovative apps and ad-free reading,</span> a digital subscription gives
+      you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
+    </p>
+    <p css={paragraph}>
+      Plus, for a limited time, you can read our latest special edition - The books of&nbsp;2021
+    </p>
+  </>
 );
 
 const HeroCopyAus = () => (

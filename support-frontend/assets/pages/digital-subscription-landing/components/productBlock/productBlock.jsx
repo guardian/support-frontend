@@ -10,7 +10,7 @@ import { ListHeading } from 'components/productPage/productPageList/productPageL
 import { arrowSvg } from '../arrow';
 
 // styles
-import '../digitalSubscriptionLanding.scss';
+// import '../digitalSubscriptionLanding.scss';
 
 const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
