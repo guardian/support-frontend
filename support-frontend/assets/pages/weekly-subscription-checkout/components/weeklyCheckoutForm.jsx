@@ -160,7 +160,7 @@ const days = getWeeklyDays();
 
 function WeeklyCheckoutForm(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const price = getProductPrice(props.productPrices, props.deliveryCountry, props.billingPeriod, fulfilmentOption);
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -304,7 +304,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             fulfilmentOption={fulfilmentOption}
             onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
             billingPeriods={weeklyBillingPeriods}
-            billingCountry={props.billingCountry}
+            pricingCountry={props.deliveryCountry}
             productPrices={props.productPrices}
             selected={props.billingPeriod}
           />

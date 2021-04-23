@@ -50,7 +50,8 @@ class SubscriptionDataBuilder(
         EitherT.fromEither[Future](GuardianWeeklySubscriptionBuilder.build(
           w,
           state.requestId,
-          state.user.billingAddress.country,
+          // There will always be a delivery address for GW
+          state.user.deliveryAddress.map(_.country).getOrElse(state.user.billingAddress.country),
           state.promoCode,
           state.firstDeliveryDate,
           promotionService,
