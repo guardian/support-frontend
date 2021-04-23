@@ -65,7 +65,9 @@ function createFormReducer(
   };
 
   const getFulfilmentOption = (action, currentOption) =>
-    (action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
+    // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
+    // because it may mean a switch between domestic and rest of the world
+    (product === GuardianWeekly && action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
 
   return (originalState: FormState = initialState, action: Action): FormState => {
 
@@ -107,16 +109,10 @@ function createFormReducer(
         return { ...state, billingPeriod: action.billingPeriod };
 
       case 'SET_COUNTRY_CHANGED':
-        // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
-        // because it may mean a switch between domestic and rest of the world
-        const fulfilmentOption = state.product === GuardianWeekly ?
-          getFulfilmentOption(action, state.fulfilmentOption) :
-          state.fulfilmentOption;
-
         return {
           ...state,
           paymentMethod: null,
-          fulfilmentOption,
+          fulfilmentOption: getFulfilmentOption(action, state.fulfilmentOption),
         };
 
       case 'SET_PAYMENT_METHOD':
