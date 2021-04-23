@@ -115,7 +115,7 @@ function WeeklyHero({ orderIsAGift, countryGroupId, promotionCopy }: PropTypes) 
 
   const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 
-  const roundelText = promotionHTML(promotionCopy.roundel) || defaultRoundelText;
+  const roundelText = defaultRoundelText;
 
   return (
     <PageTitle

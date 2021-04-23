@@ -9,8 +9,8 @@ const magazine = css`
   display: flex;
   justify-content: center;
   text-align: center;
-  width: 150px;
-  height: 200px;
+  min-width: 150px;
+  min-height: 200px;
   transition: all 0.3s ease-in-out;
 
   img {
@@ -37,10 +37,10 @@ export default function WeeklyMagazine({
       style={style}
       onClick={onClick}
       onKeyDown={(event) => {
-      if (event.key === 'Enter' && onClick) {
-        onClick(event);
-      }
-    }}
+        if ((event.key === 'Enter' || event.key === ' ') && onClick) {
+          onClick(event);
+        }
+      }}
     >
       <img src={image} alt="Guardian Weekly magazine" draggable={false} />
     </div>

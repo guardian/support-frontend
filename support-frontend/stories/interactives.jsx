@@ -12,16 +12,14 @@ const stories = storiesOf('Interactives', module)
 
 stories.add('Guardian Weekly Newsstand', () => (
   <div style={{
-    display: 'flex',
-    padding: '10px',
-    minHeight: '100vh',
-    width: '100vw',
-    boxSizing: 'border-box',
-    alignItems: 'center',
-    justifyContent: 'center',
+      display: 'flex',
+      minHeight: '100vh',
+      boxSizing: 'border-box',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
-    <div style={{ maxWidth: '50%' }}>
+    <div>
       <WeeklyNewsstand />
     </div>
   </div>
@@ -29,13 +27,13 @@ stories.add('Guardian Weekly Newsstand', () => (
 
 stories.add('Guardian Weekly stack', () => (
   <div style={{
-    display: 'flex',
-    padding: '10px',
-    minHeight: '100vh',
-    width: '100vw',
-    boxSizing: 'border-box',
-    alignItems: 'center',
-    justifyContent: 'center',
+      display: 'flex',
+      padding: '10px',
+      minHeight: '100vh',
+      width: '100vw',
+      boxSizing: 'border-box',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
     <WeeklyStack />

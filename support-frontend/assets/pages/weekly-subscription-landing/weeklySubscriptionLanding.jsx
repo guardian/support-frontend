@@ -4,6 +4,8 @@
 
 import * as React from 'react';
 import { Provider } from 'react-redux';
+import { css } from '@emotion/core';
+import { from, until } from '@guardian/src-foundations/mq';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
@@ -29,6 +31,8 @@ import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
 import Block from 'components/page/block';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
+import WeeklyNewsstand from 'components/interactives/weeklyNewsstand';
+import WeeklyStack from 'components/interactives/weeklyStack';
 
 import 'stylesheets/skeleton/skeleton.scss';
 
@@ -95,6 +99,18 @@ const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || d
 // ID for Selenium tests
 const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
 
+const mobileOnly = css`
+  ${from.desktop} {
+    display: none;
+  }
+`;
+
+const desktopOnly = css`
+  ${until.desktop} {
+    display: none;
+  }
+`;
+
 const content = (
   <Provider store={store}>
     <Page
@@ -111,6 +127,14 @@ const content = (
         <CentredContainer>
           <Block>
             {orderIsAGift ? <GiftBenefits /> : <Benefits />}
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block>
+            <div css={desktopOnly}><WeeklyNewsstand /></div>
+            <div css={mobileOnly}><WeeklyStack /></div>
           </Block>
         </CentredContainer>
       </FullWidthContainer>
