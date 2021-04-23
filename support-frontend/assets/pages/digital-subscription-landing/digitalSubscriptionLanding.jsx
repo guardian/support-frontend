@@ -48,7 +48,7 @@ const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 const { page, common }: State = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
-const { internationalisation } = common;
+const { internationalisation, abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 // For CTAs in hero test
@@ -57,8 +57,7 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
-const showPriceCardsInHero = !orderIsAGift && true;
-// abParticipations.priceCardsInHeroTest === 'variant';
+const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
 

@@ -12,7 +12,8 @@ import type { Tests } from './abtest';
 const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
-const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
+export const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
+const digiSubLandingPagesNotAus = '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
   thankyouPageHeadingTest: {
@@ -118,7 +119,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: digiSubLandingPages,
+    targetPage: digiSubLandingPagesNotAus,
     seed: 3,
   },
 };
