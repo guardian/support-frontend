@@ -291,8 +291,9 @@ function trackSubmitAttempt(
 }
 
 function getPricingCountry(product, addresses) {
-  if (product === GuardianWeekly)
+  if (product === GuardianWeekly && addresses.deliveryAddress) {
     return addresses.deliveryAddress.country;
+  }
   return addresses.billingAddress.country;
 }
 
