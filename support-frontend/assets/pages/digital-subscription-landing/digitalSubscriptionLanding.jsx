@@ -5,6 +5,9 @@
 import { renderPage } from 'helpers/render';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { css } from '@emotion/core';
+import { from, until } from '@guardian/src-foundations/mq';
+
 import {
   AUDCountries,
   Canada,
@@ -36,13 +39,24 @@ import digitalSubscriptionLandingReducer, { type State }
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
+import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
 // ----- Styles ----- //
 
 // import './components/digitalSubscriptionLanding.scss';
 import 'stylesheets/skeleton/skeleton.scss';
-import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+
+const productBlockContainer = css`
+  ${until.tablet} {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  ${from.tablet} {
+    margin-top: 66px;
+  }
+`;
 
 // ----- Redux Store ----- //
 
@@ -123,7 +137,7 @@ function LandingPage() {
       />
       <FullWidthContainer>
         <CentredContainer>
-          <Block>
+          <Block cssOverrides={productBlockContainer}>
             {countryGroupId === AUDCountries ?
               <ProductBlockAus
                 countryGroupId={countryGroupId}
