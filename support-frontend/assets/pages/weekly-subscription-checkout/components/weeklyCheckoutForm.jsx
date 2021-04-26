@@ -168,7 +168,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
-  const paymentMethods = supportedPaymentMethods(props.billingCountry);
+  const paymentMethods = supportedPaymentMethods(props.deliveryCountry);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -311,7 +311,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
-                country={props.billingCountry}
+                country={props.deliveryCountry}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}
@@ -324,7 +324,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             title="Your card details"
           >
             <StripeProviderForCountry
-              country={props.billingCountry}
+              country={props.deliveryCountry}
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}
