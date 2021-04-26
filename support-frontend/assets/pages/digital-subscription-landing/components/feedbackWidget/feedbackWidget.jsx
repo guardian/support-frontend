@@ -8,19 +8,19 @@ import { ThemeProvider } from 'emotion-theming';
 
 import { Button, LinkButton, buttonBrand } from '@guardian/src-button';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { clickedCss, wrapper, widgetTitle, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
+import { clickedCss, hideWidget, wrapper, widgetTitle, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
 import { SvgThumbsUp } from './thumbsUp';
 import { SvgThumbsDown } from './thumbsDown';
 
-function FeedbackWidget() {
+function FeedbackWidget({ display }: { display: boolean }) {
 
   const [clicked, setClicked] = useState({ positive: false, negative: false, open: false });
   const positiveButtonCss = clicked.positive ? clickedCss : null;
   const negativeButtonCss = clicked.negative ? clickedCss : null;
 
   return (
-    <aside css={wrapper}>
-      <fieldset role="group">
+    <aside css={[wrapper, display ? '' : hideWidget]}>
+      <fieldset role="group" >
         <div css={header}>
           <p css={widgetTitle}>
             {clicked.negative ? 'What can we improve?' : 'Is this page helpful?'}

@@ -19,14 +19,18 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
-
+import {
+  setCurrencyId,
+  setUseLocalAmounts,
+  setUseLocalCurrencyFlag,
+} from '../../../helpers/page/commonActions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type { ContributionAmounts, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { CampaignSettings } from 'helpers/campaigns';
 
 import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
@@ -40,7 +44,7 @@ import { type State } from 'pages/contributions-landing/contributionsLandingRedu
 import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
-  createOneOffPayPalPayment,
+  createOneOffPayPalPayment, selectAmount,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -49,6 +53,8 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaym
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
 import { logException } from 'helpers/logger';
+import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
+import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -83,6 +89,11 @@ type PropTypes = {|
   campaignSettings: CampaignSettings | null,
   referrerSource: ?string,
   amazonPayBillingAgreementId: ?string,
+  localCurrencyCountry: ?LocalCurrencyCountry,
+  amounts: ContributionAmounts,
+  useLocalCurrency: boolean,
+  setUseLocalCurrency: (boolean, ?LocalCurrencyCountry, ?number) => void,
+  defaultOneOffAmount: number | null;
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -103,7 +114,6 @@ const mapStateToProps = (state: State) => ({
   createStripePaymentMethod: state.page.form.stripeCardFormData.createPaymentMethod,
   stripeClientSecret: state.page.form.stripeCardFormData.setupIntentClientSecret,
   contributionType: state.page.form.contributionType,
-  currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
   selectedAmounts: state.page.form.selectedAmounts,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
@@ -117,6 +127,11 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   referrerSource: state.common.referrerAcquisitionData.source,
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
+  currency: state.common.internationalisation.currencyId,
+  amounts: state.common.amounts,
+  defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
 });
 
 
@@ -125,6 +140,17 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setUseLocalCurrency: (useLocalCurrency, localCurrencyCountry, defaultOneOffAmount) => {
+    dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
+    dispatch(setCurrencyId(useLocalCurrency));
+    dispatch(setUseLocalAmounts(useLocalCurrency));
+    dispatch(selectAmount(
+      useLocalCurrency
+        ? localCurrencyCountry.amounts.ONE_OFF.defaultAmount
+        : defaultOneOffAmount,
+      'ONE_OFF',
+    ));
+  },
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -229,8 +255,15 @@ function onSubmit(props: PropTypes): Event => void {
 
 function withProps(props: PropTypes) {
   const baseClass = 'form';
-
   const classModifiers = ['contribution', 'with-labels'];
+
+  function toggleUseLocalCurrency() {
+    props.setUseLocalCurrency(
+      !props.useLocalCurrency,
+      props.localCurrencyCountry,
+      props.defaultOneOffAmount,
+    );
+  }
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
@@ -238,6 +271,18 @@ function withProps(props: PropTypes) {
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />
         <ContributionAmount />
+        {
+          props.localCurrencyCountry && props.contributionType === 'ONE_OFF' &&
+          (
+            <CheckboxGroup cssOverrides="margin-top:16px;">
+              <Checkbox
+                label={`View in local currency (${props.localCurrencyCountry.currency})`}
+                defaultChecked={props.useLocalCurrency}
+                onChange={toggleUseLocalCurrency}
+              />
+            </CheckboxGroup>
+          )
+        }
       </div>
       <StripePaymentRequestButtonContainer
         currency={props.currency}

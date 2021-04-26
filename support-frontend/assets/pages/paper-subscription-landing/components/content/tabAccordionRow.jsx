@@ -15,14 +15,20 @@ type TabAccordionRowPropTypes = {|
 export const TabAccordionRow = ({
   trackingId, label, children,
 }: TabAccordionRowPropTypes) => {
+  const initialRender = React.useRef(true);
   const [expanded, setExpanded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    sendTrackingEventsOnClick({
-      id: `${trackingId}-${expanded ? 'expand' : 'minimize'}`,
-      product: 'Paper',
-      componentType: 'ACQUISITIONS_BUTTON',
-    })();
+    // don't call sendTrackingEventsOnClick on initialRender
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      sendTrackingEventsOnClick({
+        id: `${trackingId}-${expanded ? 'expand' : 'minimize'}`,
+        product: 'Paper',
+        componentType: 'ACQUISITIONS_BUTTON',
+      })();
+    }
   }, [expanded]);
 
   return (

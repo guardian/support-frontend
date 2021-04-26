@@ -388,10 +388,10 @@ function getFrequency(contributionType: ContributionType): string {
   if (contributionType === 'ONE_OFF') {
     return '';
   } else if (contributionType === 'MONTHLY') {
-    return 'a month';
+    return 'per month';
   }
 
-  return 'a year';
+  return 'per year';
 
 }
 

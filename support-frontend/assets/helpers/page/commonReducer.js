@@ -13,11 +13,15 @@ import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionAmounts } from 'helpers/contributions';
+import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 export type Internationalisation = {|
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   countryId: IsoCountry,
+  localCurrencyCountry?: LocalCurrencyCountry,
+  useLocalCurrency: boolean,
+  defaultCurrency: IsoCurrency,
 |};
 
 export type CommonState = {
@@ -27,6 +31,7 @@ export type CommonState = {
   abParticipations: Participations,
   settings: Settings,
   amounts: ContributionAmounts,
+  defaultAmounts: ContributionAmounts,
   internationalisation: Internationalisation,
   existingPaymentMethods?: ExistingPaymentMethod[],
 };
@@ -39,7 +44,6 @@ const getInternationalisationFromCountry = (countryId: IsoCountry, international
 
 // Sets up the common reducer with its initial state.
 function createCommonReducer(initialState: CommonState): (state?: CommonState, action: Action) => CommonState {
-
   return function commonReducer(
     state?: CommonState = initialState,
     action: Action,
@@ -54,6 +58,34 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
             ...state.internationalisation,
             ...getInternationalisationFromCountry(action.country, state.internationalisation),
           },
+        };
+
+      case 'SET_CURRENCY_ID':
+        return {
+          ...state,
+          internationalisation: {
+            ...state.internationalisation,
+            currencyId: (action.useLocalCurrency && state.internationalisation.localCurrencyCountry)
+              ? state.internationalisation.localCurrencyCountry.currency
+              : state.internationalisation.defaultCurrency,
+          },
+        };
+
+      case 'SET_USE_LOCAL_CURRENCY_FLAG':
+        return {
+          ...state,
+          internationalisation: {
+            ...state.internationalisation,
+            useLocalCurrency: action.useLocalCurrency,
+          },
+        };
+
+      case 'SET_USE_LOCAL_AMOUNTS':
+        return {
+          ...state,
+          amounts: (action.useLocalAmounts && state.internationalisation.localCurrencyCountry)
+            ? state.internationalisation.localCurrencyCountry.amounts
+            : state.defaultAmounts,
         };
 
       case 'SET_EXISTING_PAYMENT_METHODS': {

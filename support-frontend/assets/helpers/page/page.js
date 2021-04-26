@@ -27,7 +27,7 @@ import {
   detect as detectCurrency,
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import { getAllQueryParamsWithExclusions } from 'helpers/url';
+import { getAllQueryParamsWithExclusions, getQueryParameter } from 'helpers/url';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
 import {
@@ -44,6 +44,7 @@ import { getGlobal } from 'helpers/globals';
 import { isPostDeployUser } from 'helpers/user/user';
 import { getAmounts } from 'helpers/abTests/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -81,10 +82,17 @@ function buildInitialState(
 ): CommonState {
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
+  const localCurrencyCountry = localCurrencyCountries[
+    (getQueryParameter('local-currency-country') || '').toUpperCase()
+  ];
+
   const internationalisation = {
     countryGroupId,
     countryId,
     currencyId,
+    useLocalCurrency: false,
+    defaultCurrency: currencyId,
+    localCurrencyCountry,
   };
 
   const amounts = getAmounts(settings, abParticipations, countryGroupId);
@@ -97,6 +105,7 @@ function buildInitialState(
     abParticipations,
     settings,
     amounts,
+    defaultAmounts: amounts,
   };
 
 }

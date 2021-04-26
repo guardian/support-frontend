@@ -16,27 +16,6 @@ export const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/sub
 const digiSubLandingPagesNotAus = '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)';
 
 export const tests: Tests = {
-  thankyouPageHeadingTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 1,
-  },
-
   stripePaymentRequestButtonDec2020: {
     variants: [
       {
@@ -56,27 +35,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: notUkLandingPage,
     seed: 2,
-  },
-
-  globalThankyouPageLargeDonationTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 12,
   },
 
   thankyouPageMarketingConsentTestR3: {

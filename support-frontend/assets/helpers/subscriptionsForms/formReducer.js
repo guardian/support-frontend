@@ -19,6 +19,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
+import { GuardianWeekly } from 'helpers/subscriptions';
 
 function createFormReducer(
   initialCountry: IsoCountry,
@@ -64,7 +65,9 @@ function createFormReducer(
   };
 
   const getFulfilmentOption = (action, currentOption) =>
-    (action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
+    // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
+    // because it may mean a switch between domestic and rest of the world
+    (product === GuardianWeekly && action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
 
   return (originalState: FormState = initialState, action: Action): FormState => {
 
@@ -109,8 +112,6 @@ function createFormReducer(
         return {
           ...state,
           paymentMethod: null,
-          // When the country changes we need to update the fulfilment option because it may mean
-          // a switch between domestic and rest of the world
           fulfilmentOption: getFulfilmentOption(action, state.fulfilmentOption),
         };
 
