@@ -94,7 +94,7 @@ export type ParsedContribution = {|
   error: ParseError,
 |};
 
-type Config = {
+export type Config = {
   [ContributionType]: {
     min: number,
     minInWords: string,

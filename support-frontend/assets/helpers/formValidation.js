@@ -11,6 +11,7 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
 import { DateUtils } from 'react-day-picker';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
+import type {LocalCurrencyCountry} from "./internationalisation/localCurrencyCountry";
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -61,6 +62,7 @@ export const amountOrOtherAmountIsValid = (
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
+  localCurrencyCountry?: LocalCurrencyCountry,
 ): boolean => {
   let amt = '';
   if (selectedAmounts[contributionType] && selectedAmounts[contributionType] === 'other') {
