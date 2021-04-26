@@ -10,11 +10,19 @@ import { textSans } from '@guardian/src-foundations/typography';
 
 // ----- Constants ----- //
 
+export const hideWidget = css`
+  visibility: hidden;
+  max-height: 0;
+`;
+
 export const wrapper = css`
+  visibility: visible;
   position: fixed;
   z-index: 10;
   bottom: 0;
   width: 100%;
+  max-height: 200px;
+  transition: max-height 0.5s ease;
 
   ${from.phablet} {
     width: 300px;
