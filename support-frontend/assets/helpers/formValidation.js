@@ -50,11 +50,22 @@ export const amountIsValid = (
   input: string,
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-): boolean =>
-  isNotEmpty(input)
-    && isLargerOrEqual(config[countryGroupId][contributionType].min, input)
-    && isSmallerOrEqual(config[countryGroupId][contributionType].max, input)
+  localCurrencyCountry?: LocalCurrencyCountry,
+  useLocalCurrencyCountry?: boolean,
+): boolean => {
+  const min = useLocalCurrencyCountry
+    ? localCurrencyCountry.config[contributionType].min
+    : config[countryGroupId][contributionType].min;
+
+  const max = useLocalCurrencyCountry
+    ? localCurrencyCountry.config[contributionType].max
+    : config[countryGroupId][contributionType].max;
+
+  return isNotEmpty(input)
+    && isLargerOrEqual(min, input)
+    && isSmallerOrEqual(max, input)
     && maxTwoDecimals(input);
+}
 
 
 export const amountOrOtherAmountIsValid = (
@@ -63,6 +74,7 @@ export const amountOrOtherAmountIsValid = (
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   localCurrencyCountry?: LocalCurrencyCountry,
+  useLocalCurrencyCountry?: boolean,
 ): boolean => {
   let amt = '';
   if (selectedAmounts[contributionType] && selectedAmounts[contributionType] === 'other') {
@@ -72,7 +84,13 @@ export const amountOrOtherAmountIsValid = (
   } else if (selectedAmounts[contributionType]) {
     amt = selectedAmounts[contributionType].toString();
   }
-  return amountIsValid(amt, countryGroupId, contributionType);
+  return amountIsValid(
+    amt,
+    countryGroupId,
+    contributionType,
+    localCurrencyCountry,
+    useLocalCurrencyCountry,
+  );
 };
 
 export const checkStateIfApplicable: ((string | null), CountryGroupId, ContributionType) => boolean = (
