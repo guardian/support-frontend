@@ -26,9 +26,7 @@ import {
 } from './contributionsLandingActions';
 import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import { AmazonPay } from 'helpers/paymentMethods';
-import type {LocalCurrencyCountry} from "../../helpers/internationalisation/localCurrencyCountry";
-import {localCurrencyCountries} from "../../helpers/internationalisation/localCurrencyCountry";
-import {setUseLocalAmounts} from "../../helpers/page/commonActions";
+import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
 

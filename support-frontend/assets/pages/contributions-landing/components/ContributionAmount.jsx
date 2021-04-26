@@ -80,9 +80,9 @@ const renderEmptyAmount = (id: string) => (
 function withProps(props: PropTypes) {
   const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const { min, max } = props.useLocalCurrency
+  const { min, max } = (props.useLocalCurrency && props.localCurrencyCountry)
     ? props.localCurrencyCountry.config[props.contributionType]
-    : config[props.countryGroupId][props.contributionType]
+    : config[props.countryGroupId][props.contributionType];
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], min, false);
   const maxAmount: string =

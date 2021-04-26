@@ -11,7 +11,7 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
 import { DateUtils } from 'react-day-picker';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
-import type {LocalCurrencyCountry} from "./internationalisation/localCurrencyCountry";
+import type { LocalCurrencyCountry } from './internationalisation/localCurrencyCountry';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -50,14 +50,14 @@ export const amountIsValid = (
   input: string,
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-  localCurrencyCountry?: LocalCurrencyCountry,
-  useLocalCurrency?: boolean,
+  localCurrencyCountry?: LocalCurrencyCountry | null,
+  useLocalCurrency?: boolean | null,
 ): boolean => {
-  const min = useLocalCurrency
+  const min = (useLocalCurrency && localCurrencyCountry)
     ? localCurrencyCountry.config[contributionType].min
     : config[countryGroupId][contributionType].min;
 
-  const max = useLocalCurrency
+  const max = (useLocalCurrency && localCurrencyCountry)
     ? localCurrencyCountry.config[contributionType].max
     : config[countryGroupId][contributionType].max;
 
@@ -65,15 +65,15 @@ export const amountIsValid = (
     && isLargerOrEqual(min, input)
     && isSmallerOrEqual(max, input)
     && maxTwoDecimals(input);
-}
+};
 
 export const amountOrOtherAmountIsValid = (
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
-  localCurrencyCountry?: LocalCurrencyCountry,
-  useLocalCurrency?: boolean,
+  localCurrencyCountry?: LocalCurrencyCountry | null,
+  useLocalCurrency?: boolean | null,
 ): boolean => {
   let amt = '';
   if (selectedAmounts[contributionType] && selectedAmounts[contributionType] === 'other') {

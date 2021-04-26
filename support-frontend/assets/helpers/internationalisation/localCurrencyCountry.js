@@ -2,7 +2,7 @@
 
 import type { IsoCountry } from './country';
 import type { IsoCurrency } from './currency';
-import type {Config, ContributionAmounts} from '../contributions';
+import type { Config, ContributionAmounts } from '../contributions';
 
 export type LocalCurrencyCountry = {
   countryCode: IsoCountry,
@@ -31,6 +31,7 @@ export const localCurrencyCountries: {
         minInWords: 'ten',
         max: 23_000,
         maxInWords: 'twenty three thousand',
+        default: 50,
       },
     },
   },
@@ -50,6 +51,7 @@ export const localCurrencyCountries: {
         minInWords: 'two',
         max: 2_200,
         maxInWords: 'two thousand and two hundred',
+        default: 5,
       },
     },
   },
@@ -69,6 +71,7 @@ export const localCurrencyCountries: {
         minInWords: 'ten',
         max: 23_000,
         maxInWords: 'twenty three thousand',
+        default: 50,
       },
     },
   },
@@ -88,6 +91,7 @@ export const localCurrencyCountries: {
         minInWords: 'ten',
         max: 23_000,
         maxInWords: 'twenty three thousand',
+        default: 50,
       },
     },
   },

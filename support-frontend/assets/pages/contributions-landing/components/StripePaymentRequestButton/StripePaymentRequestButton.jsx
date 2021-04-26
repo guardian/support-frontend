@@ -52,7 +52,7 @@ import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymen
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
-import type {LocalCurrencyCountry} from "../../../../helpers/internationalisation/localCurrencyCountry";
+import type { LocalCurrencyCountry } from '../../../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types -----//
 
