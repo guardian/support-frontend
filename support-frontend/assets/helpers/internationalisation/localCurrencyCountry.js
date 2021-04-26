@@ -13,7 +13,7 @@ export type LocalCurrencyCountry = {
 };
 
 export const localCurrencyCountries: {
-  [?string]: LocalCurrencyCountry
+  [?IsoCountry]: LocalCurrencyCountry
 } = {
   SE: {
     countryCode: 'SE',
