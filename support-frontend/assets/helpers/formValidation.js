@@ -51,13 +51,13 @@ export const amountIsValid = (
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
   localCurrencyCountry?: LocalCurrencyCountry,
-  useLocalCurrencyCountry?: boolean,
+  useLocalCurrency?: boolean,
 ): boolean => {
-  const min = useLocalCurrencyCountry
+  const min = useLocalCurrency
     ? localCurrencyCountry.config[contributionType].min
     : config[countryGroupId][contributionType].min;
 
-  const max = useLocalCurrencyCountry
+  const max = useLocalCurrency
     ? localCurrencyCountry.config[contributionType].max
     : config[countryGroupId][contributionType].max;
 
@@ -67,14 +67,13 @@ export const amountIsValid = (
     && maxTwoDecimals(input);
 }
 
-
 export const amountOrOtherAmountIsValid = (
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   localCurrencyCountry?: LocalCurrencyCountry,
-  useLocalCurrencyCountry?: boolean,
+  useLocalCurrency?: boolean,
 ): boolean => {
   let amt = '';
   if (selectedAmounts[contributionType] && selectedAmounts[contributionType] === 'other') {
@@ -89,7 +88,7 @@ export const amountOrOtherAmountIsValid = (
     countryGroupId,
     contributionType,
     localCurrencyCountry,
-    useLocalCurrencyCountry,
+    useLocalCurrency,
   );
 };
 
