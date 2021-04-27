@@ -49,14 +49,18 @@ const roundelContainer = css`
 `;
 
 const fitAroundBelow = css`
-  & > p:last-of-type {
-    max-width: calc(100% - 80px);
+  ${until.tablet} {
+    & > p:last-of-type {
+      max-width: calc(100% - 80px);
+    }
   }
 `;
 
 const fitAroundAbove = css`
-  & > p:first-of-type {
-    max-width: calc(100% - 80px);
+  ${until.tablet} {
+    & > p:first-of-type {
+      max-width: calc(100% - 80px);
+    }
   }
 `;
 
