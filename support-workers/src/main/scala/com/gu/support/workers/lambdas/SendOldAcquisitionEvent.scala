@@ -89,6 +89,7 @@ object SendOldAcquisitionEvent {
         }
       case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
+      case _: SepaPaymentMethod => thrift.PaymentProvider.Gocardless  // TODO
       case _: AmazonPayPaymentMethod => thrift.PaymentProvider.AmazonPay
     }
 
