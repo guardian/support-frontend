@@ -67,7 +67,7 @@ const heroParagraph = css`
 `;
 
 const roundelLines = css`
-  padding: ${space[4]}px;
+  padding: ${space[1]}px;
   ${headline.xxxsmall({ fontWeight: 'bold' })}
   ${from.tablet} {
     ${headline.xxsmall({ fontWeight: 'bold' })}
