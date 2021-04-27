@@ -146,7 +146,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   def createSepaPaymentMethod(sepa: SepaPaymentFields, user: User): Future[SepaPaymentMethod] = {
     Future.successful(SepaPaymentMethod(
       bankTransferAccountName = sepa.accountHolderName,
-      bankTransferAccountNumber = sepa.iban
+      bankTransferAccountNumber = sepa.iban,
+      email = user.primaryEmailAddress
     ))
   }
 

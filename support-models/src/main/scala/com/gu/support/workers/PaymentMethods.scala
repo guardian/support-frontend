@@ -88,6 +88,7 @@ case class ClonedDirectDebitPaymentMethod(
 case class SepaPaymentMethod(
   bankTransferAccountName: String,
   bankTransferAccountNumber: String,
+  email: String,
   bankTransferType: String = "SEPA",
   `type`: String = "BankTransfer",
   paymentGateway: PaymentGateway = SepaGateway
