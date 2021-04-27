@@ -60,14 +60,6 @@ const fitAroundAbove = css`
   }
 `;
 
-// const product1 = {
-//   offerCopy: '50% off for 3 months',
-//   priceCopy: 'You\'ll pay £5.99/month for 3 months, then £11.99 per month',
-//   href: '',
-//   buttonCopy: 'Subscribe monthly for £5.99',
-//   onClick: () => {},
-//   onView: () => {},
-// };
 type PropTypes = {|
   roundel: Node,
   priceList: any[]
