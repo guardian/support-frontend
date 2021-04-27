@@ -56,6 +56,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
         createDirectDebitPaymentMethod(dd, user)
+      case sepa: SepaPaymentMethod =>
+        createSepaPaymentMethod(sepa, user)
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
       case amazonPay: AmazonPayPaymentFields =>
@@ -138,6 +140,12 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state = user.billingAddress.state,
       streetName = addressLine.map(_.streetName),
       streetNumber = addressLine.flatMap(_.streetNumber)
+    ))
+  }
+
+  def createSepaPaymentMethod(sepa: SepaPaymentFields, user: User): Future[SepaPaymentMethod] = {
+    Future.successful(SepaPaymentMethod(
+
     ))
   }
 

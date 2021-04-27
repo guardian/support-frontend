@@ -16,10 +16,11 @@ import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationa
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { SelectedAmounts } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe, AmazonPay, Sepa } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 import { isSwitchOn } from 'helpers/globals';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
+import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
 
 // ----- Types ----- //
 
@@ -76,7 +77,7 @@ function getContributionTypeFromUrl(): ?ContributionType {
 
 // Returns an array of Payment Methods, in the order of preference,
 // i.e the first element in the array will be the default option
-function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
+function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry, countryGroupId: CountryGroupId): PaymentMethod[] {
   if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
     return [DirectDebit, Stripe, PayPal];
   } else if (countryId === 'US') {
@@ -85,6 +86,8 @@ function getPaymentMethods(contributionType: ContributionType, countryId: IsoCou
       return [Stripe, PayPal, AmazonPay];
     }
     return [Stripe, PayPal];
+  } else if (contributionType !== 'ONE_OFF' && countryGroupId === 'EURCountries') {
+    return [Sepa, Stripe, PayPal]
   }
   return [Stripe, PayPal];
 
@@ -98,12 +101,14 @@ function getValidPaymentMethods(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
+  countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
   const switchKey = switchKeyForContributionType(contributionType);
 
-  return getPaymentMethods(contributionType, countryId)
-    .filter(paymentMethod =>
-      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
+  return getPaymentMethods(contributionType, countryId, countryGroupId)
+  //TODO - switch
+    // .filter(paymentMethod =>
+    //   isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
 }
 
 function getPaymentMethodToSelect(
@@ -186,6 +191,8 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
       return 'Credit/Debit card';
     case DirectDebit:
       return 'Direct debit';
+    case Sepa:
+      return 'Sepa';
     case PayPal:
       return PayPal;
     case AmazonPay:

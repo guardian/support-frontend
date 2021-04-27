@@ -45,9 +45,8 @@ import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalA
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { AmazonPay, DirectDebit, Stripe, ExistingCard, ExistingDirectDebit, Sepa } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
 import type { Option } from 'helpers/types/option';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
@@ -649,6 +648,7 @@ const recurringPaymentAuthorisationHandlers = {
   PayPal: recurringPaymentAuthorisationHandler,
   Stripe: recurringPaymentAuthorisationHandler,
   DirectDebit: recurringPaymentAuthorisationHandler,
+  Sepa: recurringPaymentAuthorisationHandler,
   ExistingCard: recurringPaymentAuthorisationHandler,
   ExistingDirectDebit: recurringPaymentAuthorisationHandler,
   AmazonPay: recurringPaymentAuthorisationHandler,
@@ -701,6 +701,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
     },
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', DirectDebit);
+      return Promise.resolve(error);
+    },
+    Sepa: () => {
+      logInvalidCombination('ONE_OFF', Sepa);
       return Promise.resolve(error);
     },
     ExistingCard: () => {

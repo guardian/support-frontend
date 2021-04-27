@@ -204,7 +204,7 @@ const onPaymentMethodUpdate = (paymentMethod: PaymentMethod, props: PropTypes) =
 
 function withProps(props: PropTypes) {
   const paymentMethods: PaymentMethod[] =
-    getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
+    getValidPaymentMethods(props.contributionType, props.switches, props.countryId, props.countryGroupId);
 
   const fullExistingPaymentMethods = getFullExistingPaymentMethods(props);
 

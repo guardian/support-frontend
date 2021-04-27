@@ -52,6 +52,11 @@ case class DirectDebitPaymentFields(
   accountNumber: String
 ) extends PaymentFields
 
+case class SepaPaymentFields(
+  accountHolderName: String,
+  iban: String
+) extends PaymentFields
+
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
 
 case class AmazonPayPaymentFields(amazonPayBillingAgreementId: String) extends PaymentFields

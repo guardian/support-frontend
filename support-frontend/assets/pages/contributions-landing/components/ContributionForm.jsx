@@ -51,7 +51,7 @@ import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/St
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
+import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay, Sepa } from 'helpers/paymentMethods';
 import { logException } from 'helpers/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
@@ -170,6 +170,9 @@ const formHandlersForRecurring = {
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
   },
+  Sepa: (props: PropTypes) => {
+    props.openDirectDebitPopUp();
+  },
   ExistingCard: (props: PropTypes) => props.onPaymentAuthorisation({
     paymentMethod: 'ExistingCard',
     billingAccountId: props.existingPaymentMethod.billingAccountId,
@@ -209,6 +212,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       });
     },
     DirectDebit: () => { logInvalidCombination('ONE_OFF', DirectDebit); },
+    Sepa: () => { logInvalidCombination('ONE_OFF', Sepa); },
     ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
     AmazonPay: (props: PropTypes) => {
