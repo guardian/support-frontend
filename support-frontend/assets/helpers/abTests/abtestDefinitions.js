@@ -78,6 +78,7 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     targetPage: digiSubLandingPagesNotAus,
-    seed: 3,
+    seed: 19,
+    optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
   },
 };

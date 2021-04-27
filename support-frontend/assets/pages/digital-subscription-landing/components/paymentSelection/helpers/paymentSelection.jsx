@@ -134,7 +134,7 @@ const getHeroCtaProps = (
     promotion.landingPage.roundel ? promotion.landingPage.roundel :
       BILLING_PERIOD[digitalBillingPeriod].offer;
     const trackingProperties = {
-      id: `subscribe_now__hero_cta-${billingPeriod}`,
+      id: `subscribe_now_cta_hero-${billingPeriod}`,
       product: 'DigitalPack',
       componentType: 'ACQUISITIONS_BUTTON',
     };
