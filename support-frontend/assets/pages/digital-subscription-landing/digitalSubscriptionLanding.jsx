@@ -44,8 +44,6 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
 // ----- Styles ----- //
-
-// import './components/digitalSubscriptionLanding.scss';
 import 'stylesheets/skeleton/skeleton.scss';
 
 const productBlockContainer = css`

@@ -9,9 +9,6 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { ListHeading } from 'components/productPage/productPageList/productPageList';
 import { arrowSvg } from '../arrow';
 
-// styles
-// import '../digitalSubscriptionLanding.scss';
-
 const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
 type DropdownPropTypes = {
