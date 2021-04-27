@@ -27,6 +27,7 @@ import {
   updateAccountNumber,
   updateSortCode,
 } from 'components/directDebit/directDebitActions';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText
   from 'components/svgs/directDebitSymbolAndText';
@@ -59,6 +60,7 @@ type PropTypes = {|
   editDirectDebitClicked: () => void,
   confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
   countryGroupId: CountryGroupId,
+  paymentMethod: PaymentMethod,
 |};
 
 
@@ -74,6 +76,7 @@ function mapStateToProps(state) {
     formError: state.page.directDebit.formError,
     phase: state.page.directDebit.phase,
     countryGroupId: state.common.internationalisation.countryGroupId,
+    paymentMethod: state.page.form.paymentMethod,
   };
 }
 
@@ -87,8 +90,8 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     editDirectDebitClicked: () => {
       dispatch(setDirectDebitFormPhase('entry'));
     },
-    confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => {
-      dispatch(confirmDirectDebitClicked(onPaymentAuthorisation));
+    confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void, paymentMethod: PaymentMethod) => {
+      dispatch(confirmDirectDebitClicked(onPaymentAuthorisation, paymentMethod));
       return false;
     },
     openDDGuaranteeClicked: () => {
@@ -150,7 +153,7 @@ const DirectDebitForm = (props: PropTypes) => (
       phase={props.phase}
       onPayClick={() => props.payDirectDebitClicked()}
       onEditClick={() => props.editDirectDebitClicked()}
-      onConfirmClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation)}
+      onConfirmClick={() => props.confirmDirectDebitClicked(props.onPaymentAuthorisation, props.paymentMethod)}
     />
 
     <ErrorMessage
@@ -177,9 +180,9 @@ function AccountNumberInput(props: {phase: Phase, onChange: Function, value: str
       id="account-number-input"
       value={props.value}
       onChange={props.onChange}
-      pattern="[0-9]*"
-      minLength="6"
-      maxLength="10"
+      // pattern="[0-9]*"
+      // minLength="6"
+      // maxLength="10"
       className="component-direct-debit-form__text-field focus-target"
     />
   );

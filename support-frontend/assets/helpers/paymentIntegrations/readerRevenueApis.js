@@ -215,6 +215,7 @@ const MAX_POLLS = 10;
 // ----- Functions ----- //
 
 function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
+  debugger
   switch (authorisation.paymentMethod) {
     case Stripe:
       if (authorisation.paymentMethodId) {

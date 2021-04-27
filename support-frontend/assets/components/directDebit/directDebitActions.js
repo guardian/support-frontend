@@ -5,6 +5,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 
 import { checkAccount } from './helpers/ajax';
 import { DirectDebit } from 'helpers/paymentMethods';
+import type {PaymentMethod} from "helpers/paymentMethods";
 
 // ----- Types ----- //
 
@@ -87,36 +88,37 @@ function payDirectDebitClicked(): Function {
       dispatch(setDirectDebitFormError('You need to confirm that you are the account holder.'));
       return;
     }
+    dispatch(setDirectDebitFormPhase('confirmation'));
 
-    checkAccount(sortCode, accountNumber, isTestUser, csrf)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('invalid_input');
-        }
-        return response.json();
-      })
-      .then((response) => {
-        if (!response.accountValid) {
-          throw new Error('incorrect_input');
-        }
-        dispatch(setDirectDebitFormPhase('confirmation'));
-      })
-      .catch((e) => {
-        let msg = '';
-        switch (e.message) {
-          case 'invalid_input': msg = 'Your bank details are invalid. Please check them and try again';
-            break;
-          case 'incorrect_input': msg = 'Your bank details are not correct. Please check them and try again';
-            break;
-          default: msg = 'Oops, something went wrong, please try again later';
-
-        }
-        dispatch(setDirectDebitFormError(msg));
-      });
+    // checkAccount(sortCode, accountNumber, isTestUser, csrf)
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error('invalid_input');
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((response) => {
+    //     if (!response.accountValid) {
+    //       throw new Error('incorrect_input');
+    //     }
+    //     dispatch(setDirectDebitFormPhase('confirmation'));
+    //   })
+    //   .catch((e) => {
+    //     let msg = '';
+    //     switch (e.message) {
+    //       case 'invalid_input': msg = 'Your bank details are invalid. Please check them and try again';
+    //         break;
+    //       case 'incorrect_input': msg = 'Your bank details are not correct. Please check them and try again';
+    //         break;
+    //       default: msg = 'Oops, something went wrong, please try again later';
+    //
+    //     }
+    //     dispatch(setDirectDebitFormError(msg));
+    //   });
   };
 }
 
-function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation => void): Function {
+function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation => void, paymentMethod: PaymentMethod): Function {
 
   return (dispatch: Function, getState: Function) => {
 
@@ -129,12 +131,21 @@ function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation 
 
     const sortCode = sortCodeArray.join('') || sortCodeString;
 
-    onPaymentAuthorisation({
-      paymentMethod: DirectDebit,
-      accountHolderName,
-      sortCode,
-      accountNumber,
-    });
+    // if (paymentMethod === 'Sepa') {
+    //   debugger
+    //   onPaymentAuthorisation({
+    //     paymentMethod,
+    //     accountHolderName,
+    //     iban: accountNumber,
+    //   });
+    // } else {
+      onPaymentAuthorisation({
+        paymentMethod,
+        accountHolderName,
+        sortCode,
+        accountNumber,
+      });
+    // }
 
     dispatch(closeDirectDebitPopUp());
 

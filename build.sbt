@@ -33,7 +33,7 @@ lazy val release = Seq[ReleaseStep](
 inThisBuild(Seq(
   organization := "com.gu",
   scalaVersion := "2.13.5",
-  dependencyTree / aggregate := false,
+//  dependencyTree / aggregate := false,
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central

@@ -67,6 +67,7 @@ object PaymentFields {
   implicit val stripeSourcePaymentFieldsCodec: Codec[StripeSourcePaymentFields] = deriveCodec
   implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentMethodPaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
+  implicit val sepaPaymentFieldsCodec: Codec[SepaPaymentFields] = deriveCodec
   implicit val existingPaymentFieldsCodec: Codec[ExistingPaymentFields] = deriveCodec
   implicit val amazonPayPaymentFieldsCodec: Codec[AmazonPayPaymentFields] = deriveCodec
 
@@ -75,6 +76,7 @@ object PaymentFields {
     case s: StripeSourcePaymentFields => s.asJson
     case s: StripePaymentMethodPaymentFields => s.asJson
     case d: DirectDebitPaymentFields => d.asJson
+    case s: SepaPaymentFields => s.asJson
     case e: ExistingPaymentFields => e.asJson
     case a: AmazonPayPaymentFields => a.asJson
   }
@@ -85,6 +87,7 @@ object PaymentFields {
       Decoder[StripeSourcePaymentFields].widen,
       Decoder[StripePaymentMethodPaymentFields].widen,
       Decoder[DirectDebitPaymentFields].widen,
+      Decoder[SepaPaymentFields].widen,
       Decoder[ExistingPaymentFields].widen,
       Decoder[AmazonPayPaymentFields].widen
     ).reduceLeft(or(_,_))

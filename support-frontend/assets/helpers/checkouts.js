@@ -40,6 +40,7 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
     case ExistingCard: return 'existingCard';
     case ExistingDirectDebit: return 'existingDirectDebit';
     case AmazonPay: return 'amazonPay';
+    case Sepa: return 'sepa';
     default: return null;
   }
 }
