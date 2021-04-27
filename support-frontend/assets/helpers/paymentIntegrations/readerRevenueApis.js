@@ -88,6 +88,11 @@ type RegularDirectDebitPaymentFields = {|
   accountNumber: string,
 |};
 
+type RegularSepaPaymentFields = {|
+  accountHolderName: string,
+  iban: string,
+|}
+
 type CorporateRedemption = {|
   redemptionCode: string,
 |}
@@ -100,6 +105,7 @@ export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentIntentFields |
   RegularDirectDebitPaymentFields |
+  RegularSepaPaymentFields |
   RegularExistingPaymentFields |
   CorporateRedemption |
   RegularAmazonPayPaymentFields;
@@ -162,7 +168,7 @@ export type DirectDebitAuthorisation = {|
 export type SepaAuthorisation = {|
   paymentMethod: typeof Sepa,
   accountHolderName: string,
-  iban: string
+  accountNumber: string
 |};
 export type ExistingCardAuthorisation = {|
   paymentMethod: typeof ExistingCard,
@@ -225,6 +231,11 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
         accountHolderName: authorisation.accountHolderName,
         sortCode: authorisation.sortCode,
         accountNumber: authorisation.accountNumber,
+      };
+    case Sepa:
+      return {
+        accountHolderName: authorisation.accountHolderName,
+        iban: authorisation.accountNumber,
       };
     case ExistingCard:
     case ExistingDirectDebit:

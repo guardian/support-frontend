@@ -54,7 +54,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
     countryGroupId: CountryGroupId,
     useLocalCurrency: boolean,
   ) => {
-    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, countryGroupId);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
     if (contributionType !== 'ONE_OFF') {

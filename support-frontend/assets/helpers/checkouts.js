@@ -20,7 +20,7 @@ import { DirectDebit, PayPal, Stripe, AmazonPay, Sepa } from 'helpers/paymentMet
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 import { isSwitchOn } from 'helpers/globals';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
-import type {CountryGroupId} from "helpers/internationalisation/countryGroup";
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -77,7 +77,11 @@ function getContributionTypeFromUrl(): ?ContributionType {
 
 // Returns an array of Payment Methods, in the order of preference,
 // i.e the first element in the array will be the default option
-function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry, countryGroupId: CountryGroupId): PaymentMethod[] {
+function getPaymentMethods(
+  contributionType: ContributionType,
+  countryId: IsoCountry,
+  countryGroupId: CountryGroupId,
+): PaymentMethod[] {
   if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
     return [DirectDebit, Stripe, PayPal];
   } else if (countryId === 'US') {
@@ -87,7 +91,7 @@ function getPaymentMethods(contributionType: ContributionType, countryId: IsoCou
     }
     return [Stripe, PayPal];
   } else if (contributionType !== 'ONE_OFF' && countryGroupId === 'EURCountries') {
-    return [Sepa, Stripe, PayPal]
+    return [Sepa, Stripe, PayPal];
   }
   return [Stripe, PayPal];
 
@@ -106,17 +110,17 @@ function getValidPaymentMethods(
   const switchKey = switchKeyForContributionType(contributionType);
 
   return getPaymentMethods(contributionType, countryId, countryGroupId)
-  //TODO - switch
-    // .filter(paymentMethod =>
-    //   isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
+    .filter(paymentMethod =>
+      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
 }
 
 function getPaymentMethodToSelect(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
+  countryGroupId: CountryGroupId,
 ) {
-  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId, countryGroupId);
   return validPaymentMethods[0] || 'None';
 }
 
