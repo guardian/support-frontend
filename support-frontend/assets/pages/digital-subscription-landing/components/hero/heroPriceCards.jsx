@@ -41,6 +41,7 @@ const roundelContainer = css`
   display: flex;
   align-items: center;
   height: 100%;
+  overflow: hidden;
 
   ${from.tablet} {
     display: none;

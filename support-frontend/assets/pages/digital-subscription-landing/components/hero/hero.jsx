@@ -51,7 +51,7 @@ const HeroCopy = () => (
       you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
     </p>
     <p css={paragraph}>
-      Plus, for a limited time, you can read our latest special edition - The books of&nbsp;2021
+      Plus, for a limited time, you can read our latest special edition - The books of&nbsp;2021.
     </p>
   </>
 );
