@@ -8,6 +8,7 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
 
+import covers from './assets/gwCovers';
 import WeeklyMagazine from './weeklyMagazine';
 import WeeklyFocus from './weeklyFocus';
 
@@ -85,8 +86,6 @@ const magazineSelected = css`
   }
 `;
 
-const magazines = Array.from({ length: 10 }, (_, index) => `https://support.thegulocal.com/assets/gwCovers/GW%20${index + 1}.png`);
-
 function WeeklyNewsstand() {
   const [selectedMagazine, setSelectedMagazine] = useState<string>('');
 
@@ -106,12 +105,12 @@ function WeeklyNewsstand() {
         <h3>The latest editions</h3>
       </div>
       <div css={[newsStand, selectedMagazine ? newsStandHidden : '']}>
-        {magazines.map((image, index) =>
+        {covers.map((image, index) =>
           (
             <WeeklyMagazine
               image={image}
               onClick={select(image)}
-              cssOverrides={[magazine, index < magazines.length / 2 ? magazineTopRow : magazineBottomRow, selectedMagazine === image ? magazineSelected : '']}
+              cssOverrides={[magazine, index < covers.length / 2 ? magazineTopRow : magazineBottomRow, selectedMagazine === image ? magazineSelected : '']}
             />
           ))}
       </div>

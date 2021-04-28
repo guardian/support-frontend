@@ -10,6 +10,7 @@ import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { Button } from '@guardian/src-button';
 import { SvgCross, SvgChevronLeftSingle, SvgChevronRightSingle } from '@guardian/src-icons';
+import spreads from './assets/gwSpreads';
 
 const hideOnMobile = css`
   ${until.desktop} {
@@ -338,17 +339,17 @@ export default function WeeklyFocus({ image, onClose }: { image: string, onClose
             </Slide>
             <Slide show={slide === 2} css={[slideVisible, slide === 2 ? '' : [slideInvisible, slideDirections[direction]]]}>
               <div css={ctaSlide}>
-                <img height="513" css={spreadImage} src="https://support.thegulocal.com/assets/gwSpreads/GW%201 spread 1.png" alt="Guardian Weekly spread" draggable={false} />
+                <img height="513" css={spreadImage} src={spreads[0]} alt="Guardian Weekly spread" draggable={false} />
               </div>
             </Slide>
             <Slide show={slide === 3} css={[slideVisible, slide === 3 ? '' : [slideInvisible, slideDirections[direction]]]}>
               <div css={ctaSlide}>
-                <img height="513" css={spreadImage} src="https://support.thegulocal.com/assets/gwSpreads/GW%201 spread 2.png" alt="Guardian Weekly spread" draggable={false} />
+                <img height="513" css={spreadImage} src={spreads[1]} alt="Guardian Weekly spread" draggable={false} />
               </div>
             </Slide>
             <Slide show={slide === 4} css={[slideVisible, slide === 4 ? '' : [slideInvisible, slideDirections[direction]]]}>
               <div css={ctaSlide}>
-                <img height="513" css={spreadImage} src="https://support.thegulocal.com/assets/gwSpreads/GW%201 spread 3.png" alt="Guardian Weekly spread" draggable={false} />
+                <img height="513" css={spreadImage} src={spreads[2]} alt="Guardian Weekly spread" draggable={false} />
               </div>
             </Slide>
           </div>

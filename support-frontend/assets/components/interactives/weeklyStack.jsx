@@ -12,6 +12,9 @@ import { headline } from '@guardian/src-foundations/typography';
 import WeeklyMagazine from './weeklyMagazine';
 import WeeklyFocus from './weeklyFocus';
 
+import covers from './assets/gwCovers';
+import strips from './assets/gwStrips';
+
 const hasBorder = css`
   border: 1px solid #DCDCDC;
   padding: ${space[6]}px 0;
@@ -65,12 +68,16 @@ function randomAngle() {
   return Math.floor((Math.random() * (max - min)) + min);
 }
 
-const magazines = Array.from({ length: 10 }, (_, index) => ({
-  image: `https://support.thegulocal.com/assets/gwCovers/GW%20${10 - index}.png`,
-  strip: `https://support.thegulocal.com/assets/gwStrips/GW%20${10 - index} Mobile strip.png`,
+const reversedStrips = [...strips].reverse();
+
+const magazines = [...covers].reverse().map((image, index) => ({
+  image,
+  strip: reversedStrips[index],
   rotate: randomAngle(),
   dismissed: false,
 }));
+
+console.log(magazines);
 
 function WeeklyStack() {
   const [stackedMagazines, setStackedMagazines] = useState(magazines);
