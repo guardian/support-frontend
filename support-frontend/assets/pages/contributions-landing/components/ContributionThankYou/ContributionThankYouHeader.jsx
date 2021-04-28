@@ -5,9 +5,10 @@ import { titlepiece, body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import type { ContributionType } from 'helpers/contributions';
-import { currencies } from 'helpers/internationalisation/currency';
+import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { formatAmount } from 'helpers/checkouts';
 
 const header = css`
   background: white;
@@ -77,8 +78,12 @@ const ContributionThankYouHeader = ({
     if (!payPalOneOff && amount) {
       const currencyAndAmount = (
         <span css={amountText}>
-          {currencies[currency].glyph}
-          {amount}
+          { formatAmount(
+            currencies[currency],
+            spokenCurrencies[currency],
+            parseFloat(amount),
+            false,
+          ) }
         </span>
       );
 
