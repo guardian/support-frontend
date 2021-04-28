@@ -80,8 +80,7 @@ function buildInitialState(
   settings: Settings,
   acquisitionData: ReferrerAcquisitionData,
 ): CommonState {
-  // $FlowIgnore
-  const countryCode = (guardian && guardian.geoip && guardian.geoip.countryCode) || 'GB';
+  const countryCode = (window.guardian && window.guardian.geoip && window.guardian.geoip.countryCode) || 'GB';
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   let localCurrencyCountry;
