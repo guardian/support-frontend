@@ -5,6 +5,9 @@
 import { renderPage } from 'helpers/render';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { css } from '@emotion/core';
+import { from, until } from '@guardian/src-foundations/mq';
+
 import {
   AUDCountries,
   Canada,
@@ -23,32 +26,53 @@ import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
+import Block from 'components/page/block';
+
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import CampaignHeader from './components/hero/hero';
-import CampaignHeaderGift from './components/heroGift/hero';
+import { DigitalHero } from './components/hero/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
-import './digitalSubscriptionLanding.scss';
-import digitalSubscriptionLandingReducer
+import digitalSubscriptionLandingReducer, { type State }
   from './digitalSubscriptionLandingReducer';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
-// ----- Styles ----- //
-
-import './components/digitalSubscriptionLanding.scss';
-import 'stylesheets/skeleton/skeleton.scss';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
+
+// ----- Styles ----- //
+import 'stylesheets/skeleton/skeleton.scss';
+
+const productBlockContainer = css`
+  ${until.tablet} {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  ${from.tablet} {
+    margin-top: 66px;
+  }
+`;
 
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { orderIsAGift, productPrices, promotionCopy } = store.getState().page;
+const { page, common }: State = store.getState();
+const { orderIsAGift, productPrices, promotionCopy } = page;
+const { internationalisation, abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+
+// For CTAs in hero test
+const heroPriceList = getHeroCtaProps(
+  productPrices,
+  internationalisation.currencyId,
+  internationalisation.countryGroupId,
+);
+const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -108,20 +132,29 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      {orderIsAGift ?
-        <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
-        <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
-      }
-      <div ref={setElementToObserve}>
-        {countryGroupId === AUDCountries ?
-          <ProductBlockAus
-            countryGroupId={countryGroupId}
-          /> :
-          <ProductBlock
-            countryGroupId={countryGroupId}
-          />
-        }
-      </div>
+      <DigitalHero
+        orderIsAGift={orderIsAGift}
+        countryGroupId={countryGroupId}
+        promotionCopy={sanitisedPromoCopy}
+        showPriceCards={showPriceCardsInHero}
+        priceList={heroPriceList}
+      />
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={productBlockContainer}>
+            <div ref={setElementToObserve}>
+              {countryGroupId === AUDCountries ?
+                <ProductBlockAus
+                  countryGroupId={countryGroupId}
+                /> :
+                <ProductBlock
+                  countryGroupId={countryGroupId}
+                />
+              }
+            </div>
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />
