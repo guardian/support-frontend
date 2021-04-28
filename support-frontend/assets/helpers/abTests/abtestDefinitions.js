@@ -66,6 +66,7 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 18,
   },
+
   priceCardsInHeroTest: {
     variants: [
       {
@@ -117,7 +118,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 0,
   },
 };
