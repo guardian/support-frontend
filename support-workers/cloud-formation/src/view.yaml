@@ -11,6 +11,8 @@ lambdas:
   description: Failure handler
 - name: SendThankYouEmail
   description: Send thank-you email
+- name: UpdateSupporterProductData
+  description: Update SupporterProductData Dynamo table
 - name: SendAcquisitionEvent
   description: Submit Acquisition events to BigQuery
 - name: SendOldAcquisitionEvent

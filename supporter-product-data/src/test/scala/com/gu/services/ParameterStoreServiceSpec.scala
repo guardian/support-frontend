@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.model.Stage.DEV
+import com.gu.supporterdata.model.Stage.DEV
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers

@@ -333,7 +333,7 @@ object DigitalSubscriptionGiftRedemption {
     val zuoraUpdater = new ZuoraUpdater(zuoraService, catalogService)
     for {
       codeValidation <- codeValidator.getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
-      termDates <- codeValidation match {
+      (subscriptionNumber, termDates) <- codeValidation match {
         case ValidGiftCode(subscriptionId) => zuoraUpdater.doZuoraUpdates(
           subscriptionId,
           zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _),
@@ -344,13 +344,14 @@ object DigitalSubscriptionGiftRedemption {
         )
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
-      handlerResult <- Future.fromTry(buildHandlerResult(state, requestInfo, termDates))
+      handlerResult <- Future.fromTry(buildHandlerResult(state, requestInfo, subscriptionNumber, termDates))
     } yield handlerResult
   }
 
   private def buildHandlerResult(
     state: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
+    subscriptionNumber: ZuoraSubscriptionNumber,
     termDates: TermDates,
   ) = {
     val product = state.product match {
@@ -364,7 +365,8 @@ object DigitalSubscriptionGiftRedemption {
         sendThankYouEmailState = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
           state.user,
           product,
-          termDates,
+          subscriptionNumber.value,
+          termDates
         ),
         acquisitionData = state.acquisitionData
       ), requestInfo)
@@ -378,13 +380,13 @@ object DigitalSubscriptionGiftRedemption {
     def doZuoraUpdates(
       subscriptionId: String,
       updateGiftIdentityIdCall: Int => Future[ZuoraSuccessOrFailureResponse]
-    ): Future[TermDates] = for {
+    ): Future[(ZuoraSubscriptionNumber, TermDates)] = for {
       fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
       calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
       (dates, newTermLength) = calculatedDates
       _ <- updateGiftIdentityIdCall(newTermLength)
       _ <- zuoraService.setupRevenueRecognition(fullGiftSubscription, dates)
-    } yield dates
+    } yield (ZuoraSubscriptionNumber(fullGiftSubscription.subscriptionNumber), dates)
 
 
     private def calculateNewTermLength(subscription: Subscription, catalogService: CatalogService) = {
@@ -395,7 +397,7 @@ object DigitalSubscriptionGiftRedemption {
         val termDates = getStartEndDates(productRatePlan.billingPeriod.monthsInPeriod)
         val newTermLength = Days.daysBetween(subscription.customerAcceptanceDate, termDates.giftEndDate).getDays + 1 //To avoid having to think about time zones
         Success((termDates, newTermLength))
-      }).getOrElse(Failure(new RuntimeException(s"Unable to calculate new term length for subscription ${subscription}")))
+      }).getOrElse(Failure(new RuntimeException(s"Unable to calculate new term length for subscription $subscription")))
 
     }
 
