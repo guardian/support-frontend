@@ -4,10 +4,10 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.model.{GetParameterRequest, GetParametersByPathRequest, ParameterType, PutParameterRequest}
 import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagementAsync, AWSSimpleSystemsManagementAsyncClientBuilder}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
-import com.gu.model.Stage
+import com.gu.supporterdata.model.Stage
 
-import scala.collection.JavaConverters._
-import scala.concurrent.{ExecutionContext, blocking}
+import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters._
 
 class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stage) {
   val configRoot = s"/supporter-product-data/${stage.value}"

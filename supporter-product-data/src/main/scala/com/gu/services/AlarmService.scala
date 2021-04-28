@@ -2,7 +2,7 @@ package com.gu.services
 
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{MetricDimensionName, MetricDimensionValue, MetricName, MetricNamespace, MetricRequest}
-import com.gu.model.Stage
+import com.gu.supporterdata.model.Stage
 
 class AlarmService(stage: Stage) {
 

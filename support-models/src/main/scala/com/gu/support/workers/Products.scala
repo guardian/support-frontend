@@ -35,7 +35,7 @@ case class DigitalPack(
   billingPeriod: BillingPeriod,
   readerType: ReaderType = Direct
 ) extends ProductType {
-  override def describe: String = s"$billingPeriod-DigitalPack-$currency"
+  override def describe: String = s"$billingPeriod-DigitalPack-$currency-$readerType"
 }
 
 case class Paper(

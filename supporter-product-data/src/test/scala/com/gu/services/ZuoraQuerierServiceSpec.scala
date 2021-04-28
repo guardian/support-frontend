@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.model.Stage.DEV
+import com.gu.supporterdata.model.Stage.DEV
 import com.gu.model.states.QueryType.Full
 import com.gu.model.zuora.response.JobStatus.Submitted
 import com.gu.okhttp.RequestRunners.configurableFutureRunner

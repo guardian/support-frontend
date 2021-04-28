@@ -54,6 +54,13 @@ States:
           Resource: "${SendThankYouEmailLambda.Arn}"
           End: True
           {{> emailRetry}}
+    - StartAt: UpdateSupporterProductData
+      States:
+        UpdateSupporterProductData:
+          Type: Task
+          Resource: "${UpdateSupporterProductDataLambda.Arn}"
+          End: True
+          {{> retry}}
     - StartAt: SendAcquisitionEvent
       States:
         SendAcquisitionEvent:
