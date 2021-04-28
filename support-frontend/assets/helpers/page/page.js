@@ -80,18 +80,20 @@ function buildInitialState(
   settings: Settings,
   acquisitionData: ReferrerAcquisitionData,
 ): CommonState {
+  // $FlowIgnore
+  const countryCode = (guardian && guardian.geoip && guardian.geoip.countryCode) || 'GB';
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
-
   let localCurrencyCountry;
+
   const localCurrencyCountryFromQuery = localCurrencyCountries[
     (getQueryParameter('local-currency-country') || '').toUpperCase()
   ];
 
   if (localCurrencyCountryFromQuery) {
     localCurrencyCountry = localCurrencyCountryFromQuery;
-  } else if (abParticipations['localCurrencyTest'] === 'variant') {
-    localCurrencyCountry = localCurrencyCountries[guardian.geoip.countryCode];
+  } else if (abParticipations.localCurrencyTest === 'variant') {
+    localCurrencyCountry = localCurrencyCountries[countryCode];
   }
 
   const internationalisation = {

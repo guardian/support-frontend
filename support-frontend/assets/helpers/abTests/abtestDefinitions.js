@@ -9,6 +9,8 @@ import type { Tests } from './abtest';
 // navigation from landing page to thank you page *won't* register any new
 // participations.
 
+// $FlowIgnore
+const countryCode = (guardian && guardian.geoip && guardian.geoip.countryCode) || 'GB';
 const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
@@ -74,7 +76,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    canRun: () => ['SE', 'CH', 'NO', 'DK'].includes(guardian.geoip.countryCode),
+    canRun: () => ['SE', 'CH', 'NO', 'DK'].includes(countryCode),
     isActive: true,
     referrerControlled: false,
     targetPage: allLandingPagesAndThankyouPages,
