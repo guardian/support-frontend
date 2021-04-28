@@ -18,6 +18,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { routes } from 'helpers/routes';
+import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -85,6 +86,11 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 // ----- Render ----- //
 function LandingPage() {
+  const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
+    threshold: 0.3,
+    debounce: true,
+  });
+
   const footer = (
     <div className="footer-container">
       <div className="footer-alignment">
@@ -106,14 +112,16 @@ function LandingPage() {
         <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
         <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
       }
-      {countryGroupId === AUDCountries ?
-        <ProductBlockAus
-          countryGroupId={countryGroupId}
-        /> :
-        <ProductBlock
-          countryGroupId={countryGroupId}
-        />
-      }
+      <div ref={setElementToObserve}>
+        {countryGroupId === AUDCountries ?
+          <ProductBlockAus
+            countryGroupId={countryGroupId}
+          /> :
+          <ProductBlock
+            countryGroupId={countryGroupId}
+          />
+        }
+      </div>
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />
@@ -124,7 +132,7 @@ function LandingPage() {
           <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
-      <FeedbackWidget />
+      <FeedbackWidget display={widgetShouldDisplay} />
     </Page>
   );
 

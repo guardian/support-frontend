@@ -163,7 +163,7 @@ const days = getWeeklyDays();
 
 function WeeklyCheckoutFormGifting(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const price = getProductPrice(props.productPrices, props.deliveryCountry, props.billingPeriod, fulfilmentOption);
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -171,7 +171,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
-  const paymentMethods = supportedPaymentMethods(props.billingCountry);
+  const paymentMethods = supportedPaymentMethods(props.deliveryCountry);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -337,7 +337,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
-                country={props.billingCountry}
+                country={props.deliveryCountry}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}
