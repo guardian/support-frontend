@@ -55,7 +55,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
-              productRatePlanName = "support-workers added Contribution",
+              productRatePlanName = s"support-workers added ${product.describe}",
             ))
       case SendThankYouEmailDigitalSubscriptionDirectPurchaseState(user, product, _, _, _, _, subscriptionNumber) =>
         catalogService
@@ -65,7 +65,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
-              productRatePlanName = "support-workers added Digital Subscription",
+              productRatePlanName = s"support-workers added ${product.describe}",
             ))
       case SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, _, subscriptionNumber) =>
         catalogService
@@ -75,7 +75,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
-              productRatePlanName = "support-workers added Gift Digital Subscription",
+              productRatePlanName = s"support-workers added ${product.describe}",
             ))
       case SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, subscriptionNumber, _) =>
         catalogService
@@ -85,7 +85,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
-              productRatePlanName = "support-workers added Guardian Weekly",
+              productRatePlanName = s"support-workers added ${product.describe}",
             ))
       case SendThankYouEmailGuardianWeeklyState(user, product, giftRecipient, _, _, _, _, subscriptionNumber, _) =>
         val readerType = if(giftRecipient.isDefined) Gift else Direct
@@ -96,7 +96,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
-              productRatePlanName = "support-workers added Guardian Weekly",
+              productRatePlanName = s"support-workers added ${product.describe}-$readerType",
             ))
       case SendThankYouEmailPaperState(user, product, _, _, _, _, subscriptionNumber, _) =>
         catalogService
@@ -106,7 +106,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
               subscriptionName = subscriptionNumber,
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
-              productRatePlanName = s"support-workers added ${product.productOptions.toString}",
+              productRatePlanName = s"support-workers added ${product.describe}",
             ))
       case _ => None
     }
