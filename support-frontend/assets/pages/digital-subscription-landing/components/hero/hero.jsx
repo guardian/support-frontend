@@ -106,26 +106,32 @@ function DigitalHero({
     >
       <CentredContainer>
         <Hero
-          image={showPriceCards ? <HeroPriceCards
-            priceList={priceList}
-            roundel={
-              <HeroRoundel cssOverrides={testEmbeddedRoundel} theme="digital">
+          image={showPriceCards ?
+            <HeroPriceCards
+              priceList={priceList}
+              roundel={
+                <HeroRoundel cssOverrides={testEmbeddedRoundel} theme="digital">
+                  {roundelText}
+                </HeroRoundel>}
+            /> : <GridImage
+              gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
+              srcSizes={[1000, 500, 140]}
+              sizes="(max-width: 480px) 200px,
+                (max-width: 740px) 100%,
+                (max-width: 1067px) 150%,
+                500px"
+              altText="Digital subscriptions"
+              imgType="png"
+            />
+          }
+          roundelElement={
+              orderIsAGift ? null :
+              <HeroRoundel
+                cssOverrides={showPriceCards ? testRoundelOverrides : ''}
+                theme={showPriceCards ? 'digital' : 'base'}
+              >
                 {roundelText}
-              </HeroRoundel>}
-          /> : <GridImage
-            gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
-            srcSizes={[1000, 500, 140]}
-            sizes="(max-width: 480px) 200px,
-            (max-width: 740px) 100%,
-            (max-width: 1067px) 150%,
-            500px"
-            altText="Digital subscriptions"
-            imgType="png"
-          />}
-          roundel={orderIsAGift ? null :
-          <HeroRoundel cssOverrides={showPriceCards ? testRoundelOverrides : ''} theme={showPriceCards ? 'digital' : 'base'}>
-            {roundelText}
-          </HeroRoundel>
+              </HeroRoundel>
           }
         >
           <section css={heroCopy}>

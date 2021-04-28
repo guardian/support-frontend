@@ -14,7 +14,9 @@ import {
   getAppliedPromo,
   hasDiscount,
   hasIntroductoryPrice,
+  type Promotion,
 } from 'helpers/productPrice/promotions';
+import type { Option } from 'helpers/types/option';
 
 const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(price)}`;
 
@@ -174,20 +176,24 @@ function getSimplifiedPriceDescription(
   return `${termPrepositon} ${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}`;
 }
 
+function getPriceForDescription(productPrice: ProductPrice, promotion: Option<Promotion>) {
+  if (promotion && promotion.introductoryPrice) {
+    return promotion.introductoryPrice.price;
+  }
+  if (promotion && promotion.discountedPrice) {
+    return promotion.discountedPrice;
+  }
+
+  return productPrice.price;
+}
+
 function getAdverbialSubscriptionDescription(
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
 ) {
   const glyph = shortGlyph(productPrice.currency);
   const promotion = getAppliedPromo(productPrice.promotions);
-  let { price } = productPrice;
-
-  if (promotion && promotion.introductoryPrice) {
-    // eslint-disable-next-line prefer-destructuring
-    price = promotion.introductoryPrice.price;
-  } else if (promotion && promotion.discountedPrice) {
-    price = promotion.discountedPrice;
-  }
+  const price = getPriceForDescription(productPrice, promotion);
 
   return `Subscribe ${billingPeriodAdverb(billingPeriod).toLowerCase()} for ${displayPrice(glyph, price)}`;
 }

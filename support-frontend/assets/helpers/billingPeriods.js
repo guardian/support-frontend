@@ -34,8 +34,6 @@ function billingPeriodAdverb(billingPeriod: BillingPeriod) {
       return 'Annually';
     case Quarterly:
       return 'Quarterly';
-    case SixWeekly:
-      return 'Six weekly';
     default:
       return 'Monthly';
   }

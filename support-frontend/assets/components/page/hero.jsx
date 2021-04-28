@@ -10,7 +10,8 @@ type PropTypes = {|
   image: Node,
   children: Node,
   cssOverrides?: string,
-  roundel?: Node,
+  // You can pass either text content for the roundel, or a whole instance of a HeroRoundel component
+  roundelElement?: Node,
   roundelText?: Node,
   roundelNudgeDirection?: RoundelNudgeDirection,
   hideRoundelBelow?: string,
@@ -27,7 +28,7 @@ function Hero({
   children,
   image,
   cssOverrides,
-  roundel,
+  roundelElement,
   roundelText,
   hideRoundelBelow,
   roundelNudgeDirection = 'up',
@@ -39,14 +40,14 @@ function Hero({
 
   return (
     <div css={[hero, cssOverrides]}>
-      {roundelText && !roundel &&
+      {roundelText && !roundelElement &&
         <div css={heroRoundelContainer}>
           <HeroRoundel cssOverrides={[nudgeCSS, hideRoundel]} theme={roundelTheme}>{roundelText}</HeroRoundel>
         </div>
       }
-      {!roundelText && roundel &&
+      {!roundelText && roundelElement &&
         <div css={heroRoundelContainer}>
-          {roundel}
+          {roundelElement}
         </div>
       }
       <div css={useOffset ? roundelOffset : ''}>
@@ -61,7 +62,7 @@ function Hero({
 
 Hero.defaultProps = {
   cssOverrides: '',
-  roundel: null,
+  roundelElement: null,
   roundelText: null,
   roundelNudgeDirection: 'up',
   hideRoundelBelow: '',
