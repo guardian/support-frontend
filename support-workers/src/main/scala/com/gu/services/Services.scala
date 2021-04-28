@@ -46,13 +46,11 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
   lazy val bigQueryService = new BigQueryService(bigQueryConfigProvider.get(isTestUser))
-  val supporterDynamoStage = Configuration.stage match {
-    case DEV if isTestUser => DynamoStageUAT
-    case DEV => DynamoStageDEV
-    case CODE if isTestUser => DynamoStageUAT
-    case CODE => DynamoStageDEV
-    case PROD if isTestUser => DynamoStageUAT
-    case PROD => DynamoStagePROD
+  val supporterDynamoStage = (Configuration.stage, isTestUser) match {
+    case (DEV, false) => DynamoStageDEV
+    case (CODE, false) => DynamoStageDEV
+    case (PROD, false) => DynamoStagePROD
+    case (_, true) => DynamoStageUAT
   }
   lazy val supporterDataDynamoService = SupporterDataDynamoService(supporterDynamoStage)
 }
