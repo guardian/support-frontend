@@ -2,17 +2,18 @@
 
 import type { IsoCountry } from './country';
 import type { IsoCurrency } from './currency';
-import type { ContributionAmounts } from '../contributions';
+import type { Config, ContributionAmounts } from '../contributions';
 
 export type LocalCurrencyCountry = {
   countryCode: IsoCountry,
   countryName: string,
   currency: IsoCurrency,
   amounts: ContributionAmounts,
+  config: Config,
 };
 
 export const localCurrencyCountries: {
-  [?string]: LocalCurrencyCountry
+  [?IsoCountry]: LocalCurrencyCountry
 } = {
   SE: {
     countryCode: 'SE',
@@ -22,6 +23,15 @@ export const localCurrencyCountries: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
         defaultAmount: 50,
+      },
+    },
+    config: {
+      ONE_OFF: {
+        min: 10,
+        minInWords: 'ten',
+        max: 23_000,
+        maxInWords: 'twenty three thousand',
+        default: 50,
       },
     },
   },
@@ -35,6 +45,15 @@ export const localCurrencyCountries: {
         defaultAmount: 5,
       },
     },
+    config: {
+      ONE_OFF: {
+        min: 2,
+        minInWords: 'two',
+        max: 2_200,
+        maxInWords: 'two thousand and two hundred',
+        default: 5,
+      },
+    },
   },
   NO: {
     countryCode: 'NO',
@@ -46,6 +65,15 @@ export const localCurrencyCountries: {
         defaultAmount: 50,
       },
     },
+    config: {
+      ONE_OFF: {
+        min: 10,
+        minInWords: 'ten',
+        max: 23_000,
+        maxInWords: 'twenty three thousand',
+        default: 50,
+      },
+    },
   },
   DK: {
     countryCode: 'DK',
@@ -55,6 +83,15 @@ export const localCurrencyCountries: {
       ONE_OFF: {
         amounts: [50, 100, 150, 200],
         defaultAmount: 50,
+      },
+    },
+    config: {
+      ONE_OFF: {
+        min: 10,
+        minInWords: 'ten',
+        max: 23_000,
+        maxInWords: 'twenty three thousand',
+        default: 50,
       },
     },
   },

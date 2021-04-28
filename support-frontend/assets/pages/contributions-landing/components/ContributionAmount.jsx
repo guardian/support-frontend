@@ -20,6 +20,7 @@ import { selectAmount, updateOtherAmount } from '../contributionsLandingActions'
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { TextInput } from '@guardian/src-text-input';
+import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
 
@@ -34,6 +35,8 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
+  localCurrencyCountry: ?LocalCurrencyCountry,
+  useLocalCurrency: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -47,6 +50,8 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -75,7 +80,9 @@ const renderEmptyAmount = (id: string) => (
 function withProps(props: PropTypes) {
   const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
+  const { min, max } = (props.useLocalCurrency && props.localCurrencyCountry)
+    ? props.localCurrencyCountry.config[props.contributionType]
+    : config[props.countryGroupId][props.contributionType];
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], min, false);
   const maxAmount: string =
@@ -88,7 +95,13 @@ function withProps(props: PropTypes) {
   const canShowOtherAmountErrorMessage =
     checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount;
   const otherAmountErrorMessage: string | null =
-    canShowOtherAmountErrorMessage && !amountIsValid(otherAmount || '', props.countryGroupId, props.contributionType) ?
+    canShowOtherAmountErrorMessage && !amountIsValid(
+      otherAmount || '',
+      props.countryGroupId,
+      props.contributionType,
+      props.localCurrencyCountry,
+      props.useLocalCurrency,
+    ) ?
       `Please provide an amount between ${minAmount} and ${maxAmount}` :
       null;
 
