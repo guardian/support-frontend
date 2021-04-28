@@ -21,6 +21,7 @@ import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import {
   detect as detectCountry,
+  fromGeolocation as countryFromGeolocation,
   type IsoCountry,
 } from 'helpers/internationalisation/country';
 import {
@@ -80,7 +81,6 @@ function buildInitialState(
   settings: Settings,
   acquisitionData: ReferrerAcquisitionData,
 ): CommonState {
-  const countryCode = (window.guardian && window.guardian.geoip && window.guardian.geoip.countryCode) || 'GB';
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   let localCurrencyCountry;
@@ -92,7 +92,9 @@ function buildInitialState(
   if (localCurrencyCountryFromQuery) {
     localCurrencyCountry = localCurrencyCountryFromQuery;
   } else if (abParticipations.localCurrencyTest === 'variant') {
-    localCurrencyCountry = localCurrencyCountries[countryCode];
+    localCurrencyCountry = localCurrencyCountries[
+      countryFromGeolocation() || 'GB'
+    ];
   }
 
   const internationalisation = {

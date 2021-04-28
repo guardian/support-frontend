@@ -9,7 +9,6 @@ import type { Tests } from './abtest';
 // navigation from landing page to thank you page *won't* register any new
 // participations.
 
-const countryCode = (window.guardian && window.guardian.geoip && window.guardian.geoip.countryCode) || 'GB';
 const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
 const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
 export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
@@ -70,12 +69,23 @@ export const tests: Tests = {
       },
     ],
     audiences: {
-      DE: {
+      SE: {
+        offset: 0,
+        size: 1,
+      },
+      CH: {
+        offset: 0,
+        size: 1,
+      },
+      NO: {
+        offset: 0,
+        size: 1,
+      },
+      DK: {
         offset: 0,
         size: 1,
       },
     },
-    canRun: () => ['SE', 'CH', 'NO', 'DK'].includes(countryCode),
     isActive: true,
     referrerControlled: false,
     targetPage: allLandingPagesAndThankyouPages,
