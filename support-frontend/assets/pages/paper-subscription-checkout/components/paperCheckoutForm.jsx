@@ -183,7 +183,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const deliveryTitle = isHomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your subscription card?';
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
-  const paymentMethods = supportedPaymentMethods(props.country);
+  const paymentMethods = supportedPaymentMethods(props.currencyId);
   const isSubscriptionCard = props.fulfilmentOption === Collection;
   let formattedStartDate = '';
   if (isSubscriptionCard) {
@@ -377,7 +377,7 @@ function PaperCheckoutForm(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection cssOverrides={removeTopBorder} title="How would you like to pay?">
               <PaymentMethodSelector
-                country="GB"
+                currencyId="GBP"
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}
