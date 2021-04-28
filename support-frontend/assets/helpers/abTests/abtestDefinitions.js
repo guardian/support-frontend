@@ -58,4 +58,37 @@ export const tests: Tests = {
     targetPage: allLandingPagesAndThankyouPages,
     seed: 18,
   },
+
+  localCurrencyTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      SE: {
+        offset: 0,
+        size: 1,
+      },
+      CH: {
+        offset: 0,
+        size: 1,
+      },
+      NO: {
+        offset: 0,
+        size: 1,
+      },
+      DK: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: allLandingPagesAndThankyouPages,
+    seed: 0,
+  },
 };
