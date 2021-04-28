@@ -13,6 +13,9 @@ import { fixDecimals } from 'helpers/subscriptions';
 import {
   type Product,
 } from 'components/product/productOption';
+import {
+  type ProductSmall,
+} from 'components/product/productOptionSmall';
 
 import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
 import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
@@ -26,6 +29,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
+import { getPriceDescription, getAdverbialSubscriptionDescription } from 'helpers/productPrice/priceDescriptions';
 
 import { type PropTypes } from '../paymentSelection';
 
@@ -113,6 +117,47 @@ const BILLING_PERIOD_GIFT = {
   },
 };
 
+const getHeroCtaProps = (
+  productPrices: ProductPrices,
+  currencyId: IsoCurrency,
+  countryGroupId: CountryGroupId,
+): ProductSmall[] => {
+  const productOptions = getProductOptions(productPrices, countryGroupId);
+
+  const createPaymentOption = (billingPeriod: BillingPeriod): ProductSmall => {
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+    const productPrice = getProductPrice(productOptions, billingPeriod, currencyId);
+    const promotion = getAppliedPromo(productPrice.promotions);
+    const promoCode = promotion ? promotion.promoCode : null;
+    const offerCopy = promotion &&
+    promotion.landingPage &&
+    promotion.landingPage.roundel ? promotion.landingPage.roundel :
+      BILLING_PERIOD[digitalBillingPeriod].offer;
+    const trackingProperties = {
+      id: `subscribe_now_cta_hero-${billingPeriod}`,
+      product: 'DigitalPack',
+      componentType: 'ACQUISITIONS_BUTTON',
+    };
+
+    return {
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, false),
+      onClick: sendTrackingEventsOnClick(trackingProperties),
+      priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
+      offerCopy,
+      buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
+    };
+  };
+
+  return Object.keys(productOptions).sort((optA, optB) => {
+    if (optA === 'Annual') {
+      return 1;
+    } else if (optB === 'Annual') {
+      return -1;
+    }
+    return 0;
+  }).map(createPaymentOption);
+};
+
 // state
 const mapStateToProps = (state: State): PropTypes => {
   const { productPrices, orderIsAGift } = state.page;
@@ -169,5 +214,6 @@ const mapStateToProps = (state: State): PropTypes => {
 };
 
 export {
+  getHeroCtaProps,
   mapStateToProps,
 };

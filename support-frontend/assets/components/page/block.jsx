@@ -8,6 +8,7 @@ import { from } from '@guardian/src-foundations/mq';
 
 type PropTypes = {|
   children: Node;
+  cssOverrides?: string;
 |};
 
 const block = css`
@@ -25,10 +26,14 @@ const block = css`
 
 function Block(props: PropTypes) {
   return (
-    <div css={block}>
+    <div css={[block, props.cssOverrides]}>
       {props.children}
     </div>
   );
 }
+
+Block.defaultProps = {
+  cssOverrides: '',
+};
 
 export default Block;

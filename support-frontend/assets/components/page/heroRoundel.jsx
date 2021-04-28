@@ -8,7 +8,7 @@ import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
-export const roundelSizeMob = 120;
+export const roundelSizeMob = 100;
 export const roundelSize = 180;
 
 
@@ -52,7 +52,7 @@ const roundelDigital = css`
   border: 2px solid ${brandAlt[400]};
 `;
 
-type RoundelTheme = 'base' | 'digital';
+export type RoundelTheme = 'base' | 'digital';
 
 type PropTypes = {|
   children: Node,
