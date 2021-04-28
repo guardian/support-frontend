@@ -118,7 +118,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
       gifteeIdentityId = None,
       productRatePlanId = productRatePlanId,
       productRatePlanName = productRatePlanName,
-      termEndDate = LocalDate.now.plusYears(1),
+      termEndDate = LocalDate.now.plusWeeks(1),
       contractEffectiveDate = LocalDate.now
     )
 
