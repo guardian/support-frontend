@@ -82,9 +82,17 @@ function buildInitialState(
 ): CommonState {
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
-  const localCurrencyCountry = localCurrencyCountries[
+
+  let localCurrencyCountry;
+  const localCurrencyCountryFromQuery = localCurrencyCountries[
     (getQueryParameter('local-currency-country') || '').toUpperCase()
   ];
+
+  if (localCurrencyCountryFromQuery) {
+    localCurrencyCountry = localCurrencyCountryFromQuery;
+  } else if (abParticipations['localCurrencyTest'] === 'variant') {
+    localCurrencyCountry = localCurrencyCountries[guardian.geoip.countryCode];
+  }
 
   const internationalisation = {
     countryGroupId,

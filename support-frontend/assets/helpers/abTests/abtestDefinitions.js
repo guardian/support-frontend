@@ -69,23 +69,12 @@ export const tests: Tests = {
       },
     ],
     audiences: {
-      SE: {
-        offset: 0,
-        size: 1,
-      },
-      CH: {
-        offset: 0,
-        size: 1,
-      },
-      NO: {
-        offset: 0,
-        size: 1,
-      },
-      DK: {
+      DE: {
         offset: 0,
         size: 1,
       },
     },
+    canRun: () => ['SE', 'CH', 'NO', 'DK'].includes(guardian.geoip.countryCode),
     isActive: true,
     referrerControlled: false,
     targetPage: allLandingPagesAndThankyouPages,
