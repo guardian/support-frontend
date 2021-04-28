@@ -2,7 +2,7 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.lambdas.FetchResultsLambda.fetchResults
-import com.gu.model.StageHelpers
+import com.gu.model.StageConstructors
 import com.gu.model.states.{FetchResultsState, UpdateDynamoState}
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -17,7 +17,7 @@ import scala.concurrent.duration.DurationInt
 
 class FetchResultsLambda extends Handler[FetchResultsState, UpdateDynamoState] {
   override protected def handlerFuture(input: FetchResultsState, context: Context) =
-    fetchResults(StageHelpers.fromEnvironment, input.jobId, input.attemptedQueryTime)
+    fetchResults(StageConstructors.fromEnvironment, input.jobId, input.attemptedQueryTime)
 }
 
 object FetchResultsLambda extends StrictLogging{

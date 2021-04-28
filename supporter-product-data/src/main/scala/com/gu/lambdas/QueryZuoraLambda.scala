@@ -2,7 +2,7 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.lambdas.QueryZuoraLambda.queryZuora
-import com.gu.model.StageHelpers
+import com.gu.model.StageConstructors
 import com.gu.model.states.{FetchResultsState, QueryType, QueryZuoraState}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ConfigService, ZuoraQuerierService}
@@ -16,7 +16,7 @@ import scala.concurrent.duration._
 class QueryZuoraLambda extends Handler[QueryZuoraState, FetchResultsState] {
 
   override protected def handlerFuture(input: QueryZuoraState, context: Context) =
-    queryZuora(StageHelpers.fromEnvironment, input.queryType)
+    queryZuora(StageConstructors.fromEnvironment, input.queryType)
 
 }
 

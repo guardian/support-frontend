@@ -3,7 +3,7 @@ package com.gu.model
 import com.gu.supporterdata.model.Stage
 import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
 
-object StageHelpers {
+object StageConstructors {
 
   def fromString(str: String): Option[Stage] =
     List(DEV, UAT, PROD)
