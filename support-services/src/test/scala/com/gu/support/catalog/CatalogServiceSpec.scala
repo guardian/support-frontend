@@ -12,8 +12,22 @@ import org.scalatest.matchers.should.Matchers
 
 class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
 
+  def getPrice[T <: Product](
+    product: T,
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: ProductOptions
+  ): Option[Price] = {
+    for {
+      productRatePlan <- product.getProductRatePlan(PROD, billingPeriod, fulfilmentOptions, productOptions)
+      priceList <- serviceWithFixtures.getPriceList(productRatePlan)
+      price <- priceList.prices.find(_.currency == currency)
+    } yield price
+  }
+
   "CatalogService" should "load the catalog" in {
-    serviceWithFixtures.getPrice(
+    getPrice(
       DigitalPack,
       GBP,
       Monthly,
@@ -21,7 +35,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       NoProductOptions
     ) shouldBe Some(Price(11.99, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       Paper,
       GBP,
       Monthly,
@@ -29,7 +43,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Everyday
     ) shouldBe Some(Price(67.99, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       Paper,
       GBP,
       Monthly,
@@ -37,7 +51,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Sixday
     ) shouldBe Some(Price(57.99, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       GuardianWeekly,
       GBP,
       Quarterly,
@@ -45,7 +59,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       NoProductOptions
     ) shouldBe Some(Price(37.50, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       GuardianWeekly,
       USD,
       Annual,

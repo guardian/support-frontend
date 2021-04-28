@@ -1,7 +1,6 @@
 package com.gu.support.catalog
 
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
-import com.gu.i18n.Currency
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.{Annual, BillingPeriod, Quarterly, SixWeekly}
 import com.gu.support.zuora.api.ReaderType
@@ -80,22 +79,6 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     )
     (product.ratePlans(environment) ++ legacyDigitalGiftRatePlans).find(_.id == id)
   }
-
-  def getPrice[T <: Product](
-    product: T,
-    currency: Currency,
-    billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions,
-    readerType: ReaderType = Direct
-  ): Option[Price] = {
-    for {
-      productRatePlan <- product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions, readerType)
-      priceList <- getPriceList(productRatePlan)
-      price <- priceList.prices.find(_.currency == currency)
-    } yield price
-  }
-
 
   def getPriceList[T <: Product](productRatePlan: ProductRatePlan[T]): Option[Pricelist] =
     catalog.flatMap(_.prices.find(_.productRatePlanId == productRatePlan.id))
