@@ -21,7 +21,6 @@ import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import {
   detect as detectCountry,
-  fromGeolocation as countryFromGeolocation,
   type IsoCountry,
 } from 'helpers/internationalisation/country';
 import {
@@ -29,7 +28,7 @@ import {
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions, getQueryParameter } from 'helpers/url';
-import type { CommonState } from 'helpers/page/commonReducer';
+import type { CommonState, Internationalisation } from 'helpers/page/commonReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
 import {
   getCampaign,
@@ -46,6 +45,7 @@ import { isPostDeployUser } from 'helpers/user/user';
 import { getAmounts } from 'helpers/abTests/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
+import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 if (process.env.NODE_ENV === 'DEV') {
   // $FlowIgnore
@@ -72,6 +72,22 @@ function analyticsInitialisation(participations: Participations, acquisitionData
   logger.init();
 }
 
+function getLocalCurrencyCountry(
+  countryId: IsoCountry,
+  abParticipations: Participations,
+): ?LocalCurrencyCountry {
+  const queryParam = getQueryParameter('local-currency-country');
+  if (queryParam) {
+    return localCurrencyCountries[queryParam.toUpperCase()];
+  }
+
+  if (abParticipations.localCurrencyTest === 'variant') {
+    return localCurrencyCountries[countryId];
+  }
+
+  return null;
+}
+
 // Creates the initial state for the common reducer.
 function buildInitialState(
   abParticipations: Participations,
@@ -83,28 +99,19 @@ function buildInitialState(
 ): CommonState {
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
-  let localCurrencyCountry;
+  const localCurrencyCountry = getLocalCurrencyCountry(countryId, abParticipations);
 
-  const localCurrencyCountryFromQuery = localCurrencyCountries[
-    (getQueryParameter('local-currency-country') || '').toUpperCase()
-  ];
-
-  if (localCurrencyCountryFromQuery) {
-    localCurrencyCountry = localCurrencyCountryFromQuery;
-  } else if (abParticipations.localCurrencyTest === 'variant') {
-    localCurrencyCountry = localCurrencyCountries[
-      countryFromGeolocation() || 'GB'
-    ];
-  }
-
-  const internationalisation = {
+  const internationalisation: Internationalisation = {
     countryGroupId,
     countryId,
     currencyId,
     useLocalCurrency: false,
     defaultCurrency: currencyId,
-    localCurrencyCountry,
   };
+
+  if (localCurrencyCountry) {
+    internationalisation.localCurrencyCountry = localCurrencyCountry;
+  }
 
   const amounts = getAmounts(settings, abParticipations, countryGroupId);
 
