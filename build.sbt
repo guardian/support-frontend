@@ -207,8 +207,6 @@ lazy val `support-internationalisation` = (project in file("support-internationa
 lazy val `acquisition-event-producer` = (project in file("acquisition-event-producer"))
   .settings(
     licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
-    bintrayOrganization := Some("guardian"),
-    bintrayRepository := "ophan",
     publishMavenStyle := true,
     scalacOptions += "-Ymacro-annotations",
     libraryDependencies ++= Seq(
