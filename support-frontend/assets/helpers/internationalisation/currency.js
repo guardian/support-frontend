@@ -8,6 +8,7 @@ import {
   type CountryGroup,
   type CountryGroupId,
   countryGroups,
+  fromCountry,
 } from './countryGroup';
 import type { IsoCountry } from './country';
 
@@ -179,14 +180,9 @@ function fromString(s: string): ?IsoCurrency {
   }
 }
 
-function localCurrencyFromCountryCode(countryCode: IsoCountry): ?IsoCurrency {
-  switch (countryCode.toLowerCase()) {
-    case 'se': return 'SEK';
-    case 'ch': return 'CHF';
-    case 'no': return 'NOK';
-    case 'dk': return 'DKK';
-    default: return null;
-  }
+function currencyFromCountryCode(countryCode: IsoCountry): ?IsoCurrency {
+  const countryGroupId = fromCountry(countryCode);
+  return countryGroupId ? fromCountryGroupId(countryGroupId) : null;
 }
 
 function fromQueryParameter(): ?IsoCurrency {
@@ -212,7 +208,7 @@ export {
   detect,
   spokenCurrencies,
   fromCountryGroupId,
-  localCurrencyFromCountryCode,
+  currencyFromCountryCode,
   currencies,
   glyph,
   extendedGlyph,
