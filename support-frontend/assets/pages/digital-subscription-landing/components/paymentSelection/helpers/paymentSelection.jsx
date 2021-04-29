@@ -8,6 +8,7 @@ import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/sub
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // types
 import {
@@ -139,9 +140,19 @@ const getHeroCtaProps = (
       componentType: 'ACQUISITIONS_BUTTON',
     };
 
+    const onClick = () => {
+      gaEvent({
+        category: 'click',
+        action: 'DigitalPack',
+        label: trackingProperties.id,
+      });
+
+      sendTrackingEventsOnClick(trackingProperties)();
+    };
+
     return {
       href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, false),
-      onClick: sendTrackingEventsOnClick(trackingProperties),
+      onClick,
       priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
       offerCopy,
       buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
@@ -183,12 +194,22 @@ const mapStateToProps = (state: State): PropTypes => {
       componentType: 'ACQUISITIONS_BUTTON',
     };
 
+    const onClick = () => {
+      gaEvent({
+        category: 'click',
+        action: 'DigitalPack',
+        label: trackingProperties.id,
+      });
+
+      sendTrackingEventsOnClick(trackingProperties)();
+    };
+
     return orderIsAGift ?
       {
         title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
         price: getDisplayPrice(currencyId, fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: sendTrackingEventsOnClick(trackingProperties),
+        onClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(),
         offerCopy: '',
@@ -199,7 +220,7 @@ const mapStateToProps = (state: State): PropTypes => {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
         price: getDisplayPrice(currencyId, getFirstValidPrice(promotionalPrice, fullPrice)),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: sendTrackingEventsOnClick(trackingProperties),
+        onClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
         offerCopy,
