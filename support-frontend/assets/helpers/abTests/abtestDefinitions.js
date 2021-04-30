@@ -42,30 +42,6 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.notUkLandingPage,
     seed: 2,
   },
-
-  thankyouPageMarketingConsentTestR3: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'v1',
-      },
-      {
-        id: 'v2',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-    seed: 18,
-  },
   priceCardsInHeroTest: {
     variants: [
       {
