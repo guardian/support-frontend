@@ -90,17 +90,19 @@ object UpdateSupporterProductData {
           .toRight(())
           .map(Some(_))
       case SendThankYouEmailDigitalSubscriptionGiftRedemptionState(user, product, subscriptionNumber, _) =>
-        catalogService
-          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Gift)
-          .map(productRatePlan =>
-            supporterRatePlanItem(
-              subscriptionName = subscriptionNumber,
-              identityId = user.id,
-              productRatePlanId = productRatePlan.id,
-              productRatePlanName = s"support-workers added ${product.describe}",
-            ))
-          .toRight(())
-          .map(Some(_))
+//        catalogService
+//          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Gift)
+//          .map(productRatePlan =>
+//            supporterRatePlanItem(
+//              subscriptionName = subscriptionNumber,
+//              identityId = user.id,
+//              productRatePlanId = productRatePlan.id,
+//              productRatePlanName = s"support-workers added ${product.describe}",
+//            ))
+//          .toRight(())
+//          .map(Some(_))
+//      TODO: Fix this for gift redemptions
+        Right(None)
       case SendThankYouEmailGuardianWeeklyState(user, product, giftRecipient, _, _, _, _, subscriptionNumber, _) =>
         val readerType = if(giftRecipient.isDefined) Gift else Direct
         catalogService
