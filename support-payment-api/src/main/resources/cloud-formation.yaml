@@ -274,6 +274,13 @@ Resources:
                     !Sub arn:aws:s3:::support-admin-console/*/*,
                     !Sub arn:aws:s3:::support-admin-console/CODE/*
                   ]
+        - PolicyName: s3Deploy
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action: s3:GetObject
+              Resource:
+                - arn:aws:s3::*:membership-dist/*
 
   DescribeEC2Policy:
     Type: AWS::IAM::Policy
