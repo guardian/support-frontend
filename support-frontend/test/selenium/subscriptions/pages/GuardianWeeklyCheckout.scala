@@ -11,25 +11,25 @@ class GuardianWeeklyCheckout(implicit val webDriver: WebDriver) extends Checkout
   private val deliveryCity = id("delivery-city")
   private val deliveryPostcode = id("delivery-postcode")
   private val deliveryCountry = id("delivery-country")
-  private val deliveryState = id("delivery-stateProvince")
 
   private val billingAddressIsDifferent = id("qa-billing-address-different")
   private val billingLineOne = id("billing-lineOne")
   private val billingCity = id("billing-city")
+  private val billingState = id("billing-stateProvince")
   private val billingPostcode = id("billing-postcode")
   private val billingCountry = id("billing-country")
 
   def fillForm {
-    setValue(deliveryCountry, "India")
-    setValue(deliveryLineOne, "Red Fort")
-    setValue(deliveryCity, "New Delhi")
-    setValue(deliveryState, "Delhi")
-    setValue(deliveryPostcode, "110006")
+    setValue(deliveryCountry, "United Kingdom")
+    setValue(deliveryLineOne, "Kings Place")
+    setValue(deliveryCity, "London")
+    setValue(deliveryPostcode, "N19GU")
     clickOn(billingAddressIsDifferent)
-    setValue(billingCountry, "United Kingdom")
-    setValue(billingLineOne, "Kings Place")
-    setValue(billingCity, "London")
-    setValue(billingPostcode, "N19GU")
+    setValue(billingCountry, "India")
+    setValue(billingLineOne, "Red Fort")
+    setValue(billingCity, "New Delhi")
+    setValue(billingState, "Delhi")
+    setValue(billingPostcode, "110006")
   }
 
 }

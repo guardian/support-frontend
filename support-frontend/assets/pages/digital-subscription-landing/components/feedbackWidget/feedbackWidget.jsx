@@ -3,23 +3,27 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 
 import { Button, LinkButton, buttonBrand } from '@guardian/src-button';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { clickedCss, wrapper, widgetTitle, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
+import { clickedCss, hideWidget, wrapper, widgetTitle, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
 import { SvgThumbsUp } from './thumbsUp';
 import { SvgThumbsDown } from './thumbsDown';
 
-function FeedbackWidget() {
-
+function FeedbackWidget({ display }: { display: boolean }) {
+  const [showWidget, setShowWidget] = useState<boolean>(display);
   const [clicked, setClicked] = useState({ positive: false, negative: false, open: false });
   const positiveButtonCss = clicked.positive ? clickedCss : null;
   const negativeButtonCss = clicked.negative ? clickedCss : null;
 
+  useEffect(() => {
+    setShowWidget(display);
+  }, [display]);
+
   return (
-    <aside css={wrapper}>
+    <aside css={[wrapper, showWidget ? '' : hideWidget]}>
       <fieldset role="group" >
         <div css={header}>
           <p css={widgetTitle}>
@@ -35,14 +39,15 @@ function FeedbackWidget() {
                 icon={<SvgThumbsUp />}
                 cssOverrides={[positiveButtonCss, buttonStyles]}
                 onClick={() => {
-              sendTrackingEventsOnClick({
-                id: 'ds_landing_page_survey_positive',
-                product: 'DigitalPack',
-                componentType: 'SURVEYS_QUESTIONS',
-              })();
+                  sendTrackingEventsOnClick({
+                    id: 'ds_landing_page_survey_positive',
+                    product: 'DigitalPack',
+                    componentType: 'SURVEYS_QUESTIONS',
+                  })();
 
-              setClicked({ positive: true, negative: false });
-            }}
+                  setClicked({ positive: true, negative: false });
+                  setShowWidget(false);
+                }}
               />
             </ThemeProvider>
             <ThemeProvider theme={buttonBrand}>
@@ -54,14 +59,14 @@ function FeedbackWidget() {
                 icon={<SvgThumbsDown />}
                 cssOverrides={[negativeButtonCss, buttonStyles]}
                 onClick={() => {
-              sendTrackingEventsOnClick({
-                id: 'ds_landing_page_survey_negative',
-                product: 'DigitalPack',
-                componentType: 'SURVEYS_QUESTIONS',
-              })();
+                  sendTrackingEventsOnClick({
+                    id: 'ds_landing_page_survey_negative',
+                    product: 'DigitalPack',
+                    componentType: 'SURVEYS_QUESTIONS',
+                  })();
 
-              setClicked({ positive: false, negative: true, open: !clicked.open });
-            }}
+                  setClicked({ positive: false, negative: true, open: !clicked.open });
+                }}
               />
             </ThemeProvider>
           </span>
@@ -79,6 +84,7 @@ function FeedbackWidget() {
               href="https://www.surveymonkey.co.uk/r/63XM7CX"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => setShowWidget(false)}
             >
               Tell us what you think
             </LinkButton>

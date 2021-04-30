@@ -12,6 +12,7 @@ import PaymentSelection
 const pricesSection = css`
   padding: 0 ${space[3]}px ${space[12]}px;
 `;
+
 const priceBoxes = css`
   margin-top: ${space[6]}px;
   justify-content: flex-start;
@@ -42,8 +43,9 @@ const ctaCopy = {
   },
 };
 
-function Prices({ orderIsAGift }: { orderIsAGift: boolean }) {
+function Prices({ orderIsAGift }: { orderIsAGift: boolean}) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
+
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>{copy.title}</h2>

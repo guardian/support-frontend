@@ -1,8 +1,8 @@
 package com.gu.services
 
-import com.gu.model.FieldsToExport._
-import com.gu.model.Stage
-import com.gu.model.Stage.{DEV, PROD}
+import com.gu.model.ZuoraFieldNames._
+import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -13,11 +13,11 @@ object SelectActiveRatePlansQuery {
 
   val isNotDSGift = "(Subscription.RedemptionCode__c = '' OR Subscription.RedemptionCode__c is null)"
   // _% in a like clause checks that the field has at least one character ie. not '' or null
-  val isRedeemedDSGift = s"(Subscription.RedemptionCode__c like '_%' AND ${gifteeIdentityId.zuoraName} like '_%')"
+  val isRedeemedDSGift = s"(Subscription.RedemptionCode__c like '_%' AND $gifteeIdentityId like '_%')"
 
   def excludeDiscountProductRatePlans(discountProductRatePlanIds: List[String]) =
     discountProductRatePlanIds
-      .map(id => s"${productRatePlanId.zuoraName} != '$id'")
+      .map(id => s"$productRatePlanId != '$id'")
       .mkString(" AND\n")
 
   /* -------- Notes on this query -----------
@@ -54,24 +54,24 @@ object SelectActiveRatePlansQuery {
 
   def query(discountProductRatePlanIds: List[String]): String =
     s"""SELECT
-          ${subscriptionName.zuoraName},
+          $subscriptionName,
           Subscription.Version,
-          ${identityId.zuoraName},
-          ${gifteeIdentityId.zuoraName},
-          ${productRatePlanId.zuoraName},
-          ${productRatePlanName.zuoraName},
-          ${contractEffectiveDate.zuoraName},
-          ${termEndDate.zuoraName},
-          ${subscriptionStatus.zuoraName}
+          $identityId,
+          $gifteeIdentityId,
+          $productRatePlanId,
+          $productRatePlanName,
+          $contractEffectiveDate,
+          $termEndDate,
+          $subscriptionStatus
             FROM
             rateplan
             WHERE
-            (${subscriptionStatus.zuoraName} = 'Active' OR ${subscriptionStatus.zuoraName} = 'Cancelled') AND
+            ($subscriptionStatus = 'Active' OR $subscriptionStatus = 'Cancelled') AND
             (RatePlan.AmendmentType is null OR RatePlan.AmendmentType = 'NewProduct' OR RatePlan.AmendmentType = 'UpdateProduct') AND
             ${excludeDiscountProductRatePlans(discountProductRatePlanIds)} AND
-            ${identityId.zuoraName} like '_%' AND
+            $identityId like '_%' AND
             ($isNotDSGift OR $isRedeemedDSGift)
-          ORDER BY ${identityId.zuoraName}, ${contractEffectiveDate.zuoraName}, ${subscriptionName.zuoraName}, Subscription.Version
+          ORDER BY $identityId, $contractEffectiveDate, $subscriptionName, Subscription.Version
     """
 
 }

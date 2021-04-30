@@ -26,17 +26,25 @@ type PropTypes = {|
 function TermsPrivacy(props: PropTypes) {
   const terms = <a href={contributionsTermsLinks[props.countryGroupId]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
-  const regionalAmounts = {
-    GBP: 100,
-    USD: 135,
-    EUR: 117,
-    AUD: 185,
-    CAD: 167,
-    NZD: 200,
+
+  const gbpAmount = 100;
+  const regionalAmount = (isoCurrency: IsoCurrency): ?number => {
+    switch (isoCurrency) {
+      case 'GBP': return gbpAmount;
+      case 'USD': return 135;
+      case 'EUR': return 117;
+      case 'AUD': return 185;
+      case 'CAD': return 167;
+      case 'NZD': return 200;
+      default: return null;
+    }
   };
+
   const getRegionalAmountString = (): string => {
     const currency: IsoCurrency = fromCountryGroupId(props.countryGroupId) || 'GBP';
-    return `${currencies[currency].glyph}${regionalAmounts[currency]}`;
+    const regionalPatronageAmount = regionalAmount(currency) || gbpAmount;
+
+    return `${currencies[currency].glyph}${regionalPatronageAmount}`;
   };
 
   const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;

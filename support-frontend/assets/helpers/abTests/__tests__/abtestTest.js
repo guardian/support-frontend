@@ -10,7 +10,9 @@ import {
 } from '../abtest';
 import type { Participations } from '../abtest';
 import { GBPCountries, UnitedStates } from '../../internationalisation/countryGroup';
-import { subsShowcaseAndDigiSubPages } from 'helpers/abTests/abtestDefinitions';
+import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
+
+const { subsShowcaseAndDigiSubPages } = pageUrlRegexes.subscriptions;
 
 jest.mock('ophan', () => ({
   record: () => null,

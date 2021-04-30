@@ -115,14 +115,12 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/"
-          render={() => contributionsLandingPage()
-          }
+          render={() => contributionsLandingPage()}
         />
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
-          render={props => contributionsLandingPage(props.match.params.campaignCode)
-          }
+          render={props => contributionsLandingPage(props.match.params.campaignCode)}
         />
         <Route
           exact

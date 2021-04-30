@@ -2,10 +2,12 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
-import com.gu.model.Stage
-import com.gu.model.dynamo.SupporterRatePlanItem
+import com.gu.model.StageConstructors
+import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.states.UpdateDynamoState
-import com.gu.services.{AlarmService, ConfigService, DynamoDBService, S3Service}
+import com.gu.services.{AlarmService, ConfigService, S3Service}
+import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
+import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.syntax.EncoderOps
 import kantan.csv._
@@ -26,7 +28,7 @@ class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
 
 class UpdateDynamoLambda extends Handler[UpdateDynamoState, UpdateDynamoState] {
   override protected def handlerFuture(input: UpdateDynamoState, context: Context) = {
-    writeToDynamo(Stage.fromEnvironment, input, new ContextTimeOutCheck(context))
+    writeToDynamo(StageConstructors.fromEnvironment, input, new ContextTimeOutCheck(context))
   }
 }
 
@@ -39,7 +41,7 @@ object UpdateDynamoLambda extends StrictLogging {
 
     val s3Object = S3Service.streamFromS3(stage, state.filename)
     val csvReader = s3Object.getObjectContent.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
-    val dynamoDBService = DynamoDBService(stage)
+    val dynamoDBService = SupporterDataDynamoService(stage)
     val alarmService = AlarmService(stage)
 
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
@@ -81,7 +83,7 @@ object UpdateDynamoLambda extends StrictLogging {
     processedCount: Int,
     batches: List[List[(SupporterRatePlanItem, Int)]],
     timeOutCheck: TimeOutCheck,
-    dynamoDBService: DynamoDBService,
+    dynamoDBService: SupporterDataDynamoService,
     alarmService: AlarmService
   ): Int =
     batches.foldLeft(processedCount) {
@@ -104,7 +106,7 @@ object UpdateDynamoLambda extends StrictLogging {
         newProcessedCount
     }
 
-  def writeBatch(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: DynamoDBService, alarmService: AlarmService) = {
+  def writeBatch(list: List[(SupporterRatePlanItem, Int)], dynamoDBService: SupporterDataDynamoService, alarmService: AlarmService) = {
     val futures = list.map {
       case (supporterRatePlanItem, index) =>
         logger.info(s"Attempting to write item index $index - ${supporterRatePlanItem.productRatePlanName} to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")

@@ -62,7 +62,8 @@ object SendThankYouEmailState {
   case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user: User,
     product: DigitalPack,
-    termDates: TermDates
+    subscriptionNumber: String,
+    termDates: TermDates,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailPaperState(

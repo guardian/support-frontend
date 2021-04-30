@@ -52,6 +52,7 @@ import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymen
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
+import type { LocalCurrencyCountry } from '../../../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types -----//
 
@@ -86,6 +87,8 @@ type PropTypes = {
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   csrf: CsrfState,
   stripePaymentRequestButtonVariant: boolean,
+  localCurrencyCountry: ?LocalCurrencyCountry,
+  useLocalCurrency: boolean,
 };
 
 const mapStateToProps = (state: State, ownProps: PropTypes) => ({
@@ -102,6 +105,8 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   switches: state.common.settings.switches,
   csrf: state.page.csrf,
   stripePaymentRequestButtonVariant: state.common.abParticipations.stripePaymentRequestButtonDec2020 === 'PRB',
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -179,6 +184,7 @@ function updateTotal(props: PropTypes) {
         label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
         amount: props.amount * 100,
       },
+      currency: props.currency.toLowerCase(),
     });
   }
 }
@@ -196,6 +202,8 @@ function onClick(event, props: PropTypes) {
       props.otherAmounts,
       props.contributionType,
       props.countryGroupId,
+      props.localCurrencyCountry,
+      props.useLocalCurrency,
     );
 
   if (!amountIsValid) {

@@ -11,6 +11,7 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
 import { DateUtils } from 'react-day-picker';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
+import type { LocalCurrencyCountry } from './internationalisation/localCurrencyCountry';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -49,18 +50,30 @@ export const amountIsValid = (
   input: string,
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-): boolean =>
-  isNotEmpty(input)
-    && isLargerOrEqual(config[countryGroupId][contributionType].min, input)
-    && isSmallerOrEqual(config[countryGroupId][contributionType].max, input)
-    && maxTwoDecimals(input);
+  localCurrencyCountry?: LocalCurrencyCountry | null,
+  useLocalCurrency?: boolean | null,
+): boolean => {
+  const min = (useLocalCurrency && localCurrencyCountry)
+    ? localCurrencyCountry.config[contributionType].min
+    : config[countryGroupId][contributionType].min;
 
+  const max = (useLocalCurrency && localCurrencyCountry)
+    ? localCurrencyCountry.config[contributionType].max
+    : config[countryGroupId][contributionType].max;
+
+  return isNotEmpty(input)
+    && isLargerOrEqual(min, input)
+    && isSmallerOrEqual(max, input)
+    && maxTwoDecimals(input);
+};
 
 export const amountOrOtherAmountIsValid = (
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
+  localCurrencyCountry?: LocalCurrencyCountry | null,
+  useLocalCurrency?: boolean | null,
 ): boolean => {
   let amt = '';
   if (selectedAmounts[contributionType] && selectedAmounts[contributionType] === 'other') {
@@ -70,7 +83,13 @@ export const amountOrOtherAmountIsValid = (
   } else if (selectedAmounts[contributionType]) {
     amt = selectedAmounts[contributionType].toString();
   }
-  return amountIsValid(amt, countryGroupId, contributionType);
+  return amountIsValid(
+    amt,
+    countryGroupId,
+    contributionType,
+    localCurrencyCountry,
+    useLocalCurrency,
+  );
 };
 
 export const checkStateIfApplicable: ((string | null), CountryGroupId, ContributionType) => boolean = (

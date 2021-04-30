@@ -9,32 +9,19 @@ import type { Tests } from './abtest';
 // navigation from landing page to thank you page *won't* register any new
 // participations.
 
-const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
-const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
-export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
+export const pageUrlRegexes = {
+  contributions: {
+    allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
+    notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
+  },
+  subscriptions: {
+    subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
+    digiSubLandingPages: '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
+    digiSubLandingPagesNotAus: '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
+  },
+};
 
 export const tests: Tests = {
-  thankyouPageHeadingTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 1,
-  },
-
   stripePaymentRequestButtonDec2020: {
     variants: [
       {
@@ -52,29 +39,8 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: notUkLandingPage,
+    targetPage: pageUrlRegexes.contributions.notUkLandingPage,
     seed: 2,
-  },
-
-  globalThankyouPageLargeDonationTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 12,
   },
 
   thankyouPageMarketingConsentTestR3: {
@@ -97,7 +63,28 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 18,
+  },
+  priceCardsInHeroTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
+    seed: 19,
+    optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
   },
 };

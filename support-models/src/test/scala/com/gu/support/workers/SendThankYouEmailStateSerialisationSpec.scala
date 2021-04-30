@@ -69,6 +69,7 @@ object ProductTypeCreatedTestData {
   val digitalSubscriptionGiftRedemptionCreated = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
+    "subno",
     TermDates(
       new LocalDate(2020, 10, 24),
       new LocalDate(2021, 1, 24),

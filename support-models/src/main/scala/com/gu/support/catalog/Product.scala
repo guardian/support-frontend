@@ -17,12 +17,14 @@ sealed trait Product {
     environment: TouchPointEnvironment,
     billingPeriod: BillingPeriod,
     fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions
+    productOptions: ProductOptions,
+    readerType: ReaderType = Direct,
   ): Option[ProductRatePlan[Product]] =
     ratePlans(environment).find(prp =>
       prp.billingPeriod == billingPeriod &&
         prp.fulfilmentOptions == fulfilmentOptions &&
-        prp.productOptions == productOptions
+        prp.productOptions == productOptions &&
+        prp.readerType == readerType
     )
 
   def getProductRatePlans(environment: TouchPointEnvironment) = ratePlans(environment)

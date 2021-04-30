@@ -26,6 +26,7 @@ import {
 } from './contributionsLandingActions';
 import { stripeCardFormIsIncomplete } from 'helpers/stripe';
 import { AmazonPay } from 'helpers/paymentMethods';
+import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
 
@@ -59,6 +60,8 @@ export type FormIsValidParameters = {
   email: string | null,
   stripeCardFormOk: boolean,
   amazonPayFormOk: boolean,
+  localCurrencyCountry?: LocalCurrencyCountry,
+  useLocalCurrency?: boolean,
 }
 
 const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
@@ -73,6 +76,8 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     email,
     stripeCardFormOk,
     amazonPayFormOk,
+    localCurrencyCountry,
+    useLocalCurrency,
   } = formIsValidParameters;
 
   const hasNameFields = contributionType !== 'ONE_OFF';
@@ -85,7 +90,14 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     && stripeCardFormOk
     && amazonPayFormOk
     && checkStateIfApplicable(billingState, countryGroupId, contributionType)
-    && amountOrOtherAmountIsValid(selectedAmounts, otherAmounts, contributionType, countryGroupId);
+    && amountOrOtherAmountIsValid(
+      selectedAmounts,
+      otherAmounts,
+      contributionType,
+      countryGroupId,
+      localCurrencyCountry,
+      useLocalCurrency,
+    );
 };
 
 const amazonPayFormOk = (state: State): boolean => {
@@ -119,6 +131,8 @@ const formIsValidParameters = (state: State) => ({
     state.page.form.stripeCardFormData.formComplete,
   ),
   amazonPayFormOk: amazonPayFormOk(state),
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 function enableOrDisableForm() {
