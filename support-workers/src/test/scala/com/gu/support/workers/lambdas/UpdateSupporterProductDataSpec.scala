@@ -8,6 +8,7 @@ import io.circe.parser._
 import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.OptionValues._
 
 import scala.io.Source
 
@@ -29,7 +30,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
     val supporterRatePlanItem =  UpdateSupporterProductData
       .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
     inside(supporterRatePlanItem) {
-      case Right(item) => item.isDefined shouldBe true //.value.identityId shouldBe "102803446"
+      case Right(item) => item.value.identityId shouldBe "102803446"
     }
   }
 }
@@ -62,7 +63,7 @@ object UpdateSupporterProductDataSpec {
       },
       "product": {
         "currency": "GBP",
-        "billingPeriod": "Monthly",
+        "billingPeriod": "Quarterly",
         "readerType": "Gift",
         "productType": "DigitalPack"
       },

@@ -7,7 +7,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
-import com.gu.support.catalog._
+import com.gu.support.catalog.{CatalogService, ProductRatePlan, Product}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption._
@@ -22,8 +22,8 @@ import com.gu.support.workers.lambdas.NextState.{DigitalSubscriptionGiftPurchase
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.support.zuora.api.ReaderType.Gift
-import com.gu.support.zuora.api._
-import com.gu.support.zuora.api.response.{Subscription, ZuoraAccountNumber, ZuoraSubscriptionNumber, ZuoraSuccessOrFailureResponse}
+import com.gu.support.zuora.api.{ReaderType, SubscribeItem, SubscribeRequest}
+import com.gu.support.zuora.api.response.{RatePlan, Subscription, ZuoraAccountNumber, ZuoraSubscriptionNumber, ZuoraSuccessOrFailureResponse}
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.subscriptionBuilders._
 import com.gu.zuora.{ZuoraGiftService, ZuoraSubscribeService}
@@ -333,7 +333,7 @@ object DigitalSubscriptionGiftRedemption {
     val zuoraUpdater = new ZuoraUpdater(zuoraService, catalogService)
     for {
       codeValidation <- codeValidator.getStatus(redemptionData.redemptionCode, Some(state.requestId.toString))
-      (subscriptionNumber, termDates) <- codeValidation match {
+      (subscriptionNumber, termDates, billingPeriod) <- codeValidation match {
         case ValidGiftCode(subscriptionId) => zuoraUpdater.doZuoraUpdates(
           subscriptionId,
           zuoraService.updateSubscriptionRedemptionData(subscriptionId, state.requestId.toString, state.user.id, LocalDate.now(), _),
@@ -344,7 +344,14 @@ object DigitalSubscriptionGiftRedemption {
         )
         case otherState: CodeStatus => Future.failed(new RuntimeException(otherState.clientCode))
       }
-      handlerResult <- Future.fromTry(buildHandlerResult(state, requestInfo, subscriptionNumber, termDates))
+      // The product.billingPeriod contained in the state is incorrect at this point because we
+      // don't know it in support-frontend. Set it to the correct value here so that we can use
+      // it in the UpdateSupporterProductData lambda
+      productWithCorrectBillingPeriod = DigitalPack(state.product.currency, billingPeriod, Gift)
+      handlerResult <- Future.fromTry(
+        buildHandlerResult(
+          state.copy(product = productWithCorrectBillingPeriod), requestInfo, subscriptionNumber, termDates)
+      )
     } yield handlerResult
   }
 
@@ -380,26 +387,28 @@ object DigitalSubscriptionGiftRedemption {
     def doZuoraUpdates(
       subscriptionId: String,
       updateGiftIdentityIdCall: Int => Future[ZuoraSuccessOrFailureResponse]
-    ): Future[(ZuoraSubscriptionNumber, TermDates)] = for {
+    ): Future[(ZuoraSubscriptionNumber, TermDates, BillingPeriod)] = for {
       fullGiftSubscription <- zuoraService.getSubscriptionById(subscriptionId)
-      calculatedDates <- Future.fromTry(calculateNewTermLength(fullGiftSubscription, catalogService))
+      productRatePlan <- Future.fromTry(getDigitalSubProductRatePlan(fullGiftSubscription, catalogService))
+      calculatedDates <- Future.successful(calculateNewTermLength(productRatePlan, fullGiftSubscription.customerAcceptanceDate))
       (dates, newTermLength) = calculatedDates
       _ <- updateGiftIdentityIdCall(newTermLength)
       _ <- zuoraService.setupRevenueRecognition(fullGiftSubscription, dates)
-    } yield (ZuoraSubscriptionNumber(fullGiftSubscription.subscriptionNumber), dates)
+    } yield (ZuoraSubscriptionNumber(fullGiftSubscription.subscriptionNumber), dates, productRatePlan.billingPeriod)
 
 
-    private def calculateNewTermLength(subscription: Subscription, catalogService: CatalogService) = {
-      (for {
-        ratePlan <- subscription.ratePlans.headOption
-        productRatePlan <- catalogService.getProductRatePlanFromId(catalog.DigitalPack, ratePlan.productRatePlanId)
-      } yield {
-        val termDates = getStartEndDates(productRatePlan.billingPeriod.monthsInPeriod)
-        val newTermLength = Days.daysBetween(subscription.customerAcceptanceDate, termDates.giftEndDate).getDays + 1 //To avoid having to think about time zones
-        Success((termDates, newTermLength))
-      }).getOrElse(Failure(new RuntimeException(s"Unable to calculate new term length for subscription $subscription")))
-
+    private def calculateNewTermLength(productRatePlan: ProductRatePlan[Product], customerAcceptanceDate: LocalDate) = {
+      val termDates = getStartEndDates(productRatePlan.billingPeriod.monthsInPeriod)
+      val newTermLength = Days.daysBetween(customerAcceptanceDate, termDates.giftEndDate).getDays + 1 //To avoid having to think about time zones
+      (termDates, newTermLength)
     }
+
+    private def getDigitalSubProductRatePlan(subscription: Subscription, catalogService: CatalogService) =
+      subscription.ratePlans
+        .find(ratePlan => catalogService.getProductRatePlanFromId(catalog.DigitalPack, ratePlan.productRatePlanId).isDefined)
+        .flatMap(ratePlan => catalogService.getProductRatePlanFromId(catalog.DigitalPack, ratePlan.productRatePlanId))
+        .map(Success(_))
+        .getOrElse(Failure(new RuntimeException(s"Unable to calculate new term length for subscription $subscription")))
 
     private def getStartEndDates(months: Int) = {
       val startDate = LocalDate.now()
