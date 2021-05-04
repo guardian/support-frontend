@@ -63,4 +63,37 @@ export const tests: Tests = {
     seed: 19,
     optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
   },
+
+  localCurrencyTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      SE: {
+        offset: 0,
+        size: 1,
+      },
+      CH: {
+        offset: 0,
+        size: 1,
+      },
+      NO: {
+        offset: 0,
+        size: 1,
+      },
+      DK: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 0,
+  },
 };

@@ -627,6 +627,7 @@ export {
   newspaperCountries,
   findIsoCountry,
   fromString,
+  fromGeolocation,
   stateProvinceFieldFromString,
   stateProvinceFromString,
   fromCountryGroup,
