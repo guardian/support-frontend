@@ -78,6 +78,7 @@ import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPayme
 import { titles } from 'helpers/user/details';
 import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
+import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 
 
 // ----- Styles ----- //
@@ -126,7 +127,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     billingAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
     csrf: state.page.csrf,
-    currencyId: state.common.internationalisation.currencyId,
+    currencyId: currencyFromCountryCode(deliveryAddress.fields.country),
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
   };
 }
