@@ -15,7 +15,7 @@ type TimedCopyCollection = { [LandingPage]: TimeBoundCopy[] }
 const timedCopy: TimedCopyCollection = {
   digitalSubscription: [
     {
-      start: '2021-05-08',
+      start: '2021-05-04',
       copy: <>
         <p>
           <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
