@@ -19,12 +19,12 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { getTimeboundCopy } from 'helpers/timeBoundedCopy/timeBoundedCopy';
 import { HeroPriceCards } from './heroPriceCards';
 import {
   heroCopy,
   heroTitle,
-  paragraph,
-  heavyText,
+  paragraphs,
   yellowHeading,
   circleTextTop,
   circleTextBottom,
@@ -46,11 +46,11 @@ type PropTypes = {
 
 const HeroCopy = () => (
   <>
-    <p css={paragraph}>
-      <span css={heavyText}>With two innovative apps and ad-free reading,</span> a digital subscription gives
+    <p>
+      <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
       you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
     </p>
-    <p css={paragraph}>
+    <p>
       Plus, for a limited time, you can read our latest special edition - The books of&nbsp;2021.
     </p>
   </>
@@ -58,22 +58,22 @@ const HeroCopy = () => (
 
 const HeroCopyAus = () => (
   <>
-    <p css={paragraph}>
+    <p>
       With two innovative apps and ad-free reading, a digital subscription gives you the richest experience
       of Guardian Australia journalism. It also sustains the independent reporting you love.
     </p>
-    <p css={paragraph}>
-      You&apos;ll gain exclusive access to <span css={heavyText}>Australia Weekend</span>, the new digital
+    <p>
+      You&apos;ll gain exclusive access to <strong>Australia Weekend</strong>, the new digital
       edition, providing you with a curated view of the week&apos;s biggest stories, plus early access to
       essential weekend news.
     </p>
   </>);
 
 const GiftCopy = () => (
-  <p css={paragraph}>
-    <span css={heavyText}>Share what matters most,<br css={mobileLineBreak} /> even when apart</span><br />
-        Show that you care with the gift of a digital gift subscription. Your loved ones will get the
-        richest, ad-free experience of our independent journalism and your gift will help fund our work.
+  <p>
+    <strong>Share what matters most,<br css={mobileLineBreak} /> even when apart</strong><br />
+    Show that you care with the gift of a digital gift subscription. Your loved ones will get the
+    richest, ad-free experience of our independent journalism and your gift will help fund our work.
   </p>
 );
 
@@ -91,11 +91,12 @@ function DigitalHero({
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
-  const promoCopy = promotionHTML(promotionCopy.description, { css: paragraph, tag: 'div' });
+  const promoCopy = promotionHTML(promotionCopy.description, { tag: 'div' });
 
   const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || defaultRoundel;
 
-  const nonGiftCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : <HeroCopy />;
+  const nonAusCopy = getTimeboundCopy('digitalSubscription', new Date()) || <HeroCopy />;
+  const nonGiftCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : nonAusCopy;
   const defaultCopy = orderIsAGift ? <GiftCopy /> : nonGiftCopy;
   const copy = promoCopy || defaultCopy;
 
@@ -139,7 +140,7 @@ function DigitalHero({
               <GiftHeadingAnimation /> :
               <h2 css={heroTitle}>{title}</h2>
             }
-            <div>
+            <div css={paragraphs}>
               {copy}
             </div>
             {!showPriceCards &&
