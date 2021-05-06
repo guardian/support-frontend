@@ -19,7 +19,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { getTimeboundCopy } from 'helpers/timeBoundedCopy/timeBoundedCopy';
+import { getTimeboundQuery, getTimeboundCopy } from 'helpers/timeBoundedCopy/timeBoundedCopy';
 import { HeroPriceCards } from './heroPriceCards';
 import {
   heroCopy,
@@ -95,7 +95,7 @@ function DigitalHero({
 
   const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || defaultRoundel;
 
-  const nonAusCopy = getTimeboundCopy('digitalSubscription', new Date()) || <HeroCopy />;
+  const nonAusCopy = getTimeboundCopy('digitalSubscription', getTimeboundQuery() || new Date()) || <HeroCopy />;
   const nonGiftCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : nonAusCopy;
   const defaultCopy = orderIsAGift ? <GiftCopy /> : nonGiftCopy;
   const copy = promoCopy || defaultCopy;
