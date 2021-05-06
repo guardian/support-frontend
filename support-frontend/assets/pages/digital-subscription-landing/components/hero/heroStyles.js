@@ -25,40 +25,36 @@ export const yellowHeading = css`
   color: ${brandAlt[400]};
 `;
 
-export const paragraph = css`
-  ${body.small()};
-  max-width: 100%;
-  margin-bottom: ${space[6]}px;
+export const paragraphs = css`
+  p {
+    ${body.small()};
+    max-width: 100%;
+    margin-bottom: ${space[6]}px;
 
-  // This applies to paras coming from the promo tool
-  & p:not(:last-of-type) {
+    ${from.mobileMedium} {
+      ${body.medium()};
+    }
+
+    ${from.phablet} {
+      ${body.medium()};
+      max-width: 85%;
+      margin-bottom: ${space[9]}px;
+    }
+
+    ${from.desktop} {
+      ${headline.xxsmall()};
+      line-height: 135%;
+      max-width: 90%;
+    }
+  }
+
+  p:not(:last-of-type) {
     margin-bottom: ${space[5]}px;
   }
 
-  // This applies to default paragraphs in the hero
-  :not(:last-of-type) {
-    margin-bottom: ${space[5]}px;
+  strong {
+    font-weight: 600;
   }
-
-  ${from.mobileMedium} {
-    ${body.medium()};
-  }
-
-  ${from.phablet} {
-    ${body.medium()};
-    max-width: 85%;
-    margin-bottom: ${space[9]}px;
-  }
-
-  ${from.desktop} {
-    ${headline.xxsmall()};
-    line-height: 135%;
-    max-width: 90%;
-  }
-`;
-
-export const heavyText = css`
-  font-weight: 600;
 `;
 
 export const circleTextContainer = css`
