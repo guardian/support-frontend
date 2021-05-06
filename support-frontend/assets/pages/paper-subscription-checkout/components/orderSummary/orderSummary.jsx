@@ -12,6 +12,7 @@ import { Collection, type FulfilmentOptions } from 'helpers/productPrice/fulfilm
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
+import { applyDiscount, getAppliedPromo } from 'helpers/productPrice/promotions';
 
 import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
@@ -43,17 +44,28 @@ function getMobileSummaryTitle(
 }
 
 function mapStateToProps(state: WithDeliveryCheckoutState) {
+  const totalWithoutDiscount = getProductPrice(
+    state.page.checkout.productPrices,
+    state.page.checkout.fulfilmentOption,
+    state.page.checkout.productOption,
+  );
+
   return {
     fulfilmentOption: state.page.checkout.fulfilmentOption,
     productOption: state.page.checkout.productOption,
     billingPeriod: state.page.checkout.billingPeriod,
     productPrices: state.page.checkout.productPrices,
-    total: getProductPrice(
-      state.page.checkout.productPrices,
-      state.page.checkout.fulfilmentOption,
-      state.page.checkout.productOption,
-    ),
+    total: applyDiscount(totalWithoutDiscount, getAppliedPromo(totalWithoutDiscount.promotions)),
   };
+}
+
+function getPrintOnlyPricePlusDiscount(
+  productPrices: ProductPrices,
+  productOption: ProductOptions,
+  fulfilmentOption: ?FulfilmentOptions,
+) {
+  const printPlusPrice = getProductPrice(productPrices, fulfilmentOption, paperProductsWithoutDigital[productOption]);
+  return applyDiscount(printPlusPrice, getAppliedPromo(printPlusPrice.promotions));
 }
 
 function PaperOrderSummary(props: PropTypes) {
@@ -62,9 +74,15 @@ function PaperOrderSummary(props: PropTypes) {
   const total = `${cleanedTotal} per month`;
   // If the user has added a digi sub, we need to know the price of their selected base paper product separately
   const basePaperPrice = props.includesDigiSub ?
-    getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption])
+    getPrintOnlyPricePlusDiscount(
+      props.productPrices,
+      props.productOption,
+      props.fulfilmentOption,
+    )
     : props.total;
-  const rawPrice = getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod);
+  const priceWithDiscount = applyDiscount(basePaperPrice, getAppliedPromo(basePaperPrice.promotions));
+
+  const rawPrice = getPriceSummary(showPrice(priceWithDiscount, false), props.billingPeriod);
   const cleanedPrice = rawPrice.replace(/\/(.*)/, ''); // removes anything after the /
   const accessiblePriceString = `${cleanedPrice} per month`;
 
