@@ -8,8 +8,8 @@ describe('Time bounded copy', () => {
     testCopy = {
       newspaper: [
         {
-          start: '2021-01-01',
-          end: '2021-12-31',
+          startShowingOn: '2021-01-01',
+          stopShowingOn: '2021-12-31',
           copy,
         },
       ],
@@ -23,7 +23,7 @@ describe('Time bounded copy', () => {
 
     it('returns the first copy item in the list where the passed date matches', () => {
       testCopy.newspaper.unshift({
-        start: '2020-01-01',
+        startShowingOn: '2020-01-01',
         copy: 'I am some more prominent copy',
       });
       expect(getTimeboundCopy('newspaper', new Date('2021-05-05'), testCopy)).toBe('I am some more prominent copy');
