@@ -44,18 +44,11 @@ function getMobileSummaryTitle(
 }
 
 function mapStateToProps(state: WithDeliveryCheckoutState) {
-  const totalWithoutDiscount = getProductPrice(
-    state.page.checkout.productPrices,
-    state.page.checkout.fulfilmentOption,
-    state.page.checkout.productOption,
-  );
-
   return {
     fulfilmentOption: state.page.checkout.fulfilmentOption,
     productOption: state.page.checkout.productOption,
     billingPeriod: state.page.checkout.billingPeriod,
     productPrices: state.page.checkout.productPrices,
-    total: applyDiscount(totalWithoutDiscount, getAppliedPromo(totalWithoutDiscount.promotions)),
   };
 }
 

@@ -61,7 +61,8 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import { paperProductsWithDigital, paperProductsWithoutDigital, type ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import { paperProductsWithDigital, paperProductsWithoutDigital, type ActivePaperProducts, type ProductOptions } from 'helpers/productPrice/productOptions';
+import { applyDiscount, getAppliedPromo } from 'helpers/productPrice/promotions';
 import { Paper } from 'helpers/subscriptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
@@ -116,6 +117,16 @@ type PropTypes = {|
   fulfilmentOption: FulfilmentOptions,
 |};
 
+
+function getPricePlusDiscount(
+  productPrices: ProductPrices,
+  fulfilmentOption: FulfilmentOptions,
+  productOption: ProductOptions,
+) {
+  const basePrice = getProductPrice(productPrices, fulfilmentOption, productOption);
+  return applyDiscount(basePrice, getAppliedPromo(basePrice.promotions));
+}
+
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state: WithDeliveryCheckoutState) {
@@ -131,7 +142,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
-    total: getProductPrice(
+    total: getPricePlusDiscount(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
@@ -207,10 +218,14 @@ function PaperCheckoutForm(props: PropTypes) {
     // Price of the 'Plus' product that corresponds to the selected product option
     const plusPrice = includesDigiSub ?
       props.total :
-      getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithDigital[props.productOption]);
+      getPricePlusDiscount(props.productPrices, props.fulfilmentOption, paperProductsWithDigital[props.productOption]);
     // Price of the standard paper-only product that corresponds to the selected product option
     const paperPrice = includesDigiSub ?
-      getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption]) :
+      getPricePlusDiscount(
+        props.productPrices,
+        props.fulfilmentOption,
+        paperProductsWithoutDigital[props.productOption],
+      ) :
       props.total;
     const digitalCost = sensiblyGenerateDigiSubPrice(plusPrice, paperPrice);
 
@@ -226,6 +241,7 @@ function PaperCheckoutForm(props: PropTypes) {
         imgType="png"
         altText=""
       />}
+    total={props.total}
     digiSubPrice={expandedPricingText}
     startDate={formattedStartDate}
     includesDigiSub={includesDigiSub}
@@ -242,6 +258,7 @@ function PaperCheckoutForm(props: PropTypes) {
         altText=""
       />
     }
+    total={props.total}
     digiSubPrice={expandedPricingText}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
