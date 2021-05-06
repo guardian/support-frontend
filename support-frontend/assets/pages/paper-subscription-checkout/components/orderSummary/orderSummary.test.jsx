@@ -70,6 +70,7 @@ describe('Paper order summary', () => {
         imgType="png"
         altText=""
       />,
+      total: paperProducts['United Kingdom'].Collection[productOption].Monthly.GBP,
       includesDigiSub: true,
       digiSubPrice: '£5 per month',
       changeSubscription: '/page',
@@ -87,7 +88,7 @@ describe('Paper order summary', () => {
   });
 
   it('displays the correct total price', async () => {
-    const mockPrice = paperProducts['United Kingdom'].Collection[productOption].Monthly.GBP.price.toFixed(2);
+    const mockPrice = props.total.price.toFixed(2);
     expect(await screen.findByText(findTextAcrossElements(`Total:£${mockPrice} per month`))).toBeInTheDocument();
   });
 
