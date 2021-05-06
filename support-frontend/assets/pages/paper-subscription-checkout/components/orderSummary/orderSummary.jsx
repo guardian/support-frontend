@@ -11,8 +11,7 @@ import { paperProductsWithoutDigital, type ProductOptions } from 'helpers/produc
 import { Collection, type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
-import { applyDiscount, getAppliedPromo } from 'helpers/productPrice/promotions';
+import { getPriceWithDiscount } from 'helpers/productPrice/paperProductPrices';
 
 import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
@@ -52,30 +51,20 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
   };
 }
 
-function getPrintOnlyPricePlusDiscount(
-  productPrices: ProductPrices,
-  productOption: ProductOptions,
-  fulfilmentOption: ?FulfilmentOptions,
-) {
-  const printPlusPrice = getProductPrice(productPrices, fulfilmentOption, paperProductsWithoutDigital[productOption]);
-  return applyDiscount(printPlusPrice, getAppliedPromo(printPlusPrice.promotions));
-}
-
 function PaperOrderSummary(props: PropTypes) {
   const rawTotal = getPriceSummary(showPrice(props.total, false), props.billingPeriod);
   const cleanedTotal = rawTotal.replace(/\/(.*)/, ''); // removes anything after the /
   const total = `${cleanedTotal} per month`;
   // If the user has added a digi sub, we need to know the price of their selected base paper product separately
   const basePaperPrice = props.includesDigiSub ?
-    getPrintOnlyPricePlusDiscount(
+    getPriceWithDiscount(
       props.productPrices,
-      props.productOption,
       props.fulfilmentOption,
+      paperProductsWithoutDigital[props.productOption],
     )
     : props.total;
-  const priceWithDiscount = applyDiscount(basePaperPrice, getAppliedPromo(basePaperPrice.promotions));
 
-  const rawPrice = getPriceSummary(showPrice(priceWithDiscount, false), props.billingPeriod);
+  const rawPrice = getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod);
   const cleanedPrice = rawPrice.replace(/\/(.*)/, ''); // removes anything after the /
   const accessiblePriceString = `${cleanedPrice} per month`;
 
