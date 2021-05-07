@@ -7,6 +7,8 @@ import { css } from '@emotion/core';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { border, brandAlt, neutral, sport } from '@guardian/src-foundations/palette';
+import { from, until } from '@guardian/src-foundations/mq';
+
 
 const quoteFigure = css`
   position: relative;
@@ -15,8 +17,12 @@ const quoteFigure = css`
 `;
 
 const quoteText = css`
-  ${headline.xsmall()};
-  margin-bottom: ${space[12]}px;
+  ${headline.xxxsmall()};
+  margin-bottom: -${space[2]}px;
+
+  ${from.tablet} {
+    ${headline.xsmall()};
+  }
 
   strong {
     font-weight: 700;
@@ -30,6 +36,10 @@ const quoteAttribution = css`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+
+  ${until.tablet} {
+    font-size: 15px;
+  }
 
   span {
     display: block;
