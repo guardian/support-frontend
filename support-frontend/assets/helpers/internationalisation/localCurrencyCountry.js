@@ -21,8 +21,8 @@ export const localCurrencyCountries: {
     currency: 'SEK',
     amounts: {
       ONE_OFF: {
-        amounts: [50, 100, 150, 200],
-        defaultAmount: 50,
+        amounts: [250, 500, 1000, 2500],
+        defaultAmount: 500,
       },
     },
     config: {
@@ -31,7 +31,7 @@ export const localCurrencyCountries: {
         minInWords: 'ten',
         max: 23_000,
         maxInWords: 'twenty three thousand',
-        default: 50,
+        default: 500,
       },
     },
   },
@@ -41,8 +41,8 @@ export const localCurrencyCountries: {
     currency: 'CHF',
     amounts: {
       ONE_OFF: {
-        amounts: [5, 10, 15, 20],
-        defaultAmount: 5,
+        amounts: [27, 55, 110, 275],
+        defaultAmount: 55,
       },
     },
     config: {
@@ -51,7 +51,7 @@ export const localCurrencyCountries: {
         minInWords: 'two',
         max: 2_200,
         maxInWords: 'two thousand and two hundred',
-        default: 5,
+        default: 55,
       },
     },
   },
@@ -61,8 +61,8 @@ export const localCurrencyCountries: {
     currency: 'NOK',
     amounts: {
       ONE_OFF: {
-        amounts: [50, 100, 150, 200],
-        defaultAmount: 50,
+        amounts: [250, 500, 1000, 2500],
+        defaultAmount: 500,
       },
     },
     config: {
@@ -71,7 +71,7 @@ export const localCurrencyCountries: {
         minInWords: 'ten',
         max: 23_000,
         maxInWords: 'twenty three thousand',
-        default: 50,
+        default: 500,
       },
     },
   },
@@ -81,8 +81,8 @@ export const localCurrencyCountries: {
     currency: 'DKK',
     amounts: {
       ONE_OFF: {
-        amounts: [50, 100, 150, 200],
-        defaultAmount: 50,
+        amounts: [185, 375, 745, 1850],
+        defaultAmount: 375,
       },
     },
     config: {
@@ -91,7 +91,7 @@ export const localCurrencyCountries: {
         minInWords: 'ten',
         max: 23_000,
         maxInWords: 'twenty three thousand',
-        default: 50,
+        default: 375,
       },
     },
   },
