@@ -3,11 +3,16 @@
 // $FlowIgnore
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
+import { text, withKnobs } from '@storybook/addon-knobs';
 
 import { List, ListWithSubText } from 'components/list/list';
 import Tabs from 'components/tabs/tabs';
+import Quote from 'components/quote/quote';
 
-const stories = storiesOf('Content components', module);
+const stories = storiesOf('Content components', module)
+  .addDecorator(withKnobs({
+    escapeHTML: false,
+  }));
 
 stories.add('List', () => (
   <div style={{ padding: '8px' }}>
@@ -86,4 +91,21 @@ stories.add('Tabs', () => {
     );
   }
   return <TabsContainer />;
+});
+
+stories.add('Quote', () => {
+  const name = text('Name', 'Katherine Viner');
+  const jobTitle = text('Job title', 'Editor-in-chief');
+  const quote = text('Quote', 'The Subscriptions team is my favourite team');
+
+  return (
+    <div style={{ padding: '8px', maxWidth: '320px' }}>
+      <Quote
+        name={name}
+        jobTitle={jobTitle}
+      >
+        {quote}
+      </Quote>
+    </div>
+  );
 });
