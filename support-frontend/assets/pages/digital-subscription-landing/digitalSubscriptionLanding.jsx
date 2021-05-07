@@ -74,6 +74,7 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.countryGroupId,
 );
 const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
+const showEditorialVoiceComponent = abParticipations.editorialVoiceTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -140,11 +141,13 @@ function LandingPage() {
         showPriceCards={showPriceCardsInHero}
         priceList={heroPriceList}
       />
-      <FullWidthContainer>
-        <CentredContainer>
-          <EditorialVoice />
-        </CentredContainer>
-      </FullWidthContainer>
+      {showEditorialVoiceComponent &&
+        <FullWidthContainer>
+          <CentredContainer>
+            <EditorialVoice />
+          </CentredContainer>
+        </FullWidthContainer>
+      }
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={productBlockContainer}>

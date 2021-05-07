@@ -63,6 +63,27 @@ export const tests: Tests = {
     seed: 19,
     optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
   },
+  editorialVoiceTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPages,
+    seed: 20,
+    // optimizeId: '',
+  },
 
   localCurrencyTest: {
     variants: [
