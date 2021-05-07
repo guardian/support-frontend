@@ -14,7 +14,6 @@ const blockOverrides = css`
   position: relative;
   padding: 0 !important;
   margin-top: 66px;
-  max-height: 376px;
 `;
 
 const evLabel = css`
@@ -54,13 +53,12 @@ const evImageContainer = css`
 `;
 
 const evQuotePadding = css`
-  padding: ${space[4]}px;
+  padding: ${space[4]}px ${space[4]}px 0;
 
   ${from.desktop} {
     padding-top: 56px;
     padding-left: 56px;
     padding-right: 80px;
-    padding-bottom: 84px;
   }
 `;
 

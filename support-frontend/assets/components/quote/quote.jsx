@@ -13,6 +13,7 @@ import { from, until } from '@guardian/src-foundations/mq';
 const quoteFigure = css`
   position: relative;
   padding: ${space[2]}px;
+  margin-bottom: 40px;
   border: 1px solid ${border.secondary};
 `;
 
