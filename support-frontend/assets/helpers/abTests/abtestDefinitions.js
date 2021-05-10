@@ -64,7 +64,7 @@ export const tests: Tests = {
     optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
   },
 
-  localCurrencyTest: {
+  localCurrencyTestV2: {
     variants: [
       {
         id: 'control',
