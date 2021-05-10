@@ -189,41 +189,72 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
   handleErrorsAndCheckAccount = (event) => {
     event.preventDefault();
     const { props } = this;
-    let accountErrorsLength = 0;
-    fieldNames.forEach((field) => {
-      // The following line is checking that the field value matches the validation rule
-      if (!this.state[field].rule(props[field])) {
-        // If not, an error is set in state
-        this.setState(
-          state => ({
-            [field]: {
-              ...state[field],
-              error: this.state[field].message,
-            },
-          }),
-          // And then the error count in state is updated
-          () => {
-            this.getAccountErrors();
-            accountErrorsLength = this.getAccountErrorsLength();
-            this.setState({
-              accountErrorsLength,
-            });
+
+    const fieldsWithErrors = fieldNames.reduce((updatedFields, fieldName) => {
+      const hasError = !this.state[fieldName].rule(props[fieldName]);
+
+      if (hasError) {
+        return {
+          ...updatedFields,
+          accountErrorsLength: updatedFields.accountErrorsLength + 1,
+          [fieldName]: {
+            ...this.state[fieldName],
+            error: this.state[fieldName].message,
           },
-        );
-      } else {
-        // If the field is fine, the number of errors is updated
-        accountErrorsLength = this.getAccountErrorsLength();
-        this.setState(
-          { accountErrorsLength },
-          // And then all the error count is checked before an action is dispatched to check the account
-          () => {
-            if (this.state.accountErrorsLength === 0) {
-              props.payDirectDebitClicked();
-            }
-          },
-        );
+        };
       }
-    });
+      return {
+        ...updatedFields,
+        [fieldName]: {
+          ...this.state[fieldName],
+        },
+      };
+    }, { accountErrorsLength: 0 });
+
+    this.setState(
+      { ...fieldsWithErrors },
+      // And then all the error count is checked before an action is dispatched to check the account
+      () => {
+        if (this.state.accountErrorsLength === 0) {
+          props.payDirectDebitClicked();
+        }
+      },
+    );
+
+    // fieldNames.forEach((field) => {
+    //   // The following line is checking that the field value matches the validation rule
+    //   if (!this.state[field].rule(props[field])) {
+    //     // If not, an error is set in state
+    //     this.setState(
+    //       state => ({
+    //         [field]: {
+    //           ...state[field],
+    //           error: this.state[field].message,
+    //         },
+    //       }),
+    //       // And then the error count in state is updated
+    //       () => {
+    //         this.getAccountErrors();
+    //         accountErrorsLength = this.getAccountErrorsLength();
+    //         this.setState({
+    //           accountErrorsLength,
+    //         });
+    //       },
+    //     );
+    //   } else {
+    //     // If the field is fine, the number of errors is updated
+    //     accountErrorsLength = this.getAccountErrorsLength();
+    //     this.setState(
+    //       { accountErrorsLength },
+    //       // And then all the error count is checked before an action is dispatched to check the account
+    //       () => {
+    //         if (this.state.accountErrorsLength === 0) {
+    //           props.payDirectDebitClicked();
+    //         }
+    //       },
+    //     );
+    //   }
+    // });
   }
 
   render() {
