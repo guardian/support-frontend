@@ -11,6 +11,7 @@ import { from, until } from '@guardian/src-foundations/mq';
 
 
 const quoteFigure = css`
+  background-color: ${neutral[100]};
   position: relative;
   padding: ${space[2]}px;
   margin-bottom: ${space[9]}px;
@@ -74,7 +75,7 @@ const quoteTail = css`
   border-top: none;
   border-radius: 0px 0px 51px 0px;
   transform: translateY(100%);
-  background-color: ${neutral[100]};
+  background-color: inherit;
 `;
 
 type PropTypes = {|
