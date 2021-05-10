@@ -19,18 +19,10 @@ object Dependencies {
     val url = s"${Config.supportFrontendUrl}"
   }
 
-  object IdentityFrontend extends Availability {
-    val url = s"${Config.identityFrontendUrl}/signin"
-  }
-
   def dependencyCheck: Unit = {
     assume(
       SupportFrontend.isAvailable,
       s"${Dependencies.SupportFrontend.url} is unavailable! Please run support-frontend locally before running these tests."
-    )
-    assume(
-      IdentityFrontend.isAvailable,
-      s"- ${Dependencies.IdentityFrontend.url} is unavailable! Please run identity-frontend locally before running these tests."
     )
   }
 
