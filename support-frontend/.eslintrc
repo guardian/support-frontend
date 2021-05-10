@@ -1,29 +1,29 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "eslint:recommended",
     "airbnb",
-    "plugin:flowtype/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "env": {
     "amd": true,
     "browser": true,
     "node": true,
-    "jest": true,
+    "jest": true
   },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 6
   },
   "plugins": [
     "react",
-    "flowtype"
+    "@typescript-eslint"
   ],
   "globals": {
     "guardian": true,
     "React": true,
     "ga": true,
     "Raven": true,
-    "jsdom": true,
+    "jsdom": true
   },
   "rules": {
     "curly": [2, "all"],
@@ -56,7 +56,7 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }],
+    "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }]
   },
   "settings": {
     "import/resolver": {
@@ -65,7 +65,7 @@
       }
     },
     "flowtype": {
-        "onlyFilesWithFlowAnnotation": true,
-    },
-  },
+        "onlyFilesWithFlowAnnotation": true
+    }
+  }
 }
