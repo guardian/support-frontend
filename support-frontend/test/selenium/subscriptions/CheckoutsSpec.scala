@@ -52,13 +52,13 @@ class CheckoutsSpec extends AnyFeatureSpec
   }
 
   Feature("Guardian Weekly checkout") {
-    Scenario("User already logged in - Direct Debit checkout") {
+    Scenario("User already logged in - Stripe checkout") {
       testCheckout("Guardian Weekly", new GuardianWeeklyCheckout, new WeeklyProductPage, payWithStripe)
     }
   }
 
   Feature("Guardian Weekly gift checkout") {
-    Scenario("User already logged in - Stripe checkout") {
+    Scenario("User already logged in - Direct Debit checkout") {
       testCheckout("Guardian Weekly gift", new GuardianWeeklyGiftCheckout, new WeeklyGiftProductPage, payWithDirectDebit)
     }
   }

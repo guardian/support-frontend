@@ -15,7 +15,6 @@ object Config {
 
   val supportFrontendUrl = conf.getString("support.url")
 
-  val identityFrontendUrl = conf.getString("identity.webapp.url")
 
   val waitTimeout = 45
 
@@ -28,7 +27,7 @@ object Config {
   val idapiClientAccessTokenName = conf.getString("idapi.clientAccessToken.name")
 
   val idapiClientAccessTokenSecret = conf.getString("idapi.clientAccessToken.secret")
-  
+
   val webDriverRemoteUrl = Try(conf.getString("web.driver.remote.url")) match {
     case Success(url) => url
     case Failure(_) => ""
@@ -43,7 +42,6 @@ object Config {
     logger.info("=============================")
     logger.info(s"Stage: ${conf.getString("stage")}")
     logger.info(s"Support Frontend: ${supportFrontendUrl}")
-    logger.info(s"Identity Frontend: ${identityFrontendUrl}")
   }
 
 }
