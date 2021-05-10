@@ -13,13 +13,18 @@ import { from, until } from '@guardian/src-foundations/mq';
 const quoteFigure = css`
   position: relative;
   padding: ${space[2]}px;
-  margin-bottom: 40px;
+  margin-bottom: ${space[9]}px;
   border: 1px solid ${border.secondary};
 `;
 
 const quoteText = css`
+  display: flex;
   ${headline.xxxsmall()};
-  margin-bottom: -${space[2]}px;
+  margin-bottom: ${space[1]}px;
+
+  ${from.mobileMedium} {
+    margin-bottom: -${space[2]}px;
+  }
 
   ${from.tablet} {
     ${headline.xsmall()};
@@ -32,11 +37,11 @@ const quoteText = css`
 
 const quoteAttribution = css`
   ${headline.xxxsmall({ fontStyle: 'italic' })};
-  margin-top: -${space[1]}px;
   margin-bottom: ${space[6]}px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  min-height: 68px;
 
   ${until.tablet} {
     font-size: 15px;
@@ -76,10 +81,12 @@ type PropTypes = {|
   children: Node;
   name: string;
   jobTitle: string;
-  // headshot: Node;
+  headshot?: Node;
 |}
 
-function Quote({ children, name, jobTitle }: PropTypes) {
+function Quote({
+  children, name, jobTitle, headshot,
+}: PropTypes) {
   return (
     <figure css={quoteFigure}>
       <blockquote css={quoteText}>
@@ -90,11 +97,19 @@ function Quote({ children, name, jobTitle }: PropTypes) {
           <span>{name}</span>
           <span css={quoteJobTitle}>{jobTitle}</span>
         </div>
-        <div css={quoteHeadshot} />
+        {headshot &&
+          <div css={quoteHeadshot}>
+            {headshot}
+          </div>
+        }
       </figcaption>
       <div css={quoteTail} />
     </figure>
   );
 }
+
+Quote.defaultProps = {
+  headshot: null,
+};
 
 export default Quote;

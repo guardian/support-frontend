@@ -17,6 +17,7 @@ export const pageUrlRegexes = {
   subscriptions: {
     subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPages: '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
+    digiSubLandingPagesNotGift: '(/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPagesNotAus: '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
   },
 };
@@ -80,9 +81,9 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPages,
+    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotGift,
     seed: 20,
-    // optimizeId: '',
+    optimizeId: '9iCcOPWDTCePfDn8ckRbCA',
   },
 
   localCurrencyTest: {
