@@ -22,7 +22,7 @@ const blockOverrides = css`
 const evLabel = css`
   position: absolute;
   top: 0;
-  left: -1px;
+  left: 0;
   transform: translateY(-100%);
 `;
 

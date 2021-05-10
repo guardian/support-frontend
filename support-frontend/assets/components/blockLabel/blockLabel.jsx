@@ -13,15 +13,20 @@ const blockLabel = css`
   ${headline.xxxsmall({ fontWeight: 'bold' })};
   background-color: ${neutral[0]};
   color: ${text.ctaPrimary};
+  margin-left: -1px;
 
   ${from.tablet} {
     ${headline.xxsmall({ fontWeight: 'bold' })};
+  }
+
+  ${from.desktop} {
+    ${headline.xsmall({ fontWeight: 'bold' })};
   }
 `;
 
 type PropTypes = {|
   children: Node;
-  cssOverrides?: string;
+  cssOverrides?: string | string[];
 |};
 
 function BlockLabel({ children, cssOverrides }: PropTypes) {

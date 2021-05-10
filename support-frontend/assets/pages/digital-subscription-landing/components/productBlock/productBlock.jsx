@@ -1,16 +1,41 @@
 /* eslint-disable react/no-unused-prop-types */
 // @flow
 import React, { Component, type Node } from 'react';
+import { css } from '@emotion/core';
+import { from } from '@guardian/src-foundations/mq';
+
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { ListHeading } from 'components/productPage/productPageList/productPageList';
+import BlockLabel from 'components/blockLabel/blockLabel';
 import { arrowSvg } from '../arrow';
 
-const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
+const labelMobileMargin = css`
+  margin-top: 20px;
+
+  ${from.mobileLandscape} {
+    margin-top: 25px;
+  }
+
+  ${from.tablet} {
+    margin-top: 0;
+  }
+`;
+
+const sectionLabel = css`
+  ${from.tablet} {
+    transform: translateY(-100%);
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+`;
+
+const Plus = () => <BlockLabel cssOverrides={labelMobileMargin}>+ Plus</BlockLabel>;
 type DropdownPropTypes = {
   children: Node,
   showDropDown: boolean,
@@ -164,7 +189,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
     return (
       <div className="hope-is-power__products">
         <section className="product-block__container hope-is-power--centered">
-          <div className="product-block__container__label--top">What&apos;s included?</div>
+          <BlockLabel cssOverrides={[sectionLabel, labelMobileMargin]}>What&apos;s included?</BlockLabel>
           <ProductCard
             title="UK Daily in The Guardian Editions app"
             subtitle="Each day&apos;s edition, in one simple, elegant app"
