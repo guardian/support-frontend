@@ -141,7 +141,7 @@ const ProductCard = ({
   title, subtitle, image, second = false,
 }: ProductCardPropTypes) => (
   <section className="product-block__item">
-    <h2 className="product-block__item__title">{title}</h2>
+    <h3 className="product-block__item__title">{title}</h3>
     <p className="product-block__item__subtitle">
       <span className={`product-block__item__subtitle--desktop${second ? '--second' : ''}`}>{subtitle}</span>
     </p>
@@ -189,7 +189,7 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
     return (
       <div className="hope-is-power__products">
         <section className="product-block__container hope-is-power--centered">
-          <BlockLabel cssOverrides={[sectionLabel, labelMobileMargin]}>What&apos;s included?</BlockLabel>
+          <BlockLabel tag="h2" cssOverrides={[sectionLabel, labelMobileMargin]}>What&apos;s included?</BlockLabel>
           <ProductCard
             title="UK Daily in The Guardian Editions app"
             subtitle="Each day&apos;s edition, in one simple, elegant app"
