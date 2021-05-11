@@ -60,17 +60,26 @@ const evQuotePadding = css`
 function EditorialVoice() {
   return (
     <Block cssOverrides={blockOverrides}>
-      <BlockLabel cssOverrides={evLabel}>Why your support matters</BlockLabel>
+      <BlockLabel tag="h2" cssOverrides={evLabel}>Why your support matters</BlockLabel>
       <div css={evContainer}>
         <div css={evImageContainer}>
           <img src="https://media.guim.co.uk/fe925780346f02f20530eadc6890c40946c3c88b/0_0_137_376/137.png" alt="" />
         </div>
         <div css={evQuotePadding}>
-          <Quote name="Damian Carrington" jobTitle="Environment Editor">
+          <Quote
+            name="Damian Carrington"
+            jobTitle="Environment Editor"
+            headshot={
+              // No alt text needed- the preceeding name/job title describe the image
+              <img src="https://media.guim.co.uk/5218e86aa3406dd4b5a9b54a3147de4a2f411b17/0_1_315_315/140.png" alt="" />
+            }
+          >
             <p>
-              The biggest story of the 21st Century is the climate crisis; reporting on global,
-              slow-motion disasters requires long-term commitment.{' '}
-              <strong>The secure foundation Guardian subscribers provide is essential to us.</strong>
+              The biggest story of the 21st century is the climate crisis.{' '}
+              <strong>
+                Our long-term commitment to reporting on global disasters is impossible without the secure
+                foundation of support from our subscribers.
+              </strong>
             </p>
           </Quote>
         </div>

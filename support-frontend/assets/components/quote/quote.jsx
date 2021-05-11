@@ -63,6 +63,11 @@ const quoteHeadshot = css`
   width: 68px;
   background-color: ${brandAlt[400]};
   border-radius: 50%;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
 `;
 
 const quoteTail = css`

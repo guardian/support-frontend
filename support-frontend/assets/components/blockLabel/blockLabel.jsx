@@ -8,7 +8,7 @@ import { neutral, text } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 
 const blockLabel = css`
-  width: max-content;
+  display: inline-block;
   padding: ${space[1]}px ${space[2]}px;
   ${headline.xxxsmall({ fontWeight: 'bold' })};
   background-color: ${neutral[0]};
@@ -26,18 +26,21 @@ const blockLabel = css`
 
 type PropTypes = {|
   children: Node;
+  tag?: string;
   cssOverrides?: string | string[];
 |};
 
-function BlockLabel({ children, cssOverrides }: PropTypes) {
+function BlockLabel({ children, tag = 'div', cssOverrides }: PropTypes) {
+  const TagName = tag;
   return (
-    <div css={[blockLabel, cssOverrides]}>
+    <TagName css={[blockLabel, cssOverrides]}>
       {children}
-    </div>
+    </TagName>
   );
 }
 
 BlockLabel.defaultProps = {
+  tag: 'div',
   cssOverrides: '',
 };
 
