@@ -9,6 +9,7 @@ import { space } from '@guardian/src-foundations';
 import { border, brandAlt, neutral, sport } from '@guardian/src-foundations/palette';
 import { from, until } from '@guardian/src-foundations/mq';
 
+const headshotSize = 68;
 
 const quoteFigure = css`
   background-color: ${neutral[100]};
@@ -21,14 +22,16 @@ const quoteFigure = css`
 const quoteText = css`
   display: flex;
   ${headline.xxxsmall()};
-  margin-bottom: ${space[1]}px;
+  margin-bottom: ${space[2]}px;
 
-  ${from.mobileMedium} {
-    margin-bottom: -${space[2]}px;
+  ${from.mobileLandscape} {
+    ${headline.xxsmall()};
   }
 
   ${from.tablet} {
     ${headline.xsmall()};
+    margin-bottom: ${space[4]}px;
+    max-width: calc(100% - ${headshotSize + space[1]}px);
   }
 
   strong {
@@ -59,10 +62,12 @@ const quoteJobTitle = css`
 
 const quoteHeadshot = css`
   display: flex;
-  height: 68px;
-  width: 68px;
+  height: ${headshotSize}px;
+  width: ${headshotSize}px;
   background-color: ${brandAlt[400]};
   border-radius: 50%;
+  flex-shrink: 0;
+  flex-basis: auto;
 
   img {
     max-width: 100%;

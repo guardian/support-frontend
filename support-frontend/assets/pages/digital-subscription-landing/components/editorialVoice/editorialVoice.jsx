@@ -35,10 +35,11 @@ const evImageContainer = css`
   display: flex;
   align-items: flex-start;
   margin-left: -${space[9]}px;
-  height: 316px;
+  height: 376px;
+  flex-basis: auto;
+  flex-shrink: 2;
 
   ${from.desktop} {
-    height: 376px;
     margin-left: ${space[12]}px;
   }
 
@@ -48,9 +49,18 @@ const evImageContainer = css`
 `;
 
 const evQuotePadding = css`
-  padding: ${space[4]}px;
+  padding: ${space[2]}px;
+  flex-shrink: 1;
 
-  ${from.desktop} {
+  ${from.mobileMedium} {
+    padding: ${space[4]}px;
+  }
+
+  ${from.phablet} {
+    padding: ${space[6]}px;
+  }
+
+  ${from.leftCol} {
     padding-top: 56px;
     padding-left: 56px;
     padding-right: 80px;
@@ -75,9 +85,9 @@ function EditorialVoice() {
             }
           >
             <p>
-              The biggest story of the 21st century is the climate crisis.{' '}
+              The biggest story of the 21st century is the climate emergency.{' '}
               <strong>
-                Our long-term commitment to reporting on global disasters is impossible without the secure
+                Our long-term commitment to reporting on the environmental crises is impossible without the secure
                 foundation of support from our subscribers.
               </strong>
             </p>
