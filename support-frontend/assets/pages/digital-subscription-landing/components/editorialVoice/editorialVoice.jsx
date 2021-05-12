@@ -60,6 +60,10 @@ const evQuotePadding = css`
     padding: ${space[6]}px;
   }
 
+  ${from.desktop} {
+    padding: ${space[9]}px;
+  }
+
   ${from.leftCol} {
     padding-top: 56px;
     padding-left: 56px;
@@ -73,7 +77,10 @@ function EditorialVoice() {
       <BlockLabel tag="h2" cssOverrides={evLabel}>Why your support matters</BlockLabel>
       <div css={evContainer}>
         <div css={evImageContainer}>
-          <img src="https://media.guim.co.uk/fe925780346f02f20530eadc6890c40946c3c88b/0_0_137_376/137.png" alt="" />
+          <img
+            src="https://media.guim.co.uk/fe925780346f02f20530eadc6890c40946c3c88b/0_0_137_376/137.png"
+            alt="A stylised pen with a globe on its nib"
+          />
         </div>
         <div css={evQuotePadding}>
           <Quote

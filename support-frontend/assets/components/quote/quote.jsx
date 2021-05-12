@@ -30,8 +30,8 @@ const quoteText = css`
 
   ${from.tablet} {
     ${headline.xsmall()};
-    margin-bottom: ${space[4]}px;
-    max-width: calc(100% - ${headshotSize + space[1]}px);
+    margin-bottom: ${space[2]}px;
+    max-width: calc(100% - ${headshotSize - space[4]}px);
   }
 
   strong {
