@@ -103,12 +103,6 @@ export const mobileLineBreak = css`
   }
 `;
 
-export const hideOnMobile = css`
-  ${until.tablet} {
-    display: none;
-  }
-`;
-
 export const testRoundelOverrides = css`
   display: none;
 

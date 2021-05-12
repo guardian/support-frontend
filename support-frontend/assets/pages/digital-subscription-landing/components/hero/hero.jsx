@@ -30,7 +30,6 @@ import {
   circleTextBottom,
   circleTextGeneric,
   circleTextContainer,
-  hideOnMobile,
   spaceAfter,
   mobileLineBreak,
   testRoundelOverrides,
@@ -129,7 +128,7 @@ function DigitalHero({
           roundelElement={
               orderIsAGift ? null :
               <HeroRoundel
-                cssOverrides={showPriceCards ? testRoundelOverrides : hideOnMobile}
+                cssOverrides={showPriceCards ? testRoundelOverrides : ''}
                 theme={showPriceCards ? 'digital' : 'base'}
               >
                 {roundelText}
