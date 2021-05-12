@@ -1,7 +1,7 @@
 'use-strict';
 
 const path = require('path');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
@@ -63,7 +63,7 @@ class CleanUpStatsPlugin {
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
-    new ManifestPlugin({
+    new WebpackManifestPlugin({
       fileName: '../../conf/assets.map',
       writeToFileEmit: true,
     }),
@@ -112,19 +112,18 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: [
-          {
-            test: /node_modules/,
-            exclude: [
-              /@guardian\/(?!(automat-modules))/,
-            ],
-          },
-        ],
+        exclude: {
+          and: [/node_modules/],
+          not: [/@guardian\/(?!(automat-modules))/],
+        },
         loader: 'babel-loader',
       },
       {
         test: /\.(png|jpg|gif|ico)$/,
-        loader: 'file-loader?name=[path][name].[hash].[ext]',
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[hash].[ext]'
+        }
       },
       {
         test: /\.svg$/,
@@ -148,7 +147,10 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       },
       {
         test: /\.(ttf|woff|woff2)$/,
-        loader: 'file-loader?name=[path][name].[ext]',
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
       },
       {
         test: /\.scss$/,
