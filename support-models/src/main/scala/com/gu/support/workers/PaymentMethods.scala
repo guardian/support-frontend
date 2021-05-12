@@ -109,7 +109,9 @@ object PaymentMethod {
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
-  implicit val sepaPaymentMethodCode: Codec[SepaPaymentMethod] = capitalizingCodec
+  implicit val gatewayOptionCodec: Codec[GatewayOption] = capitalizingCodec
+  implicit val gatewayOptionDataCodec: Codec[GatewayOptionData] = capitalizingCodec
+  implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = capitalizingCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = capitalizingCodec
   implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = capitalizingCodec
 
