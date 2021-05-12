@@ -85,10 +85,14 @@ case class ClonedDirectDebitPaymentMethod(
   paymentGateway: PaymentGateway = DirectDebitGateway
 ) extends PaymentMethod
 
+case class GatewayOption(name: String, value: String)
+case class GatewayOptionData(gatewayOption: List[GatewayOption])
 case class SepaPaymentMethod(
   bankTransferAccountName: String,
   bankTransferAccountNumber: String,
   email: String,
+  ipAddress: String,
+  gatewayOptionData: GatewayOptionData,
   bankTransferType: String = "SEPA",
   `type`: String = "BankTransfer",
   paymentGateway: PaymentGateway = SepaGateway

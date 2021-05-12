@@ -147,7 +147,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     Future.successful(SepaPaymentMethod(
       bankTransferAccountName = sepa.accountHolderName,
       bankTransferAccountNumber = sepa.iban,
-      email = user.primaryEmailAddress
+      email = user.primaryEmailAddress,
+      ipAddress = "127.0.0.1",
+      gatewayOptionData = GatewayOptionData(List(GatewayOption("UserAgent", "TestUserAgent")))
     ))
   }
 
