@@ -186,6 +186,7 @@
     "cssnano/cosmiconfig/js-yaml": "3.13.1",
     "optimize-css-assets-webpack-plugin/**/js-yaml": "3.13.1",
     "postcss-load-config/cosmiconfig/js-yaml": "3.13.1",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.19",
+    "ssri": "^6.0.2"
   }
 }
