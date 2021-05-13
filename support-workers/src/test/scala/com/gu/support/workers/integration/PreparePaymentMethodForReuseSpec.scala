@@ -38,15 +38,15 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
       val response = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream).get
 
       response._1.paymentMethod shouldBe Left(CreditCardReferenceTransaction(
-        tokenId = "card_EdajV2eXkZPrVV",
-        secondTokenId = "cus_EdajoRmjUSlef9",
-        creditCardNumber = "************4242",
-        creditCardCountry = Some(Country.US),
-        creditCardExpirationMonth = 2,
-        creditCardExpirationYear = 2022,
-        creditCardType = Some("Visa"),
-        paymentGateway = StripeGatewayPaymentIntentsDefault,
-        stripePaymentType = None
+        TokenId = "card_EdajV2eXkZPrVV",
+        SecondTokenId = "cus_EdajoRmjUSlef9",
+        CreditCardNumber = "************4242",
+        CreditCardCountry = Some(Country.US),
+        CreditCardExpirationMonth = 2,
+        CreditCardExpirationYear = 2022,
+        CreditCardType = Some("Visa"),
+        PaymentGateway = StripeGatewayPaymentIntentsDefault,
+        StripePaymentType = None
       ))
     }
 

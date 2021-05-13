@@ -59,11 +59,11 @@ object Fixtures {
     12, 22,
     Some("AmericanExpress"),
     _: PaymentGateway,
-    stripePaymentType = Some(StripePaymentType.StripeCheckout)
+    StripePaymentType = Some(StripePaymentType.StripeCheckout)
   )
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911",
-    city = Some("Edited city"), postalCode = Some("n19gu"), state = Some("blah"), streetName = Some("easy street"), streetNumber = Some("123"))
+    City = Some("Edited city"), PostalCode = Some("n19gu"), State = Some("blah"), StreetName = Some("easy street"), StreetNumber = Some("123"))
 
   val config = Configuration.load().zuoraConfigProvider.get()
   val monthlySubscriptionData = SubscriptionData(

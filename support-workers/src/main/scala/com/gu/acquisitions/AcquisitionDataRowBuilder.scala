@@ -66,7 +66,7 @@ object AcquisitionDataRowBuilder {
   private def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): PaymentProvider =
     paymentMethod match {
       case creditCardPayment: CreditCardReferenceTransaction =>
-        creditCardPayment.stripePaymentType match {
+        creditCardPayment.StripePaymentType match {
           case Some(StripePaymentType.StripeApplePay) => StripeApplePay
           case Some(StripePaymentType.StripePaymentRequestButton) => StripePaymentRequestButton
           case _ => Stripe
