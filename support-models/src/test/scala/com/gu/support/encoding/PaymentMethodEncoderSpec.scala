@@ -26,7 +26,7 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "StreetNumber" : null,
       "BankTransferType" : "DirectDebitUK",
       "Type" : "BankTransfer",
-      "paymentGateway": "GoCardless"
+      "PaymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {
@@ -48,7 +48,7 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "Country" : "GB",
       "BankTransferType" : "DirectDebitUK",
       "Type" : "BankTransfer",
-      "paymentGateway": "GoCardless"
+      "PaymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {

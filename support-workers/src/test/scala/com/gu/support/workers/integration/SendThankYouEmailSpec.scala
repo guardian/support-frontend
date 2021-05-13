@@ -71,7 +71,7 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
 
       new JsonValidater(resultJson.toOption.get)
         .validate("Mandate ID", mandateId)
-        .validate("account name", directDebitPaymentMethod.bankTransferAccountName)
+        .validate("account name", directDebitPaymentMethod.BankTransferAccountName)
         .validate("account number", "******11")
         .validate("sort code", "20-20-20")
         .validate("first payment date", "Monday, 10 January 2000")
@@ -297,17 +297,17 @@ object TestData {
   val paperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
 
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
-    firstName = "Mickey",
-    lastName = "Mouse",
-    bankTransferAccountName = "Mickey Mouse",
-    bankCode = "202020",
-    bankTransferAccountNumber = "55779911",
-    country = Country.UK,
-    city = Some("London"),
-    postalCode = Some("post code"),
-    state = None,
-    streetName = Some("streetname"),
-    streetNumber = Some("123")
+    FirstName = "Mickey",
+    LastName = "Mouse",
+    BankTransferAccountName = "Mickey Mouse",
+    BankCode = "202020",
+    BankTransferAccountNumber = "55779911",
+    Country = Country.UK,
+    City = Some("London"),
+    PostalCode = Some("post code"),
+    State = None,
+    StreetName = Some("streetname"),
+    StreetNumber = Some("123")
   )
 
   val digitalPackEmailFields = new DigitalPackEmailFields(

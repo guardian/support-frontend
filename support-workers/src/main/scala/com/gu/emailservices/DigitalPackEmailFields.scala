@@ -276,16 +276,16 @@ class DigitalPackPaymentEmailFields(getMandate: String => Future[Option[String]]
   def paymentFields(paymentMethod: PaymentMethod, accountNumber: String)(implicit ec: ExecutionContext): Future[PaymentFieldsAttributes] =
     paymentMethod match {
       case dd: DirectDebitPaymentMethod => getMandate(accountNumber).map(directDebitMandateId => DDAttributes(
-        account_number = mask(dd.bankTransferAccountNumber),
-        sort_code = hyphenate(dd.bankCode),
-        account_name = dd.bankTransferAccountName,
+        account_number = mask(dd.BankTransferAccountNumber),
+        sort_code = hyphenate(dd.BankCode),
+        account_name = dd.BankTransferAccountName,
         mandateid = directDebitMandateId.getOrElse("")
       ))
       case dd: ClonedDirectDebitPaymentMethod => Future.successful(DDAttributes(
-        sort_code = hyphenate(dd.bankCode),
-        account_number = mask(dd.bankTransferAccountNumber),
-        account_name = dd.bankTransferAccountName,
-        mandateid = dd.mandateId
+        sort_code = hyphenate(dd.BankCode),
+        account_number = mask(dd.BankTransferAccountNumber),
+        account_name = dd.BankTransferAccountName,
+        mandateid = dd.MandateId
       ))
       case _: CreditCardReferenceTransaction => Future.successful(CCAttributes())
       case _: PayPalReferenceTransaction => Future.successful(PPAttributes())

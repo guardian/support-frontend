@@ -43,7 +43,7 @@ class SubscribeItemBuilder(
       crmId = salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
       sfContactId__c = salesForceContact.Id,
       identityId__c = user.id,
-      paymentGateway = maybePaymentMethod.map(_.paymentGateway),
+      paymentGateway = maybePaymentMethod.map(_.PaymentGateway),
       createdRequestId__c = requestId.toString,
       autoPay = maybePaymentMethod.isDefined
     )

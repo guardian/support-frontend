@@ -34,7 +34,7 @@ object Fixtures {
               "PaypalEmail": "$payPalEmail",
               "PaypalType": "ExpressCheckout",
               "Type": "PayPal",
-              "paymentGateway": "PayPal Express"
+              "PaymentGateway": "PayPal Express"
          }
        """
 
@@ -49,7 +49,7 @@ object Fixtures {
            "CreditCardExpirationYear": 2022,
            "CreditCardType": "Visa",
            "Type": "CreditCardReferenceTransaction",
-           "paymentGateway": "Stripe Gateway 1"
+           "PaymentGateway": "Stripe Gateway 1"
          }
        """
 

@@ -72,15 +72,15 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       val maybeCountry: Option[Country] = cardResponse.creditCardCountry.flatMap(CountryGroup.byOptimisticCountryNameOrCode)
       Future.successful(
         CreditCardReferenceTransaction(
-          tokenId = cardResponse.tokenId,
-          secondTokenId = cardResponse.secondTokenId,
-          creditCardNumber = cardResponse.creditCardMaskNumber,
-          creditCardCountry = maybeCountry,
-          creditCardExpirationMonth = cardResponse.creditCardExpirationMonth,
-          creditCardExpirationYear = cardResponse.creditCardExpirationYear,
-          creditCardType = cardResponse.creditCardType,
-          paymentGateway = paymentGateway,
-          stripePaymentType = None
+          TokenId = cardResponse.tokenId,
+          SecondTokenId = cardResponse.secondTokenId,
+          CreditCardNumber = cardResponse.creditCardMaskNumber,
+          CreditCardCountry = maybeCountry,
+          CreditCardExpirationMonth = cardResponse.creditCardExpirationMonth,
+          CreditCardExpirationYear = cardResponse.creditCardExpirationYear,
+          CreditCardType = cardResponse.creditCardType,
+          PaymentGateway = paymentGateway,
+          StripePaymentType = None
         )
       )
     case directDebitResponse: GetPaymentMethodDirectDebitResponse =>
@@ -97,13 +97,13 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
     customerBankAccountId <- goCardlessService.getCustomerAccountIdFromMandateId(existingDirectDebit.tokenId)
     clonedMandateRefs <- goCardlessService.createNewMandateOnExistingCustomerAccount(customerBankAccountId)
   } yield ClonedDirectDebitPaymentMethod(
-    tokenId = clonedMandateRefs.mandateId, // yes Zuora put the mandateId into tokenId
-    mandateId = clonedMandateRefs.reference, // and yes Zuora like to use the 'reference' in the 'mandateId' field, sigh
-    firstName = existingDirectDebit.firstName,
-    lastName = existingDirectDebit.lastName,
-    bankTransferAccountName = existingDirectDebit.bankTransferAccountName,
-    bankTransferAccountNumber = existingDirectDebit.bankTransferAccountNumberMask,
-    bankCode = existingDirectDebit.bankCode
+    TokenId = clonedMandateRefs.mandateId, // yes Zuora put the mandateId into tokenId
+    MandateId = clonedMandateRefs.reference, // and yes Zuora like to use the 'reference' in the 'mandateId' field, sigh
+    FirstName = existingDirectDebit.firstName,
+    LastName = existingDirectDebit.lastName,
+    BankTransferAccountName = existingDirectDebit.bankTransferAccountName,
+    BankTransferAccountNumber = existingDirectDebit.bankTransferAccountNumberMask,
+    BankCode = existingDirectDebit.bankCode
   )
 
   def errorResponse(msg:String): Future[Nothing] = Future.failed(new Exception(msg))
