@@ -2,6 +2,7 @@ package com.gu.support.workers
 
 import cats.syntax.functor._
 import com.gu.i18n.Country
+import com.gu.i18n.Country.UK
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.capitalizingCodec
 import com.gu.support.zuora.api.{AmazonPayGatewayUSA, DirectDebitGateway, PayPalGateway, PaymentGateway}
@@ -9,8 +10,8 @@ import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
 sealed trait PaymentMethod {
-  def `type`: String
-  def paymentGateway: PaymentGateway
+  def Type: String
+  def PaymentGateway: PaymentGateway
 }
 
 sealed trait StripePaymentType
@@ -33,71 +34,72 @@ object StripePaymentType {
 }
 
 case class CreditCardReferenceTransaction(
-  tokenId: String, //Stripe Card id
-  secondTokenId: String, //Stripe Customer Id
-  creditCardNumber: String,
-  creditCardCountry: Option[Country],
-  creditCardExpirationMonth: Int,
-  creditCardExpirationYear: Int,
-  creditCardType: Option[String] /*TODO: strip spaces?*/ ,
-  paymentGateway: PaymentGateway,
-  `type`: String = "CreditCardReferenceTransaction",
-  stripePaymentType: Option[StripePaymentType]
+  TokenId: String, //Stripe Card id
+  SecondTokenId: String, //Stripe Customer Id
+  CreditCardNumber: String,
+  CreditCardCountry: Option[Country],
+  CreditCardExpirationMonth: Int,
+  CreditCardExpirationYear: Int,
+  CreditCardType: Option[String] /*TODO: strip spaces?*/ ,
+  PaymentGateway: PaymentGateway,
+  Type: String = "CreditCardReferenceTransaction",
+  StripePaymentType: Option[StripePaymentType]
 ) extends PaymentMethod
 
 case class PayPalReferenceTransaction(
-  paypalBaid: String,
-  paypalEmail: String,
-  paypalType: String = "ExpressCheckout",
-  `type`: String = "PayPal",
-  paymentGateway: PaymentGateway = PayPalGateway
+  PaypalBaid: String,
+  PaypalEmail: String,
+  PaypalType: String = "ExpressCheckout",
+  Type: String = "PayPal",
+  PaymentGateway: PaymentGateway = PayPalGateway
 ) extends PaymentMethod
 
 case class DirectDebitPaymentMethod(
-  firstName: String,
-  lastName: String,
-  bankTransferAccountName: String,
-  bankCode: String,
-  bankTransferAccountNumber: String,
-  country: Country = Country.UK,
-  city: Option[String],
-  postalCode: Option[String],
-  state: Option[String],
-  streetName: Option[String],
-  streetNumber: Option[String],
-  bankTransferType: String = "DirectDebitUK",
-  `type`: String = "BankTransfer",
-  paymentGateway: PaymentGateway = DirectDebitGateway
+  FirstName: String,
+  LastName: String,
+  BankTransferAccountName: String,
+  BankCode: String,
+  BankTransferAccountNumber: String,
+  Country: Country = UK,
+  City: Option[String],
+  PostalCode: Option[String],
+  State: Option[String],
+  StreetName: Option[String],
+  StreetNumber: Option[String],
+  BankTransferType: String = "DirectDebitUK",
+  Type: String = "BankTransfer",
+  PaymentGateway: PaymentGateway = DirectDebitGateway
 ) extends PaymentMethod
 
 case class ClonedDirectDebitPaymentMethod(
-  existingMandate: String = "Yes",
-  tokenId: String,
-  mandateId: String,
-  firstName: String,
-  lastName: String,
-  bankTransferAccountName: String,
-  bankCode: String,
-  bankTransferAccountNumber: String,
-  country: Country = Country.UK,
-  bankTransferType: String = "DirectDebitUK",
-  `type`: String = "BankTransfer",
-  paymentGateway: PaymentGateway = DirectDebitGateway
+  ExistingMandate: String = "Yes",
+  TokenId: String,
+  MandateId: String,
+  FirstName: String,
+  LastName: String,
+  BankTransferAccountName: String,
+  BankCode: String,
+  BankTransferAccountNumber: String,
+  Country: Country = UK,
+  BankTransferType: String = "DirectDebitUK",
+  Type: String = "BankTransfer",
+  PaymentGateway: PaymentGateway = DirectDebitGateway
 ) extends PaymentMethod
 
 case class AmazonPayPaymentMethod(
-  tokenId: String,
-  `type`: String = "CreditCardReferenceTransaction",  // This is how amazon pay works in zuora - as a credit card
-  paymentGateway: PaymentGateway
+  TokenId: String,
+  Type: String = "CreditCardReferenceTransaction",  // This is how amazon pay works in zuora - as a credit card
+  PaymentGateway: PaymentGateway
 ) extends PaymentMethod
 
 object PaymentMethod {
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
-  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
-  implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
-  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
-  implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = capitalizingCodec
-  implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = capitalizingCodec
+//  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
+//  implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
+//  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
+//  implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = capitalizingCodec
+//  implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = capitalizingCodec
+  import io.circe.generic.auto._
 
   //Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {

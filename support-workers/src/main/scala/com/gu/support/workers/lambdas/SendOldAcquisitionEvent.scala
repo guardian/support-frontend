@@ -82,7 +82,7 @@ object SendOldAcquisitionEvent {
   def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): thrift.PaymentProvider =
     paymentMethod match {
       case creditCardPayment: CreditCardReferenceTransaction =>
-        creditCardPayment.stripePaymentType match {
+        creditCardPayment.StripePaymentType match {
           case Some(StripePaymentType.StripeApplePay) => thrift.PaymentProvider.StripeApplePay
           case Some(StripePaymentType.StripePaymentRequestButton) => thrift.PaymentProvider.StripePaymentRequestButton
           case _ => thrift.PaymentProvider.Stripe

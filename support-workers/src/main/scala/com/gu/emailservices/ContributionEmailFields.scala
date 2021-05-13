@@ -36,18 +36,18 @@ class ContributionEmailFields(
   def getPaymentFields(paymentMethod: PaymentMethod, accountNumber: String, created: DateTime)(implicit ec: ExecutionContext): Future[Seq[(String, String)]] = {
     paymentMethod match {
       case dd: DirectDebitPaymentMethod => getMandate(accountNumber).map(directDebitMandateId => List(
-        "account name" -> dd.bankTransferAccountName,
-        "account number" -> mask(dd.bankTransferAccountNumber),
-        "sort code" -> hyphenate(dd.bankCode),
+        "account name" -> dd.BankTransferAccountName,
+        "account number" -> mask(dd.BankTransferAccountNumber),
+        "sort code" -> hyphenate(dd.BankCode),
         "Mandate ID" -> directDebitMandateId.getOrElse(""),
         "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
         "payment method" -> "Direct Debit"
       ))
       case dd: ClonedDirectDebitPaymentMethod => Future.successful(List(
-        "account name" -> dd.bankTransferAccountName,
-        "account number" -> mask(dd.bankTransferAccountNumber),
-        "sort code" -> hyphenate(dd.bankCode),
-        "Mandate ID" -> dd.mandateId,
+        "account name" -> dd.BankTransferAccountName,
+        "account number" -> mask(dd.BankTransferAccountNumber),
+        "sort code" -> hyphenate(dd.BankCode),
+        "Mandate ID" -> dd.MandateId,
         "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
         "payment method" -> "Direct Debit"
       ))
