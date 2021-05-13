@@ -3,7 +3,6 @@ package com.gu.support.encoding
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.encoding.Codec._
 import com.gu.support.workers.{ClonedDirectDebitPaymentMethod, DirectDebitPaymentMethod, GatewayOption, GatewayOptionData, PaymentMethod, SepaPaymentMethod}
-import com.gu.support.zuora.api.SepaGateway
 import com.typesafe.scalalogging.LazyLogging
 import io.circe._
 import org.scalatest.flatspec.AsyncFlatSpec
