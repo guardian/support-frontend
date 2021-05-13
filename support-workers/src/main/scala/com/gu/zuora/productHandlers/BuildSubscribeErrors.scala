@@ -1,4 +1,4 @@
-package com.gu.zuora.subscriptionBuilders
+package com.gu.zuora.productHandlers
 
 import com.gu.support.promotions.PromoError
 import com.gu.support.redemption.InvalidCode

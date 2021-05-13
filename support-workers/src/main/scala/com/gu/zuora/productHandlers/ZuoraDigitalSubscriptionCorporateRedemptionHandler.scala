@@ -8,7 +8,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Digital
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionCorporateRedemptionState
 import com.gu.zuora.ZuoraSubscriptionCreator
-import com.gu.zuora.subscriptionBuilders.{BuildSubscribeRedemptionError, DigitalSubscriptionCorporateRedemptionBuilder}
+import com.gu.zuora.subscriptionBuilders.DigitalSubscriptionCorporateRedemptionBuilder
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

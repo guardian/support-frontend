@@ -2,13 +2,11 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
-import com.gu.support.workers.PaymentSchedule
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailPaperState
-import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.zuora.ZuoraSubscriptionCreator
-import com.gu.zuora.subscriptionBuilders.{BuildSubscribePromoError, PaperSubscriptionBuilder}
+import com.gu.zuora.subscriptionBuilders.PaperSubscriptionBuilder
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

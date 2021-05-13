@@ -7,7 +7,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Digital
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
 import com.gu.zuora.ZuoraSubscriptionCreator
-import com.gu.zuora.subscriptionBuilders.{BuildSubscribePromoError, DigitalSubscriptionDirectPurchaseBuilder}
+import com.gu.zuora.subscriptionBuilders.DigitalSubscriptionDirectPurchaseBuilder
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
