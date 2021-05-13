@@ -2,6 +2,7 @@ package com.gu.zuora.subscriptionBuilders
 
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.redemption.corporate.CorporateCodeValidator
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType, ValidCorporateCode}
@@ -10,13 +11,12 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Digital
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
-import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscriptionCorporateRedemptionBuilder(
   codeValidator: CorporateCodeValidator,
-  today: () => LocalDate,
+  dateGenerator: DateGenerator,
   environment: TouchPointEnvironment,
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
@@ -27,7 +27,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
     import state._
     val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
     val redemptionCode = redemptionData.redemptionCode
-    val todaysDate = today()
+    val todaysDate = dateGenerator.today
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,
       contractAcceptanceDate = todaysDate,

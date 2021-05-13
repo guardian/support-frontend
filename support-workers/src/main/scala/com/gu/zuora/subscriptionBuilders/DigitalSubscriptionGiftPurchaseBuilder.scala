@@ -1,5 +1,6 @@
 package com.gu.zuora.subscriptionBuilders
 
+import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.redemption.gifting.GiftCodeValidator
@@ -9,13 +10,12 @@ import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionGiftPurchaseState
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
-import org.joda.time.LocalDate
 
 import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionGiftPurchaseBuilder(
   promotionService: PromotionService,
-  today: () => LocalDate,
+  dateGenerator: DateGenerator,
   giftCodeGeneratorService: GiftCodeGeneratorService,
   environment: TouchPointEnvironment,
   subscribeItemBuilder: SubscribeItemBuilder,
@@ -32,7 +32,7 @@ class DigitalSubscriptionGiftPurchaseBuilder(
     val giftCode: GeneratedGiftCode = giftCodeGeneratorService.generateCode(state.product.billingPeriod)
       .withLogging("Generated code for Digital Subscription gift")
 
-    val todaysDate = today()
+    val todaysDate = dateGenerator.today
     val contractAcceptanceDate = todaysDate.plusDays(0)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(

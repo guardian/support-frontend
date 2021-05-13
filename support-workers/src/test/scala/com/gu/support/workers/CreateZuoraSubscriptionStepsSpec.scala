@@ -1,5 +1,7 @@
 package com.gu.support.workers
 
+import com.gu.helpers
+import com.gu.helpers.DateGenerator
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
@@ -72,14 +74,14 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
     val subscriptionCreator = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
       new ZuoraSubscriptionCreator(
         zuora,
-        () => new DateTime(2020, 6, 15, 16, 28, 57),
+        DateGenerator(new DateTime(2020, 6, 15, 16, 28, 57)),
         requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
         userId = "111222",
       ),
       new CorporateCodeStatusUpdater(dynamoDb),
       new DigitalSubscriptionCorporateRedemptionBuilder(
         new CorporateCodeValidator(dynamoDb),
-        () => new LocalDate(2020, 6, 15),
+        DateGenerator(new LocalDate(2020, 6, 15)),
         TouchPointEnvironments.SANDBOX,
         new SubscribeItemBuilder(
           requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
@@ -142,14 +144,14 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
     val subscriptionCreator = new ZuoraDigitalSubscriptionDirectHandler(
       new ZuoraSubscriptionCreator(
         zuora,
-        () => new DateTime(2020, 6, 15, 16, 28, 57),
+        DateGenerator(new DateTime(2020, 6, 15, 16, 28, 57)),
         requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
         userId = "111222",
       ),
       new DigitalSubscriptionDirectPurchaseBuilder(
         config = ZuoraDigitalPackConfig(14, 2),
         promotionService = null,// shouldn't be called for subs with no promo code
-        () => new LocalDate(2020, 6, 15),
+        DateGenerator(new LocalDate(2020, 6, 15)),
         TouchPointEnvironments.SANDBOX,
         new SubscribeItemBuilder(
           requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),

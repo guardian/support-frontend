@@ -156,7 +156,7 @@ object JsonFixtures {
       2022,
       Some("Visa"),
       StripeGatewayDefault,
-      stripePaymentType = None,
+      StripePaymentType = None,
     )
   val stripePaymentMethod = // test env card and cus token, not prod ones
     s"""

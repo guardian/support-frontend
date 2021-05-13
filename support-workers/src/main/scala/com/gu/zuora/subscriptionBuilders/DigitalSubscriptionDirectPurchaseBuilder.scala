@@ -1,17 +1,17 @@
 package com.gu.zuora.subscriptionBuilders
 
+import com.gu.helpers.DateGenerator
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
-import org.joda.time.LocalDate
 
 class DigitalSubscriptionDirectPurchaseBuilder(
   config: ZuoraDigitalPackConfig,
   promotionService: PromotionService,
-  today: () => LocalDate,
+  dateGenerator: DateGenerator,
   environment: TouchPointEnvironment,
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
@@ -20,7 +20,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(state.product, environment), state.product.describe)
 
-    val todaysDate = today()
+    val todaysDate = dateGenerator.today
     val contractAcceptanceDate = todaysDate.plusDays(config.defaultFreeTrialPeriod + config.paymentGracePeriod)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(

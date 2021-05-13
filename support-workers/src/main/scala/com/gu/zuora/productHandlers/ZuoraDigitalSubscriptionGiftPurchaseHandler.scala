@@ -2,6 +2,7 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
+import com.gu.helpers.DateGenerator
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.workers.User
@@ -10,14 +11,13 @@ import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionGiftPurchaseState
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.{BuildSubscribePromoError, DigitalSubscriptionGiftPurchaseBuilder}
-import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ZuoraDigitalSubscriptionGiftPurchaseHandler(
   zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
-  now: () => DateTime,
+  dateGenerator: DateGenerator,
   digitalSubscriptionGiftPurchaseBuilder: DigitalSubscriptionGiftPurchaseBuilder,
   user: User,
 ) {
@@ -30,7 +30,7 @@ class ZuoraDigitalSubscriptionGiftPurchaseHandler(
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield {
-      val lastRedemptionDate = (() => now().toLocalDate) ().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
+      val lastRedemptionDate = (() => dateGenerator.today) ().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
       SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
         user,
         SfContactId(state.salesforceContacts.giftRecipient.get.Id),

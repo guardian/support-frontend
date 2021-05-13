@@ -1,5 +1,6 @@
 package com.gu.zuora.subscriptionBuilders
 
+import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
@@ -84,7 +85,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val gift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     SANDBOX,
-    () => saleDate,
+    DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
     GuardianWeeklyState(
@@ -101,7 +102,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     SANDBOX,
-    () => saleDate,
+    DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
     GuardianWeeklyState(

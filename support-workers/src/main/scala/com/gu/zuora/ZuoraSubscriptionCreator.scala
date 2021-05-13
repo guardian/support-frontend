@@ -1,13 +1,13 @@
 package com.gu.zuora
 
 import com.gu.WithLoggingSugar._
+import com.gu.helpers.DateGenerator
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers._
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.api.{SubscribeItem, _}
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ZuoraSubscriptionCreator.checkSingleResponse
-import org.joda.time.DateTime
 
 import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -15,7 +15,7 @@ import scala.concurrent.Future
 
 class ZuoraSubscriptionCreator(
   zuoraService: ZuoraSubscribeService,
-  now: () => DateTime,
+  dateGenerator: DateGenerator,
   userId: String,
   requestId: UUID,
 ) {
@@ -31,7 +31,7 @@ class ZuoraSubscriptionCreator(
     for {
       identityId <- Future.fromTry(IdentityId(userId))
         .withEventualLogging("identity id")
-      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, requestId, identityId, now)
+      maybeDomainSubscription <- GetSubscriptionWithCurrentRequestId(zuoraService, requestId, identityId, dateGenerator)
         .withEventualLogging("GetSubscriptionWithCurrentRequestId")
       (account, sub) <- ZuoraSubscriptionCreator.subscribeIfApplicable(zuoraService, subscribeItem, maybeDomainSubscription)
         .withEventualLogging("subscribe")

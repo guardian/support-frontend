@@ -1,5 +1,7 @@
 package com.gu.zuora.subscriptionBuilders
 
+import com.gu.helpers
+import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
@@ -96,7 +98,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         "corporateId" -> DynamoLookup.DynamoString("1")
       )))
     }),
-    () => saleDate,
+    DateGenerator(saleDate),
     TouchPointEnvironments.SANDBOX,
     new SubscribeItemBuilder(
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
@@ -117,7 +119,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2),
     promotionService,
-    () => saleDate,
+    DateGenerator(saleDate),
     SANDBOX,
     new SubscribeItemBuilder(
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
@@ -128,7 +130,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
 
   lazy val subscriptionGiftPurchaseBuilder = new DigitalSubscriptionGiftPurchaseBuilder(
     promotionService,
-    () => saleDate,
+    DateGenerator(saleDate),
     new GiftCodeGeneratorService,
     SANDBOX,
     new SubscribeItemBuilder(

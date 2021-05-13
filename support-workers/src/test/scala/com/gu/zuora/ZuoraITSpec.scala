@@ -1,13 +1,12 @@
 package com.gu.zuora
 
-import java.util.UUID
-
 import com.gu.config.Configuration
+import com.gu.helpers.DateGenerator
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
-import com.gu.support.config.{Stage, Stages}
+import com.gu.support.config.Stages
 import com.gu.support.redemptions.RedemptionCode
-import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, Monthly}
+import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -16,6 +15,7 @@ import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
+import java.util.UUID
 import scala.concurrent.duration._
 
 @IntegrationTest
@@ -78,7 +78,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       uatService,
       UUID.fromString("f131bfb4-bcd9-31e6-0000-00000001ac69"),
       IdentityId("104725102").get,
-      () => earlyDate
+      DateGenerator(earlyDate)
     ).map {
       _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
     }
@@ -89,7 +89,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       uatService,
       UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"),
       IdentityId("104725102").get,
-      () => earlyDate
+      DateGenerator(earlyDate)
     ).map {
       _ should be(None)
     }

@@ -2,16 +2,16 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
+import com.gu.helpers.DateGenerator
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.redemption.corporate._
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState._
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState, SendThankYouEmailState}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.productHandlers._
 import com.gu.zuora.subscriptionBuilders._
-import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -66,10 +66,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState) {
 
   private val isTestUser = state.user.isTestUser
-  private val now = () => DateTime.now(DateTimeZone.UTC)
+  private val dateGenerator = new DateGenerator()
   private val touchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
-  private val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, now, state.user.id, state.requestId)
+  private val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, dateGenerator, state.user.id, state.requestId)
 
   val zuoraDigitalSubscriptionGiftRedemptionHandler = new ZuoraDigitalSubscriptionGiftRedemptionHandler(
     services.zuoraGiftService,
@@ -85,10 +85,11 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
   )
 
   val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
-    zuoraSubscriptionCreator, now,
+    zuoraSubscriptionCreator,
+    dateGenerator,
     new DigitalSubscriptionGiftPurchaseBuilder(
       services.promotionService,
-      () => now().toLocalDate,
+      dateGenerator,
       services.giftCodeGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,
@@ -101,7 +102,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     CorporateCodeStatusUpdater.withDynamoUpdate(services.redemptionService),
     new DigitalSubscriptionCorporateRedemptionBuilder(
       CorporateCodeValidator.withDynamoLookup(services.redemptionService),
-      () => now().toLocalDate,
+      dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,
     ),
@@ -113,7 +114,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     new DigitalSubscriptionDirectPurchaseBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).digitalPack,
       services.promotionService,
-      () => now().toLocalDate,
+      dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,
     ),
@@ -139,7 +140,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     new GuardianWeeklySubscriptionBuilder(
       services.promotionService,
       touchPointEnvironment,
-      () => now().toLocalDate,
+      dateGenerator,
       subscribeItemBuilder,
     ),
   )

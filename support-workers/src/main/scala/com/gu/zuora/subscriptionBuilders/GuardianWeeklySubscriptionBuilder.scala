@@ -1,5 +1,6 @@
 package com.gu.zuora.subscriptionBuilders
 
+import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
@@ -13,13 +14,13 @@ import org.joda.time.{Days, LocalDate}
 class GuardianWeeklySubscriptionBuilder(
   promotionService: PromotionService,
   environment: TouchPointEnvironment,
-  now: () => LocalDate,
+  dateGenerator: DateGenerator,
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(state: GuardianWeeklyState): Either[PromoError, SubscribeItem] = {
 
-    val contractEffectiveDate = now()
+    val contractEffectiveDate = dateGenerator.today
 
     val readerType = if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct
 
