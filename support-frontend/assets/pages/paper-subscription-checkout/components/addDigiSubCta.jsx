@@ -5,7 +5,7 @@ import * as React from 'react';
 import { css } from '@emotion/core';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
+import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { Checkbox } from '@guardian/src-checkbox';
@@ -30,10 +30,15 @@ const rowOverrides = css`
 `;
 
 const ctaContainer = css`
-  background-color: ${neutral[97]};
+  background-color: ${brandAlt[400]};
   padding: 0 ${space[6]}px;
   border-top: 1px solid ${neutral[86]};
   border-bottom: 1px solid ${neutral[86]};
+  transition: background-color 0.2s ease-out;
+`;
+
+const ctaContainerOpen = css`
+  background-color: ${neutral[97]};
 `;
 
 const lightBorder = css`
@@ -95,7 +100,7 @@ function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
   }, [expanded]);
 
   return (
-    <Accordion cssOverrides={ctaContainer} hideToggleLabel>
+    <Accordion cssOverrides={[ctaContainer, expanded ? ctaContainerOpen : '']} hideToggleLabel>
       <AccordionRow
         cssOverrides={rowOverrides}
         label={`Would you like to add a digital subscription for ${digiSubPrice}?`}
