@@ -128,11 +128,11 @@
     "@babel/preset-flow": "^7.10.4",
     "@babel/preset-react": "^7.10.4",
     "@guardian/paparazzi": "^0.3.1",
-    "@storybook/addon-knobs": "^5.3.19",
-    "@storybook/addon-options": "^5.3.19",
-    "@storybook/addon-storysource": "^5.3.19",
-    "@storybook/addon-viewport": "^6.0.28",
-    "@storybook/react": "^5.3.19",
+    "@storybook/addon-knobs": "^6.3.0-alpha.21",
+    "@storybook/addon-options": "^5.3.21",
+    "@storybook/addon-storysource": "^6.3.0-alpha.25",
+    "@storybook/addon-viewport": "^6.3.0-alpha.25",
+    "@storybook/react": "^6.3.0-alpha.25",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "autoprefixer": "^8.6.1",
@@ -186,6 +186,7 @@
     "cssnano/cosmiconfig/js-yaml": "3.13.1",
     "optimize-css-assets-webpack-plugin/**/js-yaml": "3.13.1",
     "postcss-load-config/cosmiconfig/js-yaml": "3.13.1",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.19",
+    "ssri": "^7.0.0"
   }
 }
