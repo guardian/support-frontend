@@ -148,7 +148,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       bankTransferAccountName = sepa.accountHolderName,
       bankTransferAccountNumber = sepa.iban,
       email = user.primaryEmailAddress,
-      ipAddress = "127.0.0.1",
+      iPAddress = "127.0.0.1",
       gatewayOptionData = GatewayOptionData(List(GatewayOption("UserAgent", "TestUserAgent")))
     ))
   }

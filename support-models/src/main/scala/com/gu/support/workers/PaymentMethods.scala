@@ -3,7 +3,7 @@ package com.gu.support.workers
 import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec.capitalizingCodec
+import com.gu.support.encoding.Codec.{capitalizingCodec, deriveCodec}
 import com.gu.support.zuora.api._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -91,7 +91,7 @@ case class SepaPaymentMethod(
   bankTransferAccountName: String,
   bankTransferAccountNumber: String,
   email: String,
-  ipAddress: String,
+  iPAddress: String,
   gatewayOptionData: GatewayOptionData,
   bankTransferType: String = "SEPA",
   `type`: String = "BankTransfer",
@@ -109,7 +109,7 @@ object PaymentMethod {
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
-  implicit val gatewayOptionCodec: Codec[GatewayOption] = capitalizingCodec
+  implicit val gatewayOptionCodec: Codec[GatewayOption] = deriveCodec
   implicit val gatewayOptionDataCodec: Codec[GatewayOptionData] = capitalizingCodec
   implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = capitalizingCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = capitalizingCodec
