@@ -21,6 +21,9 @@ object Codec
   def deriveCodec[A](implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedObjectEncoder[A]]): Codec[A] =
     new Codec(deriveEncoder, deriveDecoder)
 
+  def auto[A](implicit decode: Decoder[A], encode: Encoder[A]): Codec[A] =
+    new Codec(encode, decode)
+
   def capitalizingCodec[A](implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedObjectEncoder[A]]): Codec[A] =
     new Codec(capitalizingEncoder, decapitalizingDecoder)
 

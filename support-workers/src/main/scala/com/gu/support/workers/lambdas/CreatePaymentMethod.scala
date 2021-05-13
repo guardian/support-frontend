@@ -95,8 +95,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             card.exp_month,
             card.exp_year,
             card.brand.zuoraCreditCardType,
-            paymentGateway = chargeGateway(currency),
-            stripePaymentType = stripePaymentType
+            PaymentGateway = chargeGateway(currency),
+            StripePaymentType = stripePaymentType
           )
         }
       case StripePaymentMethodPaymentFields(paymentMethod, stripePaymentType) =>
@@ -113,8 +113,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             card.exp_month,
             card.exp_year,
             card.brand.zuoraCreditCardType,
-            paymentGateway = paymentIntentGateway(currency),
-            stripePaymentType = stripePaymentType
+            PaymentGateway = paymentIntentGateway(currency),
+            StripePaymentType = stripePaymentType
           )
         }
     }
@@ -129,35 +129,35 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     val addressLine = AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
 
     Future.successful(DirectDebitPaymentMethod(
-      firstName = user.firstName,
-      lastName = user.lastName,
-      bankTransferAccountName = dd.accountHolderName,
-      bankCode = dd.sortCode,
-      bankTransferAccountNumber = dd.accountNumber,
-      country = user.billingAddress.country,
-      city = user.billingAddress.city,
-      postalCode = user.billingAddress.postCode,
-      state = user.billingAddress.state,
-      streetName = addressLine.map(_.streetName),
-      streetNumber = addressLine.flatMap(_.streetNumber)
+      FirstName = user.firstName,
+      LastName = user.lastName,
+      BankTransferAccountName = dd.accountHolderName,
+      BankCode = dd.sortCode,
+      BankTransferAccountNumber = dd.accountNumber,
+      Country = user.billingAddress.country,
+      City = user.billingAddress.city,
+      PostalCode = user.billingAddress.postCode,
+      State = user.billingAddress.state,
+      StreetName = addressLine.map(_.streetName),
+      StreetNumber = addressLine.flatMap(_.streetNumber)
     ))
   }
 
   def createSepaPaymentMethod(sepa: SepaPaymentFields, user: User): Future[SepaPaymentMethod] = {
     Future.successful(SepaPaymentMethod(
-      bankTransferAccountName = sepa.accountHolderName,
-      bankTransferAccountNumber = sepa.iban,
-      email = user.primaryEmailAddress,
-      iPAddress = "127.0.0.1",
-      gatewayOptionData = GatewayOptionData(List(GatewayOption("UserAgent", "TestUserAgent")))
+      BankTransferAccountName = sepa.accountHolderName,
+      BankTransferAccountNumber = sepa.iban,
+      Email = user.primaryEmailAddress,
+      IPAddress = "127.0.0.1",
+      GatewayOptionData = GatewayOptionData(List(GatewayOption("UserAgent", "TestUserAgent")))
     ))
   }
 
   def createAmazonPayPaymentMethod(amazonPay: AmazonPayPaymentFields, user: User): Future[AmazonPayPaymentMethod] =
     Future.successful(
       AmazonPayPaymentMethod(
-        tokenId = amazonPay.amazonPayBillingAgreementId,
-        paymentGateway = AmazonPayGatewayUSA
+        TokenId = amazonPay.amazonPayBillingAgreementId,
+        PaymentGateway = AmazonPayGatewayUSA
       )
     )
 }

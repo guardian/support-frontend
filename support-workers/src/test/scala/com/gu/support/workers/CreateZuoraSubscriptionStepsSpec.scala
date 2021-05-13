@@ -138,7 +138,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       // ideally should also check we called zuora with the right post data
       override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] = {
         val maybeRedemptionCode = subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode
-        val paymentType = subscribeRequest.subscribes.head.paymentMethod.get.`type`
+        val paymentType = subscribeRequest.subscribes.head.paymentMethod.get.Type
         val autoPay = subscribeRequest.subscribes.head.account.autoPay
         val readerType = subscribeRequest.subscribes.head.subscriptionData.subscription.readerType
         val ratePlan = subscribeRequest.subscribes.head.subscriptionData.ratePlanData.head.ratePlan.productRatePlanId

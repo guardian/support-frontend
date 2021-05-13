@@ -26,7 +26,7 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "StreetNumber" : null,
       "BankTransferType" : "DirectDebitUK",
       "Type" : "BankTransfer",
-      "paymentGateway": "GoCardless"
+      "PaymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {
@@ -48,7 +48,7 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "Country" : "GB",
       "BankTransferType" : "DirectDebitUK",
       "Type" : "BankTransfer",
-      "paymentGateway": "GoCardless"
+      "PaymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {
@@ -59,11 +59,11 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
 
   it should "encode SepaPaymentMethod" in {
     val pm = SepaPaymentMethod(
-      bankTransferAccountName = "Mr Test",
-      bankTransferAccountNumber = "DE89370400440532013000",
-      email = "mr.test@guardian.co.uk",
-      iPAddress = "127.0.0.1",
-      gatewayOptionData = GatewayOptionData(List(GatewayOption(name = "UserAgent", value = "IE11"))),
+      BankTransferAccountName = "Mr Test",
+      BankTransferAccountNumber = "DE89370400440532013000",
+      Email = "mr.test@guardian.co.uk",
+      IPAddress = "127.0.0.1",
+      GatewayOptionData = GatewayOptionData(List(GatewayOption(name = "UserAgent", value = "IE11"))),
     )
 
     val expected =
@@ -85,7 +85,7 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
          |"PaymentGateway": "Stripe Bank Transfer - GNM Membership"
          |}""".stripMargin
 
-    testEncoding(pm, expected)
+    testEncoding[PaymentMethod](pm, expected)
   }
 
 }
