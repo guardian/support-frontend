@@ -1,5 +1,6 @@
 package model.amazonpay
 
+import com.gu.support.workers.CheckoutFailureReasons.{AmazonPayFatal, AmazonPayTryAgain, AmazonPayTryAnotherCard}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -13,16 +14,16 @@ class AmazonPayApiErrorSpec extends AnyWordSpec with Matchers {
         val errorMessage = "error message"
 
         val InvalidPaymentMethod = AmazonPayApiError.withReason(200, errorMessage, "InvalidPaymentMethod")
-        InvalidPaymentMethod.failureReason mustBe Some(AmazonPayApiError.TryAnotherCard)
+        InvalidPaymentMethod.failureReason mustBe Some(AmazonPayTryAnotherCard.asString)
 
         val ProcessingFailure = AmazonPayApiError.withReason(200, errorMessage, "ProcessingFailure")
-        ProcessingFailure.failureReason mustBe Some(AmazonPayApiError.TryAgain)
+        ProcessingFailure.failureReason mustBe Some(AmazonPayTryAgain.asString)
 
         val TransactionTimedOut = AmazonPayApiError.withReason(200, errorMessage, "TransactionTimedOut")
-        TransactionTimedOut.failureReason mustBe Some(AmazonPayApiError.Fatal)
+        TransactionTimedOut.failureReason mustBe Some(AmazonPayFatal.asString)
 
         val fatalError = AmazonPayApiError.withReason(200, errorMessage, "something else")
-        fatalError.failureReason mustBe Some(AmazonPayApiError.Fatal)
+        fatalError.failureReason mustBe Some(AmazonPayFatal.asString)
       }
     }
   }

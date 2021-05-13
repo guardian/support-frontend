@@ -3,34 +3,25 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
-const allLandingPagesAndThankyouPages = '/contribute|thankyou(/.*)?$';
-const allThankYouPages = '/thankyou(/.*)?$';
-const notUkLandingPage = '/us|au|eu|int|nz|ca/contribute(/.*)?$';
-export const subsShowcaseAndDigiSubPages = '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
-const digiSubLandingPages = '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)';
+// Note: When setting up a test to run on the contributions thank you page
+// you should always target both the landing page *and* the thank you page.
+// This is to ensure the participation is picked up by ophan. The client side
+// navigation from landing page to thank you page *won't* register any new
+// participations.
+
+export const pageUrlRegexes = {
+  contributions: {
+    allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
+    notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
+  },
+  subscriptions: {
+    subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
+    digiSubLandingPages: '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
+    digiSubLandingPagesNotAus: '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
+  },
+};
 
 export const tests: Tests = {
-  thankyouPageHeadingTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'V1',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 1,
-  },
-
   stripePaymentRequestButtonDec2020: {
     variants: [
       {
@@ -48,17 +39,16 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: notUkLandingPage,
+    targetPage: pageUrlRegexes.contributions.notUkLandingPage,
     seed: 2,
   },
-
-  globalThankyouPageLargeDonationTest: {
+  priceCardsInHeroTest: {
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'V1',
+        id: 'variant',
       },
     ],
     audiences: {
@@ -69,77 +59,41 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 12,
+    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
+    seed: 19,
+    optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
   },
 
-  landingPagePriceBreakdownTest: {
+  localCurrencyTestV2: {
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'daily',
-      },
-      {
-        id: 'none',
+        id: 'variant',
       },
     ],
     audiences: {
-      ALL: {
+      SE: {
+        offset: 0,
+        size: 1,
+      },
+      CH: {
+        offset: 0,
+        size: 1,
+      },
+      NO: {
+        offset: 0,
+        size: 1,
+      },
+      DK: {
         offset: 0,
         size: 1,
       },
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: allLandingPagesAndThankyouPages,
-    seed: 14,
-  },
-
-  accordionTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'accordionOpen',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: digiSubLandingPages,
-    seed: 16,
-    optimizeId: 'oeDqGqpqT4OLrAaMJjYz6A',
-  },
-
-  thankyouPageMarketingConsentTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'v1',
-      },
-      {
-        id: 'v2',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: allThankYouPages,
-    seed: 17,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 0,
   },
 };

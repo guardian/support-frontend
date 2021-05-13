@@ -28,6 +28,17 @@ function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm: boolean = fa
   }
 }
 
+function billingPeriodAdverb(billingPeriod: BillingPeriod) {
+  switch (billingPeriod) {
+    case Annual:
+      return 'Annually';
+    case Quarterly:
+      return 'Quarterly';
+    default:
+      return 'Monthly';
+  }
+}
+
 function billingPeriodTitle(billingPeriod: BillingPeriod, fixedTerm: boolean = false) {
   switch (billingPeriod) {
     case Annual:
@@ -47,6 +58,7 @@ export {
   Quarterly,
   SixWeekly,
   billingPeriodNoun,
+  billingPeriodAdverb,
   billingPeriodTitle,
   weeklyBillingPeriods,
   weeklyGiftBillingPeriods,

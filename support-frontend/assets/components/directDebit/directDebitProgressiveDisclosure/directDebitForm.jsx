@@ -189,41 +189,37 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
   handleErrorsAndCheckAccount = (event) => {
     event.preventDefault();
     const { props } = this;
-    let accountErrorsLength = 0;
-    fieldNames.forEach((field) => {
-      // The following line is checking that the field value matches the validation rule
-      if (!this.state[field].rule(props[field])) {
-        // If not, an error is set in state
-        this.setState(
-          state => ({
-            [field]: {
-              ...state[field],
-              error: this.state[field].message,
-            },
-          }),
-          // And then the error count in state is updated
-          () => {
-            this.getAccountErrors();
-            accountErrorsLength = this.getAccountErrorsLength();
-            this.setState({
-              accountErrorsLength,
-            });
+
+    // Build up a new state for the fields and the error count
+    const updatedStateWithErrors = fieldNames.reduce((updatedState, fieldName) => {
+      const hasError = !this.state[fieldName].rule(props[fieldName]);
+
+      if (hasError) {
+        return {
+          ...updatedState,
+          accountErrorsLength: updatedState.accountErrorsLength + 1,
+          [fieldName]: {
+            ...this.state[fieldName],
+            error: this.state[fieldName].message,
           },
-        );
-      } else {
-        // If the field is fine, the number of errors is updated
-        accountErrorsLength = this.getAccountErrorsLength();
-        this.setState(
-          { accountErrorsLength },
-          // And then all the error count is checked before an action is dispatched to check the account
-          () => {
-            if (this.state.accountErrorsLength === 0) {
-              props.payDirectDebitClicked();
-            }
-          },
-        );
+        };
       }
-    });
+      return {
+        ...updatedState,
+        [fieldName]: {
+          ...this.state[fieldName],
+        },
+      };
+    }, { accountErrorsLength: 0 });
+
+    this.setState(
+      updatedStateWithErrors,
+      () => {
+        if (this.state.accountErrorsLength === 0) {
+          props.payDirectDebitClicked();
+        }
+      },
+    );
   }
 
   render() {

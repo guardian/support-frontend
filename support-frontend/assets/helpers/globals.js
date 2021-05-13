@@ -40,11 +40,8 @@ const emptyConfiguredRegionAmounts: ConfiguredRegionAmounts = {
 
 const getSettings = (): Settings => {
   const globalSettings = getGlobal('settings');
-  if (globalSettings) {
-    const useDigitalVoucher = getGlobal('useDigitalVoucher');
-    return { ...globalSettings, useDigitalVoucher };
-  }
-  return {
+
+  return globalSettings || {
     switches: {
       experiments: {},
     },
@@ -67,7 +64,6 @@ const getSettings = (): Settings => {
       Canada: [],
     },
     metricUrl: '',
-    useDigitalVoucher: null,
   };
 };
 

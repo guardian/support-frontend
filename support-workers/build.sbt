@@ -1,7 +1,6 @@
-import scala.sys.process._
 import LibraryVersions._
 import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
-import sbt.Keys.{libraryDependencies, resolvers}
+import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
@@ -82,6 +81,7 @@ deployToCode := {
     "-CreateSalesforceContactLambda-",
     "-CreateZuoraSubscriptionLambda-",
     "-SendThankYouEmailLambda-",
+    "-UpdateSupporterProductDataLambda-",
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
     "-SendOldAcquisitionEventLambda-",

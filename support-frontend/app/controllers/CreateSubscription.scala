@@ -13,6 +13,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.config.Stage
 import com.gu.support.workers.{BillingPeriod, Contribution, DigitalPack, GuardianWeekly, Paper, User}
+import config.Configuration.GuardianDomain
+import cookies.DigitalSubscriptionCookies
 import io.circe.syntax._
 import lib.PlayImplicits._
 import play.api.libs.circe.Circe
@@ -31,8 +33,8 @@ class CreateSubscription(
   identityService: IdentityService,
   testUsers: TestUserService,
   components: ControllerComponents,
-  settingsProvider: AllSettingsProvider,
   val supportUrl: String,
+  val guardianDomain: GuardianDomain,
   stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
@@ -128,7 +130,7 @@ class CreateSubscription(
       },
       { statusResponse =>
         SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod $product subscription")
-        Accepted(statusResponse.asJson)
+        Accepted(statusResponse.asJson).withCookies(DigitalSubscriptionCookies.create(guardianDomain):_*)
       }
     )
   }

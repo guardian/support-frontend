@@ -73,7 +73,6 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 // ----- Render ----- //
 
 function withProps(props: PropTypes) {
-
   const campaignSettings = getCampaignSettings();
   const campaignCopy = campaignSettings && campaignSettings.copy ?
     campaignSettings.copy(props.tickerGoalReached) :

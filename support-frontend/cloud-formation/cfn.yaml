@@ -223,6 +223,13 @@ Resources:
               Action:
                 - lambda:InvokeFunction
               Resource: !Sub arn:aws:lambda:eu-west-1:${AWS::AccountId}:function:stripe-intent-${Stage}
+        - PolicyName: s3Deploy
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action: s3:GetObject
+              Resource:
+                - arn:aws:s3::*:membership-dist/*
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:

@@ -79,8 +79,12 @@ function getContributionTypeFromUrl(): ?ContributionType {
 function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
   if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
     return [DirectDebit, Stripe, PayPal];
-  } else if (contributionType === 'ONE_OFF' && countryId === 'US') {
-    return [Stripe, PayPal, AmazonPay];
+  } else if (countryId === 'US') {
+    // Remove this condition after we've tested in PROD
+    if (contributionType === 'ONE_OFF' || getQueryParameter('amazon-pay-recurring') === 'true') {
+      return [Stripe, PayPal, AmazonPay];
+    }
+    return [Stripe, PayPal];
   }
   return [Stripe, PayPal];
 
@@ -134,11 +138,16 @@ function getPaymentDescription(contributionType: ContributionType, paymentMethod
   return '';
 }
 
-const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: number, verbose: boolean) =>
-  (verbose ?
-    `${amount} ${amount === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
-    `${currency.glyph}${amount}`);
+const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: number, verbose: boolean): string => {
+  const glyph = currency.isPaddedGlyph ? ` ${currency.glyph} ` : currency.glyph;
 
+  if (verbose) {
+    return `${amount} ${amount === 1 ? spokenCurrency.singular : spokenCurrency.plural}`;
+  }
+  const valueWithGlyph = currency.isSuffixGlyph ? `${amount}${glyph}` : `${glyph}${amount}`;
+  return valueWithGlyph.trim();
+
+};
 
 const getContributeButtonCopy = (
   contributionType: ContributionType,

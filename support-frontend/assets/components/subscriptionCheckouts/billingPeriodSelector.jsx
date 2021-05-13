@@ -20,7 +20,7 @@ type PropTypes = {|
   productPrices: ProductPrices,
   billingPeriods: BillingPeriod[],
   fulfilmentOption?: FulfilmentOptions,
-  billingCountry: IsoCountry,
+  pricingCountry: IsoCountry,
   selected: BillingPeriod,
   onChange: (BillingPeriod) => Action,
 |}
@@ -32,7 +32,7 @@ function BillingPeriodSelector(props: PropTypes) {
         {props.billingPeriods.map((billingPeriod) => {
           const productPrice = getProductPrice(
             props.productPrices,
-            props.billingCountry,
+            props.pricingCountry,
             billingPeriod,
             props.fulfilmentOption,
           );

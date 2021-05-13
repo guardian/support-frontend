@@ -17,12 +17,14 @@ sealed trait Product {
     environment: TouchPointEnvironment,
     billingPeriod: BillingPeriod,
     fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions
+    productOptions: ProductOptions,
+    readerType: ReaderType = Direct,
   ): Option[ProductRatePlan[Product]] =
     ratePlans(environment).find(prp =>
       prp.billingPeriod == billingPeriod &&
         prp.fulfilmentOptions == fulfilmentOptions &&
-        prp.productOptions == productOptions
+        prp.productOptions == productOptions &&
+        prp.readerType == readerType
     )
 
   def getProductRatePlans(environment: TouchPointEnvironment) = ratePlans(environment)
@@ -68,8 +70,8 @@ case object Contribution extends Product {
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[Contribution.type]]] =
     Map(
       PROD -> List(
-        ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions, "Monthly Contribution"),
-        ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions, "Annual Contribution"),
+        ProductRatePlan("2c92a0fc5aacfadd015ad24db4ff5e97", Monthly, NoFulfilmentOptions, NoProductOptions, "Monthly Contribution"),
+        ProductRatePlan("2c92a0fc5e1dc084015e37f58c200eea", Annual, NoFulfilmentOptions, NoProductOptions, "Annual Contribution"),
       ),
       UAT -> List(
         ProductRatePlan("2c92c0f85ab269be015acd9d014549b7", Monthly, NoFulfilmentOptions, NoProductOptions, "Monthly Contribution"),
@@ -90,9 +92,7 @@ case object Paper extends Product {
   private def homeDelivery(productRatePlanId: ProductRatePlanId, productOptions: ProductOptions, description: String): ProductRatePlan[Paper.type] =
     ProductRatePlan(productRatePlanId, Monthly, HomeDelivery, productOptions, description, List(CountryGroup.UK))
 
-  val useDigitalVoucher = true
-
-  private val prodCollection: List[ProductRatePlan[Paper.type]] = if (useDigitalVoucher) {
+  private val prodCollection: List[ProductRatePlan[Paper.type]] =
     List(
       collection("2c92a00870ec598001710740ce702ff0", SaturdayPlus, "Voucher Saturday+"),
       collection("2c92a00870ec598001710740cdd02fbd", Saturday, "Voucher Saturday"),
@@ -105,23 +105,8 @@ case object Paper extends Product {
       collection("2c92a00870ec598001710740d3d03035", EverydayPlus, "Voucher Everyday+"),
       collection("2c92a00870ec598001710740c78d2f13", Everyday, "Voucher Everyday")
     )
-  } else {
-    List(
-      collection("2c92a0fd6205707201621fa1350710e3", SaturdayPlus, "Voucher Saturday+"),
-      collection("2c92a0fd6205707201621f9f6d7e0116", Saturday, "Voucher Saturday"),
-      collection("2c92a0fe56fe33ff0157040d4b824168", SundayPlus, "Voucher Sunday+"),
-      collection("2c92a0fe5af9a6b9015b0fe1ecc0116c", Sunday, "Voucher Sunday"),
-      collection("2c92a0fd56fe26b60157040cdd323f76", WeekendPlus, "Voucher Weekend+"),
-      collection("2c92a0ff56fe33f00157040f9a537f4b", Weekend, "Voucher Weekend"),
-      collection("2c92a0fc56fe26ba0157040c5ea17f6a", SixdayPlus, "Voucher Sixday+"),
-      collection("2c92a0fd56fe270b0157040e42e536ef", Sixday, "Voucher Sixday"),
-      collection("2c92a0ff56fe33f50157040bbdcf3ae4", EverydayPlus, "Voucher Everyday+"),
-      collection("2c92a0fd56fe270b0157040dd79b35da", Everyday, "Voucher Everyday")
-    )
-  }
 
-  private val uatCollection: List[ProductRatePlan[Paper.type]] = if (useDigitalVoucher) {
-    List(
+  private val uatCollection: List[ProductRatePlan[Paper.type]] = List(
       collection("2c92c0f870f682820171070489d542da", SaturdayPlus, "Voucher Saturday+"),
       collection("2c92c0f870f682820171070488df42ce", Saturday, "Voucher Saturday"),
       collection("2c92c0f870f68282017107047b214214", SundayPlus, "Voucher Sunday+"),
@@ -133,23 +118,8 @@ case object Paper extends Product {
       collection("2c92c0f870f682820171070481bf4264", EverydayPlus, "Voucher Everyday+"),
       collection("2c92c0f870f682820171070474ee419d", Everyday, "Voucher Everyday"),
     )
-  } else {
-    List(
-      collection("2c92c0f961f9cf350161fc0454283f3e", SaturdayPlus, "Voucher Saturday+"),
-      collection("2c92c0f961f9cf300161fc02a7d805c9", Saturday, "Voucher Saturday"),
-      collection("2c92c0f858aa38af0158b9dae19110a3", SundayPlus, "Voucher Sunday+"),
-      collection("2c92c0f95aff3b54015b0ee0eb500b2e", Sunday, "Voucher Sunday"),
-      collection("2c92c0f855c9f4b20155d9f1dd0651ab", WeekendPlus, "Voucher Weekends+"),
-      collection("2c92c0f855c9f4b20155d9f1db9b5199", Weekend, "Voucher Weekend"),
-      collection("2c92c0f855c9f4540155da2607db6402", SixdayPlus, "Voucher Sixday+"),
-      collection("2c92c0f955ca02910155da254a641fb3", Sixday, "Voucher Sixday"),
-      collection("2c92c0f955ca02920155da240cdb4399", EverydayPlus, "Voucher Everyday+"),
-      collection("2c92c0f855c9f4b20155d9f1d3d4512a", Everyday, "Voucher Everyday"),
-    )
-  }
 
-  private val sandboxCollection: List[ProductRatePlan[Paper.type]] = if (useDigitalVoucher) {
-    List(
+  private val sandboxCollection: List[ProductRatePlan[Paper.type]] = List(
       collection("2c92c0f86fa49142016fa49eb1732a39", SaturdayPlus, "Voucher Saturday paper+"),
       collection("2c92c0f86fa49142016fa49ea442291b", Saturday, "Voucher Saturday paper"),
       collection("2c92c0f86fa49142016fa49ea90e2976", SundayPlus, "Voucher Sunday paper+"),
@@ -161,20 +131,6 @@ case object Paper extends Product {
       collection("2c92c0f86fa49142016fa49eaa492988", EverydayPlus, "Voucher Everyday+"),
       collection("2c92c0f86fa49142016fa49ea56a2938", Everyday, "Voucher Everyday"),
     )
-  } else {
-    List(
-      collection("2c92c0f961f9cf300161fc44f2661258", SaturdayPlus, "Voucher Saturday paper+"),
-      collection("2c92c0f861f9c26d0161fc434bfe004c", Saturday, "Voucher Saturday paper"),
-      collection("2c92c0f955a0b5bf0155b62623846fc8", SundayPlus, "Voucher Sunday paper+"),
-      collection("2c92c0f95aff3b56015b1045fb9332d2", Sunday, "Voucher Sunday paper"),
-      collection("2c92c0f95aff3b54015b1047efaa2ac3", WeekendPlus, "Voucher Weekend+"),
-      collection("2c92c0f8555ce5cf01556e7f01b81b94", Weekend, "Voucher Weekend"),
-      collection("2c92c0f855c3b8190155c585a95e6f5a", SixdayPlus, "Voucher Sixday+"),
-      collection("2c92c0f8555ce5cf01556e7f01771b8a", Sixday, "Voucher Sixday"),
-      collection("2c92c0f95aff3b53015b10469bbf5f5f", EverydayPlus, "Voucher Everyday+"),
-      collection("2c92c0f9555cf10501556e84a70440e2", Everyday, "Voucher Everyday"),
-    )
-  }
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[Paper.type]]] =
     Map(

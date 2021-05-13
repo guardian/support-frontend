@@ -5,6 +5,9 @@
 import { renderPage } from 'helpers/render';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { css } from '@emotion/core';
+import { from, until } from '@guardian/src-foundations/mq';
+
 import {
   AUDCountries,
   Canada,
@@ -18,38 +21,58 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { routes } from 'helpers/routes';
+import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
+import Block from 'components/page/block';
+
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import CampaignHeader from './components/hero/hero';
-import CampaignHeaderGift from './components/heroGift/hero';
+import { DigitalHero } from './components/hero/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
-import './digitalSubscriptionLanding.scss';
-import digitalSubscriptionLandingReducer
+import digitalSubscriptionLandingReducer, { type State }
   from './digitalSubscriptionLandingReducer';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
-// ----- Styles ----- //
+import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
-import './components/digitalSubscriptionLanding.scss';
+// ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
+
+const productBlockContainer = css`
+  ${until.tablet} {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  ${from.tablet} {
+    margin-top: 66px;
+  }
+`;
 
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { common, page } = store.getState();
+const { page, common }: State = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
-const { abParticipations } = common;
+const { internationalisation, abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-const accordionOpen = abParticipations.accordionTest === 'accordionOpen';
+
+// For CTAs in hero test
+const heroPriceList = getHeroCtaProps(
+  productPrices,
+  internationalisation.currencyId,
+  internationalisation.countryGroupId,
+);
+const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -87,6 +110,11 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 // ----- Render ----- //
 function LandingPage() {
+  const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
+    threshold: 0.3,
+    debounce: true,
+  });
+
   const footer = (
     <div className="footer-container">
       <div className="footer-alignment">
@@ -104,20 +132,29 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      {orderIsAGift ?
-        <CampaignHeaderGift countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} /> :
-        <CampaignHeader countryGroupId={countryGroupId} promotionCopy={sanitisedPromoCopy} />
-      }
-      {countryGroupId === AUDCountries ?
-        <ProductBlockAus
-          countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
-        /> :
-        <ProductBlock
-          countryGroupId={countryGroupId}
-          accordionOpen={accordionOpen}
-        />
-      }
+      <DigitalHero
+        orderIsAGift={orderIsAGift}
+        countryGroupId={countryGroupId}
+        promotionCopy={sanitisedPromoCopy}
+        showPriceCards={showPriceCardsInHero}
+        priceList={heroPriceList}
+      />
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={productBlockContainer}>
+            <div ref={setElementToObserve}>
+              {countryGroupId === AUDCountries ?
+                <ProductBlockAus
+                  countryGroupId={countryGroupId}
+                /> :
+                <ProductBlock
+                  countryGroupId={countryGroupId}
+                />
+              }
+            </div>
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />
@@ -128,6 +165,7 @@ function LandingPage() {
           <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
+      <FeedbackWidget display={widgetShouldDisplay} />
     </Page>
   );
 

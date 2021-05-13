@@ -177,6 +177,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
       SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
+        "subno",
         TermDates(
           new LocalDate(2020, 11, 18),
           new LocalDate(2021, 2, 18),

@@ -78,6 +78,7 @@ import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPayme
 import { titles } from 'helpers/user/details';
 import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
+import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 
 
 // ----- Styles ----- //
@@ -126,7 +127,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     billingAddressErrors: state.page.billingAddress.fields.formErrors,
     isTestUser: state.page.checkout.isTestUser,
     csrf: state.page.csrf,
-    currencyId: state.common.internationalisation.currencyId,
+    currencyId: currencyFromCountryCode(deliveryAddress.fields.country),
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
   };
 }
@@ -160,7 +161,7 @@ const days = getWeeklyDays();
 
 function WeeklyCheckoutForm(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const price = getProductPrice(props.productPrices, props.deliveryCountry, props.billingPeriod, fulfilmentOption);
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -168,7 +169,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
-  const paymentMethods = supportedPaymentMethods(props.billingCountry);
+  const paymentMethods = supportedPaymentMethods(props.currencyId);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -304,14 +305,14 @@ function WeeklyCheckoutForm(props: PropTypes) {
             fulfilmentOption={fulfilmentOption}
             onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
             billingPeriods={weeklyBillingPeriods}
-            billingCountry={props.billingCountry}
+            pricingCountry={props.deliveryCountry}
             productPrices={props.productPrices}
             selected={props.billingPeriod}
           />
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
-                country={props.billingCountry}
+                currencyId={props.currencyId}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}
@@ -324,7 +325,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             title="Your card details"
           >
             <StripeProviderForCountry
-              country={props.billingCountry}
+              country={props.deliveryCountry}
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}

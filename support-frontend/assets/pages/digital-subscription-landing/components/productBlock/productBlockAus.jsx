@@ -10,9 +10,6 @@ import { ListHeading } from 'components/productPage/productPageList/productPageL
 
 import { arrowSvg } from '../arrow';
 
-// styles
-import '../digitalSubscriptionLanding.scss';
-
 const Plus = () => <div className="product-block__plus">+ Plus</div>;
 
 type DropdownPropTypes = {
@@ -136,15 +133,14 @@ type StateTypes = {
 type PropTypes = {
   // eslint-ignore no-unused-prop-types
   countryGroupId: CountryGroupId,
-  accordionOpen: boolean,
 }
 
 class ProductBlockAus extends Component<PropTypes, StateTypes> {
   constructor(props: PropTypes) {
     super(props);
     this.state = {
-      showDropDownDaily: props.accordionOpen,
-      showDropDownApp: props.accordionOpen,
+      showDropDownDaily: false,
+      showDropDownApp: false,
     };
   }
 

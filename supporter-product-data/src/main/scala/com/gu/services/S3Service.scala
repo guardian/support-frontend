@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata, PutObjectRequest}
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
 import com.gu.aws.CredentialsProvider
-import com.gu.model.Stage
+import com.gu.supporterdata.model.Stage
 
 import java.io.InputStream
 import scala.concurrent.Promise
@@ -33,10 +33,9 @@ object S3Service {
     progressListener.future
   }
 
-  def streamFromS3(stage: Stage, filename: String) = {
-    val fullObject = s3Client.getObject(new GetObjectRequest(bucketName(stage), filename))
-    fullObject.getObjectContent
-  }
+  def streamFromS3(stage: Stage, filename: String) =
+    s3Client.getObject(new GetObjectRequest(bucketName(stage), filename))
+
 }
 
 class TransferProgressListener(filename: String) extends ProgressListener{

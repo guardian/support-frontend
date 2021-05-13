@@ -2,14 +2,14 @@
 
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
-import { brand, brandAlt, neutral } from '@guardian/src-foundations/palette';
+import { from, until } from '@guardian/src-foundations/mq';
+import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { titlepiece } from '@guardian/src-foundations/typography';
 
 import CentredContainer from '../containers/centredContainer';
 
-import { guardianWeeklyBlue, paperSubscriptionsBlue } from 'stylesheets/emotion/colours';
+import { digitalSubscriptionsBlue, guardianWeeklyBlue, paperSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 type ThemeType = 'showcase' | 'digital' | 'weekly' | 'paper';
 
@@ -22,7 +22,7 @@ type PropTypes = {|
 
 const themeColors: { [key: ThemeType]: string } = {
   weekly: guardianWeeklyBlue,
-  digital: brand[300],
+  digital: digitalSubscriptionsBlue,
   showcase: brandAlt[400],
   paper: paperSubscriptionsBlue,
 };
@@ -77,10 +77,16 @@ const header = css`
 export const pageTitle = css`
   ${titlepiece.small({ fontWeight: 'bold' })};
   z-index: 10;
-  padding: ${space[9]}px ${space[4]}px;
+  padding: ${space[3]}px ${space[3]}px ${space[4]}px;
   width: 100%;
 
+  ${until.tablet} {
+    font-size: 36px;
+  }
+
   ${from.phablet} {
+    padding: ${space[4]}px ${space[4]}px ${space[9]}px;
+    padding-top: ${space[9]}px;
     width: 100%;
     align-self: center;
   }

@@ -61,7 +61,7 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
           case ("PAYMENT_ALREADY_DONE") => false
           case _ => true
         }
-      case AmazonPayApiError(_, _, Some(AmazonPayApiError.TryAnotherCard)) => false
+      case AmazonPayApiError(_, _, Some("amazon_pay_try_other_card")) => false
       case _ => true
     }
   }

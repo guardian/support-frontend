@@ -68,6 +68,7 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import { countries } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 const controlTextAreaResizing = css`
   resize: vertical;
@@ -136,7 +137,7 @@ function mapDispatchToProps() {
       // differently to other payment methods. All others are tracked in submit.js
       const { paymentMethod } = state.page.checkout;
       if (paymentMethod === PayPal) {
-        trackSubmitAttempt(PayPal, DigitalPack);
+        trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
       }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
@@ -159,7 +160,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
-  const paymentMethods = supportedPaymentMethods(props.country);
+  const paymentMethods = supportedPaymentMethods(props.currencyId);
 
   return (
     <Content>
@@ -235,7 +236,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
-                country={props.country}
+                currencyId={props.currencyId}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}

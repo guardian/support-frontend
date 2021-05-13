@@ -4,7 +4,7 @@ import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.capitalizingCodec
-import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway}
+import com.gu.support.zuora.api.{AmazonPayGatewayUSA, DirectDebitGateway, PayPalGateway, PaymentGateway}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
@@ -85,12 +85,19 @@ case class ClonedDirectDebitPaymentMethod(
   paymentGateway: PaymentGateway = DirectDebitGateway
 ) extends PaymentMethod
 
+case class AmazonPayPaymentMethod(
+  tokenId: String,
+  `type`: String = "CreditCardReferenceTransaction",  // This is how amazon pay works in zuora - as a credit card
+  paymentGateway: PaymentGateway
+) extends PaymentMethod
+
 object PaymentMethod {
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = capitalizingCodec
+  implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = capitalizingCodec
 
   //Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
@@ -98,6 +105,7 @@ object PaymentMethod {
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
+    case amazonPayPaymentMethod: AmazonPayPaymentMethod => amazonPayPaymentMethod.asJson
   }
 
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
@@ -105,6 +113,7 @@ object PaymentMethod {
       Decoder[PayPalReferenceTransaction].widen,
       Decoder[CreditCardReferenceTransaction].widen,
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)
-      Decoder[DirectDebitPaymentMethod].widen
+      Decoder[DirectDebitPaymentMethod].widen,
+      Decoder[AmazonPayPaymentMethod].widen
     ).reduceLeft(_ or _)
 }

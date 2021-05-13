@@ -17,11 +17,6 @@
   margin-bottom: -$gu-v-spacing;
   color: gu-colour(news-main);
   background-color: gu-colour(news-faded);
-
-  // point at you can see the all the individual invalid field error messages
-  @include mq($from: mobileMedium) {
-    display: none;
-  }
 }
 
 .component-general-error-message--marketing_consent_api_error {

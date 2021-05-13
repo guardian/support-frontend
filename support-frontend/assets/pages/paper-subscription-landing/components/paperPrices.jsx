@@ -110,13 +110,11 @@ const getPlans = (
 type StateProps = {|
   activeTab: PaperFulfilmentOptions,
   products: Product[],
-  useDigitalVoucher: boolean
 |}
 
 const mapStateToProps = (state: State): StateProps => ({
   activeTab: state.page.tab,
   products: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : [],
-  useDigitalVoucher: state.common.settings.useDigitalVoucher || false,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>

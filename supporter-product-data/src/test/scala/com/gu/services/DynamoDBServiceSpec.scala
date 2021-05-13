@@ -1,7 +1,9 @@
 package com.gu.services
 
-import com.gu.model.Stage.DEV
-import com.gu.model.dynamo.SupporterRatePlanItem
+import com.gu.{model, supporterdata}
+import com.gu.supporterdata.model.Stage.DEV
+import com.gu.supporterdata.model.SupporterRatePlanItem
+import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -11,12 +13,16 @@ import java.time.LocalDate
 @IntegrationTest
 class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
 
-  DynamoDBService.getClass.getSimpleName should "stream be able to insert an item" in {
-    val service = DynamoDBService(DEV)
-    val item = SupporterRatePlanItem(
-      "999999",
-      None,
-      "1", "1", "Digital Subscription", LocalDate.parse("2021-01-01")
+  SupporterDataDynamoService.getClass.getSimpleName should "be able to insert an item" in {
+    val service = SupporterDataDynamoService(DEV)
+    val item = supporterdata.model.SupporterRatePlanItem(
+      identityId = "999999",
+      gifteeIdentityId = None,
+      subscriptionName = "test-sub-name",
+      productRatePlanId = "2c92a0fb4edd70c8014edeaa4e972204",
+      productRatePlanName = "Digital Pack Annual",
+      termEndDate = LocalDate.parse("2021-03-20"),
+      contractEffectiveDate = LocalDate.parse("2020-03-20")
     )
     service
       .writeItem(item)

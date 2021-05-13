@@ -47,7 +47,7 @@ class GuardianWeeklySubscriptionBuilder(
     applyPromoCodeIfPresent(
       promotionService,
       state.promoCode,
-      state.user.billingAddress.country,
+      state.user.deliveryAddress.getOrElse(state.user.billingAddress).country,
       promotionProductRatePlanId,
       subscriptionData
     ).map { subscriptionData =>

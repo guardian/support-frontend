@@ -7,7 +7,18 @@ import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, PayPal, Stripe, S
 import com.gu.support.acquisitions._
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
-import model.Currency.{AUD => ModelAUD, CAD => ModelCAD, EUR => ModelEUR, GBP => ModelGBP, NZD => ModelNZD, USD => ModelUSD}
+import model.Currency.{
+  AUD => ModelAUD,
+  CAD => ModelCAD,
+  EUR => ModelEUR,
+  GBP => ModelGBP,
+  NZD => ModelNZD,
+  USD => ModelUSD,
+  SEK => ModelSEK,
+  CHF => ModelCHF,
+  NOK => ModelNOK,
+  DKK => ModelDKK,
+}
 import model.db.ContributionData
 import model.stripe.StripePaymentMethod
 import ophan.thrift.event.{AbTest, QueryParameter => ThriftQueryParam}
@@ -23,7 +34,7 @@ object AcquisitionDataRowBuilder {
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
       amount = Some(paymentData.amount),
-      country = StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByName).getOrElse(Country.UK),
+      country = StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.componentId,
       componentType = acquisitionData.componentType.map(_.originalName),
@@ -60,7 +71,7 @@ object AcquisitionDataRowBuilder {
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
       amount = Some(paymentData.amount),
-      country = acquisition.countryCode.flatMap(CountryGroup.countryByName).getOrElse(Country.UK),
+      country = acquisition.countryCode.flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.flatMap(_.componentId),
       componentType = acquisitionData.flatMap(_.componentType.map(_.originalName)),
@@ -92,7 +103,7 @@ object AcquisitionDataRowBuilder {
   def buildFromPayPal(acquisition: PaypalAcquisition, contributionData: ContributionData): AcquisitionDataRow = {
     val acquisitionData = acquisition.acquisitionData
     val transaction = acquisition.payment.getTransactions.get(0)
-    val country = CountryGroup.countryByName(acquisition.payment.getPayer.getPayerInfo.getCountryCode).getOrElse(Country.UK)
+    val country = CountryGroup.countryByCode(acquisition.payment.getPayer.getPayerInfo.getCountryCode).getOrElse(Country.UK)
 
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
@@ -151,6 +162,10 @@ object AcquisitionDataRowBuilder {
       case ModelAUD => AUD
       case ModelCAD => CAD
       case ModelNZD => NZD
+      case ModelSEK => SEK
+      case ModelCHF => CHF
+      case ModelNOK => NOK
+      case ModelDKK => DKK
     }
 
   def mapQueryParams(maybeThriftParameters: Option[Set[ThriftQueryParam]]) =

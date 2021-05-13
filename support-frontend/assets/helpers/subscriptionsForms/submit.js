@@ -56,6 +56,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
+import { type ProductOptions, NoProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Functions ----- //
 
@@ -278,27 +279,40 @@ function showPaymentMethod(
   }
 }
 
-function trackSubmitAttempt(paymentMethod: ?PaymentMethod, productType: SubscriptionProduct) {
-  const componentId = `subs-checkout-submit-${productType}-${paymentMethod || ''}`;
+function trackSubmitAttempt(
+  paymentMethod: ?PaymentMethod,
+  productType: SubscriptionProduct,
+  productOption: ProductOptions,
+) {
+  const componentId = productOption === NoProductOptions ?
+    `subs-checkout-submit-${productType}-${paymentMethod || ''}` :
+    `subs-checkout-submit-${productType}-${productOption}-${paymentMethod || ''}`;
   trackCheckoutSubmitAttempt(componentId, productType, paymentMethod, productType);
+}
+
+function getPricingCountry(product, addresses) {
+  if (product === GuardianWeekly && addresses.deliveryAddress) {
+    return addresses.deliveryAddress.country;
+  }
+  return addresses.billingAddress.country;
 }
 
 function submitForm(
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
 ) {
-  const addresses = getAddresses(state);
-  const billingCountry = addresses.billingAddress.country;
-
   const {
-    paymentMethod, product, isTestUser,
+    paymentMethod, product, productOption, isTestUser,
   } = state.page.checkout;
 
-  trackSubmitAttempt(paymentMethod, product);
+  const addresses = getAddresses(state);
+  const pricingCountry = getPricingCountry(product, addresses);
+
+  trackSubmitAttempt(paymentMethod, product, productOption);
 
   let priceDetails = finalPrice(
     state.page.checkout.productPrices,
-    billingCountry,
+    pricingCountry,
     state.page.checkout.billingPeriod,
     state.page.checkout.fulfilmentOption,
     state.page.checkout.productOption,
@@ -308,7 +322,7 @@ function submitForm(
   if (state.page.checkout.billingPeriod === Quarterly && priceDetails.price === 6) {
     priceDetails = getProductPrice(
       state.page.checkout.productPrices,
-      billingCountry,
+      pricingCountry,
       state.page.checkout.billingPeriod,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
@@ -316,7 +330,7 @@ function submitForm(
   }
 
   const { price, currency } = priceDetails;
-  const currencyId = getCurrency(billingCountry);
+  const currencyId = getCurrency(pricingCountry);
   const stripePaymentMethod = paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
@@ -333,7 +347,7 @@ function submitForm(
     isTestUser,
     price,
     currency,
-    billingCountry,
+    pricingCountry,
     paymentMethod,
     stripePaymentMethod,
     state,

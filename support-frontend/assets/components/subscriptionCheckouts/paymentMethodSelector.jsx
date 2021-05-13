@@ -14,11 +14,11 @@ import { type Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {|
-  country: IsoCountry,
+  currencyId: IsoCurrency,
   paymentMethod: Option<PaymentMethod>,
   setPaymentMethod: Function,
   validationError: Option<ErrorMessage>,
@@ -52,7 +52,7 @@ const RadioWithImage = (props: RadioWithImagePropTypes) => (
 );
 
 function PaymentMethodSelector(props: PropTypes) {
-  const paymentMethods = supportedPaymentMethods(props.country);
+  const paymentMethods = supportedPaymentMethods(props.currencyId);
 
   return (
     <Rows gap="large">

@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.model.Stage.DEV
+import com.gu.supporterdata.model.Stage.DEV
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -19,7 +19,7 @@ class S3ServiceSpec extends AsyncFlatSpec with Matchers {
     S3Service
       .streamToS3(DEV, filename, stream, initialString.length)
       .map(_ =>
-        Source.fromInputStream(S3Service.streamFromS3(DEV, filename)).mkString shouldBe initialString
+        Source.fromInputStream(S3Service.streamFromS3(DEV, filename).getObjectContent).mkString shouldBe initialString
       )
   }
 }
