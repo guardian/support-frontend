@@ -17,8 +17,15 @@ export const pageUrlRegexes = {
   subscriptions: {
     subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPages: '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
-    digiSubLandingPagesNotGift: '(/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPagesNotAus: '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
+    digiSub: {
+      // Requires /subscribe/digital, allows /checkout and/or /gift, allows any query string
+      allLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\/gift)?(\?.*)?$/,
+      // Requires /subscribe/digital and /gift, allows /checkout before /gift, allows any query string
+      giftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?\/gift(\?.*)?$/,
+      // Requires /subscribe/digital, allows /checkout, allows any query string
+      nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
+    },
   },
 };
 
@@ -81,7 +88,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotGift,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
     seed: 20,
     optimizeId: '9iCcOPWDTCePfDn8ckRbCA',
   },
