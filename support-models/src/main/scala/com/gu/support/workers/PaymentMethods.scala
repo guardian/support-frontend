@@ -4,8 +4,8 @@ import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
 import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec.capitalizingCodec
-import com.gu.support.zuora.api.{AmazonPayGatewayUSA, DirectDebitGateway, PayPalGateway, PaymentGateway}
+import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
@@ -94,12 +94,11 @@ case class AmazonPayPaymentMethod(
 
 object PaymentMethod {
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
-//  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
-//  implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
-//  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
-//  implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = capitalizingCodec
-//  implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = capitalizingCodec
-  import io.circe.generic.auto._
+  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
+  implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec
+  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
+  implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = deriveCodec
+  implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = deriveCodec
 
   //Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
