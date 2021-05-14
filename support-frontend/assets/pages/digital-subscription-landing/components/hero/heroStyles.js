@@ -57,30 +57,6 @@ export const paragraphs = css`
   }
 `;
 
-export const circleTextContainer = css`
-  padding: ${space[2]}px;
-
-  ${from.tablet} {
-    padding: ${space[1]}px;
-  }
-`;
-
-export const circleTextTop = css`
-  ${headline.xsmall({ fontWeight: 'bold' })};
-
-  ${from.mobileLandscape} {
-    ${headline.medium({ fontWeight: 'bold' })};
-  }
-`;
-
-export const circleTextBottom = css`
-  ${headline.xxxsmall({ fontWeight: 'bold' })};
-
-  ${from.mobileLandscape} {
-    ${headline.xsmall({ fontWeight: 'bold' })};
-  }
-`;
-
 export const circleTextGeneric = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
@@ -103,7 +79,7 @@ export const mobileLineBreak = css`
   }
 `;
 
-export const testRoundelOverrides = css`
+export const roundelOverrides = css`
   display: none;
 
   ${from.tablet} {
@@ -112,6 +88,6 @@ export const testRoundelOverrides = css`
   }
 `;
 
-export const testEmbeddedRoundel = css`
+export const embeddedRoundel = css`
   transform: translateY(0);
 `;

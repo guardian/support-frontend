@@ -32,7 +32,8 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import { DigitalHero } from './components/hero/hero';
+import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
+import { HeroWithImage } from './components/hero/heroWithImage';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
 import digitalSubscriptionLandingReducer, { type State }
@@ -63,7 +64,7 @@ const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 const { page, common }: State = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
-const { internationalisation, abParticipations } = common;
+const { internationalisation } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 // For CTAs in hero test
@@ -72,7 +73,6 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
-const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -132,13 +132,18 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      <DigitalHero
-        orderIsAGift={orderIsAGift}
-        countryGroupId={countryGroupId}
-        promotionCopy={sanitisedPromoCopy}
-        showPriceCards={showPriceCardsInHero}
-        priceList={heroPriceList}
-      />
+      {countryGroupId === AUDCountries || orderIsAGift ?
+        <HeroWithImage
+          orderIsAGift={orderIsAGift}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+        /> :
+        <HeroWithPriceCards
+          orderIsAGift={orderIsAGift}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+          priceList={heroPriceList}
+        />}
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={productBlockContainer}>
