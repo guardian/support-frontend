@@ -27,7 +27,7 @@ import {
   yellowHeading,
   mobileLineBreak,
   circleTextGeneric,
-} from './heroStyles';
+} from './heroWithImageStyles';
 
 type PropTypes = {
   promotionCopy: PromotionCopy,

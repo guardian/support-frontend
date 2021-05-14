@@ -19,7 +19,7 @@ import {
   circleTextGeneric,
   roundelOverrides,
   embeddedRoundel,
-} from './heroStyles';
+} from './heroWithPriceCardsStyles';
 
 type PropTypes = {
   promotionCopy: PromotionCopy,

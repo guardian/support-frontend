@@ -61,16 +61,6 @@ export const circleTextGeneric = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
 
-export const spaceAfter = css`
-  ${from.desktop} {
-    margin-bottom: 70px;
-  }
-
-  ${from.leftCol} {
-    margin-bottom: 80px;
-  }
-`;
-
 export const mobileLineBreak = css`
   display: block;
 
