@@ -139,8 +139,6 @@ function LandingPage() {
           promotionCopy={sanitisedPromoCopy}
         /> :
         <HeroWithPriceCards
-          orderIsAGift={orderIsAGift}
-          countryGroupId={countryGroupId}
           promotionCopy={sanitisedPromoCopy}
           priceList={heroPriceList}
         />}

@@ -91,6 +91,7 @@ function HeroWithImage({
                 {roundelText}
               </HeroRoundel>
           }
+          hideRoundelBelow="tablet"
         >
           <section css={heroCopy}>
             {orderIsAGift ?

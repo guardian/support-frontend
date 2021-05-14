@@ -17,7 +17,6 @@ export const pageUrlRegexes = {
   subscriptions: {
     subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPages: '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
-    digiSubLandingPagesNotAus: '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
   },
 };
 
@@ -41,27 +40,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.contributions.notUkLandingPage,
     seed: 2,
-  },
-  priceCardsInHeroTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
-    seed: 19,
-    optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
   },
 
   localCurrencyTestV2: {
