@@ -6,7 +6,6 @@ import com.gu.i18n.Country.UK
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway, SepaGateway}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
@@ -109,10 +108,10 @@ case class AmazonPayPaymentMethod(
 object PaymentMethod {
   import io.circe.generic.auto._
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
-  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = Codec.auto
+  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
-  implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = Codec.auto
+  implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = deriveCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = deriveCodec
   implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = deriveCodec
 
