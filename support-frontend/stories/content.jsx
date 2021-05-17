@@ -100,10 +100,13 @@ stories.add('Quote', () => {
   const quote = text('Quote', 'The Subscriptions team is my favourite team');
 
   return (
-    <div style={{ padding: '8px', maxWidth: '320px' }}>
+    <div style={{ padding: '8px', maxWidth: '400px' }}>
       <Quote
         name={name}
         jobTitle={jobTitle}
+        headshot={
+          <img src="https://media.guim.co.uk/1e8cd6f3fc9af8ba9f84a4f70acc381ca9bf0fb3/0_0_315_315/140.png" alt="" />
+        }
       >
         {quote}
       </Quote>

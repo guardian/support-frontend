@@ -68,6 +68,7 @@ const quoteHeadshot = css`
   border-radius: 50%;
   flex-shrink: 0;
   flex-basis: auto;
+  overflow: hidden;
 
   img {
     max-width: 100%;
