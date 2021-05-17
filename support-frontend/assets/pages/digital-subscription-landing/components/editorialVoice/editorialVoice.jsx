@@ -3,7 +3,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
+import { from, until } from '@guardian/src-foundations/mq';
 
 import Block from 'components/page/block';
 import Quote from 'components/quote/quote';
@@ -24,16 +24,9 @@ const evLabel = css`
   transform: translateY(-100%);
 `;
 
-const evQuotePadding = css`
-  padding: 0 ${space[4]}px;
-  margin-top: -${space[5]}px;
-
-  ${from.tablet} {
-    margin-top: 0;
-  }
-
-  ${from.desktop} {
-    padding: 0 32px;
+const evQuoteContainer = css`
+  ${until.tablet} {
+    margin: -${space[5]}px ${space[4]}px 0;
   }
 `;
 
@@ -41,7 +34,7 @@ function EditorialVoice() {
   return (
     <Block cssOverrides={blockOverrides}>
       <BlockLabel tag="h2" cssOverrides={evLabel}>Why your support matters</BlockLabel>
-      <div css={evQuotePadding}>
+      <div css={evQuoteContainer}>
         <Quote
           name="Katherine Viner"
           jobTitle="Editor-in-chief"
