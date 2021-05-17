@@ -10,7 +10,6 @@ import Quote from 'components/quote/quote';
 import BlockLabel from 'components/blockLabel/blockLabel';
 
 const blockOverrides = css`
-  position: relative;
   margin-top: 52px;
 
   ${from.desktop} {
@@ -27,6 +26,11 @@ const evLabel = css`
 
 const evQuotePadding = css`
   padding: 0 ${space[4]}px;
+  margin-top: -${space[5]}px;
+
+  ${from.tablet} {
+    margin-top: 0;
+  }
 
   ${from.desktop} {
     padding: 0 32px;
