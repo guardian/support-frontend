@@ -1,21 +1,20 @@
 // @flow
 
 // ----- Imports ----- //
-
-import { connect } from 'react-redux';
+import React from 'react';
 
 import { type Option } from 'helpers/types/option';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { CommonState } from 'helpers/page/commonReducer';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 
-import CountryGroupSwitcher, { type PropTypes } from './countryGroupSwitcher';
+import CountryGroupSwitcher from './countryGroupSwitcher';
 
 
 // ------ Component ----- //
 
 export default function (
   subPath: string,
+  countryGroupId: CountryGroupId,
   listOfCountries: CountryGroupId[],
   trackProduct?: Option<SubscriptionProduct>,
 ) {
@@ -28,16 +27,12 @@ export default function (
     })();
   }
 
-  function mapStateToProps(state: { common: CommonState }): PropTypes {
-
-    return {
-      countryGroupIds: listOfCountries,
-      selectedCountryGroup: state.common.internationalisation.countryGroupId,
-      subPath,
-      onCountryGroupSelect,
-    };
-  }
-
-  return connect(mapStateToProps)(CountryGroupSwitcher);
-
+  return () => (
+    <CountryGroupSwitcher
+      countryGroupIds={listOfCountries}
+      selectedCountryGroup={countryGroupId}
+      subPath={subPath}
+      onCountryGroupSelect={onCountryGroupSelect}
+    />
+  );
 }

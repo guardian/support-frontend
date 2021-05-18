@@ -95,4 +95,6 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
 
 renderPage(<PaperLandingPage {...paperLandingProps} />, reactElementId);
 
-export { PaperLandingPage as content };
+const content = <PaperLandingPage {...paperLandingProps} />;
+
+export { content };
