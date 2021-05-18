@@ -51,7 +51,7 @@ export const heroImage = css`
   align-self: flex-end;
   flex-shrink: 0;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: flex-end;
   width: 100%;
 
