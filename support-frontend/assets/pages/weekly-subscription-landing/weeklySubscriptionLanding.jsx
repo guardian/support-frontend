@@ -44,7 +44,7 @@ import { promoQueryParam, getPromotionCopy } from 'helpers/productPrice/promotio
 import { promotionTermsUrl } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 
-import { countryId, productPrices, promotionCopy, orderIsAGift } from './weeklySubscriptionLandingState';
+import { weeklyLandingProps, type WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
 
 // ----- Redux Store ----- //
 
@@ -66,69 +66,72 @@ const reactElementId: {
   International: 'weekly-landing-page-int',
 };
 
-const path = orderIsAGift ? routes.guardianWeeklySubscriptionLandingGift : routes.guardianWeeklySubscriptionLanding;
-const giftNonGiftLink = orderIsAGift ?
-  routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift;
-
-const Header = headerWithCountrySwitcherContainer({
-  path,
-  countryGroupId,
-  listOfCountryGroups: [
-    GBPCountries,
-    UnitedStates,
-    AUDCountries,
-    EURCountries,
-    Canada,
-    NZDCountries,
-    International,
-  ],
-  trackProduct: 'GuardianWeekly',
-});
-
 // ----- Render ----- //
 
-const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
-const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
+const WeeklyLandingPage = ({
+  countryId, productPrices, promotionCopy, orderIsAGift,
+}: WeeklyLandingPropTypes) => {
+  const path = orderIsAGift ? routes.guardianWeeklySubscriptionLandingGift : routes.guardianWeeklySubscriptionLanding;
+  const giftNonGiftLink = orderIsAGift ?
+    routes.guardianWeeklySubscriptionLanding : routes.guardianWeeklySubscriptionLandingGift;
+  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+  const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
+  const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
 
-// ID for Selenium tests
-const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
+  // ID for Selenium tests
+  const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
 
-const WeeklyLandingPage = () => (
-  <Provider store={store}>
-    <Page
-      id={pageQaId}
-      header={<Header />}
-      footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
-    >
-      <WeeklyHero
-        orderIsAGift={orderIsAGift || false}
-        countryGroupId={countryGroupId}
-        promotionCopy={sanitisedPromoCopy}
-      />
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block>
-            {orderIsAGift ? <GiftBenefits /> : <Benefits />}
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="dark" hasOverlap>
-        <CentredContainer>
-          <WeeklyProductPrices
-            countryId={countryId}
-            productPrices={productPrices}
-            orderIsAGift={orderIsAGift || false}
-          />
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="white">
-        <CentredContainer>
-          <GiftNonGiftCta product="Guardian Weekly" href={giftNonGiftLink} orderIsAGift={orderIsAGift || false} />
-        </CentredContainer>
-      </FullWidthContainer>
-    </Page>
-  </Provider>
-);
+  const Header = headerWithCountrySwitcherContainer({
+    path,
+    countryGroupId,
+    listOfCountryGroups: [
+      GBPCountries,
+      UnitedStates,
+      AUDCountries,
+      EURCountries,
+      Canada,
+      NZDCountries,
+      International,
+    ],
+    trackProduct: 'GuardianWeekly',
+  });
 
-renderPage(<WeeklyLandingPage />, reactElementId[countryGroupId]);
+  return (
+    <Provider store={store}>
+      <Page
+        id={pageQaId}
+        header={<Header />}
+        footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
+      >
+        <WeeklyHero
+          orderIsAGift={orderIsAGift || false}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+        />
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block>
+              {orderIsAGift ? <GiftBenefits /> : <Benefits />}
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>
+        <FullWidthContainer theme="dark" hasOverlap>
+          <CentredContainer>
+            <WeeklyProductPrices
+              countryId={countryId}
+              productPrices={productPrices}
+              orderIsAGift={orderIsAGift || false}
+            />
+          </CentredContainer>
+        </FullWidthContainer>
+        <FullWidthContainer theme="white">
+          <CentredContainer>
+            <GiftNonGiftCta product="Guardian Weekly" href={giftNonGiftLink} orderIsAGift={orderIsAGift || false} />
+          </CentredContainer>
+        </FullWidthContainer>
+      </Page>
+    </Provider>
+  );
+};
+
+renderPage(<WeeklyLandingPage {...weeklyLandingProps} />, reactElementId[countryGroupId]);

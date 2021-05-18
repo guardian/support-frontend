@@ -29,17 +29,13 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
-import { productPrices, promotionCopy } from './paperSubscriptionLandingState';
+import { paperLandingProps, type PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 
 // ----- Collection or delivery ----- //
-
-const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
 
 const reactElementId = 'paper-subscription-landing-page';
 
 // ----- Redux Store ----- //
-
-const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 const paperSubsFooter = (
   <Footer
@@ -52,7 +48,11 @@ const paperSubsFooter = (
 // ID for Selenium tests
 const pageQaId = 'qa-paper-subscriptions';
 
-const PaperLandingPage = () => {
+
+const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropTypes) => {
+  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+  const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
+
   const [selectedTab, setSelectedTab] = useState<PaperFulfilmentOptions>(fulfilment);
 
   if (!productPrices) {
@@ -93,6 +93,6 @@ const PaperLandingPage = () => {
   );
 };
 
-renderPage(<PaperLandingPage />, reactElementId);
+renderPage(<PaperLandingPage {...paperLandingProps} />, reactElementId);
 
 export { PaperLandingPage as content };
