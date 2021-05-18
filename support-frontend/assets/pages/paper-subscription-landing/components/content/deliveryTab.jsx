@@ -5,7 +5,6 @@
 import React from 'react';
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
-import { setTab } from '../../paperSubscriptionLandingPageActions';
 import LinkTo from './linkTo';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { Accordion } from '@guardian/src-accordion';
@@ -15,6 +14,7 @@ import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { TabAccordionRow } from './tabAccordionRow';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 const flexContainerOverride = css`
   align-items: flex-start;
@@ -63,7 +63,7 @@ const accordionTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
 
 export const ContentDeliveryFaqBlock = ({
   setTabAction,
-}: {setTabAction: typeof setTab,
+}: {setTabAction: (PaperFulfilmentOptions) => void,
 }) => (
   <FlexContainer cssOverrides={flexContainerOverride}>
     <div css={faqsContainer}>

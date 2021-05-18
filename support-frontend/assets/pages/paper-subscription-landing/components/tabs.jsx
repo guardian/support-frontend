@@ -3,15 +3,10 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
 import { paperSubsUrl } from 'helpers/routes';
-
-import { type State } from '../paperSubscriptionLandingPageReducer';
-import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 import { SubsCardFaqBlock } from './content/subsCardTab';
@@ -38,17 +33,9 @@ export const tabs: {[PaperFulfilmentOptions]: TabOptions} = {
   },
 };
 
-type StatePropTypes = {|
-  selectedTab: PaperFulfilmentOptions,
-|};
-
-type DispatchPropTypes = {|
-  setTabAction: (PaperFulfilmentOptions) => TabActions,
-|};
-
 type PropTypes = {|
-  ...StatePropTypes,
-  ...DispatchPropTypes,
+  selectedTab: PaperFulfilmentOptions,
+  setTabAction: (PaperFulfilmentOptions) => void,
 |};
 
 // ----- Component ----- //
@@ -79,18 +66,6 @@ function PaperTabs({ selectedTab, setTabAction }: PropTypes) {
   );
 }
 
-// ----- State/Props Maps ----- //
-
-const mapStateToProps = (state: State) => ({
-  selectedTab: state.page.tab,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>
-  ({
-    setTabAction: bindActionCreators(setTab, dispatch),
-  });
-
-
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(PaperTabs);
+export default PaperTabs;

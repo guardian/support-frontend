@@ -13,14 +13,13 @@ import ProductOption, { type Product } from 'components/product/productOption';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { Callout } from 'components/text/text';
 import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 import LinkTo from './linkTo';
-import { setTab } from '../../paperSubscriptionLandingPageActions';
-import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 
 export type PropTypes = {|
-  activeTab: ActiveTabState,
-  setTabAction: typeof setTab,
+  activeTab: PaperFulfilmentOptions,
+  setTabAction: (PaperFulfilmentOptions) => void,
   products: Product[],
 |};
 
