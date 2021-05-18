@@ -1,13 +1,13 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
 // components
 import ProductOption, {
   type Product,
 } from 'components/product/productOption';
 import {
   mapStateToProps,
+  type StatePropTypes,
 } from './helpers/paymentSelection';
 // styles
 import {
@@ -54,4 +54,20 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) =>
       }
     </div>);
 
-export default connect(mapStateToProps)(PaymentSelection);
+function DigitalPaymentSelection({
+  countryGroupId,
+  currencyId,
+  productPrices,
+  orderIsAGift,
+}: StatePropTypes) {
+  const { paymentOptions } = mapStateToProps({
+    countryGroupId,
+    currencyId,
+    productPrices,
+    orderIsAGift,
+  });
+
+  return <PaymentSelection paymentOptions={paymentOptions} />;
+}
+
+export default DigitalPaymentSelection;

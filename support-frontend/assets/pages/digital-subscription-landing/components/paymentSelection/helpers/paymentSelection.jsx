@@ -19,7 +19,6 @@ import {
 } from 'components/product/productOptionSmall';
 
 import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
-import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import { type Option } from 'helpers/types/option';
 import type {
   ProductPrices,
@@ -169,10 +168,20 @@ const getHeroCtaProps = (
   }).map(createPaymentOption);
 };
 
+export type StatePropTypes = {|
+  countryGroupId: CountryGroupId;
+  currencyId: IsoCurrency;
+  productPrices: ProductPrices;
+  orderIsAGift: boolean;
+|}
+
 // state
-const mapStateToProps = (state: State): PropTypes => {
-  const { productPrices, orderIsAGift } = state.page;
-  const { countryGroupId, currencyId } = state.common.internationalisation;
+const mapStateToProps = ({
+  countryGroupId,
+  currencyId,
+  productPrices,
+  orderIsAGift,
+}: StatePropTypes): PropTypes => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): Product => {

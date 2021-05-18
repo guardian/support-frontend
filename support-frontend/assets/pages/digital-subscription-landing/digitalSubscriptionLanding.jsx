@@ -12,7 +12,6 @@ import {
   AUDCountries,
   Canada,
   type CountryGroupId,
-  detect,
   EURCountries,
   GBPCountries,
   International,
@@ -43,6 +42,8 @@ import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
+import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
+
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 
@@ -61,22 +62,11 @@ const productBlockContainer = css`
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { page, common }: State = store.getState();
-const { orderIsAGift, productPrices, promotionCopy } = page;
+const { common }: State = store.getState();
 const { internationalisation, abParticipations } = common;
-const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-
-// For CTAs in hero test
-const heroPriceList = getHeroCtaProps(
-  productPrices,
-  internationalisation.currencyId,
-  internationalisation.countryGroupId,
-);
 const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 
 // ----- Internationalisation ----- //
-
-const countryGroupId: CountryGroupId = detect();
 
 const reactElementId: {
   [CountryGroupId]: string,
@@ -90,26 +80,47 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
-const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
-const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
-
-const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
-  path,
-  countryGroupId,
-  listOfCountryGroups: [
-    GBPCountries,
-    UnitedStates,
-    AUDCountries,
-    EURCountries,
-    NZDCountries,
-    Canada,
-    International,
-  ],
-  trackProduct: 'DigitalPack',
-});
 
 // ----- Render ----- //
-function LandingPage() {
+function DigitalLandingPage({
+  countryGroupId,
+  currencyId,
+  productPrices,
+  promotionCopy,
+  orderIsAGift,
+}: DigitalLandingPropTypes) {
+  if (!productPrices) {
+    return null;
+  }
+
+  const isGift = orderIsAGift || false;
+
+  const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
+  const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
+  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+
+  // For CTAs in hero test
+  const heroPriceList = getHeroCtaProps(
+    productPrices,
+    internationalisation.currencyId,
+    internationalisation.countryGroupId,
+  );
+
+  const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
+    path,
+    countryGroupId,
+    listOfCountryGroups: [
+      GBPCountries,
+      UnitedStates,
+      AUDCountries,
+      EURCountries,
+      NZDCountries,
+      Canada,
+      International,
+    ],
+    trackProduct: 'DigitalPack',
+  });
+
   const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
     threshold: 0.3,
     debounce: true,
@@ -120,7 +131,7 @@ function LandingPage() {
       <div className="footer-alignment">
         <DigitalFooter
           country={countryGroupId}
-          orderIsAGift={orderIsAGift}
+          orderIsAGift={isGift}
           productPrices={productPrices}
           centred
         />
@@ -128,53 +139,54 @@ function LandingPage() {
     </div>);
 
   return (
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={footer}
-    >
-      <DigitalHero
-        orderIsAGift={orderIsAGift}
-        countryGroupId={countryGroupId}
-        promotionCopy={sanitisedPromoCopy}
-        showPriceCards={showPriceCardsInHero}
-        priceList={heroPriceList}
-      />
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={productBlockContainer}>
-            <div ref={setElementToObserve}>
-              {countryGroupId === AUDCountries ?
-                <ProductBlockAus
-                  countryGroupId={countryGroupId}
-                /> :
-                <ProductBlock
-                  countryGroupId={countryGroupId}
-                />
+    <Provider store={store}>
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={footer}
+      >
+        <DigitalHero
+          orderIsAGift={isGift}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+          showPriceCards={showPriceCardsInHero}
+          priceList={heroPriceList}
+        />
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block cssOverrides={productBlockContainer}>
+              <div ref={setElementToObserve}>
+                {countryGroupId === AUDCountries ?
+                  <ProductBlockAus
+                    countryGroupId={countryGroupId}
+                  /> :
+                  <ProductBlock
+                    countryGroupId={countryGroupId}
+                  />
               }
-            </div>
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="dark" hasOverlap>
-        <CentredContainer>
-          <Prices orderIsAGift={orderIsAGift} />
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="white">
-        <CentredContainer>
-          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
-        </CentredContainer>
-      </FullWidthContainer>
-      <FeedbackWidget display={widgetShouldDisplay} />
-    </Page>
+              </div>
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>
+        <FullWidthContainer theme="dark" hasOverlap>
+          <CentredContainer>
+            <Prices
+              countryGroupId={countryGroupId}
+              currencyId={currencyId}
+              productPrices={productPrices}
+              orderIsAGift={isGift}
+            />
+          </CentredContainer>
+        </FullWidthContainer>
+        <FullWidthContainer theme="white">
+          <CentredContainer>
+            <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
+          </CentredContainer>
+        </FullWidthContainer>
+        <FeedbackWidget display={widgetShouldDisplay} />
+      </Page>
+    </Provider>
   );
 
 }
 
-const content = (
-  <Provider store={store}>
-    <LandingPage />
-  </Provider>
-);
-
-renderPage(content, reactElementId[countryGroupId]);
+renderPage(<DigitalLandingPage {...digitalLandingProps} />, reactElementId[digitalLandingProps.countryGroupId]);
