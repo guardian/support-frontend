@@ -15,7 +15,7 @@ import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
 
-class PaperSubscription(
+class PaperSubscriptionController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
   landingCopyProvider: LandingCopyProvider,
   val assets: AssetsResolver,

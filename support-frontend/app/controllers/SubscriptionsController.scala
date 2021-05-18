@@ -20,7 +20,7 @@ import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
 
-class Subscriptions(
+class SubscriptionsController(
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,

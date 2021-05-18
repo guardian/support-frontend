@@ -16,7 +16,7 @@ import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
 
-class WeeklySubscription(
+class WeeklySubscriptionController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
   landingCopyProvider: LandingCopyProvider,
   val assets: AssetsResolver,
