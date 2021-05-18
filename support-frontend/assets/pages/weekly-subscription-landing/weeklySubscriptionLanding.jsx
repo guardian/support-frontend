@@ -36,7 +36,7 @@ import { WeeklyHero } from './components/hero/hero';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 
-import WeeklyPrices from './components/weeklyProductPrices';
+import WeeklyProductPrices from './components/weeklyProductPrices';
 import reducer from './weeklySubscriptionLandingReducer';
 
 import './weeklySubscriptionLanding.scss';
@@ -44,11 +44,11 @@ import { promoQueryParam, getPromotionCopy } from 'helpers/productPrice/promotio
 import { promotionTermsUrl } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 
+import { countryId, productPrices, promotionCopy, orderIsAGift } from './weeklySubscriptionLandingState';
 
 // ----- Redux Store ----- //
 
 const store = pageInit(() => reducer, true);
-const { orderIsAGift } = store.getState().page;
 
 // ----- Internationalisation ----- //
 
@@ -87,7 +87,6 @@ const Header = headerWithCountrySwitcherContainer({
 
 // ----- Render ----- //
 
-const { promotionCopy } = store.getState().page;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
 const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || defaultPromo);
@@ -95,7 +94,7 @@ const promoTermsLink = promotionTermsUrl(getQueryParameter(promoQueryParam) || d
 // ID for Selenium tests
 const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
 
-const content = (
+const WeeklyLandingPage = () => (
   <Provider store={store}>
     <Page
       id={pageQaId}
@@ -103,7 +102,7 @@ const content = (
       footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
     >
       <WeeklyHero
-        orderIsAGift={orderIsAGift}
+        orderIsAGift={orderIsAGift || false}
         countryGroupId={countryGroupId}
         promotionCopy={sanitisedPromoCopy}
       />
@@ -116,16 +115,20 @@ const content = (
       </FullWidthContainer>
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
-          <WeeklyPrices />
+          <WeeklyProductPrices
+            countryId={countryId}
+            productPrices={productPrices}
+            orderIsAGift={orderIsAGift || false}
+          />
         </CentredContainer>
       </FullWidthContainer>
       <FullWidthContainer theme="white">
         <CentredContainer>
-          <GiftNonGiftCta product="Guardian Weekly" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
+          <GiftNonGiftCta product="Guardian Weekly" href={giftNonGiftLink} orderIsAGift={orderIsAGift || false} />
         </CentredContainer>
       </FullWidthContainer>
     </Page>
   </Provider>
 );
 
-renderPage(content, reactElementId[countryGroupId]);
+renderPage(<WeeklyLandingPage />, reactElementId[countryGroupId]);
