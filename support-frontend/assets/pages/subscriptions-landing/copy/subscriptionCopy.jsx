@@ -261,13 +261,18 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
   classModifier: ['subscriptions__premuim-app'],
 });
 
-const getSubscriptionCopy = (countryGroupId: CountryGroupId, pricingCopy: PricingCopy): ProductCopy[] => {
+const getSubscriptionCopy = (
+  countryGroupId: CountryGroupId,
+  pricingCopy: PricingCopy,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  abParticipations: Participations,
+): ProductCopy[] => {
   if (countryGroupId === GBPCountries) {
     return [
       digital(countryGroupId, pricingCopy[DigitalPack], true),
       guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], false),
       paper(countryGroupId, pricingCopy[Paper], false),
-      // paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
+      paperAndDigital(countryGroupId, referrerAcquisitionData, abParticipations),
       premiumApp(countryGroupId),
     ];
   } else if (countryGroupId === EURCountries) {

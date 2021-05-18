@@ -27,7 +27,9 @@ const store = pageInit(() => subscriptionsLandingReducer(), true);
 
 const SubscriptionsLandingPage = ({
   countryGroupId,
+  participations,
   pricingCopy,
+  referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) => {
   const Header = headerWithCountrySwitcherContainer({
     path: '/subscribe',
@@ -51,7 +53,12 @@ const SubscriptionsLandingPage = ({
           <FooterContainer faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions" centred />
         }
       >
-        <SubscriptionLandingContent countryGroupId={countryGroupId} pricingCopy={pricingCopy} />
+        <SubscriptionLandingContent
+          countryGroupId={countryGroupId}
+          participations={participations}
+          pricingCopy={pricingCopy}
+          referrerAcquisitions={referrerAcquisitions}
+        />
       </Page>
     </Provider>
   );

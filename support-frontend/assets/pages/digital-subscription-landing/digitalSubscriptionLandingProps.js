@@ -12,22 +12,27 @@ import {
   detect as detectCurrency,
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import { init as initAbTests, type Participations } from 'helpers/abTests/abtest';
+import { getSettings } from 'helpers/globals';
 
 export type DigitalLandingPropTypes = {|
   countryId: IsoCountry;
   countryGroupId: CountryGroupId;
   currencyId: IsoCurrency;
+  participations: Participations;
   productPrices: ?ProductPrices;
   promotionCopy: ?PromotionCopy;
   orderIsAGift: ?boolean;
 |}
 
 const countryGroupId = detectCountryGroup();
+const countryId = detectCountry();
 
 export const digitalLandingProps: DigitalLandingPropTypes = {
-  countryId: detectCountry(),
+  countryId,
   countryGroupId,
   currencyId: detectCurrency(countryGroupId),
+  participations: initAbTests(countryId, countryGroupId, getSettings()),
   productPrices: getProductPrices(),
   promotionCopy: getPromotionCopy(),
   orderIsAGift: getGlobal('orderIsAGift'),

@@ -8,7 +8,14 @@ import {
   detect as detectCountryGroup,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
+import {
+  getReferrerAcquisitionData,
+  type ReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 
+import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { init as initAbTests, type Participations } from 'helpers/abTests/abtest';
+import { getSettings } from 'helpers/globals';
 
 export type PriceCopy = {
   price: number,
@@ -21,10 +28,16 @@ export type PricingCopy = {
 
 export type SubscriptionsLandingPropTypes = {|
   countryGroupId: CountryGroupId;
+  participations: Participations;
   pricingCopy: ?PricingCopy;
+  referrerAcquisitions: ReferrerAcquisitionData;
 |}
 
+const countryGroupId = detectCountryGroup();
+
 export const subscriptionsLandingProps: SubscriptionsLandingPropTypes = {
-  countryGroupId: detectCountryGroup(),
+  countryGroupId,
+  participations: initAbTests(detectCountry(), countryGroupId, getSettings()),
   pricingCopy: getGlobal('pricingCopy'),
+  referrerAcquisitions: getReferrerAcquisitionData(),
 };

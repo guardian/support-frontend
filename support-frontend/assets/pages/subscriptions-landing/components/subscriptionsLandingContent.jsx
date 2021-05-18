@@ -11,11 +11,13 @@ import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps
 
 const isFeature = index => index === 0; // make the first card a feature
 
-const SubscriptionsLandingContent = ({ countryGroupId, pricingCopy }: SubscriptionsLandingPropTypes) => {
+const SubscriptionsLandingContent = ({
+  countryGroupId, participations, pricingCopy, referrerAcquisitions,
+}: SubscriptionsLandingPropTypes) => {
   if (!pricingCopy) {
     return null;
   }
-  const subscriptionCopy = getSubscriptionCopy(countryGroupId, pricingCopy);
+  const subscriptionCopy = getSubscriptionCopy(countryGroupId, pricingCopy, referrerAcquisitions, participations);
 
   return (
     <div className="subscriptions-landing-page" id="qa-subscriptions-landing-page">

@@ -34,8 +34,7 @@ import headerWithCountrySwitcherContainer
 import { DigitalHero } from './components/hero/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
-import digitalSubscriptionLandingReducer, { type State }
-  from './digitalSubscriptionLandingReducer';
+import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import { StatelessFooter } from 'components/footerCompliant/DigitalFooter';
@@ -62,10 +61,6 @@ const productBlockContainer = css`
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
-const { common }: State = store.getState();
-const { internationalisation, abParticipations } = common;
-const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
-
 // ----- Internationalisation ----- //
 
 const reactElementId: {
@@ -85,6 +80,7 @@ const reactElementId: {
 function DigitalLandingPage({
   countryGroupId,
   currencyId,
+  participations,
   productPrices,
   promotionCopy,
   orderIsAGift,
@@ -94,6 +90,7 @@ function DigitalLandingPage({
   }
 
   const isGift = orderIsAGift || false;
+  const showPriceCardsInHero = participations.priceCardsInHeroTest === 'variant';
 
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -102,8 +99,8 @@ function DigitalLandingPage({
   // For CTAs in hero test
   const heroPriceList = getHeroCtaProps(
     productPrices,
-    internationalisation.currencyId,
-    internationalisation.countryGroupId,
+    currencyId,
+    countryGroupId,
   );
 
   const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
