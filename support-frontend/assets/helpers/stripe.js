@@ -38,6 +38,7 @@ function getStripeKey(stripeAccount: StripeAccount, country: IsoCountry, isTestU
         window.guardian.stripeKeyDefaultCurrencies[stripeAccount].default;
   }
 }
+
 //  this is required as useStripeObjects is used in multiple components
 //  but we only want to call setLoadParameters once.
 const stripeScriptHasBeenAddedToPage = (): boolean =>

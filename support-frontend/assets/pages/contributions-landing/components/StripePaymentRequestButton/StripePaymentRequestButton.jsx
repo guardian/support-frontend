@@ -35,7 +35,6 @@ import {
   setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
-  setStripePaymentRequestObject,
   updateBillingCountry,
   updateBillingState,
   updateEmail,
@@ -56,8 +55,12 @@ import type { LocalCurrencyCountry } from '../../../../helpers/internationalisat
 
 // ----- Types -----//
 
+type PaymentRequestObject = Object; // Just to make it clearer when we're passing this object around
+
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
+  paymentRequestObject: PaymentRequestObject | null,
+  setPaymentRequestObject: (paymentRequestObject: PaymentRequestObject) => void,
   country: IsoCountry,
   currency: IsoCurrency,
   selectedAmounts: SelectedAmounts,
@@ -69,7 +72,6 @@ type PropTypes = {
   amount: number,
   stripePaymentRequestButtonData: StripePaymentRequestButtonData,
   setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod, StripeAccount) => void,
-  setStripePaymentRequestObject: (paymentRequest: Object, stripeAccount: StripeAccount) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) => void,
   toggleOtherPaymentMethods: () => void,
@@ -115,8 +117,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentRequestButtonPaymentMethod:
     (paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount) =>
       dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod, stripeAccount)),
-  setStripePaymentRequestObject: (paymentRequest: Object, stripeAccount: StripeAccount) =>
-    dispatch(setStripePaymentRequestObject(paymentRequest, stripeAccount)),
   updateEmail: (email: string) => dispatch(updateEmail(email)),
   updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
   updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
@@ -178,8 +178,8 @@ const onComplete = (res: PaymentResult) => {
 
 function updateTotal(props: PropTypes) {
   // When the other tab is clicked, the value of amount is NaN
-  if (!Number.isNaN(props.amount) && props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
-    props.stripePaymentRequestButtonData.stripePaymentRequestObject.update({
+  if (!Number.isNaN(props.amount) && props.paymentRequestObject) {
+    props.paymentRequestObject.update({
       total: {
         label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
         amount: props.amount * 100,
@@ -351,8 +351,8 @@ function setUpPaymentListenerSca(
   });
 }
 
-function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe) {
-  const paymentRequest = stripe.paymentRequest({
+function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe): PaymentRequestObject {
+  const paymentRequestObject: PaymentRequestObject = stripe.paymentRequest({
     country: props.country,
     currency: props.currency.toLowerCase(),
     total: {
@@ -363,23 +363,21 @@ function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe) {
     requestPayerName: props.contributionType !== 'ONE_OFF',
   });
 
-  paymentRequest.canMakePayment().then((result) => {
+  paymentRequestObject.canMakePayment().then((result) => {
     const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
     if (paymentMethod) {
       // Track the fact that it loaded, even if the user is in the control for the PRB test
       trackComponentLoad(`${paymentMethod}-loaded`);
 
-      if (paymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonVariant) {
-        trackComponentLoad(`${paymentMethod}-displayed`);
-        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-        setUpPaymentListenerSca(props, stripe, paymentRequest, paymentMethod);
-      }
+      // if (paymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonVariant) {
+      trackComponentLoad(`${paymentMethod}-displayed`);
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+      setUpPaymentListenerSca(props, stripe, paymentRequestObject, paymentMethod);
+      // }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
   });
-
-  props.setStripePaymentRequestObject(paymentRequest, props.stripeAccount);
 
   // Only need 3DS handler for one-offs - recurring has its own special flow via confirmCardSetup
   if (props.contributionType === 'ONE_OFF') {
@@ -388,6 +386,8 @@ function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe) {
       return stripe.handleCardAction(clientSecret);
     });
   }
+
+  return paymentRequestObject;
 }
 
 const paymentButtonStyle = {
@@ -400,20 +400,16 @@ const paymentButtonStyle = {
 
 // ---- Component ----- //
 const PaymentRequestButton = (props: PropTypes) => {
-
   const stripe = stripeJs.useStripe();
 
   useEffect(() => {
     // Call canMakePayment on the paymentRequest object only once, once the stripe object is ready
-    if (stripe && !props.stripePaymentRequestButtonData.stripePaymentRequestObject) {
-      initialisePaymentRequest({ ...props }, stripe);
+    if (stripe && !props.paymentRequestObject) {
+      props.setPaymentRequestObject(initialisePaymentRequest({ ...props }, stripe));
     }
-  }, [stripe, props.stripePaymentRequestButtonData.stripePaymentRequestObject]);
+  }, [stripe, props.paymentRequestObject]);
 
-  if (
-    !props.stripePaymentRequestButtonData.paymentMethod ||
-    props.stripePaymentRequestButtonData.paymentMethod === 'none'
-  ) {
+  if (!props.paymentRequestObject || props.stripePaymentRequestButtonData.paymentMethod === 'none') {
     return null;
   }
 
@@ -425,7 +421,7 @@ const PaymentRequestButton = (props: PropTypes) => {
     >
       <PaymentRequestButtonElement
         options={{
-          paymentRequest: props.stripePaymentRequestButtonData.stripePaymentRequestObject,
+          paymentRequest: props.paymentRequestObject,
         }}
         className="stripe-payment-request-button__button"
         style={paymentButtonStyle}
