@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import * as React from 'react';
-import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
@@ -21,7 +20,6 @@ import {
   NZDCountries,
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
 
@@ -37,7 +35,6 @@ import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 
 import WeeklyProductPrices from './components/weeklyProductPrices';
-import reducer from './weeklySubscriptionLandingReducer';
 
 import './weeklySubscriptionLanding.scss';
 import { promoQueryParam, getPromotionCopy } from 'helpers/productPrice/promotions';
@@ -45,10 +42,6 @@ import { promotionTermsUrl } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 
 import { weeklyLandingProps, type WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
-
-// ----- Redux Store ----- //
-
-const store = pageInit(() => reducer, true);
 
 // ----- Internationalisation ----- //
 
@@ -97,40 +90,38 @@ const WeeklyLandingPage = ({
   });
 
   return (
-    <Provider store={store}>
-      <Page
-        id={pageQaId}
-        header={<Header />}
-        footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
-      >
-        <WeeklyHero
-          orderIsAGift={orderIsAGift || false}
-          countryGroupId={countryGroupId}
-          promotionCopy={sanitisedPromoCopy}
-        />
-        <FullWidthContainer>
-          <CentredContainer>
-            <Block>
-              {orderIsAGift ? <GiftBenefits /> : <Benefits />}
-            </Block>
-          </CentredContainer>
-        </FullWidthContainer>
-        <FullWidthContainer theme="dark" hasOverlap>
-          <CentredContainer>
-            <WeeklyProductPrices
-              countryId={countryId}
-              productPrices={productPrices}
-              orderIsAGift={orderIsAGift || false}
-            />
-          </CentredContainer>
-        </FullWidthContainer>
-        <FullWidthContainer theme="white">
-          <CentredContainer>
-            <GiftNonGiftCta product="Guardian Weekly" href={giftNonGiftLink} orderIsAGift={orderIsAGift || false} />
-          </CentredContainer>
-        </FullWidthContainer>
-      </Page>
-    </Provider>
+    <Page
+      id={pageQaId}
+      header={<Header />}
+      footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
+    >
+      <WeeklyHero
+        orderIsAGift={orderIsAGift || false}
+        countryGroupId={countryGroupId}
+        promotionCopy={sanitisedPromoCopy}
+      />
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block>
+            {orderIsAGift ? <GiftBenefits /> : <Benefits />}
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="dark" hasOverlap>
+        <CentredContainer>
+          <WeeklyProductPrices
+            countryId={countryId}
+            productPrices={productPrices}
+            orderIsAGift={orderIsAGift || false}
+          />
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="white">
+        <CentredContainer>
+          <GiftNonGiftCta product="Guardian Weekly" href={giftNonGiftLink} orderIsAGift={orderIsAGift || false} />
+        </CentredContainer>
+      </FullWidthContainer>
+    </Page>
   );
 };
 

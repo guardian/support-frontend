@@ -3,25 +3,17 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import FooterContainer from 'components/footerCompliant/footerContainer';
+import Footer from 'components/footerCompliant/Footer';
 import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 
-import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import './subscriptionsLanding.scss';
 
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
-import subscriptionsLandingReducer
-  from 'pages/subscriptions-landing/subscriptionsLandingReducer';
 import { subscriptionsLandingProps, type SubscriptionsLandingPropTypes } from './subscriptionsLandingProps';
-
-// ----- Redux Store ----- //
-
-const store = pageInit(() => subscriptionsLandingReducer(), true);
 
 // ----- Render ----- //
 
@@ -46,21 +38,19 @@ const SubscriptionsLandingPage = ({
   });
 
   return (
-    <Provider store={store}>
-      <Page
-        header={<Header />}
-        footer={
-          <FooterContainer faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions" centred />
+    <Page
+      header={<Header />}
+      footer={
+        <Footer faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions" centred />
         }
-      >
-        <SubscriptionLandingContent
-          countryGroupId={countryGroupId}
-          participations={participations}
-          pricingCopy={pricingCopy}
-          referrerAcquisitions={referrerAcquisitions}
-        />
-      </Page>
-    </Provider>
+    >
+      <SubscriptionLandingContent
+        countryGroupId={countryGroupId}
+        participations={participations}
+        pricingCopy={pricingCopy}
+        referrerAcquisitions={referrerAcquisitions}
+      />
+    </Page>
   );
 };
 

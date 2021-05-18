@@ -4,7 +4,6 @@
 
 import { renderPage } from 'helpers/render';
 import React from 'react';
-import { Provider } from 'react-redux';
 import { css } from '@emotion/core';
 import { from, until } from '@guardian/src-foundations/mq';
 
@@ -18,7 +17,6 @@ import {
   NZDCountries,
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { init as pageInit } from 'helpers/page/page';
 import { routes } from 'helpers/routes';
 import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
 
@@ -34,7 +32,6 @@ import headerWithCountrySwitcherContainer
 import { DigitalHero } from './components/hero/hero';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
-import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import { StatelessFooter } from 'components/footerCompliant/DigitalFooter';
@@ -56,10 +53,6 @@ const productBlockContainer = css`
     margin-top: 66px;
   }
 `;
-
-// ----- Redux Store ----- //
-
-const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 // ----- Internationalisation ----- //
 
@@ -136,54 +129,51 @@ function DigitalLandingPage({
     </div>);
 
   return (
-    <Provider store={store}>
-      <Page
-        header={<CountrySwitcherHeader />}
-        footer={footer}
-      >
-        <DigitalHero
-          orderIsAGift={isGift}
-          countryGroupId={countryGroupId}
-          promotionCopy={sanitisedPromoCopy}
-          showPriceCards={showPriceCardsInHero}
-          priceList={heroPriceList}
-        />
-        <FullWidthContainer>
-          <CentredContainer>
-            <Block cssOverrides={productBlockContainer}>
-              <div ref={setElementToObserve}>
-                {countryGroupId === AUDCountries ?
-                  <ProductBlockAus
-                    countryGroupId={countryGroupId}
-                  /> :
-                  <ProductBlock
-                    countryGroupId={countryGroupId}
-                  />
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={footer}
+    >
+      <DigitalHero
+        orderIsAGift={isGift}
+        countryGroupId={countryGroupId}
+        promotionCopy={sanitisedPromoCopy}
+        showPriceCards={showPriceCardsInHero}
+        priceList={heroPriceList}
+      />
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={productBlockContainer}>
+            <div ref={setElementToObserve}>
+              {countryGroupId === AUDCountries ?
+                <ProductBlockAus
+                  countryGroupId={countryGroupId}
+                /> :
+                <ProductBlock
+                  countryGroupId={countryGroupId}
+                />
               }
-              </div>
-            </Block>
-          </CentredContainer>
-        </FullWidthContainer>
-        <FullWidthContainer theme="dark" hasOverlap>
-          <CentredContainer>
-            <Prices
-              countryGroupId={countryGroupId}
-              currencyId={currencyId}
-              productPrices={productPrices}
-              orderIsAGift={isGift}
-            />
-          </CentredContainer>
-        </FullWidthContainer>
-        <FullWidthContainer theme="white">
-          <CentredContainer>
-            <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
-          </CentredContainer>
-        </FullWidthContainer>
-        <FeedbackWidget display={widgetShouldDisplay} />
-      </Page>
-    </Provider>
+            </div>
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="dark" hasOverlap>
+        <CentredContainer>
+          <Prices
+            countryGroupId={countryGroupId}
+            currencyId={currencyId}
+            productPrices={productPrices}
+            orderIsAGift={isGift}
+          />
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="white">
+        <CentredContainer>
+          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
+        </CentredContainer>
+      </FullWidthContainer>
+      <FeedbackWidget display={widgetShouldDisplay} />
+    </Page>
   );
-
 }
 
 renderPage(<DigitalLandingPage {...digitalLandingProps} />, reactElementId[digitalLandingProps.countryGroupId]);
