@@ -100,4 +100,8 @@ function DigitalFooter(props: PropTypes) {
     </Footer>);
 }
 
+export function StatelessFooter(props: PropTypes) {
+  return <DigitalFooter {...props} />;
+}
+
 export default connect(mapStateToProps)(DigitalFooter);

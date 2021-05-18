@@ -6,8 +6,8 @@ import ProductOption, {
   type Product,
 } from 'components/product/productOption';
 import {
-  mapStateToProps,
-  type StatePropTypes,
+  getPaymentOptions,
+  type PaymentSelectionPropTypes,
 } from './helpers/paymentSelection';
 // styles
 import {
@@ -59,8 +59,8 @@ function DigitalPaymentSelection({
   currencyId,
   productPrices,
   orderIsAGift,
-}: StatePropTypes) {
-  const { paymentOptions } = mapStateToProps({
+}: PaymentSelectionPropTypes) {
+  const paymentOptions = getPaymentOptions({
     countryGroupId,
     currencyId,
     productPrices,

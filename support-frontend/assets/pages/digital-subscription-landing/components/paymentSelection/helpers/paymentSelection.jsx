@@ -31,7 +31,7 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import { getPriceDescription, getAdverbialSubscriptionDescription } from 'helpers/productPrice/priceDescriptions';
 
-import { type PropTypes } from '../paymentSelection';
+import type { Product as ProductOptionType } from 'components/product/productOption';
 
 export type PaymentOption = {
   title: string,
@@ -168,7 +168,7 @@ const getHeroCtaProps = (
   }).map(createPaymentOption);
 };
 
-export type StatePropTypes = {|
+export type PaymentSelectionPropTypes = {|
   countryGroupId: CountryGroupId;
   currencyId: IsoCurrency;
   productPrices: ProductPrices;
@@ -176,12 +176,12 @@ export type StatePropTypes = {|
 |}
 
 // state
-const mapStateToProps = ({
+const getPaymentOptions = ({
   countryGroupId,
   currencyId,
   productPrices,
   orderIsAGift,
-}: StatePropTypes): PropTypes => {
+}: PaymentSelectionPropTypes): ProductOptionType[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): Product => {
@@ -238,12 +238,10 @@ const mapStateToProps = ({
       };
 
   };
-  return {
-    paymentOptions: Object.keys(productOptions).map(createPaymentOption),
-  };
+  return Object.keys(productOptions).map(createPaymentOption);
 };
 
 export {
   getHeroCtaProps,
-  mapStateToProps,
+  getPaymentOptions,
 };

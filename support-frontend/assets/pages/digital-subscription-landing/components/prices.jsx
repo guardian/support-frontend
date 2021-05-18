@@ -6,7 +6,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 import FlexContainer from 'components/containers/flexContainer';
 
-import type { StatePropTypes } from './paymentSelection/helpers/paymentSelection';
+import type { PaymentSelectionPropTypes } from './paymentSelection/helpers/paymentSelection';
 import PaymentSelection
   from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
@@ -49,7 +49,7 @@ function Prices({
   currencyId,
   productPrices,
   orderIsAGift,
-}: StatePropTypes) {
+}: PaymentSelectionPropTypes) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
 
   return (
