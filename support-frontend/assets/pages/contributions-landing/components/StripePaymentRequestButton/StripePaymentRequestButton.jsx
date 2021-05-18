@@ -369,11 +369,11 @@ function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe): Pa
       // Track the fact that it loaded, even if the user is in the control for the PRB test
       trackComponentLoad(`${paymentMethod}-loaded`);
 
-      // if (paymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonVariant) {
-      trackComponentLoad(`${paymentMethod}-displayed`);
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-      setUpPaymentListenerSca(props, stripe, paymentRequestObject, paymentMethod);
-      // }
+      if (paymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonVariant) {
+        trackComponentLoad(`${paymentMethod}-displayed`);
+        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+        setUpPaymentListenerSca(props, stripe, paymentRequestObject, paymentMethod);
+      }
     } else {
       props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
     }
