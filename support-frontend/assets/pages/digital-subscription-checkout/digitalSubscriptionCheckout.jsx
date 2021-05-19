@@ -62,8 +62,8 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
 
 const store = pageInit(reducer, true);
 
-const { countryGroupId } = store.getState().common.internationalisation;
-const { orderIsAGift } = store.getState().page.checkout;
+const { countryGroupId, countryId } = store.getState().common.internationalisation;
+const { orderIsAGift, productPrices } = store.getState().page.checkout;
 
 
 const thankyouProps = {
@@ -80,7 +80,7 @@ const content = orderIsAGift ?
     <Provider store={store}>
       <Page
         header={<HeaderWrapper />}
-        footer={<DigitalFooter orderIsAGift />}
+        footer={<DigitalFooter country={countryId} productPrices={productPrices} orderIsAGift />}
       >
         <CheckoutStage
           checkoutForm={<CheckoutFormGift />}
@@ -95,7 +95,7 @@ const content = orderIsAGift ?
     <Provider store={store}>
       <Page
         header={<HeaderWrapper />}
-        footer={<DigitalFooter orderIsAGift={false} />}
+        footer={<DigitalFooter country={countryId} productPrices={productPrices} orderIsAGift={false} />}
       >
         <CheckoutStage
           checkoutForm={<CheckoutForm />}

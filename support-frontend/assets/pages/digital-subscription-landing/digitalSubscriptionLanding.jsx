@@ -34,7 +34,7 @@ import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
-import { StatelessFooter } from 'components/footerCompliant/DigitalFooter';
+import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
@@ -119,7 +119,7 @@ function DigitalLandingPage({
   const footer = (
     <div className="footer-container">
       <div className="footer-alignment">
-        <StatelessFooter
+        <DigitalFooter
           country={countryGroupId}
           orderIsAGift={isGift}
           productPrices={productPrices}
