@@ -1,0 +1,35 @@
+name: Bundle Analyser
+on: [push]
+
+jobs:
+    build_check:
+      name: Bundle Analyser
+      defaults:
+        run:
+          working-directory: support-frontend
+      runs-on: ubuntu-latest
+      steps:
+
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Install Node
+          uses: guardian/actions-setup-node@main
+
+        # Cache npm dependencies using https://github.com/bahmutov/npm-install
+        - name: Cache dependencies
+          uses: bahmutov/npm-install@v1
+          with:
+            working-directory: support-frontend
+
+        - name: Install
+          run: yarn
+
+        - name: Generate production build for github action
+          run: yarn build-github-action
+
+        - name: Run Bundle Analyser
+          uses: actions/upload-artifact@v2
+          with:
+            name: bundle-analyser-report
+            path: support-frontend/public/compiled-assets/webpack-stats.html
