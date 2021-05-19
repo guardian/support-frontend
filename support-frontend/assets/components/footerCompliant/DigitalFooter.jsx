@@ -96,8 +96,4 @@ function DigitalFooter({ productPrices, orderIsAGift, country }: PropTypes) {
     </Footer>);
 }
 
-export function StatelessFooter(props: PropTypes) {
-  return <DigitalFooter {...props} />;
-}
-
 export default DigitalFooter;
