@@ -63,8 +63,8 @@ const ShowcasePage = () => (
   </Page>
 );
 
-renderPage(<ShowcasePage />, 'showcase-landing-page');
-
 const content = <ShowcasePage />;
+
+renderPage(content, 'showcase-landing-page');
 
 export { content };
