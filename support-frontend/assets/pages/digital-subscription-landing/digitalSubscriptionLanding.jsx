@@ -29,7 +29,8 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import { DigitalHero } from './components/hero/hero';
+import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
+import { HeroWithImage } from './components/hero/heroWithImage';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
 import Prices from './components/prices';
@@ -73,7 +74,6 @@ const reactElementId: {
 function DigitalLandingPage({
   countryGroupId,
   currencyId,
-  participations,
   productPrices,
   promotionCopy,
   orderIsAGift,
@@ -83,7 +83,6 @@ function DigitalLandingPage({
   }
 
   const isGift = orderIsAGift || false;
-  const showPriceCardsInHero = participations.priceCardsInHeroTest === 'variant';
 
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -133,13 +132,16 @@ function DigitalLandingPage({
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      <DigitalHero
-        orderIsAGift={isGift}
-        countryGroupId={countryGroupId}
-        promotionCopy={sanitisedPromoCopy}
-        showPriceCards={showPriceCardsInHero}
-        priceList={heroPriceList}
-      />
+      {countryGroupId === AUDCountries || orderIsAGift ?
+        <HeroWithImage
+          orderIsAGift={isGift}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+        /> :
+        <HeroWithPriceCards
+          promotionCopy={sanitisedPromoCopy}
+          priceList={heroPriceList}
+        />}
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={productBlockContainer}>
