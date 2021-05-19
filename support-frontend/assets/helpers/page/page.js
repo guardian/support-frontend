@@ -81,7 +81,7 @@ function getLocalCurrencyCountry(
     return localCurrencyCountries[queryParam.toUpperCase()];
   }
 
-  if (abParticipations.localCurrencyTest === 'variant') {
+  if (abParticipations.localCurrencyTestV2 === 'variant') {
     return localCurrencyCountries[countryId];
   }
 

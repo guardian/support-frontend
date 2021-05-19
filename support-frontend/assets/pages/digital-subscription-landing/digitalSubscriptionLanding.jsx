@@ -32,7 +32,8 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import { DigitalHero } from './components/hero/hero';
+import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
+import { HeroWithImage } from './components/hero/heroWithImage';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
 import digitalSubscriptionLandingReducer, { type State }
@@ -73,7 +74,6 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
-const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
 const showEditorialVoiceComponent = abParticipations.editorialVoiceTest === 'variant';
 
 // ----- Internationalisation ----- //
@@ -134,13 +134,17 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      <DigitalHero
-        orderIsAGift={orderIsAGift}
-        countryGroupId={countryGroupId}
-        promotionCopy={sanitisedPromoCopy}
-        showPriceCards={showPriceCardsInHero}
-        priceList={heroPriceList}
-      />
+      {countryGroupId === AUDCountries || orderIsAGift ?
+        <HeroWithImage
+          orderIsAGift={orderIsAGift}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+        /> :
+        <HeroWithPriceCards
+          promotionCopy={sanitisedPromoCopy}
+          priceList={heroPriceList}
+        />
+      }
       {showEditorialVoiceComponent &&
         <FullWidthContainer>
           <CentredContainer>

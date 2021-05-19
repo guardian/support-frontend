@@ -351,7 +351,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             title="Your card details"
           >
             <StripeProviderForCountry
-              country={props.country}
+              country={props.deliveryCountry}
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}

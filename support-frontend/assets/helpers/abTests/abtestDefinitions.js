@@ -50,27 +50,6 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.notUkLandingPage,
     seed: 2,
   },
-  priceCardsInHeroTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
-    seed: 19,
-    optimizeId: '8oNvN_m2QP6U7KeAHP_lsQ',
-  },
   editorialVoiceTest: {
     variants: [
       {
@@ -89,11 +68,10 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
-    seed: 20,
+    seed: 3,
     optimizeId: '9iCcOPWDTCePfDn8ckRbCA',
   },
-
-  localCurrencyTest: {
+  localCurrencyTestV2: {
     variants: [
       {
         id: 'control',

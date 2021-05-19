@@ -35,9 +35,6 @@ class DriverConfig {
 
   def reset(): Unit = {
 
-    webDriver.get(Config.identityFrontendUrl)
-    webDriver.manage.deleteAllCookies()
-
     webDriver.get(Config.supportFrontendUrl + "/uk")
     webDriver.manage.deleteAllCookies()
 

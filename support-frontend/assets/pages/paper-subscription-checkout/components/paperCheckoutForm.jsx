@@ -22,7 +22,7 @@ import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/ch
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
-import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
+import { getProductPrice, getPriceWithDiscount } from 'helpers/productPrice/paperProductPrices';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
@@ -131,7 +131,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     csrf: state.page.csrf,
     currencyId: state.common.internationalisation.currencyId,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
-    total: getProductPrice(
+    total: getPriceWithDiscount(
       state.page.checkout.productPrices,
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
@@ -195,7 +195,8 @@ function PaperCheckoutForm(props: PropTypes) {
   const [digiSubPriceString, setDigiSubPriceString] = useState<string>('');
   const [includesDigiSub, setIncludesDigiSub] = useState<boolean>(false);
   const simplePrice = digiSubPriceString.replace(/\/(.*)/, ''); // removes anything after the /
-  const cleanedPrice = simplePrice.replace(/\.(.*)/, ''); // removes decimal point if there is one
+  const priceHasRedundantFloat = simplePrice.split('.')[1] === '00'; // checks whether price is something like '£10.00'
+  const cleanedPrice = priceHasRedundantFloat ? simplePrice.replace(/\.(.*)/, '') : simplePrice; // removes decimal point if there are no pence
   const expandedPricingText = `${cleanedPrice} per month`;
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
@@ -207,10 +208,14 @@ function PaperCheckoutForm(props: PropTypes) {
     // Price of the 'Plus' product that corresponds to the selected product option
     const plusPrice = includesDigiSub ?
       props.total :
-      getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithDigital[props.productOption]);
+      getPriceWithDiscount(props.productPrices, props.fulfilmentOption, paperProductsWithDigital[props.productOption]);
     // Price of the standard paper-only product that corresponds to the selected product option
     const paperPrice = includesDigiSub ?
-      getProductPrice(props.productPrices, props.fulfilmentOption, paperProductsWithoutDigital[props.productOption]) :
+      getPriceWithDiscount(
+        props.productPrices,
+        props.fulfilmentOption,
+        paperProductsWithoutDigital[props.productOption],
+      ) :
       props.total;
     const digitalCost = sensiblyGenerateDigiSubPrice(plusPrice, paperPrice);
 
@@ -226,6 +231,7 @@ function PaperCheckoutForm(props: PropTypes) {
         imgType="png"
         altText=""
       />}
+    total={props.total}
     digiSubPrice={expandedPricingText}
     startDate={formattedStartDate}
     includesDigiSub={includesDigiSub}
@@ -242,6 +248,7 @@ function PaperCheckoutForm(props: PropTypes) {
         altText=""
       />
     }
+    total={props.total}
     digiSubPrice={expandedPricingText}
     includesDigiSub={includesDigiSub}
     changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
