@@ -42,6 +42,7 @@ import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+import EditorialVoice from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
 // ----- Styles ----- //
@@ -64,7 +65,7 @@ const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 const { page, common }: State = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
-const { internationalisation } = common;
+const { internationalisation, abParticipations } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 // For CTAs in hero test
@@ -73,6 +74,7 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
+const showEditorialVoiceComponent = abParticipations.editorialVoiceTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -141,7 +143,15 @@ function LandingPage() {
         <HeroWithPriceCards
           promotionCopy={sanitisedPromoCopy}
           priceList={heroPriceList}
-        />}
+        />
+      }
+      {showEditorialVoiceComponent &&
+        <FullWidthContainer>
+          <CentredContainer>
+            <EditorialVoice />
+          </CentredContainer>
+        </FullWidthContainer>
+      }
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={productBlockContainer}>

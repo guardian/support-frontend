@@ -18,6 +18,14 @@ export const pageUrlRegexes = {
     subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPages: '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPagesNotAus: '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
+    digiSub: {
+      // Requires /subscribe/digital, allows /checkout and/or /gift, allows any query string
+      allLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\/gift)?(\?.*)?$/,
+      // Requires /subscribe/digital and /gift, allows /checkout before /gift, allows any query string
+      giftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?\/gift(\?.*)?$/,
+      // Requires /subscribe/digital, allows /checkout, allows any query string
+      nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
+    },
   },
 };
 
@@ -42,7 +50,27 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.notUkLandingPage,
     seed: 2,
   },
-
+  editorialVoiceTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 3,
+    optimizeId: '9iCcOPWDTCePfDn8ckRbCA',
+  },
   localCurrencyTestV2: {
     variants: [
       {
