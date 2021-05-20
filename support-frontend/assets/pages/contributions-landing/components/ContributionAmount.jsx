@@ -131,7 +131,9 @@ function withProps(props: PropTypes) {
               props.countryGroupId,
               props.contributionType,
             )}
-            onBlur={() => trackComponentClick(`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`)}
+            onBlur={() => !!otherAmount &&
+              trackComponentClick(`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`)
+            }
             error={otherAmountErrorMessage}
             autoComplete="off"
             autoFocus
