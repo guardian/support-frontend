@@ -23,7 +23,7 @@
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle",
     "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
-    "compressed-size-action": "CI_ENV=github webpack --config webpack.prod.js --env.prod"
+    "compressed-size-action": "webpack --config webpack.prod.js --env.prod"
   },
   "browserslist": [
     "Chrome >= 49",
