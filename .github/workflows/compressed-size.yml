@@ -28,6 +28,7 @@ jobs:
 
         - name: Check compressed size of JS
           uses: preactjs/compressed-size-action@v2
+          working-directory: support-frontend
           with:
             repo-token: '${{ secrets.GITHUB_TOKEN }}'
             cwd: './support-frontend'
