@@ -7,7 +7,7 @@ jobs:
         name: Compressed Size
         defaults:
           run:
-            working-directory: support-frontend
+            working-directory: './support-frontend'
         runs-on: ubuntu-latest
         steps:
 
