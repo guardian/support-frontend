@@ -61,7 +61,7 @@ class CleanUpStatsPlugin {
   }
 }
 
-module.exports = (cssFilename, outputFilename, minimizeCss) => ({
+module.exports = (cssFilename, jsFilename, minimizeCss) => ({
   plugins: [
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
@@ -91,7 +91,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   output: {
     path: path.resolve(__dirname, 'public/compiled-assets'),
     chunkFilename: 'webpack/[chunkhash].js',
-    filename: `javascripts/${outputFilename}`,
+    filename: `javascripts/${jsFilename}`,
     publicPath: '/assets/',
   },
 
