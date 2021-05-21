@@ -8,6 +8,7 @@ object PaymentMethodExtensions {
       case _: CreditCardReferenceTransaction => "Stripe"
       case _: PayPalReferenceTransaction => "PayPal"
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => "DirectDebit"
+      case _: SepaPaymentMethod => "Sepa"
       case _: AmazonPayPaymentMethod => "AmazonPay"
     }
   }

@@ -116,7 +116,8 @@ case class PaymentMethodsSwitch(
   directDebit: Option[SwitchState],
   existingCard: Option[SwitchState],
   existingDirectDebit: Option[SwitchState],
-  amazonPay: Option[SwitchState]
+  amazonPay: Option[SwitchState],
+  sepa: Option[SwitchState]
 )
 case class ExperimentSwitch(name: String, description: String, state: SwitchState) {
   def isOn: Boolean = state == SwitchState.On
@@ -139,7 +140,8 @@ object PaymentMethodsSwitch {
       SwitchState.optionFromConfig(config, "directDebit"),
       SwitchState.optionFromConfig(config, "existingCard"),
       SwitchState.optionFromConfig(config, "existingDirectDebit"),
-      SwitchState.optionFromConfig(config, "amazonPay")
+      SwitchState.optionFromConfig(config, "amazonPay"),
+      SwitchState.optionFromConfig(config, "sepa")
     )
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
 }

@@ -85,6 +85,8 @@ class ZuoraSubscriptionCreator(
         .withLogging("gift recipient with code")
     } yield digitalSubscriptionGiftCreationDetails
     val maybeGeneratedGiftCode = maybeDigitalSubscriptionGiftCreationDetails.map(_.giftCode)
+
+
     for {
       subscriptionData <- subscriptionDataBuilder.build(state, maybeGeneratedGiftCode).value.map(_.toTry).flatMap(Future.fromTry)
         .withEventualLogging("subscription data")
