@@ -113,12 +113,14 @@ const trackAbTests = (participations: Participations): void =>
 // Note - the localstorage item is deleted by tracker-js as soon as it's read, see:
 // https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/core.coffee#L72
 const setReferrerDataInLocalStorage = (acquisitionData: ReferrerAcquisitionData): void => {
-  const { referrerUrl, referrerPageviewId } = acquisitionData;
-  if (!localStorage.getItem('ophan_follow') && referrerUrl && referrerPageviewId) {
-    localStorage.setItem('ophan_follow', JSON.stringify({
-      refViewId: referrerPageviewId,
-      ref: referrerUrl,
-    }));
+  if (acquisitionData) {
+    const {referrerUrl, referrerPageviewId} = acquisitionData;
+    if (!localStorage.getItem('ophan_follow') && referrerUrl && referrerPageviewId) {
+      localStorage.setItem('ophan_follow', JSON.stringify({
+        refViewId: referrerPageviewId,
+        ref: referrerUrl,
+      }));
+    }
   }
 };
 
