@@ -4,6 +4,7 @@
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { getLocal, setLocal } from 'helpers/storage';
 
 // ----- Types ----- //
 
@@ -115,8 +116,8 @@ const trackAbTests = (participations: Participations): void =>
 const setReferrerDataInLocalStorage = (acquisitionData: ReferrerAcquisitionData): void => {
   if (acquisitionData) {
     const {referrerUrl, referrerPageviewId} = acquisitionData;
-    if (!localStorage.getItem('ophan_follow') && referrerUrl && referrerPageviewId) {
-      localStorage.setItem('ophan_follow', JSON.stringify({
+    if (!getLocal('ophan_follow') && referrerUrl && referrerPageviewId) {
+      setLocal('ophan_follow', JSON.stringify({
         refViewId: referrerPageviewId,
         ref: referrerUrl,
       }));
