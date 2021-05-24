@@ -33,4 +33,4 @@ jobs:
             cwd: './support-frontend'
             pattern: './public/compiled-assets/{javascripts,webpack}/*.js'
             build-script: 'compressed-size-action'
-            minimum-change-threshold: 1000
+            minimum-change-threshold: 500
