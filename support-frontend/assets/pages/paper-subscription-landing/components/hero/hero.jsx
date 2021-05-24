@@ -16,7 +16,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
-import HeroRoundel, { roundelMaxMob } from 'components/page/heroRoundel';
+import HeroRoundel, { roundelSizeMob } from 'components/page/heroRoundel';
 
 import { type ProductPrices } from 'helpers/productPrice/productPrices';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
@@ -32,7 +32,7 @@ type PropTypes = {|
 const fitHeadline = css`
   h1 {
     ${between.mobileMedium.and.tablet} {
-      max-width: calc(100% - ${roundelMaxMob}px);
+      max-width: calc(100% - ${roundelSizeMob}px);
     }
   }
 `;
@@ -52,7 +52,7 @@ const heroTitle = css`
   margin-bottom: ${space[3]}px;
 
   ${between.mobileMedium.and.tablet} {
-    margin-right: ${roundelMaxMob}px;
+    margin-right: ${roundelSizeMob}px;
   }
 
   ${from.tablet} {
