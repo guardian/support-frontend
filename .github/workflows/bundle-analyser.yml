@@ -1,5 +1,8 @@
 name: Bundle Analyser
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
     build_check:
