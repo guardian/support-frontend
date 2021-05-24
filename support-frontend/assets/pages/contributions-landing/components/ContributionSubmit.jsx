@@ -99,7 +99,7 @@ function withProps(props: PropTypes) {
     props.paymentMethod,
   );
 
-  console.log('paymentMethod', props.paymentMethod)
+  console.log('paymentMethod', props.paymentMethod);
   const amazonPayEnabled = () => !props.amazonPayData.fatalError;
 
   const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?

@@ -3,9 +3,9 @@
 import * as storage from 'helpers/storage';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
-import { checkAccount } from './helpers/ajax';
+// import { checkAccount } from './helpers/ajax';
 import { DirectDebit } from 'helpers/paymentMethods';
-import type {PaymentMethod} from "helpers/paymentMethods";
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -72,15 +72,15 @@ function payDirectDebitClicked(): Function {
   return (dispatch: Function, getState: Function) => {
 
     const {
-      sortCodeString,
-      sortCodeArray,
-      accountNumber,
+      // sortCodeString,
+      // sortCodeArray,
+      // accountNumber,
       accountHolderConfirmation,
     } = getState().page.directDebit;
 
-    const sortCode = sortCodeArray.join('') || sortCodeString;
-    const isTestUser: boolean = getState().page.user.isTestUser || false;
-    const { csrf } = getState().page;
+    // const sortCode = sortCodeArray.join('') || sortCodeString;
+    // const isTestUser: boolean = getState().page.user.isTestUser || false;
+    // const { csrf } = getState().page;
 
     dispatch(resetDirectDebitFormError());
 
@@ -118,7 +118,10 @@ function payDirectDebitClicked(): Function {
   };
 }
 
-function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation => void, paymentMethod: PaymentMethod): Function {
+function confirmDirectDebitClicked(
+  onPaymentAuthorisation: PaymentAuthorisation => void,
+  paymentMethod: PaymentMethod,
+): Function {
 
   return (dispatch: Function, getState: Function) => {
 
@@ -139,12 +142,12 @@ function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation 
     //     iban: accountNumber,
     //   });
     // } else {
-      onPaymentAuthorisation({
-        paymentMethod,
-        accountHolderName,
-        sortCode,
-        accountNumber,
-      });
+    onPaymentAuthorisation({
+      paymentMethod,
+      accountHolderName,
+      sortCode,
+      accountNumber,
+    });
     // }
 
     dispatch(closeDirectDebitPopUp());
