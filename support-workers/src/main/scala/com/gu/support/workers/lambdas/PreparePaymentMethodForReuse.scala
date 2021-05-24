@@ -39,7 +39,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       sfContact = SalesforceContactRecord(sfContactId, crmId)
       contribution <- Future.fromTry(state.product match {
         case c: Contribution => Success(c)
-        case _ => Failure(new RuntimeException("not yet supported reuse payment method for other than contributions"))
+        case _ => Failure(new RuntimeException("Reusing payment methods is not yet supported for products other than contributions"))
       })
     } yield HandlerResult(
       CreateZuoraSubscriptionState(
