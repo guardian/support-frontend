@@ -67,12 +67,12 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
       fileName: '../../conf/assets.map',
       writeToFileEmit: true,
     }),
-    new BundleAnalyzerPlugin({
+    ...(process.env.CI_ENV === 'github' ? [new BundleAnalyzerPlugin({
       reportFilename: 'webpack-stats.html',
       analyzerMode: 'static',
       openAnalyzer: false,
       logLevel: 'warn',
-    }),
+    })] : []),
     new MiniCssExtractPlugin({
       filename: path.join('stylesheets', cssFilename),
     }),
