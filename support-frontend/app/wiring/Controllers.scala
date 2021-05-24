@@ -49,7 +49,7 @@ trait Controllers {
     capiService
   )
 
-  lazy val subscriptionsController = new Subscriptions(
+  lazy val subscriptionsController = new SubscriptionsController(
     actionRefiners,
     identityService,
     priceSummaryServiceProvider,
@@ -91,7 +91,7 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val paperController = new PaperSubscription(
+  lazy val paperController = new PaperSubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
@@ -103,7 +103,7 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val weeklyController = new WeeklySubscription(
+  lazy val weeklyController = new WeeklySubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
@@ -158,7 +158,7 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val createSubscriptionController = new CreateSubscription(
+  lazy val createSubscriptionController = new CreateSubscriptionController(
     supportWorkersClient,
     actionRefiners,
     identityService,

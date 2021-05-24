@@ -27,7 +27,7 @@ import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CreateSubscription(
+class CreateSubscriptionController(
   client: SupportWorkersClient,
   val actionRefiners: CustomActionBuilders,
   identityService: IdentityService,

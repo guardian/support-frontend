@@ -20,7 +20,7 @@ import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
 
-class Subscriptions(
+class SubscriptionsController(
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
@@ -59,7 +59,7 @@ class Subscriptions(
     val service = priceSummaryServiceProvider.forUser(false)
 
     val paperMap = if (countryGroup == CountryGroup.UK) {
-      val paper = service.getPrices(Paper, Nil)(CountryGroup.UK)(Collection)(Sunday)(Monthly)(GBP)
+      val paper = service.getPrices(Paper, List(DefaultPromotions.Paper.june21Promotion))(CountryGroup.UK)(Collection)(Sunday)(Monthly)(GBP)
       Map(Paper.toString -> pricingCopy(paper))
     }
     else
