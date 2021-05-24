@@ -62,7 +62,6 @@ object DigitalSubscriptionEmailAttributes {
     ) extends PaymentFieldsAttributes
 
     case class SepaAttributes(
-      // TODO
       iban: String,
       default_payment_method: String = "Sepa"
     ) extends PaymentFieldsAttributes
