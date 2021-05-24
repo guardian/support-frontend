@@ -15,7 +15,7 @@ import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
 
-class PaperSubscription(
+class PaperSubscriptionController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
   landingCopyProvider: LandingCopyProvider,
   val assets: AssetsResolver,
@@ -38,7 +38,7 @@ class PaperSubscription(
   def paper(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
-    val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val queryPromos = DefaultPromotions.Paper.june21Promotion :: request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
     Ok(views.html.main(
       title = "The Guardian Newspaper Subscription | Subscription Card and Home Delivery",

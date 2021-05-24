@@ -3,11 +3,17 @@
 // $FlowIgnore
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
+import { text, withKnobs } from '@storybook/addon-knobs';
 
 import { List, ListWithSubText } from 'components/list/list';
 import Tabs from 'components/tabs/tabs';
+import Quote from 'components/quote/quote';
+import BlockLabel from 'components/blockLabel/blockLabel';
 
-const stories = storiesOf('Content components', module);
+const stories = storiesOf('Content components', module)
+  .addDecorator(withKnobs({
+    escapeHTML: false,
+  }));
 
 stories.add('List', () => (
   <div style={{ padding: '8px' }}>
@@ -87,3 +93,25 @@ stories.add('Tabs', () => {
   }
   return <TabsContainer />;
 });
+
+stories.add('Quote', () => {
+  const name = text('Name', 'Katherine Viner');
+  const jobTitle = text('Job title', 'Editor-in-chief');
+  const quote = text('Quote', 'The Subscriptions team is my favourite team');
+
+  return (
+    <div style={{ padding: '8px', maxWidth: '400px' }}>
+      <Quote
+        name={name}
+        jobTitle={jobTitle}
+        headshot={
+          <img src="https://media.guim.co.uk/1e8cd6f3fc9af8ba9f84a4f70acc381ca9bf0fb3/0_0_315_315/140.png" alt="" />
+        }
+      >
+        {quote}
+      </Quote>
+    </div>
+  );
+});
+
+stories.add('Block label', () => <BlockLabel>Use this for stand-out labels on other content</BlockLabel>);

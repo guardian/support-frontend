@@ -169,7 +169,7 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
 };
 
 // Builds the acquisition object from data and other sources.
-function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcquisitionData {
+function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisitionData {
 
   // This was how referrer pageview id used to be passed.
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
@@ -285,7 +285,7 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
     : deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Read from param, or read from sessionStorage, or build minimal version.
-  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || undefined);
+  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || {});
   storeReferrerAcquisitionData(referrerAcquisitionData);
 
   return referrerAcquisitionData;

@@ -17,8 +17,8 @@ type PropTypes = {|
 
 const surveyLinks: {[key: SubscriptionProduct]: string} = {
   DigitalPack: 'https://www.surveymonkey.com/r/PQMWMHW',
-  GuardianWeekly: 'https://www.surveymonkey.co.uk/r/QFNYV5G',
-  Paper: 'https://www.surveymonkey.co.uk/r/Q37XNTV',
+  GuardianWeekly: 'https://www.surveymonkey.co.uk/r/9DRKP78',
+  Paper: 'https://www.surveymonkey.co.uk/r/99PGHSX',
 };
 
 export const SubscriptionsSurvey = ({ product }: PropTypes) => {
