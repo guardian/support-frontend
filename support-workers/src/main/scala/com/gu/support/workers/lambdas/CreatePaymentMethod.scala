@@ -26,7 +26,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
 
     state.paymentFields fold (
-      paymentFields => createPaymentMethod(paymentFields, state.user, state.product.currency, services)
+      paymentFields => createPaymentMethod(paymentFields, state.user, state.product.currency, services, state.ipAddress, state.userAgent)
         .map(paymentMethod =>
           HandlerResult(
             getCreateSalesforceContactState(state, Left(paymentMethod)),
@@ -47,7 +47,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     paymentFields: PaymentFields,
     user:User,
     currency: Currency,
-    services: Services
+    services: Services,
+    ipAddress: String,
+    userAgent: String
   ): Future[PaymentMethod] =
     paymentFields match {
       case stripe: StripePaymentFields =>
@@ -57,7 +59,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       case dd: DirectDebitPaymentFields =>
         createDirectDebitPaymentMethod(dd, user)
       case sepa: SepaPaymentFields =>
-        createSepaPaymentMethod(sepa, user)
+        createSepaPaymentMethod(sepa, user, ipAddress, userAgent)
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
       case amazonPay: AmazonPayPaymentFields =>
@@ -143,13 +145,13 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     ))
   }
 
-  def createSepaPaymentMethod(sepa: SepaPaymentFields, user: User): Future[SepaPaymentMethod] = {
+  def createSepaPaymentMethod(sepa: SepaPaymentFields, user: User, ipAddress: String, userAgent: String): Future[SepaPaymentMethod] = {
     Future.successful(SepaPaymentMethod(
       BankTransferAccountName = sepa.accountHolderName,
       BankTransferAccountNumber = sepa.iban,
       Email = user.primaryEmailAddress,
-      IPAddress = "127.0.0.1",
-      GatewayOptionData = GatewayOptionData(List(GatewayOption("UserAgent", "TestUserAgent")))
+      IPAddress = ipAddress,
+      GatewayOptionData = GatewayOptionData(List(GatewayOption("UserAgent", userAgent)))
     ))
   }
 

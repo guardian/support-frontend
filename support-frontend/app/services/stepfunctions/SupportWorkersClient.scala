@@ -162,7 +162,9 @@ class SupportWorkersClient(
           supportAbTests = request.body.supportAbTests
         )),
         promoCode = request.body.promoCode,
-        firstDeliveryDate = request.body.firstDeliveryDate
+        firstDeliveryDate = request.body.firstDeliveryDate,
+        userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
+        ipAddress = request.remoteAddress
       )
       isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
       executionResult <- underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(

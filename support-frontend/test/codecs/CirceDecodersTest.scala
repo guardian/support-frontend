@@ -101,6 +101,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |      "stripeApplePay": "On",
           |      "stripePaymentRequestButton": "On",
           |      "payPal": "On",
+          |      "sepa": "On",
           |      "amazonPay": "On"
           |    },
           |    "recurringPaymentMethods": {
@@ -110,6 +111,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
           |      "payPal": "On",
           |      "directDebit": "On",
           |      "existingCard": "On",
+          |      "sepa": "On",
           |      "existingDirectDebit": "On"
           |    },
           |    "experiments": {
@@ -313,6 +315,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
             directDebit = None,
             existingCard = None,
             existingDirectDebit = None,
+            sepa = None,
             amazonPay = Some(On)
           ),
           recurringPaymentMethods = PaymentMethodsSwitch(
@@ -323,6 +326,7 @@ class CirceDecodersTest extends AnyWordSpec with Matchers {
             directDebit = Some(On),
             existingCard = Some(On),
             existingDirectDebit = Some(On),
+            sepa = Some(On),
             amazonPay = None
           ),
           experiments = Map(
