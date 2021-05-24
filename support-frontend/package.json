@@ -22,7 +22,8 @@
     "cache-ssr": "node scripts/ssrScript.js",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle",
-    "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js"
+    "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
+    "compressed-size-action": "yarn clean && CI_ENV=github webpack --config webpack.prod.js --env.prod"
   },
   "browserslist": [
     "Chrome >= 49",
