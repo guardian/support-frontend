@@ -10,7 +10,7 @@ import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
 import com.gu.support.acquisitions
 import com.gu.support.acquisitions.AcquisitionType.{Purchase, Redemption}
-import com.gu.support.acquisitions.PaymentProvider.{DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, AmazonPay}
+import com.gu.support.acquisitions.PaymentProvider.{DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa, AmazonPay}
 import com.gu.support.acquisitions.PrintProduct._
 import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
 import com.gu.support.zuora.api.ReaderType
@@ -73,7 +73,7 @@ object AcquisitionDataRowBuilder {
         }
       case _: PayPalReferenceTransaction => PayPal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => DirectDebit
-      case _: SepaPaymentMethod => DirectDebit  //TODO - new PaymentProvider?
+      case _: SepaPaymentMethod => StripeSepa
       case _: AmazonPayPaymentMethod => AmazonPay
     }
 
