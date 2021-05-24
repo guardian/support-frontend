@@ -32,9 +32,6 @@ const HeroCopy = () => (
       <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
       you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
     </p>
-    <p>
-      Plus, for a limited time, you can read our latest special edition - The books of&nbsp;2021.
-    </p>
   </>
 );
 
