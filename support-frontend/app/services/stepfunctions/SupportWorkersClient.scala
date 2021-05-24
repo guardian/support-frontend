@@ -164,7 +164,7 @@ class SupportWorkersClient(
         promoCode = request.body.promoCode,
         firstDeliveryDate = request.body.firstDeliveryDate,
         userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
-        ipAddress = request.remoteAddress
+        ipAddress = request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress)
       )
       isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
       executionResult <- underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
