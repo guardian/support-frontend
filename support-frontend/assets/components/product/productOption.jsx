@@ -51,7 +51,6 @@ const productOptionTitle = css`
 `;
 
 const productOptionOfferCopy = css`
-  width: 100%;
   height: 100%;
   padding-bottom: ${space[2]}px;
 `;
@@ -62,7 +61,6 @@ const productOptionPrice = css`
 `;
 
 const productOptionPriceCopy = css`
-  width: 100%;
   height: 100%;
   margin-bottom: ${space[4]}px;
 `;
