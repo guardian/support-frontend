@@ -32,5 +32,5 @@ jobs:
             repo-token: '${{ secrets.GITHUB_TOKEN }}'
             cwd: './support-frontend'
             pattern: './public/compiled-assets/{javascripts,webpack}/*.js'
-            build-script: 'compressed-size-action'
+            build-script: 'build-github-action'
             minimum-change-threshold: 500
