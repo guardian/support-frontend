@@ -29,7 +29,7 @@ const productOption = css`
   ${textSans.medium()}
   position: relative;
   display: grid;
-  grid-template-rows: 48px minmax(66px, 1fr) 100px 86px;
+  grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -51,6 +51,7 @@ const productOptionTitle = css`
 `;
 
 const productOptionOfferCopy = css`
+  width: 100%;
   height: 100%;
   padding-bottom: ${space[2]}px;
 `;
@@ -61,6 +62,7 @@ const productOptionPrice = css`
 `;
 
 const productOptionPriceCopy = css`
+  width: 100%;
   height: 100%;
   margin-bottom: ${space[4]}px;
 `;
@@ -102,18 +104,16 @@ function ProductOption(props: Product) {
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
         {props.children && props.children}
       </div>
+      <p css={[productOptionOfferCopy, productOptionUnderline]}>
+        {props.offerCopy}
+      </p>
+      {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
+      {/* eslint-disable-next-line jsx-a11y/aria-role */}
+      <p role="text" css={productOptionPriceCopy}>
+        <span css={productOptionPrice}>{props.price}</span>
+        {props.priceCopy}
+      </p>
       <div>
-        <p css={[productOptionOfferCopy, productOptionUnderline]}>
-          {props.offerCopy}
-        </p>
-      </div>
-      <div>
-        {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
-        {/* eslint-disable-next-line jsx-a11y/aria-role */}
-        <p role="text" css={productOptionPriceCopy}>
-          <span css={productOptionPrice}>{props.price}</span>
-          {props.priceCopy}
-        </p>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
             href={props.href}
