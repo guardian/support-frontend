@@ -9,6 +9,7 @@ import { headline } from '@guardian/src-foundations/typography';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const roundelSizeMob = 100;
+export const roundelMaxMob = 120;
 export const roundelSize = 180;
 
 
@@ -21,13 +22,14 @@ const heroRoundelStyles = css`
   float: left;
   transform: translateY(-67%);
   min-width: ${roundelSizeMob}px;
-  max-width: ${roundelSize}px;
+  max-width: ${roundelMaxMob}px;
   width: calc(100% + ${space[3]}px);
   padding: ${space[1]}px;
   border-radius: 50%;
   ${headline.xxsmall({ fontWeight: 'bold' })};
 
   ${from.tablet} {
+    max-width: ${roundelSize}px;
     width: calc(100% + ${space[6]}px);
     transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};
