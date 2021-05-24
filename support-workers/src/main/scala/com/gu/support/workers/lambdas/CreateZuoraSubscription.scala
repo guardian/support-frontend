@@ -65,26 +65,26 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
 class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState) {
 
-  private val isTestUser = state.user.isTestUser
-  private val dateGenerator = new DateGenerator()
-  private val touchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
+  private lazy val isTestUser = state.user.isTestUser
+  private lazy val dateGenerator = new DateGenerator()
+  private lazy val touchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
 
-  private val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, dateGenerator, state.user.id, state.requestId)
+  private lazy val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, dateGenerator, state.user.id, state.requestId)
 
-  val zuoraDigitalSubscriptionGiftRedemptionHandler = new ZuoraDigitalSubscriptionGiftRedemptionHandler(
+  lazy val zuoraDigitalSubscriptionGiftRedemptionHandler = new ZuoraDigitalSubscriptionGiftRedemptionHandler(
     services.zuoraGiftService,
     services.catalogService,
     state.user,
     state.requestId,
   )
 
-  val subscribeItemBuilder = new SubscribeItemBuilder(
+  lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     state.requestId,
     state.user,
     state.product.currency,
   )
 
-  val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
+  lazy val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
     zuoraSubscriptionCreator,
     dateGenerator,
     new DigitalSubscriptionGiftPurchaseBuilder(
@@ -97,7 +97,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     state.user,
   )
 
-  val zuoraDigitalSubscriptionCorporateRedemptionHandler = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
+  lazy val zuoraDigitalSubscriptionCorporateRedemptionHandler = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
     zuoraSubscriptionCreator,
     CorporateCodeStatusUpdater.withDynamoUpdate(services.redemptionService),
     new DigitalSubscriptionCorporateRedemptionBuilder(
@@ -109,7 +109,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     state.user,
   )
 
-  val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
+  lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
     zuoraSubscriptionCreator,
     new DigitalSubscriptionDirectPurchaseBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).digitalPack,
@@ -121,7 +121,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     state.user,
   )
 
-  val zuoraContributionHandler = new ZuoraContributionHandler(
+  lazy val zuoraContributionHandler = new ZuoraContributionHandler(
     zuoraSubscriptionCreator,
     new ContributionSubscriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).contributionConfig,
@@ -130,12 +130,12 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     state.user,
   )
 
-  val zuoraPaperHandler = new ZuoraPaperHandler(
+  lazy val zuoraPaperHandler = new ZuoraPaperHandler(
     zuoraSubscriptionCreator,
     new PaperSubscriptionBuilder(services.promotionService, touchPointEnvironment, subscribeItemBuilder),
   )
 
-  val zuoraGuardianWeeklyHandler = new ZuoraGuardianWeeklyHandler(
+  lazy val zuoraGuardianWeeklyHandler = new ZuoraGuardianWeeklyHandler(
     zuoraSubscriptionCreator,
     new GuardianWeeklySubscriptionBuilder(
       services.promotionService,
