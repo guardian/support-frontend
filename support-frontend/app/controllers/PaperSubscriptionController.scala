@@ -38,7 +38,7 @@ class PaperSubscriptionController(
   def paper(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
-    val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val queryPromos = DefaultPromotions.Paper.june21Promotion :: request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
     Ok(views.html.main(
       title = "The Guardian Newspaper Subscription | Subscription Card and Home Delivery",
