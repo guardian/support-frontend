@@ -60,7 +60,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(selectAmount(amount, contributionType));
   },
   updateOtherAmount: (amount, countryGroupId, contributionType) => {
-    trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
     dispatch(updateOtherAmount(amount, contributionType));
   },
 });
@@ -132,6 +131,9 @@ function withProps(props: PropTypes) {
               props.countryGroupId,
               props.contributionType,
             )}
+            onBlur={() => !!otherAmount &&
+              trackComponentClick(`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`)
+            }
             error={otherAmountErrorMessage}
             autoComplete="off"
             autoFocus

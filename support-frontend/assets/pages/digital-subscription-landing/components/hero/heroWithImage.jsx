@@ -19,42 +19,21 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { getTimeboundQuery, getTimeboundCopy } from 'helpers/timeBoundedCopy/timeBoundedCopy';
-import { HeroPriceCards } from './heroPriceCards';
+import DefaultRoundel from './defaultRoundel';
 import {
   heroCopy,
   heroTitle,
   paragraphs,
   yellowHeading,
-  circleTextTop,
-  circleTextBottom,
-  circleTextGeneric,
-  circleTextContainer,
-  spaceAfter,
   mobileLineBreak,
-  testRoundelOverrides,
-  testEmbeddedRoundel,
-} from './heroStyles';
+  circleTextGeneric,
+} from './heroWithImageStyles';
 
 type PropTypes = {
   promotionCopy: PromotionCopy,
   countryGroupId: CountryGroupId,
-  showPriceCards: boolean,
   orderIsAGift: boolean,
-  priceList: any[],
 }
-
-const HeroCopy = () => (
-  <>
-    <p>
-      <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
-      you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
-    </p>
-    <p>
-      Plus, for a limited time, you can read our latest special edition - The books of&nbsp;2021.
-    </p>
-  </>
-);
 
 const HeroCopyAus = () => (
   <>
@@ -77,27 +56,15 @@ const GiftCopy = () => (
   </p>
 );
 
-const defaultRoundel = (
-  <div css={circleTextContainer}>
-    <div css={circleTextTop}>14 day</div>
-    <div css={circleTextBottom}>free trial</div>
-  </div>
-);
-
-
-function DigitalHero({
-  promotionCopy, countryGroupId, orderIsAGift, showPriceCards, priceList,
+function HeroWithImage({
+  promotionCopy, countryGroupId, orderIsAGift,
 }: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
   const promoCopy = promotionHTML(promotionCopy.description, { tag: 'div' });
-
-  const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || defaultRoundel;
-
-  const nonAusCopy = getTimeboundCopy('digitalSubscription', getTimeboundQuery() || new Date()) || <HeroCopy />;
-  const nonGiftCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : nonAusCopy;
-  const defaultCopy = orderIsAGift ? <GiftCopy /> : nonGiftCopy;
+  const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || <DefaultRoundel />;
+  const defaultCopy = orderIsAGift ? <GiftCopy /> : <HeroCopyAus />;
   const copy = promoCopy || defaultCopy;
 
   return (
@@ -107,33 +74,24 @@ function DigitalHero({
     >
       <CentredContainer>
         <Hero
-          image={showPriceCards ?
-            <HeroPriceCards
-              priceList={priceList}
-              roundel={
-                <HeroRoundel cssOverrides={testEmbeddedRoundel} theme="digital">
-                  {roundelText}
-                </HeroRoundel>}
-            /> : <GridImage
-              gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
-              srcSizes={[1000, 500, 140]}
-              sizes="(max-width: 480px) 200px,
+          image={<GridImage
+            gridId={countryGroupId === AUDCountries ? 'editionsPackshotAus' : 'editionsPackshot'}
+            srcSizes={[1000, 500, 140]}
+            sizes="(max-width: 480px) 200px,
                 (max-width: 740px) 100%,
                 (max-width: 1067px) 150%,
                 500px"
-              altText="Digital subscriptions"
-              imgType="png"
-            />
+            altText="Digital subscriptions"
+            imgType="png"
+          />
           }
           roundelElement={
               orderIsAGift ? null :
-              <HeroRoundel
-                cssOverrides={showPriceCards ? testRoundelOverrides : ''}
-                theme={showPriceCards ? 'digital' : 'base'}
-              >
+              <HeroRoundel>
                 {roundelText}
               </HeroRoundel>
           }
+          hideRoundelBelow="tablet"
         >
           <section css={heroCopy}>
             {orderIsAGift ?
@@ -143,8 +101,7 @@ function DigitalHero({
             <div css={paragraphs}>
               {copy}
             </div>
-            {!showPriceCards &&
-            <div css={countryGroupId === AUDCountries ? '' : spaceAfter}>
+            <div>
               <ThemeProvider theme={buttonBrand}>
                 <LinkButton
                   href="#subscribe"
@@ -164,7 +121,6 @@ function DigitalHero({
                 </LinkButton>
               </ThemeProvider>
             </div>
-            }
           </section>
         </Hero>
       </CentredContainer>
@@ -172,4 +128,4 @@ function DigitalHero({
   );
 }
 
-export { DigitalHero };
+export { HeroWithImage };

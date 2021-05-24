@@ -74,7 +74,7 @@ export type Test = {|
   seed: number,
   // An optional regex that will be tested against the path of the current page
   // before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
-  targetPage?: string,
+  targetPage?: string | RegExp,
   optimizeId?: string, // The id of the Optimize experiment which this test maps to
 |};
 
@@ -257,7 +257,7 @@ function assignUserToVariant(
   return randomNumber(mvtId, seed) % test.variants.length;
 }
 
-function targetPageMatches(locationPath: string, targetPage: ?string) {
+function targetPageMatches(locationPath: string, targetPage: ?string | RegExp) {
   if (!targetPage) { return true; }
 
   return locationPath.match(targetPage) != null;

@@ -195,7 +195,8 @@ function PaperCheckoutForm(props: PropTypes) {
   const [digiSubPriceString, setDigiSubPriceString] = useState<string>('');
   const [includesDigiSub, setIncludesDigiSub] = useState<boolean>(false);
   const simplePrice = digiSubPriceString.replace(/\/(.*)/, ''); // removes anything after the /
-  const cleanedPrice = simplePrice.replace(/\.(.*)/, ''); // removes decimal point if there is one
+  const priceHasRedundantFloat = simplePrice.split('.')[1] === '00'; // checks whether price is something like '£10.00'
+  const cleanedPrice = priceHasRedundantFloat ? simplePrice.replace(/\.(.*)/, '') : simplePrice; // removes decimal point if there are no pence
   const expandedPricingText = `${cleanedPrice} per month`;
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {

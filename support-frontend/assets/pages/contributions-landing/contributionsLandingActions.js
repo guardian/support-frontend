@@ -88,7 +88,6 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
-  | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object, stripeAccount: StripeAccount }
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError: ErrorReason, stripeAccount: StripeAccount }
@@ -163,11 +162,6 @@ const updateRecaptchaToken = (recaptchaToken: string): ((Function) => void) =>
 const setPaymentRequestButtonPaymentMethod =
   (paymentMethod: 'none' | StripePaymentMethod, stripeAccount: StripeAccount): Action =>
     ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod, stripeAccount });
-
-
-const setStripePaymentRequestObject =
-  (stripePaymentRequestObject: Object, stripeAccount: StripeAccount): Action =>
-    ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject, stripeAccount });
 
 const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Action =>
   ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount });
@@ -802,7 +796,6 @@ export {
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
   setPaymentRequestButtonPaymentMethod,
-  setStripePaymentRequestObject,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
   setTickerGoalReached,

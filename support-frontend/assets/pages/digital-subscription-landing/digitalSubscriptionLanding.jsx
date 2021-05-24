@@ -32,7 +32,8 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
-import { DigitalHero } from './components/hero/hero';
+import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
+import { HeroWithImage } from './components/hero/heroWithImage';
 import ProductBlock from './components/productBlock/productBlock';
 import ProductBlockAus from './components/productBlock/productBlockAus';
 import digitalSubscriptionLandingReducer, { type State }
@@ -41,6 +42,7 @@ import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+import EditorialVoice from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
 // ----- Styles ----- //
@@ -72,7 +74,7 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
-const showPriceCardsInHero = abParticipations.priceCardsInHeroTest === 'variant';
+const showEditorialVoiceComponent = abParticipations.editorialVoiceTest === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -132,13 +134,24 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      <DigitalHero
-        orderIsAGift={orderIsAGift}
-        countryGroupId={countryGroupId}
-        promotionCopy={sanitisedPromoCopy}
-        showPriceCards={showPriceCardsInHero}
-        priceList={heroPriceList}
-      />
+      {countryGroupId === AUDCountries || orderIsAGift ?
+        <HeroWithImage
+          orderIsAGift={orderIsAGift}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+        /> :
+        <HeroWithPriceCards
+          promotionCopy={sanitisedPromoCopy}
+          priceList={heroPriceList}
+        />
+      }
+      {showEditorialVoiceComponent &&
+        <FullWidthContainer>
+          <CentredContainer>
+            <EditorialVoice />
+          </CentredContainer>
+        </FullWidthContainer>
+      }
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={productBlockContainer}>

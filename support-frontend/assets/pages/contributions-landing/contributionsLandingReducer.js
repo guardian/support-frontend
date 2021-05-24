@@ -57,8 +57,7 @@ type SetPasswordData = {
 }
 
 export type StripePaymentRequestButtonData = {
-  paymentMethod: 'none' | StripePaymentMethod | null,
-  stripePaymentRequestObject: Object | null,
+  paymentMethod: 'none' | StripePaymentMethod,
   stripePaymentRequestButtonClicked: boolean,
   paymentError: ErrorReason | null,
 }
@@ -198,14 +197,12 @@ function createFormReducer() {
     },
     stripePaymentRequestButtonData: {
       ONE_OFF: {
-        paymentMethod: null,
-        stripePaymentRequestObject: null,
+        paymentMethod: 'none',
         stripePaymentRequestButtonClicked: false,
         paymentError: null,
       },
       REGULAR: {
-        paymentMethod: null,
-        stripePaymentRequestObject: null,
+        paymentMethod: 'none',
         stripePaymentRequestButtonClicked: false,
         paymentError: null,
       },
@@ -451,18 +448,6 @@ function createFormReducer() {
             [action.stripeAccount]: {
               ...state.stripePaymentRequestButtonData[action.stripeAccount],
               paymentMethod: action.paymentMethod,
-            },
-          },
-        };
-
-      case 'SET_STRIPE_PAYMENT_REQUEST_OBJECT':
-        return {
-          ...state,
-          stripePaymentRequestButtonData: {
-            ...state.stripePaymentRequestButtonData,
-            [action.stripeAccount]: {
-              ...state.stripePaymentRequestButtonData[action.stripeAccount],
-              stripePaymentRequestObject: action.stripePaymentRequestObject,
             },
           },
         };
