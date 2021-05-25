@@ -269,7 +269,8 @@ const orderedProducts = (state: State): ProductCopy[] => {
       digital(countryGroupId, state.page.pricingCopy[DigitalPack], true),
       guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
       paper(countryGroupId, state.page.pricingCopy[Paper], false),
-      paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
+      //Removing the link to the old paper+digital page during the June 21 Sale
+      //paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
       premiumApp(countryGroupId),
     ];
   } else if (countryGroupId === EURCountries) {
