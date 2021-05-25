@@ -61,7 +61,6 @@ function HeroWithImage({
             imgType="png"
           />
           }
-          hideRoundelBelow="tablet"
         >
           <section css={heroCopy}>
             <GiftHeadingAnimation />
