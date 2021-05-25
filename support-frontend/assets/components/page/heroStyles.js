@@ -74,7 +74,7 @@ export const heroRoundelContainer = css`
   right: ${space[3]}px;
 
   ${from.tablet} {
-    right: 65px;
+    right: 60px;
   }
 
   ${from.desktop} {
