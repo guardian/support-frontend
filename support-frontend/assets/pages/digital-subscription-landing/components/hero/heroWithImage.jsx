@@ -10,7 +10,6 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
-import HeroRoundel from 'components/page/heroRoundel';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 
 import {
@@ -19,18 +18,15 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import DefaultRoundel from './defaultRoundel';
 import {
   heroCopy,
   paragraphs,
   mobileLineBreak,
-  circleTextGeneric,
 } from './heroWithImageStyles';
 
 type PropTypes = {
   promotionCopy: PromotionCopy,
   countryGroupId: CountryGroupId,
-  orderIsAGift: boolean,
 }
 
 const GiftCopy = () => (
@@ -42,10 +38,9 @@ const GiftCopy = () => (
 );
 
 function HeroWithImage({
-  promotionCopy, countryGroupId, orderIsAGift,
+  promotionCopy, countryGroupId,
 }: PropTypes) {
   const promoCopy = promotionHTML(promotionCopy.description, { tag: 'div' });
-  const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || <DefaultRoundel />;
   const copy = promoCopy || <GiftCopy />;
 
   return (
@@ -65,12 +60,6 @@ function HeroWithImage({
             altText="Digital subscriptions"
             imgType="png"
           />
-          }
-          roundelElement={
-              orderIsAGift ? null :
-              <HeroRoundel>
-                {roundelText}
-              </HeroRoundel>
           }
           hideRoundelBelow="tablet"
         >

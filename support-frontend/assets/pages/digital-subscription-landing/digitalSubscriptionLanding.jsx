@@ -136,7 +136,6 @@ function LandingPage() {
     >
       {orderIsAGift ?
         <HeroWithImage
-          orderIsAGift={orderIsAGift}
           countryGroupId={countryGroupId}
           promotionCopy={sanitisedPromoCopy}
         /> :
