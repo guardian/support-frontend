@@ -17,6 +17,10 @@ export const heroTitle = css`
   margin-bottom: ${space[3]}px;
 
   ${from.tablet} {
+    ${headline.medium({ fontWeight: 'bold' })};
+  }
+
+  ${from.desktop} {
     ${headline.large({ fontWeight: 'bold' })};
   }
 `;

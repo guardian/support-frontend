@@ -12,6 +12,10 @@ import { getTimeboundQuery, getTimeboundCopy } from 'helpers/timeBoundedCopy/tim
 import { HeroPriceCards } from './heroPriceCards';
 import DefaultRoundel from './defaultRoundel';
 import {
+  AUDCountries,
+  type CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
+import {
   heroCopy,
   heroTitle,
   paragraphs,
@@ -24,6 +28,7 @@ import {
 type PropTypes = {
   promotionCopy: PromotionCopy,
   priceList: any[],
+  countryGroupId: CountryGroupId,
 }
 
 const HeroCopy = () => (
@@ -35,16 +40,28 @@ const HeroCopy = () => (
   </>
 );
 
+const HeroCopyAus = () => (
+  <>
+    <p>
+      <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
+      you the richest experience of Guardian journalism, while helping to sustain vital, independent reporting.
+    </p>
+    <p>
+      Start your free trial today and enjoy exclusive access to the new weekly edition, Australia Weekend.
+    </p>
+  </>);
+
 
 function HeroWithPriceCards({
-  promotionCopy, priceList,
+  promotionCopy, priceList, countryGroupId,
 }: PropTypes) {
   const title = promotionCopy.title || <>Subscribe for stories<br />
     <span css={yellowHeading}>that must be told</span></>;
 
   const promoCopy = promotionHTML(promotionCopy.description, { tag: 'div' });
   const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || <DefaultRoundel />;
-  const defaultCopy = getTimeboundCopy('digitalSubscription', getTimeboundQuery() || new Date()) || <HeroCopy />;
+  const nonAusCopy = getTimeboundCopy('digitalSubscription', getTimeboundQuery() || new Date()) || <HeroCopy />;
+  const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : nonAusCopy;
   const copy = promoCopy || defaultCopy;
 
   return (

@@ -27,7 +27,7 @@ const heroRoundelStyles = css`
   border-radius: 50%;
   ${headline.xxsmall({ fontWeight: 'bold' })};
 
-  ${from.tablet} {
+  ${from.desktop} {
     width: calc(100% + ${space[6]}px);
     transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};

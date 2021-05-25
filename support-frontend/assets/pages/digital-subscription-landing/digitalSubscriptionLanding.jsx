@@ -134,14 +134,14 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      {countryGroupId === AUDCountries || orderIsAGift ?
+      {orderIsAGift ?
         <HeroWithImage
-          orderIsAGift={orderIsAGift}
           countryGroupId={countryGroupId}
           promotionCopy={sanitisedPromoCopy}
         /> :
         <HeroWithPriceCards
           promotionCopy={sanitisedPromoCopy}
+          countryGroupId={countryGroupId}
           priceList={heroPriceList}
         />
       }
