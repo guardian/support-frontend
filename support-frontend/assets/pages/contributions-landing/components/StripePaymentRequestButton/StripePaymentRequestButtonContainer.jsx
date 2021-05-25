@@ -14,7 +14,7 @@ import {
   stripeAccountForContributionType,
   useStripeObjects,
   type StripeAccount,
-} from 'helpers/stripe';
+} from 'helpers/forms/stripe';
 import type {
   ContributionType,
   OtherAmounts,

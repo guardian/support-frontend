@@ -1,6 +1,6 @@
 // @flow
 
-import { Annual, type DigitalGiftBillingPeriod } from 'helpers/billingPeriods';
+import { Annual, type DigitalGiftBillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 const getGiftOrderSummaryText = (giftType: DigitalGiftBillingPeriod, price: string) => {
   const numberOfMonths = giftType === Annual ? 12 : 3;

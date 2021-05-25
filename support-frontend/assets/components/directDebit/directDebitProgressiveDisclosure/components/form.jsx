@@ -13,7 +13,7 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
-import { type ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/forms/errorReasons';
 import { type Option } from 'helpers/types/option';
 
 const directDebitForm = css`

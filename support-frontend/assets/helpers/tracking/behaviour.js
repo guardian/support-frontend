@@ -1,8 +1,8 @@
 // @flow
 import { trackComponentEvents } from 'helpers/tracking/ophan';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 export type ProductCheckout = 'Contribution' | SubscriptionProduct;
 

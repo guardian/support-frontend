@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { loadStripe, type Stripe as StripeSDK } from '@stripe/stripe-js/pure';
 import { onConsentChange } from '@guardian/consent-management-platform';
-import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
+import { type PaymentMethod, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType } from 'helpers/contributions';
 

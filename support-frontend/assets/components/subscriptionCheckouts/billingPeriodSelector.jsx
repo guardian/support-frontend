@@ -2,8 +2,8 @@
 import React from 'react';
 
 import { RadioGroup, Radio } from '@guardian/src-radio';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { billingPeriodTitle } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { billingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';

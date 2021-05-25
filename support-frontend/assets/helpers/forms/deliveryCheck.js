@@ -1,6 +1,6 @@
 // @flow
 
-import { getGlobal } from 'helpers/globals';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 
 const M25_POSTCODE_PREFIXES = getGlobal('homeDeliveryPostcodes') || [];
 

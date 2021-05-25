@@ -13,7 +13,7 @@ import type {
   RedemptionPageState,
   Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import { DigitalPack } from 'helpers/subscriptions';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { User } from 'helpers/subscriptionsForms/user';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';

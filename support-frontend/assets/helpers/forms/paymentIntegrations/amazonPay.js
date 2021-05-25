@@ -1,9 +1,9 @@
 // @flow
 
 import { setAmazonPayLoginObject, setAmazonPayPaymentsObject } from 'pages/contributions-landing/contributionsLandingActions';
-import { isProd } from 'helpers/url';
+import { isProd } from 'helpers/urls/url';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 
 const amazonPaySupportedCountryGroups = ['UnitedStates'];
 

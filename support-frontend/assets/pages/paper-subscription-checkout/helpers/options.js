@@ -8,7 +8,7 @@ import {
   ActivePaperProductTypes,
   Everyday,
 } from 'helpers/productPrice/productOptions';
-import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { paperHasDeliveryEnabled } from 'helpers/productPrice/subscriptions';
 import type {
   FulfilmentOptions,
   PaperFulfilmentOptions,
@@ -17,10 +17,10 @@ import {
   Collection,
   HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
-import { formatMachineDate } from 'helpers/dateConversions';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
 
 function getProductOption(): PaperProductOptions {
   const productInUrl = getQueryParameter('product');

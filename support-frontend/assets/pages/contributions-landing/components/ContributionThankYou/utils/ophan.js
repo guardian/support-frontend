@@ -1,6 +1,6 @@
 // @flow
 import { trackComponentEvents } from 'helpers/tracking/ophan';
-import { type PaymentMethod } from 'helpers/paymentMethods';
+import { type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { type ContributionType } from 'helpers/contributions';
 
 export const OPHAN_COMPONENT_ID_SIGN_IN = 'sign-into-the-guardian-link';

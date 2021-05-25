@@ -6,9 +6,9 @@ import React, { Component, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getGlobal } from 'helpers/globals';
-import { classNameWithModifiers } from 'helpers/utilities';
-import { onElementResize, type ElementResizer } from 'helpers/layout';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import { onElementResize, type ElementResizer } from 'helpers/polyfills/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import Padlock from './padlock.svg';
 

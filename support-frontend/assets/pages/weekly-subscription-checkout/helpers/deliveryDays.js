@@ -4,7 +4,7 @@ import {
   getDeliveryDays, getNextDeliveryDay,
   numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
-import { formatUserDate } from 'helpers/dateConversions';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;

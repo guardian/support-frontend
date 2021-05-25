@@ -5,10 +5,10 @@
 
 import type { ContributionType } from 'helpers/contributions';
 import React from 'react';
-import { getBaseDomain } from 'helpers/url';
+import { getBaseDomain } from 'helpers/urls/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import AnimatedDots from 'components/spinners/animatedDots';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { createAuthenticationEventParams } from 'helpers/tracking/identityComponentEvent';
 

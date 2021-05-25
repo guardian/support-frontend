@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { routes } from 'helpers/routes';
+import { routes } from 'helpers/urls/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 type CheckBankAccountDetails = {

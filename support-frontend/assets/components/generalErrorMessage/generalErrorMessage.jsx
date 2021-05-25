@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-import { appropriateErrorMessage, type ErrorReason } from 'helpers/errorReasons';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { appropriateErrorMessage, type ErrorReason } from 'helpers/forms/errorReasons';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import SvgExclamationAlternate from '../svgs/exclamationAlternate';
 import { type Option } from 'helpers/types/option';
 

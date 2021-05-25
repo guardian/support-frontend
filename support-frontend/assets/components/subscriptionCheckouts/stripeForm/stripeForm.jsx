@@ -19,14 +19,14 @@ import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 
 import './stripeForm.scss';
-import { fetchJson, requestOptions } from 'helpers/fetch';
-import { logException } from 'helpers/logger';
+import { fetchJson, requestOptions } from 'helpers/async/fetch';
+import { logException } from 'helpers/utilities/logger';
 import type { Option } from 'helpers/types/option';
-import { appropriateErrorMessage } from 'helpers/errorReasons';
+import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { loadRecaptchaV2 } from 'helpers/recaptcha';
-import { routes } from 'helpers/routes';
+import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
+import { routes } from 'helpers/urls/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 
 // Types

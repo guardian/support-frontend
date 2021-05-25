@@ -10,7 +10,7 @@ import {
   currencies,
   spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { formatAmount } from 'helpers/checkouts';
+import { formatAmount } from 'helpers/forms/checkouts';
 import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import ContributionAmountChoicesChoiceLabel from './ContributionAmountChoicesChoiceLabel';
 import { from, until } from '@guardian/src-foundations/mq';

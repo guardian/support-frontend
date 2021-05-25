@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { fetchJson } from 'helpers/fetch';
-import { logException } from '../logger';
+import { fetchJson } from 'helpers/async/fetch';
+import { logException } from '../../utilities/logger';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, Stripe } from '../paymentMethods';
 import { getPaymentLabel } from '../checkouts';
 

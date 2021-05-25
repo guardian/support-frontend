@@ -16,7 +16,7 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { connect } from 'react-redux';
 import './AmazonPay.scss';
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { ContributionType } from 'helpers/contributions';
 import { InlineError } from '@guardian/src-user-feedback';

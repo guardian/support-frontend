@@ -1,11 +1,11 @@
 // @flow
 
 // ----- Imports ----- //
-import { getRequestOptions } from 'helpers/fetch';
-import { logPromise } from 'helpers/promise';
-import { routes } from 'helpers/routes';
-import { fetchJson } from 'helpers/fetch';
-import { checkEmail } from 'helpers/formValidation';
+import { getRequestOptions } from 'helpers/async/fetch';
+import { logPromise } from 'helpers/async/promise';
+import { routes } from 'helpers/urls/routes';
+import { fetchJson } from 'helpers/async/fetch';
+import { checkEmail } from 'helpers/forms/formValidation';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ContributionType } from 'helpers/contributions';
 

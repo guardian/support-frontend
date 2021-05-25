@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { type User } from 'helpers/user/userReducer';
-import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
+import { type PaymentMethod, DirectDebit } from 'helpers/forms/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -30,8 +30,8 @@ import {
   OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { getCampaignSettings } from 'helpers/campaigns';
-import type { CampaignSettings } from 'helpers/campaigns';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getAmount } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 

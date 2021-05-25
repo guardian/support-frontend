@@ -1,24 +1,24 @@
 // @flow
 
-import { fetchJson } from 'helpers/fetch';
+import { fetchJson } from 'helpers/async/fetch';
 import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { type Dispatch } from 'redux';
 import type { Option } from 'helpers/types/option';
-import type { PaymentResult, RegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { postRegularPaymentRequest } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentResult, RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getOphanIds, getReferrerAcquisitionData, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { routes } from 'helpers/routes';
+import { routes } from 'helpers/urls/routes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Monthly } from 'helpers/billingPeriods';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { User } from 'helpers/subscriptionsForms/user';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { getOrigin } from 'helpers/url';
-import { appropriateErrorMessage } from 'helpers/errorReasons';
-import { getGlobal } from 'helpers/globals';
+import { getOrigin } from 'helpers/urls/url';
+import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { ReaderType } from 'helpers/productPrice/readerType';
-import { DigitalPack } from 'helpers/subscriptions';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 
 type ValidationResult = {
   valid: boolean,

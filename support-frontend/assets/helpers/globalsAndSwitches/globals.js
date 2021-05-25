@@ -1,11 +1,11 @@
 // @flow
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { type Settings } from 'helpers/settings';
+import { type Settings } from 'helpers/globalsAndSwitches/settings';
 import type {
   PromotionCopy,
 } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
-import type { ConfiguredRegionAmounts } from './contributions';
+import type { ConfiguredRegionAmounts } from '../contributions';
 
 function getGlobal<T>(path: string = ''): Option<T> {
 

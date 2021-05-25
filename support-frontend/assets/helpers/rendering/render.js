@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { logException } from 'helpers/logger';
-import { isSafari } from 'helpers/userAgent';
+import { logException } from 'helpers/utilities/logger';
+import { isSafari } from 'helpers/utilities/userAgent';
 
 // Without this the build-time pre-rendering breaks, because fetch is undefined when running with node
 const safeFetch = (url: string, opts) => {

@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
-import { paperSubsUrl } from 'helpers/routes';
+import { paperSubsUrl } from 'helpers/urls/routes';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';

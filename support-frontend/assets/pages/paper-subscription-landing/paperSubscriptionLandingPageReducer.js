@@ -8,8 +8,8 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { type TabActions } from './paperSubscriptionLandingPageActions';
 import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
-import { getProductPrices, getPromotionCopy } from 'helpers/globals';
+import { paperHasDeliveryEnabled } from 'helpers/productPrice/subscriptions';
+import { getProductPrices, getPromotionCopy } from 'helpers/globalsAndSwitches/globals';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 

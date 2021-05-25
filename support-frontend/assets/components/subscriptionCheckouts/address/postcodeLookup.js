@@ -1,6 +1,6 @@
 // @flow
-import { postcodeLookupUrl } from 'helpers/routes';
-import { getGlobal } from 'helpers/globals';
+import { postcodeLookupUrl } from 'helpers/urls/routes';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 
 export type PostcodeFinderResult = {|
   lineOne?: string,

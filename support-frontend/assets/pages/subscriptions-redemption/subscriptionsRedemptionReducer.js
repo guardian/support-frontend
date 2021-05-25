@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { CommonState } from 'helpers/page/commonReducer';
-import { getGlobal } from 'helpers/globals';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { Option } from 'helpers/types/option';
 import type { User } from 'helpers/subscriptionsForms/user';
 import { getUser } from 'helpers/subscriptionsForms/user';

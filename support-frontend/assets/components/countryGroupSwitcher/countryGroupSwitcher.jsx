@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import Dialog from 'components/dialog/dialog';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import Menu, { LinkItem } from 'components/menu/menu';
 
 import {

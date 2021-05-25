@@ -1,11 +1,11 @@
 // @flow
 
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 import { type CountryGroupId, detect } from 'helpers/internationalisation/countryGroup';
-import { fixDecimals } from 'helpers/subscriptions';
-import { type BillingPeriod } from 'helpers/billingPeriods';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
+import { type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
-import { type SubscriptionProduct } from './subscriptions';
+import { type SubscriptionProduct } from './productPrice/subscriptions';
 import { AUDCountries, GBPCountries, EURCountries, Canada, International, UnitedStates, NZDCountries } from './internationalisation/countryGroup';
 import { type FulfilmentOptions } from './productPrice/fulfilmentOptions';
 import { type Option } from 'helpers/types/option';

@@ -4,7 +4,7 @@
 import React from 'react';
 
 import { init as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 
 import Page from 'components/page/page';
 

@@ -22,7 +22,7 @@ import list from 'pages/digital-subscription-checkout/components/thankYou/icons/
 import gift from 'pages/digital-subscription-checkout/components/thankYou/icons/gift.png';
 import person from 'pages/digital-subscription-checkout/components/thankYou/icons/person.png';
 import phone from 'pages/digital-subscription-checkout/components/thankYou/icons/phone.png';
-import { formatUserDate } from 'helpers/dateConversions';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 

@@ -2,8 +2,8 @@
 
 // ----- Routes ----- //
 
-import type { CountryGroupId } from './internationalisation/countryGroup';
-import { countryGroups } from './internationalisation/countryGroup';
+import type { CountryGroupId } from '../internationalisation/countryGroup';
+import { countryGroups } from '../internationalisation/countryGroup';
 import { getOrigin, isProd } from './url';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';

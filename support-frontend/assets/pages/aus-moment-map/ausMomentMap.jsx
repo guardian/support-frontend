@@ -5,7 +5,7 @@
 import * as React from 'preact/compat';
 import * as ophan from 'ophan';
 import { motion } from 'framer-motion';
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import './ausMomentMap.scss';
 import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';

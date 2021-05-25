@@ -1,6 +1,6 @@
 // @flow
 
-import { getAbsoluteURL } from '../url';
+import { getAbsoluteURL } from '../urls/url';
 import { pageView } from './ophan';
 import { successfulConversion } from './googleTagManager';
 import type { Participations } from '../abTests/abtest';

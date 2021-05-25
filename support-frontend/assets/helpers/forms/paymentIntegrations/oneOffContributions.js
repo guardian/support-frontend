@@ -1,12 +1,12 @@
 // @flow
 import { type PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 
-import type { ErrorReason } from 'helpers/errorReasons';
-import { logPromise } from 'helpers/promise';
-import { logException } from 'helpers/logger';
-import { fetchJson, requestOptions } from 'helpers/fetch';
-import * as cookie from 'helpers/cookie';
-import { addQueryParamsToURL } from 'helpers/url';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { logPromise } from 'helpers/async/promise';
+import { logException } from 'helpers/utilities/logger';
+import { fetchJson, requestOptions } from 'helpers/async/fetch';
+import * as cookie from 'helpers/storage/cookie';
+import { addQueryParamsToURL } from 'helpers/urls/url';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { PaymentSuccess } from './readerRevenueApis';

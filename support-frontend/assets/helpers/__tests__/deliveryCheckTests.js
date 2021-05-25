@@ -1,4 +1,4 @@
-import { postcodeIsWithinDeliveryArea, postcodeHasPrefix } from '../deliveryCheck';
+import { postcodeIsWithinDeliveryArea, postcodeHasPrefix } from '../forms/deliveryCheck';
 
 describe('Delivery Check', () => {
 

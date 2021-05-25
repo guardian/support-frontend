@@ -8,10 +8,10 @@
 import { config } from 'helpers/contributions';
 import type { CountryGroup, CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import { Canada, UnitedStates, AUDCountries, countryGroups } from './internationalisation/countryGroup';
+import { Canada, UnitedStates, AUDCountries, countryGroups } from '../internationalisation/countryGroup';
 import { DateUtils } from 'react-day-picker';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
-import type { LocalCurrencyCountry } from './internationalisation/localCurrencyCountry';
+import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 

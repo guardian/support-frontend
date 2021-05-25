@@ -4,11 +4,11 @@ import React from 'react';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { LargeParagraph, Title } from 'components/text/text';
 import Content from 'components/content/content';
-import { formatUserDate } from 'helpers/dateConversions';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import UnorderedList from 'components/list/unorderedList';
 import AnchorButton from 'components/button/anchorButton';
-import { DigitalPack, Paper } from 'helpers/subscriptions';
-import { routes } from 'helpers/routes';
+import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
+import { routes } from 'helpers/urls/routes';
 
 const landingPageForProduct = (props: PromotionTerms) => {
   switch (props.product) {

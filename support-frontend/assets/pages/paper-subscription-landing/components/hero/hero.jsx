@@ -19,7 +19,7 @@ import Hero from 'components/page/hero';
 import HeroRoundel, { roundelSizeMob } from 'components/page/heroRoundel';
 
 import { type ProductPrices } from 'helpers/productPrice/productPrices';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { getDiscountCopy } from './discountCopy';

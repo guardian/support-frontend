@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 
-import { routes } from 'helpers/routes';
-import * as cookie from 'helpers/cookie';
-import { get as getCookie } from 'helpers/cookie';
-import { getSession } from 'helpers/storage';
+import { routes } from 'helpers/urls/routes';
+import * as cookie from 'helpers/storage/cookie';
+import { get as getCookie } from 'helpers/storage/cookie';
+import { getSession } from 'helpers/storage/storage';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import type { UserSetStateActions } from 'helpers/user/userActions';
-import { getSignoutUrl } from 'helpers/externalLinks';
+import { getSignoutUrl } from 'helpers/urls/externalLinks';
 import type { Option } from 'helpers/types/option';
 
 export type User = {|

@@ -4,7 +4,7 @@
 
 import { getVoucherDays } from '../voucherDeliveryDays';
 import { daysTillNextDelivery, getHomeDeliveryDays } from '../homeDeliveryDays';
-import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
+import { formatMachineDate, formatUserDate } from 'helpers/utilities/dateConversions';
 import { canDeliverOnNextDeliveryDay } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { DeliveryDays } from 'helpers/subscriptionsForms/deliveryDays';
 import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';

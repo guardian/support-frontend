@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/forms/errorReasons';
 import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -11,18 +11,18 @@ import { type StateProvince } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import type { StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { getContributionTypeFromSession } from 'helpers/checkouts';
-import * as storage from 'helpers/storage';
+import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
+import * as storage from 'helpers/storage/storage';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from '../../helpers/internationalisation/country';
 
 // ----- Types ----- //

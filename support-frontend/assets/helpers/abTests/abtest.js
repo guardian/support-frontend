@@ -6,13 +6,13 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import seedrandom from 'seedrandom';
 
-import * as cookie from 'helpers/cookie';
-import { type Settings } from 'helpers/settings';
+import * as cookie from 'helpers/storage/cookie';
+import { type Settings } from 'helpers/globalsAndSwitches/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { tests } from './abtestDefinitions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 
 // ----- Types ----- //
 

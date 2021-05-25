@@ -1,5 +1,5 @@
 // @flow
-import * as storage from 'helpers/storage';
+import * as storage from 'helpers/storage/storage';
 
 
 const fetchFonts = (window: Object, document: Document): void => {

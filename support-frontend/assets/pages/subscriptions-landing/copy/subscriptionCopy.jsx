@@ -10,13 +10,13 @@ import {
   sendTrackingEventsOnClick,
   subscriptionPricesForDefaultBillingPeriod,
   type SubscriptionProduct,
-} from 'helpers/subscriptions';
+} from 'helpers/productPrice/subscriptions';
 import { getCampaign } from 'helpers/tracking/acquisitions';
 import {
   androidAppUrl,
   getIosAppUrl,
   getSubsLinks,
-} from 'helpers/externalLinks';
+} from 'helpers/urls/externalLinks';
 import trackAppStoreLink from 'helpers/tracking/appCtaTracking';
 // images
 import GuardianWeeklyPackShot
@@ -43,7 +43,7 @@ import {
   getDisplayFlashSalePrice,
   getSaleCopy,
 } from 'helpers/flashSale';
-import { Monthly, Quarterly } from 'helpers/billingPeriods';
+import { Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
 import {
   currencies, detect,
   fromCountryGroupId,
@@ -52,11 +52,11 @@ import {
 
 import type { State } from '../subscriptionsLandingReducer';
 import type { PriceCopy } from '../subscriptionsLandingReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
   digitalSubscriptionLanding,
   guardianWeeklyLanding, paperSubsUrl,
-} from 'helpers/routes';
+} from 'helpers/urls/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import PaperPackshot from 'components/packshots/paper-packshot';

@@ -7,11 +7,11 @@ import {
   type BillingPeriod,
   Monthly,
   Quarterly,
-} from 'helpers/billingPeriods';
-import { trackComponentEvents } from './tracking/ophan';
-import type { OphanAction, OphanComponentEvent, OphanComponentType } from './tracking/ophan';
-import { currencies, detect } from './internationalisation/currency';
-import { isTestSwitchedOn } from 'helpers/globals';
+} from 'helpers/productPrice/billingPeriods';
+import { trackComponentEvents } from '../tracking/ophan';
+import type { OphanAction, OphanComponentEvent, OphanComponentType } from '../tracking/ophan';
+import { currencies, detect } from '../internationalisation/currency';
+import { isTestSwitchedOn } from 'helpers/globalsAndSwitches/globals';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Types ------ //

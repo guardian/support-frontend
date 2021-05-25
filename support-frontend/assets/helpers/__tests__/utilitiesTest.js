@@ -11,7 +11,7 @@ import {
   parseBoolean,
   deserialiseJsonObject,
   addLeadingZeros,
-} from '../utilities';
+} from '../utilities/utilities';
 
 
 // ----- Functions ----- //

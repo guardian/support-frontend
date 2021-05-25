@@ -24,7 +24,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { fromCountryGroupId, glyph } from 'helpers/internationalisation/currency';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type PropTypes = {|
   orderIsAGift: boolean;

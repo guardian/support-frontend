@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionTypes } from 'helpers/contributions';
 
 // ----- Types ----- //

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 import { getProductPrice } from 'helpers/productPrice/productPrices';
-import { Annual, Quarterly, SixWeekly } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixWeekly } from 'helpers/productPrice/billingPeriods';
 import {
   Domestic,
   getWeeklyFulfilmentOption,
