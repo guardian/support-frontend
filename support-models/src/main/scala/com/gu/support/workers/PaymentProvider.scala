@@ -14,6 +14,8 @@ case object PayPal extends PaymentProvider("PayPal")
 
 case object DirectDebit extends PaymentProvider("DirectDebit")
 
+case object Sepa extends PaymentProvider("Sepa")
+
 case object Existing extends PaymentProvider("Existing")
 
 case object RedemptionNoProvider extends PaymentProvider("Redemption")
@@ -27,6 +29,7 @@ object PaymentProvider {
     StripeApplePay,
     PayPal,
     DirectDebit,
+    Sepa,
     Existing,
     RedemptionNoProvider,
     AmazonPay
@@ -48,6 +51,7 @@ object PaymentProvider {
     }
     case Some(_: PayPalPaymentFields) => PayPal
     case Some(_: DirectDebitPaymentFields) => DirectDebit
+    case Some(_: SepaPaymentFields) => Sepa
     case Some(_: ExistingPaymentFields) => Existing
     case Some(_: AmazonPayPaymentFields) => AmazonPay
     case None /* Corporate*/ => RedemptionNoProvider

@@ -5,7 +5,7 @@ import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway}
+import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway, SepaGateway}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
@@ -86,6 +86,19 @@ case class ClonedDirectDebitPaymentMethod(
   PaymentGateway: PaymentGateway = DirectDebitGateway
 ) extends PaymentMethod
 
+case class GatewayOption(name: String, value: String)
+case class GatewayOptionData(GatewayOption: List[GatewayOption])
+case class SepaPaymentMethod(
+  BankTransferAccountName: String,
+  BankTransferAccountNumber: String,
+  Email: String,
+  IPAddress: String,
+  GatewayOptionData: GatewayOptionData,
+  BankTransferType: String = "SEPA",
+  `Type`: String = "BankTransfer",
+  PaymentGateway: PaymentGateway = SepaGateway
+) extends PaymentMethod
+
 case class AmazonPayPaymentMethod(
   TokenId: String,
   Type: String = "CreditCardReferenceTransaction",  // This is how amazon pay works in zuora - as a credit card
@@ -93,10 +106,12 @@ case class AmazonPayPaymentMethod(
 ) extends PaymentMethod
 
 object PaymentMethod {
+  import io.circe.generic.auto._
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
+  implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = deriveCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = deriveCodec
   implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = deriveCodec
 
@@ -105,6 +120,7 @@ object PaymentMethod {
     case pp: PayPalReferenceTransaction => pp.asJson
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
+    case sepa: SepaPaymentMethod => sepa.asJson
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
     case amazonPayPaymentMethod: AmazonPayPaymentMethod => amazonPayPaymentMethod.asJson
   }
@@ -115,6 +131,7 @@ object PaymentMethod {
       Decoder[CreditCardReferenceTransaction].widen,
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)
       Decoder[DirectDebitPaymentMethod].widen,
+      Decoder[SepaPaymentMethod].widen,
       Decoder[AmazonPayPaymentMethod].widen
     ).reduceLeft(_ or _)
 }

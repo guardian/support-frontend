@@ -46,6 +46,7 @@ object PathVerification {
   case object Card extends MonitoredPaymentMethod { val tipString = "Card" }
   case object ExistingPaymentMethod extends MonitoredPaymentMethod { val tipString = "Existing Payment Method" }
   case object AmazonPay extends MonitoredPaymentMethod { val tipString = "AmazonPay" }
+  case object Sepa extends MonitoredPaymentMethod { val tipString = "Sepa" }
 
   case class TipPath(
       region: MonitoredRegion,
@@ -77,6 +78,7 @@ object PathVerification {
     case _: StripePaymentFields => Card
     case ExistingPaymentFields(_) => ExistingPaymentMethod
     case AmazonPayPaymentFields(_) => AmazonPay
+    case SepaPaymentFields(_, _) => Sepa
   }
 
   def verify(tipPath: TipPath, verifier: VerifyPath): Future[TipResponse] = {

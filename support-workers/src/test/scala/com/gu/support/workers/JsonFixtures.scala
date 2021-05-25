@@ -267,7 +267,9 @@ object JsonFixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $payPalJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Test"
         }"""
 
   def createStripeSourcePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
@@ -281,7 +283,9 @@ object JsonFixtures {
           },
           "paymentFields": $stripeJson,
           "sessionId": "testingToken",
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Test"
         }"""
 
   def createStripePaymentMethodPaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
@@ -295,7 +299,9 @@ object JsonFixtures {
           },
           "paymentFields": $stripePaymentMethodJson,
           "sessionId": "testingToken",
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Test"
         }"""
 
   val createPayPalPaymentMethodDigitalPackJson =
@@ -307,7 +313,9 @@ object JsonFixtures {
             "paymentProvider": "PayPal",
             "isGiftPurchase": false
           },
-          "paymentFields": $payPalJson
+          "paymentFields": $payPalJson,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Test"
         }"""
 
   val createDirectDebitDigitalPackJson =
