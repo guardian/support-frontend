@@ -22,9 +22,7 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import DefaultRoundel from './defaultRoundel';
 import {
   heroCopy,
-  heroTitle,
   paragraphs,
-  yellowHeading,
   mobileLineBreak,
   circleTextGeneric,
 } from './heroWithImageStyles';
@@ -34,19 +32,6 @@ type PropTypes = {
   countryGroupId: CountryGroupId,
   orderIsAGift: boolean,
 }
-
-const HeroCopyAus = () => (
-  <>
-    <p>
-      With two innovative apps and ad-free reading, a digital subscription gives you the richest experience
-      of Guardian Australia journalism. It also sustains the independent reporting you love.
-    </p>
-    <p>
-      You&apos;ll gain exclusive access to <strong>Australia Weekend</strong>, the new digital
-      edition, providing you with a curated view of the week&apos;s biggest stories, plus early access to
-      essential weekend news.
-    </p>
-  </>);
 
 const GiftCopy = () => (
   <p>
@@ -59,17 +44,13 @@ const GiftCopy = () => (
 function HeroWithImage({
   promotionCopy, countryGroupId, orderIsAGift,
 }: PropTypes) {
-  const title = promotionCopy.title || <>Subscribe for stories<br />
-    <span css={yellowHeading}>that must be told</span></>;
-
   const promoCopy = promotionHTML(promotionCopy.description, { tag: 'div' });
   const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || <DefaultRoundel />;
-  const defaultCopy = orderIsAGift ? <GiftCopy /> : <HeroCopyAus />;
-  const copy = promoCopy || defaultCopy;
+  const copy = promoCopy || <GiftCopy />;
 
   return (
     <PageTitle
-      title={orderIsAGift ? 'Give the digital subscription' : 'Digital subscription'}
+      title="Give the digital subscription"
       theme="digital"
     >
       <CentredContainer>
@@ -94,10 +75,7 @@ function HeroWithImage({
           hideRoundelBelow="tablet"
         >
           <section css={heroCopy}>
-            {orderIsAGift ?
-              <GiftHeadingAnimation /> :
-              <h2 css={heroTitle}>{title}</h2>
-            }
+            <GiftHeadingAnimation />
             <div css={paragraphs}>
               {copy}
             </div>

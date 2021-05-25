@@ -134,7 +134,7 @@ function LandingPage() {
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      {countryGroupId === AUDCountries || orderIsAGift ?
+      {orderIsAGift ?
         <HeroWithImage
           orderIsAGift={orderIsAGift}
           countryGroupId={countryGroupId}
@@ -142,6 +142,7 @@ function LandingPage() {
         /> :
         <HeroWithPriceCards
           promotionCopy={sanitisedPromoCopy}
+          countryGroupId={countryGroupId}
           priceList={heroPriceList}
         />
       }

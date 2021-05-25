@@ -47,6 +47,11 @@ const roundelContainer = css`
   ${from.tablet} {
     display: none;
   }
+
+  ${until.mobileMedium} {
+    align-items: flex-start;
+    margin-top: 82px;
+  }
 `;
 
 const fitAroundBelow = css`
