@@ -43,11 +43,11 @@ const HeroCopy = () => (
 const HeroCopyAus = () => (
   <>
     <p>
-    With two innovative apps and ad-free reading, a digital subscription gives you the richest experience of
-    Guardian journalism, while helping to sustain vital, independent reporting.
+      <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
+      you the richest experience of Guardian journalism, while helping to sustain vital, independent reporting.
     </p>
     <p>
-    Start your free trial today and enjoy exclusive access to the new weekly edition, Australia Weekend.
+      Start your free trial today and enjoy exclusive access to the new weekly edition, Australia Weekend.
     </p>
   </>);
 
