@@ -56,6 +56,10 @@ export const heroImage = css`
   width: 100%;
 
   ${from.tablet} {
+    width: 45%;
+  }
+
+  ${from.desktop} {
     width: 40%;
   }
 
@@ -70,7 +74,11 @@ export const heroRoundelContainer = css`
   right: ${space[3]}px;
 
   ${from.tablet} {
-  right: ${space[12]}px;
+    right: 60px;
+  }
+
+  ${from.desktop} {
+    right: ${space[12]}px;
   }
 `;
 

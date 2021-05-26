@@ -79,7 +79,9 @@ object StatesTestData {
     paymentFields = Left(PayPalPaymentFields("baid")),
     firstDeliveryDate = None,
     promoCode = None,
-    acquisitionData = None
+    acquisitionData = None,
+    ipAddress = "127.0.0.1",
+    userAgent = "TestAgent"
   )
 
   val createSalesforceContactState = CreateSalesforceContactState(

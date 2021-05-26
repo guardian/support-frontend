@@ -1,7 +1,7 @@
 package com.gu.support
 
 import io.circe.{Decoder, Encoder, Error}
-import io.circe.parser.decode
+import io.circe.parser.{decode, parse}
 import io.circe.syntax._
 import org.scalatest.Assertion
 import org.scalatest.matchers.should.Matchers
@@ -10,6 +10,14 @@ trait SerialisationTestHelpers extends Matchers {
   def testDecoding[T : Decoder](fixture: String, objectChecks: T => Assertion = (_: T) => succeed): Assertion = {
     val decodeResult = decode[T](fixture)
     assertDecodingSucceeded(decodeResult, objectChecks)
+  }
+
+  def testEncoding[T : Encoder](t: T, expectedJson: String): Assertion = {
+    val json = t.asJson
+    parse(expectedJson).fold(
+      err => fail(err.getMessage),
+      expected => json should be(expected)
+    )
   }
 
   def assertDecodingSucceeded[T](decodeResult: Either[Error, T], objectChecks: T => Assertion = (_: T) => succeed): Assertion =

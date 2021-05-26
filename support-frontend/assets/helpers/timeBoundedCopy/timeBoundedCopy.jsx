@@ -17,6 +17,7 @@ const timedCopy: TimedCopyCollection = {
   digitalSubscription: [
     {
       startShowingOn: '2021-05-08',
+      stopShowingOn: '2021-06-04',
       copy: <>
         <p>
           <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives

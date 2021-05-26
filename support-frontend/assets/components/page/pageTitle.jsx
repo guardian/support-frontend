@@ -92,9 +92,13 @@ export const pageTitle = css`
   }
 
   ${from.desktop} {
-    ${titlepiece.large({ fontWeight: 'bold' })}
+    ${titlepiece.medium({ fontWeight: 'bold' })}
     margin: 0 auto;
     max-width: 1290px;
+  }
+
+  ${from.leftCol} {
+    ${titlepiece.large({ fontWeight: 'bold' })}
   }
 `;
 

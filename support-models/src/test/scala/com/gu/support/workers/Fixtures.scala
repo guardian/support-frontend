@@ -152,7 +152,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $payPalJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5): String =
@@ -166,7 +168,9 @@ object Fixtures {
           },
           "paymentFields": $stripeJson,
           "sessionId": "testingToken",
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createPayPalPaymentMethodDigitalPackJson =
@@ -179,7 +183,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $payPalJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createDirectDebitDigitalPackJson =
@@ -192,7 +198,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $directDebitJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createDirectDebitGuardianWeeklyJson =
@@ -205,7 +213,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $directDebitJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createSalesforceContactJson =
