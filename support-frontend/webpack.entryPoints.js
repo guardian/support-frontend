@@ -4,7 +4,7 @@ module.exports = {
     showcasePage: 'pages/showcase/showcase.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
-    fontLoader: 'helpers/fontLoader.js',
+    fontLoader: 'helpers/rendering/fontLoader.js',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
     digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.jsx',
@@ -23,6 +23,6 @@ module.exports = {
     ausMomentMap: 'pages/aus-moment-map/ausMomentMap.jsx',
   },
   ssr: {
-    ssrPages: 'helpers/ssrPages.js',
+    ssrPages: 'helpers/rendering/ssrPages.js',
   },
 };
