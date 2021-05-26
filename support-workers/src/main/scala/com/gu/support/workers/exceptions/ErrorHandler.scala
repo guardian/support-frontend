@@ -9,7 +9,7 @@ import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.StripeError
 import com.gu.support.workers.lambdas.StateNotValidException
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
-import com.gu.zuora.subscriptionBuilders.{BuildSubscribePromoError, BuildSubscribeRedemptionError}
+import com.gu.zuora.productHandlers.{BuildSubscribePromoError, BuildSubscribeRedemptionError}
 import io.circe.syntax._
 import io.circe.{DecodingFailure, ParsingFailure}
 
