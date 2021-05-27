@@ -95,7 +95,7 @@ stories.add('Tabs', () => {
 });
 
 stories.add('Quote', () => {
-  const name = text('Name', 'Katherine Viner');
+  const name = text('Name', 'Katharine Viner');
   const jobTitle = text('Job title', 'Editor-in-chief');
   const quote = text('Quote', 'The Subscriptions team is my favourite team');
 
