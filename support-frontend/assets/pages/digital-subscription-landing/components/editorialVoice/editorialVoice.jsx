@@ -36,7 +36,7 @@ function EditorialVoice() {
       <BlockLabel tag="h2" cssOverrides={evLabel}>Why your support matters</BlockLabel>
       <div css={evQuoteContainer}>
         <Quote
-          name="Katherine Viner"
+          name="Katharine Viner"
           jobTitle="Editor-in-chief"
           headshot={
           // No alt text needed- the preceeding name/job title describe the image
