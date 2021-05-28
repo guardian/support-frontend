@@ -22,7 +22,7 @@ const heroRoundelStyles = css`
   transform: translateY(-67%);
   min-width: 100px;
   max-width: ${roundelSizeMob}px;
-  width: calc(100% + ${space[3]}px);
+  width: calc(100% + ${space[1]}px);
   padding: ${space[1]}px;
   border-radius: 50%;
   ${headline.xxsmall({ fontWeight: 'bold' })};
