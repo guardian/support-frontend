@@ -6,7 +6,6 @@ import {
   hero,
   heroRoundelContainer,
   heroImage,
-  roundelOffset,
   roundelNudgeDown,
   roundelNudgeUp,
   roundelHidingPoints,
@@ -42,7 +41,6 @@ function Hero({
   roundelNudgeDirection = 'up',
   roundelTheme = 'base',
 }: PropTypes) {
-  const useOffset = roundelText && roundelNudgeDirection === 'up';
   const nudgeCSS = roundelNudges[roundelNudgeDirection];
   const hideRoundel = hideRoundelBelow ? roundelHidingPoints[hideRoundelBelow] : '';
 
@@ -60,7 +58,7 @@ function Hero({
           {roundelElement}
         </div>
       }
-      <div css={useOffset ? roundelOffset : ''}>
+      <div>
         {children}
       </div>
       <div css={heroImage}>

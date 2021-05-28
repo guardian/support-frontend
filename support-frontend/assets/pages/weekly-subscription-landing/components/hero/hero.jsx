@@ -37,11 +37,16 @@ const weeklyHeroCopy = css`
 `;
 
 const weeklyHeroTitle = css`
-  ${headline.medium({ fontWeight: 'bold' })};
+  ${headline.small({ fontWeight: 'bold' })};
   margin-bottom: ${space[3]}px;
+
+  ${from.mobileLandscape} {
+    width: 75%;
+  }
 
   ${from.tablet} {
     ${headline.large({ fontWeight: 'bold' })};
+    width: 100%;
   }
 `;
 
@@ -56,7 +61,12 @@ const weeklyHeroParagraph = css`
 `;
 
 const roundelCentreLine = css`
-  ${headline.small({ fontWeight: 'bold' })}
+  ${headline.xxsmall({ fontWeight: 'bold' })}
+
+  ${from.tablet} {
+    ${headline.medium({ fontWeight: 'bold' })}
+  }
+
   ${from.tablet} {
     ${headline.large({ fontWeight: 'bold' })}
   }
@@ -66,8 +76,16 @@ const giftHeroSubHeading = css`
   font-weight: 700;
 `;
 
+const showOnMobile = css`
+  display: block;
+
+  ${from.mobileLandscape} {
+    display: none;
+  }
+`;
+
 const getRegionalCopyFor = (region: CountryGroupId) => (region === GBPCountries ?
-  <span>Find clarity with The Guardian&apos;s global magazine</span> :
+  <span>Find clarity<br css={showOnMobile} /> with The Guardian&apos;s global magazine</span> :
   <span>Read The Guardian in print</span>);
 
 const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) => {
