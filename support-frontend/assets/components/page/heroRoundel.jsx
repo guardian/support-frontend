@@ -20,7 +20,7 @@ const heroRoundelStyles = css`
   /* Do not remove float! It makes the circle work! See link below */
   float: left;
   transform: translateY(-67%);
-  min-width: 100px;
+  min-width: ${roundelSizeMob}px;
   max-width: ${roundelSizeMob}px;
   width: calc(100% + ${space[1]}px);
   padding: ${space[1]}px;

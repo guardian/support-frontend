@@ -86,7 +86,7 @@ const showOnMobile = css`
 
 const getRegionalCopyFor = (region: CountryGroupId) => (region === GBPCountries ?
   <span>Find clarity<br css={showOnMobile} /> with The Guardian&apos;s global magazine</span> :
-  <span>Read The Guardian in print</span>);
+  <span>Read The<br css={showOnMobile} /> Guardian in print</span>);
 
 const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) => {
   if (promotionCopy.description) {
