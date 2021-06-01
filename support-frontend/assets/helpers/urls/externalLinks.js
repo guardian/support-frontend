@@ -17,9 +17,7 @@ import type {
   DigitalBillingPeriod, DigitalGiftBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { getIntcmp, getPromoCode } from '../flashSale';
 import { getOrigin } from './url';
-import { GBPCountries } from '../internationalisation/countryGroup';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
 
@@ -59,10 +57,10 @@ const memUrls: {
 };
 
 const defaultPromos: PromoCodes = {
-  DigitalPack: getPromoCode('DigitalPack', GBPCountries, 'DXX83X'),
-  Paper: getPromoCode('Paper', GBPCountries, 'GXX83P'),
-  PaperAndDigital: getPromoCode('PaperAndDigital', GBPCountries, 'GXX83X'),
-  GuardianWeekly: getPromoCode('GuardianWeekly', GBPCountries, '10ANNUAL'),
+  DigitalPack: 'DXX83X',
+  Paper: 'GXX83P',
+  PaperAndDigital: 'GXX83X',
+  GuardianWeekly: '10ANNUAL',
 };
 
 const customPromos: {
@@ -144,7 +142,7 @@ function buildParamString(
 ): string {
   const params = new URLSearchParams(window.location.search);
 
-  const maybeCustomIntcmp = getIntcmp(product, countryGroupId, intCmp, defaultIntCmp);
+  const maybeCustomIntcmp = intCmp || defaultIntCmp;
   params.set('INTCMP', maybeCustomIntcmp);
 
   if (referrerAcquisitionData) {

@@ -3,11 +3,7 @@ import React, { type Node } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { type Option } from 'helpers/types/option';
 import {
-  getNewsstandPrice,
-  getNewsstandSaving,
-  getNewsstandSavingPercentage,
   sendTrackingEventsOnClick,
   sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
@@ -20,28 +16,16 @@ import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions'
 
 import { type Product } from 'components/product/productOption';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type {
-  PaperProductOptions,
-} from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import { flashSaleIsActive } from 'helpers/flashSale';
-import { Paper } from 'helpers/productPrice/subscriptions';
 
 import Prices from './content/prices';
 
 // ---- Helpers ----- //
-
-const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): string => {
-  if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
-    return `Save ${getNewsstandSavingPercentage(subscription, newsstand)}% a month on retail price`;
-  }
-  return '';
-};
 
 const getPriceCopyString = (price: ProductPrice, productCopy: Node = null): Node => {
   const promotion = getAppliedPromo(price.promotions);
@@ -51,10 +35,7 @@ const getPriceCopyString = (price: ProductPrice, productCopy: Node = null): Node
   return <>per month{productCopy}</>;
 };
 
-const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) => {
-  if (flashSaleIsActive(Paper)) {
-    return getOfferStr(price.price, getNewsstandPrice(productOption));
-  }
+const getOfferText = (price: ProductPrice) => {
   if (price.savingVsRetail && price.savingVsRetail > 0) {
     return `Save ${price.savingVsRetail}% on retail price`;
   }
@@ -100,7 +81,7 @@ const getPlans = (
       onView: sendTrackingEventsOnView(trackingProperties),
       buttonCopy: 'Subscribe now',
       priceCopy: getPriceCopyString(price, copy[fulfilmentOption][productOption]),
-      offerCopy: getOfferText(price, productOption),
+      offerCopy: getOfferText(price),
       label: '',
     };
   });
