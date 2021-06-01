@@ -4,10 +4,9 @@ import type { Element } from 'react';
 
 // helpers
 import { getDigitalCheckout } from 'helpers/urls/externalLinks';
-import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
+import { fixDecimals, sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // types

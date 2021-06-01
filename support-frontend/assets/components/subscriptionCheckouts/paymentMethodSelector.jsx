@@ -11,8 +11,7 @@ import {
 
 import Rows from 'components/base/rows';
 import { type Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';

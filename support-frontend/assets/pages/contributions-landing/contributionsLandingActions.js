@@ -41,11 +41,10 @@ import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/storage/cookie';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
+import { setPayPalHasLoaded, type Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { AmazonPay, DirectDebit, Stripe } from 'helpers/forms/paymentMethods';
+import { AmazonPay, DirectDebit, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/forms/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/forms/stripe';
@@ -53,7 +52,6 @@ import type { Option } from 'helpers/types/option';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }

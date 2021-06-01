@@ -4,8 +4,7 @@
 
 import React from 'react';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { billingPeriodNoun } from 'helpers/productPrice/billingPeriods';
+import { billingPeriodNoun, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { countryGroups, fromCountry } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';

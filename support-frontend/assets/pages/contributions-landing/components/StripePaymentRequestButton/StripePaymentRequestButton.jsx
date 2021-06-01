@@ -42,8 +42,7 @@ import {
   updateLastName,
   updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { Stripe } from 'helpers/forms/paymentMethods';
+import { Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { StripeAccount } from 'helpers/forms/stripe';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
