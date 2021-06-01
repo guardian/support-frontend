@@ -1,42 +1,38 @@
 package com.gu.zuora.subscriptionBuilders
 
-import java.util.UUID
-
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.redemption.corporate.CorporateCodeValidator
 import com.gu.support.redemption.{InvalidCode, InvalidReaderType, ValidCorporateCode}
-import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.DigitalPack
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionCorporateRedemptionState
 import com.gu.support.zuora.api.ReaderType.Corporate
-import com.gu.support.zuora.api.{ReaderType, SubscriptionData}
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{buildProductSubscription, validateRatePlan}
-import org.joda.time.LocalDate
+import com.gu.support.zuora.api._
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscriptionCorporateRedemptionBuilder(
   codeValidator: CorporateCodeValidator,
-  today: () => LocalDate,
+  dateGenerator: DateGenerator,
+  environment: TouchPointEnvironment,
+  subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(
-    redemptionData: RedemptionData,
-    digitalPack: DigitalPack,
-    requestId: UUID,
-    environment: TouchPointEnvironment,
-  )(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscriptionData] = {
-    val productRatePlanId = validateRatePlan(digitalRatePlan(digitalPack, environment), digitalPack.describe)
+    state: DigitalSubscriptionCorporateRedemptionState
+  )(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscribeItem] = {
+    import state._
+    val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
     val redemptionCode = redemptionData.redemptionCode
-    val todaysDate = today()
-    val subscriptionData = buildProductSubscription(
-      requestId,
+    val todaysDate = dateGenerator.today
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,
       contractAcceptanceDate = todaysDate,
       contractEffectiveDate = todaysDate,
-      readerType = Corporate
+      readerType = Corporate,
     )
 
     val redeemedSubcription = for {
@@ -55,6 +51,7 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
 
     redeemedSubcription
       .map(subscription => subscriptionData.copy(subscription = subscription))
+      .map(subscriptionData => subscribeItemBuilder.build(subscriptionData, state.salesForceContact, None, None))
   }
 
 }

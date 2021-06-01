@@ -1,16 +1,23 @@
 package com.gu.support.workers
 
-import java.io.ByteArrayInputStream
-import java.util.UUID
-
-import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
+import com.gu.i18n.{Country, Currency, Title}
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
+import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, RestOfWorld}
 import com.gu.support.promotions.PromoCode
+import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
+import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState, DigitalSubscriptionGiftRedemptionState, GuardianWeeklyState, PaperState}
+import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
+import com.gu.support.zuora.api.StripeGatewayDefault
 import io.circe.parser
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
+
+import java.io.ByteArrayInputStream
+import java.util.UUID
 
 //noinspection TypeAnnotation
 object JsonFixtures {
@@ -19,6 +26,23 @@ object JsonFixtures {
     JsonWrapper(parser.parse(string).toOption.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
       .asJson.noSpaces.asInputStream
 
+  def user(id: String = idId): User =
+    User(
+      id,
+      emailAddress,
+      None,
+      "test",
+      "user",
+      billingAddress = Address(
+        Some("The Guardian"),
+        Some("Kings Place"),
+        Some("london"),
+        None,
+        Some("n1 9gu"),
+        Country.UK,
+      ),
+      deliveryInstructions = Some("Leave with neighbour")
+    )
   def userJson(id: String = idId): String =
     s"""
       "user":{
@@ -83,32 +107,31 @@ object JsonFixtures {
     """
 
   val userJsonWithDeliveryAddress =
-    s"""
-      "user":{
-          "id": "$idId",
-          "primaryEmailAddress": "$emailAddress",
-          "firstName": "test",
-          "lastName": "user",
-          "country": "GB",
-          "billingAddress": {
-            "country": "GB",
-            "lineOne": "yaw kroy 09",
-            "city": "london",
-            "postCode": "n1 9gu"
-          },
-          "deliveryAddress": {
-            "country": "GB",
-            "lineOne": "90 york way",
-            "city": "london",
-            "postCode": "n1 9gu"
-          },
-          "allowMembershipMail": false,
-          "allowThirdPartyMail": false,
-          "allowGURelatedMail": false,
-          "isTestUser": false,
-          "deliveryInstructions": "Leave with neighbour"
-        }
-    """
+    User(
+      idId,
+      emailAddress,
+      None,
+      "test",
+      "user",
+      billingAddress = Address(
+        Some("yaw kroy 09"),
+        None,
+        Some("london"),
+        None,
+        Some("n1 9gu"),
+        Country.UK,
+      ),
+      deliveryAddress = Some(Address(
+        Some("90 york way"),
+        None,
+        Some("london"),
+        None,
+        Some("n1 9gu"),
+        Country.UK,
+      )),
+      deliveryInstructions = Some("Leave with neighbour")
+    )
+
   def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""
   val validBaid = "B-23637766K5365543J"
   val payPalEmail = "test@paypal.com"
@@ -123,6 +146,18 @@ object JsonFixtures {
          }
        """
 
+  val stripePaymentMethodObj =
+    CreditCardReferenceTransaction(
+      "card_E0zitFfsO2wTEn",
+      "cus_E0zic0cedDT5MZ",
+      "4242",
+      Some(Country.US),
+      2,
+      2022,
+      Some("Visa"),
+      StripeGatewayDefault,
+      StripePaymentType = None,
+    )
   val stripePaymentMethod = // test env card and cus token, not prod ones
     s"""
         {
@@ -188,6 +223,8 @@ object JsonFixtures {
         "productOptions" : "Everyday"
       }
     """
+
+  val weeklyJson = GuardianWeekly(GBP, Monthly, Domestic).asJson.spaces2
 
   val digitalPackProductJson =
     s"""
@@ -349,12 +386,13 @@ object JsonFixtures {
           {
             $requestIdJson,
             ${userJson()},
-            "product": ${contribution()},
+            "product": ${weeklyJson},
             "analyticsInfo": {
               "paymentProvider": "PayPal",
               "isGiftPurchase": true
             },
             "paymentMethod": $payPalPaymentMethod,
+            "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
             "giftRecipient": {
               "title": "Mr",
               "firstName": "Gifty",
@@ -365,6 +403,23 @@ object JsonFixtures {
           }
         """
 
+  val salesforceContact =
+    SalesforceContactRecord(
+      "0033E00001Cq8D2QAJ",
+      "0013E00001AU6xcQAD",
+    )
+  val salesforceContacts = {
+    SalesforceContactRecords(
+      SalesforceContactRecord(
+        "0033E00001Cq8D2QAJ",
+        "0013E00001AU6xcQAD",
+      ),
+      Some(SalesforceContactRecord(
+        "0033E00001Cq8D2QAJ",
+        "0013E00001AU6xcQAD",
+      ))
+    )
+  }
   val salesforceContactJson =
     """
         {
@@ -388,180 +443,167 @@ object JsonFixtures {
       """
 
   def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
-    s"""
-          {
-            $requestIdJson,
-            ${userJson()},
-            "product": ${contribution(billingPeriod = billingPeriod)},
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            $salesforceContactsJson
-            }
-        """
+    CreateZuoraSubscriptionState(
+      ContributionState(
+        Contribution(5, GBP, billingPeriod),
+        stripePaymentMethodObj,
+        salesforceContact
+      ),
+      UUID.randomUUID(),
+      user(),
+      Contribution(5, GBP, billingPeriod),
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None
+    ).asJson.spaces2
   val createDigiPackZuoraSubscriptionJson =
-    s"""
-          {
-            $requestIdJson,
-            ${userJson()},
-            "product": $digitalPackJson,
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            $salesforceContactsJson
-            }
-        """
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionDirectPurchaseState(
+        Country.UK,
+        DigitalPack(GBP, Annual),
+        stripePaymentMethodObj,
+        None,
+        salesforceContact
+      ),
+      UUID.randomUUID(),
+      user(),
+      DigitalPack(GBP, Annual),
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None
+    ).asJson.spaces2
 
   val createDigiPackCorporateSubscriptionJson =
-    s"""
-          {
-            $requestIdJson,
-            $userJsonNoAddress,
-            "product": $digitalPackCorporateJson,
-            "analyticsInfo": {
-              "paymentProvider": "RedemptionNoProvider",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": {
-              "redemptionCode": "it-mutable123"
-            },
-            "salesForceContact": $salesforceContactJson,
-            $salesforceContactsJson
-            }
-        """
-  def createDigiPackGiftSubscriptionJson(requestId: UUID) =
-    s"""
-          {
-            "requestId": "${requestId}\",
-            $userJsonNoAddress,
-            "product": $digitalPackGiftJson,
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": true
-            },
-            "giftRecipient": {
-              "firstName": "Gifty",
-              "lastName": "McRecipent",
-              "email": "gift.recipient@gu.com",
-              "deliveryDate": "2020-01-01",
-              "giftRecipientType": "DigitalSubscription"
-            },
-            "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            $salesforceContactsJson
-            }
-        """
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionCorporateRedemptionState(
+        DigitalPack(GBP, Annual),
+        RedemptionData(RedemptionCode("it-mutable123").toOption.get),
+        salesforceContact
+      ),
+      UUID.randomUUID(),
+      user(),
+      DigitalPack(GBP, Annual),
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None
+    ).asJson.spaces2
 
-  def createDigiPackGiftRedemptionJson(code: String, requestId: UUID) =
-    s"""
-          {
-            "requestId": "${requestId}\",
-            $userJsonNoAddress,
-            "product": $digitalPackGiftJson,
-            "analyticsInfo": {
-              "paymentProvider": "RedemptionNoProvider",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": {
-              "redemptionCode": "${code}"
-            },
-            "salesForceContact": $salesforceContactJson,
-            $salesforceContactsJson
-            }
-        """
+  def createDigiPackGiftSubscriptionJson(requestId: UUID): String =
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionGiftPurchaseState(
+        Country.UK,
+        DigitalSubscriptionGiftRecipient(
+          "Gifty",
+          "McRecipent",
+          "gift.recipient@gu.com",
+          None,
+          new LocalDate(2020, 1, 1)
+        ),
+        DigitalPack(GBP, Annual),
+        stripePaymentMethodObj,
+        None,
+        salesforceContacts
+      ),
+      requestId,
+      user(),
+      DigitalPack(GBP, Annual),
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None
+    ).asJson.spaces2
+
+  def createDigiPackGiftRedemptionJson(code: String): String =
+    (DigitalSubscriptionGiftRedemptionState(
+      idId,
+      DigitalPack(GBP, Annual),
+      RedemptionData(RedemptionCode(code).toOption.get),
+    ): CreateZuoraSubscriptionProductState).asJson.spaces2
 
   val createDigiPackSubscriptionWithPromoJson =
-    s"""
-          {
-            $requestIdJson,
-            ${userJson()},
-            "product": $digitalPackJson,
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": $stripePaymentMethod,
-            "promoCode": "DJP8L27FY",
-            "salesForceContact": $salesforceContactJson,
-            $salesforceContactsJson
-            }
-        """
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionDirectPurchaseState(
+        Country.UK,
+        DigitalPack(GBP, Annual),
+        stripePaymentMethodObj,
+        Some("DJP8L27FY"),
+        salesforceContact
+      ),
+      UUID.randomUUID(),
+      user(),
+      DigitalPack(GBP, Annual),
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None
+    ).asJson.spaces2
 
   val createEverydayPaperSubscriptionJson =
-    s"""
-          {
-            $requestIdJson,
-            $userJsonWithDeliveryAddress,
-            "product": $everydayPaperJson,
-            "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            $salesforceContactsJson
-            }
-      """
+    CreateZuoraSubscriptionState(
+      PaperState(
+        userJsonWithDeliveryAddress,
+        Paper(GBP, Monthly, HomeDelivery, Everyday),
+        stripePaymentMethodObj,
+        LocalDate.now(DateTimeZone.UTC),
+        None,
+        salesforceContact
+      ),
+      UUID.randomUUID(),
+      userJsonWithDeliveryAddress,
+      Paper(GBP, Monthly, HomeDelivery, Everyday),
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None
+    ).asJson.spaces2
 
-  def createGuardianWeeklySubscriptionJson(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode] = None): String ={
-    val promoJson = maybePromoCode.map(promo => s""""promoCode": "$promo",""").getOrElse("")
-    s"""
-      {
-        $requestIdJson,
-        $userJsonWithDeliveryAddress,
-        "product": {
-          "productType": "GuardianWeekly",
-          "currency": "GBP",
-          "billingPeriod" : "$billingPeriod",
-          "fulfilmentOptions" : "RestOfWorld"
-        },
-        "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(10)}",
-        $promoJson
-        "analyticsInfo": {
-          "paymentProvider": "Stripe",
-          "isGiftPurchase": false
-        },
-        "paymentMethod": $stripePaymentMethod,
-        "salesForceContact": $salesforceContactJson,
-        $salesforceContactsJson
-        }
-      """
-    }
+  def createGuardianWeeklySubscriptionJson(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode] = None): String =
+    CreateZuoraSubscriptionState(
+      GuardianWeeklyState(
+        userJsonWithDeliveryAddress,
+        None,
+        GuardianWeekly(GBP, billingPeriod, RestOfWorld),
+        stripePaymentMethodObj,
+        LocalDate.now(DateTimeZone.UTC).plusDays(10),
+        maybePromoCode,
+        salesforceContacts
+      ),
+      UUID.randomUUID(),
+      userJsonWithDeliveryAddress,
+      GuardianWeekly(GBP, billingPeriod, RestOfWorld),
+      AnalyticsInfo(false, Stripe),
+      Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
+      maybePromoCode,
+      None
+    ).asJson.spaces2
 
   val guardianWeeklyGiftJson =
-    s"""
-      {
-        $requestIdJson,
-        $userJsonWithDeliveryAddress,
-        "giftRecipient": {
-          "title": "Mr",
-          "firstName": "Harry",
-          "lastName": "Ramsden",
-          "giftRecipientType": "Weekly"
-        },
-        "product": {
-          "productType": "GuardianWeekly",
-          "currency": "GBP",
-          "billingPeriod" : "Quarterly",
-          "fulfilmentOptions" : "RestOfWorld"
-        },
-        "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(10)}",
-        "analyticsInfo": {
-          "paymentProvider": "Stripe",
-          "isGiftPurchase": true
-        },
-        "paymentMethod": $stripePaymentMethod,
-        "salesForceContact": $salesforceContactJson,
-        $salesforceContactsJson
-        }
-      """
+    CreateZuoraSubscriptionState(
+      GuardianWeeklyState(
+        userJsonWithDeliveryAddress,
+        Some(WeeklyGiftRecipient(
+          Some(Title.Mr),
+          "Harry",
+          "Ramsden",
+          None
+        )),
+        GuardianWeekly(GBP, Quarterly, RestOfWorld),
+        stripePaymentMethodObj,
+        LocalDate.now(DateTimeZone.UTC).plusDays(10),
+        None,
+        salesforceContacts
+      ),
+      UUID.randomUUID(),
+      userJsonWithDeliveryAddress,
+      GuardianWeekly(GBP, Quarterly, RestOfWorld),
+      AnalyticsInfo(false, Stripe),
+      Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
+      None,
+      None
+    ).asJson.spaces2
 
   val failureJson =
     """{
@@ -847,25 +889,22 @@ object JsonFixtures {
     }
     """
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
-    s"""
-        {
-          $requestIdJson,
-          ${userJson()},
-          "product": $digitalPackJson,
-          "analyticsInfo": {
-            "paymentProvider": "Stripe",
-            "isGiftPurchase": false
-          },
-          "paymentMethod": $stripePaymentMethod,
-          "promoCode": "DJRHYMDS8",
-          "salesForceContact": {
-              "Id": "0036E00000VlOPDQA3",
-              "AccountId": "0016E00000f17pYQAQ"
-          },
-          "acquisitionData": $acquisitionData,
-          $salesforceContactsJson
-      }
-      """
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionDirectPurchaseState(
+        Country.UK,
+        DigitalPack(GBP, Annual),
+        stripePaymentMethodObj,
+        Some("DJRHYMDS8"),
+        salesforceContact
+      ),
+      UUID.randomUUID(),
+      user(),
+      DigitalPack(GBP, Annual),
+      AnalyticsInfo(false, Stripe),
+      None,
+      Some("DJRHYMDS8"),
+      None
+    ).asJson.spaces2
 
   def getPaymentMethodJson(billingAccountId: String, userId: String): String =
     s"""

@@ -18,7 +18,7 @@ Most errors should be logged to Sentry so they can be investigated. However tran
 
 | Error type           | Description                                     | Retry?    |
 |----------------------|-------------------------------------------------|-----------|
-| Input parsing errors | Errors caused by invalid input JSON             | No        |
+| Input parsing errors | Errors caused by invalid input JSON             | Yes       |
 | Service timeouts     | Any http timeout from a 3rd party service       | Unlimited |
 | Service 500s         | Any 500 result code from a 3rd party service    | Unlimited |
 | Unknown error        | Any unhandled exception thrown during execution | Limited   |
