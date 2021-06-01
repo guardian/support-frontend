@@ -1,7 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-jest.mock('helpers/globals', () => ({
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
   __esModule: true,
   isSwitchOn: jest.fn(),
 }));

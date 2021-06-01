@@ -6,7 +6,7 @@ import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCh
 import { setFormErrors, setStage } from 'helpers/subscriptionsForms/formActions';
 
 jest.mock('ophan', () => () => ({}));
-jest.mock('helpers/fontLoader', () => () => ({}));
+jest.mock('helpers/rendering/fontLoader', () => () => ({}));
 // ----- Tests ----- //
 
 describe('Subscription Checkout Reducer', () => {
