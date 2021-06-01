@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { type ProductPrice, showPrice } from 'helpers/productPrice/productPrices';
-import { type DigitalBillingPeriod, Annual, Quarterly } from 'helpers/billingPeriods';
+import { type DigitalBillingPeriod, Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';

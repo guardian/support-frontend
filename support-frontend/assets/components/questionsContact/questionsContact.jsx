@@ -11,7 +11,7 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import {
   ContactPageLink,
   useDotcomContactPage,
-} from 'helpers/dotcomContactPage';
+} from 'helpers/utilities/dotcomContactPage';
 
 
 // ---- Types ----- //

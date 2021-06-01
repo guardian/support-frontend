@@ -7,18 +7,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
   type ContributionType,
   type PaymentMatrix,
   logInvalidCombination,
 } from 'helpers/contributions';
-import { type ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/forms/errorReasons';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
+import { type PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { type CreatePaypalPaymentData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
+import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import {
   setCurrencyId,
   setUseLocalAmounts,
@@ -31,7 +31,7 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { ContributionAmounts, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import type { CampaignSettings } from 'helpers/campaigns';
+import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 
 import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
 import { ContributionTypeTabs, EmptyContributionTypeTabs } from './ContributionTypeTabs';
@@ -49,10 +49,9 @@ import {
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay } from 'helpers/paymentMethods';
-import { logException } from 'helpers/logger';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import { logException } from 'helpers/utilities/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
 

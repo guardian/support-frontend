@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { type Option } from 'helpers/types/option';
 
 // ----- Component Imports ----- //

@@ -9,7 +9,7 @@ import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
-import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
+import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 
 export type Product = {
   title: string,

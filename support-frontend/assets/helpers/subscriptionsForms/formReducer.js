@@ -4,8 +4,8 @@
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { getUser } from 'helpers/subscriptionsForms/user';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { isTestUser } from 'helpers/user/user';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { removeError } from 'helpers/subscriptionsForms/validation';
@@ -19,7 +19,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
-import { GuardianWeekly } from 'helpers/subscriptions';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 
 function createFormReducer(
   initialCountry: IsoCountry,

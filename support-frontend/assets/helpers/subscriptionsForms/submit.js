@@ -7,12 +7,12 @@ import type {
   PaymentResult,
   RegularPaymentRequest,
   SubscriptionProductFields,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 
 import {
   type Action,
@@ -35,11 +35,11 @@ import {
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { routes } from 'helpers/routes';
+import { routes } from 'helpers/urls/routes';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import {
   validateCheckoutForm,
   validateWithDeliveryForm,
@@ -48,8 +48,8 @@ import {
   DigitalPack, GuardianWeekly, Paper,
   isPhysicalProduct,
   type SubscriptionProduct,
-} from 'helpers/subscriptions';
-import { Quarterly } from 'helpers/billingPeriods';
+} from 'helpers/productPrice/subscriptions';
+import { Quarterly } from 'helpers/productPrice/billingPeriods';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import type { IsoCountry } from '../internationalisation/country';
 import type { Promotion } from 'helpers/productPrice/promotions';

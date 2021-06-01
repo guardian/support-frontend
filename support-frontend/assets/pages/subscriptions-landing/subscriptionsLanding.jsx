@@ -11,7 +11,7 @@ import { detect, type CountryGroupId, AUDCountries, Canada, EURCountries, GBPCou
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 
 import { init as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';
 
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';

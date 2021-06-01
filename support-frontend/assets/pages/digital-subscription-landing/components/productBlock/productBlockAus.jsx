@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import GridPicture from 'components/gridPicture/gridPicture';
 import cx from 'classnames';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';

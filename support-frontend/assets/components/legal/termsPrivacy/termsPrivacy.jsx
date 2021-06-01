@@ -9,7 +9,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/internationalisation/currency';
 import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
-import type { CampaignSettings } from 'helpers/campaigns';
+import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 
 
 // ---- Types ----- //

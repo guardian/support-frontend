@@ -2,23 +2,23 @@
 
 // ----- Imports ----- //
 
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 import {
   type ContributionType, type ContributionTypes,
   getFrequency,
   toContributionType,
   generateContributionTypes,
 } from 'helpers/contributions';
-import * as storage from 'helpers/storage';
-import { type Switches } from 'helpers/settings';
+import * as storage from 'helpers/storage/storage';
+import { type Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { SelectedAmounts } from 'helpers/contributions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/paymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/forms/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
-import { isSwitchOn } from 'helpers/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //

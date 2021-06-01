@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import type { ErrorReason } from 'helpers/errorReasons';
-import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { type ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import {
   type ContributionType,
   getAmount,
@@ -15,7 +15,7 @@ import { type IsoCountry, type StateProvince, stateProvinceFromString, findIsoCo
 import type {
   RegularPaymentRequest,
   StripePaymentIntentAuthorisation, StripePaymentMethod,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
   type AmazonPayAuthorisation,
   type PaymentAuthorisation,
@@ -23,37 +23,35 @@ import {
   type StripePaymentRequestButtonMethod,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/paymentIntegrations/oneOffContributions';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   processStripePaymentIntentRequest,
   postOneOffAmazonPayExecutePaymentRequest,
-} from 'helpers/paymentIntegrations/oneOffContributions';
-import { routes } from 'helpers/routes';
-import * as storage from 'helpers/storage';
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import { routes } from 'helpers/urls/routes';
+import * as storage from 'helpers/storage/storage';
 import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import * as cookie from 'helpers/cookie';
-import { Annual, Monthly } from 'helpers/billingPeriods';
-import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
+import * as cookie from 'helpers/storage/cookie';
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import { setPayPalHasLoaded, type Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
-import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
+import { AmazonPay, DirectDebit, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import { ExistingCard, ExistingDirectDebit } from 'helpers/forms/paymentMethods';
+import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/forms/stripe';
 import type { Option } from 'helpers/types/option';
-import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
+import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }

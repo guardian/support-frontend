@@ -14,7 +14,7 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 import { getPriceWithDiscount } from 'helpers/productPrice/paperProductPrices';
 
 import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 import { getOrderSummaryTitle, getPriceSummary } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 

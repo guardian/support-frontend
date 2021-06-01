@@ -10,7 +10,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { Annual, Quarterly } from 'helpers/billingPeriods';
+import { Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';

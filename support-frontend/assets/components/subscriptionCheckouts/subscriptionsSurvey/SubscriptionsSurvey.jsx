@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 import AnchorButton from 'components/button/anchorButton';
 import Text from 'components/text/text';

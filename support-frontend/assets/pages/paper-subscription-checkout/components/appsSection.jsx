@@ -18,11 +18,11 @@ import {
   androidAppUrl,
   androidDailyUrl,
   getDailyEditionUrl,
-} from 'helpers/externalLinks';
+} from 'helpers/urls/externalLinks';
 
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 
 // ----- Types ----- //

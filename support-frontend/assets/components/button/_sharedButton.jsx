@@ -5,7 +5,7 @@
 import React, { createElement, type Node } from 'react';
 
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
 import './button.scss';
 

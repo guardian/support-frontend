@@ -1,5 +1,5 @@
 // @flow
-import { isProd } from './url';
+import { isProd } from '../urls/url';
 
 const referralCodeEndpoint = isProd()
   ? 'https://contribution-referrals.support.guardianapis.com/referral-code'

@@ -1,6 +1,6 @@
 // @flow
 
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 
 // Repeats a promise a maximum of `n` times, until it succeeds or bottoms out
 function repeatPromise<A>(n: number, p: () => Promise<A>): Promise<A> {

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { CommonState } from 'helpers/page/commonReducer';
-import { getGlobal, getProductPrices } from 'helpers/globals';
+import { getGlobal, getProductPrices } from 'helpers/globalsAndSwitches/globals';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

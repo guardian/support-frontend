@@ -5,9 +5,9 @@
 import React from 'react';
 import uuidv4 from 'uuid';
 
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 
 // ----- Types ----- //

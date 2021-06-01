@@ -6,12 +6,12 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Campaign, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Settings } from 'helpers/settings';
+import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Action } from 'helpers/page/commonActions';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
-import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { ContributionAmounts } from 'helpers/contributions';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 

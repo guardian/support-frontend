@@ -12,17 +12,17 @@ import { connect } from 'react-redux';
 
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import { myAccountUrl } from 'helpers/externalLinks';
+import { myAccountUrl } from 'helpers/urls/externalLinks';
 import typeof MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
-import { formatUserDate } from 'helpers/dateConversions';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import SubscriptionsSurvey from './subscriptionSurvey';
 import { HeroPicture } from './heroPicture';
 import { getTitle } from 'pages/paper-subscription-landing/helpers/products';

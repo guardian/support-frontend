@@ -14,7 +14,7 @@ import {
 import { isHomeDeliveryInM25 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 jest.mock('ophan', () => () => ({}));
-jest.mock('helpers/fontLoader', () => () => ({}));
+jest.mock('helpers/rendering/fontLoader', () => () => ({}));
 
 // ----- Tests ----- //
 

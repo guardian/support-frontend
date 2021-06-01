@@ -7,7 +7,7 @@ import React from 'react';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
-import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { paperHasDeliveryEnabled } from 'helpers/productPrice/subscriptions';
 
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { css } from '@emotion/core';

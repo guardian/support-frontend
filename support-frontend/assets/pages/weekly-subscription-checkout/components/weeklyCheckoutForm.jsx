@@ -13,7 +13,7 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import { weeklyBillingPeriods } from 'helpers/billingPeriods';
+import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Form, {
@@ -22,7 +22,7 @@ import Form, {
 } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
-import type { ErrorReason } from 'helpers/errorReasons';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
   getProductPrice,
   type ProductPrices,
@@ -54,8 +54,8 @@ import {
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
-import { routes } from 'helpers/routes';
+import { formatMachineDate, formatUserDate } from 'helpers/utilities/dateConversions';
+import { routes } from 'helpers/urls/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -63,13 +63,13 @@ import {
   type SetCountryChangedAction,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
-import { Stripe, DirectDebit, PayPal } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';

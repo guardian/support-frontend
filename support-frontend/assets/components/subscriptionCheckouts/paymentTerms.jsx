@@ -2,8 +2,7 @@
 import React from 'react';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { type Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit } from 'helpers/paymentMethods';
+import { DirectDebit, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
 import CancellationPolicy from 'components/subscriptionCheckouts/cancellationPolicy';
 

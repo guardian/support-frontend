@@ -10,7 +10,7 @@ import {
   checkFirstName,
   checkLastName,
   checkStateIfApplicable,
-} from 'helpers/formValidation';
+} from 'helpers/forms/formValidation';
 import {
   type ContributionType,
   type OtherAmounts,
@@ -24,8 +24,8 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
-import { stripeCardFormIsIncomplete } from 'helpers/stripe';
-import { AmazonPay } from 'helpers/paymentMethods';
+import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
+import { AmazonPay } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //

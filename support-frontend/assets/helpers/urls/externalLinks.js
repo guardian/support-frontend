@@ -12,14 +12,14 @@ import {
   countryGroups,
 } from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
-import { getBaseDomain } from 'helpers/url';
+import { getBaseDomain } from 'helpers/urls/url';
 import type {
   DigitalBillingPeriod, DigitalGiftBillingPeriod,
-} from 'helpers/billingPeriods';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
-import { getIntcmp, getPromoCode } from './flashSale';
+} from 'helpers/productPrice/billingPeriods';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import { getIntcmp, getPromoCode } from '../flashSale';
 import { getOrigin } from './url';
-import { GBPCountries } from './internationalisation/countryGroup';
+import { GBPCountries } from '../internationalisation/countryGroup';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
 

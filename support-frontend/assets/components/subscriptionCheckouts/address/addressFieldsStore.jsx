@@ -13,8 +13,8 @@ import {
   removeError,
   validate,
 } from 'helpers/subscriptionsForms/validation';
-import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { type Scoped } from 'helpers/scoped';
+import { type RegularPaymentRequestAddress } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { type Scoped } from 'helpers/subscriptionsForms/scoped';
 
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import {
@@ -23,7 +23,7 @@ import {
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import { postcodeIsWithinDeliveryArea, M25_POSTCODE_PREFIXES } from 'helpers/deliveryCheck';
+import { postcodeIsWithinDeliveryArea, M25_POSTCODE_PREFIXES } from 'helpers/forms/deliveryCheck';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
@@ -47,8 +47,8 @@ export type State = {|
 export type SetCountryChangedAction = { type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> };
 
 export type Action =
-  | { type: 'SET_ADDRESS_LINE_1', lineOne: string, ...Scoped<AddressType> }
   | { type: 'SET_ADDRESS_LINE_2', lineTwo: string, ...Scoped<AddressType> }
+  | { type: 'SET_ADDRESS_LINE_1', lineOne: string, ...Scoped<AddressType> }
   | { type: 'SET_TOWN_CITY', city: string, ...Scoped<AddressType> }
   | { type: 'SET_STATE', state: string, ...Scoped<AddressType> }
   | SetCountryChangedAction

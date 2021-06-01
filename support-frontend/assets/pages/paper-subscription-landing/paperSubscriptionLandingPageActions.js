@@ -2,11 +2,11 @@
 
 // ----- Imports ----- //
 
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import { paperSubsUrl } from 'helpers/routes';
+import { paperSubsUrl } from 'helpers/urls/routes';
 
 // ----- Types ----- //
 export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }

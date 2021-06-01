@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 
 import {
   type CountryGroup,

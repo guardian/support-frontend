@@ -12,10 +12,10 @@ import {
   currencies,
   spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { amountIsValid } from 'helpers/formValidation';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { amountIsValid } from 'helpers/forms/formValidation';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { formatAmount } from 'helpers/checkouts';
+import { formatAmount } from 'helpers/forms/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';

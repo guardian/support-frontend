@@ -5,7 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
@@ -23,8 +23,8 @@ import {
 } from 'pages/paper-subscription-checkout/helpers/options';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { Monthly } from 'helpers/billingPeriods';
-import { Paper } from 'helpers/subscriptions';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { Paper } from 'helpers/productPrice/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import { FocusStyleManager } from '@guardian/src-utilities';
 

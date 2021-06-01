@@ -4,7 +4,7 @@
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getLocal, setLocal } from 'helpers/storage';
+import { getLocal, setLocal } from 'helpers/storage/storage';
 
 // ----- Types ----- //
 

@@ -5,7 +5,7 @@
 import React, { Component, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
 import './dialog.scss';
 

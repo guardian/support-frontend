@@ -2,7 +2,7 @@
 import { type Dispatch } from 'redux';
 
 import { type Option } from 'helpers/types/option';
-import { type Scoped } from 'helpers/scoped';
+import { type Scoped } from 'helpers/subscriptionsForms/scoped';
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import {
 

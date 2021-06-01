@@ -17,13 +17,13 @@ import ActionBody from './components/ActionBody';
 import ExpandableContainer from './components/ExpandableContainer';
 import BulletPointedList from './components/BulletPointedList';
 import SvgPersonWithTick from './components/SvgPersonWithTick';
-import { checkEmail } from 'helpers/formValidation';
+import { checkEmail } from 'helpers/forms/formValidation';
 import {
   setPasswordError as setPasswordErrorAction,
   updatePassword as updatePasswordAction,
   type Action,
 } from '../../contributionsLandingActions';
-import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { setPasswordGuest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import styles from './styles';
 import {
   OPHAN_COMPONENT_ID_SIGN_UP,

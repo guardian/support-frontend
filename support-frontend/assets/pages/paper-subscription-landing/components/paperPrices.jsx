@@ -10,7 +10,7 @@ import {
   getNewsstandSavingPercentage,
   sendTrackingEventsOnClick,
   sendTrackingEventsOnView,
-} from 'helpers/subscriptions';
+} from 'helpers/productPrice/subscriptions';
 import {
   finalPrice,
 } from 'helpers/productPrice/paperProductPrices';
@@ -24,13 +24,13 @@ import type {
   PaperProductOptions,
 } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
-import { paperCheckoutUrl } from 'helpers/routes';
+import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { flashSaleIsActive } from 'helpers/flashSale';
-import { Paper } from 'helpers/subscriptions';
+import { Paper } from 'helpers/productPrice/subscriptions';
 
 import Prices from './content/prices';
 

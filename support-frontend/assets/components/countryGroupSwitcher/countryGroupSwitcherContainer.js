@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { type Option } from 'helpers/types/option';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 import CountryGroupSwitcher, { type PropTypes } from './countryGroupSwitcher';
 

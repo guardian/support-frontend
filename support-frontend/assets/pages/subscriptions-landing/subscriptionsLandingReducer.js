@@ -4,8 +4,8 @@
 
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { getGlobal } from 'helpers/globals';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 export type PriceCopy = {
   price: number,

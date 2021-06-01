@@ -2,14 +2,11 @@
 import React from 'react';
 
 import { RadioGroup, Radio } from '@guardian/src-radio';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { billingPeriodTitle } from 'helpers/billingPeriods';
+import { billingPeriodTitle, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { getProductPrice, type ProductPrices } from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoFulfilmentOptions, type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
   getAppliedPromoDescription,

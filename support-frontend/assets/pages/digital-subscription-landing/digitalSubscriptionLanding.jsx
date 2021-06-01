@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { css } from '@emotion/core';
@@ -20,8 +20,8 @@ import {
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
-import { routes } from 'helpers/routes';
-import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
+import { routes } from 'helpers/urls/routes';
+import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';

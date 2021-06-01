@@ -5,7 +5,7 @@ import { type ProductPrice } from 'helpers/productPrice/productPrices';
 import {
   billingPeriodNoun,
   type BillingPeriod,
-} from 'helpers/billingPeriods';
+} from 'helpers/productPrice/billingPeriods';
 
 const productOptionDisplayNames: { [key: ProductOptions]: string } = {
   Saturday: 'Saturday',

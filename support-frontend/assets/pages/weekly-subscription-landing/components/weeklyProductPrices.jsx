@@ -7,8 +7,8 @@ import {
   weeklyBillingPeriods,
   weeklyGiftBillingPeriods,
   type WeeklyBillingPeriod,
-} from 'helpers/billingPeriods';
-import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/subscriptions';
+} from 'helpers/productPrice/billingPeriods';
+import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
 import {
   getAppliedPromo,
 } from 'helpers/productPrice/promotions';
@@ -21,11 +21,11 @@ import {
   getSimplifiedPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import { getOrigin, getQueryParameter } from 'helpers/url';
+import { getOrigin, getQueryParameter } from 'helpers/urls/url';
 import { promoQueryParam, type Promotion } from 'helpers/productPrice/promotions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { currencies } from 'helpers/internationalisation/currency';
-import { fixDecimals } from 'helpers/subscriptions';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean): string => {

@@ -1,6 +1,6 @@
 // @flow
 
-import { formatMachineDate } from 'helpers/dateConversions';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { type ActivePaperProducts } from 'helpers/productPrice/productOptions';
 
 const additionalDays = [{

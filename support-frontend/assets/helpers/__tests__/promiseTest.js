@@ -6,7 +6,7 @@ import {
   repeatPromise,
   pollUntilPromise,
   bracketPromise,
-} from '../promise';
+} from '../async/promise';
 
 
 // ----- Tests ----- //

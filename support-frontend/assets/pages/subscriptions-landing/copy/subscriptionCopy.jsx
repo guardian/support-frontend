@@ -7,11 +7,11 @@ import {
   GuardianWeekly,
   Paper,
   sendTrackingEventsOnClick,
-} from 'helpers/subscriptions';
+} from 'helpers/productPrice/subscriptions';
 import {
   androidAppUrl,
   getIosAppUrl,
-} from 'helpers/externalLinks';
+} from 'helpers/urls/externalLinks';
 import trackAppStoreLink from 'helpers/tracking/appCtaTracking';
 // images
 import GuardianWeeklyPackShot
@@ -31,7 +31,7 @@ import {
   EURCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
-import { Monthly, Quarterly } from 'helpers/billingPeriods';
+import { Monthly, Quarterly, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
   currencies, detect,
   fromCountryGroupId,
@@ -40,11 +40,10 @@ import {
 
 import type { State } from '../subscriptionsLandingReducer';
 import type { PriceCopy } from '../subscriptionsLandingReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
   digitalSubscriptionLanding,
   guardianWeeklyLanding, paperSubsUrl,
-} from 'helpers/routes';
+} from 'helpers/urls/routes';
 import PaperPackshot from 'components/packshots/paper-packshot';
 
 // types

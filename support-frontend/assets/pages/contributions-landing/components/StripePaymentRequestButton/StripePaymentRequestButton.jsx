@@ -5,23 +5,23 @@
 // $FlowIgnore - required for hooks
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchJson, requestOptions } from 'helpers/fetch';
+import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
   type StripePaymentMethod,
   type StripePaymentRequestButtonMethod,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
-import { amountOrOtherAmountIsValid, isValidEmail } from 'helpers/formValidation';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { amountOrOtherAmountIsValid, isValidEmail } from 'helpers/forms/formValidation';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry, StateProvince } from 'helpers/internationalisation/country';
 import { findIsoCountry, stateProvinceFromString } from 'helpers/internationalisation/country';
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 import type {
   State,
   Stripe3DSResult,
@@ -42,12 +42,11 @@ import {
   updateLastName,
   updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { Stripe } from 'helpers/paymentMethods';
-import type { StripeAccount } from 'helpers/stripe';
-import type { ErrorReason } from 'helpers/errorReasons';
+import { Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { StripeAccount } from 'helpers/forms/stripe';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/checkouts';
+import { toHumanReadableContributionType, getAvailablePaymentRequestButtonPaymentMethod } from 'helpers/forms/checkouts';
 import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 import { trackComponentEvents } from '../../../../helpers/tracking/ophan';

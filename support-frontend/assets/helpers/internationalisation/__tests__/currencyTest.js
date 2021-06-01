@@ -7,7 +7,7 @@ import { AUDCountries, EURCountries, GBPCountries, UnitedStates } from '../count
 
 let mockCurrency: ?IsoCurrency = null;
 
-jest.mock('helpers/url', () => ({
+jest.mock('helpers/urls/url', () => ({
   getQueryParameter: () => mockCurrency,
 }));
 

@@ -7,12 +7,12 @@ import { css } from '@emotion/core';
 
 import { connect } from 'react-redux';
 
-import { getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
-import { type Switches } from 'helpers/settings';
+import { getPaymentLabel, getValidPaymentMethods } from 'helpers/forms/checkouts';
+import { type Switches } from 'helpers/globalsAndSwitches/settings';
 import {
   type ContributionType, contributionTypeIsRecurring,
 } from 'helpers/contributions';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
@@ -21,28 +21,27 @@ import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 import { type State } from '../contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, PayPal } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
   type Action,
   updatePaymentMethod,
   updateSelectedExistingPaymentMethod,
   loadPayPalExpressSdk, loadAmazonPaySdk,
 } from '../contributionsLandingActions';
-import { isUsableExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import { isUsableExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type {
   ExistingPaymentMethod,
   RecentlySignedInExistingPaymentMethod,
-} from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { getReauthenticateUrl } from 'helpers/externalLinks';
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import AnimatedDots from 'components/spinners/animatedDots';
-import { ExistingCard, ExistingDirectDebit, Stripe, AmazonPay } from '../../../helpers/paymentMethods';
+import { ExistingCard, ExistingDirectDebit, Stripe, AmazonPay } from '../../../helpers/forms/paymentMethods';
 import {
   getExistingPaymentMethodLabel,
   mapExistingPaymentMethodToPaymentMethod,
   subscriptionsToExplainerList,
   subscriptionToExplainerPart,
-} from 'helpers/existingPaymentMethods/existingPaymentMethods';
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import SvgAmazonPayLogo from 'components/svgs/amazonPayLogo';
 import { RadioGroup, Radio } from '@guardian/src-radio';

@@ -15,7 +15,7 @@ import {
   checkBillingState,
   checkEmail,
   emailRegexPattern,
-} from 'helpers/formValidation';
+} from 'helpers/forms/formValidation';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import ContributionState from './ContributionState';
 import ContributionTextInput from './ContributionTextInput';
@@ -28,7 +28,7 @@ import {
   updateBillingState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { TextInput } from '@guardian/src-text-input';
 
 

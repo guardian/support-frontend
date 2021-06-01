@@ -4,7 +4,7 @@
 
 import React, { type Node } from 'react';
 import Heading, { type HeadingSize } from 'components/heading/heading';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
 import './text.scss';
 

@@ -15,16 +15,16 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import { routes } from 'helpers/routes';
+import { routes } from 'helpers/urls/routes';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
-import type { ErrorReason } from 'helpers/errorReasons';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
 import { getProductPrice, getPriceWithDiscount } from 'helpers/productPrice/paperProductPrices';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
-import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
+import { formatMachineDate, formatUserDate } from 'helpers/utilities/dateConversions';
 import {
   type FormField,
   type FormFields,
@@ -51,7 +51,7 @@ import {
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Stripe, DirectDebit, PayPal } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
@@ -59,10 +59,10 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { paperProductsWithDigital, paperProductsWithoutDigital, type ActivePaperProducts } from 'helpers/productPrice/productOptions';
-import { Paper } from 'helpers/subscriptions';
+import { Paper } from 'helpers/productPrice/subscriptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';

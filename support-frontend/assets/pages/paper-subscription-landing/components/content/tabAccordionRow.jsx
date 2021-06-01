@@ -4,7 +4,7 @@
 // $FlowIgnore - required for hooks
 import * as React from 'react';
 import { AccordionRow } from '@guardian/src-accordion';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type TabAccordionRowPropTypes = {|
   trackingId: string,

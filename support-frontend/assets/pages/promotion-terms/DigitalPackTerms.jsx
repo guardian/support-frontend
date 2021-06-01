@@ -1,8 +1,8 @@
 // @flow
 
 import React from 'react';
-import { formatUserDate } from 'helpers/dateConversions';
-import { digitalSubscriptionLanding } from 'helpers/routes';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { digitalSubscriptionLanding } from 'helpers/urls/routes';
 import OrderedList from 'components/list/orderedList';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';

@@ -5,7 +5,7 @@
 import React, { Children, useEffect, type Node } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { Link, ButtonLink, linkBrand } from '@guardian/src-link';
-import { getGlobal } from 'helpers/globals';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { copyrightNotice } from 'helpers/legal';
 
 import Rows from '../base/rows';

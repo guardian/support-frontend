@@ -4,7 +4,7 @@
 // $FlowIgnore - required for hooks
 import React, { type Node, useEffect } from 'react';
 
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
 import TimeTravelBanner from 'components/headerBanners/timeTravelBanner';
 

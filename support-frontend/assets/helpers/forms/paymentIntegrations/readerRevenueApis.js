@@ -1,16 +1,16 @@
 // @flow
-import { routes } from 'helpers/routes';
+import { routes } from 'helpers/urls/routes';
 import {
   type AcquisitionABTest,
   type OphanIds,
   type ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import { type ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/forms/errorReasons';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   DigitalPack, GuardianWeekly, Paper,
-} from 'helpers/subscriptions';
-import { type BillingPeriod } from 'helpers/billingPeriods';
+} from 'helpers/productPrice/subscriptions';
+import { type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
 import {
   type CaState,
@@ -18,9 +18,9 @@ import {
   type UsState,
 } from 'helpers/internationalisation/country';
 import { type Option } from 'helpers/types/option';
-import { logPromise, pollUntilPromise } from 'helpers/promise';
-import { logException } from 'helpers/logger';
-import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
+import { logPromise, pollUntilPromise } from 'helpers/async/promise';
+import { logException } from 'helpers/utilities/logger';
+import { fetchJson, getRequestOptions, requestOptions } from 'helpers/async/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -33,7 +33,7 @@ import {
   PayPal,
   Stripe,
   AmazonPay,
-} from 'helpers/paymentMethods';
+} from 'helpers/forms/paymentMethods';
 import type { Title } from 'helpers/user/details';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 

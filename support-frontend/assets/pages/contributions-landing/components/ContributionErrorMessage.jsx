@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import {
   type ContributionType,
 } from 'helpers/contributions';
-import { type ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/forms/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { type State } from '../contributionsLandingReducer';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';

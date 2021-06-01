@@ -7,8 +7,8 @@ import { from } from '@guardian/src-foundations/mq';
 import type { ContributionType } from 'helpers/contributions';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { formatAmount } from 'helpers/checkouts';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { formatAmount } from 'helpers/forms/checkouts';
 
 const header = css`
   background: white;

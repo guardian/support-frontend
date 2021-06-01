@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
-import { Annual, Quarterly, SixWeekly } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixWeekly } from 'helpers/productPrice/billingPeriods';
 
 jest.mock('ophan', () => {});
 
