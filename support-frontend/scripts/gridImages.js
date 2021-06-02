@@ -1,5 +1,7 @@
 const { fileSearch } = require('search-in-file');
 
+// To be replaced with an actual import from theGrid module once we upgrade to TS
+// Right now compiling/running Flow etc on one file is just not worth it
 const gridFiles = {
   newsroom: '8caacf301dd036a2bbb1b458cf68b637d3c55e48/0_0_1140_683',
   digitalSubscriptionHeaderDesktop: 'f9665e14b5927ee8ed94cc92204831b4f792c6dc/1407_0_7856_4260',
