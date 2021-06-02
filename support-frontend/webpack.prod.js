@@ -3,7 +3,7 @@ const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-const jsFileName = process.env.CI_ENV !== 'github' ? '[name].[chunkhash].js' : '[name].js';
+const jsFileName = process.env.CI_ENV === 'github' ? '[name].js' : '[name].[chunkhash].js';
 
 module.exports = merge(common('[name].[chunkhash].css', jsFileName, true), {
   mode: 'production',
