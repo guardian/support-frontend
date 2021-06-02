@@ -23,8 +23,17 @@ object AwsCloudWatchMetricPut {
     namespace: MetricNamespace,
     name: MetricName,
     dimensions: Map[MetricDimensionName, MetricDimensionValue],
-    value: Double = 1.0
+    value: Double
   )
+  object MetricRequest {
+
+    def apply(
+      namespace: MetricNamespace,
+      name: MetricName,
+      dimensions: Map[MetricDimensionName, MetricDimensionValue]
+    ): MetricRequest = new MetricRequest(namespace, name, dimensions, 1.0)
+
+  }
 
   def apply(client: AmazonCloudWatch)(request: MetricRequest): Try[Unit] = {
 

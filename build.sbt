@@ -5,7 +5,7 @@ import LibraryVersions._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.2"
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.9"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
@@ -32,7 +32,8 @@ lazy val release = Seq[ReleaseStep](
 
 inThisBuild(Seq(
   organization := "com.gu",
-  scalaVersion := "2.13.5",
+  scalaVersion := "2.13.6",
+  scalacOptions += "-Ytasty-reader",
   dependencyTree / aggregate := false,
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true),
@@ -62,6 +63,13 @@ lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
   scalatest % "test",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+)
+
+lazy val commonDependencies3 = Seq(
+//  "com.typesafe" % "config" % "1.3.2",
+  scalatest % "test",
+  "org.slf4j" % "slf4j-jdk14" % "1.7.21",
+  "org.wvlet.airframe" %% "airframe-log" % "21.5.4",
 )
 
 lazy val root = (project in file("."))
@@ -187,7 +195,7 @@ lazy val `module-rest` = (project in file("support-modules/rest"))
 lazy val `module-aws` = (project in file("support-modules/aws"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(
-    libraryDependencies ++= commonDependencies
+    libraryDependencies ++= commonDependencies3
   )
 
 lazy val `module-bigquery` = (project in file("support-modules/bigquery"))

@@ -1,6 +1,6 @@
 package com.gu.supporterdata.services
 
-import com.gu.aws.ProfileName
+import com.gu.aws.CredentialsProfileName
 import com.gu.supporterdata.model.FieldNames._
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
@@ -70,7 +70,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
 
 object SupporterDataDynamoService {
   lazy val CredentialsProvider = AwsCredentialsProviderChain.builder.credentialsProviders(
-    ProfileCredentialsProvider.builder.profileName(ProfileName).build,
+    ProfileCredentialsProvider.builder.profileName(CredentialsProfileName).build,
     InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
     EnvironmentVariableCredentialsProvider.create()
   ).build
