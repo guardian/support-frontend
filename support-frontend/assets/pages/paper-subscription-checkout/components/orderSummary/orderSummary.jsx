@@ -11,7 +11,7 @@ import { paperProductsWithoutDigital, type ProductOptions } from 'helpers/produc
 import { Collection, type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getPriceWithDiscount } from 'helpers/productPrice/paperProductPrices';
+import { getPriceWithDiscount, getProductPrice } from 'helpers/productPrice/paperProductPrices';
 
 import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -63,14 +63,24 @@ function PaperOrderSummary(props: PropTypes) {
       paperProductsWithoutDigital[props.productOption],
     )
     : props.total;
-
+  // This allows us to get the price without promotion, so we can say what the price will revert to
+  const paperWithoutPromo = getProductPrice(
+    props.productPrices,
+    props.fulfilmentOption,
+    props.productOption,
+  );
+  const monthsDiscounted = paperWithoutPromo.promotions &&
+    paperWithoutPromo.promotions.length && paperWithoutPromo.promotions[0].numberOfDiscountedPeriods;
+  const priceHasPromo = paperWithoutPromo.promotions && paperWithoutPromo.promotions.length > 0;
+  const promotionPriceString = priceHasPromo && monthsDiscounted
+    ? ` for ${monthsDiscounted} months, then ${showPrice(paperWithoutPromo, false)} per month` : '';
   const rawPrice = getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod);
   const cleanedPrice = rawPrice.replace(/\/(.*)/, ''); // removes anything after the /
-  const accessiblePriceString = `${cleanedPrice} per month`;
+  const accessiblePriceString = `You'll pay ${cleanedPrice} per month`;
 
   const productInfoHomeDelivery = [
     {
-      content: `You'll pay ${accessiblePriceString}`,
+      content: `${accessiblePriceString}${promotionPriceString}`,
     },
   ];
   const productInfoSubsCard = [
@@ -88,13 +98,15 @@ function PaperOrderSummary(props: PropTypes) {
     },
   ];
 
+  const mobilePriceStatement = priceHasPromo ? `${total}${promotionPriceString}` : total;
+
   const mobileSummary = {
     title: getMobileSummaryTitle(
       props.productOption,
       props.fulfilmentOption,
       props.includesDigiSub,
     ),
-    price: total,
+    price: mobilePriceStatement,
   };
 
   return (
