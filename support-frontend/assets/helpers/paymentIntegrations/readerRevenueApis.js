@@ -39,7 +39,7 @@ import type { ReaderType } from 'helpers/productPrice/readerType';
 
 // ----- Types ----- //
 
-export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton' | 'StripeElements';
+export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripeGooglePay' | 'StripePaymentRequestButton' | 'StripeElements';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 type RegularContribution = {|

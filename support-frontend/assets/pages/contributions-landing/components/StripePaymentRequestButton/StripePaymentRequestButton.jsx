@@ -4,6 +4,8 @@
 
 // $FlowIgnore - required for hooks
 import React, { useEffect } from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
 import { fetchJson, requestOptions } from 'helpers/fetch';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
@@ -52,6 +54,7 @@ import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
 import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
 import type { LocalCurrencyCountry } from '../../../../helpers/internationalisation/localCurrencyCountry';
+import { Button } from '@guardian/src-button';
 
 // ----- Types -----//
 
@@ -88,7 +91,7 @@ type PropTypes = {
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   csrf: CsrfState,
-  stripePaymentRequestButtonVariant: boolean,
+  shouldShowRegularPrb: boolean,
   localCurrencyCountry: ?LocalCurrencyCountry,
   useLocalCurrency: boolean,
 };
@@ -106,7 +109,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   paymentMethod: state.page.form.paymentMethod,
   switches: state.common.settings.switches,
   csrf: state.page.csrf,
-  stripePaymentRequestButtonVariant: state.common.abParticipations.stripePaymentRequestButtonDec2020 === 'PRB',
+  shouldShowRegularPrb: state.common.abParticipations.stripeCustomPrbTest === 'control',
   localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
@@ -210,6 +213,27 @@ function onClick(event, props: PropTypes) {
     event.preventDefault();
   }
 }
+
+function onCustomPrbClick(event, props: PropTypes) {
+  trackComponentClick('apple-pay-clicked');
+  updateTotal(props);
+  props.setAssociatedPaymentMethod();
+  props.setStripePaymentRequestButtonClicked(props.stripeAccount);
+  const amountIsValid =
+    amountOrOtherAmountIsValid(
+      props.selectedAmounts,
+      props.otherAmounts,
+      props.contributionType,
+      props.countryGroupId,
+      props.localCurrencyCountry,
+      props.useLocalCurrency,
+    );
+
+  if (amountIsValid && props.paymentRequestObject) {
+    props.paymentRequestObject.show();
+  }
+}
+
 
 // Requests a new SetupIntent and returns the associated clientSecret
 function fetchClientSecret(props: PropTypes): Promise<string> {
@@ -366,10 +390,19 @@ function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe): Pa
   paymentRequestObject.canMakePayment().then((result) => {
     const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
     if (paymentMethod) {
-      // Track the fact that it loaded, even if the user is in the control for the PRB test
       trackComponentLoad(`${paymentMethod}-loaded`);
 
-      if (paymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonVariant) {
+      const isUkOrEuRecurring =
+        props.contributionType !== 'ONE_OFF' &&
+        (props.countryGroupId === 'GBPCountries' ||
+          props.countryGroupId === 'EURCountries');
+
+      const shouldShowPrb =
+        paymentMethod === 'StripeApplePay' ||
+        paymentMethod === 'StripeGooglePay' ||
+        !isUkOrEuRecurring;
+
+      if (shouldShowPrb) {
         trackComponentLoad(`${paymentMethod}-displayed`);
         props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
         setUpPaymentListenerSca(props, stripe, paymentRequestObject, paymentMethod);
@@ -397,6 +430,18 @@ const paymentButtonStyle = {
   },
 };
 
+// ---- Styles ----- //
+
+const customPrbStyles = css`
+  width: 100%;
+  justify-content: center;
+  margin: ${space[6]}px 0;
+  background: #323457;
+
+  &:hover {
+    background: #1C1D31;
+  }
+`;
 
 // ---- Component ----- //
 const PaymentRequestButton = (props: PropTypes) => {
@@ -413,22 +458,36 @@ const PaymentRequestButton = (props: PropTypes) => {
     return null;
   }
 
+  const shouldShowStripePrb =
+    props.stripePaymentRequestButtonData.paymentMethod === 'StripeApplePay' ||
+    props.stripePaymentRequestButtonData.paymentMethod === 'StripeGooglePay' ||
+    props.shouldShowRegularPrb;
+
   return (
     <div
       className="stripe-payment-request-button__container"
       data-for-stripe-account={props.stripeAccount}
       data-for-contribution-type={props.contributionType}
     >
-      <PaymentRequestButtonElement
-        options={{
-          paymentRequest: props.paymentRequestObject,
-        }}
-        className="stripe-payment-request-button__button"
-        style={paymentButtonStyle}
-        onClick={(event) => {
-          onClick(event, props);
-        }}
-      />
+      { (shouldShowStripePrb) ? (
+        <PaymentRequestButtonElement
+          options={{
+            paymentRequest: props.paymentRequestObject,
+          }}
+          className="stripe-payment-request-button__button"
+          style={paymentButtonStyle}
+          onClick={(event) => {
+            onClick(event, props);
+          }}
+        />
+      ) : (
+        <div>
+          <Button onClick={event => onCustomPrbClick(event, props)} css={customPrbStyles}>
+            Pay with saved card
+          </Button>
+        </div>
+
+      )}
 
       {
         props.stripePaymentRequestButtonData.paymentError &&

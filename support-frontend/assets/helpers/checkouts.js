@@ -206,7 +206,9 @@ function getAvailablePaymentRequestButtonPaymentMethod(
   const switchKey = switchKeyForContributionType(contributionType);
   if (result && result.applePay === true && isSwitchOn(`${switchKey}.stripeApplePay`)) {
     return 'StripeApplePay';
-  } else if (result && result.applePay === false && isSwitchOn(`${switchKey}.stripePaymentRequestButton`)) {
+  } else if (result && result.googlePay === true) {
+    return 'StripeGooglePay';
+  } else if (result) {
     return 'StripePaymentRequestButton';
   }
   return null;
