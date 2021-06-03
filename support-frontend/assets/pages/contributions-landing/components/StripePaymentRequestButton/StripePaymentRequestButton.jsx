@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 // $FlowIgnore - required for hooks
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { connect } from 'react-redux';
@@ -194,46 +194,31 @@ function updateTotal(props: PropTypes) {
 
 // We need to intercept the click ourselves because we need to check
 // that the user has entered a valid amount before we allow them to continue
-function onClick(event, props: PropTypes) {
-  trackComponentClick('apple-pay-clicked');
-  updateTotal(props);
-  props.setAssociatedPaymentMethod();
-  props.setStripePaymentRequestButtonClicked(props.stripeAccount);
-  const amountIsValid =
-    amountOrOtherAmountIsValid(
-      props.selectedAmounts,
-      props.otherAmounts,
-      props.contributionType,
-      props.countryGroupId,
-      props.localCurrencyCountry,
-      props.useLocalCurrency,
-    );
+function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
+  function onClick(event) {
+    trackComponentClick('apple-pay-clicked');
+    updateTotal(props);
+    props.setAssociatedPaymentMethod();
+    props.setStripePaymentRequestButtonClicked(props.stripeAccount);
+    const amountIsValid =
+      amountOrOtherAmountIsValid(
+        props.selectedAmounts,
+        props.otherAmounts,
+        props.contributionType,
+        props.countryGroupId,
+        props.localCurrencyCountry,
+        props.useLocalCurrency,
+      );
 
-  if (!amountIsValid) {
-    event.preventDefault();
+    if (isCustomPrb && amountIsValid && props.paymentRequestObject) {
+      props.paymentRequestObject.show();
+    } else if (!isCustomPrb && !amountIsValid) {
+      event.preventDefault();
+    }
   }
+
+  return onClick;
 }
-
-function onCustomPrbClick(event, props: PropTypes) {
-  trackComponentClick('apple-pay-clicked');
-  updateTotal(props);
-  props.setAssociatedPaymentMethod();
-  props.setStripePaymentRequestButtonClicked(props.stripeAccount);
-  const amountIsValid =
-    amountOrOtherAmountIsValid(
-      props.selectedAmounts,
-      props.otherAmounts,
-      props.contributionType,
-      props.countryGroupId,
-      props.localCurrencyCountry,
-      props.useLocalCurrency,
-    );
-
-  if (amountIsValid && props.paymentRequestObject) {
-    props.paymentRequestObject.show();
-  }
-}
-
 
 // Requests a new SetupIntent and returns the associated clientSecret
 function fetchClientSecret(props: PropTypes): Promise<string> {
@@ -375,54 +360,6 @@ function setUpPaymentListenerSca(
   });
 }
 
-function initialisePaymentRequest(props: PropTypes, stripe: stripeJs.Stripe): PaymentRequestObject {
-  const paymentRequestObject: PaymentRequestObject = stripe.paymentRequest({
-    country: props.country,
-    currency: props.currency.toLowerCase(),
-    total: {
-      label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
-      amount: props.amount * 100,
-    },
-    requestPayerEmail: true,
-    requestPayerName: props.contributionType !== 'ONE_OFF',
-  });
-
-  paymentRequestObject.canMakePayment().then((result) => {
-    const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
-    if (paymentMethod) {
-      trackComponentLoad(`${paymentMethod}-loaded`);
-
-      const isUkOrEuRecurring =
-        props.contributionType !== 'ONE_OFF' &&
-        (props.countryGroupId === 'GBPCountries' ||
-          props.countryGroupId === 'EURCountries');
-
-      const shouldShowPrb =
-        paymentMethod === 'StripeApplePay' ||
-        paymentMethod === 'StripeGooglePay' ||
-        !isUkOrEuRecurring;
-
-      if (shouldShowPrb) {
-        trackComponentLoad(`${paymentMethod}-displayed`);
-        props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
-        setUpPaymentListenerSca(props, stripe, paymentRequestObject, paymentMethod);
-      }
-    } else {
-      props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
-    }
-  });
-
-  // Only need 3DS handler for one-offs - recurring has its own special flow via confirmCardSetup
-  if (props.contributionType === 'ONE_OFF') {
-    props.setHandleStripe3DS((clientSecret: string) => {
-      trackComponentLoad('stripe-3ds');
-      return stripe.handleCardAction(clientSecret);
-    });
-  }
-
-  return paymentRequestObject;
-}
-
 const paymentButtonStyle = {
   paymentRequestButton: {
     theme: 'dark',
@@ -443,14 +380,74 @@ const customPrbStyles = css`
   }
 `;
 
+type PrbType = "APPLE_PAY" | "GOOGLE_PAY" | "PAY_NOW" | "NONE";
+
 // ---- Component ----- //
 const PaymentRequestButton = (props: PropTypes) => {
   const stripe = stripeJs.useStripe();
 
+  const [prbType, setPrbType] = useState<PrbType>('NONE');
+
+  function initialisePaymentRequest() {
+    const paymentRequestObject: PaymentRequestObject = stripe.paymentRequest({
+      country: props.country,
+      currency: props.currency.toLowerCase(),
+      total: {
+        label: `${toHumanReadableContributionType(props.contributionType)} Contribution`,
+        amount: props.amount * 100,
+      },
+      requestPayerEmail: true,
+      requestPayerName: props.contributionType !== 'ONE_OFF',
+    });
+
+    paymentRequestObject.canMakePayment().then((result) => {
+      const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(result, props.contributionType);
+      if (paymentMethod) {
+        trackComponentLoad(`${paymentMethod}-loaded`);
+
+        if (result && result.applePay) {
+          setPrbType('APPLE_PAY');
+        } else if (result && result.googlePay) {
+          setPrbType('GOOGLE_PAY');
+        } else if (result) {
+          setPrbType('PAY_NOW');
+        }
+
+        const isUkOrEuRecurring =
+        props.contributionType !== 'ONE_OFF' &&
+        (props.countryGroupId === 'GBPCountries' ||
+          props.countryGroupId === 'EURCountries');
+
+        const shouldShowPrb =
+        (result && result.applePay) ||
+        (result && result.googlePay) ||
+        !isUkOrEuRecurring;
+
+        if (shouldShowPrb) {
+          trackComponentLoad(`${paymentMethod}-displayed`);
+          props.setPaymentRequestButtonPaymentMethod(paymentMethod, props.stripeAccount);
+          setUpPaymentListenerSca(props, stripe, paymentRequestObject, paymentMethod);
+        }
+      } else {
+        props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
+      }
+    });
+
+    // Only need 3DS handler for one-offs - recurring has its own special flow via confirmCardSetup
+    if (props.contributionType === 'ONE_OFF') {
+      props.setHandleStripe3DS((clientSecret: string) => {
+        trackComponentLoad('stripe-3ds');
+        return stripe.handleCardAction(clientSecret);
+      });
+    }
+
+    props.setPaymentRequestObject(paymentRequestObject);
+  }
+
   useEffect(() => {
     // Call canMakePayment on the paymentRequest object only once, once the stripe object is ready
     if (stripe && !props.paymentRequestObject) {
-      props.setPaymentRequestObject(initialisePaymentRequest({ ...props }, stripe));
+      initialisePaymentRequest();
     }
   }, [stripe, props.paymentRequestObject]);
 
@@ -459,8 +456,8 @@ const PaymentRequestButton = (props: PropTypes) => {
   }
 
   const shouldShowStripePrb =
-    props.stripePaymentRequestButtonData.paymentMethod === 'StripeApplePay' ||
-    props.stripePaymentRequestButtonData.paymentMethod === 'StripeGooglePay' ||
+    prbType === 'APPLE_PAY' ||
+    prbType === 'GOOGLE_PAY' ||
     props.shouldShowRegularPrb;
 
   return (
@@ -469,20 +466,18 @@ const PaymentRequestButton = (props: PropTypes) => {
       data-for-stripe-account={props.stripeAccount}
       data-for-contribution-type={props.contributionType}
     >
-      { (shouldShowStripePrb) ? (
+      { shouldShowStripePrb ? (
         <PaymentRequestButtonElement
           options={{
             paymentRequest: props.paymentRequestObject,
           }}
           className="stripe-payment-request-button__button"
           style={paymentButtonStyle}
-          onClick={(event) => {
-            onClick(event, props);
-          }}
+          onClick={getClickHandler(props, false)}
         />
       ) : (
         <div>
-          <Button onClick={event => onCustomPrbClick(event, props)} css={customPrbStyles}>
+          <Button onClick={getClickHandler(props, true)} css={customPrbStyles}>
             Pay with saved card
           </Button>
         </div>
