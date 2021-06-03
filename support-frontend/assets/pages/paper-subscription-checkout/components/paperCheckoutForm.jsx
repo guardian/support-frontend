@@ -15,7 +15,6 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import { routes } from 'helpers/urls/routes';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
@@ -75,6 +74,8 @@ import { options } from 'components/forms/customFields/options';
 import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
 import { getPriceSummary, sensiblyGenerateDigiSubPrice } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
+import { paperSubsUrl } from 'helpers/urls/routes';
+import { getQueryParameter } from 'helpers/urls/url';
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -235,7 +236,7 @@ function PaperCheckoutForm(props: PropTypes) {
     digiSubPrice={expandedPricingText}
     startDate={formattedStartDate}
     includesDigiSub={includesDigiSub}
-    changeSubscription={routes.paperSubscriptionProductChoices}
+    changeSubscription={`${paperSubsUrl(false, getQueryParameter('promoCode'))}#subscribe`}
   />);
 
   const homeDeliveryOrderSummary = (<PaperOrderSummary
@@ -251,7 +252,7 @@ function PaperCheckoutForm(props: PropTypes) {
     total={props.total}
     digiSubPrice={expandedPricingText}
     includesDigiSub={includesDigiSub}
-    changeSubscription={routes.paperSubscriptionDeliveryProductChoices}
+    changeSubscription={`${paperSubsUrl(true, getQueryParameter('promoCode'))}#subscribe`}
     productType={Paper}
     paymentStartDate={formattedStartDate}
   />);
