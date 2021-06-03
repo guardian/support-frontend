@@ -16,7 +16,7 @@ import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationa
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { SelectedAmounts } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { DirectDebit, PayPal, Stripe, AmazonPay } from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal, Stripe, AmazonPay, Sepa } from 'helpers/forms/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
