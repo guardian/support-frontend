@@ -50,8 +50,12 @@ function postcodeLookupUrl(postcode: string): string {
   return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
 }
 
-function paperSubsUrl(withDelivery: boolean = false): string {
-  return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
+function paperSubsUrl(withDelivery: boolean = false, promoCode?: Option<string>): string {
+  const baseURL = [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
+  if (promoCode) {
+    return `${baseURL}?promoCode=${promoCode}`;
+  }
+  return baseURL;
 }
 
 function digitalSubscriptionLanding(countryGroupId: CountryGroupId, gift: boolean) {
