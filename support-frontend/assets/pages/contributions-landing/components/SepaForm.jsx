@@ -31,38 +31,22 @@ const checkboxContainerStyles = css`
 // -- Component -- //
 
 type DirectDebitFormProps = {|
-  accountNumber: string,
+  iban: string,
   accountHolderName: string,
   accountHolderConfirmation: boolean,
-  sortCodeSegments: string[],
-  updateAccountNumber: (accountNumber: string) => void,
+  updateIban: (iban: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
-  updateSortCodeSegments: (sortCodeSegments: string[]) => void,
 |};
 
 export function SepaForm({
-                                  accountNumber,
-                                  accountHolderName,
-                                  accountHolderConfirmation,
-                                  sortCodeSegments,
-                                  updateAccountNumber,
-                                  updateAccountHolderName,
-                                  updateAccountHolderConfirmation,
-                                  updateSortCodeSegments,
-                                }: DirectDebitFormProps) {
-
-  const sortCode = sortCodeSegments.join('');
-
-  const onSortCodeChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
-    const updatedSortCode = event.target.value;
-
-    updateSortCodeSegments([
-      updatedSortCode.slice(0, 2),
-      updatedSortCode.slice(2, 4),
-      updatedSortCode.slice(4, 6),
-    ]);
-  };
+  iban,
+  accountHolderName,
+  accountHolderConfirmation,
+  updateIban,
+  updateAccountHolderName,
+  updateAccountHolderConfirmation,
+}: DirectDebitFormProps) {
 
   return (
     <div css={containerStyles}>
@@ -79,15 +63,6 @@ export function SepaForm({
         </div>
 
         <div>
-          <TextInput
-            label="Sort code"
-            width={10}
-            pattern="[0-9]*"
-            minLength="6"
-            maxLength="6"
-            value={sortCode}
-            onChange={onSortCodeChange}
-          />
         </div>
 
         <div>
@@ -96,8 +71,8 @@ export function SepaForm({
             pattern="[0-9]*"
             minLength="6"
             maxLength="10"
-            value={accountNumber}
-            onChange={e => updateAccountNumber(e.target.value)}
+            value={iban}
+            onChange={e => updateIban(e.target.value)}
           />
         </div>
       </div>
