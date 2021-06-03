@@ -45,6 +45,7 @@ import {
   guardianWeeklyLanding, paperSubsUrl,
 } from 'helpers/urls/routes';
 import PaperPackshot from 'components/packshots/paper-packshot';
+import { getOrigin } from 'helpers/urls/url';
 
 // types
 
@@ -113,6 +114,16 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   productImage: getDigitalImage(isTop, countryGroupId),
   offer: priceCopy.discountCopy,
   buttons: [{
+    ctaButtonText: 'Subscribe now',
+    link: `${getOrigin()}/subscribe/digital/checkout?promoCode=DK0NT24WG&period=Monthly`,
+    analyticsTracking: sendTrackingEventsOnClick({
+      id: 'digipack_cta',
+      product: 'DigitalPack',
+      ...(abTest && { abTest }),
+      componentType: 'ACQUISITIONS_BUTTON',
+    }),
+  },
+  {
     ctaButtonText: 'Find out more',
     link: digitalSubscriptionLanding(countryGroupId, false),
     analyticsTracking: sendTrackingEventsOnClick({

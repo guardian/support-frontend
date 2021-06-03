@@ -20,7 +20,9 @@ type PropTypes = {
 const getButtonAppearance = (isFeature, index, hierarchy) => {
   if (isFeature && index === 0) {
     return 'primary';
-  } else if (isFeature && index > 0) {
+  } else if (isFeature && index === 1) {
+    return 'secondaryFeature';
+  } else if (isFeature && index === 2) {
     return 'tertiaryFeature';
   } else if ((!isFeature && index === 0) || (!isFeature && hierarchy === 'first')) {
     return 'secondary';

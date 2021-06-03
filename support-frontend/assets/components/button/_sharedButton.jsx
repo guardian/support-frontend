@@ -15,6 +15,7 @@ export const Appearances = {
   primary: 'primary',
   secondary: 'secondary',
   tertiary: 'tertiary',
+  secondaryFeature: 'secondary-feature',
   tertiaryFeature: 'tertiary-feature',
   green: 'green',
   blue: 'blue',
