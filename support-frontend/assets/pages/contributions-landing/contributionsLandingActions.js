@@ -641,6 +641,7 @@ const recurringPaymentAuthorisationHandlers = {
   PayPal: recurringPaymentAuthorisationHandler,
   Stripe: recurringPaymentAuthorisationHandler,
   DirectDebit: recurringPaymentAuthorisationHandler,
+  Sepa: recurringPaymentAuthorisationHandler,
   ExistingCard: recurringPaymentAuthorisationHandler,
   ExistingDirectDebit: recurringPaymentAuthorisationHandler,
   AmazonPay: recurringPaymentAuthorisationHandler,
@@ -693,6 +694,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
     },
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', DirectDebit);
+      return Promise.resolve(error);
+    },
+    Sepa: () => {
+      logInvalidCombination('ONE_OFF', Sepa);
       return Promise.resolve(error);
     },
     ExistingCard: () => {

@@ -50,10 +50,11 @@ import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import { Sepa, DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { logException } from 'helpers/utilities/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
+import {SepaForm} from "pages/contributions-landing/components/SepaForm";
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -169,6 +170,13 @@ const formHandlersForRecurring = {
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
   },
+  Sepa: (props: PropTypes) => {
+    props.onPaymentAuthorisation({
+      paymentMethod: 'Sepa',
+      accountHolderName: '',  // TODO
+      iban: '', // TODO
+    })
+  },
   ExistingCard: (props: PropTypes) => props.onPaymentAuthorisation({
     paymentMethod: 'ExistingCard',
     billingAccountId: props.existingPaymentMethod.billingAccountId,
@@ -208,6 +216,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       });
     },
     DirectDebit: () => { logInvalidCombination('ONE_OFF', DirectDebit); },
+    Sepa: () => { logInvalidCombination('ONE_OFF', Sepa); },
     ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
     ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
     AmazonPay: (props: PropTypes) => {
@@ -294,6 +303,13 @@ function withProps(props: PropTypes) {
       <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />
         <PaymentMethodSelector />
+
+        {
+          props.paymentMethod === Sepa && (
+            <SepaForm
+            />
+          )
+        }
 
         <StripeCardFormContainer
           currency={props.currency}

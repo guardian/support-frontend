@@ -44,10 +44,11 @@ import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
+  countryGroupId: CountryGroupId,
   switches: Switches,
 ): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
-  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId, countryGroupId);
 
   if (
     paymentMethodFromSession &&
@@ -144,7 +145,7 @@ function selectInitialContributionTypeAndPaymentMethod(
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, countryGroupId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 
   switch (paymentMethod) {
