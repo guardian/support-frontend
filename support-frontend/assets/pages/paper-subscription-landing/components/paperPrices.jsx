@@ -12,7 +12,7 @@ import {
   sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import {
-  finalPrice,
+  finalPrice, getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
@@ -46,7 +46,7 @@ const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): s
 const getPriceCopyString = (price: ProductPrice, productCopy: Node = null): Node => {
   const promotion = getAppliedPromo(price.promotions);
   if (promotion && promotion.numberOfDiscountedPeriods) {
-    return <>per month for {promotion.numberOfDiscountedPeriods} months{productCopy}</>;
+    return <>per month for {promotion.numberOfDiscountedPeriods} months{productCopy}, then {showPrice(price)} after</>;
   }
   return <>per month{productCopy}</>;
 };
@@ -83,24 +83,29 @@ const getPlans = (
   productPrices: ProductPrices,
 ) =>
   ActivePaperProductTypes.map((productOption) => {
-    const price = finalPrice(productPrices, fulfilmentOption, productOption);
-    const promotion = getAppliedPromo(price.promotions);
+    const priceAfterPromosApplied = finalPrice(productPrices, fulfilmentOption, productOption);
+    const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
     const trackingProperties = {
       id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
       product: 'Paper',
       componentType: 'ACQUISITIONS_BUTTON',
     };
+    const nonDiscountedPrice = getProductPrice(
+      productPrices,
+      fulfilmentOption,
+      productOption,
+    )
 
     return {
       title: getTitle(productOption),
-      price: showPrice(price),
+      price: showPrice(priceAfterPromosApplied),
       href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
       onClick: sendTrackingEventsOnClick(trackingProperties),
       onView: sendTrackingEventsOnView(trackingProperties),
       buttonCopy: 'Subscribe now',
-      priceCopy: getPriceCopyString(price, copy[fulfilmentOption][productOption]),
-      offerCopy: getOfferText(price, productOption),
+      priceCopy: getPriceCopyString(nonDiscountedPrice, copy[fulfilmentOption][productOption]),
+      offerCopy: getOfferText(priceAfterPromosApplied, productOption),
       label: '',
     };
   });
