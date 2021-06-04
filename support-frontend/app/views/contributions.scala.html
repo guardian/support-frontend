@@ -45,10 +45,10 @@
         firstName: "@firstName",
         lastName: "@lastName",
       }
-      @for(address4 <- user.privateFields.billingAddress4 orElse user.privateFields.address4) {
+      @for(address4 <- user.privateFields.address4) {
         address4: "@address4",
       }
-      @for(country <- user.privateFields.billingCountry orElse user.privateFields.country) {
+      @for(country <- user.privateFields.country) {
         country: "@country",
       }
     };
