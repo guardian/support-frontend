@@ -168,7 +168,7 @@ function LandingPage() {
           </CentredContainer>
         </FullWidthContainer>
       }
-      <FullWidthContainer theme="dark" hasOverlap={!showEditorialVoiceComponent}>
+      <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />
         </CentredContainer>
