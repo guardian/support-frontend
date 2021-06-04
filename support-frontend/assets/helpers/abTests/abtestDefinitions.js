@@ -30,13 +30,13 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
-  stripePaymentRequestButtonDec2020: {
+  stripeCustomPrbTest: {
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'PRB',
+        id: 'custom',
       },
     ],
     audiences: {
@@ -47,8 +47,8 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: pageUrlRegexes.contributions.notUkLandingPage,
-    seed: 2,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 5,
   },
   editorialVoiceTest: {
     variants: [
