@@ -4,6 +4,7 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
+import { visuallyHidden } from '@guardian/src-foundations/accessibility';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 import FlexContainer from 'components/containers/flexContainer';
 import Quote from 'components/quote/quote';
@@ -31,6 +32,7 @@ const evFlexContainer = css`
 `;
 
 const evHeadlineContainer = css`
+  position: relative;
   padding-bottom: ${space[3]}px;
 
   ${from.tablet} {
@@ -44,15 +46,8 @@ const evHeadlineContainer = css`
   }
 `;
 
-const visuallyHidden = css`
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px !important;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  width: 1px;
+const evHeadline = css`
+  ${visuallyHidden}
 `;
 
 const evQuoteContainer = css`
@@ -65,7 +60,8 @@ function EditorialVoice() {
   return (
     <FlexContainer cssOverrides={evFlexContainer}>
       <div css={evHeadlineContainer}>
-        <h2 css={visuallyHidden}>
+        {/* Visually hidden headline to provide a landmark & text for screenreaders */}
+        <h2 css={evHeadline}>
           Why your support matters
         </h2>
         <HeadlineSvg />
