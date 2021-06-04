@@ -17,6 +17,7 @@ import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/produc
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 import { getOrderSummaryTitle, getPriceSummary } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
 type PropTypes = {
   fulfilmentOption: FulfilmentOptions,
@@ -69,10 +70,9 @@ function PaperOrderSummary(props: PropTypes) {
     props.fulfilmentOption,
     props.productOption,
   );
-  const monthsDiscounted = paperWithoutPromo.promotions &&
-    paperWithoutPromo.promotions.length && paperWithoutPromo.promotions[0].numberOfDiscountedPeriods;
-  const priceHasPromo = paperWithoutPromo.promotions && paperWithoutPromo.promotions.length > 0;
-  const promotionPriceString = priceHasPromo && monthsDiscounted
+  const activePromo = getAppliedPromo(paperWithoutPromo.promotions);
+  const monthsDiscounted = activePromo && activePromo.numberOfDiscountedPeriods;
+  const promotionPriceString = activePromo && monthsDiscounted
     ? ` for ${monthsDiscounted} months, then ${showPrice(paperWithoutPromo, false)} per month` : '';
   const rawPrice = getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod);
   const cleanedPrice = rawPrice.replace(/\/(.*)/, ''); // removes anything after the /
@@ -98,7 +98,7 @@ function PaperOrderSummary(props: PropTypes) {
     },
   ];
 
-  const mobilePriceStatement = priceHasPromo ? `${total}${promotionPriceString}` : total;
+  const mobilePriceStatement = activePromo ? `${total}${promotionPriceString}` : total;
 
   const mobileSummary = {
     title: getMobileSummaryTitle(
