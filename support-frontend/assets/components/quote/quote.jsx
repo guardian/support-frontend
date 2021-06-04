@@ -18,6 +18,10 @@ const quoteFigure = css`
   padding: ${space[2]}px;
   margin-bottom: ${space[9]}px;
   border: 1px solid ${border.secondary};
+
+  ${from.desktop} {
+    padding-right: ${space[9]}px;
+  }
 `;
 
 const quoteText = css`
@@ -31,7 +35,6 @@ const quoteText = css`
   ${from.tablet} {
     ${headline.xsmall()};
     margin-bottom: ${space[2]}px;
-    max-width: calc(100% - ${headshotSize - space[4]}px);
   }
 
   strong {
