@@ -34,7 +34,7 @@ const quoteText = css`
 
   ${from.tablet} {
     ${headline.xsmall()};
-    margin-bottom: ${space[2]}px;
+    margin-bottom: ${space[6]}px;
   }
 
   strong {
@@ -56,7 +56,7 @@ const quoteicon = css`
 
 const quoteAttribution = css`
   ${headline.xxxsmall({ fontStyle: 'italic' })};
-  margin-bottom: ${space[6]}px;
+  margin-bottom: ${space[1]}px;
   display: flex;
   align-items: center;
   min-height: 68px;
