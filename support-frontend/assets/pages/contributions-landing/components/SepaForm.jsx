@@ -67,10 +67,10 @@ export function SepaForm({
 
         <div>
           <TextInput
-            label="Account number"
-            pattern="[0-9]*"
+            label="IBAN"
+            pattern="[0-9A-Z]*"
             minLength="6"
-            maxLength="10"
+            maxLength="34"
             value={iban}
             onChange={e => updateIban(e.target.value)}
           />

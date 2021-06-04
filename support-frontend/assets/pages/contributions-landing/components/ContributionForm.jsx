@@ -45,6 +45,7 @@ import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment, selectAmount,
+  setSepaIban, setSepaAccountHolderName, setSepaAccountHolderConfirmation,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -53,8 +54,9 @@ import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existi
 import { Sepa, DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { logException } from 'helpers/utilities/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
-import type { LocalCurrencyCountry } from '../../../helpers/internationalisation/localCurrencyCountry';
-import {SepaForm} from "pages/contributions-landing/components/SepaForm";
+import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
+import { SepaForm } from "pages/contributions-landing/components/SepaForm";
+import type {SepaData} from "pages/contributions-landing/contributionsLandingReducer";
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -93,7 +95,11 @@ type PropTypes = {|
   amounts: ContributionAmounts,
   useLocalCurrency: boolean,
   setUseLocalCurrency: (boolean, ?LocalCurrencyCountry, ?number) => void,
-  defaultOneOffAmount: number | null;
+  defaultOneOffAmount: number | null,
+  sepaData: SepaData,
+  setSepaIban: string => void,
+  setSepaAccountHolderName: string => void,
+  setSepaAccountHolderConfirmation: boolean => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -132,6 +138,7 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId,
   amounts: state.common.amounts,
   defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
+  sepaData: state.page.form.sepaData,
 });
 
 
@@ -151,6 +158,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
       'ONE_OFF',
     ));
   },
+  setSepaIban: iban => { dispatch(setSepaIban(iban)) },
+  setSepaAccountHolderName: name => { dispatch(setSepaAccountHolderName(name)) },
+  setSepaAccountHolderConfirmation: confirmed => { dispatch(setSepaAccountHolderConfirmation(confirmed)) },
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -307,6 +317,12 @@ function withProps(props: PropTypes) {
         {
           props.paymentMethod === Sepa && (
             <SepaForm
+              iban={props.sepaData.iban}
+              accountHolderName={props.sepaData.accountHolderName}
+              accountHolderConfirmation={props.sepaData.accountHolderConfirmation}
+              updateIban={props.setSepaIban}
+              updateAccountHolderName={props.updateAccountHolderName}
+              updateAccountHolderConfirmation={props.accountHolderConfirmation}
             />
           )
         }
