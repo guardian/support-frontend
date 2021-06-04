@@ -183,8 +183,8 @@ const formHandlersForRecurring = {
   Sepa: (props: PropTypes) => {
     props.onPaymentAuthorisation({
       paymentMethod: 'Sepa',
-      accountHolderName: '',  // TODO
-      iban: '', // TODO
+      accountHolderName: props.sepaData.accountHolderName,
+      iban: props.sepaData.iban,
     })
   },
   ExistingCard: (props: PropTypes) => props.onPaymentAuthorisation({
@@ -321,8 +321,8 @@ function withProps(props: PropTypes) {
               accountHolderName={props.sepaData.accountHolderName}
               accountHolderConfirmation={props.sepaData.accountHolderConfirmation}
               updateIban={props.setSepaIban}
-              updateAccountHolderName={props.updateAccountHolderName}
-              updateAccountHolderConfirmation={props.accountHolderConfirmation}
+              updateAccountHolderName={props.setSepaAccountHolderName}
+              updateAccountHolderConfirmation={props.setSepaAccountHolderConfirmation}
             />
           )
         }

@@ -79,7 +79,7 @@ export function SepaForm({
 
       <div css={checkboxContainerStyles}>
         <Checkbox
-          supporting="I confirm that I am the account holder and I am solely able to authorise debit from the account"
+          supporting=""
           checked={accountHolderConfirmation}
           onChange={e => updateAccountHolderConfirmation(e.target.checked)}
         />
