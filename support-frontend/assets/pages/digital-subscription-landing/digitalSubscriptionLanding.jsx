@@ -42,7 +42,7 @@ import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
-import EditorialVoice from './components/editorialVoice/editorialVoice';
+import EditorialVoice, { evContainerOverrides } from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
 // ----- Styles ----- //
@@ -145,13 +145,6 @@ function LandingPage() {
           priceList={heroPriceList}
         />
       }
-      {showEditorialVoiceComponent &&
-        <FullWidthContainer>
-          <CentredContainer>
-            <EditorialVoice />
-          </CentredContainer>
-        </FullWidthContainer>
-      }
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={productBlockContainer}>
@@ -168,7 +161,14 @@ function LandingPage() {
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      <FullWidthContainer theme="dark" hasOverlap>
+      {showEditorialVoiceComponent &&
+        <FullWidthContainer cssOverrides={evContainerOverrides}>
+          <CentredContainer>
+            <EditorialVoice />
+          </CentredContainer>
+        </FullWidthContainer>
+      }
+      <FullWidthContainer theme="dark" hasOverlap={!showEditorialVoiceComponent}>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />
         </CentredContainer>
