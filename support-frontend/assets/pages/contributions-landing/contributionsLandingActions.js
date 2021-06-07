@@ -339,15 +339,15 @@ const setStripeRecurringRecaptchaVerified = (recaptchaVerified: boolean): ((Func
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified })));
   };
 
-const setSepaIban = (iban: string | null): ((Function) => void) =>
+const setSepaIban = (iban: string | null) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_IBAN', iban })));
   };
-const setSepaAccountHolderName = (accountHolderName: string | null): ((Function) => void) =>
+const setSepaAccountHolderName = (accountHolderName: string | null) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName })));
   };
-const setSepaAccountHolderConfirmation = (accountHolderConfirmation: boolean): ((Function) => void) =>
+const setSepaAccountHolderConfirmation = (accountHolderConfirmation: boolean) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation })));
   };
