@@ -74,7 +74,7 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
-const showEditorialVoiceComponent = abParticipations.editorialVoiceTest === 'variant';
+const showEditorialVoiceComponent = abParticipations.editorialVoiceTestPart2 === 'variant';
 
 // ----- Internationalisation ----- //
 
