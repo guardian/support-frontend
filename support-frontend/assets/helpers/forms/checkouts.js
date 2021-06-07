@@ -24,7 +24,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
-export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe' | 'existingCard' | 'existingDirectDebit' | 'amazonPay';
+export type PaymentMethodSwitch = 'directDebit' | 'sepa' | 'payPal' | 'stripe' | 'existingCard' | 'existingDirectDebit' | 'amazonPay';
 
 type StripeHandler = { open: Function, close: Function };
 

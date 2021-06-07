@@ -31,8 +31,8 @@ const checkboxContainerStyles = css`
 // -- Component -- //
 
 type DirectDebitFormProps = {|
-  iban: string,
-  accountHolderName: string,
+  iban: string | null,
+  accountHolderName: string | null,
   accountHolderConfirmation: boolean,
   updateIban: (iban: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,

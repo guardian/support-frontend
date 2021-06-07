@@ -181,11 +181,14 @@ const formHandlersForRecurring = {
     props.openDirectDebitPopUp();
   },
   Sepa: (props: PropTypes) => {
-    props.onPaymentAuthorisation({
-      paymentMethod: 'Sepa',
-      accountHolderName: props.sepaData.accountHolderName,
-      iban: props.sepaData.iban,
-    });
+    const [accountHolderName, iban] = props.sepaData;
+    if (accountHolderName && iban) {
+      props.onPaymentAuthorisation({
+        paymentMethod: 'Sepa',
+        accountHolderName,
+        iban,
+      });
+    }
   },
   ExistingCard: (props: PropTypes) => props.onPaymentAuthorisation({
     paymentMethod: 'ExistingCard',
