@@ -31,20 +31,13 @@ function TermsPrivacy(props: PropTypes) {
   const gbpAmount = 100;
   const regionalAmount = (isoCurrency: IsoCurrency): ?number => {
     switch (isoCurrency) {
-      case 'GBP':
-        return gbpAmount;
-      case 'USD':
-        return 135;
-      case 'EUR':
-        return 117;
-      case 'AUD':
-        return 185;
-      case 'CAD':
-        return 167;
-      case 'NZD':
-        return 200;
-      default:
-        return null;
+      case 'GBP': return gbpAmount;
+      case 'USD': return 135;
+      case 'EUR': return 117;
+      case 'AUD': return 185;
+      case 'CAD': return 167;
+      case 'NZD': return 200;
+      default: return null;
     }
   };
 
@@ -55,19 +48,15 @@ function TermsPrivacy(props: PropTypes) {
     return `${currencies[currency].glyph}${regionalPatronageAmount}`;
   };
 
-  const patronsLink = (
-    <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">
-      Find out more today
-    </a>
-  );
+  const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
   const americasContactLink = <a href="mailto:us.philanthropy@theguardian.com">contact us</a>;
 
   const patronText = (
     <div className="patrons">
       <h4>Guardian Patrons programme</h4>
       <p>
-        If you would like to support us at a higher level, from {getRegionalAmountString()} a month, you can join us as
-        a Guardian Patron. {patronsLink}
+        If you would like to support us at a higher level, from {getRegionalAmountString()} a month,
+        you can join us as a Guardian Patron. {patronsLink}
       </p>
     </div>
   );
@@ -78,23 +67,24 @@ function TermsPrivacy(props: PropTypes) {
       <div className="philanthropic-ask">
         <h4>Contribute another way</h4>
         <p>
-          To contribute by mail, please make your check payable to:
-          <br />
-          Guardian News
-          <br />
-          Church Street Station
-          <br />
-          PO Box 3403
-          <br />
+          To contribute by mail, please make your check payable to:<br />
+          Guardian News<br />
+          Church Street Station<br />
+          PO Box 3403<br />
           New York, NY 10008-3403.
         </p>
         <p>
           Please {americasContactLink} if you would like to: make a larger single contribution as an individual,
-          contribute as a company or foundation, learn about options for tax-exempt support or would like to discuss
-          legacy gifting.
+          contribute as a company or foundation, learn about options for tax-exempt support or would
+          like to discuss legacy gifting.
         </p>
-        <p>To contribute at a higher level on a recurring basis, you can join as a Guardian Patron. {patronsLink}.</p>
-        <p>Thank you for your generosity.</p>
+        <p>
+          To contribute at a higher level on a recurring basis, you can join as a
+          Guardian Patron. {patronsLink}.
+        </p>
+        <p>
+          Thank you for your generosity.
+        </p>
       </div>
     </div>
   );
