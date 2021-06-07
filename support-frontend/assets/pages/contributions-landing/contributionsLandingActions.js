@@ -44,7 +44,7 @@ import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { setPayPalHasLoaded, type Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
-import { AmazonPay, DirectDebit, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import { AmazonPay, DirectDebit, Sepa, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/forms/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/forms/stripe';
