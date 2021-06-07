@@ -6,6 +6,7 @@ import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
 import { TextInput } from '@guardian/src-text-input';
 import { Checkbox } from '@guardian/src-checkbox';
+import { CheckboxGroup } from '@guardian/src-checkbox';
 
 // -- Styles -- //
 
@@ -37,6 +38,7 @@ type DirectDebitFormProps = {|
   updateIban: (iban: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
+  checkoutFormHasBeenSubmitted: boolean,
 |};
 
 export function SepaForm({
@@ -46,6 +48,7 @@ export function SepaForm({
   updateIban,
   updateAccountHolderName,
   updateAccountHolderConfirmation,
+  checkoutFormHasBeenSubmitted,
 }: DirectDebitFormProps) {
 
   return (
@@ -59,6 +62,7 @@ export function SepaForm({
             maxLength="40"
             value={accountHolderName}
             onChange={e => updateAccountHolderName(e.target.value)}
+            error={checkoutFormHasBeenSubmitted && !accountHolderName ? 'Please provide your account holder name' : null}
           />
         </div>
 
@@ -72,16 +76,21 @@ export function SepaForm({
             maxLength="34"
             value={iban}
             onChange={e => updateIban(e.target.value)}
+            error={checkoutFormHasBeenSubmitted && !iban ? 'Please provide your IBAN' : null}
           />
         </div>
       </div>
 
       <div css={checkboxContainerStyles}>
-        <Checkbox
-          supporting=""
-          checked={accountHolderConfirmation}
-          onChange={e => updateAccountHolderConfirmation(e.target.checked)}
-        />
+        <CheckboxGroup
+          error={checkoutFormHasBeenSubmitted && !accountHolderConfirmation ? 'Please click the consent checkbox' : null}
+        >
+          <Checkbox
+            supporting="By checking this box, you agree that you have read and understood the details of this mandate and that you append your signature to it"
+            checked={accountHolderConfirmation}
+            onChange={e => updateAccountHolderConfirmation(e.target.checked)}
+          />
+        </CheckboxGroup>
       </div>
     </div>
   );
