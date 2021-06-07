@@ -52,7 +52,7 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
     props.isTestUser,
   );
 
-  const stripeObjects = useStripeObjects(stripeAccount, stripeKey, props.isTestUser);
+  const stripeObjects = useStripeObjects(stripeAccount, stripeKey);
 
   const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);
 
