@@ -26,8 +26,8 @@ export const pageUrlRegexes = {
       // Requires /subscribe/digital, allows /checkout, allows any query string
       nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
     },
-    // Requires /subscribe, allows any query string
-    subsLandingPage: /\/subscribe?(\?.*)?$/,
+    // Requires /subscribe, allows any query string, in all regions except Europe
+    subsLandingPage: /(uk|us|ca|au|nz|int)\/subscribe?(\?.*)?$/,
   },
 };
 
@@ -115,7 +115,7 @@ export const tests: Tests = {
       },
     ],
     audiences: {
-      AL: {
+      ALL: {
         offset: 0,
         size: 1,
       },
@@ -124,5 +124,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.subsLandingPage,
     seed: 4,
+    optimizeId: 'Dwj6WTNCS4ySkLEL2y6ncQ',
   },
 };

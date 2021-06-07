@@ -8,6 +8,7 @@ import { type Option } from 'helpers/types/option';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 import type { Participations } from 'helpers/abTests/abtest';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type PropTypes = {
   title: string,
@@ -19,6 +20,7 @@ type PropTypes = {
   isFeature?: Option<boolean>,
   classModifier: string[],
   participations: Participations,
+  countryGroupId: CountryGroupId,
 }
 
 const SubscriptionsProduct = ({
@@ -41,6 +43,7 @@ const SubscriptionsProduct = ({
             {...props}
             isFeature={isFeature}
             isVariant={isVariant}
+            CountryGroupId={props.countryGroupId}
           />
         </div>
       </div>

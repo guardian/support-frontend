@@ -140,7 +140,7 @@ const digital = (
       ctaButtonText: 'Subscribe now',
       link: `${getOrigin()}/subscribe/digital/checkout?promoCode=DK0NT24WG&period=Monthly`,
       analyticsTracking: sendTrackingEventsOnClick({
-        id: 'digipack_cta',
+        id: 'digipack_cta_checkout',
         product: 'DigitalPack',
         ...(abTest && { abTest }),
         componentType: 'ACQUISITIONS_BUTTON',
