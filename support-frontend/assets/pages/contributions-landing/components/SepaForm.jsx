@@ -7,6 +7,7 @@ import { headline } from '@guardian/src-foundations/typography';
 import { TextInput } from '@guardian/src-text-input';
 import { Checkbox } from '@guardian/src-checkbox';
 import { CheckboxGroup } from '@guardian/src-checkbox';
+import { isValidIban } from 'helpers/forms/formValidation';
 
 // -- Styles -- //
 
@@ -76,7 +77,7 @@ export function SepaForm({
             maxLength="34"
             value={iban}
             onChange={e => updateIban(e.target.value)}
-            error={checkoutFormHasBeenSubmitted && !iban ? 'Please provide your IBAN' : null}
+            error={checkoutFormHasBeenSubmitted && !isValidIban(iban) ? 'Please provide a valid IBAN' : null}
           />
         </div>
       </div>

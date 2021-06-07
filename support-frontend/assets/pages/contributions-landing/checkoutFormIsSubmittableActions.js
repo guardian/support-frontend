@@ -10,6 +10,7 @@ import {
   checkFirstName,
   checkLastName,
   checkStateIfApplicable,
+  isValidIban,
 } from 'helpers/forms/formValidation';
 import {
   type ContributionType,
@@ -123,7 +124,7 @@ const amazonPayFormOk = (state: State): boolean => {
 const sepaFormOk = (state: State): boolean => {
   if (state.page.form.paymentMethod === Sepa) {
     const { accountHolderName, iban } = state.page.form.sepaData;
-    return !!accountHolderName && !!iban;
+    return !!accountHolderName && isValidIban(iban);
   }
 
   return true;

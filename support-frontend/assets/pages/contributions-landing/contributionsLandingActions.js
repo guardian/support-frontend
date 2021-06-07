@@ -339,9 +339,18 @@ const setStripeRecurringRecaptchaVerified = (recaptchaVerified: boolean): ((Func
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified })));
   };
 
-const setSepaIban = (iban: string | null): Action => ({ type: 'SET_SEPA_IBAN', iban });
-const setSepaAccountHolderName = (accountHolderName: string | null): Action => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName });
-const setSepaAccountHolderConfirmation = (accountHolderConfirmation: boolean): Action => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation });
+const setSepaIban = (iban: string | null): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_IBAN', iban })));
+  };
+const setSepaAccountHolderName = (accountHolderName: string | null): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName })));
+  };
+const setSepaAccountHolderConfirmation = (accountHolderConfirmation: boolean): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation })));
+  };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
