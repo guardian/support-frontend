@@ -55,8 +55,8 @@ import { Sepa, DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay, type P
 import { logException } from 'helpers/utilities/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
-import { SepaForm } from "pages/contributions-landing/components/SepaForm";
-import type {SepaData} from "pages/contributions-landing/contributionsLandingReducer";
+import { SepaForm } from 'pages/contributions-landing/components/SepaForm';
+import type { SepaData } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -158,9 +158,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
       'ONE_OFF',
     ));
   },
-  setSepaIban: iban => { dispatch(setSepaIban(iban)) },
-  setSepaAccountHolderName: name => { dispatch(setSepaAccountHolderName(name)) },
-  setSepaAccountHolderConfirmation: confirmed => { dispatch(setSepaAccountHolderConfirmation(confirmed)) },
+  setSepaIban: (iban) => { dispatch(setSepaIban(iban)); },
+  setSepaAccountHolderName: (name) => { dispatch(setSepaAccountHolderName(name)); },
+  setSepaAccountHolderConfirmation: (confirmed) => { dispatch(setSepaAccountHolderConfirmation(confirmed)); },
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -185,7 +185,7 @@ const formHandlersForRecurring = {
       paymentMethod: 'Sepa',
       accountHolderName: props.sepaData.accountHolderName,
       iban: props.sepaData.iban,
-    })
+    });
   },
   ExistingCard: (props: PropTypes) => props.onPaymentAuthorisation({
     paymentMethod: 'ExistingCard',

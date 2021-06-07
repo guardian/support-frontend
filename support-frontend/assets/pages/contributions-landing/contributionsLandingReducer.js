@@ -428,8 +428,8 @@ function createFormReducer() {
           sepaData: {
             ...state.sepaData,
             iban: action.iban,
-          }
-        }
+          },
+        };
 
       case 'SET_SEPA_ACCOUNT_HOLDER_NAME':
         return {
@@ -437,8 +437,8 @@ function createFormReducer() {
           sepaData: {
             ...state.sepaData,
             accountHolderName: action.accountHolderName,
-          }
-        }
+          },
+        };
 
       case 'SET_SEPA_ACCOUNT_HOLDER_CONFIRMATION':
         return {
@@ -446,8 +446,8 @@ function createFormReducer() {
           sepaData: {
             ...state.sepaData,
             accountHolderConfirmation: action.accountHolderConfirmation,
-          }
-        }
+          },
+        };
 
       case 'UPDATE_RECAPTCHA_TOKEN':
         return { ...state, oneOffRecaptchaToken: action.recaptchaToken };

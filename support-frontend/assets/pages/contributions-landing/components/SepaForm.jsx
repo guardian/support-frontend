@@ -62,8 +62,7 @@ export function SepaForm({
           />
         </div>
 
-        <div>
-        </div>
+        <div />
 
         <div>
           <TextInput
