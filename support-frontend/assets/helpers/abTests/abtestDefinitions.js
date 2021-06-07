@@ -26,6 +26,8 @@ export const pageUrlRegexes = {
       // Requires /subscribe/digital, allows /checkout, allows any query string
       nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
     },
+    // Requires /subscribe, allows any query string
+    subsLandingPage: /\/subscribe?(\?.*)?$/,
   },
 };
 
@@ -102,5 +104,25 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 0,
+  },
+  linkToCheckoutOnSubsLandingPage: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      AL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.subsLandingPage,
+    seed: 4,
   },
 };

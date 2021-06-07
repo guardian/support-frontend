@@ -15,14 +15,13 @@ type PropTypes = {
   isFeature: Option<boolean>,
   offer?: Option<string>,
   buttons: ProductButton[],
+  isVariant: boolean,
 };
 
 const getButtonAppearance = (isFeature, index, hierarchy) => {
   if (isFeature && index === 0) {
     return 'primary';
-  } else if (isFeature && index === 1) {
-    return 'secondaryFeature';
-  } else if (isFeature && index === 2) {
+  } else if (isFeature && index >= 1) {
     return 'tertiaryFeature';
   } else if ((!isFeature && index === 0) || (!isFeature && hierarchy === 'first')) {
     return 'secondary';
@@ -30,8 +29,17 @@ const getButtonAppearance = (isFeature, index, hierarchy) => {
   return 'tertiary';
 };
 
+const getButtonContainerStyle = (isFeature, isVariant) => {
+  if (isFeature && isVariant) {
+    return 'subscriptions__button-container--featureVariant';
+  } else if (isFeature && !isVariant) {
+    return 'subscriptions__button-container--feature';
+  }
+  return 'subscriptions__button-container';
+};
+
 const SubscriptionsProductDescription = ({
-  title, subtitle, description, offer, isFeature, buttons,
+  title, subtitle, description, offer, isFeature, buttons, isVariant,
 }: PropTypes) => (
   <div>
     <h2 className="subscriptions__product-title">{title}</h2>
@@ -39,7 +47,7 @@ const SubscriptionsProductDescription = ({
     {offer && <h3 className="subscriptions__product-subtitle--small">{subtitle}</h3>}
     {!offer && <h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>}
     <p className="subscriptions__description">{description}</p>
-    <div className={isFeature ? 'subscriptions__button-container--feature' : 'subscriptions__button-container'}>
+    <div className={getButtonContainerStyle(isFeature, isVariant)}>
       {buttons.map((button, index) => (
         <AnchorButton
           href={button.link}

@@ -105,46 +105,62 @@ const getDigitalImage = (isTop: boolean, countryGroupId: CountryGroupId) => {
   return <DigitalPackshot countryGroupId={countryGroupId} />;
 };
 
-const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
-  title: 'Digital Subscription',
-  subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
-  description: countryGroupId === AUDCountries
-    ? 'The Guardian Editions app including Australia Weekend, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
-    : 'The Guardian Editions app, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
-  productImage: getDigitalImage(isTop, countryGroupId),
-  offer: priceCopy.discountCopy,
-  buttons: [{
-    ctaButtonText: 'Subscribe now',
-    link: `${getOrigin()}/subscribe/digital/checkout?promoCode=DK0NT24WG&period=Monthly`,
-    analyticsTracking: sendTrackingEventsOnClick({
-      id: 'digipack_cta',
-      product: 'DigitalPack',
-      ...(abTest && { abTest }),
-      componentType: 'ACQUISITIONS_BUTTON',
-    }),
-  },
-  {
-    ctaButtonText: 'Find out more',
-    link: digitalSubscriptionLanding(countryGroupId, false),
-    analyticsTracking: sendTrackingEventsOnClick({
-      id: 'digipack_cta',
-      product: 'DigitalPack',
-      ...(abTest && { abTest }),
-      componentType: 'ACQUISITIONS_BUTTON',
-    }),
-  },
-  {
-    ctaButtonText: 'See gift options',
-    link: digitalSubscriptionLanding(countryGroupId, true),
-    analyticsTracking: sendTrackingEventsOnClick({
-      id: 'digipack_cta_gift',
-      product: 'DigitalPack',
-      ...(abTest && { abTest }),
-      componentType: 'ACQUISITIONS_BUTTON',
-    }),
-    modifierClasses: '',
-  }],
-});
+const digital = (
+  countryGroupId: CountryGroupId,
+  priceCopy: PriceCopy,
+  isTop: boolean,
+  isVariant: boolean,
+): ProductCopy => {
+  const buttonsControl = [
+    {
+      ctaButtonText: 'Find out more',
+      link: digitalSubscriptionLanding(countryGroupId, false),
+      analyticsTracking: sendTrackingEventsOnClick({
+        id: 'digipack_cta',
+        product: 'DigitalPack',
+        ...(abTest && { abTest }),
+        componentType: 'ACQUISITIONS_BUTTON',
+      }),
+    },
+    {
+      ctaButtonText: 'See gift options',
+      link: digitalSubscriptionLanding(countryGroupId, true),
+      analyticsTracking: sendTrackingEventsOnClick({
+        id: 'digipack_cta_gift',
+        product: 'DigitalPack',
+        ...(abTest && { abTest }),
+        componentType: 'ACQUISITIONS_BUTTON',
+      }),
+      modifierClasses: '',
+    },
+  ];
+
+  const buttonsVariant = [
+    {
+      ctaButtonText: 'Subscribe now',
+      link: `${getOrigin()}/subscribe/digital/checkout?promoCode=DK0NT24WG&period=Monthly`,
+      analyticsTracking: sendTrackingEventsOnClick({
+        id: 'digipack_cta',
+        product: 'DigitalPack',
+        ...(abTest && { abTest }),
+        componentType: 'ACQUISITIONS_BUTTON',
+      }),
+    },
+  ];
+
+  const buttons = isVariant ? [...buttonsVariant, ...buttonsControl] : buttonsControl;
+
+  return {
+    title: 'Digital Subscription',
+    subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
+    description: countryGroupId === AUDCountries
+      ? 'The Guardian Editions app including Australia Weekend, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
+      : 'The Guardian Editions app, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
+    productImage: getDigitalImage(isTop, countryGroupId),
+    offer: priceCopy.discountCopy,
+    buttons,
+  };
+};
 
 const getWeeklyImage = (isTop: boolean) => {
   if (isTop) {
@@ -260,9 +276,12 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
 
 const orderedProducts = (state: State): ProductCopy[] => {
   const { countryGroupId } = state.common.internationalisation;
+  const { linkToCheckoutOnSubsLandingPage } = state.common.abParticipations;
+  const isVariant = linkToCheckoutOnSubsLandingPage === 'variant';
+
   if (countryGroupId === GBPCountries) {
     return [
-      digital(countryGroupId, state.page.pricingCopy[DigitalPack], true),
+      digital(countryGroupId, state.page.pricingCopy[DigitalPack], true, isVariant),
       guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
       paper(countryGroupId, state.page.pricingCopy[Paper], false),
       // Removing the link to the old paper+digital page during the June 21 Sale
@@ -272,12 +291,12 @@ const orderedProducts = (state: State): ProductCopy[] => {
   } else if (countryGroupId === EURCountries) {
     return [
       guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], true),
-      digital(countryGroupId, state.page.pricingCopy[DigitalPack], false),
+      digital(countryGroupId, state.page.pricingCopy[DigitalPack], false, false),
       premiumApp(countryGroupId),
     ];
   }
   return [
-    digital(countryGroupId, state.page.pricingCopy[DigitalPack], true),
+    digital(countryGroupId, state.page.pricingCopy[DigitalPack], true, isVariant),
     guardianWeekly(countryGroupId, state.page.pricingCopy[GuardianWeekly], false),
     premiumApp(countryGroupId),
   ];

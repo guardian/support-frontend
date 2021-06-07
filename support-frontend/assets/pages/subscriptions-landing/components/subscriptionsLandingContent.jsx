@@ -10,11 +10,16 @@ import type { State } from '../subscriptionsLandingReducer';
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { ProductCopy } from '../copy/subscriptionCopy';
 import { connect } from 'react-redux';
+import type { Participations } from 'helpers/abTests/abtest';
 
-type PropTypes = {subscriptionCopy: ProductCopy[]};
+type PropTypes = {
+  subscriptionCopy: ProductCopy[],
+  participations: Participations,
+};
 
 const mapStateToProps = (state: State) => ({
   subscriptionCopy: getSubscriptionCopy(state),
+  participations: state.common.abParticipations,
 });
 
 const isFeature = index => index === 0; // make the first card a feature
@@ -33,6 +38,7 @@ const SubscriptionsLandingContent = (props: PropTypes) => (
           offer={product.offer || null}
           isFeature={isFeature(index)}
           classModifier={product.classModifier || []}
+          participations={props.participations}
         />
       ))}
     </div>
