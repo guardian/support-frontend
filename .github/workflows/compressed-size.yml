@@ -1,0 +1,36 @@
+name: Compressed Size
+
+on: [pull_request]
+
+jobs:
+    compressed_size:
+        name: Compressed Size
+        defaults:
+          run:
+            working-directory: support-frontend
+        runs-on: ubuntu-latest
+        steps:
+
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Install Node
+          uses: guardian/actions-setup-node@main
+
+        # Cache npm dependencies using https://github.com/bahmutov/npm-install
+        - name: Cache dependencies
+          uses: bahmutov/npm-install@v1
+          with:
+            working-directory: support-frontend
+
+        - name: Install
+          run: yarn
+
+        - name: Check compressed size of JS
+          uses: preactjs/compressed-size-action@v2
+          with:
+            repo-token: '${{ secrets.GITHUB_TOKEN }}'
+            cwd: './support-frontend'
+            pattern: './public/compiled-assets/{javascripts,webpack}/*.js'
+            build-script: 'build-github-action'
+            minimum-change-threshold: 500
