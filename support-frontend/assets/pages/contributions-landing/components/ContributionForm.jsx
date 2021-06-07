@@ -8,22 +8,14 @@ import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import {
-  type ContributionType,
-  type PaymentMatrix,
-  logInvalidCombination,
-} from 'helpers/contributions';
+import { type ContributionType, type PaymentMatrix, logInvalidCombination } from 'helpers/contributions';
 import { type ErrorReason } from 'helpers/forms/errorReasons';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { type PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
-import {
-  setCurrencyId,
-  setUseLocalAmounts,
-  setUseLocalCurrencyFlag,
-} from '../../../helpers/page/commonActions';
+import { setCurrencyId, setUseLocalAmounts, setUseLocalCurrencyFlag } from '../../../helpers/page/commonActions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
@@ -44,14 +36,24 @@ import { type State } from 'pages/contributions-landing/contributionsLandingRedu
 import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
-  createOneOffPayPalPayment, selectAmount,
-  setSepaIban, setSepaAccountHolderName, setSepaAccountHolderConfirmation,
+  createOneOffPayPalPayment,
+  selectAmount,
+  setSepaIban,
+  setSepaAccountHolderName,
+  setSepaAccountHolderConfirmation,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { Sepa, DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import {
+  Sepa,
+  DirectDebit,
+  ExistingCard,
+  ExistingDirectDebit,
+  AmazonPay,
+  type PaymentMethod,
+} from 'helpers/forms/paymentMethods';
 import { logException } from 'helpers/utilities/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
@@ -141,26 +143,37 @@ const mapStateToProps = (state: State) => ({
   sepaData: state.page.form.sepaData,
 });
 
-
 const mapDispatchToProps = (dispatch: Function) => ({
-  setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
-  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
-  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setPaymentIsWaiting: (isWaiting) => {
+    dispatch(paymentWaiting(isWaiting));
+  },
+  openDirectDebitPopUp: () => {
+    dispatch(openDirectDebitPopUp());
+  },
+  setCheckoutFormHasBeenSubmitted: () => {
+    dispatch(setCheckoutFormHasBeenSubmitted());
+  },
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => {
+    dispatch(createOneOffPayPalPayment(data));
+  },
   setUseLocalCurrency: (useLocalCurrency, localCurrencyCountry, defaultOneOffAmount) => {
     dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
     dispatch(setCurrencyId(useLocalCurrency));
     dispatch(setUseLocalAmounts(useLocalCurrency));
     dispatch(selectAmount(
-      useLocalCurrency
-        ? localCurrencyCountry.amounts.ONE_OFF.defaultAmount
-        : defaultOneOffAmount,
+      useLocalCurrency ? localCurrencyCountry.amounts.ONE_OFF.defaultAmount : defaultOneOffAmount,
       'ONE_OFF',
     ));
   },
-  setSepaIban: (iban) => { dispatch(setSepaIban(iban)); },
-  setSepaAccountHolderName: (name) => { dispatch(setSepaAccountHolderName(name)); },
-  setSepaAccountHolderConfirmation: (confirmed) => { dispatch(setSepaAccountHolderConfirmation(confirmed)); },
+  setSepaIban: (iban) => {
+    dispatch(setSepaIban(iban));
+  },
+  setSepaAccountHolderName: (name) => {
+    dispatch(setSepaAccountHolderName(name));
+  },
+  setSepaAccountHolderConfirmation: (confirmed) => {
+    dispatch(setSepaAccountHolderConfirmation(confirmed));
+  },
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -190,14 +203,16 @@ const formHandlersForRecurring = {
       });
     }
   },
-  ExistingCard: (props: PropTypes) => props.onPaymentAuthorisation({
-    paymentMethod: 'ExistingCard',
-    billingAccountId: props.existingPaymentMethod.billingAccountId,
-  }),
-  ExistingDirectDebit: (props: PropTypes) => props.onPaymentAuthorisation({
-    paymentMethod: 'ExistingDirectDebit',
-    billingAccountId: props.existingPaymentMethod.billingAccountId,
-  }),
+  ExistingCard: (props: PropTypes) =>
+    props.onPaymentAuthorisation({
+      paymentMethod: 'ExistingCard',
+      billingAccountId: props.existingPaymentMethod.billingAccountId,
+    }),
+  ExistingDirectDebit: (props: PropTypes) =>
+    props.onPaymentAuthorisation({
+      paymentMethod: 'ExistingDirectDebit',
+      billingAccountId: props.existingPaymentMethod.billingAccountId,
+    }),
   AmazonPay: (props: PropTypes) => {
     if (props.amazonPayBillingAgreementId) {
       props.onPaymentAuthorisation({
@@ -208,7 +223,7 @@ const formHandlersForRecurring = {
   },
 };
 
-const formHandlers: PaymentMatrix<PropTypes => void> = {
+const formHandlers: PaymentMatrix<(PropTypes) => void> = {
   ONE_OFF: {
     Stripe: (props: PropTypes) => {
       if (props.createStripePaymentMethod) {
@@ -219,19 +234,23 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
         currency: props.currency,
-        amount: getAmount(
-          props.selectedAmounts,
-          props.otherAmounts,
-          props.contributionType,
-        ),
+        amount: getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType),
         returnURL: payPalReturnUrl(props.countryGroupId, props.email),
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
-    DirectDebit: () => { logInvalidCombination('ONE_OFF', DirectDebit); },
-    Sepa: () => { logInvalidCombination('ONE_OFF', Sepa); },
-    ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
-    ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
+    DirectDebit: () => {
+      logInvalidCombination('ONE_OFF', DirectDebit);
+    },
+    Sepa: () => {
+      logInvalidCombination('ONE_OFF', Sepa);
+    },
+    ExistingCard: () => {
+      logInvalidCombination('ONE_OFF', ExistingCard);
+    },
+    ExistingDirectDebit: () => {
+      logInvalidCombination('ONE_OFF', ExistingDirectDebit);
+    },
     AmazonPay: (props: PropTypes) => {
       const { amazonPayOrderReferenceId } = props;
       if (amazonPayOrderReferenceId) {
@@ -240,17 +259,22 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       } else {
         logException('Missing orderReferenceId for amazon pay');
       }
-
     },
-    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
+    None: () => {
+      logInvalidCombination('ONE_OFF', 'None');
+    },
   },
   ANNUAL: {
     ...formHandlersForRecurring,
-    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+    None: () => {
+      logInvalidCombination('ANNUAL', 'None');
+    },
   },
   MONTHLY: {
     ...formHandlersForRecurring,
-    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+    None: () => {
+      logInvalidCombination('MONTHLY', 'None');
+    },
   },
 };
 
@@ -279,11 +303,7 @@ function withProps(props: PropTypes) {
   const classModifiers = ['contribution', 'with-labels'];
 
   function toggleUseLocalCurrency() {
-    props.setUseLocalCurrency(
-      !props.useLocalCurrency,
-      props.localCurrencyCountry,
-      props.defaultOneOffAmount,
-    );
+    props.setUseLocalCurrency(!props.useLocalCurrency, props.localCurrencyCountry, props.defaultOneOffAmount);
   }
 
   return (
@@ -292,18 +312,15 @@ function withProps(props: PropTypes) {
       <div className="contributions-form-selectors">
         <ContributionTypeTabs />
         <ContributionAmount />
-        {
-          props.localCurrencyCountry && props.contributionType === 'ONE_OFF' &&
-          (
-            <CheckboxGroup cssOverrides="margin-top:16px;">
-              <Checkbox
-                label={`View in local currency (${props.localCurrencyCountry.currency})`}
-                defaultChecked={props.useLocalCurrency}
-                onChange={toggleUseLocalCurrency}
-              />
-            </CheckboxGroup>
-          )
-        }
+        {props.localCurrencyCountry && props.contributionType === 'ONE_OFF' && (
+          <CheckboxGroup cssOverrides="margin-top:16px;">
+            <Checkbox
+              label={`View in local currency (${props.localCurrencyCountry.currency})`}
+              defaultChecked={props.useLocalCurrency}
+              onChange={toggleUseLocalCurrency}
+            />
+          </CheckboxGroup>
+        )}
       </div>
       <StripePaymentRequestButtonContainer
         currency={props.currency}
@@ -317,19 +334,17 @@ function withProps(props: PropTypes) {
         <ContributionFormFields />
         <PaymentMethodSelector />
 
-        {
-          props.paymentMethod === Sepa && (
-            <SepaForm
-              iban={props.sepaData.iban}
-              accountHolderName={props.sepaData.accountHolderName}
-              accountHolderConfirmation={props.sepaData.accountHolderConfirmation}
-              updateIban={props.setSepaIban}
-              updateAccountHolderName={props.setSepaAccountHolderName}
-              updateAccountHolderConfirmation={props.setSepaAccountHolderConfirmation}
-              checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
-            />
-          )
-        }
+        {props.paymentMethod === Sepa && (
+          <SepaForm
+            iban={props.sepaData.iban}
+            accountHolderName={props.sepaData.accountHolderName}
+            accountHolderConfirmation={props.sepaData.accountHolderConfirmation}
+            updateIban={props.setSepaIban}
+            updateAccountHolderName={props.setSepaAccountHolderName}
+            updateAccountHolderConfirmation={props.setSepaAccountHolderConfirmation}
+            checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+          />
+        )}
 
         <StripeCardFormContainer
           currency={props.currency}
@@ -342,9 +357,7 @@ function withProps(props: PropTypes) {
         <div>
           <ContributionErrorMessage />
         </div>
-        <ContributionSubmit
-          onPaymentAuthorisation={props.onPaymentAuthorisation}
-        />
+        <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>
 
       <TermsPrivacy
@@ -352,6 +365,7 @@ function withProps(props: PropTypes) {
         contributionType={props.contributionType}
         campaignSettings={props.campaignSettings}
         referrerSource={props.referrerSource}
+        paymentMethod={props.paymentMethod}
       />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>

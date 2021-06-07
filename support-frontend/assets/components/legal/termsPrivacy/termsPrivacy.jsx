@@ -10,7 +10,7 @@ import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/intern
 import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
-
+import { type PaymentMethod } from 'helpers/forms/paymentMethods';
 
 // ---- Types ----- //
 
@@ -19,6 +19,7 @@ type PropTypes = {|
   contributionType: ContributionType,
   campaignSettings: CampaignSettings | null,
   referrerSource: ?string,
+  paymentMethod: PaymentMethod,
 |};
 
 // ----- Component ----- //
@@ -30,13 +31,20 @@ function TermsPrivacy(props: PropTypes) {
   const gbpAmount = 100;
   const regionalAmount = (isoCurrency: IsoCurrency): ?number => {
     switch (isoCurrency) {
-      case 'GBP': return gbpAmount;
-      case 'USD': return 135;
-      case 'EUR': return 117;
-      case 'AUD': return 185;
-      case 'CAD': return 167;
-      case 'NZD': return 200;
-      default: return null;
+      case 'GBP':
+        return gbpAmount;
+      case 'USD':
+        return 135;
+      case 'EUR':
+        return 117;
+      case 'AUD':
+        return 185;
+      case 'CAD':
+        return 167;
+      case 'NZD':
+        return 200;
+      default:
+        return null;
     }
   };
 
@@ -47,15 +55,19 @@ function TermsPrivacy(props: PropTypes) {
     return `${currencies[currency].glyph}${regionalPatronageAmount}`;
   };
 
-  const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
+  const patronsLink = (
+    <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">
+      Find out more today
+    </a>
+  );
   const americasContactLink = <a href="mailto:us.philanthropy@theguardian.com">contact us</a>;
 
   const patronText = (
     <div className="patrons">
       <h4>Guardian Patrons programme</h4>
       <p>
-        If you would like to support us at a higher level, from {getRegionalAmountString()} a month,
-        you can join us as a Guardian Patron. {patronsLink}
+        If you would like to support us at a higher level, from {getRegionalAmountString()} a month, you can join us as
+        a Guardian Patron. {patronsLink}
       </p>
     </div>
   );
@@ -66,24 +78,23 @@ function TermsPrivacy(props: PropTypes) {
       <div className="philanthropic-ask">
         <h4>Contribute another way</h4>
         <p>
-          To contribute by mail, please make your check payable to:<br />
-          Guardian News<br />
-          Church Street Station<br />
-          PO Box 3403<br />
+          To contribute by mail, please make your check payable to:
+          <br />
+          Guardian News
+          <br />
+          Church Street Station
+          <br />
+          PO Box 3403
+          <br />
           New York, NY 10008-3403.
         </p>
         <p>
           Please {americasContactLink} if you would like to: make a larger single contribution as an individual,
-          contribute as a company or foundation, learn about options for tax-exempt support or would
-          like to discuss legacy gifting.
+          contribute as a company or foundation, learn about options for tax-exempt support or would like to discuss
+          legacy gifting.
         </p>
-        <p>
-          To contribute at a higher level on a recurring basis, you can join as a
-          Guardian Patron. {patronsLink}.
-        </p>
-        <p>
-          Thank you for your generosity.
-        </p>
+        <p>To contribute at a higher level on a recurring basis, you can join as a Guardian Patron. {patronsLink}.</p>
+        <p>Thank you for your generosity.</p>
       </div>
     </div>
   );
@@ -100,36 +111,39 @@ function TermsPrivacy(props: PropTypes) {
   const sourceIsNotAppleNews = props.referrerSource !== 'APPLE_NEWS';
   const sourceIsNotGoogleAMP = props.referrerSource !== 'GOOGLE_AMP';
 
-  const shouldShowPhilanthropicAsk = (
-    isUSContributor &&
-    isNotOneOffContribution &&
-    sourceIsNotAppleNews &&
-    sourceIsNotGoogleAMP
-  );
+  const shouldShowPhilanthropicAsk =
+    isUSContributor && isNotOneOffContribution && sourceIsNotAppleNews && sourceIsNotGoogleAMP;
 
   return (
     <>
       <div className="component-terms-privacy">
-        {props.contributionType !== 'ONE_OFF' ?
+        {props.contributionType !== 'ONE_OFF' ? (
           <div className="component-terms-privacy__change">
-            Monthly contributions are billed each month and annual contributions are billed once a year.
-            You can change how much you give or cancel your contributions at any time.
+            Monthly contributions are billed each month and annual contributions are billed once a year.{' '}
+            <strong>You can change how much you give or cancel your contributions at any time.</strong>
           </div>
-          : null
-        }
+        ) : null}
+        {props.paymentMethod === 'Sepa' ? (
+          <div className="component-terms-privacy__change">
+            By providing your IBAN and confirming this payment, you are authorizing Guardian News & Media Ltd and
+            Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank
+            to debit your account in accordance with those instructions. You are entitled to a refund from your bank
+            under the terms and conditions of your agreement with your bank.{' '}
+            <strong>
+              A refund must be claimed within 8 weeks starting from the date on which your account was debited.
+            </strong>
+          </div>
+        ) : null}
         <div className="component-terms-privacy__terms">
           By proceeding, you are agreeing to our {terms}. To find out what personal data we collect and how we use it,
           please visit our {privacy}.
         </div>
       </div>
       <br />
-      <div>
-        { shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText }
-      </div>
+      <div>{shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText}</div>
     </>
   );
 }
-
 
 // ----- Exports ----- //
 
