@@ -141,7 +141,7 @@ const ProductCard = ({
   title, subtitle, image, secondImage, first,
 }: ProductCardPropTypes) => (
   <section className="product-block__item">
-    <h2 className="product-block__item__title">{title}</h2>
+    <h3 className="product-block__item__title">{title}</h3>
     <p className={`product-block__item__subtitle--Aus${first ? '-first' : ''}`}>{subtitle}</p>
     <span className={`product-block__item__image${secondImage ? '--second' : ''}`}>{image}</span>
   </section>
