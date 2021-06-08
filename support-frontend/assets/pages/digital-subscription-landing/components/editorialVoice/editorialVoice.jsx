@@ -41,7 +41,7 @@ const evHeadlineContainer = css`
   }
 
   svg {
-    width: 350px;
+    width: 500px;
     max-width: 100%;
   }
 `;
