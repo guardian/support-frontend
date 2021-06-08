@@ -5,12 +5,12 @@ import com.gu.support.catalog._
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import com.gu.support.workers.{AcquisitionData, AmazonPayPaymentMethod, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, SepaPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SixWeekly, StripePaymentType}
+import com.gu.support.workers.{AcquisitionData, AmazonPayPaymentMethod, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SepaPaymentMethod, SixWeekly, StripePaymentType}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
-import com.gu.support.acquisitions
+import com.gu.support.{acquisitions, catalog}
 import com.gu.support.acquisitions.AcquisitionType.{Purchase, Redemption}
-import com.gu.support.acquisitions.PaymentProvider.{DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa, AmazonPay}
+import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa}
 import com.gu.support.acquisitions.PrintProduct._
 import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
 import com.gu.support.zuora.api.ReaderType
@@ -59,7 +59,9 @@ object AcquisitionDataRowBuilder {
   private def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
     billingPeriod match {
       case Monthly => PaymentFrequency.Monthly
-      case Quarterly | SixWeekly => PaymentFrequency.Quarterly
+      case Quarterly => PaymentFrequency.Quarterly
+      case SixWeekly if catalog.GuardianWeekly.sixForSixBillingPeriod == Quarterly => PaymentFrequency.Quarterly
+      case SixWeekly => PaymentFrequency.Monthly
       case Annual => PaymentFrequency.Annually
     }
 

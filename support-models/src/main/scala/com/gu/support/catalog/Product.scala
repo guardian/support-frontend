@@ -174,6 +174,7 @@ case object Paper extends Product {
 }
 
 case object GuardianWeekly extends Product {
+  val sixForSixBillingPeriod: BillingPeriod = Monthly
   private def domestic(
     id: String,
     billingPeriod: BillingPeriod,

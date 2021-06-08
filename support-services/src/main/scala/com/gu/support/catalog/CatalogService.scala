@@ -40,8 +40,8 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     // promotion. It is much more use from the point of view of the site to have the subscription
     // price, ie. the quarterly price as the £6 is available through the introductory promotion object
     val ratePlanIdsToSwap = Map(
-      getGWRatePlanId(SixWeekly, Domestic) -> getGWRatePlanId(Quarterly, Domestic),
-      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(Quarterly, RestOfWorld)
+      getGWRatePlanId(SixWeekly, Domestic) -> getGWRatePlanId(GuardianWeekly.sixForSixBillingPeriod, Domestic),
+      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(GuardianWeekly.sixForSixBillingPeriod, RestOfWorld)
     )
 
     Catalog(

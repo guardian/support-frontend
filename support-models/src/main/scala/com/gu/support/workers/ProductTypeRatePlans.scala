@@ -13,7 +13,7 @@ object ProductTypeRatePlans {
     environment: TouchPointEnvironment,
     readerType: ReaderType
   ): Option[ProductRatePlan[catalog.GuardianWeekly.type]] = {
-    val postIntroductoryBillingPeriod = if (product.billingPeriod == SixWeekly) Quarterly else product.billingPeriod
+    val postIntroductoryBillingPeriod = if (product.billingPeriod == SixWeekly) catalog.GuardianWeekly.sixForSixBillingPeriod else product.billingPeriod
     catalog.GuardianWeekly.ratePlans.getOrElse(environment, Nil).find(productRatePlan =>
       productRatePlan.fulfilmentOptions == product.fulfilmentOptions &&
         productRatePlan.billingPeriod == postIntroductoryBillingPeriod &&
