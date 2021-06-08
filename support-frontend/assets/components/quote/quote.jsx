@@ -20,13 +20,13 @@ const quoteFigure = css`
   border: 1px solid ${border.secondary};
 
   ${from.desktop} {
-    padding-right: ${space[9]}px;
+    padding-right: ${space[12]}px;
   }
 `;
 
 const quoteText = css`
   ${headline.xxxsmall()};
-  margin-bottom: ${space[3]}px;
+  margin-bottom: ${space[6]}px;
 
   ${from.mobileLandscape} {
     ${headline.xxsmall()};
@@ -34,7 +34,6 @@ const quoteText = css`
 
   ${from.tablet} {
     ${headline.xsmall()};
-    margin-bottom: ${space[6]}px;
   }
 
   strong {
@@ -51,6 +50,14 @@ const quoteicon = css`
 
   svg {
     fill: ${brandAlt[400]};
+  }
+
+  ${until.mobileLandscape} {
+    margin-top: -${space[2]}px;
+
+    svg {
+      transform: scale(0.8);
+    }
   }
 `;
 
