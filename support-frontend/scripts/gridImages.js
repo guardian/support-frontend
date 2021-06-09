@@ -14,7 +14,7 @@ const imageNames = Object.keys(imageCatalogue).map(async fileName => ({
     .map(({ fileName }) => fileName)
     .sort();
 
-  console.log(keysToRetain);
+  console.log('Retaining the following keys:\n', keysToRetain.join('\n'));
 
   const newCatalogue = {};
 
@@ -22,5 +22,5 @@ const imageNames = Object.keys(imageCatalogue).map(async fileName => ({
     newCatalogue[key] = imageCatalogue[key];
   });
 
-  fs.writeFileSync('../assets/helpers/images/imageCatalogue.json', JSON.stringify(newCatalogue, null, 2));
+  fs.writeFileSync('./assets/helpers/images/imageCatalogue.json', JSON.stringify(newCatalogue, null, 2));
 })();
