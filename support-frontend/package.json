@@ -39,7 +39,7 @@
   ],
   "jest": {
     "transform": {
-      ".*": "./node_modules/babel-jest"
+      ".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!@guardian)",
