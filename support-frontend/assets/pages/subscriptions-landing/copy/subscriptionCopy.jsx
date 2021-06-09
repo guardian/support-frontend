@@ -31,7 +31,7 @@ import {
   EURCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
-import { Monthly, Quarterly, type BillingPeriod, SixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { Monthly, type BillingPeriod, SixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
   currencies, detect,
   fromCountryGroupId,
