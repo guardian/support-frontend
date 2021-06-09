@@ -135,6 +135,6 @@ object PriceSummaryService {
     }
     val numberOfPeriodsDiscounted = Math.ceil(percentageOfPeriodDiscounted)
     val newDiscountPercent = (discountBenefit.amount * percentageOfPeriodDiscounted) / numberOfPeriodsDiscounted
-    BigDecimal(newDiscountPercent).setScale(2, RoundingMode.HALF_DOWN).toDouble
+    BigDecimal(newDiscountPercent).setScale(3, RoundingMode.HALF_DOWN).toDouble
   }
 }
