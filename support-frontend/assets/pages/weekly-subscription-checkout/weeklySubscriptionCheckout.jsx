@@ -35,7 +35,7 @@ import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
-const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixWeekly' || billingPeriodInUrl === 'Quarterly' || billingPeriodInUrl === 'Annual'
+const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixWeekly' || billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Quarterly' || billingPeriodInUrl === 'Annual'
   ? billingPeriodInUrl
   : Quarterly;
 
