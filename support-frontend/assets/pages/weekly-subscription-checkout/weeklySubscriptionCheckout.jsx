@@ -19,11 +19,7 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import {
-  Annual,
-  Monthly,
-  Quarterly,
   SixForSixBillingPeriod,
-  SixWeekly,
   type WeeklyBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -43,10 +39,10 @@ import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod: WeeklyBillingPeriod =
-  billingPeriodInUrl === SixWeekly ||
-  billingPeriodInUrl === Monthly ||
-  billingPeriodInUrl === Quarterly ||
-  billingPeriodInUrl === Annual
+  billingPeriodInUrl === 'SixWeekly' ||
+  billingPeriodInUrl === 'Monthly' ||
+  billingPeriodInUrl === 'Quarterly' ||
+  billingPeriodInUrl === 'Annual'
     ? billingPeriodInUrl
     : SixForSixBillingPeriod;
 
