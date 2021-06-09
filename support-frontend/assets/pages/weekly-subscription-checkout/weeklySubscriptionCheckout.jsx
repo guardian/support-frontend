@@ -18,7 +18,14 @@ import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
-import { Quarterly, type WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+  Annual,
+  Monthly,
+  Quarterly,
+  SixForSixBillingPeriod,
+  SixWeekly,
+  type WeeklyBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { getQueryParameter } from 'helpers/urls/url';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
@@ -35,9 +42,13 @@ import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
-const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixWeekly' || billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Quarterly' || billingPeriodInUrl === 'Annual'
-  ? billingPeriodInUrl
-  : Quarterly;
+const initialBillingPeriod: WeeklyBillingPeriod =
+  billingPeriodInUrl === SixWeekly ||
+  billingPeriodInUrl === Monthly ||
+  billingPeriodInUrl === Quarterly ||
+  billingPeriodInUrl === Annual
+    ? billingPeriodInUrl
+    : SixForSixBillingPeriod;
 
 const startDate = formatMachineDate(getWeeklyDays()[0]);
 const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(

@@ -8,10 +8,7 @@ import {
   weeklyGiftBillingPeriods,
   type WeeklyBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import {
-  sendTrackingEventsOnClick,
-  sendTrackingEventsOnView,
-} from 'helpers/productPrice/subscriptions';
+import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
 import {
   getAppliedPromo,
 } from 'helpers/productPrice/promotions';
