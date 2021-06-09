@@ -22,5 +22,5 @@ const imageNames = Object.keys(imageCatalogue).map(async fileName => ({
     newCatalogue[key] = imageCatalogue[key];
   });
 
-  fs.writeFileSync('./assets/helpers/images/imageCatalogue.json', JSON.stringify(newCatalogue, null, 2));
+  fs.writeFileSync('./assets/helpers/images/imageCatalogue.json', `${JSON.stringify(newCatalogue, null, 2)}\n`);
 })();
