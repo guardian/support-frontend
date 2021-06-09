@@ -5,7 +5,6 @@ import { brand, neutral } from '@guardian/src-foundations/palette';
 import { from, until } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { headline, body } from '@guardian/src-foundations/typography';
-import { roundelSizeMob } from './heroRoundel';
 
 export const hero = css`
   position: relative;
@@ -39,14 +38,6 @@ export const hero = css`
   }
 `;
 
-// On mobile the roundel can overlay and hide the h2 inside the hero
-// This adds a little extra top margin if the roundel is present to keep the headline visible
-export const roundelOffset = css`
-  ${until.tablet} {
-    margin-top: ${(roundelSizeMob / 2) - space[6]}px;
-  }
-`;
-
 export const heroImage = css`
   align-self: flex-end;
   flex-shrink: 0;
@@ -70,8 +61,20 @@ export const heroImage = css`
 
 export const heroRoundelContainer = css`
   position: absolute;
-  top: 0;
-  right: ${space[3]}px;
+  top: ${space[3]}px;
+  right: ${space[5]}px;
+
+  ${from.mobileMedium} {
+    right: ${space[6]}px;
+  }
+
+  ${from.mobileLandscape} {
+    top: 60px;
+  }
+
+  ${from.phablet} {
+    top: ${space[6]}px;
+  }
 
   ${from.tablet} {
     right: 60px;
@@ -79,6 +82,7 @@ export const heroRoundelContainer = css`
 
   ${from.desktop} {
     right: ${space[12]}px;
+    top: 0;
   }
 `;
 

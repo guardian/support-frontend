@@ -31,7 +31,7 @@ import {
   EURCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
-import { Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
+import { Monthly, Quarterly, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
   currencies, detect,
   fromCountryGroupId,
@@ -40,7 +40,6 @@ import {
 
 import type { State } from '../subscriptionsLandingReducer';
 import type { PriceCopy } from '../subscriptionsLandingReducer';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
   digitalSubscriptionLanding,
   guardianWeeklyLanding, paperSubsUrl,

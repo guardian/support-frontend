@@ -23,7 +23,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import { routes } from 'helpers/urls/routes';
+import { routes, promotionTermsUrl } from 'helpers/urls/routes';
 
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
@@ -41,7 +41,6 @@ import reducer from './weeklySubscriptionLandingReducer';
 
 import './weeklySubscriptionLanding.scss';
 import { promoQueryParam, getPromotionCopy } from 'helpers/productPrice/promotions';
-import { promotionTermsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 
 

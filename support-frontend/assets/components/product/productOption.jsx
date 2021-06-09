@@ -29,7 +29,7 @@ const productOption = css`
   ${textSans.medium()}
   position: relative;
   display: grid;
-  grid-template-rows: 48px minmax(66px, 1fr) 100px 86px;
+  grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -114,6 +114,8 @@ function ProductOption(props: Product) {
           <span css={productOptionPrice}>{props.price}</span>
           {props.priceCopy}
         </p>
+      </div>
+      <div>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
             href={props.href}

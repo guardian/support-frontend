@@ -15,8 +15,7 @@ import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { ErrorSummary } from './submitFormErrorSummary';
 import { type Option } from 'helpers/types/option';
-import { PayPal } from 'helpers/forms/paymentMethods';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { PayPal, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { hiddenIf } from 'helpers/utilities/utilities';
 
 const payPalButton = css`

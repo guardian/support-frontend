@@ -30,8 +30,7 @@ import {
   OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import type { CampaignSettings } from 'helpers/campaigns/campaigns';
+import { getCampaignSettings, type CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getAmount } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 

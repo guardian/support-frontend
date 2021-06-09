@@ -6,8 +6,7 @@ import { border } from '@guardian/src-foundations/palette';
 import { from } from '@guardian/src-foundations/mq';
 
 import { type Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { DirectDebit } from 'helpers/forms/paymentMethods';
+import { DirectDebit, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import DirectDebitTerms from './directDebitTerms';
 
 const directDebitSection = css`

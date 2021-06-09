@@ -4,6 +4,7 @@
 
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
+import { SvgQuote } from '@guardian/src-icons';
 import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { border, brandAlt, neutral, sport } from '@guardian/src-foundations/palette';
@@ -17,12 +18,15 @@ const quoteFigure = css`
   padding: ${space[2]}px;
   margin-bottom: ${space[9]}px;
   border: 1px solid ${border.secondary};
+
+  ${from.desktop} {
+    padding-right: ${space[12]}px;
+  }
 `;
 
 const quoteText = css`
-  display: flex;
   ${headline.xxxsmall()};
-  margin-bottom: ${space[2]}px;
+  margin-bottom: ${space[6]}px;
 
   ${from.mobileLandscape} {
     ${headline.xxsmall()};
@@ -30,8 +34,6 @@ const quoteText = css`
 
   ${from.tablet} {
     ${headline.xsmall()};
-    margin-bottom: ${space[2]}px;
-    max-width: calc(100% - ${headshotSize - space[4]}px);
   }
 
   strong {
@@ -39,12 +41,31 @@ const quoteText = css`
   }
 `;
 
+const quoteicon = css`
+  float: left;
+  width: ${space[9]}px;
+  max-height: ${space[6]}px;
+  margin-top: -${space[1]}px;
+  margin-left: -${space[1]}px;
+
+  svg {
+    fill: ${brandAlt[400]};
+  }
+
+  ${until.mobileLandscape} {
+    margin-top: -${space[2]}px;
+
+    svg {
+      transform: scale(0.8);
+    }
+  }
+`;
+
 const quoteAttribution = css`
   ${headline.xxxsmall({ fontStyle: 'italic' })};
-  margin-bottom: ${space[6]}px;
+  margin-bottom: ${space[1]}px;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: center;
   min-height: 68px;
 
   ${until.tablet} {
@@ -69,6 +90,7 @@ const quoteHeadshot = css`
   flex-shrink: 0;
   flex-basis: auto;
   overflow: hidden;
+  margin-right: ${space[2]}px;
 
   img {
     max-width: 100%;
@@ -102,18 +124,21 @@ function Quote({
   return (
     <figure css={quoteFigure}>
       <blockquote css={quoteText}>
+        <div css={quoteicon}>
+          <SvgQuote />
+        </div>
         {children}
       </blockquote>
       <figcaption css={quoteAttribution}>
-        <div>
-          <span>{name}</span>
-          <span css={quoteJobTitle}>{jobTitle}</span>
-        </div>
         {headshot &&
           <div css={quoteHeadshot}>
             {headshot}
           </div>
         }
+        <div>
+          <span>{name}</span>
+          <span css={quoteJobTitle}>{jobTitle}</span>
+        </div>
       </figcaption>
       <div css={quoteTail} />
     </figure>

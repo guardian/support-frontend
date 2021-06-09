@@ -21,8 +21,7 @@ import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 import { type State } from '../contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
   type Action,
   updatePaymentMethod,

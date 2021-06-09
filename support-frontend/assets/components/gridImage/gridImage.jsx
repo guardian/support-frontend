@@ -9,8 +9,7 @@
 import React, { type Node } from 'react';
 
 import { gridUrl, gridSrcset } from 'helpers/theGrid';
-import { ascending } from 'helpers/utilities/utilities';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import { ascending, classNameWithModifiers } from 'helpers/utilities/utilities';
 
 import type { ImageType, ImageId } from 'helpers/theGrid';
 
