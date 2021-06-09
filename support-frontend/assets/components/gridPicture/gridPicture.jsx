@@ -8,9 +8,9 @@
 
 import React from 'react';
 
-import { gridSrcset, gridUrl } from 'helpers/theGrid';
+import { gridSrcset, gridUrl } from 'helpers/images/theGrid';
 
-import type { ImageId, ImageType } from 'helpers/theGrid';
+import type { ImageId, ImageType } from 'helpers/images/theGrid';
 
 
 // ----- Types ----- //
