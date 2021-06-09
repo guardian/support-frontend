@@ -4,8 +4,8 @@ import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import {
   billingPeriodNoun as upperCaseNoun,
   billingPeriodAdverb,
-  Quarterly,
-  type BillingPeriod, SixForSixBillingPeriod,
+  type BillingPeriod,
+  SixForSixBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { glyph as shortGlyph, extendedGlyph } from 'helpers/internationalisation/currency';
@@ -101,7 +101,7 @@ const getIntroductoryPriceDescription = (
   productPrice: ProductPrice,
   compact: boolean,
 ) => {
-  const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm);
+  const standardCopy = standardRate(glyph, productPrice.price, SixForSixBillingPeriod, productPrice.fixedTerm);
   const separator = compact ? '/' : ' for the first ';
   const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
