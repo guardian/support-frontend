@@ -4,6 +4,9 @@ const Annual: 'Annual' = 'Annual';
 const Monthly: 'Monthly' = 'Monthly';
 const Quarterly: 'Quarterly' = 'Quarterly';
 const SixWeekly: 'SixWeekly' = 'SixWeekly';
+
+// The value for six for six billing period here must match
+// the value in support-models/src/main/scala/com/gu/support/catalog/Product.scala
 const SixForSixBillingPeriod: 'Monthly' = 'Monthly';
 
 export type BillingPeriod = typeof SixWeekly | typeof Annual | typeof Monthly | typeof Quarterly;
