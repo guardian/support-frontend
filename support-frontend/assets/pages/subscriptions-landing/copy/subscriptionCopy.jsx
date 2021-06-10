@@ -225,7 +225,7 @@ const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bool
 //       }),
 //     }],
 //     productImage: <PaperAndDigitalPackshot />,
-//     offer: getSaleCopy(PaperAndDigital, countryGroupId).bundle.subHeading,
+//     offer: '',
 //   };
 // };
 

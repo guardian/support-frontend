@@ -1,7 +1,5 @@
 // @flow
 
-import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 
 export type DiscountCopy = {
@@ -21,10 +19,4 @@ const discountCopy = (discountPercentage: number): DiscountCopy => (
     }
 );
 
-export const getDiscountCopy = (discountPercentage: number): DiscountCopy => {
-  if (flashSaleIsActive('Paper', GBPCountries)) {
-    const saleCopy = getSaleCopy('Paper', GBPCountries);
-    return saleCopy.landingPage;
-  }
-  return discountCopy(discountPercentage);
-};
+export const getDiscountCopy = (discountPercentage: number): DiscountCopy => discountCopy(discountPercentage);

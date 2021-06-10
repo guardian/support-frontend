@@ -1,8 +1,0 @@
-@import '~stylesheets/gu-sass/gu-sass';
-
-.component-banner-time-travel {
-  @include gu-fontset-body-sans;
-  background: gu-colour(highlight-main);
-  padding: $gu-v-spacing $gu-h-spacing;
-  text-align: center;
-}

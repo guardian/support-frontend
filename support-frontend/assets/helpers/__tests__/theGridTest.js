@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { gridUrl, gridSrcset, imageCatalogue, GRID_DOMAIN } from '../theGrid';
+import { gridUrl, gridSrcset, imageCatalogue, GRID_DOMAIN } from '../images/theGrid';
 
 
 // ----- Tests ----- //

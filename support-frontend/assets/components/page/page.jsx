@@ -6,9 +6,6 @@ import React, { type Node, useEffect } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
-import TimeTravelBanner from 'components/headerBanners/timeTravelBanner';
-
-
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -41,7 +38,6 @@ export default function Page(props: PropTypes) {
 
   return (
     <div id={props.id} className={classNameWithModifiers('gu-content', props.classModifiers)}>
-      <TimeTravelBanner />
       {props.header}
       <main
         role="main"
