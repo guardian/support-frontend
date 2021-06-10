@@ -117,21 +117,20 @@ function TermsPrivacy(props: PropTypes) {
   return (
     <>
       <div className="component-terms-privacy">
+        {props.paymentMethod === 'Sepa' ? (
+          <div className="component-terms-privacy__change">
+            By proceeding, you authorise Guardian News & Media Ltd and Stripe, our payment provider, to instruct your
+            bank to debit your account.
+            <strong>
+              You’re entitled to a refund from your bank under their T&Cs, which must be claimed within 8 weeks of the
+              first payment.
+            </strong>
+          </div>
+        ) : null}
         {props.contributionType !== 'ONE_OFF' ? (
           <div className="component-terms-privacy__change">
             Monthly contributions are billed each month and annual contributions are billed once a year.{' '}
             <strong>You can change how much you give or cancel your contributions at any time.</strong>
-          </div>
-        ) : null}
-        {props.paymentMethod === 'Sepa' ? (
-          <div className="component-terms-privacy__change">
-            By providing your IBAN and confirming this payment, you are authorizing Guardian News & Media Ltd and
-            Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank
-            to debit your account in accordance with those instructions. You are entitled to a refund from your bank
-            under the terms and conditions of your agreement with your bank.{' '}
-            <strong>
-              A refund must be claimed within 8 weeks starting from the date on which your account was debited.
-            </strong>
           </div>
         ) : null}
         <div className="component-terms-privacy__terms">
