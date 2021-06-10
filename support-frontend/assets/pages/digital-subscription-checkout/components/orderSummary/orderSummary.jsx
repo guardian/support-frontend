@@ -18,6 +18,7 @@ type PropTypes = {
   productPrice: ProductPrice,
   title: string,
   orderIsAGift?: boolean,
+  showEventsContent?: boolean,
 };
 
 function OrderSummary(props: PropTypes) {
@@ -39,6 +40,7 @@ function OrderSummary(props: PropTypes) {
           <p>{priceString}</p>
           {!props.orderIsAGift && <span>14 day free trial</span>}
         </div>
+        {props.showEventsContent && <div />}
       </div>
       <div css={styles.endSummary}>
         <EndSummary orderIsAGift={props.orderIsAGift} />
@@ -50,6 +52,7 @@ function OrderSummary(props: PropTypes) {
 OrderSummary.defaultProps = {
   changeSubscription: '',
   orderIsAGift: false,
+  showEventsContent: false,
 };
 
 export default OrderSummary;

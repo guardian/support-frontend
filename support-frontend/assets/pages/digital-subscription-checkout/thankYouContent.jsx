@@ -18,6 +18,7 @@ import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { Option } from 'helpers/types/option';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import { type Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
 
@@ -26,6 +27,7 @@ export type PropTypes = {
   paymentMethod: Option<PaymentMethod>,
   marketingConsent: React.Node,
   includePaymentCopy: boolean,
+  participations?: Option<Participations>,
 };
 
 
@@ -41,6 +43,8 @@ const getEmailCopy = (paymentMethod: Option<PaymentMethod>, includePaymentCopy: 
 };
 
 function ThankYouContent(props: PropTypes) {
+  const showEventsContent = props.participations && props.participations.eventsTest === 'variant';
+
   return (
     <div className="thank-you-stage">
       <ThankYouHero
@@ -58,6 +62,7 @@ function ThankYouContent(props: PropTypes) {
           </LargeParagraph>
         </Text>
       </Content>
+      {showEventsContent && <div />}
       <Content>
         <Text title="Can&#39;t wait to get started?">
           <LargeParagraph>
@@ -78,6 +83,10 @@ function ThankYouContent(props: PropTypes) {
   );
 
 }
+
+ThankYouContent.defaultProps = {
+  participations: null,
+};
 
 // ----- Export ----- //
 
