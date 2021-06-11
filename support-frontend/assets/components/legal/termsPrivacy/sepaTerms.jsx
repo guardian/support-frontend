@@ -16,10 +16,10 @@ type PropTypes = {|
 function SepaTerms(props: PropTypes) {
   return (
     <>
-      <br />
       <div className="component-terms-privacy">
         {props.paymentMethod === 'Sepa' ? (
           <div className="component-terms-privacy__change">
+            <br />
             By proceeding, you authorise Guardian News & Media Ltd and Stripe, our payment provider, to instruct your
             bank to debit your account.
             <strong>
