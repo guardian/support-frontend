@@ -164,6 +164,7 @@ const getContributeButtonCopy = (
   maybeOtherAmount: string | null,
   selectedAmounts: SelectedAmounts,
   currency: IsoCurrency,
+  paymentMethod: PaymentMethod
 ) => {
   const frequency = getFrequency(contributionType);
   const amount = selectedAmounts[contributionType] === 'other' ? parseInt(maybeOtherAmount, 10) : selectedAmounts[contributionType];
@@ -175,6 +176,9 @@ const getContributeButtonCopy = (
       amount,
       false,
     ) : '';
+  if (paymentMethod === Sepa) {
+    return `contribute ${amountCopy} ${frequency}`;
+  }
   return `Contribute ${amountCopy} ${frequency}`;
 };
 
@@ -186,7 +190,10 @@ const getContributeButtonCopyWithPaymentType = (
   paymentMethod: PaymentMethod,
 ) => {
   const paymentDescriptionCopy = getPaymentDescription(contributionType, paymentMethod);
-  const contributionButtonCopy = getContributeButtonCopy(contributionType, maybeOtherAmount, selectedAmounts, currency);
+  const contributionButtonCopy = getContributeButtonCopy(contributionType, maybeOtherAmount, selectedAmounts, currency, paymentMethod);
+  if (paymentMethod === Sepa) {
+    return `Accept and ${contributionButtonCopy} ${paymentDescriptionCopy}`;
+  }
   return `${contributionButtonCopy} ${paymentDescriptionCopy}`;
 };
 
