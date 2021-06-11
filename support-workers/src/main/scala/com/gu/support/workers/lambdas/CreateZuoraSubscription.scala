@@ -21,20 +21,20 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
-    state: CreateZuoraSubscriptionState,
+    zuoraSubscriptionState: CreateZuoraSubscriptionState,
     requestInfo: RequestInfo,
     context: Context,
     services: Services
   ): FutureHandlerResult = {
 
-    val zuoraProductHandlers = new ZuoraProductHandlers(services, state)
+    val zuoraProductHandlers = new ZuoraProductHandlers(services, zuoraSubscriptionState)
     import zuoraProductHandlers._
 
-    val eventualSendThankYouEmailState = state.productSpecificState match {
+    val eventualSendThankYouEmailState = zuoraSubscriptionState.productSpecificState match {
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
       case state: DigitalSubscriptionDirectPurchaseState =>
-        zuoraDigitalSubscriptionDirectHandler.subscribe(state)
+        zuoraDigitalSubscriptionDirectHandler.subscribe(state, zuoraSubscriptionState.acquisitionData.map(_.supportAbTests))
       case state: DigitalSubscriptionGiftPurchaseState =>
         zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(state)
       case state: DigitalSubscriptionCorporateRedemptionState =>
@@ -50,10 +50,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     eventualSendThankYouEmailState.map { nextState =>
       HandlerResult(
         SendAcquisitionEventState(
-          requestId = state.requestId,
-          analyticsInfo = state.analyticsInfo,
+          requestId = zuoraSubscriptionState.requestId,
+          analyticsInfo = zuoraSubscriptionState.analyticsInfo,
           sendThankYouEmailState = nextState,
-          acquisitionData = state.acquisitionData,
+          acquisitionData = zuoraSubscriptionState.acquisitionData,
         ),
         requestInfo,
       )

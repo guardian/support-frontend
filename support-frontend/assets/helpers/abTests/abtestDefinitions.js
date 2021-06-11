@@ -103,4 +103,27 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 0,
   },
+  // If the name of this test or the variant id changes then the code
+  // in `ZuoraDigitalSubscriptionDirectHandler.subscribe` will need
+  // to change as well.
+  digiSubEventsTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 9,
+  },
 };
