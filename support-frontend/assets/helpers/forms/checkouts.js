@@ -164,7 +164,7 @@ const getContributeButtonCopy = (
   maybeOtherAmount: string | null,
   selectedAmounts: SelectedAmounts,
   currency: IsoCurrency,
-  paymentMethod: PaymentMethod
+  paymentMethod: PaymentMethod,
 ) => {
   const frequency = getFrequency(contributionType);
   const amount = selectedAmounts[contributionType] === 'other' ? parseInt(maybeOtherAmount, 10) : selectedAmounts[contributionType];
