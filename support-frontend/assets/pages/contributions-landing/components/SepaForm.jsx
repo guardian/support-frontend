@@ -51,7 +51,6 @@ export function SepaForm({
   updateAccountHolderConfirmation,
   checkoutFormHasBeenSubmitted,
 }: DirectDebitFormProps) {
-
   return (
     <div css={containerStyles}>
       <h3 css={headerStyles}>Your account details</h3>
@@ -63,7 +62,9 @@ export function SepaForm({
             maxLength="40"
             value={accountHolderName}
             onChange={e => updateAccountHolderName(e.target.value)}
-            error={checkoutFormHasBeenSubmitted && !accountHolderName ? 'Please provide your account holder name' : null}
+            error={
+              checkoutFormHasBeenSubmitted && !accountHolderName ? 'Please provide your account holder name' : null
+            }
           />
         </div>
 
@@ -80,18 +81,6 @@ export function SepaForm({
             error={checkoutFormHasBeenSubmitted && !isValidIban(iban) ? 'Please provide a valid IBAN' : null}
           />
         </div>
-      </div>
-
-      <div css={checkboxContainerStyles}>
-        <CheckboxGroup
-          error={checkoutFormHasBeenSubmitted && !accountHolderConfirmation ? 'Please click the consent checkbox' : null}
-        >
-          <Checkbox
-            supporting="By checking this box, you agree that you have read and understood the details of this mandate and that you append your signature to it"
-            checked={accountHolderConfirmation}
-            onChange={e => updateAccountHolderConfirmation(e.target.checked)}
-          />
-        </CheckboxGroup>
       </div>
     </div>
   );
