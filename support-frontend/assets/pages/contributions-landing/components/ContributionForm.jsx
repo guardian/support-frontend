@@ -59,6 +59,7 @@ import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { SepaForm } from 'pages/contributions-landing/components/SepaForm';
 import type { SepaData } from 'pages/contributions-landing/contributionsLandingReducer';
+import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -357,6 +358,7 @@ function withProps(props: PropTypes) {
         <div>
           <ContributionErrorMessage />
         </div>
+        <SepaTerms paymentMethod={props.paymentMethod} />
         <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>
 
