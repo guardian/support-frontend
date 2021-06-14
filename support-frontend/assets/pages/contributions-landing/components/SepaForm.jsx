@@ -5,8 +5,6 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
 import { TextInput } from '@guardian/src-text-input';
-import { Checkbox } from '@guardian/src-checkbox';
-import { CheckboxGroup } from '@guardian/src-checkbox';
 import { isValidIban } from 'helpers/forms/formValidation';
 
 // -- Styles -- //
@@ -26,10 +24,6 @@ const fieldsContainerStyles = css`
   }
 `;
 
-const checkboxContainerStyles = css`
-  margin-top: ${space[5]}px;
-`;
-
 // -- Component -- //
 
 type DirectDebitFormProps = {|
@@ -38,17 +32,14 @@ type DirectDebitFormProps = {|
   accountHolderConfirmation: boolean,
   updateIban: (iban: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
-  updateAccountHolderConfirmation: (accountHolderConfirmation: boolean) => void,
   checkoutFormHasBeenSubmitted: boolean,
 |};
 
 export function SepaForm({
   iban,
   accountHolderName,
-  accountHolderConfirmation,
   updateIban,
   updateAccountHolderName,
-  updateAccountHolderConfirmation,
   checkoutFormHasBeenSubmitted,
 }: DirectDebitFormProps) {
   return (
