@@ -26,10 +26,9 @@ const fieldsContainerStyles = css`
 
 // -- Component -- //
 
-type DirectDebitFormProps = {|
+type SepaFormProps = {|
   iban: string | null,
   accountHolderName: string | null,
-  accountHolderConfirmation: boolean,
   updateIban: (iban: string) => void,
   updateAccountHolderName: (accountHolderName: string) => void,
   checkoutFormHasBeenSubmitted: boolean,
@@ -41,7 +40,7 @@ export function SepaForm({
   updateIban,
   updateAccountHolderName,
   checkoutFormHasBeenSubmitted,
-}: DirectDebitFormProps) {
+}: SepaFormProps) {
   return (
     <div css={containerStyles}>
       <h3 css={headerStyles}>Your account details</h3>

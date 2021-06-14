@@ -106,7 +106,6 @@ export type Action =
   | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
   | { type: 'SET_SEPA_IBAN', iban: string | null }
   | { type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName: string | null }
-  | { type: 'SET_SEPA_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation: boolean }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -346,10 +345,6 @@ const setSepaIban = (iban: string | null) =>
 const setSepaAccountHolderName = (accountHolderName: string | null) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName })));
-  };
-const setSepaAccountHolderConfirmation = (accountHolderConfirmation: boolean) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_CONFIRMATION', accountHolderConfirmation })));
   };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -826,5 +821,4 @@ export {
   loadAmazonPaySdk,
   setSepaIban,
   setSepaAccountHolderName,
-  setSepaAccountHolderConfirmation,
 };

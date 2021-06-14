@@ -40,7 +40,6 @@ import {
   selectAmount,
   setSepaIban,
   setSepaAccountHolderName,
-  setSepaAccountHolderConfirmation,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -102,7 +101,6 @@ type PropTypes = {|
   sepaData: SepaData,
   setSepaIban: string => void,
   setSepaAccountHolderName: string => void,
-  setSepaAccountHolderConfirmation: boolean => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -171,9 +169,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
   setSepaAccountHolderName: (name) => {
     dispatch(setSepaAccountHolderName(name));
-  },
-  setSepaAccountHolderConfirmation: (confirmed) => {
-    dispatch(setSepaAccountHolderConfirmation(confirmed));
   },
 });
 
@@ -336,15 +331,16 @@ function withProps(props: PropTypes) {
         <PaymentMethodSelector />
 
         {props.paymentMethod === Sepa && (
-          <SepaForm
-            iban={props.sepaData.iban}
-            accountHolderName={props.sepaData.accountHolderName}
-            accountHolderConfirmation={props.sepaData.accountHolderConfirmation}
-            updateIban={props.setSepaIban}
-            updateAccountHolderName={props.setSepaAccountHolderName}
-            updateAccountHolderConfirmation={props.setSepaAccountHolderConfirmation}
-            checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
-          />
+          <>
+            <SepaForm
+              iban={props.sepaData.iban}
+              accountHolderName={props.sepaData.accountHolderName}
+              updateIban={props.setSepaIban}
+              updateAccountHolderName={props.setSepaAccountHolderName}
+              checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+            />
+            <SepaTerms />
+          </>
         )}
 
         <StripeCardFormContainer
@@ -358,7 +354,7 @@ function withProps(props: PropTypes) {
         <div>
           <ContributionErrorMessage />
         </div>
-        <SepaTerms paymentMethod={props.paymentMethod} />
+
         <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       </div>
 

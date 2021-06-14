@@ -104,7 +104,6 @@ export type PayPalData = {
 export type SepaData = {
   iban: string | null,
   accountHolderName: string | null,
-  accountHolderConfirmation: boolean,
 }
 
 type FormState = {
@@ -224,7 +223,6 @@ function createFormReducer() {
     sepaData: {
       iban: null,
       accountHolderName: null,
-      accountHolderConfirmation: false,
     },
     setPasswordData: {
       password: '',
@@ -437,15 +435,6 @@ function createFormReducer() {
           sepaData: {
             ...state.sepaData,
             accountHolderName: action.accountHolderName,
-          },
-        };
-
-      case 'SET_SEPA_ACCOUNT_HOLDER_CONFIRMATION':
-        return {
-          ...state,
-          sepaData: {
-            ...state.sepaData,
-            accountHolderConfirmation: action.accountHolderConfirmation,
           },
         };
 
