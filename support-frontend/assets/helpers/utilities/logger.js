@@ -31,21 +31,9 @@ const logException = (ex: string, context?: Object): void => {
   });
 };
 
-const logInfo = (message: string): void => {
-  EventualSentry.then((Sentry) => {
-    Sentry.captureMessage(
-      message,
-      {
-        level: 'info',
-      },
-    );
-  });
-};
-
 // ----- Exports ----- //
 
 export {
   init,
   logException,
-  logInfo,
 };

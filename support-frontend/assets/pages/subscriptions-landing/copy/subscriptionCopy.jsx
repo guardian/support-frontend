@@ -37,7 +37,6 @@ import {
   fromCountryGroupId,
   glyph,
 } from 'helpers/internationalisation/currency';
-
 import type { State } from '../subscriptionsLandingReducer';
 import type { PriceCopy } from '../subscriptionsLandingReducer';
 import {
@@ -203,13 +202,13 @@ const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bool
 //   referrerAcquisitionData: ReferrerAcquisitionData,
 //   abParticipations: Participations,
 // ): ProductCopy => {
-//   const link = getSubsLinks(
+//   const link = getLegacyPaperAndDigitalLink(
 //     countryGroupId,
 //     referrerAcquisitionData.campaignCode,
 //     getCampaign(referrerAcquisitionData),
 //     referrerAcquisitionData,
 //     abParticipations,
-//   ).PaperAndDigital;
+//   );
 //   return {
 //     title: 'Paper+Digital',
 //     subtitle: `from ${getPrice(countryGroupId, PaperAndDigital)}`,
