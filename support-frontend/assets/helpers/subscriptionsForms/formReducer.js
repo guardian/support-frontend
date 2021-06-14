@@ -3,7 +3,7 @@
 // ----- Reducer ----- //
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { getUser } from 'helpers/subscriptionsForms/user';
+import { getUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { isTestUser } from 'helpers/user/user';

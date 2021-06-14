@@ -8,11 +8,6 @@ function ascending(a: number, b: number): number {
   return a - b;
 }
 
-// Descending comparison function for use with Array.prototype.sort.
-function descending(a: number, b: number): number {
-  return b - a;
-}
-
 // Converts a number to a given number of decimal places, default two.
 function roundDp(num: number, dps: number = 2) {
   return Math.round(num * (10 ** dps)) / (10 ** dps);
@@ -28,34 +23,6 @@ function classNameWithModifiers(className: string, modifiers: Array<?string>): s
 
 function hiddenIf(shouldHide: boolean, className: string): string {
   return shouldHide ? classNameWithModifiers(className, ['hidden']) : className;
-}
-
-// Generates a key handler that only trigger a function if the
-// CarriageReturnCode and SpaceCode are pressed
-function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
-  return (event: Object) => {
-    const CarriageReturnCode = 13;
-    const SpaceCode = 32;
-
-    if (event.keyCode === CarriageReturnCode || event.keyCode === SpaceCode) {
-      event.preventDefault();
-      handler();
-    }
-  };
-}
-
-// Attempts to parse a boolean from a string.
-function parseBoolean(boolString: string, fallback: boolean): boolean {
-
-  switch (boolString.toLowerCase()) {
-    case 'true':
-      return true;
-    case 'false':
-      return false;
-    default:
-      return fallback;
-  }
-
 }
 
 // Deserialises a JSON object from a string.
@@ -77,25 +44,11 @@ function deserialiseJsonObject(serialised: string): ?Object {
 
 }
 
-
-// Adds leading zeros
-function addLeadingZeros(value: number, length: number = 2): string {
-  let valueStr = String(value);
-  while (valueStr.length < length) {
-    valueStr = `0${valueStr}`;
-  }
-  return valueStr;
-}
-
 // ----- Exports ----- //
 export {
   ascending,
-  descending,
   roundDp,
   classNameWithModifiers,
   hiddenIf,
-  clickSubstituteKeyPressHandler,
-  parseBoolean,
   deserialiseJsonObject,
-  addLeadingZeros,
 };

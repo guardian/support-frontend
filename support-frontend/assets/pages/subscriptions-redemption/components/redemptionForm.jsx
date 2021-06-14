@@ -19,7 +19,7 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 import { TextInput } from '@guardian/src-text-input';
 import { headline, textSans } from '@guardian/src-foundations/typography/obj';
-import type { User } from 'helpers/subscriptionsForms/user';
+import type { User } from 'helpers/user/user';
 import { error } from '@guardian/src-foundations/palette';
 import { InlineError } from '@guardian/src-user-feedback';
 

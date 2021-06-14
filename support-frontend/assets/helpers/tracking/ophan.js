@@ -115,7 +115,7 @@ const trackAbTests = (participations: Participations): void =>
 // https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/core.coffee#L72
 const setReferrerDataInLocalStorage = (acquisitionData: ReferrerAcquisitionData): void => {
   if (acquisitionData) {
-    const {referrerUrl, referrerPageviewId} = acquisitionData;
+    const { referrerUrl, referrerPageviewId } = acquisitionData;
     if (!getLocal('ophan_follow') && referrerUrl && referrerPageviewId) {
       setLocal('ophan_follow', JSON.stringify({
         refViewId: referrerPageviewId,

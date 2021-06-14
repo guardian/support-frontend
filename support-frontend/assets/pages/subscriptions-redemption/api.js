@@ -10,7 +10,7 @@ import { getOphanIds, getReferrerAcquisitionData, getSupportAbTests } from 'help
 import { routes } from 'helpers/urls/routes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
-import type { User } from 'helpers/subscriptionsForms/user';
+import type { User } from 'helpers/user/user';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getOrigin } from 'helpers/urls/url';
