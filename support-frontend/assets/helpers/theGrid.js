@@ -128,6 +128,7 @@ export const imageCatalogue: {
   googlePlay: '0a3eda7d719ad8ebe3a13a9bab8fd2b3348d1f20/0_0_554_160',
   appleStore: 'a0787d3b313f03ed87a16ced224ab4022f794bc5/0_0_554_160',
   enny: '09bc6e6bec6757b1a6e0bc2dc8543d93127095e2/0_1532_3700_2219',
+  emmaJohn: 'e315b6ac938fbcf8b246293298d8cce10b957283/0_0_560_336',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

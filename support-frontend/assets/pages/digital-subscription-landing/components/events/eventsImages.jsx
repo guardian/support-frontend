@@ -14,7 +14,20 @@ const ennyImage = (
   />
 );
 
+const emmaJohnImage = (
+  <GridImage
+    classModifiers={['']}
+    gridId="emmaJohn"
+    srcSizes={[140, 500, 560]}
+    sizes="(max-width: 480px) 100px,
+            (max-width: 740px) 100%,
+            (max-width: 1067px) 150%,
+            560px"
+    imgType="jpg"
+  />
+);
+
 export {
   ennyImage,
-
+  emmaJohnImage,
 };
