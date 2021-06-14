@@ -19,7 +19,7 @@ class ZuoraDigitalSubscriptionDirectHandler(
   user: User,
 ) {
 
-  def checkIfUserIsInEventsTest(maybeAbTests: Option[Set[AbTest]]) =
+  def isUserInEventsTest(maybeAbTests: Option[Set[AbTest]]) =
     maybeAbTests.exists(_.toList.exists(test => test.name == "digiSubEventsTest" && test.variant == "variant"))
 
   def subscribe(state: DigitalSubscriptionDirectPurchaseState, maybeAbTests: Option[Set[AbTest]]): Future[SendThankYouEmailState] =
@@ -36,7 +36,7 @@ class ZuoraDigitalSubscriptionDirectHandler(
       state.promoCode,
       account.value,
       sub.value,
-      Some(checkIfUserIsInEventsTest(maybeAbTests)),
+      Some(isUserInEventsTest(maybeAbTests)),
     )
 
 }
