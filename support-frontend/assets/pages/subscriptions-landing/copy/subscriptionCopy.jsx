@@ -31,7 +31,7 @@ import {
   EURCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
-import { Monthly, type BillingPeriod, SixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { Monthly, type BillingPeriod, postIntroductorySixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
   currencies, detect,
   fromCountryGroupId,
@@ -143,7 +143,7 @@ const getWeeklyImage = (isTop: boolean) => {
 
 const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
   title: 'The Guardian Weekly',
-  subtitle: getDisplayPrice(countryGroupId, priceCopy.price, SixForSixBillingPeriod),
+  subtitle: getDisplayPrice(countryGroupId, priceCopy.price, postIntroductorySixForSixBillingPeriod),
   description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
   offer: getGuardianWeeklyOfferCopy(countryGroupId, priceCopy.discountCopy),
   buttons: [

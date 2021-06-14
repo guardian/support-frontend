@@ -5,7 +5,7 @@ import {
   billingPeriodNoun as upperCaseNoun,
   billingPeriodAdverb,
   type BillingPeriod,
-  SixForSixBillingPeriod,
+  postIntroductorySixForSixBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { glyph as shortGlyph, extendedGlyph } from 'helpers/internationalisation/currency';
@@ -101,7 +101,7 @@ const getIntroductoryPriceDescription = (
   productPrice: ProductPrice,
   compact: boolean,
 ) => {
-  const standardCopy = standardRate(glyph, productPrice.price, SixForSixBillingPeriod, productPrice.fixedTerm);
+  const standardCopy = standardRate(glyph, productPrice.price, postIntroductorySixForSixBillingPeriod, productPrice.fixedTerm);
   const separator = compact ? '/' : ' for the first ';
   const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
@@ -159,7 +159,7 @@ function getSimplifiedPriceDescription(
 
   if (promotion && promotion.introductoryPrice) {
     const introPrice = promotion.introductoryPrice;
-    const standardCopy = standardRate(glyph, productPrice.price, SixForSixBillingPeriod, productPrice.fixedTerm);
+    const standardCopy = standardRate(glyph, productPrice.price, postIntroductorySixForSixBillingPeriod, productPrice.fixedTerm);
     const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
     return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;

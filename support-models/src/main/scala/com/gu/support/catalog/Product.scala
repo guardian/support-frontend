@@ -176,7 +176,7 @@ case object Paper extends Product {
 case object GuardianWeekly extends Product {
   // The value for six for six billing period here must match
   // the value in support-frontend/assets/helpers/productPrice/billingPeriods.js
-  val sixForSixBillingPeriod: BillingPeriod = Monthly
+  val postIntroductorySixForSixBillingPeriod: BillingPeriod = Monthly
   private def domestic(
     id: String,
     billingPeriod: BillingPeriod,

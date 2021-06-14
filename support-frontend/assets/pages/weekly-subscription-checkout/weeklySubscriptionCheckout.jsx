@@ -19,7 +19,7 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import {
-  SixForSixBillingPeriod,
+  postIntroductorySixForSixBillingPeriod,
   type WeeklyBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -44,7 +44,7 @@ const initialBillingPeriod: WeeklyBillingPeriod =
   billingPeriodInUrl === 'Quarterly' ||
   billingPeriodInUrl === 'Annual'
     ? billingPeriodInUrl
-    : SixForSixBillingPeriod;
+    : postIntroductorySixForSixBillingPeriod;
 
 const startDate = formatMachineDate(getWeeklyDays()[0]);
 const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(

@@ -1,6 +1,7 @@
 package com.gu.support.catalog
 
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
+import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.{Annual, BillingPeriod, Quarterly, SixWeekly}
 import com.gu.support.zuora.api.ReaderType
@@ -40,8 +41,8 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     // promotion. It is much more use from the point of view of the site to have the subscription
     // price, ie. the quarterly price as the £6 is available through the introductory promotion object
     val ratePlanIdsToSwap = Map(
-      getGWRatePlanId(SixWeekly, Domestic) -> getGWRatePlanId(GuardianWeekly.sixForSixBillingPeriod, Domestic),
-      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(GuardianWeekly.sixForSixBillingPeriod, RestOfWorld)
+      getGWRatePlanId(SixWeekly, Domestic) -> getGWRatePlanId(postIntroductorySixForSixBillingPeriod, Domestic),
+      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(postIntroductorySixForSixBillingPeriod, RestOfWorld)
     )
 
     Catalog(

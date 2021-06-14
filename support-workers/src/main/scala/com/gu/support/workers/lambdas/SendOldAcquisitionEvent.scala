@@ -12,6 +12,7 @@ import com.gu.i18n.Country
 import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog
+import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers._
@@ -125,7 +126,7 @@ object SendOldAcquisitionEvent {
         (billingPeriod: @unchecked) match {
           case Monthly => thrift.PaymentFrequency.Monthly
           case Quarterly => thrift.PaymentFrequency.Quarterly
-          case SixWeekly if catalog.GuardianWeekly.sixForSixBillingPeriod == Quarterly => thrift.PaymentFrequency.Quarterly
+          case SixWeekly if postIntroductorySixForSixBillingPeriod == Quarterly => thrift.PaymentFrequency.Quarterly
           case SixWeekly => thrift.PaymentFrequency.Monthly
           case Annual => thrift.PaymentFrequency.Annually
         }

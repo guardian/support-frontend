@@ -13,6 +13,7 @@ import com.gu.support.acquisitions.AcquisitionType.{Purchase, Redemption}
 import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa}
 import com.gu.support.acquisitions.PrintProduct._
 import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
+import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.zuora.api.ReaderType
 
 
@@ -60,7 +61,7 @@ object AcquisitionDataRowBuilder {
     billingPeriod match {
       case Monthly => PaymentFrequency.Monthly
       case Quarterly => PaymentFrequency.Quarterly
-      case SixWeekly if catalog.GuardianWeekly.sixForSixBillingPeriod == Quarterly => PaymentFrequency.Quarterly
+      case SixWeekly if postIntroductorySixForSixBillingPeriod == Quarterly => PaymentFrequency.Quarterly
       case SixWeekly => PaymentFrequency.Monthly
       case Annual => PaymentFrequency.Annually
     }
