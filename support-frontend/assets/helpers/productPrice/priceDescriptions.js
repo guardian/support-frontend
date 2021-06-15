@@ -101,7 +101,12 @@ const getIntroductoryPriceDescription = (
   productPrice: ProductPrice,
   compact: boolean,
 ) => {
-  const standardCopy = standardRate(glyph, productPrice.price, postIntroductorySixForSixBillingPeriod, productPrice.fixedTerm);
+  const standardCopy = standardRate(
+    glyph,
+    productPrice.price,
+    postIntroductorySixForSixBillingPeriod,
+    productPrice.fixedTerm,
+  );
   const separator = compact ? '/' : ' for the first ';
   const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
@@ -159,7 +164,12 @@ function getSimplifiedPriceDescription(
 
   if (promotion && promotion.introductoryPrice) {
     const introPrice = promotion.introductoryPrice;
-    const standardCopy = standardRate(glyph, productPrice.price, postIntroductorySixForSixBillingPeriod, productPrice.fixedTerm);
+    const standardCopy = standardRate(
+      glyph,
+      productPrice.price,
+      postIntroductorySixForSixBillingPeriod,
+      productPrice.fixedTerm,
+    );
     const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
     return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
