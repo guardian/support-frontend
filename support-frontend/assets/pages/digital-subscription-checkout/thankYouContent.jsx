@@ -62,7 +62,9 @@ function ThankYouContent(props: PropTypes) {
           </LargeParagraph>
         </Text>
       </Content>
-      {showEventsContent && <div />}
+      {// Placeholder for thank you page event tickets offer content
+        showEventsContent && <div />
+      }
       <Content>
         <Text title="Can&#39;t wait to get started?">
           <LargeParagraph>
