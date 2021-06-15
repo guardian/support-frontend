@@ -101,6 +101,11 @@ export type PayPalData = {
   buttonReady: boolean,
 }
 
+export type SepaData = {
+  iban: string | null,
+  accountHolderName: string | null,
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
@@ -116,6 +121,7 @@ type FormState = {
     REGULAR: StripePaymentRequestButtonData,
   },
   stripeCardFormData: StripeCardFormData,
+  sepaData: SepaData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
@@ -213,6 +219,10 @@ function createFormReducer() {
       recurringRecaptchaVerified: false,
       createPaymentMethod: null,
       handle3DS: null,
+    },
+    sepaData: {
+      iban: null,
+      accountHolderName: null,
     },
     setPasswordData: {
       password: '',
@@ -407,6 +417,24 @@ function createFormReducer() {
           stripeCardFormData: {
             ...state.stripeCardFormData,
             recurringRecaptchaVerified: action.recaptchaVerified,
+          },
+        };
+
+      case 'SET_SEPA_IBAN':
+        return {
+          ...state,
+          sepaData: {
+            ...state.sepaData,
+            iban: action.iban,
+          },
+        };
+
+      case 'SET_SEPA_ACCOUNT_HOLDER_NAME':
+        return {
+          ...state,
+          sepaData: {
+            ...state.sepaData,
+            accountHolderName: action.accountHolderName,
           },
         };
 

@@ -33,6 +33,7 @@ import {
   PayPal,
   Stripe,
   AmazonPay,
+  Sepa,
 } from 'helpers/forms/paymentMethods';
 import type { Title } from 'helpers/user/details';
 import type { ReaderType } from 'helpers/productPrice/readerType';
@@ -88,6 +89,11 @@ type RegularDirectDebitPaymentFields = {|
   accountNumber: string,
 |};
 
+type RegularSepaPaymentFields = {|
+  accountHolderName: string,
+  iban: string,
+|}
+
 type CorporateRedemption = {|
   redemptionCode: string,
 |}
@@ -100,6 +106,7 @@ export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentIntentFields |
   RegularDirectDebitPaymentFields |
+  RegularSepaPaymentFields |
   RegularExistingPaymentFields |
   CorporateRedemption |
   RegularAmazonPayPaymentFields;
@@ -159,6 +166,11 @@ export type DirectDebitAuthorisation = {|
   sortCode: string,
   accountNumber: string
 |};
+export type SepaAuthorisation = {|
+  paymentMethod: typeof Sepa,
+  accountHolderName: string,
+  iban: string
+|};
 export type ExistingCardAuthorisation = {|
   paymentMethod: typeof ExistingCard,
   billingAccountId: string
@@ -182,6 +194,7 @@ export type PaymentAuthorisation =
   StripePaymentIntentAuthorisation |
   PayPalAuthorisation |
   DirectDebitAuthorisation |
+  SepaAuthorisation |
   ExistingCardAuthorisation |
   ExistingDirectDebitAuthorisation |
   AmazonPayAuthorisation;
@@ -219,6 +232,11 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
         accountHolderName: authorisation.accountHolderName,
         sortCode: authorisation.sortCode,
         accountNumber: authorisation.accountNumber,
+      };
+    case Sepa:
+      return {
+        accountHolderName: authorisation.accountHolderName,
+        iban: authorisation.iban,
       };
     case ExistingCard:
     case ExistingDirectDebit:

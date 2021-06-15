@@ -10,6 +10,7 @@ import {
   checkFirstName,
   checkLastName,
   checkStateIfApplicable,
+  isValidIban,
 } from 'helpers/forms/formValidation';
 import {
   type ContributionType,
@@ -25,7 +26,7 @@ import {
   setFormIsValid,
 } from './contributionsLandingActions';
 import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
-import { AmazonPay } from 'helpers/forms/paymentMethods';
+import { AmazonPay, Sepa } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
@@ -60,6 +61,7 @@ export type FormIsValidParameters = {
   email: string | null,
   stripeCardFormOk: boolean,
   amazonPayFormOk: boolean,
+  sepaFormOk: boolean,
   localCurrencyCountry?: LocalCurrencyCountry,
   useLocalCurrency?: boolean,
 }
@@ -76,6 +78,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     email,
     stripeCardFormOk,
     amazonPayFormOk,
+    sepaFormOk,
     localCurrencyCountry,
     useLocalCurrency,
   } = formIsValidParameters;
@@ -89,6 +92,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
   ) && checkEmail(email)
     && stripeCardFormOk
     && amazonPayFormOk
+    && sepaFormOk
     && checkStateIfApplicable(billingState, countryGroupId, contributionType)
     && amountOrOtherAmountIsValid(
       selectedAmounts,
@@ -117,6 +121,15 @@ const amazonPayFormOk = (state: State): boolean => {
 
 };
 
+const sepaFormOk = (state: State): boolean => {
+  if (state.page.form.paymentMethod === Sepa) {
+    const { accountHolderName, iban } = state.page.form.sepaData;
+    return !!accountHolderName && isValidIban(iban);
+  }
+
+  return true;
+};
+
 const formIsValidParameters = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
@@ -131,6 +144,7 @@ const formIsValidParameters = (state: State) => ({
     state.page.form.stripeCardFormData.formComplete,
   ),
   amazonPayFormOk: amazonPayFormOk(state),
+  sepaFormOk: sepaFormOk(state),
   localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });

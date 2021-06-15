@@ -11,7 +11,6 @@ import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 
-
 // ---- Types ----- //
 
 type PropTypes = {|
@@ -100,36 +99,28 @@ function TermsPrivacy(props: PropTypes) {
   const sourceIsNotAppleNews = props.referrerSource !== 'APPLE_NEWS';
   const sourceIsNotGoogleAMP = props.referrerSource !== 'GOOGLE_AMP';
 
-  const shouldShowPhilanthropicAsk = (
-    isUSContributor &&
-    isNotOneOffContribution &&
-    sourceIsNotAppleNews &&
-    sourceIsNotGoogleAMP
-  );
+  const shouldShowPhilanthropicAsk =
+    isUSContributor && isNotOneOffContribution && sourceIsNotAppleNews && sourceIsNotGoogleAMP;
 
   return (
     <>
       <div className="component-terms-privacy">
-        {props.contributionType !== 'ONE_OFF' ?
+        {props.contributionType !== 'ONE_OFF' ? (
           <div className="component-terms-privacy__change">
-            Monthly contributions are billed each month and annual contributions are billed once a year.
-            You can change how much you give or cancel your contributions at any time.
+            Monthly contributions are billed each month and annual contributions are billed once a year.{' '}
+            <strong>You can change how much you give or cancel your contributions at any time.</strong>
           </div>
-          : null
-        }
+        ) : null}
         <div className="component-terms-privacy__terms">
           By proceeding, you are agreeing to our {terms}. To find out what personal data we collect and how we use it,
           please visit our {privacy}.
         </div>
       </div>
       <br />
-      <div>
-        { shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText }
-      </div>
+      <div>{shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText}</div>
     </>
   );
 }
-
 
 // ----- Exports ----- //
 
