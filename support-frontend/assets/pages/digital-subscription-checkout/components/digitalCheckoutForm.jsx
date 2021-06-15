@@ -150,7 +150,7 @@ function DigitalCheckoutForm(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
   const paymentMethods = supportedPaymentMethods(props.currencyId);
-  const showEventsContent = props.participations.eventsTest === 'variant';
+  const showEventsContent = props.participations.digiSubEventsTest === 'variant';
 
   return (
     <Content>

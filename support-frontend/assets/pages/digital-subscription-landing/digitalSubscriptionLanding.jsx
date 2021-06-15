@@ -46,34 +46,6 @@ import EditorialVoice, { evContainerOverrides } from './components/editorialVoic
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 
-// ----- Styles ----- //
-import 'stylesheets/skeleton/skeleton.scss';
-
-const productBlockContainer = css`
-    background-color: ${neutral[93]};
-    border-top: none;
-    border-right: none;
-    margin-top: 0;
-    padding-top: 0;
-
-  ${from.tablet} {
-    background-color: ${neutral[100]};
-    margin-top: ${space[6]}px;
-    border-top: 1px solid ${neutral[86]};
-    border-right: 1px solid ${neutral[86]};
-  }
-`;
-
-const eventsProductBlockContainer = css`
-    margin-top: 43px;
-    padding-top: 0;
-    padding-bottom: 0;
-
-  ${from.tablet} {
-    margin-top: ${space[12]}px;
-  }
-`;
-
 // ----- Redux Store ----- //
 
 const store = pageInit(() => digitalSubscriptionLandingReducer, true);
@@ -90,7 +62,35 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.countryGroupId,
 );
 const showEditorialVoiceComponent = abParticipations.editorialVoiceTestPart2 === 'variant';
-const showEventsComponent = abParticipations.eventsTest === 'variant';
+const showEventsComponent = abParticipations.digiSubEventsTest === 'variant';
+
+// ----- Styles ----- //
+import 'stylesheets/skeleton/skeleton.scss';
+
+const productBlockContainer = css`
+    background-color: ${neutral[93]};
+    border-top: none;
+    border-right: none;
+    margin-top: ${showEventsComponent ? '0' : `${space[3]}px`};
+    padding-top: 0;
+
+  ${from.tablet} {
+    background-color: ${neutral[100]};
+    margin-top: ${showEventsComponent ? `${space[6]}px` : `${space[12]}px`};
+    border-top: 1px solid ${neutral[86]};
+    border-right: 1px solid ${neutral[86]};
+  }
+`;
+
+const eventsProductBlockContainer = css`
+    margin-top: 43px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+  ${from.tablet} {
+    margin-top: ${space[12]}px;
+  }
+`;
 
 // ----- Internationalisation ----- //
 
@@ -161,7 +161,7 @@ function LandingPage() {
           priceList={heroPriceList}
         />
       }
-      {!showEventsComponent &&
+      {showEventsComponent &&
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={eventsProductBlockContainer}>

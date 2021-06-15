@@ -43,7 +43,7 @@ const getEmailCopy = (paymentMethod: Option<PaymentMethod>, includePaymentCopy: 
 };
 
 function ThankYouContent(props: PropTypes) {
-  const showEventsContent = props.participations && props.participations.eventsTest === 'variant';
+  const showEventsContent = props.participations && props.participations.digiSubEventsTest === 'variant';
 
   return (
     <div className="thank-you-stage">
