@@ -9,9 +9,7 @@ import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
 
-  // scalastyle:off
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth with Monitoring =>
-  // scalastyle:on
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth =>
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
   lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)
@@ -194,8 +192,7 @@ trait Controllers {
     identityService,
     testUsers,
     controllerComponents,
-    appConfig.guardianDomain,
-    tipMonitoring
+    appConfig.guardianDomain
   )
 
   lazy val payPalRegularController = new PayPalRegular(
@@ -216,7 +213,6 @@ trait Controllers {
     paymentAPIService,
     identityService,
     allSettingsProvider,
-    tipMonitoring,
     fontLoader
   )
 

@@ -15,7 +15,6 @@ import com.gu.support.promotions.{PromoCode, PromotionServiceProvider}
 import com.gu.support.workers.Monthly
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.Direct
-import com.gu.tip.Tip
 import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
 import config.{RecaptchaConfigProvider, RecaptchaConfig, StringsConfig}
@@ -129,7 +128,6 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
       val client = mock[SupportWorkersClient]
       val testUserService = mock[TestUserService]
-      val tip = mock[Tip]
       val stripe = mock[StripeConfigProvider]
       val stripeAccountConfig = StripeAccountConfig("", "")
       when(stripe.get(any[Boolean])).thenReturn(
