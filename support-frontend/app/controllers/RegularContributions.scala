@@ -30,7 +30,7 @@ class RegularContributions(
     identityService: IdentityService,
     testUsers: TestUserService,
     components: ControllerComponents,
-    guardianDomain: GuardianDomain,
+    guardianDomain: GuardianDomain
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
