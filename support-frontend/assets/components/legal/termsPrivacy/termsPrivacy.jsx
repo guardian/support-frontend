@@ -10,7 +10,6 @@ import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/intern
 import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
-import { type PaymentMethod } from 'helpers/forms/paymentMethods';
 
 // ---- Types ----- //
 
@@ -19,7 +18,6 @@ type PropTypes = {|
   contributionType: ContributionType,
   campaignSettings: CampaignSettings | null,
   referrerSource: ?string,
-  paymentMethod: PaymentMethod,
 |};
 
 // ----- Component ----- //

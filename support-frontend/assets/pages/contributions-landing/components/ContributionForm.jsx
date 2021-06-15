@@ -363,7 +363,6 @@ function withProps(props: PropTypes) {
         contributionType={props.contributionType}
         campaignSettings={props.campaignSettings}
         referrerSource={props.referrerSource}
-        paymentMethod={props.paymentMethod}
       />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
