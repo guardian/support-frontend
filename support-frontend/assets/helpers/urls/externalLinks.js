@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import {
-  type Campaign,
   deriveSubsAcquisitionData,
   type ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
@@ -17,19 +16,13 @@ import type {
   DigitalBillingPeriod, DigitalGiftBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { getIntcmp, getPromoCode } from '../flashSale';
 import { getOrigin } from './url';
-import { GBPCountries } from '../internationalisation/countryGroup';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
 export type MemProduct = 'patrons' | 'events';
-
-type PromoCodes = {
-  [SubscriptionProduct]: string,
-};
 
 export type SubsUrls = {
   [SubscriptionProduct]: string,
@@ -57,64 +50,6 @@ const memUrls: {
 } = {
   events: 'https://membership.theguardian.com/events',
 };
-
-const defaultPromos: PromoCodes = {
-  DigitalPack: getPromoCode('DigitalPack', GBPCountries, 'DXX83X'),
-  Paper: getPromoCode('Paper', GBPCountries, 'GXX83P'),
-  PaperAndDigital: getPromoCode('PaperAndDigital', GBPCountries, 'GXX83X'),
-  GuardianWeekly: getPromoCode('GuardianWeekly', GBPCountries, '10ANNUAL'),
-};
-
-const customPromos: {
-  [Campaign]: PromoCodes,
-} = {
-  seven_fifty_middle: {
-    DigitalPack: 'D750MIDDLE',
-    Paper: 'N750MIDDLE',
-    PaperAndDigital: 'ND750MIDDLE',
-  },
-  seven_fifty_end: {
-    DigitalPack: 'D750END',
-    Paper: 'N750END',
-    PaperAndDigital: 'ND750END',
-  },
-  seven_fifty_email: {
-    DigitalPack: 'D750EMAIL',
-    Paper: 'N750EMAIL',
-    PaperAndDigital: 'ND750EMAIL',
-  },
-  epic_paradise_paradise_highlight: {
-    DigitalPack: 'DPARAHIGH',
-    Paper: 'NPARAHIGH',
-    PaperAndDigital: 'NDPARAHIGH',
-  },
-  epic_paradise_control: {
-    DigitalPack: 'DPARACON',
-    Paper: 'NPARACON',
-    PaperAndDigital: 'NDPARACON',
-  },
-  epic_paradise_different_highlight: {
-    DigitalPack: 'DPARADIFF',
-    Paper: 'NPARADIFF',
-    PaperAndDigital: 'NDPARADIFF',
-  },
-  epic_paradise_standfirst: {
-    DigitalPack: 'DPARASTAND',
-    Paper: 'NPARASTAND',
-    PaperAndDigital: 'NDPARASTAND',
-  },
-  banner_just_one_control: {
-    DigitalPack: 'DBANJUSTCON',
-    Paper: 'NBANJUSTCON',
-    PaperAndDigital: 'NDBANJUSTCON',
-  },
-  banner_just_one_just_one: {
-    DigitalPack: 'DBANJUSTONE',
-    Paper: 'NBANJUSTONE',
-    PaperAndDigital: 'NDBANJUSTONE',
-  },
-};
-
 
 // ----- Functions ----- //
 
@@ -144,7 +79,7 @@ function buildParamString(
 ): string {
   const params = new URLSearchParams(window.location.search);
 
-  const maybeCustomIntcmp = getIntcmp(product, countryGroupId, intCmp, defaultIntCmp);
+  const maybeCustomIntcmp = intCmp || defaultIntCmp;
   params.set('INTCMP', maybeCustomIntcmp);
 
   if (referrerAcquisitionData) {
@@ -154,59 +89,18 @@ function buildParamString(
   return params.toString();
 }
 
-// Creates URLs for the subs site from promo codes and intCmp.
-function buildSubsUrls(
-  countryGroupId: CountryGroupId,
-  promoCodes: PromoCodes,
-  intCmp: ?string,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-): SubsUrls {
-
-  const countryId = countryGroups[countryGroupId].supportInternationalisationId;
-
-  // paper only applies to uk, so hardcode the country
-  const paper = '/uk/subscribe/paper';
-  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', countryGroupId, intCmp, referrerAcquisitionData)}`;
-  const digital = `/${countryId}/subscribe/digital`;
-  const digitalGift = `/${countryId}/subscribe/digital/gift`;
-  const weekly = `/${countryId}/subscribe/weekly`;
-  const weeklyGift = `/${countryId}/subscribe/weekly/gift`;
-
-  return {
-    DigitalPack: digital,
-    DigitalPackGift: digitalGift,
-    Paper: paper,
-    PaperAndDigital: paperDig,
-    GuardianWeekly: weekly,
-    GuardianWeeklyGift: weeklyGift,
-  };
-
-}
-
-// Creates links to subscriptions, tailored to the user's campaign.
-function getSubsLinks(
+function getLegacyPaperAndDigitalLink(
   countryGroupId: CountryGroupId,
   intCmp: ?string,
-  campaign: ?Campaign,
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
-): SubsUrls {
+) {
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
     nativeAbParticipations,
   );
 
-  if ((campaign && customPromos[campaign])) {
-    return buildSubsUrls(
-      countryGroupId,
-      customPromos[campaign],
-      intCmp,
-      acquisitionData,
-    );
-  }
-
-  return buildSubsUrls(countryGroupId, defaultPromos, intCmp, acquisitionData);
-
+  return `${subsUrl}/p/GXX83X?${buildParamString('PaperAndDigital', countryGroupId, intCmp, acquisitionData)}`;
 }
 
 // Builds a link to the digital pack checkout.
@@ -266,7 +160,7 @@ const getReauthenticateUrl = getProfileUrl('reauthenticate');
 // ----- Exports ----- //
 
 export {
-  getSubsLinks,
+  getLegacyPaperAndDigitalLink,
   getMemLink,
   getPatronsLink,
   getDigitalCheckout,

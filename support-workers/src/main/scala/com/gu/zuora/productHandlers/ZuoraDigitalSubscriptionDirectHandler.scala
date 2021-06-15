@@ -8,6 +8,7 @@ import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.DigitalSubscriptionDirectPurchaseBuilder
+import ophan.thrift.event.AbTest
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -18,7 +19,10 @@ class ZuoraDigitalSubscriptionDirectHandler(
   user: User,
 ) {
 
-  def subscribe(state: DigitalSubscriptionDirectPurchaseState): Future[SendThankYouEmailState] =
+  def isUserInEventsTest(maybeAbTests: Option[Set[AbTest]]) =
+    maybeAbTests.exists(_.toList.exists(test => test.name == "digiSubEventsTest" && test.variant == "variant"))
+
+  def subscribe(state: DigitalSubscriptionDirectPurchaseState, maybeAbTests: Option[Set[AbTest]]): Future[SendThankYouEmailState] =
     for {
       subscribeItem <- Future.fromTry(digitalSubscriptionDirectPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
@@ -31,7 +35,8 @@ class ZuoraDigitalSubscriptionDirectHandler(
       paymentSchedule,
       state.promoCode,
       account.value,
-      sub.value
+      sub.value,
+      Some(isUserInEventsTest(maybeAbTests)),
     )
 
 }

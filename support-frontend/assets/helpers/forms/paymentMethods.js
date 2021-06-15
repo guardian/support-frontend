@@ -3,6 +3,7 @@
 const Stripe: 'Stripe' = 'Stripe';
 const PayPal: 'PayPal' = 'PayPal';
 const DirectDebit: 'DirectDebit' = 'DirectDebit';
+const Sepa: 'Sepa' = 'Sepa';
 const ExistingCard: 'ExistingCard' = 'ExistingCard';
 const ExistingDirectDebit: 'ExistingDirectDebit' = 'ExistingDirectDebit';
 const AmazonPay: 'AmazonPay' = 'AmazonPay';
@@ -11,6 +12,7 @@ export type PaymentMethodMap<T> = {|
   Stripe: T,
   PayPal: T,
   DirectDebit: T,
+  Sepa: T,
   ExistingCard: T,
   ExistingDirectDebit: T,
   None: T,
@@ -24,4 +26,4 @@ export type PaymentMethodMap<T> = {|
 // so it's irrelevant - so we supply null
 export type PaymentMethod = $Keys<PaymentMethodMap<null>>;
 
-export { Stripe, PayPal, DirectDebit, ExistingCard, ExistingDirectDebit, AmazonPay };
+export { Stripe, PayPal, DirectDebit, Sepa, ExistingCard, ExistingDirectDebit, AmazonPay };

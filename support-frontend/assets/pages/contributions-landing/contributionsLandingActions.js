@@ -44,7 +44,7 @@ import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { setPayPalHasLoaded, type Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
-import { AmazonPay, DirectDebit, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import { AmazonPay, DirectDebit, Sepa, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/forms/paymentMethods';
 import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/forms/stripe';
@@ -104,6 +104,8 @@ export type Action =
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
   | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
+  | { type: 'SET_SEPA_IBAN', iban: string | null }
+  | { type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName: string | null }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -334,6 +336,15 @@ const setStripeSetupIntentClientSecret = (setupIntentClientSecret: string): ((Fu
 const setStripeRecurringRecaptchaVerified = (recaptchaVerified: boolean): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified })));
+  };
+
+const setSepaIban = (iban: string | null) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_IBAN', iban })));
+  };
+const setSepaAccountHolderName = (accountHolderName: string | null) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName })));
   };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -641,6 +652,7 @@ const recurringPaymentAuthorisationHandlers = {
   PayPal: recurringPaymentAuthorisationHandler,
   Stripe: recurringPaymentAuthorisationHandler,
   DirectDebit: recurringPaymentAuthorisationHandler,
+  Sepa: recurringPaymentAuthorisationHandler,
   ExistingCard: recurringPaymentAuthorisationHandler,
   ExistingDirectDebit: recurringPaymentAuthorisationHandler,
   AmazonPay: recurringPaymentAuthorisationHandler,
@@ -693,6 +705,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
     },
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', DirectDebit);
+      return Promise.resolve(error);
+    },
+    Sepa: () => {
+      logInvalidCombination('ONE_OFF', Sepa);
       return Promise.resolve(error);
     },
     ExistingCard: () => {
@@ -803,4 +819,6 @@ export {
   updateRecaptchaToken,
   loadPayPalExpressSdk,
   loadAmazonPaySdk,
+  setSepaIban,
+  setSepaAccountHolderName,
 };

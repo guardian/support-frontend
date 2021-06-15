@@ -22,7 +22,8 @@
     "cache-ssr": "node scripts/ssrScript.js",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle",
-    "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js"
+    "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
+    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
   },
   "browserslist": [
     "Chrome >= 49",
@@ -38,7 +39,7 @@
   ],
   "jest": {
     "transform": {
-      ".*": "./node_modules/babel-jest"
+      ".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!@guardian)",
@@ -139,8 +140,8 @@
     "babel-plugin-add-react-displayname": "^0.0.5",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "chalk": "^4.1.0",
-    "cssnano": "^4.1.10",
     "css-loader": "^1.0.0",
+    "cssnano": "^4.1.10",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-airbnb-base": "^12.1.0",
@@ -169,6 +170,7 @@
     "react-svg-loader": "^3.0.3",
     "rimraf": "^2.6.2",
     "sass-mq": "^5.0.0",
+    "search-in-file": "^1.2.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.2",
     "webpack-bundle-analyzer": "^4.4.2",

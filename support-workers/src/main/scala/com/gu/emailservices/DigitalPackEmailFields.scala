@@ -272,7 +272,12 @@ class DigitalPackEmailFields(
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date),
         trial_period = "14", //TODO: depends on Promo code or zuora config
         paymentFieldsAttributes
-      ), state.user)
+      ),
+        state.user,
+        Some(JsonObject.fromMap(
+          Map("unmanaged_digital_subscription_in_events_test" -> Json.fromBoolean(state.isInEventsTest.getOrElse(false)))
+        ))
+      )
     )
   }
 
