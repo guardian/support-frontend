@@ -65,8 +65,8 @@ class SubscriptionsController(
     else
       Map.empty
 
-    val weeklyFulfilmentCountry = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
-    val weekly = service.getPrices(GuardianWeekly, Nil)(countryGroup)(weeklyFulfilmentCountry)(NoProductOptions)(Quarterly)(countryGroup.currency)
+    val fulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
+    val weekly = service.getPrices(GuardianWeekly, Nil)(countryGroup)(fulfilmentOptions)(NoProductOptions)(Quarterly)(countryGroup.currency)
 
     val digitalSubscription = service
       .getPrices(
