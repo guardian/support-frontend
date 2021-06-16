@@ -9,9 +9,9 @@ import org.joda.time.DateTime
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContributionEmailFields(
-  getMandate: String => Future[Option[String]],
-  created: DateTime,
-) {
+                               getMandate: String => Future[Option[String]],
+                               created: DateTime,
+                             ) {
 
   def build(contributionProcessedInfo: SendThankYouEmailContributionState)(implicit ec: ExecutionContext): Future[EmailFields] = {
     getPaymentFields(
@@ -51,9 +51,14 @@ class ContributionEmailFields(
         "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
         "payment method" -> "Direct Debit"
       ))
+      case sepa: SepaPaymentMethod => Future.successful(List(
+        "account name" -> sepa.BankTransferAccountName,
+        "account number" -> mask(sepa.BankTransferAccountNumber),
+        "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
+        "payment method" -> "SEPA"
+      ))
       case _: PayPalReferenceTransaction => Future.successful(List("payment method" -> "PayPal"))
       case _: CreditCardReferenceTransaction => Future.successful(List("payment method" -> "credit / debit card"))
-      case _: SepaPaymentMethod => Future.successful(List("payment method" -> "Sepa"))  // TODO
       case _: AmazonPayPaymentMethod => Future.successful(List("payment method" -> "AmazonPay"))
     }
   }
