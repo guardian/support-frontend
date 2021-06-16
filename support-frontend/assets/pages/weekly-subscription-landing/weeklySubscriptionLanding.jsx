@@ -20,8 +20,8 @@ import {
   NZDCountries,
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { renderPage } from 'helpers/render';
-import { routes } from 'helpers/routes';
+import { renderPage } from 'helpers/rendering/render';
+import { routes, promotionTermsUrl } from 'helpers/urls/routes';
 
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
@@ -38,8 +38,7 @@ import WeeklyProductPrices from './components/weeklyProductPrices';
 
 import './weeklySubscriptionLanding.scss';
 import { promoQueryParam, getPromotionCopy } from 'helpers/productPrice/promotions';
-import { promotionTermsUrl } from 'helpers/routes';
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 
 import { weeklyLandingProps, type WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
 

@@ -8,7 +8,7 @@ import CountryGroupSwitcherContainer from 'components/countryGroupSwitcher/count
 
 import { type Option } from 'helpers/types/option';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type SubscriptionProduct } from 'helpers/subscriptions';
+import { type SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 import Header from './header';
 

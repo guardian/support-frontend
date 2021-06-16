@@ -11,10 +11,9 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 import Content, { Divider, NarrowContent } from 'components/content/content';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 const buttonStyles = css`
   ${from.desktop} {

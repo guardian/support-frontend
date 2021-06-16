@@ -1,6 +1,6 @@
 // @flow
 
-import { setSession } from 'helpers/storage';
+import { setSession } from 'helpers/storage/storage';
 import { type Action } from './userActions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 

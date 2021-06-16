@@ -3,13 +3,13 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { checkEmail } from 'helpers/formValidation';
-import { logException } from 'helpers/logger';
+import { checkEmail } from 'helpers/forms/formValidation';
+import { logException } from 'helpers/utilities/logger';
 import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import 'components/marketingConsent/marketingConsent.scss';

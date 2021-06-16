@@ -7,7 +7,7 @@ import {
   getAbsoluteURL,
   getAllQueryParams,
   getAllQueryParamsWithExclusions,
-} from '../url';
+} from '../urls/url';
 
 
 // ----- Tests ----- //

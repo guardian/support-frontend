@@ -1,12 +1,12 @@
 // @flow
 
-import { fixDecimals } from 'helpers/subscriptions';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import {
   billingPeriodNoun as upperCaseNoun,
   billingPeriodAdverb,
   Quarterly,
   type BillingPeriod,
-} from 'helpers/billingPeriods';
+} from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { glyph as shortGlyph, extendedGlyph } from 'helpers/internationalisation/currency';
 import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';

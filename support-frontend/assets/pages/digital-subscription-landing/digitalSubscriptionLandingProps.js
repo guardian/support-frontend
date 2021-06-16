@@ -1,7 +1,7 @@
 // @flow
 
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getGlobal, getProductPrices, getPromotionCopy } from 'helpers/globals';
+import { getGlobal, getProductPrices, getPromotionCopy } from 'helpers/globalsAndSwitches/globals';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import {
   detect as detectCountryGroup,
@@ -13,7 +13,7 @@ import {
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import { init as initAbTests, type Participations } from 'helpers/abTests/abtest';
-import { getSettings } from 'helpers/globals';
+import { getSettings } from 'helpers/globalsAndSwitches/globals';
 
 export type DigitalLandingPropTypes = {|
   countryId: IsoCountry;

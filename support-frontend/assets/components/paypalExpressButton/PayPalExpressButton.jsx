@@ -7,11 +7,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { getPayPalOptions, type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { getPayPalOptions, type SetupPayPalRequestType } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { PayPal } from 'helpers/paymentMethods';
+import { type PayPalAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { PayPal } from 'helpers/forms/paymentMethods';
 import { type Action, updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
 import AnimatedDots from 'components/spinners/animatedDots';
 

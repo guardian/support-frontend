@@ -1,54 +1,35 @@
 // @flow
 import React, { type Node } from 'react';
 
-import { type Option } from 'helpers/types/option';
 import {
-  getNewsstandPrice,
-  getNewsstandSaving,
-  getNewsstandSavingPercentage,
   sendTrackingEventsOnClick,
   sendTrackingEventsOnView,
-} from 'helpers/subscriptions';
+} from 'helpers/productPrice/subscriptions';
 import {
-  finalPrice,
+  finalPrice, getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type {
-  PaperProductOptions,
-} from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
-import { paperCheckoutUrl } from 'helpers/routes';
+import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
 import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import { flashSaleIsActive } from 'helpers/flashSale';
-import { Paper } from 'helpers/subscriptions';
 
 import Prices from './content/prices';
 
 // ---- Helpers ----- //
 
-const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): string => {
-  if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
-    return `Save ${getNewsstandSavingPercentage(subscription, newsstand)}% a month on retail price`;
-  }
-  return '';
-};
-
 const getPriceCopyString = (price: ProductPrice, productCopy: Node = null): Node => {
   const promotion = getAppliedPromo(price.promotions);
   if (promotion && promotion.numberOfDiscountedPeriods) {
-    return <>per month for {promotion.numberOfDiscountedPeriods} months{productCopy}</>;
+    return <>per month for {promotion.numberOfDiscountedPeriods} months{productCopy}, then {showPrice(price)} after</>;
   }
   return <>per month{productCopy}</>;
 };
 
-const getOfferText = (price: ProductPrice, productOption: PaperProductOptions) => {
-  if (flashSaleIsActive(Paper)) {
-    return getOfferStr(price.price, getNewsstandPrice(productOption));
-  }
+const getOfferText = (price: ProductPrice) => {
   if (price.savingVsRetail && price.savingVsRetail > 0) {
     return `Save ${price.savingVsRetail}% on retail price`;
   }
@@ -77,24 +58,29 @@ const getPlans = (
   productPrices: ProductPrices,
 ) =>
   ActivePaperProductTypes.map((productOption) => {
-    const price = finalPrice(productPrices, fulfilmentOption, productOption);
-    const promotion = getAppliedPromo(price.promotions);
+    const priceAfterPromosApplied = finalPrice(productPrices, fulfilmentOption, productOption);
+    const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
     const promoCode = promotion ? promotion.promoCode : null;
     const trackingProperties = {
       id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
       product: 'Paper',
       componentType: 'ACQUISITIONS_BUTTON',
     };
+    const nonDiscountedPrice = getProductPrice(
+      productPrices,
+      fulfilmentOption,
+      productOption,
+    );
 
     return {
       title: getTitle(productOption),
-      price: showPrice(price),
+      price: showPrice(priceAfterPromosApplied),
       href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
       onClick: sendTrackingEventsOnClick(trackingProperties),
       onView: sendTrackingEventsOnView(trackingProperties),
       buttonCopy: 'Subscribe now',
-      priceCopy: getPriceCopyString(price, copy[fulfilmentOption][productOption]),
-      offerCopy: getOfferText(price, productOption),
+      priceCopy: getPriceCopyString(nonDiscountedPrice, copy[fulfilmentOption][productOption]),
+      offerCopy: getOfferText(priceAfterPromosApplied),
       label: '',
     };
   });

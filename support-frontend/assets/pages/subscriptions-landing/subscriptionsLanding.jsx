@@ -9,7 +9,7 @@ import Footer from 'components/footerCompliant/Footer';
 import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';
 
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';

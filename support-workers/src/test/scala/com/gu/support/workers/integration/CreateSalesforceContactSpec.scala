@@ -1,15 +1,17 @@
 package com.gu.support.workers.integration
 
-import java.io.ByteArrayOutputStream
-
 import com.gu.salesforce.Fixtures.salesforceId
-import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
-import com.gu.support.workers.JsonFixtures.{createSalesForceGiftContactJson, createSalesForceContactJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createSalesForceContactJson, createSalesForceGiftContactJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.CreateSalesforceContact
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, GuardianWeeklyState}
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
+import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 import com.gu.test.tags.annotations.IntegrationTest
+import org.scalatest.Inside.inside
+
+import java.io.ByteArrayOutputStream
 
 @IntegrationTest
 class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
@@ -23,8 +25,10 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
 
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)
-      val contacts = result.get._1.salesforceContacts
-      contacts.buyer.Id should be("0039E000017tZUEQA2")
+      inside(result.get._1.productSpecificState) {
+        case state: ContributionState =>
+          state.salesForceContact.Id should be("0039E000017tZUEQA2")
+      }
     }
   }
 
@@ -37,9 +41,11 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
 
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)
-      val contacts = result.get._1.salesforceContacts
-      contacts.buyer.Id should be(salesforceId)
-      contacts.giftRecipient shouldBe defined
+      inside(result.get._1.productSpecificState) {
+        case state: GuardianWeeklyState =>
+          state.salesforceContacts.buyer.Id should be(salesforceId)
+          state.salesforceContacts.giftRecipient shouldBe defined
+      }
     }
   }
 

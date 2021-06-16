@@ -1,11 +1,11 @@
 // @flow
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import React from 'react';
 import './promotionTerms.scss';
 import { init as pageInit } from 'helpers/page/page';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import { DigitalPack, GuardianWeekly } from 'helpers/subscriptions';
+import { DigitalPack, GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { State } from './promotionTermsReducer';
 import reducer from './promotionTermsReducer';
 import Page from 'components/page/page';

@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { type SubscriptionProduct, DigitalPack, GuardianWeekly } from 'helpers/subscriptions';
+import { type SubscriptionProduct, DigitalPack, GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import Text from 'components/text/text';
 
 type PropTypes = {

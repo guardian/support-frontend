@@ -12,10 +12,10 @@ import AppsSection from './components/thankYou/appsSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { DirectDebit } from 'helpers/paymentMethods';
+import { DirectDebit } from 'helpers/forms/paymentMethods';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
-import { DigitalPack } from 'helpers/subscriptions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { Option } from 'helpers/types/option';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 

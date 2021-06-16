@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import { getGlobal } from 'helpers/globals';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
   detect as detectCountryGroup,
   type CountryGroupId,
@@ -15,7 +15,7 @@ import {
 
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { init as initAbTests, type Participations } from 'helpers/abTests/abtest';
-import { getSettings } from 'helpers/globals';
+import { getSettings } from 'helpers/globalsAndSwitches/globals';
 
 export type PriceCopy = {
   price: number,

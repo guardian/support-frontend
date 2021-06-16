@@ -79,12 +79,12 @@ POST /identity/signin-url                                          controllers.I
 
 # ----- Subscriptions ----- #
 
-GET  /subscribe                                                    controllers.Subscriptions.geoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.Subscriptions.landing(country: String)
+GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
-GET  /:country/subscribe                                           controllers.Subscriptions.legacyRedirect(country: String)
+GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
 GET  /digital                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/digital                                            controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
@@ -99,19 +99,19 @@ GET  /subscribe/digital/checkout                                         control
 GET  /subscribe/digital/checkout/gift                                    controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
 GET  /subscribe/digital/checkout/thankyou-existing                       controllers.DigitalSubscriptionFormController.displayThankYouExisting()
 
-GET  /weekly                                                       controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/weekly                                             controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/weekly/gift                                        controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = true)
+GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly/gift                                        controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = true)
 GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = true)
-GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscription.weekly(country: String, orderIsAGift: Boolean = false)
-GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscription.weekly(country: String, orderIsAGift: Boolean = true)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
-GET  /paper                                                        controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper                                              controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper/delivery                                     controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = true)
-GET  /uk/subscribe/paper                                           controllers.PaperSubscription.paper()
-GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscription.paper()
+GET  /paper                                                        controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/paper                                              controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
+GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
+GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionForm.displayForm()
 
 # redemptions
@@ -124,7 +124,7 @@ GET  /r/:redemptionCode                                            controllers.R
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 
-POST /subscribe/create                                             controllers.CreateSubscription.create
+POST /subscribe/create                                             controllers.CreateSubscriptionController.create
 
 # ----- Authentication ----- #
 

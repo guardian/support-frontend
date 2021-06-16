@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { Annual, Monthly } from 'helpers/billingPeriods';
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 // eslint-disable-next-line import/extensions
 import { getSummary } from '../promotionSummary.jsx';
 

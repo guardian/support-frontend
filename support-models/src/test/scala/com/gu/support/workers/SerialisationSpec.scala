@@ -1,17 +1,17 @@
 package com.gu.support.workers
 
-import java.util.UUID
-
 import com.gu.i18n.{Country, Currency}
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
 import com.gu.support.workers.Fixtures._
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState}
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
-import org.joda.time.LocalDate
 import org.scalatest.EitherValues
+import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AnyFlatSpec
+
+import java.util.UUID
 
 
 class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with LazyLogging with EitherValues {
@@ -37,11 +37,14 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
   }
 
   "CreateZuoraSubscription" should "deserialise correctly" in {
-    testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson())
-    testDecoding[CreateZuoraSubscriptionState](createContributionZuoraSubscriptionJson(Annual))
-    testDecoding[CreateZuoraSubscriptionState](createDigiPackZuoraSubscriptionJson)
-    testDecoding[CreateZuoraSubscriptionState](createCorporateDigiPackZuoraSubscriptionJson,
-      state => state.paymentMethod.right.value.redemptionCode.value shouldBe "fake-code-123"
+    testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson())
+    testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson(Annual))
+    testDecoding[CreateZuoraSubscriptionProductState](createDigiPackZuoraSubscriptionJson)
+    testDecoding[CreateZuoraSubscriptionProductState](createCorporateDigiPackZuoraSubscriptionJson,
+      inside(_) {
+        case state: DigitalSubscriptionCorporateRedemptionState =>
+          state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
+      }
     )
   }
 
@@ -76,7 +79,9 @@ object StatesTestData {
     paymentFields = Left(PayPalPaymentFields("baid")),
     firstDeliveryDate = None,
     promoCode = None,
-    acquisitionData = None
+    acquisitionData = None,
+    ipAddress = "127.0.0.1",
+    userAgent = "TestAgent"
   )
 
   val createSalesforceContactState = CreateSalesforceContactState(
@@ -91,17 +96,21 @@ object StatesTestData {
     acquisitionData = None
   )
 
-  val createZuoraSubscriptionState = CreateZuoraSubscriptionState(
-    requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftRecipient = None,
-    product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
-    paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
-    firstDeliveryDate = None,
-    promoCode = None,
-    salesforceContacts = SalesforceContactRecords(SalesforceContactRecord("sfbuy", "sfbuyacid"), None),
-    acquisitionData = None
+  val createZuoraSubscriptionState: CreateZuoraSubscriptionState = CreateZuoraSubscriptionState(
+    DigitalSubscriptionDirectPurchaseState(
+      Country.UK,
+      product = DigitalPack(Currency.GBP, Monthly),
+      paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
+      promoCode = None,
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid")
+    ),
+    UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+    User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+    DigitalPack(Currency.GBP, Monthly),
+    AnalyticsInfo(false, StripeApplePay),
+    None,
+    None,
+    None
   )
 
   val thankYouEmailProductTypeState: SendThankYouEmailState = ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated

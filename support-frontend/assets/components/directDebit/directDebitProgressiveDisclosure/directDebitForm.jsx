@@ -18,7 +18,7 @@ import {
 import Form from './components/form';
 import Playback from './components/playback';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/forms/errorReasons';
 
 
 // ---- Types ----- //

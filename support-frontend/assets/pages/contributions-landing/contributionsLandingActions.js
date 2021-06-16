@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import type { ErrorReason } from 'helpers/errorReasons';
-import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { type ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import {
   type ContributionType,
   getAmount,
@@ -15,7 +15,7 @@ import { type IsoCountry, type StateProvince, stateProvinceFromString, findIsoCo
 import type {
   RegularPaymentRequest,
   StripePaymentIntentAuthorisation, StripePaymentMethod,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
   type AmazonPayAuthorisation,
   type PaymentAuthorisation,
@@ -23,37 +23,35 @@ import {
   type StripePaymentRequestButtonMethod,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/paymentIntegrations/oneOffContributions';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   processStripePaymentIntentRequest,
   postOneOffAmazonPayExecutePaymentRequest,
-} from 'helpers/paymentIntegrations/oneOffContributions';
-import { routes } from 'helpers/routes';
-import * as storage from 'helpers/storage';
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import { routes } from 'helpers/urls/routes';
+import * as storage from 'helpers/storage/storage';
 import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import * as cookie from 'helpers/cookie';
-import { Annual, Monthly } from 'helpers/billingPeriods';
-import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
+import * as cookie from 'helpers/storage/cookie';
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import { setPayPalHasLoaded, type Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
-import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
+import { AmazonPay, DirectDebit, Sepa, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import { ExistingCard, ExistingDirectDebit } from 'helpers/forms/paymentMethods';
+import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/forms/stripe';
 import type { Option } from 'helpers/types/option';
-import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
+import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -89,7 +87,6 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
-  | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object, stripeAccount: StripeAccount }
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError: ErrorReason, stripeAccount: StripeAccount }
@@ -107,6 +104,8 @@ export type Action =
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
   | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
+  | { type: 'SET_SEPA_IBAN', iban: string | null }
+  | { type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName: string | null }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -164,11 +163,6 @@ const updateRecaptchaToken = (recaptchaToken: string): ((Function) => void) =>
 const setPaymentRequestButtonPaymentMethod =
   (paymentMethod: 'none' | StripePaymentMethod, stripeAccount: StripeAccount): Action =>
     ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod, stripeAccount });
-
-
-const setStripePaymentRequestObject =
-  (stripePaymentRequestObject: Object, stripeAccount: StripeAccount): Action =>
-    ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject, stripeAccount });
 
 const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Action =>
   ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount });
@@ -342,6 +336,15 @@ const setStripeSetupIntentClientSecret = (setupIntentClientSecret: string): ((Fu
 const setStripeRecurringRecaptchaVerified = (recaptchaVerified: boolean): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified })));
+  };
+
+const setSepaIban = (iban: string | null) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_IBAN', iban })));
+  };
+const setSepaAccountHolderName = (accountHolderName: string | null) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName })));
   };
 
 const sendFormSubmitEventForPayPalRecurring = () =>
@@ -649,6 +652,7 @@ const recurringPaymentAuthorisationHandlers = {
   PayPal: recurringPaymentAuthorisationHandler,
   Stripe: recurringPaymentAuthorisationHandler,
   DirectDebit: recurringPaymentAuthorisationHandler,
+  Sepa: recurringPaymentAuthorisationHandler,
   ExistingCard: recurringPaymentAuthorisationHandler,
   ExistingDirectDebit: recurringPaymentAuthorisationHandler,
   AmazonPay: recurringPaymentAuthorisationHandler,
@@ -701,6 +705,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
     },
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', DirectDebit);
+      return Promise.resolve(error);
+    },
+    Sepa: () => {
+      logInvalidCombination('ONE_OFF', Sepa);
       return Promise.resolve(error);
     },
     ExistingCard: () => {
@@ -798,7 +806,6 @@ export {
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
   setPaymentRequestButtonPaymentMethod,
-  setStripePaymentRequestObject,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
   setTickerGoalReached,
@@ -812,4 +819,6 @@ export {
   updateRecaptchaToken,
   loadPayPalExpressSdk,
   loadAmazonPaySdk,
+  setSepaIban,
+  setSepaAccountHolderName,
 };

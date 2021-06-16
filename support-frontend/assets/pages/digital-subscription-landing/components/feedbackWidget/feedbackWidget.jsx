@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 
 import { Button, LinkButton, buttonBrand } from '@guardian/src-button';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { clickedCss, hideWidget, wrapper, widgetTitle, buttonStyles, feedbackLink, header } from './feedbackWidgetStyles';
 import { SvgThumbsUp } from './thumbsUp';
 import { SvgThumbsDown } from './thumbsDown';

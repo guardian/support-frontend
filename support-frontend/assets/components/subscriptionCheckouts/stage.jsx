@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { type Stage } from 'helpers/subscriptionsForms/formFields';
-import { type SubscriptionProduct } from 'helpers/subscriptions';
+import { type SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Settings } from 'helpers/settings';
+import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import {
   getVariantsAsString,
   init as abInit,

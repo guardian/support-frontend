@@ -7,7 +7,7 @@ import {
   type ProductPrice,
   showPrice,
 } from 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 

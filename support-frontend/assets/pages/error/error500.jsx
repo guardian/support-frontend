@@ -5,7 +5,7 @@
 import React from 'react';
 
 import { statelessInit as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 
 import ErrorPage from './components/errorPage';
 

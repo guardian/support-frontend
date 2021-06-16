@@ -5,7 +5,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import { sendTrackingEventsOnClick, GuardianWeekly } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick, GuardianWeekly } from 'helpers/productPrice/subscriptions';
 
 import GridPicture from 'components/gridPicture/gridPicture';
 import OrderedList from 'components/list/orderedList';
@@ -18,12 +18,12 @@ import {
   homeDeliveryUrl,
   manageSubsUrl,
   helpCentreUrl,
-} from 'helpers/externalLinks';
+} from 'helpers/urls/externalLinks';
 import typeof MarketingConsent
   from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import styles
   from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
-import { formatUserDate } from 'helpers/dateConversions';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 import {
   type FormFields,

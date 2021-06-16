@@ -1,12 +1,11 @@
 // @flow
 import React from 'react';
 // styles
-import { promotionTermsUrl } from 'helpers/routes';
+import { promotionTermsUrl } from 'helpers/urls/routes';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
+import { Annual, Monthly, Quarterly, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Option } from 'helpers/types/option';

@@ -2,11 +2,11 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { routes } from 'helpers/routes';
-import { getPatronsLink } from 'helpers/externalLinks';
+import { routes } from 'helpers/urls/routes';
+import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { type Option } from 'helpers/types/option';
-import { classNameWithModifiers } from 'helpers/utilities';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
   type CountryGroupId, GBPCountries,
 } from 'helpers/internationalisation/countryGroup';

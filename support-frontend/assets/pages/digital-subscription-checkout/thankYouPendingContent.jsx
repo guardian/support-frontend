@@ -9,10 +9,10 @@ import Text, { LargeParagraph } from 'components/text/text';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
-import { DigitalPack } from 'helpers/subscriptions';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 
 // ----- Types ----- //

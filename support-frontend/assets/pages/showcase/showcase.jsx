@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 import React from 'react';
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 
 import Page from 'components/page/page';
 

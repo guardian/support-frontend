@@ -1,11 +1,11 @@
 package com.gu.support.workers.lambdas
 
-import com.gu.support.encoding.CustomCodecs._
+import com.gu.i18n.Currency.GBP
+import com.gu.support.catalog.Domestic
 import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.states.CreateSalesforceContactState
-import com.gu.support.workers.{Contribution, PayPalReferenceTransaction, PaymentMethod}
+import com.gu.support.workers.{GuardianWeekly, Monthly, PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.generic.auto._
 import io.circe.parser._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -16,10 +16,7 @@ class CreateSalesforceContactDecoderSpec extends AnyFlatSpec with Matchers with 
   "CreateSalesforceContactDecoder" should "be able to decode a CreateSalesforceContactState" in {
     val state = decode[CreateSalesforceContactState](createSalesForceGiftContactJson)
     val result = state.toOption.get
-    result.product match {
-      case contribution: Contribution => contribution.amount should be(5)
-      case _ => fail()
-    }
+    result.product should be(GuardianWeekly(GBP, Monthly, Domestic))
     result.paymentMethod match {
       case Left(_: PayPalReferenceTransaction) => succeed
       case _ => fail()

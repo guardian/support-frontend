@@ -9,8 +9,8 @@ import { space } from '@guardian/src-foundations';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { checkEmail } from 'helpers/formValidation';
-import { logException } from 'helpers/logger';
+import { checkEmail } from 'helpers/forms/formValidation';
+import { logException } from 'helpers/utilities/logger';
 import { Button } from '@guardian/src-button';
 import 'components/marketingConsent/marketingConsent.scss';
 

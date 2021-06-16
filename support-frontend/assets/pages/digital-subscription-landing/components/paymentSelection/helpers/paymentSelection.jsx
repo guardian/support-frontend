@@ -3,11 +3,10 @@ import React from 'react';
 import type { Element } from 'react';
 
 // helpers
-import { getDigitalCheckout } from 'helpers/externalLinks';
-import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/subscriptions';
+import { getDigitalCheckout } from 'helpers/urls/externalLinks';
+import { fixDecimals, sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { fixDecimals } from 'helpers/subscriptions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // types
@@ -18,7 +17,7 @@ import {
   type ProductSmall,
 } from 'components/product/productOptionSmall';
 
-import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
+import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
 import { type Option } from 'helpers/types/option';
 import type {
   ProductPrices,

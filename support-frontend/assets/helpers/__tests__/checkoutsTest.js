@@ -1,16 +1,16 @@
 // @flow
 
 // ----- Imports ----- //
-jest.mock('helpers/globals', () => ({
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
   __esModule: true,
   isSwitchOn: jest.fn(),
 }));
 
 const mock = (mockFn: any) => mockFn;
 
-import { getValidPaymentMethods, getPaymentMethodToSelect } from '../checkouts';
-import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
-import { isSwitchOn } from 'helpers/globals';
+import { getValidPaymentMethods, getPaymentMethodToSelect } from '../forms/checkouts';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 
 // ----- Tests ----- //
 

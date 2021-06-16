@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import type { State, AmazonPayData } from 'pages/contributions-landing/contributionsLandingReducer';
 import { type Action, setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
 import Button from 'components/button/button';
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
 

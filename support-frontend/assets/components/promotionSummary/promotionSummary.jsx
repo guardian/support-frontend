@@ -4,12 +4,11 @@
 
 import React from 'react';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { billingPeriodNoun } from 'helpers/billingPeriods';
+import { billingPeriodNoun, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { countryGroups, fromCountry } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { fixDecimals } from 'helpers/subscriptions';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { getProductPrice } from 'helpers/productPrice/productPrices';

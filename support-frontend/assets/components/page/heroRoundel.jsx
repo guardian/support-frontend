@@ -21,13 +21,17 @@ const heroRoundelStyles = css`
   float: left;
   transform: translateY(-67%);
   min-width: ${roundelSizeMob}px;
-  max-width: ${roundelSize}px;
-  width: calc(100% + ${space[3]}px);
+  max-width: ${roundelSizeMob}px;
+  width: calc(100% + ${space[1]}px);
   padding: ${space[1]}px;
   border-radius: 50%;
   ${headline.xxsmall({ fontWeight: 'bold' })};
 
-  ${from.tablet} {
+  ${from.mobileMedium} {
+    max-width: ${roundelSize}px;
+  }
+
+  ${from.desktop} {
     width: calc(100% + ${space[6]}px);
     transform: translateY(-50%);
     ${headline.small({ fontWeight: 'bold' })};

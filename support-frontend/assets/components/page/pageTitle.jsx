@@ -2,7 +2,7 @@
 
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from } from '@guardian/src-foundations/mq';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { titlepiece } from '@guardian/src-foundations/typography';
@@ -80,10 +80,6 @@ export const pageTitle = css`
   padding: ${space[3]}px ${space[3]}px ${space[4]}px;
   width: 100%;
 
-  ${until.tablet} {
-    font-size: 36px;
-  }
-
   ${from.phablet} {
     padding: ${space[4]}px ${space[4]}px ${space[9]}px;
     padding-top: ${space[9]}px;
@@ -92,9 +88,13 @@ export const pageTitle = css`
   }
 
   ${from.desktop} {
-    ${titlepiece.large({ fontWeight: 'bold' })}
+    ${titlepiece.medium({ fontWeight: 'bold' })}
     margin: 0 auto;
     max-width: 1290px;
+  }
+
+  ${from.leftCol} {
+    ${titlepiece.large({ fontWeight: 'bold' })}
   }
 `;
 

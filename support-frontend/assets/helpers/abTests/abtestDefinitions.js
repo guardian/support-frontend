@@ -18,17 +18,25 @@ export const pageUrlRegexes = {
     subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPages: '(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
     digiSubLandingPagesNotAus: '(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
+    digiSub: {
+      // Requires /subscribe/digital, allows /checkout and/or /gift, allows any query string
+      allLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\/gift)?(\?.*)?$/,
+      // Requires /subscribe/digital and /gift, allows /checkout before /gift, allows any query string
+      giftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?\/gift(\?.*)?$/,
+      // Requires /subscribe/digital, allows /checkout, allows any query string
+      nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
+    },
   },
 };
 
 export const tests: Tests = {
-  stripePaymentRequestButtonDec2020: {
+  stripeCustomPrbTest: {
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'PRB',
+        id: 'custom',
       },
     ],
     audiences: {
@@ -39,10 +47,30 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: pageUrlRegexes.contributions.notUkLandingPage,
-    seed: 2,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 5,
   },
-
+  editorialVoiceTestPart2: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 6,
+    optimizeId: 'Z6RZxv27Q221_9OuJOl2Qw',
+  },
   localCurrencyTestV2: {
     variants: [
       {
@@ -74,5 +102,28 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 0,
+  },
+  // If the name of this test or the variant id changes then the code
+  // in `ZuoraDigitalSubscriptionDirectHandler.subscribe` will need
+  // to change as well.
+  digiSubEventsTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 9,
   },
 };

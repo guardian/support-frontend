@@ -12,7 +12,7 @@ import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
 import Block from 'components/page/block';
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
@@ -22,8 +22,8 @@ import PaperHero from './components/hero/hero';
 import Tabs from './components/tabs';
 import Prices from './components/paperPrices';
 
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { paperSubsUrl } from 'helpers/routes';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { paperSubsUrl } from 'helpers/urls/routes';
 
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';

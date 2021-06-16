@@ -3,10 +3,10 @@ import React from 'react';
 import marked from 'marked';
 import DOMPurify from 'dompurify';
 
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 import type { Option } from 'helpers/types/option';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type {
@@ -14,7 +14,7 @@ import type {
   ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 export type DiscountBenefit = {
   amount: number,

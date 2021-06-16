@@ -9,10 +9,10 @@ import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/re
 import * as stripeJs from '@stripe/react-stripe-js';
 import { connect } from 'react-redux';
 import { TextInput } from '@guardian/src-text-input';
-import { fetchJson, requestOptions } from 'helpers/fetch';
+import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { State, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
-import { Stripe } from 'helpers/paymentMethods';
-import { type PaymentResult } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { Stripe } from 'helpers/forms/paymentMethods';
+import { type PaymentResult } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
   type Action,
   onThirdPartyPaymentAuthorised,
@@ -25,8 +25,8 @@ import {
   setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { type ContributionType } from 'helpers/contributions';
-import type { ErrorReason } from 'helpers/errorReasons';
-import { logException } from 'helpers/logger';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { logException } from 'helpers/utilities/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import CreditCardsROW from './creditCardsROW.svg';
@@ -34,13 +34,13 @@ import CreditCardsUS from './creditCardsUS.svg';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { updateRecaptchaToken } from '../../contributionsLandingActions';
-import { routes } from 'helpers/routes';
+import { routes } from 'helpers/urls/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { InlineError } from '@guardian/src-user-feedback';
 import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
-import { isValidZipCode } from 'helpers/formValidation';
+import { isValidZipCode } from 'helpers/forms/formValidation';
 
 // ----- Types -----//
 

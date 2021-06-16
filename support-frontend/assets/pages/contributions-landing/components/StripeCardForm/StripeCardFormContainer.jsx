@@ -4,11 +4,11 @@
 import * as React from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import StripeCardForm from './StripeCardForm';
-import { getStripeKey, stripeAccountForContributionType, useStripeObjects } from 'helpers/stripe';
+import { getStripeKey, stripeAccountForContributionType, useStripeObjects } from 'helpers/forms/stripe';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ContributionType } from 'helpers/contributions';
-import { type PaymentMethod, Stripe } from 'helpers/paymentMethods';
+import { type PaymentMethod, Stripe } from 'helpers/forms/paymentMethods';
 import AnimatedDots from 'components/spinners/animatedDots';
 import './stripeCardForm.scss';
 
@@ -31,7 +31,7 @@ const StripeCardFormContainer = (props: PropTypes) => {
     props.isTestUser,
   );
 
-  const stripeObjects = useStripeObjects(stripeAccount, stripeKey, props.isTestUser);
+  const stripeObjects = useStripeObjects(stripeAccount, stripeKey);
 
   if (props.paymentMethod === Stripe) {
     if (stripeObjects[stripeAccount]) {

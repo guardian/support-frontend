@@ -8,16 +8,15 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import { type SetupPayPalRequestType } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { ErrorSummary } from './submitFormErrorSummary';
 import { type Option } from 'helpers/types/option';
-import { PayPal } from 'helpers/paymentMethods';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { hiddenIf } from 'helpers/utilities';
+import { PayPal, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import { hiddenIf } from 'helpers/utilities/utilities';
 
 const payPalButton = css`
   box-sizing: border-box;

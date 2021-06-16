@@ -2,8 +2,8 @@
 
 import React from 'react';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import { formatUserDate } from 'helpers/dateConversions';
-import { paperSubsUrl } from 'helpers/routes';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { paperSubsUrl } from 'helpers/urls/routes';
 import OrderedList from 'components/list/orderedList';
 
 export default function PaperTerms(props: PromotionTerms) {

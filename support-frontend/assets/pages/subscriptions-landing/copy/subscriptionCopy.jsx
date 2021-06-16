@@ -3,27 +3,20 @@ import * as React from 'react';
 // constants
 import {
   DigitalPack,
-  displayPrice, fixDecimals,
+  fixDecimals,
   GuardianWeekly,
   Paper,
-  PaperAndDigital,
   sendTrackingEventsOnClick,
-  subscriptionPricesForDefaultBillingPeriod,
-  type SubscriptionProduct,
-} from 'helpers/subscriptions';
-import { getCampaign } from 'helpers/tracking/acquisitions';
+} from 'helpers/productPrice/subscriptions';
 import {
   androidAppUrl,
   getIosAppUrl,
-  getSubsLinks,
-} from 'helpers/externalLinks';
+} from 'helpers/urls/externalLinks';
 import trackAppStoreLink from 'helpers/tracking/appCtaTracking';
 // images
 import GuardianWeeklyPackShot
   from 'components/packshots/guardian-weekly-packshot';
 import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
-import PaperAndDigitalPackshot
-  from 'components/packshots/paper-and-digital-packshot';
 import GuardianWeeklyPackShotHero
   from 'components/packshots/guardian-weekly-packshot-hero';
 import DigitalPackshotHero
@@ -38,25 +31,17 @@ import {
   EURCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
-import {
-  flashSaleIsActive,
-  getDisplayFlashSalePrice,
-  getSaleCopy,
-} from 'helpers/flashSale';
-import { Monthly, Quarterly } from 'helpers/billingPeriods';
+import { Monthly, Quarterly, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
   currencies, detect,
   fromCountryGroupId,
   glyph,
 } from 'helpers/internationalisation/currency';
 
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
   digitalSubscriptionLanding,
   guardianWeeklyLanding, paperSubsUrl,
-} from 'helpers/routes';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Participations } from 'helpers/abTests/abtest';
+} from 'helpers/urls/routes';
 import PaperPackshot from 'components/packshots/paper-packshot';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 
@@ -81,18 +66,18 @@ export type ProductCopy = {
 
 const abTest = null;
 
-const getPrice = (countryGroupId: CountryGroupId, product: SubscriptionProduct) => {
-
-  if (flashSaleIsActive(product, countryGroupId)) {
-    return getDisplayFlashSalePrice(product, countryGroupId, Monthly);
-  }
-
-  if (subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]) {
-    return `${displayPrice(product, countryGroupId)}`;
-  }
-
-  return '';
-};
+// const getPrice = (countryGroupId: CountryGroupId, product: SubscriptionProduct) => {
+//
+//   if (flashSaleIsActive(product, countryGroupId)) {
+//     return getDisplayFlashSalePrice(product, countryGroupId, Monthly);
+//   }
+//
+//   if (subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]) {
+//     return `${displayPrice(product, countryGroupId)}`;
+//   }
+//
+//   return '';
+// };
 
 const getDisplayPrice = (
   countryGroupId: CountryGroupId,
@@ -212,36 +197,36 @@ const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bool
   offer: priceCopy.discountCopy,
 });
 
-const paperAndDigital = (
-  countryGroupId: CountryGroupId,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  abParticipations: Participations,
-): ProductCopy => {
-  const link = getSubsLinks(
-    countryGroupId,
-    referrerAcquisitionData.campaignCode,
-    getCampaign(referrerAcquisitionData),
-    referrerAcquisitionData,
-    abParticipations,
-  ).PaperAndDigital;
-  return {
-    title: 'Paper+Digital',
-    subtitle: `from ${getPrice(countryGroupId, PaperAndDigital)}`,
-    description: 'All the benefits of a paper subscription, plus access to the digital subscription',
-    buttons: [{
-      ctaButtonText: 'Find out more',
-      link,
-      analyticsTracking: sendTrackingEventsOnClick({
-        id: 'paper_digital_cta',
-        product: PaperAndDigital,
-        ...(abTest && { abTest }),
-        componentType: 'ACQUISITIONS_BUTTON',
-      }),
-    }],
-    productImage: <PaperAndDigitalPackshot />,
-    offer: getSaleCopy(PaperAndDigital, countryGroupId).bundle.subHeading,
-  };
-};
+// const paperAndDigital = (
+//   countryGroupId: CountryGroupId,
+//   referrerAcquisitionData: ReferrerAcquisitionData,
+//   abParticipations: Participations,
+// ): ProductCopy => {
+//   const link = getLegacyPaperAndDigitalLink(
+//     countryGroupId,
+//     referrerAcquisitionData.campaignCode,
+//     getCampaign(referrerAcquisitionData),
+//     referrerAcquisitionData,
+//     abParticipations,
+//   );
+//   return {
+//     title: 'Paper+Digital',
+//     subtitle: `from ${getPrice(countryGroupId, PaperAndDigital)}`,
+//     description: 'All the benefits of a paper subscription, plus access to the digital subscription',
+//     buttons: [{
+//       ctaButtonText: 'Find out more',
+//       link,
+//       analyticsTracking: sendTrackingEventsOnClick({
+//         id: 'paper_digital_cta',
+//         product: PaperAndDigital,
+//         ...(abTest && { abTest }),
+//         componentType: 'ACQUISITIONS_BUTTON',
+//       }),
+//     }],
+//     productImage: <PaperAndDigitalPackshot />,
+//     offer: '',
+//   };
+// };
 
 const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
   title: 'Premium access to the Guardian Live app',
@@ -264,15 +249,14 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
 const getSubscriptionCopy = (
   countryGroupId: CountryGroupId,
   pricingCopy: PricingCopy,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  abParticipations: Participations,
 ): ProductCopy[] => {
   if (countryGroupId === GBPCountries) {
     return [
       digital(countryGroupId, pricingCopy[DigitalPack], true),
       guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], false),
       paper(countryGroupId, pricingCopy[Paper], false),
-      paperAndDigital(countryGroupId, referrerAcquisitionData, abParticipations),
+      // Removing the link to the old paper+digital page during the June 21 Sale
+      // paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
       premiumApp(countryGroupId),
     ];
   } else if (countryGroupId === EURCountries) {

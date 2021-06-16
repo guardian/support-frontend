@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './secureTransactionIndicator.scss';
 import SecurePadlock from './securePadlock.svg';
 

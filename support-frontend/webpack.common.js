@@ -7,10 +7,10 @@ const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 const cssnano = require('cssnano');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 const { getClassName } = require('./scripts/css');
 const entryPoints = require('./webpack.entryPoints');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const cssLoaders = [{
   loader: 'postcss-loader',
@@ -61,16 +61,18 @@ class CleanUpStatsPlugin {
   }
 }
 
-module.exports = (cssFilename, outputFilename, minimizeCss) => ({
+module.exports = (cssFilename, jsFilename, minimizeCss) => ({
   plugins: [
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
       writeToFileEmit: true,
     }),
-    new StatsWriterPlugin({
-      filename: 'stats.json',
-      fields: null,
-    }),
+    ...(process.env.CI_ENV === 'github' ? [new BundleAnalyzerPlugin({
+      reportFilename: 'webpack-stats.html',
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      logLevel: 'warn',
+    })] : []),
     new MiniCssExtractPlugin({
       filename: path.join('stylesheets', cssFilename),
     }),
@@ -90,8 +92,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
 
   output: {
     path: path.resolve(__dirname, 'public/compiled-assets'),
-    chunkFilename: 'webpack/[chunkhash].js',
-    filename: `javascripts/${outputFilename}`,
+    chunkFilename: `webpack/${jsFilename}`,
+    filename: `javascripts/${jsFilename}`,
     publicPath: '/assets/',
   },
 

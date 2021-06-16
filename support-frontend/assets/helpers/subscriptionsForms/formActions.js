@@ -1,27 +1,27 @@
 // @flow
 
 import type { Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { PayPal } from 'helpers/paymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { PayPal } from 'helpers/forms/paymentMethods';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { ErrorReason } from 'helpers/errorReasons';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { FormField, Stage } from './formFields';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import * as storage from 'helpers/storage';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import * as storage from 'helpers/storage/storage';
 import {
   trackThankYouPageLoaded,
 } from 'helpers/tracking/behaviour';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
-import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
+import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }

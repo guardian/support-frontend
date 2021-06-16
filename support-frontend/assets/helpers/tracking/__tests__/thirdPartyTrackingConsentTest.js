@@ -14,7 +14,7 @@ jest.mock('@guardian/consent-management-platform', () => ({
   onConsentChange: jest.fn(),
 }));
 
-jest.mock('helpers/logger', () => ({
+jest.mock('helpers/utilities/logger', () => ({
   logException: jest.fn(),
 }));
 

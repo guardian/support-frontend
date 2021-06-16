@@ -8,7 +8,7 @@ import {
   fromCountry,
   GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -19,7 +19,7 @@ import {
   glyph,
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import { fixDecimals } from 'helpers/subscriptions';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { applyDiscount, getPromotion } from 'helpers/productPrice/promotions';
 

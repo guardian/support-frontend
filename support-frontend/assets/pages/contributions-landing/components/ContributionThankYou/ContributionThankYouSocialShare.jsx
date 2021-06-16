@@ -22,7 +22,7 @@ import {
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 } from './utils/ophan';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
-import { generateReferralCode } from '../../../../helpers/campaignReferralCodes';
+import { generateReferralCode } from '../../../../helpers/campaigns/campaignReferralCodes';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 

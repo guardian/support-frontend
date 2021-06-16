@@ -1,8 +1,8 @@
 // @flow
 // $FlowIgnore - required for hooks
 import React, { useState, useEffect } from 'react';
-import { createOneOffReminderEndpoint, createRecurringReminderEndpoint } from 'helpers/routes';
-import { logException } from 'helpers/logger';
+import { createOneOffReminderEndpoint, createRecurringReminderEndpoint } from 'helpers/urls/routes';
+import { logException } from 'helpers/utilities/logger';
 import { css } from '@emotion/core';
 import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';

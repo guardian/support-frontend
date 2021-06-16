@@ -12,10 +12,10 @@ import {
   currencies,
   spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { amountIsValid } from 'helpers/formValidation';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { amountIsValid } from 'helpers/forms/formValidation';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { formatAmount } from 'helpers/checkouts';
+import { formatAmount } from 'helpers/forms/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
@@ -60,7 +60,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(selectAmount(amount, contributionType));
   },
   updateOtherAmount: (amount, countryGroupId, contributionType) => {
-    trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
     dispatch(updateOtherAmount(amount, contributionType));
   },
 });
@@ -132,6 +131,9 @@ function withProps(props: PropTypes) {
               props.countryGroupId,
               props.contributionType,
             )}
+            onBlur={() => !!otherAmount &&
+              trackComponentClick(`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`)
+            }
             error={otherAmountErrorMessage}
             autoComplete="off"
             autoFocus

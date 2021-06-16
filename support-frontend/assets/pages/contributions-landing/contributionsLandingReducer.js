@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type ErrorReason } from 'helpers/errorReasons';
+import { type ErrorReason } from 'helpers/forms/errorReasons';
 import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -11,18 +11,18 @@ import { type StateProvince } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import type { StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { getContributionTypeFromSession } from 'helpers/checkouts';
-import * as storage from 'helpers/storage';
+import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
+import * as storage from 'helpers/storage/storage';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from '../../helpers/internationalisation/country';
 
 // ----- Types ----- //
@@ -57,8 +57,7 @@ type SetPasswordData = {
 }
 
 export type StripePaymentRequestButtonData = {
-  paymentMethod: 'none' | StripePaymentMethod | null,
-  stripePaymentRequestObject: Object | null,
+  paymentMethod: 'none' | StripePaymentMethod,
   stripePaymentRequestButtonClicked: boolean,
   paymentError: ErrorReason | null,
 }
@@ -102,6 +101,11 @@ export type PayPalData = {
   buttonReady: boolean,
 }
 
+export type SepaData = {
+  iban: string | null,
+  accountHolderName: string | null,
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
@@ -117,6 +121,7 @@ type FormState = {
     REGULAR: StripePaymentRequestButtonData,
   },
   stripeCardFormData: StripeCardFormData,
+  sepaData: SepaData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
@@ -198,14 +203,12 @@ function createFormReducer() {
     },
     stripePaymentRequestButtonData: {
       ONE_OFF: {
-        paymentMethod: null,
-        stripePaymentRequestObject: null,
+        paymentMethod: 'none',
         stripePaymentRequestButtonClicked: false,
         paymentError: null,
       },
       REGULAR: {
-        paymentMethod: null,
-        stripePaymentRequestObject: null,
+        paymentMethod: 'none',
         stripePaymentRequestButtonClicked: false,
         paymentError: null,
       },
@@ -216,6 +219,10 @@ function createFormReducer() {
       recurringRecaptchaVerified: false,
       createPaymentMethod: null,
       handle3DS: null,
+    },
+    sepaData: {
+      iban: null,
+      accountHolderName: null,
     },
     setPasswordData: {
       password: '',
@@ -413,6 +420,24 @@ function createFormReducer() {
           },
         };
 
+      case 'SET_SEPA_IBAN':
+        return {
+          ...state,
+          sepaData: {
+            ...state.sepaData,
+            iban: action.iban,
+          },
+        };
+
+      case 'SET_SEPA_ACCOUNT_HOLDER_NAME':
+        return {
+          ...state,
+          sepaData: {
+            ...state.sepaData,
+            accountHolderName: action.accountHolderName,
+          },
+        };
+
       case 'UPDATE_RECAPTCHA_TOKEN':
         return { ...state, oneOffRecaptchaToken: action.recaptchaToken };
 
@@ -451,18 +476,6 @@ function createFormReducer() {
             [action.stripeAccount]: {
               ...state.stripePaymentRequestButtonData[action.stripeAccount],
               paymentMethod: action.paymentMethod,
-            },
-          },
-        };
-
-      case 'SET_STRIPE_PAYMENT_REQUEST_OBJECT':
-        return {
-          ...state,
-          stripePaymentRequestButtonData: {
-            ...state.stripePaymentRequestButtonData,
-            [action.stripeAccount]: {
-              ...state.stripePaymentRequestButtonData[action.stripeAccount],
-              stripePaymentRequestObject: action.stripePaymentRequestObject,
             },
           },
         };

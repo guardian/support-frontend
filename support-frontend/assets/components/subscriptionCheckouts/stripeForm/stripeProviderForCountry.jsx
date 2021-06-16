@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
-import { getStripeKey } from 'helpers/stripe';
+import { getStripeKey } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import React from 'react';
 import { css } from '@emotion/core';
 import { from, until } from '@guardian/src-foundations/mq';
@@ -17,8 +17,8 @@ import {
   NZDCountries,
   UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { routes } from 'helpers/routes';
-import { useHasBeenSeen } from 'helpers/useHasBeenSeen';
+import { routes } from 'helpers/urls/routes';
+import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -37,6 +37,7 @@ import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+import EditorialVoice, { evContainerOverrides } from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
@@ -74,6 +75,7 @@ const reactElementId: {
 function DigitalLandingPage({
   countryGroupId,
   currencyId,
+  participations,
   productPrices,
   promotionCopy,
   orderIsAGift,
@@ -83,6 +85,7 @@ function DigitalLandingPage({
   }
 
   const isGift = orderIsAGift || false;
+  const showEditorialVoiceComponent = participations.editorialVoiceTestPart2 === 'variant';
 
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -132,7 +135,7 @@ function DigitalLandingPage({
       header={<CountrySwitcherHeader />}
       footer={footer}
     >
-      {countryGroupId === AUDCountries || orderIsAGift ?
+      {orderIsAGift ?
         <HeroWithImage
           orderIsAGift={isGift}
           countryGroupId={countryGroupId}
@@ -140,8 +143,10 @@ function DigitalLandingPage({
         /> :
         <HeroWithPriceCards
           promotionCopy={sanitisedPromoCopy}
+          countryGroupId={countryGroupId}
           priceList={heroPriceList}
-        />}
+        />
+      }
       <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={productBlockContainer}>
@@ -158,6 +163,13 @@ function DigitalLandingPage({
           </Block>
         </CentredContainer>
       </FullWidthContainer>
+      {showEditorialVoiceComponent &&
+        <FullWidthContainer cssOverrides={evContainerOverrides}>
+          <CentredContainer>
+            <EditorialVoice />
+          </CentredContainer>
+        </FullWidthContainer>
+      }
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices

@@ -6,7 +6,7 @@ import { space } from '@guardian/src-foundations';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { LinkButton } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type GiftableProduct = 'digital' | 'Guardian Weekly'
 

@@ -17,7 +17,9 @@ case class CreatePaymentMethodState(
   paymentFields: Either[PaymentFields, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
-  acquisitionData: Option[AcquisitionData]
+  acquisitionData: Option[AcquisitionData],
+  ipAddress: String,
+  userAgent: String
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec

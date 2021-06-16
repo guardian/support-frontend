@@ -1,6 +1,6 @@
 // @flow
 
-import { Monthly } from 'helpers/billingPeriods';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
   Collection,

@@ -6,15 +6,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType } from 'helpers/contributions';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
   getPaymentMethodToSelect,
   toHumanReadableContributionType,
-} from 'helpers/checkouts';
+} from 'helpers/forms/checkouts';
 
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Switches } from 'helpers/settings';
+import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
@@ -54,7 +54,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
     countryGroupId: CountryGroupId,
     useLocalCurrency: boolean,
   ) => {
-    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+    const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId, countryGroupId);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
     if (contributionType !== 'ONE_OFF') {

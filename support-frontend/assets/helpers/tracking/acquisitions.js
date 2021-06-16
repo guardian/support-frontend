@@ -4,13 +4,13 @@
 
 import { viewId } from 'ophan';
 
-import { get as getCookie } from 'helpers/cookie';
-import { getQueryParameter } from 'helpers/url';
-import { deserialiseJsonObject } from 'helpers/utilities';
+import { get as getCookie } from 'helpers/storage/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
+import { deserialiseJsonObject } from 'helpers/utilities/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
-import * as storage from 'helpers/storage';
-import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import { getCampaignCode } from 'helpers/campaigns';
+import * as storage from 'helpers/storage/storage';
+import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
+import { getCampaignCode } from 'helpers/campaigns/campaigns';
 
 // ----- Types ----- //
 
@@ -169,7 +169,7 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
 };
 
 // Builds the acquisition object from data and other sources.
-function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcquisitionData {
+function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisitionData {
 
   // This was how referrer pageview id used to be passed.
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
@@ -285,7 +285,7 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
     : deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Read from param, or read from sessionStorage, or build minimal version.
-  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || undefined);
+  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || {});
   storeReferrerAcquisitionData(referrerAcquisitionData);
 
   return referrerAcquisitionData;

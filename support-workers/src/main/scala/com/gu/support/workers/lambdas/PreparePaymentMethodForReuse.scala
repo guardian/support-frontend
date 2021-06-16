@@ -1,20 +1,19 @@
 package com.gu.support.workers.lambdas
 
-import java.util.UUID
-
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.gocardless.GoCardlessWorkersService
 import com.gu.i18n.{Country, CountryGroup}
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.ContributionState
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 
 class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[PreparePaymentMethodForReuseState, CreateZuoraSubscriptionState](servicesProvider) {
@@ -38,19 +37,25 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       crmId <- getOrFailWithMessage(account.CrmId, s"Zuora account $accountId has not CrmId")
       paymentMethod <- toPaymentMethod(getPaymentMethodResponse, services.goCardlessService, account.PaymentGateway)
       sfContact = SalesforceContactRecord(sfContactId, crmId)
+      contribution <- Future.fromTry(state.product match {
+        case c: Contribution => Success(c)
+        case _ => Failure(new RuntimeException("Reusing payment methods is not yet supported for products other than contributions"))
+      })
     } yield HandlerResult(
-        CreateZuoraSubscriptionState(
-          requestId = UUID.randomUUID(),
-          user = state.user,
-          giftRecipient = state.giftRecipient,
-          product = state.product,
-          state.analyticsInfo,
-          paymentMethod = Left(paymentMethod),
-          firstDeliveryDate = None,
-          promoCode = None,
-          salesforceContacts = SalesforceContactRecords(sfContact, None),
-          acquisitionData = state.acquisitionData
+      CreateZuoraSubscriptionState(
+        ContributionState(
+          product = contribution,
+          paymentMethod = paymentMethod,
+          salesForceContact = sfContact,
         ),
+        state.requestId,
+        state.user,
+        contribution,
+        state.analyticsInfo,
+        None,
+        None,
+        acquisitionData = state.acquisitionData
+      ),
       requestInfo
         .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
         .appendMessage(s"Product is ${state.product.describe}")

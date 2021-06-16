@@ -24,6 +24,7 @@ object DefaultPromotions {
 
   object Paper {
     val landing: PromoCode = "PAPER_LANDING_PAGE"
+    val june21Promotion = "JUNE21SALE"
   }
 
   object GuardianWeekly {

@@ -1,8 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-import { routes } from 'helpers/routes';
-import { logException } from 'helpers/logger';
+import { routes } from 'helpers/urls/routes';
+import { logException } from 'helpers/utilities/logger';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 

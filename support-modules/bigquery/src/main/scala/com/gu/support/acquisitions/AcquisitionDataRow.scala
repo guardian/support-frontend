@@ -135,6 +135,8 @@ object PaymentProvider{
 
   case object StripePaymentRequestButton extends PaymentProvider("STRIPE_PAYMENT_REQUEST_BUTTON")
 
+  case object StripeSepa extends PaymentProvider("STRIPE_SEPA")
+
   case object PayPal extends PaymentProvider("PAYPAL")
 
   case object DirectDebit extends PaymentProvider("GOCARDLESS")

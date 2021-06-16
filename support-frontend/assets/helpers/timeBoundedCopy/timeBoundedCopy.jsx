@@ -16,14 +16,15 @@ type TimedCopyCollection = { [LandingPage]: TimeBoundCopy[] }
 const timedCopy: TimedCopyCollection = {
   digitalSubscription: [
     {
-      startShowingOn: '2021-05-08',
+      startShowingOn: '2021-06-11',
+      stopShowingOn: '2021-07-11',
       copy: <>
         <p>
           <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
           you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
         </p>
         <p>
-          Plus celebrate our 200th birthday with our special edition, We were there, available for a limited time.
+          Plus take a deeper dive into the Euros with our new special edition, available for a limited time only.
         </p>
       </>,
     },

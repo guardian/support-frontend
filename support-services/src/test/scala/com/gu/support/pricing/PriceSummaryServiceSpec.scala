@@ -104,6 +104,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     checkPrice(discountBenefit, 11.99, 8.99, Monthly)
     checkPrice(discountBenefit, 119.90, 112.41, Annual)
     checkPrice(DiscountBenefit(25, Some(Months.FIVE)), 35.95, 28.46, Quarterly)
+    checkPrice(DiscountBenefit(36.975, Some(Months.TWELVE)), 119, 75, Annual)
 
     //Guardian Weekly domestic
     checkPrice(DiscountBenefit(25, Some(Months.TWO)), 37.50, 31.25, Quarterly)

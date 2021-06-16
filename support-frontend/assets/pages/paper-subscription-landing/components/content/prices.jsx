@@ -11,8 +11,6 @@ import ProductInfoChip from 'components/product/productInfoChip';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductOption, { type Product } from 'components/product/productOption';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import { Callout } from 'components/text/text';
-import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 import LinkTo from './linkTo';
@@ -77,20 +75,6 @@ const pricesInfo = css`
   margin-top: ${space[6]}px;
 `;
 
-const DiscountCalloutMaybe = () => {
-  if (!flashSaleIsActive('Paper', 'GBPCountries')) { return null; }
-  const [discount, duration] = [
-    getDiscount('Paper', 'GBPCountries'),
-    getDuration('Paper', 'GBPCountries'),
-  ];
-  if (discount && duration) {
-    return <Callout>Save up to {Math.round(discount * 100)}% for {duration}</Callout>;
-  } else if (discount) {
-    return <Callout>Save up to {Math.round(discount * 100)}% </Callout>;
-  }
-  return null;
-};
-
 function Prices({
   activeTab, setTabAction, products,
 }: PropTypes) {
@@ -98,7 +82,6 @@ function Prices({
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>Pick your subscription package below</h2>
-      <DiscountCalloutMaybe />
       <FlexContainer cssOverrides={priceBoxes}>
         {products.map(product => (
           <ProductOption

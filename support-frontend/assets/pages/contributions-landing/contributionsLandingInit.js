@@ -4,15 +4,15 @@
 
 import { type Store } from 'redux';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Switches } from 'helpers/settings';
-import { getQueryParameter } from 'helpers/url';
+import type { Switches } from 'helpers/globalsAndSwitches/settings';
+import { getQueryParameter } from 'helpers/urls/url';
 import {
   getContributionTypeFromSession,
   getContributionTypeFromUrl,
   getPaymentMethodFromSession,
   getValidPaymentMethods,
   getValidContributionTypesFromUrlOrElse,
-} from 'helpers/checkouts';
+} from 'helpers/forms/checkouts';
 import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -25,29 +25,30 @@ import {
   loadPayPalExpressSdk, loadAmazonPaySdk,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
   isUsableExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
-} from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { setExistingPaymentMethods, setContributionTypes } from 'helpers/page/commonActions';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
-import { isSwitchOn } from 'helpers/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { ContributionTypes } from 'helpers/contributions';
-import { getCampaignSettings } from 'helpers/campaigns';
-import { loadRecaptchaV2 } from '../../helpers/recaptcha';
-import { AmazonPay, PayPal } from 'helpers/paymentMethods';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
+import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 
 // ----- Functions ----- //
 
 function getInitialPaymentMethod(
   contributionType: ContributionType,
   countryId: IsoCountry,
+  countryGroupId: CountryGroupId,
   switches: Switches,
 ): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
-  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId, countryGroupId);
 
   if (
     paymentMethodFromSession &&
@@ -144,7 +145,7 @@ function selectInitialContributionTypeAndPaymentMethod(
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, countryGroupId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 
   switch (paymentMethod) {

@@ -13,7 +13,7 @@ import {
 } from 'components/gridPicture/gridPicture';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type ImageId as GridId, type ImageType } from 'helpers/theGrid';
+import { type ImageId as GridId, type ImageType } from 'helpers/images/theGrid';
 
 
 // ----- Types ----- //

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { SubscriptionProduct } from './subscriptions';
+import type { SubscriptionProduct } from './productPrice/subscriptions';
 
 // ----- Terms & Conditions ----- //
 

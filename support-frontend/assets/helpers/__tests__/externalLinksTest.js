@@ -16,7 +16,7 @@ import {
   androidAppUrl,
   getIosAppUrl,
   getDailyEditionUrl,
-} from '../externalLinks';
+} from '../urls/externalLinks';
 
 // ----- Tests ----- //
 

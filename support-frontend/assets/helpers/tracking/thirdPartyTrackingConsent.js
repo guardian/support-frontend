@@ -1,6 +1,6 @@
 // @flow
-import { logException } from 'helpers/logger';
-import { getGlobal } from 'helpers/globals';
+import { logException } from 'helpers/utilities/logger';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 
 type ConsentVector = {
     [key: string]: boolean;
