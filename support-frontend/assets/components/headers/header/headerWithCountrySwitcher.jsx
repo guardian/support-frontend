@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import CountryGroupSwitcherContainer from 'components/countryGroupSwitcher/countryGroupSwitcherContainer';
+import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 
 import { type Option } from 'helpers/types/option';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -26,7 +26,17 @@ export default function ({
   trackProduct?: Option<SubscriptionProduct>,
 }) {
 
-  const Switcher = CountryGroupSwitcherContainer(path, countryGroupId, listOfCountryGroups, trackProduct);
-
-  return () => <Header countryGroupId={countryGroupId} utility={<Switcher />} />;
+  return () => (
+    <Header
+      countryGroupId={countryGroupId}
+      utility={
+        <CountryGroupSwitcher
+          countryGroupIds={listOfCountryGroups}
+          selectedCountryGroup={countryGroupId}
+          subPath={path}
+          trackProduct={trackProduct}
+        />
+      }
+    />
+  );
 }

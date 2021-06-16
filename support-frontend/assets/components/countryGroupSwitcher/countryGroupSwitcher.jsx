@@ -1,14 +1,15 @@
 // @flow
 
 // ----- Imports ----- //
-
-import React, { Component } from 'react';
+// $FlowIgnore
+import React, { useState, useRef } from 'react';
 
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import Dialog from 'components/dialog/dialog';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import Menu, { LinkItem } from 'components/menu/menu';
 
+import { type Option } from 'helpers/types/option';
+import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
   countryGroups,
   type CountryGroupId,
@@ -23,91 +24,92 @@ import styles from './countryGroupSwitcher.module.scss';
 export type PropTypes = {|
   countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
-  onCountryGroupSelect: CountryGroupId => void,
+  trackProduct?: Option<SubscriptionProduct>,
   subPath: string,
 |};
 
-
 // ----- Component ----- //
 
-class CountryGroupSwitcher extends Component<PropTypes, {menuOpen: boolean, bounds: { top: number, left: number }}> {
+function CountryGroupSwitcher({
+  subPath, selectedCountryGroup, countryGroupIds, trackProduct,
+}: PropTypes) {
+  const buttonRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [bounds, setBounds] = useState({ top: 0, left: 0 });
 
-  state = {
-    menuOpen: false,
-    bounds: { top: 0, left: 0 },
+  function onCountryGroupSelect(cgId: CountryGroupId): void {
+    sendTrackingEventsOnClick({
+      id: `toggle_country_${cgId}`,
+      ...(trackProduct ? { product: trackProduct } : {}),
+      componentType: 'ACQUISITIONS_OTHER',
+    })();
   }
 
-  buttonRef: ?Element;
-
-  render() {
-    const {
-      onCountryGroupSelect, subPath, selectedCountryGroup, countryGroupIds,
-    } = this.props;
-    const { menuOpen, bounds: { top, left } } = this.state;
-
-    return (
-      <div className="component-country-group-switcher">
-        <button
-          aria-label="Select a country"
-          className={styles.button}
-          ref={(r) => { this.buttonRef = r; }}
-          onClick={() => {
-            if (this.buttonRef) {
-              this.setState({ bounds: this.buttonRef.getBoundingClientRect() });
-            }
-            this.setState({ menuOpen: true });
-            }}
-        >
-          {countryGroups[selectedCountryGroup].name}
-          {' '}
-          <strong>{currencies[countryGroups[selectedCountryGroup].currency].extendedGlyph}</strong>
-          <SvgDropdownArrow />
-        </button>
-        <Dialog
-          aria-label="Select a country"
-          open={menuOpen}
-          blocking={false}
-          styled={false}
-          onStatusChange={(status) => {
-            this.setState({ menuOpen: status });
-            if (status) {
-              sendTrackingEventsOnClick({
-                id: 'toggle_country',
-                componentType: 'ACQUISITIONS_BUTTON',
-              })();
-            }
+  return (
+    <div className="component-country-group-switcher">
+      <button
+        aria-label="Select a country"
+        className={styles.button}
+        ref={buttonRef}
+        onClick={() => {
+          if (buttonRef.current) {
+            setBounds(buttonRef.current.getBoundingClientRect());
+          }
+          setMenuOpen(true);
           }}
-        >
-          <Menu style={{ top, left, position: 'absolute' }}>
-            {
-              countryGroupIds.map((countryGroupId: CountryGroupId) =>
-              (
-                <LinkItem
-                  href={`/${countryGroups[countryGroupId].supportInternationalisationId}${subPath}`}
-                  onClick={() => onCountryGroupSelect(countryGroupId)}
-                  isSelected={countryGroupId === selectedCountryGroup}
-                >
-                  {countryGroups[countryGroupId].name}
-                  {' '}
-                  {currencies[countryGroups[countryGroupId].currency].extendedGlyph}
-                </LinkItem>
-                ))
-            }
-            <button
-              className="visually-hidden"
-              onClick={() => {
-                this.setState({ menuOpen: false });
-              }}
-            >
-              Close
-            </button>
-          </Menu>
-        </Dialog>
-      </div>
-    );
-  }
+      >
+        {countryGroups[selectedCountryGroup].name}
+        {' '}
+        <strong>{currencies[countryGroups[selectedCountryGroup].currency].extendedGlyph}</strong>
+        <SvgDropdownArrow />
+      </button>
+      <Dialog
+        aria-label="Select a country"
+        open={menuOpen}
+        blocking={false}
+        styled={false}
+        onStatusChange={(status) => {
+          setMenuOpen(status);
+          if (status) {
+            sendTrackingEventsOnClick({
+              id: 'toggle_country',
+              componentType: 'ACQUISITIONS_BUTTON',
+            })();
+          }
+        }}
+      >
+        <Menu style={{ top: bounds.top, left: bounds.left, position: 'absolute' }}>
+          {
+            countryGroupIds.map((countryGroupId: CountryGroupId) =>
+            (
+              <LinkItem
+                href={`/${countryGroups[countryGroupId].supportInternationalisationId}${subPath}`}
+                onClick={() => onCountryGroupSelect(countryGroupId)}
+                isSelected={countryGroupId === selectedCountryGroup}
+              >
+                {countryGroups[countryGroupId].name}
+                {' '}
+                {currencies[countryGroups[countryGroupId].currency].extendedGlyph}
+              </LinkItem>
+              ))
+          }
+          <button
+            className="visually-hidden"
+            onClick={() => {
+              setMenuOpen(false);
+            }}
+          >
+            Close
+          </button>
+        </Menu>
+      </Dialog>
+    </div>
+  );
 }
 
+CountryGroupSwitcher.defaultProps = {
+  trackProduct: null,
+};
 
 // ----- Exports ----- //
 
