@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { background, border } from '@guardian/src-foundations/palette';
-import { headline, body } from '@guardian/src-foundations/typography';
+import { headline, body, textSans } from '@guardian/src-foundations/typography';
 import { SvgTicket } from './icons/ticket';
 import EventCard from './eventCard';
 import { ennyImage, emmaJohnImage } from './eventsImages';
@@ -98,13 +98,41 @@ const para = css`
   margin-top: ${space[1]}px;
 `;
 
+const bold = css`
+  font-style: bold;
+`;
+
 const paraSecond = css`
   ${body.medium()};
   line-height: 135%;
-  margin: ${space[4]}px 0 ${space[5]}px;
+  margin: ${space[4]}px 0;
 
   ${from.tablet} {
-    margin-bottom: ${space[4]}px 0;
+    margin-bottom: ${space[5]}px;
+  }
+`;
+
+const paraTiny = css`
+  display: inline-flex;
+  order: 3;
+  ${textSans.xsmall()}
+  margin: ${space[3]}px 0 ${space[2]}px;
+  a, a:visited, a:hover {
+    color: inherit;
+  }
+
+  ${from.tablet} {
+    margin: 0;
+    position: absolute;
+    bottom: 10px;
+  }
+
+  ${from.desktop} {
+    bottom: 60px;
+  }
+
+  ${from.wide} {
+    bottom: 70px;
   }
 `;
 
@@ -136,10 +164,11 @@ const eventCardContainer = css`
     max-width: 45%;
     padding-right: ${space[5]}px;
   }
-
 `;
 
-const EventsModule = () => (
+const EventsModule = () => {
+  const tandcLink = 'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
+  return (
   <>
     <BlockLabel tag="h2" cssOverrides={label}>Special offer</BlockLabel>
     <div css={container}>
@@ -147,11 +176,11 @@ const EventsModule = () => (
         <div css={textContentContainer}>
           <div css={icon}><SvgTicket /></div>
           <h3 css={cardTitle} aria-label="Offer for new Guardian subscribers: ">Enjoy 6 free tickets to digital Guardian events</h3>
-          <p css={para}>In the <strong>first 3 months</strong> of your subscription</p>
+          <p css={para}>In the <span css={bold}>first 3 months</span> of your subscription</p>
           <p css={paraSecond}>
-        Join interactive Live conversations with journalists, political leaders and cultural
-        icons. Or get inspired to learn a new skill in selected Masterclasses. With events
-        launching weekly and available on-demand.
+            Join interactive Live conversations with journalists, political leaders and cultural
+            icons. Or get inspired to learn a new skill in selected Masterclasses. With events
+            launching weekly and available on-demand.
           </p>
         </div>
         <div css={eventCardContainer}>
@@ -174,10 +203,12 @@ const EventsModule = () => (
             eventDescription="How to use sports psychology to improve your life"
           />
         </div>
+        <p css={paraTiny}>See full&nbsp;<a href={tandcLink}> terms and conditions</a>&nbsp;for details</p>
       </div>
     </div>
   </>
-);
+  );
+};
 
 
 export default EventsModule;
