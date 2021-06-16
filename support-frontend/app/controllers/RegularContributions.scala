@@ -10,12 +10,10 @@ import com.gu.i18n.Title
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.{Address, User}
-import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import cookies.RecurringContributionCookies
 import io.circe.syntax._
 import lib.PlayImplicits._
-import monitoring.PathVerification._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.libs.circe.Circe
@@ -32,8 +30,7 @@ class RegularContributions(
     identityService: IdentityService,
     testUsers: TestUserService,
     components: ControllerComponents,
-    guardianDomain: GuardianDomain,
-    tipMonitoring: Tip
+    guardianDomain: GuardianDomain
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -84,15 +81,6 @@ class RegularContributions(
         InternalServerError
       },
       { statusResponse =>
-        body.paymentFields.left.map(
-          paymentFields => if (!testUsers.isTestUser(request)) {
-            monitoredRegion(body.billingAddress.country).map { region =>
-              val tipPath = TipPath(region, RecurringContribution, monitoredPaymentMethod(paymentFields), guestCheckout)
-              verify(tipPath, tipMonitoring.verify)
-            }
-          }
-        )
-
         Accepted(statusResponse.asJson).withCookies(RecurringContributionCookies.create(guardianDomain, billingPeriod):_*)
       }
     )
