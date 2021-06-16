@@ -124,4 +124,4 @@ const WeeklyLandingPage = ({
   );
 };
 
-renderPage(<WeeklyLandingPage {...weeklyLandingProps} />, reactElementId[countryGroupId]);
+renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />, reactElementId[countryGroupId]);

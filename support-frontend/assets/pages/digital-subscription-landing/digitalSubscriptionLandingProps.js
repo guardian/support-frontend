@@ -28,7 +28,7 @@ export type DigitalLandingPropTypes = {|
 const countryGroupId = detectCountryGroup();
 const countryId = detectCountry();
 
-export const digitalLandingProps: DigitalLandingPropTypes = {
+export const digitalLandingProps = (): DigitalLandingPropTypes => ({
   countryId,
   countryGroupId,
   currencyId: detectCurrency(countryGroupId),
@@ -36,4 +36,4 @@ export const digitalLandingProps: DigitalLandingPropTypes = {
   productPrices: getProductPrices(),
   promotionCopy: getPromotionCopy(),
   orderIsAGift: getGlobal('orderIsAGift'),
-};
+});

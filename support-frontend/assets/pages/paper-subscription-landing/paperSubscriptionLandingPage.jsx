@@ -93,7 +93,7 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
   );
 };
 
-const content = <PaperLandingPage {...paperLandingProps} />;
+const content = <PaperLandingPage {...paperLandingProps()} />;
 
 renderPage(content, reactElementId);
 

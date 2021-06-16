@@ -54,4 +54,4 @@ const SubscriptionsLandingPage = ({
   );
 };
 
-renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps} />, 'subscriptions-landing-page');
+renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps()} />, 'subscriptions-landing-page');

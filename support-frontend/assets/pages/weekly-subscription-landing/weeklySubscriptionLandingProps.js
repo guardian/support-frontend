@@ -12,9 +12,9 @@ export type WeeklyLandingPropTypes = {|
   orderIsAGift: ?boolean;
 |}
 
-export const weeklyLandingProps: WeeklyLandingPropTypes = {
+export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
   countryId: detectCountry(),
   productPrices: getProductPrices(),
   promotionCopy: getPromotionCopy(),
   orderIsAGift: getGlobal('orderIsAGift'),
-};
+});

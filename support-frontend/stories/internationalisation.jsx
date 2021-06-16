@@ -43,7 +43,6 @@ stories.add('Country Group Switcher', () => {
         International,
       ]}
         selectedCountryGroup={countryGroup}
-        onCountryGroupSelect={() => {}}
         subPath={window.location.search}
       />
     </div>

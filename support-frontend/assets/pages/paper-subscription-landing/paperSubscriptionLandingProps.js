@@ -9,7 +9,7 @@ export type PaperLandingPropTypes = {|
   promotionCopy: ?PromotionCopy;
 |}
 
-export const paperLandingProps: PaperLandingPropTypes = {
+export const paperLandingProps = (): PaperLandingPropTypes => ({
   productPrices: getProductPrices(),
   promotionCopy: getPromotionCopy(),
-};
+});

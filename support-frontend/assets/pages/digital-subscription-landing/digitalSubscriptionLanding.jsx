@@ -190,4 +190,6 @@ function DigitalLandingPage({
   );
 }
 
-renderPage(<DigitalLandingPage {...digitalLandingProps} />, reactElementId[digitalLandingProps.countryGroupId]);
+const props = digitalLandingProps();
+
+renderPage(<DigitalLandingPage {...props} />, reactElementId[props.countryGroupId]);
