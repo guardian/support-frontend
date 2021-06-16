@@ -9,9 +9,9 @@ import org.joda.time.DateTime
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContributionEmailFields(
-     getMandate: String => Future[Option[String]],
-     created: DateTime,
-   ) {
+   getMandate: String => Future[Option[String]],
+   created: DateTime,
+ ) {
 
   def build(contributionProcessedInfo: SendThankYouEmailContributionState)(implicit ec: ExecutionContext): Future[EmailFields] = {
     getPaymentFields(
