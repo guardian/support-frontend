@@ -82,7 +82,7 @@ const heroParagraph = css`
 const roundelLines = css`
   padding: ${space[1]}px;
   ${headline.xxxsmall({ fontWeight: 'bold' })}
-  ${from.tablet} {
+  ${from.desktop} {
     ${headline.xxsmall({ fontWeight: 'bold' })}
   }
 `;
