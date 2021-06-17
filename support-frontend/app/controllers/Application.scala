@@ -185,7 +185,7 @@ class Application(
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
+      mdapiUrl = membersDataService.apiUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       fontLoaderBundle = fontLoaderBundle,

@@ -6,8 +6,6 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
-import com.gu.tip.Tip
-import monitoring.PathVerification._
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
@@ -25,7 +23,6 @@ class PayPalOneOff(
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
     settingsProvider: AllSettingsProvider,
-    tipMonitoring: Tip,
     fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
@@ -62,15 +59,9 @@ class PayPalOneOff(
     }
   }
 
-  def resultFromPaypalSuccess(success: PayPalSuccess, country: String, isTestUser: Boolean)(implicit request: RequestHeader): Result = {
+  def resultFromPaypalSuccess(success: PayPalSuccess, country: String)(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
     val redirect = Redirect(s"/$country/thankyou")
-    if (!isTestUser) {
-      monitoredRegion(country).map {
-        region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
-      }
-    }
-
     success.guestAccountCreationToken.fold {
       SafeLogger.info("Redirecting to thank you page without guestAccountCreationToken")
       redirect
@@ -105,6 +96,6 @@ class PayPalOneOff(
     val userAgent = request.headers.get("user-agent")
 
     paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)
-      .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
+      .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country))
   }
 }
