@@ -1,6 +1,7 @@
 package com.gu.support.workers
 
 import com.gu.support.catalog
+import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.catalog.{Product, ProductRatePlan}
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.zuora.api.ReaderType
@@ -13,7 +14,7 @@ object ProductTypeRatePlans {
     environment: TouchPointEnvironment,
     readerType: ReaderType
   ): Option[ProductRatePlan[catalog.GuardianWeekly.type]] = {
-    val postIntroductoryBillingPeriod = if (product.billingPeriod == SixWeekly) Quarterly else product.billingPeriod
+    val postIntroductoryBillingPeriod = if (product.billingPeriod == SixWeekly) postIntroductorySixForSixBillingPeriod else product.billingPeriod
     catalog.GuardianWeekly.ratePlans.getOrElse(environment, Nil).find(productRatePlan =>
       productRatePlan.fulfilmentOptions == product.fulfilmentOptions &&
         productRatePlan.billingPeriod == postIntroductoryBillingPeriod &&
