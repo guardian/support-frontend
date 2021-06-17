@@ -690,6 +690,9 @@ $teal-green: #006d67;
     border-left: none;
     border-right: none;
     background-color: #ffffff;
+    &:focus {
+      box-shadow: 0 0 0 5px #00B2FF;
+    }
 
     @include mq($from: phablet) {
       border-left: 1px solid gu-colour(neutral-86);
