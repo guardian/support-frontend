@@ -1,7 +1,7 @@
 package model
 
 import io.circe.generic.semiauto._
-import io.circe.{Encoder, Json, ObjectEncoder}
+import io.circe.{Encoder, Json}
 
 import scala.reflect._
 
@@ -21,7 +21,7 @@ object ResultBody {
 
   case class RequiresAction[A](data: A)
 
-  private def typeDiscriminatorEncoder[A : ClassTag](encoder: ObjectEncoder[A]): ObjectEncoder[A] =
+  private def typeDiscriminatorEncoder[A : ClassTag](encoder: Encoder.AsObject[A]): Encoder.AsObject[A] =
     encoder.mapJsonObject { obj =>
       obj.add("type", Json.fromString(classTag[A].runtimeClass.getSimpleName.toLowerCase))
     }

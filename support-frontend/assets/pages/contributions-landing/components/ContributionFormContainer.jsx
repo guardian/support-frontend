@@ -12,9 +12,14 @@ import ContributionTicker from 'components/ticker/contributionTicker';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
+import { ContributionFormBlurb } from './ContributionFormBlurb';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
+import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
+import { PreviousGivingBodyCopy, PreviousGivingHeaderCopy } from './ContributionsFormBlurbPreviousGiving';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 
 // ----- Types ----- //
@@ -30,6 +35,8 @@ type PropTypes = {|
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
   countryId: IsoCountry,
+  userName: string | null,
+  referrerAcquisitionData: ReferrerAcquisitionData,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -40,6 +47,8 @@ const mapStateToProps = (state: State) => ({
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
   countryId: state.common.internationalisation.countryId,
+  userName: state.page.user.firstName,
+  referrerAcquisitionData: state.common.referrerAcquisitionData,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -108,16 +117,24 @@ function withProps(props: PropTypes) {
     );
   }
 
+  const showPreviousGiving = isInSupportAgainHeaderVariant(props.referrerAcquisitionData);
+  const lastOneOffContribution = useLastOneOffContribution();
+
   return (
     <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-      <div className="gu-content__blurb">
-        <div className="gu-content__blurb-header-container">
-          <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
-        </div>
-        { countryGroupDetails.contributeCopy ?
-          <p className="gu-content__blurb-blurb">{countryGroupDetails.contributeCopy}</p> : null
-        }
-      </div>
+      { showPreviousGiving && lastOneOffContribution && (
+        <ContributionFormBlurb
+          headerCopy={<PreviousGivingHeaderCopy userName={props.userName} />}
+          bodyCopy={<PreviousGivingBodyCopy lastOneOffContribution={lastOneOffContribution} />}
+        />
+      )}
+
+      {!showPreviousGiving && (
+        <ContributionFormBlurb
+          headerCopy={countryGroupDetails.headerCopy}
+          bodyCopy={countryGroupDetails.contributeCopy}
+        />
+      )}
 
       <div className="gu-content__form">
         {showSecureTransactionIndicator()}

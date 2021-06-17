@@ -70,7 +70,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
     (for {
       voucherEveryday <- Paper.getProductRatePlan(PROD, Monthly, Collection, Everyday)
       priceList <- serviceWithFixtures.getPriceList(voucherEveryday)
-    } yield priceList.savingVsRetail shouldBe Some(29)).getOrElse(fail())
+    } yield priceList.savingVsRetail shouldBe Some(43)).getOrElse(fail())
 
   }
 }

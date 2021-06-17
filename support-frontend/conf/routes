@@ -1,12 +1,12 @@
 # ----- System ----- #
 
-GET /healthcheck                                                   controllers.Application.healthcheck
-GET /error500                                                      lib.ErrorController.error500
-GET /cookies                                                       controllers.DiagnosticsController.cookies
+GET /healthcheck                                                   controllers.Application.healthcheck()
+GET /error500                                                      lib.ErrorController.error500()
+GET /cookies                                                       controllers.DiagnosticsController.cookies()
 
 # ----- Unsupported Browsers ----- #
 
-GET /unsupported-browser                                           controllers.Application.unsupportedBrowser
+GET /unsupported-browser                                           controllers.Application.unsupportedBrowser()
 
 # ----- Remove trailing slashes so that /uk/ redirects to /uk ---- #
 
@@ -14,7 +14,7 @@ GET  /*path/                                                       controllers.A
 
 # ----- Sitemap ----- #
 
-GET /sitemap.xml                                                   controllers.SiteMap.sitemap
+GET /sitemap.xml                                                   controllers.SiteMap.sitemap()
 
 
 # ----- Geo landings ----- #
@@ -70,12 +70,12 @@ POST  /stripe/create-setup-intent/prb                              controllers.S
 
 # this endpoint should be removed once identity remove
 # the need for a client token
-POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
+POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing()
 
 # ------ Identity ------ #
-PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest
+PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest()
 GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
-POST /identity/signin-url                                          controllers.IdentityController.createSignInURL
+POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
 
 # ----- Subscriptions ----- #
 
@@ -124,23 +124,23 @@ GET  /r/:redemptionCode                                            controllers.R
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 
-POST /subscribe/create                                             controllers.CreateSubscriptionController.create
+POST /subscribe/create                                             controllers.CreateSubscriptionController.create()
 
 # ----- Authentication ----- #
 
-GET  /login                                                        controllers.Login.login
-GET  /loginAction                                                  controllers.Login.loginAction
-GET  /oauth2callback                                               controllers.Login.oauth2Callback
-GET  /logout                                                       controllers.Login.logout
-GET  /test-users                                                   controllers.TestUsersManagement.createTestUser
+GET  /login                                                        controllers.Login.login()
+GET  /loginAction                                                  controllers.Login.loginAction()
+GET  /oauth2callback                                               controllers.Login.oauth2Callback()
+GET  /logout                                                       controllers.Login.logout()
+GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
 
 
 # ----- PayPal (Recurring Endpoints) ----- #
 
-POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment
-POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement
-GET  /paypal/return                                                controllers.PayPalRegular.returnUrl
-GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl
+POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
+POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement()
+GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
+GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 
 # ----- PayPal (One-off Endpoints) ----- #
 
@@ -153,11 +153,11 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return         controllers.P
 
 # If we get an error back from the execute-payment request to PayPal,
 # we need to redirect the user to a page that tells them their payment failed.
-GET  /paypal/rest/error                                            controllers.PayPalOneOff.paypalError
+GET  /paypal/rest/error                                            controllers.PayPalOneOff.paypalError()
 
 # ----- Direct Debit ----- #
 
-POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount
+POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount()
 
 # ----- Promotions ----- #
 GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
@@ -170,7 +170,7 @@ GET  /.well-known/*file                                            controllers.A
 # ----- Assets ----- #
 # See application.conf for cache time config
 
-GET  /favicon.ico                                                  controllers.Favicon.get
+GET  /favicon.ico                                                  controllers.Favicon.get()
 
 GET  /assets/*file                                                 controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                                        controllers.Assets.at(path="/public", file)

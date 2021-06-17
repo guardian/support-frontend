@@ -19,7 +19,7 @@
   paymentMethodConfigs: ContributionsPaymentMethodConfigs,
   paymentApiUrl: String,
   paymentApiPayPalEndpoint: String,
-  existingPaymentOptionsEndpoint: String,
+  mdapiUrl: String,
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent],
@@ -105,7 +105,7 @@
   };
   window.guardian.paymentApiUrl = "@paymentApiUrl";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
-  window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
+  window.guardian.mdapiUrl = "@mdapiUrl";
   window.guardian.csrf = { token: "@CSRF.getToken.value" };
 
   @guestAccountCreationToken.map { guestAccountCreationToken =>
