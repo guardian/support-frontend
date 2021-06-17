@@ -113,7 +113,9 @@ const EventCard = (props: PropTypes) => {
             </div>
           </div>
           <p css={eventDescriptionText}>
-            <span css={eventTypeStyle} aria-label="The event type is">{props.eventSectionText}</span>
+            <span css={eventTypeStyle} aria-label="The event type is">
+              {props.eventSectionText}<span aria-hidden="true">&nbsp;/&nbsp;</span>
+            </span>
             <span aria-label="Event summary:">{props.eventDescription}</span>
           </p>
         </div>

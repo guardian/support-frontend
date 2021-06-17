@@ -171,11 +171,11 @@ const EventsModule = () => {
   return (
   <>
     <BlockLabel tag="h2" cssOverrides={label}>Special offer</BlockLabel>
-    <div css={container}>
+    <section css={container}>
       <div css={contentContainer}>
         <div css={textContentContainer}>
           <div css={icon}><SvgTicket /></div>
-          <h3 css={cardTitle} aria-label="Offer for new Guardian subscribers: ">Enjoy 6 free tickets to digital Guardian events</h3>
+          <h3 css={cardTitle}>Enjoy 6 free tickets to digital Guardian events</h3>
           <p css={para}>In the <span css={bold}>first 3 months</span> of your subscription</p>
           <p css={paraSecond}>
             Join interactive Live conversations with journalists, political leaders and cultural
@@ -190,7 +190,7 @@ const EventsModule = () => {
             eventDate="27 July 2021"
             eventTime="8-9pm BST"
             eventColour={eventsOfferPink}
-            eventSectionText="Culture / "
+            eventSectionText="Culture"
             eventDescription="In conversation with UK rapper Enny"
           />
           <EventCard
@@ -199,13 +199,13 @@ const EventsModule = () => {
             eventDate="22 July 2021"
             eventTime="6-8pm BST"
             eventColour={eventsOfferRed}
-            eventSectionText="Sport / "
+            eventSectionText="Sport"
             eventDescription="How to use sports psychology to improve your life"
           />
         </div>
         <p css={paraTiny}>See full&nbsp;<a href={tandcLink}> terms and conditions</a>&nbsp;for details</p>
       </div>
-    </div>
+    </section>
   </>
   );
 };
