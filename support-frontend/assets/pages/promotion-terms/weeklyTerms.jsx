@@ -27,7 +27,7 @@ const orderedCountryGroupNames: NameAndSaving[] = [
   { name: 'International', saving: null },
 ];
 
-const shortTermDescription = postIntroductorySixForSixBillingPeriod  === Quarterly ?
+const shortTermDescription = postIntroductorySixForSixBillingPeriod === Quarterly ?
   'Quarterly (13 weeks)' :
   'Monthly (4 weeks)';
 
