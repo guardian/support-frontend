@@ -1,5 +1,3 @@
-import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport._
-
 name := "acquisitions-firehose-transformer"
 
 organization := "com.gu"
@@ -11,15 +9,6 @@ version := "0.1"
 scalaVersion := "2.12.8"
 
 val circeVersion = "0.10.0"
-
-scalacOptions ++= Seq(
-  "-deprecation",
-  "-encoding", "UTF-8",
-  "-target:jvm-1.8",
-  "-Ywarn-dead-code"
-)
-
-resolvers += Resolver.sonatypeRepo("releases")
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
@@ -33,15 +22,11 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
 
-
-scalacOptions ++= Seq("-Xfatal-warnings")
-
-enablePlugins(JavaAppPackaging, RiffRaffArtifact)
-
-topLevelDirectory in Universal := None
-packageName in Universal := normalizedName.value
-
-riffRaffPackageType := (packageBin in Universal).value
-riffRaffManifestProjectName := s"Contributions::${name.value}"
+assemblyJarName := s"$name.jar"
+riffRaffPackageType := assembly.value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
+riffRaffManifestProjectName := s"support:lambdas:$name"
+riffRaffArtifactResources += (file(s"support-lambdas/$name/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch")
+riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")

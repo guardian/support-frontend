@@ -244,3 +244,7 @@ lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .dependsOn(`module-aws`)
+
+lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas/acquisitions-firehose-transformer"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .dependsOn(`module-bigquery`)
