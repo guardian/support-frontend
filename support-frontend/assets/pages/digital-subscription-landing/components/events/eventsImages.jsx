@@ -1,24 +1,24 @@
 import React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 
-const ennyImage = (
+const jessPhillips = (
   <GridImage
     classModifiers={['']}
-    gridId="enny"
+    gridId="jessPhillips"
     srcSizes={[140, 500, 1000]}
     sizes="(max-width: 480px) 100px,
             (max-width: 740px) 100%,
             (max-width: 1067px) 150%,
-            800px"
-    imgType="jpg"
+            560px"
+    imgType="png"
   />
 );
 
-const emmaJohnImage = (
+const robbieAndersonImage = (
   <GridImage
     classModifiers={['']}
-    gridId="emmaJohn"
-    srcSizes={[140, 500, 560]}
+    gridId="robbieAnderson"
+    srcSizes={[140, 500, 1000]}
     sizes="(max-width: 480px) 100px,
             (max-width: 740px) 100%,
             (max-width: 1067px) 150%,
@@ -28,6 +28,6 @@ const emmaJohnImage = (
 );
 
 export {
-  ennyImage,
-  emmaJohnImage,
+  jessPhillips,
+  robbieAndersonImage,
 };

@@ -4,6 +4,6 @@ export const guardianWeeklyBlue = '#66c2e9';
 
 export const paperSubscriptionsBlue = '#90DCFF';
 
-export const eventsOfferPink = '#C91B68';
+export const eventsPink = '#C91B68';
 
-export const eventsOfferRed = '#CC2B12';
+export const masterclassOrange = '#ff7f0f';

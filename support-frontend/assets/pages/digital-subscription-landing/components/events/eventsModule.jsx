@@ -8,8 +8,8 @@ import { background, border } from '@guardian/src-foundations/palette';
 import { headline, body, textSans } from '@guardian/src-foundations/typography';
 import { SvgTicket } from './icons/ticket';
 import EventCard from './eventCard';
-import { ennyImage, emmaJohnImage } from './eventsImages';
-import { eventsOfferPink, eventsOfferRed } from 'stylesheets/emotion/colours';
+import { jessPhillips, robbieAndersonImage } from './eventsImages';
+import { eventsPink, masterclassOrange } from 'stylesheets/emotion/colours';
 import BlockLabel from 'components/blockLabel/blockLabel';
 
 const container = css`
@@ -99,7 +99,7 @@ const para = css`
 `;
 
 const bold = css`
-  font-style: bold;
+  font-weight: bold;
 `;
 
 const paraSecond = css`
@@ -140,9 +140,18 @@ const eventCardContainer = css`
   width: 100%;
   display: inline-flex;
   justify-content: space-between;
+  section {
+    width: 140px;
+    max-width: 140px;
+  }
 
   ${from.mobileMedium} {
     justify-content: flex-start;
+    section {
+      width: 45%;
+      min-width: 140px;
+      max-width: 160px;
+    }
     section + section {
       margin-left: ${space[5]}px;
     }
@@ -186,21 +195,21 @@ const EventsModule = () => {
         <div css={eventCardContainer}>
           <EventCard
             eventType="Featured event"
-            eventImage={ennyImage}
-            eventDate="27 July 2021"
+            eventImage={jessPhillips}
+            eventDate="21 July 2021"
             eventTime="8-9pm BST"
-            eventColour={eventsOfferPink}
-            eventSectionText="Culture"
-            eventDescription="In conversation with UK rapper Enny"
+            eventColour={eventsPink}
+            eventSectionText="Politics"
+            eventDescription="Everything you really need to know about politics, with Jess Phillips MP"
           />
           <EventCard
             eventType="Featured masterclass"
-            eventImage={emmaJohnImage}
+            eventImage={robbieAndersonImage}
             eventDate="22 July 2021"
-            eventTime="6-8pm BST"
-            eventColour={eventsOfferRed}
+            eventTime="6.30-8pm BST"
+            eventColour={masterclassOrange}
             eventSectionText="Sport"
-            eventDescription="How to use sports psychology to improve your life"
+            eventDescription="How to apply sports psychology to your life with Dr Robbie Anderson"
           />
         </div>
         <p css={paraTiny}>See full&nbsp;<a href={tandcLink}> terms and conditions</a>&nbsp;for details</p>
