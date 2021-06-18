@@ -6,8 +6,8 @@ import { textSans, body } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
-import { SvgCalendar } from './icons/calendar';
-import { SvgClock } from './icons/clock';
+import { SvgCalendar } from 'components/icons/calendar';
+import { SvgClock } from 'components/icons/clock';
 
 type PropTypes = {
   eventType: string,

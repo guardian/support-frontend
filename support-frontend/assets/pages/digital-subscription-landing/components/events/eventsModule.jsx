@@ -6,7 +6,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
 import { background, border } from '@guardian/src-foundations/palette';
 import { headline, body, textSans } from '@guardian/src-foundations/typography';
-import { SvgTicket } from './icons/ticket';
+import { SvgTicket } from 'components/icons/ticket';
 import EventCard from './eventCard';
 import { jessPhillips, robbieAndersonImage } from './eventsImages';
 import { eventsPink, masterclassOrange } from 'stylesheets/emotion/colours';
