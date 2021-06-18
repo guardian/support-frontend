@@ -87,7 +87,8 @@ lazy val root = (project in file("."))
     `module-bigquery`,
     `module-rest`,
     `support-payment-api`,
-    `acquisition-event-producer`
+    `acquisition-event-producer`,
+    `acquisitions-firehose-transformer`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -247,4 +248,8 @@ lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
 
 lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas/acquisitions-firehose-transformer"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    libraryDependencies ++= commonDependencies,
+  )
   .dependsOn(`module-bigquery`)
+  .aggregate(`module-bigquery`)
