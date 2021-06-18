@@ -6,4 +6,4 @@ export const paperSubscriptionsBlue = '#90DCFF';
 
 export const eventsPink = '#C91B68';
 
-export const masterclassOrange = '#ff7f0f';
+export const masterclassOrange = '#c25519';
