@@ -52,7 +52,7 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
     delete element.dataset.notHydrated;
     try {
       if (process.env.NODE_ENV === 'DEV' && !isSafari) {
-        import('react-axe').then((axe) => {
+        import('@axe-core/react').then((axe) => {
           console.log('Loading react-axe for accessibility analysis');
           axe.default(React, ReactDOM, 1000);
           ReactDOM.render(content, element, callBack);
