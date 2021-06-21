@@ -123,15 +123,15 @@ const paraTiny = css`
   ${from.tablet} {
     margin: 0;
     position: absolute;
-    bottom: 10px;
+    bottom: 40px;
   }
 
   ${from.desktop} {
-    bottom: 60px;
+    bottom: 55px;
   }
 
   ${from.wide} {
-    bottom: 70px;
+    bottom: 80px;
   }
 `;
 
