@@ -12,6 +12,13 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion
 )
+assemblyMergeStrategy in assembly := {
+  case x if x.endsWith("module-info.class") => MergeStrategy.discard
+  case str if str.contains("simulacrum") => MergeStrategy.first
+  case y =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(y)
+}
 
 assemblyJarName := s"$name.jar"
 riffRaffPackageType := assembly.value
