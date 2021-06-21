@@ -4,12 +4,11 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-import { background, border } from '@guardian/src-foundations/palette';
+import { background, border, sport, news } from '@guardian/src-foundations/palette';
 import { headline, body, textSans } from '@guardian/src-foundations/typography';
 import { SvgTicket } from 'components/icons/ticket';
 import EventCard from './eventCard';
 import { jessPhillips, robbieAndersonImage } from './eventsImages';
-import { eventsPink, masterclassOrange } from 'stylesheets/emotion/colours';
 import BlockLabel from 'components/blockLabel/blockLabel';
 
 const container = css`
@@ -198,7 +197,7 @@ const EventsModule = () => {
             eventImage={jessPhillips}
             eventDate="21 July 2021"
             eventTime="8-9pm BST"
-            eventColour={eventsPink}
+            eventColour={news[400]}
             eventSectionText="Politics"
             eventDescription="Everything you really need to know about politics, with Jess Phillips MP"
           />
@@ -207,7 +206,7 @@ const EventsModule = () => {
             eventImage={robbieAndersonImage}
             eventDate="22 July 2021"
             eventTime="6.30-8pm BST"
-            eventColour={masterclassOrange}
+            eventColour={sport[400]}
             eventSectionText="Sport"
             eventDescription="How to apply sports psychology to your life with Dr Robbie Anderson"
           />
