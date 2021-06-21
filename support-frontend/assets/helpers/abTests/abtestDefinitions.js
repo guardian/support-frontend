@@ -30,26 +30,6 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
-  stripeCustomPrbTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'custom',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-    seed: 5,
-  },
   editorialVoiceTestPart2: {
     variants: [
       {

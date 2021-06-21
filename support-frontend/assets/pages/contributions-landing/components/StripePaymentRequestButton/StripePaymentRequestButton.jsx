@@ -90,7 +90,6 @@ type PropTypes = {
   setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action,
   setHandleStripe3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) => Action,
   csrf: CsrfState,
-  shouldShowRegularPrb: boolean,
   localCurrencyCountry: ?LocalCurrencyCountry,
   useLocalCurrency: boolean,
 };
@@ -108,7 +107,6 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
   paymentMethod: state.page.form.paymentMethod,
   switches: state.common.settings.switches,
   csrf: state.page.csrf,
-  shouldShowRegularPrb: state.common.abParticipations.stripeCustomPrbTest === 'control',
   localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
@@ -456,8 +454,7 @@ const PaymentRequestButton = (props: PropTypes) => {
 
   const shouldShowStripePrb =
     prbType === 'APPLE_PAY' ||
-    prbType === 'GOOGLE_PAY' ||
-    props.shouldShowRegularPrb;
+    prbType === 'GOOGLE_PAY';
 
   return (
     <div
