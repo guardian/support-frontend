@@ -1,27 +1,50 @@
 package com.gu.acquisitionFirehoseTransformer
 
-import org.scalatest.{FlatSpec, Matchers}
-import ophan.thrift.event._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.flatspec.AnyFlatSpec
 
-class AcquisitionToJsonSpec extends FlatSpec with Matchers {
+import com.gu.support.acquisitions
+import com.gu.i18n.{ Country, Currency }
+import com.gu.support.zuora.api.ReaderType
+import com.gu.support.acquisitions.AcquisitionDataRow
+
+import org.joda.time.DateTime
+
+class AcquisitionToJsonSpec extends AnyFlatSpec with Matchers {
   it should "serialise an event to json" in {
-    val event = Acquisition(
-      product = ophan.thrift.event.Product.RecurringContribution,
-      paymentFrequency = PaymentFrequency.Monthly,
-      currency = "GBP",
-      amount = 20d,
-      paymentProvider = Some(PaymentProvider.Stripe),
-      campaignCode = Some(Set("MY_CAMPAIGN_CODE")),
-      abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name"), AbTest("second_test", "control")))),
-      countryCode = Some("US"),
-      referrerPageViewId = None,
-      referrerUrl = None,
+    val event = AcquisitionDataRow(
+      eventTimeStamp = new DateTime(1544710504165L),
+      product = acquisitions.AcquisitionProduct.RecurringContribution,
+      amount = Some(20d),
+      country = Country.UK,
+      currency = Currency.GBP,
       componentId = Some("MY_COMPONENT_ID"),
-      componentTypeV2 = None,
-      source = None
+      componentType = None,
+      campaignCode = Some("MY_CAMPAIGN_CODE"),
+      source = None,
+      referrerUrl = None,
+      abTests = Nil,
+      paymentFrequency = acquisitions.PaymentFrequency.Monthly,
+      paymentProvider = Some(acquisitions.PaymentProvider.Stripe),
+      printOptions = None,
+      browserId = None,
+      identityId = None,
+      pageViewId = None,
+      referrerPageViewId = None,
+      labels = Nil,
+      promoCode = None,
+      reusedExistingPaymentMethod = false,
+      readerType = ReaderType.Direct,
+      acquisitionType = acquisitions.AcquisitionType.Purchase,
+      zuoraSubscriptionNumber = None,
+      zuoraAccountNumber = None,
+      contributionId = None,
+      paymentId = None,
+      queryParameters = Nil,
+      platform = None
     )
 
-    val jsonString = AcquisitionToJson(event, 1544710504165L).noSpaces
-    jsonString should be("""{"payment_frequency":"Monthly","country_code":"US","amount":20.0,"currency":"GBP","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RecurringContribution","paymentProvider":"Stripe"}""")
+    val jsonString = AcquisitionToJson(event).get.noSpaces
+    jsonString should be("""{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"currency":"GBP","timestamp":"2018-12-13T14:15:04.165Z","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE"}""")
   }
 }

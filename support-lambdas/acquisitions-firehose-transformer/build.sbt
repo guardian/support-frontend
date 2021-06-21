@@ -9,8 +9,6 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-events" % "2.2.4",
   "ch.qos.logback" % "logback-classic" % "1.1.7",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
-  "com.gu" %% "thrift-serializer" % "4.0.3",
-  "com.gu" %% "ophan-event-model" % "0.0.17",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion
 )
