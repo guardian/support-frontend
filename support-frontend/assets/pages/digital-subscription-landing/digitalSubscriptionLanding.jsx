@@ -42,7 +42,6 @@ import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
-import EditorialVoice, { evContainerOverrides } from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 
 // ----- Styles ----- //
@@ -65,7 +64,7 @@ const store = pageInit(() => digitalSubscriptionLandingReducer, true);
 
 const { page, common }: State = store.getState();
 const { orderIsAGift, productPrices, promotionCopy } = page;
-const { internationalisation, abParticipations } = common;
+const { internationalisation } = common;
 const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 // For CTAs in hero test
@@ -74,7 +73,6 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
-const showEditorialVoiceComponent = abParticipations.editorialVoiceTestPart2 === 'variant';
 
 // ----- Internationalisation ----- //
 
@@ -161,13 +159,6 @@ function LandingPage() {
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      {showEditorialVoiceComponent &&
-        <FullWidthContainer cssOverrides={evContainerOverrides}>
-          <CentredContainer>
-            <EditorialVoice />
-          </CentredContainer>
-        </FullWidthContainer>
-      }
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />
