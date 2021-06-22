@@ -44,6 +44,7 @@ const androidDailyUrl = 'https://play.google.com/store/apps/details?id=com.guard
 const myAccountUrl = `${profileUrl}/account/edit`;
 const manageSubsUrl = `${manageUrl}/subscriptions`;
 const helpCentreUrl = `${manageUrl}/help-centre`;
+const emailPreferences = `${manageUrl}/email-prefs`;
 
 const memUrls: {
   [MemProduct]: string,
@@ -174,4 +175,5 @@ export {
   manageSubsUrl,
   homeDeliveryUrl,
   helpCentreUrl,
+  emailPreferences,
 };

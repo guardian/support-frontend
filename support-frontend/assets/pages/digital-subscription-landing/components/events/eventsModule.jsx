@@ -63,16 +63,6 @@ const textContentContainer = css`
   }
 `;
 
-const icon = css`
-  display: flex;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  background-color: ${background.ctaPrimary};
-  align-items: center;
-  justify-content: center;
-`;
-
 const cardTitle = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
   line-height: 115%;
@@ -186,7 +176,7 @@ const EventsModule = () => {
     <section css={container}>
       <div css={contentContainer}>
         <div css={textContentContainer}>
-          <div css={icon}><SvgTicket /></div>
+          <SvgTicket />
           <h3 css={cardTitle}>Enjoy 6 free tickets to digital Guardian events</h3>
           <p css={para}>In the <span css={bold}>first 3 months</span> of your subscription</p>
           <p css={paraSecond}>
