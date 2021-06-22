@@ -3,4 +3,4 @@ set -e
 
 # build scala
 cd ..
-./sbt "project supporter-product-data" riffRaffUpload
+./sbt "project supporter-product-data" test riffRaffUpload
