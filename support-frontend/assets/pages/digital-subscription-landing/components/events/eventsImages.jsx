@@ -10,7 +10,7 @@ const jessPhillips = (
             (max-width: 740px) 100%,
             (max-width: 1067px) 150%,
             560px"
-    imgType="png"
+    imgType="jpg"
   />
 );
 
