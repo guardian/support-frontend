@@ -87,7 +87,8 @@ lazy val root = (project in file("."))
     `module-bigquery`,
     `module-rest`,
     `support-payment-api`,
-    `acquisition-event-producer`
+    `acquisition-event-producer`,
+    `support-lambdas`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -244,3 +245,6 @@ lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .dependsOn(`module-aws`)
+
+lazy val `support-lambdas` = (project in file("support-lambdas"))
+  .aggregate(`stripe-intent`, `it-test-runner`)
