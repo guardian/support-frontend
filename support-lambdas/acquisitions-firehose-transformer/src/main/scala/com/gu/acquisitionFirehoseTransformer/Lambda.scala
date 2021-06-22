@@ -8,11 +8,10 @@ import com.amazonaws.services.lambda.runtime.events.KinesisAnalyticsInputPreproc
 import com.amazonaws.services.lambda.runtime.events.{KinesisAnalyticsInputPreprocessingResponse, KinesisFirehoseEvent}
 import com.amazonaws.services.lambda.runtime.Context
 
-import com.gu.thrift.serializer.ThriftDeserializer
 import com.gu.support.acquisitions._
 
 import io.circe.parser.decode
-import io.circe.{Decoder}
+import io.circe.Decoder
 import io.circe.generic.auto._
 
 import org.joda.time.DateTime
