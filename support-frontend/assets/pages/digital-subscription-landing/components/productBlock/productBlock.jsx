@@ -188,8 +188,8 @@ class ProductBlock extends Component<PropTypes, StateTypes> {
     const { state } = this;
     return (
       <div className="hope-is-power__products">
+        <BlockLabel tag="h2" cssOverrides={sectionLabel}>What&apos;s included?</BlockLabel>
         <section className="product-block__container hope-is-power--centered">
-          <BlockLabel tag="h2" cssOverrides={[sectionLabel, labelMobileMargin]}>What&apos;s included?</BlockLabel>
           <ProductCard
             title="UK Daily in The Guardian Editions app"
             subtitle="Each day&apos;s edition, in one simple, elegant app"

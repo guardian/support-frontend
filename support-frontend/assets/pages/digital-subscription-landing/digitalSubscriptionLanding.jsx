@@ -6,7 +6,9 @@ import { renderPage } from 'helpers/rendering/render';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { css } from '@emotion/core';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from } from '@guardian/src-foundations/mq';
+import { space } from '@guardian/src-foundations';
+import { neutral } from '@guardian/src-foundations/palette';
 
 import {
   AUDCountries,
@@ -27,9 +29,7 @@ import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
 import Block from 'components/page/block';
-
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
-
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
@@ -44,20 +44,7 @@ import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 import EditorialVoice, { evContainerOverrides } from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
-
-// ----- Styles ----- //
-import 'stylesheets/skeleton/skeleton.scss';
-
-const productBlockContainer = css`
-  ${until.tablet} {
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  ${from.tablet} {
-    margin-top: 66px;
-  }
-`;
+import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 
 // ----- Redux Store ----- //
 
@@ -75,6 +62,35 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.countryGroupId,
 );
 const showEditorialVoiceComponent = abParticipations.editorialVoiceTestPart2 === 'variant';
+const showEventsComponent = abParticipations.digiSubEventsTest === 'variant';
+
+// ----- Styles ----- //
+import 'stylesheets/skeleton/skeleton.scss';
+
+const productBlockContainer = css`
+    background-color: ${neutral[93]};
+    border-top: none;
+    border-right: none;
+    margin-top: ${showEventsComponent ? '0' : `${space[3]}px`};
+    padding-top: 0;
+
+  ${from.tablet} {
+    background-color: ${neutral[100]};
+    margin-top: ${showEventsComponent ? `${space[6]}px` : `${space[12]}px`};
+    border-top: 1px solid ${neutral[86]};
+    border-right: 1px solid ${neutral[86]};
+  }
+`;
+
+const eventsProductBlockContainer = css`
+    margin-top: 43px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+  ${from.tablet} {
+    margin-top: ${space[12]}px;
+  }
+`;
 
 // ----- Internationalisation ----- //
 
@@ -144,6 +160,15 @@ function LandingPage() {
           countryGroupId={countryGroupId}
           priceList={heroPriceList}
         />
+      }
+      {showEventsComponent &&
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={eventsProductBlockContainer}>
+            <EventsModule />
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
       }
       <FullWidthContainer>
         <CentredContainer>

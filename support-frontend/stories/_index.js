@@ -9,6 +9,7 @@ module.exports = () => {
   require('./contributionTicker.jsx');
   require('./dialog.jsx');
   require('./errorSummary');
+  require('./events');
   require('./footer.jsx');
   require('./images.jsx');
   require('./internationalisation.jsx');

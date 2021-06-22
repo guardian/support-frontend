@@ -389,6 +389,7 @@ $teal-green: #006d67;
 
         img {
           width: 110px;
+          display: block;
         }
 
         @include mq($until: mobileLandscape) {
@@ -453,11 +454,15 @@ $teal-green: #006d67;
 
       .product-block__item__image--first-row {
         @include mq($from: mobileMedium) {
-          margin-top: -140px;
+          margin-top: -120px;
         }
 
         @include mq($from: mobileLandscape) {
-          margin-top: -100px;
+          margin-top: -90px;
+        }
+
+        @include mq($from: phablet) {
+          margin-top: -130px;
         }
 
         @include mq($from: desktop) {
@@ -685,6 +690,9 @@ $teal-green: #006d67;
     border-left: none;
     border-right: none;
     background-color: #ffffff;
+    &:focus {
+      box-shadow: 0 0 0 5px #00B2FF;
+    }
 
     @include mq($from: phablet) {
       border-left: 1px solid gu-colour(neutral-86);
