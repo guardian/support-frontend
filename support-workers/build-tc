@@ -26,5 +26,4 @@ popd
 cd ..
 ./sbt "project support-workers" it:assembly \
 "project support-workers" test riffRaffUpload \
-"project it-test-runner" riffRaffUpload \
 "project support-redemptiondb" riffRaffUpload
