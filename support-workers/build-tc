@@ -25,4 +25,5 @@ popd
 # build scala
 cd ..
 ./sbt "project support-workers" it:assembly \
+"project support-workers" riffRaffUpload \
 "project support-redemptiondb" riffRaffUpload

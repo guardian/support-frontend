@@ -123,7 +123,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     `acquisition-event-producer`,
     `module-bigquery`,
     `supporter-product-data-dynamo`
-  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
+  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
