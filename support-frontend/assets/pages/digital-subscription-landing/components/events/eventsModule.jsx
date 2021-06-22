@@ -130,6 +130,10 @@ const paraTiny = css`
     bottom: 55px;
   }
 
+  ${from.leftCol} {
+    bottom: 60px;
+  }
+
   ${from.wide} {
     bottom: 80px;
   }
