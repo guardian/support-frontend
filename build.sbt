@@ -88,7 +88,8 @@ lazy val root = (project in file("."))
     `module-rest`,
     `support-payment-api`,
     `acquisition-event-producer`,
-    `acquisitions-firehose-transformer`
+    `acquisitions-firehose-transformer`,
+    `support-lambdas`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -123,7 +124,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     `acquisition-event-producer`,
     `module-bigquery`,
     `supporter-product-data-dynamo`
-  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
+  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
@@ -253,3 +254,6 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
   )
   .dependsOn(`module-bigquery`)
   .aggregate(`module-bigquery`)
+
+lazy val `support-lambdas` = (project in file("support-lambdas"))
+  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)
