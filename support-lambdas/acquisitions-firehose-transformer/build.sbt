@@ -20,11 +20,11 @@ assemblyMergeStrategy in assembly := {
     oldStrategy(y)
 }
 
-assemblyJarName := s"$name.jar"
+assemblyJarName := s"${name.value}.jar"
 riffRaffPackageType := assembly.value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffManifestProjectName := s"support:lambdas:$name"
-riffRaffArtifactResources += (file(s"support-lambdas/$name/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffManifestProjectName := s"support:lambdas:${name.value}"
+riffRaffArtifactResources += (file(s"support-lambdas/${name.value}/cfn.yaml"), "cfn/cfn.yaml")
 riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch")
 riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
