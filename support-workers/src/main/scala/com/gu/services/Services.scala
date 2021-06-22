@@ -39,7 +39,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val salesforceService = new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
   lazy val zuoraGiftService = new ZuoraGiftService(zuoraConfigProvider.get(isTestUser), Configuration.stage, configurableFutureRunner(60.seconds))
-  lazy val acquisitionService = AcquisitionServiceBuilder.build(config.kinesisStreamName, isTestUser)
+  lazy val acquisitionService = AcquisitionServiceBuilder.build(isTestUser)
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val redemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(stage, isTestUser))
