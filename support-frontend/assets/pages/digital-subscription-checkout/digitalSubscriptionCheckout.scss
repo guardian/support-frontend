@@ -4,7 +4,6 @@
 
 // ----- Shared Components ----- //
 
-@import '~components/productHero/productHero';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
 @import '~components/generalErrorMessage/generalErrorMessage';
@@ -23,6 +22,20 @@
     }
     @include mq($until: tablet) {
       display: none;
+    }
+
+    .component-grid-picture__image {
+      display: block;
+      margin: ($gu-v-spacing * 2) auto 0;
+      position: relative;
+
+      @include mq($from: tablet) {
+        margin-top: $gu-v-spacing * 3;
+      }
+
+      @include mq($from: leftCol) {
+        margin-left: 10px;
+      }
     }
   }
 
