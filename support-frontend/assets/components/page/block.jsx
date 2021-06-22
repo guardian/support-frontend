@@ -14,7 +14,6 @@ type PropTypes = {|
 const block = css`
   position: relative;
   margin: ${space[6]}px 0;
-  padding: ${space[9]}px 0;
   border: 1px solid ${neutral[86]};
   background-color: ${neutral[100]};
   z-index: 2;
