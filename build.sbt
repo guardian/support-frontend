@@ -88,6 +88,7 @@ lazy val root = (project in file("."))
     `module-rest`,
     `support-payment-api`,
     `acquisition-event-producer`,
+    `acquisitions-firehose-transformer`,
     `support-lambdas`
   )
 
@@ -246,5 +247,13 @@ lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .dependsOn(`module-aws`)
 
+lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas/acquisitions-firehose-transformer"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`module-bigquery`)
+  .aggregate(`module-bigquery`)
+
 lazy val `support-lambdas` = (project in file("support-lambdas"))
-  .aggregate(`stripe-intent`, `it-test-runner`)
+  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)
