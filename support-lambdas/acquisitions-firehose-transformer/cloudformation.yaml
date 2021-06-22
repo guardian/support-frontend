@@ -34,7 +34,7 @@ Resources:
       Timeout: 300
       CodeUri:
         Bucket: !Ref DeployBucket
-        Key: !Sub ${Stack}/${Stage}/${App}/${App}.zip
+        Key: !Sub ${Stack}/${Stage}/${App}/${App}.jar
       Policies:
       - AWSLambdaBasicExecutionRole
       - Statement:

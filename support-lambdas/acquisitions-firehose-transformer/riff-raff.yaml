@@ -7,5 +7,5 @@ deployments:
     parameters:
       bucket: membership-dist
       functionNames: [acquisitions-firehose-transformer-]
-      fileName: acquisitions-firehose-transformer.zip
+      fileName: acquisitions-firehose-transformer.jar
       prefixStack: false
