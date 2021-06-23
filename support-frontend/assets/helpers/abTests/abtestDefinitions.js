@@ -30,27 +30,6 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
-  editorialVoiceTestPart2: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
-    seed: 6,
-    optimizeId: 'Z6RZxv27Q221_9OuJOl2Qw',
-  },
   localCurrencyTestV2: {
     variants: [
       {

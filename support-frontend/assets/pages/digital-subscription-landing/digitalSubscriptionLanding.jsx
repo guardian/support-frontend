@@ -42,7 +42,6 @@ import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
-import EditorialVoice, { evContainerOverrides } from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 
@@ -61,7 +60,7 @@ const heroPriceList = getHeroCtaProps(
   internationalisation.currencyId,
   internationalisation.countryGroupId,
 );
-const showEditorialVoiceComponent = abParticipations.editorialVoiceTestPart2 === 'variant';
+
 const showEventsComponent = abParticipations.digiSubEventsTest === 'variant';
 
 // ----- Styles ----- //
@@ -186,13 +185,6 @@ function LandingPage() {
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      {showEditorialVoiceComponent &&
-        <FullWidthContainer cssOverrides={evContainerOverrides}>
-          <CentredContainer>
-            <EditorialVoice />
-          </CentredContainer>
-        </FullWidthContainer>
-      }
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices orderIsAGift={orderIsAGift} />
