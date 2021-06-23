@@ -10,29 +10,25 @@ import okhttp3.{HttpUrl, OkHttpClient}
 import scala.concurrent.ExecutionContext
 
 sealed trait DefaultAcquisitionServiceConfig {
-  val kinesisStreamName: String
   val ophanEndpoint: Option[HttpUrl]
 }
 
 //Credentials provider is only required by the kinesis client when running in ec2 or locally
-case class Ec2OrLocalConfig(credentialsProvider: AWSCredentialsProviderChain, kinesisStreamName: String, ophanEndpoint: Option[HttpUrl] = None) extends DefaultAcquisitionServiceConfig
+case class Ec2OrLocalConfig(credentialsProvider: AWSCredentialsProviderChain, ophanEndpoint: Option[HttpUrl] = None) extends DefaultAcquisitionServiceConfig
 
-case class LambdaConfig(kinesisStreamName: String, ophanEndpoint: Option[HttpUrl] = None) extends DefaultAcquisitionServiceConfig
+case class LambdaConfig(ophanEndpoint: Option[HttpUrl] = None) extends DefaultAcquisitionServiceConfig
 
 class DefaultAcquisitionService(config: DefaultAcquisitionServiceConfig)(implicit client: OkHttpClient) extends AcquisitionService {
   private val ophanService = new OphanService(config.ophanEndpoint)
   private val gAService = new GAService()
-  private val kinesisService = new KinesisService(config)
 
   override def submit[A: AcquisitionSubmissionBuilder](a: A)(implicit ec: ExecutionContext) = {
     val ov = ophanService.submit(a).value
     val gv = gAService.submit(a).value
-    val kv = kinesisService.submit(a).value
     val result = for {
       o <- ov
       g <- gv
-      k <- kv
-    } yield mergeEithers(List(o, g, k))
+    } yield mergeEithers(List(o, g))
     EitherT(result)
   }
 

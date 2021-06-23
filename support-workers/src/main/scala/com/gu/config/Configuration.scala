@@ -44,6 +44,4 @@ case class Configuration(config: Config) {
   val bigQueryConfigProvider = new BigQueryConfigProvider(config, stage)
 
   val contributionThanksQueueName = config.getString("email.thankYou.queueName")
-
-  val kinesisStreamName = config.getString("kinesis.streamName")
 }
