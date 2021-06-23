@@ -168,9 +168,7 @@ const eventCardContainer = css`
   }
 `;
 
-const EventsModule = () => {
-  const tandcLink = 'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
-  return (
+const EventsModule = () => (
   <>
     <BlockLabel tag="h2" cssOverrides={label}>Special offer</BlockLabel>
     <section css={container}>
@@ -205,12 +203,11 @@ const EventsModule = () => {
             eventDescription="How to apply sports psychology to your life with Dr Robbie Anderson"
           />
         </div>
-        <p css={paraTiny}>See full&nbsp;<a href={tandcLink}> terms and conditions</a>&nbsp;for details</p>
+        <p css={paraTiny}>See full Terms &amp; Conditions below</p>
       </div>
     </section>
   </>
-  );
-};
+);
 
 
 export default EventsModule;
