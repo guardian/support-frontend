@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
-import { Annual, Quarterly, SixWeekly } from 'helpers/productPrice/billingPeriods';
+import { Annual, Monthly, Quarterly, SixWeekly } from 'helpers/productPrice/billingPeriods';
 
 jest.mock('ophan', () => {});
 
@@ -31,6 +31,10 @@ describe('getPriceDescription', () => {
     expect(getPriceDescription(gwQuarterly, Quarterly))
       .toEqual('£37.50 per quarter');
 
+    const gwMonthly = { price: 12.5, currency: 'GBP', promotions: [] };
+    expect(getPriceDescription(gwMonthly, Monthly))
+      .toEqual('£12.50 per month');
+
     const gwQuarterlyWithPromo = {
       price: 37.5,
       currency: 'GBP',
@@ -48,7 +52,7 @@ describe('getPriceDescription', () => {
       .toEqual('You\'ll pay £31.87 for 1 quarter, then £37.50 per quarter');
 
     const gwSixWeekly = {
-      price: 81.30,
+      price: 27.50,
       currency: 'USD',
       promotions: [
         {
@@ -59,6 +63,6 @@ describe('getPriceDescription', () => {
         }],
     };
     expect(getPriceDescription(gwSixWeekly, SixWeekly))
-      .toEqual('US$6 for the first 6 issues (then US$81.30 per quarter)');
+      .toEqual('US$6 for the first 6 issues (then US$27.50 per month)');
   });
 });

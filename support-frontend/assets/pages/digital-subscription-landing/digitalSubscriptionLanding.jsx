@@ -5,7 +5,9 @@
 import { renderPage } from 'helpers/rendering/render';
 import React from 'react';
 import { css } from '@emotion/core';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from } from '@guardian/src-foundations/mq';
+import { space } from '@guardian/src-foundations';
+import { neutral } from '@guardian/src-foundations/palette';
 
 import {
   AUDCountries,
@@ -24,9 +26,7 @@ import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
 import Block from 'components/page/block';
-
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
-
 import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
@@ -39,20 +39,41 @@ import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 import EditorialVoice, { evContainerOverrides } from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
-
+import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
 
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 
 const productBlockContainer = css`
-  ${until.tablet} {
-    margin-top: 0;
-    padding-top: 0;
-  }
+  background-color: ${neutral[93]};
+  border-top: none;
+  border-right: none;
+  margin-top: ${space[3]}px;
+  padding-top: 0;
 
   ${from.tablet} {
-    margin-top: 66px;
+    background-color: ${neutral[100]};
+    margin-top: ${space[12]}px;
+    border-top: 1px solid ${neutral[86]};
+    border-right: 1px solid ${neutral[86]};
+  }
+`;
+
+const productBlockContainerWithEvents = css`
+  margin-top: 0;
+  ${from.tablet} {
+    margin-top: ${space[6]}px;
+  }
+`;
+
+const eventsProductBlockContainer = css`
+    margin-top: 43px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+  ${from.tablet} {
+    margin-top: ${space[12]}px;
   }
 `;
 
@@ -86,6 +107,7 @@ function DigitalLandingPage({
 
   const isGift = orderIsAGift || false;
   const showEditorialVoiceComponent = participations.editorialVoiceTestPart2 === 'variant';
+  const showEventsComponent = participations.digiSubEventsTest === 'variant';
 
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -147,9 +169,18 @@ function DigitalLandingPage({
           priceList={heroPriceList}
         />
       }
+      {showEventsComponent &&
       <FullWidthContainer>
         <CentredContainer>
-          <Block cssOverrides={productBlockContainer}>
+          <Block cssOverrides={eventsProductBlockContainer}>
+            <EventsModule />
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      }
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
             <div ref={setElementToObserve}>
               {countryGroupId === AUDCountries ?
                 <ProductBlockAus

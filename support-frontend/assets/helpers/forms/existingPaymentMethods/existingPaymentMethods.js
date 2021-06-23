@@ -42,7 +42,7 @@ function sendGetExistingPaymentMethodsRequest(
   storeResponse: ExistingPaymentMethod[] => void,
 ): void {
   fetchJson(
-    `${window.guardian.existingPaymentOptionsEndpoint}?currencyFilter=${isoCurrency}`,
+    `${window.guardian.mdapiUrl}/user-attributes/me/existing-payment-options?currencyFilter=${isoCurrency}`,
     {
       mode: 'cors',
       credentials: 'include',

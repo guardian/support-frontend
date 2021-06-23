@@ -30,26 +30,6 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
-  stripeCustomPrbTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'custom',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-    seed: 5,
-  },
   editorialVoiceTestPart2: {
     variants: [
       {
@@ -118,12 +98,13 @@ export const tests: Tests = {
     audiences: {
       ALL: {
         offset: 0,
-        size: 1,
+        size: 0,
       },
     },
-    isActive: false,
+    isActive: true,
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
     seed: 9,
+    optimizeId: 'rrmFUvehRtuWCchrbm_Iug',
   },
 };

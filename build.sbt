@@ -87,7 +87,9 @@ lazy val root = (project in file("."))
     `module-bigquery`,
     `module-rest`,
     `support-payment-api`,
-    `acquisition-event-producer`
+    `acquisition-event-producer`,
+    `acquisitions-firehose-transformer`,
+    `support-lambdas`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -122,7 +124,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     `acquisition-event-producer`,
     `module-bigquery`,
     `supporter-product-data-dynamo`
-  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
+  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
@@ -195,6 +197,10 @@ lazy val `module-bigquery` = (project in file("support-modules/bigquery"))
   .settings(libraryDependencies ++= commonDependencies)
   .dependsOn(`support-config`)
 
+lazy val `module-acquisitions-stream` = (project in file("support-modules/acquisitions-stream"))
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
+  .settings(libraryDependencies ++= commonDependencies)
+  .dependsOn(`support-config`, `module-bigquery`)
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
@@ -211,7 +217,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
     scalacOptions += "-Ymacro-annotations",
     libraryDependencies ++= Seq(
       "com.gu" %% "ophan-event-model" % "0.0.23" excludeAll ExclusionRule(organization = "com.typesafe.play"),
-      "com.gu" %% "fezziwig" % "1.3",
+      "com.gu" %% "fezziwig" % "1.4",
       "com.typesafe.play" %% "play-json" % "2.7.4",
       "io.circe" %% "circe-core" % "0.12.1",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -244,3 +250,14 @@ lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .dependsOn(`module-aws`)
+
+lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas/acquisitions-firehose-transformer"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`module-bigquery`)
+  .aggregate(`module-bigquery`)
+
+lazy val `support-lambdas` = (project in file("support-lambdas"))
+  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)

@@ -95,6 +95,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
     chunkFilename: `webpack/${jsFilename}`,
     filename: `javascripts/${jsFilename}`,
     publicPath: '/assets/',
+    strictModuleExceptionHandling: process.env.NODE_ENV === 'production',
   },
 
   resolve: {

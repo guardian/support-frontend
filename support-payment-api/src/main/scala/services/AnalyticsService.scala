@@ -65,7 +65,6 @@ object AnalyticsService extends StrictLogging {
 
       val acquisitionConfig = Ec2OrLocalConfig(
         credentialsProvider,
-        kinesisStreamName = kinesisConfig.streamName,
         ophanEndpoint = Some(HttpUrl.parse(ophanConfig.ophanEndpoint))
       )
 

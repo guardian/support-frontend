@@ -8,13 +8,12 @@ import { from } from '@guardian/src-foundations/mq';
 
 type PropTypes = {|
   children: Node;
-  cssOverrides?: string;
+  cssOverrides?: string | string[];
 |};
 
 const block = css`
   position: relative;
   margin: ${space[6]}px 0;
-  padding: ${space[9]}px 0;
   border: 1px solid ${neutral[86]};
   background-color: ${neutral[100]};
   z-index: 2;

@@ -5,6 +5,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
+import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.catalog._
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider}
@@ -66,7 +67,8 @@ class SubscriptionsController(
       Map.empty
 
     val fulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
-    val weekly = service.getPrices(GuardianWeekly, Nil)(countryGroup)(fulfilmentOptions)(NoProductOptions)(Quarterly)(countryGroup.currency)
+    val weekly =
+      service.getPrices(GuardianWeekly, Nil)(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(countryGroup.currency)
 
     val digitalSubscription = service
       .getPrices(
