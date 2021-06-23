@@ -50,7 +50,7 @@ object MockAcquisitionHelper extends MockitoSugar {
     //Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val acquisitionService = AcquisitionServiceBuilder.build(configuration.kinesisStreamName, isTestService = true)
+    val acquisitionService = AcquisitionServiceBuilder.build(isTestService = true)
     val bigQueryService = new BigQueryService(configuration.bigQueryConfigProvider.get())
 
     when(services.acquisitionService).thenReturn(acquisitionService)
