@@ -14,7 +14,6 @@ class DefaultAcquisitionServiceSpec extends AsyncWordSpecLike with Matchers with
 
   private val service = AcquisitionService.prod(Ec2OrLocalConfig(
     credentialsProvider = new AWSCredentialsProviderChain(new EnvironmentVariableCredentialsProvider()),
-    kinesisStreamName = "stream"
   ))
 
   val submission = AcquisitionSubmission(

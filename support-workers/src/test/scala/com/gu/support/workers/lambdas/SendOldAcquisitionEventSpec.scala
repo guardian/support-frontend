@@ -19,7 +19,7 @@ class SendOldAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
     //Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val acquisitionService = AcquisitionServiceBuilder.build(configuration.kinesisStreamName, isTestService = true)
+    val acquisitionService = AcquisitionServiceBuilder.build(isTestService = true)
 
     when(services.acquisitionService).thenReturn(acquisitionService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
