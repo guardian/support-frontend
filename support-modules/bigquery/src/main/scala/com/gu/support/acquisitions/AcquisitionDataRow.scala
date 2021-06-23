@@ -3,6 +3,13 @@ package com.gu.support.acquisitions
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.zuora.api.ReaderType
 import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat
+
+import io.circe.parser.decode
+import io.circe.generic.auto._
+import io.circe.{Decoder, Encoder}
+
+import scala.util.{Try, Success, Failure}
 
 case class AcquisitionDataRow(
   eventTimeStamp: DateTime,
@@ -35,6 +42,19 @@ case class AcquisitionDataRow(
   queryParameters: List[QueryParameter],
   platform: Option[String]
 )
+
+object AcquisitionDataRow {
+  implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeString.emap { s =>
+    Try(DateTime.parse(s)) match {
+      case Success(dt) => Right(dt)
+      case Failure(e) => Left(e.getMessage)
+    }
+  }
+  implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap[DateTime](dt => ISODateTimeFormat.dateTime().print(dt))
+
+  implicit val decoder = Decoder[AcquisitionDataRow]
+  implicit val encoder = Encoder[AcquisitionDataRow]
+}
 
 case class AbTest(
   name: String,

@@ -197,6 +197,10 @@ lazy val `module-bigquery` = (project in file("support-modules/bigquery"))
   .settings(libraryDependencies ++= commonDependencies)
   .dependsOn(`support-config`)
 
+lazy val `module-acquisitions-stream` = (project in file("support-modules/acquisitions-stream"))
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
+  .settings(libraryDependencies ++= commonDependencies)
+  .dependsOn(`support-config`, `module-bigquery`)
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
