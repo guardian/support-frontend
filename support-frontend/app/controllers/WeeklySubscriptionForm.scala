@@ -77,7 +77,7 @@ class WeeklySubscriptionForm(
       css,
       fontLoaderBundle,
       Some(csrf),
-      idUser,
+      Some(idUser),
       uatMode,
       priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes, readerType),
       stripeConfigProvider.get(),

@@ -3,6 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
@@ -53,12 +54,12 @@ class DigitalSubscriptionFormController(
           },
           user =>
             if (orderIsAGift)
-              Future.successful(Ok(digitalSubscriptionFormHtml(user, orderIsAGift = true)))
+              Future.successful(Ok(digitalSubscriptionFormHtml(Some(user), orderIsAGift = true)))
             else for (alreadyADigitalSubscriber <- userHasDigitalSubscription(membersDataService, request.user)) yield
               if (alreadyADigitalSubscriber)
                 redirectToExistingThankYouPage
               else
-                Ok(digitalSubscriptionFormHtml(user, orderIsAGift = false))
+                Ok(digitalSubscriptionFormHtml(Some(user), orderIsAGift = false))
         ).flatten.map(_.withSettingsSurrogateKey)
       }
     } else {
@@ -66,8 +67,29 @@ class DigitalSubscriptionFormController(
     }
   }
 
+  def displayGuestForm(orderIsAGift: Boolean): Action[AnyContent] = {
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    maybeAuthenticatedAction().async { implicit request =>
+      val maybeIdUser: EitherT[Future, String, Option[IdUser]] = request.user match {
+        case Some(user) =>
+          identityService.getUser(user.minimalUser).map(Some(_))
+        case _ => EitherT.rightT(None)
+      }
+      maybeIdUser.fold(
+        error => {
+          SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.map(_.minimalUser.id).getOrElse("unknown identity id")} due to error from identityService: $error")
+          InternalServerError
+        },
+        user =>
+          if (orderIsAGift)
+            Ok(digitalSubscriptionFormHtml(user, orderIsAGift = true))
+          else
+            Ok(digitalSubscriptionFormHtml(user, orderIsAGift = false))
+      ).map(_.withSettingsSurrogateKey)
+    }
+  }
 
-  private def digitalSubscriptionFormHtml(idUser: IdUser, orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def digitalSubscriptionFormHtml(maybeIdUser: Option[IdUser], orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = if (orderIsAGift) {
       "Support the Guardian | The Guardian Digital Gift Subscription"
     } else {
@@ -77,7 +99,7 @@ class DigitalSubscriptionFormController(
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
-    val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
+    val uatMode = maybeIdUser.exists(idUser => testUsers.isTestUser(idUser.publicFields.displayName))
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey
     val readerType = if (orderIsAGift) Gift else Direct
@@ -89,7 +111,7 @@ class DigitalSubscriptionFormController(
       css,
       fontLoaderBundle,
       Some(csrf),
-      idUser,
+      maybeIdUser,
       uatMode,
       priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes, readerType),
       stripeConfigProvider.get(),

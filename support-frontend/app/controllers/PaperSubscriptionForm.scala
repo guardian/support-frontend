@@ -71,7 +71,7 @@ class PaperSubscriptionForm(
       css,
       fontLoaderBundle,
       Some(csrf),
-      idUser,
+      Some(idUser),
       uatMode,
       priceSummaryServiceProvider.forUser(uatMode).getPrices(Paper, promoCodes),
       stripeConfigProvider.get(false),
