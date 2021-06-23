@@ -40,7 +40,7 @@ const alignmentStyles = css`
 `;
 
 function ContributionsFooter() {
-  const faqsLink = 'https://www.theguardian.com/help/users/faq';
+  const faqsLink = 'https://manage.theguardian.com/help-centre';
   const termsConditionsLink =
     'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
 
