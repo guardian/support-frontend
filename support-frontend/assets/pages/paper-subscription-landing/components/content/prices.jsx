@@ -11,14 +11,13 @@ import ProductInfoChip from 'components/product/productInfoChip';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductOption, { type Product } from 'components/product/productOption';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 import LinkTo from './linkTo';
-import { setTab } from '../../paperSubscriptionLandingPageActions';
-import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 
 export type PropTypes = {|
-  activeTab: ActiveTabState,
-  setTabAction: typeof setTab,
+  activeTab: PaperFulfilmentOptions,
+  setTabAction: (PaperFulfilmentOptions) => void,
   products: Product[],
 |};
 

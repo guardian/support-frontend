@@ -1,7 +1,5 @@
 // @flow
 import React, { type Node } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import {
   sendTrackingEventsOnClick,
@@ -11,10 +9,6 @@ import {
   finalPrice, getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 
-import { type State } from '../paperSubscriptionLandingPageReducer';
-import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
-
-import { type Product } from 'components/product/productOption';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
@@ -91,23 +85,21 @@ const getPlans = (
     };
   });
 
-
-// ----- State/Props Maps ----- //
-type StateProps = {|
-  activeTab: PaperFulfilmentOptions,
-  products: Product[],
+  type PaperProductPricesProps ={|
+  productPrices: ?ProductPrices,
+  tab: PaperFulfilmentOptions,
+  setTabAction: (PaperFulfilmentOptions) => void
 |}
 
-const mapStateToProps = (state: State): StateProps => ({
-  activeTab: state.page.tab,
-  products: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : [],
-});
+function PaperProductPrices({ productPrices, tab, setTabAction }: PaperProductPricesProps) {
+  if (!productPrices) {
+    return null;
+  }
+  const products = getPlans(tab, productPrices);
 
-const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>
-  ({
-    setTabAction: bindActionCreators(setTab, dispatch),
-  });
+  return <Prices activeTab={tab} products={products} setTabAction={setTabAction} />;
+}
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(Prices);
+export default PaperProductPrices;

@@ -3,8 +3,6 @@ import React from 'react';
 // styles
 import { promotionTermsUrl } from 'helpers/urls/routes';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { connect } from 'react-redux';
-import type { State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Annual, Monthly, Quarterly, type BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -14,12 +12,11 @@ import type { Option } from 'helpers/types/option';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
 
-type PropTypes = {productPrices: ProductPrices, country: IsoCountry, orderIsAGift: boolean}
-
-const mapStateToProps = (state: State) => ({
-  country: state.common.internationalisation.countryId,
-  productPrices: state.page.productPrices || state.page.checkout.productPrices,
-});
+type PropTypes = {
+  productPrices: ProductPrices,
+  country: IsoCountry,
+  orderIsAGift: boolean
+}
 
 const getPromoUrl = (
   productPrices: ProductPrices,
@@ -70,8 +67,7 @@ const GiftLinks = (props: LinkTypes) => {
   );
 };
 
-function DigitalFooter(props: PropTypes) {
-  const { orderIsAGift, country } = props;
+function DigitalFooter({ productPrices, orderIsAGift, country }: PropTypes) {
   const faqsLink = orderIsAGift ? 'https://www.theguardian.com/help/2020/nov/23/guardian-gift-digital-subscription-faqs' :
     'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions';
   const termsConditionsLink = orderIsAGift ?
@@ -92,11 +88,11 @@ function DigitalFooter(props: PropTypes) {
           (&quot;GNM&quot;) reserves the right to withdraw this promotion at any
           time. Full promotion terms and conditions for our&nbsp;
         {orderIsAGift ?
-          <GiftLinks productPrices={props.productPrices} country={country} /> :
-          <RegularLinks productPrices={props.productPrices} country={country} />
+          <GiftLinks productPrices={productPrices} country={country} /> :
+          <RegularLinks productPrices={productPrices} country={country} />
           }.
       </p>
     </Footer>);
 }
 
-export default connect(mapStateToProps)(DigitalFooter);
+export default DigitalFooter;

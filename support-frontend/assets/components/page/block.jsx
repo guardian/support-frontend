@@ -8,7 +8,7 @@ import { from } from '@guardian/src-foundations/mq';
 
 type PropTypes = {|
   children: Node;
-  cssOverrides?: string;
+  cssOverrides?: string | string[];
 |};
 
 const block = css`

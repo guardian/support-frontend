@@ -18,7 +18,6 @@ import {
 } from 'components/product/productOptionSmall';
 
 import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
-import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
 import { type Option } from 'helpers/types/option';
 import type {
   ProductPrices,
@@ -31,7 +30,7 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import { getPriceDescription, getAdverbialSubscriptionDescription } from 'helpers/productPrice/priceDescriptions';
 
-import { type PropTypes } from '../paymentSelection';
+import type { Product as ProductOptionType } from 'components/product/productOption';
 
 export type PaymentOption = {
   title: string,
@@ -168,10 +167,20 @@ const getHeroCtaProps = (
   }).map(createPaymentOption);
 };
 
+export type PaymentSelectionPropTypes = {|
+  countryGroupId: CountryGroupId;
+  currencyId: IsoCurrency;
+  productPrices: ProductPrices;
+  orderIsAGift: boolean;
+|}
+
 // state
-const mapStateToProps = (state: State): PropTypes => {
-  const { productPrices, orderIsAGift } = state.page;
-  const { countryGroupId, currencyId } = state.common.internationalisation;
+const getPaymentOptions = ({
+  countryGroupId,
+  currencyId,
+  productPrices,
+  orderIsAGift,
+}: PaymentSelectionPropTypes): ProductOptionType[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): Product => {
@@ -228,12 +237,10 @@ const mapStateToProps = (state: State): PropTypes => {
       };
 
   };
-  return {
-    paymentOptions: Object.keys(productOptions).map(createPaymentOption),
-  };
+  return Object.keys(productOptions).map(createPaymentOption);
 };
 
 export {
   getHeroCtaProps,
-  mapStateToProps,
+  getPaymentOptions,
 };
