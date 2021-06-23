@@ -57,7 +57,7 @@ const EventsModule = () => (
         icon={<SvgArrowRightStraight />}
         iconSide="right"
         nudgeIcon
-        aria-label="Click to find out more about Guardian Live events and Masterclasses"
+        aria-label="Click to manage your email subscriptions, and sign up to receive news about Guardian Live events and Masterclasses"
         href={emailPreferences}
         onClick={sendTrackingEventsOnClick({
               id: 'checkout_thankyou_email_prefs',
