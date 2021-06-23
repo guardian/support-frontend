@@ -66,7 +66,6 @@ const textContentContainer = css`
 const cardTitle = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
   line-height: 115%;
-  margin-top: ${space[2]}px;
 
   ${from.tablet} {
     ${headline.xsmall({ fontWeight: 'bold' })};

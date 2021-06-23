@@ -13,13 +13,10 @@ const marginForButton = css`
   margin-bottom: ${space[3]}px;
 `;
 
-const iconContainer = css`
-  margin-bottom: ${space[1]}px;
-`;
 
 const EventsModule = () => (
   <div>
-    <div css={iconContainer}><SvgTicket /></div>
+    <SvgTicket />
     <Text title="Guardian digital events">
       <p>
       Enjoy 6 free tickets to Guardian digital events in the first 3 months of your subscription.
