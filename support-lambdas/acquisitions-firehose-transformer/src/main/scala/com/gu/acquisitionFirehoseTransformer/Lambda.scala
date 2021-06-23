@@ -8,8 +8,8 @@ import com.amazonaws.services.lambda.runtime.events.KinesisAnalyticsInputPreproc
 import com.amazonaws.services.lambda.runtime.events.{KinesisAnalyticsInputPreprocessingResponse, KinesisFirehoseEvent}
 import com.amazonaws.services.lambda.runtime.Context
 
-import com.gu.support.acquisitions._
 import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
+import com.gu.support.acquisitions.models.AcquisitionDataRow
 
 import cats.implicits._
 import cats.instances.either._

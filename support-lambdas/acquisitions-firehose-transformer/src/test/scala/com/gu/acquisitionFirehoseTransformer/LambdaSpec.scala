@@ -4,6 +4,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 
 import com.gu.support.acquisitions
+import com.gu.support.acquisitions.models._
 import com.amazonaws.services.lambda.runtime.events.KinesisFirehoseEvent
 
 import io.circe.syntax._
@@ -60,9 +61,9 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
   }
 
   def buildRecord(id: String, amount: Option[BigDecimal]): KinesisFirehoseEvent.Record = {
-    val acquisition = acquisitions.AcquisitionDataRow(
+    val acquisition = AcquisitionDataRow(
       eventTimeStamp = new DateTime(1544710504165L),
-      product = acquisitions.AcquisitionProduct.RecurringContribution,
+      product = AcquisitionProduct.RecurringContribution,
       amount = amount,
       country = Country.UK,
       currency = Currency.GBP,
@@ -72,8 +73,8 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       source = None,
       referrerUrl = None,
       abTests = Nil,
-      paymentFrequency = acquisitions.PaymentFrequency.Monthly,
-      paymentProvider = Some(acquisitions.PaymentProvider.Stripe),
+      paymentFrequency = PaymentFrequency.Monthly,
+      paymentProvider = Some(PaymentProvider.Stripe),
       printOptions = None,
       browserId = None,
       identityId = None,
@@ -83,7 +84,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       promoCode = None,
       reusedExistingPaymentMethod = false,
       readerType = ReaderType.Direct,
-      acquisitionType = acquisitions.AcquisitionType.Purchase,
+      acquisitionType = AcquisitionType.Purchase,
       zuoraSubscriptionNumber = None,
       zuoraAccountNumber = None,
       contributionId = None,

@@ -1,6 +1,6 @@
 package com.gu.acquisitionFirehoseTransformer
 
-import com.gu.support.acquisitions.AcquisitionDataRow
+import com.gu.support.acquisitions.models.AcquisitionDataRow
 
 import io.circe.Json
 import io.circe.generic.auto._

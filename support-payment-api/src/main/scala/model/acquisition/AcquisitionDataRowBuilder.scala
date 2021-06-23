@@ -3,8 +3,8 @@ package model.acquisition
 import com.gu.i18n.Currency._
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.acquisitions
-import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
-import com.gu.support.acquisitions._
+import com.gu.support.acquisitions.models.PaymentProvider.{AmazonPay, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
+import com.gu.support.acquisitions.models._
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
 import model.Currency.{
@@ -141,7 +141,7 @@ object AcquisitionDataRowBuilder {
   def mapAbTests(maybeTests: Option[Set[AbTest]]) =
     maybeTests.map(
       _.map(abTest =>
-        acquisitions.AbTest(
+        acquisitions.models.AbTest(
           abTest.name,
           abTest.variant
         )).toList

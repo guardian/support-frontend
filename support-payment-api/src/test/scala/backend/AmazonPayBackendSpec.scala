@@ -8,7 +8,7 @@ import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmO
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.support.acquisitions.BigQueryService
+import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 
 import javax.xml.datatype.DatatypeFactory
 import model._
@@ -102,6 +102,8 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.right(Future.successful(()))
   val bigQueryResponseError: EitherT[Future, String, Unit] =
     EitherT.left(Future.successful("a BigQuery error"))
+  val streamResponseError: EitherT[Future, String, Unit] =
+    EitherT.left(Future.successful("stream error"))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, expectedGuestToken)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
@@ -118,6 +120,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
+  val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
 
   //-- test obj
   val amazonPayBackend = new AmazonPayBackend(
@@ -127,6 +130,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockEmailService,
     mockOphanService,
     mockBigQueryService,
+    mockAcquisitionsStreamService,
     mockDatabaseService
   )(new DefaultThreadPool(ec))
 
@@ -183,7 +187,8 @@ class AmazonPayBackendSpec extends AnyWordSpec
 
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponseError)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe AmazonPayResponse(None)
       }
@@ -201,7 +206,8 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponseError)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 

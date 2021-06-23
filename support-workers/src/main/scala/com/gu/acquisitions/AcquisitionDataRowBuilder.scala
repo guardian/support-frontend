@@ -9,10 +9,10 @@ import com.gu.support.workers.{AcquisitionData, AmazonPayPaymentMethod, Annual, 
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
 import com.gu.support.{acquisitions, catalog}
-import com.gu.support.acquisitions.AcquisitionType.{Purchase, Redemption}
-import com.gu.support.acquisitions.PaymentProvider.{AmazonPay, DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa}
-import com.gu.support.acquisitions.PrintProduct._
-import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
+import com.gu.support.acquisitions.models.AcquisitionType.{Purchase, Redemption}
+import com.gu.support.acquisitions.models.PaymentProvider.{AmazonPay, DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa}
+import com.gu.support.acquisitions.models.PrintProduct._
+import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
 import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.zuora.api.ReaderType
 
@@ -82,7 +82,7 @@ object AcquisitionDataRowBuilder {
 
   private def getAbTests(data: AcquisitionData) =
     (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set()))
-      .map(abTest => acquisitions.AbTest(
+      .map(abTest => acquisitions.models.AbTest(
         abTest.name,
         abTest.variant
       )).toList
@@ -213,7 +213,7 @@ object AcquisitionDataRowBuilder {
 
   private def getQueryParameters(data: AcquisitionData) =
     data.referrerAcquisitionData.queryParameters.getOrElse(Set())
-      .map(queryParam => acquisitions.QueryParameter(
+      .map(queryParam => acquisitions.models.QueryParameter(
         queryParam.name,
         queryParam.value
       )).toList

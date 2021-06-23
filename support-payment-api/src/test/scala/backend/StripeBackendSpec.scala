@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.support.acquisitions.BigQueryService
+import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
 import io.circe.Json
@@ -96,6 +96,10 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val bigQueryResponseError: EitherT[Future, String, Unit] =
     EitherT.left(Future.successful("a BigQuery error"))
+  val streamResponse: EitherT[Future, String, Unit] =
+    EitherT.right(Future.successful(()))
+  val streamResponseError: EitherT[Future, String, Unit] =
+    EitherT.left(Future.successful("stream error"))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
   val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResult] =
@@ -119,6 +123,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockRecaptchaService: RecaptchaService = mock[RecaptchaService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockSwitchService: SwitchService = mock[SwitchService]
+  val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
   implicit val mockWsClient: WSClient = mock[WSClient]
   implicit val mockActorSystem: ActorSystem = mock[ActorSystem]
   implicit val mockS3Client: AmazonS3 = mock[AmazonS3]
@@ -133,6 +138,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockIdentityService,
     mockOphanService,
     mockBigQueryService,
+    mockAcquisitionsStreamService,
     mockEmailService,
     mockRecaptchaService,
     mockCloudWatchService,
@@ -198,7 +204,8 @@ with WSClientProvider {
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponseError)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
         stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock, None)
       }
 
@@ -206,7 +213,8 @@ with WSClientProvider {
         populateChargeMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
@@ -243,10 +251,11 @@ with WSClientProvider {
 
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
-        val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
+        val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
-        result.futureLeft mustBe BackendError.Database(dbError)
+        result.futureValue mustBe List(BackendError.Database(dbError))
       }
 
       "return a combined error if Ophan and DB fail" in new StripeBackendFixture {
@@ -254,14 +263,15 @@ with WSClientProvider {
 
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
-        val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
+        val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
-        val error = BackendError.MultipleErrors(List(
-          BackendError.Database(dbError),
-          BackendError.fromOphanError(List(AnalyticsServiceError.BuildError("Ophan error response"))))
+        val error = List(
+          BackendError.fromOphanError(List(AnalyticsServiceError.BuildError("Ophan error response"))),
+          BackendError.Database(dbError)
         )
-        result.futureLeft mustBe error
+        result.futureValue mustBe error
       }
     }
 
@@ -273,7 +283,8 @@ with WSClientProvider {
         populatePaymentIntentMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
@@ -344,7 +355,8 @@ with WSClientProvider {
         populatePaymentIntentMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRow(any())(any())).thenReturn(bigQueryResponse)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.confirmPaymentIntent(confirmPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)

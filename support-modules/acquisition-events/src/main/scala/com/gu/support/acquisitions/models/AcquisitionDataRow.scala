@@ -1,4 +1,4 @@
-package com.gu.support.acquisitions
+package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.zuora.api.ReaderType
