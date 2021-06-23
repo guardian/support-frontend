@@ -22,9 +22,9 @@ const EventsModule = () => (
     <div css={iconContainer}><SvgTicket /></div>
     <Text title="Guardian digital events">
       <p>
-          Enjoy 6 free tickets to Guardian digital events in the first 3 months of your subscription.
-          You will be sent your unique redemption code on email shortly, which you can apply at checkout
-          to book your free tickets.
+      Enjoy 6 free tickets to Guardian digital events in the first 3 months of your subscription.
+      You will be sent your unique redemption code by email shortly, enter your code 6 times at
+      the checkout for your chosen events to receive your free tickets.
       </p>
       <p>
         Browse Guardian Live events and Masterclasses
@@ -44,7 +44,7 @@ const EventsModule = () => (
               componentType: 'ACQUISITIONS_BUTTON',
             })}
       >
-        Guardian events
+        Guardian digital events
       </LinkButton>
       <p>
         Sign up to the Guardian Live and Masterclasses newsletter to be the
@@ -65,7 +65,7 @@ const EventsModule = () => (
               componentType: 'ACQUISITIONS_BUTTON',
             })}
       >
-        Manage email subscriptions
+        Manage my newsletters
       </LinkButton>
     </Text>
   </div>

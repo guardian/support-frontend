@@ -65,7 +65,8 @@ function ThankYouContent(props: PropTypes) {
       <Content>
         <Text title="Can&#39;t wait to get started?">
           <LargeParagraph>
-            Just download the apps and log in with your Guardian account details.
+            {`Just download the apps and log in with your Guardian account details${showEventsContent ?
+              ', or start browsing our Guardian digital events programmes.' : '.'}`}
           </LargeParagraph>
         </Text>
         <AppsSection countryGroupId={props.countryGroupId} />
