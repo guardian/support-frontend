@@ -37,7 +37,6 @@ import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
-import EditorialVoice, { evContainerOverrides } from './components/editorialVoice/editorialVoice';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
@@ -106,7 +105,6 @@ function DigitalLandingPage({
   }
 
   const isGift = orderIsAGift || false;
-  const showEditorialVoiceComponent = participations.editorialVoiceTestPart2 === 'variant';
   const showEventsComponent = participations.digiSubEventsTest === 'variant';
 
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
@@ -194,13 +192,6 @@ function DigitalLandingPage({
           </Block>
         </CentredContainer>
       </FullWidthContainer>
-      {showEditorialVoiceComponent &&
-        <FullWidthContainer cssOverrides={evContainerOverrides}>
-          <CentredContainer>
-            <EditorialVoice />
-          </CentredContainer>
-        </FullWidthContainer>
-      }
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
           <Prices
