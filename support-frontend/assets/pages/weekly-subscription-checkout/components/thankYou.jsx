@@ -5,8 +5,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import { sendTrackingEventsOnClick, GuardianWeekly } from 'helpers/productPrice/subscriptions';
-
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import GridPicture from 'components/gridPicture/gridPicture';
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
@@ -125,7 +124,9 @@ function ThankYouContent({
     ] :
     [
       <span>
-        You&apos;ll receive a confirmation email with everything you need to know, as well as future communications on how  to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.
+        You&apos;ll receive a confirmation email with everything you need to know, as well as future communications on
+        how to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any
+        time via your account.
       </span>,
       <span>
         Your magazine will be delivered to your door.

@@ -83,7 +83,8 @@ function MarketingConsent(props: PropTypes) {
     return (
       <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
         <Text title="Supporting The Guardian">
-          Stay up-to-date with the latest offers and the aims of the organisation, as well as ways you can enjoy and support our independent journalism.
+          Stay up-to-date with the latest offers and the aims of the organisation, as well as ways you can enjoy and
+          support our independent journalism.
         </Text>
 
         {MarketingButton({
