@@ -82,8 +82,9 @@ function MarketingConsent(props: PropTypes) {
   if (checkEmail(props.email)) {
     return (
       <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
-        <Text title="Contributions, subscriptions and membership">
-          Get related news and offers – whether you are a contributor, subscriber, member or would like to become one
+        <Text title="Supporting The Guardian">
+          Stay up-to-date with the latest offers and the aims of the organisation, as well as ways you can enjoy and
+          support our independent journalism.
         </Text>
 
         {MarketingButton({

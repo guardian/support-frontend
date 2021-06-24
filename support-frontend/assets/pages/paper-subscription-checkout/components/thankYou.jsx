@@ -94,8 +94,7 @@ const listStyle = css`
 
 const whatNextText: { [FulfilmentOptions]: Array<string> } = {
   [HomeDelivery]: [
-    `Look out for an email from us confirming your subscription.
-          It has everything you need to know about how to manage it in the future.`,
+    'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how  to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.',
     'Your newspaper will be delivered to your door.',
   ],
   [Collection]: [

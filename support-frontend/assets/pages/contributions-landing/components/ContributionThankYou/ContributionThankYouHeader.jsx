@@ -125,8 +125,8 @@ const ContributionThankYouHeader = ({
   };
 
   const additionalCopy = shouldShowLargeDonationMessage
-    ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best.'
-    : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best';
+    ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best. You’ll also receive future communications from us to bring you closer to our journalism and make the most of your Guardian benefits. You can opt out at any time via your account.'
+    : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. You’ll also receive future communications from us to bring you closer to our journalism and make the most of your Guardian benefits. You can opt out at any time via your account.';
 
   return (
     <header css={header}>
