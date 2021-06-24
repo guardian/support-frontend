@@ -126,7 +126,7 @@ function ThankYouContent({
     ] :
     [
       <span>
-        Look out for an email from us confirming your subscription. It will contain everything you need to know.
+        You&apos;ll receive a confirmation email with everything you need to know, as well as future communications on how  to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.
       </span>,
       <span>
         Your magazine will be delivered to your door.
@@ -174,7 +174,6 @@ function ThankYouContent({
             <MktConsent />)
           }
         </Asyncronously>
-        <OptInCopy subscriptionProduct={GuardianWeekly} />
       </Content>
     </div>
   );
