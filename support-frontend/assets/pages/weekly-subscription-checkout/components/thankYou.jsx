@@ -30,7 +30,6 @@ import {
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
-import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 
 // ----- Types ----- //

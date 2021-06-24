@@ -11,7 +11,6 @@ import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import OptInCopy from 'components/subscriptionCheckouts/thankYou/optInCopy';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 
@@ -78,7 +77,6 @@ function ThankYouPendingContent(props: PropTypes) {
       }
       <Content>
         {props.marketingConsent}
-        <OptInCopy subscriptionProduct={DigitalPack} />
       </Content>
     </div>
   );
