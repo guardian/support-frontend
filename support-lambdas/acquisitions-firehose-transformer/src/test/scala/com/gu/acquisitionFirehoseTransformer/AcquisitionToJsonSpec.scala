@@ -12,10 +12,11 @@ import org.joda.time.DateTime
 
 class AcquisitionToJsonSpec extends AnyFlatSpec with Matchers {
   it should "serialise an event to json" in {
+    val amount = 20d
     val event = AcquisitionDataRow(
       eventTimeStamp = new DateTime(1544710504165L),
       product = acquisitions.AcquisitionProduct.RecurringContribution,
-      amount = Some(20d),
+      amount = Some(amount),
       country = Country.UK,
       currency = Currency.GBP,
       componentId = Some("MY_COMPONENT_ID"),
@@ -43,8 +44,9 @@ class AcquisitionToJsonSpec extends AnyFlatSpec with Matchers {
       queryParameters = Nil,
       platform = None
     )
+    val av = 20.0
 
-    val jsonString = AcquisitionToJson(event).get.noSpaces
-    jsonString should be("""{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"currency":"GBP","timestamp":"2018-12-13T14:15:04.165Z","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE"}""")
+    val jsonString = AcquisitionToJson(amount, av, event).noSpaces
+    jsonString should be("""{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"annualisedValue":20.0,"currency":"GBP","timestamp":"2018-12-13T14:15:04.165Z","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE"}""")
   }
 }
