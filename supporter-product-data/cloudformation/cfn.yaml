@@ -130,7 +130,7 @@ Resources:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 512
-      Runtime: "java8"
+      Runtime: "java8.al2"
       Timeout: 300
       Environment:
         Variables:
@@ -148,7 +148,7 @@ Resources:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 512
-      Runtime: "java8"
+      Runtime: "java8.al2"
       Timeout: 300
       Environment:
         Variables:
@@ -166,7 +166,7 @@ Resources:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 4096
-      Runtime: "java8"
+      Runtime: "java8.al2"
       Timeout: 600
       Environment:
         Variables:
