@@ -87,6 +87,9 @@ function createFormReducer(
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName, formErrors: removeError('lastName', state.formErrors) };
 
+      case 'SET_EMAIL':
+        return { ...state, email: action.email, formErrors: removeError('email', state.formErrors) };
+
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
 

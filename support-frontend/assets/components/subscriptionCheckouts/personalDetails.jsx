@@ -13,6 +13,7 @@ import type { Option } from 'helpers/types/option';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
+import { emailRegexPattern } from 'helpers/forms/formValidation';
 
 const marginBotom = css`
   margin-bottom: ${space[6]}px;
@@ -33,6 +34,7 @@ export type PropTypes = {
   lastName: string,
   setLastName: Function,
   email: string,
+  setEmail: Function,
   telephone: Option<string>,
   setTelephone: Function,
   formErrors: FormError<FormField>[],
@@ -95,8 +97,10 @@ export default function PersonalDetails(props: PropTypes) {
       <TextInput
         label="Email"
         type="email"
-        disabled
         value={props.email}
+        onChange={e => props.setEmail(e.target.value)}
+        error={firstError('email', props.formErrors)}
+        pattern={emailRegexPattern}
       />
       <EmailFooter handleSignOut={handleSignOut} />
       <TextInput
