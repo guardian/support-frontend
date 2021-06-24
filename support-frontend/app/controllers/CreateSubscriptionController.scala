@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.AuthRequest
+import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
@@ -21,7 +21,7 @@ import play.api.libs.circe.Circe
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, TestUserService}
+import services.{AuthenticatedIdUser, IdMinimalUser, IdentityService, TestUserService}
 import utils.NormalisedTelephoneNumber.asFormattedString
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
@@ -47,15 +47,29 @@ class CreateSubscriptionController(
   type ApiResponseOrError[RES] = EitherT[Future, CreateSubscriptionError, RES]
 
   def create: Action[CreateSupportWorkersRequest] =
-    authenticatedAction(recurringIdentityClientId).async(new LoggingCirceParser(components).requestParser) {
-      implicit request: AuthRequest[CreateSupportWorkersRequest] =>
-        handleCreateSupportWorkersRequest(request)
+    maybeAuthenticatedAction().async(new LoggingCirceParser(components).requestParser) {
+      implicit request =>
+        request.user match {
+          case Some(user) =>
+            SafeLogger.info(s"User ${user.minimalUser.id} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
+            handleCreateSupportWorkersRequest(user.minimalUser, None)
+          case None =>
+            SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
+            createGuestUserAndHandleRequest.getOrElse(InternalServerError)
+        }
     }
 
-  def handleCreateSupportWorkersRequest(
-    implicit request: AuthRequest[CreateSupportWorkersRequest]
+  def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]) =
+    for {
+      userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
+      result <- EitherT.right[String](
+        handleCreateSupportWorkersRequest(IdMinimalUser(userIdWithOptionalToken.userId, None), userIdWithOptionalToken.guestAccountRegistrationToken)
+      )
+    } yield result
+
+  def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser, guestAccountRegistrationToken: Option[String])(
+    implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]
   ): Future[Result] = {
-    SafeLogger.info(s"[${request.uuid}] User ${request.user.minimalUser.id} is attempting to create a new ${request.body.product} subscription")
 
     val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 
@@ -68,12 +82,12 @@ class CreateSubscriptionController(
     }
 
     if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
-      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user.minimalUser).leftMap(ServerError(_))
+      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(idMinimalUser).leftMap(ServerError)
 
       val result: ApiResponseOrError[StatusResponse] = for {
         user <- userOrError
         statusResponse <- subscriptionStatusOrError(user)
-      } yield statusResponse
+      } yield statusResponse.copy(guestAccountCreationToken = guestAccountRegistrationToken)
 
       respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
     } else {
@@ -118,7 +132,7 @@ class CreateSubscriptionController(
   protected def respondToClient(
     result: EitherT[Future, CreateSubscriptionError, StatusResponse],
     billingPeriod: BillingPeriod
- )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
+ )(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
     val product = request.body.product.describe
     result.fold(
       { error =>
