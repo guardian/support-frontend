@@ -223,7 +223,7 @@ class Application(
       mainStyleBundle = Left(RefPath("ausMomentMap.css")),
       fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.contributionsLandingDescription,
-      canonicalLink = Some("https://support.theguardian.com/aus-2020-map"),
+      canonicalLink = Some("https://support.theguardian.com/aus-map"),
       shareImageUrl = Some(
         ausMomentMapSocialImageUrl
       )
