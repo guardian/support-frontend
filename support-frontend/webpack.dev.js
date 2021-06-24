@@ -20,3 +20,4 @@ module.exports = merge(common('[name].css', '[name].js', false), {
     }),
   ],
 });
+
