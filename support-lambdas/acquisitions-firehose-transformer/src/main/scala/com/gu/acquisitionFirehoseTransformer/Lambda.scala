@@ -32,7 +32,11 @@ case class AcquisitionWithRecordId(val acquisition: AcquisitionDataRow, recordId
 
 object Lambda extends LazyLogging {
 
-  def handler(event: KinesisFirehoseEvent, context: Context): KinesisAnalyticsInputPreprocessingResponse = {
+  def handler(event: KinesisFirehoseEvent): KinesisAnalyticsInputPreprocessingResponse = {
+    processEvent(event, new AnnualisedValueServiceImpl())
+  }
+
+  def processEvent(event: KinesisFirehoseEvent, avService: AnnualisedValueServiceWrapper) = {
     val records = event.getRecords.asScala
 
     def decodeAcquisitions(): Either[String, List[AcquisitionWithRecordId]] = records.toList.map { record =>
@@ -50,6 +54,18 @@ object Lambda extends LazyLogging {
             (amount, acquisitionWithRecordId)
           }
       }
+
+    def getAnnualisedValue(amount: BigDecimal, acquisition: AcquisitionDataRow): Either[String, Double] = {
+      val acqModel = AcquisitionModel(
+        amount = amount.toDouble,
+        product = acquisition.product.value,
+        currency = acquisition.currency.iso,
+        paymentFrequency = acquisition.paymentFrequency.value,
+        paymentProvider = acquisition.paymentProvider.map(_.value),
+        printOptions = None)
+
+      avService.getAV(acqModel, "ophan")
+    }
 
     def buildRecords(acquisitions: List[(BigDecimal, AcquisitionWithRecordId)]): Either[String, List[Record]] =
       acquisitions.map {
@@ -75,18 +91,5 @@ object Lambda extends LazyLogging {
         response.setRecords(results.asJava)
         response
     }
-  }
-
-
-  def getAnnualisedValue(amount: BigDecimal, acquisition: AcquisitionDataRow): Either[String, Double] = {
-    val acqModel = AcquisitionModel(
-      amount = amount.toDouble,
-      product = acquisition.product.value,
-      currency = acquisition.currency.iso,
-      paymentFrequency = acquisition.paymentFrequency.value,
-      paymentProvider = acquisition.paymentProvider.map(_.value),
-      printOptions = None)
-
-    AnnualisedValueService.getAV(acqModel, "ophan")
   }
 }
