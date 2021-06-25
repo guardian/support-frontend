@@ -86,4 +86,25 @@ export const tests: Tests = {
     seed: 9,
     optimizeId: 'rrmFUvehRtuWCchrbm_Iug',
   },
+  comparisonTableTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 0,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 10,
+    optimizeId: '',
+  },
 };

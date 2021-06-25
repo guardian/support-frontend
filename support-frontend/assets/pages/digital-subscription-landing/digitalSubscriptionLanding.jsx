@@ -40,6 +40,7 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
+import ComparisonTable from './components/comparison/comparisonTable';
 
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
@@ -106,6 +107,7 @@ function DigitalLandingPage({
 
   const isGift = orderIsAGift || false;
   const showEventsComponent = participations.digiSubEventsTest === 'variant';
+  const showComparisonTable = participations.comparisonTableTest === 'variant';
 
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -166,6 +168,15 @@ function DigitalLandingPage({
           countryGroupId={countryGroupId}
           priceList={heroPriceList}
         />
+      }
+      {showComparisonTable &&
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={eventsProductBlockContainer}>
+            <ComparisonTable />
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
       }
       {showEventsComponent &&
       <FullWidthContainer>
