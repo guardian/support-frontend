@@ -14,6 +14,7 @@ object AcquisitionToJson {
     paymentFrequency: String,
     countryCode: String,
     amount: BigDecimal,
+    annualisedValue: Double,
     currency: String,
     timestamp: String,
     campaignCode: String,
@@ -22,19 +23,18 @@ object AcquisitionToJson {
     paymentProvider: String
   )
 
-  def apply(acquisition: AcquisitionDataRow): Option[Json] =
-    for {
-      amount <- acquisition.amount
-    } yield
-      AcquisitionOutput(
-        acquisition.paymentFrequency.value,
-        acquisition.country.alpha2,
-        amount,
-        acquisition.currency.iso,
-        ISODateTimeFormat.dateTime().print(acquisition.eventTimeStamp),
-        acquisition.campaignCode.getOrElse(""),
-        acquisition.componentId.getOrElse(""),
-        acquisition.product.value,
-        acquisition.paymentProvider.map(_.value).getOrElse("")
-      ).asJson
+  def apply(amount: BigDecimal, annualisedValue: Double, acquisition: AcquisitionDataRow): Json = {
+    AcquisitionOutput(
+      acquisition.paymentFrequency.value,
+      acquisition.country.alpha2,
+      amount,
+      annualisedValue,
+      acquisition.currency.iso,
+      ISODateTimeFormat.dateTime().print(acquisition.eventTimeStamp),
+      acquisition.campaignCode.getOrElse(""),
+      acquisition.componentId.getOrElse(""),
+      acquisition.product.value,
+      acquisition.paymentProvider.map(_.value).getOrElse("")
+    ).asJson
+  }
 }

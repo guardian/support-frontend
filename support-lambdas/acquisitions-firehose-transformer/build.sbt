@@ -10,7 +10,8 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.7",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "io.circe" %% "circe-core" % circeVersion,
-  "io.circe" %% "circe-generic" % circeVersion
+  "io.circe" %% "circe-generic" % circeVersion,
+  "com.gu" %% "acquisitions-value-calculator-client" % "2.0.5"
 )
 assemblyMergeStrategy in assembly := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
