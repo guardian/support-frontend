@@ -57,6 +57,7 @@
       }
     ],
     "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }],
+    "react/jsx-closing-tag-location": "off"
   },
   "settings": {
     "import/resolver": {
