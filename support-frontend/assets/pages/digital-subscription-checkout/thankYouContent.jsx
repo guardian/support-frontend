@@ -17,6 +17,8 @@ import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { Option } from 'helpers/types/option';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import EventsModule from './components/thankYou/eventsModule';
+import { type Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
 
@@ -25,6 +27,7 @@ export type PropTypes = {
   paymentMethod: Option<PaymentMethod>,
   marketingConsent: React.Node,
   includePaymentCopy: boolean,
+  participations?: Option<Participations>,
 };
 
 
@@ -40,6 +43,7 @@ const getEmailCopy = (paymentMethod: Option<PaymentMethod>, includePaymentCopy: 
 };
 
 function ThankYouContent(props: PropTypes) {
+  const showEventsContent = props.participations && props.participations.digiSubEventsTest === 'variant';
   return (
     <div className="thank-you-stage">
       <ThankYouHero
@@ -60,10 +64,12 @@ function ThankYouContent(props: PropTypes) {
       <Content>
         <Text title="Can&#39;t wait to get started?">
           <LargeParagraph>
-            Just download the apps and log in with your Guardian account details.
+            {`Just download the apps and log in with your Guardian account details${showEventsContent ?
+              ', or start browsing our Guardian digital events programmes.' : '.'}`}
           </LargeParagraph>
         </Text>
         <AppsSection countryGroupId={props.countryGroupId} />
+        {showEventsContent && <EventsModule />}
       </Content>
       {props.includePaymentCopy ?
         <SubscriptionsSurvey product={DigitalPack} />
@@ -76,6 +82,10 @@ function ThankYouContent(props: PropTypes) {
   );
 
 }
+
+ThankYouContent.defaultProps = {
+  participations: null,
+};
 
 // ----- Export ----- //
 

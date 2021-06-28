@@ -17,6 +17,9 @@ Parameters:
     AllowedValues:
     - CODE
     - PROD
+  OphanRole:
+    Type: String
+    Description: ARN of the Ophan cross-account role
   DeployBucket:
     Description: Deploy bucket
     Type: String
@@ -30,7 +33,7 @@ Resources:
       Description: A Firehose transformation lambda for serialising the acquisitions event stream to csv
       Runtime: java8.al2
       Handler: com.gu.acquisitionFirehoseTransformer.Lambda::handler
-      MemorySize: 256
+      MemorySize: 512
       Timeout: 300
       CodeUri:
         Bucket: !Ref DeployBucket
@@ -42,4 +45,9 @@ Resources:
           Action: s3:GetObject
           Resource:
             - arn:aws:s3::*:membership-dist/*
+      - Statement:
+        - Effect: Allow
+          Action: sts:AssumeRole
+          Resource:
+            Ref: OphanRole
 
