@@ -124,9 +124,18 @@ const ContributionThankYouHeader = ({
     }
   };
 
-  const additionalCopy = shouldShowLargeDonationMessage
-    ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best. You’ll also receive future communications from us to bring you closer to our journalism and make the most of your Guardian benefits. You can opt out at any time via your account.'
-    : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. You’ll also receive future communications from us to bring you closer to our journalism and make the most of your Guardian benefits. You can opt out at any time via your account.';
+  const AdditionalCopy = () => (
+    <>
+      { shouldShowLargeDonationMessage ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best. '
+        : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. '}
+      {contributionType !== 'ONE_OFF' &&
+        <span>
+            As you’re now a valued supporter, we’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via <a
+          href="https://manage.theguardian.com">your account</a>.
+        </span>
+      }
+    </>
+  );
 
   return (
     <header css={header}>
@@ -144,7 +153,7 @@ const ContributionThankYouHeader = ({
             <br />
           </>
         )}
-        {additionalCopy}
+        <AdditionalCopy />
       </p>
     </header>
   );

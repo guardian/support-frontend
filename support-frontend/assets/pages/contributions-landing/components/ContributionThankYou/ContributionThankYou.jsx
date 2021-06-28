@@ -201,7 +201,7 @@ const ContributionThankYou = ({
         csrf={csrf}
       />
     ),
-    shouldShow: true,
+    shouldShow: contributionType === 'ONE_OFF',
   };
   const supportReminderAction = {
     component: (
