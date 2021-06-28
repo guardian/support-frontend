@@ -63,20 +63,9 @@ const textContentContainer = css`
   }
 `;
 
-const icon = css`
-  display: flex;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  background-color: ${background.ctaPrimary};
-  align-items: center;
-  justify-content: center;
-`;
-
 const cardTitle = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
   line-height: 115%;
-  margin-top: ${space[2]}px;
 
   ${from.tablet} {
     ${headline.xsmall({ fontWeight: 'bold' })};
@@ -178,15 +167,13 @@ const eventCardContainer = css`
   }
 `;
 
-const EventsModule = () => {
-  const tandcLink = 'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
-  return (
+const EventsModule = () => (
   <>
     <BlockLabel tag="h2" cssOverrides={label}>Special offer</BlockLabel>
     <section css={container}>
       <div css={contentContainer}>
         <div css={textContentContainer}>
-          <div css={icon}><SvgTicket /></div>
+          <SvgTicket />
           <h3 css={cardTitle}>Enjoy 6 free tickets to digital Guardian events</h3>
           <p css={para}>In the <span css={bold}>first 3 months</span> of your subscription</p>
           <p css={paraSecond}>
@@ -215,12 +202,11 @@ const EventsModule = () => {
             eventDescription="How to apply sports psychology to your life with Dr Robbie Anderson"
           />
         </div>
-        <p css={paraTiny}>See full&nbsp;<a href={tandcLink}> terms and conditions</a>&nbsp;for details</p>
+        <p css={paraTiny}>See full Terms &amp; Conditions below</p>
       </div>
     </section>
   </>
-  );
-};
+);
 
 
 export default EventsModule;
