@@ -4,6 +4,7 @@
 import React from 'react';
 
 import { renderPage } from 'helpers/rendering/render';
+import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
 
 import Page from 'components/page/page';
 
@@ -65,6 +66,7 @@ const ShowcasePage = () => (
 
 const content = <ShowcasePage />;
 
+setUpTrackingAndConsents();
 renderPage(content, 'showcase-landing-page');
 
 export { content };
