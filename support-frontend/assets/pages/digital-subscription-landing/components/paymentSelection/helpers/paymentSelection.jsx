@@ -120,6 +120,7 @@ const getHeroCtaProps = (
   productPrices: ProductPrices,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
+  isUsingGuestCheckout: boolean,
 ): ProductSmall[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -149,7 +150,7 @@ const getHeroCtaProps = (
     };
 
     return {
-      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, false),
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, false, isUsingGuestCheckout),
       onClick,
       priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
       offerCopy,
@@ -182,6 +183,8 @@ const getPaymentOptions = ({
   orderIsAGift,
 }: PaymentSelectionPropTypes): ProductOptionType[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
+  const { abParticipations } = state.common;
+  const isUsingGuestCheckout = abParticipations.subscriptionsGuestCheckoutTest === 'variant';
 
   const createPaymentOption = (billingPeriod: BillingPeriod): Product => {
     const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
@@ -216,7 +219,7 @@ const getPaymentOptions = ({
       {
         title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
         price: getDisplayPrice(currencyId, fullPrice),
-        href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
+        href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift, false),
         onClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(),
@@ -227,7 +230,7 @@ const getPaymentOptions = ({
       {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
         price: getDisplayPrice(currencyId, getFirstValidPrice(promotionalPrice, fullPrice)),
-        href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
+        href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift, isUsingGuestCheckout),
         onClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),

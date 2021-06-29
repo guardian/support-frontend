@@ -26,6 +26,8 @@ export const pageUrlRegexes = {
       // Requires /subscribe/digital, allows /checkout, allows any query string
       nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
       nonGiftLandingNotAusNotUS: /((uk|ca|eu|nz|int)\/subscribe\/digital(?!\/gift).?(\\?.*)?$)|(\/subscribe\/digital\/checkout?(\\?.*)?$)/,
+      // Requires /subscribe/digital, allows /checkout or /checkout/guest, allows any query string
+      nonGiftLandingWithGuestCheckout: /\/subscribe\/digital(\/checkout|\/checkout\/guest)?(\?.*)?$/,
     },
   },
 };
@@ -108,4 +110,25 @@ export const tests: Tests = {
     seed: 10,
     optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
   },
+  subscriptionsGuestCheckoutTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 3,
+    //optimizeId: '',
+  }
 };
