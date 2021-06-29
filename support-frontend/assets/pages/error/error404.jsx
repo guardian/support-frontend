@@ -4,16 +4,14 @@
 
 import React from 'react';
 
-import { statelessInit as pageInit } from 'helpers/page/page';
+import { initPageWithoutRedux } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 
 import ErrorPage from './components/errorPage';
 
 
-// ----- Page Startup ----- //
-
-pageInit();
-
+// ----- Page Startup without Redux ----- //
+initPageWithoutRedux();
 
 // ----- Render ----- //
 

@@ -30,6 +30,7 @@ import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { paperLandingProps, type PaperLandingPropTypes } from './paperSubscriptionLandingProps';
+import { initPageWithoutRedux } from 'helpers/page/page';
 
 // ----- Collection or delivery ----- //
 
@@ -92,6 +93,9 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
     </Page>
   );
 };
+
+// ----- Page Startup without Redux ----- //
+initPageWithoutRedux();
 
 const content = <PaperLandingPage {...paperLandingProps()} />;
 

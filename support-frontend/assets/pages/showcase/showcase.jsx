@@ -25,6 +25,7 @@ import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
 import OtherProducts from './components/otherProducts';
 import './showcase.scss';
+import { initPageWithoutRedux } from 'helpers/page/page';
 
 // ----- Internationalisation ----- //
 
@@ -62,6 +63,9 @@ const ShowcasePage = () => (
     {countryGroupId === 'GBPCountries' && <OtherProducts />}
   </Page>
 );
+
+// ----- Page Startup without Redux ----- //
+initPageWithoutRedux();
 
 const content = <ShowcasePage />;
 

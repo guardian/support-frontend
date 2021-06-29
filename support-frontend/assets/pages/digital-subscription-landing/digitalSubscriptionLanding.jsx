@@ -21,7 +21,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { routes } from 'helpers/urls/routes';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
@@ -40,6 +39,7 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
+import { initPageWithoutRedux } from 'helpers/page/page';
 
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
@@ -211,6 +211,9 @@ function DigitalLandingPage({
     </Page>
   );
 }
+
+// ----- Page Startup without Redux ----- //
+initPageWithoutRedux();
 
 const props = digitalLandingProps();
 

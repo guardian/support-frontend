@@ -62,6 +62,21 @@ export type ReduxState<PageState> = {|
 
 // ----- Functions ----- //
 
+function cmpInitialisation(country: IsoCountry) {
+  /**
+   * Dynamically load @guardian/consent-management-platform
+   * on condition we're not server side rendering (ssr) the page.
+   * @guardian/consent-management-platform breaks ssr otherwise.
+   */
+  if (!getGlobal('ssr') && !isPostDeployUser()) {
+    import('@guardian/consent-management-platform').then(({ cmp }) => {
+      cmp.init({
+        country,
+      });
+    });
+  }
+}
+
 // Sets up GA and logging.
 function analyticsInitialisation(participations: Participations, acquisitionData: ReferrerAcquisitionData): void {
   setReferrerDataInLocalStorage(acquisitionData);
@@ -128,12 +143,14 @@ function buildInitialState(
 
 }
 
-// For pages that don't need Redux.
-function statelessInit() {
+// Initialise for pages without a REDUX store.
+function initPageWithoutRedux() {
   const country: IsoCountry = detectCountry();
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
   const acquisitionData = getReferrerAcquisitionData();
+
+  cmpInitialisation(country);
   analyticsInitialisation(participations, acquisitionData);
 }
 
@@ -153,33 +170,20 @@ function storeEnhancer(thunk: boolean) {
 }
 /* eslint-enable no-underscore-dangle */
 
-// Initialises the page.
+// Initialise for pages with a REDUX store.
 function init<S, A>(
   pageReducer?: CommonState => Reducer<S, A> | null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
   try {
     const countryId: IsoCountry = detectCountry();
-
-    /**
-     * Dynamically load @guardian/consent-management-platform
-     * on condition we're not server side rendering (ssr) the page.
-     * @guardian/consent-management-platform breaks ssr otherwise.
-     */
-    if (!getGlobal('ssr') && !isPostDeployUser()) {
-      import('@guardian/consent-management-platform').then(({ cmp }) => {
-        cmp.init({
-          country: countryId,
-        });
-      });
-    }
-
     const acquisitionData = getReferrerAcquisitionData();
-
     const settings = getSettings();
     const countryGroupId: CountryGroupId = detectCountryGroup();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);
     const participations: Participations = abTest.init(countryId, countryGroupId, settings);
+
+    cmpInitialisation(countryId);
     analyticsInitialisation(participations, acquisitionData);
 
     const initialState: CommonState = buildInitialState(
@@ -209,5 +213,5 @@ function init<S, A>(
 
 export {
   init,
-  statelessInit,
+  initPageWithoutRedux,
 };

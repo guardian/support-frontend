@@ -14,6 +14,7 @@ import './subscriptionsLanding.scss';
 
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
 import { subscriptionsLandingProps, type SubscriptionsLandingPropTypes } from './subscriptionsLandingProps';
+import { initPageWithoutRedux } from 'helpers/page/page';
 
 // ----- Render ----- //
 
@@ -53,5 +54,8 @@ const SubscriptionsLandingPage = ({
     </Page>
   );
 };
+
+// ----- Page Startup without Redux ----- //
+initPageWithoutRedux();
 
 renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps()} />, 'subscriptions-landing-page');

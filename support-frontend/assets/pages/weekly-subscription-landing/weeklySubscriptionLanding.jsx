@@ -41,6 +41,7 @@ import { promoQueryParam, getPromotionCopy } from 'helpers/productPrice/promotio
 import { getQueryParameter } from 'helpers/urls/url';
 
 import { weeklyLandingProps, type WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
+import { initPageWithoutRedux } from 'helpers/page/page';
 
 // ----- Internationalisation ----- //
 
@@ -123,5 +124,8 @@ const WeeklyLandingPage = ({
     </Page>
   );
 };
+
+// ----- Page Startup without Redux ----- //
+initPageWithoutRedux();
 
 renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />, reactElementId[countryGroupId]);
