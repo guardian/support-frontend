@@ -134,7 +134,8 @@ const ContributionThankYouHeader = ({
           'We’ll be in touch to bring you closer to our journalism. Please select the extra add-ons that suit you best. ' :
           'As you’re now a valued supporter, we’ll be in touch to bring you closer to our journalism. '
         }
-        You can amend your email preferences at any time via <a
+        You can amend your email preferences at any time via{' '}
+        <a
           href="https://manage.theguardian.com"
         >your account
         </a>.

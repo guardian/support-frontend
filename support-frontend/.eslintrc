@@ -56,8 +56,7 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }],
-    "react/jsx-closing-tag-location": "off"
+    "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }]
   },
   "settings": {
     "import/resolver": {
