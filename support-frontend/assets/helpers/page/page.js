@@ -108,15 +108,6 @@ function buildInitialState(
 
 }
 
-// For pages that don't need Redux.
-function statelessInit() {
-  const country: IsoCountry = detectCountry();
-  const countryGroupId: CountryGroupId = detectCountryGroup();
-  const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
-  const acquisitionData = getReferrerAcquisitionData();
-  analyticsInitialisation(participations, acquisitionData);
-}
-
 // Enables redux devtools extension and optional redux-thunk.
 /* eslint-disable no-underscore-dangle */
 function storeEnhancer(thunk: boolean) {
@@ -177,5 +168,4 @@ function init<S, A>(
 
 export {
   init,
-  statelessInit,
 };

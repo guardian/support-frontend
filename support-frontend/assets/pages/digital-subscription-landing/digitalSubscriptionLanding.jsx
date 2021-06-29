@@ -213,7 +213,7 @@ function DigitalLandingPage({
   );
 }
 
+setUpTrackingAndConsents();
 const props = digitalLandingProps();
 
-setUpTrackingAndConsents();
 renderPage(<DigitalLandingPage {...props} />, reactElementId[props.countryGroupId]);

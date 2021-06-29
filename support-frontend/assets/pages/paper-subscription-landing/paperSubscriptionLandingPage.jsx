@@ -94,9 +94,10 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
   );
 };
 
+setUpTrackingAndConsents();
+
 const content = <PaperLandingPage {...paperLandingProps()} />;
 
-setUpTrackingAndConsents();
 renderPage(content, reactElementId);
 
 export { content };

@@ -56,4 +56,5 @@ const SubscriptionsLandingPage = ({
 };
 
 setUpTrackingAndConsents();
+
 renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps()} />, 'subscriptions-landing-page');

@@ -64,9 +64,10 @@ const ShowcasePage = () => (
   </Page>
 );
 
+setUpTrackingAndConsents();
+
 const content = <ShowcasePage />;
 
-setUpTrackingAndConsents();
 renderPage(content, 'showcase-landing-page');
 
 export { content };
