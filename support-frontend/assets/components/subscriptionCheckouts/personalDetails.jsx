@@ -39,6 +39,7 @@ export type PropTypes = {
   setTelephone: Function,
   formErrors: FormError<FormField>[],
   signOut: Function,
+  isInGuestCheckout: boolean,
 }
 
 type EmailFooterTypes = {
@@ -101,6 +102,7 @@ export default function PersonalDetails(props: PropTypes) {
         onChange={e => props.setEmail(e.target.value)}
         error={firstError('email', props.formErrors)}
         pattern={emailRegexPattern}
+        disabled={!props.isInGuestCheckout}
       />
       <EmailFooter handleSignOut={handleSignOut} />
       <TextInput
