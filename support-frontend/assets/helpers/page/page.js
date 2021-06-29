@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import * as ophan from 'ophan';
 import type { Store } from 'redux';
 import {
   applyMiddleware,
@@ -17,8 +16,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { renderError } from 'helpers/rendering/render';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
-import * as logger from 'helpers/utilities/logger';
-import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import {
   detect as detectCountry,
   type IsoCountry,
@@ -38,19 +35,12 @@ import {
   type CountryGroupId,
   detect as detectCountryGroup,
 } from 'helpers/internationalisation/countryGroup';
-import { trackAbTests, setReferrerDataInLocalStorage } from 'helpers/tracking/ophan';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import { isPostDeployUser } from 'helpers/user/user';
 import { getAmounts } from 'helpers/abTests/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
-
-if (process.env.NODE_ENV === 'DEV') {
-  // $FlowIgnore
-  import('preact/debug');
-}
+import { analyticsInitialisation, consentInitialisation } from 'helpers/page/analyticsAndConsent';
 
 // ----- Types ----- //
 
@@ -61,16 +51,6 @@ export type ReduxState<PageState> = {|
 
 
 // ----- Functions ----- //
-
-// Sets up GA and logging.
-function analyticsInitialisation(participations: Participations, acquisitionData: ReferrerAcquisitionData): void {
-  setReferrerDataInLocalStorage(acquisitionData);
-  googleTagManager.init(participations);
-  ophan.init();
-  trackAbTests(participations);
-  // Logging.
-  logger.init();
-}
 
 function getLocalCurrencyCountry(
   countryId: IsoCountry,
@@ -160,19 +140,7 @@ function init<S, A>(
 ): Store<*, *, *> {
   try {
     const countryId: IsoCountry = detectCountry();
-
-    /**
-     * Dynamically load @guardian/consent-management-platform
-     * on condition we're not server side rendering (ssr) the page.
-     * @guardian/consent-management-platform breaks ssr otherwise.
-     */
-    if (!getGlobal('ssr') && !isPostDeployUser()) {
-      import('@guardian/consent-management-platform').then(({ cmp }) => {
-        cmp.init({
-          country: countryId,
-        });
-      });
-    }
+    consentInitialisation(countryId);
 
     const acquisitionData = getReferrerAcquisitionData();
 
