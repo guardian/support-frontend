@@ -1,12 +1,13 @@
 /* eslint-disable react/no-unused-prop-types */
 // @flow
 // $FlowIgnore
-import React, { type Node } from 'react';
-
+import React, { useState, type Node } from 'react';
 import cx from 'classnames';
+
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { arrowSvg } from '../arrow';
 
-type DropdownPropTypes = {
+export type DropdownPropTypes = {
   children: Node,
   showDropDown: boolean,
   product: string,
@@ -26,7 +27,7 @@ export const Dropdown = ({
   </div>
 );
 
-type ButtonPropTypes = {
+export type ButtonPropTypes = {
   showDropDown: boolean,
   handleClick: Function,
   product: 'daily' | 'app',
@@ -50,7 +51,7 @@ export const Button = ({
   </button>
 );
 
-type ProductCardPropTypes = {
+export type ProductCardPropTypes = {
   title: string,
   subtitle: string,
   image: Node,
@@ -71,4 +72,41 @@ export const ProductCard = ({
 
 ProductCard.defaultProps = {
   shortSubTitle: '',
+};
+
+type DigitalSubProduct = 'Daily' | 'App';
+
+function trackClickAction(product: DigitalSubProduct, isOpen: boolean) {
+  console.log('Is open?', isOpen);
+  const clickAction = isOpen ? 'open' : 'close';
+  sendTrackingEventsOnClick({
+    id: `digital-subscriptions-landing-page--accordion--${product}--${clickAction}`,
+    componentType: 'ACQUISITIONS_OTHER',
+  })();
+}
+
+type ProductBlockSectionProps = {|
+  product: DigitalSubProduct;
+  render: (showDropDown: boolean) => Node;
+|}
+
+export const ProductBlockSection = ({ product, render }: ProductBlockSectionProps) => {
+  const [showDropDown, setShowDropDownDaily] = useState<boolean>(false);
+
+  function handleClick() {
+    setShowDropDownDaily(!showDropDown);
+    // setting state is async, so we reuse the reversed boolean here
+    trackClickAction(product, !showDropDown);
+  }
+
+  return (
+    <>
+      {render(showDropDown)}
+      <Button
+        showDropDown={showDropDown}
+        handleClick={handleClick}
+        product={product.toLowerCase()}
+      />
+    </>
+  );
 };
