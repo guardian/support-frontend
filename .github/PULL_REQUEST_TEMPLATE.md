@@ -15,6 +15,16 @@ For detailed changes see the inline self-review comments.
 Remember, PRs are documentation for future contributors.
 -->
 
+## Is this an AB test?
+- [ ] Yes
+- [ ] No
+
+<!--
+Delete this section if it's not an AB test
+-->
+If this is an AB test, PR reviewers should open and check the Optimize test.
+[**Optimize Link**](https://optimize.google.com/optimize/home)
+
 ## Accessibility test checklist
  - [ ] [Tested with screen reader](https://accessibility.gutools.co.uk/testing/web/screen-readers/)
  - [ ] [Navigable with keyboard](https://accessibility.gutools.co.uk/testing/web/keyboard-navigation/)

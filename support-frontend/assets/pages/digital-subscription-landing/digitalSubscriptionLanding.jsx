@@ -21,6 +21,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { routes } from 'helpers/urls/routes';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -223,6 +224,7 @@ function DigitalLandingPage({
   );
 }
 
+setUpTrackingAndConsents();
 const props = digitalLandingProps();
 
 renderPage(<DigitalLandingPage {...props} />, reactElementId[props.countryGroupId]);

@@ -8,6 +8,7 @@ import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
 import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
 
 import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';
@@ -53,5 +54,7 @@ const SubscriptionsLandingPage = ({
     </Page>
   );
 };
+
+setUpTrackingAndConsents();
 
 renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps()} />, 'subscriptions-landing-page');

@@ -17,6 +17,7 @@ import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
+import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
 
 import PaperHero from './components/hero/hero';
 import Tabs from './components/tabs';
@@ -92,6 +93,8 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
     </Page>
   );
 };
+
+setUpTrackingAndConsents();
 
 const content = <PaperLandingPage {...paperLandingProps()} />;
 
