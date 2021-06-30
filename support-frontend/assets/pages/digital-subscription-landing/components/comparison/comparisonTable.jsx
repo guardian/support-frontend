@@ -8,26 +8,34 @@ import { background, border } from '@guardian/src-foundations/palette';
 import { body } from '@guardian/src-foundations/typography';
 
 import BlockLabel from 'components/blockLabel/blockLabel';
-import { tableContent, finalRow } from './tableContents';
+import { titleRow, tableContent, finalRow } from './tableContents';
 import { type Option } from 'helpers/types/option';
 
 export type TableRow = {
-  icon: Node,
+  icon: Option<Node>,
   description: string | Node,
-  free: Node | null,
-  paid: Node | null,
+  free: Option<Node>,
+  paid: Option<Node>,
   cssOverrides?: Option<string>,
 }
 
 const container = css`
+  padding: ${space[6]}px 0 ${space[9]}px;
+`;
+
+const tableContainer = css`
   box-sizing: border-box;
   width: 100%;
   background-color: ${background.primary};
-  border: ${border.secondary} 1px solid;
   padding-left: ${space[2]}px;
 
   ${from.mobileLandscape} {
     padding-left: ${space[3]}px;
+  }
+
+  ${from.desktop} {
+    border-left: ${border.secondary} 1px solid;
+    border-right: ${border.secondary} 1px solid;
   }
 `;
 
@@ -44,10 +52,6 @@ const label = css`
     top: -35px;
   }
 `;
-
-// const infoText = css`
-//   ${textSans.xsmall({ fontWeight: 'bold' })}
-// `;
 
 const rowText = css`
   display: inline-flex;
@@ -99,9 +103,18 @@ const ComparisonTableRow = ({
 
 
 const ComparisonTable = () => (
-  <section>
+  <section css={container}>
     <BlockLabel tag="h2" cssOverrides={label}>Your subscription at a glance</BlockLabel>
-    <div css={container}>
+    {titleRow.map(row => (
+      <ComparisonTableRow
+        cssOverrides={row.cssOverrides}
+        icon={row.icon}
+        description={row.description}
+        free={row.free}
+        paid={row.paid}
+      />
+      ))}
+    <div css={tableContainer}>
       <ul>
         {tableContent.map(row => (
           <ComparisonTableRow
