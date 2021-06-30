@@ -17,6 +17,7 @@ import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
 import { SvgPadlock } from 'components/icons/padlock';
+import { comparisonTableYellow } from 'stylesheets/emotion/colours';
 
 const iconContainer = css`
   display: inline-block;
@@ -42,7 +43,7 @@ const borderBottomNone = css`
 `;
 
 const finalRowStyle = css`
-  background-color: #FFFACC;
+  background-color: ${comparisonTableYellow};
   padding: ${space[3]}px;
   padding-left: ${space[1]}px;
   border-top: ${border.secondary} 1px solid;
@@ -72,6 +73,9 @@ const checkmark = css`
   height: 59px;
   svg {
     max-width: 25px;
+  }
+  :last-of-type {
+    height: 60px;
   }
 `;
 

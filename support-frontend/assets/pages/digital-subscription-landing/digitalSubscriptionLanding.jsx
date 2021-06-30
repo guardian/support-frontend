@@ -78,6 +78,18 @@ const eventsProductBlockContainer = css`
   }
 `;
 
+const comparisonTableContainer = css`
+    margin-top: 43px;
+    margin-bottom: ${space[2]}px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+  ${from.tablet} {
+    margin-top: 60px;
+    margin-bottom: ${space[2]}px;
+  }
+`;
+
 // ----- Internationalisation ----- //
 
 const reactElementId: {
@@ -173,7 +185,7 @@ function DigitalLandingPage({
       {showComparisonTable &&
       <FullWidthContainer>
         <CentredContainer>
-          <Block cssOverrides={eventsProductBlockContainer}>
+          <Block cssOverrides={comparisonTableContainer}>
             <ComparisonTable />
           </Block>
         </CentredContainer>

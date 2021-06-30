@@ -20,7 +20,11 @@ export type TableRow = {
 }
 
 const container = css`
-  padding: ${space[6]}px 0 ${space[9]}px;
+  padding-top: ${space[4]}px;
+
+  ${from.desktop} {
+    padding: 0;
+  }
 `;
 
 const tableContainer = css`
