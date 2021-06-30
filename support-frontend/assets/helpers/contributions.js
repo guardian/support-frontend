@@ -7,7 +7,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-import type { Radio } from 'components/radioToggle/radioToggle';
 import { logException } from 'helpers/utilities/logger';
 import { Annual, type BillingPeriod, Monthly } from 'helpers/productPrice/billingPeriods';
 import type { PaymentMethod, PaymentMethodMap } from 'helpers/forms/paymentMethods';
@@ -430,6 +429,13 @@ function getAmountA11yHint(
   return `contribute ${spokenAmount} ${spokenCurrency} annually`;
 
 }
+
+type Radio = {
+  id?: string,
+  value: string,
+  text: string,
+  accessibilityHint?: ?string,
+};
 
 const contributionTypeRadios = [
   {
