@@ -58,6 +58,6 @@ class AcquisitionsStreamService(config: AcquisitionsStreamServiceConfig, region:
     EitherT(promise.future)
   }
 
-  def putAcquisitionWithRetry(acquisition: AcquisitionDataRow, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, String, Unit] = Retry(maxRetries)(putAcquisition(acquisition))
+  def putAcquisitionWithRetry(acquisition: AcquisitionDataRow, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[String], Unit] = Retry(maxRetries)(putAcquisition(acquisition))
 }
 

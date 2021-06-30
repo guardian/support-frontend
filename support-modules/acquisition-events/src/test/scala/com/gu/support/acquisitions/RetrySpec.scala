@@ -47,6 +47,22 @@ class RetrySpec extends AnyFlatSpec with Matchers {
     alwaysFail.tries should be(maxRetries + 1)
   }
 
+  it should "collect all the error messages" in {
+    val alwaysFail = countTries(tries =>
+      EitherT.fromEither[Future](Left[String, Unit](s"error $tries"))
+    )
+    val maxRetries = 2
+
+    val result = Await.result(Retry(maxRetries)(alwaysFail()).value, atMost = 5.seconds)
+
+    result match {
+      case Right(value) => fail("result should be a left")
+      case Left(errors) => {
+        errors should be(List("error 3", "error 2", "error 1"))
+      }
+    }
+  }
+
   def countTries[T](f: (Int) => T) = {
     class Wrapped(var tries: Int = 0) {
       def apply() = {

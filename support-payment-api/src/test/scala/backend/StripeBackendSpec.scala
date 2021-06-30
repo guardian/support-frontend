@@ -92,14 +92,14 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(dbError))
   val databaseResponse: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.right(Future.successful(()))
-  val bigQueryResponse: EitherT[Future, String, Unit] =
+  val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
-  val bigQueryResponseError: EitherT[Future, String, Unit] =
-    EitherT.left(Future.successful("a BigQuery error"))
-  val streamResponse: EitherT[Future, String, Unit] =
+  val bigQueryResponseError: EitherT[Future, List[String], Unit] =
+    EitherT.left(Future.successful(List("a BigQuery error")))
+  val streamResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
-  val streamResponseError: EitherT[Future, String, Unit] =
-    EitherT.left(Future.successful("stream error"))
+  val streamResponseError: EitherT[Future, List[String], Unit] =
+    EitherT.left(Future.successful(List("stream error")))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
   val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResult] =

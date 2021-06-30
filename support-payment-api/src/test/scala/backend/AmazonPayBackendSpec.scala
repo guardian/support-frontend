@@ -98,12 +98,12 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
-  val bigQueryResponse: EitherT[Future, String, Unit] =
+  val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
-  val bigQueryResponseError: EitherT[Future, String, Unit] =
-    EitherT.left(Future.successful("a BigQuery error"))
-  val streamResponseError: EitherT[Future, String, Unit] =
-    EitherT.left(Future.successful("stream error"))
+  val bigQueryResponseError: EitherT[Future, List[String], Unit] =
+    EitherT.left(Future.successful(List("a BigQuery error")))
+  val streamResponseError: EitherT[Future, List[String], Unit] =
+    EitherT.left(Future.successful(List("stream error")))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, expectedGuestToken)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =

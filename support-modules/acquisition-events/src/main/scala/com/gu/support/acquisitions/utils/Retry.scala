@@ -5,13 +5,13 @@ import cats.data.EitherT
 import cats.instances.future._
 
 object Retry {
-  def apply[A, B](max: Int)(f: => EitherT[Future, A, B])(implicit ec: ExecutionContext): EitherT[Future, A, B] = {
-    def attempt(triesLeft: Int): EitherT[Future, A, B] = {
+  def apply[A, B](max: Int)(f: => EitherT[Future, A, B])(implicit ec: ExecutionContext): EitherT[Future, List[A], B] = {
+    def attempt(triesLeft: Int, errors: List[A]): EitherT[Future, List[A], B] = {
       f.leftFlatMap(error => {
-        if (triesLeft > 0) attempt(triesLeft - 1) else EitherT.fromEither(Left(error))
+        if (triesLeft > 0) attempt(triesLeft - 1, error +: errors) else EitherT.fromEither(Left(error +: errors))
       })
     }
 
-    attempt(max)
+    attempt(max, Nil)
   }
 }

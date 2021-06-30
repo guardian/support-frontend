@@ -33,7 +33,7 @@ class BigQueryService(config: BigQueryConfig) {
       blockingInsert(acquisitionDataRow)
     )))
 
-  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit executionContext: ExecutionContext): EitherT[Future, String, Unit] = Retry(maxRetries)(tableInsertRow(acquisitionDataRow))
+  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit executionContext: ExecutionContext): EitherT[Future, List[String], Unit] = Retry(maxRetries)(tableInsertRow(acquisitionDataRow))
 
   private def blockingInsert(acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] =
     try {

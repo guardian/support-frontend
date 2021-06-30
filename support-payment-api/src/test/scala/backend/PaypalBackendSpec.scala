@@ -78,16 +78,16 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
-  val bigQueryResponse: EitherT[Future, String, Unit] =
+  val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val bigQueryErrorMessage = "a BigQuery error"
-  val bigQueryResponseError: EitherT[Future, String, Unit] =
-    EitherT.left(Future.successful(bigQueryErrorMessage))
-  val streamResponse: EitherT[Future, String, Unit] =
+  val bigQueryResponseError: EitherT[Future, List[String], Unit] =
+    EitherT.left(Future.successful(List(bigQueryErrorMessage)))
+  val streamResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val streamResponseErrorMessage = "stream error"
-  val streamResponseError: EitherT[Future, String, Unit] =
-    EitherT.left(Future.successful(streamResponseErrorMessage))
+  val streamResponseError: EitherT[Future, List[String], Unit] =
+    EitherT.left(Future.successful(List(streamResponseErrorMessage)))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =

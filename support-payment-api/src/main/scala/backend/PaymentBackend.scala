@@ -30,8 +30,8 @@ trait PaymentBackend extends StrictLogging {
     val ophanFuture = ophanService.submitAcquisition(legacyAcquisition)
       .bimap(BackendError.fromOphanError, _ => ())
 
-    val bigQueryFuture = bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5).leftMap(BackendError.BigQueryError)
-    val streamFuture = acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5).leftMap(BackendError.AcquisitionsStreamError)
+    val bigQueryFuture = bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5).leftMap(errors => BackendError.BigQueryError(errors.mkString(" & ")))
+    val streamFuture = acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5).leftMap(errors => BackendError.AcquisitionsStreamError(errors.mkString(" & ")))
 
     val dbFuture = insertContributionDataIntoDatabase(contributionData)
 
