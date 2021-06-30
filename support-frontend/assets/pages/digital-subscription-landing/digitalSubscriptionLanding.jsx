@@ -33,7 +33,6 @@ import headerWithCountrySwitcherContainer
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
 import { HeroWithImage } from './components/hero/heroWithImage';
 import ProductBlock from './components/productBlock/productBlock';
-import ProductBlockAus from './components/productBlock/productBlockAus';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
@@ -181,14 +180,9 @@ function DigitalLandingPage({
         <CentredContainer>
           <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
             <div ref={setElementToObserve}>
-              {countryGroupId === AUDCountries ?
-                <ProductBlockAus
-                  countryGroupId={countryGroupId}
-                /> :
-                <ProductBlock
-                  countryGroupId={countryGroupId}
-                />
-              }
+              <ProductBlock
+                countryGroupId={countryGroupId}
+              />
             </div>
           </Block>
         </CentredContainer>

@@ -61,6 +61,31 @@ const dailyImage = (
   />
 );
 
+const weekendImage = (
+  <GridPicture
+    sources={[
+      {
+        gridId: 'weekendPackshotMobile',
+        srcSizes: [140, 500],
+        imgType: 'png',
+        sizes: '90vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'weekendPackshotDesktop',
+        srcSizes: [140, 500, 1000],
+        imgType: 'png',
+        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="weekendPackshotDesktop"
+    fallbackSize={500}
+    altText=""
+    fallbackImgType="png"
+  />
+);
+
 const appImage = (
   <GridPicture
     sources={[
@@ -125,6 +150,55 @@ const DailyProductBlockSection = () => (
   />
 );
 
+const DailyProductBlockSectionAus = () => (
+  <ProductBlockSection
+    product="Daily"
+    render={showDropDown =>
+        (<>
+          <ProductCard
+            title="Australia Weekend in The Guardian Editions app"
+            subtitle={
+              <span className="product-block__item__subtitle--short-first">
+              Everything you need to make sense of the week, in one simple, elegant app
+              </span>}
+            image={weekendImage}
+            first
+            secondImage={false}
+          />
+          <Dropdown
+            showDropDown={showDropDown}
+            product="daily"
+          >
+            <ListHeading
+              items={[
+              {
+                boldText: 'A new way to read',
+                explainer: 'The weekend paper, reimagined for mobile and tablet. Each new edition available to read Saturday at 6am (AEST)',
+              },
+              {
+                boldText: 'Start your weekend informed',
+                explainer: 'Enjoy early access to the best journalism planned for the weekend',
+              },
+              { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
+              { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
+            ]}
+            />
+            <ListHeading
+              items={[
+              { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
+              { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
+              {
+                boldText: 'Enjoy our other editions',
+                explainer: 'The UK Daily and other special editions are all included in The Guardian Editions app as part of your subscription',
+              },
+            ]}
+            />
+          </Dropdown>
+        </>)
+      }
+  />
+);
+
 const PremiumAppProductBlockSection = () => (
   <ProductBlockSection
     product="App"
@@ -168,6 +242,8 @@ function getProductOrderForCountryGroup(countryGroupId: CountryGroupId) {
   switch (countryGroupId) {
     case 'UnitedStates':
       return [PremiumAppProductBlockSection, DailyProductBlockSection, AdFreeSection];
+    case 'AUDCountries':
+      return [DailyProductBlockSectionAus, PremiumAppProductBlockSection, AdFreeSection];
     default:
       return [DailyProductBlockSection, PremiumAppProductBlockSection, AdFreeSection];
   }
