@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
 // @flow
-// $FlowIgnore
 import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
@@ -154,48 +153,48 @@ const DailyProductBlockSectionAus = () => (
   <ProductBlockSection
     product="Daily"
     render={showDropDown =>
-        (<>
-          <ProductCard
-            title="Australia Weekend in The Guardian Editions app"
-            subtitle={
-              <span className="product-block__item__subtitle--short-first">
-              Everything you need to make sense of the week, in one simple, elegant app
-              </span>}
-            image={weekendImage}
-            first
-            secondImage={false}
+      (<>
+        <ProductCard
+          title="Australia Weekend in The Guardian Editions app"
+          subtitle={
+            <span className="product-block__item__subtitle--short-first">
+            Everything you need to make sense of the week, in one simple, elegant app
+            </span>}
+          image={weekendImage}
+          first
+          secondImage={false}
+        />
+        <Dropdown
+          showDropDown={showDropDown}
+          product="daily"
+        >
+          <ListHeading
+            items={[
+            {
+              boldText: 'A new way to read',
+              explainer: 'The weekend paper, reimagined for mobile and tablet. Each new edition available to read Saturday at 6am (AEST)',
+            },
+            {
+              boldText: 'Start your weekend informed',
+              explainer: 'Enjoy early access to the best journalism planned for the weekend',
+            },
+            { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
+            { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
+          ]}
           />
-          <Dropdown
-            showDropDown={showDropDown}
-            product="daily"
-          >
-            <ListHeading
-              items={[
-              {
-                boldText: 'A new way to read',
-                explainer: 'The weekend paper, reimagined for mobile and tablet. Each new edition available to read Saturday at 6am (AEST)',
-              },
-              {
-                boldText: 'Start your weekend informed',
-                explainer: 'Enjoy early access to the best journalism planned for the weekend',
-              },
-              { boldText: 'Easy to navigate', explainer: 'Read the complete edition, or swipe to the sections you care about' },
-              { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
-            ]}
-            />
-            <ListHeading
-              items={[
-              { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
-              { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
-              {
-                boldText: 'Enjoy our other editions',
-                explainer: 'The UK Daily and other special editions are all included in The Guardian Editions app as part of your subscription',
-              },
-            ]}
-            />
-          </Dropdown>
-        </>)
-      }
+          <ListHeading
+            items={[
+            { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
+            { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
+            {
+              boldText: 'Enjoy our other editions',
+              explainer: 'The UK Daily and other special editions are all included in The Guardian Editions app as part of your subscription',
+            },
+          ]}
+          />
+        </Dropdown>
+      </>)
+    }
   />
 );
 
@@ -203,34 +202,34 @@ const PremiumAppProductBlockSection = () => (
   <ProductBlockSection
     product="App"
     render={showDropDown => (
-          <>
-            <ProductCard
-              title="Premium access to The Guardian Live app"
-              subtitle="Live news, as it happens"
-              image={appImage}
-              second
+        <>
+          <ProductCard
+            title="Premium access to The Guardian Live app"
+            subtitle="Live news, as it happens"
+            image={appImage}
+            second
+          />
+          <Dropdown
+            showDropDown={showDropDown}
+            product="app"
+          >
+            <ListHeading
+              items={[
+              { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
+              { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
+              { boldText: 'Enhanced offline reading', explainer: 'Download the news whenever it suits you' },
+            ]}
             />
-            <Dropdown
-              showDropDown={showDropDown}
-              product="app"
-            >
-              <ListHeading
-                items={[
-                { boldText: 'Live', explainer: 'Follow a live feed of breaking news and sport, as it happens' },
-                { boldText: 'Discover', explainer: 'Explore stories you might have missed, tailored to you' },
-                { boldText: 'Enhanced offline reading', explainer: 'Download the news whenever it suits you' },
-              ]}
-              />
-              <ListHeading
-                items={[
-                { boldText: 'Daily Crossword', explainer: 'Play the daily crossword wherever you are' },
-                { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
-              ]}
-              />
-            </Dropdown>
-          </>
-        )
-      }
+            <ListHeading
+              items={[
+              { boldText: 'Daily Crossword', explainer: 'Play the daily crossword wherever you are' },
+              { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
+            ]}
+            />
+          </Dropdown>
+        </>
+      )
+    }
   />
 );
 

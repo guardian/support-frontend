@@ -27,15 +27,15 @@ export const Dropdown = ({
   </div>
 );
 
-export type ButtonPropTypes = {
+export type DropdownButtonPropTypes = {
   showDropDown: boolean,
   handleClick: Function,
   product: 'daily' | 'app',
 }
 
-export const Button = ({
+export const DropdownButton = ({
   showDropDown, handleClick, product,
-}: ButtonPropTypes) => (
+}: DropdownButtonPropTypes) => (
   <button
     aria-controls={`product-details-${product}`}
     aria-expanded={showDropDown ? 'true' : 'false'}
@@ -102,7 +102,7 @@ export const ProductBlockSection = ({ product, render }: ProductBlockSectionProp
   return (
     <>
       {render(showDropDown)}
-      <Button
+      <DropdownButton
         showDropDown={showDropDown}
         handleClick={handleClick}
         product={product.toLowerCase()}
