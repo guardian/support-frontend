@@ -19,7 +19,7 @@ class RetrySpec extends AnyFlatSpec with Matchers {
       EitherT.fromEither[Future](Right[String, Unit](()))
     })
 
-    Retry(max = 10)(alwaysSucceed())
+    Await.result(Retry(max = 10)(alwaysSucceed()).value, atMost = 5.seconds)
 
     alwaysSucceed.tries should be(1)
   }
