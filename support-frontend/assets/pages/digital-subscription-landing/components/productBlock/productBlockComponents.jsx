@@ -7,17 +7,19 @@ import cx from 'classnames';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { arrowSvg } from '../arrow';
 
+type DigitalSubProduct = 'Daily' | 'App';
+
 export type DropdownPropTypes = {
   children: Node,
   showDropDown: boolean,
-  product: string,
+  product: DigitalSubProduct,
 }
 
 export const Dropdown = ({
   children, showDropDown, product,
 }: DropdownPropTypes) => (
   <div
-    id={`product-details-${product}`}
+    id={`product-details-${product.toLowerCase()}`}
     className={cx('product-block__dropdown--hide', { 'product-block__dropdown--show': showDropDown })}
     aria-hidden={showDropDown ? 'false' : 'true'}
   >
@@ -30,14 +32,14 @@ export const Dropdown = ({
 export type DropdownButtonPropTypes = {
   showDropDown: boolean,
   handleClick: Function,
-  product: 'daily' | 'app',
+  product: DigitalSubProduct,
 }
 
 export const DropdownButton = ({
   showDropDown, handleClick, product,
 }: DropdownButtonPropTypes) => (
   <button
-    aria-controls={`product-details-${product}`}
+    aria-controls={`product-details-${product.toLowerCase()}`}
     aria-expanded={showDropDown ? 'true' : 'false'}
     onClick={handleClick}
     className={cx('product-block__button--hide', { 'product-block__button--show': showDropDown })}
@@ -74,8 +76,6 @@ ProductCard.defaultProps = {
   shortSubTitle: '',
 };
 
-type DigitalSubProduct = 'Daily' | 'App';
-
 function trackClickAction(product: DigitalSubProduct, isOpen: boolean) {
   const clickAction = isOpen ? 'open' : 'close';
   sendTrackingEventsOnClick({
@@ -104,7 +104,7 @@ export const ProductBlockSection = ({ product, render }: ProductBlockSectionProp
       <DropdownButton
         showDropDown={showDropDown}
         handleClick={handleClick}
-        product={product.toLowerCase()}
+        product={product}
       />
     </>
   );

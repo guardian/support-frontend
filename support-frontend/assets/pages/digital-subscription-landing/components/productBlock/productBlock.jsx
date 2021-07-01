@@ -110,7 +110,12 @@ const appImage = (
   />
 );
 
-const DailyProductBlockSection = () => (
+type ProductSectionPropTypes = {|
+  first: boolean;
+  second: boolean;
+|}
+
+const DailyProductBlockSection = ({ first, second }: ProductSectionPropTypes) => (
   <ProductBlockSection
     product="Daily"
     render={showDropDown =>
@@ -119,11 +124,12 @@ const DailyProductBlockSection = () => (
           title="UK Daily in The Guardian Editions app"
           subtitle="Each day&apos;s edition, in one simple, elegant app"
           image={dailyImage}
-          second={false}
+          first={first}
+          second={second}
         />
         <Dropdown
           showDropDown={showDropDown}
-          product="daily"
+          product="Daily"
         >
           <ListHeading
             items={[
@@ -149,24 +155,22 @@ const DailyProductBlockSection = () => (
   />
 );
 
-const DailyProductBlockSectionAus = () => (
+const DailyProductBlockSectionAus = ({ first, second }: ProductSectionPropTypes) => (
   <ProductBlockSection
     product="Daily"
     render={showDropDown =>
       (<>
         <ProductCard
           title="Australia Weekend in The Guardian Editions app"
-          subtitle={
-            <span className="product-block__item__subtitle--short-first">
-            Everything you need to make sense of the week, in one simple, elegant app
-            </span>}
+          subtitle="Everything you need to make sense of the week, in one simple, elegant app"
           image={weekendImage}
-          first
+          first={first}
+          second={second}
           secondImage={false}
         />
         <Dropdown
           showDropDown={showDropDown}
-          product="daily"
+          product="Daily"
         >
           <ListHeading
             items={[
@@ -198,7 +202,7 @@ const DailyProductBlockSectionAus = () => (
   />
 );
 
-const PremiumAppProductBlockSection = () => (
+const PremiumAppProductBlockSection = ({ first, second }: ProductSectionPropTypes) => (
   <ProductBlockSection
     product="App"
     render={showDropDown => (
@@ -207,11 +211,12 @@ const PremiumAppProductBlockSection = () => (
             title="Premium access to The Guardian Live app"
             subtitle="Live news, as it happens"
             image={appImage}
-            second
+            first={first}
+            second={second}
           />
           <Dropdown
             showDropDown={showDropDown}
-            product="app"
+            product="App"
           >
             <ListHeading
               items={[
@@ -257,7 +262,7 @@ function ProductBlock({ countryGroupId }: PropTypes) {
       <section className="product-block__container hope-is-power--centered">
         {contentOrder.map((ProductSection, index) => (
           <>
-            <ProductSection />
+            <ProductSection first={index === 0} second={index === 1} />
             {index < contentOrder.length - 1 ? <Plus /> : null}
           </>
         ))}
