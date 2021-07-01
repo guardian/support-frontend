@@ -186,11 +186,12 @@ function DigitalCheckoutForm(props: PropTypes) {
               setLastName={props.setLastName}
               email={props.email}
               setEmail={props.setEmail}
+              isSignedIn={props.isSignedIn}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
-              isInGuestCheckout={isUsingGuestCheckout}
+              isUsingGuestCheckout={isUsingGuestCheckout}
             />
           </FormSection>
           <FormSection title="Address">

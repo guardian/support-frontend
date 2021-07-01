@@ -39,6 +39,7 @@ function createFormReducer(
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
+    isSignedIn: user.isSignedIn,
     startDate,
     telephone: null,
     billingAddressIsSame: true,

@@ -34,19 +34,20 @@ export type PropTypes = {
   lastName: string,
   setLastName: Function,
   email: string,
-  setEmail: Function,
+  setEmail?: Function,
+  isSignedIn: boolean,
   telephone: Option<string>,
   setTelephone: Function,
   formErrors: FormError<FormField>[],
   signOut: Function,
-  isInGuestCheckout: boolean,
+  isUsingGuestCheckout: boolean,
 }
 
-type EmailFooterTypes = {
+type SignedInEmailFooterTypes = {
   handleSignOut: Function,
 }
 
-const EmailFooter = (props: EmailFooterTypes) => (
+const SignedInEmailFooter = (props: SignedInEmailFooterTypes) => (
   <div css={marginBotom}>
     <CheckoutExpander copy="Want to use a different email address?">
       <p css={sansText}>You will be able to edit this in your account once you have completed this checkout.</p>
@@ -69,11 +70,25 @@ const EmailFooter = (props: EmailFooterTypes) => (
   </div>
 );
 
+const SignedOutEmailFooter = () => (
+  <div css={marginBotom}>
+  </div>
+);
+
 export default function PersonalDetails(props: PropTypes) {
   const handleSignOut = (e) => {
     e.preventDefault();
     props.signOut();
   };
+
+  const maybeSetEmail = (e) => {
+    if (props.setEmail)
+      props.setEmail(e.target.value);
+  }
+
+  const emailFooter = props.isSignedIn ?
+    <SignedInEmailFooter handleSignOut={handleSignOut} /> :
+    <SignedOutEmailFooter />;
 
   return (
     <div id="qa-personal-details">
@@ -99,12 +114,12 @@ export default function PersonalDetails(props: PropTypes) {
         label="Email"
         type="email"
         value={props.email}
-        onChange={e => props.setEmail(e.target.value)}
+        onChange={maybeSetEmail}
         error={firstError('email', props.formErrors)}
         pattern={emailRegexPattern}
-        disabled={!props.isInGuestCheckout}
+        disabled={!props.isUsingGuestCheckout}
       />
-      <EmailFooter handleSignOut={handleSignOut} />
+      {emailFooter}
       <TextInput
         id="telephone"
         label="Telephone"
