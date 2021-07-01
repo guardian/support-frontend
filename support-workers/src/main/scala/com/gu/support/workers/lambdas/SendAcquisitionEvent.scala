@@ -15,7 +15,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.acquisitions.AcquisitionEventTable
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.workers._
-import com.gu.support.workers.exceptions.RetryUnlimited
+import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 
@@ -53,11 +53,19 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
     sendPaymentSuccessMetric(state)
 
-    services.bigQueryService.tableInsertRow(
-      AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
-    ).value.flatMap {
-      case Left(errorMessage) => throw new RetryUnlimited(errorMessage)
-      case Right(_) => Future.successful(HandlerResult((), requestInfo))
+    val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
+
+    val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
+    val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
+
+    val result = for {
+      streamResult <- streamFuture
+      bigQueryResult <- biqQueryFuture
+    } yield ()
+
+    result.value.map {
+      case Left(errorMessage) => throw new RetryNone(errorMessage.mkString(" & "))
+      case Right(_) => HandlerResult((), requestInfo)
     }
   }
 

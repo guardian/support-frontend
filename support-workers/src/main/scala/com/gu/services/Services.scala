@@ -18,9 +18,11 @@ import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
 import com.gu.supporterdata.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD, UAT => DynamoStageUAT}
 import com.gu.supporterdata.services.SupporterDataDynamoService
+import com.gu.support.acquisitions.{AcquisitionsStreamService, AcquisitionsStreamLambdaConfig}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import com.gu.support.acquisitions.AcquisitionsStreamLambdaConfig
 
 trait ServiceProvider {
   private lazy val config = Configuration.load()
@@ -46,6 +48,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
   lazy val bigQueryService = new BigQueryService(bigQueryConfigProvider.get(isTestUser))
+  lazy val acquisitionsStreamService = new AcquisitionsStreamService(AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName))
   val supporterDynamoStage = (Configuration.stage, isTestUser) match {
     case (DEV, false) => DynamoStageDEV
     case (CODE, false) => DynamoStageDEV

@@ -8,10 +8,11 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService, AcquisitionsStreamService, AcquisitionsStreamEc2OrLocalConfig}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
+import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
 import conf.ConfigLoader._
 import conf._
 import model.Environment.{Live, Test}
@@ -31,16 +32,17 @@ import scala.concurrent.Future
 
 class StripeBackend(
   stripeService: StripeService,
-  databaseService: ContributionsStoreService,
+  val databaseService: ContributionsStoreService,
   identityService: IdentityService,
-  ophanService: AnalyticsService,
-  bigQueryService: BigQueryService,
+  val ophanService: AnalyticsService,
+  val bigQueryService: BigQueryService,
+  val acquisitionsStreamService: AcquisitionsStreamService,
   emailService: EmailService,
   recaptchaService: RecaptchaService,
   cloudWatchService: CloudWatchService,
   switchService: SwitchService,
   environment: Environment
-)(implicit pool: DefaultThreadPool, WSClient: WSClient) extends StrictLogging {
+)(implicit pool: DefaultThreadPool, WSClient: WSClient) extends StrictLogging with PaymentBackend {
 
   switchService.startPoller()
 
@@ -200,12 +202,11 @@ class StripeBackend(
   }
 
   private def postPaymentTasks(email: String, chargeData: StripeRequest, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long]): Unit = {
-    trackContribution(charge, chargeData, identityId, clientBrowserInfo).leftMap { err =>
-      cloudWatchService.recordPostPaymentTasksError(
+    trackContribution(charge, chargeData, identityId, clientBrowserInfo)
+      .map(errors => cloudWatchService.recordPostPaymentTasksErrors(
         PaymentProvider.Stripe,
-        s"unable to track contribution due to error: ${err.getMessage}"
-      )
-    }
+        errors
+      ))
 
     identityId.foreach { id =>
       sendThankYouEmail(email, chargeData, id).leftMap { err =>
@@ -217,7 +218,7 @@ class StripeBackend(
     }
   }
 
-  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  = {
+  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): Future[List[BackendError]] = {
     val contributionData = ContributionData.fromStripeCharge(
       identityId,
       charge,
@@ -227,12 +228,10 @@ class StripeBackend(
 
     val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
 
-    BackendError.combineResults(
-      insertContributionDataIntoDatabase(
-        contributionData
-      ),
-      submitAcquisitionToOphan(stripeAcquisition),
-      submitAcquisitionToBigQuery(stripeAcquisition, contributionData)
+    track(
+      legacyAcquisition = stripeAcquisition,
+      acquisition = AcquisitionDataRowBuilder.buildFromStripe(stripeAcquisition, contributionData),
+      contributionData
     )
   }
 
@@ -244,25 +243,6 @@ class StripeBackend(
       },
       identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
     )
-
-  private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
-    // log so that if something goes wrong we can reconstruct the missing data from the logs
-    logger.info(s"about to insert contribution into database: $contributionData")
-    databaseService.insertContributionData(contributionData)
-      .leftMap(BackendError.fromDatabaseError)
-  }
-
-  private def submitAcquisitionToOphan(acquisition: StripeAcquisition): EitherT[Future, BackendError, Unit] =
-    ophanService.submitAcquisition(acquisition)
-      .bimap(BackendError.fromOphanError, _ => ())
-
-  private def submitAcquisitionToBigQuery(
-    acquisition: StripeAcquisition,
-    contributionData: ContributionData
-  ): EitherT[Future, BackendError, Unit] =
-    bigQueryService.tableInsertRow(
-      AcquisitionDataRowBuilder.buildFromStripe(acquisition, contributionData)
-    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
     stripeService.validateRefundHook(refundHook)
@@ -294,6 +274,7 @@ object StripeBackend {
     identityService: IdentityService,
     ophanService: AnalyticsService,
     bigQueryService: BigQueryService,
+    acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     recaptchaService: RecaptchaService,
     cloudWatchService: CloudWatchService,
@@ -308,6 +289,7 @@ object StripeBackend {
       identityService,
       ophanService,
       bigQueryService,
+      acquisitionsStreamService,
       emailService,
       recaptchaService,
       cloudWatchService,
@@ -338,6 +320,9 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],
+      configLoader
+        .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
+        .map(new AcquisitionsStreamService(_)): InitializationResult[AcquisitionsStreamService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

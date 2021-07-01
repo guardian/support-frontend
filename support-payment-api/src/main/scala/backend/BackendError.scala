@@ -19,10 +19,12 @@ sealed abstract class BackendError extends Exception {
     case BackendError.IdentityServiceError(err) => err.getMessage
     case BackendError.Ophan(err) => err.map(_.getMessage).mkString(", ")
     case BackendError.BigQueryError(err) => err
+    case BackendError.AcquisitionsStreamError(err) => err
     case BackendError.StripeApiError(err) => err.getMessage
     case BackendError.PaypalApiError(err) => err.message
     case BackendError.AmazonPayApiError(err) => err.message
     case BackendError.Email(err) => err.getMessage
+    case BackendError.TrackingError(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
     case BackendError.SubscribeWithGoogleDuplicateEventError(error) => error.getMessage
   }
@@ -31,6 +33,7 @@ sealed abstract class BackendError extends Exception {
 object BackendError {
   final case class IdentityIdMissingError(error: String) extends BackendError
   final case class BigQueryError(error: String) extends BackendError
+  final case class AcquisitionsStreamError(error: String) extends BackendError
   final case class Database(error: ContributionsStoreService.Error) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
@@ -39,6 +42,7 @@ object BackendError {
   final case class AmazonPayApiError(err: AmazonPayError) extends BackendError
   final case class SubscribeWithGoogleDuplicateEventError(error: SubscribeWithGoogleDuplicateInsertEventError) extends BackendError
   final case class Email(error: EmailService.Error) extends BackendError
+  final case class TrackingError(err: Throwable) extends BackendError
   final case class MultipleErrors(errors: List[BackendError]) extends BackendError
 
   implicit val backendSemiGroup: Semigroup[BackendError] =

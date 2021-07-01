@@ -6,9 +6,11 @@ import com.google.cloud.bigquery.{BigQueryException, BigQueryOptions, InsertAllR
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.acquisitions.AcquisitionEventTable.{datasetName, tableName}
+import com.gu.support.acquisitions.models.AcquisitionDataRow
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future, blocking}
+import com.gu.support.acquisitions.utils.Retry
 
 class BigQueryService(config: BigQueryConfig) {
   lazy val bigQuery =
@@ -30,6 +32,8 @@ class BigQueryService(config: BigQueryConfig) {
       // https://docs.scala-lang.org/overviews/core/futures.html#blocking-inside-a-future
       blockingInsert(acquisitionDataRow)
     )))
+
+  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit executionContext: ExecutionContext): EitherT[Future, List[String], Unit] = Retry(maxRetries)(tableInsertRow(acquisitionDataRow))
 
   private def blockingInsert(acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] =
     try {

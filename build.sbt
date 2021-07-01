@@ -84,7 +84,7 @@ lazy val root = (project in file("."))
     `support-redemptiondb`,
     `it-test-runner`,
     `module-aws`,
-    `module-bigquery`,
+    `module-acquisition-events`,
     `module-rest`,
     `support-payment-api`,
     `acquisition-event-producer`,
@@ -122,7 +122,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     `support-config`,
     `support-internationalisation`,
     `acquisition-event-producer`,
-    `module-bigquery`,
+    `module-acquisition-events`,
     `supporter-product-data-dynamo`
   ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
 
@@ -150,8 +150,8 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-models`, `support-internationalisation`, `module-bigquery`)
-  .aggregate(`support-models`, `support-internationalisation`, `module-bigquery`)
+  ).dependsOn(`support-models`, `support-internationalisation`, `module-acquisition-events`)
+  .aggregate(`support-models`, `support-internationalisation`, `module-acquisition-events`)
 
 lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
@@ -192,15 +192,10 @@ lazy val `module-aws` = (project in file("support-modules/aws"))
     libraryDependencies ++= commonDependencies
   )
 
-lazy val `module-bigquery` = (project in file("support-modules/bigquery"))
+lazy val `module-acquisition-events` = (project in file("support-modules/acquisition-events"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(libraryDependencies ++= commonDependencies)
   .dependsOn(`support-config`)
-
-lazy val `module-acquisitions-stream` = (project in file("support-modules/acquisitions-stream"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
-  .settings(libraryDependencies ++= commonDependencies)
-  .dependsOn(`support-config`, `module-bigquery`)
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
@@ -256,8 +251,8 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
   .settings(
     libraryDependencies ++= commonDependencies,
   )
-  .dependsOn(`module-bigquery`)
-  .aggregate(`module-bigquery`)
+  .dependsOn(`module-acquisition-events`)
+  .aggregate(`module-acquisition-events`)
 
 lazy val `support-lambdas` = (project in file("support-lambdas"))
   .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)

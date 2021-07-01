@@ -1,5 +1,6 @@
 package com.gu.support.acquisitions
 
+import com.gu.support.acquisitions.models._
 import com.gu.support.workers._
 import org.joda.time.format.ISODateTimeFormat
 import scala.collection.JavaConverters._

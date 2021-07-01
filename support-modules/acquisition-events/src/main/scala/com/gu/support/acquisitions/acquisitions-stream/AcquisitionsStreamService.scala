@@ -1,8 +1,8 @@
-package com.gu.acquisition.services
+package com.gu.support.acquisitions
 
 import java.nio.ByteBuffer
 
-import com.gu.support.acquisitions.AcquisitionDataRow
+import com.gu.support.acquisitions.models.AcquisitionDataRow
 
 import cats.data.EitherT
 import com.amazonaws.handlers.AsyncHandler
@@ -16,21 +16,22 @@ import scala.util.control.NonFatal
 import org.joda.time.format.ISODateTimeFormat
 
 import io.circe.syntax._
+import com.gu.support.acquisitions.utils.Retry
 
 sealed trait AcquisitionsStreamServiceConfig {
   val streamName: String
 }
 
-case class Ec2OrLocalConfig(val streamName: String, val credentialsProvider: AWSCredentialsProviderChain) extends AcquisitionsStreamServiceConfig
-case class LambdaConfig(val streamName: String) extends AcquisitionsStreamServiceConfig
+case class AcquisitionsStreamEc2OrLocalConfig(val streamName: String, val credentialsProvider: AWSCredentialsProviderChain) extends AcquisitionsStreamServiceConfig
+case class AcquisitionsStreamLambdaConfig(val streamName: String) extends AcquisitionsStreamServiceConfig
 
 class AcquisitionsStreamService(config: AcquisitionsStreamServiceConfig, region: String = "eu-west-1") {
 
   private val kinesisClient = {
     val builder = AmazonKinesisAsyncClientBuilder.standard().withRegion(region)
     config match {
-      case Ec2OrLocalConfig(_,provider) => builder.withCredentials(provider).build
-      case _: LambdaConfig => builder.build
+      case AcquisitionsStreamEc2OrLocalConfig(_,provider) => builder.withCredentials(provider).build
+      case _: AcquisitionsStreamLambdaConfig => builder.build
     }
   }
 
@@ -49,11 +50,14 @@ class AcquisitionsStreamService(config: AcquisitionsStreamServiceConfig, region:
     }
 
     kinesisClient.putRecordAsync(request, new AsyncHandler[PutRecordRequest, PutRecordResult] {
-      override def onError(exception: Exception): Unit = promise.failure(exception)
+      override def onError(exception: Exception): Unit = promise.success(Left(exception.getMessage))
 
       override def onSuccess(request: PutRecordRequest, result: PutRecordResult): Unit = promise.success(Right(()))
     })
 
     EitherT(promise.future)
   }
+
+  def putAcquisitionWithRetry(acquisition: AcquisitionDataRow, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[String], Unit] = Retry(maxRetries)(putAcquisition(acquisition))
 }
+

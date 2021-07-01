@@ -1,11 +1,15 @@
-import LibraryVersions.{jacksonDatabindVersion, jacksonVersion}
+import LibraryVersions.{jacksonDatabindVersion, jacksonVersion, circeVersion}
 
-name := "module-acquisitions-stream"
+name := "module-acquisition-events"
 
-description := "Module to provide an AcquisitionsStreamService to support projects"
+description := "Module for sending acquisition events"
 
 libraryDependencies ++= Seq(
+  "com.google.cloud" % "google-cloud-bigquery" % "1.126.0",
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
   "com.amazonaws" % "aws-java-sdk-kinesis" % "1.12.10",
+
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,

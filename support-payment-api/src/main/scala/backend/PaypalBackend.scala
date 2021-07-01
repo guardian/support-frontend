@@ -6,10 +6,11 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService, AcquisitionsStreamService, AcquisitionsStreamEc2OrLocalConfig}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
+import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
 import play.api.libs.ws.WSClient
 import conf._
 import conf.ConfigLoader._
@@ -27,13 +28,14 @@ import scala.util.Try
 
 class PaypalBackend(
   paypalService: PaypalService,
-  databaseService: ContributionsStoreService,
+  val databaseService: ContributionsStoreService,
   identityService: IdentityService,
-  ophanService: AnalyticsService,
-  bigQueryService: BigQueryService,
+  val ophanService: AnalyticsService,
+  val bigQueryService: BigQueryService,
+  val acquisitionsStreamService: AcquisitionsStreamService,
   emailService: EmailService,
   cloudWatchService: CloudWatchService
-)(implicit pool: DefaultThreadPool) extends StrictLogging {
+)(implicit pool: DefaultThreadPool) extends StrictLogging with PaymentBackend {
 
   /*
    * Used by web clients.
@@ -103,9 +105,9 @@ class PaypalBackend(
   // Success or failure of these steps shouldn't affect the response to the client
   private def postPaymentTasks(payment: Payment, email: String, identityId: Option[Long], acquisitionData: AcquisitionData, clientBrowserInfo: ClientBrowserInfo): Unit = {
     trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo)
-      .leftMap(trackErr => cloudWatchService.recordPostPaymentTasksError(
+      .map(errors => cloudWatchService.recordPostPaymentTasksErrors(
         PaymentProvider.Paypal,
-        s"unable to track contribution due to error: ${trackErr.getMessage}"
+        errors
       ))
 
     val emailResult = for {
@@ -125,18 +127,18 @@ class PaypalBackend(
     }
   }
 
-  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
-    ContributionData.fromPaypalCharge(payment, email, identityId, clientBrowserInfo.countrySubdivisionCode)
-      .leftMap(BackendError.fromPaypalAPIError)
-      .toEitherT[Future]
-      .flatMap { contributionData =>
+  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): Future[List[BackendError]] = {
+    ContributionData.fromPaypalCharge(payment, email, identityId, clientBrowserInfo.countrySubdivisionCode) match {
+      case Left(err) => Future.successful(List(BackendError.fromPaypalAPIError(err)))
+      case Right(contributionData) =>
         val paypalAcquisition = PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
-        BackendError.combineResults(
-          submitAcquisitionToOphan(paypalAcquisition),
-          submitAcquisitionToBigQuery(paypalAcquisition, contributionData),
-          insertContributionDataIntoDatabase(contributionData)
+
+        track(
+          legacyAcquisition = paypalAcquisition,
+          acquisition = AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData),
+          contributionData,
         )
-      }
+    }
   }
 
 
@@ -149,25 +151,6 @@ class PaypalBackend(
         },
         identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
       )
-
-  private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
-    // log so that if something goes wrong we can reconstruct the missing data from the logs
-    logger.info(s"about to insert contribution into database: $contributionData")
-    databaseService.insertContributionData(contributionData)
-      .leftMap(BackendError.fromDatabaseError)
-  }
-
-  private def submitAcquisitionToOphan(paypalAcquisition: PaypalAcquisition): EitherT[Future, BackendError, Unit] =
-    ophanService.submitAcquisition(paypalAcquisition)
-      .bimap(BackendError.fromOphanError, _ => ())
-
-  private def submitAcquisitionToBigQuery(
-    acquisition: PaypalAcquisition,
-    contributionData: ContributionData
-  ): EitherT[Future, BackendError, Unit] =
-    bigQueryService.tableInsertRow(
-      AcquisitionDataRowBuilder.buildFromPayPal(acquisition, contributionData)
-    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def validateRefundHook(headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] =
     paypalService.validateWebhookEvent(headers, rawJson)
@@ -209,10 +192,11 @@ object PaypalBackend {
     identityService: IdentityService,
     ophanService: AnalyticsService,
     bigQueryService: BigQueryService,
+    acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
-    new PaypalBackend(paypalService, databaseService, identityService, ophanService, bigQueryService, emailService, cloudWatchService)
+    new PaypalBackend(paypalService, databaseService, identityService, ophanService, bigQueryService, acquisitionsStreamService, emailService, cloudWatchService)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -236,6 +220,9 @@ object PaypalBackend {
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],
+      configLoader
+        .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
+        .map(new AcquisitionsStreamService(_)): InitializationResult[AcquisitionsStreamService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
