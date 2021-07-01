@@ -12,7 +12,7 @@
     "build-prod": "npm-run-all clean validate test storybook-static 'webpack --config webpack.prod.js'",
     "build-github-action": "npm-run-all clean 'webpack --config webpack.prod.js --env.ci=github'",
     "webpack": "webpack",
-    "webpack-dev-server": "NODE_OPTIONS=\"--inspect\" webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com --disable-host-check",
+    "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com --disable-host-check",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "NODE_ENV=test echo 'Running JS tests' && jest",
     "test-watch": "NODE_ENV=test echo 'Running JS tests in watch mode' && jest --watch",
