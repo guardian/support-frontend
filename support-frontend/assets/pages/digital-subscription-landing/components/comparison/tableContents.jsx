@@ -19,18 +19,30 @@ import { SvgFreeTrial } from 'components/icons/freeTrial';
 import { SvgPadlock } from 'components/icons/padlock';
 import { comparisonTableYellow } from 'stylesheets/emotion/colours';
 
+const iconSizeMobile = 28;
+const iconSizeDesktop = 34;
+const titleRowHeight = 30;
+const borderStyle = `${border.secondary} 1px solid`;
+
 const iconContainer = css`
-  display: inline-block;
-  height: 28px;
-  width: 28px;
+  display: inline-flex;
+  align-self: center;
+  height: ${iconSizeMobile}px;
+  width: ${iconSizeMobile}px;
   margin-right: ${space[2]}px;
   svg {
-    width: 100%;
+    height: ${iconSizeMobile}px;
+    width: ${iconSizeMobile}px;
   }
 
   ${from.phablet} {
-    height: 34px;
-    width: 34px;
+    height: ${iconSizeDesktop}px;
+    width: ${iconSizeDesktop}px;
+
+    svg {
+    height: ${iconSizeDesktop}px;
+    width: ${iconSizeDesktop}px;
+  }
   }
 `;
 
@@ -45,13 +57,13 @@ const borderBottomNone = css`
 const finalRowStyle = css`
   background-color: ${comparisonTableYellow};
   padding: ${space[3]}px;
-  padding-left: ${space[1]}px;
-  border-top: ${border.secondary} 1px solid;
-  border-bottom: ${border.secondary} 1px solid;
+  padding-left: ${space[2]}px;
+  border-top: ${borderStyle};
+  border-bottom: ${borderStyle};
 
   ${from.mobileLandscape} {
     padding: ${space[3]}px;
-    border: ${border.secondary} 1px solid;
+    border: ${borderStyle};
   }
 `;
 
@@ -81,17 +93,17 @@ const checkmark = css`
 
 const padlock = css`
   height: 59px;
-  border-left: ${border.secondary} 1px solid;
+  border-left: ${borderStyle};
 `;
 
 const columnTitle = css`
   align-items: flex-start;
   justify-content: flex-start;
   padding: ${space[1]}px;
-  height: 30px;
+  height: ${titleRowHeight}px;
   ${textSans.xsmall({ fontWeight: 'bold' })}
-  border-left: ${border.secondary} 1px solid;
-  border-top: ${border.secondary} 1px solid;
+  border-left: ${borderStyle};
+  border-top: ${borderStyle};
 
   ${from.mobileLandscape} {
     ${textSans.small({ fontWeight: 'bold' })}
@@ -100,16 +112,28 @@ const columnTitle = css`
 
 const paid = css`
   background-color: ${brandAltBackground.primary};
-  border-bottom: ${border.secondary} 1px solid;
+  border-bottom: ${borderStyle};
 `;
 
 const free = css`
   background-color: ${background.secondary};
-  border-bottom: ${border.secondary} 1px solid;
+  border-bottom: ${borderStyle};
 `;
 
 const titleRowStyle = css`
-  height: 30px;
+  height: ${titleRowHeight}px;
+`;
+
+const hideOnVerySmall = css`
+  display: none;
+
+  ${from.mobileLandscape} {
+    display: inline-block;
+  }
+`;
+
+const noWrap = css`
+  white-space: nowrap;
 `;
 
 const Padlock = () => (
@@ -136,13 +160,15 @@ export const tableContent: Array<TableRow> = [
   },
   {
     icon: <div css={iconContainer}><SvgEditionsIcon /></div>,
-    description: 'The Editions app with digital supplements',
+    description: <>The Editions app with <span css={hideOnVerySmall}>unique</span>{' '}digital supplements</>,
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgLiveAppIcon /></div>,
-    description: 'The Guardian app with premium features',
+    description: <>The Guardian app with premium features
+      <span css={[hideOnVerySmall, noWrap]}>;&nbsp;</span>
+      <span css={hideOnVerySmall}>Live and Discover</span></>,
     free: <Padlock />,
     paid: <Checkmark />,
   },

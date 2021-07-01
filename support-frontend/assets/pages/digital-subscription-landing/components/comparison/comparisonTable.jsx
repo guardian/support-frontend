@@ -19,6 +19,8 @@ export type TableRow = {
   cssOverrides?: Option<string>,
 }
 
+const borderStyle = `${border.secondary} 1px solid`;
+
 const container = css`
   padding-top: ${space[4]}px;
 
@@ -38,8 +40,8 @@ const tableContainer = css`
   }
 
   ${from.desktop} {
-    border-left: ${border.secondary} 1px solid;
-    border-right: ${border.secondary} 1px solid;
+    border-left: ${borderStyle};
+    border-right: ${borderStyle};
   }
 `;
 
@@ -72,7 +74,7 @@ const rowStyle = css`
   position: relative;
   z-index: 1;
   height: 60px;
-  border-bottom: ${border.secondary} 1px solid;
+  border-bottom: ${borderStyle};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -80,6 +82,7 @@ const rowStyle = css`
 
 const descriptionStyle = css`
   ${body.small()};
+  line-height: 135%;
   align-self: center;
 
   ${from.mobileLandscape} {
