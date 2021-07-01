@@ -77,7 +77,6 @@ ProductCard.defaultProps = {
 type DigitalSubProduct = 'Daily' | 'App';
 
 function trackClickAction(product: DigitalSubProduct, isOpen: boolean) {
-  console.log('Is open?', isOpen);
   const clickAction = isOpen ? 'open' : 'close';
   sendTrackingEventsOnClick({
     id: `digital-subscriptions-landing-page--accordion--${product}--${clickAction}`,
