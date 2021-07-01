@@ -90,10 +90,10 @@ type ProductBlockSectionProps = {|
 |}
 
 export const ProductBlockSection = ({ product, render }: ProductBlockSectionProps) => {
-  const [showDropDown, setShowDropDownDaily] = useState<boolean>(false);
+  const [showDropDown, setShowDropDown] = useState<boolean>(false);
 
   function handleClick() {
-    setShowDropDownDaily(!showDropDown);
+    setShowDropDown(!showDropDown);
     // setting state is async, so we reuse the reversed boolean here
     trackClickAction(product, !showDropDown);
   }
