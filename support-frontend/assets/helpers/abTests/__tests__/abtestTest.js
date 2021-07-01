@@ -12,7 +12,8 @@ import type { Participations } from '../abtest';
 import { GBPCountries, UnitedStates } from '../../internationalisation/countryGroup';
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 
-const { subsShowcaseAndDigiSubPages } = pageUrlRegexes.subscriptions;
+const { subsShowcaseAndDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
+const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckout } = digiSub;
 
 jest.mock('ophan', () => ({
   record: () => null,
@@ -593,7 +594,7 @@ describe('Correct allocation in a multi test environment', () => {
 
 });
 
-describe('targetPage matching for the digital pack product page and showcase page test', () => {
+it('targetPage matching', () => {
   expect(targetPageMatches('/uk/subscribe/paper', subsShowcaseAndDigiSubPages)).toEqual(false);
   expect(targetPageMatches('/uk/subscribe/digital/checkout', subsShowcaseAndDigiSubPages)).toEqual(false);
   expect(targetPageMatches('/us/subscribe', subsShowcaseAndDigiSubPages)).toEqual(true);
@@ -601,4 +602,14 @@ describe('targetPage matching for the digital pack product page and showcase pag
   const withAcquisitionParams = '/uk/subscribe?INTCMP=header_support_subscribe&acquisitionData=%7B"componentType"%3A"ACQUISITIONS_HEADER"%2C"componentId"%3A"header_support_subscribe"%2C"source"%3A"GUARDIAN_WEB"%2C"referrerPageviewId"%3A"k8heft91k5c3tnnnmwjd"%2C"referrerUrl"%3A"https%3A%2F%2Fwww.theguardian.com%2Fuk"%7D';
   expect(targetPageMatches(withAcquisitionParams, subsShowcaseAndDigiSubPages)).toEqual(true);
   expect(targetPageMatches('/us/subscribe/digital?test=blah', subsShowcaseAndDigiSubPages)).toEqual(true);
+ // Test nonGiftLandingAndCheckout regex
+ expect(targetPageMatches('/uk/subscribe/digital', nonGiftLandingAndCheckout)).toEqual(true);
+ expect(targetPageMatches('/subscribe/digital/checkout', nonGiftLandingAndCheckout)).toEqual(true);
+ expect(targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingAndCheckout)).toEqual(false);
+  // Test nonGiftLandingNotAusNotUS regex
+  expect(targetPageMatches('/uk/subscribe/digital', nonGiftLandingNotAusNotUS)).toEqual(true);
+  expect(targetPageMatches('/subscribe/digital/checkout', nonGiftLandingNotAusNotUS)).toEqual(true);
+  expect(targetPageMatches('/us/subscribe/digital', nonGiftLandingNotAusNotUS)).toEqual(false);
+  expect(targetPageMatches('/au/subscribe/digital', nonGiftLandingNotAusNotUS)).toEqual(false);
+  expect(targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingNotAusNotUS)).toEqual(false);
 });
