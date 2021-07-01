@@ -48,7 +48,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
   lazy val bigQueryService = new BigQueryService(bigQueryConfigProvider.get(isTestUser))
-  lazy val acquisitionsStreamService = new AcquisitionsStreamService(AcquisitionsStreamLambdaConfig(config.kinesisStreamName))
+  lazy val acquisitionsStreamService = new AcquisitionsStreamService(AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName))
   val supporterDynamoStage = (Configuration.stage, isTestUser) match {
     case (DEV, false) => DynamoStageDEV
     case (CODE, false) => DynamoStageDEV
