@@ -27,13 +27,17 @@ const ContributionThankYouSurvey = ({ countryId }: { countryId: IsoCountry }) =>
     trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
   }, []);
 
+  const isAus = countryId === 'AU';
+
+  const heading = isAus ? 'Tell us why you value Guardian Australia' : 'Send us your thoughts';
+
   const actionIcon = <SvgSpeechBubbleWithPlus />;
   const actionHeader = (
     <ActionHeader
       title={
         hasBeenCompleted
           ? 'Thank you for sharing your thoughts'
-          : 'Send us your thoughts'
+          : heading
       }
     />
   );
@@ -43,7 +47,7 @@ const ContributionThankYouSurvey = ({ countryId }: { countryId: IsoCountry }) =>
     setHasBeenCompleted(true);
   };
 
-  const url = countryId === 'AU' ? AUS_SURVEY_LINK : SURVEY_LINK;
+  const url = isAus ? AUS_SURVEY_LINK : SURVEY_LINK;
 
   const actionBody = (
     <ActionBody>
@@ -54,15 +58,25 @@ const ContributionThankYouSurvey = ({ countryId }: { countryId: IsoCountry }) =>
       ) : (
         <>
           <p>
-            <span css={styles.hideAfterTablet}>
-              Fill out this short form to tell us more about your experience of
-              supporting us today – it only takes a minute.
-            </span>
-            <span css={styles.hideBeforeTablet}>
-              We would love to hear more about your experience of supporting the
-              Guardian today. Please fill out this short form – it only takes a
-              minute.
-            </span>
+            { isAus &&
+              <span>
+                We would love to know more about your decision to support our journalism today.
+                We’ll publish a selection of our favourite messages, so other readers can enjoy them too.
+              </span>
+            }
+            { !isAus &&
+              <>
+                <span css={styles.hideAfterTablet}>
+                  Fill out this short form to tell us more about your experience of
+                  supporting us today – it only takes a minute.
+                </span>
+                <span css={styles.hideBeforeTablet}>
+                We would love to hear more about your experience of supporting the
+                Guardian today. Please fill out this short form – it only takes a
+                minute.
+                </span>
+              </>
+            }
           </p>
           <div css={buttonContainer}>
             <LinkButton
