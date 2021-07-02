@@ -14,6 +14,7 @@ import type {
   CheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
@@ -23,6 +24,7 @@ export type FormFields = {|
   lastName: string,
   email: string,
   isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   telephone: Option<string>,
   titleGiftRecipient: Option<Title>,
   firstNameGiftRecipient: Option<string>,
@@ -64,6 +66,7 @@ function getFormFields(state: AnyCheckoutState): FormFields {
     lastName: state.page.checkout.lastName,
     email: state.page.checkout.email,
     isSignedIn: state.page.checkout.isSignedIn,
+    userTypeFromIdentityResponse: state.page.checkout.userTypeFromIdentityResponse,
     telephone: state.page.checkout.telephone,
     titleGiftRecipient: state.page.checkout.titleGiftRecipient,
     firstNameGiftRecipient: state.page.checkout.firstNameGiftRecipient,

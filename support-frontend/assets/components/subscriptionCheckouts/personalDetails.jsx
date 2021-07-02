@@ -35,6 +35,7 @@ export type PropTypes = {
   setLastName: Function,
   email: string,
   setEmail?: Function,
+  checkIfEmailHasPassword?: Function,
   isSignedIn: boolean,
   telephone: Option<string>,
   setTelephone: Function,
@@ -86,6 +87,11 @@ export default function PersonalDetails(props: PropTypes) {
       props.setEmail(e.target.value);
   }
 
+  const maybeCheckEmail = (e) => {
+    if (props.checkIfEmailHasPassword)
+      props.checkIfEmailHasPassword(e.target.value);
+  }
+
   const emailFooter = props.isSignedIn ?
     <SignedInEmailFooter handleSignOut={handleSignOut} /> :
     <SignedOutEmailFooter />;
@@ -114,10 +120,11 @@ export default function PersonalDetails(props: PropTypes) {
         label="Email"
         type="email"
         value={props.email}
-        onChange={maybeSetEmail}
+        onInput={maybeSetEmail}
+        onChange={maybeCheckEmail}
         error={firstError('email', props.formErrors)}
         pattern={emailRegexPattern}
-        disabled={!props.isUsingGuestCheckout}
+        disabled={!props.isUsingGuestCheckout || props.isSignedIn}
       />
       {emailFooter}
       <TextInput

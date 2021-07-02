@@ -127,7 +127,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingWithGuestCheckout,
     seed: 3,
     //optimizeId: '',
   }
