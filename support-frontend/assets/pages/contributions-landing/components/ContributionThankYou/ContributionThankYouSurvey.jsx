@@ -1,4 +1,5 @@
 // @flow
+// $FlowIgnore - required for hooks
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
