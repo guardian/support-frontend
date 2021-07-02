@@ -1,3 +1,4 @@
+// @flow
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
@@ -10,14 +11,16 @@ import SvgSpeechBubbleWithPlus from './components/SvgSpeechBubbleWithPlus';
 import styles from './styles';
 import { OPHAN_COMPONENT_ID_SURVEY } from './utils/ophan';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
 const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/KY7XRR2';
+const AUS_SURVEY_LINK = 'https://guardiannewsampampmedia.formstack.com/forms/australia_2021';
 
-const ContributionThankYouSurvey = () => {
+const ContributionThankYouSurvey = ({ countryId }: { countryId: IsoCountry }) => {
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
 
   useEffect(() => {
@@ -39,6 +42,8 @@ const ContributionThankYouSurvey = () => {
     trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
     setHasBeenCompleted(true);
   };
+
+  const url = countryId === 'AU' ? AUS_SURVEY_LINK : SURVEY_LINK;
 
   const actionBody = (
     <ActionBody>
@@ -62,7 +67,7 @@ const ContributionThankYouSurvey = () => {
           <div css={buttonContainer}>
             <LinkButton
               onClick={onClick}
-              href={SURVEY_LINK}
+              href={url}
               target="_blank"
               rel="noopener noreferrer"
               priority="primary"

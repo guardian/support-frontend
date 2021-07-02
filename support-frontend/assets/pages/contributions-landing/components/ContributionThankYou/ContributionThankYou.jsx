@@ -213,7 +213,7 @@ const ContributionThankYou = ({
   };
 
   const surveyAction = {
-    component: <ContributionThankYouSurvey />,
+    component: <ContributionThankYouSurvey countryId={countryId} />,
     shouldShow: true,
   };
 
