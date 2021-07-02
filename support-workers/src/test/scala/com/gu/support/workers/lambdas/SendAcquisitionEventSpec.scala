@@ -48,6 +48,13 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
 object MockAcquisitionHelper extends MockitoSugar {
 
+  val mockAcquisitionsStreamService = new AcquisitionsStreamService {
+    def putAcquisition(acquisition: AcquisitionDataRow): EitherT[Future, String, Unit] =
+      EitherT(Future.successful(
+        Right(()): Either[String,Unit]
+      ))
+  }
+
   lazy val mockServices = {
     val configuration = Configuration.load()
     //Mock the Acquisition service
@@ -56,16 +63,9 @@ object MockAcquisitionHelper extends MockitoSugar {
     val acquisitionService = AcquisitionServiceBuilder.build(isTestService = true)
     val bigQueryService = new BigQueryService(configuration.bigQueryConfigProvider.get())
 
-    val acquisitionsStreamService = mock[AcquisitionsStreamService]
-    val acquisitionsStreamServiceResult = EitherT(Future.successful(
-      Right(()): Either[List[String],Unit]
-    ))
-    when(acquisitionsStreamService.putAcquisitionWithRetry(any[AcquisitionDataRow], any[Int])(any[ExecutionContext]))
-      .thenReturn(acquisitionsStreamServiceResult)
-
     when(services.acquisitionService).thenReturn(acquisitionService)
     when(services.bigQueryService).thenReturn(bigQueryService)
-    when(services.acquisitionsStreamService).thenReturn(acquisitionsStreamService)
+    when(services.acquisitionsStreamService).thenReturn(mockAcquisitionsStreamService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
   }

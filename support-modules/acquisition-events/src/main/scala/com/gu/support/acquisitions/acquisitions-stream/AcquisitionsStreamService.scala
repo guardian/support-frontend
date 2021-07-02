@@ -25,7 +25,13 @@ sealed trait AcquisitionsStreamServiceConfig {
 case class AcquisitionsStreamEc2OrLocalConfig(val streamName: String, val credentialsProvider: AWSCredentialsProviderChain) extends AcquisitionsStreamServiceConfig
 case class AcquisitionsStreamLambdaConfig(val streamName: String) extends AcquisitionsStreamServiceConfig
 
-class AcquisitionsStreamService(config: AcquisitionsStreamServiceConfig, region: String = "eu-west-1") {
+trait AcquisitionsStreamService {
+  def putAcquisition(acquisition: AcquisitionDataRow): EitherT[Future, String, Unit]
+
+  def putAcquisitionWithRetry(acquisition: AcquisitionDataRow, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[String], Unit] = Retry(maxRetries)(putAcquisition(acquisition))
+}
+
+class AcquisitionsStreamServiceImpl(config: AcquisitionsStreamServiceConfig, region: String = "eu-west-1") extends AcquisitionsStreamService {
 
   private val kinesisClient = {
     val builder = AmazonKinesisAsyncClientBuilder.standard().withRegion(region)
@@ -57,7 +63,5 @@ class AcquisitionsStreamService(config: AcquisitionsStreamServiceConfig, region:
 
     EitherT(promise.future)
   }
-
-  def putAcquisitionWithRetry(acquisition: AcquisitionDataRow, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[String], Unit] = Retry(maxRetries)(putAcquisition(acquisition))
 }
 

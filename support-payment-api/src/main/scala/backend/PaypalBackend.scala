@@ -6,7 +6,7 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService, AcquisitionsStreamService, AcquisitionsStreamEc2OrLocalConfig}
+import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -222,7 +222,7 @@ object PaypalBackend {
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
-        .map(new AcquisitionsStreamService(_)): InitializationResult[AcquisitionsStreamService],
+        .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
