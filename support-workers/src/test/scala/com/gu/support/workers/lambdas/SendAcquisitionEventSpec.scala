@@ -1,5 +1,7 @@
 package com.gu.support.workers.lambdas
 
+import cats.data.EitherT
+
 import java.io.ByteArrayOutputStream
 import com.gu.acquisitions.AcquisitionServiceBuilder
 import com.gu.services.{ServiceProvider, Services}
@@ -13,9 +15,10 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import cats.implicits._
 import com.gu.config.Configuration
-import com.gu.support.acquisitions.BigQueryService
+import com.gu.support.acquisitions.models.AcquisitionDataRow
+import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
@@ -45,6 +48,13 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
 object MockAcquisitionHelper extends MockitoSugar {
 
+  val mockAcquisitionsStreamService = new AcquisitionsStreamService {
+    def putAcquisition(acquisition: AcquisitionDataRow): EitherT[Future, String, Unit] =
+      EitherT(Future.successful(
+        Right(()): Either[String,Unit]
+      ))
+  }
+
   lazy val mockServices = {
     val configuration = Configuration.load()
     //Mock the Acquisition service
@@ -55,6 +65,7 @@ object MockAcquisitionHelper extends MockitoSugar {
 
     when(services.acquisitionService).thenReturn(acquisitionService)
     when(services.bigQueryService).thenReturn(bigQueryService)
+    when(services.acquisitionsStreamService).thenReturn(mockAcquisitionsStreamService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
   }

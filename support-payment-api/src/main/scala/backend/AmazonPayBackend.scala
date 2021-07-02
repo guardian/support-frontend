@@ -6,7 +6,7 @@ import com.amazon.pay.response.ipn.model.{Notification, NotificationType, Refund
 import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails, Status}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
@@ -195,7 +195,7 @@ object AmazonPayBackend {
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
-        .map(new AcquisitionsStreamService(_)): InitializationResult[AcquisitionsStreamService],
+        .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
