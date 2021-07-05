@@ -22,14 +22,14 @@ import { comparisonTableYellow } from 'stylesheets/emotion/colours';
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
 const titleRowHeight = 30;
-const borderStyle = `${border.secondary} 1px solid`;
+const borderStyle = `${border.primary} 1px solid`;
 
 const iconContainer = css`
   display: inline-flex;
   align-self: center;
   height: ${iconSizeMobile}px;
   width: ${iconSizeMobile}px;
-  margin-right: ${space[2]}px;
+  margin-right: ${space[3]}px;
   svg {
     height: ${iconSizeMobile}px;
     width: ${iconSizeMobile}px;
@@ -57,7 +57,7 @@ const borderBottomNone = css`
 const finalRowStyle = css`
   background-color: ${comparisonTableYellow};
   padding: ${space[3]}px;
-  padding-left: ${space[2]}px;
+  padding-left: ${space[3]}px;
   border-top: ${borderStyle};
   border-bottom: ${borderStyle};
 

@@ -19,7 +19,7 @@ export type TableRow = {
   cssOverrides?: Option<string>,
 }
 
-const borderStyle = `${border.secondary} 1px solid`;
+const borderStyle = `${border.primary} 1px solid`;
 
 const container = css`
   padding-top: ${space[4]}px;
@@ -33,7 +33,7 @@ const tableContainer = css`
   box-sizing: border-box;
   width: 100%;
   background-color: ${background.primary};
-  padding-left: ${space[2]}px;
+  padding-left: ${space[3]}px;
 
   ${from.mobileLandscape} {
     padding-left: ${space[3]}px;
