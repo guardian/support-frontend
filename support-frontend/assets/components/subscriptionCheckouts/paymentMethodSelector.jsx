@@ -8,16 +8,15 @@ import {
   SvgDirectDebit,
   SvgPayPal,
 } from '@guardian/src-icons';
-
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import Rows from 'components/base/rows';
 import { type Option } from 'helpers/types/option';
 import { DirectDebit, PayPal, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {|
-  currencyId: IsoCurrency,
+  country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
   setPaymentMethod: Function,
   validationError: Option<ErrorMessage>,
@@ -51,7 +50,7 @@ const RadioWithImage = (props: RadioWithImagePropTypes) => (
 );
 
 function PaymentMethodSelector(props: PropTypes) {
-  const paymentMethods = supportedPaymentMethods(props.currencyId);
+  const paymentMethods = supportedPaymentMethods(props.country);
 
   return (
     <Rows gap="large">

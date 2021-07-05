@@ -385,7 +385,7 @@ function PaperCheckoutForm(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection cssOverrides={removeTopBorder} title="How would you like to pay?">
               <PaymentMethodSelector
-                currencyId="GBP"
+                country={props.country}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}
