@@ -41,7 +41,6 @@ type PropTypes = {|
   billingState: StateProvince | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
-  isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: (Event) => void,
   updateLastName: (Event) => void,
@@ -65,7 +64,6 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   billingState: getCheckoutFormValue(state.page.form.formData.billingState, state.page.user.stateField),
   isSignedIn: state.page.user.isSignedIn,
-  isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
 });
