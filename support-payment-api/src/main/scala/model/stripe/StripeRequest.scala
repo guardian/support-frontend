@@ -41,6 +41,7 @@ object StripeJsonDecoder {
       nativeAbTests <- downField("nativeAbTests").as[Option[Set[AbTest]]]
       queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
       gaId <- downField("gaId").as[Option[String]]
+      labels <- downField("labels").as[Option[Set[String]]]
       stripePaymentMethod <- downField("stripePaymentMethod").as[Option[StripePaymentMethod]]
       stripePublicKey <- downField("publicKey").as[Option[StripePublicKey]]
     } yield {
@@ -67,7 +68,8 @@ object StripeJsonDecoder {
             .getOrElse(Set[AbTest]()))
             .filter(_.nonEmpty),
           queryParameters = queryParameters,
-          gaId = gaId
+          gaId = gaId,
+          labels = labels
         ),
         publicKey = stripePublicKey
       )

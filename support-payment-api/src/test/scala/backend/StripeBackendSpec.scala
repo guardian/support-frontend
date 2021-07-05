@@ -37,7 +37,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val email = Json.fromString("email@email.com").as[NonEmptyString].right.get
   val token = Json.fromString("token").as[NonEmptyString].right.get
   val recaptchaToken = "recaptchaToken"
-  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
+  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
   val stripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
   val legacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")

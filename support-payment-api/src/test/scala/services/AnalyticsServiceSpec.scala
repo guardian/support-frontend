@@ -31,7 +31,7 @@ class AnalyticsServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar w
     val paypalAcquisition = PaypalAcquisition(
       payment = mock[Payment],
       acquisitionData = AcquisitionData(
-        None, None, None, None, None, None, None, None, None, None, None, None, None
+        None, None, None, None, None, None, None, None, None, None, None, None, None, None
       ),
       identityId = None,
       clientBrowserInfo = ClientBrowserInfo.fromRequest(FakeRequest(), None)

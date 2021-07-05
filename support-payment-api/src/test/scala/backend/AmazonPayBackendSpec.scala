@@ -31,7 +31,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
 
 
   //-- entities
-  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
+  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
   val countrySubdivisionCode = Some("NY")
   val ophanError: List[AnalyticsServiceError] = List(AnalyticsServiceError.BuildError("Ophan error response"))
   val dbError = ContributionsStoreService.Error(new Exception("DB error response"))

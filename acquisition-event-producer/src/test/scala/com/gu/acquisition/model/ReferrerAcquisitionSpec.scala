@@ -20,7 +20,8 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
     hostname = Some("hostname"),
     gaClientId = Some("gaClientId"),
     userAgent = Some("userAgent"),
-    ipAddress = Some("ipAddress")
+    ipAddress = Some("ipAddress"),
+    labels = Some(Set("label1", "label2"))
   )
 
   val referrerAcquisitionCJson: CJson = CJson.obj(
@@ -53,7 +54,10 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
     "hostname" -> CJson.fromString("hostname"),
     "gaClientId" -> CJson.fromString("gaClientId"),
     "userAgent" -> CJson.fromString("userAgent"),
-    "ipAddress" -> CJson.fromString("ipAddress")
+    "ipAddress" -> CJson.fromString("ipAddress"),
+    "labels" -> CJson.arr(
+      CJson.fromString("label1"), CJson.fromString("label2")
+    )
   )
 
   val referrerAcquisitionPJson: JsObject = PJson.obj(
@@ -86,7 +90,8 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
     "hostname" -> "hostname",
     "gaClientId" -> "gaClientId",
     "userAgent" -> "userAgent",
-    "ipAddress" -> "ipAddress"
+    "ipAddress" -> "ipAddress",
+    "labels" -> PJson.arr("label1", "label2")
   )
 
   "Referrer acquisition data" should {

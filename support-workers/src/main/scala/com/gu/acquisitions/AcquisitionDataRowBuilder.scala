@@ -193,7 +193,9 @@ object AcquisitionDataRowBuilder {
       )
     }
 
-  private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
+  private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) = {
+    val referrerLabels = state.acquisitionData.flatMap(_.referrerAcquisitionData.labels).getOrElse(Set())
+
     Set(
       if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
       if (isSixForSix(state)) Some("GUARDIAN_WEEKLY_SIX_FOR_SIX") else None,
@@ -202,7 +204,8 @@ object AcquisitionDataRowBuilder {
         case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => Some("CORPORATE_SUBSCRIPTION")
         case _ => None
       }
-    ).flatten.toList
+    ).flatten.union(referrerLabels).toList
+  }
 
   private def isSixForSix(state: SendAcquisitionEventState) =
     state.sendThankYouEmailState match {
