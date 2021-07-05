@@ -9,6 +9,7 @@ import { getQueryParameter } from 'helpers/urls/url';
 import {
   getContributionTypeFromSession,
   getContributionTypeFromUrl,
+  getAmountFromUrl,
   getPaymentMethodFromSession,
   getValidPaymentMethods,
   getValidContributionTypesFromUrlOrElse,
@@ -19,6 +20,7 @@ import {
   type Action,
   checkIfEmailHasPassword,
   selectAmount, setGuestAccountCreationToken,
+  updateOtherAmount,
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
   setThankYouPageStage,
@@ -116,12 +118,23 @@ function initialisePaymentMethods(
   }
 }
 
-function selectInitialAmounts(state: State, dispatch: Function) {
+function selectInitialAmounts(state: State, dispatch: Function, selectedContributionType: ContributionType) {
   const { amounts } = state.common;
 
+  const amountFromUrl = getAmountFromUrl();
+
   Object.keys(amounts).forEach((contributionType) => {
-    const { defaultAmount } = amounts[contributionType];
-    dispatch(selectAmount(defaultAmount, contributionType));
+    if (amountFromUrl && contributionType === selectedContributionType) {
+      if (amounts[contributionType].amounts.includes(amountFromUrl)) {
+        dispatch(selectAmount(amountFromUrl, contributionType));
+      } else {
+        dispatch(selectAmount('other', contributionType));
+        dispatch(updateOtherAmount(`${amountFromUrl}`, contributionType));
+      }
+    } else {
+      const { defaultAmount } = amounts[contributionType];
+      dispatch(selectAmount(defaultAmount, contributionType));
+    }
   });
 }
 
@@ -139,7 +152,7 @@ function selectInitialContributionTypeAndPaymentMethod(
   state: State,
   dispatch: Function,
   contributionTypes: ContributionTypes,
-) {
+): ContributionType {
 
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
@@ -157,6 +170,8 @@ function selectInitialContributionTypeAndPaymentMethod(
       break;
     default:
   }
+
+  return contributionType;
 }
 
 const init = (store: Store<State, Action, Function>) => {
@@ -178,8 +193,8 @@ const init = (store: Store<State, Action, Function>) => {
     dispatch(setThankYouPageStage('thankYouSetPassword'));
   }
 
-  selectInitialAmounts(state, dispatch);
-  selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes);
+  const contributionType = selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes);
+  selectInitialAmounts(state, dispatch, contributionType);
 
   const {
     firstName,

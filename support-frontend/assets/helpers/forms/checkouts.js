@@ -76,6 +76,10 @@ function getContributionTypeFromUrl(): ?ContributionType {
   return toContributionType(getQueryParameter('selected-contribution-type'));
 }
 
+function getAmountFromUrl(): ?number {
+  return parseInt(getQueryParameter('selected-amount'), 10);
+}
+
 // Returns an array of Payment Methods, in the order of preference,
 // i.e the first element in the array will be the default option
 function getPaymentMethods(
@@ -233,6 +237,7 @@ export {
   getValidContributionTypesFromUrlOrElse,
   getContributionTypeFromSession,
   getContributionTypeFromUrl,
+  getAmountFromUrl,
   toHumanReadableContributionType,
   getValidPaymentMethods,
   getPaymentMethodToSelect,
