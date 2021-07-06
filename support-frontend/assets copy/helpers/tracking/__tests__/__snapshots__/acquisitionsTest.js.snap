@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`acquisitions derivePaymentApiAcquisitionData should return a PaymentAPIAcquisitionData correctly built 1`] = `
+Object {
+  "abTests": Array [
+    Object {
+      "name": "testId1",
+      "variant": "variant1",
+    },
+    Object {
+      "name": "testId2",
+      "variant": "variant2",
+    },
+    Object {
+      "name": "testId3",
+      "variant": "variant3",
+    },
+    Object {
+      "name": "referrerAbTest",
+      "variant": "value1",
+    },
+  ],
+  "browserId": null,
+  "campaignCodes": Array [
+    "Example",
+  ],
+  "componentId": "exampleComponentId",
+  "componentType": "exampleComponentType",
+  "gaId": null,
+  "labels": undefined,
+  "pageviewId": "123456",
+  "platform": "SUPPORT",
+  "queryParameters": Array [
+    Object {
+      "name": "param1",
+      "value": "value1",
+    },
+    Object {
+      "name": "param2",
+      "value": "value2",
+    },
+  ],
+  "referrerPageviewId": "123456",
+  "referrerUrl": "https://example.com",
+  "source": "exampleSource",
+  "visitId": null,
+}
+`;

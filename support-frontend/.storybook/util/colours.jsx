@@ -1,4 +1,4 @@
-import React, {type Node, Component} from 'react';
+import React, { Node, Component} from 'react';
 
 import WithState from './withState.jsx';
 import './colours.scss';

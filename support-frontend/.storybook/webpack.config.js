@@ -1,7 +1,7 @@
 const defaultConfig = {...require('../webpack.dev.js')};
 
 defaultConfig.module.rules.push({
-  test: /stories\/.*?\.(js|jsx)$/,
+  test: /stories\/.*?\.(js|jsx|ts|tsx)$/,
   loaders: [
     {
       loader: require.resolve('@storybook/addon-storysource/loader'),

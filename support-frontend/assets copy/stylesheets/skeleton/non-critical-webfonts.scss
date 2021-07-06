@@ -1,0 +1,33 @@
+// Our core fonts (Guardian Headline, Guardian Text Egyptian Web and Guardian Text Sans Egyptian Web)
+// are loaded via an iFrame from dotcom. If you use any fonts in this file, it will result in
+// the font files being downloaded from pasteup
+
+$gu-gt-fonts-url: "//pasteup.guim.co.uk/webfonts/1.0.0";
+$gu-gt-font-variant: "noalts-not-hinted";
+
+@function gu-font-src($filename) {
+    @return
+        url("#{$gu-gt-fonts-url + "/" + $gu-gt-font-variant + "/" + $filename}.woff2") format("woff2"),
+        url("#{$gu-gt-fonts-url + "/" + $gu-gt-font-variant + "/" + $filename}.woff") format("woff"),
+        url("#{$gu-gt-fonts-url + "/" + $gu-gt-font-variant + "/" + $filename}.ttf") format("ttf");
+}
+
+@mixin gu-font-face($family, $src, $weight:400, $italic: false) {
+    @at-root {
+        @font-face {
+            font-family: $family;
+            src: gu-font-src($src);
+            font-weight:  $weight;
+            @if($italic){
+                font-style: italic;
+            }
+        }
+    }
+}
+
+// Titlepiece
+@font-face {
+    font-family: "GT Guardian Titlepiece";
+    src: gu-font-src("GTGuardianTitlepiece-Bold");
+    font-weight: 400;
+}
