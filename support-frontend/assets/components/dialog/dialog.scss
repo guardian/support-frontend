@@ -1,50 +1,50 @@
 .component-dialog {
-  all: initial;
-  position: absolute;
-  visibility: hidden;
-  height: 0;
-  width: 0;
-  overflow: hidden;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  &::backdrop {
-    background: rgba(0,0,0,0);
-  }  
+	all: initial;
+	position: absolute;
+	visibility: hidden;
+	height: 0;
+	width: 0;
+	overflow: hidden;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	&::backdrop {
+		background: rgba(0, 0, 0, 0);
+	}
 }
 
 .component-dialog--open {
-  visibility: visible;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 100;
-  contain: strict;
-  &.component-dialog--styled {
-    display: flex;
-    justify-content: center;
-    align-items: center;  
-  }
+	visibility: visible;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 100;
+	contain: strict;
+	&.component-dialog--styled {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 }
 
 .component-dialog__contents {
-  position: relative;
-  z-index: 10;
+	position: relative;
+	z-index: 10;
 }
 
 .component-dialog__backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 9;
-  height: 100%;
-  width: 100%;
-  .component-dialog--styled & {
-    background: rgba(0, 0, 0, 0.6);
-  }
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 9;
+	height: 100%;
+	width: 100%;
+	.component-dialog--styled & {
+		background: rgba(0, 0, 0, 0.6);
+	}
 }

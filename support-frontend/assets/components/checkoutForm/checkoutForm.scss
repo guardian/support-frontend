@@ -1,52 +1,51 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-checkout-form-section {
-  max-width: gu-span(5);
-  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
+	max-width: gu-span(5);
+	padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
 
-  &:first-child {
-    padding-top: $gu-v-spacing;
-  }
+	&:first-child {
+		padding-top: $gu-v-spacing;
+	}
 
-  fieldset {
-    .component-radio-input + .component-radio-input {
-      margin-top: $gu-v-spacing;
-    }
-    .component-radio-input--group + .component-radio-input--group {
-      margin-top: $gu-v-spacing / 2;
-    }
-  }
+	fieldset {
+		.component-radio-input + .component-radio-input {
+			margin-top: $gu-v-spacing;
+		}
+		.component-radio-input--group + .component-radio-input--group {
+			margin-top: $gu-v-spacing / 2;
+		}
+	}
 }
 
 .component-checkout-form-section ~ .component-checkout-form-section {
-  border-top: 1px solid gu-colour(neutral-86);
+	border-top: 1px solid gu-colour(neutral-86);
 }
 
 div .component-checkout-form-section.component-checkout-form-section--bottom {
-  border-top: none;
+	border-top: none;
 }
 
 div .component-checkout-form-section.component-checkout-form-section--top {
-  border-bottom: none;
+	border-bottom: none;
 }
 
 div .component-checkout-form-section.component-checkout-form-section--none {
-  border-top: none;
-  border-bottom: none;
+	border-top: none;
+	border-bottom: none;
 }
 
 div .component-checkout-form-section.component-checkout-form-section--hidden {
-  display: none;
+	display: none;
 }
 
 .component-checkout-form-section__heading {
-  @include gu-fontset-heading;
-  margin-bottom: ($gu-v-spacing * 2);
+	@include gu-fontset-heading;
+	margin-bottom: ($gu-v-spacing * 2);
 }
 
 .component-general-error-message {
-  margin: 0 ($gu-h-spacing / 2);
-  max-width: gu-span(5);
-  border: 1px gu-colour(state-error) solid;
+	margin: 0 ($gu-h-spacing / 2);
+	max-width: gu-span(5);
+	border: 1px gu-colour(state-error) solid;
 }
-

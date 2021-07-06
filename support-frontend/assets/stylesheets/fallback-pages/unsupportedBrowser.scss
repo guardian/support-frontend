@@ -3,120 +3,119 @@
 @import '~stylesheets/skeleton/skeleton';
 @import '~stylesheets/gu-sass/gu-sass';
 
-
 // ----- Page-Specific Styles ----- //
 
 .unsupported-browser__header {
-  background-color: gu-colour(brand-main);
+	background-color: gu-colour(brand-main);
 
-  .svg-guardian-logo {
-    height: 100%;
-  }
-
+	.svg-guardian-logo {
+		height: 100%;
+	}
 }
 
 .unsupported-browser__header-link {
-  float: right;
-  height: 100%;
+	float: right;
+	height: 100%;
 }
 
 .unsupported-browser__header-content {
-  @extend .gu-content-margin;
-  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
-  height: 68px;
+	@extend .gu-content-margin;
+	padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
+	height: 68px;
 
-  @include mq($from: mobileMedium) {
-    height: 78px;
-  }
+	@include mq($from: mobileMedium) {
+		height: 78px;
+	}
 
-  @include mq($from: mobileLandscape) {
-    height: 85px;
-    padding-left: $gu-h-spacing;
-    padding-right: $gu-h-spacing;
-  }
+	@include mq($from: mobileLandscape) {
+		height: 85px;
+		padding-left: $gu-h-spacing;
+		padding-right: $gu-h-spacing;
+	}
 
-  @include mq($from: phablet) {
-    padding-left: 0;
-    padding-right: 0;
-  }
+	@include mq($from: phablet) {
+		padding-left: 0;
+		padding-right: 0;
+	}
 
-  @include mq($from: tablet) {
-    height: 104px;
-  }
+	@include mq($from: tablet) {
+		height: 104px;
+	}
 }
 
 .unsupported-browser__introduction-text {
-  @extend .gu-content-margin;
-  background-color: #e9e939;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+	@extend .gu-content-margin;
+	background-color: #e9e939;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .unsupported-browser__why-support {
-  padding-bottom: $gu-v-spacing * 2;
+	padding-bottom: $gu-v-spacing * 2;
 }
 
 .unsupported-browser__why-support-content {
-  @extend .gu-content-margin;
+	@extend .gu-content-margin;
 }
 
 .unsupported-browser__why-support-heading {
-  font-weight: 700;
-  font-family: $gu-headline;
-  font-size: 24px;
-  padding: $gu-v-spacing 0 0;
+	font-weight: 700;
+	font-family: $gu-headline;
+	font-size: 24px;
+	padding: $gu-v-spacing 0 0;
 }
 
 .unsupported-browser__why-support-subheading {
-  font-weight: 700;
-  font-family: $gu-headline;
-  font-size: 20px;
-  padding: $gu-v-spacing 0;
+	font-weight: 700;
+	font-family: $gu-headline;
+	font-size: 20px;
+	padding: $gu-v-spacing 0;
 }
 
 .unsupported-browser__why-support-copy {
-  @include mq($from: desktop) {
-    width: 60%;
-  }
+	@include mq($from: desktop) {
+		width: 60%;
+	}
 }
 
 .unsupported-browser__footer {
-  background-color: gu-colour(neutral-7);
-  font-family: $gu-text-sans-web;
-  font-size: 12px;
-  line-height: 16px;
-  padding: $gu-v-spacing 0;
+	background-color: gu-colour(neutral-7);
+	font-family: $gu-text-sans-web;
+	font-size: 12px;
+	line-height: 16px;
+	padding: $gu-v-spacing 0;
 }
 
 .unsupported-browser__footer-content {
-  @extend .gu-content-margin;
+	@extend .gu-content-margin;
 }
 
 .unsupported-browser__footer-privacy-policy {
-  text-decoration: none;
-  color: gu-colour(neutral-86);
-  padding: 5px 0;
+	text-decoration: none;
+	color: gu-colour(neutral-86);
+	padding: 5px 0;
 }
 
 .unsupported-browser__footer-privacy-policy:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
-.unsupported-browser__footer-copyright, .unsupported-browser__footer-legal {
-  font-weight: 400;
-  display: block;
-  padding: 3px 0;
-  color: gu-colour(neutral-86);
+.unsupported-browser__footer-copyright,
+.unsupported-browser__footer-legal {
+	font-weight: 400;
+	display: block;
+	padding: 3px 0;
+	color: gu-colour(neutral-86);
 }
 
 .unsupported-browser__footer-legal {
-  margin-top: $gu-v-spacing;
-  font-family: $gu-text-sans-web;
-  font-size: 12px;
+	margin-top: $gu-v-spacing;
+	font-family: $gu-text-sans-web;
+	font-size: 12px;
 }
 
 .unsupported-browser__footer-legal-link {
-  color: inherit;
+	color: inherit;
 }

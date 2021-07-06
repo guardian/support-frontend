@@ -1,63 +1,89 @@
 // ----- Imports ----- //
-import { Csrf as CsrfState } from "helpers/csrf/csrfReducer";
-import React from "react";
-import { css } from "@emotion/core";
-import { space } from "@guardian/src-foundations";
-import { IsoCurrency } from "helpers/internationalisation/currency";
-import "helpers/internationalisation/currency";
-import { SetupPayPalRequestType } from "helpers/forms/paymentIntegrations/payPalRecurringCheckout";
-import "helpers/forms/paymentIntegrations/payPalRecurringCheckout";
-import { BillingPeriod } from "helpers/productPrice/billingPeriods";
-import PayPalExpressButton from "components/paypalExpressButton/PayPalExpressButton";
-import { FormError } from "helpers/subscriptionsForms/validation";
-import "helpers/subscriptionsForms/validation";
-import { FormField } from "helpers/subscriptionsForms/formFields";
-import "helpers/subscriptionsForms/formFields";
-import { ErrorSummary } from "./submitFormErrorSummary";
-import { Option } from "helpers/types/option";
-import "helpers/types/option";
-import { PaymentMethod } from "helpers/forms/paymentMethods";
-import { PayPal } from "helpers/forms/paymentMethods";
-import { hiddenIf } from "helpers/utilities/utilities";
+import { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import React from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { IsoCurrency } from 'helpers/internationalisation/currency';
+import 'helpers/internationalisation/currency';
+import { SetupPayPalRequestType } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
+import { FormError } from 'helpers/subscriptionsForms/validation';
+import 'helpers/subscriptionsForms/validation';
+import { FormField } from 'helpers/subscriptionsForms/formFields';
+import 'helpers/subscriptionsForms/formFields';
+import { ErrorSummary } from './submitFormErrorSummary';
+import { Option } from 'helpers/types/option';
+import 'helpers/types/option';
+import { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { PayPal } from 'helpers/forms/paymentMethods';
+import { hiddenIf } from 'helpers/utilities/utilities';
 const payPalButton = css`
-  box-sizing: border-box;
-  padding: ${space[3]}px;
+	box-sizing: border-box;
+	padding: ${space[3]}px;
 `;
 const showButton = css`
-    max-width: 350px;
+	max-width: 350px;
 `;
 const hideButton = css`
-  display: none;
+	display: none;
 `;
 // ----- Types ----- //
 type PropTypes = {
-  paymentMethod: Option<PaymentMethod>;
-  currencyId: IsoCurrency;
-  csrf: CsrfState;
-  setupRecurringPayPalPayment: SetupPayPalRequestType;
-  payPalHasLoaded: boolean;
-  isTestUser: boolean;
-  onPaymentAuthorised: (...args: Array<any>) => any;
-  amount: number;
-  billingPeriod: BillingPeriod;
-  validateForm: (...args: Array<any>) => any;
-  formIsValid: (...args: Array<any>) => any;
-  allErrors: FormError<FormField>[];
+	paymentMethod: Option<PaymentMethod>;
+	currencyId: IsoCurrency;
+	csrf: CsrfState;
+	setupRecurringPayPalPayment: SetupPayPalRequestType;
+	payPalHasLoaded: boolean;
+	isTestUser: boolean;
+	onPaymentAuthorised: (...args: Array<any>) => any;
+	amount: number;
+	billingPeriod: BillingPeriod;
+	validateForm: (...args: Array<any>) => any;
+	formIsValid: (...args: Array<any>) => any;
+	allErrors: FormError<FormField>[];
 };
 
 // ----- Render ----- //
 function PayPalSubmitButton(props: PropTypes) {
-  // We have to show/hide PayPalExpressButton rather than conditionally rendering it
-  // because we don't want to destroy and replace the iframe each time.
-  // See PayPalExpressButton for more info.
-  return <div css={payPalButton}>
-      <div css={props.paymentMethod === PayPal ? showButton : hideButton}>
-        <div id="component-paypal-button-checkout" className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}>
-          <PayPalExpressButton onPaymentAuthorisation={props.onPaymentAuthorised} csrf={props.csrf} currencyId={props.currencyId} hasLoaded={props.payPalHasLoaded} canOpen={props.formIsValid} onClick={props.validateForm} formClassName="form--contribution" isTestUser={props.isTestUser} setupRecurringPayPalPayment={props.setupRecurringPayPalPayment} amount={props.amount} billingPeriod={props.billingPeriod} />
-        </div>
-      </div>
-      {props.paymentMethod === PayPal && <span>{props.allErrors.length > 0 && <ErrorSummary errors={props.allErrors} />}</span>}
-    </div>;
+	// We have to show/hide PayPalExpressButton rather than conditionally rendering it
+	// because we don't want to destroy and replace the iframe each time.
+	// See PayPalExpressButton for more info.
+	return (
+		<div css={payPalButton}>
+			<div css={props.paymentMethod === PayPal ? showButton : hideButton}>
+				<div
+					id="component-paypal-button-checkout"
+					className={hiddenIf(
+						props.paymentMethod !== PayPal,
+						'component-paypal-button-checkout',
+					)}
+				>
+					<PayPalExpressButton
+						onPaymentAuthorisation={props.onPaymentAuthorised}
+						csrf={props.csrf}
+						currencyId={props.currencyId}
+						hasLoaded={props.payPalHasLoaded}
+						canOpen={props.formIsValid}
+						onClick={props.validateForm}
+						formClassName="form--contribution"
+						isTestUser={props.isTestUser}
+						setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+						amount={props.amount}
+						billingPeriod={props.billingPeriod}
+					/>
+				</div>
+			</div>
+			{props.paymentMethod === PayPal && (
+				<span>
+					{props.allErrors.length > 0 && (
+						<ErrorSummary errors={props.allErrors} />
+					)}
+				</span>
+			)}
+		</div>
+	);
 }
 
 export { PayPalSubmitButton };

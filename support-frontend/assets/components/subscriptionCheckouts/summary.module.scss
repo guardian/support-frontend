@@ -1,235 +1,243 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .root {
-  position: relative;
+	position: relative;
 }
 
-.content, .contentShowDetails, .contentShowDetailsNoDecription {
-  @include mq($until: tablet) {
-    display: grid;
-    grid-template-columns: 40% 60%;
-    justify-content: space-between;
-    text-align: right;
-  }
-  @include mq($from: tablet) {
-    & > * + * {
-      margin-top: $gu-v-spacing;
-    }
-  }
-  @include mq($until: mobileMedium) {
-    grid-template-columns: 50% 50%;
-  }
+.content,
+.contentShowDetails,
+.contentShowDetailsNoDecription {
+	@include mq($until: tablet) {
+		display: grid;
+		grid-template-columns: 40% 60%;
+		justify-content: space-between;
+		text-align: right;
+	}
+	@include mq($from: tablet) {
+		& > * + * {
+			margin-top: $gu-v-spacing;
+		}
+	}
+	@include mq($until: mobileMedium) {
+		grid-template-columns: 50% 50%;
+	}
 }
 
 .contentShowDetailsNoDecription {
-  display: block;
-  border-bottom: 1px solid gu-colour(neutral-86);
-  margin-bottom: $gu-v-spacing *2 /3;
-  padding-bottom: $gu-v-spacing;
+	display: block;
+	border-bottom: 1px solid gu-colour(neutral-86);
+	margin-bottom: $gu-v-spacing * 2 /3;
+	padding-bottom: $gu-v-spacing;
 }
 
-.contentWrapper, .content {
-  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing;
-  @include mq($until: tablet) {
-    background: gu-colour(neutral-97);
-  }
+.contentWrapper,
+.content {
+	padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing;
+	@include mq($until: tablet) {
+		background: gu-colour(neutral-97);
+	}
 }
 
-.contentShowDetails, .contentShowDetailsLast {
-  grid-template-columns: 40% 55%;
-  text-align: left;
-  border-bottom: 1px solid gu-colour(neutral-86);
-  margin-bottom: $gu-v-spacing *2 /3;
-  padding-bottom: $gu-v-spacing;
+.contentShowDetails,
+.contentShowDetailsLast {
+	grid-template-columns: 40% 55%;
+	text-align: left;
+	border-bottom: 1px solid gu-colour(neutral-86);
+	margin-bottom: $gu-v-spacing * 2 /3;
+	padding-bottom: $gu-v-spacing;
 }
 
 .contentShowDetailsLast {
-  border-bottom: none;
-  display: grid;
-  grid-template-columns: 40% 55%;
-  padding-bottom: 0;
-  margin-top: $gu-v-spacing;
-  margin-bottom: 0;
+	border-bottom: none;
+	display: grid;
+	grid-template-columns: 40% 55%;
+	padding-bottom: 0;
+	margin-top: $gu-v-spacing;
+	margin-bottom: 0;
 }
 
 .img,
 .imgGuardianWeekly {
-  overflow: hidden;
-  background-color: gu-colour(neutral-97);
-  border-bottom: 1px solid gu-colour(neutral-86);
-  padding: $gu-v-spacing * 3 $gu-h-spacing/2 0;
-  @include mq($until: desktop) {
-    display: none;
-  }
+	overflow: hidden;
+	background-color: gu-colour(neutral-97);
+	border-bottom: 1px solid gu-colour(neutral-86);
+	padding: $gu-v-spacing * 3 $gu-h-spacing/2 0;
+	@include mq($until: desktop) {
+		display: none;
+	}
 }
 
 .imgGuardianWeekly {
-  background-color: #66c2e9;
+	background-color: #66c2e9;
 }
 
 .img img,
 .imgGuardianWeekly img {
-  width: 75%;
-  margin: 5% auto 0;
-  display: block;
+	width: 75%;
+	margin: 5% auto 0;
+	display: block;
 }
 
 .header,
 .headerShowDetails,
 .headerGuardianWeekly {
-  @include gu-fontset-body-sans;
-  font-weight: 600;
-  @include mq($from: tablet) {
-    @include gu-fontset-heading;
-    display: inline;
-    background: gu-colour(neutral-7);
-    color: gu-colour(neutral-100);
-    padding: 0 4px;
-    margin: 0 -4px;
-  }
-  @include mq($from: desktop) {
-    position: absolute;
-    top: $gu-v-spacing;
-  }
-  @include mq($until: tablet) {
-    margin-bottom: $gu-v-spacing /2;
-    text-align: left;
-  }
+	@include gu-fontset-body-sans;
+	font-weight: 600;
+	@include mq($from: tablet) {
+		@include gu-fontset-heading;
+		display: inline;
+		background: gu-colour(neutral-7);
+		color: gu-colour(neutral-100);
+		padding: 0 4px;
+		margin: 0 -4px;
+	}
+	@include mq($from: desktop) {
+		position: absolute;
+		top: $gu-v-spacing;
+	}
+	@include mq($until: tablet) {
+		margin-bottom: $gu-v-spacing / 2;
+		text-align: left;
+	}
 }
 
 .headerShowDetails {
-  margin-bottom: $gu-v-spacing;
+	margin-bottom: $gu-v-spacing;
 }
 
 .headerGuardianWeekly {
-  @include mq($from: tablet) {
-    border-bottom: 2px solid gu-colour(neutral-100);
-  }
+	@include mq($from: tablet) {
+		border-bottom: 2px solid gu-colour(neutral-100);
+	}
 }
 
-.title, .titleLeftAlign {
-  @include gu-fontset-heading;
-  @include mq($until: tablet) {
-    @include gu-typeface(headline, 18, $size-only: true);
-  }
-  @include mq($from:leftCol) {
-    @include gu-typeface(headline, 24, $size-only: true);
-  }
+.title,
+.titleLeftAlign {
+	@include gu-fontset-heading;
+	@include mq($until: tablet) {
+		@include gu-typeface(headline, 18, $size-only: true);
+	}
+	@include mq($from: leftCol) {
+		@include gu-typeface(headline, 24, $size-only: true);
+	}
 }
 
 .titleDescription {
-  @include gu-fontset-body-sans;
+	@include gu-fontset-body-sans;
 }
 
 .titleLeftAlign {
-  text-align: left;
+	text-align: left;
 }
 
-.dropDown, .changeSub {
-  @include gu-fontset-body-sans;
-  outline: none;
-  border: none;
-  padding: 0;
-  text-align: left;
-  align-self: end;
+.dropDown,
+.changeSub {
+	@include gu-fontset-body-sans;
+	outline: none;
+	border: none;
+	padding: 0;
+	text-align: left;
+	align-self: end;
 }
 
-.changeSub, :visited {
-  color: gu-colour(neutral-7);
-  text-align: right;
-  right: 0;
+.changeSub,
+:visited {
+	color: gu-colour(neutral-7);
+	text-align: right;
+	right: 0;
 }
 
 .pricing {
-  @include gu-fontset-body-sans;
-  font-size: 14px;
-  font-weight: 600;
+	@include gu-fontset-body-sans;
+	font-size: 14px;
+	font-weight: 600;
 
-  @include mq($from: tablet) {
-    @include gu-fontset-heading;
-    font-weight: 400;
-  }
+	@include mq($from: tablet) {
+		@include gu-fontset-heading;
+		font-weight: 400;
+	}
 }
 
 .dataList {
-  @include mq($from: tablet) {
-    margin-bottom: $gu-v-spacing;
-  }
+	@include mq($from: tablet) {
+		margin-bottom: $gu-v-spacing;
+	}
 }
 
 .tabletAndDesktop {
-  @include mq($until: tablet) {
-    display: none;
-  }
+	@include mq($until: tablet) {
+		display: none;
+	}
 }
 
 .mobileOnly {
-  @include mq($from: tablet) {
-    display: none;
-  }
+	@include mq($from: tablet) {
+		display: none;
+	}
 }
 
 .data {
-  @include gu-fontset-body-sans;
-  display: grid;
-  grid-template-columns: minmax(max-content 1fr);
+	@include gu-fontset-body-sans;
+	display: grid;
+	grid-template-columns: minmax(max-content 1fr);
 
-  @include mq($from: tablet) {
-    grid-template-columns: max-content 1fr;
-  }
+	@include mq($from: tablet) {
+		grid-template-columns: max-content 1fr;
+	}
 }
 
-.data dt, .dataUnderline, .dataBold {
-  font-weight: bold;
-  padding-right: $gu-h-spacing;
+.data dt,
+.dataUnderline,
+.dataBold {
+	font-weight: bold;
+	padding-right: $gu-h-spacing;
 }
 
 .dataBold {
-  font-weight: 600;
+	font-weight: 600;
 }
 
 .spaceRight {
-  padding-right: $gu-h-spacing /3;
+	padding-right: $gu-h-spacing / 3;
 }
 
 .defaultState {
-  transition: transform 300ms;
-  transform-origin: center;
-  transform: rotate(180deg);
+	transition: transform 300ms;
+	transform-origin: center;
+	transform: rotate(180deg);
 }
 
 .openState {
-  transform: rotate(0);
+	transform: rotate(0);
 }
 
 .promo {
-  @include gu-fontset-body-sans;
-  color: gu-colour(neutral-46);
-  margin-top: 4px;
+	@include gu-fontset-body-sans;
+	color: gu-colour(neutral-46);
+	margin-top: 4px;
 }
 
 .promoTitle {
-  color: gu-colour(state-success);
-  font-weight: 700;
+	color: gu-colour(state-success);
+	font-weight: 700;
 }
 
 .children {
-  @include gu-fontset-body-sans;
-  color: gu-colour(neutral-46);
-  margin-top: $gu-v-spacing * 2;
-  @include mq($until: tablet) {
-    display: none;
-  }
-  a {
-    color: inherit;
-  }
+	@include gu-fontset-body-sans;
+	color: gu-colour(neutral-46);
+	margin-top: $gu-v-spacing * 2;
+	@include mq($until: tablet) {
+		display: none;
+	}
+	a {
+		color: inherit;
+	}
 }
 
 .cancellationPolicy {
-  display: none;
+	display: none;
 
-  @include mq($from: desktop) {
-    display: block;
-  }
+	@include mq($from: desktop) {
+		display: block;
+	}
 }
-

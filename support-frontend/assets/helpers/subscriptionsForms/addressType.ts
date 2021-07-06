@@ -1,1 +1,1 @@
-export type AddressType = "billing" | "delivery";
+export type AddressType = 'billing' | 'delivery';

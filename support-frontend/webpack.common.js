@@ -106,6 +106,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
     modules: [
       path.resolve(__dirname, 'assets'),
       path.resolve(__dirname, 'node_modules'),
+      'node_modules',
     ],
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },

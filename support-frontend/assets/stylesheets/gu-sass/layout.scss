@@ -8,13 +8,12 @@
 $gu-h-spacing: 20px;
 $gu-v-spacing: 12px;
 
-
 // Shared Layout metrics
 // =============================================================================
 $gu-col-width: 60px;
-$gu-animation-speed-fast: .1s;
-$gu-animation-speed: .2s;
-$gu-animation-speed-med: .4s;
+$gu-animation-speed-fast: 0.1s;
+$gu-animation-speed: 0.2s;
+$gu-animation-speed-med: 0.4s;
 
 // CTA button height
 // =============================================================================
@@ -22,10 +21,10 @@ $gu-cta-height: 42px;
 
 // Transition for interactive elements
 // =============================================================================
-$gu-transition: .3s ease-in-out;
+$gu-transition: 0.3s ease-in-out;
 
 // Columns
 // =============================================================================
 @function gu-span($n-columns) {
-  @return $n-columns * $gu-col-width + $gu-h-spacing * ($n-columns - 1);
+	@return $n-columns * $gu-col-width + $gu-h-spacing * ($n-columns - 1);
 }

@@ -1,86 +1,86 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-product-page-hero {
-  overflow: hidden;
-  position: relative;
-  min-height: 300px;
-  height: 37.5vw;
+	overflow: hidden;
+	position: relative;
+	min-height: 300px;
+	height: 37.5vw;
 
-  &.component-product-page-hero--custom {
-    height: auto;
-    min-height: 0;
-  }
+	&.component-product-page-hero--custom {
+		height: auto;
+		min-height: 0;
+	}
 
-  .component-left-margin-section__content {
-    position: relative;
-    @include mq($from: tablet) {
-      border-left: 1px solid;
-      margin-left: -1px;
-    }
-  }
-  .component-heading-block {
-    z-index: 10;
-    position: relative;
-  }
-  .component-left-margin-section {
-    height: 100%;
-  }
-  &.component-product-page-hero--feature {
-    max-height: 600px;
-  }
+	.component-left-margin-section__content {
+		position: relative;
+		@include mq($from: tablet) {
+			border-left: 1px solid;
+			margin-left: -1px;
+		}
+	}
+	.component-heading-block {
+		z-index: 10;
+		position: relative;
+	}
+	.component-left-margin-section {
+		height: 100%;
+	}
+	&.component-product-page-hero--feature {
+		max-height: 600px;
+	}
 }
 
 .component-product-page-hero--feature {
-  border-top: 1px solid gu-colour(brand-pastel);
-  background-color: gu-colour(brand-main);
-  .component-left-margin-section__content {
-    border-left-color: gu-colour(brand-pastel);
-  }
+	border-top: 1px solid gu-colour(brand-pastel);
+	background-color: gu-colour(brand-main);
+	.component-left-margin-section__content {
+		border-left-color: gu-colour(brand-pastel);
+	}
 }
 
 .component-product-page-hero--grey {
-  background: gu-colour(neutral-97);
-  .component-left-margin-section__content {
-    border-left-color: gu-colour(neutral-86);
-  }
+	background: gu-colour(neutral-97);
+	.component-left-margin-section__content {
+		border-left-color: gu-colour(neutral-86);
+	}
 }
 
 .component-product-page-hero--custom {
-  .component-left-margin-section__content {
-    border-left-color: transparent;
-  }
+	.component-left-margin-section__content {
+		border-left-color: transparent;
+	}
 }
 
 .component-product-page-hero--campaign {
-  background: gu-colour(neutral-97);
-  .component-left-margin-section__content {
-    border-left-color: transparent;
-  }
+	background: gu-colour(neutral-97);
+	.component-left-margin-section__content {
+		border-left-color: transparent;
+	}
 }
 
 .component-product-page-hero-hanger {
-  position: relative;
-  background: gu-colour(neutral-100);
-  .component-left-margin-section__content {
-    @include mq($from: tablet) {
-      border-left: 1px solid gu-colour(neutral-86);
-    }
-    @include multiline-bottom-border;
-  }
+	position: relative;
+	background: gu-colour(neutral-100);
+	.component-left-margin-section__content {
+		@include mq($from: tablet) {
+			border-left: 1px solid gu-colour(neutral-86);
+		}
+		@include multiline-bottom-border;
+	}
 }
 
 .payment-selection-container {
-  position: relative;
-  margin: 0;
+	position: relative;
+	margin: 0;
 
-  @include mq($from: desktop) {
-    margin-top: -60px;
-  }
+	@include mq($from: desktop) {
+		margin-top: -60px;
+	}
 }
 
- // This is here to fix a layout issue cased by the new and old pages sharing the same payment cards panel but in differnt contexts
- .component-left-margin-section__content > .payment-selection {
-  @include mq($until: desktop) {
-    margin: -5rem 0 1.5rem;
-  }
+// This is here to fix a layout issue cased by the new and old pages sharing the same payment cards panel but in differnt contexts
+.component-left-margin-section__content > .payment-selection {
+	@include mq($until: desktop) {
+		margin: -5rem 0 1.5rem;
+	}
 }

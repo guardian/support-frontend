@@ -2,26 +2,26 @@
 @import '~stylesheets/skeleton/html';
 
 .component-page-section__header {
-  @include mq($from: desktop) {
-    display: inline-block;
-    vertical-align: top;
-    width: 20%;
-  }
+	@include mq($from: desktop) {
+		display: inline-block;
+		vertical-align: top;
+		width: 20%;
+	}
 }
 
 .component-page-section__content {
-  @extend .gu-content-margin;
+	@extend .gu-content-margin;
 }
 
 .component-page-section__body {
-  box-sizing: border-box;
+	box-sizing: border-box;
 
-  .component-text {
-    margin: $gu-v-spacing * 3 0;
-  }
+	.component-text {
+		margin: $gu-v-spacing * 3 0;
+	}
 
-  @include mq($from: desktop) {
-    display: inline-block;
-    width: 80%;
-  }
+	@include mq($from: desktop) {
+		display: inline-block;
+		width: 80%;
+	}
 }

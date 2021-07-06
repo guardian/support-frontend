@@ -1,7 +1,6 @@
 // -----  gu-sass ----- //
 @import '~stylesheets/gu-sass/gu-sass';
 
-
 // ----- Shared Components ----- //
 
 @import '~components/ctaLink/ctaLink';
@@ -12,7 +11,7 @@
 // ----- Page-Specific Styles ----- //
 
 :root {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 #digital-subscription-landing-page-int,
@@ -22,405 +21,406 @@
 #digital-subscription-landing-page-eu,
 #digital-subscription-landing-page-nz,
 #digital-subscription-landing-page-ca {
-  .digital-default .component-left-margin-section__content {
-    overflow-x: hidden;
-    @include mq($from: leftCol) {
-      overflow-x: visible;
-    }
-  }
-
-  // ----- todo
-
-  .component-product-page-hero-heading .component-left-margin-section__content {
-    border: 0;
-  }
-
-  footer {
-    overflow: hidden;
-  }
-
-  .component-ad-free-section__col {
-    padding-right: 0;
-  }
-
-  // ----- Product Block
-
-  .product-block {
-    overflow: hidden;
-
-    .product-block__heading-wrapper {
-      border-top: 1px solid gu-colour(neutral-86);
-
-      @include mq($from: phablet) {
-        width: 100%;
-      }
-    }
-
-    .component-left-margin-section__content {
-      position: relative;
-
-      @include mq($from: phablet) {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-
-      @include mq($from: desktop) {
-        border-left: 1px solid gu-colour(neutral-86);
-      }
-
-    }
-
-    .component-grid-image {
-      width: 100%;
-      display: block;
-
-      @include mq($from: mobileLandscape, $until: phablet) {
-        width: 460px;
-        margin: 0 auto;
-      }
-
-      @include mq($from: tablet) {
-        width: 345px;
-      }
-    }
-
-    .component-price-cta {
-      width: 100%;
-
-      @include mq($until: desktop) {
-        margin-top: $gu-v-spacing * 2;
-      }
-    }
-
-    .component-price-cta__secondary {
-      background-color: #fff;
-    }
-  }
-
-  .product-block__product {
-    @include mq($from: phablet) {
-      display: inline-block;
-      width: 50%;
-      vertical-align: top;
-    }
-    @include mq($from: desktop) {
-      max-width: 485px;
-    }
-
-    @include mq($from: leftCol) {
-      max-width: 520px;
-    }
-  }
-
-  .product-block__copy {
-    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
-    font-size: 17px;
-  }
-
-  .product-block__image {
-    border-bottom: 1px solid gu-colour(neutral-86);
-    padding: 0 ($gu-h-spacing / 2);
-    margin-bottom: $gu-v-spacing / 2;
-
-    @include mq($from: desktop) {
-      position: relative;
-    }
-
-    .svg-penny-farthing-circles {
-      display: none;
-
-      @include mq($from: desktop) {
-        display: block;
-        position: absolute;
-        width: 250px;
-        bottom: 0;
-        left: 255px;
-      }
-
-      @include mq($from: leftCol) {
-        left: 220px;
-      }
-    }
-  }
-
-  .product-block__heading {
-    font-family: $gu-headline;
-    font-weight: 200;
-    font-size: 22px;
-    line-height: 26px;
-    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
-
-    @include mq($from: phablet) {
-      font-size: 28px;
-      line-height: 1.14;
-      width: 100%;
-      max-width: 700px;
-    }
-
-    @include mq($from: desktop) {
-      font-size: 36px;
-      line-height: 1.11;
-      width: 100%;
-      max-width: 600px;
-      padding-bottom: $gu-v-spacing * 3;
-    }
-  }
-
-  .product-block__product-heading {
-    color: #fff;
-    font-weight: bold;
-    font-family: $gu-headline;
-    line-height: 1;
-    display: inline;
-    padding: 0 5px 3px;
-  }
-
-  .product-block__product-description {
-    margin: $gu-v-spacing / 2 0 $gu-v-spacing;
-    line-height: 1.25;
-  }
-
-  .component-feature-list {
-    line-height: 1.25;
-    list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ff4e36"/></svg>');
-    margin-left: 26px;
-
-    @include mq($from: desktop) {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-row-gap: $gu-v-spacing;
-    }
-
-  }
-
-  .component-feature-list__heading {
-    font-family: $gu-headline;
-    font-weight: bold;
-    display: inline;
-    vertical-align: top;
-    line-height: 1;
-  }
-
-  .component-feature-list__item {
-    margin-bottom: $gu-v-spacing / 2;
-
-    @include mq($from: desktop) {
-      padding-right: 40px;
-    }
-  }
-
-  .product-block__highlight {
-    font-weight: normal;
-    background-color: gu-colour(highlight-main);
-    padding: 0 2px;
-  }
-
-  .product-block__product--premium-app {
-    .product-block__product-heading {
-      background-color: gu-colour(news-bright);
-    }
-  }
-
-  .product-block__product--daily-edition {
-    .component-grid-image {
-      @include mq($from: desktop) {
-        position: relative;
-        left: -100px;
-      }
-
-      @include mq($from: leftCol) {
-        left: -135px;
-      }
-    }
-
-    .product-block__product-heading {
-      background-color: gu-colour(sport-bright);
-    }
-
-    .component-feature-list {
-      list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#00b2ff"/></svg>');
-    }
-  }
-
-  .product-block__ampersand {
-    border-radius: 600px;
-    width: 80px;
-    height: 80px;
-    text-align: center;
-    font-size: 50px;
-    line-height: 80px;
-    font-family: $gu-headline;
-    font-weight: bold;
-    background-color: gu-colour(highlight-main);
-    margin: 0 auto -35px;
-    position: relative;
-
-    @include mq($from: phablet) {
-      position: absolute;
-      left: calc(50% - 40px);
-      top: 90px;
-    }
-
-    @include mq($from: tablet) {
-      left: calc(140px + 25%);
-    }
-
-    @include mq($from: desktop) {
-      width: 100px;
-      height: 100px;
-      font-size: 60px;
-      line-height: 100px;
-      top: 167px;
-      left: 325px;
-    }
-  }
-
-  .component-grid-picture__image {
-    display: block;
-  }
-
-  .digital-subscription-landing-header {
-    .component-price-cta {
-      background-color: gu-colour(neutral-7);
-      border-top: 1px solid #fff;
-    }
-    .component-price-cta__secondary {
-      color: gu-colour(neutral-97);
-      padding: ($gu-v-spacing / 2) 0;
-      font-size: .9em;
-    }
-  }
-
-  .component-heading-block {
-    position: relative;
-  }
-
-  .digital-subscription-landing-header__picture {
-    @include mq($until: tablet) {
-      height: 351px
-    }
-    @include mq($from: tablet) {
-      height: 332px;
-    }
-    @include mq($from: leftCol) {
-      height: 389px;
-    }
-  }
-
-
-  .component-left-margin-section--header-block {
-    .component-grid-picture {
-      position: relative;
-    }
-
-    .svg-title-circles-left-mobile {
-      position: absolute;
-      top: 300px;
-      height: 140px;
-      right: calc(50% + 70px);
-
-      @include mq($from: mobileMedium) {
-        top: 310px;
-        height: 150px;
-      }
-
-      @include mq($from: tablet) {
-        display: none;
-      }
-    }
-
-    .svg-title-circles-left-tablet {
-      position: absolute;
-      @include mq($until: tablet) {
-        display: none;
-      }
-      @include mq($from: tablet) {
-        top: 200px;
-        right: calc(50% + 10px);
-        width: 374px;
-        height: 418px;
-      }
-      @include mq($from: leftCol) {
-        top: 235px;
-        right: calc(50% + 210px);
-        height: 430px;
-        width: 430px;
-      }
-    }
-
-    .svg-title-circles-right-mobile {
-      position: absolute;
-      top: 335px;
-      left: calc(50% + 100px);
-      width: 60px;
-
-      @include mq($from: mobileMedium) {
-        width: 80px;
-        left: calc(50% + 105px);
-      }
-
-      @include mq($from: tablet) {
-        display: none;
-      }
-    }
-
-    .svg-title-circles-right-tablet {
-      position: absolute;
-      @include mq($until: tablet) {
-        display: none;
-      }
-      @include mq($from: tablet) {
-        top: 300px;
-        left: calc(50% + 177px);
-        width: 210px;
-      }
-      @include mq($from: leftCol) {
-        top: 350px;
-        left: calc(50% + 307px);
-      }
-    }
-
-    .component-grid-picture__image {
-      margin-left: auto;
-      margin-right: auto;
-      @include mq($until: tablet) {
-        margin-top: 16px;
-      }
-      @include mq($from: tablet, $until: leftCol) {
-        margin-top: 35px;
-      }
-      @include mq($from: leftCol) {
-        margin-top: 37px;
-        margin-left: 12px;
-      }
-    }
-  }
-
-  // cta link text should be 16px throughout the whole site but that will require
-  // quite a bit of work to make everything else match up, so for now I'm just going
-  // to change it here.
-  .component-cta-link__text {
-    font-size: 16px;
-  }
-
-  .component-flash-sale-countdown-hero {
-    position: relative;
-    margin-bottom: 50px;
-    @include mq($from: tablet) {
-      margin-bottom: 0;
-      margin-left: 450px;
-    }
-  }
+	.digital-default .component-left-margin-section__content {
+		overflow-x: hidden;
+		@include mq($from: leftCol) {
+			overflow-x: visible;
+		}
+	}
+
+	// ----- todo
+
+	.component-product-page-hero-heading .component-left-margin-section__content {
+		border: 0;
+	}
+
+	footer {
+		overflow: hidden;
+	}
+
+	.component-ad-free-section__col {
+		padding-right: 0;
+	}
+
+	// ----- Product Block
+
+	.product-block {
+		overflow: hidden;
+
+		.product-block__heading-wrapper {
+			border-top: 1px solid gu-colour(neutral-86);
+
+			@include mq($from: phablet) {
+				width: 100%;
+			}
+		}
+
+		.component-left-margin-section__content {
+			position: relative;
+
+			@include mq($from: phablet) {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+			}
+
+			@include mq($from: desktop) {
+				border-left: 1px solid gu-colour(neutral-86);
+			}
+		}
+
+		.component-grid-image {
+			width: 100%;
+			display: block;
+
+			@include mq($from: mobileLandscape, $until: phablet) {
+				width: 460px;
+				margin: 0 auto;
+			}
+
+			@include mq($from: tablet) {
+				width: 345px;
+			}
+		}
+
+		.component-price-cta {
+			width: 100%;
+
+			@include mq($until: desktop) {
+				margin-top: $gu-v-spacing * 2;
+			}
+		}
+
+		.component-price-cta__secondary {
+			background-color: #fff;
+		}
+	}
+
+	.product-block__product {
+		@include mq($from: phablet) {
+			display: inline-block;
+			width: 50%;
+			vertical-align: top;
+		}
+		@include mq($from: desktop) {
+			max-width: 485px;
+		}
+
+		@include mq($from: leftCol) {
+			max-width: 520px;
+		}
+	}
+
+	.product-block__copy {
+		padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
+		font-size: 17px;
+	}
+
+	.product-block__image {
+		border-bottom: 1px solid gu-colour(neutral-86);
+		padding: 0 ($gu-h-spacing / 2);
+		margin-bottom: $gu-v-spacing / 2;
+
+		@include mq($from: desktop) {
+			position: relative;
+		}
+
+		.svg-penny-farthing-circles {
+			display: none;
+
+			@include mq($from: desktop) {
+				display: block;
+				position: absolute;
+				width: 250px;
+				bottom: 0;
+				left: 255px;
+			}
+
+			@include mq($from: leftCol) {
+				left: 220px;
+			}
+		}
+	}
+
+	.product-block__heading {
+		font-family: $gu-headline;
+		font-weight: 200;
+		font-size: 22px;
+		line-height: 26px;
+		padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
+
+		@include mq($from: phablet) {
+			font-size: 28px;
+			line-height: 1.14;
+			width: 100%;
+			max-width: 700px;
+		}
+
+		@include mq($from: desktop) {
+			font-size: 36px;
+			line-height: 1.11;
+			width: 100%;
+			max-width: 600px;
+			padding-bottom: $gu-v-spacing * 3;
+		}
+	}
+
+	.product-block__product-heading {
+		color: #fff;
+		font-weight: bold;
+		font-family: $gu-headline;
+		line-height: 1;
+		display: inline;
+		padding: 0 5px 3px;
+	}
+
+	.product-block__product-description {
+		margin: $gu-v-spacing / 2 0 $gu-v-spacing;
+		line-height: 1.25;
+	}
+
+	.component-feature-list {
+		line-height: 1.25;
+		list-style-image: svg-url(
+			'<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ff4e36"/></svg>'
+		);
+		margin-left: 26px;
+
+		@include mq($from: desktop) {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-row-gap: $gu-v-spacing;
+		}
+	}
+
+	.component-feature-list__heading {
+		font-family: $gu-headline;
+		font-weight: bold;
+		display: inline;
+		vertical-align: top;
+		line-height: 1;
+	}
+
+	.component-feature-list__item {
+		margin-bottom: $gu-v-spacing / 2;
+
+		@include mq($from: desktop) {
+			padding-right: 40px;
+		}
+	}
+
+	.product-block__highlight {
+		font-weight: normal;
+		background-color: gu-colour(highlight-main);
+		padding: 0 2px;
+	}
+
+	.product-block__product--premium-app {
+		.product-block__product-heading {
+			background-color: gu-colour(news-bright);
+		}
+	}
+
+	.product-block__product--daily-edition {
+		.component-grid-image {
+			@include mq($from: desktop) {
+				position: relative;
+				left: -100px;
+			}
+
+			@include mq($from: leftCol) {
+				left: -135px;
+			}
+		}
+
+		.product-block__product-heading {
+			background-color: gu-colour(sport-bright);
+		}
+
+		.component-feature-list {
+			list-style-image: svg-url(
+				'<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#00b2ff"/></svg>'
+			);
+		}
+	}
+
+	.product-block__ampersand {
+		border-radius: 600px;
+		width: 80px;
+		height: 80px;
+		text-align: center;
+		font-size: 50px;
+		line-height: 80px;
+		font-family: $gu-headline;
+		font-weight: bold;
+		background-color: gu-colour(highlight-main);
+		margin: 0 auto -35px;
+		position: relative;
+
+		@include mq($from: phablet) {
+			position: absolute;
+			left: calc(50% - 40px);
+			top: 90px;
+		}
+
+		@include mq($from: tablet) {
+			left: calc(140px + 25%);
+		}
+
+		@include mq($from: desktop) {
+			width: 100px;
+			height: 100px;
+			font-size: 60px;
+			line-height: 100px;
+			top: 167px;
+			left: 325px;
+		}
+	}
+
+	.component-grid-picture__image {
+		display: block;
+	}
+
+	.digital-subscription-landing-header {
+		.component-price-cta {
+			background-color: gu-colour(neutral-7);
+			border-top: 1px solid #fff;
+		}
+		.component-price-cta__secondary {
+			color: gu-colour(neutral-97);
+			padding: ($gu-v-spacing / 2) 0;
+			font-size: 0.9em;
+		}
+	}
+
+	.component-heading-block {
+		position: relative;
+	}
+
+	.digital-subscription-landing-header__picture {
+		@include mq($until: tablet) {
+			height: 351px;
+		}
+		@include mq($from: tablet) {
+			height: 332px;
+		}
+		@include mq($from: leftCol) {
+			height: 389px;
+		}
+	}
+
+	.component-left-margin-section--header-block {
+		.component-grid-picture {
+			position: relative;
+		}
+
+		.svg-title-circles-left-mobile {
+			position: absolute;
+			top: 300px;
+			height: 140px;
+			right: calc(50% + 70px);
+
+			@include mq($from: mobileMedium) {
+				top: 310px;
+				height: 150px;
+			}
+
+			@include mq($from: tablet) {
+				display: none;
+			}
+		}
+
+		.svg-title-circles-left-tablet {
+			position: absolute;
+			@include mq($until: tablet) {
+				display: none;
+			}
+			@include mq($from: tablet) {
+				top: 200px;
+				right: calc(50% + 10px);
+				width: 374px;
+				height: 418px;
+			}
+			@include mq($from: leftCol) {
+				top: 235px;
+				right: calc(50% + 210px);
+				height: 430px;
+				width: 430px;
+			}
+		}
+
+		.svg-title-circles-right-mobile {
+			position: absolute;
+			top: 335px;
+			left: calc(50% + 100px);
+			width: 60px;
+
+			@include mq($from: mobileMedium) {
+				width: 80px;
+				left: calc(50% + 105px);
+			}
+
+			@include mq($from: tablet) {
+				display: none;
+			}
+		}
+
+		.svg-title-circles-right-tablet {
+			position: absolute;
+			@include mq($until: tablet) {
+				display: none;
+			}
+			@include mq($from: tablet) {
+				top: 300px;
+				left: calc(50% + 177px);
+				width: 210px;
+			}
+			@include mq($from: leftCol) {
+				top: 350px;
+				left: calc(50% + 307px);
+			}
+		}
+
+		.component-grid-picture__image {
+			margin-left: auto;
+			margin-right: auto;
+			@include mq($until: tablet) {
+				margin-top: 16px;
+			}
+			@include mq($from: tablet, $until: leftCol) {
+				margin-top: 35px;
+			}
+			@include mq($from: leftCol) {
+				margin-top: 37px;
+				margin-left: 12px;
+			}
+		}
+	}
+
+	// cta link text should be 16px throughout the whole site but that will require
+	// quite a bit of work to make everything else match up, so for now I'm just going
+	// to change it here.
+	.component-cta-link__text {
+		font-size: 16px;
+	}
+
+	.component-flash-sale-countdown-hero {
+		position: relative;
+		margin-bottom: 50px;
+		@include mq($from: tablet) {
+			margin-bottom: 0;
+			margin-left: 450px;
+		}
+	}
 }
 
 .component-left-margin-section--grey {
-  background: gu-colour(neutral-97);
-  overflow: hidden;
-  margin-left: -1px;
+	background: gu-colour(neutral-97);
+	overflow: hidden;
+	margin-left: -1px;
 }
 
 .component-customer-service h2 {
-  margin-top: $gu-v-spacing;
-  font-weight: bold;
+	margin-top: $gu-v-spacing;
+	font-weight: bold;
 }

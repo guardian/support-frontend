@@ -1,55 +1,55 @@
 @mixin introduction {
-  background-color: gu-colour(neutral-97);
-  color: gu-colour(neutral-7);
-  position: relative;
-  overflow: hidden;
-  font-family: $gu-headline;
-  font-weight: bold;
-  font-size: 28px;
-  line-height: 30px;
+	background-color: gu-colour(neutral-97);
+	color: gu-colour(neutral-7);
+	position: relative;
+	overflow: hidden;
+	font-family: $gu-headline;
+	font-weight: bold;
+	font-size: 28px;
+	line-height: 30px;
 
-  @include mq($from: mobileMedium) {
-    font-size: 30px;
-    line-height: 32px;
-  }
+	@include mq($from: mobileMedium) {
+		font-size: 30px;
+		line-height: 32px;
+	}
 
-  @include mq($from: phablet) {
-    font-size: 46px;
-    line-height: 50px;
-  }
+	@include mq($from: phablet) {
+		font-size: 46px;
+		line-height: 50px;
+	}
 
-  @include mq($from: desktop) {
-    font-size: 48px;
-    line-height: 52px;
-  }
+	@include mq($from: desktop) {
+		font-size: 48px;
+		line-height: 52px;
+	}
 }
 
 @mixin introduction-left-spacing {
-  @include mq($from: desktop) {
-    padding-left: $gu-h-spacing;
-    margin-left: 20%;
-  }
+	@include mq($from: desktop) {
+		padding-left: $gu-h-spacing;
+		margin-left: 20%;
+	}
 }
 
-@mixin introduction-svg($breakpoint: "mobile") {
-  position: absolute;
-  top: 0;
-  min-height: 100%;
-  display: none;
+@mixin introduction-svg($breakpoint: 'mobile') {
+	position: absolute;
+	top: 0;
+	min-height: 100%;
+	display: none;
 
-  @if $breakpoint == "desktop" {
-    @include mq($from: desktop) {
-      display: inline;
-    }
-  } @else if $breakpoint == "tablet" {
-    @include mq($from: mobileLandscape, $until: desktop) {
-      display: inline;
-    }
-  } @else {
-    width: 100%;
+	@if $breakpoint == 'desktop' {
+		@include mq($from: desktop) {
+			display: inline;
+		}
+	} @else if $breakpoint == 'tablet' {
+		@include mq($from: mobileLandscape, $until: desktop) {
+			display: inline;
+		}
+	} @else {
+		width: 100%;
 
-    @include mq($until: mobileLandscape) {
-      display: inline;
-    }
-  }
+		@include mq($until: mobileLandscape) {
+			display: inline;
+		}
+	}
 }

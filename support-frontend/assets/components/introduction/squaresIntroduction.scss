@@ -1,43 +1,43 @@
 @import '~stylesheets/skeleton/html';
 
 .component-squares-introduction {
-  @include introduction;
+	@include introduction;
 
-  .svg-squares-hero-desktop {
-    @include introduction-svg("desktop");
-  }
+	.svg-squares-hero-desktop {
+		@include introduction-svg('desktop');
+	}
 
-  .svg-squares-hero-tablet {
-    @include introduction-svg("tablet");
-  }
+	.svg-squares-hero-tablet {
+		@include introduction-svg('tablet');
+	}
 
-  .svg-squares-hero-mobile {
-    @include introduction-svg;
-  }
+	.svg-squares-hero-mobile {
+		@include introduction-svg;
+	}
 
-  .component-highlights {
-    @include introduction-left-spacing;
-  }
+	.component-highlights {
+		@include introduction-left-spacing;
+	}
 }
 
 .component-squares-introduction__content {
-  @extend .gu-content-margin;
-  padding-top: $gu-v-spacing;
-  padding-bottom: 220px;
+	@extend .gu-content-margin;
+	padding-top: $gu-v-spacing;
+	padding-bottom: 220px;
 
-  @include mq($from: mobileLandscape) {
-    padding-bottom: 170px;
-  }
+	@include mq($from: mobileLandscape) {
+		padding-bottom: 170px;
+	}
 
-  @include mq($from: desktop) {
-    padding-bottom: 10%;
-  }
+	@include mq($from: desktop) {
+		padding-bottom: 10%;
+	}
 }
 
 .component-squares-introduction__heading {
-  @include introduction-left-spacing;
+	@include introduction-left-spacing;
 }
 
 .component-squares-introduction__heading-line {
-  display: block;
+	display: block;
 }

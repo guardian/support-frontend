@@ -1,60 +1,60 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-text {
-  @include gu-fontset-body;
-  overflow-wrap: break-word;
-  > *:not(:first-child) {
-    margin-top: $gu-v-spacing
-  }
-  > .component-text__heading + p {
-    margin-top: ($gu-v-spacing/-2);
-  }
+	@include gu-fontset-body;
+	overflow-wrap: break-word;
+	> *:not(:first-child) {
+		margin-top: $gu-v-spacing;
+	}
+	> .component-text__heading + p {
+		margin-top: ($gu-v-spacing/-2);
+	}
 }
 
 .component-text + .component-text {
-  margin-top: ($gu-v-spacing/-1);
+	margin-top: ($gu-v-spacing/-1);
 }
 
 .component-text code {
-  font-family: monospace;
-  background: gu-colour(neutral-93);
-  color: gu-colour(neutral-7);
-  padding: ($gu-v-spacing / 4) ($gu-h-spacing / 4);
+	font-family: monospace;
+	background: gu-colour(neutral-93);
+	color: gu-colour(neutral-7);
+	padding: ($gu-v-spacing / 4) ($gu-h-spacing / 4);
 }
 
 .component-text a {
-  color: inherit;
+	color: inherit;
 }
 
 .component-text__heading {
-  @include gu-fontset-heading;
-  margin-bottom: $gu-v-spacing;
+	@include gu-fontset-heading;
+	margin-bottom: $gu-v-spacing;
 }
 
 .component-text__callout {
-  @include gu-fontset-heading;
-  & > strong {
-    padding: 0 ($gu-h-spacing / 4);
-    background-color: gu-colour(highlight-main);
-    color: gu-colour(neutral-7);
-  }
+	@include gu-fontset-heading;
+	& > strong {
+		padding: 0 ($gu-h-spacing / 4);
+		background-color: gu-colour(highlight-main);
+		color: gu-colour(neutral-7);
+	}
 }
 
 .component-text__large {
-  @include gu-fontset-heading;
-  font-size: 18px;
-  font-weight: 300;
-  line-height: 24px;
+	@include gu-fontset-heading;
+	font-size: 18px;
+	font-weight: 300;
+	line-height: 24px;
 
-  @include mq($from: tablet) {
-    @include gu-fontset-body-large;
-  }
+	@include mq($from: tablet) {
+		@include gu-fontset-body-large;
+	}
 }
 
 .component-text__sans {
-  @include gu-fontset-body-sans;
+	@include gu-fontset-body-sans;
 }
 
 .component-text__paddingTop {
-  padding-top: ($gu-v-spacing);
+	padding-top: ($gu-v-spacing);
 }

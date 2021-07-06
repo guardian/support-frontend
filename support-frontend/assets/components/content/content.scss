@@ -1,210 +1,206 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 @mixin narrow-content {
-  max-width: gu-span(7);
-  @include mq($from: desktop) {
-    max-width: gu-span(8);
-  }
+	max-width: gu-span(7);
+	@include mq($from: desktop) {
+		max-width: gu-span(8);
+	}
 }
 
 @mixin outset {
-  margin-left: ($gu-h-spacing / 2 * -1);
-  margin-right: ($gu-h-spacing / 2 * -1);
+	margin-left: ($gu-h-spacing / 2 * -1);
+	margin-right: ($gu-h-spacing / 2 * -1);
 }
 
 @mixin block-colours($border, $bg: null, $text: null) {
-  @if($text){
-    color: $text;
-  }
-  @if($bg){
-    &, .component-content-bg {
-      background-color: $bg;
-    }
-  }
-  &, .component-content-bg,
-  & .component-left-margin-section__content,
-  & .component-product-page-features .component-product-page-features__item {
-    border-color: $border;
-  }
-  & .component-content__divider__line {
-    @include multiline(4, $border);
-  }
-  &.component-content--force-border,
-  & + &  {
-    .component-left-margin-section__content {
-      border-top: 1px solid $border;
-    }
-  }
-  &.component-content--no-border  .component-left-margin-section__content {
-    border-top: 0 !important;
-  }
+	@if ($text) {
+		color: $text;
+	}
+	@if ($bg) {
+		&,
+		.component-content-bg {
+			background-color: $bg;
+		}
+	}
+	&,
+	.component-content-bg,
+	& .component-left-margin-section__content,
+	& .component-product-page-features .component-product-page-features__item {
+		border-color: $border;
+	}
+	& .component-content__divider__line {
+		@include multiline(4, $border);
+	}
+	&.component-content--force-border,
+	& + & {
+		.component-left-margin-section__content {
+			border-top: 1px solid $border;
+		}
+	}
+	&.component-content--no-border .component-left-margin-section__content {
+		border-top: 0 !important;
+	}
 }
 
-
 .component-content .component-left-margin-section__content {
-  max-width: 100%;
-  position: relative;
-  @include mq($from: tablet) {
-    border-left: 1px solid gu-colour(neutral-86);
-  }
+	max-width: 100%;
+	position: relative;
+	@include mq($from: tablet) {
+		border-left: 1px solid gu-colour(neutral-86);
+	}
 }
 
 .component-content--overflow-hidden .component-left-margin-section__content {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .component-content--white {
-  @include block-colours(
-    $border: gu-colour(neutral-86),
-    $bg: gu-colour(neutral-100),
-  );
+	@include block-colours(
+		$border: gu-colour(neutral-86),
+		$bg: gu-colour(neutral-100)
+	);
 }
 
 .component-content--grey {
-  @include block-colours(
-    $border: transparent,
-    $bg: gu-colour(neutral-97),
-  );
+	@include block-colours($border: transparent, $bg: gu-colour(neutral-97));
 }
 
 .component-content--feature {
-  @include block-colours(
-    $border: gu-colour(brand-pastel),
-    $bg: gu-colour(brand-main),
-    $text: gu-colour(neutral-100),
-  );
+	@include block-colours(
+		$border: gu-colour(brand-pastel),
+		$bg: gu-colour(brand-main),
+		$text: gu-colour(neutral-100)
+	);
 }
 
 .component-content--highlight {
-  @include block-colours(
-    $border: gu-colour(brand-pastel),
-    $bg: gu-colour(highlight-main),
-    $text: gu-colour(neutral-7)
-  );
+	@include block-colours(
+		$border: gu-colour(brand-pastel),
+		$bg: gu-colour(highlight-main),
+		$text: gu-colour(neutral-7)
+	);
 }
 
 .component-content--dark {
-  @include block-colours(
-    $border: gu-colour(neutral-46),
-    $text: gu-colour(neutral-100),
-    $bg: gu-colour(neutral-20),
-  );
+	@include block-colours(
+		$border: gu-colour(neutral-46),
+		$text: gu-colour(neutral-100),
+		$bg: gu-colour(neutral-20)
+	);
 }
 
 .component-content--higher {
-  position: relative;
-  z-index: 10;
+	position: relative;
+	z-index: 10;
 }
 
 .component-content__content,
 .component-content__content--grey {
-  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
+	padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 
 .component-footer {
-  .component-content__content,
-  .component-content__content--grey {
-    padding: ($gu-h-spacing / 2);
-  }
+	.component-content__content,
+	.component-content__content--grey {
+		padding: ($gu-h-spacing / 2);
+	}
 }
 
 .component-content__content {
-  max-width: gu-span(12);
+	max-width: gu-span(12);
 
-  @include mq($from: desktop) {
-    padding-top: $gu-v-spacing*2;
-  }
+	@include mq($from: desktop) {
+		padding-top: $gu-v-spacing * 2;
+	}
 }
 
 .component-content.component-content--white.component-content--overflow-hidden.component-content--force-border {
-  .component-text {
-    @include mq($from: desktop) {
-      max-width: gu-span(6);
-    }
-  }
+	.component-text {
+		@include mq($from: desktop) {
+			max-width: gu-span(6);
+		}
+	}
 }
 
 .component-content__content--grey {
-  background-color: gu-colour(neutral-97);
+	background-color: gu-colour(neutral-97);
 }
 
-
 .component-content__outset {
-  @include outset;
+	@include outset;
 }
 
 .component-content__divider {
-  @include outset;
-  height: 20px;
-  margin-bottom: ($gu-v-spacing*.33);
+	@include outset;
+	height: 20px;
+	margin-bottom: ($gu-v-spacing * 0.33);
 }
 
 .component-content__divider--small {
-  @include narrow-content;
-  height: 1px;
-  overflow: hidden;
-  position: relative;
+	@include narrow-content;
+	height: 1px;
+	overflow: hidden;
+	position: relative;
 }
 
 .component-content__divider__line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  border: 0;
-  margin: 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+	border: 0;
+	margin: 0;
 }
 
 // ----- Vertical rhythm ------ //
 
 .component-content {
-  .component-content__narrowContent,
-  .component-text,
-  .component-product-page-plan-form,
-  .component-product-page-info-chip {
-    margin-bottom: ($gu-v-spacing*2)
-  }
-  .component-product-page-info-chip + .component-product-page-info-chip {
-    margin-top: ($gu-v-spacing * -1);
-  }
-  .component-content__divider:last-child {
-    margin-bottom: ($gu-v-spacing*-.5) - 2px;
-    margin-top: ($gu-v-spacing*.5) + 2px;
-  }
-  /*
+	.component-content__narrowContent,
+	.component-text,
+	.component-product-page-plan-form,
+	.component-product-page-info-chip {
+		margin-bottom: ($gu-v-spacing * 2);
+	}
+	.component-product-page-info-chip + .component-product-page-info-chip {
+		margin-top: ($gu-v-spacing * -1);
+	}
+	.component-content__divider:last-child {
+		margin-bottom: ($gu-v-spacing * -0.5) - 2px;
+		margin-top: ($gu-v-spacing * 0.5) + 2px;
+	}
+	/*
   cancel out initial padding
   */
-  .component-content__content > .component-content__divider:first-child,
-  .component-product-page-tabs {
-    margin-top: ($gu-v-spacing*-.5) - 1px;
-  }
+	.component-content__content > .component-content__divider:first-child,
+	.component-product-page-tabs {
+		margin-top: ($gu-v-spacing * -0.5) - 1px;
+	}
 }
-
 
 // ----- Images ------ //
 
 .component-content__image {
-  position: absolute;
-  max-width: gu-span(6);
-  @include mq($from: tablet) {
-    left: gu-span(7) + ($gu-h-spacing * 2);
-  }
-  @include mq($from: desktop) {
-    left: gu-span(6) + ($gu-h-spacing * 2);
-  }
+	position: absolute;
+	max-width: gu-span(6);
+	@include mq($from: tablet) {
+		left: gu-span(7) + ($gu-h-spacing * 2);
+	}
+	@include mq($from: desktop) {
+		left: gu-span(6) + ($gu-h-spacing * 2);
+	}
 
-  @include mq($from: wide) {
-    left: gu-span(7);
-  }
+	@include mq($from: wide) {
+		left: gu-span(7);
+	}
 
-  top: ($gu-v-spacing*2)*-1;
-  .component-grid-image {
-    display: none;
-    @include mq($from: desktop) {
-      display: block;
-      width: 100%;
-    }
-  }
-  /*
+	top: ($gu-v-spacing * 2) * -1;
+	.component-grid-image {
+		display: none;
+		@include mq($from: desktop) {
+			display: block;
+			width: 100%;
+		}
+	}
+	/*
   If you are implementing an image in a page and you want
   it to look just a teeny tiny bit bigger or smaller or plain move it,
   try to avoid overriding `left` to do fine positioning and

@@ -3,93 +3,102 @@
 //  See: http://codepen.io/tigt/post/optimizing-svgs-in-data-uris
 //
 //
-@function svg-url($svg){
-  //
-  //  Chunk up string in order to avoid
-  //  "stack level too deep" error
-  //
-  $encoded:'';
-  $slice: 2000;
-  $index: 0;
-  $loops: ceil(str-length($svg)/$slice);
-  @for $i from 1 through $loops {
-    $chunk: str-slice($svg, $index, $index + $slice - 1);
-    //
-    //   Encode (may need a few extra replacements)
-    //
-    $chunk: str-replace($chunk,'"','\'');
-    $chunk: str-replace($chunk,'<','%3C');
-    $chunk: str-replace($chunk,'>','%3E');
-    $chunk: str-replace($chunk,'&','%26');
-    $chunk: str-replace($chunk,'#','%23');
-    $encoded: #{$encoded}#{$chunk};
-    $index: $index + $slice;
-  }
-  @return url("data:image/svg+xml;charset=utf8,#{$encoded}");
+@function svg-url($svg) {
+	//
+	//  Chunk up string in order to avoid
+	//  "stack level too deep" error
+	//
+	$encoded: '';
+	$slice: 2000;
+	$index: 0;
+	$loops: ceil(str-length($svg) / $slice);
+	@for $i from 1 through $loops {
+		$chunk: str-slice($svg, $index, $index + $slice - 1);
+		//
+		//   Encode (may need a few extra replacements)
+		//
+		$chunk: str-replace($chunk, '"', "'");
+		$chunk: str-replace($chunk, '<', '%3C');
+		$chunk: str-replace($chunk, '>', '%3E');
+		$chunk: str-replace($chunk, '&', '%26');
+		$chunk: str-replace($chunk, '#', '%23');
+		$encoded: #{$encoded}#{$chunk};
+		$index: $index + $slice;
+	}
+	@return url('data:image/svg+xml;charset=utf8,#{$encoded}');
 }
 
 //  Helper function to replace characters in a string
 @function str-replace($string, $search, $replace: '') {
-  $index: str-index($string, $search);
-  @if $index {
-    @return str-slice($string, 1, $index - 1) + $replace +
-      str-replace(str-slice($string, $index +
-      str-length($search)), $search, $replace);
-  }
-  @return $string;
+	$index: str-index($string, $search);
+	@if $index {
+		@return str-slice($string, 1, $index - 1) + $replace +
+			str-replace(
+				str-slice($string, $index + str-length($search)),
+				$search,
+				$replace
+			);
+	}
+	@return $string;
 }
 
 // Helper to create the multilines used in e.g. the header.
 // $number - the number of lines
 // $colour - the colour of the lines
 @mixin multiline($number, $colour, $position: bottom) {
-  $bgSize: $number * 4 - 3;
+	$bgSize: $number * 4 - 3;
 
-  background-image: repeating-linear-gradient(to bottom, $colour, $colour 1px, transparent 1px, transparent 4px);
-  background-repeat: repeat-x;
-  background-position: $position;
-  background-size: 1px #{$bgSize}px;
-  height: #{$bgSize}px;
+	background-image: repeating-linear-gradient(
+		to bottom,
+		$colour,
+		$colour 1px,
+		transparent 1px,
+		transparent 4px
+	);
+	background-repeat: repeat-x;
+	background-position: $position;
+	background-size: 1px #{$bgSize}px;
+	height: #{$bgSize}px;
 }
 
 @mixin multiline-top-border {
-  &:before {
-    @include multiline(4, gu-colour(neutral-86));
-    background-color: #fff;
-    display: block;
-    content: '';
-  }
+	&:before {
+		@include multiline(4, gu-colour(neutral-86));
+		background-color: #fff;
+		display: block;
+		content: '';
+	}
 }
 
 @mixin multiline-bottom-border {
-  &:after {
-    @include multiline(4, gu-colour(neutral-86));
-    background-color: #fff;
-    display: block;
-    content: '';
-  }
+	&:after {
+		@include multiline(4, gu-colour(neutral-86));
+		background-color: #fff;
+		display: block;
+		content: '';
+	}
 }
 
 // Helper to create the dropped line used to separate the title in page sections.
 @mixin dropline {
-  @include mq($from: desktop) {
-    position: relative;
+	@include mq($from: desktop) {
+		position: relative;
 
-    &:after {
-      border-right: 1px solid gu-colour(neutral-86);
-      content: "";
-      display: inline-block;
-      height: 36px;
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-  }
+		&:after {
+			border-right: 1px solid gu-colour(neutral-86);
+			content: '';
+			display: inline-block;
+			height: 36px;
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+	}
 }
 
 // ----- Assistive technologies guidance (non-visible) ----- //
 @mixin visually-hidden {
-  border: 0;
+	border: 0;
 	clip: rect(0 0 0 0);
 	height: 1px;
 	margin: -1px !important;
@@ -103,9 +112,9 @@
 
 .is-hidden,
 [hidden] {
-  display: none !important;
+	display: none !important;
 }
 
 .show {
-  display: block !important;
+	display: block !important;
 }

@@ -1,66 +1,64 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-general-error-message {
-  padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
-  color: gu-colour(news-main);
-  background-color: gu-colour(news-faded);
-  margin-bottom: 20px;
+	padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
+	color: gu-colour(news-main);
+	background-color: gu-colour(news-faded);
+	margin-bottom: 20px;
 
-  @include mq($from: tablet) {
-    width: 404px;
-  }
-
+	@include mq($from: tablet) {
+		width: 404px;
+	}
 }
 
 .component-general-error-message--invalid_form_mobile {
-  padding-top: $gu-v-spacing;
-  margin-bottom: -$gu-v-spacing;
-  color: gu-colour(news-main);
-  background-color: gu-colour(news-faded);
+	padding-top: $gu-v-spacing;
+	margin-bottom: -$gu-v-spacing;
+	color: gu-colour(news-main);
+	background-color: gu-colour(news-faded);
 }
 
 .component-general-error-message--marketing_consent_api_error {
-  margin-top: $gu-v-spacing * 2;
+	margin-top: $gu-v-spacing * 2;
 }
 
 .gu-content__content {
-  .component-general-error-message {
-    width: auto;
-  }
+	.component-general-error-message {
+		width: auto;
+	}
 
-  .component-general-error-message--no-valid-payments {
-    padding: 0;
-  }
+	.component-general-error-message--no-valid-payments {
+		padding: 0;
+	}
 }
 
 .svg-exclamation-alternate {
-  display: inline-block;
-  margin-right: 8px;
-  vertical-align: bottom;
+	display: inline-block;
+	margin-right: 8px;
+	vertical-align: bottom;
 }
 
 .svg-exclamation-alternate__circle {
-  fill: gu-colour(news-main);
+	fill: gu-colour(news-main);
 }
 
 .svg-exclamation-alternate__exclamation-mark {
-  fill: gu-colour(neutral-100);
+	fill: gu-colour(neutral-100);
 }
 
 .component-general-error-message__error-heading {
-  vertical-align: bottom;
-  display: inline-block;
-  font-family: $gu-text-sans-web;
-  font-size: 16px;
-  font-weight: 600;
+	vertical-align: bottom;
+	display: inline-block;
+	font-family: $gu-text-sans-web;
+	font-size: 16px;
+	font-weight: 600;
 }
 
 .component-general-error-message__small-print {
-  display: block;
-  line-height: 18px;
-  font-family: $gu-text-sans-web;
-  font-size: 14px;
-  font-weight: 400;
-  margin-top: $gu-v-spacing;
+	display: block;
+	line-height: 18px;
+	font-family: $gu-text-sans-web;
+	font-size: 14px;
+	font-weight: 400;
+	margin-top: $gu-v-spacing;
 }
-

@@ -1,16 +1,16 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-list-ol__li {
-  position: relative;
-  list-style: none;
-  counter-increment: step-counter;
-  padding-left: $gu-h-spacing;
-  margin-bottom: $gu-v-spacing / 2;
-  &:before {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-weight: 700;
-    content: counter(step-counter) ".";
-  }
+	position: relative;
+	list-style: none;
+	counter-increment: step-counter;
+	padding-left: $gu-h-spacing;
+	margin-bottom: $gu-v-spacing / 2;
+	&:before {
+		position: absolute;
+		top: 0;
+		left: 0;
+		font-weight: 700;
+		content: counter(step-counter) '.';
+	}
 }

@@ -1,72 +1,72 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-$mobile-menu-gutter: ($gu-h-spacing*2.5);
+$mobile-menu-gutter: ($gu-h-spacing * 2.5);
 
 .component-header-mobile-menu {
-  background: gu-colour(brand-main);
-  min-height: 100%;
-  min-height: 100vh;
-  max-width: 95vw;
-  position: relative;
-  box-shadow: 3px 0 16px rgba(0,0,0,0.4);
+	background: gu-colour(brand-main);
+	min-height: 100%;
+	min-height: 100vh;
+	max-width: 95vw;
+	position: relative;
+	box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
 
-  .component-veggie-burger-button {
-    position: absolute;
-    top: $gu-cta-height;
-    right: $gu-cta-height/-2;
-  }
+	.component-veggie-burger-button {
+		position: absolute;
+		top: $gu-cta-height;
+		right: $gu-cta-height/-2;
+	}
 
-  .component-header-mobile-menu__scroll {
-    height: 100%;
-    height: 100vh;
-    overflow: auto;
-    box-sizing: border-box;
-    padding: $gu-v-spacing/2 0 $gu-v-spacing*2;
-  }
-
+	.component-header-mobile-menu__scroll {
+		height: 100%;
+		height: 100vh;
+		overflow: auto;
+		box-sizing: border-box;
+		padding: $gu-v-spacing/2 0 $gu-v-spacing * 2;
+	}
 }
 
 .component-header-links--mobile {
-  display: block;
-  clear: both;
+	display: block;
+	clear: both;
 
-  .component-header-links__ul {
-    list-style: none;
-  }
+	.component-header-links__ul {
+		list-style: none;
+	}
 
-  .component-header-links__link {
-    @include gu-fontset-nav-mobile;
-    line-height: .9;
-    color: gu-colour(neutral-100);
-    text-decoration: none;
-    display: block;
-    padding: ($gu-v-spacing/2) $gu-h-spacing ($gu-v-spacing*1.5) 0;
-    overflow: hidden;
-    position: relative;
-    box-shadow: inset 0 0 0 gu-colour(highlight-main);
-    transition: .2s linear;
+	.component-header-links__link {
+		@include gu-fontset-nav-mobile;
+		line-height: 0.9;
+		color: gu-colour(neutral-100);
+		text-decoration: none;
+		display: block;
+		padding: ($gu-v-spacing/2) $gu-h-spacing ($gu-v-spacing * 1.5) 0;
+		overflow: hidden;
+		position: relative;
+		box-shadow: inset 0 0 0 gu-colour(highlight-main);
+		transition: 0.2s linear;
 
-    &:hover, &:focus {
-      text-decoration: underline;
-    }
-  }
+		&:hover,
+		&:focus {
+			text-decoration: underline;
+		}
+	}
 
-  .component-header-links__li {
-    margin-left: $mobile-menu-gutter;
-    border-top: 1px solid gu-colour(brand-pastel);
-    &:first-child {
-      border-top: none;
-    }
-  }
+	.component-header-links__li {
+		margin-left: $mobile-menu-gutter;
+		border-top: 1px solid gu-colour(brand-pastel);
+		&:first-child {
+			border-top: none;
+		}
+	}
 }
 
 .component-header-mobile-menu__utility {
-  margin-left: $mobile-menu-gutter;
-  border-top: 1px solid gu-colour(brand-pastel);
-  padding: ($gu-v-spacing/2) 0;
-  margin-top: $gu-v-spacing;
+	margin-left: $mobile-menu-gutter;
+	border-top: 1px solid gu-colour(brand-pastel);
+	padding: ($gu-v-spacing/2) 0;
+	margin-top: $gu-v-spacing;
 
-  .component-country-group-switcher .component-select-input__select {
-    @include gu-fontset-body-sans($size-only: true);
-  }
+	.component-country-group-switcher .component-select-input__select {
+		@include gu-fontset-body-sans($size-only: true);
+	}
 }

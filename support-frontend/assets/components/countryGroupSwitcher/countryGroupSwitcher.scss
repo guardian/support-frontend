@@ -1,44 +1,44 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-country-group-switcher {
-  display: inline-flex;
+	display: inline-flex;
 
-  .component-select-input__select {
-    @include gu-fontset-body-sans;
-    @include mq($until: tablet) {
-      font-size: 14px;
-    }
-    line-height: 1;
-    cursor: pointer;
-    background-color: transparent;
-    background: none;
-    padding: 0 $gu-h-spacing 0 0;
-    margin: 0;
-    height: auto;
-    border-radius: 0;
-    color: gu-colour(neutral-100);
-    z-index: 10;
-    position: relative;
+	.component-select-input__select {
+		@include gu-fontset-body-sans;
+		@include mq($until: tablet) {
+			font-size: 14px;
+		}
+		line-height: 1;
+		cursor: pointer;
+		background-color: transparent;
+		background: none;
+		padding: 0 $gu-h-spacing 0 0;
+		margin: 0;
+		height: auto;
+		border-radius: 0;
+		color: gu-colour(neutral-100);
+		z-index: 10;
+		position: relative;
 
-    option {
-      color: gu-colour(neutral-7);
-    }
+		option {
+			color: gu-colour(neutral-7);
+		}
 
-    &::-ms-expand {
-      display: none;
-    }
-  }
+		&::-ms-expand {
+			display: none;
+		}
+	}
 
-  &:hover {
-    .component-select-input__select {
-      color: gu-colour(highlight-main);
-    }
-    .svg-dropdown-arrow path {
-      fill: gu-colour(highlight-main);
-    }
-  }
+	&:hover {
+		.component-select-input__select {
+			color: gu-colour(highlight-main);
+		}
+		.svg-dropdown-arrow path {
+			fill: gu-colour(highlight-main);
+		}
+	}
 
-  .component-select-input__label {
-    @include visually-hidden;
-  }
+	.component-select-input__label {
+		@include visually-hidden;
+	}
 }

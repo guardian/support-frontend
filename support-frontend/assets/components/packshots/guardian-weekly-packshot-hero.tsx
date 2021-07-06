@@ -1,7 +1,7 @@
-import React from "react";
-import { css } from "@emotion/core";
-import { from, until } from "@guardian/src-foundations/mq";
-import GridImage from "components/gridImage/gridImage";
+import React from 'react';
+import { css } from '@emotion/core';
+import { from, until } from '@guardian/src-foundations/mq';
+import GridImage from 'components/gridImage/gridImage';
 
 /** NOTE about packshot images
  * ------
@@ -12,28 +12,35 @@ import GridImage from "components/gridImage/gridImage";
  * this is applied using the "subscriptions__guardian-weekly-packshot" class in this instance
  *  */
 const weeklyOverride = css`
-  ${until.tablet} {
-    width: 100%;
-  }
+	${until.tablet} {
+		width: 100%;
+	}
 
-  img {
-    width: 100%;
+	img {
+		width: 100%;
 
-    ${from.tablet} {
-      width: 80%;
-    }
+		${from.tablet} {
+			width: 80%;
+		}
 
-    ${from.desktop} {
-      width: 500px;
-    }
-  }
+		${from.desktop} {
+			width: 500px;
+		}
+	}
 `;
 
-const GuardianWeeklyPackShotHero = () => <div className="subscriptions-feature-packshot" css={weeklyOverride}>
-    <GridImage gridId="subscriptionGuardianWeeklyPackShot" srcSizes={[1000, 500]} sizes="(max-width: 480px) 100px,
+const GuardianWeeklyPackShotHero = () => (
+	<div className="subscriptions-feature-packshot" css={weeklyOverride}>
+		<GridImage
+			gridId="subscriptionGuardianWeeklyPackShot"
+			srcSizes={[1000, 500]}
+			sizes="(max-width: 480px) 100px,
               (max-width: 740px) 100%,
               (max-width: 1067px) 150%,
-              800px" imgType="png" />
-  </div>;
+              800px"
+			imgType="png"
+		/>
+	</div>
+);
 
 export default GuardianWeeklyPackShotHero;

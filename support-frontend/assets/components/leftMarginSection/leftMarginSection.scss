@@ -1,34 +1,34 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-left-margin-section {
-  display: flex;
+	display: flex;
 
-  @include mq($from: tablet) {
-    &:before {
-      content: "";
-      flex-basis: 0;
-      flex-grow: 1;
-      // Fix for IE11, it doesn't treat inline elements as flex items.
-      display: block;
-    }
-  }
+	@include mq($from: tablet) {
+		&:before {
+			content: '';
+			flex-basis: 0;
+			flex-grow: 1;
+			// Fix for IE11, it doesn't treat inline elements as flex items.
+			display: block;
+		}
+	}
 }
 
 .component-left-margin-section--blue {
-  color: #ffffff;
-  .component-left-margin-section__content {
-    background: gu-colour(sport-dark);
-  }
+	color: #ffffff;
+	.component-left-margin-section__content {
+		background: gu-colour(sport-dark);
+	}
 }
 
 .component-left-margin-section__content {
-  flex-grow: 1;
-  flex-basis: gu-span(9) + $gu-h-spacing;
+	flex-grow: 1;
+	flex-basis: gu-span(9) + $gu-h-spacing;
 
-  @include mq($from: desktop) {
-    flex-basis: gu-span(10) + $gu-h-spacing;
-  }
-  @include mq($from: leftCol) {
-    flex-basis: gu-span(12) + $gu-h-spacing;
-  }
+	@include mq($from: desktop) {
+		flex-basis: gu-span(10) + $gu-h-spacing;
+	}
+	@include mq($from: leftCol) {
+		flex-basis: gu-span(12) + $gu-h-spacing;
+	}
 }

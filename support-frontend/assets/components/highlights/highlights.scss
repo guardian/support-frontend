@@ -1,31 +1,29 @@
 .component-highlights__line {
-  display: block;
+	display: block;
 }
 
 .component-highlights__highlight {
-  display: inline-block;
-  vertical-align: top;
-  padding: 4px;
-  background-color: gu-colour(highlight-main);
+	display: inline-block;
+	vertical-align: top;
+	padding: 4px;
+	background-color: gu-colour(highlight-main);
 }
 
 .component-highlights__highlight--compact {
+	font-size: 16px;
+	line-height: 18px;
 
-  font-size: 16px;
-  line-height: 18px;
+	@include mq($from: phablet) {
+		font-size: 18px;
+		line-height: 20px;
+	}
 
-  @include mq($from: phablet) {
-    font-size: 18px;
-    line-height: 20px;
-  }
+	@include mq($from: desktop) {
+		font-size: 18px;
+	}
 
-  @include mq($from: desktop) {
-    font-size: 18px;
-  }
-
-  @include mq($from:leftCol) {
-    font-size: 24px;
-    line-height: 28px;
-  }
+	@include mq($from: leftCol) {
+		font-size: 24px;
+		line-height: 28px;
+	}
 }
-
