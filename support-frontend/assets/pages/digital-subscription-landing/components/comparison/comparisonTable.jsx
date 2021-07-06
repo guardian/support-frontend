@@ -74,6 +74,7 @@ const rowStyle = css`
 const rowIconAndText = css`
   display: inline-flex;
   align-items: center;
+  text-align: left;
 
   ${from.mobileMedium} {
     padding-right: ${space[3]}px;
