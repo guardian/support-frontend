@@ -135,12 +135,16 @@ const noWrap = css`
 `;
 
 const Padlock = () => (
-  <div css={[indicators, padlock, free]}><SvgPadlock /></div>
+  <div aria-label="Not included for free" css={[indicators, padlock, free]}>
+    <SvgPadlock />
+  </div>
 );
 
 
 const Checkmark = () => (
-  <div css={[indicators, checkmark, paid]}><SvgCheckmark /></div>
+  <div aria-label="Included in a paid subscription" css={[indicators, checkmark, paid]}>
+    <SvgCheckmark />
+  </div>
 );
 
 

@@ -29,11 +29,14 @@ const container = css`
   }
 `;
 
+const fullwidth = css`
+  width: 100%;
+`;
+
 const tableContainer = css`
   *, *:before, *:after {
     box-sizing: border-box;
   }
-  width: 100%;
   padding-left: ${space[3]}px;
   border: ${borderStyle};
   border-bottom: none;
@@ -91,45 +94,59 @@ const descriptionStyle = css`
   }
 `;
 
+const visuallyHidden = css`
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+`;
+
 const ComparisonTableRow = ({
   icon, description, free, paid, cssOverrides,
 }: TableRow) => (
-  <li css={[rowStyle, cssOverrides]}>
-    <div css={rowIconAndText}>
+  <tr css={[rowStyle, cssOverrides]}>
+    <th scope="row" css={rowIconAndText}>
       {icon}<div css={descriptionStyle}>{description}</div>
-    </div>
-    {free}
-    {paid}
-  </li>
+    </th>
+    <td>{free}</td>
+    <td>{paid}</td>
+  </tr>
 );
 
 
 const ComparisonTable = () => (
   <section css={container}>
     <BlockLabel tag="h2" cssOverrides={label}>Your subscription at a glance</BlockLabel>
-    <div css={[rowStyle, titleRow.cssOverrides]}>
-      <div css={rowIconAndText} />
-      {titleRow.free}
-      {titleRow.paid}
-    </div>
-    <div css={tableContainer}>
-      <ul css={tableRows}>
-        {tableContent.map(row => (
-          <ComparisonTableRow
-            cssOverrides={row.cssOverrides}
-            icon={row.icon}
-            description={row.description}
-            free={row.free}
-            paid={row.paid}
-          />))}
-      </ul>
-
-    </div>
-    <div css={[rowStyle, finalRow.cssOverrides]}>
-      <div css={[rowIconAndText]}>
-        {finalRow.icon}<div css={descriptionStyle}>{finalRow.description}</div>
+    <table role="presentation" css={fullwidth}>
+      <caption css={visuallyHidden}>What&apos;s included in a paid digital subscription</caption>
+      <thead>
+        <tr css={[rowStyle, titleRow.cssOverrides]}>
+          <th scope="col" css={rowIconAndText} />
+          <th scope="col">{titleRow.free}</th>
+          <th scope="col">{titleRow.paid}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <div css={tableContainer}>
+          <div css={tableRows}>
+            {tableContent.map(row => (
+              <ComparisonTableRow
+                cssOverrides={row.cssOverrides}
+                icon={row.icon}
+                description={row.description}
+                free={row.free}
+                paid={row.paid}
+              />))}
+          </div>
+        </div>
+      </tbody>
+      <div css={[rowStyle, finalRow.cssOverrides]}>
+        <div css={[rowIconAndText]}>
+          {finalRow.icon}<div css={descriptionStyle}>{finalRow.description}</div>
+        </div>
       </div>
-    </div>
+    </table>
   </section>
 );
 
