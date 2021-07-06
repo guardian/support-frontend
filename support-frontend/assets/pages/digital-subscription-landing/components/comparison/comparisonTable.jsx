@@ -72,7 +72,7 @@ const rowText = css`
 
 const rowStyle = css`
   position: relative;
-  z-index: 1;
+  z-index: 5;
   height: 60px;
   border-bottom: ${borderStyle};
   display: flex;

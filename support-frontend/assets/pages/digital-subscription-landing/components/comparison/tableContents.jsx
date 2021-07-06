@@ -72,6 +72,8 @@ const indicators = css`
   width: 40px;
   align-items: center;
   justify-content: center;
+  border-bottom: ${borderStyle};
+
   svg {
     display: block;
   }
@@ -105,6 +107,10 @@ const columnTitle = css`
   border-left: ${borderStyle};
   border-top: ${borderStyle};
 
+  :last-of-type {
+    border-right: ${borderStyle};
+  }
+
   ${from.mobileLandscape} {
     ${textSans.small({ fontWeight: 'bold' })}
   }
@@ -112,12 +118,10 @@ const columnTitle = css`
 
 const paid = css`
   background-color: ${brandAltBackground.primary};
-  border-bottom: ${borderStyle};
 `;
 
 const free = css`
   background-color: ${background.secondary};
-  border-bottom: ${borderStyle};
 `;
 
 const titleRowStyle = css`
@@ -136,20 +140,42 @@ const noWrap = css`
   white-space: nowrap;
 `;
 
-const Padlock = () => (
-  <div css={[indicators, padlock, free]}><SvgPadlock /></div>
-);
+type IndicatorTypes = {
+  noBottomBorder?: boolean,
+}
 
-const Checkmark = () => (
-  <div css={[indicators, checkmark, paid]}><SvgCheckmark /></div>
-);
+const Padlock = (props: IndicatorTypes) => {
+  const padlockStyles = props.noBottomBorder ?
+    [indicators, padlock, free, borderBottomNone] :
+    [indicators, padlock, free];
+  return (
+    <div css={padlockStyles}><SvgPadlock /></div>
+  );
+};
+
+const Checkmark = (props: IndicatorTypes) => {
+  const checkmarkStyles = props.noBottomBorder ?
+    [indicators, checkmark, paid, borderBottomNone] :
+    [indicators, checkmark, paid];
+  return (
+    <div css={checkmarkStyles}><SvgCheckmark /></div>
+  );
+};
+
+Padlock.defaultProps = {
+  noBottomBorder: false,
+};
+
+Checkmark.defaultProps = {
+  noBottomBorder: false,
+};
 
 
 export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgNews /></div>,
-    description: 'Guardian journalism; keeping it open to all',
-    free: <Checkmark />,
+    description: 'Access to The Guardian\'s quality, open journalism',
+    free: <Checkmark noBottomBorder />,
     paid: <Checkmark />,
   },
   {
@@ -187,8 +213,8 @@ export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgCrosswords /></div>,
     description: 'Play interactive crosswords',
-    free: <Padlock />,
-    paid: <Checkmark />,
+    free: <Padlock noBottomBorder />,
+    paid: <Checkmark noBottomBorder />,
     cssOverrides: borderBottomNone,
   },
 ];
