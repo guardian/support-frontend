@@ -44,6 +44,7 @@ export type ReferrerAcquisitionData = {|
   // these aren't in the referrer acquisition data model on frontend, but they're convenient to include
   // as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
   queryParameters: ?AcquisitionQueryParameters,
+  labels: ?string[],
 |};
 
 export type PaymentAPIAcquisitionData = {|
@@ -60,6 +61,7 @@ export type PaymentAPIAcquisitionData = {|
   abTests: ?AcquisitionABTest[],
   gaId: ?string,
   queryParameters: ?AcquisitionQueryParameters,
+  labels: ?string[],
 |};
 
 // ----- Setup ----- //
@@ -195,6 +197,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisit
     source: acquisitionData.source,
     abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
     queryParameters: queryParameters.length > 0 ? queryParameters : [],
+    labels: acquisitionData.labels,
   };
 }
 
@@ -246,6 +249,7 @@ function derivePaymentApiAcquisitionData(
     abTests,
     gaId: getCookie('_ga'),
     queryParameters: referrerAcquisitionData.queryParameters,
+    labels: referrerAcquisitionData.labels,
   };
 }
 

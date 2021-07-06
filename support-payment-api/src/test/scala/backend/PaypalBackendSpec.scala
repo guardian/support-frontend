@@ -25,7 +25,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   //-- entities
-  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
+  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
   val capturePaypalPaymentData = CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, Some("email@email.com"))
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo =  ClientBrowserInfo("","",None,None,countrySubdivisionCode)

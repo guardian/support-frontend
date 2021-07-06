@@ -20,7 +20,8 @@ object AcquisitionToJson {
     campaignCode: String,
     componentId: String,
     product: String,
-    paymentProvider: String
+    paymentProvider: String,
+    labels: List[String]
   )
 
   def apply(amount: BigDecimal, annualisedValue: Double, acquisition: AcquisitionDataRow): Json = {
@@ -34,7 +35,8 @@ object AcquisitionToJson {
       acquisition.campaignCode.getOrElse(""),
       acquisition.componentId.getOrElse(""),
       acquisition.product.value,
-      acquisition.paymentProvider.map(_.value).getOrElse("")
+      acquisition.paymentProvider.map(_.value).getOrElse(""),
+      acquisition.labels
     ).asJson
   }
 }
