@@ -99,13 +99,13 @@ const columnTitle = css`
   border-left: ${borderStyle};
   border-top: ${borderStyle};
 
-  :last-of-type {
-    border-right: ${borderStyle};
-  }
-
   ${from.mobileLandscape} {
     ${textSans.small({ fontWeight: 'bold' })}
   }
+`;
+
+const columnTitleRight = css`
+  border-right: ${borderStyle};
 `;
 
 const paid = css`
@@ -200,7 +200,7 @@ export const titleRow = {
   icon: null,
   description: null,
   free: <div css={[indicators, columnTitle, free]}>Free</div>,
-  paid: <div css={[indicators, columnTitle, paid]}>Paid</div>,
+  paid: <div css={[indicators, columnTitle, columnTitleRight, paid]}>Paid</div>,
   cssOverrides: [titleRowStyle, borderBottomNone],
 };
 
