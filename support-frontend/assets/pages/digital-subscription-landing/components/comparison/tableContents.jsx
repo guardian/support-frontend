@@ -108,12 +108,12 @@ const columnTitleRight = css`
   border-right: ${borderStyle};
 `;
 
-const paid = css`
+const yellowBackground = css`
   background: ${brandAltBackground.primary};
   height: 99.9%;
 `;
 
-const free = css`
+const greyBackground = css`
   background: ${background.secondary};
   height: 99.9%;
 `;
@@ -135,14 +135,20 @@ const noWrap = css`
 `;
 
 const Padlock = () => (
-  <div aria-label="Not included for free" css={[indicators, padlock, free]}>
+  <div aria-label="Not included for free" css={[indicators, padlock, greyBackground]}>
     <SvgPadlock />
   </div>
 );
 
 
 const Checkmark = () => (
-  <div aria-label="Included in a paid subscription" css={[indicators, checkmark, paid]}>
+  <div aria-label="Included in a paid subscription" css={[indicators, checkmark, yellowBackground]}>
+    <SvgCheckmark />
+  </div>
+);
+
+const CheckmarkFree = () => (
+  <div aria-label="Included for free" css={[indicators, checkmark, yellowBackground]}>
     <SvgCheckmark />
   </div>
 );
@@ -152,7 +158,7 @@ export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgNews /></div>,
     description: 'Access to The Guardian\'s quality, open journalism',
-    free: <Checkmark />,
+    free: <CheckmarkFree />,
     paid: <Checkmark />,
   },
   {
@@ -199,8 +205,8 @@ export const tableContent: Array<TableRow> = [
 export const titleRow = {
   icon: null,
   description: null,
-  free: <div css={[indicators, columnTitle, free]}>Free</div>,
-  paid: <div css={[indicators, columnTitle, columnTitleRight, paid]}>Paid</div>,
+  free: <div css={[indicators, columnTitle, greyBackground]}>Free</div>,
+  paid: <div css={[indicators, columnTitle, columnTitleRight, yellowBackground]}>Paid</div>,
   cssOverrides: [titleRowStyle, borderBottomNone],
 };
 
