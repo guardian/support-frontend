@@ -56,52 +56,44 @@ const borderBottomNone = css`
 
 const finalRowStyle = css`
   background-color: ${comparisonTableYellow};
+  border: ${borderStyle};
   padding: ${space[3]}px;
-  padding-left: ${space[3]}px;
-  border-top: ${borderStyle};
-  border-bottom: ${borderStyle};
 
-  ${from.mobileLandscape} {
-    padding: ${space[3]}px;
-    border: ${borderStyle};
+  ${from.tablet} {
+    padding: 0;
+    padding-left: ${space[3]}px;
   }
+
 `;
 
 const indicators = css`
-  display: inline-flex;
-  width: 40px;
-  align-items: center;
-  justify-content: center;
-  border-bottom: ${borderStyle};
+  padding: ${space[4]}px 0;
+  height: 99%;
 
   svg {
     display: block;
-  }
-
-  ${from.mobileLandscape} {
-    width: 60px;
+    margin: 0 auto;
   }
 `;
 
 const checkmark = css`
-  height: 59px;
+  height: 100%;
+
   svg {
     max-width: 25px;
-  }
-  :last-of-type {
-    height: 60px;
   }
 `;
 
 const padlock = css`
-  height: 59px;
+  height: 99%;
   border-left: ${borderStyle};
 `;
 
 const columnTitle = css`
+  display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: ${space[1]}px;
+  padding: 3px;
   height: ${titleRowHeight}px;
   ${textSans.xsmall({ fontWeight: 'bold' })}
   border-left: ${borderStyle};
@@ -117,11 +109,13 @@ const columnTitle = css`
 `;
 
 const paid = css`
-  background-color: ${brandAltBackground.primary};
+  background: ${brandAltBackground.primary};
+  height: 99.9%;
 `;
 
 const free = css`
-  background-color: ${background.secondary};
+  background: ${background.secondary};
+  height: 99.9%;
 `;
 
 const titleRowStyle = css`
@@ -140,42 +134,21 @@ const noWrap = css`
   white-space: nowrap;
 `;
 
-type IndicatorTypes = {
-  noBottomBorder?: boolean,
-}
+const Padlock = () => (
+  <div css={[indicators, padlock, free]}><SvgPadlock /></div>
+);
 
-const Padlock = (props: IndicatorTypes) => {
-  const padlockStyles = props.noBottomBorder ?
-    [indicators, padlock, free, borderBottomNone] :
-    [indicators, padlock, free];
-  return (
-    <div css={padlockStyles}><SvgPadlock /></div>
-  );
-};
 
-const Checkmark = (props: IndicatorTypes) => {
-  const checkmarkStyles = props.noBottomBorder ?
-    [indicators, checkmark, paid, borderBottomNone] :
-    [indicators, checkmark, paid];
-  return (
-    <div css={checkmarkStyles}><SvgCheckmark /></div>
-  );
-};
-
-Padlock.defaultProps = {
-  noBottomBorder: false,
-};
-
-Checkmark.defaultProps = {
-  noBottomBorder: false,
-};
+const Checkmark = () => (
+  <div css={[indicators, checkmark, paid]}><SvgCheckmark /></div>
+);
 
 
 export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgNews /></div>,
     description: 'Access to The Guardian\'s quality, open journalism',
-    free: <Checkmark noBottomBorder />,
+    free: <Checkmark />,
     paid: <Checkmark />,
   },
   {
@@ -213,28 +186,24 @@ export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgCrosswords /></div>,
     description: 'Play interactive crosswords',
-    free: <Padlock noBottomBorder />,
-    paid: <Checkmark noBottomBorder />,
+    free: <Padlock />,
+    paid: <Checkmark />,
     cssOverrides: borderBottomNone,
   },
 ];
 
-export const titleRow = [
-  {
-    icon: null,
-    description: null,
-    free: <div css={[indicators, columnTitle, free]}>Free</div>,
-    paid: <div css={[indicators, columnTitle, paid]}>Paid</div>,
-    cssOverrides: titleRowStyle,
-  },
-];
+export const titleRow = {
+  icon: null,
+  description: null,
+  free: <div css={[indicators, columnTitle, free]}>Free</div>,
+  paid: <div css={[indicators, columnTitle, paid]}>Paid</div>,
+  cssOverrides: [titleRowStyle, borderBottomNone],
+};
 
-export const finalRow = [
-  {
-    icon: <div css={iconContainer}><SvgFreeTrial /></div>,
-    description: <>Plus a <span css={bold}>14 day free trial</span></>,
-    free: null,
-    paid: null,
-    cssOverrides: finalRowStyle,
-  },
-];
+export const finalRow = {
+  icon: <div css={iconContainer}><SvgFreeTrial /></div>,
+  description: <>Plus a <span css={bold}>14 day free trial</span></>,
+  free: null,
+  paid: null,
+  cssOverrides: finalRowStyle,
+};

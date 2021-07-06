@@ -4,7 +4,7 @@ import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-import { background, border } from '@guardian/src-foundations/palette';
+import { border } from '@guardian/src-foundations/palette';
 import { body } from '@guardian/src-foundations/typography';
 
 import BlockLabel from 'components/blockLabel/blockLabel';
@@ -16,7 +16,7 @@ export type TableRow = {
   description: string | Node,
   free: Option<Node>,
   paid: Option<Node>,
-  cssOverrides?: Option<string>,
+  cssOverrides?: Option<string> | Array<string>,
 }
 
 const borderStyle = `${border.primary} 1px solid`;
@@ -30,19 +30,18 @@ const container = css`
 `;
 
 const tableContainer = css`
-  box-sizing: border-box;
+  *, *:before, *:after {
+    box-sizing: border-box;
+  }
   width: 100%;
-  background-color: ${background.primary};
   padding-left: ${space[3]}px;
+  border: ${borderStyle};
+  border-bottom: none;
+`;
 
-  ${from.mobileLandscape} {
-    padding-left: ${space[3]}px;
-  }
-
-  ${from.desktop} {
-    border-left: ${borderStyle};
-    border-right: ${borderStyle};
-  }
+const tableRows = css`
+  display: grid;
+  grid-template-rows: repeat(7, 60px);
 `;
 
 const label = css`
@@ -59,52 +58,48 @@ const label = css`
   }
 `;
 
-const rowText = css`
-  display: inline-flex;
-  vertical-align: middle;
-  padding: ${space[3]}px 0;
-  max-width: 70%;
+const rowStyle = css`
+  display: grid;
+  grid-template-columns: 1fr 40px 40px;
+  border-bottom: ${borderStyle};
 
-  ${from.phablet} {
-    max-width: 80%;
+  ${from.mobileLandscape} {
+    grid-template-columns: 1fr minmax(40px, 60px) minmax(40px, 60px);
   }
 `;
 
-const rowStyle = css`
-  position: relative;
-  z-index: 5;
-  height: 60px;
-  border-bottom: ${borderStyle};
-  display: flex;
+const rowIconAndText = css`
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+
+  ${from.mobileMedium} {
+    padding-right: ${space[3]}px;
+  }
+
+  ${from.tablet} {
+    padding: ${space[3]}px 0;
+  }
 `;
 
 const descriptionStyle = css`
+  display: inline-block;
   ${body.small()};
   line-height: 135%;
-  align-self: center;
 
-  ${from.mobileLandscape} {
+  ${from.phablet} {
     ${body.medium()};
   }
-`;
-
-const indicators = css`
-  max-width: 40%;
 `;
 
 const ComparisonTableRow = ({
   icon, description, free, paid, cssOverrides,
 }: TableRow) => (
   <li css={[rowStyle, cssOverrides]}>
-    <div css={rowText}>
-      {icon}<span css={descriptionStyle}>{description}</span>
+    <div css={rowIconAndText}>
+      {icon}<div css={descriptionStyle}>{description}</div>
     </div>
-    <span css={indicators}>
-      {free}
-      {paid}
-    </span>
+    {free}
+    {paid}
   </li>
 );
 
@@ -112,17 +107,13 @@ const ComparisonTableRow = ({
 const ComparisonTable = () => (
   <section css={container}>
     <BlockLabel tag="h2" cssOverrides={label}>Your subscription at a glance</BlockLabel>
-    {titleRow.map(row => (
-      <ComparisonTableRow
-        cssOverrides={row.cssOverrides}
-        icon={row.icon}
-        description={row.description}
-        free={row.free}
-        paid={row.paid}
-      />
-      ))}
+    <div css={[rowStyle, titleRow.cssOverrides]}>
+      <div css={rowIconAndText} />
+      {titleRow.free}
+      {titleRow.paid}
+    </div>
     <div css={tableContainer}>
-      <ul>
+      <ul css={tableRows}>
         {tableContent.map(row => (
           <ComparisonTableRow
             cssOverrides={row.cssOverrides}
@@ -134,15 +125,11 @@ const ComparisonTable = () => (
       </ul>
 
     </div>
-    {finalRow.map(row => (
-      <ComparisonTableRow
-        cssOverrides={row.cssOverrides}
-        icon={row.icon}
-        description={row.description}
-        free={row.free}
-        paid={row.paid}
-      />
-      ))}
+    <div css={[rowStyle, finalRow.cssOverrides]}>
+      <div css={[rowIconAndText]}>
+        {finalRow.icon}<div css={descriptionStyle}>{finalRow.description}</div>
+      </div>
+    </div>
   </section>
 );
 
