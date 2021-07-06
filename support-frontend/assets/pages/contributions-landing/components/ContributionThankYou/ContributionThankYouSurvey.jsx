@@ -18,17 +18,21 @@ const buttonContainer = css`
   margin-top: ${space[6]}px;
 `;
 
-const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/KY7XRR2';
 const AUS_SURVEY_LINK = 'https://guardiannewsampampmedia.formstack.com/forms/australia_2021';
 
 const ContributionThankYouSurvey = ({ countryId }: { countryId: IsoCountry }) => {
   const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
 
+  const isAus = countryId === 'AU';
+  const url = isAus ? AUS_SURVEY_LINK : null;
+
+  if (!url) {
+    return null;
+  }
+
   useEffect(() => {
     trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
   }, []);
-
-  const isAus = countryId === 'AU';
 
   const heading = isAus ? 'Tell us why you value Guardian Australia' : 'Send us your thoughts';
 
@@ -47,8 +51,6 @@ const ContributionThankYouSurvey = ({ countryId }: { countryId: IsoCountry }) =>
     trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
     setHasBeenCompleted(true);
   };
-
-  const url = isAus ? AUS_SURVEY_LINK : SURVEY_LINK;
 
   const actionBody = (
     <ActionBody>
