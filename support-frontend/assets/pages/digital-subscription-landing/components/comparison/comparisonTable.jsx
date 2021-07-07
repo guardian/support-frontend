@@ -14,7 +14,6 @@ import { type Option } from 'helpers/types/option';
 export type TableRow = {
   icon: Option<Node>,
   description: string | Node,
-  ariaLabel: string,
   free: Option<Node>,
   paid: Option<Node>,
   cssOverrides?: Option<string> | Array<string>,
@@ -105,11 +104,11 @@ const visuallyHidden = css`
 `;
 
 const ComparisonTableRow = ({
-  icon, description, ariaLabel, free, paid, cssOverrides,
+  icon, description, free, paid, cssOverrides,
 }: TableRow) => (
   <tr css={[rowStyle, cssOverrides]}>
-    <th aria-label={ariaLabel} scope="row" css={rowIconAndText}>
-      {icon}<div aria-hidden="true" css={descriptionStyle}>{description}</div>
+    <th scope="row" css={rowIconAndText}>
+      {icon}<div css={descriptionStyle}>{description}</div>
     </th>
     <td>{free}</td>
     <td>{paid}</td>
@@ -124,7 +123,7 @@ const ComparisonTable = () => (
       <caption css={visuallyHidden}>What&apos;s included in a paid digital subscription</caption>
       <thead>
         <tr css={[rowStyle, titleRow.cssOverrides]}>
-          <th scope="col" css={rowIconAndText} />
+          <th scope="col" css={[rowIconAndText]}><span css={visuallyHidden}>Benefits</span></th>
           <th scope="col">{titleRow.free}</th>
           <th scope="col">{titleRow.paid}</th>
         </tr>
@@ -137,7 +136,6 @@ const ComparisonTable = () => (
                 cssOverrides={row.cssOverrides}
                 icon={row.icon}
                 description={row.description}
-                ariaLabel={row.ariaLabel}
                 free={row.free}
                 paid={row.paid}
               />))}
@@ -146,7 +144,7 @@ const ComparisonTable = () => (
       </tbody>
       <div css={[rowStyle, finalRow.cssOverrides]}>
         <div css={[rowIconAndText]}>
-          {finalRow.icon}<div aria-label={finalRow.ariaLabel} css={descriptionStyle}>{finalRow.description}</div>
+          {finalRow.icon}<div css={descriptionStyle}>{finalRow.description}</div>
         </div>
       </div>
     </table>
