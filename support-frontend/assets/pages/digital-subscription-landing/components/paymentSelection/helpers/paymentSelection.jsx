@@ -181,10 +181,9 @@ const getPaymentOptions = ({
   currencyId,
   productPrices,
   orderIsAGift,
+  isUsingGuestCheckout,
 }: PaymentSelectionPropTypes): ProductOptionType[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
-  const { abParticipations } = state.common;
-  const isUsingGuestCheckout = abParticipations.subscriptionsGuestCheckoutTest === 'variant';
 
   const createPaymentOption = (billingPeriod: BillingPeriod): Product => {
     const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
