@@ -37,14 +37,11 @@ const tableContainer = css`
   *, *:before, *:after {
     box-sizing: border-box;
   }
+  display: grid;
+  grid-template-rows: repeat(7, 60px);
   padding-left: ${space[3]}px;
   border: ${borderStyle};
   border-bottom: none;
-`;
-
-const tableRows = css`
-  display: grid;
-  grid-template-rows: repeat(7, 60px);
 `;
 
 const label = css`
@@ -108,7 +105,7 @@ const ComparisonTableRow = ({
 }: TableRow) => (
   <tr css={[rowStyle, cssOverrides]}>
     <th scope="row" css={rowIconAndText}>
-      {icon}<div css={descriptionStyle}>{description}</div>
+      {icon}<td css={descriptionStyle}>{description}</td>
     </th>
     <td>{free}</td>
     <td>{paid}</td>
@@ -119,7 +116,7 @@ const ComparisonTableRow = ({
 const ComparisonTable = () => (
   <section css={container}>
     <BlockLabel tag="h2" cssOverrides={label}>Your subscription at a glance</BlockLabel>
-    <table role="presentation" css={fullwidth}>
+    <table css={fullwidth}>
       <caption css={visuallyHidden}>What&apos;s included in a paid digital subscription</caption>
       <thead>
         <tr css={[rowStyle, titleRow.cssOverrides]}>
@@ -128,19 +125,15 @@ const ComparisonTable = () => (
           <th scope="col">{titleRow.paid}</th>
         </tr>
       </thead>
-      <tbody>
-        <div css={tableContainer}>
-          <div css={tableRows}>
-            {tableContent.map(row => (
-              <ComparisonTableRow
-                cssOverrides={row.cssOverrides}
-                icon={row.icon}
-                description={row.description}
-                free={row.free}
-                paid={row.paid}
-              />))}
-          </div>
-        </div>
+      <tbody css={tableContainer}>
+        {tableContent.map(row => (
+          <ComparisonTableRow
+            cssOverrides={row.cssOverrides}
+            icon={row.icon}
+            description={row.description}
+            free={row.free}
+            paid={row.paid}
+          />))}
       </tbody>
       <div css={[rowStyle, finalRow.cssOverrides]}>
         <div css={[rowIconAndText]}>
