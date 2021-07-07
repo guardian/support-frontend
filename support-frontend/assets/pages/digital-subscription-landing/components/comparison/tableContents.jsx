@@ -135,20 +135,20 @@ const noWrap = css`
 `;
 
 const Padlock = () => (
-  <div aria-label="Not included for free" css={[indicators, padlock, greyBackground]}>
+  <div aria-hidden="true" css={[indicators, padlock, greyBackground]}>
     <SvgPadlock />
   </div>
 );
 
 
 const Checkmark = () => (
-  <div aria-label="Included in a paid subscription" css={[indicators, checkmark, yellowBackground]}>
+  <div aria-hidden="true" css={[indicators, checkmark, yellowBackground]}>
     <SvgCheckmark />
   </div>
 );
 
 const CheckmarkFree = () => (
-  <div aria-label="Included for free" css={[indicators, checkmark, yellowBackground]}>
+  <div aria-hidden="true" css={[indicators, checkmark, yellowBackground]}>
     <SvgCheckmark />
   </div>
 );
@@ -158,18 +158,21 @@ export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgNews /></div>,
     description: 'Access to The Guardian\'s quality, open journalism',
+    ariaLabel: 'Access to The Guardian\'s quality, open journalism is available for free and in a paid subscription',
     free: <CheckmarkFree />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgAdFree /></div>,
     description: 'Ad-free reading on all your devices',
+    ariaLabel: 'Ad-free reading on all your devices is available only with a paid subscription',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgEditionsIcon /></div>,
     description: <>The Editions app with <span css={hideOnVerySmall}>unique</span>{' '}digital supplements</>,
+    ariaLabel: 'The Editions app with unique digital supplements is available only with a paid subscription',
     free: <Padlock />,
     paid: <Checkmark />,
   },
@@ -178,24 +181,28 @@ export const tableContent: Array<TableRow> = [
     description: <>The Guardian app with premium features
       <span css={[hideOnVerySmall, noWrap]}>;&nbsp;</span>
       <span css={hideOnVerySmall}>Live and Discover</span></>,
+    ariaLabel: 'The Guardian app with premium features, Live and Discover, is available only with a paid subscription',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgTicket /></div>,
     description: 'Six free tickets to Guardian events',
+    ariaLabel: 'Six free tickets to Guardian events are available with a paid subscription',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgOffline /></div>,
     description: 'Offline reading in both your apps',
+    ariaLabel: 'Offline reading in both your apps is available only with a paid subscription',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgCrosswords /></div>,
     description: 'Play interactive crosswords',
+    ariaLabel: 'Play interactive crosswords is available only with a paid subscription',
     free: <Padlock />,
     paid: <Checkmark />,
     cssOverrides: borderBottomNone,
@@ -205,14 +212,15 @@ export const tableContent: Array<TableRow> = [
 export const titleRow = {
   icon: null,
   description: null,
-  free: <div css={[indicators, columnTitle, greyBackground]}>Free</div>,
-  paid: <div css={[indicators, columnTitle, columnTitleRight, yellowBackground]}>Paid</div>,
+  free: <div aria-hidden="true" css={[indicators, columnTitle, greyBackground]}>Free</div>,
+  paid: <div aria-hidden="true" css={[indicators, columnTitle, columnTitleRight, yellowBackground]}>Paid</div>,
   cssOverrides: [titleRowStyle, borderBottomNone],
 };
 
 export const finalRow = {
   icon: <div css={iconContainer}><SvgFreeTrial /></div>,
   description: <>Plus a <span css={bold}>14 day free trial</span></>,
+  ariaLabel: '',
   free: null,
   paid: null,
   cssOverrides: finalRowStyle,
