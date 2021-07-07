@@ -11,7 +11,7 @@ const links = {
   email: `mailto:?subject=${emailHeadline}&body=${emailBody}?INTCMP=component-social-email`,
 };
 
-const iconColour = '#E05E00';
+const iconColour = '#052962';
 
 export const SocialLinks = () => (
   <div className="social-links">
