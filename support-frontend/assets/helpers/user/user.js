@@ -130,10 +130,6 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setPostDeploymentTestUser(true));
   }
 
-  if (getCookie('gu_recurring_contributor') === 'true') {
-    dispatch(setIsRecurringContributor());
-  }
-
   if (getCookie('gu.contributions.contrib-timestamp')) {
     dispatch(setIsReturningContributor(true));
   }
@@ -149,6 +145,17 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setStateField(window.guardian.user.address4 || window.guardian.geoip.stateCode));
     dispatch(setIsSignedIn(true));
     dispatch(setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))));
+
+    fetch(`${window.guardian.mdapiUrl}/user-attributes/me`, {
+      mode: 'cors',
+      credentials: 'include',
+    }).then(response => response.json())
+      .then((attributes) => {
+        if (attributes.recurringContributionPaymentPlan) {
+          dispatch(setIsRecurringContributor());
+        }
+      });
+
   } else if (userAppearsLoggedIn) { // TODO - remove in another PR as this condition is deprecated
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
