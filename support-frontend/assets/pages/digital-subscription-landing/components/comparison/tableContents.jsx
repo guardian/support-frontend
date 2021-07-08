@@ -157,18 +157,21 @@ export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgNews /></div>,
     description: 'Access to The Guardian\'s quality, open journalism',
+    ariaLabel: 'Access to The Guardian\'s quality, open journalism',
     free: <CheckmarkFree />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgAdFree /></div>,
     description: 'Ad-free reading on all your devices',
+    ariaLabel: 'Ad-free reading on all your devices',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgEditionsIcon /></div>,
     description: <>The Editions app with <span css={hideOnVerySmall}>unique</span>{' '}digital supplements</>,
+    ariaLabel: 'The Editions app with unique digital supplements',
     free: <Padlock />,
     paid: <Checkmark />,
   },
@@ -177,24 +180,28 @@ export const tableContent: Array<TableRow> = [
     description: <>The Guardian app with premium features
       <span css={[hideOnVerySmall, noWrap]}>;&nbsp;</span>
       <span css={hideOnVerySmall}>Live and Discover</span></>,
+    ariaLabel: 'The Guardian app with premium features, Live and Discover',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgTicket /></div>,
     description: 'Six free tickets to Guardian events',
+    ariaLabel: 'Six free tickets to Guardian events',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgOffline /></div>,
     description: 'Offline reading in both your apps',
+    ariaLabel: 'Offline reading in both your apps',
     free: <Padlock />,
     paid: <Checkmark />,
   },
   {
     icon: <div css={iconContainer}><SvgCrosswords /></div>,
     description: 'Play interactive crosswords',
+    ariaLabel: 'Play interactive crosswords',
     free: <Padlock />,
     paid: <Checkmark />,
     cssOverrides: borderBottomNone,
