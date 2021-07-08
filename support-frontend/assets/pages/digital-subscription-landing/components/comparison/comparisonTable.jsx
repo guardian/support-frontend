@@ -32,6 +32,9 @@ const container = css`
 const columnHeading = css`
   border-left: ${borderStyle};
   border-top: ${borderStyle};
+  ${from.mobileLandscape} {
+    width: 60px;
+  }
 `;
 
 const columnHeadingLast = css`
