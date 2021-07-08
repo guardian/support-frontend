@@ -31,7 +31,7 @@ const container = css`
 
 const table = css`
   width: 100%;
-  border-collapse: collapse;
+  /* border-collapse: collapse; */
 `;
 
 const tableContainer = css`
@@ -123,9 +123,11 @@ const ComparisonTable = () => (
             paid={row.paid}
           />))}
       </tbody>
-      <tfoot css={[rowStyle, finalRow.cssOverrides]}>
-        <tr css={[rowIconAndText]}>
-          <div css={descriptionStyle}>{finalRow.icon}<span>{finalRow.description}</span></div>
+      <tfoot>
+        <tr css={[rowStyle]}>
+          <td colSpan="3" css={[rowIconAndText, finalRow.cssOverrides]}>
+            <div css={descriptionStyle}>{finalRow.icon}<span>{finalRow.description}</span></div>
+          </td>
         </tr>
       </tfoot>
     </table>

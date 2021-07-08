@@ -58,12 +58,6 @@ const finalRowStyle = css`
   background-color: ${comparisonTableYellow};
   border: ${borderStyle};
   padding: ${space[3]}px;
-  padding-left: 0;
-
-  ${from.tablet} {
-    padding: 0;
-  }
-
 `;
 
 const indicators = css`
