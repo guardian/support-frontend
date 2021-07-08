@@ -40,9 +40,9 @@ const iconContainer = css`
     width: ${iconSizeDesktop}px;
 
     svg {
-    height: ${iconSizeDesktop}px;
-    width: ${iconSizeDesktop}px;
-  }
+      height: ${iconSizeDesktop}px;
+      width: ${iconSizeDesktop}px;
+    }
   }
 `;
 
@@ -58,17 +58,17 @@ const finalRowStyle = css`
   background-color: ${comparisonTableYellow};
   border: ${borderStyle};
   padding: ${space[3]}px;
+  padding-left: 0;
 
   ${from.tablet} {
     padding: 0;
-    padding-left: ${space[3]}px;
   }
 
 `;
 
 const indicators = css`
   padding: ${space[4]}px 0;
-  height: 99%;
+  height: 100%;
 
   svg {
     display: block;
@@ -77,15 +77,12 @@ const indicators = css`
 `;
 
 const checkmark = css`
-  height: 100%;
-
   svg {
     max-width: 25px;
   }
 `;
 
 const padlock = css`
-  height: 99%;
   border-left: ${borderStyle};
 `;
 
@@ -110,12 +107,10 @@ const columnTitleRight = css`
 
 const yellowBackground = css`
   background: ${brandAltBackground.primary};
-  height: 99.9%;
 `;
 
 const greyBackground = css`
   background: ${background.secondary};
-  height: 99.9%;
 `;
 
 const titleRowStyle = css`

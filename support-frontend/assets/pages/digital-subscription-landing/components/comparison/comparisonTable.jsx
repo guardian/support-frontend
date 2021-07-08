@@ -14,7 +14,6 @@ import { type Option } from 'helpers/types/option';
 export type TableRow = {
   icon: Option<Node>,
   description: string | Node,
-  ariaLabel: string,
   free: Option<Node>,
   paid: Option<Node>,
   cssOverrides?: Option<string> | Array<string>,
@@ -30,17 +29,12 @@ const container = css`
   }
 `;
 
-const fullwidth = css`
+const table = css`
   width: 100%;
+  border-collapse: collapse;
 `;
 
 const tableContainer = css`
-  *, *:before, *:after {
-    box-sizing: border-box;
-  }
-  display: grid;
-  grid-template-rows: repeat(7, 60px);
-  padding-left: ${space[3]}px;
   border: ${borderStyle};
   border-bottom: none;
 `;
@@ -60,33 +54,23 @@ const label = css`
 `;
 
 const rowStyle = css`
-  display: grid;
-  grid-template-columns: 1fr 40px 40px;
   border-bottom: ${borderStyle};
-
-  ${from.mobileLandscape} {
-    grid-template-columns: 1fr minmax(40px, 60px) minmax(40px, 60px);
-  }
 `;
 
 const rowIconAndText = css`
-  display: inline-flex;
-  align-items: center;
   text-align: left;
+  vertical-align: middle;
+  padding-left: ${space[3]}px;
 
   ${from.mobileMedium} {
     padding-right: ${space[3]}px;
   }
-
-  ${from.tablet} {
-    padding: ${space[3]}px 0;
-  }
 `;
 
 const descriptionStyle = css`
-  display: inline-block;
+  display: flex;
+  align-items: center;
   ${body.small()};
-  line-height: 135%;
 
   ${from.phablet} {
     ${body.medium()};
@@ -102,11 +86,14 @@ const visuallyHidden = css`
 `;
 
 const ComparisonTableRow = ({
-  icon, description, ariaLabel, free, paid, cssOverrides,
+  icon, description, free, paid, cssOverrides,
 }: TableRow) => (
   <tr css={[rowStyle, cssOverrides]}>
-    <th aria-label={ariaLabel} scope="row" css={rowIconAndText}>
-      {icon}<span aria-hidden="true" css={descriptionStyle}>{description}</span>
+    <th scope="row" css={rowIconAndText}>
+      <div css={descriptionStyle}>
+        {icon}
+        <span>{description}</span>
+      </div>
     </th>
     <td>{free}</td>
     <td>{paid}</td>
@@ -117,7 +104,7 @@ const ComparisonTableRow = ({
 const ComparisonTable = () => (
   <section css={container}>
     <BlockLabel tag="h2" cssOverrides={label}>Your subscription at a glance</BlockLabel>
-    <table css={fullwidth}>
+    <table css={table}>
       <caption css={visuallyHidden}>What&apos;s included in a paid digital subscription</caption>
       <thead>
         <tr css={[rowStyle, titleRow.cssOverrides]}>
@@ -132,14 +119,13 @@ const ComparisonTable = () => (
             cssOverrides={row.cssOverrides}
             icon={row.icon}
             description={row.description}
-            ariaLabel={row.ariaLabel}
             free={row.free}
             paid={row.paid}
           />))}
       </tbody>
       <tfoot css={[rowStyle, finalRow.cssOverrides]}>
         <tr css={[rowIconAndText]}>
-          {finalRow.icon}<div css={descriptionStyle}>{finalRow.description}</div>
+          <div css={descriptionStyle}>{finalRow.icon}<span>{finalRow.description}</span></div>
         </tr>
       </tfoot>
     </table>
