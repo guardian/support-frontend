@@ -87,16 +87,10 @@ const columnTitle = css`
   padding: 3px;
   height: ${titleRowHeight}px;
   ${textSans.xsmall({ fontWeight: 'bold' })}
-  border-left: ${borderStyle};
-  border-top: ${borderStyle};
 
   ${from.mobileLandscape} {
     ${textSans.small({ fontWeight: 'bold' })}
   }
-`;
-
-const columnTitleRight = css`
-  border-right: ${borderStyle};
 `;
 
 const yellowBackground = css`
@@ -201,7 +195,7 @@ export const titleRow = {
   icon: null,
   description: null,
   free: <div css={[indicators, columnTitle, greyBackground]}>Free</div>,
-  paid: <div css={[indicators, columnTitle, columnTitleRight, yellowBackground]}>Paid</div>,
+  paid: <div css={[indicators, columnTitle, yellowBackground]}>Paid</div>,
   cssOverrides: [titleRowStyle, borderBottomNone],
 };
 

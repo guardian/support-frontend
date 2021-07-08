@@ -29,6 +29,15 @@ const container = css`
   }
 `;
 
+const columnHeading = css`
+  border-left: ${borderStyle};
+  border-top: ${borderStyle};
+`;
+
+const columnHeadingLast = css`
+  border-right: ${borderStyle};
+`;
+
 const table = css`
   width: 100%;
   /* border-collapse: collapse; */
@@ -109,8 +118,8 @@ const ComparisonTable = () => (
       <thead>
         <tr css={[rowStyle, titleRow.cssOverrides]}>
           <th scope="col" css={[rowIconAndText]}><span css={visuallyHidden}>Benefits</span></th>
-          <th scope="col">{titleRow.free}</th>
-          <th scope="col">{titleRow.paid}</th>
+          <th scope="col" css={columnHeading}>{titleRow.free}</th>
+          <th scope="col" css={[columnHeading, columnHeadingLast]}>{titleRow.paid}</th>
         </tr>
       </thead>
       <tbody css={tableContainer}>
