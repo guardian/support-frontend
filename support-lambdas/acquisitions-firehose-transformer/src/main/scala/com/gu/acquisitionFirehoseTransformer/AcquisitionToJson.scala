@@ -6,10 +6,13 @@ import io.circe.Json
 import io.circe.generic.auto._
 import io.circe.syntax._
 
-import org.joda.time.format.ISODateTimeFormat
+import org.joda.time.format.DateTimeFormat
 
 
 object AcquisitionToJson {
+
+  val dtFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
   private case class AcquisitionOutput(
     paymentFrequency: String,
     countryCode: String,
@@ -31,7 +34,7 @@ object AcquisitionToJson {
       amount,
       annualisedValue,
       acquisition.currency.iso,
-      ISODateTimeFormat.dateTime().print(acquisition.eventTimeStamp),
+      dtFormatter.print(acquisition.eventTimeStamp),
       acquisition.campaignCode.getOrElse(""),
       acquisition.componentId.getOrElse(""),
       acquisition.product.value,
