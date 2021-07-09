@@ -83,8 +83,21 @@ type OphanABPayload = {
 
 // ----- Functions ----- //
 
+const utcNow = () => {
+  const now = new Date();
+  return Date.UTC(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    now.getHours(),
+    now.getMinutes(),
+    now.getSeconds(),
+    now.getMilliseconds()
+  );
+};
+
 const trackComponentEvents = (componentEvent: OphanComponentEvent) => ophan.record({
-  dateTime: Date.UTC(),
+  dateTime: utcNow(),
   ...componentEvent,
 });
 
