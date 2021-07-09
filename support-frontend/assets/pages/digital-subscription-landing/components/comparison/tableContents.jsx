@@ -118,19 +118,13 @@ const noWrap = css`
 `;
 
 const Padlock = () => (
-  <div aria-label="Not included for free" css={[indicators, padlock, greyBackground]}>
+  <div aria-label="Not included" css={[indicators, padlock, greyBackground]}>
     <SvgPadlock />
   </div>
 );
 
 const Checkmark = () => (
-  <div aria-label="Included in a paid subscription" css={[indicators, checkmark, yellowBackground]}>
-    <SvgCheckmark />
-  </div>
-);
-
-const CheckmarkFree = () => (
-  <div aria-label="Included for free" css={[indicators, checkmark, yellowBackground]}>
+  <div aria-label="Included" css={[indicators, checkmark, yellowBackground]}>
     <SvgCheckmark />
   </div>
 );
@@ -141,7 +135,7 @@ export const tableContent: Array<TableRow> = [
     icon: <div css={iconContainer}><SvgNews /></div>,
     description: 'Access to The Guardian\'s quality, open journalism',
     ariaLabel: 'Access to The Guardian\'s quality, open journalism',
-    free: <CheckmarkFree />,
+    free: <Checkmark />,
     paid: <Checkmark />,
   },
   {
