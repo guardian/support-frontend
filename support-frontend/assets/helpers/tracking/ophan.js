@@ -67,7 +67,8 @@ export type OphanComponentEvent = {
   abTest?: {
     name: string,
     variant: string
-  }
+  },
+  dateTime?: number,
 };
 
 type OphanABEvent = {
@@ -82,7 +83,10 @@ type OphanABPayload = {
 
 // ----- Functions ----- //
 
-const trackComponentEvents = (componentEvent: OphanComponentEvent) => ophan.record({ componentEvent });
+const trackComponentEvents = (componentEvent: OphanComponentEvent) => ophan.record({
+  dateTime: Date.UTC(),
+  ...componentEvent,
+});
 
 const pageView = (url: string, referrer: string) => {
   try {
