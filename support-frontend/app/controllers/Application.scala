@@ -142,8 +142,8 @@ class Application(
     // Standard image
     // "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
 
-    // US EOY appeal image
-    "https://i.guim.co.uk/img/media/c8ac7d83a65fc4f4c1071e48cbe8416b0f5504de/0_0_1000_525/1000.png?quality=85&s=a81db4ac4e52561fb56bbc588a1e196c"
+    // AUS 2021 appeal image
+    "https://i.guim.co.uk/img/media/1cd1b8238f9612f3428ecb1381d8d29e294c2f65/0_1_1000_525/1000.png?quality=85&s=fcc045ac6f23de6bcac4f7054d62eb31"
   }
 
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
