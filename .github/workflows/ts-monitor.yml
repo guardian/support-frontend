@@ -27,5 +27,6 @@ jobs:
           uses: guardian/typescript-monitor-action@main
           with:
             repo-token: '${{ secrets.GITHUB_TOKEN }}'
+            cwd: './support-frontend'
             ts-script: 'yarn tsc --allowJs --noEmit'
             lint-script: 'yarn lint:check'
