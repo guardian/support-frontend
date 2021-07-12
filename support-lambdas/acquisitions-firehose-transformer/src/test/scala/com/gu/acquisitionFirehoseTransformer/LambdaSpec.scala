@@ -38,10 +38,10 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     val jsons = records.toList.map { record => new String(record.getData().array()) }
 
     jsons(0) should be(
-      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":10.0,"annualisedValue":50.0,"currency":"GBP","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","labels":[]}""" + '\n',
+      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":10.0,"annualisedValue":50.0,"currency":"GBP","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
     )
     jsons(1) should be(
-      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"annualisedValue":50.0,"currency":"GBP","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","labels":[]}""" + '\n',
+      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"annualisedValue":50.0,"currency":"GBP","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
     )
   }
 
@@ -71,7 +71,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       componentType = None,
       campaignCode = Some("MY_CAMPAIGN_CODE"),
       source = None,
-      referrerUrl = None,
+      referrerUrl = Some("referrer-url"),
       abTests = Nil,
       paymentFrequency = PaymentFrequency.Monthly,
       paymentProvider = Some(PaymentProvider.Stripe),
