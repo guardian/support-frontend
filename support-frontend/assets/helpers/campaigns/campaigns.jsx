@@ -30,7 +30,7 @@ const aus2021Copy = (): CampaignCopy => ({
 });
 
 export const campaign: CampaignSettings = ({
-  campaignCode: 'aus_2021',
+  campaignCode: 'Aus_moment_2021',
   copy: aus2021Copy,
   tickerSettings: {
     tickerCountType: 'people',
