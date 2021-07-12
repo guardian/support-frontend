@@ -108,7 +108,7 @@ const titleRowStyle = css`
 const hideOnVerySmall = css`
   display: none;
 
-  ${from.mobileLandscape} {
+  ${from.mobileMedium} {
     display: inline-block;
   }
 `;
