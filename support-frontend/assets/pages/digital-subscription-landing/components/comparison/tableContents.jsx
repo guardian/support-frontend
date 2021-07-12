@@ -62,7 +62,7 @@ const finalRowStyle = css`
 
 const indicators = css`
   padding: ${space[4]}px 0;
-  height: 100%;
+  height: 58px;
 
   svg {
     display: block;
