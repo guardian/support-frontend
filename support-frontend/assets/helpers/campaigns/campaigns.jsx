@@ -22,31 +22,24 @@ export type CampaignSettings = {
   createReferralCodes: boolean,
 };
 
-const currentCampaignPath: string | null = 'us/contribute';
+const currentCampaignPath: string | null = 'au/contribute';
 
-const usEndOfYearCampaignCopy = (): CampaignCopy => ({
-  headerCopy: 'Help us reach our $1.25m goal!',
-  contributeCopy: 'As America begins a new chapter, the need for robust, fact-based journalism that highlights injustice and offers solutions is as great as ever. Support the Guardian’s open, independent journalism with a year-end gift.',
+const aus2021Copy = (): CampaignCopy => ({
+  headerCopy: 'Support Guardian Australia with a contribution of any size',
+  contributeCopy: 'Together, we can be a voice for change. Help us reach our ambitious goal of 170,000 supporters.',
 });
-
-const usEndOfYearCampaignXmasCopy = (): CampaignCopy => ({
-  headerCopy: 'Help fund high\xa0impact journalism in\xa02021',
-  contributeCopy: 'As America begins a new chapter, the need for robust, fact-based journalism that highlights injustice and offers solutions is as great as ever. Support the Guardian’s open, independent journalism with a gift today.',
-});
-
-const DEC_29 = Date.parse('2020-12-29');
 
 export const campaign: CampaignSettings = ({
-  campaignCode: 'us_eoyappeal_2020',
-  copy: Date.now() < DEC_29 ? usEndOfYearCampaignCopy : usEndOfYearCampaignXmasCopy,
+  campaignCode: 'aus_2021',
+  copy: aus2021Copy,
   tickerSettings: {
-    tickerCountType: 'money',
+    tickerCountType: 'people',
     tickerEndType: 'unlimited',
     currencySymbol: '$',
     copy: {
-      countLabel: 'contributed',
-      goalReachedPrimary: 'It\'s not too late to give!',
-      goalReachedSecondary: '',
+      countLabel: 'supporters in Australia',
+      goalReachedPrimary: 'We\'ve hit our goal!',
+      goalReachedSecondary: 'but you can still support us',
     },
   },
   createReferralCodes: false,
