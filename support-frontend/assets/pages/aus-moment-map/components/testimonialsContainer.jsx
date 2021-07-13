@@ -36,7 +36,7 @@ const TestimonialCtaSecondary = () => (
       className="testimonial-cta-secondary-link-button"
       priority="primary"
       size="small"
-      href={contributeUrl('Aus_Moment_2020_map_inline')}
+      href={contributeUrl('Aus_Moment_2021_map_inline')}
       target="_blank"
       rel="noopener noreferrer"
     >Support the Guardian
