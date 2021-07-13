@@ -16,6 +16,8 @@ const htmlTemplate = ({ html, title, key, ids, css }: HtmlProps): string => `
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>${title}</title>
         <link rel="stylesheet" href="/assets/stylesheets/weeklySubscriptionLandingPage.css">
+        <script>window.__STATE__={components:{}}</script>
+        <script src="http://localhost:3000/js/client.js" defer></script>
         <style data-emotion="${key} ${ids.join(' ')}">${css}</style>
     </head>
     <body>
@@ -25,6 +27,5 @@ const htmlTemplate = ({ html, title, key, ids, css }: HtmlProps): string => `
         <iframe id="gu-font-loader-iframe" style="display:none" src="https://www.theguardian.com/font-loader"></iframe>
     </html>
     `;
-// <script src="http://localhost:3000/js/client.js" defer></script>
 
 export default htmlTemplate;

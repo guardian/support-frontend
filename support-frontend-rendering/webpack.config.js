@@ -12,6 +12,10 @@ module.exports = function (env) {
             publicPath: '/',
         },
         resolve: {
+            alias: {
+                react: 'preact/compat',
+                'react-dom': 'preact/compat',
+            },
             // Add '.ts' and '.tsx' as resolvable extensions.
             extensions: ['.ts', '.tsx', '.js', '.json'],
         },

@@ -5,6 +5,8 @@ import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
+import withHydration from '../../utils/withHydration';
+import { useEffect } from 'react';
 
 export type Product = {
     title: string;
@@ -17,7 +19,7 @@ export type Product = {
     onClick: () => void;
     onView: () => void;
     label?: string;
-    cssOverrides?: SerializedStyles;
+    cssOverrides?: SerializedStyles | string;
 };
 
 const productOption = css`
@@ -72,6 +74,10 @@ const productOptionHighlight = css`
     ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
 function ProductOption(props: Product): React.ReactElement {
+    useEffect(() => {
+        console.log(`Feeling hydrated: ${props.title}`);
+    }, []);
+
     return (
         <div css={[productOption, props.cssOverrides]}>
             <div>
@@ -108,4 +114,4 @@ ProductOption.defaultProps = {
     cssOverrides: '',
 };
 
-export default ProductOption;
+export default withHydration(ProductOption);

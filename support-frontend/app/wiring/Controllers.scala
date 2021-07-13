@@ -10,7 +10,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 
 trait Controllers {
 
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth =>
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth with AhcWSComponents =>
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
   lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)

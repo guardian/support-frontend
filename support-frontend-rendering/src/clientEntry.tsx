@@ -1,16 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { html, render } from 'htm/preact';
+import { VNode } from 'preact';
 
-import Error from './pages/error';
+import ProductOption from './components/product/productOption';
+
+type ComponentDataType = {
+    name: string;
+    props: any;
+};
+
 declare global {
     interface Window {
-        __STATE__: any;
+        __STATE__: {
+            components: Record<string, ComponentDataType>;
+        };
     }
 }
 
-window.__STATE__ = window.__STATE__ || {};
+const componentMap: Record<string, (props: any) => VNode> = {
+    ProductOption,
+};
+const $componentMarkers = document.querySelectorAll(`[data-cmp-id]`);
 
-const pageProps = window.__STATE__?.page;
-delete window.__STATE__;
+console.log($componentMarkers);
 
-ReactDOM.render(<Error {...pageProps} />, document.getElementById('root'));
+Array.from($componentMarkers).forEach(($marker) => {
+    const cmpId = ($marker as HTMLElement).dataset.cmpId;
+    if (cmpId) {
+        const $component = $marker.nextElementSibling as HTMLElement;
+        const { name, props } = window.__STATE__.components[cmpId] as ComponentDataType;
+        const Component = componentMap[name];
+
+        render(html`<${Component} ...${props} />`, $component.parentNode as HTMLElement);
+    }
+});
