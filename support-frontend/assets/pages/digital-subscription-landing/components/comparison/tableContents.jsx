@@ -83,7 +83,7 @@ const padlock = css`
 const columnTitle = css`
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   padding: 3px;
   height: ${titleRowHeight}px;
   ${textSans.xsmall({ fontWeight: 'bold' })}

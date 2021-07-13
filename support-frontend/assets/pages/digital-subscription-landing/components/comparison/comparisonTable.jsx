@@ -43,7 +43,6 @@ const columnHeadingLast = css`
 
 const table = css`
   width: 100%;
-  /* border-collapse: collapse; */
 `;
 
 const tableContainer = css`
