@@ -21,7 +21,8 @@ case class ReferrerAcquisitionData(
   hostname: Option[String],
   gaClientId: Option[String],
   userAgent: Option[String],
-  ipAddress: Option[String]
+  ipAddress: Option[String],
+  labels: Option[Set[String]]
 )
 
 object ReferrerAcquisitionData {

@@ -11,7 +11,7 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
   resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"),
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oI"),
   libraryDependencies += scalatest % "it",
 )
 
@@ -75,6 +75,7 @@ lazy val root = (project in file("."))
     `support-frontend`,
     `support-workers`,
     `supporter-product-data`,
+    `supporter-product-data-dynamo`,
     `support-models`,
     `support-config`,
     `support-internationalisation`,
@@ -83,10 +84,12 @@ lazy val root = (project in file("."))
     `support-redemptiondb`,
     `it-test-runner`,
     `module-aws`,
-    `module-bigquery`,
+    `module-acquisition-events`,
     `module-rest`,
     `support-payment-api`,
-    `acquisition-event-producer`
+    `acquisition-event-producer`,
+    `acquisitions-firehose-transformer`,
+    `support-lambdas`
   )
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
@@ -113,8 +116,15 @@ lazy val `support-workers` = (project in file("support-workers"))
   .settings(
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`, `acquisition-event-producer`, `module-bigquery`)
-  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `stripe-intent`, `acquisition-event-producer`)
+  ).dependsOn(
+    `support-services`,
+    `support-models` % "test->test;it->test;compile->compile",
+    `support-config`,
+    `support-internationalisation`,
+    `acquisition-event-producer`,
+    `module-acquisition-events`,
+    `supporter-product-data-dynamo`
+  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
@@ -122,8 +132,15 @@ lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .settings(
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`module-rest`, `module-aws`)
-  .aggregate(`module-rest`, `module-aws`)
+  ).dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
+  .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
+
+lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
+  .settings(
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`module-aws`)
+  .aggregate(`module-aws`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
@@ -133,8 +150,8 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-models`, `support-internationalisation`, `module-bigquery`)
-  .aggregate(`support-models`, `support-internationalisation`, `module-bigquery`)
+  ).dependsOn(`support-models`, `support-internationalisation`, `module-acquisition-events`)
+  .aggregate(`support-models`, `support-internationalisation`, `module-acquisition-events`)
 
 lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
@@ -175,11 +192,10 @@ lazy val `module-aws` = (project in file("support-modules/aws"))
     libraryDependencies ++= commonDependencies
   )
 
-lazy val `module-bigquery` = (project in file("support-modules/bigquery"))
+lazy val `module-acquisition-events` = (project in file("support-modules/acquisition-events"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(libraryDependencies ++= commonDependencies)
   .dependsOn(`support-config`)
-
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
@@ -192,13 +208,11 @@ lazy val `support-internationalisation` = (project in file("support-internationa
 lazy val `acquisition-event-producer` = (project in file("acquisition-event-producer"))
   .settings(
     licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
-    bintrayOrganization := Some("guardian"),
-    bintrayRepository := "ophan",
     publishMavenStyle := true,
     scalacOptions += "-Ymacro-annotations",
     libraryDependencies ++= Seq(
-      "com.gu" %% "ophan-event-model" % "0.0.17" excludeAll ExclusionRule(organization = "com.typesafe.play"),
-      "com.gu" %% "fezziwig" % "1.3",
+      "com.gu" %% "ophan-event-model" % "0.0.23" excludeAll ExclusionRule(organization = "com.typesafe.play"),
+      "com.gu" %% "fezziwig" % "1.4",
       "com.typesafe.play" %% "play-json" % "2.7.4",
       "io.circe" %% "circe-core" % "0.12.1",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -231,3 +245,14 @@ lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .dependsOn(`module-aws`)
+
+lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas/acquisitions-firehose-transformer"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`module-acquisition-events`)
+  .aggregate(`module-acquisition-events`)
+
+lazy val `support-lambdas` = (project in file("support-lambdas"))
+  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)

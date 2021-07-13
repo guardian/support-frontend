@@ -10,7 +10,8 @@ import {
   checkFirstName,
   checkLastName,
   checkStateIfApplicable,
-} from 'helpers/formValidation';
+  isValidIban,
+} from 'helpers/forms/formValidation';
 import {
   type ContributionType,
   type OtherAmounts,
@@ -24,7 +25,9 @@ import {
   type Action as ContributionsLandingAction,
   setFormIsValid,
 } from './contributionsLandingActions';
-import { stripeCardFormIsIncomplete } from 'helpers/stripe';
+import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
+import { AmazonPay, Sepa } from 'helpers/forms/paymentMethods';
+import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
 
@@ -57,6 +60,10 @@ export type FormIsValidParameters = {
   lastName: string | null,
   email: string | null,
   stripeCardFormOk: boolean,
+  amazonPayFormOk: boolean,
+  sepaFormOk: boolean,
+  localCurrencyCountry?: LocalCurrencyCountry,
+  useLocalCurrency?: boolean,
 }
 
 const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
@@ -70,6 +77,10 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     lastName,
     email,
     stripeCardFormOk,
+    amazonPayFormOk,
+    sepaFormOk,
+    localCurrencyCountry,
+    useLocalCurrency,
   } = formIsValidParameters;
 
   const hasNameFields = contributionType !== 'ONE_OFF';
@@ -80,8 +91,43 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
       true
   ) && checkEmail(email)
     && stripeCardFormOk
+    && amazonPayFormOk
+    && sepaFormOk
     && checkStateIfApplicable(billingState, countryGroupId, contributionType)
-    && amountOrOtherAmountIsValid(selectedAmounts, otherAmounts, contributionType, countryGroupId);
+    && amountOrOtherAmountIsValid(
+      selectedAmounts,
+      otherAmounts,
+      contributionType,
+      countryGroupId,
+      localCurrencyCountry,
+      useLocalCurrency,
+    );
+};
+
+const amazonPayFormOk = (state: State): boolean => {
+  if (state.page.form.paymentMethod === AmazonPay) {
+    const {
+      orderReferenceId, amazonBillingAgreementId, amazonBillingAgreementConsentStatus, paymentSelected,
+    } = state.page.form.amazonPayData;
+
+    const oneOffOk = () => !!orderReferenceId;
+    const recurringOk = () => !!amazonBillingAgreementId && amazonBillingAgreementConsentStatus;
+
+    return paymentSelected && (
+      state.page.form.contributionType === 'ONE_OFF' ? oneOffOk() : recurringOk()
+    );
+  }
+  return true;
+
+};
+
+const sepaFormOk = (state: State): boolean => {
+  if (state.page.form.paymentMethod === Sepa) {
+    const { accountHolderName, iban } = state.page.form.sepaData;
+    return !!accountHolderName && isValidIban(iban);
+  }
+
+  return true;
 };
 
 const formIsValidParameters = (state: State) => ({
@@ -97,6 +143,10 @@ const formIsValidParameters = (state: State) => ({
     state.page.form.paymentMethod,
     state.page.form.stripeCardFormData.formComplete,
   ),
+  amazonPayFormOk: amazonPayFormOk(state),
+  sepaFormOk: sepaFormOk(state),
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 function enableOrDisableForm() {

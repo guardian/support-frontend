@@ -45,5 +45,5 @@ case class Configuration(config: Config) {
 
   val contributionThanksQueueName = config.getString("email.thankYou.queueName")
 
-  val kinesisStreamName = config.getString("kinesis.streamName")
+  val acquisitionsKinesisStreamName = config.getString("kinesis.streamName")
 }

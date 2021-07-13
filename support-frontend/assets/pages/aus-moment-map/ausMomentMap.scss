@@ -176,21 +176,25 @@ body {
 
     &:hover {
       .territory-landmass {
-        color: gu-colour(brand-main);
+        color: #04FFFF;
       }
 
       .territory-label-on-landmass {
-        color: gu-colour(neutral-100);
+        color: gu-colour(neutral-7);
       }
     }
   }
 
   .territory-landmass {
-    color: gu-colour(opinion-bright);
+    color: gu-colour(brand-main);
   }
 
   .territory-label {
     color: gu-colour(neutral-7);
+  }
+
+  .territory-label-on-landmass {
+    color: gu-colour(neutral-100);
   }
 
   .territory-label-full {
@@ -210,11 +214,11 @@ body {
 
 .territory-selected {
   .territory-landmass {
-    color: gu-colour(brand-main);
+    color: #04FFFF;
   }
 
   .territory-label-on-landmass {
-    color: gu-colour(neutral-100);
+    color: gu-colour(neutral-7);
   }
 }
 

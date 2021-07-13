@@ -9,8 +9,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/internationalisation/currency';
 import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
-import type { CampaignSettings } from 'helpers/campaigns';
-
+import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 
 // ---- Types ----- //
 
@@ -26,17 +25,25 @@ type PropTypes = {|
 function TermsPrivacy(props: PropTypes) {
   const terms = <a href={contributionsTermsLinks[props.countryGroupId]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
-  const regionalAmounts = {
-    GBP: 100,
-    USD: 135,
-    EUR: 117,
-    AUD: 185,
-    CAD: 167,
-    NZD: 200,
+
+  const gbpAmount = 100;
+  const regionalAmount = (isoCurrency: IsoCurrency): ?number => {
+    switch (isoCurrency) {
+      case 'GBP': return gbpAmount;
+      case 'USD': return 135;
+      case 'EUR': return 117;
+      case 'AUD': return 185;
+      case 'CAD': return 167;
+      case 'NZD': return 200;
+      default: return null;
+    }
   };
+
   const getRegionalAmountString = (): string => {
     const currency: IsoCurrency = fromCountryGroupId(props.countryGroupId) || 'GBP';
-    return `${currencies[currency].glyph}${regionalAmounts[currency]}`;
+    const regionalPatronageAmount = regionalAmount(currency) || gbpAmount;
+
+    return `${currencies[currency].glyph}${regionalPatronageAmount}`;
   };
 
   const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
@@ -58,10 +65,10 @@ function TermsPrivacy(props: PropTypes) {
       <div className="philanthropic-ask">
         <h4>Contribute another way</h4>
         <p>
-          To contribute by mail, please make your check payable to:<br/>
-          Guardian News<br/>
-          Church Street Station<br/>
-          PO Box 3403<br/>
+          To contribute by mail, please make your check payable to:<br />
+          Guardian News<br />
+          Church Street Station<br />
+          PO Box 3403<br />
           New York, NY 10008-3403.
         </p>
         <p>
@@ -92,36 +99,28 @@ function TermsPrivacy(props: PropTypes) {
   const sourceIsNotAppleNews = props.referrerSource !== 'APPLE_NEWS';
   const sourceIsNotGoogleAMP = props.referrerSource !== 'GOOGLE_AMP';
 
-  const shouldShowPhilanthropicAsk = (
-    isUSContributor &&
-    isNotOneOffContribution &&
-    sourceIsNotAppleNews &&
-    sourceIsNotGoogleAMP
-  );
+  const shouldShowPhilanthropicAsk =
+    isUSContributor && isNotOneOffContribution && sourceIsNotAppleNews && sourceIsNotGoogleAMP;
 
   return (
     <>
       <div className="component-terms-privacy">
-        {props.contributionType !== 'ONE_OFF' ?
+        {props.contributionType !== 'ONE_OFF' ? (
           <div className="component-terms-privacy__change">
-            Monthly contributions are billed each month and annual contributions are billed once a year.
-            You can change how much you give or cancel your contributions at any time.
+            Monthly contributions are billed each month and annual contributions are billed once a year.{' '}
+            <strong>You can change how much you give or cancel your contributions at any time.</strong>
           </div>
-          : null
-        }
+        ) : null}
         <div className="component-terms-privacy__terms">
           By proceeding, you are agreeing to our {terms}. To find out what personal data we collect and how we use it,
           please visit our {privacy}.
         </div>
       </div>
       <br />
-      <div>
-        { shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText }
-      </div>
+      <div>{shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText}</div>
     </>
   );
 }
-
 
 // ----- Exports ----- //
 

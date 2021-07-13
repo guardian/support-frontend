@@ -1,19 +1,22 @@
 // @flow
 
-import { fixDecimals } from 'helpers/subscriptions';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import {
   billingPeriodNoun as upperCaseNoun,
-  Quarterly,
-} from 'helpers/billingPeriods';
+  billingPeriodAdverb,
+  type BillingPeriod,
+  postIntroductorySixForSixBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
+import { glyph as shortGlyph, extendedGlyph } from 'helpers/internationalisation/currency';
 import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
 import {
   getAppliedPromo,
   hasDiscount,
   hasIntroductoryPrice,
+  type Promotion,
 } from 'helpers/productPrice/promotions';
+import type { Option } from 'helpers/types/option';
 
 const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(price)}`;
 
@@ -98,7 +101,12 @@ const getIntroductoryPriceDescription = (
   productPrice: ProductPrice,
   compact: boolean,
 ) => {
-  const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm);
+  const standardCopy = standardRate(
+    glyph,
+    productPrice.price,
+    postIntroductorySixForSixBillingPeriod,
+    productPrice.fixedTerm,
+  );
   const separator = compact ? '/' : ' for the first ';
   const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
@@ -109,8 +117,10 @@ function getPriceDescription(
   productPrice: ProductPrice,
   billingPeriod: BillingPeriod,
   compact: boolean = false,
+  useExtendedGlyph: boolean = true,
 ): string {
-  const glyph = extendedGlyph(productPrice.currency);
+  const glyphFn = useExtendedGlyph ? extendedGlyph : shortGlyph;
+  const glyph = glyphFn(productPrice.currency);
   const promotion = getAppliedPromo(productPrice.promotions);
 
   if (hasIntroductoryPrice(promotion)) {
@@ -154,7 +164,12 @@ function getSimplifiedPriceDescription(
 
   if (promotion && promotion.introductoryPrice) {
     const introPrice = promotion.introductoryPrice;
-    const standardCopy = standardRate(glyph, productPrice.price, Quarterly, productPrice.fixedTerm);
+    const standardCopy = standardRate(
+      glyph,
+      productPrice.price,
+      postIntroductorySixForSixBillingPeriod,
+      productPrice.fixedTerm,
+    );
     const periodType = pluralizePeriodType(introPrice.periodLength, introPrice.periodType);
 
     return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
@@ -171,9 +186,32 @@ function getSimplifiedPriceDescription(
   return `${termPrepositon} ${billingPeriodNoun(billingPeriod, productPrice.fixedTerm)}`;
 }
 
+function getPriceForDescription(productPrice: ProductPrice, promotion: Option<Promotion>) {
+  if (promotion && promotion.introductoryPrice) {
+    return promotion.introductoryPrice.price;
+  }
+  if (promotion && promotion.discountedPrice) {
+    return promotion.discountedPrice;
+  }
+
+  return productPrice.price;
+}
+
+function getAdverbialSubscriptionDescription(
+  productPrice: ProductPrice,
+  billingPeriod: BillingPeriod,
+) {
+  const glyph = shortGlyph(productPrice.currency);
+  const promotion = getAppliedPromo(productPrice.promotions);
+  const price = getPriceForDescription(productPrice, promotion);
+
+  return `Subscribe ${billingPeriodAdverb(billingPeriod).toLowerCase()} for ${displayPrice(glyph, price)}`;
+}
+
 export {
   displayPrice,
   getPriceDescription,
   getAppliedPromoDescription,
   getSimplifiedPriceDescription,
+  getAdverbialSubscriptionDescription,
 };

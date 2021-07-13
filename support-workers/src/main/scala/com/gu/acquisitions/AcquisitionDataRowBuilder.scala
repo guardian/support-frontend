@@ -5,14 +5,15 @@ import com.gu.support.catalog._
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import com.gu.support.workers.{AcquisitionData, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SixWeekly, StripePaymentType}
+import com.gu.support.workers.{AcquisitionData, AmazonPayPaymentMethod, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SepaPaymentMethod, SixWeekly, StripePaymentType}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
-import com.gu.support.acquisitions
-import com.gu.support.acquisitions.AcquisitionType.{Purchase, Redemption}
-import com.gu.support.acquisitions.PaymentProvider.{DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
-import com.gu.support.acquisitions.PrintProduct._
-import com.gu.support.acquisitions.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
+import com.gu.support.{acquisitions, catalog}
+import com.gu.support.acquisitions.models.AcquisitionType.{Purchase, Redemption}
+import com.gu.support.acquisitions.models.PaymentProvider.{AmazonPay, DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa}
+import com.gu.support.acquisitions.models.PrintProduct._
+import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions, PrintProduct}
+import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.zuora.api.ReaderType
 
 
@@ -59,25 +60,29 @@ object AcquisitionDataRowBuilder {
   private def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod) =
     billingPeriod match {
       case Monthly => PaymentFrequency.Monthly
-      case Quarterly | SixWeekly => PaymentFrequency.Quarterly
+      case Quarterly => PaymentFrequency.Quarterly
+      case SixWeekly if postIntroductorySixForSixBillingPeriod == Quarterly => PaymentFrequency.Quarterly
+      case SixWeekly => PaymentFrequency.Monthly
       case Annual => PaymentFrequency.Annually
     }
 
   private def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): PaymentProvider =
     paymentMethod match {
       case creditCardPayment: CreditCardReferenceTransaction =>
-        creditCardPayment.stripePaymentType match {
+        creditCardPayment.StripePaymentType match {
           case Some(StripePaymentType.StripeApplePay) => StripeApplePay
           case Some(StripePaymentType.StripePaymentRequestButton) => StripePaymentRequestButton
           case _ => Stripe
         }
       case _: PayPalReferenceTransaction => PayPal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => DirectDebit
+      case _: SepaPaymentMethod => StripeSepa
+      case _: AmazonPayPaymentMethod => AmazonPay
     }
 
   private def getAbTests(data: AcquisitionData) =
     (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set()))
-      .map(abTest => acquisitions.AbTest(
+      .map(abTest => acquisitions.models.AbTest(
         abTest.name,
         abTest.variant
       )).toList
@@ -188,7 +193,9 @@ object AcquisitionDataRowBuilder {
       )
     }
 
-  private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) =
+  private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) = {
+    val referrerLabels = state.acquisitionData.flatMap(_.referrerAcquisitionData.labels).getOrElse(Set())
+
     Set(
       if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
       if (isSixForSix(state)) Some("GUARDIAN_WEEKLY_SIX_FOR_SIX") else None,
@@ -197,7 +204,8 @@ object AcquisitionDataRowBuilder {
         case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => Some("CORPORATE_SUBSCRIPTION")
         case _ => None
       }
-    ).flatten.toList
+    ).flatten.union(referrerLabels).toList
+  }
 
   private def isSixForSix(state: SendAcquisitionEventState) =
     state.sendThankYouEmailState match {
@@ -208,7 +216,7 @@ object AcquisitionDataRowBuilder {
 
   private def getQueryParameters(data: AcquisitionData) =
     data.referrerAcquisitionData.queryParameters.getOrElse(Set())
-      .map(queryParam => acquisitions.QueryParameter(
+      .map(queryParam => acquisitions.models.QueryParameter(
         queryParam.name,
         queryParam.value
       )).toList

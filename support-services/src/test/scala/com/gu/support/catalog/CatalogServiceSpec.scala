@@ -1,9 +1,10 @@
 package com.gu.support.catalog
 
 import com.gu.i18n.Currency.{GBP, USD}
-import com.gu.support.workers.{Annual, Monthly, Quarterly}
+import com.gu.support.workers.{Annual, BillingPeriod, Monthly, Quarterly}
 import io.circe.parser._
 import CatalogServiceSpec.serviceWithFixtures
+import com.gu.i18n.Currency
 import com.gu.support.config.TouchPointEnvironments.PROD
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -11,8 +12,22 @@ import org.scalatest.matchers.should.Matchers
 
 class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
 
+  def getPrice[T <: Product](
+    product: T,
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: ProductOptions
+  ): Option[Price] = {
+    for {
+      productRatePlan <- product.getProductRatePlan(PROD, billingPeriod, fulfilmentOptions, productOptions)
+      priceList <- serviceWithFixtures.getPriceList(productRatePlan)
+      price <- priceList.prices.find(_.currency == currency)
+    } yield price
+  }
+
   "CatalogService" should "load the catalog" in {
-    serviceWithFixtures.getPrice(
+    getPrice(
       DigitalPack,
       GBP,
       Monthly,
@@ -20,7 +35,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       NoProductOptions
     ) shouldBe Some(Price(11.99, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       Paper,
       GBP,
       Monthly,
@@ -28,7 +43,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Everyday
     ) shouldBe Some(Price(67.99, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       Paper,
       GBP,
       Monthly,
@@ -36,7 +51,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Sixday
     ) shouldBe Some(Price(57.99, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       GuardianWeekly,
       GBP,
       Quarterly,
@@ -44,7 +59,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       NoProductOptions
     ) shouldBe Some(Price(37.50, GBP))
 
-    serviceWithFixtures.getPrice(
+    getPrice(
       GuardianWeekly,
       USD,
       Annual,
@@ -55,7 +70,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
     (for {
       voucherEveryday <- Paper.getProductRatePlan(PROD, Monthly, Collection, Everyday)
       priceList <- serviceWithFixtures.getPriceList(voucherEveryday)
-    } yield priceList.savingVsRetail shouldBe Some(29)).getOrElse(fail())
+    } yield priceList.savingVsRetail shouldBe Some(43)).getOrElse(fail())
 
   }
 }

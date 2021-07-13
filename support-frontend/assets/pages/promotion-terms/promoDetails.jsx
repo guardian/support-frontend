@@ -1,14 +1,15 @@
 // @flow
 
 import React from 'react';
+import { css } from '@emotion/core';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { LargeParagraph, Title } from 'components/text/text';
 import Content from 'components/content/content';
-import { formatUserDate } from 'helpers/dateConversions';
-import UnorderedList from 'components/list/unorderedList';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { List } from 'components/list/list';
 import AnchorButton from 'components/button/anchorButton';
-import { DigitalPack, Paper } from 'helpers/subscriptions';
-import { routes } from 'helpers/routes';
+import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
+import { routes } from 'helpers/urls/routes';
 
 const landingPageForProduct = (props: PromotionTerms) => {
   switch (props.product) {
@@ -38,10 +39,14 @@ export default function PromoDetails(props: PromotionTerms) {
       {validUntil}
       <LargeParagraph>
         <strong>Applies to products:</strong>
-        <UnorderedList items={
-          // $FlowIgnore
-          props.productRatePlans
-        }
+        <List
+          cssOverrides={css`
+            font-size: inherit;
+            margin: 0 !important;
+          `}
+          items={
+            props.productRatePlans.map(content => ({ content }))
+          }
         />
       </LargeParagraph>
       <AnchorButton href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}>

@@ -13,7 +13,7 @@ import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { TabAccordionRow } from './tabAccordionRow';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 const flexContainerOverride = css`
   align-items: flex-start;

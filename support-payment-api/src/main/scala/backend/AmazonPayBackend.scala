@@ -6,9 +6,10 @@ import com.amazon.pay.response.ipn.model.{Notification, NotificationType, Refund
 import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails, Status}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.{BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
+import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
 import conf.ConfigLoader.environmentShow
 import conf._
 import model._
@@ -28,10 +29,11 @@ class AmazonPayBackend(
     service: AmazonPayService,
     identityService: IdentityService,
     emailService: EmailService,
-    ophanService: AnalyticsService,
-    bigQueryService: BigQueryService,
-    databaseService: ContributionsStoreService
-  )(implicit pool: DefaultThreadPool) extends StrictLogging {
+    val ophanService: AnalyticsService,
+    val bigQueryService: BigQueryService,
+    val acquisitionsStreamService: AcquisitionsStreamService,
+    val databaseService: ContributionsStoreService
+  )(implicit pool: DefaultThreadPool) extends StrictLogging with PaymentBackend {
 
   def makePayment(amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, AmazonPayApiError, AmazonPayResponse] = {
 
@@ -96,12 +98,11 @@ class AmazonPayBackend(
   private def postPaymentTasks(authDetails: AuthorizationDetails, email: String, acquisitionData: AmazonPayAcquisition): Unit = {
     val clientBrowserInfo = acquisitionData.clientBrowserInfo
     val identityId = acquisitionData.identityId
-    trackContribution(authDetails, acquisitionData, email, identityId, clientBrowserInfo).leftMap { err =>
-      cloudWatchService.recordPostPaymentTasksError(
+    trackContribution(authDetails, acquisitionData, email, identityId, clientBrowserInfo)
+      .map(errors => cloudWatchService.recordPostPaymentTasksErrors(
         PaymentProvider.AmazonPay,
-        s"Error tracking contribution: ${err.getMessage}"
-      )
-    }
+        errors
+      ))
 
     identityId.foreach { id =>
       sendThankYouEmail(email, acquisitionData.amazonPayment, id).leftMap { err =>
@@ -113,33 +114,15 @@ class AmazonPayBackend(
     }
   }
 
-  private def trackContribution(payment: AuthorizationDetails, acquisitionData: AmazonPayAcquisition, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
+  private def trackContribution(payment: AuthorizationDetails, acquisitionData: AmazonPayAcquisition, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): Future[List[BackendError]] = {
     val contributionData = ContributionData.fromAmazonPay(payment, identityId, email, acquisitionData.countryCode, clientBrowserInfo.countrySubdivisionCode, acquisitionData.amazonPayment.orderReferenceId)
-    BackendError.combineResults(
-      submitAcquisitionToOphan(acquisitionData),
-      submitAcquisitionToBigQuery(acquisitionData, contributionData),
-      insertContributionDataIntoDatabase(contributionData)
+
+    track(
+      legacyAcquisition = acquisitionData,
+      acquisition = AcquisitionDataRowBuilder.buildFromAmazonPay(acquisitionData, contributionData),
+      contributionData
     )
   }
-
-  private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
-    // log so that if something goes wrong we can reconstruct the missing data from the logs
-    logger.info(s"about to insert contribution into database: $contributionData")
-    databaseService.insertContributionData(contributionData)
-      .leftMap(BackendError.fromDatabaseError)
-  }
-
-  private def submitAcquisitionToOphan(acquisition: AmazonPayAcquisition): EitherT[Future, BackendError, Unit] =
-    ophanService.submitAcquisition(acquisition)
-      .bimap(BackendError.fromOphanError, _ => ())
-
-  private def submitAcquisitionToBigQuery(
-    acquisition: AmazonPayAcquisition,
-    contributionData: ContributionData
-  ): EitherT[Future, BackendError, Unit] =
-    bigQueryService.tableInsertRow(
-      AcquisitionDataRowBuilder.buildFromAmazonPay(acquisition, contributionData)
-    ).bimap(BackendError.BigQueryError, _ => ())
 
   private def sendThankYouEmail(email: String, payment: AmazonPaymentData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow = ContributorRow(
@@ -183,10 +166,11 @@ object AmazonPayBackend {
     identityService: IdentityService,
     ophanService: AnalyticsService,
     bigQueryService: BigQueryService,
+    acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
-    new AmazonPayBackend(cloudWatchService, amazonPayService, identityService, emailService, ophanService, bigQueryService, databaseService)
+    new AmazonPayBackend(cloudWatchService, amazonPayService, identityService, emailService, ophanService, bigQueryService, acquisitionsStreamService, databaseService)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -209,6 +193,9 @@ object AmazonPayBackend {
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],
+      configLoader
+        .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
+        .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

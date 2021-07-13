@@ -54,6 +54,16 @@
   color: gu-colour(neutral-100);
 }
 
+.component-heading-block__fontSize {
+    font-size: 34px;
+    line-height: 115%;
+
+  @include mq($until: mobileLandscape) {
+    font-size: 28px;
+    line-height: 30px;
+  }
+}
+
 .component-heading-block__gift {
   .component-heading-block__fontSize {
 

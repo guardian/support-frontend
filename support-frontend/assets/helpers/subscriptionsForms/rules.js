@@ -3,7 +3,7 @@
 import { formError, nonEmptyString, notNull, validate } from './validation';
 import type { FormField, FormFields } from './formFields';
 import type { FormError } from './validation';
-import { checkOptionalEmail, checkEmail, checkGiftStartDate } from 'helpers/formValidation';
+import { checkOptionalEmail, checkEmail, checkGiftStartDate } from 'helpers/forms/formValidation';
 
 function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
   const { orderIsAGift, product } = fields;

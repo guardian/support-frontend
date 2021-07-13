@@ -53,7 +53,6 @@ $teal-green: #006d67;
   background-color: #ffffff;
 }
 
-.hope-is-power--centered,
 .component-customer-service {
   align-self: flex-start;
   padding-left: 0;
@@ -90,6 +89,7 @@ $teal-green: #006d67;
   background-color: gu-colour('brand-main');
   align-self: flex-start;
   width: 100%;
+  padding-bottom: 55px;
 
   .footer-alignment {
     padding-left: 0;
@@ -237,9 +237,6 @@ $teal-green: #006d67;
   }
 
   @include mq($from: wide) {
-    // width: calc(100% - 80px);
-    // max-width: 80.625rem;
-
     h1 {
       font-size: 50px;
     }
@@ -301,107 +298,14 @@ $teal-green: #006d67;
 }
 
 .hope-is-power__products {
-  box-sizing: border-box;
-  & * {
-    box-sizing: border-box;
-  }
-
-  display: flex;
-  flex-direction: column;
-  background-color: #ededed;
-  overflow: hidden;
-
-  @include mq($from: tablet) {
-    margin-bottom: 24px;
-  }
 
   .product-block__container {
     z-index: 2;
-    padding-bottom: 50px;
-
-    @include mq($from:phablet, $until: tablet) {
-      padding-top: 30px;
-    }
-
-    @include mq($from: tablet) {
-      border: 1px solid gu-colour(neutral-86);
-    }
-
-    .product-block__container__label--top, .product-block__plus {
-      @include gu-fontset-heading;
-      font-size: 17px;
-      color: #ffffff;
-      background-color: #121212;
-      padding: 0 3px 0 10px;
-
-      @include mq($from: tablet) {
-        font-size: 20px;
-        margin-top: 35px;
-      }
-
-      @include mq($from: desktop) {
-        font-size: 26px;
-        padding: 2px 3px 2px 10px;
-      }
-    }
-
-    div.product-block__plus {
-      margin-bottom: 0;
-      margin-top: 15px;
-      width: 70px;
-
-      @include mq($from: phablet) {
-        margin-top: 14px;
-        margin-bottom: 0;
-      }
-
-      @include mq($from: tablet) {
-        width: 80px;
-        margin-bottom: 0;
-      }
-
-      @include mq($from: desktop) {
-        width: 95px;
-      }
-    }
-
-    div.product-block__container__label--top {
-      width: 160px;
-      margin: 20px 0 0;
-
-      @include mq($from: mobileLandscape) {
-        margin: 25px 0 0;
-      }
-
-      @include mq($from: phablet) {
-        margin: 0;
-      }
-
-      @include mq($from: tablet) {
-        transform: translateY(-100%);
-        position: relative;
-        left: -19px;
-        width: 180px;
-      }
-
-      @include mq($from: desktop) {
-        left: -50px;
-        width: 230px;
-      }
-    }
 
     .product-block__item, .product-block__dropdown--show, button, .ad-free-section-c__content {
       display: flex;
       flex-direction: column;
       width: 100%;
-
-      @include mq($from: phablet) {
-        width: calc(100% - 20px);
-      }
-
-      @include mq($from: desktop) {
-        width: calc(100% - 50px);
-      }
     }
 
     .product-block__item {
@@ -409,13 +313,6 @@ $teal-green: #006d67;
       padding-top: 10px;
       border-top: 1px solid gu-colour(neutral-86);
       border-bottom: 1px solid gu-colour(neutral-86);
-
-
-      @include mq($from: tablet) {
-          &:first-of-type {
-            margin-top: 15px;
-          }
-      }
 
       @include mq($from: phablet) {
         border: 1px solid gu-colour(neutral-86);
@@ -492,6 +389,7 @@ $teal-green: #006d67;
 
         img {
           width: 110px;
+          display: block;
         }
 
         @include mq($until: mobileLandscape) {
@@ -556,11 +454,15 @@ $teal-green: #006d67;
 
       .product-block__item__image--first-row {
         @include mq($from: mobileMedium) {
-          margin-top: -140px;
+          margin-top: -120px;
         }
 
         @include mq($from: mobileLandscape) {
-          margin-top: -100px;
+          margin-top: -90px;
+        }
+
+        @include mq($from: phablet) {
+          margin-top: -130px;
         }
 
         @include mq($from: desktop) {
@@ -734,15 +636,6 @@ $teal-green: #006d67;
     }
   }
 
-  .product-block__container:first-of-type {
-    margin-top: 0;
-
-    @include mq($from: tablet) {
-      margin-top: 60px;
-    }
-
-  }
-
   button {
     @include gu-fontset-body-sans;
     display: inline-block;
@@ -797,6 +690,9 @@ $teal-green: #006d67;
     border-left: none;
     border-right: none;
     background-color: #ffffff;
+    &:focus {
+      box-shadow: 0 0 0 5px #00B2FF;
+    }
 
     @include mq($from: phablet) {
       border-left: 1px solid gu-colour(neutral-86);
@@ -996,10 +892,6 @@ div.call-to-action__container {
   }
 
   .hope-is-power--centered {
-    background-color: #041f4a;
-    color: #ffffff;
-    overflow: hidden;
-
     @include mq($from: wide) {
       padding-left: 0;
     }

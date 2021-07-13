@@ -10,9 +10,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 
 trait Controllers {
 
-  // scalastyle:off
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth with Monitoring with AhcWSComponents =>
-  // scalastyle:on
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth =>
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
   lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)
@@ -50,7 +48,7 @@ trait Controllers {
     capiService
   )
 
-  lazy val subscriptionsController = new Subscriptions(
+  lazy val subscriptionsController = new SubscriptionsController(
     actionRefiners,
     identityService,
     priceSummaryServiceProvider,
@@ -92,7 +90,7 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val paperController = new PaperSubscription(
+  lazy val paperController = new PaperSubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
@@ -104,7 +102,7 @@ trait Controllers {
     fontLoader
   )
 
-  lazy val weeklyController = new WeeklySubscription(
+  lazy val weeklyController = new WeeklySubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
@@ -160,7 +158,7 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val createSubscriptionController = new CreateSubscription(
+  lazy val createSubscriptionController = new CreateSubscriptionController(
     supportWorkersClient,
     actionRefiners,
     identityService,
@@ -196,8 +194,7 @@ trait Controllers {
     identityService,
     testUsers,
     controllerComponents,
-    appConfig.guardianDomain,
-    tipMonitoring
+    appConfig.guardianDomain
   )
 
   lazy val payPalRegularController = new PayPalRegular(
@@ -218,7 +215,6 @@ trait Controllers {
     paymentAPIService,
     identityService,
     allSettingsProvider,
-    tipMonitoring,
     fontLoader
   )
 

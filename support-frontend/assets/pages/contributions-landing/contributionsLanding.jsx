@@ -5,9 +5,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Redirect, Route } from 'react-router-dom';
-import { isDetailsSupported, polyfillDetails } from 'helpers/details';
+import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { init as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import {
   type CountryGroupId,
   countryGroups,
@@ -15,12 +15,12 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
-import * as storage from 'helpers/storage';
-import { set as setCookie } from 'helpers/cookie';
+import * as storage from 'helpers/storage/storage';
+import { set as setCookie } from 'helpers/storage/cookie';
 import Page from 'components/page/page';
 import ContributionsFooter from 'components/footerCompliant/ContributionsFooter';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
-import { getCampaignSettings } from 'helpers/campaigns';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
@@ -115,14 +115,12 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/"
-          render={() => contributionsLandingPage()
-          }
+          render={() => contributionsLandingPage()}
         />
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
-          render={props => contributionsLandingPage(props.match.params.campaignCode)
-          }
+          render={props => contributionsLandingPage(props.match.params.campaignCode)}
         />
         <Route
           exact

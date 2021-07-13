@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import type { ErrorReason } from 'helpers/errorReasons';
-import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { type ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import {
   type ContributionType,
   getAmount,
@@ -15,7 +15,7 @@ import { type IsoCountry, type StateProvince, stateProvinceFromString, findIsoCo
 import type {
   RegularPaymentRequest,
   StripePaymentIntentAuthorisation, StripePaymentMethod,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
   type AmazonPayAuthorisation,
   type PaymentAuthorisation,
@@ -23,37 +23,35 @@ import {
   type StripePaymentRequestButtonMethod,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/paymentIntegrations/oneOffContributions';
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { StripeChargeData, CreateStripePaymentIntentRequest, AmazonPayData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   processStripePaymentIntentRequest,
   postOneOffAmazonPayExecutePaymentRequest,
-} from 'helpers/paymentIntegrations/oneOffContributions';
-import { routes } from 'helpers/routes';
-import * as storage from 'helpers/storage';
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import { routes } from 'helpers/urls/routes';
+import * as storage from 'helpers/storage/storage';
 import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { logException } from 'helpers/logger';
+import { logException } from 'helpers/utilities/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import * as cookie from 'helpers/cookie';
-import { Annual, Monthly } from 'helpers/billingPeriods';
-import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
+import * as cookie from 'helpers/storage/cookie';
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import { setPayPalHasLoaded, type Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { AmazonPay, DirectDebit, Stripe } from 'helpers/paymentMethods';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
-import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/stripe';
+import { AmazonPay, DirectDebit, Sepa, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import { ExistingCard, ExistingDirectDebit } from 'helpers/forms/paymentMethods';
+import { getStripeKey, stripeAccountForContributionType, type StripeAccount } from 'helpers/forms/stripe';
 import type { Option } from 'helpers/types/option';
-import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { setupAmazonPay } from 'helpers/paymentIntegrations/amazonPay';
+import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -70,11 +68,13 @@ export type Action =
   | { type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING' }
   | { type: 'SET_AMAZON_PAY_LOGIN_OBJECT', amazonLoginObject: Object }
   | { type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT', amazonPaymentsObject: Object }
-  | { type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady: boolean }
+  | { type: 'SET_AMAZON_PAY_WALLET_IS_STALE', isStale: boolean }
   | { type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId: string }
   | { type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected: boolean }
   | { type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' }
   | { type: 'SET_AMAZON_PAY_FATAL_ERROR' }
+  | { type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId: string }
+  | { type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus: boolean }
   | { type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken: string }
   | { type: 'SELECT_AMOUNT', amount: number | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string, contributionType: ContributionType }
@@ -87,7 +87,6 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
-  | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object, stripeAccount: StripeAccount }
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError: ErrorReason, stripeAccount: StripeAccount }
@@ -105,6 +104,8 @@ export type Action =
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
   | { type: 'UPDATE_PAYPAL_BUTTON_READY', ready: boolean }
+  | { type: 'SET_SEPA_IBAN', iban: string | null }
+  | { type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName: string | null }
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -162,11 +163,6 @@ const updateRecaptchaToken = (recaptchaToken: string): ((Function) => void) =>
 const setPaymentRequestButtonPaymentMethod =
   (paymentMethod: 'none' | StripePaymentMethod, stripeAccount: StripeAccount): Action =>
     ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod, stripeAccount });
-
-
-const setStripePaymentRequestObject =
-  (stripePaymentRequestObject: Object, stripeAccount: StripeAccount): Action =>
-    ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject, stripeAccount });
 
 const setStripePaymentRequestButtonClicked = (stripeAccount: StripeAccount): Action =>
   ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount });
@@ -239,17 +235,39 @@ const setAmazonPayPaymentsObject = (amazonPaymentsObject: Object): Action => ({
   amazonPaymentsObject,
 });
 
-const setAmazonPayWalletWidgetReady = (isReady: boolean): Action =>
-  ({ type: 'SET_AMAZON_PAY_WALLET_WIDGET_READY', isReady });
+const setAmazonPayWalletIsStale = (isStale: boolean): Action =>
+  ({ type: 'SET_AMAZON_PAY_WALLET_IS_STALE', isStale });
 
 const setAmazonPayHasAccessToken: Action = ({ type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN' });
 const setAmazonPayFatalError: Action = ({ type: 'SET_AMAZON_PAY_FATAL_ERROR' });
 
-const setAmazonPayPaymentSelected = (paymentSelected: boolean): Action =>
-  ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected });
+const setAmazonPayPaymentSelected =
+  (paymentSelected: boolean) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_PAYMENT_SELECTED', paymentSelected })));
+    };
 
-const setAmazonPayOrderReferenceId = (orderReferenceId: string): Action =>
-  ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId });
+const setAmazonPayOrderReferenceId =
+  (orderReferenceId: string) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID', orderReferenceId })));
+    };
+
+const setAmazonPayBillingAgreementId =
+  (amazonBillingAgreementId: string) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID', amazonBillingAgreementId })));
+    };
+
+const setAmazonPayBillingAgreementConsentStatus =
+  (amazonBillingAgreementConsentStatus: boolean): ((Function) => void) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS', amazonBillingAgreementConsentStatus })));
+    };
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
@@ -320,6 +338,15 @@ const setStripeRecurringRecaptchaVerified = (recaptchaVerified: boolean): ((Func
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED', recaptchaVerified })));
   };
 
+const setSepaIban = (iban: string | null) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_IBAN', iban })));
+  };
+const setSepaAccountHolderName = (accountHolderName: string | null) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_SEPA_ACCOUNT_HOLDER_NAME', accountHolderName })));
+  };
+
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
@@ -328,7 +355,6 @@ const sendFormSubmitEventForPayPalRecurring = () =>
       flowPrefix: 'npf',
       form: getForm('form--contribution'),
       isSignedIn: state.page.user.isSignedIn,
-      isRecurringContributor: state.page.user.isRecurringContributor,
       setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
       setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
     };
@@ -466,7 +492,7 @@ const amazonPayDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    orderReferenceId: authorisation.orderReferenceId,
+    orderReferenceId: authorisation.orderReferenceId ?? '',
     email: state.page.form.formData.email || '',
   },
   acquisitionData: derivePaymentApiAcquisitionData(
@@ -505,12 +531,14 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>, paymentAuthorisa
               stripeAccountForContributionType[state.page.form.contributionType],
             ));
           } else {
-            if (result.error === 'amazon_pay_fatal') {
-              dispatch(setAmazonPayFatalError);
-            }
-            if (result.error === 'amazon_pay_try_other_card') {
-              // Must re-render the wallet widget in order to display amazon's error message
-              dispatch(setAmazonPayWalletWidgetReady(false));
+            if (paymentAuthorisation.paymentMethod === 'AmazonPay') {
+              if (result.error === 'amazon_pay_try_other_card' || result.error === 'amazon_pay_try_again') {
+                // Must re-render the wallet widget in order to display amazon's error message
+                dispatch(setAmazonPayWalletIsStale(true));
+              } else {
+                // Disable Amazon Pay
+                dispatch(setAmazonPayFatalError);
+              }
             }
             // Reset any updates the previous payment method had made to the form's billingCountry or billingState
             dispatch(updateBillingCountry(null));
@@ -623,8 +651,10 @@ const recurringPaymentAuthorisationHandlers = {
   PayPal: recurringPaymentAuthorisationHandler,
   Stripe: recurringPaymentAuthorisationHandler,
   DirectDebit: recurringPaymentAuthorisationHandler,
+  Sepa: recurringPaymentAuthorisationHandler,
   ExistingCard: recurringPaymentAuthorisationHandler,
   ExistingDirectDebit: recurringPaymentAuthorisationHandler,
+  AmazonPay: recurringPaymentAuthorisationHandler,
 };
 
 const error = { paymentStatus: 'failure', error: 'internal_error' };
@@ -676,6 +706,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       logInvalidCombination('ONE_OFF', DirectDebit);
       return Promise.resolve(error);
     },
+    Sepa: () => {
+      logInvalidCombination('ONE_OFF', Sepa);
+      return Promise.resolve(error);
+    },
     ExistingCard: () => {
       logInvalidCombination('ONE_OFF', ExistingCard);
       return Promise.resolve(error);
@@ -689,7 +723,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
-      if (paymentAuthorisation.paymentMethod === AmazonPay) {
+      if (paymentAuthorisation.paymentMethod === AmazonPay && paymentAuthorisation.orderReferenceId !== undefined) {
         return dispatch(executeAmazonPayOneOffPayment(
           amazonPayDataFromAuthorisation(paymentAuthorisation, state),
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
@@ -707,10 +741,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
-    AmazonPay: () => {
-      logInvalidCombination('ANNUAL', AmazonPay);
-      return Promise.resolve(error);
-    },
     None: () => {
       logInvalidCombination('ANNUAL', 'None');
       return Promise.resolve(error);
@@ -718,10 +748,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
-    AmazonPay: () => {
-      logInvalidCombination('MONTHLY', AmazonPay);
-      return Promise.resolve(error);
-    },
     None: () => {
       logInvalidCombination('MONTHLY', 'None');
       return Promise.resolve(error);
@@ -754,10 +780,12 @@ export {
   setAmazonPayHasBegunLoading,
   setAmazonPayLoginObject,
   setAmazonPayPaymentsObject,
-  setAmazonPayWalletWidgetReady,
+  setAmazonPayWalletIsStale,
   setAmazonPayHasAccessToken,
   setAmazonPayFatalError,
   setAmazonPayOrderReferenceId,
+  setAmazonPayBillingAgreementId,
+  setAmazonPayBillingAgreementConsentStatus,
   setAmazonPayPaymentSelected,
   selectAmount,
   updateOtherAmount,
@@ -777,7 +805,6 @@ export {
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
   setPaymentRequestButtonPaymentMethod,
-  setStripePaymentRequestObject,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestButtonError,
   setTickerGoalReached,
@@ -791,4 +818,6 @@ export {
   updateRecaptchaToken,
   loadPayPalExpressSdk,
   loadAmazonPaySdk,
+  setSepaIban,
+  setSepaAccountHolderName,
 };

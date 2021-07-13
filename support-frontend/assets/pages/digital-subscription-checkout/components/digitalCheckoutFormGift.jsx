@@ -12,10 +12,10 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
+import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import Form, { FormSection, FormSectionHiddenUntilSelected } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
-import type { ErrorReason } from 'helpers/errorReasons';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import {
   finalPrice,
@@ -29,7 +29,7 @@ import {
   formActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { signOut } from 'helpers/user/user';
 import GridImage from 'components/gridImage/gridImage';
@@ -43,7 +43,7 @@ import { PersonalDetailsDigitalGift } from 'components/subscriptionCheckouts/per
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { DigitalPack } from 'helpers/subscriptions';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
   checkoutFormIsValid,
@@ -53,12 +53,12 @@ import {
   submitCheckoutForm,
   trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { PayPal, Stripe, DirectDebit } from 'helpers/paymentMethods';
+import { PayPal, Stripe, DirectDebit } from 'helpers/forms/paymentMethods';
 import GeneralErrorMessage
   from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import { routes } from 'helpers/routes';
+import { routes } from 'helpers/urls/routes';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
 import { withError } from 'hocs/withError';
@@ -68,6 +68,7 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import { countries } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 const controlTextAreaResizing = css`
   resize: vertical;
@@ -136,7 +137,7 @@ function mapDispatchToProps() {
       // differently to other payment methods. All others are tracked in submit.js
       const { paymentMethod } = state.page.checkout;
       if (paymentMethod === PayPal) {
-        trackSubmitAttempt(PayPal, DigitalPack);
+        trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
       }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
@@ -159,7 +160,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
-  const paymentMethods = supportedPaymentMethods(props.country);
+  const paymentMethods = supportedPaymentMethods(props.currencyId);
 
   return (
     <Content>

@@ -52,7 +52,14 @@ case class DirectDebitPaymentFields(
   accountNumber: String
 ) extends PaymentFields
 
+case class SepaPaymentFields(
+  accountHolderName: String,
+  iban: String
+) extends PaymentFields
+
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
+
+case class AmazonPayPaymentFields(amazonPayBillingAgreementId: String) extends PaymentFields
 
 object PaymentFields {
   //Payment fields are input from support-frontend
@@ -60,14 +67,18 @@ object PaymentFields {
   implicit val stripeSourcePaymentFieldsCodec: Codec[StripeSourcePaymentFields] = deriveCodec
   implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentMethodPaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
+  implicit val sepaPaymentFieldsCodec: Codec[SepaPaymentFields] = deriveCodec
   implicit val existingPaymentFieldsCodec: Codec[ExistingPaymentFields] = deriveCodec
+  implicit val amazonPayPaymentFieldsCodec: Codec[AmazonPayPaymentFields] = deriveCodec
 
   implicit val encodePaymentFields: Encoder[PaymentFields] = Encoder.instance {
     case p: PayPalPaymentFields => p.asJson
     case s: StripeSourcePaymentFields => s.asJson
     case s: StripePaymentMethodPaymentFields => s.asJson
     case d: DirectDebitPaymentFields => d.asJson
+    case s: SepaPaymentFields => s.asJson
     case e: ExistingPaymentFields => e.asJson
+    case a: AmazonPayPaymentFields => a.asJson
   }
 
   implicit val decodePaymentFields: Decoder[PaymentFields] =
@@ -76,7 +87,9 @@ object PaymentFields {
       Decoder[StripeSourcePaymentFields].widen,
       Decoder[StripePaymentMethodPaymentFields].widen,
       Decoder[DirectDebitPaymentFields].widen,
-      Decoder[ExistingPaymentFields].widen
+      Decoder[SepaPaymentFields].widen,
+      Decoder[ExistingPaymentFields].widen,
+      Decoder[AmazonPayPaymentFields].widen
     ).reduceLeft(or(_,_))
 
   final def or[A, AA >: A](a: Decoder[A], d: => Decoder[AA]): Decoder[AA] = new Decoder[AA] {

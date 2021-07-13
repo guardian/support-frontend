@@ -6,13 +6,13 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import seedrandom from 'seedrandom';
 
-import * as cookie from 'helpers/cookie';
-import { type Settings } from 'helpers/settings';
+import * as cookie from 'helpers/storage/cookie';
+import { type Settings } from 'helpers/globalsAndSwitches/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { tests } from './abtestDefinitions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter } from 'helpers/urls/url';
 
 // ----- Types ----- //
 
@@ -74,7 +74,7 @@ export type Test = {|
   seed: number,
   // An optional regex that will be tested against the path of the current page
   // before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
-  targetPage?: string,
+  targetPage?: string | RegExp,
   optimizeId?: string, // The id of the Optimize experiment which this test maps to
 |};
 
@@ -257,7 +257,7 @@ function assignUserToVariant(
   return randomNumber(mvtId, seed) % test.variants.length;
 }
 
-function targetPageMatches(locationPath: string, targetPage: ?string) {
+function targetPageMatches(locationPath: string, targetPage: ?string | RegExp) {
   if (!targetPage) { return true; }
 
   return locationPath.match(targetPage) != null;

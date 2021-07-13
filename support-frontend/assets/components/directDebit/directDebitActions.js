@@ -1,10 +1,10 @@
 // @flow
 
-import * as storage from 'helpers/storage';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import * as storage from 'helpers/storage/storage';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 
 import { checkAccount } from './helpers/ajax';
-import { DirectDebit } from 'helpers/paymentMethods';
+import { DirectDebit } from 'helpers/forms/paymentMethods';
 
 // ----- Types ----- //
 

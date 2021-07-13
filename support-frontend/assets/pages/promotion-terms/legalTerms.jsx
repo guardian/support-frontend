@@ -3,7 +3,7 @@
 import React from 'react';
 import Content, { Divider } from 'components/content/content';
 import { Title } from 'components/text/text';
-import { DigitalPack, GuardianWeekly } from 'helpers/subscriptions';
+import { DigitalPack, GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
 import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
 import DigitalPackTerms from 'pages/promotion-terms/DigitalPackTerms';

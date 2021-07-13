@@ -1,7 +1,7 @@
 // @flow
 
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Settings } from 'helpers/settings';
+import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionAmounts } from 'helpers/contributions';
 

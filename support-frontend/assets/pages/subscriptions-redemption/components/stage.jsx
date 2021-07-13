@@ -13,8 +13,8 @@ import type {
   RedemptionPageState,
   Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import { DigitalPack } from 'helpers/subscriptions';
-import type { User } from 'helpers/subscriptionsForms/user';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import type { User } from 'helpers/user/user';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';

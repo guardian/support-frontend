@@ -1,12 +1,12 @@
 # ----- System ----- #
 
-GET /healthcheck                                                   controllers.Application.healthcheck
-GET /error500                                                      lib.ErrorController.error500
-GET /cookies                                                       controllers.DiagnosticsController.cookies
+GET /healthcheck                                                   controllers.Application.healthcheck()
+GET /error500                                                      lib.ErrorController.error500()
+GET /cookies                                                       controllers.DiagnosticsController.cookies()
 
 # ----- Unsupported Browsers ----- #
 
-GET /unsupported-browser                                           controllers.Application.unsupportedBrowser
+GET /unsupported-browser                                           controllers.Application.unsupportedBrowser()
 
 # ----- Remove trailing slashes so that /uk/ redirects to /uk ---- #
 
@@ -14,7 +14,7 @@ GET  /*path/                                                       controllers.A
 
 # ----- Sitemap ----- #
 
-GET /sitemap.xml                                                   controllers.SiteMap.sitemap
+GET /sitemap.xml                                                   controllers.SiteMap.sitemap()
 
 
 # ----- Geo landings ----- #
@@ -56,6 +56,7 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
+GET  /aus-map                                                      controllers.Application.ausMomentMap()
 GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()
 
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
@@ -70,21 +71,21 @@ POST  /stripe/create-setup-intent/prb                              controllers.S
 
 # this endpoint should be removed once identity remove
 # the need for a client token
-POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
+POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing()
 
 # ------ Identity ------ #
-PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest
+PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest()
 GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
-POST /identity/signin-url                                          controllers.IdentityController.createSignInURL
+POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
 
 # ----- Subscriptions ----- #
 
-GET  /subscribe                                                    controllers.Subscriptions.geoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.Subscriptions.landing(country: String)
+GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
-GET  /:country/subscribe                                           controllers.Subscriptions.legacyRedirect(country: String)
+GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
 GET  /digital                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/digital                                            controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
@@ -99,19 +100,19 @@ GET  /subscribe/digital/checkout                                         control
 GET  /subscribe/digital/checkout/gift                                    controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
 GET  /subscribe/digital/checkout/thankyou-existing                       controllers.DigitalSubscriptionFormController.displayThankYouExisting()
 
-GET  /weekly                                                       controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/weekly                                             controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/weekly/gift                                        controllers.WeeklySubscription.weeklyGeoRedirect(orderIsAGift: Boolean = true)
+GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly/gift                                        controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = true)
 GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = true)
-GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscription.weekly(country: String, orderIsAGift: Boolean = false)
-GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscription.weekly(country: String, orderIsAGift: Boolean = true)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
-GET  /paper                                                        controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper                                              controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper/delivery                                     controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = true)
-GET  /uk/subscribe/paper                                           controllers.PaperSubscription.paper()
-GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscription.paper()
+GET  /paper                                                        controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/paper                                              controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
+GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
+GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionForm.displayForm()
 
 # redemptions
@@ -124,23 +125,23 @@ GET  /r/:redemptionCode                                            controllers.R
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 
-POST /subscribe/create                                             controllers.CreateSubscription.create
+POST /subscribe/create                                             controllers.CreateSubscriptionController.create()
 
 # ----- Authentication ----- #
 
-GET  /login                                                        controllers.Login.login
-GET  /loginAction                                                  controllers.Login.loginAction
-GET  /oauth2callback                                               controllers.Login.oauth2Callback
-GET  /logout                                                       controllers.Login.logout
-GET  /test-users                                                   controllers.TestUsersManagement.createTestUser
+GET  /login                                                        controllers.Login.login()
+GET  /loginAction                                                  controllers.Login.loginAction()
+GET  /oauth2callback                                               controllers.Login.oauth2Callback()
+GET  /logout                                                       controllers.Login.logout()
+GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
 
 
 # ----- PayPal (Recurring Endpoints) ----- #
 
-POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment
-POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement
-GET  /paypal/return                                                controllers.PayPalRegular.returnUrl
-GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl
+POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
+POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement()
+GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
+GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 
 # ----- PayPal (One-off Endpoints) ----- #
 
@@ -153,11 +154,11 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return         controllers.P
 
 # If we get an error back from the execute-payment request to PayPal,
 # we need to redirect the user to a page that tells them their payment failed.
-GET  /paypal/rest/error                                            controllers.PayPalOneOff.paypalError
+GET  /paypal/rest/error                                            controllers.PayPalOneOff.paypalError()
 
 # ----- Direct Debit ----- #
 
-POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount
+POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount()
 
 # ----- Promotions ----- #
 GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
@@ -170,7 +171,7 @@ GET  /.well-known/*file                                            controllers.A
 # ----- Assets ----- #
 # See application.conf for cache time config
 
-GET  /favicon.ico                                                  controllers.Favicon.get
+GET  /favicon.ico                                                  controllers.Favicon.get()
 
 GET  /assets/*file                                                 controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                                        controllers.Assets.at(path="/public", file)

@@ -2,9 +2,9 @@ package com.gu.services
 
 import com.amazonaws.services.simplesystemsmanagement.model.Parameter
 import com.gu.conf.ZuoraQuerierConfig
-import com.gu.model.Stage
-import com.gu.model.Stage.{DEV, PROD, UAT}
+import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
 import com.gu.services.ConfigService.{lastSuccessfulQueryTime, zuoraConfigPath}
+import com.gu.supporterdata.model.Stage
 import com.typesafe.scalalogging.StrictLogging
 
 import java.time.ZonedDateTime

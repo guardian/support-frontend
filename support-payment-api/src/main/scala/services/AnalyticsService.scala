@@ -10,7 +10,7 @@ import com.gu.acquisition.services.{DefaultAcquisitionService, Ec2OrLocalConfig}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder.ops._
 import com.typesafe.scalalogging.StrictLogging
-import conf.{ConfigLoader, KinesisConfig, OphanConfig}
+import conf.{ConfigLoader, OphanConfig}
 import io.circe.Encoder
 import model.{DefaultThreadPool, Environment, InitializationError, InitializationResult}
 import okhttp3.{HttpUrl, OkHttpClient}
@@ -44,17 +44,12 @@ object AnalyticsService extends StrictLogging {
     io.circe.generic.semiauto.deriveEncoder[AcquisitionSubmission]
   }
 
-  private def getAnalyticsServiceConfig(configLoader: ConfigLoader, env: Environment)(implicit pool: DefaultThreadPool): InitializationResult[(OphanConfig, KinesisConfig)] = {
+  private def getAnalyticsServiceConfig(configLoader: ConfigLoader, env: Environment)(implicit pool: DefaultThreadPool): InitializationResult[OphanConfig] = {
     import ConfigLoader.environmentShow
-    val ophanResult = configLoader.loadConfig[Environment, OphanConfig](env)
-    val kinesisResult = configLoader.loadConfig[Environment, KinesisConfig](env)
-
-    import cats.syntax.apply._
-    (ophanResult, kinesisResult)
-      .mapN((ophan, kinesis) => (ophan, kinesis))
+    configLoader.loadConfig[Environment, OphanConfig](env)
   }
 
-  def fromConfig(ophanConfig: OphanConfig, kinesisConfig: KinesisConfig)(implicit pool: DefaultThreadPool): InitializationResult[AnalyticsService] = {
+  def fromConfig(ophanConfig: OphanConfig)(implicit pool: DefaultThreadPool): InitializationResult[AnalyticsService] = {
     Validated.catchNonFatal {
       implicit val client = new OkHttpClient()
 
@@ -65,18 +60,15 @@ object AnalyticsService extends StrictLogging {
 
       val acquisitionConfig = Ec2OrLocalConfig(
         credentialsProvider,
-        kinesisStreamName = kinesisConfig.streamName,
         ophanEndpoint = Some(HttpUrl.parse(ophanConfig.ophanEndpoint))
       )
 
       new AnalyticsService(new DefaultAcquisitionService(acquisitionConfig))
     }.leftMap { err =>
-      InitializationError(s"unable to instantiate AnalyticsService for config: $ophanConfig, $kinesisConfig. Error trace: ${err.getMessage}")
+      InitializationError(s"unable to instantiate AnalyticsService for config: $ophanConfig. Error trace: ${err.getMessage}")
     }
   }
 
   def apply(configLoader: ConfigLoader, env: Environment)(implicit pool: DefaultThreadPool): InitializationResult[AnalyticsService] =
-    getAnalyticsServiceConfig(configLoader, env).andThen {
-      case (ophan, kinesis) => fromConfig(ophan, kinesis)
-    }
+    getAnalyticsServiceConfig(configLoader, env).andThen(fromConfig)
 }

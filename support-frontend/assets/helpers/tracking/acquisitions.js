@@ -4,13 +4,13 @@
 
 import { viewId } from 'ophan';
 
-import { get as getCookie } from 'helpers/cookie';
-import { getQueryParameter } from 'helpers/url';
-import { deserialiseJsonObject } from 'helpers/utilities';
+import { get as getCookie } from 'helpers/storage/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
+import { deserialiseJsonObject } from 'helpers/utilities/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
-import * as storage from 'helpers/storage';
-import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import { getCampaignCode } from 'helpers/campaigns';
+import * as storage from 'helpers/storage/storage';
+import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
+import { getCampaignCode } from 'helpers/campaigns/campaigns';
 
 // ----- Types ----- //
 
@@ -44,6 +44,7 @@ export type ReferrerAcquisitionData = {|
   // these aren't in the referrer acquisition data model on frontend, but they're convenient to include
   // as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
   queryParameters: ?AcquisitionQueryParameters,
+  labels: ?string[],
 |};
 
 export type PaymentAPIAcquisitionData = {|
@@ -60,6 +61,7 @@ export type PaymentAPIAcquisitionData = {|
   abTests: ?AcquisitionABTest[],
   gaId: ?string,
   queryParameters: ?AcquisitionQueryParameters,
+  labels: ?string[],
 |};
 
 // ----- Setup ----- //
@@ -169,7 +171,7 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
 };
 
 // Builds the acquisition object from data and other sources.
-function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcquisitionData {
+function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisitionData {
 
   // This was how referrer pageview id used to be passed.
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
@@ -195,6 +197,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     source: acquisitionData.source,
     abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
     queryParameters: queryParameters.length > 0 ? queryParameters : [],
+    labels: acquisitionData.labels,
   };
 }
 
@@ -246,6 +249,7 @@ function derivePaymentApiAcquisitionData(
     abTests,
     gaId: getCookie('_ga'),
     queryParameters: referrerAcquisitionData.queryParameters,
+    labels: referrerAcquisitionData.labels,
   };
 }
 
@@ -285,7 +289,7 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
     : deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Read from param, or read from sessionStorage, or build minimal version.
-  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || undefined);
+  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || {});
   storeReferrerAcquisitionData(referrerAcquisitionData);
 
   return referrerAcquisitionData;

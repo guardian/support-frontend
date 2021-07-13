@@ -34,7 +34,7 @@ object Fixtures {
               "PaypalEmail": "$payPalEmail",
               "PaypalType": "ExpressCheckout",
               "Type": "PayPal",
-              "paymentGateway": "PayPal Express"
+              "PaymentGateway": "PayPal Express"
          }
        """
 
@@ -49,7 +49,7 @@ object Fixtures {
            "CreditCardExpirationYear": 2022,
            "CreditCardType": "Visa",
            "Type": "CreditCardReferenceTransaction",
-           "paymentGateway": "Stripe Gateway 1"
+           "PaymentGateway": "Stripe Gateway 1"
          }
        """
 
@@ -152,7 +152,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $payPalJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5): String =
@@ -166,7 +168,9 @@ object Fixtures {
           },
           "paymentFields": $stripeJson,
           "sessionId": "testingToken",
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createPayPalPaymentMethodDigitalPackJson =
@@ -179,7 +183,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $payPalJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createDirectDebitDigitalPackJson =
@@ -192,7 +198,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $directDebitJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createDirectDebitGuardianWeeklyJson =
@@ -205,7 +213,9 @@ object Fixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $directDebitJson,
-          "acquisitionData": $acquisitionData
+          "acquisitionData": $acquisitionData,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "TestAgent"
         }"""
 
   val createSalesforceContactJson =
@@ -247,47 +257,34 @@ object Fixtures {
   def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
     s"""
           {
+            "productType": "Contribution",
             $requestIdJson,
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            "salesforceContacts": $salesforceContactsJson
+            "salesForceContact": $salesforceContactJson
             }
         """
   def createDigiPackZuoraSubscriptionJson: String =
     s"""
           {
-            $requestIdJson,
-            $userJson,
+            "productType": "DigitalSubscriptionDirectPurchase",
+            "billingCountry": "GB",
             "product": $digitalPackJson,
-            "analyticsInfo": {
-              "paymentProvider": "Stripe",
-              "isGiftPurchase": false
-            },
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson,
-            "salesforceContacts": $salesforceContactsJson
+            "salesForceContact": $salesforceContactJson
             }
         """
 
   def createCorporateDigiPackZuoraSubscriptionJson: String =
     s"""
           {
+            "productType": "DigitalSubscriptionCorporateRedemption",
             $requestIdJson,
             $userJson,
             "product": $digitalPackJson,
-            "analyticsInfo": {
-              "paymentProvider": "RedemptionNoProvider",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": {"redemptionCode": "fake-code-123"},
-            "salesForceContact": $salesforceContactJson,
-            "salesforceContacts": $salesforceContactsJson
+            "redemptionData": {"redemptionCode": "fake-code-123"},
+            "salesForceContact": $salesforceContactJson
             }
         """
 

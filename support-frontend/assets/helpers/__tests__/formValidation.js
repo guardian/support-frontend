@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import { checkStateIfApplicable } from 'helpers/formValidation';
-import { amountOrOtherAmountIsValid, maxTwoDecimals } from '../formValidation';
+import { checkStateIfApplicable } from 'helpers/forms/formValidation';
+import { amountOrOtherAmountIsValid, maxTwoDecimals } from '../forms/formValidation';
 import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from '../internationalisation/countryGroup';
 
 // ----- Tests ----- //

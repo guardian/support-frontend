@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import { getQueryParameter } from 'helpers/url';
-import * as cookie from 'helpers/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
+import * as cookie from 'helpers/storage/cookie';
 import { type Option } from 'helpers/types/option';
 
 import {
@@ -627,6 +627,7 @@ export {
   newspaperCountries,
   findIsoCountry,
   fromString,
+  fromGeolocation,
   stateProvinceFieldFromString,
   stateProvinceFromString,
   fromCountryGroup,

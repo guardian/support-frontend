@@ -53,7 +53,8 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
 )
 
-resolvers += Resolver.bintrayRepo("guardian", "ophan")
+dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
+
 resolvers += Resolver.sonatypeRepo("releases")
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")

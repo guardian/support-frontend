@@ -1,10 +1,10 @@
 // @flow
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { combineReducers } from 'redux';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { createUserReducer } from 'helpers/user/userReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type {

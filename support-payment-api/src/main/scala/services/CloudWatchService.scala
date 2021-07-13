@@ -1,5 +1,6 @@
 package services
 
+import backend.BackendError
 import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, PutMetricDataResult}
@@ -61,8 +62,17 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
           case ("PAYMENT_ALREADY_DONE") => false
           case _ => true
         }
-      case AmazonPayApiError(_, _, Some(AmazonPayApiError.TryAnotherCard)) => false
+      case AmazonPayApiError(_, _, Some("amazon_pay_try_other_card")) => false
       case _ => true
+    }
+  }
+
+  def recordPostPaymentTasksErrors(paymentProvider: PaymentProvider, errors: List[BackendError]): Unit = {
+    if (errors.nonEmpty) {
+      recordPostPaymentTasksError(
+        paymentProvider,
+        s"unable to track contribution due to error: ${errors.mkString(" & ")}"
+      )
     }
   }
 

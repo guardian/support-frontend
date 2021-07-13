@@ -1,24 +1,4 @@
 // @flow
-
-// ----- Imports ----- //
-import { type ContributionType } from 'helpers/contributions';
-
-// Copied from
-// https://github.com/playframework/playframework/blob/master/framework/src/play/
-// src/main/scala/play/api/data/validation/Validation.scala#L81
-// but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
-// for compatibility with Stripe
-export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
-
-export function patternIsValid(value: string, pattern: string): boolean {
-  const regex = new RegExp(pattern);
-  return regex.test(value);
-}
-
-export function emptyInputField(input: ?string): boolean {
-  return input === undefined || input === null || input === '' || input.trim().length === 0;
-}
-
 export type UserFormFieldAttribute = {
   id: string,
   value: string,
@@ -83,17 +63,3 @@ export const formElementIsValid = (formElement: Object | null) => {
 };
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
-
-export function getTitle(contributionType: ContributionType): string {
-
-  switch (contributionType) {
-    case 'ANNUAL':
-      return 'Make an annual';
-    case 'MONTHLY':
-      return 'Make a monthly';
-    case 'ONE_OFF':
-    default:
-      return 'Make a single';
-  }
-}
-

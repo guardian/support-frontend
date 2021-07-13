@@ -2,7 +2,7 @@ package com.gu.support.encoding
 
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.encoding.Codec._
-import com.gu.support.workers.{ClonedDirectDebitPaymentMethod, DirectDebitPaymentMethod, PaymentMethod}
+import com.gu.support.workers.{ClonedDirectDebitPaymentMethod, DirectDebitPaymentMethod, GatewayOption, GatewayOptionData, PaymentMethod, SepaPaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe._
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -26,7 +26,7 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "StreetNumber" : null,
       "BankTransferType" : "DirectDebitUK",
       "Type" : "BankTransfer",
-      "paymentGateway": "GoCardless"
+      "PaymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {
@@ -48,13 +48,44 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "Country" : "GB",
       "BankTransferType" : "DirectDebitUK",
       "Type" : "BankTransfer",
-      "paymentGateway": "GoCardless"
+      "PaymentGateway": "GoCardless"
     }"""
 
     testDecoding[PaymentMethod](json, {
       case _ : ClonedDirectDebitPaymentMethod => succeed
       case x => fail(s"Expected ClonedDirectDebitPaymentMethod, got $x")
     })
+  }
+
+  it should "encode SepaPaymentMethod" in {
+    val pm = SepaPaymentMethod(
+      BankTransferAccountName = "Mr Test",
+      BankTransferAccountNumber = "DE89370400440532013000",
+      Email = "mr.test@guardian.co.uk",
+      IPAddress = "127.0.0.1",
+      GatewayOptionData = GatewayOptionData(List(GatewayOption(name = "UserAgent", value = "IE11"))),
+    )
+
+    val expected =
+      s"""{
+         |"BankTransferAccountName": "Mr Test",
+         |"BankTransferAccountNumber": "DE89370400440532013000",
+         |"Email": "mr.test@guardian.co.uk",
+         |"IPAddress": "127.0.0.1",
+         |"GatewayOptionData": {
+         |    "GatewayOption": [
+         |        {
+         |            "name": "UserAgent",
+         |            "value": "IE11"
+         |        }
+         |    ]
+         |},
+         |"BankTransferType": "SEPA",
+         |"Type": "BankTransfer",
+         |"PaymentGateway": "Stripe Bank Transfer - GNM Membership"
+         |}""".stripMargin
+
+    testEncoding[PaymentMethod](pm, expected)
   }
 
 }

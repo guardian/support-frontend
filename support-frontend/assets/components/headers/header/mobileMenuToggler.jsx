@@ -7,7 +7,7 @@ import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
 import MobileMenu, { type Position } from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 export default class MobileMenuToggler extends Component<{
   utility: Node,

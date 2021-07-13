@@ -3,14 +3,15 @@
 // ----- Reducer ----- //
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { getUser } from 'helpers/subscriptionsForms/user';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { getUser } from 'helpers/user/user';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { isTestUser } from 'helpers/user/user';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { NoProductOptions, paperProductsWithDigital,
+  paperProductsWithoutDigital } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
   getWeeklyFulfilmentOption,
@@ -18,6 +19,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 
 function createFormReducer(
   initialCountry: IsoCountry,
@@ -63,7 +65,9 @@ function createFormReducer(
   };
 
   const getFulfilmentOption = (action, currentOption) =>
-    (action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
+    // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
+    // because it may mean a switch between domestic and rest of the world
+    (product === GuardianWeekly && action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
 
   return (originalState: FormState = initialState, action: Action): FormState => {
 
@@ -108,8 +112,6 @@ function createFormReducer(
         return {
           ...state,
           paymentMethod: null,
-          // When the country changes we need to update the fulfilment option because it may mean
-          // a switch between domestic and rest of the world
           fulfilmentOption: getFulfilmentOption(action, state.fulfilmentOption),
         };
 
@@ -153,6 +155,13 @@ function createFormReducer(
 
       case 'SET_GIFT_DELIVERY_DATE':
         return { ...state, giftDeliveryDate: action.giftDeliveryDate, formErrors: removeError('giftDeliveryDate', state.formErrors) };
+
+      case 'SET_ADD_DIGITAL_SUBSCRIPTION':
+        return {
+          ...state,
+          productOption: action.addDigital ?
+            paperProductsWithDigital[state.productOption] : paperProductsWithoutDigital[state.productOption],
+        };
 
       default:
         return state;

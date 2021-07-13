@@ -24,7 +24,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { fromCountryGroupId, glyph } from 'helpers/internationalisation/currency';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type PropTypes = {|
   orderIsAGift: boolean;
@@ -37,11 +37,16 @@ const weeklyHeroCopy = css`
 `;
 
 const weeklyHeroTitle = css`
-  ${headline.medium({ fontWeight: 'bold' })};
+  ${headline.small({ fontWeight: 'bold' })};
   margin-bottom: ${space[3]}px;
+
+  ${from.mobileLandscape} {
+    width: 75%;
+  }
 
   ${from.tablet} {
     ${headline.large({ fontWeight: 'bold' })};
+    width: 100%;
   }
 `;
 
@@ -56,7 +61,12 @@ const weeklyHeroParagraph = css`
 `;
 
 const roundelCentreLine = css`
-  ${headline.small({ fontWeight: 'bold' })}
+  ${headline.xxsmall({ fontWeight: 'bold' })}
+
+  ${from.tablet} {
+    ${headline.medium({ fontWeight: 'bold' })}
+  }
+
   ${from.tablet} {
     ${headline.large({ fontWeight: 'bold' })}
   }
@@ -66,9 +76,17 @@ const giftHeroSubHeading = css`
   font-weight: 700;
 `;
 
+const showOnMobile = css`
+  display: block;
+
+  ${from.mobileLandscape} {
+    display: none;
+  }
+`;
+
 const getRegionalCopyFor = (region: CountryGroupId) => (region === GBPCountries ?
-  <span>Find clarity with The Guardian&apos;s global magazine</span> :
-  <span>Read The Guardian in print</span>);
+  <span>Find clarity<br css={showOnMobile} /> with The Guardian&apos;s global magazine</span> :
+  <span>Read The<br css={showOnMobile} /> Guardian in print</span>);
 
 const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) => {
   if (promotionCopy.description) {

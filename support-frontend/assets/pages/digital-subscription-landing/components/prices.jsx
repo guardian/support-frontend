@@ -6,12 +6,14 @@ import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 import FlexContainer from 'components/containers/flexContainer';
 
+import type { PaymentSelectionPropTypes } from './paymentSelection/helpers/paymentSelection';
 import PaymentSelection
   from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
 const pricesSection = css`
   padding: 0 ${space[3]}px ${space[12]}px;
 `;
+
 const priceBoxes = css`
   margin-top: ${space[6]}px;
   justify-content: flex-start;
@@ -42,14 +44,25 @@ const ctaCopy = {
   },
 };
 
-function Prices({ orderIsAGift }: { orderIsAGift: boolean }) {
+function Prices({
+  countryGroupId,
+  currencyId,
+  productPrices,
+  orderIsAGift,
+}: PaymentSelectionPropTypes) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
+
   return (
     <section css={pricesSection} id="subscribe">
       <h2 css={pricesHeadline}>{copy.title}</h2>
       <p css={pricesSubHeadline}>{copy.paragraph}</p>
       <FlexContainer cssOverrides={priceBoxes}>
-        <PaymentSelection />
+        <PaymentSelection
+          countryGroupId={countryGroupId}
+          currencyId={currencyId}
+          productPrices={productPrices}
+          orderIsAGift={orderIsAGift}
+        />
       </FlexContainer>
     </section>
   );

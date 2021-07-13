@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';

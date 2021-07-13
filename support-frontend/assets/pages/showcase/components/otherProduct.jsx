@@ -4,8 +4,8 @@ import React from 'react';
 import Heading from 'components/heading/heading';
 import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
-import { classNameWithModifiers } from 'helpers/utilities';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type PropTypes = {|
   title: string,

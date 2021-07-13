@@ -5,9 +5,10 @@ import { titlepiece, body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import type { ContributionType } from 'helpers/contributions';
-import { currencies } from 'helpers/internationalisation/currency';
+import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { formatAmount } from 'helpers/forms/checkouts';
 
 const header = css`
   background: white;
@@ -53,7 +54,6 @@ type ContributionThankYouHeaderProps = {|
   contributionType: ContributionType,
   amount: string,
   currency: IsoCurrency,
-  thankyouPageHeadingTestVariant: boolean,
   shouldShowLargeDonationMessage: boolean
 |};
 
@@ -66,7 +66,6 @@ const ContributionThankYouHeader = ({
   contributionType,
   amount,
   currency,
-  thankyouPageHeadingTestVariant,
   shouldShowLargeDonationMessage,
 }: ContributionThankYouHeaderProps) => {
   const title = (): React.Node => {
@@ -76,11 +75,15 @@ const ContributionThankYouHeader = ({
     const payPalOneOff =
       paymentMethod === 'PayPal' && contributionType === 'ONE_OFF';
 
-    if (thankyouPageHeadingTestVariant && !payPalOneOff && amount) {
+    if (!payPalOneOff && amount) {
       const currencyAndAmount = (
         <span css={amountText}>
-          {currencies[currency].glyph}
-          {amount}
+          { formatAmount(
+            currencies[currency],
+            spokenCurrencies[currency],
+            parseFloat(amount),
+            false,
+          ) }
         </span>
       );
 
@@ -121,9 +124,32 @@ const ContributionThankYouHeader = ({
     }
   };
 
-  const additionalCopy = shouldShowLargeDonationMessage
-    ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best.'
-    : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best';
+  const AdditionalCopy = () => {
+    const mainText = shouldShowLargeDonationMessage ? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best. '
+      : 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. ';
+
+    const MarketingCopy = () => (
+      <span>
+        { shouldShowLargeDonationMessage ?
+          'We’ll be in touch to bring you closer to our journalism. Please select the extra add-ons that suit you best. ' :
+          'As you’re now a valued supporter, we’ll be in touch to bring you closer to our journalism. '
+        }
+        You can amend your email preferences at any time via{' '}
+        <a
+          href="https://manage.theguardian.com"
+        >your account
+        </a>.
+      </span>
+    );
+    return (
+      <>
+        {mainText}
+        { contributionType !== 'ONE_OFF' &&
+          <MarketingCopy />
+        }
+      </>
+    );
+  };
 
   return (
     <header css={header}>
@@ -141,7 +167,7 @@ const ContributionThankYouHeader = ({
             <br />
           </>
         )}
-        {additionalCopy}
+        <AdditionalCopy />
       </p>
     </header>
   );

@@ -127,18 +127,18 @@ object Fixtures {
     12, 22,
     Some("AmericanExpress"),
     StripeGatewayDefault,
-    stripePaymentType = Some(StripePaymentType.StripeCheckout))
+    StripePaymentType = Some(StripePaymentType.StripeCheckout))
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
-    firstName = "Barry",
-    lastName = "Humphreys",
-    bankTransferAccountName = "Barry Humphreys",
-    bankCode = "200000", bankTransferAccountNumber = "55779911",
-    city = Some("London"),
-    postalCode = Some("abc 123"),
-    state = None,
-    streetName = Some("easy street"),
-    streetNumber = None
+    FirstName = "Barry",
+    LastName = "Humphreys",
+    BankTransferAccountName = "Barry Humphreys",
+    BankCode = "200000", BankTransferAccountNumber = "55779911",
+    City = Some("London"),
+    PostalCode = Some("abc 123"),
+    State = None,
+    StreetName = Some("easy street"),
+    StreetNumber = None
   )
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"

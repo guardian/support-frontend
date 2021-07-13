@@ -1,20 +1,23 @@
 package com.gu.zuora.subscriptionBuilders
 
-import java.util.UUID
-
+import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.{GuardianWeekly, Quarterly}
-import com.gu.support.zuora.api.{Day, Month, ReaderType, SubscriptionData}
+import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
+import com.gu.support.workers._
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
+import com.gu.support.zuora.api.{Day, Month, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._
+
+import java.util.UUID
 
 class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
@@ -73,25 +76,44 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
 
-  lazy val gift: SubscriptionData =
-    GuardianWeeklySubscriptionBuilder.build(
-      weekly,
-      UUID.randomUUID(),
-      Country.UK, None,
-      Some(firstDeliveryDate),
-      promotionService,
-      ReaderType.Gift,
-      SANDBOX,
-      contractEffectiveDate = saleDate).toOption.get
-
-  lazy val nonGift = GuardianWeeklySubscriptionBuilder.build(
-    weekly,
+  lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     UUID.randomUUID(),
-    Country.UK, None,
-    Some(firstDeliveryDate),
+    User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+    GBP,
+  )
+
+  lazy val gift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
-    ReaderType.Direct,
     SANDBOX,
-    contractEffectiveDate = saleDate).toOption.get
+    DateGenerator(saleDate),
+    subscribeItemBuilder,
+  ).build(
+    GuardianWeeklyState(
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+      Some(WeeklyGiftRecipient(None, "bob", "smith", None)),
+      weekly,
+      PayPalReferenceTransaction("baid", "hi@gu.com"),
+      firstDeliveryDate,
+      None,
+      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+    ),
+  ).toOption.get.subscriptionData
+
+  lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
+    promotionService,
+    SANDBOX,
+    DateGenerator(saleDate),
+    subscribeItemBuilder,
+  ).build(
+    GuardianWeeklyState(
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+      None,
+      weekly,
+      PayPalReferenceTransaction("baid", "hi@gu.com"),
+      firstDeliveryDate,
+      None,
+      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+    ),
+  ).toOption.get.subscriptionData
 
 }

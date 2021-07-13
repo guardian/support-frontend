@@ -8,13 +8,11 @@ import {
   SvgDirectDebit,
   SvgPayPal,
 } from '@guardian/src-icons';
-
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import Rows from 'components/base/rows';
 import { type Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {|

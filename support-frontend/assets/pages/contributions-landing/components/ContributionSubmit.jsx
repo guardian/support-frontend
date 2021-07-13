@@ -8,17 +8,16 @@ import { connect } from 'react-redux';
 
 import { billingPeriodFromContrib, type ContributionType, getAmount } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
-import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
-import { hiddenIf } from 'helpers/utilities';
-import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
+import { hiddenIf } from 'helpers/utilities/utilities';
+import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import { PayPal, AmazonPay } from 'helpers/paymentMethods';
+import { PayPal, AmazonPay, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import Button from 'components/button/button';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
@@ -90,8 +89,6 @@ function withProps(props: PropTypes) {
   // if all payment methods are switched off, do not display the button
   const formClassName = 'form--contribution';
   const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
-  const amazonPaymentReady = () =>
-    !props.amazonPayData.fatalError && props.amazonPayData.orderReferenceId && props.amazonPayData.paymentSelected;
 
   const submitButtonCopy = getContributeButtonCopyWithPaymentType(
     props.contributionType,
@@ -101,8 +98,10 @@ function withProps(props: PropTypes) {
     props.paymentMethod,
   );
 
+  const amazonPayEnabled = () => !props.amazonPayData.fatalError;
+
   const getAmazonPayComponent = () => (props.amazonPayData.hasAccessToken ?
-    <AmazonPayWallet isTestUser={props.isTestUser} /> :
+    <AmazonPayWallet isTestUser={props.isTestUser} contributionType={props.contributionType} /> :
     <AmazonPayLoginButton />);
 
   // We have to show/hide PayPalExpressButton rather than conditionally rendering it
@@ -132,9 +131,11 @@ function withProps(props: PropTypes) {
         />
       </div>
         )}
-      { !props.amazonPayData.fatalError && props.paymentMethod === AmazonPay && getAmazonPayComponent() }
+      { props.paymentMethod === AmazonPay && amazonPayEnabled() && getAmazonPayComponent() }
 
-      {!showPayPalRecurringButton && (props.paymentMethod !== AmazonPay || amazonPaymentReady()) ?
+      {!showPayPalRecurringButton && (
+        props.paymentMethod !== AmazonPay || (amazonPayEnabled() && props.amazonPayData.hasAccessToken)
+      ) ?
         <Button
           type="submit"
           aria-label={submitButtonCopy}

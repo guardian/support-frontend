@@ -6,7 +6,7 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { formatMachineDate } from 'helpers/dateConversions';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import CalendarIcon from './calendarIcon.svg';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { TextInput } from '@guardian/src-text-input';

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { getWeeklyDays } from '../deliveryDays';
-import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
+import { formatMachineDate, formatUserDate } from 'helpers/utilities/dateConversions';
 
 
 // ----- Tests ----- //

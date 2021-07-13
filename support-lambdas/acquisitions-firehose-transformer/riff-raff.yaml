@@ -1,0 +1,11 @@
+stacks: [support]
+regions: [eu-west-1]
+
+deployments:
+  acquisitions-firehose-transformer:
+    type: aws-lambda
+    parameters:
+      bucket: membership-dist
+      functionNames: [acquisitions-firehose-transformer-]
+      fileName: acquisitions-firehose-transformer.jar
+      prefixStack: false

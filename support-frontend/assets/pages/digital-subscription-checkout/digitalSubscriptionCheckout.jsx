@@ -5,7 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
@@ -20,12 +20,12 @@ import CheckoutFormGift
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
-import { getQueryParameter } from 'helpers/url';
-import type { DigitalBillingPeriod, DigitalGiftBillingPeriod } from 'helpers/billingPeriods';
-import { Monthly, Annual, Quarterly } from 'helpers/billingPeriods';
+import { getQueryParameter } from 'helpers/urls/url';
+import type { DigitalBillingPeriod, DigitalGiftBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { Monthly, Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { DigitalPack } from 'helpers/subscriptions';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
@@ -62,8 +62,8 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
 
 const store = pageInit(reducer, true);
 
-const { countryGroupId } = store.getState().common.internationalisation;
-const { orderIsAGift } = store.getState().page.checkout;
+const { countryGroupId, countryId } = store.getState().common.internationalisation;
+const { orderIsAGift, productPrices } = store.getState().page.checkout;
 
 
 const thankyouProps = {
@@ -80,7 +80,7 @@ const content = orderIsAGift ?
     <Provider store={store}>
       <Page
         header={<HeaderWrapper />}
-        footer={<DigitalFooter orderIsAGift />}
+        footer={<DigitalFooter country={countryId} productPrices={productPrices} orderIsAGift />}
       >
         <CheckoutStage
           checkoutForm={<CheckoutFormGift />}
@@ -95,7 +95,7 @@ const content = orderIsAGift ?
     <Provider store={store}>
       <Page
         header={<HeaderWrapper />}
-        footer={<DigitalFooter orderIsAGift={false} />}
+        footer={<DigitalFooter country={countryId} productPrices={productPrices} orderIsAGift={false} />}
       >
         <CheckoutStage
           checkoutForm={<CheckoutForm />}

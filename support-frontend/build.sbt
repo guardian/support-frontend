@@ -9,11 +9,9 @@ testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
 
 testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 
-resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
-
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "com.gu" %% "simple-configuration-ssm" % "1.5.3",
+  "com.gu" %% "simple-configuration-ssm" % "1.5.6",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
@@ -23,7 +21,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-lambda" % awsClientVersion,
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.dripower" %% "play-circe" % playCirceVersion,
-  "com.gu" %% "fezziwig" % "1.3",
+  "com.gu" %% "fezziwig" % "1.4",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
@@ -40,7 +38,6 @@ libraryDependencies ++= Seq(
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "3.10.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.gu" %% "tip" % "0.6.4",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,

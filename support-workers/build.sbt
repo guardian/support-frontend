@@ -1,7 +1,6 @@
-import scala.sys.process._
 import LibraryVersions._
 import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
-import sbt.Keys.{libraryDependencies, resolvers}
+import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
@@ -50,6 +49,7 @@ assemblyMergeStrategy in assembly := {
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case "mime.types" => MergeStrategy.first
+  case str if str.contains("simulacrum") => MergeStrategy.first
   case y =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)
@@ -82,6 +82,7 @@ deployToCode := {
     "-CreateSalesforceContactLambda-",
     "-CreateZuoraSubscriptionLambda-",
     "-SendThankYouEmailLambda-",
+    "-UpdateSupporterProductDataLambda-",
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
     "-SendOldAcquisitionEventLambda-",

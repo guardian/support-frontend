@@ -6,10 +6,9 @@ import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { Link } from '@guardian/src-link';
 
-import { paperSubsUrl } from 'helpers/routes';
+import { paperSubsUrl } from 'helpers/urls/routes';
 
-import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
-import { setTab } from '../../paperSubscriptionLandingPageActions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 const linkColor = css`
   color: inherit;
@@ -18,8 +17,8 @@ const linkColor = css`
 function LinkTo({
   setTabAction, tab, children,
 }: {|
-  setTabAction: typeof setTab,
-  tab: ActiveTabState,
+  setTabAction: (PaperFulfilmentOptions) => void,
+  tab: PaperFulfilmentOptions,
   children: Node
 |}) {
   return (

@@ -1,28 +1,29 @@
 package com.gu.support.workers
 
-import java.util.UUID
-
+import com.gu.helpers
+import com.gu.helpers.DateGenerator
+import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
-import com.gu.support.config.{ZuoraConfig, ZuoraDigitalPackConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
 import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
-import com.gu.support.redemption.corporate.{DynamoLookup, DynamoUpdate}
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
+import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, CorporateCodeValidator, DynamoLookup, DynamoUpdate}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.lambdas.ZuoraSubscriptionCreator
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState}
 import com.gu.support.workers.states.SendThankYouEmailState.{SendThankYouEmailDigitalSubscriptionCorporateRedemptionState, SendThankYouEmailDigitalSubscriptionDirectPurchaseState}
-import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.ReaderType.Corporate
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeRequest}
 import com.gu.support.zuora.domain
-import com.gu.zuora.ZuoraSubscribeService
+import com.gu.zuora.productHandlers.{ZuoraDigitalSubscriptionCorporateRedemptionHandler, ZuoraDigitalSubscriptionDirectHandler}
+import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionCorporateRedemptionBuilder, DigitalSubscriptionDirectPurchaseBuilder, SubscribeItemBuilder}
+import com.gu.zuora.{ZuoraSubscribeService, ZuoraSubscriptionCreator}
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
+import java.util.UUID
 import scala.concurrent.Future
 
 class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
@@ -32,20 +33,10 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
     val testCode = "test-code-123"
 
-    val state = CreateZuoraSubscriptionState(
-      requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-      giftRecipient = None,
+    val state = DigitalSubscriptionCorporateRedemptionState(
       product = DigitalPack(Currency.GBP, null /* !*/, Corporate),
-      AnalyticsInfo(false, RedemptionNoProvider),
-      paymentMethod = Right(RedemptionData(RedemptionCode(testCode).toOption.get)),
-      firstDeliveryDate = None,
-      promoCode = None,
-      salesforceContacts = SalesforceContactRecords(
-        buyer = SalesforceContactRecord("sfbuy", "sfbuyacid"),
-        giftRecipient = None
-      ),
-      acquisitionData = None
+      redemptionData = RedemptionData(RedemptionCode(testCode).toOption.get),
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     )
 
 
@@ -80,26 +71,33 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       }
     }
 
-    val giftCodeGeneratorService = new GiftCodeGeneratorService
-
-    val subscriptionCreator = ZuoraSubscriptionCreator(
-      () => new DateTime(2020, 6, 15, 16, 28, 57),
-      null,
-      dynamoDb,
-      zuora,
-      giftCodeGeneratorService,
-      ZuoraConfig(null, null, null, null, null, null),
-      false,
+    val subscriptionCreator = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
+      new ZuoraSubscriptionCreator(
+        zuora,
+        DateGenerator(new DateTime(2020, 6, 15, 16, 28, 57)),
+        requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+        userId = "111222",
+      ),
+      new CorporateCodeStatusUpdater(dynamoDb),
+      new DigitalSubscriptionCorporateRedemptionBuilder(
+        new CorporateCodeValidator(dynamoDb),
+        DateGenerator(new LocalDate(2020, 6, 15)),
+        TouchPointEnvironments.SANDBOX,
+        new SubscribeItemBuilder(
+          requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+          user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+          GBP,
+        )
+      ),
+      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     )
-    val result = subscriptionCreator.create(
-      state,
-      RequestInfo(false, false, Nil, false),
-    )
 
-    result.map { handlerResult =>
-      withClue(handlerResult) {
+    val result = subscriptionCreator.subscribe(state)
+
+    result.map { sendThankYouEmailState =>
+      withClue(sendThankYouEmailState) {
         dynamoUpdates should be(List(testCode -> DynamoFieldUpdate("available", false)))
-        inside(handlerResult.value.sendThankYouEmailState) {
+        inside(sendThankYouEmailState) {
           case s: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState =>
             s.subscriptionNumber should be("subcorp")
         }
@@ -109,20 +107,12 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
   it should "create a Digital Pack standard (paid) subscription" in {
 
-    val state = CreateZuoraSubscriptionState(
-      requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-      giftRecipient = None,
+    val state = DigitalSubscriptionDirectPurchaseState(
+      billingCountry = Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
-      AnalyticsInfo(false, PayPal),
-      paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
-      firstDeliveryDate = None,
+      paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = None,
-      salesforceContacts = SalesforceContactRecords(
-        buyer = SalesforceContactRecord("sfbuy", "sfbuyacid"),
-        giftRecipient = None
-      ),
-      acquisitionData = None
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     )
 
     val zuora = new ZuoraSubscribeService {
@@ -138,7 +128,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       // ideally should also check we called zuora with the right post data
       override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] = {
         val maybeRedemptionCode = subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode
-        val paymentType = subscribeRequest.subscribes.head.paymentMethod.get.`type`
+        val paymentType = subscribeRequest.subscribes.head.paymentMethod.get.Type
         val autoPay = subscribeRequest.subscribes.head.account.autoPay
         val readerType = subscribeRequest.subscribes.head.subscriptionData.subscription.readerType
         val ratePlan = subscribeRequest.subscribes.head.subscriptionData.ratePlanData.head.ratePlan.productRatePlanId
@@ -151,23 +141,32 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       }
     }
 
-    val subscriptionCreator = ZuoraSubscriptionCreator(
-      now = () => new DateTime(2020, 6, 15, 16, 28, 57),
-      promotionService = null,// shouldn't be called for subs with no promo code
-      redemptionService = null,// shouldn't be called for paid subs
-      zuoraService = zuora,
-      giftCodeGenerator = new GiftCodeGeneratorService,
-      config = ZuoraConfig(url = null, username = null, password = null, monthlyContribution = null, annualContribution = null, digitalPack = ZuoraDigitalPackConfig(14, 2)),
-      false,
-    )
-    val result = subscriptionCreator.create(
-      state = state,
-      requestInfo = RequestInfo(false, false, Nil, false),
+    val subscriptionCreator = new ZuoraDigitalSubscriptionDirectHandler(
+      new ZuoraSubscriptionCreator(
+        zuora,
+        DateGenerator(new DateTime(2020, 6, 15, 16, 28, 57)),
+        requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+        userId = "111222",
+      ),
+      new DigitalSubscriptionDirectPurchaseBuilder(
+        config = ZuoraDigitalPackConfig(14, 2),
+        promotionService = null,// shouldn't be called for subs with no promo code
+        DateGenerator(new LocalDate(2020, 6, 15)),
+        TouchPointEnvironments.SANDBOX,
+        new SubscribeItemBuilder(
+          requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+          user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
+          Currency.GBP,
+        )
+      ),
+      user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     )
 
-    result.map { handlerResult =>
-      withClue(handlerResult) {
-        inside(handlerResult.value.sendThankYouEmailState) {
+    val result = subscriptionCreator.subscribe(state, None)
+
+    result.map { sendThankYouEmailState =>
+      withClue(sendThankYouEmailState) {
+        inside(sendThankYouEmailState) {
           case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
             s.accountNumber should be("accountdigi")
             s.subscriptionNumber should be("subdigi")

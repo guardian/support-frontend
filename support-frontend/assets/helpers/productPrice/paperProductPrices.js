@@ -1,6 +1,6 @@
 // @flow
 
-import { Monthly } from 'helpers/billingPeriods';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
   Collection,
@@ -17,6 +17,8 @@ import {
   finalPrice as genericFinalPrice,
   getProductPrice as genericGetProductPrice,
 } from 'helpers/productPrice/productPrices';
+import { applyDiscount, getAppliedPromo } from 'helpers/productPrice/promotions';
+
 
 const country = 'GB';
 const billingPeriod = Monthly;
@@ -66,4 +68,13 @@ function getMaxSavingVsRetail(productPrices: ProductPrices): number {
   return Math.max(...allSavings);
 }
 
-export { getProductPrice, finalPrice, getMaxSavingVsRetail };
+function getPriceWithDiscount(
+  productPrices: ProductPrices,
+  fulfilmentOption: FulfilmentOptions,
+  productOption: ProductOptions,
+) {
+  const basePrice = getProductPrice(productPrices, fulfilmentOption, productOption);
+  return applyDiscount(basePrice, getAppliedPromo(basePrice.promotions));
+}
+
+export { getProductPrice, finalPrice, getMaxSavingVsRetail, getPriceWithDiscount };

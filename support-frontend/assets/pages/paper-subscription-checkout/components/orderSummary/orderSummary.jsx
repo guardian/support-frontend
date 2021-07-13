@@ -1,53 +1,136 @@
 // @flow
 
 import React from 'react';
-import { type ProductPrice } from 'helpers/productPrice/productPrices';
-import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { connect } from 'react-redux';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
-import EndSummary from 'pages/paper-subscription-checkout/components/endSummary/endSummary';
-import * as styles from './orderSummaryStyles';
-import { type Option } from 'helpers/types/option';
+import OrderSummary from 'components/orderSummary/orderSummary';
+import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
+
+import { paperProductsWithoutDigital, type ProductOptions } from 'helpers/productPrice/productOptions';
+import { Collection, type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getPriceWithDiscount, getProductPrice } from 'helpers/productPrice/paperProductPrices';
+
+import { showPrice, type ProductPrices, type ProductPrice } from 'helpers/productPrice/productPrices';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+
+import { getOrderSummaryTitle, getPriceSummary } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
 type PropTypes = {
-  billingPeriod: DigitalBillingPeriod,
-  // eslint-disable-next-line react/no-unused-prop-types
-  changeSubscription?: string | null,
+  fulfilmentOption: FulfilmentOptions,
+  productOption: ActivePaperProducts,
+  billingPeriod: BillingPeriod,
+  productPrices: ProductPrices,
+  digiSubPrice: string,
   image: $Call<GridImageType, GridImg>,
-  productPrice: ProductPrice,
-  title: string,
-  paymentStartDate?: Option<string>,
+  includesDigiSub: boolean,
+  changeSubscription?: string | null,
+  startDate?: string,
+  total: ProductPrice,
 };
 
-function OrderSummary(props: PropTypes) {
+function getMobileSummaryTitle(
+  productOption: ProductOptions,
+  fulfilmentOption: FulfilmentOptions,
+  includesDigiSub: ?boolean = false,
+) {
+  return (<>
+    {getOrderSummaryTitle(productOption, fulfilmentOption)}
+    {includesDigiSub && <> +&nbsp;digital</>}
+  </>);
+}
 
-  const priceString =
-    `You'll pay ${getPriceDescription(props.productPrice, props.billingPeriod)}`;
+function mapStateToProps(state: WithDeliveryCheckoutState) {
+  return {
+    fulfilmentOption: state.page.checkout.fulfilmentOption,
+    productOption: state.page.checkout.productOption,
+    billingPeriod: state.page.checkout.billingPeriod,
+    productPrices: state.page.checkout.productPrices,
+  };
+}
+
+function PaperOrderSummary(props: PropTypes) {
+  const rawTotal = getPriceSummary(showPrice(props.total, false), props.billingPeriod);
+  const cleanedTotal = rawTotal.replace(/\/(.*)/, ''); // removes anything after the /
+  const total = `${cleanedTotal} per month`;
+  // If the user has added a digi sub, we need to know the price of their selected base paper product separately
+  const basePaperPrice = props.includesDigiSub ?
+    getPriceWithDiscount(
+      props.productPrices,
+      props.fulfilmentOption,
+      paperProductsWithoutDigital[props.productOption],
+    )
+    : props.total;
+  // This allows us to get the price without promotion, so we can say what the price will revert to
+  const paperWithoutPromo = getProductPrice(
+    props.productPrices,
+    props.fulfilmentOption,
+    props.productOption,
+  );
+  const activePromo = getAppliedPromo(paperWithoutPromo.promotions);
+  const monthsDiscounted = activePromo && activePromo.numberOfDiscountedPeriods;
+  const promotionPriceString = activePromo && monthsDiscounted
+    ? ` for ${monthsDiscounted} months, then ${showPrice(paperWithoutPromo, false)} per month` : '';
+  const rawPrice = getPriceSummary(showPrice(basePaperPrice, false), props.billingPeriod);
+  const cleanedPrice = rawPrice.replace(/\/(.*)/, ''); // removes anything after the /
+  const accessiblePriceString = `You'll pay ${cleanedPrice} per month`;
+
+  const productInfoHomeDelivery = [
+    {
+      content: `${accessiblePriceString}${promotionPriceString}`,
+    },
+  ];
+  const productInfoSubsCard = [
+    ...productInfoHomeDelivery,
+    {
+      content: props.startDate ? `Your first payment will be on ${props.startDate}` : '',
+      subText: 'Your subscription card will arrive in the post before the payment date',
+    },
+  ];
+  const productInfoPaper = props.fulfilmentOption === Collection ? productInfoSubsCard : productInfoHomeDelivery;
+
+  const productInfoDigiSub = [
+    {
+      content: `You'll pay ${props.digiSubPrice}`,
+    },
+  ];
+
+  const mobilePriceStatement = activePromo ? `${total}${promotionPriceString}` : total;
+
+  const mobileSummary = {
+    title: getMobileSummaryTitle(
+      props.productOption,
+      props.fulfilmentOption,
+      props.includesDigiSub,
+    ),
+    price: mobilePriceStatement,
+  };
 
   return (
-    <aside css={styles.wrapper}>
-      <div css={styles.topLine}>
-        <h3 css={styles.sansTitle}>Order summary</h3>
-        <a href={props.changeSubscription}>Change</a>
-      </div>
-      <div css={styles.contentBlock}>
-        <div css={styles.imageContainer}>{props.image}</div>
-        <div css={styles.textBlock}>
-          <h4>{props.title}</h4>
-          <p>{priceString}</p>
-        </div>
-      </div>
-      <div css={styles.endSummary}>
-        <EndSummary paymentStartDate={props.paymentStartDate || 'date to be confirmed'} />
-      </div>
-    </aside>
+    <OrderSummary
+      image={props.image}
+      changeSubscription={props.changeSubscription}
+      total={total}
+      mobileSummary={mobileSummary}
+    >
+      <OrderSummaryProduct
+        productName={getOrderSummaryTitle(props.productOption, props.fulfilmentOption)}
+        productInfo={productInfoPaper}
+      />
+      {props.includesDigiSub && <OrderSummaryProduct
+        productName="Digital subscription"
+        productInfo={productInfoDigiSub}
+      />}
+    </OrderSummary>
   );
 }
 
-OrderSummary.defaultProps = {
+PaperOrderSummary.defaultProps = {
   changeSubscription: '',
-  paymentStartDate: 'date to be confirmed',
+  startDate: '',
 };
 
-export default OrderSummary;
+export default connect(mapStateToProps)(PaperOrderSummary);

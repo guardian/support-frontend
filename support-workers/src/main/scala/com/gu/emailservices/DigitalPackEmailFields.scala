@@ -2,7 +2,7 @@ package com.gu.emailservices
 
 import cats.implicits._
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes
-import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.{CCAttributes, DDAttributes, PPAttributes}
+import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.{APAttributes, CCAttributes, DDAttributes, PPAttributes, SepaAttributes}
 import com.gu.emailservices.SubscriptionEmailFieldHelpers._
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.config.TouchPointEnvironment
@@ -42,11 +42,15 @@ object DigitalSubscriptionEmailAttributes {
     implicit val e1: Encoder.AsObject[DDAttributes] = deriveEncoder
     implicit val e2: Encoder.AsObject[CCAttributes] = deriveEncoder
     implicit val e3: Encoder.AsObject[PPAttributes] = deriveEncoder
+    implicit val e4: Encoder.AsObject[APAttributes] = deriveEncoder
+    implicit val e5: Encoder.AsObject[SepaAttributes] = deriveEncoder
 
     implicit val encoder: Encoder.AsObject[PaymentFieldsAttributes] = Encoder.AsObject.instance {
       case v: DDAttributes => v.asJsonObject
       case v: CCAttributes => v.asJsonObject
       case v: PPAttributes => v.asJsonObject
+      case v: APAttributes => v.asJsonObject
+      case v: SepaAttributes => v.asJsonObject
     }
 
     case class DDAttributes(
@@ -57,12 +61,21 @@ object DigitalSubscriptionEmailAttributes {
       default_payment_method: String = "Direct Debit",
     ) extends PaymentFieldsAttributes
 
+    case class SepaAttributes(
+      iban: String,
+      default_payment_method: String = "Sepa"
+    ) extends PaymentFieldsAttributes
+
     case class CCAttributes(
       default_payment_method: String = "Credit/Debit Card",
     ) extends PaymentFieldsAttributes
 
     case class PPAttributes(
       default_payment_method: String = "PayPal",
+    ) extends PaymentFieldsAttributes
+
+    case class APAttributes(
+      default_payment_method: String = "AmazonPay",
     ) extends PaymentFieldsAttributes
 
   }
@@ -259,7 +272,12 @@ class DigitalPackEmailFields(
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date),
         trial_period = "14", //TODO: depends on Promo code or zuora config
         paymentFieldsAttributes
-      ), state.user)
+      ),
+        state.user,
+        Some(JsonObject.fromMap(
+          Map("unmanaged_digital_subscription_in_events_test" -> Json.fromBoolean(state.isInEventsTest.getOrElse(false)))
+        ))
+      )
     )
   }
 
@@ -270,19 +288,21 @@ class DigitalPackPaymentEmailFields(getMandate: String => Future[Option[String]]
   def paymentFields(paymentMethod: PaymentMethod, accountNumber: String)(implicit ec: ExecutionContext): Future[PaymentFieldsAttributes] =
     paymentMethod match {
       case dd: DirectDebitPaymentMethod => getMandate(accountNumber).map(directDebitMandateId => DDAttributes(
-        account_number = mask(dd.bankTransferAccountNumber),
-        sort_code = hyphenate(dd.bankCode),
-        account_name = dd.bankTransferAccountName,
+        account_number = mask(dd.BankTransferAccountNumber),
+        sort_code = hyphenate(dd.BankCode),
+        account_name = dd.BankTransferAccountName,
         mandateid = directDebitMandateId.getOrElse("")
       ))
       case dd: ClonedDirectDebitPaymentMethod => Future.successful(DDAttributes(
-        sort_code = hyphenate(dd.bankCode),
-        account_number = mask(dd.bankTransferAccountNumber),
-        account_name = dd.bankTransferAccountName,
-        mandateid = dd.mandateId
+        sort_code = hyphenate(dd.BankCode),
+        account_number = mask(dd.BankTransferAccountNumber),
+        account_name = dd.BankTransferAccountName,
+        mandateid = dd.MandateId
       ))
       case _: CreditCardReferenceTransaction => Future.successful(CCAttributes())
       case _: PayPalReferenceTransaction => Future.successful(PPAttributes())
+      case _: AmazonPayPaymentMethod => Future.successful(APAttributes())
+      case sepa: SepaPaymentMethod => Future.successful(SepaAttributes(sepa.BankTransferAccountNumber))
     }
 
 }

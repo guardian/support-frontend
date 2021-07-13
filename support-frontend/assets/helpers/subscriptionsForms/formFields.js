@@ -2,18 +2,18 @@
 
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { ErrorReason } from 'helpers/errorReasons';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type {
   AnyCheckoutState,
   CheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { SubscriptionProduct } from 'helpers/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 

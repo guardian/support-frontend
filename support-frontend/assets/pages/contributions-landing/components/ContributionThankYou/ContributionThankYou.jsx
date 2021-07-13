@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { type User } from 'helpers/user/userReducer';
-import { type PaymentMethod, DirectDebit } from 'helpers/paymentMethods';
+import { type PaymentMethod, DirectDebit } from 'helpers/forms/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -22,6 +22,7 @@ import ContributionThankYouSignIn from './ContributionThankYouSignIn';
 import ContributionThankYouSignUp from './ContributionThankYouSignUp';
 import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
 import ContributionThankYouSupportReminder from './ContributionThankYouSupportReminder';
+import ContributionThankYouSurvey from './ContributionThankYouSurvey';
 import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import {
@@ -29,8 +30,7 @@ import {
   OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { getCampaignSettings } from 'helpers/campaigns';
-import type { CampaignSettings } from 'helpers/campaigns';
+import { getCampaignSettings, type CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getAmount } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
@@ -139,8 +139,6 @@ type ContributionThankYouProps = {|
   paymentMethod: PaymentMethod,
   countryId: IsoCountry,
   campaignCode: ?string,
-  thankyouPageHeadingTestVariant: boolean,
-  largeDonationMessageTestVariant: boolean
 |};
 
 const mapStateToProps = state => ({
@@ -159,10 +157,6 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
   campaignCode: state.common.referrerAcquisitionData.campaignCode,
-  thankyouPageHeadingTestVariant:
-    state.common.abParticipations.thankyouPageHeadingTest === 'V1',
-  largeDonationMessageTestVariant:
-    state.common.abParticipations.globalThankyouPageLargeDonationTest === 'V1',
 });
 
 const ContributionThankYou = ({
@@ -177,16 +171,10 @@ const ContributionThankYou = ({
   paymentMethod,
   countryId,
   campaignCode,
-  thankyouPageHeadingTestVariant,
-  largeDonationMessageTestVariant,
 }: ContributionThankYouProps) => {
   const isKnownEmail = guestAccountCreationToken === null;
   const campaignSettings = useMemo<CampaignSettings | null>(() =>
     getCampaignSettings(campaignCode));
-
-
-  const shouldShowLargeDonationMessage =
-    largeDonationMessageTestVariant && isLargeDonation(amount, contributionType);
 
   useEffect(() => {
     trackUserData(
@@ -211,10 +199,9 @@ const ContributionThankYou = ({
       <ContributionThankYouMarketingConsent
         email={email}
         csrf={csrf}
-        thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
       />
     ),
-    shouldShow: true,
+    shouldShow: contributionType === 'ONE_OFF',
   };
   const supportReminderAction = {
     component: (
@@ -224,6 +211,12 @@ const ContributionThankYou = ({
     ),
     shouldShow: contributionType === 'ONE_OFF',
   };
+
+  const surveyAction = {
+    component: <ContributionThankYouSurvey countryId={countryId} />,
+    shouldShow: true,
+  };
+
   const socialShareAction = {
     component: (
       <ContributionThankYouSocialShare
@@ -232,6 +225,7 @@ const ContributionThankYou = ({
           campaignSettings && campaignSettings.createReferralCodes
         }
         campaignCode={campaignSettings && campaignSettings.campaignCode}
+        countryId={countryId}
       />
     ),
     shouldShow: true,
@@ -246,6 +240,7 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
+    surveyAction,
     socialShareAction,
   ];
 
@@ -254,6 +249,7 @@ const ContributionThankYou = ({
     signInAction,
     marketingConsentAction,
     supportReminderAction,
+    surveyAction,
     ausMapAction,
     socialShareAction,
   ];
@@ -279,8 +275,7 @@ const ContributionThankYou = ({
           contributionType={contributionType}
           amount={amount}
           currency={currency}
-          thankyouPageHeadingTestVariant={thankyouPageHeadingTestVariant}
-          shouldShowLargeDonationMessage={shouldShowLargeDonationMessage}
+          shouldShowLargeDonationMessage={isLargeDonation(amount, contributionType)}
         />
       </div>
 

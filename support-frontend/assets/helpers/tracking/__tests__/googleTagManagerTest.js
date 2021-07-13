@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { mapFields } from '../googleTagManager';
-import { DirectDebit } from '../../paymentMethods';
+import { DirectDebit } from '../../forms/paymentMethods';
 
 // ----- Tests ----- //
 

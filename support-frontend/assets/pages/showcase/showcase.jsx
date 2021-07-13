@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 import React from 'react';
 
-import { init as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
+import { renderPage } from 'helpers/rendering/render';
+import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
 
 import Page from 'components/page/page';
 
@@ -26,7 +26,6 @@ import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
 import OtherProducts from './components/otherProducts';
 import './showcase.scss';
-import { Provider } from 'react-redux';
 
 // ----- Internationalisation ----- //
 
@@ -46,31 +45,28 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
-// ----- Page Startup ----- //
-
-const store = pageInit();
-const state = store.getState();
-
 // ----- Render ----- //
 
-const content = (
-  <Provider store={store}>
-    <Page header={<CountrySwitcherHeader />} footer={<Footer />}>
-      <Hero countryGroupId={state.common.internationalisation.countryGroupId} />
-      <WhySupportMatters />
-      <BreakingHeadlines />
-      <NoOneEdits />
-      <Content id="support">
-        <Heading size={2} className="anchor">
+const ShowcasePage = () => (
+  <Page header={<CountrySwitcherHeader />} footer={<Footer />}>
+    <Hero countryGroupId={countryGroupId} />
+    <WhySupportMatters />
+    <BreakingHeadlines />
+    <NoOneEdits />
+    <Content id="support">
+      <Heading size={2} className="anchor">
           Ways you can support The Guardian
-        </Heading>
-      </Content>
-      <CtaSubscribe />
-      <CtaContribute />
-      {countryGroupId === 'GBPCountries' && <OtherProducts />}
-    </Page>
-  </Provider>
+      </Heading>
+    </Content>
+    <CtaSubscribe />
+    <CtaContribute />
+    {countryGroupId === 'GBPCountries' && <OtherProducts />}
+  </Page>
 );
+
+setUpTrackingAndConsents();
+
+const content = <ShowcasePage />;
 
 renderPage(content, 'showcase-landing-page');
 

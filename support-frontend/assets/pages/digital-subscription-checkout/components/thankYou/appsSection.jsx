@@ -16,13 +16,14 @@ import {
   androidAppUrl,
   androidDailyUrl,
   getDailyEditionUrl,
-} from 'helpers/externalLinks';
+} from 'helpers/urls/externalLinks';
 
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 import Text from 'components/text/text';
+import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
 
 // ----- Types ----- //
 
@@ -53,11 +54,16 @@ const marginForFirstButton = css`
   margin-bottom: ${space[3]}px;
 `;
 
+const marginTop = css`
+  margin-top: ${space[9]}px;
+`;
+
 
 // ----- Component ----- //
 
 const AppsSection = ({ countryGroupId }: PropTypes) => (
   <div>
+    <div css={marginTop}><SvgEditionsIcon /></div>
     <Text title="Download The Guardian Editions app" headingSize={3}>
       <p>Each day&#39;s edition, in one simple, elegant app. Contains the UK Daily, Australia Weekend
         and other special editions.
@@ -102,6 +108,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
         </ThemeProvider>
       </div>
     </Text>
+    <div css={marginTop}><SvgLiveAppIcon /></div>
     <Text title="Download The Guardian Live app" headingSize={3}>
       <p>
         With premium access to The Guardian Live app get breaking news, as it happens.
@@ -146,6 +153,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
         </ThemeProvider>
       </div>
     </Text>
+    <div css={marginTop} />
     <Text title="Sign into theguardian.com">
       <p>
         Never be interrupted or distracted by ads again by signing in. Just use your subscriber email

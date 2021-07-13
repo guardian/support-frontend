@@ -21,7 +21,7 @@ import Form, {
 } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
-import type { ErrorReason } from 'helpers/errorReasons';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
   getProductPrice,
   type ProductPrices,
@@ -54,15 +54,15 @@ import {
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
-import { routes } from 'helpers/routes';
+import { formatMachineDate, formatUserDate } from 'helpers/utilities/dateConversions';
+import { routes } from 'helpers/urls/routes';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import {
   addressActionCreatorsFor,
   type SetCountryChangedAction,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { type SetCountryAction } from 'helpers/page/commonActions';
-import { Stripe, DirectDebit, PayPal } from 'helpers/paymentMethods';
+import { Stripe, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Heading from 'components/heading/heading';
@@ -70,7 +70,7 @@ import './weeklyCheckout.scss';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
@@ -80,6 +80,7 @@ import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPayme
 import { titles } from 'helpers/user/details';
 import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
+import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 
 // ----- Styles ----- //
 
@@ -129,7 +130,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
     isTestUser: state.page.checkout.isTestUser,
     country: state.common.internationalisation.countryId,
     csrf: state.page.csrf,
-    currencyId: state.common.internationalisation.currencyId,
+    currencyId: currencyFromCountryCode(deliveryAddress.fields.country),
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
   };
 }
@@ -163,7 +164,7 @@ const days = getWeeklyDays();
 
 function WeeklyCheckoutFormGifting(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const price = getProductPrice(props.productPrices, props.deliveryCountry, props.billingPeriod, fulfilmentOption);
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
 
@@ -171,7 +172,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
-  const paymentMethods = supportedPaymentMethods(props.billingCountry);
+  const paymentMethods = supportedPaymentMethods(props.currencyId);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -350,7 +351,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
             title="Your card details"
           >
             <StripeProviderForCountry
-              country={props.country}
+              country={props.deliveryCountry}
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
               allErrors={[...props.billingAddressErrors, ...props.deliveryAddressErrors, ...props.formErrors]}

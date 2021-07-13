@@ -1,32 +1,33 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
 
 import {
   billingPeriodTitle,
   weeklyBillingPeriods,
   weeklyGiftBillingPeriods,
   type WeeklyBillingPeriod,
-} from 'helpers/billingPeriods';
-import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/subscriptions';
+} from 'helpers/productPrice/billingPeriods';
+import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
 import {
   getAppliedPromo,
 } from 'helpers/productPrice/promotions';
 
-import Prices, { type PropTypes } from './content/prices';
+import Prices from './content/prices';
+import { type Product } from 'components/product/productOption';
 
-import { type State } from '../weeklySubscriptionLandingReducer';
 import { getProductPrice, getFirstValidPrice } from 'helpers/productPrice/productPrices';
 import {
   getSimplifiedPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import { getOrigin, getQueryParameter } from 'helpers/url';
+import { getOrigin, getQueryParameter } from 'helpers/urls/url';
 import { promoQueryParam, type Promotion } from 'helpers/productPrice/promotions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { currencies } from 'helpers/internationalisation/currency';
-import { fixDecimals } from 'helpers/subscriptions';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 
 const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod, orderIsGift: boolean): string => {
   const promoCode = getQueryParameter(promoQueryParam);
@@ -82,26 +83,35 @@ const weeklyProductProps = (billingPeriod: WeeklyBillingPeriod, productPrice: Pr
   };
 };
 
-const mapStateToProps = (state: State): PropTypes => {
-  const { countryId } = state.common.internationalisation;
-  const { productPrices, orderIsAGift } = state.page;
+type WeeklyProductPricesProps = {|
+  countryId: IsoCountry;
+  productPrices: ?ProductPrices;
+  orderIsAGift: boolean;
+|}
+
+const getProducts = ({ countryId, productPrices, orderIsAGift }: WeeklyProductPricesProps): Product[] => {
   const billingPeriodsToUse = orderIsAGift ? weeklyGiftBillingPeriods : weeklyBillingPeriods;
 
-  return {
-    orderIsAGift,
-    products: billingPeriodsToUse.map((billingPeriod) => {
-      const productPrice = productPrices ? getProductPrice(
-        productPrices,
-        countryId,
-        billingPeriod,
-        getWeeklyFulfilmentOption(countryId),
-      ) : { price: 0, fixedTerm: false, currency: 'GBP' };
-      return weeklyProductProps(billingPeriod, productPrice, orderIsAGift);
-    }),
-  };
+  return billingPeriodsToUse.map((billingPeriod) => {
+    const productPrice = productPrices ? getProductPrice(
+      productPrices,
+      countryId,
+      billingPeriod,
+      getWeeklyFulfilmentOption(countryId),
+    ) : { price: 0, fixedTerm: false, currency: 'GBP' };
+    return weeklyProductProps(billingPeriod, productPrice, orderIsAGift);
+  });
 };
 
+function WeeklyProductPrices({ countryId, productPrices, orderIsAGift }: WeeklyProductPricesProps) {
+  if (!productPrices) {
+    return null;
+  }
+  const products = getProducts({ countryId, productPrices, orderIsAGift });
+
+  return <Prices products={products} orderIsAGift={orderIsAGift} />;
+}
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(Prices);
+export default WeeklyProductPrices;

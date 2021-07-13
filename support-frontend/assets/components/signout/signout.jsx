@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { getSignoutUrl } from 'helpers/externalLinks';
+import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
 // ---- Types ----- //
 

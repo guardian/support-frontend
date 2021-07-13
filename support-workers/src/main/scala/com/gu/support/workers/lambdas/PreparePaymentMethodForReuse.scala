@@ -1,20 +1,19 @@
 package com.gu.support.workers.lambdas
 
-import java.util.UUID
-
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.gocardless.GoCardlessWorkersService
 import com.gu.i18n.{Country, CountryGroup}
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.ContributionState
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 
 class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[PreparePaymentMethodForReuseState, CreateZuoraSubscriptionState](servicesProvider) {
@@ -38,19 +37,25 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       crmId <- getOrFailWithMessage(account.CrmId, s"Zuora account $accountId has not CrmId")
       paymentMethod <- toPaymentMethod(getPaymentMethodResponse, services.goCardlessService, account.PaymentGateway)
       sfContact = SalesforceContactRecord(sfContactId, crmId)
+      contribution <- Future.fromTry(state.product match {
+        case c: Contribution => Success(c)
+        case _ => Failure(new RuntimeException("Reusing payment methods is not yet supported for products other than contributions"))
+      })
     } yield HandlerResult(
-        CreateZuoraSubscriptionState(
-          requestId = UUID.randomUUID(),
-          user = state.user,
-          giftRecipient = state.giftRecipient,
-          product = state.product,
-          state.analyticsInfo,
-          paymentMethod = Left(paymentMethod),
-          firstDeliveryDate = None,
-          promoCode = None,
-          salesforceContacts = SalesforceContactRecords(sfContact, None),
-          acquisitionData = state.acquisitionData
+      CreateZuoraSubscriptionState(
+        ContributionState(
+          product = contribution,
+          paymentMethod = paymentMethod,
+          salesForceContact = sfContact,
         ),
+        state.requestId,
+        state.user,
+        contribution,
+        state.analyticsInfo,
+        None,
+        None,
+        acquisitionData = state.acquisitionData
+      ),
       requestInfo
         .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
         .appendMessage(s"Product is ${state.product.describe}")
@@ -67,15 +72,15 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       val maybeCountry: Option[Country] = cardResponse.creditCardCountry.flatMap(CountryGroup.byOptimisticCountryNameOrCode)
       Future.successful(
         CreditCardReferenceTransaction(
-          tokenId = cardResponse.tokenId,
-          secondTokenId = cardResponse.secondTokenId,
-          creditCardNumber = cardResponse.creditCardMaskNumber,
-          creditCardCountry = maybeCountry,
-          creditCardExpirationMonth = cardResponse.creditCardExpirationMonth,
-          creditCardExpirationYear = cardResponse.creditCardExpirationYear,
-          creditCardType = cardResponse.creditCardType,
-          paymentGateway = paymentGateway,
-          stripePaymentType = None
+          TokenId = cardResponse.tokenId,
+          SecondTokenId = cardResponse.secondTokenId,
+          CreditCardNumber = cardResponse.creditCardMaskNumber,
+          CreditCardCountry = maybeCountry,
+          CreditCardExpirationMonth = cardResponse.creditCardExpirationMonth,
+          CreditCardExpirationYear = cardResponse.creditCardExpirationYear,
+          CreditCardType = cardResponse.creditCardType,
+          PaymentGateway = paymentGateway,
+          StripePaymentType = None
         )
       )
     case directDebitResponse: GetPaymentMethodDirectDebitResponse =>
@@ -92,13 +97,13 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
     customerBankAccountId <- goCardlessService.getCustomerAccountIdFromMandateId(existingDirectDebit.tokenId)
     clonedMandateRefs <- goCardlessService.createNewMandateOnExistingCustomerAccount(customerBankAccountId)
   } yield ClonedDirectDebitPaymentMethod(
-    tokenId = clonedMandateRefs.mandateId, // yes Zuora put the mandateId into tokenId
-    mandateId = clonedMandateRefs.reference, // and yes Zuora like to use the 'reference' in the 'mandateId' field, sigh
-    firstName = existingDirectDebit.firstName,
-    lastName = existingDirectDebit.lastName,
-    bankTransferAccountName = existingDirectDebit.bankTransferAccountName,
-    bankTransferAccountNumber = existingDirectDebit.bankTransferAccountNumberMask,
-    bankCode = existingDirectDebit.bankCode
+    TokenId = clonedMandateRefs.mandateId, // yes Zuora put the mandateId into tokenId
+    MandateId = clonedMandateRefs.reference, // and yes Zuora like to use the 'reference' in the 'mandateId' field, sigh
+    FirstName = existingDirectDebit.firstName,
+    LastName = existingDirectDebit.lastName,
+    BankTransferAccountName = existingDirectDebit.bankTransferAccountName,
+    BankTransferAccountNumber = existingDirectDebit.bankTransferAccountNumberMask,
+    BankCode = existingDirectDebit.bankCode
   )
 
   def errorResponse(msg:String): Future[Nothing] = Future.failed(new Exception(msg))

@@ -5,7 +5,6 @@
 import React from 'react';
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
-import { setTab } from '../../paperSubscriptionLandingPageActions';
 import LinkTo from './linkTo';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import { Accordion } from '@guardian/src-accordion';
@@ -15,6 +14,7 @@ import { textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { TabAccordionRow } from './tabAccordionRow';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 const flexContainerOverride = css`
   align-items: flex-start;
@@ -62,15 +62,15 @@ export const accordionContainer = css`
 const accordionTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
 
 export const ContentDeliveryFaqBlock = ({
-  useDigitalVoucher,
   setTabAction,
-}: {useDigitalVoucher?: boolean, setTabAction: typeof setTab,
+}: {setTabAction: (PaperFulfilmentOptions) => void,
 }) => (
   <FlexContainer cssOverrides={flexContainerOverride}>
     <div css={faqsContainer}>
       <p css={paragraph}>
         If you live in Greater London (within the M25), you can use The Guardian’s home delivery
-        service. If not, you can use our <LinkTo tab={Collection} setTabAction={setTabAction}>{useDigitalVoucher ? 'subscription cards' : 'voucher scheme'}</LinkTo>.
+        service. If not, you can use our{' '}
+        <LinkTo tab={Collection} setTabAction={setTabAction}>subscription cards</LinkTo>.
       </p>
       <p css={paragraph}>
         Select your subscription below and checkout. You&apos;ll receive your first newspaper
@@ -104,6 +104,3 @@ export const ContentDeliveryFaqBlock = ({
 
 );
 
-ContentDeliveryFaqBlock.defaultProps = {
-  useDigitalVoucher: true,
-};

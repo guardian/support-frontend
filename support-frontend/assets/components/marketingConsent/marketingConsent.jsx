@@ -3,13 +3,13 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { checkEmail } from 'helpers/formValidation';
-import { logException } from 'helpers/logger';
+import { checkEmail } from 'helpers/forms/formValidation';
+import { logException } from 'helpers/utilities/logger';
 import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import 'components/marketingConsent/marketingConsent.scss';
@@ -82,8 +82,9 @@ function MarketingConsent(props: PropTypes) {
   if (checkEmail(props.email)) {
     return (
       <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
-        <Text title="Contributions, subscriptions and membership">
-          Get related news and offers – whether you are a contributor, subscriber, member or would like to become one
+        <Text title="Supporting The Guardian">
+          Stay up-to-date with the latest offers and the aims of the organisation, as well as ways you can enjoy and
+          support our independent journalism.
         </Text>
 
         {MarketingButton({

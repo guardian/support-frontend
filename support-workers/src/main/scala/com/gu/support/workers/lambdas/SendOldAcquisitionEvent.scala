@@ -1,7 +1,6 @@
 package com.gu.support.workers.lambdas
 
 import java.util.UUID
-
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
@@ -12,6 +11,8 @@ import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.catalog
+import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers._
@@ -82,13 +83,15 @@ object SendOldAcquisitionEvent {
   def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): thrift.PaymentProvider =
     paymentMethod match {
       case creditCardPayment: CreditCardReferenceTransaction =>
-        creditCardPayment.stripePaymentType match {
+        creditCardPayment.StripePaymentType match {
           case Some(StripePaymentType.StripeApplePay) => thrift.PaymentProvider.StripeApplePay
           case Some(StripePaymentType.StripePaymentRequestButton) => thrift.PaymentProvider.StripePaymentRequestButton
           case _ => thrift.PaymentProvider.Stripe
         }
       case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
+      case _: SepaPaymentMethod => thrift.PaymentProvider.StripeSepa
+      case _: AmazonPayPaymentMethod => thrift.PaymentProvider.AmazonPay
     }
 
   // Typeclass instance used by the Ophan service to attempt to build a submission from the state.
@@ -122,7 +125,9 @@ object SendOldAcquisitionEvent {
       // Don't match on this as its not a valid billing period.
         (billingPeriod: @unchecked) match {
           case Monthly => thrift.PaymentFrequency.Monthly
-          case Quarterly | SixWeekly => thrift.PaymentFrequency.Quarterly
+          case Quarterly => thrift.PaymentFrequency.Quarterly
+          case SixWeekly if postIntroductorySixForSixBillingPeriod == Quarterly => thrift.PaymentFrequency.Quarterly
+          case SixWeekly => thrift.PaymentFrequency.Monthly
           case Annual => thrift.PaymentFrequency.Annually
         }
 

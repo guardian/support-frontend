@@ -4,23 +4,10 @@
 
 import {
   ascending,
-  descending,
   roundDp,
   classNameWithModifiers,
-  clickSubstituteKeyPressHandler,
-  parseBoolean,
   deserialiseJsonObject,
-  addLeadingZeros,
-} from '../utilities';
-
-
-// ----- Functions ----- //
-
-// Returns a mocked keypress event.
-function getMockedKeypress(key: number) {
-  return { keyCode: key, preventDefault: () => { } };
-}
-
+} from '../utilities/utilities';
 
 // ----- Tests ----- //
 
@@ -46,31 +33,6 @@ describe('utilities', () => {
       const sorted = [-3, 0.3, 2, 2, 46.78, 54, 54, 67, 100];
 
       expect(unsorted.sort(ascending)).toEqual(sorted);
-
-    });
-
-  });
-
-  describe('descending', () => {
-
-    it('should return a 0 if a > b', () => {
-      expect(ascending(3, 2)).toEqual(1);
-    });
-
-    it('should return a 1 if a < b', () => {
-      expect(ascending(2, 3)).toEqual(-1);
-    });
-
-    it('should return a 0 if a === b', () => {
-      expect(ascending(2, 2)).toEqual(0);
-    });
-
-    it('should sort an array in descending order', () => {
-
-      const unsorted = [100, 2, 2, 46.78, 54, 67, 54, 0.3, -3];
-      const sorted = [100, 67, 54, 54, 46.78, 2, 2, 0.3, -3];
-
-      expect(unsorted.sort(descending)).toEqual(sorted);
 
     });
 
@@ -113,53 +75,6 @@ describe('utilities', () => {
     it('should not add modifiers for null, undefined or empty strings', () => {
       expect(classNameWithModifiers('made-up-class', [null, undefined, 'pseudo-modifier', '']))
         .toBe('made-up-class made-up-class--pseudo-modifier');
-    });
-
-  });
-
-  describe('clickSubstituteKeyPressHandler', () => {
-
-    it('should call callback if return is pressed', (done) => {
-      clickSubstituteKeyPressHandler(done)(getMockedKeypress(13));
-    });
-
-    it('should call callback if space is pressed', (done) => {
-      clickSubstituteKeyPressHandler(done)(getMockedKeypress(32));
-    });
-
-  });
-
-  describe('parseBoolean', () => {
-
-    it('should parse all variations of true', () => {
-      expect(parseBoolean('true', false)).toBe(true);
-      expect(parseBoolean('TRUE', false)).toBe(true);
-      expect(parseBoolean('True', false)).toBe(true);
-    });
-
-    it('should parse all variations of false', () => {
-      expect(parseBoolean('false', true)).toBe(false);
-      expect(parseBoolean('FALSE', true)).toBe(false);
-      expect(parseBoolean('False', true)).toBe(false);
-    });
-
-    it('should produce the correct fallbacks on failure to parse', () => {
-      expect(parseBoolean('notaboolean', true)).toBe(true);
-      expect(parseBoolean('notaboolean', false)).toBe(false);
-    });
-
-  });
-
-  describe('addLeadingZeros', () => {
-
-    it('should fill in a smaller number', () => {
-      expect(addLeadingZeros(2, 2)).toBe('02');
-      expect(addLeadingZeros(12, 3)).toBe('012');
-    });
-
-    it('should not fill in larger numbers', () => {
-      expect(addLeadingZeros(20, 2)).toBe('20');
-      expect(addLeadingZeros(120, 3)).toBe('120');
     });
 
   });

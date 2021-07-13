@@ -8,7 +8,7 @@ import { css } from '@emotion/core';
 import { LinkButton, buttonBrand } from '@guardian/src-button';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
+import { between, from, until } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { brandAlt } from '@guardian/src-foundations/palette';
 
@@ -16,9 +16,10 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
+import HeroRoundel, { roundelSizeMob } from 'components/page/heroRoundel';
 
 import { type ProductPrices } from 'helpers/productPrice/productPrices';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import { promotionHTML, type PromotionCopy } from 'helpers/productPrice/promotions';
 import { getDiscountCopy } from './discountCopy';
@@ -27,6 +28,14 @@ type PropTypes = {|
   productPrices: ProductPrices,
   promotionCopy: PromotionCopy,
 |}
+
+const fitHeadline = css`
+  h1 {
+    ${between.mobileMedium.and.tablet} {
+      max-width: calc(100% - ${roundelSizeMob}px);
+    }
+  }
+`;
 
 const heroCopy = css`
   padding: 0 ${space[3]}px ${space[3]}px;
@@ -41,6 +50,10 @@ const heroCopy = css`
 const heroTitle = css`
   ${headline.medium({ fontWeight: 'bold' })};
   margin-bottom: ${space[3]}px;
+
+  ${between.mobileMedium.and.tablet} {
+    margin-right: ${roundelSizeMob}px;
+  }
 
   ${from.tablet} {
     ${headline.large({ fontWeight: 'bold' })};
@@ -67,8 +80,9 @@ const heroParagraph = css`
 `;
 
 const roundelLines = css`
+  padding: ${space[1]}px;
   ${headline.xxxsmall({ fontWeight: 'bold' })}
-  ${from.tablet} {
+  ${from.desktop} {
     ${headline.xxsmall({ fontWeight: 'bold' })}
   }
 `;
@@ -77,6 +91,12 @@ const roundelCentreLine = css`
   ${headline.medium({ fontWeight: 'bold' })}
   ${from.tablet} {
     ${headline.xlarge({ fontWeight: 'bold' })}
+  }
+`;
+
+const roundelOffset = css`
+  ${until.tablet} {
+    transform: translateY(-34%);
   }
 `;
 
@@ -135,6 +155,7 @@ function PaperHero({ productPrices, promotionCopy }: PropTypes) {
     <PageTitle
       title="Newspaper subscription"
       theme="paper"
+      cssOverrides={fitHeadline}
     >
       <CentredContainer>
         <Hero
@@ -147,9 +168,12 @@ function PaperHero({ productPrices, promotionCopy }: PropTypes) {
             imgType="png"
             altText="Newspapers"
           />}
-          roundelText={roundelText}
-          roundelNudgeDirection="down"
           hideRoundelBelow="mobileMedium"
+          roundelElement={
+            <HeroRoundel cssOverrides={roundelOffset}>
+              {roundelText}
+            </HeroRoundel>
+          }
         >
           <section css={heroCopy}>
             <h2 css={heroTitle}>

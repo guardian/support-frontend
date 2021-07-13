@@ -22,7 +22,8 @@ import {
   OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 } from './utils/ophan';
 import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/behaviour';
-import { generateReferralCode } from '../../../../helpers/campaignReferralCodes';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { generateReferralCode } from '../../../../helpers/campaigns/campaignReferralCodes';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 
@@ -37,13 +38,15 @@ const buttonsContainer = css`
 type ContributionThankYouSocialShareProps = {|
   email: string,
   createReferralCodes: boolean,
-  campaignCode: ?string
+  campaignCode: ?string,
+  countryId: IsoCountry,
 |};
 
 const ContributionThankYouSocialShare = ({
   email,
   createReferralCodes,
   campaignCode,
+  countryId,
 }: ContributionThankYouSocialShareProps) => {
   useEffect(() => {
     trackComponentLoad(OPHAN_COMPONENT_ID_SOCIAL);
@@ -54,17 +57,21 @@ const ContributionThankYouSocialShare = ({
       ? generateReferralCode(email, campaignCode)
       : null;
 
+  const copy = countryId === 'AU' ?
+    'Your voice matters. By sharing a message of support for Guardian Australia, you can help us grow our community. ' +
+    'Together, we can make a difference.' :
+    'Invite your followers to support the Guardian’s open, independent reporting.';
+
   const actionIcon = <SvgShare />;
   const actionHeader = <ActionHeader title="Share your support" />;
   const actionBody = (
     <ActionBody>
       <p>
-        Invite your followers to support the Guardian’s open, independent
-        reporting.
+        {copy}
       </p>
       <div css={buttonsContainer}>
         <LinkButton
-          href={getFacebookShareLink(referralCode)}
+          href={getFacebookShareLink(campaignCode, referralCode)}
           onClick={() =>
             trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)
           }
@@ -76,7 +83,7 @@ const ContributionThankYouSocialShare = ({
           hideLabel
         />
         <LinkButton
-          href={getTwitterShareLink(referralCode)}
+          href={getTwitterShareLink(countryId, campaignCode, referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
           target="_blank"
           rel="noopener noreferrer"
@@ -98,7 +105,7 @@ const ContributionThankYouSocialShare = ({
           hideLabel
         />
         <LinkButton
-          href={getEmailShareLink(referralCode)}
+          href={getEmailShareLink(campaignCode, referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
           target="_blank"
           rel="noopener noreferrer"

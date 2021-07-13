@@ -59,7 +59,8 @@ object StripeAcquisition extends StrictLogging {
             source = acquisitionData.source,
             identityId = stripeAcquisition.identityId.map(x => x.toString),
             platform = acquisitionData.platform.flatMap(Platform.valueOf(_)),
-            queryParameters = acquisitionData.queryParameters
+            queryParameters = acquisitionData.queryParameters,
+            labels = acquisitionData.labels
           )
         }.leftMap{ error =>
           s"Failed to build an acquisition submission from an instance of Stripe Acquisition - cause: $error"

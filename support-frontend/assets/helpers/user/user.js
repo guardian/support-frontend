@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 
-import { routes } from 'helpers/routes';
-import * as cookie from 'helpers/cookie';
-import { get as getCookie } from 'helpers/cookie';
-import { getSession } from 'helpers/storage';
+import { routes } from 'helpers/urls/routes';
+import * as cookie from 'helpers/storage/cookie';
+import { get as getCookie } from 'helpers/storage/cookie';
+import { getSession } from 'helpers/storage/storage';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import type { UserSetStateActions } from 'helpers/user/userActions';
-import { getSignoutUrl } from 'helpers/externalLinks';
+import { getSignoutUrl } from 'helpers/urls/externalLinks';
 import type { Option } from 'helpers/types/option';
 
 export type User = {|
@@ -130,10 +130,6 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setPostDeploymentTestUser(true));
   }
 
-  if (getCookie('gu_recurring_contributor') === 'true') {
-    dispatch(setIsRecurringContributor());
-  }
-
   if (getCookie('gu.contributions.contrib-timestamp')) {
     dispatch(setIsReturningContributor(true));
   }
@@ -149,6 +145,17 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setStateField(window.guardian.user.address4 || window.guardian.geoip.stateCode));
     dispatch(setIsSignedIn(true));
     dispatch(setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))));
+
+    fetch(`${window.guardian.mdapiUrl}/user-attributes/me`, {
+      mode: 'cors',
+      credentials: 'include',
+    }).then(response => response.json())
+      .then((attributes) => {
+        if (attributes.recurringContributionPaymentPlan) {
+          dispatch(setIsRecurringContributor());
+        }
+      });
+
   } else if (userAppearsLoggedIn) { // TODO - remove in another PR as this condition is deprecated
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {

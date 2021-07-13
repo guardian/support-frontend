@@ -1,6 +1,6 @@
 // @flow
 
-import { Monthly, type DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { Monthly, type DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { displayPrice, getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import { extendedGlyph } from 'helpers/internationalisation/currency';

@@ -6,14 +6,15 @@
 
 // We import from preact/compat here rather than react because flow doesn't like it if the child component uses redux
 // $FlowIgnore - required for hooks
-import React from 'preact/compat';
+import React, { useState } from 'preact/compat';
 import { Elements } from '@stripe/react-stripe-js';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   getStripeKey,
   stripeAccountForContributionType,
   useStripeObjects,
-} from 'helpers/stripe';
+  type StripeAccount,
+} from 'helpers/forms/stripe';
 import type {
   ContributionType,
   OtherAmounts,
@@ -38,6 +39,12 @@ type PropTypes = {|
 // ----- Component ----- //
 
 const StripePaymentRequestButtonContainer = (props: PropTypes) => {
+  // Maintain the PRB objects here because we must not re-create them when user switches between regular/one-off.
+  // We have to create the PRB object inside the Elements component.
+  const [prbObjects, setPrbObjects] = useState<{ [StripeAccount]: Object | null }>({
+    ONE_OFF: null,
+    REGULAR: null,
+  });
   const stripeAccount = stripeAccountForContributionType[props.contributionType];
   const stripeKey = getStripeKey(
     stripeAccount,
@@ -45,7 +52,7 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
     props.isTestUser,
   );
 
-  const stripeObjects = useStripeObjects(stripeAccount, stripeKey, props.isTestUser);
+  const stripeObjects = useStripeObjects(stripeAccount, stripeKey);
 
   const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);
 
@@ -67,6 +74,11 @@ const StripePaymentRequestButtonContainer = (props: PropTypes) => {
             stripeAccount={stripeAccount}
             amount={amount}
             stripeKey={stripeKey}
+            paymentRequestObject={prbObjects[stripeAccount]}
+            setPaymentRequestObject={prbObject => setPrbObjects({
+              ...prbObjects,
+              [stripeAccount]: prbObject,
+            })}
           />
         </Elements>
       </div>

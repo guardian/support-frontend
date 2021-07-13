@@ -89,21 +89,23 @@ class PaperFieldsGenerator(
     accountNumber: String
   )(implicit ec: ExecutionContext): Future[Seq[(String, String)]] = paymentMethod match {
     case dd: DirectDebitPaymentMethod => getMandate(accountNumber).map(directDebitMandateId => List(
-      "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
-      "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
-      "account_holder" -> dd.bankTransferAccountName,
+      "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.BankTransferAccountNumber),
+      "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.BankCode),
+      "account_holder" -> dd.BankTransferAccountName,
       "payment_method" -> "Direct Debit",
       "mandate_id" -> directDebitMandateId.getOrElse("")
     ))
     case dd: ClonedDirectDebitPaymentMethod => Future.successful(List(
-      "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.bankTransferAccountNumber),
-      "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.bankCode),
-      "account_holder" -> dd.bankTransferAccountName,
+      "bank_account_no" -> SubscriptionEmailFieldHelpers.mask(dd.BankTransferAccountNumber),
+      "bank_sort_code" -> SubscriptionEmailFieldHelpers.hyphenate(dd.BankCode),
+      "account_holder" -> dd.BankTransferAccountName,
       "payment_method" -> "Direct Debit",
-      "mandate_id" -> dd.mandateId
+      "mandate_id" -> dd.MandateId
     ))
     case _: CreditCardReferenceTransaction => Future.successful(List("payment_method" -> "Credit/Debit Card"))
     case _: PayPalReferenceTransaction => Future.successful(List("payment_method" -> "PayPal"))
+    case _: AmazonPayPaymentMethod => Future.successful(List("payment_method" -> "AmazonPay"))
+    case _: SepaPaymentMethod => Future.successful(List("payment_method" -> "Sepa"))
   }
 
 }

@@ -15,7 +15,7 @@ import {
 import DirectDebitForm
   from 'components/directDebit/directDebitForm/directDebitForm';
 import SvgCross from 'components/svgs/cross';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import './directDebitPopUpForm.scss';
 
 // ---- Types ----- //

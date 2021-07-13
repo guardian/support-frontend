@@ -2,10 +2,10 @@
 
 // ----- Imports ----- //
 // $FlowIgnore - required for hooks
-import React, { Children, useEffect, type Node } from 'react';
+import React, { Children, useState, useEffect, type Node } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { Link, ButtonLink, linkBrand } from '@guardian/src-link';
-import { getGlobal } from 'helpers/globals';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { copyrightNotice } from 'helpers/legal';
 
 import Rows from '../base/rows';
@@ -30,7 +30,7 @@ type PropTypes = {|
 function Footer({
   centred, children, faqsLink, termsConditionsLink,
 }: PropTypes) {
-  let consentManagementPlatform;
+  const [consentManagementPlatform, setConsentManagementPlatform] = useState(null);
 
   function showPrivacyManager() {
     if (consentManagementPlatform) {
@@ -41,7 +41,7 @@ function Footer({
   useEffect(() => {
     if (!getGlobal('ssr')) {
       import('@guardian/consent-management-platform').then(({ cmp }) => {
-        consentManagementPlatform = cmp;
+        setConsentManagementPlatform(cmp);
       });
     }
   }, []);

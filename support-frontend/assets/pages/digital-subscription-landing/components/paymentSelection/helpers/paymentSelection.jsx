@@ -3,19 +3,21 @@ import React from 'react';
 import type { Element } from 'react';
 
 // helpers
-import { getDigitalCheckout } from 'helpers/externalLinks';
-import { sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/subscriptions';
+import { getDigitalCheckout } from 'helpers/urls/externalLinks';
+import { fixDecimals, sendTrackingEventsOnClick, sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { fixDecimals } from 'helpers/subscriptions';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // types
 import {
   type Product,
 } from 'components/product/productOption';
+import {
+  type ProductSmall,
+} from 'components/product/productOptionSmall';
 
-import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/billingPeriods';
-import { type State } from 'pages/digital-subscription-landing/digitalSubscriptionLandingReducer';
+import { type BillingPeriod, Annual, Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
 import { type Option } from 'helpers/types/option';
 import type {
   ProductPrices,
@@ -26,9 +28,9 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
+import { getPriceDescription, getAdverbialSubscriptionDescription } from 'helpers/productPrice/priceDescriptions';
 
-import { type PropTypes } from '../paymentSelection';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
+import type { Product as ProductOptionType } from 'components/product/productOption';
 
 export type PaymentOption = {
   title: string,
@@ -114,10 +116,71 @@ const BILLING_PERIOD_GIFT = {
   },
 };
 
+const getHeroCtaProps = (
+  productPrices: ProductPrices,
+  currencyId: IsoCurrency,
+  countryGroupId: CountryGroupId,
+): ProductSmall[] => {
+  const productOptions = getProductOptions(productPrices, countryGroupId);
+
+  const createPaymentOption = (billingPeriod: BillingPeriod): ProductSmall => {
+    const digitalBillingPeriod = billingPeriod === 'Monthly' || billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
+    const productPrice = getProductPrice(productOptions, billingPeriod, currencyId);
+    const promotion = getAppliedPromo(productPrice.promotions);
+    const promoCode = promotion ? promotion.promoCode : null;
+    const offerCopy = promotion &&
+    promotion.landingPage &&
+    promotion.landingPage.roundel ? promotion.landingPage.roundel :
+      BILLING_PERIOD[digitalBillingPeriod].offer;
+    const trackingProperties = {
+      id: `subscribe_now_cta_hero-${billingPeriod}`,
+      product: 'DigitalPack',
+      componentType: 'ACQUISITIONS_BUTTON',
+    };
+
+    const onClick = () => {
+      gaEvent({
+        category: 'click',
+        action: 'DigitalPack',
+        label: trackingProperties.id,
+      });
+
+      sendTrackingEventsOnClick(trackingProperties)();
+    };
+
+    return {
+      href: getDigitalCheckout(countryGroupId, digitalBillingPeriod, promoCode, false),
+      onClick,
+      priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
+      offerCopy,
+      buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
+    };
+  };
+
+  return Object.keys(productOptions).sort((optA, optB) => {
+    if (optA === 'Annual') {
+      return 1;
+    } else if (optB === 'Annual') {
+      return -1;
+    }
+    return 0;
+  }).map(createPaymentOption);
+};
+
+export type PaymentSelectionPropTypes = {|
+  countryGroupId: CountryGroupId;
+  currencyId: IsoCurrency;
+  productPrices: ProductPrices;
+  orderIsAGift: boolean;
+|}
+
 // state
-const mapStateToProps = (state: State): PropTypes => {
-  const { productPrices, orderIsAGift } = state.page;
-  const { countryGroupId, currencyId } = state.common.internationalisation;
+const getPaymentOptions = ({
+  countryGroupId,
+  currencyId,
+  productPrices,
+  orderIsAGift,
+}: PaymentSelectionPropTypes): ProductOptionType[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
   const createPaymentOption = (billingPeriod: BillingPeriod): Product => {
@@ -139,21 +202,22 @@ const mapStateToProps = (state: State): PropTypes => {
       componentType: 'ACQUISITIONS_BUTTON',
     };
 
-    const trackClick = () => {
+    const onClick = () => {
       gaEvent({
         category: 'click',
         action: 'DigitalPack',
         label: trackingProperties.id,
       });
+
       sendTrackingEventsOnClick(trackingProperties)();
-    }
+    };
 
     return orderIsAGift ?
       {
         title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
         price: getDisplayPrice(currencyId, fullPrice),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: trackClick,
+        onClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].salesCopy(),
         offerCopy: '',
@@ -164,7 +228,7 @@ const mapStateToProps = (state: State): PropTypes => {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
         price: getDisplayPrice(currencyId, getFirstValidPrice(promotionalPrice, fullPrice)),
         href: getDigitalCheckout(countryGroupId, billingPeriodForHref, promoCode, orderIsAGift),
-        onClick: trackClick,
+        onClick,
         onView: sendTrackingEventsOnView(trackingProperties),
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
         offerCopy,
@@ -173,11 +237,10 @@ const mapStateToProps = (state: State): PropTypes => {
       };
 
   };
-  return {
-    paymentOptions: Object.keys(productOptions).map(createPaymentOption),
-  };
+  return Object.keys(productOptions).map(createPaymentOption);
 };
 
 export {
-  mapStateToProps,
+  getHeroCtaProps,
+  getPaymentOptions,
 };

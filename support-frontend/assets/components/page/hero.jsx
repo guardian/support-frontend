@@ -1,7 +1,15 @@
 // @flow
 
 import React, { type Node } from 'react';
-import { hero, heroRoundel, heroRoundelContainer, heroImage, roundelOffset, roundelNudgeDown, roundelNudgeUp, roundelHidingPoints } from './heroStyles';
+import HeroRoundel, { type RoundelTheme } from './heroRoundel';
+import {
+  hero,
+  heroRoundelContainer,
+  heroImage,
+  roundelNudgeDown,
+  roundelNudgeUp,
+  roundelHidingPoints,
+} from './heroStyles';
 
 // Options for moving the roundel position on mobile
 type RoundelNudgeDirection = 'up' | 'down' | 'none';
@@ -9,9 +17,12 @@ type PropTypes = {|
   image: Node,
   children: Node,
   cssOverrides?: string,
+  // You can pass either text content for the roundel, or a whole instance of a HeroRoundel component
+  roundelElement?: Node,
   roundelText?: Node,
   roundelNudgeDirection?: RoundelNudgeDirection,
   hideRoundelBelow?: string,
+  roundelTheme?: RoundelTheme
 |}
 
 const roundelNudges: { [RoundelNudgeDirection]: string } = {
@@ -21,20 +32,33 @@ const roundelNudges: { [RoundelNudgeDirection]: string } = {
 };
 
 function Hero({
-  children, image, cssOverrides, roundelText, roundelNudgeDirection = 'up', hideRoundelBelow,
+  children,
+  image,
+  cssOverrides,
+  roundelElement,
+  roundelText,
+  hideRoundelBelow,
+  roundelNudgeDirection = 'up',
+  roundelTheme = 'base',
 }: PropTypes) {
-  const useOffset = roundelText && roundelNudgeDirection === 'up';
   const nudgeCSS = roundelNudges[roundelNudgeDirection];
   const hideRoundel = hideRoundelBelow ? roundelHidingPoints[hideRoundelBelow] : '';
 
   return (
     <div css={[hero, cssOverrides]}>
-      {roundelText &&
+      {roundelText && !roundelElement &&
         <div css={heroRoundelContainer}>
-          <div css={[heroRoundel, nudgeCSS, hideRoundel]}>{roundelText}</div>
+          <HeroRoundel cssOverrides={[nudgeCSS, hideRoundel]} theme={roundelTheme}>
+            {roundelText}
+          </HeroRoundel>
         </div>
       }
-      <div css={useOffset ? roundelOffset : ''}>
+      {!roundelText && roundelElement &&
+        <div css={[heroRoundelContainer, hideRoundel]}>
+          {roundelElement}
+        </div>
+      }
+      <div>
         {children}
       </div>
       <div css={heroImage}>
@@ -46,9 +70,11 @@ function Hero({
 
 Hero.defaultProps = {
   cssOverrides: '',
+  roundelElement: null,
   roundelText: null,
   roundelNudgeDirection: 'up',
   hideRoundelBelow: '',
+  roundelTheme: 'base',
 };
 
 export default Hero;

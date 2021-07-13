@@ -2,16 +2,15 @@
 
 // ----- Imports ----- //
 
-import { roundDp } from 'helpers/utilities';
+import { roundDp } from 'helpers/utilities/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-import type { Radio } from 'components/radioToggle/radioToggle';
-import { logException } from 'helpers/logger';
-import { Annual, type BillingPeriod, Monthly } from 'helpers/billingPeriods';
-import type { PaymentMethod, PaymentMethodMap } from 'helpers/paymentMethods';
-import type { ThirdPartyPaymentLibrary } from 'helpers/checkouts';
+import { logException } from 'helpers/utilities/logger';
+import { Annual, type BillingPeriod, Monthly } from 'helpers/productPrice/billingPeriods';
+import type { PaymentMethod, PaymentMethodMap } from 'helpers/forms/paymentMethods';
+import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 
 // ----- Types ----- //
 
@@ -94,7 +93,7 @@ export type ParsedContribution = {|
   error: ParseError,
 |};
 
-type Config = {
+export type Config = {
   [ContributionType]: {
     min: number,
     minInWords: string,
@@ -388,10 +387,10 @@ function getFrequency(contributionType: ContributionType): string {
   if (contributionType === 'ONE_OFF') {
     return '';
   } else if (contributionType === 'MONTHLY') {
-    return 'a month';
+    return 'per month';
   }
 
-  return 'a year';
+  return 'per year';
 
 }
 
@@ -430,6 +429,13 @@ function getAmountA11yHint(
   return `contribute ${spokenAmount} ${spokenCurrency} annually`;
 
 }
+
+type Radio = {
+  id?: string,
+  value: string,
+  text: string,
+  accessibilityHint?: ?string,
+};
 
 const contributionTypeRadios = [
   {

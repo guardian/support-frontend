@@ -5,26 +5,24 @@
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { config, type ContributionAmounts, type ContributionType, getAmount } from 'helpers/contributions';
+import { config, type ContributionAmounts, type ContributionType } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
   currencies,
   spokenCurrencies,
-  detect,
 } from 'helpers/internationalisation/currency';
-import { amountIsValid } from 'helpers/formValidation';
-import { classNameWithModifiers } from 'helpers/utilities';
+import { amountIsValid } from 'helpers/forms/formValidation';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { formatAmount } from 'helpers/checkouts';
+import { formatAmount } from 'helpers/forms/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { type State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { TextInput } from '@guardian/src-text-input';
+import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 
 // ----- Types ----- //
-
-type BreakdownMode = "WEEKLY" | "DAILY" | "NONE";
 
 type PropTypes = {|
   countryGroupId: CountryGroupId,
@@ -37,19 +35,9 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  breakdownMode: BreakdownMode,
+  localCurrencyCountry: ?LocalCurrencyCountry,
+  useLocalCurrency: boolean,
 |};
-
-const getBreakdownMode = (state: State): BreakdownMode => {
-  const variant = state.common.abParticipations.landingPagePriceBreakdownTest;
-  if (variant === 'control') {
-    return 'WEEKLY';
-  } else if (variant === 'daily') {
-    return 'DAILY';
-  }
-  return 'NONE';
-};
-
 
 const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
@@ -62,7 +50,8 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonClicked:
     state.page.form.stripePaymentRequestButtonData.ONE_OFF.stripePaymentRequestButtonClicked ||
     state.page.form.stripePaymentRequestButtonData.REGULAR.stripePaymentRequestButtonClicked,
-  breakdownMode: getBreakdownMode(state),
+  localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
+  useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -71,7 +60,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch(selectAmount(amount, contributionType));
   },
   updateOtherAmount: (amount, countryGroupId, contributionType) => {
-    trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
     dispatch(updateOtherAmount(amount, contributionType));
   },
 });
@@ -88,48 +76,12 @@ const renderEmptyAmount = (id: string) => (
   </li>
 );
 
-const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
-  if (amount < 1 && countryGroupId === 'GBPCountries') {
-    return `${(amount * 100).toFixed(0)}p`;
-  }
-  return `${currencyString}${(amount).toFixed(2)}`;
-};
-
-const getAmountBreakdown = (
-  breakdownMode: BreakdownMode,
-  contributionType: ContributionType,
-  countryGroupId: CountryGroupId,
-  selectedAmounts: SelectedAmounts,
-  otherAmounts: OtherAmounts,
-): string => {
-  const currencyStringPrefix = countryGroupId === 'International' ? 'US' : '';
-  const currencyString = currencyStringPrefix + currencies[detect(countryGroupId)].glyph;
-
-  const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
-
-  const breakdownIntervalsPerYear = breakdownMode === 'WEEKLY' ? 52.0 : 365.0;
-  let breakdownAmount: number;
-  if (contributionType === 'ANNUAL') {
-    breakdownAmount = amount / breakdownIntervalsPerYear;
-  } else if (contributionType === 'MONTHLY') {
-    breakdownAmount = (amount * 12) / breakdownIntervalsPerYear;
-  }
-
-  if ((amount && breakdownAmount)) {
-    return (`Contributing ${currencyString}${amount} works out as ${amountFormatted(
-      breakdownAmount,
-      currencyString,
-      countryGroupId,
-    )} ${breakdownMode === 'WEEKLY' ? 'each week' : 'a day'}`);
-  }
-
-  return '';
-};
-
 function withProps(props: PropTypes) {
   const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
+  const { min, max } = (props.useLocalCurrency && props.localCurrencyCountry)
+    ? props.localCurrencyCountry.config[props.contributionType]
+    : config[props.countryGroupId][props.contributionType];
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], min, false);
   const maxAmount: string =
@@ -139,14 +91,16 @@ function withProps(props: PropTypes) {
   const {
     checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked,
   } = props;
-
-  const showWeeklyBreakdown =
-    props.contributionType !== 'ONE_OFF' && props.breakdownMode !== 'NONE';
-
   const canShowOtherAmountErrorMessage =
     checkoutFormHasBeenSubmitted || stripePaymentRequestButtonClicked || !!otherAmount;
   const otherAmountErrorMessage: string | null =
-    canShowOtherAmountErrorMessage && !amountIsValid(otherAmount || '', props.countryGroupId, props.contributionType) ?
+    canShowOtherAmountErrorMessage && !amountIsValid(
+      otherAmount || '',
+      props.countryGroupId,
+      props.contributionType,
+      props.localCurrencyCountry,
+      props.useLocalCurrency,
+    ) ?
       `Please provide an amount between ${minAmount} and ${maxAmount}` :
       null;
 
@@ -172,11 +126,14 @@ function withProps(props: PropTypes) {
             id="contributionOther"
             label={`Other amount (${otherLabelSymbol})`}
             value={otherAmount}
-            onBlur={e => props.updateOtherAmount(
+            onChange={e => props.updateOtherAmount(
               (e.target: any).value,
               props.countryGroupId,
               props.contributionType,
             )}
+            onBlur={() => !!otherAmount &&
+              trackComponentClick(`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`)
+            }
             error={otherAmountErrorMessage}
             autoComplete="off"
             autoFocus
@@ -184,17 +141,6 @@ function withProps(props: PropTypes) {
         </div>
       }
 
-      {showWeeklyBreakdown ? (
-        <p className="amount-per-week-breakdown">
-          {getAmountBreakdown(
-            props.breakdownMode,
-            props.contributionType,
-            props.countryGroupId,
-            props.selectedAmounts,
-            props.otherAmounts,
-          )}
-        </p>
-      ) : null}
     </fieldset>
   );
 }

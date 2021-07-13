@@ -36,6 +36,7 @@ object SendThankYouEmailState {
     promoCode: Option[PromoCode],
     accountNumber: String,
     subscriptionNumber: String,
+    isInEventsTest: Option[Boolean],
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
@@ -62,7 +63,8 @@ object SendThankYouEmailState {
   case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user: User,
     product: DigitalPack,
-    termDates: TermDates
+    subscriptionNumber: String,
+    termDates: TermDates,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailPaperState(
@@ -99,15 +101,17 @@ object SendThankYouEmailState {
   implicit val encodeSFContactId = Encoder.encodeString.contramap[SfContactId](_.id)
   implicit val decodeSFContactId = Decoder.decodeString.map(SfContactId.apply)
 
-  private val discriminatedType = new DiscriminatedType[SendThankYouEmailState]("productType")
+  import ExecutionTypeDiscriminators._
+
+  private val discriminatedType = new DiscriminatedType[SendThankYouEmailState](fieldName)
   implicit val codec = discriminatedType.codec(List(
-    discriminatedType.variant[SendThankYouEmailContributionState]("Contribution"),
-    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState]("DigitalSubscriptionDirectPurchase"),
-    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftPurchaseState]("DigitalSubscriptionGiftPurchase"),
-    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionCorporateRedemptionState]("DigitalSubscriptionCorporateRedemption"),
-    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftRedemptionState]("DigitalSubscriptionGiftRedemption"),
-    discriminatedType.variant[SendThankYouEmailPaperState]("Paper"),
-    discriminatedType.variant[SendThankYouEmailGuardianWeeklyState]("GuardianWeekly"),
+    discriminatedType.variant[SendThankYouEmailContributionState](contribution),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState](digitalSubscriptionDirectPurchase),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionCorporateRedemptionState](digitalSubscriptionCorporateRedemption),
+    discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftRedemptionState](digitalSubscriptionGiftRedemption),
+    discriminatedType.variant[SendThankYouEmailPaperState](paper),
+    discriminatedType.variant[SendThankYouEmailGuardianWeeklyState](guardianWeekly),
   ))
 
 }

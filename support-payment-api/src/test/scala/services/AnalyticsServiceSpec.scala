@@ -6,7 +6,7 @@ import cats.implicits._
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.services.DefaultAcquisitionService
-import conf.{KinesisConfig, OphanConfig}
+import conf.OphanConfig
 import model.{AcquisitionData, ClientBrowserInfo, DefaultThreadPool, InitializationError}
 import model.acquisition.PaypalAcquisition
 import com.paypal.api.payments.Payment
@@ -31,7 +31,7 @@ class AnalyticsServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar w
     val paypalAcquisition = PaypalAcquisition(
       payment = mock[Payment],
       acquisitionData = AcquisitionData(
-        None, None, None, None, None, None, None, None, None, None, None, None, None
+        None, None, None, None, None, None, None, None, None, None, None, None, None, None
       ),
       identityId = None,
       clientBrowserInfo = ClientBrowserInfo.fromRequest(FakeRequest(), None)
@@ -39,7 +39,7 @@ class AnalyticsServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar w
   }
 
   it should "return an error if the config is invalid" in new OphanServiceTestFixture {
-    val result = AnalyticsService.fromConfig(OphanConfig(null), KinesisConfig("test"))
+    val result = AnalyticsService.fromConfig(OphanConfig(null))
     result mustBe an [Invalid[InitializationError]]
   }
 
