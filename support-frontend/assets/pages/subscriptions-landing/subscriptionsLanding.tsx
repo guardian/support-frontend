@@ -16,8 +16,10 @@ import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
 import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
-import { SubscriptionsLandingPropTypes } from './subscriptionsLandingProps';
-import { subscriptionsLandingProps } from './subscriptionsLandingProps';
+import {
+	subscriptionsLandingProps,
+	SubscriptionsLandingPropTypes,
+} from './subscriptionsLandingProps';
 
 // ----- Render ----- //
 const SubscriptionsLandingPage = ({
@@ -45,7 +47,7 @@ const SubscriptionsLandingPage = ({
 			footer={
 				<Footer
 					faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-					centred
+					centred={true}
 				/>
 			}
 		>
@@ -61,6 +63,7 @@ const SubscriptionsLandingPage = ({
 
 setUpTrackingAndConsents();
 renderPage(
+	// eslint-disable-next-line react/jsx-props-no-spreading
 	<SubscriptionsLandingPage {...subscriptionsLandingProps()} />,
 	'subscriptions-landing-page',
 );
