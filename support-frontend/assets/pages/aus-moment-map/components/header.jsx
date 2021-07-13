@@ -62,7 +62,7 @@ export const Header = () => (
         <LinkButton
           priority="tertiary"
           size="small"
-          href={contributeUrl('Aus_Moment_2020_map_header')}
+          href={contributeUrl('Aus_Moment_2021_map_header')}
           target="_blank"
           rel="noopener noreferrer"
         >
