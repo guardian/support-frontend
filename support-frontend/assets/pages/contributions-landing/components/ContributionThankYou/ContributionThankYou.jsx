@@ -225,6 +225,7 @@ const ContributionThankYou = ({
           campaignSettings && campaignSettings.createReferralCodes
         }
         campaignCode={campaignSettings && campaignSettings.campaignCode}
+        countryId={countryId}
       />
     ),
     shouldShow: true,
