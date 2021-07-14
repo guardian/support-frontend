@@ -1,9 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = function (env) {
     // default to the server configuration
     const base = {
+        mode: process.env.NODE_ENV,
         entry: './src/server/index.tsx',
         output: {
             filename: 'js/server.js',
@@ -43,6 +45,7 @@ module.exports = function (env) {
     if (env.platform === 'web') {
         base.entry = './src/clientEntry.tsx';
         base.output.filename = 'js/client.js';
+        base.plugins = [new CompressionPlugin()];
     }
 
     return base;

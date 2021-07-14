@@ -1,5 +1,6 @@
 import React from 'react';
 import express from 'express';
+import expressStaticGzip from 'express-static-gzip';
 import { renderToString } from 'react-dom/server';
 import { CacheProvider } from '@emotion/react';
 import createEmotionServer from '@emotion/server/create-instance';
@@ -16,7 +17,12 @@ const key = 'support';
 const cache = createCache({ key });
 const { extractCritical } = createEmotionServer(cache);
 
-server.use(express.static('dist'));
+server.use(
+    '/',
+    expressStaticGzip('dist', {
+        enableBrotli: false,
+    }),
+);
 server.use(express.json());
 
 server.post('/error', (req, res) => {

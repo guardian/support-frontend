@@ -4,18 +4,17 @@ import { space } from '@guardian/src-foundations';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 import { SvgInfo } from '@guardian/src-icons';
+import ProductOptionGroup from './productOptionGroup';
+import { CountryCode } from '../../helpers/internationalisation';
+import { ProductPrices } from '../../helpers/getProductPrices';
 import ProductInfoChip from '../../../../components/product/productInfoChip';
 import SvgGift from '../../../../components/svgs/gift';
 import FlexContainer from '../../../../components/containers/flexContainer';
-import ProductOption, { Product } from '../../../../components/product/productOption';
 
 export type WeeklyPricesProps = {
-    products: Product[];
+    productPrices: ProductPrices;
+    countryId: CountryCode;
 };
-
-const pricesSection = css`
-    padding: 0 ${space[3]}px ${space[12]}px;
-`;
 
 const priceBoxes = css`
     margin-top: ${space[6]}px;
@@ -26,32 +25,8 @@ const priceBoxes = css`
     }
 `;
 
-const productOverride = css`
-    &:not(:first-of-type) {
-        margin-top: ${space[4]}px;
-    }
-    ${from.tablet} {
-        &:not(:first-of-type) {
-            margin-top: 0;
-        }
-        &:not(:last-of-type) {
-            margin-right: ${space[5]}px;
-        }
-    }
-`;
-
-const productOverrideWithLabel = css`
-    &:not(:first-of-type) {
-        margin-top: ${space[12]}px;
-    }
-    ${from.tablet} {
-        &:not(:first-of-type) {
-            margin-top: 0;
-        }
-        &:not(:last-of-type) {
-            margin-right: ${space[5]}px;
-        }
-    }
+const pricesSection = css`
+    padding: 0 ${space[3]}px ${space[12]}px;
 `;
 
 const pricesHeadline = css`
@@ -67,27 +42,13 @@ const pricesInfo = css`
     margin-top: ${space[6]}px;
 `;
 
-export default function Prices({ products }: WeeklyPricesProps): React.ReactElement {
+function Prices({ productPrices, countryId }: WeeklyPricesProps): React.ReactElement {
     return (
         <section css={pricesSection} id="subscribe">
             <h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
             <p css={pricesSubHeadline}>Choose how you&apos;d like to pay</p>
             <FlexContainer cssOverrides={priceBoxes}>
-                {products.map((product) => (
-                    <ProductOption
-                        key={product.title}
-                        cssOverrides={product.label ? productOverrideWithLabel : productOverride}
-                        title={product.title}
-                        price={product.price}
-                        offerCopy={product.offerCopy}
-                        priceCopy={product.priceCopy}
-                        buttonCopy={product.buttonCopy}
-                        href={product.href}
-                        onClick={product.onClick}
-                        onView={product.onView}
-                        label={product.label}
-                    />
-                ))}
+                <ProductOptionGroup productPrices={productPrices} countryId={countryId} />
             </FlexContainer>
             <div css={pricesInfo}>
                 <ProductInfoChip icon={<SvgGift />}>Gifting is available</ProductInfoChip>
@@ -98,3 +59,5 @@ export default function Prices({ products }: WeeklyPricesProps): React.ReactElem
         </section>
     );
 }
+
+export default Prices;

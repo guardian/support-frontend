@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { html, render } from 'htm/preact';
+import ReactDOM from 'react-dom';
 import { VNode } from 'preact';
-
-import ProductOption from './components/product/productOption';
+import ProductOptionGroup from './pages/weekly/components/content/productOptionGroup';
+import React from 'react';
 
 type ComponentDataType = {
     name: string;
@@ -18,19 +18,20 @@ declare global {
 }
 
 const componentMap: Record<string, (props: any) => VNode> = {
-    ProductOption,
+    ProductOptionGroup,
 };
 const $componentMarkers = document.querySelectorAll(`[data-cmp-id]`);
-
-console.log($componentMarkers);
 
 Array.from($componentMarkers).forEach(($marker) => {
     const cmpId = ($marker as HTMLElement).dataset.cmpId;
     if (cmpId) {
         const $component = $marker.nextElementSibling as HTMLElement;
+        console.log($marker, $component);
         const { name, props } = window.__STATE__.components[cmpId] as ComponentDataType;
         const Component = componentMap[name];
 
-        render(html`<${Component} ...${props} />`, $component.parentNode as HTMLElement);
+        if (Component) {
+            ReactDOM.render(<Component {...props} />, $component.parentNode as HTMLElement);
+        }
     }
 });

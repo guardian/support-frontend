@@ -1,4 +1,3 @@
-import { WeeklyPricesProps } from '../components/content/prices';
 import {
     countryGroups,
     currencies,
@@ -7,6 +6,7 @@ import {
     CountryGroupName,
     IsoCurrency,
 } from './internationalisation';
+import { Product } from '../../../components/product/productOption';
 
 type ProductOptions = 'NoProductOptions';
 
@@ -84,6 +84,8 @@ function weeklyProductProps(billingPeriod: BillingPeriod, productPrice: ProductP
     const offerCopy = promotion?.landingPage?.roundel ?? '';
     const label = promotion?.discount?.amount ? `Save ${promotion?.discount?.amount}%` : '';
 
+    const msgs = ['ouch!', 'ow!', 'stop that!'];
+
     return {
         title: billingPeriodTitle(billingPeriod),
         price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
@@ -92,7 +94,7 @@ function weeklyProductProps(billingPeriod: BillingPeriod, productPrice: ProductP
         buttonCopy: 'Subscribe now',
         href: '/',
         label,
-        onClick: () => undefined,
+        onClick: () => alert(msgs[Math.floor(Math.random() * msgs.length)]),
         onView: () => undefined,
     };
 }
@@ -100,19 +102,17 @@ function weeklyProductProps(billingPeriod: BillingPeriod, productPrice: ProductP
 export default function getProductPrices(
     productPrices: ProductPrices,
     countryId: CountryCode,
-): WeeklyPricesProps {
-    return {
-        products: weeklyBillingPeriods.map((billingPeriod) => {
-            const defaultPrice: ProductPrice = { price: 0, fixedTerm: false, currency: 'GBP' };
-            const productPrice = productPrices
-                ? getProductPrice(
-                      productPrices,
-                      countryId,
-                      billingPeriod,
-                      getWeeklyFulfilmentOption(countryId),
-                  )
-                : defaultPrice;
-            return weeklyProductProps(billingPeriod, productPrice);
-        }),
-    };
+): Product[] {
+    return weeklyBillingPeriods.map((billingPeriod) => {
+        const defaultPrice: ProductPrice = { price: 0, fixedTerm: false, currency: 'GBP' };
+        const productPrice = productPrices
+            ? getProductPrice(
+                  productPrices,
+                  countryId,
+                  billingPeriod,
+                  getWeeklyFulfilmentOption(countryId),
+              )
+            : defaultPrice;
+        return weeklyProductProps(billingPeriod, productPrice);
+    });
 }

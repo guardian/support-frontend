@@ -11,7 +11,7 @@ import WeeklyHero, { WeeklyHeroProps } from './components/WeeklyHero';
 import Benefits from './components/content/benefits';
 import Prices from './components/content/prices';
 import { CountryCode } from './helpers/internationalisation';
-import getProductPrices, { ProductPrices } from './helpers/getProductPrices';
+import { ProductPrices } from './helpers/getProductPrices';
 
 export type WeeklyLandingProps = {
     hero: WeeklyHeroProps;
@@ -37,7 +37,9 @@ export default function WeeklyLandingPage({
             </FullWidthContainer>
             <FullWidthContainer theme="dark" hasOverlap>
                 <Container>
-                    {countryCode && prices && <Prices {...getProductPrices(prices, countryCode)} />}
+                    {countryCode && prices && (
+                        <Prices productPrices={prices} countryId={countryCode} />
+                    )}
                 </Container>
             </FullWidthContainer>
             <FullWidthContainer theme="white">
