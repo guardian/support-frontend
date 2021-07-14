@@ -78,7 +78,7 @@ export const tests: Tests = {
     audiences: {
       ALL: {
         offset: 0,
-        size: 1,
+        size: 0,
       },
     },
     isActive: true,
@@ -86,5 +86,26 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingNotAusNotUS,
     seed: 10,
     optimizeId: '-2DJ0JTsSVaskWwTm9Je4A',
+  },
+  comparisonTableTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 10,
+    optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
   },
 };

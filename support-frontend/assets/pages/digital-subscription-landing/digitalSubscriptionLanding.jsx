@@ -40,6 +40,7 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
+import ComparisonTable from './components/comparison/comparisonTable';
 
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
@@ -76,6 +77,18 @@ const eventsProductBlockContainer = css`
   }
 `;
 
+const comparisonTableContainer = css`
+    margin-top: 43px;
+    margin-bottom: ${space[2]}px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+  ${from.tablet} {
+    margin-top: 60px;
+    margin-bottom: ${space[2]}px;
+  }
+`;
+
 // ----- Internationalisation ----- //
 
 const reactElementId: {
@@ -106,6 +119,7 @@ function DigitalLandingPage({
 
   const isGift = orderIsAGift || false;
   const showEventsComponent = participations.digiSubEventsTest === 'variant';
+  const showComparisonTable = participations.comparisonTableTest === 'variant';
 
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -166,6 +180,15 @@ function DigitalLandingPage({
           countryGroupId={countryGroupId}
           priceList={heroPriceList}
         />
+      }
+      {showComparisonTable &&
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={comparisonTableContainer}>
+            <ComparisonTable />
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
       }
       {showEventsComponent &&
       <FullWidthContainer>
