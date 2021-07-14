@@ -17,12 +17,12 @@ import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
 import { SvgPadlock } from 'components/icons/padlock';
-import { comparisonTableYellow } from 'stylesheets/emotion/colours';
 
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
 const titleRowHeight = 30;
 const borderStyle = `${border.primary} 1px solid`;
+const comparisonTableYellow = '#FFFACC';
 
 const iconContainer = css`
   display: inline-flex;
