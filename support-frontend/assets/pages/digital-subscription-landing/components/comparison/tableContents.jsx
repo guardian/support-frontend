@@ -12,7 +12,6 @@ import { type TableRow } from './comparisonTable';
 import { SvgNews } from 'components/icons/news';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
-import { SvgTicket } from 'components/icons/ticket';
 import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
@@ -158,13 +157,6 @@ export const tableContent: Array<TableRow> = [
       <span css={[hideOnVerySmall, noWrap]}>;&nbsp;</span>
       <span css={hideOnVerySmall}>Live and Discover</span></>,
     ariaLabel: 'The Guardian app with premium features, Live and Discover',
-    free: <Padlock />,
-    paid: <Checkmark />,
-  },
-  {
-    icon: <div css={iconContainer}><SvgTicket /></div>,
-    description: 'Six free tickets to Guardian events',
-    ariaLabel: 'Six free tickets to Guardian events',
     free: <Padlock />,
     paid: <Checkmark />,
   },
