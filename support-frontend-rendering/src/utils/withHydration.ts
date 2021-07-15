@@ -22,7 +22,7 @@ export default function withHydration<T>(
                 dangerouslySetInnerHTML=${{ __html: scriptSrc }}
                 data-cmp-id=${id}
             ></script>`}
-            <${Component} data-prerender-id=${id} ...${props} />
+            <${Component} ...${props} />
         `;
     };
 }
