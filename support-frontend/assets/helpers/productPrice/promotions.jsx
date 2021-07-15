@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import marked from 'marked';
+import snarkdown from 'snarkdown';
 import DOMPurify from 'dompurify';
 
 import { getQueryParameter } from 'helpers/urls/url';
@@ -118,7 +118,7 @@ function getPromotion(
 function getSanitisedHtml(markdownString: string) {
   // ensure we don't accidentally inject dangerous html into the page
   return DOMPurify.sanitize(
-    marked(markdownString),
+    snarkdown(markdownString),
     { ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'] },
   );
 }
