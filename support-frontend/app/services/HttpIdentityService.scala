@@ -207,7 +207,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       case r if r.success =>
         func(r)
       case r =>
-        Left(s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}")
+        Left(s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}, BODY: ${r.body}")
     }
   }
 }
