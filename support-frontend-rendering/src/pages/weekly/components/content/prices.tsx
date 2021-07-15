@@ -5,15 +5,13 @@ import { body, headline } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
 import { SvgInfo } from '@guardian/src-icons';
 import ProductOptionGroup from './productOptionGroup';
-import { CountryCode } from '../../helpers/internationalisation';
-import { ProductPrices } from '../../helpers/getProductPrices';
+import { LocalisedProductPriceType } from '../../helpers/getProductPrices';
 import ProductInfoChip from '../../../../components/product/productInfoChip';
 import SvgGift from '../../../../components/svgs/gift';
 import FlexContainer from '../../../../components/containers/flexContainer';
 
 export type WeeklyPricesProps = {
-    productPrices: ProductPrices;
-    countryId: CountryCode;
+    products: LocalisedProductPriceType[];
 };
 
 const priceBoxes = css`
@@ -42,13 +40,13 @@ const pricesInfo = css`
     margin-top: ${space[6]}px;
 `;
 
-function Prices({ productPrices, countryId }: WeeklyPricesProps): React.ReactElement {
+function Prices({ products }: WeeklyPricesProps): React.ReactElement {
     return (
         <section css={pricesSection} id="subscribe">
             <h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
             <p css={pricesSubHeadline}>Choose how you&apos;d like to pay</p>
             <FlexContainer cssOverrides={priceBoxes}>
-                <ProductOptionGroup productPrices={productPrices} countryId={countryId} />
+                <ProductOptionGroup localisedProducts={products} />
             </FlexContainer>
             <div css={pricesInfo}>
                 <ProductInfoChip icon={<SvgGift />}>Gifting is available</ProductInfoChip>

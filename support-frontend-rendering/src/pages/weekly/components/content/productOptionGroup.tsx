@@ -3,14 +3,12 @@ import React from 'react';
 import { jsx, css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { CountryCode } from '../../helpers/internationalisation';
-import getProductPrices, { ProductPrices } from '../../helpers/getProductPrices';
-import ProductOption from '../../../../components/product/productOption';
+import { LocalisedProductPriceType } from '../../helpers/getProductPrices';
+import ProductOption, { Product } from '../../../../components/product/productOption';
 import withHydration from '../../../../utils/withHydration';
 
 export type ProductOptionGroupProps = {
-    productPrices: ProductPrices;
-    countryId: CountryCode;
+    localisedProducts: LocalisedProductPriceType[];
 };
 
 const productOverride = css`
@@ -41,11 +39,23 @@ const productOverrideWithLabel = css`
     }
 `;
 
-function ProductOptionGroup({
-    productPrices,
-    countryId,
-}: ProductOptionGroupProps): React.ReactElement {
-    const products = getProductPrices(productPrices, countryId);
+function addEventListeners(localisedProducts: LocalisedProductPriceType[]): Product[] {
+    return localisedProducts.map((product) => {
+        const trackingProperties = {
+            id: `subscribe_now_cta-${product.billingPeriod}`,
+            product: product.product,
+            componentType: 'ACQUISITIONS_BUTTON',
+        };
+        return {
+            ...product,
+            onClick: () => alert(`Sending tracking data: ${JSON.stringify(trackingProperties)}`),
+            onView: () => undefined,
+        };
+    });
+}
+
+function ProductOptionGroup({ localisedProducts }: ProductOptionGroupProps): React.ReactElement {
+    const products = addEventListeners(localisedProducts);
 
     return (
         <React.Fragment>

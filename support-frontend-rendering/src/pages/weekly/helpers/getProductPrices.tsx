@@ -6,7 +6,6 @@ import {
     CountryGroupName,
     IsoCurrency,
 } from './internationalisation';
-import { Product } from '../../../components/product/productOption';
 
 type ProductOptions = 'NoProductOptions';
 
@@ -84,9 +83,9 @@ function weeklyProductProps(billingPeriod: BillingPeriod, productPrice: ProductP
     const offerCopy = promotion?.landingPage?.roundel ?? '';
     const label = promotion?.discount?.amount ? `Save ${promotion?.discount?.amount}%` : '';
 
-    const msgs = ['ouch!', 'ow!', 'stop that!'];
-
     return {
+        billingPeriod,
+        product: 'GuardianWeekly',
         title: billingPeriodTitle(billingPeriod),
         price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
         offerCopy,
@@ -94,15 +93,26 @@ function weeklyProductProps(billingPeriod: BillingPeriod, productPrice: ProductP
         buttonCopy: 'Subscribe now',
         href: '/',
         label,
-        onClick: () => alert(msgs[Math.floor(Math.random() * msgs.length)]),
-        onView: () => undefined,
     };
 }
+
+export type LocalisedProductPriceType = {
+    billingPeriod: BillingPeriod;
+    product: string;
+    title: string;
+    price: string;
+    children?: React.ReactNode;
+    offerCopy?: React.ReactNode;
+    priceCopy: React.ReactNode;
+    buttonCopy: string;
+    href: string;
+    label: string;
+};
 
 export default function getProductPrices(
     productPrices: ProductPrices,
     countryId: CountryCode,
-): Product[] {
+): LocalisedProductPriceType[] {
     return weeklyBillingPeriods.map((billingPeriod) => {
         const defaultPrice: ProductPrice = { price: 0, fixedTerm: false, currency: 'GBP' };
         const productPrice = productPrices
