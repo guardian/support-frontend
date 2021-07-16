@@ -3,12 +3,12 @@ package com.gu.aws
 import java.util.concurrent.{Future => JFuture}
 import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.{AmazonServiceException, AmazonWebServiceRequest}
-import com.typesafe.scalalogging.LazyLogging
+import wvlet.log.LogSupport
 
 import scala.concurrent.{Future, Promise}
 
 class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response](f: (Request, AsyncHandler[Request, Response]) => JFuture[Response], request: Request)
-    extends AsyncHandler[Request, Response] with LazyLogging{
+    extends AsyncHandler[Request, Response] with LogSupport {
   f(request, this)
 
   private val promise = Promise[Response]()
