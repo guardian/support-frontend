@@ -22,7 +22,6 @@ class Promotions(
   val actionRefiners: CustomActionBuilders,
   testUsers: TestUserService,  //Remove?
   components: ControllerComponents,
-  fontLoaderBundle: Either[RefPath, StyleContent],
   settingsProvider: AllSettingsProvider,
   stage: Stage
 ) extends AbstractController(components){
@@ -61,7 +60,7 @@ class Promotions(
       val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(promotionTerms.product, List.empty[PromoCode])
 
       Ok(views.html.main(
-        title, mainElement, js, css, fontLoaderBundle
+        title, mainElement, js, css
       ) {
         Html(
           s"""<script type="text/javascript">

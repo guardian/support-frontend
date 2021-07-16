@@ -33,7 +33,6 @@ class DigitalSubscriptionFormController(
   payPalConfigProvider: PayPalConfigProvider,
   components: ControllerComponents,
   settingsProvider: AllSettingsProvider,
-  fontLoaderBundle: Either[RefPath, StyleContent],
   recaptchaConfigProvider: RecaptchaConfigProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
 
@@ -87,7 +86,6 @@ class DigitalSubscriptionFormController(
       id,
       js,
       css,
-      fontLoaderBundle,
       Some(csrf),
       idUser,
       uatMode,
@@ -114,7 +112,6 @@ class DigitalSubscriptionFormController(
       mainElement,
       js,
       css,
-      fontLoaderBundle
     )()
     )
   }

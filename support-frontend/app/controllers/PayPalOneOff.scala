@@ -23,7 +23,6 @@ class PayPalOneOff(
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
     settingsProvider: AllSettingsProvider,
-    fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -39,7 +38,6 @@ class PayPalOneOff(
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
       Left(RefPath("payPalErrorPageStyles.css")),
-      fontLoaderBundle
     )()).withSettingsSurrogateKey
   }
 

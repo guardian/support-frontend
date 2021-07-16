@@ -51,7 +51,6 @@ class Application(
   guardianDomain: GuardianDomain,
   stage: Stage,
   val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
   with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging {
 
@@ -188,7 +187,6 @@ class Application(
       mdapiUrl = membersDataService.apiUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
-      fontLoaderBundle = fontLoaderBundle,
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
@@ -205,7 +203,6 @@ class Application(
       mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page", "showcase.html"),
       mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
-      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.showcaseLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
     )()).withSettingsSurrogateKey
@@ -221,7 +218,6 @@ class Application(
       mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
       mainJsBundle = Left(RefPath("ausMomentMap.js")),
       mainStyleBundle = Left(RefPath("ausMomentMap.css")),
-      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.contributionsLandingDescription,
       canonicalLink = Some("https://support.theguardian.com/aus-map"),
       shareImageUrl = Some(

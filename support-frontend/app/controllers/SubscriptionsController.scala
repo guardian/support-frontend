@@ -30,7 +30,6 @@ class SubscriptionsController(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
-    fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -94,7 +93,6 @@ class SubscriptionsController(
       mainElement,
       Left(RefPath(js)),
       Left(RefPath("subscriptionsLandingPage.css")),
-      fontLoaderBundle,
       description = stringsConfig.subscriptionsLandingDescription
     ){
       Html(
