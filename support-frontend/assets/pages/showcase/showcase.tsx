@@ -6,9 +6,9 @@ import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
 import Heading from 'components/heading/heading';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
-import { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect } from 'helpers/internationalisation/countryGroup';
 import {
+	detect,
+	CountryGroupId,
 	GBPCountries,
 	AUDCountries,
 	Canada,
@@ -17,6 +17,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+
 import Content from 'components/content/content';
 import 'stylesheets/skeleton/skeleton.scss';
 import WhySupportMatters from './components/whySupportMatters';

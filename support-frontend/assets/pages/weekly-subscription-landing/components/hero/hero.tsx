@@ -12,23 +12,26 @@ import GridImage from 'components/gridImage/gridImage';
 import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
-import { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
+	CountryGroupId,
 	detect,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import { PromotionCopy } from 'helpers/productPrice/promotions';
-import { promotionHTML } from 'helpers/productPrice/promotions';
+
+import { PromotionCopy, promotionHTML } from 'helpers/productPrice/promotions';
+
 import {
 	fromCountryGroupId,
 	glyph,
 } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 type PropTypes = {
 	orderIsAGift: boolean;
 	countryGroupId: CountryGroupId;
 	promotionCopy: PromotionCopy;
 };
+
 const weeklyHeroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
 `;
@@ -127,9 +130,10 @@ const getFirstParagraph = (
 	return (
 		<>
 			The Guardian Weekly magazine is a round-up of the world news, opinion and
-			long reads that have shaped the week. Inside, the past seven days' most
-			memorable stories are reframed with striking photography and insightful
-			companion pieces, all handpicked from The Guardian and The Observer.
+			long reads that have shaped the week. Inside, the past seven days&apos;
+			most memorable stories are reframed with striking photography and
+			insightful companion pieces, all handpicked from The Guardian and The
+			Observer.
 		</>
 	);
 };

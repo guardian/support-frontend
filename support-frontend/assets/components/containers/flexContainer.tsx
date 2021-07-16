@@ -1,10 +1,12 @@
-import { Node } from 'react';
-import React from 'react';
+import React, { ReactNode } from 'react';
+
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
+import { SerializedStyles } from '@emotion/react';
+
 type PropTypes = {
-	cssOverrides?: string;
-	children: Node;
+	cssOverrides?: SerializedStyles;
+	children: ReactNode;
 };
 const flexContainer = css`
 	display: flex;
@@ -14,8 +16,8 @@ const flexContainer = css`
 	}
 `;
 
-function FlexContainer(props: PropTypes) {
-	return <div css={[flexContainer, props.cssOverrides]}>{props.children}</div>;
+function FlexContainer({ cssOverrides, children }: PropTypes) {
+	return <div css={[flexContainer, cssOverrides]}>{children}</div>;
 }
 
 FlexContainer.defaultProps = {

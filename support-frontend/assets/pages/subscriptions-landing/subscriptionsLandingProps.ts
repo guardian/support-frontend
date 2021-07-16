@@ -1,14 +1,17 @@
 // ----- Imports ----- //
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { getSettings, getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import {
+	detect as detectCountryGroup,
+	CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
+import {
+	getReferrerAcquisitionData,
+	ReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
-import { Participations } from 'helpers/abTests/abtest';
-import { init as initAbTests } from 'helpers/abTests/abtest';
-import { getSettings } from 'helpers/globalsAndSwitches/globals';
+import { init as initAbTests, Participations } from 'helpers/abTests/abtest';
+
 export type PriceCopy = {
 	price: number;
 	discountCopy: string;

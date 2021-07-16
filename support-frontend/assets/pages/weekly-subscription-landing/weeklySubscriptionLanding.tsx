@@ -3,7 +3,6 @@ import * as React from 'react';
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
-import { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -13,10 +12,17 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
+	CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import { renderPage } from 'helpers/rendering/render';
 import { routes, promotionTermsUrl } from 'helpers/urls/routes';
 import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
+import {
+	promoQueryParam,
+	getPromotionCopy,
+} from 'helpers/productPrice/promotions';
+import { getQueryParameter } from 'helpers/urls/url';
+
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
 import Block from 'components/page/block';
@@ -28,12 +34,10 @@ import GiftBenefits from './components/content/giftBenefits';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 import './weeklySubscriptionLanding.scss';
 import {
-	promoQueryParam,
-	getPromotionCopy,
-} from 'helpers/productPrice/promotions';
-import { getQueryParameter } from 'helpers/urls/url';
-import { WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
-import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
+	weeklyLandingProps,
+	WeeklyLandingPropTypes,
+} from './weeklySubscriptionLandingProps';
+
 // ----- Internationalisation ----- //
 const countryGroupId: CountryGroupId = detect();
 const reactElementId: Record<CountryGroupId, string> = {
@@ -84,7 +88,7 @@ const WeeklyLandingPage = ({
 		<Page
 			id={pageQaId}
 			header={<Header />}
-			footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
+			footer={<WeeklyFooter centred={true} promoTermsLink={promoTermsLink} />}
 		>
 			<WeeklyHero
 				orderIsAGift={orderIsAGift || false}
@@ -96,7 +100,7 @@ const WeeklyLandingPage = ({
 					<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
 				</CentredContainer>
 			</FullWidthContainer>
-			<FullWidthContainer theme="dark" hasOverlap>
+			<FullWidthContainer theme="dark" hasOverlap={true}>
 				<CentredContainer>
 					<WeeklyProductPrices
 						countryId={countryId}
@@ -120,6 +124,7 @@ const WeeklyLandingPage = ({
 
 setUpTrackingAndConsents();
 renderPage(
+	// eslint-disable-next-line react/jsx-props-no-spreading
 	<WeeklyLandingPage {...weeklyLandingProps()} />,
 	reactElementId[countryGroupId],
 );
