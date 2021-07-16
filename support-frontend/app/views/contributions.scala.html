@@ -22,7 +22,6 @@
   mdapiUrl: String,
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
-  fontLoaderBundle: Either[RefPath, StyleContent],
   geoData: GeoData,
   shareImageUrl: String,
   shareUrl: String,
@@ -31,7 +30,7 @@
   serversideTests: Map[String, Participation] = Map()
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl), serversideTests = serversideTests) {
+@main(title = title, mainJsBundle = js, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl), serversideTests = serversideTests) {
   <script type="text/javascript">
   window.guardian = window.guardian || {};
   @idUser.map { user =>

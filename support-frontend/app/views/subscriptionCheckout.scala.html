@@ -19,7 +19,6 @@
   mainElement: ReactDiv,
   js: String,
   css: String,
-  fontLoaderBundle: Either[RefPath, StyleContent],
   csrf: Option[String],
   user: IdUser,
   uatMode: Boolean,
@@ -33,7 +32,7 @@
   homeDeliveryPostcodes: Option[List[String]] = None,
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
-  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
+  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
     <script type="text/javascript">
       window.guardian = window.guardian || {};
 

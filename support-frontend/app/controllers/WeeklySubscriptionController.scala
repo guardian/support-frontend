@@ -24,8 +24,7 @@ class WeeklySubscriptionController(
   components: ControllerComponents,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -47,7 +46,6 @@ class WeeklySubscriptionController(
       mainElement = EmptyDiv("weekly-landing-page-" + countryCode),
       mainJsBundle = Left(RefPath("weeklySubscriptionLandingPage.js")),
       mainStyleBundle = Left(RefPath("weeklySubscriptionLandingPage.css")),
-      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.weeklyLandingDescription,
       canonicalLink = canonicalLink,
       hrefLangLinks = getWeeklyHrefLangLinks(orderIsAGift),
