@@ -4,9 +4,9 @@ import React from 'react';
 // ----- Types ----- //
 export type HeadingSize = 1 | 2 | 3 | 4 | 5 | 6;
 type PropTypes = {
-	size: HeadingSize;
+	size: string;
 	className: string;
-	children: Node;
+	children: string;
 }; // ----- Component ----- //
 
 export default function Heading(props: PropTypes) {
