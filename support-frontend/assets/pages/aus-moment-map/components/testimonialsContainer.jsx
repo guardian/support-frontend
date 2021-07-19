@@ -7,6 +7,8 @@ import type { TestimonialsCollection, Testimonial } from 'pages/aus-moment-map/t
 import { Button } from '@guardian/src-button';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 import { contributeUrl } from '../utils';
+import { buttonDefault } from '@guardian/src-foundations/themes';
+import { ThemeProvider } from "emotion-theming";
 
 const TestimonialCtaPrimary = () => (
   <div className="testimonial-cta testimonial-cta-primary">
@@ -15,16 +17,18 @@ const TestimonialCtaPrimary = () => (
     If you’re a contributor or subscriber, we would love to hear from you
     </p>
 
-    <LinkButton
-      className="testimonial-cta-primary-link-button"
-      priority="primary"
-      size="small"
-      href="https://guardiannewsampampmedia.formstack.com/forms/australia_2021"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Add your message
-    </LinkButton>
+    <ThemeProvider theme={buttonDefault}>
+      <LinkButton
+        className="testimonial-cta-primary-link-button"
+        priority="primary"
+        size="small"
+        href="https://guardiannewsampampmedia.formstack.com/forms/australia_2021"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Add your message
+      </LinkButton>
+    </ThemeProvider>
   </div>
 );
 
