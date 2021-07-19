@@ -160,7 +160,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         stripeConfigProvider = stripe,
         payPalConfigProvider = payPal,
         components = stubControllerComponents(),
-        settingsProvider = settingsProvider,,
+        settingsProvider = settingsProvider,
         recaptchaConfigProvider
       )
     }
