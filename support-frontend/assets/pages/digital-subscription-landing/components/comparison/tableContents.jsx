@@ -16,6 +16,7 @@ import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
 import { SvgPadlock } from 'components/icons/padlock';
+import type { Option } from 'helpers/types/option';
 
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
@@ -112,8 +113,8 @@ const hideOnVerySmall = css`
   }
 `;
 
-const noWrap = css`
-  white-space: nowrap;
+const borderLeft = css`
+  border-left: ${borderStyle};
 `;
 
 const Padlock = () => (
@@ -122,11 +123,19 @@ const Padlock = () => (
   </div>
 );
 
-const Checkmark = () => (
-  <div aria-label="Included" css={[indicators, checkmark, yellowBackground]}>
-    <SvgCheckmark />
-  </div>
-);
+const Checkmark = (props: {borderLeft?: Option<string>}) => {
+  const checkMarkStyles = props.borderLeft ?
+    [indicators, checkmark, yellowBackground, props.borderLeft] :
+    [indicators, checkmark, yellowBackground];
+  return (
+    <div aria-label="Included" css={checkMarkStyles}>
+      <SvgCheckmark />
+    </div>);
+};
+
+Checkmark.defaultProps = {
+  borderLeft: null,
+};
 
 
 export const tableContent: Array<TableRow> = [
@@ -134,7 +143,7 @@ export const tableContent: Array<TableRow> = [
     icon: <div css={iconContainer}><SvgNews /></div>,
     description: 'Access to The Guardian\'s quality, open journalism',
     ariaLabel: 'Access to The Guardian\'s quality, open journalism',
-    free: <Checkmark />,
+    free: <Checkmark borderLeft={borderLeft} />,
     paid: <Checkmark />,
   },
   {
@@ -153,8 +162,7 @@ export const tableContent: Array<TableRow> = [
   },
   {
     icon: <div css={iconContainer}><SvgLiveAppIcon /></div>,
-    description: <>The Guardian app with premium features
-      <span css={[hideOnVerySmall, noWrap]}>;&nbsp;</span>
+    description: <>The Guardian app with premium features;{' '}
       <span css={hideOnVerySmall}>Live and Discover</span></>,
     ariaLabel: 'The Guardian app with premium features, Live and Discover',
     free: <Padlock />,
