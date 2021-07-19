@@ -135,7 +135,7 @@ class RedemptionController(
       maybeReaderType = None,
       Some(s"Unfortunately we were unable to process your code. ${error}"),
       user = None,
-      submitted = false,
+      submitted = false
     ))
   }
 

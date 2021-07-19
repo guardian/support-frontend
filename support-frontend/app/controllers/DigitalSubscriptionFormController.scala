@@ -111,7 +111,7 @@ class DigitalSubscriptionFormController(
       title,
       mainElement,
       js,
-      css,
+      css
     )()
     )
   }

@@ -22,7 +22,7 @@ class PayPalOneOff(
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
-    settingsProvider: AllSettingsProvider,
+    settingsProvider: AllSettingsProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -37,7 +37,7 @@ class PayPalOneOff(
       "Support the Guardian | PayPal Error",
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
-      Left(RefPath("payPalErrorPageStyles.css")),
+      Left(RefPath("payPalErrorPageStyles.css"))
     )()).withSettingsSurrogateKey
   }
 

@@ -23,7 +23,7 @@ class PaperSubscriptionController(
   components: ControllerComponents,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  val supportUrl: String,
+  val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._

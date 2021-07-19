@@ -32,7 +32,7 @@ trait Controllers {
     allSettingsProvider,
     appConfig.guardianDomain,
     appConfig.stage,
-    appConfig.supportUrl,
+    appConfig.supportUrl
   )
 
   lazy val diagnosticsController = new DiagnosticsController(
@@ -53,7 +53,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
+    appConfig.supportUrl
   )
 
   lazy val redemptionController = new RedemptionController(
@@ -191,7 +191,7 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    allSettingsProvider,
+    allSettingsProvider
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
@@ -201,7 +201,7 @@ trait Controllers {
     controllerComponents,
     paymentAPIService,
     identityService,
-    allSettingsProvider,
+    allSettingsProvider
   )
 
   lazy val testUsersController = new TestUsersManagement(

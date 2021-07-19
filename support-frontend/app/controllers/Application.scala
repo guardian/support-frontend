@@ -50,7 +50,7 @@ class Application(
   settingsProvider: AllSettingsProvider,
   guardianDomain: GuardianDomain,
   stage: Stage,
-  val supportUrl: String,
+  val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
   with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging {
 

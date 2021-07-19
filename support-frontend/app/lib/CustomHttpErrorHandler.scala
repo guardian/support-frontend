@@ -54,7 +54,7 @@ class CustomHttpErrorHandler(
           "Error 500",
           EmptyDiv("error-500-page"),
           Left(RefPath("error500Page.js")),
-          Left(RefPath("error500Page.css")),
+          Left(RefPath("error500Page.css"))
         )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.noCache)
         .withSettingsSurrogateKey
