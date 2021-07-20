@@ -25,6 +25,14 @@ function notNull<A>(value: A): boolean {
   return value !== null;
 }
 
+function nonSillyCharacters(s: ?string): boolean {
+  const nonAsciiRegex = (/[^\x20-\x7E]/g);
+  if (!s) {
+    return true;
+  }
+  return !nonAsciiRegex.test(s);
+}
+
 // ----- Functions ----- //
 
 function firstError<FieldType>(field: FieldType, errors: FormError<FieldType>[]): Option<ErrorMessage> {
@@ -56,4 +64,5 @@ export {
   formError,
   removeError,
   validate,
+  nonSillyCharacters,
 };

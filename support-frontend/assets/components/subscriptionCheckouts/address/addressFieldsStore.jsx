@@ -12,6 +12,7 @@ import {
   notNull,
   removeError,
   validate,
+  nonSillyCharacters,
 } from 'helpers/subscriptionsForms/validation';
 import { type RegularPaymentRequestAddress } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { type Scoped } from 'helpers/subscriptionsForms/scoped';
@@ -95,15 +96,16 @@ export const isHomeDeliveryInM25 = (
 
 const applyBillingAddressRules = (fields: FormFields, addressType: AddressType): FormError<FormField>[] => validate([
   {
-    rule: nonEmptyString(fields.lineOne),
+    rule: nonEmptyString(fields.lineOne) && nonSillyCharacters(fields.lineOne),
     error: formError('lineOne', `Please enter a ${addressType} address.`),
   },
   {
-    rule: nonEmptyString(fields.city),
+    rule: nonEmptyString(fields.city) && nonSillyCharacters(fields.city),
     error: formError('city', `Please enter a ${addressType} city.`),
   },
   {
-    rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
+    rule: isPostcodeOptional(fields.country) ||
+    (nonEmptyString(fields.postCode) && nonSillyCharacters(fields.postCode)),
     error: formError('postCode', `Please enter a ${addressType} postcode.`),
   },
   {
