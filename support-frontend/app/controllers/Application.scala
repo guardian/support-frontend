@@ -143,7 +143,7 @@ class Application(
     // "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
 
     // AUS 2021 appeal image
-    "https://i.guim.co.uk/img/media/1cd1b8238f9612f3428ecb1381d8d29e294c2f65/0_1_1000_525/1000.png?quality=85&s=fcc045ac6f23de6bcac4f7054d62eb31"
+    "https://i.guim.co.uk/img/media/8b9e82bb323f76edbfec5cf5f0e2ccd3c7e00b12/0_1_1000_525/1000.png?quality=85&s=a77669466491c22436d12f058d352a72"
   }
 
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
@@ -212,7 +212,7 @@ class Application(
   }
 
   val ausMomentMapSocialImageUrl =
-    "https://i.guim.co.uk/img/media/84bf6a5c9535827ff4c307941cf3147fb2fb63c8/0_0_2000_1050/1000.png?width=1000&quality=85&s=2f7dc4ee733fee7117358fbbb1fa057f"
+    "https://i.guim.co.uk/img/media/31c2f7e33af84e7743e2d9f79454ff5d59e34e5b/0_1_1000_525/1000.png?quality=85&s=c3ca1b1fccb1c6c318f4cd71c2ea1ce2"
 
   def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
