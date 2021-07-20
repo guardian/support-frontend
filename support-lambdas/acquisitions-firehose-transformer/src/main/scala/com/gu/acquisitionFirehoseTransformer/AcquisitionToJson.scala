@@ -24,6 +24,7 @@ object AcquisitionToJson {
     componentId: String,
     product: String,
     paymentProvider: String,
+    referrerUrl: String,
     labels: List[String]
   )
 
@@ -39,6 +40,7 @@ object AcquisitionToJson {
       acquisition.componentId.getOrElse(""),
       acquisition.product.value,
       acquisition.paymentProvider.map(_.value).getOrElse(""),
+      acquisition.referrerUrl.getOrElse(""),
       acquisition.labels
     ).asJson
   }
