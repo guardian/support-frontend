@@ -34,6 +34,7 @@ type SepaFormProps = {|
   checkoutFormHasBeenSubmitted: boolean,
 |};
 
+
 export function SepaForm({
   iban,
   accountHolderName,
@@ -63,7 +64,7 @@ export function SepaForm({
         <div>
           <TextInput
             label="IBAN"
-            pattern="[0-9A-Z]*"
+            pattern="[0-9A-Z ]*"
             minLength="6"
             maxLength="34"
             value={iban}

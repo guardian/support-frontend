@@ -115,5 +115,6 @@ export const checkStateIfApplicable: ((string | null), CountryGroupId, Contribut
   return true;
 };
 
+// ignores all spaces
 export const isValidIban = (iban: string | null): boolean =>
-  !!iban && /[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}/.test(iban);
+  !!iban && /[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}/.test(iban.replace(/ /g, ''));
