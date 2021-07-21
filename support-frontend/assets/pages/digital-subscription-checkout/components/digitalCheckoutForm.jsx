@@ -86,6 +86,7 @@ type PropTypes = {|
   validateForm: () => Function,
   formIsValid: Function,
   addressErrors: Array<Object>,
+  // eslint-disable-next-line react/no-unused-prop-types
   participations: Participations,
 |};
 
@@ -149,7 +150,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
-  const paymentMethods = supportedPaymentMethods(props.currencyId);
+  const paymentMethods = supportedPaymentMethods(props.currencyId, props.country);
 
   return (
     <Content>
@@ -195,7 +196,7 @@ function DigitalCheckoutForm(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
-                currencyId={props.currencyId}
+                availablePaymentMethods={paymentMethods}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}

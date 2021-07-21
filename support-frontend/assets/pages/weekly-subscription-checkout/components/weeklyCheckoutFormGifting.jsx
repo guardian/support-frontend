@@ -103,6 +103,7 @@ type PropTypes = {|
   setBillingCountry: Function,
   billingAddressErrors: Array<Object>,
   deliveryAddressErrors: Array<Object>,
+  // eslint-disable-next-line react/no-unused-prop-types
   country: IsoCountry,
   isTestUser: boolean,
   validateForm: () => Function,
@@ -172,7 +173,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
-  const paymentMethods = supportedPaymentMethods(props.currencyId);
+  const paymentMethods = supportedPaymentMethods(props.currencyId, props.billingCountry);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -259,10 +260,10 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               </RadioGroup>
               <Text className="component-text__paddingTop">
                 <p className="component-text__sans">
-                We will take payment on the date the recipient receives the first Guardian Weekly.
+                  We will take payment on the date the recipient receives the first Guardian Weekly.
                 </p>
                 <p className="component-text__sans">
-                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
+                  Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>
@@ -338,7 +339,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
-                currencyId={props.currencyId}
+                availablePaymentMethods={paymentMethods}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}

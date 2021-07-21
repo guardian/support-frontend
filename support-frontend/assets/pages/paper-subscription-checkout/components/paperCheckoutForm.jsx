@@ -112,6 +112,7 @@ type PropTypes = {|
   formIsValid: Function,
   setupRecurringPayPalPayment: Function,
   total: ProductPrice,
+  // eslint-disable-next-line react/no-unused-prop-types
   amount: number,
   productOption: ActivePaperProducts,
   fulfilmentOption: FulfilmentOptions,
@@ -184,7 +185,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const deliveryTitle = isHomeDelivery ? 'Where should we deliver your newspaper?' : 'Where should we deliver your subscription card?';
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
-  const paymentMethods = supportedPaymentMethods(props.currencyId);
+  const paymentMethods = supportedPaymentMethods(props.currencyId, props.country);
   const isSubscriptionCard = props.fulfilmentOption === Collection;
   let formattedStartDate = '';
   if (isSubscriptionCard) {
@@ -372,11 +373,11 @@ function PaperCheckoutForm(props: PropTypes) {
                 </RadioGroup>
                 <Text className="component-text__paddingTop">
                   <p>
-                  We will take the first payment on the
-                  date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
+                    We will take the first payment on the
+                    date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
                   </p>
                   <p>
-                Subscription start dates are automatically selected to be the earliest we can fulfil your order.
+                    Subscription start dates are automatically selected to be the earliest we can fulfil your order.
                   </p>
                 </Text>
               </Rows>
@@ -385,7 +386,7 @@ function PaperCheckoutForm(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection cssOverrides={removeTopBorder} title="How would you like to pay?">
               <PaymentMethodSelector
-                currencyId="GBP"
+                availablePaymentMethods={paymentMethods}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}
