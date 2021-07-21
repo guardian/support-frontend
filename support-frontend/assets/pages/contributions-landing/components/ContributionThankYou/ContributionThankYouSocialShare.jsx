@@ -105,7 +105,7 @@ const ContributionThankYouSocialShare = ({
           hideLabel
         />
         <LinkButton
-          href={getEmailShareLink(campaignCode, referralCode)}
+          href={getEmailShareLink(countryId, campaignCode, referralCode)}
           onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
           target="_blank"
           rel="noopener noreferrer"

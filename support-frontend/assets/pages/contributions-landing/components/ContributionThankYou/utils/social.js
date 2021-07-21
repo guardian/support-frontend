@@ -30,9 +30,14 @@ const TWITTER_TEXT_COPY =
 const TWITTER_TEXT_COPY_AU =
   'I support Guardian Australia because I believe in rigorous, independent journalism that’s open for everyone to read. Join me by making a contribution and together we can be a voice for change. #supportGuardianAustralia';
 
-const EMAIL_SUBJECT_COPY = 'Join me in supporting open, independent journalism';
-const emailBodyCopy = (campaignCode: ?string, referralCode: ?string) =>
-  `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${emailLandingPageUrl(campaignCode, referralCode)}`;
+const emailSubjectCopy = (countryId: IsoCountry) =>
+  (countryId === 'AU' ?
+    'Join me in supporting Guardian Australia' :
+    'Join me in supporting open, independent journalism');
+const emailBodyCopy = (countryId: IsoCountry, campaignCode: ?string, referralCode: ?string) =>
+  (countryId === 'AU' ?
+    `I support Guardian Australia because I believe in rigorous, independent journalism that’s open for everyone to read. Join me by making a contribution and together we can be a voice for change. #supportGuardianAustralia \r\n${emailLandingPageUrl(campaignCode, referralCode)}` :
+    `Join me and over one million others in supporting a different model for open, independent journalism. Together we can help safeguard The Guardian’s future – so more people, across the world, can keep accessing factual information for free: ${emailLandingPageUrl(campaignCode, referralCode)}`);
 
 export const getFacebookShareLink = (campaignCode: ?string, referralCode: ?string): string => {
   const intcmp = campaignCode ? `${INTCMP_FACEBOOK}-${campaignCode}` : INTCMP_FACEBOOK;
@@ -68,8 +73,8 @@ export const getLinkedInShareLink = (referralCode: ?string): string => {
   return `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}`;
 };
 
-export const getEmailShareLink = (campaignCode: ?string, referralCode: ?string): string => {
-  const encodedSubject = encodeURI(EMAIL_SUBJECT_COPY);
-  const encodedBody = encodeURI(emailBodyCopy(campaignCode, referralCode));
+export const getEmailShareLink = (countryId: IsoCountry, campaignCode: ?string, referralCode: ?string): string => {
+  const encodedSubject = encodeURI(emailSubjectCopy(countryId));
+  const encodedBody = encodeURI(emailBodyCopy(countryId, campaignCode, referralCode));
   return `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
 };
