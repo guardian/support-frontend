@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { type User } from 'helpers/user/userReducer';
-import { type PaymentMethod, DirectDebit } from 'helpers/forms/paymentMethods';
+import { type PaymentMethod, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -117,7 +117,13 @@ const buttonContainer = css`
 const isLargeDonation = (
   amount: string,
   contributionType: ContributionType,
+  paymentMethod: PaymentMethod,
 ): boolean => {
+  if (paymentMethod === PayPal && contributionType === 'ONE_OFF') {
+    // We do not have the amount after the redirect
+    return false;
+  }
+
   const largeDonations = {
     MONTHLY: 20,
     ANNUAL: 100,
@@ -182,7 +188,7 @@ const ContributionThankYou = ({
       contributionType,
       user.isSignedIn,
       isKnownEmail,
-      isLargeDonation(amount, contributionType),
+      isLargeDonation(amount, contributionType, paymentMethod),
     );
   }, []);
 
@@ -275,7 +281,7 @@ const ContributionThankYou = ({
           contributionType={contributionType}
           amount={amount}
           currency={currency}
-          shouldShowLargeDonationMessage={isLargeDonation(amount, contributionType)}
+          shouldShowLargeDonationMessage={isLargeDonation(amount, contributionType, paymentMethod)}
         />
       </div>
 
