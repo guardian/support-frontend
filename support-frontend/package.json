@@ -59,7 +59,8 @@
     ],
     "moduleNameMapper": {
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
-      "\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.js"
+      "\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.js",
+      "\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.js"
     },
     "setupFilesAfterEnv": [
       "./jestSetup"
