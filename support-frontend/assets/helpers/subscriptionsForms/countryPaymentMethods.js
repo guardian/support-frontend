@@ -2,10 +2,10 @@
 
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-function supportedPaymentMethods(country: IsoCountry): PaymentMethod[] {
-  const countrySpecific: PaymentMethod[] = country === 'GB' ? [DirectDebit, Stripe, PayPal] : [Stripe, PayPal];
+function supportedPaymentMethods(currencyId: IsoCurrency): PaymentMethod[] {
+  const countrySpecific: PaymentMethod[] = currencyId === 'GBP' ? [DirectDebit, Stripe, PayPal] : [Stripe, PayPal];
 
   return countrySpecific;
 }
