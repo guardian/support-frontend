@@ -93,7 +93,7 @@ const ContributionThankYouSurvey = ({ countryId }: { countryId: IsoCountry }) =>
               iconSide="right"
               nudgeIcon
             >
-              Provide feedback
+              { isAus ? 'Share your thoughts' : 'Provide feedback' }
             </LinkButton>
           </div>
         </>
