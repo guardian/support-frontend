@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
+import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { Provider } from 'react-redux';
-import { render, screen } from '@testing-library/react';
+import thunk from 'redux-thunk';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { digitalProducts } from '__mocks__/productInfoMocks';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
@@ -20,6 +21,7 @@ function setUpStore(initialState) {
   return createStore(
     combineReducers({ page: pageReducer(initialState.common), common: createCommonReducer(initialState.common) }),
     initialState,
+    compose(applyMiddleware(thunk)),
   );
 }
 
@@ -31,8 +33,6 @@ function renderWithStore(
     ...renderOptions
   } = {},
 ) {
-
-  console.log(store.getState());
   function Wrapper({ children }) {
     return <Provider store={store}>{children}</Provider>;
   }
@@ -58,6 +58,12 @@ describe('Digital checkout form', () => {
           productPrices: digitalProducts,
           formErrors: [],
         },
+        billingAddress: {
+          fields: {
+            country: 'GB',
+            formErrors: [],
+          },
+        },
       },
       common: {
         internationalisation: {
@@ -73,8 +79,13 @@ describe('Digital checkout form', () => {
 
   describe('Payment methods', () => {
     it('shows the direct debit option when the currency is GBP and the billing address is in the UK', async () => {
-      expect(await screen.findByText('Direct debit')).toBeInTheDocument();
+      expect(await screen.queryByText('Direct debit')).toBeInTheDocument();
+    });
 
+    it('does not show the direct debit option when the currency is not GBP', async () => {
+      const countrySelect = await screen.findByLabelText('Country');
+      fireEvent.change(countrySelect, { target: { value: 'US' } });
+      expect(await screen.queryByText('Direct debit')).not.toBeInTheDocument();
     });
   });
 });

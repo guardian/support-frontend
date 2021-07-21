@@ -11,7 +11,7 @@ import {
 
 import Rows from 'components/base/rows';
 import { type Option } from 'helpers/types/option';
-import { DirectDebit, PayPal, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import { type PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {|
@@ -48,6 +48,24 @@ const RadioWithImage = (props: RadioWithImagePropTypes) => (
   </div>
 );
 
+const paymentMethodIcons: { [PaymentMethod]: Node } = {
+  Stripe: <SvgCreditCard />,
+  PayPal: <SvgPayPal />,
+  DirectDebit: <SvgDirectDebit />,
+};
+
+const paymentMethodIds: { [PaymentMethod]: string } = {
+  Stripe: 'qa-credit-card',
+  PayPal: 'qa-paypal',
+  DirectDebit: 'qa-direct-debit',
+};
+
+const paymentMethodText: { [PaymentMethod]: string } = {
+  Stripe: 'Credit/Debit card',
+  PayPal: 'PayPal',
+  DirectDebit: 'Direct debit',
+};
+
 function PaymentMethodSelector({
   availablePaymentMethods, paymentMethod, setPaymentMethod, validationError,
 }: PropTypes) {
@@ -60,31 +78,14 @@ function PaymentMethodSelector({
         error={validationError}
         role="radiogroup"
       >
-        {availablePaymentMethods.includes(DirectDebit) &&
-          <RadioWithImage
-            id="qa-direct-debit"
-            image={<SvgDirectDebit />}
-            label="Direct debit"
-            name="paymentMethod"
-            checked={paymentMethod === DirectDebit}
-            onChange={() => setPaymentMethod(DirectDebit)}
-          />}
-        <RadioWithImage
-          id="qa-credit-card"
-          image={<SvgCreditCard />}
-          label="Credit/Debit card"
+        {availablePaymentMethods.map(method => (<RadioWithImage
+          id={paymentMethodIds[method]}
+          image={paymentMethodIcons[method]}
+          label={paymentMethodText[method]}
           name="paymentMethod"
-          checked={paymentMethod === Stripe}
-          onChange={() => setPaymentMethod(Stripe)}
-        />
-        <RadioWithImage
-          id="qa-paypal"
-          image={<SvgPayPal />}
-          label="PayPal"
-          name="paymentMethod"
-          checked={paymentMethod === PayPal}
-          onChange={() => setPaymentMethod(PayPal)}
-        />
+          checked={paymentMethod === method}
+          onChange={() => setPaymentMethod(method)}
+        />))}
       </RadioGroup>
     </Rows>);
 }
