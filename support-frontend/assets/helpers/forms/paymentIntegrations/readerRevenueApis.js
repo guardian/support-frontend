@@ -236,7 +236,7 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
     case Sepa:
       return {
         accountHolderName: authorisation.accountHolderName,
-        iban: authorisation.iban,
+        iban: authorisation.iban.replace(/ /g, ''),
       };
     case ExistingCard:
     case ExistingDirectDebit:
