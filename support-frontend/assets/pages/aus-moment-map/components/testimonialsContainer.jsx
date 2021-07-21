@@ -8,7 +8,7 @@ import { Button } from '@guardian/src-button';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 import { contributeUrl } from '../utils';
 import { buttonDefault } from '@guardian/src-foundations/themes';
-import { ThemeProvider } from "emotion-theming";
+import { ThemeProvider } from 'emotion-theming';
 
 const TestimonialCtaPrimary = () => (
   <div className="testimonial-cta testimonial-cta-primary">
