@@ -13,6 +13,7 @@ import { HeroPriceCards } from './heroPriceCards';
 import DefaultRoundel from './defaultRoundel';
 import {
   AUDCountries,
+  UnitedStates,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import {
@@ -61,7 +62,14 @@ function HeroWithPriceCards({
   const promoCopy = promotionHTML(promotionCopy.description, { tag: 'div' });
   const roundelText = promotionHTML(promotionCopy.roundel, { css: circleTextGeneric }) || <DefaultRoundel />;
   const nonAusCopy = getTimeboundCopy('digitalSubscription', getTimeboundQuery() || new Date()) || <HeroCopy />;
-  const defaultCopy = countryGroupId === AUDCountries ? <HeroCopyAus /> : nonAusCopy;
+  let defaultCopy;
+  if (countryGroupId === AUDCountries) {
+    defaultCopy = <HeroCopyAus />;
+  } else if (countryGroupId === UnitedStates) {
+    defaultCopy = <HeroCopy />;
+  } else {
+    defaultCopy = nonAusCopy;
+  }
   const copy = promoCopy || defaultCopy;
 
   return (
