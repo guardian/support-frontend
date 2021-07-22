@@ -449,9 +449,9 @@ function regularPaymentRequestFromAuthorisation(
   const { billingCountry, billingState } = getBillingCountryAndState(authorisation, state);
 
   return {
-    firstName: state.page.form.formData.firstName || '',
-    lastName: state.page.form.formData.lastName || '',
-    email: state.page.form.formData.email || '',
+    firstName: (state.page.form.formData.firstName || '').trim(),
+    lastName: (state.page.form.formData.lastName || '').trim(),
+    email: (state.page.form.formData.email || '').trim(),
     billingAddress: {
       lineOne: null, // required go cardless field
       lineTwo: null, // required go cardless field

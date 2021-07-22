@@ -171,10 +171,10 @@ function buildRegularPaymentRequest(
 
   return {
     title,
-    firstName,
-    lastName,
+    firstName: firstName.trim(),
+    lastName: lastName.trim(),
     ...addresses,
-    email,
+    email: email.trim(),
     ...giftRecipient,
     telephoneNumber: telephone,
     product,
