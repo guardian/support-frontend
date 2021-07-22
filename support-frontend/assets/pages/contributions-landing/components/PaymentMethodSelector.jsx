@@ -21,7 +21,7 @@ import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 import { type State } from '../contributionsLandingReducer';
-import { DirectDebit, PayPal, type PaymentMethod } from 'helpers/forms/paymentMethods';
+import { ExistingCard, ExistingDirectDebit, Stripe, AmazonPay, DirectDebit, PayPal, Sepa, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
   type Action,
   updatePaymentMethod,
@@ -35,7 +35,6 @@ import type {
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import AnimatedDots from 'components/spinners/animatedDots';
-import { ExistingCard, ExistingDirectDebit, Stripe, AmazonPay } from '../../../helpers/forms/paymentMethods';
 import {
   getExistingPaymentMethodLabel,
   mapExistingPaymentMethodToPaymentMethod,
@@ -50,6 +49,7 @@ import SvgPayPalDs from 'components/svgs/paypalDs';
 import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
+import SvgSepa from 'components/svgs/sepa';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
 
@@ -125,6 +125,8 @@ const getPaymentMethodLogoDs = (paymentMethod: PaymentMethod) => {
       return <SvgDirectDebitSymbolDs />;
     case AmazonPay:
       return <SvgAmazonPayLogoDs />;
+    case Sepa:
+      return <SvgSepa />;
     case Stripe:
     case ExistingCard:
     default:
