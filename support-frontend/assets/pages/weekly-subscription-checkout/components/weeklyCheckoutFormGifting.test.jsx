@@ -4,18 +4,17 @@ import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { paperProducts } from '__mocks__/productInfoMocks';
+import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
-import { Paper } from 'helpers/productPrice/subscriptions';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
-import PaperCheckoutForm from './paperCheckoutForm';
+import WeeklyCheckoutFormGift from './weeklyCheckoutFormGifting';
 
 const pageReducer = initialState => createWithDeliveryCheckoutReducer(
   initialState.common.internationalisation.countryId,
-  Paper,
-  Monthly,
+  GuardianWeekly,
+  'Annual',
   formatMachineDate(new Date()),
   initialState.page.checkout.productOption,
   initialState.page.checkout.fulfilmentOption,
@@ -44,7 +43,7 @@ function renderWithStore(
   return render(component, { wrapper: Wrapper, ...renderOptions });
 }
 
-describe('Newspaper checkout form', () => {
+describe('Guardian Weekly checkout form', () => {
   // Suppress warnings related to our version of Redux and improper JSX
   console.warn = jest.fn();
   console.error = jest.fn();
@@ -57,9 +56,9 @@ describe('Newspaper checkout form', () => {
         checkout: {
           product: 'Paper',
           billingPeriod: 'Monthly',
-          productOption: 'Everyday',
-          fulfilmentOption: 'Collection',
-          productPrices: paperProducts,
+          productOption: 'NoProductOptions',
+          fulfilmentOption: 'Domestic',
+          productPrices: weeklyProducts,
           formErrors: [],
         },
         billingAddress: {
@@ -84,7 +83,7 @@ describe('Newspaper checkout form', () => {
       },
     };
 
-    renderWithStore(<PaperCheckoutForm />, { initialState });
+    renderWithStore(<WeeklyCheckoutFormGift />, { initialState });
   });
 
   describe('Payment methods', () => {
@@ -92,17 +91,17 @@ describe('Newspaper checkout form', () => {
       expect(await screen.queryByText('Direct debit')).toBeInTheDocument();
     });
 
-    it('does not show the direct debit option when the delivery address is in the Isle of Man', async () => {
+    it('does not show the direct debit option when the delivery address is outside the UK', async () => {
       const countrySelect = await screen.findByLabelText('Country');
-      fireEvent.change(countrySelect, { target: { value: 'IM' } });
+      fireEvent.change(countrySelect, { target: { value: 'US' } });
       expect(await screen.queryByText('Direct debit')).not.toBeInTheDocument();
     });
 
-    it('does not show the direct debit option when the billing address is in the Isle of Man', async () => {
+    it('does not show the direct debit option when the billing address is outside the UK', async () => {
       const addressIsNotSame = await screen.findByRole('radio', { name: 'No' });
       fireEvent.click(addressIsNotSame);
       const allCountrySelects = await screen.findAllByLabelText('Country');
-      fireEvent.change(allCountrySelects[1], { target: { value: 'IM' } });
+      fireEvent.change(allCountrySelects[1], { target: { value: 'FR' } });
       expect(await screen.queryByText('Direct debit')).not.toBeInTheDocument();
     });
   });

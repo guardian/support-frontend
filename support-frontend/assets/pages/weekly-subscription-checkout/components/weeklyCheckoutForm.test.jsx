@@ -87,13 +87,21 @@ describe('Guardian Weekly checkout form', () => {
   });
 
   describe('Payment methods', () => {
-    it('shows the direct debit option when the currency is GBP and the billing address is in the UK', async () => {
+    it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', async () => {
       expect(await screen.queryByText('Direct debit')).toBeInTheDocument();
     });
 
-    it('does not show the direct debit option when the billing address is outside the UK', async () => {
+    it('does not show the direct debit option when the delivery address is outside the UK', async () => {
       const countrySelect = await screen.findByLabelText('Country');
-      fireEvent.change(countrySelect, { target: { value: 'US' } });
+      fireEvent.change(countrySelect, { target: { value: 'DE' } });
+      expect(await screen.queryByText('Direct debit')).not.toBeInTheDocument();
+    });
+
+    it('does not show the direct debit option when the billing address is outside the UK', async () => {
+      const addressIsNotSame = await screen.findByRole('radio', { name: 'No' });
+      fireEvent.click(addressIsNotSame);
+      const allCountrySelects = await screen.findAllByLabelText('Country');
+      fireEvent.change(allCountrySelects[1], { target: { value: 'IE' } });
       expect(await screen.queryByText('Direct debit')).not.toBeInTheDocument();
     });
   });
