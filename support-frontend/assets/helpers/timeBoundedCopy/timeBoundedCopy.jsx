@@ -16,15 +16,16 @@ type TimedCopyCollection = { [LandingPage]: TimeBoundCopy[] }
 const timedCopy: TimedCopyCollection = {
   digitalSubscription: [
     {
-      startShowingOn: '2021-06-11',
-      stopShowingOn: '2021-07-11',
+      startShowingOn: '2021-07-23',
+      stopShowingOn: '2021-09-18',
       copy: <>
         <p>
           <strong>With two innovative apps and ad-free reading,</strong> a digital subscription gives
-          you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
+           you the richest experience of Guardian journalism. It also sustains the independent reporting you love.
         </p>
         <p>
-          Plus take a deeper dive into the Euros with our new special edition, available for a limited time only.
+          Plus, to mark the 32nd Olympics, access our Olympic legends special edition which looks at 30 of the
+          greatest Olympic moments.
         </p>
       </>,
     },
