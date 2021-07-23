@@ -1,6 +1,6 @@
 // @flow
 
-import { formError, nonEmptyString, notNull, validate } from './validation';
+import { formError, nonEmptyString, notNull, nonSillyCharacters, validate } from './validation';
 import type { FormField, FormFields } from './formFields';
 import type { FormError } from './validation';
 import { checkOptionalEmail, checkEmail, checkGiftStartDate } from 'helpers/forms/formValidation';
@@ -13,8 +13,20 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
       error: formError('firstName', 'Please enter a first name.'),
     },
     {
+      rule: nonSillyCharacters(fields.firstName),
+      error: formError('firstName', 'Please use only letters, numbers and punctuation.'),
+    },
+    {
       rule: nonEmptyString(fields.lastName),
       error: formError('lastName', 'Please enter a last name.'),
+    },
+    {
+      rule: nonSillyCharacters(fields.lastName),
+      error: formError('lastName', 'Please use only letters, numbers and punctuation.'),
+    },
+    {
+      rule: nonSillyCharacters(fields.telephone),
+      error: formError('telephone', 'Please use only letters, numbers and punctuation.'),
     },
     {
       rule: notNull(fields.paymentMethod),
@@ -28,11 +40,19 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
         error: formError('firstNameGiftRecipient', 'Please enter the recipient\'s first name.'),
       },
       {
+        rule: nonSillyCharacters(fields.firstNameGiftRecipient),
+        error: formError('firstNameGiftRecipient', 'Please use only letters, numbers and punctuation.'),
+      },
+      {
         rule: nonEmptyString(fields.lastNameGiftRecipient),
         error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
       },
       {
-        rule: checkEmail(fields.emailGiftRecipient),
+        rule: nonSillyCharacters(fields.lastNameGiftRecipient),
+        error: formError('lastNameGiftRecipient', 'Please use only letters, numbers and punctuation.'),
+      },
+      {
+        rule: checkEmail(fields.emailGiftRecipient) && nonSillyCharacters(fields.emailGiftRecipient),
         error: formError('emailGiftRecipient', 'Please use a valid email address for the recipient.'),
       },
       {
@@ -50,7 +70,11 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
         error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
       },
       {
-        rule: checkOptionalEmail(fields.emailGiftRecipient),
+        rule: nonSillyCharacters(fields.lastNameGiftRecipient),
+        error: formError('lastNameGiftRecipient', 'Please use only letters, numbers and punctuation.'),
+      },
+      {
+        rule: checkOptionalEmail(fields.emailGiftRecipient) && nonSillyCharacters(fields.emailGiftRecipient),
         error: formError('emailGiftRecipient', 'Please use a valid email address for the recipient.'),
       },
     ];
