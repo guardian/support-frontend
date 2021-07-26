@@ -8,15 +8,14 @@ import {
   SvgDirectDebit,
   SvgPayPal,
 } from '@guardian/src-icons';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+
 import Rows from 'components/base/rows';
 import { type Option } from 'helpers/types/option';
-import { DirectDebit, PayPal, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { type PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 
 type PropTypes = {|
-  country: IsoCountry,
+  availablePaymentMethods: PaymentMethod[],
   paymentMethod: Option<PaymentMethod>,
   setPaymentMethod: Function,
   validationError: Option<ErrorMessage>,
@@ -49,43 +48,44 @@ const RadioWithImage = (props: RadioWithImagePropTypes) => (
   </div>
 );
 
-function PaymentMethodSelector(props: PropTypes) {
-  const paymentMethods = supportedPaymentMethods(props.country);
+const paymentMethodIcons: { [PaymentMethod]: Node } = {
+  Stripe: <SvgCreditCard />,
+  PayPal: <SvgPayPal />,
+  DirectDebit: <SvgDirectDebit />,
+};
 
+const paymentMethodIds: { [PaymentMethod]: string } = {
+  Stripe: 'qa-credit-card',
+  PayPal: 'qa-paypal',
+  DirectDebit: 'qa-direct-debit',
+};
+
+const paymentMethodText: { [PaymentMethod]: string } = {
+  Stripe: 'Credit/Debit card',
+  PayPal: 'PayPal',
+  DirectDebit: 'Direct debit',
+};
+
+function PaymentMethodSelector({
+  availablePaymentMethods, paymentMethod, setPaymentMethod, validationError,
+}: PropTypes) {
   return (
     <Rows gap="large">
       <RadioGroup
         id="payment-methods"
         label="How would you like to pay?"
         hideLabel
-        error={props.validationError}
+        error={validationError}
         role="radiogroup"
       >
-        {paymentMethods.includes(DirectDebit) &&
-          <RadioWithImage
-            id="qa-direct-debit"
-            image={<SvgDirectDebit />}
-            label="Direct debit"
-            name="paymentMethod"
-            checked={props.paymentMethod === DirectDebit}
-            onChange={() => props.setPaymentMethod(DirectDebit)}
-          />}
-        <RadioWithImage
-          id="qa-credit-card"
-          image={<SvgCreditCard />}
-          label="Credit/Debit card"
+        {availablePaymentMethods.map(method => (<RadioWithImage
+          id={paymentMethodIds[method]}
+          image={paymentMethodIcons[method]}
+          label={paymentMethodText[method]}
           name="paymentMethod"
-          checked={props.paymentMethod === Stripe}
-          onChange={() => props.setPaymentMethod(Stripe)}
-        />
-        <RadioWithImage
-          id="qa-paypal"
-          image={<SvgPayPal />}
-          label="PayPal"
-          name="paymentMethod"
-          checked={props.paymentMethod === PayPal}
-          onChange={() => props.setPaymentMethod(PayPal)}
-        />
+          checked={paymentMethod === method}
+          onChange={() => setPaymentMethod(method)}
+        />))}
       </RadioGroup>
     </Rows>);
 }

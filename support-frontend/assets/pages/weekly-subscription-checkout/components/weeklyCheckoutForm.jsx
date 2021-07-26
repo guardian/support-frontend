@@ -91,6 +91,7 @@ const marginBottom = css`
 
 type PropTypes = {|
   ...FormFields,
+  // eslint-disable-next-line react/no-unused-prop-types
   billingCountry: IsoCountry,
   deliveryCountry: IsoCountry,
   signOut: typeof signOut,
@@ -169,7 +170,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
     props.setBillingAddressIsSame(newState);
     props.setBillingCountry(props.deliveryCountry);
   };
-  const paymentMethods = supportedPaymentMethods(props.currencyId);
+  const paymentMethods = supportedPaymentMethods(props.currencyId, props.billingCountry);
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -312,7 +313,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
-                country={props.billingCountry}
+                availablePaymentMethods={paymentMethods}
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 validationError={firstError('paymentMethod', props.formErrors)}
