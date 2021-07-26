@@ -123,8 +123,8 @@ Resources:
             Unit: Count
       ComparisonOperator: GreaterThanThreshold
       Threshold: 0
-      EvaluationPeriods: 70
-      DatapointsToAlarm: 2
+      EvaluationPeriods: 130
+      DatapointsToAlarm: 3
       TreatMissingData: breaching
 
   ITTestNotRunningAlarm:
