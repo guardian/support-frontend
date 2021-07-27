@@ -5,6 +5,7 @@
 import React, { type Node, useEffect } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import CsrBanner from 'components/csr/csrBanner';
 
 // ----- Types ----- //
 
@@ -38,6 +39,7 @@ export default function Page(props: PropTypes) {
 
   return (
     <div id={props.id} className={classNameWithModifiers('gu-content', props.classModifiers)}>
+      <CsrBanner />
       {props.header}
       <main
         role="main"
