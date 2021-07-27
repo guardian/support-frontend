@@ -50,7 +50,7 @@ function postcodeLookupUrl(postcode: string): string {
   return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
 }
 
-function paperSubsUrl(withDelivery: boolean = false, promoCode?: Option<string> = 'yopromo'): string {
+function paperSubsUrl(withDelivery: boolean = false, promoCode?: Option<string>): string {
   const baseURL = [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
   const queryParams = [...getAllQueryParams(), (promoCode ? ['promoCode', promoCode] : [])];
   const queryParamsString = queryParams.map(keyValuePair => keyValuePair.join('=')).join('&');
