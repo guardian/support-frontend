@@ -119,11 +119,11 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 60
+            Period: 900
             Unit: Count
       ComparisonOperator: GreaterThanThreshold
       Threshold: 0
-      EvaluationPeriods: 130
+      EvaluationPeriods: 9
       DatapointsToAlarm: 3
       TreatMissingData: breaching
 
@@ -155,7 +155,7 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 60
+            Period: 900
             Unit: Count
         - Id: m2
           ReturnData: false
@@ -167,10 +167,10 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 60
+            Period: 900
             Unit: Count
       ComparisonOperator: LessThanThreshold
       Threshold: 100
-      EvaluationPeriods: 70
-      DatapointsToAlarm: 70
+      EvaluationPeriods: 9
+      DatapointsToAlarm: 9
       TreatMissingData: breaching
