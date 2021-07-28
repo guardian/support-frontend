@@ -23,12 +23,14 @@ const CsrBanner = () => {
   listenForCsrDetails(setCsrUsername);
 
   if (isInCsrMode()) {
-    return <div css={container}>
-      <div css={banner}>You are in customer support mode. Signed in as: {csrUsername}</div>
-    </div>;
-  } else {
-    return null;
+    return (
+      <div css={container}>
+        <div css={banner}>You are in customer support mode. Signed in as: {csrUsername}</div>
+      </div>
+    );
   }
+  return null;
+
 };
 
 export default CsrBanner;
