@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 // $FlowIgnore
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
@@ -60,14 +60,17 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
     return null;
   }
 
-  useEffect(() => {
+  function handleSetTabAction(newTab: PaperFulfilmentOptions) {
+    setSelectedTab(newTab);
+
     sendTrackingEventsOnClick({
-      id: `Paper_${selectedTab}-tab`, // eg. Paper_Collection-tab or Paper_HomeDelivery-tab
+      id: `Paper_${newTab}-tab`, // eg. Paper_Collection-tab or Paper_HomeDelivery-tab
       product: 'Paper',
       componentType: 'ACQUISITIONS_BUTTON',
     })();
-    window.history.replaceState({}, null, paperSubsUrl(selectedTab === HomeDelivery));
-  }, [selectedTab]);
+
+    window.history.replaceState({}, null, paperSubsUrl(newTab === HomeDelivery));
+  }
 
   return (
     <Page
@@ -80,7 +83,7 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
         <CentredContainer>
           <Block>
             <div css={tabsTabletSpacing}>
-              <Tabs selectedTab={selectedTab} setTabAction={setSelectedTab} />
+              <Tabs selectedTab={selectedTab} setTabAction={handleSetTabAction} />
             </div>
           </Block>
         </CentredContainer>
