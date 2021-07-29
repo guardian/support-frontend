@@ -32,7 +32,7 @@ There are a few manual syntax fixes that need to be applied. Search and replace 
 
 1. Run the unit tests with `yarn test`
 2. Run the three build scripts- `yarn build-dev`, `yarn build-ssr` and `yarn build-prod`
-3. Spin up the site locally and check that it behaves as normal
+3. Run the site and Storybook locally with `devrun.sh` and check that they load and behave as expected
 
 After this we can move on to testing on CODE.
 
@@ -48,3 +48,5 @@ In order to get the most out of the new Prettier and ESLint setup, VSCode should
 },
 "eslint.validate": ["typescript", "typescriptreact"]
 ```
+
+You should also now be able to disable or uninstall the Flow Language Support extension.
