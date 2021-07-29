@@ -18,7 +18,7 @@ glob(`${assetPath}/**/*.{js,jsx}`, (err, files) => {
 
     const result = files.reduce((accumulatorPromise, filePath) => accumulatorPromise.then(() =>
       new Promise((resolve) => {
-        exec(`flow-to-ts --delete-source --write ${filePath}`, (error) => {
+        exec(`npx flow-to-ts --delete-source --write ${filePath}`, (error) => {
           if (error) {
             failures.push(`Failed to migrate ${filePath}: ${error.message}`);
           } else {
