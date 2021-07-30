@@ -212,7 +212,7 @@ function DigitalCheckoutForm(props: PropTypes) {
               country={props.country}
               isTestUser={props.isTestUser}
               submitForm={props.submitForm}
-              allErrors={[...props.addressErrors]}
+              allErrors={[...props.addressErrors, ...props.formErrors]}
               setStripePaymentMethod={props.setStripePaymentMethod}
               validateForm={props.validateForm}
               buttonText="Start your free trial now"
