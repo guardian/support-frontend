@@ -66,6 +66,10 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
         error: formError('firstNameGiftRecipient', 'Please enter the recipient\'s first name.'),
       },
       {
+        rule: nonSillyCharacters(fields.firstNameGiftRecipient),
+        error: formError('firstNameGiftRecipient', 'Please use only letters, numbers and punctuation.'),
+      },
+      {
         rule: nonEmptyString(fields.lastNameGiftRecipient),
         error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
       },
