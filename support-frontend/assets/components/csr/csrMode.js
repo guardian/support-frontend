@@ -1,4 +1,6 @@
-const isSalesforceDomain = domain => domain.startsWith('https://gnmtouchpoint');
+
+const domains = ["https://gnmtouchpoint.my.salesforce.com", "https://gnmtouchpoint--dev1--c.cs88.visual.force.com"]
+const isSalesforceDomain = domain => domains.find(element => element === domain)
 
 const isInCsrMode = () => window.location !== window.parent.location;
 
