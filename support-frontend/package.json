@@ -6,7 +6,7 @@
     "clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
     "validate": "echo 'Validating JS' && npm-run-all 'lint --fix' flow && yarn orphans",
     "flow": "flow",
-    "lint": "eslint --ext .js --ext .jsx .",
+    "lint": "eslint --ignore-pattern 'migration/*' --ext .js --ext .jsx .",
     "build-dev": "webpack --config webpack.dev.js",
     "build-ssr": "webpack --config webpack.ssr.js && node scripts/ssrScript.js",
     "build-prod": "npm-run-all clean validate test storybook-static 'webpack --config webpack.prod.js'",
