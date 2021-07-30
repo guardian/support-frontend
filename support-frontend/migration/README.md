@@ -28,9 +28,16 @@ There are a few manual syntax fixes that need to be applied. Search and replace 
 - Replace “, type “ with “, “
 - Replace “{ type” with “{“
 
+Then do the following file-specific changes:
+
+- In assets/components/subscriptionCheckouts/address/addressFields.tsx, remove `<GlobalState>` on line 128
+- In assets/components/subscriptionCheckouts/address/postcodeFinder.tsx, remove `<GlobalState>` on line 98
+- In stories/_index.ts, replace every instance of `.jsx` with `.tsx`
+- Delete the jsconfig.json file at the root of /assets
+
 ## Post-migration checks
 
-1. Run the unit tests with `yarn test`
+1. Run the unit tests with `yarn test`. If the tests pass but the process still exits with code 1, run `yarn test -u` to remove obsolete snapshots
 2. Run the three build scripts- `yarn build-dev`, `yarn build-ssr` and `yarn build-prod`
 3. Run the site and Storybook locally with `devrun.sh` and check that they load and behave as expected
 

@@ -64,7 +64,8 @@
     ],
     "moduleNameMapper": {
       "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
-      "\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.ts"
+      "\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.ts",
+      "\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts"
     },
     "setupFilesAfterEnv": [
       "./jestSetup"
@@ -87,7 +88,7 @@
     "@emotion/react": "^11.1.5",
     "@emotion/serialize": "^0.11.16",
     "@guardian/consent-management-platform": "^6.7.4",
-    "@guardian/pasteup": "^1.0.0-alpha.7",
+    "@guardian/pasteup": "1.0.0-alpha.7",
     "@guardian/src-accordion": "^3.2.0",
     "@guardian/src-button": "^2.8.2",
     "@guardian/src-checkbox": "^2.7.1",

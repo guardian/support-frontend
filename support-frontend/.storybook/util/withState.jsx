@@ -1,4 +1,4 @@
-import React, {type Node, Component} from 'react';
+import React, { Component } from 'react';
 
 class WithState extends Component {
   state = {
