@@ -103,7 +103,7 @@ describe('Digital checkout form', () => {
       fireEvent.click(creditDebit);
       const freeTrialButton = await screen.findByRole('button', { name: 'Start your free trial now' }, { timeout: 2000 });
       fireEvent.click(freeTrialButton);
-      expect(await screen.queryByText('Please use only letters, numbers and punctuation.')).toBeInTheDocument();
+      expect(await screen.queryAllByText('Please use only letters, numbers and punctuation.')).toBeTruthy();
     });
   });
 });
