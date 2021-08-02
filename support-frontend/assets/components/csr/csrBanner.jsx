@@ -1,5 +1,4 @@
 // @flow
-// $FlowIgnore - required for hooks
 import React from 'react';
 import { isInCsrMode, useCsrDetails } from 'components/csr/csrMode';
 import { css } from '@emotion/core';
