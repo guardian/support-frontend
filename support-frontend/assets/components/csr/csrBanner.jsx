@@ -1,7 +1,7 @@
 // @flow
 // $FlowIgnore - required for hooks
-import React, { useState } from 'react';
-import { isInCsrMode, listenForCsrDetails } from 'components/csr/csrMode';
+import React from 'react';
+import { isInCsrMode, useCsrDetails } from 'components/csr/csrMode';
 import { css } from '@emotion/core';
 
 const container = css`
@@ -19,8 +19,8 @@ const banner = css`
 `;
 
 const CsrBanner = () => {
-  const [csrUsername, setCsrUsername] = useState('');
-  listenForCsrDetails(setCsrUsername);
+
+  const csrUsername = useCsrDetails();
 
   if (isInCsrMode()) {
     return (
