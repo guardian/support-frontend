@@ -26,9 +26,11 @@ export const pageUrlRegexes = {
       // Requires /subscribe/digital, allows /checkout, allows any query string
       nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
       nonGiftLandingNotAusNotUS: /((uk|ca|eu|nz|int)\/subscribe\/digital(?!\/gift).?(\\?.*)?$)|(\/subscribe\/digital\/checkout?(\\?.*)?$)/,
-      // Requires /subscribe/digital, allows /checkout or /checkout/guest, allows any query string
-      nonGiftLandingWithGuestCheckout: /\/subscribe\/digital(\/checkout|\/checkout\/guest)?(\?.*)?$/,
     },
+    paper: {
+      // Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
+      paperLandingWithGuestCheckout: /\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
+    }
   },
 };
 
@@ -127,7 +129,7 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingWithGuestCheckout,
+    targetPage: pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
     seed: 3,
     //optimizeId: '',
   }
