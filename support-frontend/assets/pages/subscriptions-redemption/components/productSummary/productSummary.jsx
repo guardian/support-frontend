@@ -33,7 +33,7 @@ function ProductSummary() {
             </span>
           </li>
           <li>
-            <Dot /><div css={styles.listMain}>Premium access to The Guardian Live app</div>
+            <Dot /><div css={styles.listMain}>Premium access to the Guardian Live app</div>
             <span css={styles.subText}>
               Live news, as it happens
             </span>

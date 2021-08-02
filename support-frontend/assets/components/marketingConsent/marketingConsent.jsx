@@ -58,7 +58,7 @@ function MarketingButton(props: ButtonPropTypes) {
     <Button
       appearance="green"
       iconSide="right"
-      aria-label="Sign me up to news and offers from The Guardian"
+      aria-label="Sign me up to news and offers from the Guardian"
       onClick={
           () => props.onClick(props.email, props.csrf)
         }
@@ -82,7 +82,7 @@ function MarketingConsent(props: PropTypes) {
   if (checkEmail(props.email)) {
     return (
       <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
-        <Text title="Supporting The Guardian">
+        <Text title="Supporting the Guardian">
           Stay up-to-date with the latest offers and the aims of the organisation, as well as ways you can enjoy and
           support our independent journalism.
         </Text>

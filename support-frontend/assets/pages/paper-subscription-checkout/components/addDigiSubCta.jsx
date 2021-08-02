@@ -73,7 +73,7 @@ const listCopy = [
     iOS and Android mobile and tablet. Download and read whenever it suits you.`,
   },
   {
-    content: 'Premium access to The Guardian Live app',
+    content: 'Premium access to the Guardian Live app',
     subText: 'Live feed, Discover and daily crosswords. Download the news whenever it suits you.',
   },
   {

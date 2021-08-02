@@ -150,7 +150,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
   <>
     <h2 css={mainHeading}>Make the most of your digital subscription</h2>
     <div css={maxWidth}>
-      <h3 css={subHeading}>Download The Guardian<br css={tinyMobileOnly} /> Editions App</h3>
+      <h3 css={subHeading}>Download the Guardian<br css={tinyMobileOnly} /> Editions App</h3>
       <p css={sansText}>
         Each day&apos;s edition in one simple, elegant app. Contains the UK Daily,
         Australian Weekend and other special editions.
@@ -177,9 +177,9 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
       >
         <AppStoreImage store="googlePlay" />
       </AppStoreLink>
-      <h3 css={subHeading}>Download The Guardian<br css={tinyMobileOnly} /> Live app</h3>
+      <h3 css={subHeading}>Download the Guardian<br css={tinyMobileOnly} /> Live app</h3>
       <p css={sansText}>
-        With premium access to The Guardian Live app, get breaking news, as it happens.
+        With premium access to the Guardian Live app, get breaking news, as it happens.
       </p>
       <AppStoreLink
         storeLink={getIosAppUrl(countryGroupId)}

@@ -38,7 +38,7 @@ function RoundelHeader(props: PropTypes) {
     <header role="banner" className="gu-content__header">
       <a className="glogo" href="https://www.theguardian.com">
         <SvgGuardianLogo />
-        <h2 className="glogo-alt-text">Return to The Guardian</h2>
+        <h2 className="glogo-alt-text">Return to the Guardian</h2>
       </a>
       { props.selectedCountryGroup ? (
         <details className="countryGroups">

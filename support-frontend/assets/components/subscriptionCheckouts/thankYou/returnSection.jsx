@@ -38,7 +38,7 @@ function ReturnSection(props: PropTypes) {
             <LinkButton
               css={buttonStyles}
               priority="tertiary"
-              aria-label="Return to The Guardian home page"
+              aria-label="Return to the Guardian home page"
               href="https://theguardian.com"
               icon={<SvgArrowRightStraight />}
               iconSide="right"
@@ -49,7 +49,7 @@ function ReturnSection(props: PropTypes) {
                 componentType: 'ACQUISITIONS_BUTTON',
               })}
             >
-            Return to The Guardian
+            Return to the Guardian
             </LinkButton>
           </ThemeProvider>
         </div>

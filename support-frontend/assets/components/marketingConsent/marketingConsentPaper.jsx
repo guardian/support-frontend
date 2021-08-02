@@ -120,7 +120,7 @@ function MarketingButton(props: ButtonPropTypes) {
       <Button
         css={marginForButton}
         iconSide="right"
-        aria-label="Sign me up to news and offers from The Guardian"
+        aria-label="Sign me up to news and offers from the Guardian"
         onClick={() => props.onClick(props.email, props.csrf)}
         icon={<SvgEnvelope />}
       >
@@ -165,7 +165,7 @@ function MarketingConsent(props: PropTypes) {
         <p css={sansText}>
           This is the option to choose if you want to hear about how to make the most of your newspaper
           subscription, receive a dedicated weekly email from our membership editor and get more information
-          on ways to support The Guardian.
+          on ways to support the Guardian.
         </p>
       </section>
     );

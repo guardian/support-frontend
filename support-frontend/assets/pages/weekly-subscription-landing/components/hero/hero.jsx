@@ -85,7 +85,7 @@ const showOnMobile = css`
 `;
 
 const getRegionalCopyFor = (region: CountryGroupId) => (region === GBPCountries ?
-  <span>Find clarity<br css={showOnMobile} /> with The Guardian&apos;s global magazine</span> :
+  <span>Find clarity<br css={showOnMobile} /> with the Guardian&apos;s global magazine</span> :
   <span>Read The<br css={showOnMobile} /> Guardian in print</span>);
 
 const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) => {
@@ -97,7 +97,7 @@ const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) 
       <>
         <h3 css={giftHeroSubHeading}>Stay on the same page, even when you’re apart</h3>
         <p>Share the gift of clarity with the Guardian Weekly magazine. A round-up of the world news, opinion and long
-        reads that have shaped the week, all handpicked from The Guardian and The Observer.
+        reads that have shaped the week, all handpicked from the Guardian and the Observer.
         </p>
       </>
     );
@@ -106,7 +106,7 @@ const getFirstParagraph = (promotionCopy: PromotionCopy, orderIsAGift: boolean) 
     <>
       The Guardian Weekly magazine is a round-up of the world news, opinion and long reads that have shaped the week.
       Inside, the past seven days' most memorable stories are reframed with striking photography and insightful
-      companion pieces, all handpicked from The Guardian and The Observer.
+      companion pieces, all handpicked from the Guardian and the Observer.
     </>);
 };
 

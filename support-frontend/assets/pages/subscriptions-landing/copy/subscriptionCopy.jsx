@@ -107,8 +107,8 @@ const digital = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: bo
   title: 'Digital Subscription',
   subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
   description: countryGroupId === AUDCountries
-    ? 'The Guardian Editions app including Australia Weekend, Premium access to The Guardian Live app and ad-free reading on theguardian.com'
-    : 'The Guardian Editions app, Premium access to The Guardian Live app and ad-free reading on theguardian.com',
+    ? 'The Guardian Editions app including Australia Weekend, Premium access to the Guardian Live app and ad-free reading on theguardian.com'
+    : 'The Guardian Editions app, Premium access to the Guardian Live app and ad-free reading on theguardian.com',
   productImage: getDigitalImage(isTop, countryGroupId),
   offer: priceCopy.discountCopy,
   buttons: [{
@@ -144,7 +144,7 @@ const getWeeklyImage = (isTop: boolean) => {
 const guardianWeekly = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
   title: 'The Guardian Weekly',
   subtitle: getDisplayPrice(countryGroupId, priceCopy.price, postIntroductorySixForSixBillingPeriod),
-  description: 'A weekly, global magazine from The Guardian, with delivery worldwide',
+  description: 'A weekly, global magazine from the Guardian, with delivery worldwide',
   offer: getGuardianWeeklyOfferCopy(countryGroupId, priceCopy.discountCopy),
   buttons: [
     {
@@ -182,7 +182,7 @@ const getPaperImage = (isTop: boolean) => {
 const paper = (countryGroupId: CountryGroupId, priceCopy: PriceCopy, isTop: boolean): ProductCopy => ({
   title: 'Newspaper',
   subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
-  description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
+  description: 'Save on the Guardian and the Observer\'s newspaper retail price all year round',
   buttons: [{
     ctaButtonText: 'Find out more',
     link: paperSubsUrl(false),

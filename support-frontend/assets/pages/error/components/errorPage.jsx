@@ -47,19 +47,19 @@ export default function ErrorPage(props: PropTypes) {
           </LargeParagraph>
           <Rows>
             <AnchorButton
-              aria-label="click here to support The Guardian"
+              aria-label="click here to support the Guardian"
               href="/"
               modifierClasses={['support-the-guardian']}
             >
-              Support The Guardian
+              Support the Guardian
             </AnchorButton>
             <br />
             <AnchorButton
-              aria-label="click here to return to The Guardian home page"
+              aria-label="click here to return to the Guardian home page"
               href="https://www.theguardian.com"
               appearance="greyHollow"
             >
-              Go to The Guardian home page
+              Go to the Guardian home page
             </AnchorButton>
           </Rows>
         </Text>

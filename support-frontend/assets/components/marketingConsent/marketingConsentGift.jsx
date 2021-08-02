@@ -68,7 +68,7 @@ function MarketingConsentGift(props: PropTypes) {
         <div css={marginTopAndBottom}>
           <Button
             priority="secondary"
-            aria-label="Sign me up to news and offers from The Guardian"
+            aria-label="Sign me up to news and offers from the Guardian"
             onClick={
             () => props.onClick(props.email, props.csrf)
           }
