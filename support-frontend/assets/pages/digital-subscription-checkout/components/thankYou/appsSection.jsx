@@ -64,7 +64,7 @@ const marginTop = css`
 const AppsSection = ({ countryGroupId }: PropTypes) => (
   <div>
     <div css={marginTop}><SvgEditionsIcon /></div>
-    <Text title="Download The Guardian Editions app" headingSize={3}>
+    <Text title="Download the Guardian Editions app" headingSize={3}>
       <p>Each day&#39;s edition, in one simple, elegant app. Contains the UK Daily, Australia Weekend
         and other special editions.
       </p>
@@ -109,9 +109,9 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
       </div>
     </Text>
     <div css={marginTop}><SvgLiveAppIcon /></div>
-    <Text title="Download The Guardian Live app" headingSize={3}>
+    <Text title="Download the Guardian Live app" headingSize={3}>
       <p>
-        With premium access to The Guardian Live app get breaking news, as it happens.
+        With premium access to the Guardian Live app get breaking news, as it happens.
       </p>
       <div css={ctas}>
         <ThemeProvider theme={buttonReaderRevenueBrandAlt}>

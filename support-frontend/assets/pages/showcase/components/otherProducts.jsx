@@ -14,7 +14,7 @@ export default function OtherProducts() {
       <Text title="Other ways you can support us">
         <OtherProduct
           title="The Guardian Patrons"
-          description="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy The Guardian"
+          description="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy the Guardian"
           destination={getPatronsLink()}
           modifierClass="patrons"
           trackingId="patrons_cta"

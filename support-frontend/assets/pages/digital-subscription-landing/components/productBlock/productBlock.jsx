@@ -121,7 +121,7 @@ const DailyProductBlockSection = ({ first, second }: ProductSectionPropTypes) =>
     render={showDropDown =>
       (<>
         <ProductCard
-          title="UK Daily in The Guardian Editions app"
+          title="UK Daily in the Guardian Editions app"
           subtitle="Each day&apos;s edition, in one simple, elegant app"
           image={dailyImage}
           first={first}
@@ -146,7 +146,7 @@ const DailyProductBlockSection = ({ first, second }: ProductSectionPropTypes) =>
               { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
               { boldText: 'Read offline', explainer: 'Download and read whenever it suits you' },
               { boldText: 'Ad-free', explainer: 'Enjoy our journalism uninterrupted, without adverts' },
-              { boldText: 'Enjoy our other editions', explainer: 'Australia Weekend and other special editions are all included in The Guardian Editions app as part of your subscription' },
+              { boldText: 'Enjoy our other editions', explainer: 'Australia Weekend and other special editions are all included in the Guardian Editions app as part of your subscription' },
             ]}
           />
         </Dropdown>
@@ -161,7 +161,7 @@ const DailyProductBlockSectionAus = ({ first, second }: ProductSectionPropTypes)
     render={showDropDown =>
       (<>
         <ProductCard
-          title="Australia Weekend in The Guardian Editions app"
+          title="Australia Weekend in the Guardian Editions app"
           subtitle="Everything you need to make sense of the week, in one simple, elegant app"
           image={weekendImage}
           first={first}
@@ -192,7 +192,7 @@ const DailyProductBlockSectionAus = ({ first, second }: ProductSectionPropTypes)
             { boldText: 'Multiple devices', explainer: 'Beautifully designed for your mobile or tablet on iOS and Android' },
             {
               boldText: 'Enjoy our other editions',
-              explainer: 'The UK Daily and other special editions are all included in The Guardian Editions app as part of your subscription',
+              explainer: 'The UK Daily and other special editions are all included in the Guardian Editions app as part of your subscription',
             },
           ]}
           />
@@ -208,7 +208,7 @@ const PremiumAppProductBlockSection = ({ first, second }: ProductSectionPropType
     render={showDropDown => (
         <>
           <ProductCard
-            title="Premium access to The Guardian Live app"
+            title="Premium access to the Guardian Live app"
             subtitle="Live news, as it happens"
             image={appImage}
             first={first}

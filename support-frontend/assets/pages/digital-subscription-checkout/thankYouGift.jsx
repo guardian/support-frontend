@@ -237,7 +237,7 @@ function ThankYouGift(props: PropTypes) {
               <div css={iconContainer}><img src={list} alt="" /></div>
               <div css={summaryDetails}>
                 <div css={detailsGrey}>What&apos;s included?</div>
-                <div css={sansText}>The Guardian Editions app, Premium access to The Guardian Live app and ad-free
+                <div css={sansText}>The Guardian Editions app, Premium access to the Guardian Live app and ad-free
                 reading on theguardian.com
                 </div>
               </div>
@@ -286,7 +286,7 @@ function ThankYouGift(props: PropTypes) {
             {props.marketingConsent}
             <div css={sansText}>This is the option to choose if you want to hear about how to make the most of your
             digital subscription, receive a dedicated weekly email from our membership editor and get more information
-            on ways to support The Guardian.
+            on ways to support the Guardian.
             </div>
           </PageSection>
         </CheckoutLayout>

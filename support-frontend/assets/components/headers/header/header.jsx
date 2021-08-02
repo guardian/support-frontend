@@ -72,7 +72,7 @@ const TopNav = ({ display, getLogoRef, utility }: TopNavPropTypes) => (
     )}
     <div className="component-header-topnav-logo" ref={getLogoRef}>
       <a className="component-header-topnav-logo__graun" href="https://www.theguardian.com">
-        <div className="visually-hidden">Return to The Guardian</div>
+        <div className="visually-hidden">Return to the Guardian</div>
         <SvgGuardianLogo />
       </a>
     </div>

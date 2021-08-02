@@ -18,7 +18,7 @@ function Benefits() {
                 { content: 'Every issue delivered with up to 35% off the cover price' },
                 { content: 'Access to the magazine\'s digital archive' },
                 { content: 'A weekly email newsletter from the editor' },
-                { content: 'The very best of The Guardian\'s puzzles' },
+                { content: 'The very best of the Guardian\'s puzzles' },
               ]}
               />
             </>

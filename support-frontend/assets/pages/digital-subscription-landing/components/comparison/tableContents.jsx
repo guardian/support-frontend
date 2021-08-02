@@ -141,8 +141,8 @@ Checkmark.defaultProps = {
 export const tableContent: Array<TableRow> = [
   {
     icon: <div css={iconContainer}><SvgNews /></div>,
-    description: 'Access to The Guardian\'s quality, open journalism',
-    ariaLabel: 'Access to The Guardian\'s quality, open journalism',
+    description: 'Access to the Guardian\'s quality, open journalism',
+    ariaLabel: 'Access to the Guardian\'s quality, open journalism',
     free: <Checkmark borderLeft={borderLeft} />,
     paid: <Checkmark />,
   },

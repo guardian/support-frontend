@@ -55,7 +55,7 @@ const ShowcasePage = () => (
     <NoOneEdits />
     <Content id="support">
       <Heading size={2} className="anchor">
-          Ways you can support The Guardian
+          Ways you can support the Guardian
       </Heading>
     </Content>
     <CtaSubscribe />
