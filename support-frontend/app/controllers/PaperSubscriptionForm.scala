@@ -3,6 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
@@ -49,18 +50,36 @@ class PaperSubscriptionForm(
           Future.successful(InternalServerError)
         },
         user => {
-          Future.successful(Ok(paperSubscriptionFormHtml(user)))
+          Future.successful(Ok(paperSubscriptionFormHtml(Some(user))))
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
 
-  private def paperSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  def displayGuestForm(): Action[AnyContent] = {
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    maybeAuthenticatedAction().async{ implicit request =>
+        val maybeIdUser: EitherT[Future, String, Option[IdUser]] = request.user match {
+          case Some(user) =>
+            identityService.getUser(user.minimalUser).map(Some(_))
+          case _ => EitherT.rightT(None)
+        }
+        maybeIdUser.fold(
+          error => {
+            SafeLogger.error(scrub"Failed to display paper subscriptions form for ${request.user.map(_.minimalUser.id).getOrElse("unknown identity id")} due to error from identityService: $error")
+            InternalServerError
+          },
+          user => Ok(paperSubscriptionFormHtml(user))
+        ).map(_.withSettingsSurrogateKey)
+    }
+  }
+
+  private def paperSubscriptionFormHtml(maybeIdUser: Option[IdUser])(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Newspaper Subscription"
     val id = EmptyDiv("paper-subscription-checkout-page")
     val js = "paperSubscriptionCheckoutPage.js"
     val css = "paperSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
-    val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
+    val uatMode = maybeIdUser.exists(idUser => testUsers.isTestUser(idUser.publicFields.displayName))
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
 
@@ -71,7 +90,7 @@ class PaperSubscriptionForm(
       css,
       fontLoaderBundle,
       Some(csrf),
-      Some(idUser),
+      maybeIdUser,
       uatMode,
       priceSummaryServiceProvider.forUser(uatMode).getPrices(Paper, promoCodes),
       stripeConfigProvider.get(false),
@@ -79,7 +98,7 @@ class PaperSubscriptionForm(
       payPalConfigProvider.get(false),
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
-      false,
+      orderIsAGift = false,
       Some(PaperValidation.M25_POSTCODE_PREFIXES)
     )
   }
