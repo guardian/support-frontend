@@ -84,7 +84,6 @@ function TermsPrivacy(props: PropTypes) {
         <p>
           Thank you for your generosity.
         </p>
-        <p>For regular customer queries, {customerQueriesLink}.</p>
       </div>
     </div>
   );
@@ -120,6 +119,7 @@ function TermsPrivacy(props: PropTypes) {
       </div>
       <br />
       <div>{shouldShowPhilanthropicAsk ? patronAndPhilanthropicAskText : patronText}</div>
+      <div>{isUSContributor ? (<div className="customer-support-contact">For regular customer queries, {customerQueriesLink}.</div>) : null}</div>
     </>
   );
 }
