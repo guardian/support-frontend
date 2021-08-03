@@ -33,7 +33,7 @@ import {
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
   type FormActionCreators,
-  formActionCreators,
+  formActionCreators, setUserTypeFromIdentityResponse,
 } from 'helpers/subscriptionsForms/formActions';
 
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
@@ -43,7 +43,7 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CheckoutState, WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
   getBillingAddress,
   getDeliveryAddress,
@@ -77,6 +77,8 @@ import { getPriceSummary, sensiblyGenerateDigiSubPrice } from 'pages/paper-subsc
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { Participations } from 'helpers/abTests/abtest';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -149,9 +151,27 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
   };
 }
 
+const checkIfEmailHasPassword = (email: string) =>
+  (dispatch: Function, getState: () => CheckoutState): void => {
+    const state = getState();
+    const { csrf } = state.page;
+    const { isSignedIn } = state.page.checkout;
+
+    getUserTypeFromIdentity(
+      email,
+      isSignedIn,
+      csrf,
+      (userType: UserTypeFromIdentityResponse) =>
+        dispatch(setUserTypeFromIdentityResponse(userType)),
+    );
+  };
+
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
+    checkIfEmailHasPassword: (email) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      dispatch(checkIfEmailHasPassword(email));
+    },
     formIsValid: () =>
       (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
@@ -290,6 +310,7 @@ function PaperCheckoutForm(props: PropTypes) {
               email={props.email}
               setEmail={props.setEmail}
               isSignedIn={props.isSignedIn}
+              checkIfEmailHasPassword={props.checkIfEmailHasPassword}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}

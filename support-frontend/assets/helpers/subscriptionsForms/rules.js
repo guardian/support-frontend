@@ -13,6 +13,7 @@ import {
 const signInErrorMessage = (userType) => {
   switch(userType) {
     case 'current': return 'You already have a Guardian account. Please sign in or use another email address';
+    case 'noRequestSent': return 'Please enter a valid email address';
     default: return 'There was an unexpected error. Please refresh the page and try again';
   }
 }

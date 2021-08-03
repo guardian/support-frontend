@@ -114,7 +114,7 @@ GET  /subscribe/paper                                              controllers.P
 GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
 GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
-GET  /subscribe/paper/checkout/guest                                     controllers.PaperSubscriptionForm.displayGuestForm()
+GET  /subscribe/paper/checkout/guest                               controllers.PaperSubscriptionForm.displayGuestForm()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionForm.displayForm()
 
 # redemptions
