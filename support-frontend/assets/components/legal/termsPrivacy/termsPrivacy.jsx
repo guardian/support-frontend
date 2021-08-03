@@ -48,6 +48,7 @@ function TermsPrivacy(props: PropTypes) {
 
   const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
   const americasContactLink = <a href="mailto:us.philanthropy@theguardian.com">contact us</a>;
+  const customerQueriesLink = <a href="https://manage.theguardian.com/help-centre">go here</a>;
 
   const patronText = (
     <div className="patrons">
@@ -83,6 +84,7 @@ function TermsPrivacy(props: PropTypes) {
         <p>
           Thank you for your generosity.
         </p>
+        <p>For regular customer queries, {customerQueriesLink}.</p>
       </div>
     </div>
   );
