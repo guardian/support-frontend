@@ -8,12 +8,27 @@ import {
   firstError,
   formError,
   validate,
+  nonSillyCharacters,
 } from '../validation';
 
 
 // ----- Tests ----- //
 
 describe('validation', () => {
+
+  describe('non silly characters', () => {
+
+    it('should return false if string contains a silly character', () => {
+      expect(nonSillyCharacters('😊')).toBe(false);
+      expect(nonSillyCharacters('jane✅')).toBe(false);
+      expect(nonSillyCharacters('𝒢℞à©ℨ')).toBe(false);
+    });
+
+    it('should return true if string does not contain silly characters', () => {
+      expect(nonSillyCharacters('joe')).toBe(true);
+    });
+
+  });
 
   describe('nonEmptyString', () => {
 

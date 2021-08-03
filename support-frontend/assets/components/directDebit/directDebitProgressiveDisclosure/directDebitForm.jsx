@@ -19,7 +19,7 @@ import Form from './components/form';
 import Playback from './components/playback';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/forms/errorReasons';
-
+import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 
 // ---- Types ----- //
 
@@ -123,7 +123,8 @@ class DirectDebitForm extends Component<PropTypes, StateTypes> {
         error: '',
         message: 'Please enter a valid account name',
         // Regex matches a string with any character that is not a digit
-        rule: accountHolderName => accountHolderName.match(/^\D+$/),
+        rule: accountHolderName => accountHolderName.match(/^\D+$/) &&
+          nonSillyCharacters(accountHolderName),
       },
       sortCodeString: {
         error: '',

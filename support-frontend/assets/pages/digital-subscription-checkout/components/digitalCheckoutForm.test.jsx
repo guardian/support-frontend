@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import '__mocks__/stripeMock';
+
 import React from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { Provider } from 'react-redux';
@@ -74,6 +76,10 @@ describe('Digital checkout form', () => {
       },
     };
 
+    window.fetch = async () => ({
+      json: async () => ({ client_secret: 'super secret' }),
+    });
+
     renderWithStore(<DigitalCheckoutForm />, { initialState });
   });
 
@@ -86,6 +92,18 @@ describe('Digital checkout form', () => {
       const countrySelect = await screen.findByLabelText('Country');
       fireEvent.change(countrySelect, { target: { value: 'US' } });
       expect(await screen.queryByText('Direct debit')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Validation', () => {
+    it('should display an error if a silly character is entered into an input field', async () => {
+      const firstNameInput = await screen.findByLabelText('First name');
+      fireEvent.change(firstNameInput, { target: { value: 'jane✅' } });
+      const creditDebit = await screen.findByLabelText('Credit/Debit card');
+      fireEvent.click(creditDebit);
+      const freeTrialButton = await screen.findByRole('button', { name: 'Start your free trial now' }, { timeout: 2000 });
+      fireEvent.click(freeTrialButton);
+      expect(await screen.queryAllByText('Please use only letters, numbers and punctuation.')).toBeTruthy();
     });
   });
 });
