@@ -87,7 +87,7 @@ export const tests: Tests = {
   // If the name of this test or the variant id changes then the code
   // in `ZuoraDigitalSubscriptionDirectHandler.subscribe` will need
   // to change as well.
-  digiSubEventsTest: {
+  emailDigiSubEventsTest: {
     variants: [
       {
         id: 'control',
@@ -102,11 +102,10 @@ export const tests: Tests = {
         size: 0,
       },
     },
-    isActive: true,
-    referrerControlled: false,
+    isActive: false,
+    referrerControlled: true,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingNotAusNotUS,
     seed: 10,
-    optimizeId: '-2DJ0JTsSVaskWwTm9Je4A',
   },
   comparisonTableTest: {
     variants: [
