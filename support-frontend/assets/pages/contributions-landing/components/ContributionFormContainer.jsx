@@ -37,6 +37,7 @@ type PropTypes = {|
   countryId: IsoCountry,
   userName: string | null,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  canShowTicker: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -49,6 +50,7 @@ const mapStateToProps = (state: State) => ({
   countryId: state.common.internationalisation.countryId,
   userName: state.page.user.firstName,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  canShowTicker: state.common.abParticipations.tickerTest === 'variant',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -139,7 +141,7 @@ function withProps(props: PropTypes) {
       <div className="gu-content__form">
         {showSecureTransactionIndicator()}
 
-        {campaignSettings && campaignSettings.tickerSettings ?
+        {props.canShowTicker && campaignSettings && campaignSettings.tickerSettings ?
           <ContributionTicker
             {...campaignSettings.tickerSettings}
             onGoalReached={props.setTickerGoalReached}
