@@ -13,6 +13,7 @@ export const pageUrlRegexes = {
   contributions: {
     allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
     notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
+    auLandingPage: '/au/contribute(/.*)?$',
   },
   subscriptions: {
     subsShowcaseAndDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -62,6 +63,26 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 0,
+  },
+  tickerTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 0,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.contributions.auLandingPage,
+    seed: 1,
   },
   // If the name of this test or the variant id changes then the code
   // in `ZuoraDigitalSubscriptionDirectHandler.subscribe` will need
