@@ -97,6 +97,7 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/gift     controllers.D
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout/gift  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout/gift")
 GET  /subscribe/digital/checkout                                         controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = false)
+GET  /subscribe/digital/checkout/guest                                   controllers.DigitalSubscriptionFormController.displayGuestForm(orderIsAGift: Boolean = false)
 GET  /subscribe/digital/checkout/gift                                    controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
 GET  /subscribe/digital/checkout/thankyou-existing                       controllers.DigitalSubscriptionFormController.displayThankYouExisting()
 
@@ -113,6 +114,7 @@ GET  /subscribe/paper                                              controllers.P
 GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
 GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
+GET  /subscribe/paper/checkout/guest                               controllers.PaperSubscriptionForm.displayGuestForm()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionForm.displayForm()
 
 # redemptions

@@ -74,10 +74,13 @@ function paperCheckoutUrl(
   fulfilmentOption: FulfilmentOptions,
   productOptions: ProductOptions,
   promoCode?: Option<string>,
+  isUsingGuestCheckout: boolean,
 ) {
-  return promoCode ?
-    `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}&promoCode=${promoCode}`
+  const url = isUsingGuestCheckout ?
+    `${getOrigin()}/subscribe/paper/checkout/guest?fulfilment=${fulfilmentOption}&product=${productOptions}`
     : `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
+
+  return promoCode ? `${url}&promoCode=${promoCode}` : url;
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.

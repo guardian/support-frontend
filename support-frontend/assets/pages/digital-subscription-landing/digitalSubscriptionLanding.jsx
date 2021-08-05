@@ -120,7 +120,7 @@ function DigitalLandingPage({
   const isGift = orderIsAGift || false;
   const showEventsComponent = participations.digiSubEventsTest === 'variant';
   const showComparisonTable = participations.comparisonTableTest === 'variant';
-
+  const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
@@ -130,6 +130,7 @@ function DigitalLandingPage({
     productPrices,
     currencyId,
     countryGroupId,
+    isUsingGuestCheckout,
   );
 
   const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
@@ -217,6 +218,7 @@ function DigitalLandingPage({
             currencyId={currencyId}
             productPrices={productPrices}
             orderIsAGift={isGift}
+            isUsingGuestCheckout={isUsingGuestCheckout}
           />
         </CentredContainer>
       </FullWidthContainer>

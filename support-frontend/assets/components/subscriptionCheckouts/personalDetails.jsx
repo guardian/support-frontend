@@ -13,6 +13,7 @@ import type { Option } from 'helpers/types/option';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
+import { emailRegexPattern } from 'helpers/forms/formValidation';
 
 const marginBotom = css`
   margin-bottom: ${space[6]}px;
@@ -33,17 +34,21 @@ export type PropTypes = {
   lastName: string,
   setLastName: Function,
   email: string,
+  setEmail: Function,
+  checkIfEmailHasPassword?: Option<Function>,
+  isSignedIn: boolean,
   telephone: Option<string>,
   setTelephone: Function,
   formErrors: FormError<FormField>[],
   signOut: Function,
+  isUsingGuestCheckout: boolean,
 }
 
-type EmailFooterTypes = {
+type SignedInEmailFooterTypes = {
   handleSignOut: Function,
 }
 
-const EmailFooter = (props: EmailFooterTypes) => (
+const SignedInEmailFooter = (props: SignedInEmailFooterTypes) => (
   <div css={marginBotom}>
     <CheckoutExpander copy="Want to use a different email address?">
       <p css={sansText}>You will be able to edit this in your account once you have completed this checkout.</p>
@@ -66,11 +71,27 @@ const EmailFooter = (props: EmailFooterTypes) => (
   </div>
 );
 
+const SignedOutEmailFooter = () => (
+  <div css={marginBotom} />
+);
+
 export default function PersonalDetails(props: PropTypes) {
   const handleSignOut = (e) => {
     e.preventDefault();
     props.signOut();
   };
+
+  const maybeSetEmail = (e) => {
+    if (props.setEmail) { props.setEmail(e.target.value); }
+  };
+
+  const maybeCheckEmail = (e) => {
+    if (props.checkIfEmailHasPassword) { props.checkIfEmailHasPassword(e.target.value); }
+  };
+
+  const emailFooter = props.isSignedIn ?
+    <SignedInEmailFooter handleSignOut={handleSignOut} /> :
+    <SignedOutEmailFooter />;
 
   return (
     <div id="qa-personal-details">
@@ -95,10 +116,14 @@ export default function PersonalDetails(props: PropTypes) {
       <TextInput
         label="Email"
         type="email"
-        disabled
         value={props.email}
+        onInput={maybeSetEmail}
+        onChange={maybeCheckEmail}
+        error={firstError('email', props.formErrors)}
+        pattern={emailRegexPattern}
+        disabled={!props.isUsingGuestCheckout || props.isSignedIn}
       />
-      <EmailFooter handleSignOut={handleSignOut} />
+      {emailFooter}
       <TextInput
         id="telephone"
         label="Telephone"
@@ -112,3 +137,7 @@ export default function PersonalDetails(props: PropTypes) {
     </div>
   );
 }
+
+PersonalDetails.defaultProps = {
+  checkIfEmailHasPassword: null,
+};

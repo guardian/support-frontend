@@ -49,6 +49,7 @@ function Prices({
   currencyId,
   productPrices,
   orderIsAGift,
+  isUsingGuestCheckout,
 }: PaymentSelectionPropTypes) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
 
@@ -62,6 +63,7 @@ function Prices({
           currencyId={currencyId}
           productPrices={productPrices}
           orderIsAGift={orderIsAGift}
+          isUsingGuestCheckout={isUsingGuestCheckout}
         />
       </FlexContainer>
     </section>

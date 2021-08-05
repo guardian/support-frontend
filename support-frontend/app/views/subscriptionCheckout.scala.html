@@ -21,7 +21,7 @@
   css: String,
   fontLoaderBundle: Either[RefPath, StyleContent],
   csrf: Option[String],
-  user: IdUser,
+  user: Option[IdUser],
   uatMode: Boolean,
   productPrices: ProductPrices,
   defaultStripeConfig: StripeConfig,
@@ -42,9 +42,9 @@
       window.guardian.orderIsAGift = @orderIsAGift
 
       window.guardian.user = {
-        firstName: "@user.privateFields.firstName",
-        lastName: "@user.privateFields.secondName",
-        email: "@user.primaryEmailAddress"
+        firstName: "@user.map(_.privateFields.firstName).getOrElse("")",
+        lastName: "@user.map(_.privateFields.secondName).getOrElse("")",
+        email: "@user.map(_.primaryEmailAddress).getOrElse("")"
       };
 
       window.guardian.stripeKeyDefaultCurrencies = {

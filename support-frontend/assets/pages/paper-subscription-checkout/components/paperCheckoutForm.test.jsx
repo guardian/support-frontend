@@ -83,6 +83,7 @@ describe('Newspaper checkout form', () => {
           countryId: 'GB',
           currencyId: 'GBP',
         },
+        abParticipations: [],
       },
     };
 

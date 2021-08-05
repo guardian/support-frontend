@@ -15,6 +15,7 @@ export type User = {|
   firstName: Option<string>,
   lastName: Option<string>,
   email: Option<string>,
+  isSignedIn: boolean,
 |};
 
 
@@ -22,7 +23,7 @@ export type User = {|
 
 function getUser(): User {
 
-  if (window && window.guardian && window.guardian.user) {
+  if (window && window.guardian && window.guardian.user && window.guardian.user.email !== '') {
 
     const {
       firstName, lastName, email,
@@ -32,6 +33,7 @@ function getUser(): User {
       firstName: typeof firstName === 'string' ? firstName : null,
       lastName: typeof lastName === 'string' ? lastName : null,
       email: typeof email === 'string' ? email : null,
+      isSignedIn: true,
     };
   }
 
@@ -39,6 +41,7 @@ function getUser(): User {
     firstName: null,
     lastName: null,
     email: null,
+    isSignedIn: false,
   };
 
 }

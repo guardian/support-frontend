@@ -64,6 +64,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
 
 // ----- Types ----- //
 
@@ -77,6 +78,7 @@ type PropTypes = {|
   productPrices: ProductPrices,
   currencyId: IsoCurrency,
   ...FormActionCreators,
+  checkIfEmailHasPassword: Function,
   csrf: Csrf,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
@@ -119,6 +121,9 @@ function mapStateToProps(state: CheckoutState) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
+    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      checkIfEmailHasPassword(email)(dispatch, getState);
+    },
     formIsValid: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => checkoutFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
       submitCheckoutForm(dispatch, getState()),
@@ -151,6 +156,7 @@ function DigitalCheckoutForm(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
   const paymentMethods = supportedPaymentMethods(props.currencyId, props.country);
+  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant';
 
   return (
     <Content>
@@ -184,10 +190,14 @@ function DigitalCheckoutForm(props: PropTypes) {
               lastName={props.lastName}
               setLastName={props.setLastName}
               email={props.email}
+              setEmail={props.setEmail}
+              isSignedIn={props.isSignedIn}
+              checkIfEmailHasPassword={props.checkIfEmailHasPassword}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
+              isUsingGuestCheckout={isUsingGuestCheckout}
             />
           </FormSection>
           <FormSection title="Address">

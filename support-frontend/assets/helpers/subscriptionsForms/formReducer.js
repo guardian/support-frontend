@@ -39,6 +39,8 @@ function createFormReducer(
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
+    isSignedIn: user.isSignedIn,
+    userTypeFromIdentityResponse: 'noRequestSent',
     startDate,
     telephone: null,
     billingAddressIsSame: true,
@@ -86,6 +88,12 @@ function createFormReducer(
 
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName, formErrors: removeError('lastName', state.formErrors) };
+
+      case 'SET_EMAIL':
+        return { ...state, email: action.email, formErrors: removeError('email', state.formErrors) };
+
+      case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
+        return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse, formErrors: removeError('email', state.formErrors) };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };

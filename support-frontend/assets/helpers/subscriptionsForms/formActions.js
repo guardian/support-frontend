@@ -22,12 +22,15 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
   | { type: 'SET_TITLE', title: string }
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
+  | { type: 'SET_EMAIL', email: string }
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_TITLE_GIFT', titleGiftRecipient: string }
   | { type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient: string }
@@ -75,11 +78,18 @@ const setFormSubmitted = (formSubmitted: boolean) => ({
   type: 'SET_FORM_SUBMITTED',
   formSubmitted,
 });
+const setUserTypeFromIdentityResponse =
+  (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
+    };
 
 const formActionCreators = {
   setTitle: (title: string): Action => ({ type: 'SET_TITLE', title }),
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
+  setEmail: (email: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_EMAIL', email }))),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setTitleGift: (titleGiftRecipient: string): Action => ({ type: 'SET_TITLE_GIFT', titleGiftRecipient }),
   setFirstNameGift: (firstNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient }))),
@@ -148,5 +158,6 @@ export {
   setFormErrors,
   setSubmissionError,
   setFormSubmitted,
+  setUserTypeFromIdentityResponse,
   formActionCreators,
 };

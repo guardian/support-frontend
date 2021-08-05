@@ -28,6 +28,10 @@ export const pageUrlRegexes = {
       nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
       nonGiftLandingNotAusNotUS: /((uk|ca|eu|nz|int)\/subscribe\/digital(?!\/gift).?(\\?.*)?$)|(\/subscribe\/digital\/checkout?(\\?.*)?$)/,
     },
+    paper: {
+      // Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
+      paperLandingWithGuestCheckout: /\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
+    },
   },
 };
 
@@ -128,5 +132,26 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
     seed: 10,
     optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
+  },
+  subscriptionsGuestCheckoutTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
+    seed: 3,
+    optimizeId: 'tn3FveQmTeiTS4JtSUyzig',
   },
 };

@@ -59,12 +59,14 @@ function DigitalPaymentSelection({
   currencyId,
   productPrices,
   orderIsAGift,
+  isUsingGuestCheckout,
 }: PaymentSelectionPropTypes) {
   const paymentOptions = getPaymentOptions({
     countryGroupId,
     currencyId,
     productPrices,
     orderIsAGift,
+    isUsingGuestCheckout,
   });
 
   return <PaymentSelection paymentOptions={paymentOptions} />;

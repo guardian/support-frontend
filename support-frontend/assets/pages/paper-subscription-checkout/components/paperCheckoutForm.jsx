@@ -43,7 +43,7 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CheckoutState, WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
   getBillingAddress,
   getDeliveryAddress,
@@ -76,6 +76,8 @@ import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiS
 import { getPriceSummary, sensiblyGenerateDigiSubPrice } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
+import type { Participations } from 'helpers/abTests/abtest';
+import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -100,6 +102,7 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
+  checkIfEmailHasPassword: Function,
   submitForm: Function,
   billingAddressErrors: Array<Object>,
   deliveryAddressErrors: Array<Object>,
@@ -116,6 +119,7 @@ type PropTypes = {|
   amount: number,
   productOption: ActivePaperProducts,
   fulfilmentOption: FulfilmentOptions,
+  participations: Participations,
 |};
 
 // ----- Map State/Props ----- //
@@ -143,12 +147,16 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
       state.page.checkout.fulfilmentOption,
       state.page.checkout.productOption,
     ),
+    participations: state.common.abParticipations,
   };
 }
 
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
+    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      checkIfEmailHasPassword(email)(dispatch, getState);
+    },
     formIsValid: () =>
       (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
@@ -200,6 +208,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const priceHasRedundantFloat = simplePrice.split('.')[1] === '00'; // checks whether price is something like '£10.00'
   const cleanedPrice = priceHasRedundantFloat ? simplePrice.replace(/\.(.*)/, '') : simplePrice; // removes decimal point if there are no pence
   const expandedPricingText = `${cleanedPrice} per month`;
+  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant';
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
     setIncludesDigiSub(event.target.checked);
@@ -284,10 +293,14 @@ function PaperCheckoutForm(props: PropTypes) {
               lastName={props.lastName}
               setLastName={props.setLastName}
               email={props.email}
+              setEmail={props.setEmail}
+              isSignedIn={props.isSignedIn}
+              checkIfEmailHasPassword={props.checkIfEmailHasPassword}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
+              isUsingGuestCheckout={isUsingGuestCheckout}
             />
           </FormSection>
 

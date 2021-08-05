@@ -73,6 +73,7 @@ describe('Digital checkout form', () => {
           countryId: 'GB',
           currencyId: 'GBP',
         },
+        abParticipations: [],
       },
     };
 

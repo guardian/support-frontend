@@ -50,9 +50,10 @@ const paperSubsFooter = (
 const pageQaId = 'qa-paper-subscriptions';
 
 
-const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropTypes) => {
+const PaperLandingPage = ({ productPrices, promotionCopy, participations }: PaperLandingPropTypes) => {
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
   const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
+  const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
 
   const [selectedTab, setSelectedTab] = useState<PaperFulfilmentOptions>(fulfilment);
 
@@ -90,7 +91,12 @@ const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropType
       </FullWidthContainer>
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
-          <Prices productPrices={productPrices} tab={selectedTab} setTabAction={setSelectedTab} />
+          <Prices
+            productPrices={productPrices}
+            tab={selectedTab}
+            setTabAction={setSelectedTab}
+            isUsingGuestCheckout={isUsingGuestCheckout}
+          />
         </CentredContainer>
       </FullWidthContainer>
     </Page>

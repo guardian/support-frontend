@@ -110,13 +110,19 @@ function getDigitalCheckout(
   billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
   promoCode: Option<string>,
   orderIsAGift: boolean,
+  isUsingGuestCheckout: boolean,
 ): string {
   const params = new URLSearchParams(window.location.search);
   if (promoCode) {
     params.set(promoQueryParam, promoCode);
   }
   params.set('period', billingPeriod);
-  return `${getOrigin()}/subscribe/digital/checkout${orderIsAGift ? '/gift' : ''}?${params.toString()}`;
+  if (orderIsAGift) {
+    return `${getOrigin()}/subscribe/digital/checkout/gift?${params.toString()}`;
+  } else if (isUsingGuestCheckout) {
+    return `${getOrigin()}/subscribe/digital/checkout/guest?${params.toString()}`;
+  }
+  return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
 }
 
 

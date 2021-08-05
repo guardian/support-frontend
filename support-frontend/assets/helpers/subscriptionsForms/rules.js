@@ -3,10 +3,26 @@
 import { formError, nonEmptyString, notNull, nonSillyCharacters, validate } from './validation';
 import type { FormField, FormFields } from './formFields';
 import type { FormError } from './validation';
-import { checkOptionalEmail, checkEmail, checkGiftStartDate } from 'helpers/forms/formValidation';
+import {
+  checkOptionalEmail,
+  checkEmail,
+  checkGiftStartDate,
+  requiresSignIn,
+} from 'helpers/forms/formValidation';
+
+const signInErrorMessage = (userType) => {
+  switch (userType) {
+    case 'current': return 'You already have a Guardian account. Please sign in or use another email address';
+    case 'noRequestSent': return 'Please enter a valid email address';
+    default: return 'There was an unexpected error. Please refresh the page and try again';
+  }
+};
 
 function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
-  const { orderIsAGift, product } = fields;
+  const {
+    orderIsAGift, product, isSignedIn, userTypeFromIdentityResponse,
+  } = fields;
+
   const userFormFields = [
     {
       rule: nonEmptyString(fields.firstName),
@@ -27,6 +43,14 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
     {
       rule: nonSillyCharacters(fields.telephone),
       error: formError('telephone', 'Please use only letters, numbers and punctuation.'),
+    },
+    {
+      rule: nonEmptyString(fields.email),
+      error: formError('email', 'Please enter a valid email address.'),
+    },
+    {
+      rule: requiresSignIn(userTypeFromIdentityResponse, isSignedIn),
+      error: formError('email', signInErrorMessage(userTypeFromIdentityResponse)),
     },
     {
       rule: notNull(fields.paymentMethod),
