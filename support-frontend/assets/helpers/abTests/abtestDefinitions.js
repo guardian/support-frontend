@@ -102,10 +102,11 @@ export const tests: Tests = {
         size: 0,
       },
     },
-    isActive: false,
+    isActive: true,
     referrerControlled: true,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingNotAusNotUS,
     seed: 10,
+    // optimizeId: tbc
   },
   comparisonTableTest: {
     variants: [
