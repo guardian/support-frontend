@@ -59,7 +59,7 @@ class CreateSubscriptionController(
         }
     }
 
-  def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]) =
+  def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
     for {
       userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
       result <- EitherT.right[String](

@@ -65,7 +65,8 @@ class PaperSubscriptionForm(
         }
         maybeIdUser.fold(
           error => {
-            SafeLogger.error(scrub"Failed to display paper subscriptions form for ${request.user.map(_.minimalUser.id).getOrElse("unknown identity id")} due to error from identityService: $error")
+            val maybeIdentityId = request.user.map(_.minimalUser.id).getOrElse("unknown identity id")
+            SafeLogger.error(scrub"Failed to display paper subscriptions form for ${maybeIdentityId} due to error from identityService: $error")
             InternalServerError
           },
           user => Ok(paperSubscriptionFormHtml(user))
