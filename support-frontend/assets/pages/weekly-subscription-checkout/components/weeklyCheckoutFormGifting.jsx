@@ -294,6 +294,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               lastName={props.lastName}
               setLastName={props.setLastName}
               email={props.email}
+              setEmail={props.setEmail}
               isSignedIn={props.isSignedIn}
               telephone={props.telephone}
               setTelephone={props.setTelephone}

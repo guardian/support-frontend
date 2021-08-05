@@ -20,7 +20,6 @@ import {
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 function createFormReducer(
   initialCountry: IsoCountry,
@@ -41,7 +40,7 @@ function createFormReducer(
     firstName: user.firstName || '',
     lastName: user.lastName || '',
     isSignedIn: user.isSignedIn,
-    userTypeFromIdentityResponse: '',
+    userTypeFromIdentityResponse: 'noRequestSent',
     startDate,
     telephone: null,
     billingAddressIsSame: true,

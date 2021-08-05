@@ -11,7 +11,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 export type PaperLandingPropTypes = {|
   productPrices: ?ProductPrices;
   promotionCopy: ?PromotionCopy;
-  participations: ?Participations;
+  participations: Participations;
 |}
 
 export const paperLandingProps = (): PaperLandingPropTypes => ({

@@ -30,7 +30,7 @@ export const pageUrlRegexes = {
     paper: {
       // Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
       paperLandingWithGuestCheckout: /\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
-    }
+    },
   },
 };
 
@@ -127,10 +127,10 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
     seed: 3,
     optimizeId: 'tn3FveQmTeiTS4JtSUyzig',
-  }
+  },
 };

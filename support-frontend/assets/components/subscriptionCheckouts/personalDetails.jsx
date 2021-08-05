@@ -34,8 +34,8 @@ export type PropTypes = {
   lastName: string,
   setLastName: Function,
   email: string,
-  setEmail?: Function,
-  checkIfEmailHasPassword?: Function,
+  setEmail: Function,
+  checkIfEmailHasPassword?: Option<Function>,
   isSignedIn: boolean,
   telephone: Option<string>,
   setTelephone: Function,
@@ -72,8 +72,7 @@ const SignedInEmailFooter = (props: SignedInEmailFooterTypes) => (
 );
 
 const SignedOutEmailFooter = () => (
-  <div css={marginBotom}>
-  </div>
+  <div css={marginBotom} />
 );
 
 export default function PersonalDetails(props: PropTypes) {
@@ -83,14 +82,12 @@ export default function PersonalDetails(props: PropTypes) {
   };
 
   const maybeSetEmail = (e) => {
-    if (props.setEmail)
-      props.setEmail(e.target.value);
-  }
+    if (props.setEmail) { props.setEmail(e.target.value); }
+  };
 
   const maybeCheckEmail = (e) => {
-    if (props.checkIfEmailHasPassword)
-      props.checkIfEmailHasPassword(e.target.value);
-  }
+    if (props.checkIfEmailHasPassword) { props.checkIfEmailHasPassword(e.target.value); }
+  };
 
   const emailFooter = props.isSignedIn ?
     <SignedInEmailFooter handleSignOut={handleSignOut} /> :
@@ -140,3 +137,7 @@ export default function PersonalDetails(props: PropTypes) {
     </div>
   );
 }
+
+PersonalDetails.defaultProps = {
+  checkIfEmailHasPassword: null,
+};

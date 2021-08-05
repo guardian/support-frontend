@@ -173,6 +173,7 @@ export type PaymentSelectionPropTypes = {|
   currencyId: IsoCurrency;
   productPrices: ProductPrices;
   orderIsAGift: boolean;
+  isUsingGuestCheckout: boolean;
 |}
 
 // state

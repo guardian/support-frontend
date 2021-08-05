@@ -93,7 +93,9 @@ const getPlans = (
     isUsingGuestCheckout: boolean,
 |}
 
-function PaperProductPrices({ productPrices, tab, setTabAction, isUsingGuestCheckout }: PaperProductPricesProps) {
+function PaperProductPrices({
+  productPrices, tab, setTabAction, isUsingGuestCheckout,
+}: PaperProductPricesProps) {
   if (!productPrices) {
     return null;
   }

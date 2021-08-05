@@ -78,7 +78,7 @@ function paperCheckoutUrl(
 ) {
   const url = isUsingGuestCheckout ?
     `${getOrigin()}/subscribe/paper/checkout/guest?fulfilment=${fulfilmentOption}&product=${productOptions}`
-  : `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
+    : `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
 
   return promoCode ? `${url}&promoCode=${promoCode}` : url;
 }

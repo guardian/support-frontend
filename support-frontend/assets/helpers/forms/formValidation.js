@@ -41,7 +41,7 @@ export const checkBillingState: (string | null) => boolean = s => typeof s === '
 export const checkEmail: (string | null) => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 export const requiresSignIn: (UserTypeFromIdentityResponse, boolean) => boolean =
-  (userType, isSignedIn) => isSignedIn || userType  === 'guest' || userType === 'new';
+  (userType, isSignedIn) => isSignedIn || userType === 'guest' || userType === 'new';
 
 export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(input) || isValidEmail(input);
 

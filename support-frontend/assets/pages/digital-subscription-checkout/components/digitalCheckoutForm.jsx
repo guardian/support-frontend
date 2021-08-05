@@ -24,7 +24,7 @@ import OrderSummary from 'pages/digital-subscription-checkout/components/orderSu
 import {
   type Action,
   type FormActionCreators,
-  formActionCreators, setUserTypeFromIdentityResponse,
+  formActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -64,8 +64,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
 
 // ----- Types ----- //
 
@@ -79,6 +78,7 @@ type PropTypes = {|
   productPrices: ProductPrices,
   currencyId: IsoCurrency,
   ...FormActionCreators,
+  checkIfEmailHasPassword: Function,
   csrf: Csrf,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
@@ -117,27 +117,12 @@ function mapStateToProps(state: CheckoutState) {
   };
 }
 
-const checkIfEmailHasPassword = (email: string) =>
-  (dispatch: Function, getState: () => CheckoutState): void => {
-    const state = getState();
-    const { csrf } = state.page;
-    const { isSignedIn } = state.page.checkout;
-
-    getUserTypeFromIdentity(
-      email,
-      isSignedIn,
-      csrf,
-      (userType: UserTypeFromIdentityResponse) =>
-        dispatch(setUserTypeFromIdentityResponse(userType)),
-    );
-  };
-
 // ----- Map Dispatch/Props ----- //
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
-    checkIfEmailHasPassword: (email) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
-      dispatch(checkIfEmailHasPassword(email));
+    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      checkIfEmailHasPassword(email)(dispatch, getState);
     },
     formIsValid: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => checkoutFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
