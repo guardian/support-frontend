@@ -76,7 +76,7 @@ export const tests: Tests = {
     audiences: {
       ALL: {
         offset: 0,
-        size: 0,
+        size: 1,
       },
     },
     isActive: true,
