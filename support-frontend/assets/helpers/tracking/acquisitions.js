@@ -188,7 +188,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisit
     acquisitionData.queryParameters ||
     toAcquisitionQueryParameters(getAllQueryParamsWithExclusions(parameterExclusions));
 
-  const establishedSource = ((campaignCode && /\bPPC\b/i.test(campaignCode)) || getQueryParameter('glcid')) ? 'PPC' : acquisitionData.source;
+  const establishedSource = ((campaignCode && /^PPC_/i.test(campaignCode)) || getQueryParameter('gclid')) ? 'PPC' : acquisitionData.source;
 
   return {
     referrerPageviewId,
@@ -289,6 +289,8 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
   const paramData = getQueryParameter(REFERRAL_DATA_PARAM)
     ? deserialiseReferralData(getQueryParameter(REFERRAL_DATA_PARAM) || '')
     : deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
+
+  debugger;
 
   // Read from param, or read from sessionStorage, or build minimal version.
   const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || {});
