@@ -24,9 +24,7 @@ All files should replace any existing versions of the same file in their destina
 
 There are a few manual syntax fixes that need to be applied. Search and replace in both /assets and /stories for the following:
 
-- Replace “import type” with “import”
-- Replace “, type “ with “, “
-- Replace “{ type” with “{“
+- Replace “import type” with “import
 
 Then do the following file-specific changes:
 
@@ -34,6 +32,14 @@ Then do the following file-specific changes:
 - In assets/components/subscriptionCheckouts/address/postcodeFinder.tsx, remove `<GlobalState>` on line 98
 - In stories/_index.ts, replace every instance of `.jsx` with `.tsx`
 - Delete the jsconfig.json file at the root of /assets
+
+### Automated fixing
+
+After the migration the code will have some formatting issues and many linting errors. The former can be fixed by running `yarn prettier:fix` to apply Prettier formatting to the new Typescript files.
+
+It is not recommended to run an ESLint fix at this point, as it seems to introduce many new problems that mean the code no longer builds. These errors can instead be dealt with over the longer term.
+
+<!-- TODO:### Documenting type errors -->
 
 ## Post-migration checks
 
