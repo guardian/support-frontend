@@ -118,7 +118,7 @@ function DigitalLandingPage({
   }
 
   const isGift = orderIsAGift || false;
-  const showEventsComponent = participations.digiSubEventsTest === 'variant';
+  const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
   const showComparisonTable = participations.comparisonTableTest === 'variant';
   const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
