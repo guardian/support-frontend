@@ -290,8 +290,6 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
     ? deserialiseReferralData(getQueryParameter(REFERRAL_DATA_PARAM) || '')
     : deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
-  debugger;
-
   // Read from param, or read from sessionStorage, or build minimal version.
   const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || {});
   storeReferrerAcquisitionData(referrerAcquisitionData);
