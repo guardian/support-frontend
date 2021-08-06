@@ -86,7 +86,6 @@ const toggleButtonOpen = css`
   }
 `;
 
-
 type CellData = {|
   content: Node;
   isPrimary?: boolean;
@@ -125,7 +124,7 @@ function InteractiveTableRow({
           aria-controls={`${rowId}-details`}
           onClick={() => setShowDetails(!showDetails)}
         >
-          Show more details
+          {`${showDetails ? 'Hide' : 'Show'} more details`}
         </Button>
       </td>
       <td
@@ -184,8 +183,8 @@ function InteractiveTable() {
           <th scope="col" role="columnHeader"><span css={visuallyHidden}>Benefits</span></th>
           <th scope="col" role="columnHeader" css={tableCell}>Paid</th>
           <th scope="col" role="columnHeader" css={tableCell}>Free</th>
-          <th scope="col" role="columnHeader"><span css={visuallyHidden}>Actions</span></th>
-          <th scope="col" role="columnHeader"><span css={visuallyHidden}>Details</span></th>
+          <th scope="col" role="columnHeader" css={expandableButtonCell}><span css={visuallyHidden}>Actions</span></th>
+          <th scope="col" role="columnHeader"><span css={visuallyHidden}>More details</span></th>
         </tr>
       </thead>
       <tbody>
@@ -198,8 +197,8 @@ function InteractiveTable() {
         }
       </tbody>
       <tfoot>
-        <tr role="row" css={tableRow}>
-          <td role="cell" colSpan="5" css={tableCell}>
+        <tr role="row">
+          <td role="cell" colSpan="5" aria-colspan="5" css={tableCell}>
             <div><span>Plus 14 day free trial</span></div>
           </td>
         </tr>
