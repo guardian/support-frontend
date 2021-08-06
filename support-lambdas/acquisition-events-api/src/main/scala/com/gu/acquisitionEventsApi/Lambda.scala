@@ -5,10 +5,14 @@ import com.typesafe.scalalogging.LazyLogging
 
 object Lambda extends LazyLogging {
 
-  def handler(event: APIGatewayProxyRequestEvent): Unit = {
+  def handler(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
     processEvent(event)
   }
 
-  def processEvent(event: APIGatewayProxyRequestEvent) = {}
+  def processEvent(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
+    val response = new APIGatewayProxyResponseEvent()
+    response.setStatusCode(200)
+    response
+  }
 }
 

@@ -3,6 +3,10 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: API for acquisition events
 
 Parameters:
+  App:
+    Description: Acquisition Events Api
+    Type: String
+    Default: acquisition-events-api
   Stack:
     Description: Stack name
     Type: String
