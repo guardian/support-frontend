@@ -179,7 +179,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisit
 
   // This was how referrer pageview id used to be passed.
   const campaignCode =
-    getCampaignCode() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
+    getCampaignCode() || acquisitionData.campaignCode || getQueryParameter('INTCMP') || getQueryParameter('CMP');
 
   const parameterExclusions =
     ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
@@ -188,13 +188,15 @@ function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisit
     acquisitionData.queryParameters ||
     toAcquisitionQueryParameters(getAllQueryParamsWithExclusions(parameterExclusions));
 
+  const establishedSource = ((campaignCode && /^PPC_/i.test(campaignCode)) || getQueryParameter('gclid')) ? 'PPC' : acquisitionData.source;
+
   return {
     referrerPageviewId,
     campaignCode,
     referrerUrl: acquisitionData.referrerUrl,
     componentId: acquisitionData.componentId,
     componentType: acquisitionData.componentType,
-    source: acquisitionData.source,
+    source: establishedSource,
     abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
     queryParameters: queryParameters.length > 0 ? queryParameters : [],
     labels: acquisitionData.labels,
