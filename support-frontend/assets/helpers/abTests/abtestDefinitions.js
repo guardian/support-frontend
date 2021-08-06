@@ -104,7 +104,6 @@ export const tests: Tests = {
     },
     isActive: true,
     referrerControlled: true,
-    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingNotAusNotUS,
     seed: 10,
     // optimizeId: tbc
   },
