@@ -1,8 +1,6 @@
-// @flow
+import React, { Component } from 'react';
 
-import React, {type Node, Component} from 'react';
-
-class WithState extends Component<{|initialState: {}, children: Function, refs?: any[]|}, {}> {
+class WithState extends Component {
   state = {
     ...this.props.initialState
   }

@@ -1,4 +1,4 @@
-import React, {type Node, Component} from 'react';
+import React, { Component } from 'react';
 
 import WithState from './withState.jsx';
 import './colours.scss';
@@ -8,7 +8,7 @@ const copyStringToClipboard = (str) => {
   el.value = str;
   el.setAttribute('readonly', '');
   if(document.body !== null){
-    document.body.appendChild(el); 
+    document.body.appendChild(el);
   }
   el.select();
   document.execCommand('copy');
@@ -17,7 +17,7 @@ const copyStringToClipboard = (str) => {
   }
 }
 
-const coloursInCategory = (palette, category) => 
+const coloursInCategory = (palette, category) =>
   Object.entries(palette)
     .filter(([key])=>key.includes(category))
     .reduce((p, [key,val])=>({...p, [key]:val}),{});
@@ -25,7 +25,7 @@ const coloursInCategory = (palette, category) =>
 const Colour = ({name, colour, copyHex}) => (
   <WithState initialState={{clicked: false}}>
     {({clicked}, setState) =>
-      <button 
+      <button
         onClick ={() => {
           copyStringToClipboard(copyHex?colour:`gu-colour(${name})`)
           setState({clicked: true})
@@ -36,7 +36,7 @@ const Colour = ({name, colour, copyHex}) => (
         className="story-colour"
         data-clicked={clicked}
       >
-        <div         
+        <div
           className="story-colour__tile"
           style={{
             background: colour,
