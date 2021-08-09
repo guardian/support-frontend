@@ -65,7 +65,7 @@ Resources:
           Action:
             - ssm:GetParametersByPath
           Resource:
-            - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/acquisition-events-api/bigquery-config/${Stage}
+            - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/acquisition-events-api/bigquery-config/${Stage}/*
       - Statement:
         - Effect: Allow
           Action: s3:GetObject
