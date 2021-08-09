@@ -21,7 +21,7 @@ object SSMService {
 
   def getConfig(): Either[String, BigQueryConfig] = {
     val request = new GetParametersByPathRequest()
-      .withPath(s"/acquisition-events-api/bigquery-config/CODE/")
+      .withPath(s"/acquisition-events-api/bigquery-config/CODE")
       .withWithDecryption(true)
       .withRecursive(false)
 
