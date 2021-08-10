@@ -2,9 +2,11 @@ package com.gu.acquisitionEventsApi
 
 import cats.data.EitherT
 import com.amazonaws.services.lambda.runtime.events.{APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent}
+import com.gu.support.acquisitions.BigQueryService
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser.decode
 import com.gu.support.acquisitions.models.AcquisitionDataRow
+
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
@@ -22,7 +24,7 @@ object Lambda extends LazyLogging {
   def handler(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
     SSMService.getConfig() match {
       case Right(config) =>
-        val bigQuery = new BigQueryServiceImpl(config)
+        val bigQuery = new BigQueryService(config)
         processEvent(event,bigQuery)
       case Left(error) =>
         logger.error(s"failed to get big query config from SSM: $error")
@@ -30,7 +32,7 @@ object Lambda extends LazyLogging {
     }
   }
 
-  def processEvent(event: APIGatewayProxyRequestEvent, bigQuery: BigQueryServiceWrapper): APIGatewayProxyResponseEvent = {
+  def processEvent(event: APIGatewayProxyRequestEvent, bigQuery: BigQueryService): APIGatewayProxyResponseEvent = {
     val rawBody = event.getBody()
     val result = EitherT.fromEither[Future](decode[AcquisitionDataRow](rawBody))
       .leftMap(error => List(error.getMessage))
