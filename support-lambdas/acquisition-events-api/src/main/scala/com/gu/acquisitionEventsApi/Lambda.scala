@@ -6,15 +6,12 @@ import com.gu.support.acquisitions.BigQueryService
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser.decode
 import com.gu.support.acquisitions.models.AcquisitionDataRow
-
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success, Try}
 
-
 object Lambda extends LazyLogging {
-
   def buildResponse(status: Int): APIGatewayProxyResponseEvent = {
     val response = new APIGatewayProxyResponseEvent()
     response.setStatusCode(status)

@@ -6,16 +6,16 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
 import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagement, AWSSimpleSystemsManagementClientBuilder}
-
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 import com.gu.support.acquisitions.BigQueryConfig
-
 import scala.util.Try
 
 object SSMService {
-   private val credentialsProvider = new AWSCredentialsProviderChain(
-     new ProfileCredentialsProvider("membership")
-   )
+  private val credentialsProvider = new AWSCredentialsProviderChain(
+   new ProfileCredentialsProvider("membership")
+  )
+
+  private val stage = sys.env.getOrElse("STAGE", "CODE")
 
   val client = AWSSimpleSystemsManagementClientBuilder
     .standard()
@@ -24,7 +24,7 @@ object SSMService {
     .build()
 
   def getConfig(): Either[String, BigQueryConfig] = {
-    val path = s"/acquisition-events-api/bigquery-config/CODE"
+    val path = s"/acquisition-events-api/bigquery-config/$stage"
     val request = new GetParametersByPathRequest()
       .withPath(path + "/")
       .withWithDecryption(true)

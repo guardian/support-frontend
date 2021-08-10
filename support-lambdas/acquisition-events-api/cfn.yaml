@@ -55,6 +55,9 @@ Resources:
       Handler: com.gu.acquisitionEventsApi.Lambda::handler
       MemorySize: 512
       Timeout: 300
+      Environment:
+        Variables:
+          STAGE: !Ref Stage
       CodeUri:
         Bucket: !Ref DeployBucket
         Key: !Sub ${Stack}/${Stage}/${App}/${App}.jar
