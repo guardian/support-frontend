@@ -23,8 +23,7 @@ class PaperSubscriptionController(
   components: ControllerComponents,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -45,7 +44,6 @@ class PaperSubscriptionController(
       mainElement = assets.getSsrCacheContentsAsHtml("paper-subscription-landing-page", "paper-subscription-landing.html"),
       mainJsBundle = Left(RefPath("paperSubscriptionLandingPage.js")),
       mainStyleBundle = Left(RefPath("paperSubscriptionLandingPage.css")),
-      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.paperLandingDescription,
       canonicalLink = canonicalLink,
       shareImageUrl = Some(

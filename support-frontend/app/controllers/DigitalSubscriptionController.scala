@@ -24,8 +24,7 @@ class DigitalSubscriptionController(
   components: ControllerComponents,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  val supportUrl: String,
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -49,7 +48,6 @@ class DigitalSubscriptionController(
         mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode),
         mainJsBundle = Left(RefPath("digitalSubscriptionLandingPage.js")),
         mainStyleBundle = Left(RefPath("digitalSubscriptionLandingPage.css")),
-        fontLoaderBundle = fontLoaderBundle,
         description = stringsConfig.digitalPackLandingDescription,
         canonicalLink = canonicalLink,
         hrefLangLinks = getPaperHrefLangLinks(orderIsAGift),

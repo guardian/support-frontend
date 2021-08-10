@@ -161,7 +161,6 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         payPalConfigProvider = payPal,
         components = stubControllerComponents(),
         settingsProvider = settingsProvider,
-        fontLoaderBundle = Left(RefPath("test")),
         recaptchaConfigProvider
       )
     }

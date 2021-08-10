@@ -32,7 +32,6 @@ class PaperSubscriptionForm(
   payPalConfigProvider: PayPalConfigProvider,
   components: ControllerComponents,
   settingsProvider: AllSettingsProvider,
-  fontLoaderBundle: Either[RefPath, StyleContent],
   recaptchaConfigProvider: RecaptchaConfigProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
 
@@ -89,7 +88,6 @@ class PaperSubscriptionForm(
       id,
       js,
       css,
-      fontLoaderBundle,
       Some(csrf),
       maybeIdUser,
       uatMode,

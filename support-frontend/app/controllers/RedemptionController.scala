@@ -40,7 +40,6 @@ class RedemptionController(
   membersDataService: MembersDataService,
   testUsers: TestUserService,
   components: ControllerComponents,
-  fontLoaderBundle: Either[RefPath, StyleContent],
   dynamoTableProvider: DynamoTableAsyncProvider,
   zuoraLookupServiceProvider: ZuoraGiftLookupServiceProvider
 )(
@@ -78,7 +77,6 @@ class RedemptionController(
               mainElement = id,
               js = js,
               css = css,
-              fontLoaderBundle = fontLoaderBundle,
               csrf = None,
               isTestUser = isTestUser,
               stage = "checkout",
@@ -110,7 +108,6 @@ class RedemptionController(
       mainElement = id,
       mainJsBundle = Left(RefPath(js)),
       mainStyleBundle = Left(RefPath(css)),
-      fontLoaderBundle = fontLoaderBundle,
       csrf = Some(CSRF.getToken.value)
     ) {
       Html(s"""
@@ -131,7 +128,6 @@ class RedemptionController(
       mainElement = id,
       js = js,
       css = css,
-      fontLoaderBundle = fontLoaderBundle,
       csrf = None,
       isTestUser = isTestUser,
       stage = "checkout",
@@ -178,7 +174,6 @@ class RedemptionController(
       mainElement = id,
       js = js,
       css = css,
-      fontLoaderBundle = fontLoaderBundle,
       csrf = Some(CSRF.getToken.value),
       isTestUser = testUserFromRequest.fromIdUser(user),
       stage = "processing",

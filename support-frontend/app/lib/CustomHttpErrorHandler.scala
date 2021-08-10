@@ -34,15 +34,12 @@ class CustomHttpErrorHandler(
     super.onClientError(request, statusCode, message).map(_.withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*))
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] = {
-    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
-    val fontLoader = elementForStage(RefPath("fontLoader.js"))
     Future.successful(
       NotFound(main(
         "Error 404",
         EmptyDiv("error-404-page"),
         Left(RefPath("error404Page.js")),
-        Left(RefPath("error404Page.css")),
-        fontLoader
+        Left(RefPath("error404Page.css"))
       )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
         .withSettingsSurrogateKey
@@ -50,8 +47,6 @@ class CustomHttpErrorHandler(
   }
 
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
-    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
-    val fontLoader = elementForStage(RefPath("fontLoader.js"))
     logServerError(request, exception)
     Future.successful(
       InternalServerError(
@@ -59,8 +54,7 @@ class CustomHttpErrorHandler(
           "Error 500",
           EmptyDiv("error-500-page"),
           Left(RefPath("error500Page.js")),
-          Left(RefPath("error500Page.css")),
-          fontLoader
+          Left(RefPath("error500Page.css"))
         )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.noCache)
         .withSettingsSurrogateKey

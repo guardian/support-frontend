@@ -113,7 +113,7 @@ type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
 
 const fieldStyle = {
   base: {
-    fontFamily: '\'Guardian Text Sans Web\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
+    fontFamily: '\'GuardianTextSans\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
     '::placeholder': {
       color: '#999999',
     },

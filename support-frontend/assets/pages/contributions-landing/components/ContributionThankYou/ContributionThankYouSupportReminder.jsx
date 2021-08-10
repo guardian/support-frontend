@@ -38,7 +38,7 @@ const buttonContainer = css`
 const privacyText = css`
   ${styles.hideBeforeTablet}
   ${textSans.small()}
-  font-family: GuardianTextSans,Guardian Text Sans Web,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif !important;
+  font-family: GuardianTextSans,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif !important;
   font-size: 15px !important;
 
   color: ${neutral[20]};

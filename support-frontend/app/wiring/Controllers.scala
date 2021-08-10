@@ -15,7 +15,6 @@ trait Controllers {
   lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
   lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage)_
-  lazy val fontLoader = elementForStage(RefPath("fontLoader.js"))
 
   lazy val applicationController = new Application(
     actionRefiners,
@@ -33,8 +32,7 @@ trait Controllers {
     allSettingsProvider,
     appConfig.guardianDomain,
     appConfig.stage,
-    appConfig.supportUrl,
-    fontLoader
+    appConfig.supportUrl
   )
 
   lazy val diagnosticsController = new DiagnosticsController(
@@ -55,8 +53,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
-    fontLoader
+    appConfig.supportUrl
   )
 
   lazy val redemptionController = new RedemptionController(
@@ -67,7 +64,6 @@ trait Controllers {
     membersDataService,
     testUsers,
     controllerComponents,
-    fontLoader,
     dynamoTableAsyncProvider,
     zuoraGiftLookupServiceProvider
   )
@@ -85,8 +81,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
-    fontLoader
+    appConfig.supportUrl
   )
 
   lazy val paperController = new PaperSubscriptionController(
@@ -97,8 +92,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
-    fontLoader
+    appConfig.supportUrl
   )
 
   lazy val weeklyController = new WeeklySubscriptionController(
@@ -109,8 +103,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
-    fontLoader
+    appConfig.supportUrl
   )
 
   lazy val digitalPackFormController = new DigitalSubscriptionFormController(
@@ -124,7 +117,6 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     allSettingsProvider,
-    fontLoader,
     appConfig.recaptchaConfigProvider
   )
 
@@ -138,7 +130,6 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     allSettingsProvider,
-    fontLoader,
     appConfig.recaptchaConfigProvider
   )
 
@@ -152,7 +143,6 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     allSettingsProvider,
-    fontLoader,
     appConfig.recaptchaConfigProvider
   )
 
@@ -201,8 +191,7 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    allSettingsProvider,
-    fontLoader
+    allSettingsProvider
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
@@ -212,8 +201,7 @@ trait Controllers {
     controllerComponents,
     paymentAPIService,
     identityService,
-    allSettingsProvider,
-    fontLoader
+    allSettingsProvider
   )
 
   lazy val testUsersController = new TestUsersManagement(
@@ -258,7 +246,6 @@ trait Controllers {
     actionRefiners,
     testUsers,
     controllerComponents,
-    fontLoader,
     allSettingsProvider,
     appConfig.stage
   )
