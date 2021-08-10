@@ -9,7 +9,7 @@ import { getQueryParameter } from 'helpers/urls/url';
 import { deserialiseJsonObject } from 'helpers/utilities/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage/storage';
-import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
+import { getAllQueryParamsWithExclusions, getAllQueryParams } from 'helpers/urls/url';
 import { getCampaignCode } from 'helpers/campaigns/campaigns';
 
 // ----- Types ----- //
@@ -124,7 +124,7 @@ function getCampaign(acquisition: ReferrerAcquisitionData): ?Campaign {
 }
 
 // Stores the acquisition data in sessionStorage.
-function storeReferrerAcquisitionData(referrerAcquisitionData: ReferrerAcquisitionData): boolean {
+function storeReferrerAcquisitionDataInSessionStorage(referrerAcquisitionData: ReferrerAcquisitionData): boolean {
 
   try {
 
@@ -136,14 +136,6 @@ function storeReferrerAcquisitionData(referrerAcquisitionData: ReferrerAcquisiti
   } catch (err) {
     return false;
   }
-
-}
-
-// Reads the acquisition data from sessionStorage.
-function readReferrerAcquisitionData(): ?Object {
-
-  const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
-  return stored ? deserialiseJsonObject(stored) : null;
 
 }
 
@@ -177,7 +169,6 @@ function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisit
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
     getQueryParameter('REFPVID');
 
-  // This was how referrer pageview id used to be passed.
   const campaignCode =
     getCampaignCode() || acquisitionData.campaignCode || getQueryParameter('INTCMP') || getQueryParameter('CMP');
 
@@ -188,7 +179,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisit
     acquisitionData.queryParameters ||
     toAcquisitionQueryParameters(getAllQueryParamsWithExclusions(parameterExclusions));
 
-  const establishedSource = ((campaignCode && /^PPC_/i.test(campaignCode)) || getQueryParameter('gclid')) ? 'PPC' : acquisitionData.source;
+  const source = ((campaignCode && /^PPC_/i.test(campaignCode))) ? 'PPC' : acquisitionData.source;
 
   return {
     referrerPageviewId,
@@ -196,7 +187,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object): ReferrerAcquisit
     referrerUrl: acquisitionData.referrerUrl,
     componentId: acquisitionData.componentId,
     componentType: acquisitionData.componentType,
-    source: establishedSource,
+    source,
     abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
     queryParameters: queryParameters.length > 0 ? queryParameters : [],
     labels: acquisitionData.labels,
@@ -283,16 +274,54 @@ function deserialiseReferralData(serialised: string): Object {
   };
 }
 
+
+// Reads the acquisition data from sessionStorage.
+function getReferrerAcquisitionDataFromSessionStorage(): ?ReferrerAcquisitionData {
+  const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
+  return stored ? deserialiseJsonObject(stored) : null;
+}
+
+// Reads the acquisition data from the &acquistionData param containing a serialised JSON string.
+function getAcquisitionDataFromAcquisitionDataParam(): ?Object {
+  if (getQueryParameter(ACQUISITIONS_PARAM)) {
+    return deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
+  }
+  return null;
+}
+
+// Reads the acquisition data from the &referralData param containing _ separated values.
+function getAcquisitionDataFromReferralDataParam(): ?Object {
+  if (getQueryParameter(REFERRAL_DATA_PARAM)) {
+    return deserialiseReferralData(getQueryParameter(REFERRAL_DATA_PARAM) || '');
+  }
+  return null;
+}
+
+// Generates appropriate acquisition data from the various, known, PPC params
+function getAcquisitionDataFromPPCParams(): ?Object {
+  if (getQueryParameter('gclid')) {
+    return {
+      source: 'PPC',
+      campaignCode: 'Google_Adwords',
+      queryParameters: getAllQueryParams(),
+    };
+  }
+  return null;
+}
+
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
 function getReferrerAcquisitionData(): ReferrerAcquisitionData {
-  const paramData = getQueryParameter(REFERRAL_DATA_PARAM)
-    ? deserialiseReferralData(getQueryParameter(REFERRAL_DATA_PARAM) || '')
-    : deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
-  // Read from param, or read from sessionStorage, or build minimal version.
-  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || {});
-  storeReferrerAcquisitionData(referrerAcquisitionData);
+  // Read acquisitonData from the various query params, or from sessionStorage, in the following precedence
+  const candidateAcquisitionData =
+    getAcquisitionDataFromReferralDataParam() ||
+    getAcquisitionDataFromAcquisitionDataParam() ||
+    getAcquisitionDataFromPPCParams() ||
+    getReferrerAcquisitionDataFromSessionStorage();
+
+  const referrerAcquisitionData = buildReferrerAcquisitionData(candidateAcquisitionData || {});
+  storeReferrerAcquisitionDataInSessionStorage(referrerAcquisitionData);
 
   return referrerAcquisitionData;
 }
