@@ -2,7 +2,6 @@ package com.gu.acquisitionEventsApi
 
 import cats.data.EitherT
 import com.amazonaws.services.lambda.runtime.events.{APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent}
-import com.gu.support.acquisitions.BigQueryService
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser.decode
 import com.gu.support.acquisitions.models.AcquisitionDataRow

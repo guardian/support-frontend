@@ -8,7 +8,9 @@ import org.joda.time.DateTime
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 import io.circe.syntax._
+import org.scalatest.Ignore
 
+@Ignore
 class LambdaSpec extends AnyFlatSpec with Matchers {
   val acquisition = AcquisitionDataRow(
     eventTimeStamp = new DateTime(1544710504165L),
@@ -42,10 +44,10 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     platform = None
   )
 
-  it should "successfully get big query config from SSM" in {
+  it should "run locally" in {
     val request = new APIGatewayProxyRequestEvent()
     request.setBody(acquisition.asJson.noSpaces)
     val result = Lambda.handler(request)
-    println(result)
+    result.getStatusCode should be(200)
   }
 }

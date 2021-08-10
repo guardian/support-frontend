@@ -37,8 +37,6 @@ object SSMService {
         val params = result.getParameters.asScala.toList.map{parameter =>
           parameter.getName -> parameter.getValue
         }.toMap
-        println("params")
-        println(params)
 
         val config = for {
           projectId <- params.get(s"$path/projectId")
