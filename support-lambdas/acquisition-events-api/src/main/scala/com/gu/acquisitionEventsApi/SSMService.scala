@@ -1,25 +1,18 @@
 package com.gu.acquisitionEventsApi
 
 import cats.syntax.either._
-import com.amazonaws.auth.AWSCredentialsProviderChain
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagement, AWSSimpleSystemsManagementClientBuilder}
+import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 import com.gu.support.acquisitions.BigQueryConfig
 import scala.util.Try
 
 object SSMService {
-  private val credentialsProvider = new AWSCredentialsProviderChain(
-   new ProfileCredentialsProvider("membership")
-  )
-
   private val stage = sys.env.getOrElse("STAGE", "CODE")
 
   val client = AWSSimpleSystemsManagementClientBuilder
     .standard()
-    .withCredentials(credentialsProvider)
     .withRegion(Regions.EU_WEST_1)
     .build()
 
