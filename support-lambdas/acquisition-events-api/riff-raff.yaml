@@ -9,8 +9,8 @@ deployments:
       functionNames: [acquisition-events-api-]
       fileName: acquisition-events-api.jar
       prefixStack: false
-    dependencies: [ acquisition-events-api-cloudformation ]
-  acquisition-events-api-cloudformation:
+    dependencies: [ cfn ]
+  cfn:
     type: cloud-formation
     app: acquisition-events-api
     parameters:
