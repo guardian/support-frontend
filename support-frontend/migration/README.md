@@ -22,11 +22,7 @@ All files should replace any existing versions of the same file in their destina
 
 ### Post-migration manual fixes
 
-There are a few manual syntax fixes that need to be applied. Search and replace in both /assets and /stories for the following:
-
-- Replace “import type” with “import
-
-Then do the following file-specific changes:
+There are a few manual syntax fixes that need to be applied:
 
 - In assets/components/subscriptionCheckouts/address/addressFields.tsx, remove `<GlobalState>` on line 128
 - In assets/components/subscriptionCheckouts/address/postcodeFinder.tsx, remove `<GlobalState>` on line 98
