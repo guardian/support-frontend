@@ -4,11 +4,11 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-import { background, border, sport, news } from '@guardian/src-foundations/palette';
+import { background, border, lifestyle, news } from '@guardian/src-foundations/palette';
 import { headline, body, textSans } from '@guardian/src-foundations/typography';
 import { SvgTicket } from 'components/icons/ticket';
 import EventCard from './eventCard';
-import { jessPhillips, robbieAndersonImage } from './eventsImages';
+import { keirStarmerImage, felicityCloakeImage } from './eventsImages';
 import BlockLabel from 'components/blockLabel/blockLabel';
 
 const container = css`
@@ -112,7 +112,7 @@ const paraTiny = css`
   ${from.tablet} {
     margin: 0;
     position: absolute;
-    bottom: 40px;
+    bottom: 15px;
   }
 
   ${from.desktop} {
@@ -185,21 +185,19 @@ const EventsModule = () => (
         <div css={eventCardContainer}>
           <EventCard
             eventType="Featured event"
-            eventImage={jessPhillips}
+            eventImage={keirStarmerImage}
             eventDate="21 July 2021"
-            eventTime="8-9pm BST"
             eventColour={news[400]}
             eventSectionText="Politics"
-            eventDescription="Everything you really need to know about politics, with Jess Phillips MP"
+            eventDescription="Guardian Newsroom: Are the Labour Party electable?"
           />
           <EventCard
             eventType="Featured masterclass"
-            eventImage={robbieAndersonImage}
+            eventImage={felicityCloakeImage}
             eventDate="22 July 2021"
-            eventTime="6.30-8pm BST"
-            eventColour={sport[400]}
-            eventSectionText="Sport"
-            eventDescription="How to apply sports psychology to your life with Dr Robbie Anderson"
+            eventColour={lifestyle[400]}
+            eventSectionText="Food"
+            eventDescription="How to write about food with Felicity Cloake"
           />
         </div>
         <p css={paraTiny}>See full Terms &amp; Conditions below</p>
