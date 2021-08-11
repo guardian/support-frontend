@@ -175,7 +175,7 @@ const EventsModule = () => (
         <div css={textContentContainer}>
           <SvgTicket />
           <h3 css={cardTitle}>Enjoy 6 free tickets to digital Guardian events</h3>
-          <p css={para}>In the <span css={bold}>first 3 months</span> of your subscription</p>
+          <p css={para}>In the <span css={bold}>first 6 months</span> of your subscription</p>
           <p css={paraSecond}>
             Join interactive Live conversations with journalists, political leaders and cultural
             icons. Or get inspired to learn a new skill in selected Masterclasses. With events
