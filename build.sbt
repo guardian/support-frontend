@@ -254,5 +254,13 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
   .dependsOn(`module-acquisition-events`)
   .aggregate(`module-acquisition-events`)
 
+lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisition-events-api"))
+  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`module-acquisition-events`)
+  .aggregate(`module-acquisition-events`)
+
 lazy val `support-lambdas` = (project in file("support-lambdas"))
-  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)
+  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`, `acquisition-events-api`)

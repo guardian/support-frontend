@@ -1,0 +1,17 @@
+stacks: [support]
+regions: [eu-west-1]
+
+deployments:
+  acquisition-events-api:
+    type: aws-lambda
+    parameters:
+      bucket: membership-dist
+      functionNames: [acquisition-events-api-]
+      fileName: acquisition-events-api.jar
+      prefixStack: false
+    dependencies: [ cfn ]
+  cfn:
+    type: cloud-formation
+    app: acquisition-events-api
+    parameters:
+      templatePath: cfn.yaml
