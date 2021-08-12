@@ -26,7 +26,7 @@ const cardContent = css`
   }
 
   ${from.tablet} {
-    grid-template-rows: 1fr 1.8fr;
+    grid-template-rows: 1fr 1.6fr;
   }
 
   ${from.leftCol} {

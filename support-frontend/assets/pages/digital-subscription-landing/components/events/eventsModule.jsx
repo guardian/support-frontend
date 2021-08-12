@@ -4,7 +4,7 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-import { background, border, lifestyle, news } from '@guardian/src-foundations/palette';
+import { background, border, lifestyle, news, culture } from '@guardian/src-foundations/palette';
 import { headline, body, textSans } from '@guardian/src-foundations/typography';
 import { SvgTicket } from 'components/icons/ticket';
 import EventCard from './eventCard';
@@ -187,8 +187,8 @@ const FeaturedEventCardUS = (
     eventType="Featured event"
     eventImage={woleSoyinkaImage}
     eventDate="28 Sept 2021"
-    eventColour={news[400]}
-    eventSectionText="Politics"
+    eventColour={culture[400]}
+    eventSectionText="Culture"
     eventDescription="Wole Soyinka in conversation"
   />
 );
@@ -217,7 +217,7 @@ const EventsModule = () => (
             eventImage={felicityCloakeImage}
             eventDate="22 Sept 2021"
             eventColour={lifestyle[400]}
-            eventSectionText="Food"
+            eventSectionText="Lifestyle"
             eventDescription="How to write about food with Felicity Cloake"
           />
         </div>
