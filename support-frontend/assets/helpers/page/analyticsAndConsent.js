@@ -6,6 +6,7 @@ import * as ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as logger from 'helpers/utilities/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
+import * as quantumMetric from 'helpers/tracking/quantumMetric';
 import { trackAbTests, setReferrerDataInLocalStorage } from 'helpers/tracking/ophan';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
@@ -23,6 +24,7 @@ export function analyticsInitialisation(
 ): void {
   setReferrerDataInLocalStorage(acquisitionData);
   googleTagManager.init(participations);
+  quantumMetric.init();
   ophan.init();
   trackAbTests(participations);
   // Logging.
