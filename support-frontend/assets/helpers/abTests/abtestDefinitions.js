@@ -109,7 +109,7 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: true,
     seed: 10,
-    // optimizeId: tbc
+    optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
   },
   comparisonTableTest: {
     variants: [

@@ -169,7 +169,6 @@ const eventCardContainer = css`
 `;
 
 const countryId = detectCountry();
-console.log(countryId);
 
 const FeaturedEventCardUK = (
   <EventCard
