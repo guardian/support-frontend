@@ -1,3 +1,5 @@
+// @flow
+
 import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 
