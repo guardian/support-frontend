@@ -8,8 +8,9 @@ import { background, border, lifestyle, news } from '@guardian/src-foundations/p
 import { headline, body, textSans } from '@guardian/src-foundations/typography';
 import { SvgTicket } from 'components/icons/ticket';
 import EventCard from './eventCard';
-import { keirStarmerImage, felicityCloakeImage } from './eventsImages';
+import { keirStarmerImage, felicityCloakeImage, woleSoyinkaImage } from './eventsImages';
 import BlockLabel from 'components/blockLabel/blockLabel';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 
 const container = css`
   box-sizing: border-box;
@@ -167,6 +168,33 @@ const eventCardContainer = css`
   }
 `;
 
+const countryId = detectCountry();
+console.log(countryId);
+
+const FeaturedEventCardUK = (
+  <EventCard
+    eventType="Featured event"
+    eventImage={keirStarmerImage}
+    eventDate="20 Sept 2021"
+    eventColour={news[400]}
+    eventSectionText="Politics"
+    eventDescription="Guardian Newsroom: Are the Labour Party electable?"
+  />
+);
+
+const FeaturedEventCardUS = (
+  <EventCard
+    eventType="Featured event"
+    eventImage={woleSoyinkaImage}
+    eventDate="28 Sept 2021"
+    eventColour={news[400]}
+    eventSectionText="Politics"
+    eventDescription="Wole Soyinka in conversation"
+  />
+);
+
+const featuredEvent = ((countryId === 'US' ? FeaturedEventCardUS : FeaturedEventCardUK));
+
 const EventsModule = () => (
   <>
     <BlockLabel tag="h2" cssOverrides={label}>Special offer</BlockLabel>
@@ -183,18 +211,11 @@ const EventsModule = () => (
           </p>
         </div>
         <div css={eventCardContainer}>
-          <EventCard
-            eventType="Featured event"
-            eventImage={keirStarmerImage}
-            eventDate="21 July 2021"
-            eventColour={news[400]}
-            eventSectionText="Politics"
-            eventDescription="Guardian Newsroom: Are the Labour Party electable?"
-          />
+          {featuredEvent}
           <EventCard
             eventType="Featured masterclass"
             eventImage={felicityCloakeImage}
-            eventDate="22 July 2021"
+            eventDate="22 Sept 2021"
             eventColour={lifestyle[400]}
             eventSectionText="Food"
             eventDescription="How to write about food with Felicity Cloake"
