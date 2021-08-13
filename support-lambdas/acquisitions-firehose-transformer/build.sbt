@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
 assemblyMergeStrategy in assembly := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case str if str.contains("simulacrum") => MergeStrategy.first
+  case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case y =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)
