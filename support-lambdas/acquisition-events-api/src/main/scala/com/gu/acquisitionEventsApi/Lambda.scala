@@ -36,11 +36,11 @@ object Lambda extends LazyLogging {
   def processEvent(event: APIGatewayProxyRequestEvent, bigQuery: BigQueryService): APIGatewayProxyResponseEvent = {
     val rawBody = event.getBody()
     val result = EitherT.fromEither[Future](decode[AcquisitionDataRow](rawBody))
-      .leftMap(error => ParseError(error.getMessage))
+      .leftMap[Error](error => ParseError(error.getMessage))
       .flatMap { acq =>
         bigQuery
           .tableInsertRowWithRetry(acq, 5)
-          .leftMap(error => BigQueryError(error))
+          .leftMap[Error](error => BigQueryError(error))
       }
     Try (Await.result(result.value, 20.seconds)) match {
       case Success(Right(_)) =>
