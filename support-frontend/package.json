@@ -23,7 +23,8 @@
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle",
     "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
-    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
+    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
+    "snyk": "snyk test"
   },
   "browserslist": [
     "Chrome >= 49",
@@ -172,6 +173,7 @@
     "rimraf": "^2.6.2",
     "sass-mq": "^5.0.0",
     "search-in-file": "^1.2.2",
+    "snyk": "^1.587.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.2",
     "webpack-bundle-analyzer": "^4.4.2",
