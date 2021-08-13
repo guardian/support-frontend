@@ -19,10 +19,10 @@ function init() {
       if (thirdPartyTrackingConsent[quantumMetricVendorKey]) {
         const qtm = document.createElement('script');
         qtm.type = 'text/javascript';
-        qtm.async = 1;
+        qtm.async = true;
         qtm.src = 'https://cdn.quantummetric.com/qscripts/quantum-gnm.js';
         const d = document.getElementsByTagName('script')[0];
-        if (!window.QuantumMetricAPI) {
+        if (!window.QuantumMetricAPI && d && d.parentNode) {
           d.parentNode.insertBefore(qtm, d);
         }
       }
