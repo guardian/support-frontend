@@ -1,31 +1,18 @@
 package com.gu.acquisitionFirehoseTransformer
 
 import java.nio.ByteBuffer
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import com.typesafe.scalalogging.LazyLogging
-
 import com.amazonaws.services.lambda.runtime.events.KinesisAnalyticsInputPreprocessingResponse._
 import com.amazonaws.services.lambda.runtime.events.{KinesisAnalyticsInputPreprocessingResponse, KinesisFirehoseEvent}
-import com.amazonaws.services.lambda.runtime.Context
-
-import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.gu.support.acquisitions.models.AcquisitionDataRow
-
 import cats.implicits._
 import cats.instances.either._
 import io.circe.parser.decode
-import io.circe.Decoder
-import io.circe.generic.auto._
 
-import org.joda.time.DateTime
-
-import scala.util.{Try, Success, Failure}
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.gu.acquisitionsValueCalculatorClient.model.AcquisitionModel
-import com.gu.acquisition.instances.paymentFrequency
-import com.gu.acquisition.instances.paymentProvider
-import scala.concurrent.ExecutionContext
-import com.gu.acquisition.instances.acquisition
+import org.joda.time.DateTime
 
 
 case class AcquisitionWithRecordId(val acquisition: AcquisitionDataRow, recordId: String)
@@ -33,10 +20,14 @@ case class AcquisitionWithRecordId(val acquisition: AcquisitionDataRow, recordId
 object Lambda extends LazyLogging {
 
   def handler(event: KinesisFirehoseEvent): KinesisAnalyticsInputPreprocessingResponse = {
-    processEvent(event, new AnnualisedValueServiceImpl())
+    processEvent(event, new AnnualisedValueServiceImpl(), new GBPConversionServiceImpl())
   }
 
-  def processEvent(event: KinesisFirehoseEvent, avService: AnnualisedValueServiceWrapper) = {
+  def processEvent(
+    event: KinesisFirehoseEvent,
+    avService: AnnualisedValueServiceWrapper,
+    gbpService: GBPConversionService
+  ): KinesisAnalyticsInputPreprocessingResponse = {
     val records = event.getRecords.asScala
 
     def decodeAcquisitions(): Either[String, List[AcquisitionWithRecordId]] = records.toList.map { record =>
@@ -70,8 +61,12 @@ object Lambda extends LazyLogging {
     def buildRecords(acquisitions: List[(BigDecimal, AcquisitionWithRecordId)]): Either[String, List[Record]] =
       acquisitions.map {
         case (amount, AcquisitionWithRecordId(acquisition, recordId)) =>
-          getAnnualisedValue(amount, acquisition).map { av =>
-            val outputJson = AcquisitionToJson(amount, av, acquisition).noSpaces +"\n"
+          val conversionDate = DateTime.now().minusDays(1)
+          for {
+            av <- getAnnualisedValue(amount, acquisition)
+            avGBP <- gbpService.convert(acquisition.currency, av, conversionDate)
+          } yield {
+            val outputJson = AcquisitionToJson(amount, avGBP, acquisition).noSpaces +"\n"
             new Record(recordId, Result.Ok, ByteBuffer.wrap(outputJson.getBytes))
           }
       }.sequence
