@@ -91,7 +91,6 @@ type PropTypes = {|
   amazonPayOrderReferenceId: string | null,
   checkoutFormHasBeenSubmitted: boolean,
   campaignSettings: CampaignSettings | null,
-  referrerSource: ?string,
   amazonPayBillingAgreementId: ?string,
   localCurrencyCountry: ?LocalCurrencyCountry,
   amounts: ContributionAmounts,
@@ -132,7 +131,6 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
-  referrerSource: state.common.referrerAcquisitionData.source,
   amazonPayBillingAgreementId: state.page.form.amazonPayData.amazonBillingAgreementId,
   localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
@@ -362,7 +360,6 @@ function withProps(props: PropTypes) {
         countryGroupId={props.countryGroupId}
         contributionType={props.contributionType}
         campaignSettings={props.campaignSettings}
-        referrerSource={props.referrerSource}
       />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>

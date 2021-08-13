@@ -17,7 +17,6 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
   campaignSettings: CampaignSettings | null,
-  referrerSource: ?string,
 |};
 
 // ----- Component ----- //
@@ -97,8 +96,6 @@ function TermsPrivacy(props: PropTypes) {
 
   const isUSContributor = props.countryGroupId === 'UnitedStates';
   const isNotOneOffContribution = props.contributionType !== 'ONE_OFF';
-  const sourceIsNotAppleNews = props.referrerSource !== 'APPLE_NEWS';
-  const sourceIsNotGoogleAMP = props.referrerSource !== 'GOOGLE_AMP';
 
   const shouldShowPhilanthropicAsk =
     isUSContributor && isNotOneOffContribution
