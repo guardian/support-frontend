@@ -101,7 +101,7 @@ function TermsPrivacy(props: PropTypes) {
   const sourceIsNotGoogleAMP = props.referrerSource !== 'GOOGLE_AMP';
 
   const shouldShowPhilanthropicAsk =
-    isUSContributor && isNotOneOffContribution && sourceIsNotAppleNews && sourceIsNotGoogleAMP;
+    isUSContributor && isNotOneOffContribution
 
   return (
     <>
