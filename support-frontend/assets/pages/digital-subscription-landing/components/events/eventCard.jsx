@@ -7,13 +7,11 @@ import { from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { SvgCalendar } from 'components/icons/calendar';
-import { SvgClock } from 'components/icons/clock';
 
 type PropTypes = {
   eventType: string,
   eventImage: Node,
   eventDate: string,
-  eventTime: string,
   eventColour: string,
   eventSectionText: string,
   eventDescription: string,
@@ -28,7 +26,7 @@ const cardContent = css`
   }
 
   ${from.tablet} {
-    grid-template-rows: 1fr 1.8fr;
+    grid-template-rows: 1fr 1.6fr;
   }
 
   ${from.leftCol} {
@@ -97,10 +95,10 @@ const EventCard = (props: PropTypes) => {
 `;
 
   const svgFillColour = css`
-  svg path {
-    fill: ${props.eventColour};
-  }
-`;
+    svg path {
+      fill: ${props.eventColour};
+    }
+  `;
 
   return (
     <section>
@@ -111,9 +109,6 @@ const EventCard = (props: PropTypes) => {
           <div>
             <div css={[infoLine, svgFillColour]} aria-label="The event date is">
               <SvgCalendar />{props.eventDate}
-            </div>
-            <div css={[infoLine, svgFillColour]} aria-label="The event will be held at">
-              <SvgClock />{props.eventTime}
             </div>
           </div>
           <p css={eventDescriptionText}>

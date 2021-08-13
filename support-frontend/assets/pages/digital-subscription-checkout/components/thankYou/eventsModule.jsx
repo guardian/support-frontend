@@ -19,7 +19,7 @@ const EventsModule = () => (
     <SvgTicket />
     <Text title="Guardian digital events">
       <p>
-      Enjoy 6 free tickets to Guardian digital events in the first 3 months of your subscription.
+      Enjoy 6 free tickets to Guardian digital events in the first 6 months of your subscription.
       You will be sent your unique redemption code by email shortly, enter your code 6 times at
       the checkout for your chosen events to receive your free tickets.
       </p>

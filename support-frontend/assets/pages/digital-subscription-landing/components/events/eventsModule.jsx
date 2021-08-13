@@ -4,12 +4,13 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-import { background, border, sport, news } from '@guardian/src-foundations/palette';
+import { background, border, lifestyle, news, culture } from '@guardian/src-foundations/palette';
 import { headline, body, textSans } from '@guardian/src-foundations/typography';
 import { SvgTicket } from 'components/icons/ticket';
 import EventCard from './eventCard';
-import { jessPhillips, robbieAndersonImage } from './eventsImages';
+import { keirStarmerImage, felicityCloakeImage, woleSoyinkaImage } from './eventsImages';
 import BlockLabel from 'components/blockLabel/blockLabel';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 
 const container = css`
   box-sizing: border-box;
@@ -112,7 +113,7 @@ const paraTiny = css`
   ${from.tablet} {
     margin: 0;
     position: absolute;
-    bottom: 40px;
+    bottom: 15px;
   }
 
   ${from.desktop} {
@@ -167,6 +168,32 @@ const eventCardContainer = css`
   }
 `;
 
+const countryId = detectCountry();
+
+const FeaturedEventCardUK = (
+  <EventCard
+    eventType="Featured event"
+    eventImage={keirStarmerImage}
+    eventDate="20 Sept 2021"
+    eventColour={news[400]}
+    eventSectionText="Politics"
+    eventDescription="Guardian Newsroom: Are the Labour Party electable?"
+  />
+);
+
+const FeaturedEventCardUS = (
+  <EventCard
+    eventType="Featured event"
+    eventImage={woleSoyinkaImage}
+    eventDate="28 Sept 2021"
+    eventColour={culture[400]}
+    eventSectionText="Culture"
+    eventDescription="Wole Soyinka in conversation"
+  />
+);
+
+const featuredEvent = ((countryId === 'US' ? FeaturedEventCardUS : FeaturedEventCardUK));
+
 const EventsModule = () => (
   <>
     <BlockLabel tag="h2" cssOverrides={label}>Special offer</BlockLabel>
@@ -175,7 +202,7 @@ const EventsModule = () => (
         <div css={textContentContainer}>
           <SvgTicket />
           <h3 css={cardTitle}>Enjoy 6 free tickets to digital Guardian events</h3>
-          <p css={para}>In the <span css={bold}>first 3 months</span> of your subscription</p>
+          <p css={para}>In the <span css={bold}>first 6 months</span> of your subscription</p>
           <p css={paraSecond}>
             Join interactive Live conversations with journalists, political leaders and cultural
             icons. Or get inspired to learn a new skill in selected Masterclasses. With events
@@ -183,23 +210,14 @@ const EventsModule = () => (
           </p>
         </div>
         <div css={eventCardContainer}>
-          <EventCard
-            eventType="Featured event"
-            eventImage={jessPhillips}
-            eventDate="21 July 2021"
-            eventTime="8-9pm BST"
-            eventColour={news[400]}
-            eventSectionText="Politics"
-            eventDescription="Everything you really need to know about politics, with Jess Phillips MP"
-          />
+          {featuredEvent}
           <EventCard
             eventType="Featured masterclass"
-            eventImage={robbieAndersonImage}
-            eventDate="22 July 2021"
-            eventTime="6.30-8pm BST"
-            eventColour={sport[400]}
-            eventSectionText="Sport"
-            eventDescription="How to apply sports psychology to your life with Dr Robbie Anderson"
+            eventImage={felicityCloakeImage}
+            eventDate="22 Sept 2021"
+            eventColour={lifestyle[400]}
+            eventSectionText="Lifestyle"
+            eventDescription="How to write about food with Felicity Cloake"
           />
         </div>
         <p css={paraTiny}>See full Terms &amp; Conditions below</p>
