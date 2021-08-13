@@ -50,4 +50,9 @@ Resources:
           Action: sts:AssumeRole
           Resource:
             Ref: OphanRole
-
+      - Statement:
+          Effect: Allow
+          Action: dynamodb:*
+          Resource:
+            - !Sub arn:aws:dynamodb:*:${AWS::AccountId}:table/fixer-io-cache
+            - !Sub arn:aws:dynamodb:*:${AWS::AccountId}:table/fixer-io-cache/index/*
