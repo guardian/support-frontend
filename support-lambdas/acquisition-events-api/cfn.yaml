@@ -136,7 +136,7 @@ Resources:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub acquisition-events-api-${Stage} API gateway 5XX response
-      AlarmDescription: Acquisition events API failed to create a signup
+      AlarmDescription: Acquisition events API failed to process an event
       MetricName: 5XXError
       Namespace: AWS/ApiGateway
       Dimensions:
