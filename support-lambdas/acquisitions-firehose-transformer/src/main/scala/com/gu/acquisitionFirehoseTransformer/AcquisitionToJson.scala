@@ -18,6 +18,7 @@ object AcquisitionToJson {
     countryCode: String,
     amount: BigDecimal,
     annualisedValue: Double,
+    annualisedValueGBP: Double,
     currency: String,
     timestamp: String,
     campaignCode: String,
@@ -28,12 +29,13 @@ object AcquisitionToJson {
     labels: List[String]
   )
 
-  def apply(amount: BigDecimal, annualisedValue: Double, acquisition: AcquisitionDataRow): Json = {
+  def apply(amount: BigDecimal, annualisedValue: Double, annualisedValueGBP: Double,acquisition: AcquisitionDataRow): Json = {
     AcquisitionOutput(
       acquisition.paymentFrequency.value,
       acquisition.country.alpha2,
       amount,
       annualisedValue,
+      annualisedValueGBP,
       acquisition.currency.iso,
       dtFormatter.print(acquisition.eventTimeStamp),
       acquisition.campaignCode.getOrElse(""),

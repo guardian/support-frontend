@@ -9,3 +9,9 @@ deployments:
       functionNames: [acquisitions-firehose-transformer-]
       fileName: acquisitions-firehose-transformer.jar
       prefixStack: false
+    dependencies: [ cfn ]
+  cfn:
+    type: cloud-formation
+    app: acquisitions-firehose-transformer
+    parameters:
+      templatePath: cfn.yaml

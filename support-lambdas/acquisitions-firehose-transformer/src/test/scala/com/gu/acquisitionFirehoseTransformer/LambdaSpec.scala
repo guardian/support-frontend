@@ -3,7 +3,6 @@ package com.gu.acquisitionFirehoseTransformer
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 
-import com.gu.support.acquisitions
 import com.gu.support.acquisitions.models._
 import com.amazonaws.services.lambda.runtime.events.KinesisFirehoseEvent
 
@@ -12,7 +11,7 @@ import org.joda.time.DateTime
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.zuora.api.ReaderType
 import java.nio.ByteBuffer
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import com.gu.acquisitionsValueCalculatorClient.model.AcquisitionModel
 import scala.concurrent.ExecutionContext
 
@@ -20,7 +19,11 @@ import scala.concurrent.ExecutionContext
 class LambdaSpec extends AnyFlatSpec with Matchers {
 
   val mockAVService = new AnnualisedValueServiceWrapper {
-    def getAV(acquisitionModel: AcquisitionModel, accountName: String)(implicit executionContext: ExecutionContext): Either[String,Double] = Right(50)
+    def getAV(acquisitionModel: AcquisitionModel, accountName: String)(implicit executionContext: ExecutionContext): Either[String,Double] = Right(acquisitionModel.amount*12)
+  }
+
+  val mockGBPService = new GBPConversionService {
+    override def convert(currency: Currency, amount: Double, dateTime: DateTime): Either[String, Double] = Right(amount * 1.2)
   }
 
   it should "successfully process a valid batch of acquisitions, filtering out ones without an amount" in {
@@ -29,7 +32,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     val r3 = buildRecord("3", None)
     val event = buildEvent(List(r1, r2, r3))
 
-    val result = Lambda.processEvent(event, mockAVService)
+    val result = Lambda.processEvent(event, mockAVService, mockGBPService)
 
     val records = result.getRecords.asScala
 
@@ -38,10 +41,10 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     val jsons = records.toList.map { record => new String(record.getData().array()) }
 
     jsons(0) should be(
-      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":10.0,"annualisedValue":50.0,"currency":"GBP","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
+      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":10.0,"annualisedValue":120.0,"annualisedValueGBP":144.0,"currency":"USD","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
     )
     jsons(1) should be(
-      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"annualisedValue":50.0,"currency":"GBP","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
+      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"annualisedValue":240.0,"annualisedValueGBP":288.0,"currency":"USD","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
     )
   }
 
@@ -49,7 +52,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     val r = buildInvalidRecord("1")
     val event = buildEvent(List(r))
 
-    assertThrows[Exception] { Lambda.processEvent(event, mockAVService) }
+    assertThrows[Exception] { Lambda.processEvent(event, mockAVService, mockGBPService) }
   }
 
 
@@ -66,7 +69,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       product = AcquisitionProduct.RecurringContribution,
       amount = amount,
       country = Country.UK,
-      currency = Currency.GBP,
+      currency = Currency.USD,
       componentId = Some("MY_COMPONENT_ID"),
       componentType = None,
       campaignCode = Some("MY_CAMPAIGN_CODE"),
