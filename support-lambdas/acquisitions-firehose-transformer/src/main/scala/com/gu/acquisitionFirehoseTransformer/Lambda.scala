@@ -66,7 +66,7 @@ object Lambda extends LazyLogging {
             av <- getAnnualisedValue(amount, acquisition)
             avGBP <- gbpService.convert(acquisition.currency, av, conversionDate)
           } yield {
-            val outputJson = AcquisitionToJson(amount, avGBP, acquisition).noSpaces +"\n"
+            val outputJson = AcquisitionToJson(amount, av, avGBP, acquisition).noSpaces +"\n"
             new Record(recordId, Result.Ok, ByteBuffer.wrap(outputJson.getBytes))
           }
       }.sequence
