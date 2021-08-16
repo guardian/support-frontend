@@ -16,7 +16,7 @@ trait GBPConversionService {
 object GBPConversionServiceImpl extends GBPConversionService {
   private case class ConversionData(base: String, eventDate: String, rates: Map[String,Float])
 
-  private val dynamoDb = DynamoDbClient.builder().region(Region.EU_WEST_1).build()
+  private val dynamoDb = DynamoDbClient.builder().region(Region.EU_WEST_1).endpointDiscoveryEnabled(true).build()
   private val scanamo: Scanamo = Scanamo(dynamoDb)
   private val table: Table[ConversionData] = Table("fixer-io-cache")
 
