@@ -12,6 +12,7 @@ import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.gu.acquisitionsValueCalculatorClient.model.AcquisitionModel
+import com.gu.i18n.Currency
 import org.joda.time.DateTime
 
 
@@ -64,7 +65,9 @@ object Lambda extends LazyLogging {
           val conversionDate = DateTime.now().minusDays(1)
           for {
             av <- getAnnualisedValue(amount, acquisition)
-            avGBP <- gbpService.convert(acquisition.currency, av, conversionDate)
+            avGBP <-
+              if (acquisition.currency == Currency.GBP) Right(av)
+              else gbpService.convert(acquisition.currency, av, conversionDate)
           } yield {
             val outputJson = AcquisitionToJson(amount, av, avGBP, acquisition).noSpaces +"\n"
             new Record(recordId, Result.Ok, ByteBuffer.wrap(outputJson.getBytes))
