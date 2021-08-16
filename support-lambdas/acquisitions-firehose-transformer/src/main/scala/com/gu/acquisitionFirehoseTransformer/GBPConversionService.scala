@@ -7,7 +7,7 @@ import org.joda.time.format.ISODateTimeFormat
 import org.scanamo.generic.auto._
 import org.scanamo.syntax._
 import org.scanamo.{Scanamo, Table}
-import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, ProfileCredentialsProvider}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 
@@ -18,19 +18,16 @@ trait GBPConversionService {
 object GBPConversionServiceImpl extends GBPConversionService {
   private case class ConversionData(base: String, eventDate: String, rates: Map[String,Float])
 
-  val chain = AwsCredentialsProviderChain.builder()
+  private val providerChain = AwsCredentialsProviderChain.builder()
     .addCredentialsProvider(EnvironmentVariableCredentialsProvider.create())
     .addCredentialsProvider(ProfileCredentialsProvider.create("membership"))
-    .addCredentialsProvider(ProfileCredentialsProvider.create())
-    .addCredentialsProvider(InstanceProfileCredentialsProvider.create())
     .build()
 
-  val dynamoDb = DynamoDbClient.builder()
-    .credentialsProvider(chain)
+  private val dynamoDb = DynamoDbClient.builder()
+    .credentialsProvider(providerChain)
     .region(Region.EU_WEST_1)
     .build()
 
-//  private val dynamoDb = DynamoDbClient.builder().region(Region.EU_WEST_1).endpointDiscoveryEnabled(true).build()
   private val scanamo: Scanamo = Scanamo(dynamoDb)
   private val table: Table[ConversionData] = Table("fixer-io-cache")
 

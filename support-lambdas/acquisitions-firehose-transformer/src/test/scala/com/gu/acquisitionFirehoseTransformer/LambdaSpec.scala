@@ -3,7 +3,6 @@ package com.gu.acquisitionFirehoseTransformer
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 
-import com.gu.support.acquisitions
 import com.gu.support.acquisitions.models._
 import com.amazonaws.services.lambda.runtime.events.KinesisFirehoseEvent
 
@@ -12,7 +11,7 @@ import org.joda.time.DateTime
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.zuora.api.ReaderType
 import java.nio.ByteBuffer
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import com.gu.acquisitionsValueCalculatorClient.model.AcquisitionModel
 import scala.concurrent.ExecutionContext
 
