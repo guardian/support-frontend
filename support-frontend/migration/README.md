@@ -11,6 +11,7 @@ All files should replace any existing versions of the same file in their destina
 - Files in /scripts belong in support-frontend/support-frontend/scripts
 - Files in /workflows belong in support-frontend/.github/workflows
 - Files in /.storybook belong in support-frontend/support-frontend/.storybook
+- Files in /gitHooks should be ignored for now
 - All other files belong in support-frontend/support-frontend
 
 ### Running the migration script
@@ -31,11 +32,11 @@ There are a few manual syntax fixes that need to be applied:
 
 ### Automated fixing
 
-After the migration the code will have some formatting issues and many linting errors. The former can be fixed by running `yarn prettier:fix` to apply Prettier formatting to the new Typescript files.
+After the migration the code will have some formatting issues and many linting errors. The former can be fixed by running `yarn prettier:fix` to apply Prettier formatting to the new Typescript files, and a portion of the latter by running `yarn lint:fix`. Make sure to commit **before** running each of these steps, to have a clean state to revert to in case of any issues.
 
-It is not recommended to run an ESLint fix at this point, as it seems to introduce many new problems that mean the code no longer builds. These errors can instead be dealt with over the longer term.
+### Documenting type errors
 
-<!-- TODO:### Documenting type errors -->
+To begin with we will not be running type checking at build time, as there are too many errors to fix without requiring a long code freeze. However we do need to document TS compilation errors so we can gradually work through these and fix them. To generate a log of all errors and the files they arise in, run `node scripts/ts-log-errors.js`.
 
 ## Post-migration checks
 
@@ -44,6 +45,12 @@ It is not recommended to run an ESLint fix at this point, as it seems to introdu
 3. Run the site and Storybook locally with `devrun.sh` and check that they load and behave as expected
 
 After this we can move on to testing on CODE.
+
+## After deployment
+
+*After* the code has been built, checked thoroughly on CODE, and deployed to production without issues, we can introduce the git hook that will lint staged files and re-create the TS error log whenever Typescript files have changed in a commit. Installing the new dependencies should have created a .husky folder in the support-frontend sub-folder. If this directory is not present, [follow these steps](https://typicode.github.io/husky/#/?id=manual) to install Husky manually. Move the `pre-commit` file from /gitHooks in this folder to the .husky folder.
+
+To check that it's working, make a small change to a .ts/.tsx file, and commit it. The hook should re-run the ts-log-errors script, and run ESLint on *only* the changed file(s).
 
 ## Tooling adjustments
 
