@@ -19,8 +19,8 @@ object GBPConversionServiceImpl extends GBPConversionService {
   private case class ConversionData(base: String, eventDate: String, rates: Map[String,Float])
 
   private val providerChain = AwsCredentialsProviderChain.builder()
-    .addCredentialsProvider(EnvironmentVariableCredentialsProvider.create())
-    .addCredentialsProvider(ProfileCredentialsProvider.create("membership"))
+    .addCredentialsProvider(EnvironmentVariableCredentialsProvider.create())  // For running in lambda
+    .addCredentialsProvider(ProfileCredentialsProvider.create("membership"))  // For running locally
     .build()
 
   private val dynamoDb = DynamoDbClient.builder()
