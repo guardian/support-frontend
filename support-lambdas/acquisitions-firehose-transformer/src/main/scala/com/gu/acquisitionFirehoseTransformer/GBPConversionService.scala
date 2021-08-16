@@ -6,6 +6,7 @@ import org.joda.time.format.ISODateTimeFormat
 import org.scanamo.generic.auto._
 import org.scanamo.syntax._
 import org.scanamo.{Scanamo, Table}
+import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 
 trait GBPConversionService {
@@ -15,7 +16,7 @@ trait GBPConversionService {
 object GBPConversionServiceImpl extends GBPConversionService {
   private case class ConversionData(base: String, eventDate: String, rates: Map[String,Float])
 
-  private val dynamoDb = DynamoDbClient.builder().build()
+  private val dynamoDb = DynamoDbClient.builder().region(Region.EU_WEST_1).build()
   private val scanamo: Scanamo = Scanamo(dynamoDb)
   private val table: Table[ConversionData] = Table("fixer-io-cache")
 
