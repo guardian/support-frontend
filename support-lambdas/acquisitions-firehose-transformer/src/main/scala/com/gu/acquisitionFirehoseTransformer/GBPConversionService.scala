@@ -12,7 +12,7 @@ trait GBPConversionService {
   def convert(currency: Currency, amount: Double, dateTime: DateTime): Either[String,Double]
 }
 
-class GBPConversionServiceImpl() extends GBPConversionService {
+object GBPConversionServiceImpl extends GBPConversionService {
   private case class ConversionData(base: String, eventDate: String, rates: Map[String,Float])
 
   private val dynamoDb = DynamoDbClient.builder().build()

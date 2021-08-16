@@ -20,7 +20,7 @@ case class AcquisitionWithRecordId(val acquisition: AcquisitionDataRow, recordId
 object Lambda extends LazyLogging {
 
   def handler(event: KinesisFirehoseEvent): KinesisAnalyticsInputPreprocessingResponse = {
-    processEvent(event, new AnnualisedValueServiceImpl(), new GBPConversionServiceImpl())
+    processEvent(event, new AnnualisedValueServiceImpl(), GBPConversionServiceImpl)
   }
 
   def processEvent(
