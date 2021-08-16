@@ -9,6 +9,7 @@ import { List, ListWithSubText } from 'components/list/list';
 import Tabs from 'components/tabs/tabs';
 import Quote from 'components/quote/quote';
 import BlockLabel from 'components/blockLabel/blockLabel';
+import InteractiveTable from 'components/interactiveTable/interactiveTable';
 
 const stories = storiesOf('Content components', module)
   .addDecorator(withKnobs({
@@ -115,3 +116,5 @@ stories.add('Quote', () => {
 });
 
 stories.add('Block label', () => <BlockLabel>Use this for stand-out labels on other content</BlockLabel>);
+
+stories.add('Interactive table', () => <InteractiveTable />);
