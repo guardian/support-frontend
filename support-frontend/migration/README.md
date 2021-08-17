@@ -46,11 +46,26 @@ To begin with we will not be running type checking at build time, as there are t
 
 After this we can move on to testing on CODE.
 
+<!--TODO: ## Testing and deployment -->
 ## After deployment
+
+### Git hooks
 
 *After* the code has been built, checked thoroughly on CODE, and deployed to production without issues, we can introduce the git hook that will lint staged files and re-create the TS error log whenever Typescript files have changed in a commit. Installing the new dependencies should have created a .husky folder in the support-frontend sub-folder. If this directory is not present, [follow these steps](https://typicode.github.io/husky/#/?id=manual) to install Husky manually. Move the `pre-commit` file from /gitHooks in this folder to the .husky folder.
 
 To check that it's working, make a small change to a .ts/.tsx file, and commit it. The hook should re-run the ts-log-errors script, and run ESLint on *only* the changed file(s).
+
+### GitHub Actions
+
+The 'Typescript Monitor' action should be enabled now that the workflow file has been added at the root of the monorepo. Once the migration has been merged, we can now update the repo settings on GitHub to make this a required check, to ensure that any PRs which increase the amount of type/lint errors cannot be merged.
+
+### Error-busting
+
+The `typescript-errors.json` file generated when following the 'Documenting type errors' step above should serve as a guide to help us work through and reduce the amount of errors in the codebase. It groups errors by code, listing the file path where the error arises, with a summary at the top of the file listing the quantity of errors for each code. Once the git hook is correctly installed this file should be updated on every commit that involves Typescript changes.
+
+We should aim to steadily reduce the quantity of errors over time, both in the course of normal work and by specifically raising PRs to fix errors. The summary should help with identifying outstanding groups of similar errors to work on.
+
+Once all TSC and lint errors arising from the migration have been dealt with we can modify the pre-commit git hook and re-introduce a lint and compile check into the `build-tc` file, to ensure that future errors will break the build.
 
 ## Tooling adjustments
 
