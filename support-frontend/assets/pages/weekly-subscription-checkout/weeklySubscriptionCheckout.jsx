@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { init as pageInit } from 'helpers/page/page';
+import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
@@ -36,6 +36,9 @@ import { FocusStyleManager } from '@guardian/src-utilities';
 
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
+// Set up tracking and consents for stateful pages
+setUpTrackingAndConsents();
+
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod: WeeklyBillingPeriod =
@@ -56,7 +59,7 @@ const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(
   Domestic, // TODO: we need to work this out from the country
 );
 
-const store = pageInit(
+const store = getReduxState(
   reducer,
   true,
 );

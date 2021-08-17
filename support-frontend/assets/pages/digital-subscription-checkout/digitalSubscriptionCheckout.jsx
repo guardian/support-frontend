@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { init as pageInit } from 'helpers/page/page';
+import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
@@ -53,6 +53,9 @@ function getInitialBillingPeriod(periodInUrl?: string): DigitalBillingPeriod | D
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod = getInitialBillingPeriod(billingPeriodInUrl || '');
 
+// Set up tracking and consents for stateful pages
+setUpTrackingAndConsents();
+
 const reducer = (commonState: CommonState) => createCheckoutReducer(
   commonState.internationalisation.countryId,
   DigitalPack,
@@ -60,7 +63,7 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
   null, null, null,
 );
 
-const store = pageInit(reducer, true);
+const store = getReduxState(reducer, true);
 
 const { countryGroupId, countryId } = store.getState().common.internationalisation;
 const { orderIsAGift, productPrices } = store.getState().page.checkout;
