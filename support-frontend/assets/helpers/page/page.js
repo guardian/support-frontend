@@ -122,24 +122,22 @@ function storeEnhancer(thunk: boolean) {
     : undefined;
 
 }
+
+const countryId: IsoCountry = detectCountry();
+const countryGroupId: CountryGroupId = detectCountryGroup();
+const settings = getSettings();
+const participations: Participations = abTest.init(countryId, countryGroupId, settings);
+const acquisitionData = getReferrerAcquisitionData();
+
 /* eslint-enable no-underscore-dangle */
 
 // Initialises the page.
-function init<S, A>(
+function getReduxState<S, A>(
   pageReducer?: CommonState => Reducer<S, A> | null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
   try {
-    const countryId: IsoCountry = detectCountry();
-    consentInitialisation(countryId);
-
-    const acquisitionData = getReferrerAcquisitionData();
-
-    const settings = getSettings();
-    const countryGroupId: CountryGroupId = detectCountryGroup();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);
-    const participations: Participations = abTest.init(countryId, countryGroupId, settings);
-    analyticsInitialisation(participations, acquisitionData);
 
     const initialState: CommonState = buildInitialState(
       participations,
@@ -149,6 +147,7 @@ function init<S, A>(
       settings,
       acquisitionData,
     );
+
     const commonReducer = createCommonReducer(initialState);
 
     const store = createStore(
@@ -163,9 +162,15 @@ function init<S, A>(
   }
 }
 
+// For pages that need Redux.
+function setUpTrackingAndConsents() {
+  consentInitialisation(countryId);
+  analyticsInitialisation(participations, acquisitionData);
+}
 
 // ----- Exports ----- //
 
 export {
-  init,
+  getReduxState,
+  setUpTrackingAndConsents,
 };
