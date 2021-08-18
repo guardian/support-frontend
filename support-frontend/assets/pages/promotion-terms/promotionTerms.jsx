@@ -3,7 +3,7 @@
 import { renderPage } from 'helpers/rendering/render';
 import React from 'react';
 import './promotionTerms.scss';
-import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { DigitalPack, GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { State } from './promotionTermsReducer';
@@ -21,7 +21,7 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-const store = getReduxState(() => reducer, true);
+const store = initRedux(() => reducer, true);
 
 function getTermsConditionsLink({ product }: PromotionTerms) {
   if (product === DigitalPack) {

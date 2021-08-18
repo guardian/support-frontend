@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
@@ -63,7 +63,7 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
   null, null, null,
 );
 
-const store = getReduxState(reducer, true);
+const store = initRedux(reducer, true);
 
 const { countryGroupId, countryId } = store.getState().common.internationalisation;
 const { orderIsAGift, productPrices } = store.getState().page.checkout;

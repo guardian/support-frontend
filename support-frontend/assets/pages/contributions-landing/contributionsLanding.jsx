@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
-import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import {
   type CountryGroupId,
@@ -43,7 +43,7 @@ setUpTrackingAndConsents();
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = getReduxState(() => initReducer(), true);
+const store = initRedux(() => initReducer(), true);
 
 if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({

@@ -132,7 +132,7 @@ const acquisitionData = getReferrerAcquisitionData();
 /* eslint-enable no-underscore-dangle */
 
 // Initialises the page.
-function getReduxState<S, A>(
+function initRedux<S, A>(
   pageReducer?: CommonState => Reducer<S, A> | null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
@@ -162,7 +162,6 @@ function getReduxState<S, A>(
   }
 }
 
-// For pages that need Redux.
 function setUpTrackingAndConsents() {
   consentInitialisation(countryId);
   analyticsInitialisation(participations, acquisitionData);
@@ -171,6 +170,6 @@ function setUpTrackingAndConsents() {
 // ----- Exports ----- //
 
 export {
-  getReduxState,
+  initRedux,
   setUpTrackingAndConsents,
 };

@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
@@ -59,7 +59,7 @@ const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(
   Domestic, // TODO: we need to work this out from the country
 );
 
-const store = getReduxState(
+const store = initRedux(
   reducer,
   true,
 );

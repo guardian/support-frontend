@@ -7,7 +7,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
@@ -28,7 +28,7 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-const store = getReduxState();
+const store = initRedux();
 
 const { countryGroupId } = store.getState().common.internationalisation;
 

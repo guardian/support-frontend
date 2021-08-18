@@ -4,7 +4,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
@@ -22,7 +22,7 @@ import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYou
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
-const store = getReduxState(reducer, true);
+const store = initRedux(reducer, true);
 
 const state = store.getState();
 const { countryGroupId } = state.common.internationalisation;

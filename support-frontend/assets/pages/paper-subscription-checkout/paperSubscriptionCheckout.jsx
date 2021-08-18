@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { getReduxState, setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
@@ -46,7 +46,7 @@ const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(
 );
 
 
-const store = getReduxState(
+const store = initRedux(
   reducer,
   true,
 );
