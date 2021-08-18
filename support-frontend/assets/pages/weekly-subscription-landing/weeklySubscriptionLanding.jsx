@@ -22,7 +22,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { renderPage } from 'helpers/rendering/render';
 import { routes, promotionTermsUrl } from 'helpers/urls/routes';
-import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';

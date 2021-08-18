@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 
 import ErrorPage from './components/errorPage';
