@@ -123,12 +123,6 @@ function storeEnhancer(thunk: boolean) {
 
 }
 
-const countryId: IsoCountry = detectCountry();
-const countryGroupId: CountryGroupId = detectCountryGroup();
-const settings = getSettings();
-const participations: Participations = abTest.init(countryId, countryGroupId, settings);
-const acquisitionData = getReferrerAcquisitionData();
-
 /* eslint-enable no-underscore-dangle */
 
 // Initialises the page.
@@ -137,7 +131,12 @@ function initRedux<S, A>(
   thunk?: boolean = false,
 ): Store<*, *, *> {
   try {
+    const countryId: IsoCountry = detectCountry();
+    const countryGroupId: CountryGroupId = detectCountryGroup();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);
+    const settings = getSettings();
+    const participations: Participations = abTest.init(countryId, countryGroupId, settings);
+    const acquisitionData: ReferrerAcquisitionData = getReferrerAcquisitionData();
 
     const initialState: CommonState = buildInitialState(
       participations,
@@ -163,6 +162,12 @@ function initRedux<S, A>(
 }
 
 function setUpTrackingAndConsents() {
+  const countryId: IsoCountry = detectCountry();
+  const countryGroupId: CountryGroupId = detectCountryGroup();
+  const settings = getSettings();
+  const participations: Participations = abTest.init(countryId, countryGroupId, settings);
+  const acquisitionData = getReferrerAcquisitionData();
+
   consentInitialisation(countryId);
   analyticsInitialisation(participations, acquisitionData);
 }
