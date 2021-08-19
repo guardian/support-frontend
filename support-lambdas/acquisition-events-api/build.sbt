@@ -7,7 +7,7 @@ description:= "A lambda for acquisitions events api"
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
   "com.amazonaws" % "aws-lambda-java-events" % "2.2.4",
-  "com.amazonaws" % "aws-java-sdk-ssm" % AWSJavaSDKVersion,
+  "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "ch.qos.logback" % "logback-classic" % "1.1.7",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "io.circe" %% "circe-core" % circeVersion,
