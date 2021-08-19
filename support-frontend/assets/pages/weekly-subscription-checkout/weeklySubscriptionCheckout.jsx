@@ -36,7 +36,6 @@ import { FocusStyleManager } from '@guardian/src-utilities';
 
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 
-// Set up tracking and consents for stateful pages
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //

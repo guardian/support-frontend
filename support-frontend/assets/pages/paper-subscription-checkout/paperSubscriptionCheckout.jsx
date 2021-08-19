@@ -28,7 +28,6 @@ import { Paper } from 'helpers/productPrice/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import { FocusStyleManager } from '@guardian/src-utilities';
 
-// Set up tracking and consents for stateful pages
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //

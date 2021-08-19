@@ -18,7 +18,6 @@ import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
 import MarketingConsent from './marketingConsentContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
 
-// Set up tracking and consents for stateful pages
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //

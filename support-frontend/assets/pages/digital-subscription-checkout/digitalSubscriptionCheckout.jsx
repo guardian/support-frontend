@@ -53,7 +53,6 @@ function getInitialBillingPeriod(periodInUrl?: string): DigitalBillingPeriod | D
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod = getInitialBillingPeriod(billingPeriodInUrl || '');
 
-// Set up tracking and consents for stateful pages
 setUpTrackingAndConsents();
 
 const reducer = (commonState: CommonState) => createCheckoutReducer(

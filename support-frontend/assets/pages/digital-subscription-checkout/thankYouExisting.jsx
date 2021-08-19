@@ -23,7 +23,6 @@ import ThankYouContent from './components/thankYou/hero';
 
 import './digitalSubscriptionCheckout.scss';
 
-// Set up tracking and consents for stateful pages
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //

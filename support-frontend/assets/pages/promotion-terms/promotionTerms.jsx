@@ -16,7 +16,6 @@ import PromoDetails from 'pages/promotion-terms/promoDetails';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import { detect } from 'helpers/internationalisation/countryGroup';
 
-// Set up tracking and consents for stateful pages
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //

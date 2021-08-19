@@ -36,7 +36,6 @@ if (!isDetailsSupported) {
   polyfillDetails();
 }
 
-// Set up tracking and consents for stateful pages
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
