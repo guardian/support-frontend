@@ -23,7 +23,7 @@ import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
-import { ContributionFormContainer } from './components/ContributionFormContainer';
+import { ContributionFormContainer, EmptyContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
 import { setUserStateActions } from './setUserStateActions';
@@ -101,7 +101,7 @@ const contributionsLandingPage = (campaignCodeParameter: ?string) => (
     footer={<ContributionsFooter />}
     backgroundImageSrc={backgroundImageSrc}
   >
-    <ContributionFormContainer
+    <EmptyContributionFormContainer
       thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       campaignCodeParameter={campaignCodeParameter}
     />

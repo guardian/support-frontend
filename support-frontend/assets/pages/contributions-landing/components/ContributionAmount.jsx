@@ -18,7 +18,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { formatAmount } from 'helpers/forms/checkouts';
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { type State } from '../contributionsLandingReducer';
-import ContributionAmountChoices from './ContributionAmountChoices';
+import { ContributionAmountChoices, EmptyContributionAmountChoices } from './ContributionAmountChoices';
 import { TextInput } from '@guardian/src-text-input';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 
@@ -149,11 +149,7 @@ function withoutProps() {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
-      <ul className="form__radio-group-list">
-        {
-          ['a', 'b', 'c', 'd'].map(renderEmptyAmount)
-        }
-      </ul>
+      <EmptyContributionAmountChoices />
     </fieldset>
   );
 }

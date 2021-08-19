@@ -15,6 +15,7 @@ import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
 import ContributionAmountChoicesChoiceLabel from './ContributionAmountChoicesChoiceLabel';
 import { from, until } from '@guardian/src-foundations/mq';
 import { css } from '@emotion/core';
+import {connect} from "react-redux";
 
 const choiceCardGroupOverrides = css`
   > div {
@@ -72,7 +73,7 @@ const isSelected = (
   return amount === defaultAmount;
 };
 
-const ContributionAmountChoices = (props: ContributionAmountChoicesProps) =>
+const withProps = (props: ContributionAmountChoicesProps) =>
   (props.shouldShowFrequencyButtons ? (
     <ContributionAmountChoicesTwoColumnAfterMobile {...props} />
   ) : (
@@ -183,4 +184,13 @@ const ContributionAmountChoicesTwoColumnAfterMobile = ({
   </ChoiceCardGroup>
 );
 
-export default ContributionAmountChoices;
+const withoutProps = () => (
+  <ChoiceCardGroup name="amounts" css={choiceCardGroupOverrides}>
+    <ChoiceCard />
+    <ChoiceCard />
+    <ChoiceCard />
+  </ChoiceCardGroup>
+)
+
+export const ContributionAmountChoices = withProps;
+export const EmptyContributionAmountChoices = withoutProps;

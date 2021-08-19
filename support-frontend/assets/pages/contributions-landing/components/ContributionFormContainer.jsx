@@ -99,8 +99,6 @@ function withProps(props: PropTypes) {
     ...campaignCopy || {},
   };
 
-  const showSecureTransactionIndicator = () => <SecureTransactionIndicator modifierClasses={['top']} />;
-
   if (props.paymentComplete) {
     // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
     // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
@@ -139,7 +137,7 @@ function withProps(props: PropTypes) {
       )}
 
       <div className="gu-content__form">
-        {showSecureTransactionIndicator()}
+        <SecureTransactionIndicator modifierClasses={['top']} />
 
         {props.canShowTicker && campaignSettings && campaignSettings.tickerSettings ?
           <ContributionTicker
@@ -173,13 +171,13 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-      <div className="gu-content__blurb">
-        <div className="gu-content__blurb-header-container">
-          <h1 className="gu-content__blurb-header">{defaultHeaderCopy}</h1>
-        </div>
-      </div>
+      <ContributionFormBlurb
+        headerCopy={defaultHeaderCopy}
+        bodyCopy={defaultContributeCopy}
+      />
 
       <div className="gu-content__form">
+        <SecureTransactionIndicator modifierClasses={['top']} />
         <EmptyContributionForm />
       </div>
     </div>

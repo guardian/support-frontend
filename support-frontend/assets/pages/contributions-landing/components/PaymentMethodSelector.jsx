@@ -291,25 +291,18 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
-      <legend className="form__legend">Payment method</legend>
-      <ul className="form__radio-group-list">
-        {[Stripe, PayPal, DirectDebit].map(paymentMethod => (
-          <li className="form__radio-group-item">
-            <input
-              id={`paymentMethodSelector-${paymentMethod}`}
-              className="form__radio-group-input"
-              name="paymentMethodSelector"
-              type="radio"
-              value={paymentMethod}
-            />
-            <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
-              <span className="radio-ui" />
-              <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
-              {getPaymentMethodLogo(paymentMethod)}
-            </label>
-          </li>
-          ))}
-      </ul>
+      {legend}
+      <RadioGroup className="form__radio-group-list">
+        {[Stripe, PayPal].map(paymentMethod => (
+          <Radio
+            id={`paymentMethodSelector-${paymentMethod}`}
+            name="paymentMethodSelector"
+            type="radio"
+            label={renderLabelAndLogo(paymentMethod)}
+            cssOverrides={radioCss}
+          />
+        ))}
+      </RadioGroup>
     </fieldset>
   );
 

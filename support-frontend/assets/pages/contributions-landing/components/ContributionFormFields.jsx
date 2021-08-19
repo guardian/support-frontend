@@ -156,34 +156,12 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <div className="form-fields">
-      <ContributionTextInput
+      <TextInput
         id="contributionEmail"
-        name="contribution-email"
         label="Email address"
         type="email"
-        placeholder="example@domain.com"
-        icon={<SvgEnvelope />}
-        disabled
-        errorMessage={null}
+        supporting="example@domain.com"
       />
-      <div>
-        <ContributionTextInput
-          id="contributionFirstName"
-          name="contribution-fname"
-          label="First name"
-          icon={<SvgUser />}
-          disabled
-          errorMessage={null}
-        />
-        <ContributionTextInput
-          id="contributionLastName"
-          name="contribution-lname"
-          label="Last name"
-          icon={<SvgUser />}
-          disabled
-          errorMessage={null}
-        />
-      </div>
     </div>
   );
 }

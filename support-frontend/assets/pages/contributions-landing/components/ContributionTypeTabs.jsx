@@ -100,40 +100,6 @@ function withProps(props: PropTypes) {
     </ChoiceCardGroup>
   );
 
-  /* eslint-disable no-unused-vars */
-  // leaving in place as this is still in active development:
-  const renderControl = () => (
-    <ul className="form__radio-group-list form__radio-group-list--border">
-      {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
-        const { contributionType } = contributionTypeSetting;
-        return (
-          <li className="form__radio-group-item">
-            <input
-              id={`contributionType-${contributionType}`}
-              className="form__radio-group-input"
-              type="radio"
-              name="contributionType"
-              value={contributionType}
-              onChange={() =>
-                props.onSelectContributionType(
-                  contributionType,
-                  props.switches,
-                  props.countryId,
-                  props.countryGroupId,
-                  props.useLocalCurrency,
-                )
-              }
-              checked={props.contributionType === contributionType}
-            />
-            <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
-              {toHumanReadableContributionType(contributionType)}
-            </label>
-          </li>);
-      })}
-    </ul>
-  );
-  /* eslint-enable no-unused-vars */
-
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return null;
   }
@@ -150,21 +116,14 @@ function withoutProps() {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      <ul className="form__radio-group-list form__radio-group-list--border">
-        {
-          ['a', 'b', 'c'].map(id => (
-            <li className="form__radio-group-item">
-              <input
-                id={`contributionType-${id}`}
-                className="form__radio-group-input"
-                type="radio"
-                name="contributionType"
-              />
-              <label htmlFor={`contributionType-${id}`} className="form__radio-group-label">&nbsp;</label>
-            </li>
-            ))
-        }
-      </ul>
+      <ChoiceCardGroup
+        name="contributionTypes"
+        orientation="horizontal"
+      >
+        <ChoiceCard checked={false} />
+        <ChoiceCard checked={false} />
+        <ChoiceCard checked={false} />
+      </ChoiceCardGroup>
     </fieldset>
   );
 }

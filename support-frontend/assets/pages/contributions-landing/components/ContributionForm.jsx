@@ -368,10 +368,12 @@ function withProps(props: PropTypes) {
 
 function withoutProps() {
   return (
-    <form className={classNameWithModifiers('form', ['contribution'])}>
+    <form className={classNameWithModifiers('form', ['contribution', 'with-labels'])}>
       <div>
-        <EmptyContributionTypeTabs />
-        <EmptyContributionAmount />
+        <div className="contributions-form-selectors">
+          <EmptyContributionTypeTabs />
+          <EmptyContributionAmount />
+        </div>
         <div className={classNameWithModifiers('form', ['content'])}>
           <EmptyContributionFormFields />
           <EmptyPaymentMethodSelector />
