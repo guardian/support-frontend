@@ -50,6 +50,7 @@ assemblyMergeStrategy in assembly := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case "mime.types" => MergeStrategy.first
   case str if str.contains("simulacrum") => MergeStrategy.first
+  case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
   case y =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)
@@ -63,6 +64,7 @@ assemblyMergeStrategy in (IntegrationTest, assembly) := {
   case x if x.endsWith("logback.xml") => MergeStrategy.first
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case "mime.types" => MergeStrategy.first
+  case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
   case y =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)
