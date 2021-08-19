@@ -8,13 +8,26 @@ import { EmptyContributionFormContainer } from './components/ContributionFormCon
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+
 /**
  * This must be in a separate file (not contributionsLanding.jsx) because we do not want to initialise the redux store
  */
 export function EmptyContributionsLandingPage() {
+
+  // const key = "foo";
+  // const cache = createCache({ key });
+  // let cssText = "";
+  // cache.sheet.insert = (rule) => {
+  //   cssText += rule;
+  // };
+
   return (
     <Page header={<RoundelHeader selectedCountryGroup={countryGroups.GBPCountries} />}>
-      <EmptyContributionFormContainer />
+      {/*<CacheProvider value={cache}>*/}
+        <EmptyContributionFormContainer />
+      {/*</CacheProvider>*/}
     </Page>
   );
 }

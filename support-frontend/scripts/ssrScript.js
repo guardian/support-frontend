@@ -40,6 +40,7 @@ const { ssrPages } = require('../public/compiled-assets/javascripts/ssrPages').S
 ssrPages.pages.forEach((page) => {
   const { filename, html } = page;
   console.log(`Writing ${filename}`);
+  console.log(html)
 
   writeFileSync(
     resolve(__dirname, '..', 'conf/ssr-cache/', `${filename}`),
