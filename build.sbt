@@ -211,7 +211,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
     scalacOptions += "-Ymacro-annotations",
     libraryDependencies ++= Seq(
       "com.gu" %% "ophan-event-model" % "0.0.23" excludeAll ExclusionRule(organization = "com.typesafe.play"),
-      "com.gu" %% "fezziwig" % "1.4",
+      "com.gu" %% "fezziwig" % "1.5",
       "com.typesafe.play" %% "play-json" % "2.7.4",
       "io.circe" %% "circe-core" % "0.12.1",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
