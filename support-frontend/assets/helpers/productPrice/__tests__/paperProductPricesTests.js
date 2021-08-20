@@ -1,7 +1,9 @@
 // @flow
 
 // ----- Imports ----- //
-import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
+import { getMaxSavingVsRetail, getProductPrice } from 'helpers/productPrice/paperProductPrices';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 const productPrices = {
   'United Kingdom': {
@@ -162,7 +164,14 @@ const productPrices = {
       },
     },
   },
+  // No fulfilment options
 };
+
+const homeDelivery: FulfilmentOptions = 'HomeDelivery';
+// const noFulfilmentOptions: FulfilmentOptions = 'NoFulfilmentOptions';
+
+const weekend: ProductOptions = 'Weekend';
+// const noProductOptions: ProductOptions = 'NoProductOptions';
 
 // ----- Tests ----- //
 
@@ -173,6 +182,33 @@ describe('getMaxSavingVsRetail', () => {
 
   it('should return the maximum savings for a fulfilment option vs retail', () => {
     expect(getMaxSavingVsRetail(productPrices)).toEqual(29);
+  });
+
+});
+
+describe('getProductPrice', () => {
+
+  it('should return product price details if valid fulfilment and product options are provided', () => {
+    expect(getProductPrice(productPrices, homeDelivery, weekend)).toEqual({
+      currency: 'GBP',
+      fixedTerm: false,
+      price: 25.09,
+      promotions: [],
+      savingVsRetail: 2,
+    });
+
+    // it('should...', () => {
+    // expect(getProductPrice(productPrices, homeDelivery, noProductOptions)).toEqual();
+    // });
+
+    // it('should...', () => {
+    // expect(getProductPrice(productPrices, noFulfilmentOptions, sunday)).toEqual();
+    // });
+
+    // it('should...', () => {
+    // expect(getProductPrice(productPrices, noFulfilmentOptions, noProductOptions)).toEqual();
+    // });
+
   });
 
 });
