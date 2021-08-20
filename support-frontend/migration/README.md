@@ -46,7 +46,14 @@ To begin with we will not be running type checking at build time, as there are t
 
 After this we can move on to testing on CODE.
 
-<!--TODO: ## Testing and deployment -->
+## Testing and deployment
+
+Once the working, migrated build is up on CODE, we can work through [this testing spreadsheet](https://docs.google.com/spreadsheets/d/1PHSXsfVOj8KK-mKpCCizHKjiy6wMdga4B4Axk4xNzJ0/edit?usp=sharing) as a group to verify that everything on the site looks and behaves as expected, and that the all the checkouts function as normal.
+
+Any critical bugs discovered at this stage will need to be prioritised to fix as soon as possible (bugs that do not affect core functionality may be triaged according to their severity and fixed after the migration is merged). Bug fix branches should be made off of the base migration branch and merged back into it, rather than created in relation to `main`.
+
+Once we're satisfied that there are no further issues and everything is functioning as normal, we can deploy to production. At this point it would be a good idea to inform stakeholders and User Help that we're doing so, in case of any issues or bugs that we haven't caught at the testing stage.
+
 ## After deployment
 
 ### Git hooks
