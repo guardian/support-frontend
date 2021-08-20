@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
-import { init as pageInit } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import {
   type CountryGroupId,
@@ -36,11 +36,13 @@ if (!isDetailsSupported) {
   polyfillDetails();
 }
 
+setUpTrackingAndConsents();
+
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(() => initReducer(), true);
+const store = initRedux(() => initReducer(), true);
 
 if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({

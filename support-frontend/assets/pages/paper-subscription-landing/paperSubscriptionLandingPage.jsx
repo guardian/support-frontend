@@ -17,7 +17,7 @@ import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
-import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 
 import PaperHero from './components/hero/hero';
 import Tabs from './components/tabs';
