@@ -1,7 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-import { getMaxSavingVsRetail, getProductPrice } from 'helpers/productPrice/paperProductPrices';
+import { getMaxSavingVsRetail, getProductPrice, finalPrice } from 'helpers/productPrice/paperProductPrices';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
@@ -171,6 +171,7 @@ const homeDelivery: FulfilmentOptions = 'HomeDelivery';
 // const noFulfilmentOptions: FulfilmentOptions = 'NoFulfilmentOptions';
 
 const weekend: ProductOptions = 'Weekend';
+const sunday: ProductOptions = 'Sunday';
 // const noProductOptions: ProductOptions = 'NoProductOptions';
 
 // ----- Tests ----- //
@@ -209,6 +210,20 @@ describe('getProductPrice', () => {
     // expect(getProductPrice(productPrices, noFulfilmentOptions, noProductOptions)).toEqual();
     // });
 
+  });
+
+});
+
+describe('finalPrice', () => {
+  it('should return the final price with any discounts applied', () => {
+    expect(finalPrice(productPrices, homeDelivery, sunday)).toEqual({
+      currency: 'GBP',
+      fixedTerm: false,
+      price: 6.99,
+      promotions: [{
+        description: 'an example promotion', introductoryPrice: { periodLength: 3, periodType: 'issue', price: 6.99 }, name: 'examplePromo', promoCode: 1234,
+      }],
+    });
   });
 
 });
