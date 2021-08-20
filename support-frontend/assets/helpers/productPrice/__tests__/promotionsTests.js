@@ -1,4 +1,4 @@
-import { getPromotionCopy } from '../promotions';
+import { getPromotionCopy, hasDiscount } from '../promotions';
 
 const sanitisablePromotionCopy = {
   title: 'The Guardian Weekly',
@@ -24,5 +24,16 @@ describe('getPromotionCopy', () => {
     expect(getPromotionCopy(sanitisablePromotionCopy).roundel).toEqual('<strong>Save <em>25%</em> for a year!</strong>');
 
   });
-
 });
+
+describe('hasDiscount', () => {
+  it('should cope with all the possible values for promotion.discountPrice', () => {
+    expect(hasDiscount(null)).toEqual(false);
+    expect(hasDiscount(undefined)).toEqual(false);
+    expect(hasDiscount({})).toEqual(false);
+    expect(hasDiscount({ discountedPrice: null })).toEqual(false);
+    expect(hasDiscount({ discountedPrice: 50 })).toEqual(true);
+    expect(hasDiscount({ discountedPrice: 0 })).toEqual(true);
+  });
+});
+
