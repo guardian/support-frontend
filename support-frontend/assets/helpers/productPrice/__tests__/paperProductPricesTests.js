@@ -1,7 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-import { getMaxSavingVsRetail, getProductPrice, finalPrice } from 'helpers/productPrice/paperProductPrices';
+import { getMaxSavingVsRetail, getProductPrice, finalPrice, getPriceWithDiscount } from 'helpers/productPrice/paperProductPrices';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
@@ -197,26 +197,42 @@ describe('getProductPrice', () => {
       promotions: [],
       savingVsRetail: 2,
     });
+  });
 
-    // it('should...', () => {
-    // expect(getProductPrice(productPrices, homeDelivery, noProductOptions)).toEqual();
-    // });
 
-    // it('should...', () => {
-    // expect(getProductPrice(productPrices, noFulfilmentOptions, sunday)).toEqual();
-    // });
+  // it('should...', () => {
+  //   expect(getProductPrice(productPrices, homeDelivery, noProductOptions)).toEqual();
+  // });
 
-    // it('should...', () => {
-    // expect(getProductPrice(productPrices, noFulfilmentOptions, noProductOptions)).toEqual();
-    // });
+  // it('should...', () => {
+  //   expect(getProductPrice(productPrices, noFulfilmentOptions, sunday)).toEqual();
+  // });
 
+  // it('should...', () => {
+  //   expect(getProductPrice(productPrices)).toEqual();
+  // });
+
+});
+
+// as finalPrice and getPriceWithDiscount perform the same action
+// one will be removed and the related code updated in a subsequent PR
+describe('finalPrice', () => {
+  it('should return the final price with any discounts applied', () => {
+    expect(finalPrice(productPrices, homeDelivery, sunday)).toEqual({
+      currency: 'GBP',
+      fixedTerm: false,
+      price: 6.99,
+      promotions: [{
+        description: 'an example promotion', introductoryPrice: { periodLength: 3, periodType: 'issue', price: 6.99 }, name: 'examplePromo', promoCode: 1234,
+      }],
+    });
   });
 
 });
 
-describe('finalPrice', () => {
+describe('getPriceWithDiscount', () => {
   it('should return the final price with any discounts applied', () => {
-    expect(finalPrice(productPrices, homeDelivery, sunday)).toEqual({
+    expect(getPriceWithDiscount(productPrices, homeDelivery, sunday)).toEqual({
       currency: 'GBP',
       fixedTerm: false,
       price: 6.99,
