@@ -9,7 +9,7 @@ import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import PageSection from 'components/pageSection/pageSection';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { detect } from 'helpers/internationalisation/countryGroup';
 import { LinkButton } from '@guardian/src-button';

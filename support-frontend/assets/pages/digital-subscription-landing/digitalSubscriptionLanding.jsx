@@ -21,7 +21,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { routes } from 'helpers/urls/routes';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { setUpTrackingAndConsents } from 'helpers/page/statelessPage';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';

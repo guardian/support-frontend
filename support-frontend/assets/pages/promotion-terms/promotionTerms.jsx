@@ -3,7 +3,7 @@
 import { renderPage } from 'helpers/rendering/render';
 import React from 'react';
 import './promotionTerms.scss';
-import { init as pageInit } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { DigitalPack, GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { State } from './promotionTermsReducer';
@@ -16,9 +16,11 @@ import PromoDetails from 'pages/promotion-terms/promoDetails';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import { detect } from 'helpers/internationalisation/countryGroup';
 
+setUpTrackingAndConsents();
+
 // ----- Redux Store ----- //
 
-const store = pageInit(() => reducer, true);
+const store = initRedux(() => reducer, true);
 
 function getTermsConditionsLink({ product }: PromotionTerms) {
   if (product === DigitalPack) {

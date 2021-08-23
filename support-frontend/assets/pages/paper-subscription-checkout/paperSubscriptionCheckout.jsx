@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/rendering/render';
-import { init as pageInit } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
@@ -28,6 +28,8 @@ import { Paper } from 'helpers/productPrice/subscriptions';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import { FocusStyleManager } from '@guardian/src-utilities';
 
+setUpTrackingAndConsents();
+
 // ----- Redux Store ----- //
 
 const fulfilmentOption = getFulfilmentOption();
@@ -43,7 +45,7 @@ const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(
 );
 
 
-const store = pageInit(
+const store = initRedux(
   reducer,
   true,
 );
