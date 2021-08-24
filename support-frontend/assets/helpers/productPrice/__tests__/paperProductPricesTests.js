@@ -164,15 +164,12 @@ const productPrices = {
       },
     },
   },
-  // No fulfilment options
 };
 
 const homeDelivery: FulfilmentOptions = 'HomeDelivery';
-// const noFulfilmentOptions: FulfilmentOptions = 'NoFulfilmentOptions';
 
 const weekend: ProductOptions = 'Weekend';
 const sunday: ProductOptions = 'Sunday';
-// const noProductOptions: ProductOptions = 'NoProductOptions';
 
 // ----- Tests ----- //
 
@@ -180,15 +177,12 @@ jest.mock('ophan', () => {});
 
 
 describe('getMaxSavingVsRetail', () => {
-
   it('should return the maximum savings for a fulfilment option vs retail', () => {
     expect(getMaxSavingVsRetail(productPrices)).toEqual(29);
   });
-
 });
 
 describe('getProductPrice', () => {
-
   it('should return product price details if valid fulfilment and product options are provided', () => {
     expect(getProductPrice(productPrices, homeDelivery, weekend)).toEqual({
       currency: 'GBP',
@@ -198,20 +192,6 @@ describe('getProductPrice', () => {
       savingVsRetail: 2,
     });
   });
-
-
-  // it('should...', () => {
-  //   expect(getProductPrice(productPrices, homeDelivery, noProductOptions)).toEqual();
-  // });
-
-  // it('should...', () => {
-  //   expect(getProductPrice(productPrices, noFulfilmentOptions, sunday)).toEqual();
-  // });
-
-  // it('should...', () => {
-  //   expect(getProductPrice(productPrices)).toEqual();
-  // });
-
 });
 
 // as finalPrice and getPriceWithDiscount perform the same action
@@ -227,7 +207,6 @@ describe('finalPrice', () => {
       }],
     });
   });
-
 });
 
 describe('getPriceWithDiscount', () => {
@@ -241,5 +220,4 @@ describe('getPriceWithDiscount', () => {
       }],
     });
   });
-
 });
