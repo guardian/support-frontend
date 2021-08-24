@@ -38,14 +38,28 @@ exec(tscCmd, (error, stdout) => {
     return accumulator;
   }, {});
 
-  const errorCounts = Object.entries(typescriptErrors).reduce((counts, [errorCode, errorList]) => {
+  const byCode = Object.entries(typescriptErrors).reduce((counts, [errorCode, errorList]) => {
     // eslint-disable-next-line no-param-reassign
     counts[errorCode] = errorList.length;
     return counts;
   }, {});
 
+  const byPath = Object.values(typescriptErrors).flat(1).reduce((counts, errorInstance) => {
+    if (counts[errorInstance.path]) {
+      // eslint-disable-next-line no-param-reassign
+      counts[errorInstance.path] += 1;
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      counts[errorInstance.path] = 1;
+    }
+    return counts;
+  }, {})
+
   const fileContents = {
-    errorCounts,
+    errorCounts: {
+      byCode,
+      byPath,
+    },
     ...typescriptErrors,
   };
 
