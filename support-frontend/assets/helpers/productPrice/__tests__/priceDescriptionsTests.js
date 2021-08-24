@@ -2,10 +2,26 @@
 
 // ----- Imports ----- //
 
-import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
+import {
+  getPriceDescription,
+  getAppliedPromoDescription,
+  getSimplifiedPriceDescription,
+  getAdverbialSubscriptionDescription,
+} from 'helpers/productPrice/priceDescriptions';
 import { Annual, Monthly, Quarterly, SixWeekly } from 'helpers/productPrice/billingPeriods';
+import { type BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { type ProductPrice } from 'helpers/productPrice/productPrices';
 
 jest.mock('ophan', () => {});
+
+const monthlyBillingPeriod: BillingPeriod = 'Monthly';
+
+const productPrice: ProductPrice = {
+  price: 11.99,
+  currency: 'GBP',
+  fixedTerm: false,
+  promotions: [],
+};
 
 // ----- Tests ----- //
 
@@ -64,5 +80,88 @@ describe('getPriceDescription', () => {
     };
     expect(getPriceDescription(gwSixWeekly, SixWeekly))
       .toEqual('US$6 for the first 6 issues (then US$27.50 per month)');
+  });
+});
+
+describe('getAppliedPromoDescription', () => {
+  const productPriceWithLandingPageDiscount: ProductPrice = {
+    price: 11.99,
+    currency: 'GBP',
+    fixedTerm: false,
+    promotions: [{
+      name: 'Sept 2021 Discount',
+      description: '50% off for 3 months',
+      promoCode: 'DK0NT24WG',
+      discountedPrice: 5.99,
+      numberOfDiscountedPeriods: 3,
+      discount: {
+        amount: 50,
+        durationMonths: 3,
+      },
+      landingPage: {
+        title: 'Sept 2021 Discount',
+        description: '50% off for 3 months',
+        roundel: 'Save 50% for 3 months!',
+      },
+    }],
+  };
+
+  it('should return a landing page promotion roundel description', () => {
+    expect(getAppliedPromoDescription(monthlyBillingPeriod, productPriceWithLandingPageDiscount))
+      .toBe('Save 50% for 3 months!');
+  });
+});
+
+describe('getSimplifiedPriceDescription', () => {
+  it('should return a price description', () => {
+    expect(getSimplifiedPriceDescription(productPrice, monthlyBillingPeriod)).toEqual('per month');
+  });
+
+  const productPriceWithDiscountedPrice: ProductPrice = {
+    price: 11.99,
+    currency: 'GBP',
+    fixedTerm: false,
+    promotions: [{
+      name: 'Sept 2021 Discount',
+      description: '50% off for 3 months',
+      promoCode: 'DK0NT24WG',
+      discountedPrice: 5.99,
+      numberOfDiscountedPeriods: 3,
+      discount: {
+        amount: 50,
+        durationMonths: 3,
+      },
+    }],
+  };
+
+  it('should return a discounted price description', () => {
+    expect(getSimplifiedPriceDescription(productPriceWithDiscountedPrice, monthlyBillingPeriod)).toEqual('per month, then £11.99 per month');
+  });
+
+  const productPriceWithIntroductoryPrice: ProductPrice = {
+    price: 11.99,
+    currency: 'GBP',
+    fixedTerm: false,
+    promotions: [{
+      name: 'Sept 2021 Discount',
+      description: '50% off for 3 months',
+      promoCode: 'DK0NT24WG',
+      introductoryPrice: { price: 5.99, periodLength: 6, periodType: 'issue' },
+      numberOfDiscountedPeriods: 3,
+      discount: {
+        amount: 50,
+        durationMonths: 3,
+      },
+    }],
+  };
+
+  it('should return an introductory price description', () => {
+    expect(getSimplifiedPriceDescription(productPriceWithIntroductoryPrice, monthlyBillingPeriod)).toEqual('for 6 issues (then £11.99 per month)');
+  });
+});
+
+describe('getAdverbialSubscriptionDescription', () => {
+  it('should return an adverbial subscription description', () => {
+    expect(getAdverbialSubscriptionDescription(productPrice, monthlyBillingPeriod)).toEqual('Subscribe monthly for £11.99');
   });
 });
