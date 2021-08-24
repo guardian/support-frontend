@@ -14,6 +14,7 @@ riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV"
 assemblyMergeStrategy in assembly := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case str if str.contains("simulacrum") => MergeStrategy.first
+  case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
   case y =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(y)

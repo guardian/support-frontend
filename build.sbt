@@ -32,7 +32,7 @@ lazy val release = Seq[ReleaseStep](
 
 inThisBuild(Seq(
   organization := "com.gu",
-  scalaVersion := "2.13.5",
+  scalaVersion := "2.13.6",
   // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
   updateOptions := updateOptions.value.withCachedResolution(true),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central
@@ -211,7 +211,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
     scalacOptions += "-Ymacro-annotations",
     libraryDependencies ++= Seq(
       "com.gu" %% "ophan-event-model" % "0.0.23" excludeAll ExclusionRule(organization = "com.typesafe.play"),
-      "com.gu" %% "fezziwig" % "1.4",
+      "com.gu" %% "fezziwig" % "1.5",
       "com.typesafe.play" %% "play-json" % "2.7.4",
       "io.circe" %% "circe-core" % "0.12.1",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -222,7 +222,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
       "org.scalatest" %% "scalatest" % "3.1.1" % "test",
       "org.scalactic" %% "scalactic" % "3.1.1",
       "org.typelevel" %% "cats-core" % catsVersion,
-      "com.amazonaws" % "aws-java-sdk-kinesis" % "1.11.465",
+      "com.amazonaws" % "aws-java-sdk-kinesis" % awsClientVersion,
       "com.gu" %% "thrift-serializer" % "4.0.3",
       "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
     )
