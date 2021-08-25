@@ -345,7 +345,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful digipack checkouts in 3h
+      AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful Digital Subscription checkouts in 2h
       Metrics:
         - Id: e1
           Expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])"
@@ -403,7 +403,7 @@ Resources:
           ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      EvaluationPeriods: 36
+      EvaluationPeriods: 24
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -476,5 +476,73 @@ Resources:
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       EvaluationPeriods: 288
+      TreatMissingData: breaching
+    DependsOn: SupportWorkersPROD
+
+  NoWeeklyAcquisitionInOneDayAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful guardian weekly checkouts in 8h
+      Metrics:
+        - Id: e1
+          Expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])"
+          Label: AllWeeklyConversions
+        - Id: m1
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: Stripe
+                - Name: ProductType
+                  Value: GuardianWeekly
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m2
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: DirectDebit
+                - Name: ProductType
+                  Value: GuardianWeekly
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m3
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: PayPal
+                - Name: ProductType
+                  Value: GuardianWeekly
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      EvaluationPeriods: 96
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
