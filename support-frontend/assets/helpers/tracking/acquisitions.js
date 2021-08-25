@@ -303,7 +303,7 @@ function getAcquisitionDataFromPPCParams(): ?Object {
     return {
       source: 'PPC',
       campaignCode: 'Google_Adwords',
-      queryParameters: getAllQueryParams(),
+      queryParameters: toAcquisitionQueryParameters(getAllQueryParams()),
     };
   }
   return null;
