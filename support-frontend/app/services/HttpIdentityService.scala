@@ -171,6 +171,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .withBody(body)
         .withRequestTimeout(1.second)
         .withMethod("POST")
+        .withQueryStringParameters(("accountVerificationEmail", "true"))
     ) { resp =>
         resp.json.validate[GuestRegistrationResponse]
           .asEither
