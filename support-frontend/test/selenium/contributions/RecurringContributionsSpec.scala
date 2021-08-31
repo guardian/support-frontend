@@ -66,45 +66,45 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
 
     }
 
-    Scenario("Annual contribution sign-up with Stripe - USD") {
-
-      val testUser = new PostDeployTestUser(driverConfig)
-      val landingPage = ContributionsLanding("us", testUser)
-      val contributionThankYou = new ContributionThankYou("us")
-
-      Given("that a test user goes to the contributions landing page")
-      goTo(landingPage)
-      assert(landingPage.pageHasLoaded)
-
-      When("the user selects the annual option")
-      landingPage.clickAnnual
-
-      Given("the user fills in their details correctly")
-      landingPage.clearForm(hasNameFields = true)
-      landingPage.fillInPersonalDetails(hasNameFields = true)
-      landingPage.selectState
-
-      Given("that the user selects to pay with Stripe")
-      When("they press the Stripe payment button")
-      landingPage.selectStripePayment()
-
-      And("enter card details")
-      landingPage.fillInCardDetails(hasZipCodeField = true)
-
-      And("click the recaptcha")
-      landingPage.clickRecaptcha
-
-      When("they click contribute")
-      landingPage.clickContribute
-
-      And("the mock calls the backend using a test Stripe token")
-
-      Then("the thankyou page should display")
-      eventually {
-        assert(contributionThankYou.pageHasLoaded)
-      }
-
-    }
+//    Scenario("Annual contribution sign-up with Stripe - USD") {
+//
+//      val testUser = new PostDeployTestUser(driverConfig)
+//      val landingPage = ContributionsLanding("us", testUser)
+//      val contributionThankYou = new ContributionThankYou("us")
+//
+//      Given("that a test user goes to the contributions landing page")
+//      goTo(landingPage)
+//      assert(landingPage.pageHasLoaded)
+//
+//      When("the user selects the annual option")
+//      landingPage.clickAnnual
+//
+//      Given("the user fills in their details correctly")
+//      landingPage.clearForm(hasNameFields = true)
+//      landingPage.fillInPersonalDetails(hasNameFields = true)
+//      landingPage.selectState
+//
+//      Given("that the user selects to pay with Stripe")
+//      When("they press the Stripe payment button")
+//      landingPage.selectStripePayment()
+//
+//      And("enter card details")
+//      landingPage.fillInCardDetails(hasZipCodeField = true)
+//
+//      And("click the recaptcha")
+//      landingPage.clickRecaptcha
+//
+//      When("they click contribute")
+//      landingPage.clickContribute
+//
+//      And("the mock calls the backend using a test Stripe token")
+//
+//      Then("the thankyou page should display")
+//      eventually {
+//        assert(contributionThankYou.pageHasLoaded)
+//      }
+//
+//    }
 
   }
 
