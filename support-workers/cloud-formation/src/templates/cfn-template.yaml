@@ -345,7 +345,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful Digital Subscription checkouts in 2h
+      AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful Digital Subscription checkouts in 3h
       Metrics:
         - Id: e1
           Expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])"
@@ -403,7 +403,7 @@ Resources:
           ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      EvaluationPeriods: 24
+      EvaluationPeriods: 36
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
