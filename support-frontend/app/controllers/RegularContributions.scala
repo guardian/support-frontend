@@ -99,7 +99,6 @@ class RegularContributions(
   }
 
   private def contributor(user: IdUser, request: CreateSupportWorkersRequest) = {
-    SafeLogger.info(s"Building user - username: ${user.publicFields.username}, displayname: ${user.publicFields.displayName}")
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
