@@ -176,4 +176,24 @@ export const tests: Tests = {
     seed: 11,
     optimizeId: 'dDHS42cERbuQb0BXe85-4g',
   },
+  articleCountTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 11,
+  },
 };

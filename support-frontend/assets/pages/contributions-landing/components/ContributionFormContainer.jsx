@@ -1,8 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-
-import React from 'react';
+// $FlowIgnore - required for hooks
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -21,6 +21,10 @@ import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving'
 import { PreviousGivingBodyCopy, PreviousGivingHeaderCopy } from './ContributionsFormBlurbPreviousGiving';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import { ContributionsArticleCountWithOptOut } from './ContributionArticleCount';
+import { type IsoCurrency, glyph } from 'helpers/internationalisation/currency';
+import { get, set, remove } from 'helpers/storage/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
 
 
 // ----- Types ----- //
@@ -39,6 +43,8 @@ type PropTypes = {|
   userName: string | null,
   referrerAcquisitionData: ReferrerAcquisitionData,
   canShowTicker: boolean,
+  currency: IsoCurrency,
+  articleCountAbTestVariant: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -52,6 +58,8 @@ const mapStateToProps = (state: State) => ({
   userName: state.page.user.firstName,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   canShowTicker: state.common.abParticipations.tickerTest === 'variant',
+  currency: state.common.internationalisation.currencyId,
+  articleCountAbTestVariant: state.common.abParticipations.articleCountTest === 'variant',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -77,12 +85,72 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
+const articleCountContributeCopy = currency => (
+  <span>
+    Thank you for turning to the Guardian on so many occasions.
+    Show your support for our open, fiercely independent journalism today with a contribution of any size.
+    Every {currency}1 we receive is so valuable for our future.
+  </span>
+);
+
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
 };
 
 // ----- Render ----- //
+
+type ArticleCountOptOut = {|
+    hasOptedOut: boolean;
+    onArticleCountOptOut: () => void;
+    onArticleCountOptIn: () => void;
+|}
+
+const ARTICLE_COUNT_OPT_OUT_COOKIE = {
+  name: 'gu_article_count_opt_out',
+  daysToLive: 90,
+};
+
+export const addArticleCountOptOutCookie = (): void =>
+  set(
+    ARTICLE_COUNT_OPT_OUT_COOKIE.name,
+    new Date().getTime().toString(),
+    ARTICLE_COUNT_OPT_OUT_COOKIE.daysToLive,
+  );
+
+export const removeArticleCountOptOutCookie = (): void =>
+  remove(ARTICLE_COUNT_OPT_OUT_COOKIE.name);
+
+export const hasArticleCountOptOutCookie = (): boolean =>
+  !!get(ARTICLE_COUNT_OPT_OUT_COOKIE.name);
+
+
+export function useArticleCountOptOut(): ArticleCountOptOut {
+  const [hasOptedOut, setHasOptedOut] = useState(hasArticleCountOptOutCookie());
+
+  function onArticleCountOptOut() {
+    setHasOptedOut(true);
+    addArticleCountOptOutCookie();
+  }
+
+  function onArticleCountOptIn() {
+    setHasOptedOut(false);
+    removeArticleCountOptOutCookie();
+  }
+
+  return { hasOptedOut, onArticleCountOptOut, onArticleCountOptIn };
+}
+
+const getArticleCountFromUrl = (): ?number => {
+  const articleCount = getQueryParameter('numArticles');
+
+  if (articleCount) {
+    return parseInt(articleCount, 10);
+  }
+
+  return null;
+};
+
 
 function withProps(props: PropTypes) {
   const campaignSettings = getCampaignSettings();
@@ -120,17 +188,34 @@ function withProps(props: PropTypes) {
 
   const showPreviousGiving = isInSupportAgainHeaderVariant(props.referrerAcquisitionData);
   const lastOneOffContribution = useLastOneOffContribution();
+  const numArticles = getArticleCountFromUrl();
+  const { hasOptedOut, onArticleCountOptIn, onArticleCountOptOut } = useArticleCountOptOut();
+  const isArticleCountTest = props.articleCountAbTestVariant;
+
 
   return (
     <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-      { showPreviousGiving && lastOneOffContribution && (
+      { !isArticleCountTest && showPreviousGiving && lastOneOffContribution && (
         <ContributionFormBlurb
           headerCopy={<PreviousGivingHeaderCopy userName={props.userName} />}
           bodyCopy={<PreviousGivingBodyCopy lastOneOffContribution={lastOneOffContribution} />}
         />
       )}
 
-      {!showPreviousGiving && (
+      { isArticleCountTest && numArticles ? (
+        <ContributionFormBlurb
+          headerCopy={<ContributionsArticleCountWithOptOut
+            numArticles={numArticles}
+            isArticleCountOn={!hasOptedOut}
+            isMobileOnly={false}
+            onArticleCountOptOut={onArticleCountOptOut}
+            onArticleCountOptIn={onArticleCountOptIn}
+            defaultHeaderCopy={countryGroupDetails.headerCopy}
+            userName={props.userName}
+          />}
+          bodyCopy={articleCountContributeCopy(glyph(props.currency))}
+        />
+      ) : (
         <ContributionFormBlurb
           headerCopy={countryGroupDetails.headerCopy}
           bodyCopy={countryGroupDetails.contributeCopy}
@@ -138,6 +223,18 @@ function withProps(props: PropTypes) {
       )}
 
       <div className="gu-content__form">
+        { isArticleCountTest && numArticles && (
+        <ContributionsArticleCountWithOptOut
+          numArticles={numArticles}
+          isMobileOnly
+          isArticleCountOn={!hasOptedOut}
+          onArticleCountOptOut={onArticleCountOptOut}
+          onArticleCountOptIn={onArticleCountOptIn}
+          userName={null}
+          defaultHeaderCopy={null}
+        />
+      )}
+
         <SecureTransactionIndicator modifierClasses={['top']} />
 
         {props.canShowTicker && campaignSettings && campaignSettings.tickerSettings ?
@@ -147,12 +244,13 @@ function withProps(props: PropTypes) {
           /> : null
         }
         {props.tickerGoalReached &&
-         campaignSettings && campaignSettings.tickerSettings && campaignSettings.goalReachedCopy ?
+          campaignSettings && campaignSettings.tickerSettings && campaignSettings.goalReachedCopy ?
           campaignSettings.goalReachedCopy :
           <div>
             {countryGroupDetails.formMessage ?
               <div className="form-message">{countryGroupDetails.formMessage}</div> : null
             }
+
             <ContributionForm
               onPaymentAuthorisation={onPaymentAuthorisation}
               campaignSettings={campaignSettings}
