@@ -199,6 +199,7 @@ const ContributionThankYou = ({
   };
   const signInAction = {
     component: <ContributionThankYouSignIn email={email} csrf={csrf} />,
+    // Show this to existing guest accounts as well - it will take them through the password flow
     shouldShow: !isNewAccount && !user.isSignedIn,
   };
   const marketingConsentAction = {
