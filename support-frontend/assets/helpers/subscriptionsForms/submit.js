@@ -217,8 +217,6 @@ function onPaymentAuthorised(
     data,
     abParticipations,
     csrf,
-    () => {},
-    () => {},
   ).then(handleSubscribeResult);
 }
 

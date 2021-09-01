@@ -19,12 +19,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type Action,
   checkIfEmailHasPassword,
-  selectAmount, setGuestAccountCreationToken,
+  selectAmount,
   updateOtherAmount,
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
-  setThankYouPageStage,
   loadPayPalExpressSdk, loadAmazonPaySdk,
+  setUserTypeFromIdentityResponse,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -40,6 +40,7 @@ import type { ContributionTypes } from 'helpers/contributions';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
+import * as storage from 'helpers/storage/storage';
 
 // ----- Functions ----- //
 
@@ -187,14 +188,6 @@ const init = (store: Store<State, Action, Function>) => {
 
   initialisePaymentMethods(state, dispatch);
 
-  // This will be in window.guardian if it has come from a PayPal one-off contribution,
-  // where it is returned by the Payment API to the backend, flashed into the session to preserve
-  // it through a serverside redirect, and then written into window.guardian on the thank-you page.
-  if (window.guardian.guestAccountCreationToken) {
-    dispatch(setGuestAccountCreationToken(window.guardian.guestAccountCreationToken));
-    dispatch(setThankYouPageStage('thankYouSetPassword'));
-  }
-
   const contributionType = selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes);
   selectInitialAmounts(state, dispatch, contributionType);
 
@@ -205,7 +198,14 @@ const init = (store: Store<State, Action, Function>) => {
     stateField,
   } = state.page.user;
 
-  dispatch(checkIfEmailHasPassword(email));
+  // For PayPal one-off we need to get userType from session after the thankyou page redirect
+  const userType = storage.getSession('userTypeFromIdentityResponse');
+  if (userType && (userType === 'new' || userType === 'guest' || userType === 'current')) {
+    dispatch(setUserTypeFromIdentityResponse(userType));
+  } else {
+    dispatch(checkIfEmailHasPassword(email));
+  }
+
   dispatch(updateUserFormData({
     firstName, lastName, email, billingState: stateField,
   }));

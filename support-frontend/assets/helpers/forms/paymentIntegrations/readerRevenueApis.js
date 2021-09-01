@@ -25,7 +25,6 @@ import trackConversion from 'helpers/tracking/conversions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
-import { type ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
 import {
   DirectDebit,
   ExistingCard,
@@ -264,8 +263,6 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
 function checkRegularStatus(
   participations: Participations,
   csrf: CsrfState,
-  setGuestAccountCreationToken: (string) => void,
-  setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
@@ -291,10 +288,6 @@ function checkRegularStatus(
   };
 
   return (json) => {
-    if (json.guestAccountCreationToken) {
-      setGuestAccountCreationToken(json.guestAccountCreationToken);
-      setThankYouPageStage('thankYouSetPassword');
-    }
     switch (json.status) {
       case 'pending':
         return logPromise(pollUntilPromise(
@@ -316,8 +309,6 @@ function postRegularPaymentRequest(
   data: RegularPaymentRequest,
   participations: Participations,
   csrf: CsrfState,
-  setGuestAccountCreationToken: (string) => void,
-  setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)))
     .then((response) => {
@@ -330,7 +321,7 @@ function postRegularPaymentRequest(
       }
 
       return response.json()
-        .then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage));
+        .then(checkRegularStatus(participations, csrf));
 
     })
     .catch(() => {
@@ -339,31 +330,8 @@ function postRegularPaymentRequest(
     });
 }
 
-function setPasswordGuest(
-  password: string,
-  guestAccountRegistrationToken: string,
-  csrf: CsrfState,
-): Promise<boolean> {
-
-  const data = { password, guestAccountRegistrationToken };
-  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(data, 'same-origin', 'PUT', csrf)))
-    .then((response) => {
-      if (response.status === 200) {
-        return true;
-      }
-      logException('/contribute/set-password-guest endpoint returned an error');
-      return false;
-
-    })
-    .catch(() => {
-      logException('Error while trying to interact with /contribute/set-password-guest');
-      return false;
-    });
-}
-
 export {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
   PaymentSuccess,
-  setPasswordGuest,
 };
