@@ -84,7 +84,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // ----- Render ----- //
 
 
-function withProps(props: PropTypes) {
+function ContributionSubmit(props: PropTypes) {
 
   // if all payment methods are switched off, do not display the button
   const formClassName = 'form--contribution';
@@ -148,13 +148,4 @@ function withProps(props: PropTypes) {
   );
 }
 
-function withoutProps() {
-  return (
-    <div className="form__submit">
-      <Button type="submit" aria-label="Submit contribution" disabled>&nbsp;</Button>
-    </div>
-  );
-}
-
-export const ContributionSubmit = connect(mapStateToProps, mapDispatchToProps)(withProps);
-export const EmptyContributionSubmit = withoutProps;
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);
