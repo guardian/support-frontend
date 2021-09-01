@@ -85,13 +85,12 @@ object SupportWorkersClient {
 case class StatusResponse(
   status: Status,
   trackingUri: String,
-  failureReason: Option[CheckoutFailureReason] = None,
-  guestAccountCreationToken: Option[String] = None
+  failureReason: Option[CheckoutFailureReason] = None
 )
 
 object StatusResponse {
-  def fromStatusResponseAndToken(statusResponse: StatusResponse, token: Option[String]): StatusResponse =
-    StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason, token)
+  def fromStatusResponse(statusResponse: StatusResponse): StatusResponse =
+    StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason)
 
   implicit val codec: Codec[StatusResponse] = deriveCodec
 }
