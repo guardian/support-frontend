@@ -285,7 +285,7 @@ const updateContributionTypeAndPaymentMethod =
       dispatch(updatePaymentMethod(paymentMethodToSelect));
     };
 
-const checkIfEmailHasPassword = (email: string) =>
+const getUserType = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
     const { csrf } = state.page;
@@ -772,7 +772,7 @@ export {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
-  checkIfEmailHasPassword,
+  getUserType,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
   setPaymentRequestButtonPaymentMethod,

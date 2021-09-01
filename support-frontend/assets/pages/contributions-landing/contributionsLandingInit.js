@@ -18,7 +18,7 @@ import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type Action,
-  checkIfEmailHasPassword,
+  getUserType,
   selectAmount,
   updateOtherAmount,
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
@@ -203,7 +203,7 @@ const init = (store: Store<State, Action, Function>) => {
   if (userType && (userType === 'new' || userType === 'guest' || userType === 'current')) {
     dispatch(setUserTypeFromIdentityResponse(userType));
   } else {
-    dispatch(checkIfEmailHasPassword(email));
+    dispatch(getUserType(email));
   }
 
   dispatch(updateUserFormData({

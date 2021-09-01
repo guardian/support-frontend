@@ -141,7 +141,7 @@ const postToPaymentApi = (data: Object, path: string): Promise<Object> => fetchJ
 // Sends a one-off payment request to the payment API and standardises the result
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
 const handleOneOffExecution = (result: Promise<Object>): Promise<PaymentResult> => logPromise(result)
-  .then(r => paymentResultFromObject(r));
+  .then(paymentResultFromObject);
 
 const postOneOffAmazonPayExecutePaymentRequest = (data: AmazonPayData) =>
   handleOneOffExecution(postToPaymentApi(data, '/contribute/one-off/amazon-pay/execute-payment'));
