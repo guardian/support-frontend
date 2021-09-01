@@ -16,7 +16,7 @@ import org.scalatestplus.mockito.MockitoSugar
 
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
 
 class EmailServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with ScalaFutures {

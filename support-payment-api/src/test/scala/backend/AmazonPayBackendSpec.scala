@@ -13,7 +13,7 @@ import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import javax.xml.datatype.DatatypeFactory
 import model._
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
-import model.amazonpay.{AmazonPayApiError, AmazonPayResponse, AmazonPaymentData}
+import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito.{verify, when}
@@ -104,9 +104,9 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.left(Future.successful(List("a BigQuery error")))
   val streamResponseError: EitherT[Future, List[String], Unit] =
     EitherT.left(Future.successful(List("stream error")))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
-    EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, expectedGuestToken)))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
+    EitherT.right(Future.successful(1L))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
@@ -190,7 +190,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
-        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe AmazonPayResponse(None)
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
       }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new AmazonPayBackendFixture {
@@ -211,7 +211,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
-        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe AmazonPayResponse(expectedGuestToken)
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
       }
 
       "Not call setOrderRef if state is suspended" in new AmazonPayBackendFixture {

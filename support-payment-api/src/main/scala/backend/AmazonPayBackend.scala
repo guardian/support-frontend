@@ -15,7 +15,7 @@ import conf._
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, AmazonPayAcquisition}
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
-import model.amazonpay.{AmazonPayApiError, AmazonPayResponse, AmazonPaymentData}
+import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
 import model.db.ContributionData
 import model.email.ContributorRow
 import play.api.libs.ws.WSClient
@@ -35,7 +35,7 @@ class AmazonPayBackend(
     val databaseService: ContributionsStoreService
   )(implicit pool: DefaultThreadPool) extends StrictLogging with PaymentBackend {
 
-  def makePayment(amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, AmazonPayApiError, AmazonPayResponse] = {
+  def makePayment(amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, AmazonPayApiError, Unit] = {
 
     def isNotSuspended(details: OrderReferenceDetails) =  details.getOrderReferenceStatus.getState.toUpperCase != "SUSPENDED"
 
@@ -64,26 +64,30 @@ class AmazonPayBackend(
     handleResponse(response, amazonPayRequest, clientBrowserInfo)
   }
 
-  private def handleResponse(response: Either[AmazonPayApiError, AuthorizationDetails] , amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo)  = {
+  private def handleResponse(
+    response: Either[AmazonPayApiError, AuthorizationDetails],
+    amazonPayRequest: AmazonPayRequest,
+    clientBrowserInfo: ClientBrowserInfo
+  ): EitherT[Future, AmazonPayApiError, Unit] =
     response.toEitherT[Future]
       .leftMap { error =>
         logger.info(s"Something went wrong with AmazonPay orderReferenceId: ${amazonPayRequest.paymentData.orderReferenceId}")
         cloudWatchService.recordFailedPayment(error, PaymentProvider.AmazonPay)
         error
-      }.semiflatMap { authDetails =>
+      }
+      .semiflatMap { authDetails =>
         val email = amazonPayRequest.paymentData.email
         val countryCode = "US"
         service.close(amazonPayRequest.paymentData)
         cloudWatchService.recordPaymentSuccess(PaymentProvider.AmazonPay)
-        getOrCreateIdentityIdFromEmail(email)
-        .map { idWithToken =>
+
+        getOrCreateIdentityIdFromEmail(email).map { id =>
           val acquisition =
-            AmazonPayAcquisition(amazonPayRequest.paymentData, amazonPayRequest.acquisitionData, idWithToken.map(_.identityId), Some(countryCode), clientBrowserInfo)
+            AmazonPayAcquisition(amazonPayRequest.paymentData, amazonPayRequest.acquisitionData, id, Some(countryCode), clientBrowserInfo)
           postPaymentTasks(authDetails, email, acquisition)
-          AmazonPayResponse(idWithToken.flatMap(_.guestAccountCreationToken))
+          ()
         }
-    }
-  }
+      }
 
   private def getOrCreateIdentityIdFromEmail(email: String) =
     identityService.getOrCreateIdentityIdFromEmail(email)

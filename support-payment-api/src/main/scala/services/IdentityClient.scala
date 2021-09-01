@@ -65,6 +65,7 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
       requestForPath("/guest")
         .withMethod("POST")
         .withBody(CreateGuestAccountRequestBody.fromEmail(email))
+        .withQueryStringParameters(("accountVerificationEmail", "true"))
     }
     // See comment on getUser() method.
     .leftMap(error => ContextualError(error, CreateGuestAccount(email)))
@@ -98,7 +99,6 @@ object IdentityClient extends StrictLogging {
   // {
   //   "status": "ok",
   //   "guestRegistrationRequest": {
-  //     "token": "83e41c1d-458d-49c0-b469-ddc263507034",
   //     "userId": "100000190",
   //     "timeIssued": "2018-02-28T14:46:01Z"
   //   }
@@ -108,7 +108,7 @@ object IdentityClient extends StrictLogging {
   )
 
   object GuestRegistrationResponse {
-    @JsonCodec case class GuestRegistrationRequest(userId: Long, token: Option[String])
+    @JsonCodec case class GuestRegistrationRequest(userId: Long)
   }
 
   // Models the response of successfully looking up user details via email address.

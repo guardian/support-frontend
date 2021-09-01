@@ -7,7 +7,7 @@ import cats.data.EitherT
 import cats.instances.all._
 import com.amazon.pay.response.ipn.model.Notification
 import model.DefaultThreadPool
-import model.amazonpay.{AmazonPayApiError, AmazonPayResponse}
+import model.amazonpay.AmazonPayApiError
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.must.Matchers
@@ -39,8 +39,8 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
   val mockAmazonPayRequestBasedProvider: RequestBasedProvider[AmazonPayBackend] =
     mock[RequestBasedProvider[AmazonPayBackend]]
 
-  val amazonPayResponse: EitherT[Future, AmazonPayApiError, AmazonPayResponse] =
-    EitherT.right(Future(AmazonPayResponse(Some("djd")))).leftMap{ x: String => AmazonPayApiError.fromString("went wrong")}
+  val amazonPayResponse: EitherT[Future, AmazonPayApiError, Unit] =
+    EitherT.right(Future(())).leftMap{ x: String => AmazonPayApiError.fromString("went wrong")}
 
   val refundSuccess: EitherT[Future, Throwable, Unit] =
     EitherT.right(Future.successful(()))

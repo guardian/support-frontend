@@ -24,7 +24,7 @@ import router.Routes
 import services.CloudWatchService
 import util.RequestBasedProvider
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaypalControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
@@ -190,7 +190,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
       "return a 500 response if the response contains an invalid return url" in {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
 
-          import scala.collection.JavaConverters._
+          import scala.jdk.CollectionConverters._
 
           val link = new Links("invalidURL", "approval_url")
           val links: java.util.List[Links] = List(link).asJava
@@ -477,7 +477,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(enrichedPaymentServiceResponse)
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
-          when(enrichedPaymentMock.guestAccountCreationToken).thenReturn(None)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -589,7 +588,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(enrichedPaymentServiceResponse)
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
-          when(enrichedPaymentMock.guestAccountCreationToken).thenReturn(None)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")

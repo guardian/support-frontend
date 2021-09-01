@@ -7,7 +7,7 @@ import cats.instances.future._
 import com.amazon.pay.response.ipn.model.Notification
 import com.typesafe.scalalogging.StrictLogging
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
-import model.amazonpay.{AmazonPayApiError, AmazonPayResponse}
+import model.amazonpay.{AmazonPayApiError}
 import model.{ClientBrowserInfo, DefaultThreadPool, ResultBody}
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -37,7 +37,7 @@ class AmazonPayController(
 
       result.fold(
         err => toErrorResult(err),
-        res => Ok(ResultBody.Success(AmazonPayResponse(res.guestAccountCreationToken)))
+        res => Ok(ResultBody.Success("ok"))
       )
   }
 

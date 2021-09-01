@@ -69,13 +69,13 @@ class PaypalBackend(
           )
 
           maybeEmail.foreach { email =>
-            getOrCreateIdentityIdFromEmail(email).foreach { identityIdWithGuestAccountCreationToken =>
-              postPaymentTasks(payment, email, identityIdWithGuestAccountCreationToken.map(_.identityId), capturePaymentData.acquisitionData, clientBrowserInfo)
+            getOrCreateIdentityIdFromEmail(email).foreach { identityId =>
+              postPaymentTasks(payment, email, identityId, capturePaymentData.acquisitionData, clientBrowserInfo)
             }
           }
 
           // The app doesn't need the guest account token in the response, because it has no 'set password' step after payment
-          EnrichedPaypalPayment(payment, maybeEmail, guestAccountCreationToken = None)
+          EnrichedPaypalPayment(payment, maybeEmail)
         }
       )
 
@@ -88,10 +88,10 @@ class PaypalBackend(
       .semiflatMap { payment =>
         cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
 
-        getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityIdWithGuestAccountCreationToken =>
-          postPaymentTasks(payment, executePaymentData.email, identityIdWithGuestAccountCreationToken.map(_.identityId), executePaymentData.acquisitionData, clientBrowserInfo)
+        getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityId =>
+          postPaymentTasks(payment, executePaymentData.email, identityId, executePaymentData.acquisitionData, clientBrowserInfo)
 
-          EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken))
+          EnrichedPaypalPayment(payment, Some(executePaymentData.email))
         }
       }
 
@@ -142,7 +142,7 @@ class PaypalBackend(
   }
 
 
-  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[IdentityIdWithGuestAccountCreationToken]] =
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[Long]] =
     identityService.getOrCreateIdentityIdFromEmail(email)
       .fold(
         err => {
