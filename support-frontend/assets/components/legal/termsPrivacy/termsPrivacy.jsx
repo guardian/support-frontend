@@ -98,7 +98,7 @@ function TermsPrivacy(props: PropTypes) {
   const isNotOneOffContribution = props.contributionType !== 'ONE_OFF';
 
   const shouldShowPhilanthropicAsk =
-    isUSContributor && isNotOneOffContribution
+    isUSContributor && isNotOneOffContribution;
 
   return (
     <>
