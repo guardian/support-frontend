@@ -41,7 +41,7 @@ export type PaperAndDigitalProductOptions =
   | typeof SixdayPlus
   | typeof EverydayPlus;
 
-const ActivePaperProductTypes = [Everyday, Sixday, Weekend, Sunday, Saturday];
+const ActivePaperProductTypes = [Everyday, Sixday, Weekend, Saturday, Sunday];
 
 export type ActivePaperProducts = typeof Sunday
 | typeof SundayPlus
