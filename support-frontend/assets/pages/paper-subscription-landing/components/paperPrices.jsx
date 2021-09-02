@@ -42,12 +42,14 @@ const copy = {
     Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
     Sixday: <> for <strong>Guardian</strong>, delivered</>,
     Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
+    Saturday: <> for <strong>Guardian</strong>, delivered</>,
     Sunday: <> for <strong>Observer</strong>, delivered</>,
   },
   Collection: {
     Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
     Sixday: <> for <strong>Guardian</strong></>,
     Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
+    Saturday: <> for <strong>Guardian</strong></>,
     Sunday: <> for <strong>Observer</strong></>,
   },
 };
