@@ -119,7 +119,7 @@ function TermsPrivacy(props: PropTypes) {
     if (props.contributionType === 'MONTHLY') {
       return `We will attempt to take payment of ${amountCopy}, on the ${getDateWithOrdinal(now)} day of every month${closestDayCopy}, from now on until you cancel your contribution. Payments may take up to 6 days to be recorded in your bank account.`;
     }
-    return `We will attempt to take payment of ${amountCopy} on the ${getDateWithOrdinal(now)} day of ${getLongMonth(now)} every year${closestDayCopy}, from now until you cancel your contribution. Payments may take up to 6 days to be recorded in your bank account.`;
+    return `We will attempt to take payment of ${amountCopy} on the ${getDateWithOrdinal(now)} day of ${getLongMonth(now)} every year, from now until you cancel your contribution. Payments may take up to 6 days to be recorded in your bank account.`;
   };
 
   return (
