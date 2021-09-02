@@ -360,6 +360,8 @@ function withProps(props: PropTypes) {
         countryGroupId={props.countryGroupId}
         contributionType={props.contributionType}
         campaignSettings={props.campaignSettings}
+        currency={props.currency}
+        amount={getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType)}
       />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
