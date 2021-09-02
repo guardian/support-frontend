@@ -125,7 +125,7 @@ function selectInitialAmounts(state: State, dispatch: Function, selectedContribu
 
   Object.keys(amounts).forEach((contributionType) => {
     if (amountFromUrl && contributionType === selectedContributionType) {
-      if (amounts[contributionType].amounts.includes(amountFromUrl)) {
+      if (amountFromUrl !== 'other' && amounts[contributionType].amounts.includes(amountFromUrl)) {
         dispatch(selectAmount(amountFromUrl, contributionType));
       } else {
         dispatch(selectAmount('other', contributionType));
