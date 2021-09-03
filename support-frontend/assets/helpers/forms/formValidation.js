@@ -13,6 +13,7 @@ import { DateUtils } from 'react-day-picker';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { Option } from 'helpers/types/option';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -42,6 +43,9 @@ export const checkEmail: (string | null) => boolean = input => isNotEmpty(input)
 
 export const requiresSignIn: (UserTypeFromIdentityResponse, boolean) => boolean =
   (userType, isSignedIn) => isSignedIn || userType === 'guest' || userType === 'new';
+
+export const emailAddressesMatch: (boolean, string, Option<string>) => boolean =
+  (isSignedIn, email, confirmEmail) => isSignedIn || email === confirmEmail;
 
 export const checkOptionalEmail: (string | null) => boolean = input => isEmpty(input) || isValidEmail(input);
 

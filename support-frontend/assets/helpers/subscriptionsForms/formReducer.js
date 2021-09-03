@@ -37,6 +37,7 @@ function createFormReducer(
     product,
     title: null,
     email: user.email || '',
+    confirmEmail: null,
     firstName: user.firstName || '',
     lastName: user.lastName || '',
     isSignedIn: user.isSignedIn,
@@ -91,6 +92,9 @@ function createFormReducer(
 
       case 'SET_EMAIL':
         return { ...state, email: action.email, formErrors: removeError('email', state.formErrors) };
+
+      case 'SET_CONFIRM_EMAIL':
+        return { ...state, confirmEmail: action.email, formErrors: removeError('confirmEmail', state.formErrors) };
 
       case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
         return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse, formErrors: removeError('email', state.formErrors) };

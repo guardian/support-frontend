@@ -7,7 +7,7 @@ import {
   checkOptionalEmail,
   checkEmail,
   checkGiftStartDate,
-  requiresSignIn,
+  requiresSignIn, emailAddressesMatch,
 } from 'helpers/forms/formValidation';
 
 const signInErrorMessage = (userType) => {
@@ -51,6 +51,10 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
     {
       rule: requiresSignIn(userTypeFromIdentityResponse, isSignedIn),
       error: formError('email', signInErrorMessage(userTypeFromIdentityResponse)),
+    },
+    {
+      rule: emailAddressesMatch(isSignedIn, fields.email, fields.confirmEmail),
+      error: formError('confirmEmail', 'The email addresses do not match.'),
     },
     {
       rule: notNull(fields.paymentMethod),

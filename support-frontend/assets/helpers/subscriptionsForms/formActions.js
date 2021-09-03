@@ -30,6 +30,7 @@ export type Action =
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_EMAIL', email: string }
+  | { type: 'SET_CONFIRM_EMAIL', email: string }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_TITLE_GIFT', titleGiftRecipient: string }
@@ -90,6 +91,7 @@ const formActionCreators = {
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
   setEmail: (email: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_EMAIL', email }))),
+  setConfirmEmail: (email: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_CONFIRM_EMAIL', email }))),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setTitleGift: (titleGiftRecipient: string): Action => ({ type: 'SET_TITLE_GIFT', titleGiftRecipient }),
   setFirstNameGift: (firstNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient }))),
