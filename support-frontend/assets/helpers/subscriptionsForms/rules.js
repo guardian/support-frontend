@@ -37,7 +37,7 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
       error: formError('telephone', 'Please use only letters, numbers and punctuation.'),
     },
     {
-      rule: nonEmptyString(fields.email),
+      rule: checkEmail(fields.email),
       error: formError('email', 'Please enter a valid email address.'),
     },
     {
