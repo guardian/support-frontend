@@ -11,7 +11,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { type State } from '../contributionsLandingReducer';
-import { ContributionForm, EmptyContributionForm } from './ContributionForm';
+import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -20,6 +20,7 @@ import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffCont
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { PreviousGivingBodyCopy, PreviousGivingHeaderCopy } from './ContributionsFormBlurbPreviousGiving';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 
 
 // ----- Types ----- //
@@ -99,8 +100,6 @@ function withProps(props: PropTypes) {
     ...campaignCopy || {},
   };
 
-  const showSecureTransactionIndicator = () => <SecureTransactionIndicator modifierClasses={['top']} />;
-
   if (props.paymentComplete) {
     // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
     // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
@@ -139,7 +138,7 @@ function withProps(props: PropTypes) {
       )}
 
       <div className="gu-content__form">
-        {showSecureTransactionIndicator()}
+        <SecureTransactionIndicator modifierClasses={['top']} />
 
         {props.canShowTicker && campaignSettings && campaignSettings.tickerSettings ?
           <ContributionTicker
@@ -173,14 +172,14 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-      <div className="gu-content__blurb">
-        <div className="gu-content__blurb-header-container">
-          <h1 className="gu-content__blurb-header">{defaultHeaderCopy}</h1>
-        </div>
-      </div>
+      <ContributionFormBlurb
+        headerCopy={defaultHeaderCopy}
+        bodyCopy={defaultContributeCopy}
+      />
 
-      <div className="gu-content__form">
-        <EmptyContributionForm />
+      <div className="gu-content__form gu-content__form-ssr">
+        <SecureTransactionIndicator modifierClasses={['top']} />
+        <ProgressMessage message={['Loading the page']} />
       </div>
     </div>
   );

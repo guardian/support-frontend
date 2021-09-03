@@ -6,8 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType } from 'helpers/contributions';
 import { type StateProvince } from 'helpers/internationalisation/country';
-import SvgEnvelope from 'components/svgs/envelope';
-import SvgUser from 'components/svgs/user';
 import Signout from 'components/signout/signout';
 import {
   checkFirstName,
@@ -18,7 +16,6 @@ import {
 } from 'helpers/forms/formValidation';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import ContributionState from './ContributionState';
-import ContributionTextInput from './ContributionTextInput';
 import { MustSignIn } from './MustSignIn';
 import { type State } from '../contributionsLandingReducer';
 import {
@@ -79,7 +76,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Render ----- //
 
-function withProps(props: PropTypes) {
+function ContributionFormFields(props: PropTypes) {
   const {
     firstName,
     lastName,
@@ -153,40 +150,4 @@ function withProps(props: PropTypes) {
   );
 }
 
-function withoutProps() {
-  return (
-    <div className="form-fields">
-      <ContributionTextInput
-        id="contributionEmail"
-        name="contribution-email"
-        label="Email address"
-        type="email"
-        placeholder="example@domain.com"
-        icon={<SvgEnvelope />}
-        disabled
-        errorMessage={null}
-      />
-      <div>
-        <ContributionTextInput
-          id="contributionFirstName"
-          name="contribution-fname"
-          label="First name"
-          icon={<SvgUser />}
-          disabled
-          errorMessage={null}
-        />
-        <ContributionTextInput
-          id="contributionLastName"
-          name="contribution-lname"
-          label="Last name"
-          icon={<SvgUser />}
-          disabled
-          errorMessage={null}
-        />
-      </div>
-    </div>
-  );
-}
-
-export const ContributionFormFields = connect(mapStateToProps, mapDispatchToProps)(withProps);
-export const EmptyContributionFormFields = withoutProps;
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionFormFields);

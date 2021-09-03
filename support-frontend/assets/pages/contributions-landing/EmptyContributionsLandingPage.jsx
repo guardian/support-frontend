@@ -13,7 +13,10 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
  */
 export function EmptyContributionsLandingPage() {
   return (
-    <Page header={<RoundelHeader selectedCountryGroup={countryGroups.GBPCountries} />}>
+    <Page
+      classModifiers={['new-template', 'contribution-form']}
+      header={<RoundelHeader selectedCountryGroup={countryGroups.GBPCountries} />}
+    >
       <EmptyContributionFormContainer />
     </Page>
   );

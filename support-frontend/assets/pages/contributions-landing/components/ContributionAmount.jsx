@@ -64,19 +64,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-const renderEmptyAmount = (id: string) => (
-  <li className="form__radio-group-item amounts__placeholder">
-    <input
-      id={`contributionAmount-${id}`}
-      className="form__radio-group-input"
-      type="radio"
-      name="contributionAmount"
-    />
-    <label htmlFor={`contributionAmount-${id}`} className="form__radio-group-label">&nbsp;</label>
-  </li>
-);
-
-function withProps(props: PropTypes) {
+function ContributionAmount(props: PropTypes) {
   const { amounts: validAmounts, defaultAmount } = props.amounts[props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = (props.useLocalCurrency && props.localCurrencyCountry)
@@ -145,18 +133,4 @@ function withProps(props: PropTypes) {
   );
 }
 
-function withoutProps() {
-  return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How much would you like to give?</legend>
-      <ul className="form__radio-group-list">
-        {
-          ['a', 'b', 'c', 'd'].map(renderEmptyAmount)
-        }
-      </ul>
-    </fieldset>
-  );
-}
-
-export const ContributionAmount = connect(mapStateToProps, mapDispatchToProps)(withProps);
-export const EmptyContributionAmount = withoutProps;
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);

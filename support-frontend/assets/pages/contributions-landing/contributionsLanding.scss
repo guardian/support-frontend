@@ -306,6 +306,11 @@ header[role="banner"] {
   }
 }
 
+.gu-content__form-ssr {
+  width: 100%;
+  height: 450px;
+}
+
 .gu-content__blurb {
   display: none;
   border-top: 10px solid gu-colour(highlight-main);

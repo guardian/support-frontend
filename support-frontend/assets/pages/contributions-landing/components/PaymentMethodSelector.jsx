@@ -15,9 +15,6 @@ import {
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import SvgNewCreditCard from 'components/svgs/newCreditCard';
-import SvgPayPal from 'components/svgs/paypal';
-import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 import { type State } from '../contributionsLandingReducer';
@@ -42,7 +39,6 @@ import {
   subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import SvgAmazonPayLogo from 'components/svgs/amazonPayLogo';
 import { RadioGroup, Radio } from '@guardian/src-radio';
 
 import SvgPayPalDs from 'components/svgs/paypalDs';
@@ -100,23 +96,7 @@ const mapDispatchToProps = {
 
 // ----- Render ----- //
 
-function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
-  switch (paymentMethod) {
-    case PayPal:
-      return <SvgPayPal />;
-    case DirectDebit:
-    case ExistingDirectDebit:
-      return <SvgDirectDebitSymbol />;
-    case AmazonPay:
-      return <SvgAmazonPayLogo />;
-    case Stripe:
-    case ExistingCard:
-    default:
-      return <SvgNewCreditCard />;
-  }
-}
-
-const getPaymentMethodLogoDs = (paymentMethod: PaymentMethod) => {
+const getPaymentMethodLogo = (paymentMethod: PaymentMethod) => {
   switch (paymentMethod) {
     case PayPal:
       return <SvgPayPalDs />;
@@ -145,14 +125,14 @@ const legend = (
 const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
   <>
     <div>{getPaymentLabel(paymentMethod)}</div>
-    {getPaymentMethodLogoDs(paymentMethod)}
+    {getPaymentMethodLogo(paymentMethod)}
   </>
 );
 
 const renderExistingLabelAndLogo = (existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
   <>
     <div>{getExistingPaymentMethodLabel(existingPaymentMethod)}</div>
-    {getPaymentMethodLogoDs(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod))}
+    {getPaymentMethodLogo(mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod))}
   </>
 );
 
@@ -203,7 +183,7 @@ const onPaymentMethodUpdate = (paymentMethod: PaymentMethod, props: PropTypes) =
 };
 
 
-function withProps(props: PropTypes) {
+function PaymentMethodSelector(props: PropTypes) {
   const paymentMethods: PaymentMethod[] =
     getValidPaymentMethods(props.contributionType, props.switches, props.countryId, props.countryGroupId);
 
@@ -288,32 +268,4 @@ function withProps(props: PropTypes) {
     </div>);
 }
 
-function withoutProps() {
-  return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
-      <legend className="form__legend">Payment method</legend>
-      <ul className="form__radio-group-list">
-        {[Stripe, PayPal, DirectDebit].map(paymentMethod => (
-          <li className="form__radio-group-item">
-            <input
-              id={`paymentMethodSelector-${paymentMethod}`}
-              className="form__radio-group-input"
-              name="paymentMethodSelector"
-              type="radio"
-              value={paymentMethod}
-            />
-            <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
-              <span className="radio-ui" />
-              <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
-              {getPaymentMethodLogo(paymentMethod)}
-            </label>
-          </li>
-          ))}
-      </ul>
-    </fieldset>
-  );
-
-}
-
-export const PaymentMethodSelector = connect(mapStateToProps, mapDispatchToProps)(withProps);
-export const EmptyPaymentMethodSelector = withoutProps;
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentMethodSelector);
