@@ -76,8 +76,13 @@ function getContributionTypeFromUrl(): ?ContributionType {
   return toContributionType(getQueryParameter('selected-contribution-type'));
 }
 
-function getAmountFromUrl(): ?number {
-  return parseInt(getQueryParameter('selected-amount'), 10);
+function getAmountFromUrl(): number | 'other' | null {
+  const selected = getQueryParameter('selected-amount');
+  if (selected === 'other') { return 'other'; }
+
+  const amount = parseInt(selected, 10);
+  if (!Number.isNaN(amount)) { return amount; }
+  return null;
 }
 
 // Returns an array of Payment Methods, in the order of preference,
