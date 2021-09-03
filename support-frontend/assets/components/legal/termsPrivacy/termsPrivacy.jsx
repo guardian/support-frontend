@@ -6,10 +6,15 @@ import React from 'react';
 
 import { privacyLink, contributionsTermsLinks, philanthropyContactEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type IsoCurrency, fromCountryGroupId, currencies } from 'helpers/internationalisation/currency';
+import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
+import { formatAmount } from 'helpers/forms/checkouts';
 import type { ContributionType } from 'helpers/contributions';
 import './termsPrivacy.scss';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
+import {
+  getLongMonth,
+  getDateWithOrdinal,
+} from 'helpers/utilities/dateFormatting';
 
 // ---- Types ----- //
 
@@ -17,6 +22,8 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
   campaignSettings: CampaignSettings | null,
+  amount: number,
+  currency: IsoCurrency,
 |};
 
 // ----- Component ----- //
@@ -39,10 +46,9 @@ function TermsPrivacy(props: PropTypes) {
   };
 
   const getRegionalAmountString = (): string => {
-    const currency: IsoCurrency = fromCountryGroupId(props.countryGroupId) || 'GBP';
-    const regionalPatronageAmount = regionalAmount(currency) || gbpAmount;
+    const regionalPatronageAmount = regionalAmount(props.currency) || gbpAmount;
 
-    return `${currencies[currency].glyph}${regionalPatronageAmount}`;
+    return `${currencies[props.currency].glyph}${regionalPatronageAmount}`;
   };
 
   const patronsLink = <a href="https://patrons.theguardian.com/join?INTCMP=gdnwb_copts_support_contributions_referral">Find out more today</a>;
@@ -98,14 +104,33 @@ function TermsPrivacy(props: PropTypes) {
   const isNotOneOffContribution = props.contributionType !== 'ONE_OFF';
 
   const shouldShowPhilanthropicAsk =
-    isUSContributor && isNotOneOffContribution
+    isUSContributor && isNotOneOffContribution;
+
+  const recurringCopy = () => {
+    if (Number.isNaN(props.amount)) {
+      return '';
+    }
+    const now = new Date();
+    const closestDayCopy = now.getDate() >= 29 ? ', or closest day thereafter' : '';
+    const amountCopy = formatAmount(
+      currencies[props.currency],
+      spokenCurrencies[props.currency],
+      parseFloat(props.amount),
+      false,
+    );
+
+    if (props.contributionType === 'MONTHLY') {
+      return `We will attempt to take payment of ${amountCopy}, on the ${getDateWithOrdinal(now)} day of every month${closestDayCopy}, from now on until you cancel your contribution. Payments may take up to 6 days to be recorded in your bank account.`;
+    }
+    return `We will attempt to take payment of ${amountCopy} on the ${getDateWithOrdinal(now)} day of ${getLongMonth(now)} every year, from now until you cancel your contribution. Payments may take up to 6 days to be recorded in your bank account.`;
+  };
 
   return (
     <>
       <div className="component-terms-privacy">
         {props.contributionType !== 'ONE_OFF' ? (
           <div className="component-terms-privacy__change">
-            Monthly contributions are billed each month and annual contributions are billed once a year.{' '}
+            {recurringCopy()}{' '}
             <strong>You can change how much you give or cancel your contributions at any time.</strong>
           </div>
         ) : null}
