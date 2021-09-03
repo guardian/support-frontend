@@ -129,7 +129,9 @@ function selectInitialAmounts(state: State, dispatch: Function, selectedContribu
         dispatch(selectAmount(amountFromUrl, contributionType));
       } else {
         dispatch(selectAmount('other', contributionType));
-        dispatch(updateOtherAmount(`${amountFromUrl}`, contributionType));
+        if (amountFromUrl !== 'other') {
+          dispatch(updateOtherAmount(`${amountFromUrl}`, contributionType));
+        }
       }
     } else {
       const { defaultAmount } = amounts[contributionType];
