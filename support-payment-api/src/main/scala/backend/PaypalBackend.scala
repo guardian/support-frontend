@@ -74,7 +74,6 @@ class PaypalBackend(
             }
           }
 
-          // The app doesn't need the guest account token in the response, because it has no 'set password' step after payment
           EnrichedPaypalPayment(payment, maybeEmail)
         }
       )
