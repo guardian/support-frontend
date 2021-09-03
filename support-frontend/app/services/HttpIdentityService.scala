@@ -94,21 +94,6 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[GetUserTypeResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def setPasswordGuest(
-    password: String,
-    guestAccountRegistrationToken: String
-  )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies] = {
-    val payload = Json.obj("password" -> password)
-    val headers =
-      List("X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
-    request(s"guest/password")
-      .addHttpHeaders(headers: _*)
-      .put(payload)
-      .attemptT
-      .leftMap(_.toString)
-      .subflatMap(resp => (resp.json \ "cookies").validate[SetGuestPasswordResponseCookies].asEither.leftMap(_.mkString(",")))
-  }
-
   def createSignInToken(
     email: String
   )(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse] = {
