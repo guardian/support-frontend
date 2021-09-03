@@ -107,6 +107,9 @@ function TermsPrivacy(props: PropTypes) {
     isUSContributor && isNotOneOffContribution;
 
   const recurringCopy = () => {
+    if (Number.isNaN(props.amount)) {
+      return '';
+    }
     const now = new Date();
     const closestDayCopy = now.getDate() >= 29 ? ', or closest day thereafter' : '';
     const amountCopy = formatAmount(
