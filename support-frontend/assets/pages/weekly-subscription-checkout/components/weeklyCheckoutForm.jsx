@@ -53,7 +53,7 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
+import { submitWithDeliveryForm, trackSubmitAttempt } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/utilities/dateConversions';
 import { routes } from 'helpers/urls/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
@@ -80,6 +80,8 @@ import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 
 // ----- Styles ----- //
@@ -150,6 +152,12 @@ function mapDispatchToProps() {
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
       const state = getState();
       validateWithDeliveryForm(dispatch, state);
+      // We need to track PayPal payment attempts here because PayPal behaves
+      // differently to other payment methods. All others are tracked in submit.js
+      const { paymentMethod } = state.page.checkout;
+      if (paymentMethod === PayPal) {
+        trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
+      }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
   };
