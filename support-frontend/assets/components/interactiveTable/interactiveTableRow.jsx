@@ -2,7 +2,7 @@
 // $FlowIgnore
 import React, { useState, type Node } from 'react';
 import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
+import { space, transitions } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { border, brandAltBackground } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
@@ -26,7 +26,8 @@ const tableRow = css`
   text-align: left;
   background-color: ${neutral[100]};
   max-height: 72px;
-  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+  transition: max-height ${transitions.medium};
 
   :not(:first-of-type) {
     margin-top: ${space[2]}px;
@@ -117,7 +118,6 @@ const toggleButton = css`
   /* Allows space for the 5px focus box shadow */
   height: 62px;
   width: 100%;
-  /* justify-content: flex-end; */
   align-items: center;
   overflow: hidden;
 
@@ -129,7 +129,7 @@ const toggleButton = css`
     fill: currentColor;
     height: ${space[4]}px;
     max-width: ${space[5]}px;
-    transition: transform 0.2s ease-in-out;
+    transition: transform ${transitions.short};
   }
 `;
 
@@ -190,8 +190,7 @@ export function InteractiveTableFooterRow({ children }: { children: Node }) {
 export function InteractiveTableRow({
   rowId, columns, details,
 }: RowData) {
-  // TODO: revert to false before shipping!!
-  const [showDetails, setShowDetails] = useState<boolean>(true);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
 
   return (
     <tr role="row" css={[tableRow, showDetails ? tableRowOpen : '']}>
