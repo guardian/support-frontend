@@ -7,7 +7,7 @@ import { css } from '@emotion/core';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
-import { from, between } from '@guardian/src-foundations/mq';
+import { from, between, until } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 
@@ -110,8 +110,21 @@ function ProductOption(props: Product) {
     }
   }, [hasBeenSeen]);
 
+  const productOptionMargin = props.label && css`
+  ${until.tablet} {
+    /* calculation belows are based on productOptionHighlight text size, line height and padding */
+    &:first-of-type {
+      margin-top: calc((20px * 1.5) + 8px) !important;
+    }
+    /* 16px alloted for margin between product options when a label is present */
+    &:not(first-of-type) {
+      margin-top: calc((20px * 1.5) + 8px + 16px) !important;
+    }
+    }
+  `;
+
   return (
-    <div ref={setElementToObserve} css={[productOption, props.cssOverrides]}>
+    <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin]}>
       <div>
         <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
