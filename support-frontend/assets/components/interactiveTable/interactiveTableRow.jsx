@@ -91,7 +91,6 @@ const detailsCell = css`
   max-height: unset;
   min-height: 72px;
   grid-column: 1 / span 4;
-  justify-content: flex-start;
   background-color: ${sport[800]};
   border-top: ${borderStyle};
   padding-left: ${space[3]}px;

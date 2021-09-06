@@ -7,7 +7,7 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
+// import { neutral } from '@guardian/src-foundations/palette';
 
 import {
   AUDCountries,
@@ -32,7 +32,7 @@ import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
 import { HeroWithImage } from './components/hero/heroWithImage';
-import ProductBlock from './components/productBlock/productBlock';
+// import ProductBlock from './components/productBlock/productBlock';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
@@ -40,32 +40,35 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
-import ComparisonTable from './components/comparison/comparisonTable';
+// import ComparisonTable from './components/comparison/comparisonTable';
+import InteractiveTable from 'components/interactiveTable/interactiveTable';
+import { headers, rows, footer } from './components/comparison/interactiveTableContents';
+
 
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 
-const productBlockContainer = css`
-  background-color: ${neutral[93]};
-  border-top: none;
-  border-right: none;
-  margin-top: ${space[3]}px;
-  padding-top: 0;
+// const productBlockContainer = css`
+//   background-color: ${neutral[93]};
+//   border-top: none;
+//   border-right: none;
+//   margin-top: ${space[3]}px;
+//   padding-top: 0;
 
-  ${from.tablet} {
-    background-color: ${neutral[100]};
-    margin-top: ${space[12]}px;
-    border-top: 1px solid ${neutral[86]};
-    border-right: 1px solid ${neutral[86]};
-  }
-`;
+//   ${from.tablet} {
+//     background-color: ${neutral[100]};
+//     margin-top: ${space[12]}px;
+//     border-top: 1px solid ${neutral[86]};
+//     border-right: 1px solid ${neutral[86]};
+//   }
+// `;
 
-const productBlockContainerWithEvents = css`
-  margin-top: 0;
-  ${from.tablet} {
-    margin-top: ${space[6]}px;
-  }
-`;
+// const productBlockContainerWithEvents = css`
+//   margin-top: 0;
+//   ${from.tablet} {
+//     margin-top: ${space[6]}px;
+//   }
+// `;
 
 const eventsProductBlockContainer = css`
     margin-top: 43px;
@@ -77,15 +80,26 @@ const eventsProductBlockContainer = css`
   }
 `;
 
-const comparisonTableContainer = css`
-    margin-top: 43px;
-    margin-bottom: ${space[2]}px;
-    padding-top: 0;
-    padding-bottom: 0;
+// const comparisonTableContainer = css`
+//     margin-top: 43px;
+//     margin-bottom: ${space[2]}px;
+//     padding-top: 0;
+//     padding-bottom: 0;
+
+//   ${from.tablet} {
+//     margin-top: 60px;
+//     margin-bottom: ${space[2]}px;
+//   }
+// `;
+
+const interactiveTableContainer = css`
+  position: relative;
+  z-index: 1;
+  margin-top: -40px;
+  margin-bottom: ${space[2]}px;
 
   ${from.tablet} {
-    margin-top: 60px;
-    margin-bottom: ${space[2]}px;
+    margin-bottom: ${space[6]}px;
   }
 `;
 
@@ -119,7 +133,7 @@ function DigitalLandingPage({
 
   const isGift = orderIsAGift || false;
   const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
-  const showComparisonTable = participations.comparisonTableTest === 'variant';
+  // const showComparisonTable = participations.comparisonTableTest === 'variant';
   const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -153,7 +167,7 @@ function DigitalLandingPage({
     debounce: true,
   });
 
-  const footer = (
+  const pageFooter = (
     <div className="footer-container">
       <div className="footer-alignment">
         <DigitalFooter
@@ -168,7 +182,7 @@ function DigitalLandingPage({
   return (
     <Page
       header={<CountrySwitcherHeader />}
-      footer={footer}
+      footer={pageFooter}
     >
       {orderIsAGift ?
         <HeroWithImage
@@ -182,15 +196,18 @@ function DigitalLandingPage({
           priceList={heroPriceList}
         />
       }
-      {showComparisonTable &&
       <FullWidthContainer>
         <CentredContainer>
-          <Block cssOverrides={comparisonTableContainer}>
-            <ComparisonTable />
-          </Block>
+          <div css={interactiveTableContainer} ref={setElementToObserve}>
+            <InteractiveTable
+              caption={<>What&apos;s included in a paid digital subscription</>}
+              headers={headers}
+              rows={rows}
+              footer={footer}
+            />
+          </div>
         </CentredContainer>
       </FullWidthContainer>
-      }
       {showEventsComponent &&
       <FullWidthContainer>
         <CentredContainer>
@@ -200,7 +217,7 @@ function DigitalLandingPage({
         </CentredContainer>
       </FullWidthContainer>
       }
-      <FullWidthContainer>
+      {/* <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
             <div ref={setElementToObserve}>
@@ -210,8 +227,8 @@ function DigitalLandingPage({
             </div>
           </Block>
         </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="dark" hasOverlap>
+      </FullWidthContainer> */}
+      <FullWidthContainer theme="dark">
         <CentredContainer>
           <Prices
             countryGroupId={countryGroupId}

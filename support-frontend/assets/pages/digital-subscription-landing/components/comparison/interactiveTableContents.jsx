@@ -97,7 +97,7 @@ const detailsCellImageFirst = css`
 
   ${from.tablet} {
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     > * {
       max-width: 390px;
@@ -131,7 +131,7 @@ const detailsCellImageSecond = css`
 
   ${from.tablet} {
     flex-direction: row-reverse;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     > * {
       max-width: 390px;

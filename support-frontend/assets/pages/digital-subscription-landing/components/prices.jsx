@@ -11,7 +11,7 @@ import PaymentSelection
   from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
 const pricesSection = css`
-  padding: 0 ${space[3]}px ${space[12]}px;
+  padding: ${space[6]}px ${space[3]}px ${space[12]}px;
 `;
 
 const priceBoxes = css`
