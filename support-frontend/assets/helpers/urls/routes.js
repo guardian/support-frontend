@@ -80,7 +80,7 @@ function paperCheckoutUrl(
     `${getOrigin()}/subscribe/paper/checkout/guest?fulfilment=${fulfilmentOption}&product=${productOptions}`
     : `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
 
-  return addQueryParamsToURL(url, {promoCode: promoCode, csr: getQueryParameter('csr', null)});
+  return addQueryParamsToURL(url, { promoCode, csr: getQueryParameter('csr') });
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.

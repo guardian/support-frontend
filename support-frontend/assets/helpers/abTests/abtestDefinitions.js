@@ -1,6 +1,5 @@
 // @flow
 import type { Tests } from './abtest';
-import { getQueryParameter } from 'helpers/urls/url';
 import { hasCsrQueryParam } from 'components/csr/csrMode';
 
 // ----- Tests ----- //

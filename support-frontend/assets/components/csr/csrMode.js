@@ -7,7 +7,7 @@ const isSalesforceDomain = domain => domains.find(element => element === domain)
 
 const isInCsrMode = () => window.location !== window.parent.location;
 
-const hasCsrQueryParam = () => getQueryParameter('csr', "0") === "1";
+const hasCsrQueryParam = () => getQueryParameter('csr', '0') === '1';
 
 const useCsrDetails = () => {
   const [csrUsername, setCsrUsername] = useState('');
