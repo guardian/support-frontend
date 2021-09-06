@@ -2,7 +2,7 @@
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
+import { from, until, breakpoints } from '@guardian/src-foundations/mq';
 import { background, brandAltBackground, brand } from '@guardian/src-foundations/palette';
 import { SvgCheckmark } from '@guardian/src-icons';
 import { headline } from '@guardian/src-foundations/typography';
@@ -95,7 +95,7 @@ const detailsCellImageFirst = css`
     margin-top: ${space[3]}px;
   }
 
-  ${from.desktop} {
+  ${from.tablet} {
     flex-direction: row;
     justify-content: space-between;
 
@@ -115,7 +115,7 @@ const detailsCellImageFirstContainer = css`
     width: 100%;
   }
 
-  ${from.desktop} {
+  ${from.tablet} {
     margin: 0 0 -${space[4]}px;
   }
 `;
@@ -129,7 +129,7 @@ const detailsCellImageSecond = css`
   }
 
 
-  ${from.desktop} {
+  ${from.tablet} {
     flex-direction: row-reverse;
     justify-content: space-between;
 
@@ -153,7 +153,7 @@ const detailsCellOfflineReading = css`
   display: flex;
   flex-direction: column;
 
-  ${from.desktop} {
+  ${from.tablet} {
     flex-direction: row-reverse;
   }
 `;
@@ -161,7 +161,7 @@ const detailsCellOfflineReading = css`
 const appFeatureImageContainer = css`
   display: flex;
 
-  ${until.desktop} {
+  ${until.tablet} {
     :not(:last-of-type) {
       margin-bottom: ${space[3]}px;
     }
@@ -170,10 +170,12 @@ const appFeatureImageContainer = css`
 
 const detailsColumnCrosswords = css`
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
 
-  ${from.desktop} {
+  ${from.tablet} {
     flex-direction: row-reverse;
+    justify-content: space-around;
   }
 
   & > * {
@@ -427,9 +429,9 @@ export const rows = [
           </AppFeatureWithIcon>
         </div>
         <div css={detailsCellImageCrosswords}>
-          <picture className="component-grid-picture">
-            <source media="(max-width: 799px)" srcSet={crosswordsPic} />
-            <source media="(min-width: 800px)" srcSet={crosswordsDesktopPic} />
+          <picture>
+            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={crosswordsPic} />
+            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={crosswordsDesktopPic} />
             <img
               src={crosswordsPic}
               alt=""
