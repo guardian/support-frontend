@@ -7,7 +7,7 @@ import { css } from '@emotion/core';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
-import { from } from '@guardian/src-foundations/mq';
+import { from, between } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 
@@ -76,6 +76,21 @@ const productOptionHighlight = css`
   padding: ${space[2]}px ${space[3]}px;
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
+
+const buttonCopy = css`
+  display: inline-flex;
+  ${between.tablet.and.leftCol} {
+    display: none;
+    }
+`;
+
+const buttonCopyTabletToDesktop = css`
+  display: none;
+  ${between.tablet.and.leftCol} {
+    display: inline-flex;
+    }
+`;
+
 function ProductOption(props: Product) {
   const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
     threshold: 0.5,
@@ -118,11 +133,20 @@ function ProductOption(props: Product) {
       <div>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
+            css={buttonCopy}
             href={props.href}
             onClick={props.onClick}
             aria-label={`${props.title}- ${props.buttonCopy}`}
           >
             {props.buttonCopy}
+          </LinkButton>
+          <LinkButton
+            css={buttonCopyTabletToDesktop}
+            href={props.href}
+            onClick={props.onClick}
+            aria-label={`${props.title}- Subscribe`}
+          >
+            Subscribe
           </LinkButton>
         </ThemeProvider>
       </div>
