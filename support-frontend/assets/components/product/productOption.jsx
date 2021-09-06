@@ -29,7 +29,12 @@ const productOption = css`
   ${textSans.medium()}
   position: relative;
   display: grid;
-  grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas:
+    '. priceCopy'
+    '. priceCopy'
+    '. .';
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -37,6 +42,9 @@ const productOption = css`
   ${from.tablet} {
     min-height: 272px;
     width: 300px;
+    grid-template-columns: none;
+    grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
+    grid-template-areas: none;
   }
 `;
 
@@ -91,6 +99,12 @@ const buttonCopyTabletToDesktop = css`
     }
 `;
 
+const priceCopyGridPlacement = css`
+  ${until.tablet} {
+    grid-area: priceCopy;
+  }
+`;
+
 function ProductOption(props: Product) {
   const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
     threshold: 0.5,
@@ -135,7 +149,7 @@ function ProductOption(props: Product) {
           {props.offerCopy}
         </p>
       </div>
-      <div>
+      <div css={priceCopyGridPlacement}>
         {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
         {/* eslint-disable-next-line jsx-a11y/aria-role */}
         <p role="text" css={productOptionPriceCopy}>
