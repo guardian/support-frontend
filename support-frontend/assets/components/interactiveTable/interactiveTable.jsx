@@ -3,7 +3,6 @@ import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { from, until } from '@guardian/src-foundations/mq';
 import { body } from '@guardian/src-foundations/typography';
-import { neutral } from '@guardian/src-foundations/palette';
 import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/accessibility';
 import { InteractiveTableRow, InteractiveTableHeaderRow, InteractiveTableFooterRow, type RowData, type CellData } from './interactiveTableRow';
 
@@ -13,7 +12,6 @@ const visuallyHidden = css`
 
 const table = css`
   width: 100%;
-  background-color: ${neutral[86]};
   ${body.small()}
 
   ${until.mobileMedium} {

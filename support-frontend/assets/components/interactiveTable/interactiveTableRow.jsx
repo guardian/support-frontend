@@ -22,7 +22,7 @@ const tableRow = css`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 40px 40px 42px;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: 72px 1fr;
   text-align: left;
   background-color: ${neutral[100]};
   max-height: 72px;
@@ -38,18 +38,20 @@ const tableRow = css`
 `;
 
 const tableHeaderRow = css`
+  background-color: transparent;
+  color: ${neutral[100]};
   grid-template-rows: 1fr;
 `;
 
 const tableRowOpen = css`
-  max-height: 300px;
+  max-height: 600px;
 `;
 
 const tableCell = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 72px;
+  max-height: 72px;
   padding: ${space[4]}px 0;
   padding-right: ${space[3]}px;
 `;
@@ -76,6 +78,7 @@ const iconCell = css`
 
 const expandableButtonCell = css`
   position: relative;
+  max-height: 72px;
   display: flex;
   align-items: center;
   border-left: ${borderStyle};
@@ -84,6 +87,8 @@ const expandableButtonCell = css`
 `;
 
 const detailsCell = css`
+  max-height: unset;
+  min-height: 72px;
   grid-column: 1 / span 4;
   justify-content: flex-start;
   background-color: ${sport[800]};
@@ -92,6 +97,7 @@ const detailsCell = css`
 
   ${from.desktop} {
     padding-left: 80px;
+    padding-right: ${space[9]}px;
   }
 `;
 
@@ -113,6 +119,11 @@ const toggleButton = css`
   width: 100%;
   /* justify-content: flex-end; */
   align-items: center;
+  overflow: hidden;
+
+  span {
+    overflow: hidden;
+  }
 
   svg {
     fill: currentColor;
@@ -179,7 +190,8 @@ export function InteractiveTableFooterRow({ children }: { children: Node }) {
 export function InteractiveTableRow({
   rowId, columns, details,
 }: RowData) {
-  const [showDetails, setShowDetails] = useState<boolean>(false);
+  // TODO: revert to false before shipping!!
+  const [showDetails, setShowDetails] = useState<boolean>(true);
 
   return (
     <tr role="row" css={[tableRow, showDetails ? tableRowOpen : '']}>

@@ -120,7 +120,7 @@ stories.add('Quote', () => {
 stories.add('Block label', () => <BlockLabel>Use this for stand-out labels on other content</BlockLabel>);
 
 stories.add('Interactive table', () => (
-  <div style={{ maxWidth: '940px', margin: '0 auto' }}>
+  <div style={{ maxWidth: '940px', margin: '0 auto', backgroundColor: '#DCDCDC' }}>
     <InteractiveTable
       caption={<>What&apos;s included in a paid digital subscription</>}
       headers={headers}
