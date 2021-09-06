@@ -31,6 +31,7 @@ import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { paperLandingProps, type PaperLandingPropTypes } from './paperSubscriptionLandingProps';
+import { hasCsrQueryParam } from 'components/csr/csrMode';
 
 // ----- Collection or delivery ----- //
 
@@ -53,7 +54,7 @@ const pageQaId = 'qa-paper-subscriptions';
 const PaperLandingPage = ({ productPrices, promotionCopy, participations }: PaperLandingPropTypes) => {
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
   const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
-  const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
+  const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant' || hasCsrQueryParam();
 
   const [selectedTab, setSelectedTab] = useState<PaperFulfilmentOptions>(fulfilment);
 
