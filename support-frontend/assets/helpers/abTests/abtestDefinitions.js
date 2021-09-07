@@ -106,7 +106,7 @@ export const tests: Tests = {
         size: 0,
       },
     },
-    isActive: true,
+    isActive: false,
     referrerControlled: true,
     seed: 10,
     optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
