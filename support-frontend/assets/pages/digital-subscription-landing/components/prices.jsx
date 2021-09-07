@@ -35,7 +35,7 @@ const pricesSubHeadline = css`
 const ctaCopy = {
   standard: {
     title: 'Choose one of our special offers and subscribe today',
-    paragraph: <>After your <strong>14-day free trial</strong>, your
+    paragraph: <>After your <strong>flexible free trial</strong>, your
       subscription will begin automatically and you can cancel any time</>,
   },
   gift: {
