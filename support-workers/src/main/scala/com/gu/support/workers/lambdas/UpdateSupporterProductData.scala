@@ -65,15 +65,15 @@ object UpdateSupporterProductData {
             ))
           .toRight(())
           .map(Some(_))
-      case SendThankYouEmailDigitalSubscriptionDirectPurchaseState(user, product, _, _, _, _, subscriptionNumber, _) =>
+      case state: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
         catalogService
-          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
+          .getProductRatePlan(DigitalPack, state.product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
             supporterRatePlanItem(
-              subscriptionName = subscriptionNumber,
-              identityId = user.id,
+              subscriptionName = state.subscriptionNumber,
+              identityId = state.user.id,
               productRatePlanId = productRatePlan.id,
-              productRatePlanName = s"support-workers added ${product.describe}",
+              productRatePlanName = s"support-workers added ${state.product.describe}",
             ))
           .toRight(())
           .map(Some(_))

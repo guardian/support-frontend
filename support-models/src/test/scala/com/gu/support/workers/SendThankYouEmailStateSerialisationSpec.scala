@@ -46,6 +46,7 @@ object ProductTypeCreatedTestData {
     "acno",
     "subno",
     Some(false),
+    None,
   )
 
   val digitalSubscriptionGiftPurchaseCreated = SendThankYouEmailDigitalSubscriptionGiftPurchaseState(

@@ -270,7 +270,7 @@ class DigitalPackEmailFields(
         ),
         country = state.user.billingAddress.country.name,
         date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date),
-        trial_period = "14", //TODO: depends on Promo code or zuora config
+        trial_period = state.freeTrialLength.map(_.toString).getOrElse("14"), //TODO: depends on Promo code or zuora config
         paymentFieldsAttributes
       ),
         state.user,

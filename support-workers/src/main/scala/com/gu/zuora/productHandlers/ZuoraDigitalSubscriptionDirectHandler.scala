@@ -37,6 +37,7 @@ class ZuoraDigitalSubscriptionDirectHandler(
       account.value,
       sub.value,
       Some(isUserInEventsTest(maybeAbTests)),
+      state.freeTrialLength,
     )
 
 }
