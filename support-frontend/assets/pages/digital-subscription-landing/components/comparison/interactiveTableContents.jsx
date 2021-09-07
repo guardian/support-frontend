@@ -58,6 +58,7 @@ const indicators = css`
   height: 27px;
 
   svg {
+    height: 27px;
     display: block;
     margin: 0 auto;
   }
@@ -87,6 +88,7 @@ const hideOnVerySmall = css`
 
 const detailsCellImageFirst = css`
   display: flex;
+  align-items: flex-start;
   flex-direction: column-reverse;
 
   p {
@@ -95,10 +97,10 @@ const detailsCellImageFirst = css`
 
   ${from.tablet} {
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     > * {
-      max-width: 390px;
+      max-width: 500px;
       flex-basis: 50%;
       margin: 0;
     }
@@ -107,6 +109,7 @@ const detailsCellImageFirst = css`
 
 const detailsCellImageFirstContainer = css`
   display: flex;
+  align-items: flex-end;
   margin: 0 -${space[3]}px;
 
   img {
@@ -120,6 +123,7 @@ const detailsCellImageFirstContainer = css`
 
 const detailsCellImageSecond = css`
   display: flex;
+  align-items: flex-start;
   flex-direction: column;
 
   p {
@@ -129,10 +133,10 @@ const detailsCellImageSecond = css`
 
   ${from.tablet} {
     flex-direction: row-reverse;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     > * {
-      max-width: 390px;
+      max-width: 500px;
       flex-basis: 50%;
     }
   }
@@ -140,6 +144,7 @@ const detailsCellImageSecond = css`
 
 const detailsCellImageSecondContainer = css`
   display: flex;
+  align-items: flex-end;
   margin: 0 -${space[3]}px -${space[4]}px;
 
   img {
@@ -153,6 +158,7 @@ const detailsCellOfflineReading = css`
 
   ${from.tablet} {
     flex-direction: row-reverse;
+    justify-content: center;
   }
 `;
 
@@ -194,10 +200,6 @@ const detailsCellImageCrosswords = css`
   }
 `;
 
-const appFeature = css`
-  max-width: 280px;
-`;
-
 const appFeatureHeadline = css`
   ${headline.xxxsmall({ fontWeight: 'bold' })}
   color: ${brand[400]};
@@ -224,10 +226,9 @@ type AppFeatureWithIconPropTypes = {|
 |}
 
 const AppFeatureWithIcon = ({ appName, heading = `The ${appName} App`, children }: AppFeatureWithIconPropTypes) => {
-  // const defaultHeading = `The ${appName} App`;
   const icon = appName === 'Editions' ? <SvgEditionsIcon /> : <SvgLiveAppIcon />;
   return (
-    <section css={appFeature}>
+    <section>
       {icon}
       <h4 css={appFeatureHeadline}>{heading}</h4>
       {children}
