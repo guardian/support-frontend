@@ -166,7 +166,7 @@ class SupportWorkersClient(
         firstDeliveryDate = request.body.firstDeliveryDate,
         userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
         ipAddress = request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
-        freeTrialLength = request.body.freeTrialLength,
+        freeTrialLength = request.body.freeTrialLength
       )
       isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
       executionResult <- underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
