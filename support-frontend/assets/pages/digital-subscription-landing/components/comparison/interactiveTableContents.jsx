@@ -10,7 +10,6 @@ import { headline } from '@guardian/src-foundations/typography';
 import { SvgNews } from 'components/icons/news';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
-import { SvgTicket } from 'components/icons/ticket';
 import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
@@ -20,7 +19,6 @@ import journalismPic from './temp/journalism.png';
 import adFreePic from './temp/adFree.png';
 import editionsPic from './temp/editions.png';
 import guardianAppPic from './temp/guApp.png';
-import eventsPic from './temp/events.png';
 import offlineReadingEdPic from './temp/offlineReadingEditions.png';
 import offlineReadingGuPic from './temp/offlineReadingGu.png';
 import crosswordsPic from './temp/crosswords.png';
@@ -239,7 +237,7 @@ const AppFeatureWithIcon = ({ appName, heading = `The ${appName} App`, children 
 
 export const rows = [
   {
-    rowId: 'row1',
+    rowId: 'journalism',
     columns: [
       {
         content: (
@@ -269,7 +267,7 @@ export const rows = [
       </div>),
   },
   {
-    rowId: 'row2',
+    rowId: 'adFree',
     columns: [
       {
         content: <><div css={descriptionIcon}><SvgAdFree /></div>
@@ -296,7 +294,7 @@ export const rows = [
   },
 
   {
-    rowId: 'row3',
+    rowId: 'editionsApp',
     columns: [
       {
         content: <><div css={descriptionIcon}><SvgEditionsIcon /></div>
@@ -322,7 +320,7 @@ export const rows = [
       </div>),
   },
   {
-    rowId: 'row4',
+    rowId: 'premiumApp',
     columns: [
       {
         content: <><div css={descriptionIcon}><SvgLiveAppIcon /></div>
@@ -348,34 +346,7 @@ export const rows = [
       </div>),
   },
   {
-    rowId: 'row5',
-    columns: [
-      {
-        content: <><div css={descriptionIcon}><SvgTicket /></div>
-          <span>Unlimited tickets to Guardian digital events</span></>,
-        isPrimary: true,
-      },
-      {
-        content: <Checkmark />,
-      },
-      {
-        content: <Padlock />,
-      },
-    ],
-    details: (
-      <div css={detailsCellImageFirst}>
-        <p>
-          Get unlimited access to Live converations with journalists, political leaders and cultural icons.
-          Or be inspired to learn a new skill in selected Masterclasses.
-          With events launching weekly and available on demand.
-        </p>
-        <div css={detailsCellImageFirstContainer}>
-          <img src={eventsPic} alt="" />
-        </div>
-      </div>),
-  },
-  {
-    rowId: 'row6',
+    rowId: 'offlineReading',
     columns: [
       {
         content: <><div css={descriptionIcon}><SvgOffline /></div>
@@ -407,7 +378,7 @@ export const rows = [
     ),
   },
   {
-    rowId: 'row7',
+    rowId: 'crosswords',
     columns: [
       {
         content: <><div css={descriptionIcon}><SvgCrosswords /></div>
