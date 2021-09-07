@@ -16,7 +16,7 @@ import {
   type ContributionType,
   type OtherAmounts,
   type SelectedAmounts,
-  contributionTypeIsRecurring,
+  contributionTypeIsRecurring, getAmount,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { StateProvince } from 'helpers/internationalisation/country';
@@ -28,6 +28,7 @@ import {
 import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
 import { AmazonPay, Sepa } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
+import { set as setCookie } from 'helpers/storage/cookie';
 
 // ----- Types ----- //
 
@@ -149,11 +150,26 @@ const formIsValidParameters = (state: State) => ({
   useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
+function setAbandonedCartCookie(state: State): void {
+  const { form } = state.page;
+  setCookie(
+    'gu.contributions.abandonedCart',
+    JSON.stringify({
+      product: 'CONTRIBUTION',
+      amount: getAmount(form.selectedAmounts, form.formData.otherAmounts, form.contributionType),
+      contributionType: form.contributionType,
+    }),
+    1, // TODO - session cookie?
+  );
+}
+
 function enableOrDisableForm() {
   return (dispatch: Function, getState: () => State): void => {
 
     const state = getState();
     const { isRecurringContributor } = state.page.user;
+
+    setAbandonedCartCookie(state);
 
     const shouldBlockExistingRecurringContributor =
       isRecurringContributor && contributionTypeIsRecurring(state.page.form.contributionType);
@@ -188,6 +204,7 @@ function enableOrDisableForm() {
 }
 
 function setFormSubmissionDependentValue(setStateValue: () => Action) {
+  console.log('YES');
   return (dispatch: Function): void => {
     dispatch(setStateValue());
     dispatch(enableOrDisableForm());
