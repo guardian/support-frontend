@@ -113,6 +113,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+      freeTrialLength = None,
     )
 
     val zuora = new ZuoraSubscribeService {

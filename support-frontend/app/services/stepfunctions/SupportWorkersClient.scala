@@ -64,6 +64,7 @@ case class CreateSupportWorkersRequest(
   email: String,
   telephoneNumber: Option[String],
   deliveryInstructions: Option[String],
+  freeTrialLength: Option[Int],
   debugInfo: Option[String]
 )
 
@@ -164,7 +165,8 @@ class SupportWorkersClient(
         promoCode = request.body.promoCode,
         firstDeliveryDate = request.body.firstDeliveryDate,
         userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
-        ipAddress = request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress)
+        ipAddress = request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
+        freeTrialLength = request.body.freeTrialLength,
       )
       isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
       executionResult <- underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(

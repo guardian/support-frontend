@@ -144,7 +144,7 @@ class NextState(state: CreateSalesforceContactState) {
   def toNextDSDirect(
     salesforceContactRecord: SalesforceContactRecord,
     product: DigitalPack,
-    purchase: PaymentMethod
+    purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(DigitalSubscriptionDirectPurchaseState(
       user.billingAddress.country,
@@ -152,6 +152,7 @@ class NextState(state: CreateSalesforceContactState) {
       purchase,
       promoCode,
       salesforceContactRecord,
+      freeTrialLength,
     ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, acquisitionData)
 
 }
