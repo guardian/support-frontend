@@ -7,7 +7,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class PaypalApiErrorSpec extends AnyWordSpec with Matchers with MockitoSugar {
 

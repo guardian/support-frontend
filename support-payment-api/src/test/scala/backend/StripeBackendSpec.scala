@@ -80,9 +80,9 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(mock[AcquisitionSubmission]))
   val acquisitionResponseError: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
     EitherT.left(Future.successful(ophanError))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
-    EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
+    EitherT.right(Future.successful(1L))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
     EitherT.right(Future.successful(()))
@@ -169,7 +169,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     when(paymentIntentMock.getCurrency).thenReturn("GBP")
     when(paymentIntentMock.getAmount).thenReturn(12L)
 
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
     val chargeCollection = mock[ChargeCollection]
     when(chargeCollection.getData).thenReturn(List(chargeMock).asJava)
     when(paymentIntentMock.getCharges).thenReturn(chargeCollection)
@@ -206,7 +206,7 @@ with WSClientProvider {
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock, None)
+        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock)
       }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
@@ -218,7 +218,7 @@ with WSClientProvider {
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock, Some("guest-token"))
+        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock)
       }
     }
 
@@ -291,7 +291,7 @@ with WSClientProvider {
         when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
 
         stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success(Some("guest-token"))
+          StripePaymentIntentsApiResponse.Success()
       }
 
       "return RequiresAction if 3DS required" in new StripeBackendFixture {
@@ -362,7 +362,7 @@ with WSClientProvider {
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
 
         stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success(Some("guest-token"))
+          StripePaymentIntentsApiResponse.Success()
       }
 
       "return an error if confirmation failed" in new StripeBackendFixture {

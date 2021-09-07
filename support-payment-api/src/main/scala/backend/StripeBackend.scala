@@ -64,13 +64,10 @@ class StripeBackend(
 
         cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
-        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityIdWithGuestAccountCreationToken =>
-          postPaymentTasks(chargeData.paymentData.email.value, chargeData, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
+        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityId =>
+          postPaymentTasks(chargeData.paymentData.email.value, chargeData, charge, clientBrowserInfo, identityId)
 
-          StripeCreateChargeResponse.fromCharge(
-            charge,
-            identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken)
-          )
+          StripeCreateChargeResponse.fromCharge(charge)
         }
       }
 
@@ -179,10 +176,10 @@ class StripeBackend(
 
     cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
-    getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityIdWithGuestAccountCreationToken =>
+    getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityId =>
       paymentIntent.getCharges.getData.asScala.toList.headOption match {
         case Some(charge) =>
-          postPaymentTasks(request.paymentData.email.value, request, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
+          postPaymentTasks(request.paymentData.email.value, request, charge, clientBrowserInfo, identityId)
         case None =>
           /**
             * This should never happen, but in case it does we still return success to the client because the payment
@@ -195,9 +192,7 @@ class StripeBackend(
           )
       }
 
-      StripePaymentIntentsApiResponse.Success(
-        identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken)
-      )
+      StripePaymentIntentsApiResponse.Success()
     }
   }
 
@@ -235,7 +230,7 @@ class StripeBackend(
     )
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[IdentityIdWithGuestAccountCreationToken]] =
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[Long]] =
     identityService.getOrCreateIdentityIdFromEmail(email).fold(
       err => {
         logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")

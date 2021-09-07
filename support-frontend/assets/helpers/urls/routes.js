@@ -15,7 +15,6 @@ const routes: {
   recurringContribCreate: '/contribute/recurring/create',
   recurringContribPending: '/contribute/recurring/pending',
   contributionsSendMarketing: '/contribute/send-marketing',
-  contributionsSetPasswordGuest: '/identity/set-password-guest',
   getUserType: '/identity/get-user-type',
   oneOffContribAutofill: '/contribute/one-off/autofill',
   contributionsMarketingConfirm: '/contribute/marketing-confirm',

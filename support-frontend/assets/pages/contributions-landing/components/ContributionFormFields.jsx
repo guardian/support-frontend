@@ -23,7 +23,7 @@ import {
   updateLastName,
   updateEmail,
   updateBillingState,
-  checkIfEmailHasPassword,
+  getUserType,
 } from '../contributionsLandingActions';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { TextInput } from '@guardian/src-text-input';
@@ -70,7 +70,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateBillingState: (event) => { dispatch(updateBillingState(event.target.value === '' ? null : event.target.value)); },
-  checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
+  checkIfEmailHasPassword: (event) => { dispatch(getUserType(event.target.value)); },
 });
 
 
