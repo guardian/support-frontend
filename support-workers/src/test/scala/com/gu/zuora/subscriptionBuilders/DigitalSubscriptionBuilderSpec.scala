@@ -148,6 +148,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
         SalesforceContactRecord("", ""),
+        None,
       )
     ).toOption.get
 

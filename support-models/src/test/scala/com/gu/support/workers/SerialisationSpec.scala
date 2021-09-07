@@ -81,7 +81,8 @@ object StatesTestData {
     promoCode = None,
     acquisitionData = None,
     ipAddress = "127.0.0.1",
-    userAgent = "TestAgent"
+    userAgent = "TestAgent",
+    freeTrialLength = None
   )
 
   val createSalesforceContactState = CreateSalesforceContactState(
@@ -93,7 +94,8 @@ object StatesTestData {
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
     promoCode = None,
-    acquisitionData = None
+    acquisitionData = None,
+    freeTrialLength = None
   )
 
   val createZuoraSubscriptionState: CreateZuoraSubscriptionState = CreateZuoraSubscriptionState(
@@ -102,7 +104,8 @@ object StatesTestData {
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = None,
-      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid")
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+      freeTrialLength = None
     ),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),

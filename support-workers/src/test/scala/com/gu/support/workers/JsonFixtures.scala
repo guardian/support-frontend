@@ -464,7 +464,8 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         None,
-        salesforceContact
+        salesforceContact,
+        None,
       ),
       UUID.randomUUID(),
       user(),
@@ -530,7 +531,8 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         Some("DJP8L27FY"),
-        salesforceContact
+        salesforceContact,
+        None,
       ),
       UUID.randomUUID(),
       user(),
@@ -895,7 +897,8 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         Some("DJRHYMDS8"),
-        salesforceContact
+        salesforceContact,
+        None,
       ),
       UUID.randomUUID(),
       user(),

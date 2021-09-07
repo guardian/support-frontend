@@ -17,7 +17,8 @@ case class CreateSalesforceContactState(
   paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
-  acquisitionData: Option[AcquisitionData]
+  acquisitionData: Option[AcquisitionData],
+  freeTrialLength: Option[Int],  
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec

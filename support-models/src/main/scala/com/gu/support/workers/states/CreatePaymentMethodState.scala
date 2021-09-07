@@ -19,7 +19,8 @@ case class CreatePaymentMethodState(
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData],
   ipAddress: String,
-  userAgent: String
+  userAgent: String,
+  freeTrialLength: Option[Int],    
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec

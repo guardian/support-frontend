@@ -21,7 +21,12 @@ class DigitalSubscriptionDirectPurchaseBuilder(
     val productRatePlanId = validateRatePlan(digitalRatePlan(state.product, environment), state.product.describe)
 
     val todaysDate = dateGenerator.today
-    val contractAcceptanceDate = todaysDate.plusDays(config.defaultFreeTrialPeriod + config.paymentGracePeriod)
+
+    val defaultFreeTrialLength = config.defaultFreeTrialPeriod + config.paymentGracePeriod
+
+    val freeTrialLength = state.freeTrialLength.getOrElse(defaultFreeTrialLength)
+    
+    val contractAcceptanceDate = todaysDate.plusDays(freeTrialLength)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,

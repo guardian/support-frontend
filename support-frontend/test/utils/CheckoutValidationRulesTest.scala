@@ -318,7 +318,8 @@ object TestData {
     deliveryAddress = None,
     giftRecipient = None,
     deliveryInstructions = None,
-    debugInfo = None
+    debugInfo = None,
+    freeTrialLength = None
   )
 
   val someDateNextMonth = new LocalDate().plusMonths(1)
@@ -347,7 +348,8 @@ object TestData {
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,
     deliveryInstructions = None,
-    debugInfo = None
+    debugInfo = None,
+    freeTrialLength = None
   )
 
   val validWeeklyRequest = CreateSupportWorkersRequest(
@@ -367,7 +369,8 @@ object TestData {
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,
     deliveryInstructions = None,
-    debugInfo = None
+    debugInfo = None,
+    freeTrialLength = None
   )
 
 }

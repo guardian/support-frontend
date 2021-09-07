@@ -76,7 +76,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       paymentMethod,
       state.firstDeliveryDate,
       state.promoCode,
-      state.acquisitionData
+      state.acquisitionData,
+      state.freeTrialLength,
     )
 
   def createStripePaymentMethod(
