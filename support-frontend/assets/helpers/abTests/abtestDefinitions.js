@@ -88,6 +88,27 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.auLandingPage,
     seed: 1,
   },
+  freeTrialLengthTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 5,
+    optimizeId: 'Qc29RjX5Tk2R7zkBTXXhAQ',
+  },
   // If the name of this test or the variant id changes then the code
   // in `ZuoraDigitalSubscriptionDirectHandler.subscribe` will need
   // to change as well.

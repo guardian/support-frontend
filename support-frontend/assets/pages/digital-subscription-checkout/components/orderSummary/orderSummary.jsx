@@ -9,6 +9,7 @@ import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDig
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import * as styles from './orderSummaryStyles';
 import { getGiftOrderSummaryText } from '../helpers';
+import type { Participations } from 'helpers/abTests/abtest';
 
 type PropTypes = {
   billingPeriod: DigitalBillingPeriod,
@@ -18,6 +19,7 @@ type PropTypes = {
   productPrice: ProductPrice,
   title: string,
   orderIsAGift?: boolean,
+  participations: Participations,
 };
 
 function OrderSummary(props: PropTypes) {
@@ -37,7 +39,7 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.textBlock}>
           <h4>{props.title}</h4>
           <p>{priceString}</p>
-          {!props.orderIsAGift && <span>at least 14 days free trial</span>}
+          {!props.orderIsAGift && <span>{props.participations.freeTrialLengthTest === 'variant' ? <>at least </> : null }14 days free trial</span>}
         </div>
       </div>
       <div css={styles.endSummary}>

@@ -177,6 +177,7 @@ function DigitalCheckoutForm(props: PropTypes) {
           productPrice={productPrice}
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.digitalSubscriptionLanding}
+          participations={props.participations}
         />)}
       >
         <Form onSubmit={(ev) => {
@@ -204,9 +205,11 @@ function DigitalCheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
-          <FormSection title="Choose when to start paying">
-            <FreeTrialSelector onChange={props.setFreeTrialLength} currentValue={props.freeTrialLength} />
-          </FormSection>
+          {props.participations.freeTrialLengthTest === 'variant' ?
+            <FormSection title="Choose when to start paying">
+              <FreeTrialSelector onChange={props.setFreeTrialLength} currentValue={props.freeTrialLength}/>
+            </FormSection> :
+          null}
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
               <PaymentMethodSelector
