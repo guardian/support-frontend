@@ -2,7 +2,7 @@
 @import admin.ServersideAbTest.{Participation, asJsonString}
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import views.{EmptyDiv, Preload, ReactDiv, SSRContent}
-@import scala.util.Random
+@import helper.CSRF
 @(
   title: String,
   mainElement: ReactDiv,
@@ -24,14 +24,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
 
-    @csrf.map { token =>
       <script type="text/javascript">
         window.guardian = window.guardian || {};
-        if(!window.guardian.csrf) {
-          window.guardian.csrf = {token: "@token"}
-        }
+        window.guardian.csrf = { token: "@CSRF.getToken.value" };
       </script>
-    }
 
     <meta property="og:type" content="website" />
     <meta property="twitter:card" content="summary_large_image" />

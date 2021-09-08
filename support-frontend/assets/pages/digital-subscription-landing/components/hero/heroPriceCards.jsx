@@ -9,6 +9,7 @@ import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 
 import ProductOptionSmall from 'components/product/productOptionSmall';
+import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
 
 const priceCardContainer = css`
   position: relative;
@@ -80,6 +81,7 @@ export function HeroPriceCards(props: PropTypes) {
         </div>
         <ProductOptionSmall cssOverrides={fitAroundBelow} {...props.priceList[0]} />
         <ProductOptionSmall cssOverrides={fitAroundAbove} {...props.priceList[1]} />
+        <PayPalHeroButton />
       </div>
     </div>
   );

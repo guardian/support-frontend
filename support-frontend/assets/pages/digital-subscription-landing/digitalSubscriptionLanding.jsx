@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { renderPage } from 'helpers/rendering/render';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
@@ -21,7 +21,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { routes } from 'helpers/urls/routes';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -44,6 +44,9 @@ import ComparisonTable from './components/comparison/comparisonTable';
 
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
+import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { createPayPalReducer } from 'components/paypalExpressButton/PayPalHeroStore';
+import { Provider } from 'react-redux';
 
 const productBlockContainer = css`
   background-color: ${neutral[93]};
@@ -103,7 +106,7 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
-
+const store = initRedux(createPayPalReducer, true);
 // ----- Render ----- //
 function DigitalLandingPage({
   countryGroupId,
@@ -117,10 +120,11 @@ function DigitalLandingPage({
     return null;
   }
 
+  useEffect(() => {showPayPal(store.dispatch);}, []);
   const isGift = orderIsAGift || false;
   const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
   const showComparisonTable = participations.comparisonTableTest === 'variant';
-  const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
+  const isUsingGuestCheckout = true; // participations.subscriptionsGuestCheckoutTest === 'variant';
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
@@ -166,69 +170,71 @@ function DigitalLandingPage({
     </div>);
 
   return (
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={footer}
-    >
-      {orderIsAGift ?
-        <HeroWithImage
-          orderIsAGift={isGift}
-          countryGroupId={countryGroupId}
-          promotionCopy={sanitisedPromoCopy}
-        /> :
-        <HeroWithPriceCards
-          promotionCopy={sanitisedPromoCopy}
-          countryGroupId={countryGroupId}
-          priceList={heroPriceList}
-        />
-      }
-      {showComparisonTable &&
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={comparisonTableContainer}>
-            <ComparisonTable />
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      }
-      {showEventsComponent &&
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={eventsProductBlockContainer}>
-            <EventsModule />
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      }
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
-            <div ref={setElementToObserve}>
-              <ProductBlock
-                countryGroupId={countryGroupId}
-              />
-            </div>
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="dark" hasOverlap>
-        <CentredContainer>
-          <Prices
-            countryGroupId={countryGroupId}
-            currencyId={currencyId}
-            productPrices={productPrices}
+    <Provider store={store}>
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={footer}
+      >
+        {orderIsAGift ?
+          <HeroWithImage
             orderIsAGift={isGift}
-            isUsingGuestCheckout={isUsingGuestCheckout}
+            countryGroupId={countryGroupId}
+            promotionCopy={sanitisedPromoCopy}
+          /> :
+          <HeroWithPriceCards
+            promotionCopy={sanitisedPromoCopy}
+            countryGroupId={countryGroupId}
+            priceList={heroPriceList}
           />
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="white">
-        <CentredContainer>
-          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
-        </CentredContainer>
-      </FullWidthContainer>
-      <FeedbackWidget display={widgetShouldDisplay} />
-    </Page>
+        }
+        {showComparisonTable &&
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block cssOverrides={comparisonTableContainer}>
+              <ComparisonTable />
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>
+        }
+        {showEventsComponent &&
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block cssOverrides={eventsProductBlockContainer}>
+              <EventsModule />
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>
+        }
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
+              <div ref={setElementToObserve}>
+                <ProductBlock
+                  countryGroupId={countryGroupId}
+                />
+              </div>
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>
+        <FullWidthContainer theme="dark" hasOverlap>
+          <CentredContainer>
+            <Prices
+              countryGroupId={countryGroupId}
+              currencyId={currencyId}
+              productPrices={productPrices}
+              orderIsAGift={isGift}
+              isUsingGuestCheckout={isUsingGuestCheckout}
+            />
+          </CentredContainer>
+        </FullWidthContainer>
+        <FullWidthContainer theme="white">
+          <CentredContainer>
+            <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
+          </CentredContainer>
+        </FullWidthContainer>
+        <FeedbackWidget display={widgetShouldDisplay} />
+      </Page>
+    </Provider>
   );
 }
 

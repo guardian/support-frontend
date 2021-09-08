@@ -51,22 +51,24 @@ const PayPalExpressButtonComponent = (props: PropTypes) => {
     return <AnimatedDots appearance="dark" />;
   }
 
+  const paypalOptions = getPayPalOptions(
+    props.currencyId,
+    props.csrf,
+    onPaymentAuthorisation,
+    props.canOpen,
+    props.onClick,
+    props.formClassName,
+    props.isTestUser,
+    props.amount,
+    props.billingPeriod,
+    props.setupRecurringPayPalPayment,
+    props.updatePayPalButtonReady,
+  );
+
   // This element contains an iframe which contains the actual button
   return React.createElement(
     window.paypal.Button.driver('react', { React, ReactDOM }),
-    getPayPalOptions(
-      props.currencyId,
-      props.csrf,
-      onPaymentAuthorisation,
-      props.canOpen,
-      props.onClick,
-      props.formClassName,
-      props.isTestUser,
-      props.amount,
-      props.billingPeriod,
-      props.setupRecurringPayPalPayment,
-      props.updatePayPalButtonReady,
-    ),
+    paypalOptions,
   );
 };
 
