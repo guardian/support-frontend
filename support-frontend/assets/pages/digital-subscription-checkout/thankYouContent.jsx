@@ -35,9 +35,9 @@ export type PropTypes = {
 
 const getEmailCopy = (paymentMethod: Option<PaymentMethod>, includePaymentCopy: boolean) => {
   if (paymentMethod === DirectDebit) {
-    return 'Look out for an email within three business days confirming your recurring payment. Your first payment will be taken in 14 days and will appear as \'Guardian Media Group\' on your bank statement. You’ll also receive future communications from us on how to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.';
+    return 'Look out for an email within three business days confirming your recurring payment. Your first payment will be taken in at least 14 days and will appear as \'Guardian Media Group\' on your bank statement. You’ll also receive future communications from us on how to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.';
   } else if (includePaymentCopy) {
-    return 'We have sent you an email with everything you need to know. Your first payment will be taken in 14 days. You’ll also receive future communications from us on how to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.';
+    return 'We have sent you an email with everything you need to know. Your first payment will be taken in at least 14 days. You’ll also receive future communications from us on how to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.';
   }
   return 'We have sent you an email with everything you need to know. You’ll also receive future communications from us on how to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.';
 };

@@ -199,7 +199,7 @@ function InteractiveTable() {
       <tfoot>
         <tr role="row">
           <td role="cell" colSpan="5" aria-colspan="5" css={tableCell}>
-            <div><span>Plus 14 day free trial</span></div>
+            <div><span>Plus at least 14 days free trial</span></div>
           </td>
         </tr>
       </tfoot>

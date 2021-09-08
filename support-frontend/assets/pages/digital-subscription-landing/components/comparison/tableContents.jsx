@@ -195,7 +195,7 @@ export const titleRow = {
 
 export const finalRow = {
   icon: <div css={iconContainer}><SvgFreeTrial /></div>,
-  description: <>Plus a <span css={bold}>14 day free trial</span></>,
+  description: <>Plus at least <span css={bold}>14 days free trial</span></>,
   free: null,
   paid: null,
   cssOverrides: finalRowStyle,

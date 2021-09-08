@@ -37,7 +37,7 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.textBlock}>
           <h4>{props.title}</h4>
           <p>{priceString}</p>
-          {!props.orderIsAGift && <span>14 day free trial</span>}
+          {!props.orderIsAGift && <span>at least 14 days free trial</span>}
         </div>
       </div>
       <div css={styles.endSummary}>

@@ -30,6 +30,7 @@
   v2recaptchaConfigPublicKey: String,
   orderIsAGift: Boolean = false,
   homeDeliveryPostcodes: Option[List[String]] = None,
+  freeTrialOptions: Option[List[FreeTrialOption]] = None,
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
@@ -72,6 +73,10 @@
       window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
 
       window.guardian.isTestUser = @uatMode
+
+      @freeTrialOptions.map { freeTrialOptions =>
+        window.guardian.freeTrialOptions = @{Html(outputJson(freeTrialOptions))}
+      }
 
     </script>
 

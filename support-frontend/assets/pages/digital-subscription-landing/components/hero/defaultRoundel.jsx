@@ -33,7 +33,7 @@ export const circleTextContainer = css`
 function DefaultRoundel() {
   return (
     <div css={circleTextContainer}>
-      <div css={circleTextTop}>14 day</div>
+      <div css={circleTextTop}>14+ day</div>
       <div css={circleTextBottom}>free trial</div>
     </div>
   );

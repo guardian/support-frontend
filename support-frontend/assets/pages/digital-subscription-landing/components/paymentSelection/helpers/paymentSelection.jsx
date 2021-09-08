@@ -71,7 +71,7 @@ const BILLING_PERIOD = {
         </span>
         :
         <span>
-          <span className="product-option__price-detail">14 day free trial</span>
+          <span className="product-option__price-detail">at least 14 days free trial</span>
         </span>;
     },
     offer: '',

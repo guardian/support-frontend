@@ -58,6 +58,7 @@ export default function FreeTrialSelector() {
   return (
     <div id="qa-free-trial">
       <Select
+        supporting={"Your free trial lasts until your chosen first payment date"}
         css={marginBottom}
         id="freeTrialLength"
         label="First Payment Date"
