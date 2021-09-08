@@ -39,7 +39,7 @@ function OrderSummary(props: PropTypes) {
         <div css={styles.textBlock}>
           <h4>{props.title}</h4>
           <p>{priceString}</p>
-          {!props.orderIsAGift && <span>{props.participations.freeTrialLengthTest === 'variant' ? <>at least </> : null }14 days free trial</span>}
+          {!props.orderIsAGift && <span>at least 14 days free trial</span>}
         </div>
       </div>
       <div css={styles.endSummary}>
