@@ -108,7 +108,12 @@ object DigitalPackValidation {
         hasAddressLine1AndCity(billingAddress) &&
         hasPostcodeIfRequired(country, postCode) &&
         currencyIsSupportedForCountry(country, currency) &&
-        PaidProductValidation.noEmptyPaymentFields(paymentFields)
+        PaidProductValidation.noEmptyPaymentFields(paymentFields) &&
+        (freeTrialLength match {
+          case Some(value) if (14 <= value) && (value <= 50) => true
+          case Some(_) => false
+          case None => true
+        })
 
     val Purchase = Left
     type Redemption[A, B] = Right[A, B]
