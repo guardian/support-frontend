@@ -77,7 +77,7 @@ function NonGiftSummary(props: NonGiftSummaryTypes) {
         <span css={styles.subText}>{props.priceDescription}</span>
       </li>
       <li>
-        <Dot /><div css={styles.listMain}>14-day free trial</div>
+        <Dot /><div css={styles.listMain}>At least 14-day free trial</div>
         <span css={styles.subText}>
         Your first payment will occur after the trial ends
         </span>
