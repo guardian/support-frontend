@@ -114,6 +114,7 @@ function mapStateToProps(state: CheckoutState) {
     billingPeriod: state.page.checkout.billingPeriod,
     addressErrors: state.page.billingAddress.fields.formErrors,
     participations: state.common.abParticipations,
+    freeTrialLength: state.page.checkout.freeTrialLength,
   };
 }
 
@@ -204,7 +205,7 @@ function DigitalCheckoutForm(props: PropTypes) {
             <Address />
           </FormSection>
           <FormSection title="Choose when to start paying">
-            <FreeTrialSelector />
+            <FreeTrialSelector onChange={props.setFreeTrialLength} currentValue={props.freeTrialLength} />
           </FormSection>
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">

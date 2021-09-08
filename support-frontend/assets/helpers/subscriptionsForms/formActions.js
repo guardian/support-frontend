@@ -46,6 +46,7 @@ export type Action =
   | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: boolean }
   | { type: 'SET_ORDER_IS_GIFT', orderIsAGift: boolean }
   | { type: 'SET_DELIVERY_INSTRUCTIONS', instructions: Option<string>}
+  | { type: 'SET_FREE_TRIAL_LENGTH', length: Option<number>}
   | { type: 'SET_STRIPE_PAYMENT_METHOD', stripePaymentMethod: Option<string>}
   | { type: 'SET_GIFT_MESSAGE', message: Option<string>}
   | { type: 'SET_GIFT_DELIVERY_DATE', giftDeliveryDate: string}
@@ -136,6 +137,10 @@ const formActionCreators = {
   setDeliveryInstructions: (instructions: string | null): Action => ({
     type: 'SET_DELIVERY_INSTRUCTIONS',
     instructions,
+  }),
+  setFreeTrialLength: (length: number | null): Action => ({
+    type: 'SET_FREE_TRIAL_LENGTH',
+    length,
   }),
   setGiftMessage: (message: string | null): Action => ({
     type: 'SET_GIFT_MESSAGE',

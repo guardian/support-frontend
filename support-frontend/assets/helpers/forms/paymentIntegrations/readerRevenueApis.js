@@ -147,6 +147,7 @@ export type RegularPaymentRequest = {|
   telephoneNumber: Option<string>,
   promoCode?: Option<string>,
   deliveryInstructions?: Option<string>,
+  freeTrialLength?: Option<number>,
   debugInfo: string,
 |};
 

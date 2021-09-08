@@ -61,6 +61,7 @@ function createFormReducer(
     orderIsAGift,
     stripePaymentMethod: null,
     deliveryInstructions: null,
+    freeTrialLength: null,
     debugInfo: '',
     giftMessage: null,
     giftDeliveryDate: null,
@@ -157,6 +158,9 @@ function createFormReducer(
 
       case 'SET_DELIVERY_INSTRUCTIONS':
         return { ...state, deliveryInstructions: action.instructions };
+
+      case 'SET_FREE_TRIAL_LENGTH':
+        return { ...state, freeTrialLength: action.length };
 
       case 'SET_GIFT_MESSAGE':
         return { ...state, giftMessage: action.message };

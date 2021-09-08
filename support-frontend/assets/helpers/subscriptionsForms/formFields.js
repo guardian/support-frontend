@@ -39,6 +39,7 @@ export type FormFields = {|
   productOption: ProductOptions,
   orderIsAGift?: boolean,
   deliveryInstructions: Option<string>,
+  freeTrialLength: Option<number>,
   giftMessage: Option<string>,
   giftDeliveryDate: Option<string>,
 |};
@@ -81,6 +82,7 @@ function getFormFields(state: AnyCheckoutState): FormFields {
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
     orderIsAGift: state.page.checkout.orderIsAGift,
     deliveryInstructions: state.page.checkout.deliveryInstructions,
+    freeTrialLength: state.page.checkout.freeTrialLength,
     giftMessage: state.page.checkout.giftMessage,
     giftDeliveryDate: state.page.checkout.giftDeliveryDate,
   };

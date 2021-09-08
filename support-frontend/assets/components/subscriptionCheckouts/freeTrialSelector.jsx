@@ -12,44 +12,42 @@ const marginBottom = css`
 `;
 
 const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
-
-// Returns an array of dates in format {key: dayNumber, value: dateDisplayString}
-const getDates = (start, numDays) => {
-  return Array(numDays)
-    .fill(0)
-    .map((_, i) => ({key: start + i, value: displayFutureDate(start + i)}));
-}
 
 // Displays the future day in a suitable dd M format (e.g. "21 September")
 const displayFutureDate = (dayOffset) => {
-  var futureDate = new Date();
+  const futureDate = new Date();
   futureDate.setDate(futureDate.getDate() + dayOffset);
 
   const dayNum = futureDate.getDate();
   const month = monthNames[futureDate.getMonth()];
 
   return `${dayNum} ${month}`;
+};
+
+// Returns an array of dates in format {key: dayNumber, value: dateDisplayString}
+const getDates = (start, numDays) => Array(numDays)
+  .fill(0)
+  .map((_, i) => ({ key: start + i, value: displayFutureDate(start + i) }));
+
+export type FreeTrialPropTypes = {
+  onChange: Function,
+  currentValue: Option<number>,
 }
 
-// TODO add this to props and ensure it is wired up properly and sent to backend
-const setFreeTrialLength = (value) => {
-  console.log(`TODO: set props.freeTrialLength: ${value}`);
-}
-
-export default function FreeTrialSelector() {
+export default function FreeTrialSelector(props: FreeTrialPropTypes) {
 
   const lengthOfTrial = 14;
   const numDaysToDisplay = 31;
@@ -58,16 +56,15 @@ export default function FreeTrialSelector() {
   return (
     <div id="qa-free-trial">
       <Select
-        supporting={"Your free trial lasts until your chosen first payment date"}
+        supporting="Your free trial lasts until your chosen first payment date"
         css={marginBottom}
         id="freeTrialLength"
         label="First Payment Date"
-        value={lengthOfTrial}
-        onChange={e => setFreeTrialLength(e.target.value)}
+        value={props.currentValue || lengthOfTrial}
+        onChange={e => props.onChange(e.target.value)}
       >
         {paymentDates.map(pd =>
-          <OptionForSelect value={pd.key}>{pd.value}</OptionForSelect>
-        )}
+          <OptionForSelect value={pd.key}>{pd.value}</OptionForSelect>)}
       </Select>
     </div>
   );

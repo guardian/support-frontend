@@ -140,6 +140,7 @@ function buildRegularPaymentRequest(
     productOption,
     productPrices,
     deliveryInstructions,
+    freeTrialLength,
     debugInfo,
   } = state.page.checkout;
 
@@ -185,6 +186,7 @@ function buildRegularPaymentRequest(
     supportAbTests: getSupportAbTests(state.common.abParticipations),
     promoCode,
     deliveryInstructions,
+    freeTrialLength,
     debugInfo,
   };
 }
