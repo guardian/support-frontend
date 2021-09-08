@@ -65,9 +65,9 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
+import FreeTrialSelector from 'components/subscriptionCheckouts/freeTrialSelector';
 
 // ----- Types ----- //
-
 type PropTypes = {|
   ...FormFields,
   country: IsoCountry,
@@ -202,6 +202,9 @@ function DigitalCheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Address">
             <Address />
+          </FormSection>
+          <FormSection title="Choose when to start paying">
+            <FreeTrialSelector />
           </FormSection>
           {paymentMethods.length > 1 ?
             <FormSection title="How would you like to pay?">
