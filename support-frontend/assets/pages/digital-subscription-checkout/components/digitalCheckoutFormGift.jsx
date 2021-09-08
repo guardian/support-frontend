@@ -182,6 +182,7 @@ function DigitalCheckoutFormGift(props: PropTypes) {
           billingPeriod={props.billingPeriod}
           changeSubscription={routes.digitalSubscriptionLandingGift}
           orderIsAGift
+          participations={props.participations}
         />)}
       >
         <Form onSubmit={(ev) => {

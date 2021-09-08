@@ -207,7 +207,7 @@ function DigitalCheckoutForm(props: PropTypes) {
           </FormSection>
           {props.participations.freeTrialLengthTest === 'variant' ?
             <FormSection title="Choose when to start paying">
-              <FreeTrialSelector onChange={props.setFreeTrialLength} currentValue={props.freeTrialLength}/>
+              <FreeTrialSelector onChange={props.setFreeTrialLength} currentValue={props.freeTrialLength} />
             </FormSection> :
           null}
           {paymentMethods.length > 1 ?
