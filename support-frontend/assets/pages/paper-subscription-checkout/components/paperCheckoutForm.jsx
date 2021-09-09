@@ -64,9 +64,8 @@ import {
   paperProductsWithDigital,
   paperProductsWithoutDigital,
   type ActivePaperProducts,
-  NoProductOptions,
 } from 'helpers/productPrice/productOptions';
-import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
+import { Paper } from 'helpers/productPrice/subscriptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { getPaymentStartDate, getFormattedStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
@@ -173,7 +172,7 @@ function mapDispatchToProps() {
       // differently to other payment methods. All others are tracked in submit.js
       const { paymentMethod } = state.page.checkout;
       if (paymentMethod === PayPal) {
-        trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
+        trackSubmitAttempt(PayPal, Paper, state.page.checkout.productOption);
       }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,

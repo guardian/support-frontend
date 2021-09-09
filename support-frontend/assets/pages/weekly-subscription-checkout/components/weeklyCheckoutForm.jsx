@@ -80,7 +80,7 @@ import { Select, Option as OptionForSelect } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 
@@ -156,7 +156,7 @@ function mapDispatchToProps() {
       // differently to other payment methods. All others are tracked in submit.js
       const { paymentMethod } = state.page.checkout;
       if (paymentMethod === PayPal) {
-        trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
+        trackSubmitAttempt(PayPal, GuardianWeekly, NoProductOptions);
       }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
