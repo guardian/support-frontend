@@ -81,7 +81,7 @@ const getPlans = (
       href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode, isUsingGuestCheckout),
       onClick: sendTrackingEventsOnClick(trackingProperties),
       onView: sendTrackingEventsOnView(trackingProperties),
-      buttonCopy: 'Subscribe now',
+      buttonCopy: 'Subscribe',
       priceCopy: getPriceCopyString(nonDiscountedPrice, copy[fulfilmentOption][productOption]),
       offerCopy: getOfferText(priceAfterPromosApplied),
       label: '',
