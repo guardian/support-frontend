@@ -30,7 +30,7 @@ const productOption = css`
   position: relative;
   display: grid;
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: min-content 1fr min-content;
   grid-template-areas:
     '. priceCopy'
     '. priceCopy'
@@ -64,23 +64,51 @@ const productOptionVerticalLine = css`
 
 const productOptionTitle = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
-  padding-bottom: ${space[4]}px;
-  margin-bottom: ${space[2]}px;
+  padding-bottom: ${space[5]}px;
+  ${from.tablet} {
+    margin-bottom: ${space[2]}px;
+  }
+  ${between.tablet.and.desktop} {
+    ${headline.xxxsmall({ fontWeight: 'bold' })};
+  }
 `;
 
 const productOptionOfferCopy = css`
-  height: 100%;
-  padding-bottom: ${space[2]}px;
+  ${textSans.medium()};
+  ${from.tablet} {
+    height: 100%;
+    padding-bottom: ${space[2]}px;
+  }
+  ${between.tablet.and.desktop} {
+    ${textSans.small()};
+  }
 `;
 
 const productOptionPrice = css`
   display: block;
-  ${headline.large({ fontWeight: 'bold' })};
+  padding-bottom: ${space[5]}px;
+  ${headline.xsmall({ fontWeight: 'bold' })};
+  ${between.tablet.and.desktop} {
+    ${headline.small({ fontWeight: 'bold' })};
+  }
+  ${from.desktop} {
+    ${headline.large({ fontWeight: 'bold' })};
+    padding-bottom: 0;
+  }
 `;
 
 const productOptionPriceCopy = css`
-  height: 100%;
-  margin-bottom: ${space[4]}px;
+  ${textSans.xsmall()};
+  ${from.tablet} {
+    height: 100%;
+    margin-bottom: ${space[4]}px;
+  }
+  ${between.phablet.and.desktop} {
+    ${textSans.small()};
+  }
+  ${from.desktop} {
+    ${textSans.medium()};
+  }
 `;
 
 const productOptionHighlight = css`
