@@ -49,7 +49,17 @@ const productOption = css`
 `;
 
 const productOptionUnderline = css`
-  border-bottom: 1px solid ${neutral[86]};
+  ${from.tablet} {
+    border-bottom: 1px solid ${neutral[86]};
+  }
+`;
+
+const productOptionVerticalLine = css`
+  ${until.tablet} {
+    border-right: 1px solid ${neutral[86]};
+    margin-right: ${space[3]}px;
+    padding-right: ${space[3]}px;
+  }
 `;
 
 const productOptionTitle = css`
@@ -89,7 +99,7 @@ const buttonCopy = css`
   display: inline-flex;
   ${between.tablet.and.leftCol} {
     display: none;
-    }
+  }
 `;
 
 const buttonCopyTabletToDesktop = css`
@@ -139,12 +149,12 @@ function ProductOption(props: Product) {
 
   return (
     <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin]}>
-      <div>
+      <div css={productOptionVerticalLine}>
         <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
         {props.children && props.children}
       </div>
-      <div>
+      <div css={productOptionVerticalLine}>
         <p css={[productOptionOfferCopy, productOptionUnderline]}>
           {props.offerCopy}
         </p>
