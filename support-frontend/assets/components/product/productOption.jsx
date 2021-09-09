@@ -123,18 +123,10 @@ const productOptionHighlight = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
 
-const buttonCopy = css`
-  display: inline-flex;
+const buttonCopySpan = css`
   ${between.tablet.and.leftCol} {
     display: none;
   }
-`;
-
-const buttonCopyTabletToDesktop = css`
-  display: none;
-  ${between.tablet.and.leftCol} {
-    display: inline-flex;
-    }
 `;
 
 const priceCopyGridPlacement = css`
@@ -198,20 +190,11 @@ function ProductOption(props: Product) {
       <div>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
-            css={buttonCopy}
             href={props.href}
             onClick={props.onClick}
-            aria-label={`${props.title}- ${props.buttonCopy}`}
+            aria-label={`${props.title}- ${props.buttonCopy} now`}
           >
-            {props.buttonCopy}
-          </LinkButton>
-          <LinkButton
-            css={buttonCopyTabletToDesktop}
-            href={props.href}
-            onClick={props.onClick}
-            aria-label={`${props.title}- Subscribe`}
-          >
-            Subscribe
+            {props.buttonCopy}<span css={buttonCopySpan}>&nbsp;now</span>
           </LinkButton>
         </ThemeProvider>
       </div>
