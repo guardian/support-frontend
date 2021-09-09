@@ -18,7 +18,9 @@ import { SvgPadlock } from 'components/icons/padlock';
 import journalismPic from './temp/journalism.png';
 import adFreePic from './temp/adFree.png';
 import editionsPic from './temp/editions.png';
+import editionsDesktopPic from './temp/editionsDesktop.png';
 import guardianAppPic from './temp/guApp.png';
+import guardianAppDesktopPic from './temp/guAppDesktop.png';
 import offlineReadingEdPic from './temp/offlineReadingEditions.png';
 import offlineReadingGuPic from './temp/offlineReadingGu.png';
 import crosswordsPic from './temp/crosswords.png';
@@ -116,8 +118,20 @@ const detailsCellImageFirstContainer = css`
     width: 100%;
   }
 
+  picture {
+    display: flex;
+  }
+
   ${from.tablet} {
     margin: 0 0 -${space[4]}px;
+  }
+`;
+
+const detailsCellImageContainerFullHeight = css`
+  ${from.tablet} {
+    margin-top: -${space[4]}px;
+    margin-bottom: -${space[4]}px;
+    margin-right: -36px;
   }
 `;
 
@@ -150,6 +164,10 @@ const detailsCellImageSecondContainer = css`
   img {
     width: 100%;
   }
+
+  picture {
+    display: flex;
+  }
 `;
 
 const detailsCellOfflineReading = css`
@@ -158,17 +176,26 @@ const detailsCellOfflineReading = css`
 
   ${from.tablet} {
     flex-direction: row-reverse;
-    justify-content: center;
+    justify-content: space-around;
   }
 `;
 
 const appFeatureImageContainer = css`
   display: flex;
+  flex-basis: 50%;
 
   ${until.tablet} {
     :not(:last-of-type) {
       margin-bottom: ${space[3]}px;
     }
+  }
+
+  ${from.tablet} {
+    max-width: 480px;
+  }
+
+  img {
+    max-height: 250px;
   }
 `;
 
@@ -184,6 +211,7 @@ const detailsColumnCrosswords = css`
 
   & > * {
     flex-basis: 50%;
+    max-width: 500px;
   }
 `;
 
@@ -193,10 +221,22 @@ const detailsCellImageCrosswords = css`
 
   img {
     width: 100%;
+    max-height: 200px;
   }
 
   picture {
     display: flex;
+  }
+`;
+
+const appFeatureContent = css`
+  margin-right: ${space[4]}px;
+
+  /* Apply opposite margin if preceded by an image
+  https://developer.mozilla.org/en-US/docs/Web/CSS/Adjacent_sibling_combinator */
+  img + & {
+    margin-left: ${space[4]}px;
+    margin-right: 0;
   }
 `;
 
@@ -228,7 +268,7 @@ type AppFeatureWithIconPropTypes = {|
 const AppFeatureWithIcon = ({ appName, heading = `The ${appName} App`, children }: AppFeatureWithIconPropTypes) => {
   const icon = appName === 'Editions' ? <SvgEditionsIcon /> : <SvgLiveAppIcon />;
   return (
-    <section>
+    <section css={appFeatureContent}>
       {icon}
       <h4 css={appFeatureHeadline}>{heading}</h4>
       {children}
@@ -315,8 +355,15 @@ export const rows = [
           Your <strong>digital newspaper, delivered once a day.</strong> Slow down to enjoy handpicked stories
           and photography, supplements and big-issue deep dives.
         </p>
-        <div css={detailsCellImageFirstContainer}>
-          <img src={editionsPic} alt="" />
+        <div css={[detailsCellImageFirstContainer, detailsCellImageContainerFullHeight]}>
+          <picture>
+            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={editionsPic} />
+            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={editionsDesktopPic} />
+            <img
+              src={editionsPic}
+              alt=""
+            />
+          </picture>
         </div>
       </div>),
   },
@@ -342,7 +389,14 @@ export const rows = [
           or keep curious by following topics that matter to you.
         </p>
         <div css={detailsCellImageSecondContainer}>
-          <img src={guardianAppPic} alt="" />
+          <picture>
+            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={guardianAppPic} />
+            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={guardianAppDesktopPic} />
+            <img
+              src={guardianAppPic}
+              alt=""
+            />
+          </picture>
         </div>
       </div>),
   },
