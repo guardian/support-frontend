@@ -34,7 +34,7 @@ const productOption = css`
   grid-template-areas:
     '. priceCopy'
     '. priceCopy'
-    '. .';
+    'button button';
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -123,6 +123,33 @@ const productOptionHighlight = css`
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
 
+const buttonDiv = css`
+  grid-area: button;
+  padding: ${space[3]}px 0;
+  ${between.mobileMedium.and.tablet} {
+    grid-area: 3 / 1 / span 1 / span 1;
+    border-right: 1px solid ${neutral[86]};
+    margin-right: ${space[3]}px;
+    padding-right: ${space[3]}px;
+  }
+  ${from.tablet} {
+    grid-area: auto;
+    padding: 0;
+  }
+`;
+
+const button = css`
+  display: flex;
+  justify-content: center;
+  ${from.mobileMedium} {
+    grid-area: priceCopy;
+  }
+  ${from.tablet} {
+    grid-area: auto;
+    display: inline-flex;
+  }
+`;
+
 const buttonCopySpan = css`
   ${between.tablet.and.leftCol} {
     display: none;
@@ -187,9 +214,10 @@ function ProductOption(props: Product) {
           {props.priceCopy}
         </p>
       </div>
-      <div>
+      <div css={buttonDiv}>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
+            css={button}
             href={props.href}
             onClick={props.onClick}
             aria-label={`${props.title}- ${props.buttonCopy} now`}
