@@ -22,7 +22,9 @@ import editionsDesktopPic from './temp/editionsDesktop.png';
 import guardianAppPic from './temp/guApp.png';
 import guardianAppDesktopPic from './temp/guAppDesktop.png';
 import offlineReadingEdPic from './temp/offlineReadingEditions.png';
+import offlineReadingEdDesktopPic from './temp/offlineReadingEditionsDesktop.png';
 import offlineReadingGuPic from './temp/offlineReadingGu.png';
+import offlineReadingGuDesktopPic from './temp/offlineReadingGuDesktop.png';
 import crosswordsPic from './temp/crosswords.png';
 import crosswordsDesktopPic from './temp/crosswordsDesktop.png';
 
@@ -196,6 +198,10 @@ const appFeatureImageContainer = css`
 
   img {
     max-height: 250px;
+
+    ${until.tablet} {
+      max-width: 130px;
+    }
   }
 `;
 
@@ -234,7 +240,7 @@ const appFeatureContent = css`
 
   /* Apply opposite margin if preceded by an image
   https://developer.mozilla.org/en-US/docs/Web/CSS/Adjacent_sibling_combinator */
-  img + & {
+  picture + & {
     margin-left: ${space[4]}px;
     margin-right: 0;
   }
@@ -418,7 +424,14 @@ export const rows = [
     details: (
       <div css={detailsCellOfflineReading}>
         <div css={appFeatureImageContainer}>
-          <img src={offlineReadingEdPic} alt="" />
+          <picture>
+            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingEdPic} />
+            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingEdDesktopPic} />
+            <img
+              src={offlineReadingEdPic}
+              alt=""
+            />
+          </picture>
           <AppFeatureWithIcon appName="Editions">
             <p>Download any edition from the last 30 days to read anytime, anywhere you are.</p>
           </AppFeatureWithIcon>
@@ -427,7 +440,14 @@ export const rows = [
           <AppFeatureWithIcon appName="Guardian">
             <p><strong>Enhanced offline reading.</strong> Download the news whenever it suits you</p>
           </AppFeatureWithIcon>
-          <img src={offlineReadingGuPic} alt="" />
+          <picture>
+            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingGuPic} />
+            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingGuDesktopPic} />
+            <img
+              src={offlineReadingGuPic}
+              alt=""
+            />
+          </picture>
         </div>
       </div>
     ),
