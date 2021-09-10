@@ -310,9 +310,8 @@ export const rows = [
     details: (
       <div css={detailsCellImageFirst}>
         <p>
-          Independent, honest reporting should be accessible to all without a paywall. With a subscription,
-          you’ll not only unlock exclusive features - you’ll help us ensure people around the world have
-          access to trusted, reliable information.
+          By becoming a subscriber, you’re helping to protect our independence, so we can continue providing quality,
+          trustworthy reporting that’s free from commercial and political influence, and open for everyone to read.
         </p>
         <div css={detailsCellImageFirstContainer}>
           <img src={journalismPic} alt="" />
