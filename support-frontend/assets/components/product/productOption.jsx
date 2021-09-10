@@ -68,7 +68,7 @@ const productOptionTitle = css`
   ${from.tablet} {
     margin-bottom: ${space[2]}px;
   }
-  ${between.tablet.and.desktop} {
+  ${between.tablet.and.leftCol} {
     ${headline.xxxsmall({ fontWeight: 'bold' })};
   }
 `;
@@ -79,7 +79,7 @@ const productOptionOfferCopy = css`
     height: 100%;
     padding-bottom: ${space[2]}px;
   }
-  ${between.tablet.and.desktop} {
+  ${between.tablet.and.leftCol} {
     ${textSans.small()};
   }
 `;
@@ -88,10 +88,10 @@ const productOptionPrice = css`
   display: block;
   padding-bottom: ${space[5]}px;
   ${headline.xsmall({ fontWeight: 'bold' })};
-  ${between.tablet.and.desktop} {
+  ${between.tablet.and.leftCol} {
     ${headline.small({ fontWeight: 'bold' })};
   }
-  ${from.desktop} {
+  ${from.leftCol} {
     ${headline.large({ fontWeight: 'bold' })};
     padding-bottom: 0;
   }
@@ -103,10 +103,10 @@ const productOptionPriceCopy = css`
     height: 100%;
     margin-bottom: ${space[4]}px;
   }
-  ${between.phablet.and.desktop} {
+  ${between.phablet.and.leftCol} {
     ${textSans.small()};
   }
-  ${from.desktop} {
+  ${from.leftCol} {
     ${textSans.medium()};
   }
 `;
@@ -126,7 +126,7 @@ const productOptionHighlight = css`
 const buttonDiv = css`
   grid-area: button;
   padding: ${space[3]}px 0;
-  ${between.mobileMedium.and.tablet} {
+  ${between.mobileLandscape.and.tablet} {
     grid-area: 3 / 1 / span 1 / span 1;
     border-right: 1px solid ${neutral[86]};
     margin-right: ${space[3]}px;
@@ -141,8 +141,9 @@ const buttonDiv = css`
 const button = css`
   display: flex;
   justify-content: center;
-  ${from.mobileMedium} {
+  ${from.mobileLandscape} {
     grid-area: priceCopy;
+    display: inline-flex;
   }
   ${from.tablet} {
     grid-area: auto;
