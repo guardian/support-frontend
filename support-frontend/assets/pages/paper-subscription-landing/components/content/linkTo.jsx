@@ -4,6 +4,10 @@
 
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { neutral } from '@guardian/src-foundations/palette';
+import { body } from '@guardian/src-foundations/typography';
+import { from } from '@guardian/src-foundations/mq';
 import { Link } from '@guardian/src-link';
 
 import { paperSubsUrl } from 'helpers/urls/routes';
@@ -14,16 +18,30 @@ const linkColor = css`
   color: inherit;
 `;
 
+const linkStyles = (tab, activeTab) => css`
+  color: ${neutral[100]};
+  ${body.small({ fontWeight: 'bold' })};
+  text-decoration: none;
+  padding: ${space[3]}px ${space[3]}px ${space[2]}px;
+  border-bottom: ${space[1]}px solid ${(tab === activeTab) ? neutral[100] : 'transparent'};
+  width: 50%;
+  ${from.tablet} {
+    width: initial;
+  }
+`;
+
 function LinkTo({
-  setTabAction, tab, children,
+  setTabAction, tab, children, activeTab, isPricesTabLink,
 }: {|
   setTabAction: (PaperFulfilmentOptions) => void,
   tab: PaperFulfilmentOptions,
-  children: Node
+  children: Node,
+  activeTab?: PaperFulfilmentOptions | null,
+  isPricesTabLink?: boolean
 |}) {
   return (
     <Link
-      css={linkColor}
+      css={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
       href={paperSubsUrl(tab === 'delivery')}
       onClick={(ev) => {
         ev.preventDefault();
@@ -34,5 +52,10 @@ function LinkTo({
     </Link>
   );
 }
+
+LinkTo.defaultProps = {
+  activeTab: null,
+  isPricesTabLink: false,
+};
 
 export default LinkTo;
