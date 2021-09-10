@@ -172,6 +172,12 @@ const detailsCellImageSecondContainer = css`
   }
 `;
 
+const detailsCellImageContainerBottomSpacing = css`
+  ${until.tablet} {
+    margin: 0 -${space[3]}px;
+  }
+`;
+
 const detailsCellOfflineReading = css`
   display: flex;
   flex-direction: column;
@@ -394,7 +400,7 @@ export const rows = [
           <strong>Explore interactive features</strong> that help you stay on top of <strong>breaking news</strong>,
           or keep curious by following topics that matter to you.
         </p>
-        <div css={detailsCellImageSecondContainer}>
+        <div css={[detailsCellImageSecondContainer, detailsCellImageContainerBottomSpacing]}>
           <picture>
             <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={guardianAppPic} />
             <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={guardianAppDesktopPic} />
