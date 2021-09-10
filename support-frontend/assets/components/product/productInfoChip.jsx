@@ -3,7 +3,7 @@
 import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { textSans } from '@guardian/src-foundations/typography';
+import { body } from '@guardian/src-foundations/typography';
 
 type PropTypes = {|
   children: Node,
@@ -11,7 +11,8 @@ type PropTypes = {|
 |};
 
 const infoChip = css`
-  ${textSans.medium()}
+  display: flex;
+  ${body.medium()}
 
   &:not(:last-of-type) {
     margin-bottom: ${space[4]}px;
