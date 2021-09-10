@@ -62,6 +62,7 @@ function TermsPrivacy(props: PropTypes) {
         If you would like to support us at a higher level, from {getRegionalAmountString()} a month,
         you can join us as a Guardian Patron. {patronsLink}
       </p>
+      <br />
     </div>
   );
 
