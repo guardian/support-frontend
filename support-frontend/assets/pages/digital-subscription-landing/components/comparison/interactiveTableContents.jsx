@@ -122,6 +122,7 @@ const detailsCellImageFirstContainer = css`
 
   picture {
     display: flex;
+    align-items: flex-end;
   }
 
   ${from.tablet} {
@@ -169,6 +170,7 @@ const detailsCellImageSecondContainer = css`
 
   picture {
     display: flex;
+    align-items: flex-end;
   }
 `;
 
@@ -193,13 +195,19 @@ const appFeatureImageContainer = css`
   flex-basis: 50%;
 
   ${until.tablet} {
-    :not(:last-of-type) {
-      margin-bottom: ${space[3]}px;
+    :last-of-type {
+      margin-top: ${space[6]}px;
+      margin-bottom: -${space[4]}px;
     }
   }
 
   ${from.tablet} {
     max-width: 480px;
+  }
+
+  picture {
+    display: flex;
+    align-items: flex-end;
   }
 
   img {
@@ -232,12 +240,12 @@ const detailsCellImageCrosswords = css`
   margin: 0 -${space[3]}px -${space[4]}px;
 
   img {
-    width: 100%;
     max-height: 200px;
   }
 
   picture {
     display: flex;
+    align-items: flex-end;
   }
 `;
 
@@ -327,10 +335,10 @@ export const rows = [
         isPrimary: true,
       },
       {
-        content: <Checkmark />,
+        content: <Padlock />,
       },
       {
-        content: <Padlock />,
+        content: <Checkmark />,
       },
     ],
     details: (
@@ -354,10 +362,10 @@ export const rows = [
         isPrimary: true,
       },
       {
-        content: <Checkmark />,
+        content: <Padlock />,
       },
       {
-        content: <Padlock />,
+        content: <Checkmark />,
       },
     ],
     details: (
@@ -387,10 +395,10 @@ export const rows = [
         isPrimary: true,
       },
       {
-        content: <Checkmark />,
+        content: <Padlock />,
       },
       {
-        content: <Padlock />,
+        content: <Checkmark />,
       },
     ],
     details: (
@@ -420,10 +428,10 @@ export const rows = [
         isPrimary: true,
       },
       {
-        content: <Checkmark />,
+        content: <Padlock />,
       },
       {
-        content: <Padlock />,
+        content: <Checkmark />,
       },
     ],
     details: (
@@ -466,10 +474,10 @@ export const rows = [
         isPrimary: true,
       },
       {
-        content: <Checkmark />,
+        content: <Padlock />,
       },
       {
-        content: <Padlock />,
+        content: <Checkmark />,
       },
     ],
     details: (
@@ -501,11 +509,11 @@ export const headers = [
     isHidden: true,
   },
   {
-    content: 'Paid',
+    content: 'Free',
     isIcon: true,
   },
   {
-    content: 'Free',
+    content: 'Paid',
     isIcon: true,
   },
   {
