@@ -78,7 +78,6 @@ const iconCell = css`
 `;
 
 const expandableButtonCell = css`
-  position: relative;
   max-height: 72px;
   display: flex;
   align-items: center;
@@ -110,15 +109,16 @@ const detailsVisible = css`
 `;
 
 const toggleButton = css`
-  /* position: absolute;
-  left: ${space[4]}px;
-  right: ${space[4]}px;
-  width: calc(100% - 32px); */
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  width: calc(100% - 10px);
   /* Allows space for the 5px focus box shadow */
   height: 62px;
-  width: 100%;
   align-items: center;
+  justify-content: flex-end;
   overflow: hidden;
+  padding-right: ${space[3]}px;
 
   span {
     overflow: hidden;
@@ -141,9 +141,6 @@ const toggleButtonOpen = css`
 const finalRow = css`
   display: block;
   margin-top: ${space[2]}px;
-  ${from.desktop} {
-    padding-left: 32px;
-  }
 `;
 
 const yellowBackground = css`
