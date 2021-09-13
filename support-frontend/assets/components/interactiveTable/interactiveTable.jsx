@@ -3,6 +3,7 @@ import React, { type Node } from 'react';
 import { css } from '@emotion/core';
 import { from, until } from '@guardian/src-foundations/mq';
 import { body } from '@guardian/src-foundations/typography';
+import { background } from '@guardian/src-foundations/palette';
 import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/accessibility';
 import { InteractiveTableRow, InteractiveTableHeaderRow, InteractiveTableFooterRow, type RowData, type CellData } from './interactiveTableRow';
 
@@ -11,6 +12,7 @@ const visuallyHidden = css`
 `;
 
 const table = css`
+  position: relative;
   width: 100%;
   ${body.small()}
 
@@ -21,6 +23,13 @@ const table = css`
   ${from.desktop} {
     ${body.medium()}
   }
+`;
+
+const stickyHeader = css`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: ${background.ctaPrimary};
 `;
 
 type InteractiveTablePropTypes = {|
@@ -36,7 +45,7 @@ function InteractiveTable({
   return (
     <table css={table}>
       <caption css={visuallyHidden}>{caption}</caption>
-      <thead>
+      <thead css={stickyHeader}>
         <InteractiveTableHeaderRow columns={headers} />
       </thead>
       <tbody>

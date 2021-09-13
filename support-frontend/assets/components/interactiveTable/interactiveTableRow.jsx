@@ -110,15 +110,19 @@ const detailsVisible = css`
 
 const toggleButton = css`
   position: absolute;
+  /* Allows space for the 5px focus box shadow */
   left: 5px;
   right: 5px;
   width: calc(100% - 10px);
-  /* Allows space for the 5px focus box shadow */
   height: 62px;
   align-items: center;
   justify-content: flex-end;
   overflow: hidden;
-  padding-right: ${space[3]}px;
+  padding-right: ${space[1]}px;
+
+  ${from.tablet} {
+    padding-right: ${space[3]}px;
+  }
 
   span {
     overflow: hidden;
