@@ -8,6 +8,7 @@ import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import * as cookie from 'helpers/storage/cookie';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
@@ -155,8 +156,11 @@ const processStripePaymentIntentRequest = (
     // Do 3DS auth and then send back to payment-api for payment confirmation
     return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult: Stripe3DSResult) => {
       if (authResult.error) {
+        trackComponentClick('stripe-3ds-failure');
         return { type: 'error', error: { failureReason: 'card_authentication_error' } };
       }
+
+      trackComponentClick('stripe-3ds-success');
       return postToPaymentApi(
         { ...data, paymentIntentId: authResult.paymentIntent.id },
         '/contribute/one-off/stripe/confirm-payment',
