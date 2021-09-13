@@ -4,8 +4,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
-import { PayPal } from 'helpers/forms/paymentMethods';
+import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 
 function mapStateToProps(state) {
   return {
@@ -14,28 +15,36 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return {
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
+    onPaymentAuthorised: (baid) => console.log(`Baid: ${baid.token}`),
   }
 }
 
+const payPalButton = css`
+  box-sizing: border-box;
+  margin-top: ${space[3]}px;
+  min-width: 264px;
+`;
+
 function PayPalHeroButton(props) {
   return (
-    <PayPalSubmitButton
-      paymentMethod={PayPal}
-      onPaymentAuthorised={props.onPaymentAuthorised}
-      csrf={props.csrf}
-      currencyId={'GBP'}
-      payPalHasLoaded={props.hasLoaded}
-      formIsValid={() => true}
-      validateForm={() => null}
-      isTestUser={false}
-      setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-      amount={11}
-      billingPeriod={Monthly}
-      allErrors={[]}
-    />
+    <div css={payPalButton}>
+      <PayPalExpressButton
+        onPaymentAuthorisation={props.onPaymentAuthorised}
+        csrf={props.csrf}
+        currencyId={'GBP'}
+        hasLoaded={props.hasLoaded}
+        canOpen={() => true}
+        onClick={() => null}
+        formClassName="form--contribution"
+        isTestUser={false}
+        setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+        amount={5.99}
+        billingPeriod={Monthly}
+      />
+    </div>
   );
 }
 

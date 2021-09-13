@@ -12,7 +12,7 @@ import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActi
 import { PayPal } from 'helpers/forms/paymentMethods';
 import { billingPeriodFromContrib, getAmount } from '../../contributions';
 import type { Csrf } from '../../csrf/csrfReducer';
-import type { State } from '../../../pages/contributions-landing/contributionsLandingReducer';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { type Action } from 'pages/contributions-landing/contributionsLandingActions';
 
 
@@ -149,8 +149,8 @@ function getPayPalEnvironment(isTestUser: boolean): string {
 function createAgreement(payPalData: Object, csrf: CsrfState) {
   const body = { token: payPalData.paymentToken };
   const csrfToken = csrf.token;
-
-  return fetch(routes.payPalCreateAgreement, payPalRequestData(body, csrfToken || ''))
+  console.log(`paypal token: ${payPalData.paymentToken}`);
+  return fetch(routes.payPalExpressCheckout, payPalRequestData(body, csrfToken || '')) //TODO: Hack! this will break PayPal on the regular checkouts
     .then(response => response.json());
 }
 
@@ -179,7 +179,8 @@ function getPayPalOptions(
     style: {
       color: 'blue',
       size: 'responsive',
-      label: 'pay',
+      label: 'checkout',
+      tagline: false,
       layout: 'horizontal',
       fundingicons: false,
     },
@@ -210,6 +211,8 @@ function getPayPalOptions(
     onAuthorize: (data) => {
       createAgreement(data, csrf)
         .then((baid: Object) => {
+          const message = `Name: ${baid.user.firstName} ${baid.user.lastName}\nEmail: ${baid.user.email}\nAddress: ${baid.user.shipToStreet}, ${baid.user.shipToCity}, ${baid.user.shipToZip}, ${baid.user.shipToCountryCode}`;
+          alert(message);
           onPaymentAuthorisation(baid.token);
         })
         .catch((err) => {

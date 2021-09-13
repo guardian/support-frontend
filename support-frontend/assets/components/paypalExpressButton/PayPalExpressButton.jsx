@@ -27,7 +27,7 @@ type PropTypes = {|
   amount: number,
   billingPeriod: BillingPeriod,
   setupRecurringPayPalPayment: SetupPayPalRequestType,
-  updatePayPalButtonReady: (boolean) => Action,
+  updatePayPalButtonReady: (boolean) => Action, // created in mapDispatchToProps should not be passed into the component
 |};
 
 const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
