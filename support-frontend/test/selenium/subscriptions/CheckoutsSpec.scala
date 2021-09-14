@@ -36,6 +36,7 @@ class CheckoutsSpec extends AnyFeatureSpec
   Feature("Digital Pack checkout") {
     Scenario("User already logged in - Stripe checkout") {
       testCheckout("Digital Pack", new DigitalPackCheckout, new DigitalPackProductPage, payWithStripe)
+      fail()
     }
   }
 
