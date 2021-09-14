@@ -18,4 +18,4 @@ if [ ! -e $SBT_JAR ]; then
 
 fi
 
-java -jar sbt-launch.jar selenium:test # || $DIR/scripts/post_test_results_to_chat.sh
+java -jar sbt-launch.jar selenium:test || $DIR/support-frontend/scripts/post_test_results_to_chat.sh
