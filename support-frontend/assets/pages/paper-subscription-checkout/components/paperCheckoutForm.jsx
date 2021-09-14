@@ -48,7 +48,7 @@ import {
   getBillingAddress,
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
+import { submitWithDeliveryForm, trackSubmitAttempt } from 'helpers/subscriptionsForms/submit';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Stripe, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
@@ -60,7 +60,11 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import { paperProductsWithDigital, paperProductsWithoutDigital, type ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import {
+  paperProductsWithDigital,
+  paperProductsWithoutDigital,
+  type ActivePaperProducts,
+} from 'helpers/productPrice/productOptions';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
@@ -165,6 +169,12 @@ function mapDispatchToProps() {
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
       const state = getState();
       validateWithDeliveryForm(dispatch, state);
+      // We need to track PayPal payment attempts here because PayPal behaves
+      // differently to other payment methods. All others are tracked in submit.js
+      const { paymentMethod } = state.page.checkout;
+      if (paymentMethod === PayPal) {
+        trackSubmitAttempt(PayPal, Paper, state.page.checkout.productOption);
+      }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
