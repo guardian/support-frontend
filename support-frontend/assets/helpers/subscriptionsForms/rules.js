@@ -7,20 +7,12 @@ import {
   checkOptionalEmail,
   checkEmail,
   checkGiftStartDate,
-  requiresSignIn,
+  emailAddressesMatch,
 } from 'helpers/forms/formValidation';
-
-const signInErrorMessage = (userType) => {
-  switch (userType) {
-    case 'current': return 'You already have a Guardian account. Please sign in or use another email address';
-    case 'noRequestSent': return 'Please enter a valid email address';
-    default: return 'There was an unexpected error. Please refresh the page and try again';
-  }
-};
 
 function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
   const {
-    orderIsAGift, product, isSignedIn, userTypeFromIdentityResponse,
+    orderIsAGift, product, isSignedIn,
   } = fields;
 
   const userFormFields = [
@@ -45,12 +37,12 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
       error: formError('telephone', 'Please use only letters, numbers and punctuation.'),
     },
     {
-      rule: nonEmptyString(fields.email),
+      rule: checkEmail(fields.email),
       error: formError('email', 'Please enter a valid email address.'),
     },
     {
-      rule: requiresSignIn(userTypeFromIdentityResponse, isSignedIn),
-      error: formError('email', signInErrorMessage(userTypeFromIdentityResponse)),
+      rule: emailAddressesMatch(isSignedIn, fields.email, fields.confirmEmail),
+      error: formError('confirmEmail', 'The email addresses do not match.'),
     },
     {
       rule: notNull(fields.paymentMethod),
