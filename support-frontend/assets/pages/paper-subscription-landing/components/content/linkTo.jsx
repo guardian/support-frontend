@@ -43,6 +43,7 @@ function LinkTo({
     <Link
       css={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
       href={paperSubsUrl(tab === 'delivery')}
+      aria-current={tab === activeTab}
       onClick={(ev) => {
         ev.preventDefault();
         setTabAction(tab);
