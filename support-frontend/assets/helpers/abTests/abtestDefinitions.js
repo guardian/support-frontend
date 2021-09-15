@@ -153,6 +153,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
     seed: 10,
-    optimizeId: '',
+    optimizeId: 'unfNP7eZTLW4245wJOcxiw',
   },
 };
