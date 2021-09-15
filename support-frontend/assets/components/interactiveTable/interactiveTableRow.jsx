@@ -27,6 +27,7 @@ const tableRow = css`
   background-color: ${neutral[100]};
   max-height: 72px;
   overflow: hidden;
+  will-change: max-height;
   transition: max-height ${transitions.medium};
 
   :not(:first-of-type) {

@@ -7,6 +7,8 @@ import { background, brandAltBackground, brand } from '@guardian/src-foundations
 import { SvgCheckmark } from '@guardian/src-icons';
 import { headline } from '@guardian/src-foundations/typography';
 
+import { type IsoCountry } from 'helpers/internationalisation/country';
+
 import { SvgNews } from 'components/icons/news';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
@@ -82,11 +84,9 @@ const greyBackground = css`
   background: ${background.secondary};
 `;
 
-const hideOnVerySmall = css`
-  display: none;
-
-  ${from.mobileMedium} {
-    display: inline-block;
+const hideOnSmall = css`
+  ${until.mobileLandscape} {
+    display: none;
   }
 `;
 
@@ -296,212 +296,224 @@ const AppFeatureWithIcon = ({ appName, heading = `The ${appName} App`, children 
   );
 };
 
-export const rows = [
-  {
-    rowId: 'journalism',
-    columns: [
-      {
-        content: (
-          <>
-            <div css={descriptionIcon}><SvgNews /></div>
-            <span>Access to the Guardian&apos;s quality, open journalism</span>
-          </>),
-        isPrimary: true,
-      },
-      {
-        content: <Checkmark />,
-      },
-      {
-        content: <Checkmark />,
-      },
-    ],
-    details: (
-      <div css={detailsCellImageFirst}>
-        <p>
-          By becoming a subscriber, you’re helping to protect our independence, so we can continue providing quality,
-          trustworthy reporting that’s free from commercial and political influence, and open for everyone to read.
-        </p>
-        <div css={detailsCellImageFirstContainer}>
-          <img src={journalismPic} alt="" />
-        </div>
-      </div>),
-  },
-  {
-    rowId: 'adFree',
-    columns: [
-      {
-        content: <><div css={descriptionIcon}><SvgAdFree /></div>
-          <span>Ad-free reading on all your devices</span></>,
-        isPrimary: true,
-      },
-      {
-        content: <Padlock />,
-      },
-      {
-        content: <Checkmark />,
-      },
-    ],
-    details: (
-      <div css={detailsCellImageSecond}>
-        <p>
-          Enjoy an ad-free experience across all of your devices when you&apos;re signed in on your apps
-          and theguardian.com
-        </p>
-        <div css={detailsCellImageSecondContainer}>
-          <img src={adFreePic} alt="" />
-        </div>
-      </div>),
-  },
+export function getRows(countryGroupId: IsoCountry) {
+  const isAustralia = countryGroupId === 'AU';
 
-  {
-    rowId: 'editionsApp',
-    columns: [
-      {
-        content: <><div css={descriptionIcon}><SvgEditionsIcon /></div>
-          <span><strong>The Editions app:</strong> <span css={hideOnVerySmall}>unique</span>{' '}digital supplements</span></>,
-        isPrimary: true,
-      },
-      {
-        content: <Padlock />,
-      },
-      {
-        content: <Checkmark />,
-      },
-    ],
-    details: (
-      <div css={detailsCellImageFirst}>
-        <p>
-          Your <strong>digital newspaper, delivered once a day.</strong> Slow down to enjoy handpicked stories
-          and photography, supplements and big-issue deep dives.
-        </p>
-        <div css={[detailsCellImageFirstContainer, detailsCellImageContainerFullHeight]}>
-          <picture>
-            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={editionsPic} />
-            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={editionsDesktopPic} />
-            <img
-              src={editionsPic}
-              alt=""
-            />
-          </picture>
-        </div>
-      </div>),
-  },
-  {
-    rowId: 'premiumApp',
-    columns: [
-      {
-        content: <><div css={descriptionIcon}><SvgLiveAppIcon /></div>
-          <span><strong>The Guardian app</strong> with premium features</span></>,
-        isPrimary: true,
-      },
-      {
-        content: <Padlock />,
-      },
-      {
-        content: <Checkmark />,
-      },
-    ],
-    details: (
-      <div css={detailsCellImageSecond}>
-        <p>
-          <strong>Explore interactive features</strong> that help you stay on top of <strong>breaking news</strong>,
-          or keep curious by following topics that matter to you.
-        </p>
-        <div css={[detailsCellImageSecondContainer, detailsCellImageContainerBottomSpacing]}>
-          <picture>
-            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={guardianAppPic} />
-            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={guardianAppDesktopPic} />
-            <img
-              src={guardianAppPic}
-              alt=""
-            />
-          </picture>
-        </div>
-      </div>),
-  },
-  {
-    rowId: 'offlineReading',
-    columns: [
-      {
-        content: <><div css={descriptionIcon}><SvgOffline /></div>
-          <span>Offline reading in both your apps</span></>,
-        isPrimary: true,
-      },
-      {
-        content: <Padlock />,
-      },
-      {
-        content: <Checkmark />,
-      },
-    ],
-    details: (
-      <div css={detailsCellOfflineReading}>
-        <div css={appFeatureImageContainer}>
-          <picture>
-            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingEdPic} />
-            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingEdDesktopPic} />
-            <img
-              src={offlineReadingEdPic}
-              alt=""
-            />
-          </picture>
-          <AppFeatureWithIcon appName="Editions">
-            <p>Download any edition from the last 30 days to read anytime, anywhere you are.</p>
-          </AppFeatureWithIcon>
-        </div>
-        <div css={appFeatureImageContainer}>
-          <AppFeatureWithIcon appName="Guardian">
-            <p><strong>Enhanced offline reading.</strong> Download the news whenever it suits you</p>
-          </AppFeatureWithIcon>
-          <picture>
-            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingGuPic} />
-            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingGuDesktopPic} />
-            <img
-              src={offlineReadingGuPic}
-              alt=""
-            />
-          </picture>
-        </div>
-      </div>
-    ),
-  },
-  {
-    rowId: 'crosswords',
-    columns: [
-      {
-        content: <><div css={descriptionIcon}><SvgCrosswords /></div>
-          <span>Play interactive crosswords</span></>,
-        isPrimary: true,
-      },
-      {
-        content: <Padlock />,
-      },
-      {
-        content: <Checkmark />,
-      },
-    ],
-    details: (
-      <div css={detailsColumnCrosswords}>
-        <div>
-          <AppFeatureWithIcon appName="Guardian" heading="Daily crosswords">
-            <p>Play daily crosswords wherever you are in <strong>the Guardian app.</strong></p>
-          </AppFeatureWithIcon>
-        </div>
-        <div css={detailsCellImageCrosswords}>
-          <picture>
-            <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={crosswordsPic} />
-            <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={crosswordsDesktopPic} />
-            <img
-              src={crosswordsPic}
-              alt=""
-            />
-          </picture>
-        </div>
-      </div>
-    ),
+  return [
+    {
+      rowId: 'journalism',
+      columns: [
+        {
+          content: (
+            <>
+              <div css={descriptionIcon}><SvgNews /></div>
+              <span>Access to the Guardian&apos;s quality, open journalism</span>
+            </>),
+          isPrimary: true,
+        },
+        {
+          content: <Checkmark />,
+        },
+        {
+          content: <Checkmark />,
+        },
+      ],
+      details: (
+        <div css={detailsCellImageFirst}>
+          <p>
+            Independent, honest reporting should be available for everyone without a paywall. With a subscription,
+            you can help to protect the Guardian’s editorial independence and support our model for open access
+            journalism, so millions more can benefit.
+          </p>
+          <div css={detailsCellImageFirstContainer}>
+            <img src={journalismPic} alt="" />
+          </div>
+        </div>),
+    },
+    {
+      rowId: 'adFree',
+      columns: [
+        {
+          content: <><div css={descriptionIcon}><SvgAdFree /></div>
+            <span>Ad-free reading on all your devices</span></>,
+          isPrimary: true,
+        },
+        {
+          content: <Padlock />,
+        },
+        {
+          content: <Checkmark />,
+        },
+      ],
+      details: (
+        <div css={detailsCellImageSecond}>
+          <p>
+            Enjoy an ad-free experience across all of your devices when you&apos;re signed in on your apps
+            and theguardian.com
+          </p>
+          <div css={detailsCellImageSecondContainer}>
+            <img src={adFreePic} alt="" />
+          </div>
+        </div>),
+    },
 
-  },
-];
+    {
+      rowId: 'editionsApp',
+      columns: [
+        {
+          content: <><div css={descriptionIcon}><SvgEditionsIcon /></div>
+            <span><strong>The Editions app:</strong> newspapers reimagined
+              <span css={hideOnSmall}> for mobile and tablet</span>
+            </span></>,
+          isPrimary: true,
+        },
+        {
+          content: <Padlock />,
+        },
+        {
+          content: <Checkmark />,
+        },
+      ],
+      details: (
+        <div css={detailsCellImageFirst}>
+          <p>
+            Experience digital news differently. Available exclusively to subscribers,
+            {isAustralia ?
+              'Australia Weekend brings you the stories you need to understand the week' :
+              'the UK Daily brings you the stories you need for the day'}. With a beginning and an end,
+            it’s an immersive, considered alternative to your never-ending news feed.
+            {isAustralia ? 'The UK Daily' : 'Australia Weekend'}
+            and one-off special Editions are also available for you to enjoy.
+          </p>
+          <div css={[detailsCellImageFirstContainer, detailsCellImageContainerFullHeight]}>
+            <picture>
+              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={editionsPic} />
+              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={editionsDesktopPic} />
+              <img
+                src={editionsPic}
+                alt=""
+              />
+            </picture>
+          </div>
+        </div>),
+    },
+    {
+      rowId: 'premiumApp',
+      columns: [
+        {
+          content: <><div css={descriptionIcon}><SvgLiveAppIcon /></div>
+            <span><strong>The Guardian app</strong> with premium features</span></>,
+          isPrimary: true,
+        },
+        {
+          content: <Padlock />,
+        },
+        {
+          content: <Checkmark />,
+        },
+      ],
+      details: (
+        <div css={detailsCellImageSecond}>
+          <p>
+            <strong>Explore interactive features</strong> that help you stay on top of <strong>breaking news</strong>,
+            or keep curious by following topics that matter to you.
+          </p>
+          <div css={[detailsCellImageSecondContainer, detailsCellImageContainerBottomSpacing]}>
+            <picture>
+              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={guardianAppPic} />
+              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={guardianAppDesktopPic} />
+              <img
+                src={guardianAppPic}
+                alt=""
+              />
+            </picture>
+          </div>
+        </div>),
+    },
+    {
+      rowId: 'offlineReading',
+      columns: [
+        {
+          content: <><div css={descriptionIcon}><SvgOffline /></div>
+            <span>Offline reading in both your apps</span></>,
+          isPrimary: true,
+        },
+        {
+          content: <Padlock />,
+        },
+        {
+          content: <Checkmark />,
+        },
+      ],
+      details: (
+        <div css={detailsCellOfflineReading}>
+          <div css={appFeatureImageContainer}>
+            <picture>
+              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingEdPic} />
+              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingEdDesktopPic} />
+              <img
+                src={offlineReadingEdPic}
+                alt=""
+              />
+            </picture>
+            <AppFeatureWithIcon appName="Editions">
+              <p>Download any edition from the last 30 days to read anytime, anywhere you are.</p>
+            </AppFeatureWithIcon>
+          </div>
+          <div css={appFeatureImageContainer}>
+            <AppFeatureWithIcon appName="Guardian">
+              <p><strong>Enhanced offline reading.</strong> Download the news whenever it suits you</p>
+            </AppFeatureWithIcon>
+            <picture>
+              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingGuPic} />
+              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingGuDesktopPic} />
+              <img
+                src={offlineReadingGuPic}
+                alt=""
+              />
+            </picture>
+          </div>
+        </div>
+      ),
+    },
+    {
+      rowId: 'crosswords',
+      columns: [
+        {
+          content: <><div css={descriptionIcon}><SvgCrosswords /></div>
+            <span>Play interactive crosswords</span></>,
+          isPrimary: true,
+        },
+        {
+          content: <Padlock />,
+        },
+        {
+          content: <Checkmark />,
+        },
+      ],
+      details: (
+        <div css={detailsColumnCrosswords}>
+          <div>
+            <AppFeatureWithIcon appName="Guardian" heading="Daily crosswords">
+              <p>Play daily crosswords wherever you are in <strong>the Guardian app.</strong></p>
+            </AppFeatureWithIcon>
+          </div>
+          <div css={detailsCellImageCrosswords}>
+            <picture>
+              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={crosswordsPic} />
+              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={crosswordsDesktopPic} />
+              <img
+                src={crosswordsPic}
+                alt=""
+              />
+            </picture>
+          </div>
+        </div>
+      ),
+
+    },
+  ];
+}
 
 export const headers = [
   {

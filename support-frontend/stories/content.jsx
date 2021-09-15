@@ -11,7 +11,7 @@ import Quote from 'components/quote/quote';
 import BlockLabel from 'components/blockLabel/blockLabel';
 import InteractiveTable from 'components/interactiveTable/interactiveTable';
 
-import { headers, rows, footer } from 'pages/digital-subscription-landing/components/comparison/interactiveTableContents';
+import { headers, footer, getRows } from 'pages/digital-subscription-landing/components/comparison/interactiveTableContents';
 
 const stories = storiesOf('Content components', module)
   .addDecorator(withKnobs({
@@ -124,7 +124,7 @@ stories.add('Interactive table', () => (
     <InteractiveTable
       caption={<>What&apos;s included in a paid digital subscription</>}
       headers={headers}
-      rows={rows}
+      rows={getRows('GB')}
       footer={footer}
     />
   </div>

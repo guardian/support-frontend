@@ -42,7 +42,7 @@ import EventsModule from 'pages/digital-subscription-landing/components/events/e
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
 // import ComparisonTable from './components/comparison/comparisonTable';
 import InteractiveTable from 'components/interactiveTable/interactiveTable';
-import { headers, rows, footer } from './components/comparison/interactiveTableContents';
+import { headers, footer, getRows } from './components/comparison/interactiveTableContents';
 
 
 // ----- Styles ----- //
@@ -139,6 +139,9 @@ function DigitalLandingPage({
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
+  // For comparison table
+  const localisedRows = getRows(countryGroupId);
+
   // For CTAs in hero test
   const heroPriceList = getHeroCtaProps(
     productPrices,
@@ -202,7 +205,7 @@ function DigitalLandingPage({
             <InteractiveTable
               caption={<>What&apos;s included in a paid digital subscription</>}
               headers={headers}
-              rows={rows}
+              rows={localisedRows}
               footer={footer}
             />
           </div>
