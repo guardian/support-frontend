@@ -7,7 +7,7 @@ import { background, brandAltBackground, brand } from '@guardian/src-foundations
 import { SvgCheckmark } from '@guardian/src-icons';
 import { headline } from '@guardian/src-foundations/typography';
 
-import { type IsoCountry } from 'helpers/internationalisation/country';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { SvgNews } from 'components/icons/news';
 import { SvgAdFree } from 'components/icons/adFree';
@@ -296,8 +296,8 @@ const AppFeatureWithIcon = ({ appName, heading = `The ${appName} App`, children 
   );
 };
 
-export function getRows(countryGroupId: IsoCountry) {
-  const isAustralia = countryGroupId === 'AU';
+export function getRows(countryGroupId: CountryGroupId) {
+  const isAustralia = countryGroupId === 'AUDCountries';
 
   return [
     {
@@ -377,12 +377,12 @@ export function getRows(countryGroupId: IsoCountry) {
       details: (
         <div css={detailsCellImageFirst}>
           <p>
-            Experience digital news differently. Available exclusively to subscribers,
+            Experience digital news differently. Available exclusively to subscribers,{' '}
             {isAustralia ?
               'Australia Weekend brings you the stories you need to understand the week' :
               'the UK Daily brings you the stories you need for the day'}. With a beginning and an end,
             it’s an immersive, considered alternative to your never-ending news feed.
-            {isAustralia ? 'The UK Daily' : 'Australia Weekend'}
+            {isAustralia ? 'The UK Daily' : 'Australia Weekend'}{' '}
             and one-off special Editions are also available for you to enjoy.
           </p>
           <div css={[detailsCellImageFirstContainer, detailsCellImageContainerFullHeight]}>
