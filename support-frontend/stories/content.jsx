@@ -124,7 +124,7 @@ stories.add('Interactive table', () => (
     <InteractiveTable
       caption={<>What&apos;s included in a paid digital subscription</>}
       headers={headers}
-      rows={getRows('GB')}
+      rows={getRows('GBPCountries')}
       footer={footer}
     />
   </div>

@@ -111,27 +111,6 @@ export const tests: Tests = {
     seed: 10,
     optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
   },
-  comparisonTableTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: false,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
-    seed: 10,
-    optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
-  },
   subscriptionsGuestCheckoutTest: {
     variants: [
       {
@@ -152,5 +131,26 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
     seed: 3,
     optimizeId: 'tn3FveQmTeiTS4JtSUyzig',
+  },
+  comparisonTableTest2: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 10,
+    optimizeId: '',
   },
 };

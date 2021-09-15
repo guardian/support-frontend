@@ -11,7 +11,7 @@ import PaymentSelection
   from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
 const pricesSection = css`
-  padding: ${space[6]}px ${space[3]}px ${space[12]}px;
+  padding: 0 ${space[3]}px ${space[12]}px;
 `;
 
 const priceBoxes = css`
@@ -44,17 +44,24 @@ const ctaCopy = {
   },
 };
 
+type CSSOverridableType = {|
+  cssOverrides?: string;
+|}
+
+type PricesPropTypes = PaymentSelectionPropTypes & CSSOverridableType
+
 function Prices({
   countryGroupId,
   currencyId,
   productPrices,
   orderIsAGift,
   isUsingGuestCheckout,
-}: PaymentSelectionPropTypes) {
+  cssOverrides = '',
+}: PricesPropTypes) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
 
   return (
-    <section css={pricesSection} id="subscribe">
+    <section css={[pricesSection, cssOverrides]} id="subscribe">
       <h2 css={pricesHeadline}>{copy.title}</h2>
       <p css={pricesSubHeadline}>{copy.paragraph}</p>
       <FlexContainer cssOverrides={priceBoxes}>

@@ -7,7 +7,7 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
-// import { neutral } from '@guardian/src-foundations/palette';
+import { neutral } from '@guardian/src-foundations/palette';
 
 import {
   AUDCountries,
@@ -32,7 +32,7 @@ import headerWithCountrySwitcherContainer
   from 'components/headers/header/headerWithCountrySwitcher';
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
 import { HeroWithImage } from './components/hero/heroWithImage';
-// import ProductBlock from './components/productBlock/productBlock';
+import ProductBlock from './components/productBlock/productBlock';
 import Prices from './components/prices';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
@@ -48,27 +48,27 @@ import { headers, footer, getRows } from './components/comparison/interactiveTab
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 
-// const productBlockContainer = css`
-//   background-color: ${neutral[93]};
-//   border-top: none;
-//   border-right: none;
-//   margin-top: ${space[3]}px;
-//   padding-top: 0;
+const productBlockContainer = css`
+  background-color: ${neutral[93]};
+  border-top: none;
+  border-right: none;
+  margin-top: ${space[3]}px;
+  padding-top: 0;
 
-//   ${from.tablet} {
-//     background-color: ${neutral[100]};
-//     margin-top: ${space[12]}px;
-//     border-top: 1px solid ${neutral[86]};
-//     border-right: 1px solid ${neutral[86]};
-//   }
-// `;
+  ${from.tablet} {
+    background-color: ${neutral[100]};
+    margin-top: ${space[12]}px;
+    border-top: 1px solid ${neutral[86]};
+    border-right: 1px solid ${neutral[86]};
+  }
+`;
 
-// const productBlockContainerWithEvents = css`
-//   margin-top: 0;
-//   ${from.tablet} {
-//     margin-top: ${space[6]}px;
-//   }
-// `;
+const productBlockContainerWithEvents = css`
+  margin-top: 0;
+  ${from.tablet} {
+    margin-top: ${space[6]}px;
+  }
+`;
 
 const eventsProductBlockContainer = css`
     margin-top: 43px;
@@ -80,17 +80,9 @@ const eventsProductBlockContainer = css`
   }
 `;
 
-// const comparisonTableContainer = css`
-//     margin-top: 43px;
-//     margin-bottom: ${space[2]}px;
-//     padding-top: 0;
-//     padding-bottom: 0;
-
-//   ${from.tablet} {
-//     margin-top: 60px;
-//     margin-bottom: ${space[2]}px;
-//   }
-// `;
+const extraPaddingForComparisonTable = css`
+  padding-top: ${space[6]}px;
+`;
 
 const interactiveTableContainer = css`
   position: relative;
@@ -133,7 +125,7 @@ function DigitalLandingPage({
 
   const isGift = orderIsAGift || false;
   const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
-  // const showComparisonTable = participations.comparisonTableTest === 'variant';
+  const showComparisonTable = participations.comparisonTableTest2 === 'variant';
   const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
@@ -199,6 +191,7 @@ function DigitalLandingPage({
           priceList={heroPriceList}
         />
       }
+      {showComparisonTable &&
       <FullWidthContainer>
         <CentredContainer>
           <div css={interactiveTableContainer} ref={setElementToObserve}>
@@ -210,17 +203,18 @@ function DigitalLandingPage({
             />
           </div>
         </CentredContainer>
-      </FullWidthContainer>
+      </FullWidthContainer>}
       {showEventsComponent &&
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={eventsProductBlockContainer}>
-            <EventsModule />
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block cssOverrides={eventsProductBlockContainer}>
+              <EventsModule />
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>
       }
-      {/* <FullWidthContainer>
+      {!showComparisonTable &&
+      <FullWidthContainer>
         <CentredContainer>
           <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
             <div ref={setElementToObserve}>
@@ -230,10 +224,12 @@ function DigitalLandingPage({
             </div>
           </Block>
         </CentredContainer>
-      </FullWidthContainer> */}
-      <FullWidthContainer theme="dark">
+      </FullWidthContainer>}
+      <FullWidthContainer theme="dark" hasOverlap={!showComparisonTable}>
         <CentredContainer>
+          {/* $FlowIgnore inability to parse intersection type */}
           <Prices
+            cssOverrides={showComparisonTable ? extraPaddingForComparisonTable : ''}
             countryGroupId={countryGroupId}
             currencyId={currencyId}
             productPrices={productPrices}
