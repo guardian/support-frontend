@@ -60,10 +60,10 @@ class RegularContributions(
     val billingPeriod = request.body.product.billingPeriod
     SafeLogger.info(s"[${request.uuid}] Guest user: ${request.body.email} is attempting to create a new $billingPeriod contribution")
     val result = for {
-      userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
-      user <- identityService.getUser(IdMinimalUser(userIdWithOptionalToken.userId, None))
+      userId <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
+      user <- identityService.getUser(IdMinimalUser(userId, None))
       initialStatusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
-    } yield StatusResponse.fromStatusResponseAndToken(initialStatusResponse, userIdWithOptionalToken.guestAccountRegistrationToken)
+    } yield StatusResponse.fromStatusResponse(initialStatusResponse)
     respondToClient(result, request.body, guestCheckout = true)
   }
 

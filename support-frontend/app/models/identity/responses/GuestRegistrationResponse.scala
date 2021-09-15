@@ -20,7 +20,7 @@ case class GuestRegistrationResponse(
 
 object GuestRegistrationResponse {
   implicit val readsGuestRegistrationResponse: Reads[GuestRegistrationResponse] = Json.reads[GuestRegistrationResponse]
-  case class GuestRegistrationRequest(token: Option[String], userId: String)
+  case class GuestRegistrationRequest(userId: String)
 
   object GuestRegistrationRequest {
     implicit val readsGuestRegistrationRequest: Reads[GuestRegistrationRequest] = Json.reads[GuestRegistrationRequest]

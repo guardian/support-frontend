@@ -33,6 +33,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getCampaignSettings, type CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getAmount } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 const container = css`
   background: white;
@@ -141,7 +142,7 @@ type ContributionThankYouProps = {|
   currency: IsoCurrency,
   name: string,
   user: User,
-  guestAccountCreationToken: string,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   paymentMethod: PaymentMethod,
   countryId: IsoCountry,
   campaignCode: ?string,
@@ -159,7 +160,7 @@ const mapStateToProps = state => ({
   currency: state.common.internationalisation.currencyId,
   csrf: state.page.csrf,
   user: state.page.user,
-  guestAccountCreationToken: state.page.form.guestAccountCreationToken,
+  userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   paymentMethod: state.page.form.paymentMethod,
   countryId: state.common.internationalisation.countryId,
   campaignCode: state.common.referrerAcquisitionData.campaignCode,
@@ -173,12 +174,12 @@ const ContributionThankYou = ({
   amount,
   currency,
   user,
-  guestAccountCreationToken,
+  userTypeFromIdentityResponse,
   paymentMethod,
   countryId,
   campaignCode,
 }: ContributionThankYouProps) => {
-  const isKnownEmail = guestAccountCreationToken === null;
+  const isNewAccount = userTypeFromIdentityResponse === 'new';
   const campaignSettings = useMemo<CampaignSettings | null>(() =>
     getCampaignSettings(campaignCode));
 
@@ -187,18 +188,19 @@ const ContributionThankYou = ({
       paymentMethod,
       contributionType,
       user.isSignedIn,
-      isKnownEmail,
+      !isNewAccount,
       isLargeDonation(amount, contributionType, paymentMethod),
     );
   }, []);
 
   const signUpAction = {
-    component: <ContributionThankYouSignUp email={email} csrf={csrf} />,
-    shouldShow: !isKnownEmail,
+    component: <ContributionThankYouSignUp />,
+    shouldShow: isNewAccount,
   };
   const signInAction = {
     component: <ContributionThankYouSignIn email={email} csrf={csrf} />,
-    shouldShow: isKnownEmail && !user.isSignedIn,
+    // Show this to existing guest accounts as well - it will take them through the password flow
+    shouldShow: !isNewAccount && !user.isSignedIn,
   };
   const marketingConsentAction = {
     component: (

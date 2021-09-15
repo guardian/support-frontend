@@ -48,7 +48,7 @@ import {
   getBillingAddress,
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
+import { submitWithDeliveryForm, trackSubmitAttempt } from 'helpers/subscriptionsForms/submit';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { Stripe, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
@@ -60,7 +60,11 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
-import { paperProductsWithDigital, paperProductsWithoutDigital, type ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import {
+  paperProductsWithDigital,
+  paperProductsWithoutDigital,
+  type ActivePaperProducts,
+} from 'helpers/productPrice/productOptions';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
@@ -78,6 +82,7 @@ import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { Participations } from 'helpers/abTests/abtest';
 import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
+import { hasCsrQueryParam } from 'components/csr/csrMode';
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -164,6 +169,12 @@ function mapDispatchToProps() {
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
       const state = getState();
       validateWithDeliveryForm(dispatch, state);
+      // We need to track PayPal payment attempts here because PayPal behaves
+      // differently to other payment methods. All others are tracked in submit.js
+      const { paymentMethod } = state.page.checkout;
+      if (paymentMethod === PayPal) {
+        trackSubmitAttempt(PayPal, Paper, state.page.checkout.productOption);
+      }
     },
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
@@ -208,7 +219,7 @@ function PaperCheckoutForm(props: PropTypes) {
   const priceHasRedundantFloat = simplePrice.split('.')[1] === '00'; // checks whether price is something like '£10.00'
   const cleanedPrice = priceHasRedundantFloat ? simplePrice.replace(/\.(.*)/, '') : simplePrice; // removes decimal point if there are no pence
   const expandedPricingText = `${cleanedPrice} per month`;
-  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant';
+  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant' || hasCsrQueryParam();
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
     setIncludesDigiSub(event.target.checked);
@@ -294,6 +305,8 @@ function PaperCheckoutForm(props: PropTypes) {
               setLastName={props.setLastName}
               email={props.email}
               setEmail={props.setEmail}
+              confirmEmail={props.confirmEmail}
+              setConfirmEmail={props.setConfirmEmail}
               isSignedIn={props.isSignedIn}
               checkIfEmailHasPassword={props.checkIfEmailHasPassword}
               telephone={props.telephone}

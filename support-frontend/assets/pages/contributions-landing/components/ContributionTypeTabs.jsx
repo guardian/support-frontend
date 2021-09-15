@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Render ----- //
 
-function withProps(props: PropTypes) {
+function ContributionTypeTabs(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
   const renderChoiceCards = () => (
@@ -146,28 +146,4 @@ function withProps(props: PropTypes) {
   );
 }
 
-function withoutProps() {
-  return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
-      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>How often would you like to contribute?</legend>
-      <ul className="form__radio-group-list form__radio-group-list--border">
-        {
-          ['a', 'b', 'c'].map(id => (
-            <li className="form__radio-group-item">
-              <input
-                id={`contributionType-${id}`}
-                className="form__radio-group-input"
-                type="radio"
-                name="contributionType"
-              />
-              <label htmlFor={`contributionType-${id}`} className="form__radio-group-label">&nbsp;</label>
-            </li>
-            ))
-        }
-      </ul>
-    </fieldset>
-  );
-}
-
-export const ContributionTypeTabs = connect(mapStateToProps, mapDispatchToProps)(withProps);
-export const EmptyContributionTypeTabs = withoutProps;
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionTypeTabs);

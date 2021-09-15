@@ -47,21 +47,6 @@ class IdentityController(
     }
   }
 
-  def setPasswordGuest(): Action[SetPasswordRequest] = PrivateAction.async(circe.json[SetPasswordRequest]) { implicit request =>
-    identityService
-      .setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
-      .fold(
-        err => {
-          SafeLogger.error(scrub"Failed to set password using guest account registration token ${request.body.guestAccountRegistrationToken}: ${err.toString}")
-          warnAndReturn()
-        },
-        cookiesFromResponse => {
-          SafeLogger.info(s"Successfully set password using guest account registration token ${request.body.guestAccountRegistrationToken}")
-          Ok.withCookies(SetGuestPasswordResponseCookies.getCookies(cookiesFromResponse, guardianDomain): _*)
-        }
-      )
-  }
-
   def getUserType(maybeEmail: Option[String]): Action[AnyContent] = PrivateAction.async { implicit request =>
     maybeEmail.fold {
       SafeLogger.error(scrub"No email provided")

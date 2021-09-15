@@ -5,7 +5,7 @@ import selenium.util.Config
 
 class GuardianWeeklyGiftCheckout(implicit val webDriver: WebDriver) extends CheckoutPage {
 
-  val url = s"${Config.supportFrontendUrl}/subscribe/weekly/checkout/gift"
+  val url = s"${Config.supportFrontendUrl}/subscribe/weekly/checkout/gift?period=Quarterly"
 
   private val gifteeFirstName = id("firstNameGiftRecipient")
   private val gifteeLastName = id("lastNameGiftRecipient")

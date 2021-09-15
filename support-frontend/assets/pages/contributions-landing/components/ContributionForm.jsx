@@ -25,11 +25,11 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { ContributionAmounts, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 
-import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
-import { ContributionTypeTabs, EmptyContributionTypeTabs } from './ContributionTypeTabs';
-import { ContributionAmount, EmptyContributionAmount } from './ContributionAmount';
-import { PaymentMethodSelector, EmptyPaymentMethodSelector } from './PaymentMethodSelector';
-import { ContributionSubmit, EmptyContributionSubmit } from './ContributionSubmit';
+import ContributionFormFields from './ContributionFormFields';
+import ContributionTypeTabs from './ContributionTypeTabs';
+import ContributionAmount from './ContributionAmount';
+import PaymentMethodSelector from './PaymentMethodSelector';
+import ContributionSubmit from './ContributionSubmit';
 
 import { type State } from 'pages/contributions-landing/contributionsLandingReducer';
 
@@ -292,7 +292,7 @@ function onSubmit(props: PropTypes): Event => void {
 
 // ----- Render ----- //
 
-function withProps(props: PropTypes) {
+function ContributionForm(props: PropTypes) {
   const baseClass = 'form';
   const classModifiers = ['contribution', 'with-labels'];
 
@@ -360,30 +360,12 @@ function withProps(props: PropTypes) {
         countryGroupId={props.countryGroupId}
         contributionType={props.contributionType}
         campaignSettings={props.campaignSettings}
+        currency={props.currency}
+        amount={getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType)}
       />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
   );
 }
 
-function withoutProps() {
-  return (
-    <form className={classNameWithModifiers('form', ['contribution'])}>
-      <div>
-        <EmptyContributionTypeTabs />
-        <EmptyContributionAmount />
-        <div className={classNameWithModifiers('form', ['content'])}>
-          <EmptyContributionFormFields />
-          <EmptyPaymentMethodSelector />
-          <EmptyContributionSubmit />
-        </div>
-      </div>
-      <div>
-        <ProgressMessage message={['Loading the page']} />
-      </div>
-    </form>
-  );
-}
-
-export const ContributionForm = connect(mapStateToProps, mapDispatchToProps)(withProps);
-export const EmptyContributionForm = withoutProps;
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionForm);

@@ -19,7 +19,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import services._
 import util.FutureEitherValues
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
@@ -88,9 +88,9 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val streamResponseErrorMessage = "stream error"
   val streamResponseError: EitherT[Future, List[String], Unit] =
     EitherT.left(Future.successful(List(streamResponseErrorMessage)))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
-    EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
+    EitherT.right(Future.successful(1L))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
@@ -176,7 +176,7 @@ class PaypalBackendSpec
       "return successful payment response even if identityService, ophanService, " +
         "databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None)
+        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
@@ -201,7 +201,7 @@ class PaypalBackendSpec
       "return successful payment response even if identityService, " +
         "ophanService, databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None)
+        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
@@ -214,7 +214,7 @@ class PaypalBackendSpec
 
       "return successful payment response with guestAccountRegistrationToken if available" in new PaypalBackendFixture {
         populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), Some("guest-token"))
+        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)

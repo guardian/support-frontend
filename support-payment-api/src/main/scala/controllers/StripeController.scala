@@ -71,7 +71,7 @@ class StripeController(
           new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
         },
         {
-          case success: StripePaymentIntentsApiResponse.Success => Ok(ResultBody.Success(success))
+          case success: StripePaymentIntentsApiResponse.Success => Ok(ResultBody.Success("ok"))
           case requiresAction: StripePaymentIntentsApiResponse.RequiresAction => Ok(ResultBody.RequiresAction(requiresAction))
         }
       )

@@ -10,7 +10,7 @@ import { glyph } from 'helpers/internationalisation/currency';
 import {
   getLongMonth,
   getDateWithOrdinal,
-} from 'helpers/abTests/lpPreviousGiving';
+} from 'helpers/utilities/dateFormatting';
 
 // ----- Types ----- //
 

@@ -34,27 +34,12 @@ export type UserFormData = {
   billingState: string | null,
 }
 
-export type ThankYouPageStageMap<T> = {
-  thankYouSetPassword: T,
-  thankYou: T,
-  thankYouPasswordSet: T,
-  thankYouPasswordDeclinedToSet: T,
-}
-
-export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
-
 type FormData = UserFormData & {
   otherAmounts: OtherAmounts,
   billingState: StateProvince | null,
   billingCountry: IsoCountry | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
-
-type SetPasswordData = {
-  password: string,
-  passwordHasBeenSubmitted: boolean,
-  passwordError: boolean,
-}
 
 export type StripePaymentRequestButtonData = {
   paymentMethod: 'none' | StripePaymentMethod,
@@ -122,11 +107,8 @@ type FormState = {
   },
   stripeCardFormData: StripeCardFormData,
   sepaData: SepaData,
-  setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
-  guestAccountCreationToken: ?string,
-  thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
@@ -234,8 +216,6 @@ function createFormReducer() {
     isWaiting: false,
     paymentComplete: false,
     paymentError: null,
-    guestAccountCreationToken: null,
-    thankYouPageStage: 'thankYou',
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
@@ -450,15 +430,6 @@ function createFormReducer() {
       case 'UPDATE_EMAIL':
         return { ...state, formData: { ...state.formData, email: action.email } };
 
-      case 'UPDATE_PASSWORD':
-        return { ...state, setPasswordData: { ...state.setPasswordData, password: action.password } };
-
-      case 'SET_PASSWORD_HAS_BEEN_SUBMITTED':
-        return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSubmitted: true } };
-
-      case 'SET_PASSWORD_ERROR':
-        return { ...state, setPasswordData: { ...state.setPasswordData, passwordError: action.passwordError } };
-
       case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
         return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse };
 
@@ -577,18 +548,6 @@ function createFormReducer() {
 
       case 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY':
         return { ...state, hasSeenDirectDebitThankYouCopy: true };
-
-      case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
-        return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
-
-      // Don't allow the stage to be set to thankYouSetPassword unless both an email and
-      // guest registration token is present
-      case 'SET_THANK_YOU_PAGE_STAGE':
-        if ((action.thankYouPageStage === 'thankYouSetPassword')
-          && (!state.guestAccountCreationToken || !state.formData.email)) {
-          return { ...state, thankYouPageStage: 'thankYou' };
-        }
-        return { ...state, thankYouPageStage: action.thankYouPageStage };
 
       default:
         return state;

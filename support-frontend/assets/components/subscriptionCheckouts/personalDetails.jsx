@@ -15,7 +15,7 @@ import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
 
-const marginBotom = css`
+const marginBottom = css`
   margin-bottom: ${space[6]}px;
 `;
 
@@ -35,6 +35,8 @@ export type PropTypes = {
   setLastName: Function,
   email: string,
   setEmail: Function,
+  confirmEmail?: Option<string>,
+  setConfirmEmail?: Option<Function>,
   checkIfEmailHasPassword?: Option<Function>,
   isSignedIn: boolean,
   telephone: Option<string>,
@@ -49,7 +51,7 @@ type SignedInEmailFooterTypes = {
 }
 
 const SignedInEmailFooter = (props: SignedInEmailFooterTypes) => (
-  <div css={marginBotom}>
+  <div css={marginBottom}>
     <CheckoutExpander copy="Want to use a different email address?">
       <p css={sansText}>You will be able to edit this in your account once you have completed this checkout.</p>
     </CheckoutExpander>
@@ -72,7 +74,7 @@ const SignedInEmailFooter = (props: SignedInEmailFooterTypes) => (
 );
 
 const SignedOutEmailFooter = () => (
-  <div css={marginBotom} />
+  <div css={marginBottom} />
 );
 
 export default function PersonalDetails(props: PropTypes) {
@@ -89,14 +91,28 @@ export default function PersonalDetails(props: PropTypes) {
     if (props.checkIfEmailHasPassword) { props.checkIfEmailHasPassword(e.target.value); }
   };
 
+  const maybeSetConfirmEmail = (e) => {
+    if (props.setConfirmEmail) { props.setConfirmEmail(e.target.value); }
+  };
+
   const emailFooter = props.isSignedIn ?
     <SignedInEmailFooter handleSignOut={handleSignOut} /> :
     <SignedOutEmailFooter />;
 
+  const confirmEmailInput = props.isSignedIn ? null :
+    (<TextInput
+      label="Confirm email"
+      type="email"
+      value={props.confirmEmail}
+      onInput={maybeSetConfirmEmail}
+      error={firstError('confirmEmail', props.formErrors)}
+      pattern={emailRegexPattern}
+    />);
+
   return (
     <div id="qa-personal-details">
       <TextInput
-        css={marginBotom}
+        css={marginBottom}
         id="first-name"
         label="First name"
         type="text"
@@ -105,7 +121,7 @@ export default function PersonalDetails(props: PropTypes) {
         error={firstError('firstName', props.formErrors)}
       />
       <TextInput
-        css={marginBotom}
+        css={marginBottom}
         id="last-name"
         label="Last name"
         type="text"
@@ -114,6 +130,7 @@ export default function PersonalDetails(props: PropTypes) {
         error={firstError('lastName', props.formErrors)}
       />
       <TextInput
+        css={marginBottom}
         label="Email"
         type="email"
         value={props.email}
@@ -123,6 +140,7 @@ export default function PersonalDetails(props: PropTypes) {
         pattern={emailRegexPattern}
         disabled={!props.isUsingGuestCheckout || props.isSignedIn}
       />
+      {confirmEmailInput}
       {emailFooter}
       <TextInput
         id="telephone"
@@ -139,5 +157,7 @@ export default function PersonalDetails(props: PropTypes) {
 }
 
 PersonalDetails.defaultProps = {
+  confirmEmail: null,
+  setConfirmEmail: null,
   checkIfEmailHasPassword: null,
 };

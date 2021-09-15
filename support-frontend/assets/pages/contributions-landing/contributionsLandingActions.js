@@ -43,7 +43,7 @@ import * as cookie from 'helpers/storage/cookie';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { setPayPalHasLoaded, type Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import { type State, type ThankYouPageStage, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
+import { type State, type UserFormData, type Stripe3DSResult } from './contributionsLandingReducer';
 import { AmazonPay, DirectDebit, Sepa, Stripe, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from 'helpers/forms/paymentMethods';
@@ -60,7 +60,6 @@ export type Action =
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
-  | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_BILLING_STATE', billingState: StateProvince | null }
   | { type: 'UPDATE_BILLING_COUNTRY', billingCountry: IsoCountry | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
@@ -82,11 +81,7 @@ export type Action =
   | { type: 'PAYMENT_FAILURE', paymentError: ErrorReason }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
-  | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
-  | { type: 'SET_PASSWORD_ERROR', passwordError: boolean }
-  | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
-  | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod, stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED', stripeAccount: StripeAccount }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR', paymentError: ErrorReason, stripeAccount: StripeAccount }
@@ -153,8 +148,6 @@ const updateEmail = (email: string): ((Function) => void) =>
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_EMAIL', email })));
   };
 
-const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
-
 const updateRecaptchaToken = (recaptchaToken: string): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_RECAPTCHA_TOKEN', recaptchaToken })));
@@ -190,10 +183,6 @@ const selectAmount = (amount: number | 'other', contributionType: ContributionTy
 
 const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
-const setPasswordHasBeenSubmitted = (): Action => ({ type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' });
-
-const setPasswordError = (passwordError: boolean): Action => ({ type: 'SET_PASSWORD_ERROR', passwordError });
-
 const updateOtherAmount = (otherAmount: string, contributionType: ContributionType): ((Function) => void) =>
   (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount, contributionType })));
@@ -204,12 +193,6 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
 const paymentFailure = (paymentError: ErrorReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
-
-const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
-  ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
-
-const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
-  ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
 const setHasSeenDirectDebitThankYouCopy = (): Action => ({ type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' });
 
@@ -272,6 +255,8 @@ const setAmazonPayBillingAgreementConsentStatus =
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
     (dispatch: Function): void => {
+      // PayPal one-off redirects away from the site before hitting the thank you page, and we'll need userType
+      storage.setSession('userTypeFromIdentityResponse', userTypeFromIdentityResponse);
       dispatch(setFormSubmissionDependentValue(() =>
         ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
     };
@@ -300,7 +285,7 @@ const updateContributionTypeAndPaymentMethod =
       dispatch(updatePaymentMethod(paymentMethodToSelect));
     };
 
-const checkIfEmailHasPassword = (email: string) =>
+const getUserType = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
     const { csrf } = state.page;
@@ -599,26 +584,22 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
 
 const makeCreateStripePaymentIntentRequest = (
   data: CreateStripePaymentIntentRequest,
-  setGuestToken: (string) => void,
-  setThankYouPage: (ThankYouPageStage) => void,
   handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
   paymentAuthorisation: PaymentAuthorisation,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
-      processStripePaymentIntentRequest(data, handleStripe3DS)(setGuestToken, setThankYouPage),
+      processStripePaymentIntentRequest(data, handleStripe3DS),
       paymentAuthorisation,
     ));
 
 const executeAmazonPayOneOffPayment = (
   data: AmazonPayData,
-  setGuestToken: (string) => void,
-  setThankYouPage: (ThankYouPageStage) => void,
   paymentAuthorisation: PaymentAuthorisation,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(
-      postOneOffAmazonPayExecutePaymentRequest(data)(setGuestToken, setThankYouPage),
+      postOneOffAmazonPayExecutePaymentRequest(data),
       paymentAuthorisation,
     ));
 
@@ -635,8 +616,6 @@ function recurringPaymentAuthorisationHandler(
       request,
       state.common.abParticipations,
       state.page.csrf,
-      (token: string) => dispatch(setGuestAccountCreationToken(token)),
-      (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
     ),
     paymentAuthorisation,
   ));
@@ -686,8 +665,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
             };
             return dispatch(makeCreateStripePaymentIntentRequest(
               stripeData,
-              (token: string) => dispatch(setGuestAccountCreationToken(token)),
-              (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
               handle3DS,
               paymentAuthorisation,
             ));
@@ -726,8 +703,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       if (paymentAuthorisation.paymentMethod === AmazonPay && paymentAuthorisation.orderReferenceId !== undefined) {
         return dispatch(executeAmazonPayOneOffPayment(
           amazonPayDataFromAuthorisation(paymentAuthorisation, state),
-          (token: string) => dispatch(setGuestAccountCreationToken(token)),
-          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
           paymentAuthorisation,
         ));
       }
@@ -787,6 +762,7 @@ export {
   setAmazonPayBillingAgreementId,
   setAmazonPayBillingAgreementConsentStatus,
   setAmazonPayPaymentSelected,
+  setUserTypeFromIdentityResponse,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
@@ -794,14 +770,9 @@ export {
   paymentSuccess,
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
-  setGuestAccountCreationToken,
-  setThankYouPageStage,
-  setPasswordHasBeenSubmitted,
-  setPasswordError,
-  updatePassword,
   createOneOffPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
-  checkIfEmailHasPassword,
+  getUserType,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
   setPaymentRequestButtonPaymentMethod,

@@ -191,6 +191,8 @@ function DigitalCheckoutForm(props: PropTypes) {
               setLastName={props.setLastName}
               email={props.email}
               setEmail={props.setEmail}
+              confirmEmail={props.confirmEmail}
+              setConfirmEmail={props.setConfirmEmail}
               isSignedIn={props.isSignedIn}
               checkIfEmailHasPassword={props.checkIfEmailHasPassword}
               telephone={props.telephone}

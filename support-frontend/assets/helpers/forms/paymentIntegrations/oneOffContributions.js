@@ -8,10 +8,11 @@ import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import * as cookie from 'helpers/storage/cookie';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
-import type { ThankYouPageStage, Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
+import type { Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -124,21 +125,10 @@ function paymentApiEndpointWithMode(url: string) {
 // Object is expected to have structure:
 // { type: "error", error: { failureReason: string } }, or
 // { type: "success", data: { currency: string, amount: number } }
-function paymentResultFromObject(
-  json: Object,
-  setGuestAccountCreationToken: (string) => void,
-  setThankYouPageStage: (ThankYouPageStage) => void,
-): Promise<PaymentResult> {
+function paymentResultFromObject(json: Object): Promise<PaymentResult> {
   if (json.error) {
     const failureReason: ErrorReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
-  }
-
-  if (json.data && json.data.guestAccountCreationToken) {
-    setGuestAccountCreationToken(json.data.guestAccountCreationToken);
-    setThankYouPageStage('thankYouSetPassword');
-  } else {
-    setThankYouPageStage('thankYou');
   }
 
   return Promise.resolve(PaymentSuccess);
@@ -151,11 +141,8 @@ const postToPaymentApi = (data: Object, path: string): Promise<Object> => fetchJ
 
 // Sends a one-off payment request to the payment API and standardises the result
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
-const handleOneOffExecution = (result: Promise<Object>) => (
-  setGuestAccountCreationToken: (string) => void,
-  setThankYouPageStage: (ThankYouPageStage) => void,
-): Promise<PaymentResult> => logPromise(result)
-  .then(r => paymentResultFromObject(r, setGuestAccountCreationToken, setThankYouPageStage));
+const handleOneOffExecution = (result: Promise<Object>): Promise<PaymentResult> => logPromise(result)
+  .then(paymentResultFromObject);
 
 const postOneOffAmazonPayExecutePaymentRequest = (data: AmazonPayData) =>
   handleOneOffExecution(postToPaymentApi(data, '/contribute/one-off/amazon-pay/execute-payment'));
@@ -169,8 +156,11 @@ const processStripePaymentIntentRequest = (
     // Do 3DS auth and then send back to payment-api for payment confirmation
     return handleStripe3DS(createIntentResponse.data.clientSecret).then((authResult: Stripe3DSResult) => {
       if (authResult.error) {
+        trackComponentClick('stripe-3ds-failure');
         return { type: 'error', error: { failureReason: 'card_authentication_error' } };
       }
+
+      trackComponentClick('stripe-3ds-success');
       return postToPaymentApi(
         { ...data, paymentIntentId: authResult.paymentIntent.id },
         '/contribute/one-off/stripe/confirm-payment',

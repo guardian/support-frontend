@@ -1,4 +1,4 @@
-import LibraryVersions.{awsClientVersion, circeVersion}
+import LibraryVersions.{awsClientVersion, awsClientVersion2, circeVersion}
 import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import sbt.Keys.libraryDependencies
 
@@ -7,8 +7,8 @@ version := "0.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "software.amazon.awssdk" % "dynamodb" % "2.13.26",
-  "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.568",
+  "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
+  "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,

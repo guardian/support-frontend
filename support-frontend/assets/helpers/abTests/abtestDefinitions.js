@@ -1,5 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
+import { hasCsrQueryParam } from 'components/csr/csrMode';
 
 // ----- Tests ----- //
 
@@ -106,7 +107,7 @@ export const tests: Tests = {
         size: 0,
       },
     },
-    isActive: true,
+    isActive: false,
     referrerControlled: true,
     seed: 10,
     optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
@@ -147,7 +148,8 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    canRun: () => !hasCsrQueryParam(),
+    isActive: true,
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
     seed: 10,

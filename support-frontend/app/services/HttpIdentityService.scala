@@ -11,7 +11,6 @@ import com.gu.monitoring.SafeLogger._
 import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
-import models.identity.UserIdWithGuestAccountToken
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.{GuestRegistrationResponse, SetGuestPasswordResponseCookies, UserResponse}
 import play.api.libs.json.{Json, Reads}
@@ -95,21 +94,6 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[GetUserTypeResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def setPasswordGuest(
-    password: String,
-    guestAccountRegistrationToken: String
-  )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies] = {
-    val payload = Json.obj("password" -> password)
-    val headers =
-      List("X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
-    request(s"guest/password")
-      .addHttpHeaders(headers: _*)
-      .put(payload)
-      .attemptT
-      .leftMap(_.toString)
-      .subflatMap(resp => (resp.json \ "cookies").validate[SetGuestPasswordResponseCookies].asEither.leftMap(_.mkString(",")))
-  }
-
   def createSignInToken(
     email: String
   )(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse] = {
@@ -145,10 +129,10 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     }
   }
 
-  def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
+  def getUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
     get(s"user", getHeaders(req), List("emailAddress" -> email)) { resp =>
       resp.json.validate[UserResponse].asEither.map(
-        userResponse => UserIdWithGuestAccountToken(userResponse.user.id, None)
+        userResponse => userResponse.user.id
       ).leftMap(_.mkString(","))
     }
   }
@@ -157,7 +141,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     email: String,
     firstName: String,
     lastName: String
-  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
+  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
@@ -171,10 +155,11 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .withBody(body)
         .withRequestTimeout(1.second)
         .withMethod("POST")
+        .withQueryStringParameters(("accountVerificationEmail", "true"))
     ) { resp =>
         resp.json.validate[GuestRegistrationResponse]
           .asEither
-          .bimap(_.mkString(","), response => UserIdWithGuestAccountToken.fromGuestRegistrationResponse(response))
+          .bimap(_.mkString(","), response => response.guestRegistrationRequest.userId)
       }
   }
 
@@ -182,7 +167,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     email: String,
     firstName: String,
     lastName: String
-  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
+  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
     getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email, firstName, lastName))
   }
 

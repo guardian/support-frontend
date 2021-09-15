@@ -158,8 +158,6 @@ function createSubscription(
     data,
     participations,
     csrf,
-    () => {},
-    () => {},
   ).then(handleSubscribeResult);
 }
 

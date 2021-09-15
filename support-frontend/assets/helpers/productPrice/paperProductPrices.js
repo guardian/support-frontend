@@ -37,6 +37,8 @@ function getProductPrice(
   );
 }
 
+// finalPrice and getPriceWithDiscount perform the same action
+// so one will be removed and the related code updated in a subsequent PR
 function finalPrice(
   productPrices: ProductPrices,
   fulfilmentOption: ?FulfilmentOptions,

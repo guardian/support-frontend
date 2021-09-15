@@ -12,12 +12,12 @@ addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.2")
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "com.amazonaws" % "aws-java-sdk-ssm" % AWSJavaSDKVersion,
-  "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
-  "com.amazonaws" % "aws-java-sdk-s3" % AWSJavaSDKVersion,
-  "com.amazonaws" % "aws-java-sdk-ec2" % AWSJavaSDKVersion,
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % AWSJavaSDKVersion,
-  "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
+  "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-ec2" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
   "com.beachape" %% "enumeratum" % "1.6.1",
   "com.beachape" %% "enumeratum-circe" % "1.6.1",
@@ -43,7 +43,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
   "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
-  "org.apache.thrift" % "libthrift" % "0.12.0",// needed for snyk deps https://app.snyk.io/vuln/SNYK-JAVA-ORGAPACHETHRIFT-173706
+  "org.apache.thrift" % "libthrift" % "0.14.2",// needed for snyk deps https://app.snyk.io/vuln/SNYK-JAVA-ORGAPACHETHRIFT-173706
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,

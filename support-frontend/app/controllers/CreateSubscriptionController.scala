@@ -52,7 +52,7 @@ class CreateSubscriptionController(
         request.user match {
           case Some(user) =>
             SafeLogger.info(s"User ${user.minimalUser.id} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
-            handleCreateSupportWorkersRequest(user.minimalUser, None)
+            handleCreateSupportWorkersRequest(user.minimalUser)
           case None =>
             SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
             createGuestUserAndHandleRequest.getOrElse(InternalServerError)
@@ -61,13 +61,13 @@ class CreateSubscriptionController(
 
   def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
     for {
-      userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
+      userId <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
       result <- EitherT.right[String](
-        handleCreateSupportWorkersRequest(IdMinimalUser(userIdWithOptionalToken.userId, None), userIdWithOptionalToken.guestAccountRegistrationToken)
+        handleCreateSupportWorkersRequest(IdMinimalUser(userId, None))
       )
     } yield result
 
-  def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser, guestAccountRegistrationToken: Option[String])(
+  def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser)(
     implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]
   ): Future[Result] = {
 
@@ -87,7 +87,7 @@ class CreateSubscriptionController(
       val result: ApiResponseOrError[StatusResponse] = for {
         user <- userOrError
         statusResponse <- subscriptionStatusOrError(user)
-      } yield statusResponse.copy(guestAccountCreationToken = guestAccountRegistrationToken)
+      } yield statusResponse
 
       respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
     } else {
