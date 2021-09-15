@@ -35,7 +35,6 @@ object Config {
     logger.info("=============================")
     logger.info(s"Stage: ${conf.getString("stage")}")
     logger.info(s"Support Frontend: ${supportFrontendUrl}")
-    logger.info(s"Client secret: *****${idapiClientAccessTokenSecret.substring(5)}")
   }
 
 }
