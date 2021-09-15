@@ -5,13 +5,6 @@
             "overdue": "16M",
             "messages": {
                 "seen": "prout/seen.md"
-            },
-            "afterSeen": {
-                "travis": {
-                    "config": {
-                        "script": "sbt ++$TRAVIS_SCALA_VERSION selenium:test || sbt ++$TRAVIS_SCALA_VERSION selenium:test"
-                    }
-                }
             }
         }
     },

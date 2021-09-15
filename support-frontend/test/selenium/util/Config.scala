@@ -15,10 +15,7 @@ object Config {
 
   val supportFrontendUrl = conf.getString("support.url")
 
-
   val waitTimeout = 45
-
-  val paypalSandbox = conf.getString("paypal.sandbox.url")
 
   val testUsersSecret = conf.getString("identity.test.users.secret")
 
@@ -32,10 +29,6 @@ object Config {
     case Success(url) => url
     case Failure(_) => ""
   }
-
-  val paypalBuyerEmail = conf.getString("paypal.sandbox.buyer.email")
-
-  val paypalBuyerPassword = conf.getString("paypal.sandbox.buyer.password")
 
   def printSummary(sessionId: SessionId): Unit = {
     logger.info("Selenium Test Configuration")
