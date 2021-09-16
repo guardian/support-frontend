@@ -41,7 +41,7 @@ const choiceCardGrid = css`
   }
 `;
 
-const choiceCardGridProductSetAbTest = css`
+const choiceCardGridProductSetAbTestStyles = css`
   ${until.mobileLandscape} {
     > div {
       width: 100%;
@@ -55,6 +55,16 @@ const choiceCardGridProductSetAbTest = css`
     }
   }
 `;
+
+const choiceCardGridProductSetAbTestFullWithOtherStyles = css`
+${choiceCardGridProductSetAbTestStyles}
+
+> div > label:last-of-type {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+`;
+
 
 type ContributionAmountChoicesProps = {|
   countryGroupId: CountryGroupId,
@@ -202,7 +212,6 @@ const ContributionAmountChoicesTwoColumnAfterMobile = ({
   </ChoiceCardGroup>
 );
 
-
 const ContributionAmountChoicesProductSetAbTest = ({
   validAmounts,
   defaultAmount,
@@ -213,43 +222,47 @@ const ContributionAmountChoicesProductSetAbTest = ({
   selectedAmounts,
   currency,
   shouldShowFrequencyButtons,
-}: ContributionAmountChoicesProps) => (
-  <ChoiceCardGroup name="amounts" columns={2} cssOverrides={choiceCardGridProductSetAbTest}>
-    {validAmounts.map((amount: number) => (
-      <ChoiceCard
-        id={`contributionAmount-${amount}`}
-        name="contributionAmount"
-        value={amount}
-        checked={isSelected(
+}: ContributionAmountChoicesProps) => {
+  const isOtherAmountFullWidth = validAmounts.length % 2 === 0;
+
+  return (
+    <ChoiceCardGroup name="amounts" columns={2} cssOverrides={isOtherAmountFullWidth ? choiceCardGridProductSetAbTestFullWithOtherStyles : choiceCardGridProductSetAbTestStyles}>
+      {validAmounts.map((amount: number) => (
+        <ChoiceCard
+          id={`contributionAmount-${amount}`}
+          name="contributionAmount"
+          value={amount}
+          checked={isSelected(
           amount,
           selectedAmounts,
           contributionType,
           defaultAmount,
         )}
-        onChange={selectAmount(amount, countryGroupId, contributionType)}
-        label={
-          <ContributionAmountChoicesChoiceLabel
-            formattedAmount={formatAmount(
+          onChange={selectAmount(amount, countryGroupId, contributionType)}
+          label={
+            <ContributionAmountChoicesChoiceLabel
+              formattedAmount={formatAmount(
               currencies[currency],
               spokenCurrencies[currency],
               amount,
               false,
             )}
-            shouldShowFrequencyButtons={shouldShowFrequencyButtons}
-            contributionType={contributionType}
-          />
+              shouldShowFrequencyButtons={shouldShowFrequencyButtons}
+              contributionType={contributionType}
+            />
         }
-      />
+        />
     ))}
-    <ChoiceCard
-      id="contributionAmount-other"
-      name="contributionAmount"
-      value="other"
-      checked={showOther}
-      onChange={selectAmount('other', countryGroupId, contributionType)}
-      label="Other"
-    />
-  </ChoiceCardGroup>
-);
+      <ChoiceCard
+        id="contributionAmount-other"
+        name="contributionAmount"
+        value="other"
+        checked={showOther}
+        onChange={selectAmount('other', countryGroupId, contributionType)}
+        label="Other"
+      />
+    </ChoiceCardGroup>
+  );
+};
 
 export default ContributionAmountChoices;
