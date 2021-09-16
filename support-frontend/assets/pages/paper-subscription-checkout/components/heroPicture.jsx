@@ -7,18 +7,11 @@ const HeroPicture = () => (
   <GridPicture
     sources={[
       {
-        gridId: 'paperLandingHeroMobile',
-        srcSizes: [500, 922],
+        gridId: 'paperLandingHero',
+        srcSizes: [500, 1000, 2000],
         imgType: 'png',
         sizes: '100vw',
-        media: '(max-width: 739px)',
-      },
-      {
-        gridId: 'paperLandingHero',
-        srcSizes: [1000, 2000],
-        imgType: 'png',
-        sizes: '(min-width: 1000px) 2000px, 1000px',
-        media: '(min-width: 740px)',
+        media: '(max-width: 739px) 500px, (min-width: 740px) 1000px, (min-width: 1000px) 2000px',
       },
     ]}
     fallback="paperLandingHero"
