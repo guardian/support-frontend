@@ -107,7 +107,7 @@ export const SubsCardFaqBlock = () => (
     </div>
     <GridImage
       gridId="printCampaignDigitalVoucher"
-      srcSizes={[500, 140]}
+      srcSizes={[562, 500, 140]}
       sizes="(max-width: 740px) 100vw, 500px"
       imgType="png"
     />
