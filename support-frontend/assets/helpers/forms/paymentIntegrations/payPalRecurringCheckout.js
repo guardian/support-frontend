@@ -179,7 +179,7 @@ function getPayPalOptions(
     style: {
       color: 'blue',
       size: 'responsive',
-      label: 'checkout',
+      label: 'pay',
       tagline: false,
       layout: 'horizontal',
       fundingicons: false,
@@ -210,10 +210,8 @@ function getPayPalOptions(
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {
       createAgreement(data, csrf)
-        .then((baid: Object) => {
-          const message = `Name: ${baid.user.firstName} ${baid.user.lastName}\nEmail: ${baid.user.email}\nAddress: ${baid.user.shipToStreet}, ${baid.user.shipToCity}, ${baid.user.shipToZip}, ${baid.user.shipToCountryCode}`;
-          alert(message);
-          onPaymentAuthorisation(baid.token);
+        .then((payPalCheckoutDetails: Object) => {
+          onPaymentAuthorisation(payPalCheckoutDetails);
         })
         .catch((err) => {
           logException(err.message);

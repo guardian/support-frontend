@@ -57,6 +57,8 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
 import { type ProductOptions, NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 
 // ----- Functions ----- //
 
@@ -220,6 +222,35 @@ function onPaymentAuthorised(
   ).then(handleSubscribeResult);
 }
 
+function onPaymentAuthorisedNoCheckout(
+  dispatch: Dispatch<Action>,
+  regularPaymentRequest: RegularPaymentRequest,
+  product: SubscriptionProduct,
+  paymentMethod: PaymentMethod,
+  csrf: Csrf,
+  abParticipations: Participations,
+) {
+
+  const handleSubscribeResult = (result: PaymentResult) => {
+    if (result.paymentStatus === 'success') {
+      if (result.subscriptionCreationPending) {
+        dispatch(setStage('thankyou-pending', product, paymentMethod));
+      } else {
+        dispatch(setStage('thankyou', product, paymentMethod));
+      }
+    } else { dispatch(setSubmissionError(result.error)); }
+  };
+
+  dispatch(setFormSubmitted(true));
+
+  postRegularPaymentRequest(
+    routes.subscriptionCreate,
+    regularPaymentRequest,
+    abParticipations,
+    csrf,
+  ).then(handleSubscribeResult);
+}
+
 function checkStripeUserType(
   onAuthorised: (pa: PaymentAuthorisation) => void,
   isTestUser: boolean,
@@ -374,6 +405,7 @@ function submitCheckoutForm(
 
 export {
   onPaymentAuthorised,
+  onPaymentAuthorisedNoCheckout,
   buildRegularPaymentRequest,
   showPaymentMethod,
   submitCheckoutForm,

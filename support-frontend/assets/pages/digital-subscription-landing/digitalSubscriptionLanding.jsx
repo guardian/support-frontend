@@ -45,8 +45,16 @@ import ComparisonTable from './components/comparison/comparisonTable';
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import { createPayPalReducer } from 'components/paypalExpressButton/PayPalHeroStore';
 import { Provider } from 'react-redux';
+import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
+import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
+import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
 
 const productBlockContainer = css`
   background-color: ${neutral[93]};
@@ -106,7 +114,6 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
-const store = initRedux(createPayPalReducer, true);
 // ----- Render ----- //
 function DigitalLandingPage({
   countryGroupId,
@@ -170,75 +177,95 @@ function DigitalLandingPage({
     </div>);
 
   return (
-    <Provider store={store}>
-      <Page
-        header={<CountrySwitcherHeader />}
-        footer={footer}
-      >
-        {orderIsAGift ?
-          <HeroWithImage
+    <Page
+      header={<CountrySwitcherHeader />}
+      footer={footer}
+    >
+      {orderIsAGift ?
+        <HeroWithImage
+          orderIsAGift={isGift}
+          countryGroupId={countryGroupId}
+          promotionCopy={sanitisedPromoCopy}
+        /> :
+        <HeroWithPriceCards
+          promotionCopy={sanitisedPromoCopy}
+          countryGroupId={countryGroupId}
+          priceList={heroPriceList}
+        />
+      }
+      {showComparisonTable &&
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={comparisonTableContainer}>
+            <ComparisonTable />
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      }
+      {showEventsComponent &&
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={eventsProductBlockContainer}>
+            <EventsModule />
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      }
+      <FullWidthContainer>
+        <CentredContainer>
+          <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
+            <div ref={setElementToObserve}>
+              <ProductBlock
+                countryGroupId={countryGroupId}
+              />
+            </div>
+          </Block>
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="dark" hasOverlap>
+        <CentredContainer>
+          <Prices
+            countryGroupId={countryGroupId}
+            currencyId={currencyId}
+            productPrices={productPrices}
             orderIsAGift={isGift}
-            countryGroupId={countryGroupId}
-            promotionCopy={sanitisedPromoCopy}
-          /> :
-          <HeroWithPriceCards
-            promotionCopy={sanitisedPromoCopy}
-            countryGroupId={countryGroupId}
-            priceList={heroPriceList}
+            isUsingGuestCheckout={isUsingGuestCheckout}
           />
-        }
-        {showComparisonTable &&
-        <FullWidthContainer>
-          <CentredContainer>
-            <Block cssOverrides={comparisonTableContainer}>
-              <ComparisonTable />
-            </Block>
-          </CentredContainer>
-        </FullWidthContainer>
-        }
-        {showEventsComponent &&
-        <FullWidthContainer>
-          <CentredContainer>
-            <Block cssOverrides={eventsProductBlockContainer}>
-              <EventsModule />
-            </Block>
-          </CentredContainer>
-        </FullWidthContainer>
-        }
-        <FullWidthContainer>
-          <CentredContainer>
-            <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
-              <div ref={setElementToObserve}>
-                <ProductBlock
-                  countryGroupId={countryGroupId}
-                />
-              </div>
-            </Block>
-          </CentredContainer>
-        </FullWidthContainer>
-        <FullWidthContainer theme="dark" hasOverlap>
-          <CentredContainer>
-            <Prices
-              countryGroupId={countryGroupId}
-              currencyId={currencyId}
-              productPrices={productPrices}
-              orderIsAGift={isGift}
-              isUsingGuestCheckout={isUsingGuestCheckout}
-            />
-          </CentredContainer>
-        </FullWidthContainer>
-        <FullWidthContainer theme="white">
-          <CentredContainer>
-            <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
-          </CentredContainer>
-        </FullWidthContainer>
-        <FeedbackWidget display={widgetShouldDisplay} />
-      </Page>
-    </Provider>
+        </CentredContainer>
+      </FullWidthContainer>
+      <FullWidthContainer theme="white">
+        <CentredContainer>
+          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
+        </CentredContainer>
+      </FullWidthContainer>
+      <FeedbackWidget display={widgetShouldDisplay} />
+    </Page>
   );
 }
 
 setUpTrackingAndConsents();
 const props = digitalLandingProps();
+const thankyouProps = {
+  countryGroupId: GBPCountries, //TODO
+  marketingConsent: (false ? <MarketingConsentGift /> : <MarketingConsent />),
+};
 
-renderPage(<DigitalLandingPage {...props} />, reactElementId[props.countryGroupId]);
+const reducer = (commonState: CommonState) => createCheckoutReducer(
+  commonState.internationalisation.countryId,
+  DigitalPack,
+  Monthly,
+  null, null, null,
+);
+
+const store = initRedux(reducer, true);
+const content = <Provider store={store}>
+  <CheckoutStage
+    checkoutForm={<DigitalLandingPage {...props} />}
+    thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
+    thankYouContent={<ThankYouContent {...thankyouProps} />}
+    subscriptionProduct={DigitalPack}
+  />
+</Provider>
+
+
+renderPage(content, reactElementId[props.countryGroupId]);
