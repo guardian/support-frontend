@@ -215,7 +215,7 @@ lazy val `acquisition-event-producer` = (project in file("acquisition-event-prod
       "com.typesafe.play" %% "play-json" % "2.7.4",
       "io.circe" %% "circe-core" % "0.12.1",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
-      "com.gu" %% "acquisitions-value-calculator-client" % "2.0.5",
+      "com.gu" %% "acquisitions-value-calculator-client" % "2.0.6",
       "com.squareup.okhttp3" % "okhttp" % "3.9.0",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
       "org.typelevel" %% "simulacrum" % "1.0.1",
