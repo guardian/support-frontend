@@ -304,8 +304,8 @@ function ContributionForm(props: PropTypes) {
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers(baseClass, classModifiers)} noValidate>
       <h2 className="hidden-heading">Make a contribution</h2>
       <div className="contributions-form-selectors">
-        <ContributionTypeTabs />
-        <ContributionAmount />
+        <ContributionTypeTabs productSetAbTestVariant />
+        <ContributionAmount productSetAbTestVariant />
         {props.localCurrencyCountry && props.contributionType === 'ONE_OFF' && (
           <CheckboxGroup cssOverrides="margin-top:16px;">
             <Checkbox
