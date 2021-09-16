@@ -13,9 +13,6 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import { Action, formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import { Dispatch } from 'redux';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 type PayPalUserDetails = {
   firstName: string,
@@ -40,16 +37,9 @@ function mapStateToProps(state: CheckoutState) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps() {
   return {
-    setupRecurringPayPalPayment: (
-      resolve: string => void,
-    reject: Error => void,
-    currency: IsoCurrency,
-    csrf: CsrfState,
-    amount: number,
-    billingPeriod: BillingPeriod,
-) =>  setupSubscriptionPayPalPayment(resolve, reject, currency, csrf, amount, billingPeriod),
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
 
     onPaymentAuthorised: (wrappedCheckoutDetails) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
       const payPalCheckoutDetails: PayPalCheckoutDetails = wrappedCheckoutDetails.token; //TODO: the actual details are being wrapped in PayPalExpressButton.onPaymentAuthorised
@@ -63,7 +53,7 @@ function mapDispatchToProps(dispatch, ownProps) {
         getState(),
       );
     },
-    onClick: () => null,
+    onClick: (billingPeriod) => (dispatch: Dispatch<Action>) => dispatch(formActionCreators.setBillingPeriod(billingPeriod)),
   }
 }
 
@@ -96,7 +86,7 @@ function PayPalHeroButton(props) {
         currencyId={'GBP'}
         hasLoaded={props.hasLoaded}
         canOpen={() => true}
-        onClick={() => null}
+        onClick={() => props.onClick(props.billingPeriod)}
         formClassName="form--contribution"
         isTestUser={false}
         setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
