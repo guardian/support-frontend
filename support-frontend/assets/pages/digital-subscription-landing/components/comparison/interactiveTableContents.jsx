@@ -8,6 +8,7 @@ import { SvgCheckmark } from '@guardian/src-icons';
 import { headline } from '@guardian/src-foundations/typography';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 import { SvgNews } from 'components/icons/news';
 import { SvgAdFree } from 'components/icons/adFree';
@@ -296,6 +297,17 @@ const AppFeatureWithIcon = ({ appName, heading = `The ${appName} App`, children 
   );
 };
 
+function trackRowClick(rowId: string) {
+  const trackingId = `Comparison_table-${rowId}_row`;
+  return (expanded: boolean) => {
+    sendTrackingEventsOnClick({
+      id: `${trackingId}-${expanded ? 'expand' : 'minimize'}`,
+      product: 'DigitalPack',
+      componentType: 'ACQUISITIONS_BUTTON',
+    })();
+  };
+}
+
 export function getRows(countryGroupId: CountryGroupId) {
   const isAustralia = countryGroupId === 'AUDCountries';
 
@@ -329,6 +341,7 @@ export function getRows(countryGroupId: CountryGroupId) {
             <img src={journalismPic} alt="" />
           </div>
         </div>),
+      onClick: trackRowClick('journalism'),
     },
     {
       rowId: 'adFree',
@@ -355,6 +368,7 @@ export function getRows(countryGroupId: CountryGroupId) {
             <img src={adFreePic} alt="" />
           </div>
         </div>),
+      onClick: trackRowClick('adFree'),
     },
 
     {
@@ -396,6 +410,7 @@ export function getRows(countryGroupId: CountryGroupId) {
             </picture>
           </div>
         </div>),
+      onClick: trackRowClick('editionsApp'),
     },
     {
       rowId: 'premiumApp',
@@ -429,6 +444,7 @@ export function getRows(countryGroupId: CountryGroupId) {
             </picture>
           </div>
         </div>),
+      onClick: trackRowClick('premiumApp'),
     },
     {
       rowId: 'offlineReading',
@@ -475,6 +491,7 @@ export function getRows(countryGroupId: CountryGroupId) {
           </div>
         </div>
       ),
+      onClick: trackRowClick('offlineReading'),
     },
     {
       rowId: 'crosswords',
@@ -510,7 +527,7 @@ export function getRows(countryGroupId: CountryGroupId) {
           </div>
         </div>
       ),
-
+      onClick: trackRowClick('crosswords'),
     },
   ];
 }

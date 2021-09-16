@@ -49,11 +49,14 @@ function InteractiveTable({
         <InteractiveTableHeaderRow columns={headers} />
       </thead>
       <tbody>
-        {rows.map(({ rowId, columns, details }) =>
+        {rows.map(({
+            rowId, columns, details, onClick,
+          }) =>
           (<InteractiveTableRow
             rowId={rowId}
             columns={columns}
             details={details}
+            onClick={onClick}
           />))
         }
       </tbody>

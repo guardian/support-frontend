@@ -165,6 +165,7 @@ export type RowData = {|
   rowId: string;
   columns: CellData[];
   details: Node;
+  onClick?: (showDetails: boolean) => void;
 |}
 
 export function InteractiveTableHeaderRow({ columns }: { columns: CellData[] }) {
@@ -190,9 +191,14 @@ export function InteractiveTableFooterRow({ children }: { children: Node }) {
 }
 
 export function InteractiveTableRow({
-  rowId, columns, details,
+  rowId, columns, details, onClick = () => undefined,
 }: RowData) {
   const [showDetails, setShowDetails] = useState<boolean>(false);
+
+  function onRowClick() {
+    onClick(!showDetails);
+    setShowDetails(!showDetails);
+  }
 
   return (
     <tr role="row" css={[tableRow, showDetails ? tableRowOpen : '']}>
@@ -214,7 +220,7 @@ export function InteractiveTableRow({
           css={[toggleButton, showDetails ? toggleButtonOpen : '']}
           aria-expanded={showDetails ? 'true' : 'false'}
           aria-controls={`${rowId}-details`}
-          onClick={() => setShowDetails(!showDetails)}
+          onClick={onRowClick}
         >
           {`${showDetails ? 'Hide' : 'Show'} more details`}
         </Button>
@@ -230,3 +236,7 @@ export function InteractiveTableRow({
     </tr>
   );
 }
+
+InteractiveTableRow.defaultProps = {
+  onClick: () => undefined,
+};
