@@ -155,4 +155,24 @@ export const tests: Tests = {
     seed: 3,
     optimizeId: 'tn3FveQmTeiTS4JtSUyzig',
   },
+  productSetTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 13,
+  },
 };
