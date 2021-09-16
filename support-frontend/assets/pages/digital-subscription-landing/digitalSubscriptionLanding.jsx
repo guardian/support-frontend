@@ -246,8 +246,8 @@ function DigitalLandingPage({
 setUpTrackingAndConsents();
 const props = digitalLandingProps();
 const thankyouProps = {
-  countryGroupId: GBPCountries, //TODO
-  marketingConsent: (false ? <MarketingConsentGift /> : <MarketingConsent />),
+  countryGroupId: props.countryGroupId,
+  marketingConsent: (props.orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
 };
 
 const reducer = (commonState: CommonState) => createCheckoutReducer(

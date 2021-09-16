@@ -9,6 +9,7 @@ import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 export type ProductSmall = {
   offerCopy: string,
@@ -17,6 +18,7 @@ export type ProductSmall = {
   href: string,
   onClick: Function,
   cssOverrides?: string | string[],
+  billingPeriod: BillingPeriod,
 }
 
 const productOptionSmallStyles = css`
@@ -58,7 +60,7 @@ function ProductOptionSmall(props: ProductSmall) {
           {props.buttonCopy}
         </LinkButton>
       </ThemeProvider>
-      <PayPalHeroButton />
+      <PayPalHeroButton billingPeriod={props.billingPeriod} />
       <p css={priceCopyStyles}>{props.priceCopy}</p>
     </span>
   );

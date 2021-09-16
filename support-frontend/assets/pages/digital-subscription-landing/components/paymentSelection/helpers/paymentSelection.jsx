@@ -155,6 +155,7 @@ const getHeroCtaProps = (
       priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
       offerCopy,
       buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
+      billingPeriod: digitalBillingPeriod,
     };
   };
 

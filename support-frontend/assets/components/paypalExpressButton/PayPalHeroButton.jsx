@@ -7,17 +7,15 @@ import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegration
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import {  onPaymentAuthorisedNoCheckout } from 'helpers/subscriptionsForms/submit';
+import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { Action } from 'helpers/subscriptionsForms/formActions';
-import type { PayPalState } from 'components/paypalExpressButton/PayPalHeroStore';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Participations } from 'helpers/abTests/abtest';
-import { Direct } from 'helpers/productPrice/readerType';
+import { Action, formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import { Dispatch } from 'redux';
+import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 type PayPalUserDetails = {
   firstName: string,
@@ -42,62 +40,45 @@ function mapStateToProps(state: CheckoutState) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
-    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
+    setupRecurringPayPalPayment: (
+      resolve: string => void,
+    reject: Error => void,
+    currency: IsoCurrency,
+    csrf: CsrfState,
+    amount: number,
+    billingPeriod: BillingPeriod,
+) =>  setupSubscriptionPayPalPayment(resolve, reject, currency, csrf, amount, billingPeriod),
 
-    onPaymentAuthorised: (wrappedCheckoutDetails) => (dispatch: Dispatch<Action>, getState: () => PayPalState) => {
-      const state: PayPalState = getState()
+    onPaymentAuthorised: (wrappedCheckoutDetails) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
       const payPalCheckoutDetails: PayPalCheckoutDetails = wrappedCheckoutDetails.token; //TODO: the actual details are being wrapped in PayPalExpressButton.onPaymentAuthorised
-      const { abParticipations, referrerAcquisitionData } = state.common;
-      const regularPaymentRequest = buildRegularPaymentRequest(payPalCheckoutDetails, referrerAcquisitionData, abParticipations);
-      onPaymentAuthorisedNoCheckout(
+      updateStore(dispatch, payPalCheckoutDetails.user);
+      onPaymentAuthorised(
+    {
+          paymentMethod: PayPal,
+          token: payPalCheckoutDetails.baid,
+        },
         dispatch,
-        regularPaymentRequest,
-        DigitalPack,
-        PayPal,
-        state.page.csrf,
-      )
+        getState(),
+      );
     },
+    onClick: () => null,
   }
 }
 
-const buildRegularPaymentRequest = (
-  payPalCheckoutDetails: PayPalCheckoutDetails,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  abParticipations: Participations
-): RegularPaymentRequest => {
-  const { user } = payPalCheckoutDetails;
-  const paymentFields = { baid: payPalCheckoutDetails.baid };
-  const product = { //TODO: most of this is hard coded
-    productType: DigitalPack,
-    currency: 'GBP',
-    billingPeriod: Monthly,
-    readerType: Direct,
-  };
-  const addresses = {
-    billingAddress: {
-      country: user.shipToCountryCode,
-      state: user.shipToState,
-      lineOne: user.shipToStreet,
-      postCode: user.shipToZip,
-      city: user.shipToCity,
-    },
-    deliveryAddress: null,
-  };
-  return {
-    firstName: user.firstName.trim(),
-    lastName: user.lastName.trim(),
-    ...addresses,
-    email: user.email.trim(),
-    product,
-    paymentFields,
-    ophanIds: getOphanIds(),
-    referrerAcquisitionData: referrerAcquisitionData,
-    supportAbTests: getSupportAbTests(abParticipations),
-    //promoCode: '', //TODO
-    debugInfo: '',
-  };
+const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDetails) => {
+  const { setEmail, setFirstName, setLastName } = formActionCreators;
+  const { setAddressLineOne, setTownCity, setPostcode, setState, setCountry } = addressActionCreatorsFor('billing');
+
+  dispatch(setEmail(payPalUserDetails.email));
+  dispatch(setFirstName(payPalUserDetails.firstName));
+  dispatch(setLastName(payPalUserDetails.lastName));
+  dispatch(setAddressLineOne(payPalUserDetails.shipToStreet))
+  dispatch(setTownCity(payPalUserDetails.shipToCity))
+  dispatch(setState(payPalUserDetails.shipToState))
+  dispatch(setPostcode(payPalUserDetails.shipToZip))
+  dispatch(setCountry(payPalUserDetails.shipToCountryCode))
 }
 
 const payPalButton = css`

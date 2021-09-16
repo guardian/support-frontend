@@ -149,7 +149,7 @@ function getPayPalEnvironment(isTestUser: boolean): string {
 function createAgreement(payPalData: Object, csrf: CsrfState) {
   const body = { token: payPalData.paymentToken };
   const csrfToken = csrf.token;
-  console.log(`paypal token: ${payPalData.paymentToken}`);
+
   return fetch(routes.payPalExpressCheckout, payPalRequestData(body, csrfToken || '')) //TODO: Hack! this will break PayPal on the regular checkouts
     .then(response => response.json());
 }
