@@ -60,7 +60,7 @@ function PayPalSubmitButton(props: PropTypes) {
     props.onPaymentAuthorised({
       paymentMethod: PayPal,
       token: payPalCheckoutDetails.baid,
-    })
+    });
 
   return (
     <div css={payPalButton}>

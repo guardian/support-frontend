@@ -94,7 +94,7 @@ function ContributionSubmit(props: PropTypes) {
     props.onPaymentAuthorisation({
       paymentMethod: PayPal,
       token: payPalCheckoutDetails.baid,
-    })
+    });
 
   const submitButtonCopy = getContributeButtonCopyWithPaymentType(
     props.contributionType,

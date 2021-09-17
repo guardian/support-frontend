@@ -22,7 +22,7 @@ import type {
 } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 type PropTypes = {
-  onPaymentAuthorised: Function,
+  onPayPalCheckoutCompleted: Function,
   csrf: Csrf,
   currencyId: IsoCurrency,
   hasLoaded: boolean,
@@ -46,6 +46,7 @@ const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDe
   dispatch(setTownCity(payPalUserDetails.shipToCity));
   dispatch(setState(payPalUserDetails.shipToState));
   dispatch(setPostcode(payPalUserDetails.shipToZip));
+  // $FlowIgnore stoopid flow
   dispatch(setCountry(payPalUserDetails.shipToCountryCode));
 };
 
@@ -67,17 +68,18 @@ function mapStateToProps(state: CheckoutState, ownProps) {
 function mapDispatchToProps() {
   return {
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
-    onPayPalCheckoutCompleted: (payPalCheckoutDetails: PayPalCheckoutDetails) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
-      updateStore(dispatch, payPalCheckoutDetails.user);
-      onPaymentAuthorised(
-        {
-          paymentMethod: PayPal,
-          token: payPalCheckoutDetails.baid,
-        },
-        dispatch,
-        getState(),
-      );
-    },
+    onPayPalCheckoutCompleted: (payPalCheckoutDetails: PayPalCheckoutDetails) =>
+      (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+        updateStore(dispatch, payPalCheckoutDetails.user);
+        onPaymentAuthorised(
+          {
+            paymentMethod: PayPal,
+            token: payPalCheckoutDetails.baid,
+          },
+          dispatch,
+          getState(),
+        );
+      },
     onClick: billingPeriod => (dispatch: Dispatch<Action>) =>
       dispatch(formActionCreators.setBillingPeriod(billingPeriod)),
   };
