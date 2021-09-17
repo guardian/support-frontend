@@ -73,6 +73,10 @@ const tabGroupStyles = (checkedContributionType: ContributionType) => css`
   > div {
     display: flex;
 
+    /* This is to position the group under the country drop down */
+    position: relative;
+    z-index: 0;
+
     label:nth-of-type(1) {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
