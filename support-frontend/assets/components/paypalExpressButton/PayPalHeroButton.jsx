@@ -13,6 +13,9 @@ import { Action, formActionCreators } from 'helpers/subscriptionsForms/formActio
 import { Dispatch } from 'redux';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { finalPrice } from 'helpers/productPrice/productPrices';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 type PayPalUserDetails = {
   firstName: string,
@@ -29,6 +32,34 @@ type PayPalCheckoutDetails = {
   baid: string,
   user: PayPalUserDetails
 }
+
+type PropTypes = {
+  onPaymentAuthorised: Function,
+  csrf: Csrf,
+  currencyId: IsoCurrency,
+  hasLoaded: boolean,
+  onClick: Function,
+  billingPeriod: BillingPeriod,
+  isTestUser: boolean,
+  setupRecurringPayPalPayment: Function,
+  amount: number,
+}
+
+const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDetails) => {
+  const { setEmail, setFirstName, setLastName } = formActionCreators;
+  const {
+    setAddressLineOne, setTownCity, setPostcode, setState, setCountry,
+  } = addressActionCreatorsFor('billing');
+
+  dispatch(setEmail(payPalUserDetails.email));
+  dispatch(setFirstName(payPalUserDetails.firstName));
+  dispatch(setLastName(payPalUserDetails.lastName));
+  dispatch(setAddressLineOne(payPalUserDetails.shipToStreet));
+  dispatch(setTownCity(payPalUserDetails.shipToCity));
+  dispatch(setState(payPalUserDetails.shipToState));
+  dispatch(setPostcode(payPalUserDetails.shipToZip));
+  dispatch(setCountry(payPalUserDetails.shipToCountryCode));
+};
 
 function mapStateToProps(state: CheckoutState, ownProps) {
   return {
@@ -49,11 +80,12 @@ function mapDispatchToProps() {
   return {
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
 
-    onPaymentAuthorised: (wrappedCheckoutDetails) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
-      const payPalCheckoutDetails: PayPalCheckoutDetails = wrappedCheckoutDetails.token; //TODO: the actual details are being wrapped in PayPalExpressButton.onPaymentAuthorised
+    onPaymentAuthorised: wrappedCheckoutDetails => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      // TODO: the actual details are being wrapped in PayPalExpressButton.onPaymentAuthorised
+      const payPalCheckoutDetails: PayPalCheckoutDetails = wrappedCheckoutDetails.token;
       updateStore(dispatch, payPalCheckoutDetails.user);
       onPaymentAuthorised(
-    {
+        {
           paymentMethod: PayPal,
           token: payPalCheckoutDetails.baid,
         },
@@ -61,22 +93,9 @@ function mapDispatchToProps() {
         getState(),
       );
     },
-    onClick: (billingPeriod) => (dispatch: Dispatch<Action>) => dispatch(formActionCreators.setBillingPeriod(billingPeriod)),
-  }
-}
-
-const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDetails) => {
-  const { setEmail, setFirstName, setLastName } = formActionCreators;
-  const { setAddressLineOne, setTownCity, setPostcode, setState, setCountry } = addressActionCreatorsFor('billing');
-
-  dispatch(setEmail(payPalUserDetails.email));
-  dispatch(setFirstName(payPalUserDetails.firstName));
-  dispatch(setLastName(payPalUserDetails.lastName));
-  dispatch(setAddressLineOne(payPalUserDetails.shipToStreet))
-  dispatch(setTownCity(payPalUserDetails.shipToCity))
-  dispatch(setState(payPalUserDetails.shipToState))
-  dispatch(setPostcode(payPalUserDetails.shipToZip))
-  dispatch(setCountry(payPalUserDetails.shipToCountryCode))
+    onClick: billingPeriod => (dispatch: Dispatch<Action>) =>
+      dispatch(formActionCreators.setBillingPeriod(billingPeriod)),
+  };
 }
 
 const payPalButton = css`
@@ -85,7 +104,7 @@ const payPalButton = css`
   min-width: 264px;
 `;
 
-function PayPalHeroButton(props) {
+function PayPalHeroButton(props: PropTypes) {
   return (
     <div css={payPalButton}>
       <PayPalExpressButton
@@ -106,6 +125,4 @@ function PayPalHeroButton(props) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps())(PayPalHeroButton);
-
-
 

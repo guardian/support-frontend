@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { renderPage } from 'helpers/rendering/render';
+// $FlowIgnore - required for hooks
 import React, { useEffect } from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
@@ -114,6 +115,15 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
+const reducer = (commonState: CommonState) => createCheckoutReducer(
+  commonState.internationalisation.countryId,
+  DigitalPack,
+  Monthly,
+  null, null, null,
+);
+
+const store = initRedux(reducer, true);
+
 // ----- Render ----- //
 function DigitalLandingPage({
   countryGroupId,
@@ -127,7 +137,7 @@ function DigitalLandingPage({
     return null;
   }
 
-  useEffect(() => {showPayPal(store.dispatch);}, []);
+  useEffect(() => { showPayPal(store.dispatch); }, []);
   const isGift = orderIsAGift || false;
   const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
   const showComparisonTable = participations.comparisonTableTest === 'variant';
@@ -250,22 +260,16 @@ const thankyouProps = {
   marketingConsent: (props.orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
 };
 
-const reducer = (commonState: CommonState) => createCheckoutReducer(
-  commonState.internationalisation.countryId,
-  DigitalPack,
-  Monthly,
-  null, null, null,
+const content = (
+  <Provider store={store}>
+    <CheckoutStage
+      checkoutForm={<DigitalLandingPage {...props} />}
+      thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
+      thankYouContent={<ThankYouContent {...thankyouProps} />}
+      subscriptionProduct={DigitalPack}
+    />
+  </Provider>
 );
-
-const store = initRedux(reducer, true);
-const content = <Provider store={store}>
-  <CheckoutStage
-    checkoutForm={<DigitalLandingPage {...props} />}
-    thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
-    thankYouContent={<ThankYouContent {...thankyouProps} />}
-    subscriptionProduct={DigitalPack}
-  />
-</Provider>
 
 
 renderPage(content, reactElementId[props.countryGroupId]);
