@@ -673,11 +673,6 @@
     width: 100%;
   }
 
-  img {
-    position: absolute;
-    bottom: 0;
-  }
-
   img:nth-child(1) {
     z-index: 2;
     left: 80px;
@@ -691,7 +686,7 @@
     }
 
     @include mq($until: tablet) {
-      display: none;
+      width: 100%;
     }
   }
 
