@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { css } from '@emotion/core';
@@ -13,6 +12,7 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import { Action, formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import { Dispatch } from 'redux';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { finalPrice } from 'helpers/productPrice/productPrices';
 
 type PayPalUserDetails = {
   firstName: string,
@@ -30,10 +30,18 @@ type PayPalCheckoutDetails = {
   user: PayPalUserDetails
 }
 
-function mapStateToProps(state: CheckoutState) {
+function mapStateToProps(state: CheckoutState, ownProps) {
   return {
     hasLoaded: state.page.checkout.payPalHasLoaded,
     csrf: state.page.csrf,
+    productPrices: state.page.checkout.productPrices,
+    currencyId: state.common.internationalisation.currencyId,
+    isTestUser: state.page.checkout.isTestUser,
+    amount: finalPrice(
+      state.page.checkout.productPrices,
+      state.common.internationalisation.countryId,
+      ownProps.billingPeriod,
+    ).price,
   };
 }
 
@@ -83,15 +91,15 @@ function PayPalHeroButton(props) {
       <PayPalExpressButton
         onPaymentAuthorisation={props.onPaymentAuthorised}
         csrf={props.csrf}
-        currencyId={'GBP'}
+        currencyId={props.currencyId}
         hasLoaded={props.hasLoaded}
         canOpen={() => true}
         onClick={() => props.onClick(props.billingPeriod)}
         formClassName="form--contribution"
-        isTestUser={false}
+        isTestUser={props.isTestUser}
         setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-        amount={5.99}
-        billingPeriod={Monthly}
+        amount={props.amount}
+        billingPeriod={props.billingPeriod}
       />
     </div>
   );
