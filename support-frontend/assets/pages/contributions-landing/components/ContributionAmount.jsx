@@ -37,6 +37,7 @@ type PropTypes = {|
   stripePaymentRequestButtonClicked: boolean,
   localCurrencyCountry: ?LocalCurrencyCountry,
   useLocalCurrency: boolean,
+  productSetAbTestVariant: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -106,6 +107,7 @@ function ContributionAmount(props: PropTypes) {
         selectedAmounts={props.selectedAmounts}
         selectAmount={props.selectAmount}
         shouldShowFrequencyButtons={props.contributionType !== 'ONE_OFF'}
+        productSetAbTestVariant={props.productSetAbTestVariant}
       />
 
       { showOther &&
