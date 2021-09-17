@@ -24,6 +24,22 @@ export type SetupPayPalRequestType = (
   billingPeriod: BillingPeriod,
 ) => void
 
+export type PayPalUserDetails = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  shipToStreet: string,
+  shipToCity: string,
+  shipToState: string,
+  shipToZip: string,
+  shipToCountryCode: string,
+}
+
+export type PayPalCheckoutDetails = {
+  baid: string,
+  user: PayPalUserDetails
+}
+
 // ----- Functions ----- //
 
 function loadPayPalRecurring(): Promise<void> {
@@ -154,11 +170,10 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
     .then(response => response.json());
 }
 
-
 function getPayPalOptions(
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  onPaymentAuthorisation: string => void,
+  onPayPalCheckoutCompleted: PayPalCheckoutDetails => void,
   canOpen: () => boolean,
   onClick: () => void,
   formClassName: string,
@@ -211,7 +226,7 @@ function getPayPalOptions(
     onAuthorize: (data) => {
       createAgreement(data, csrf)
         .then((payPalCheckoutDetails: Object) => {
-          onPaymentAuthorisation(payPalCheckoutDetails);
+          onPayPalCheckoutCompleted(payPalCheckoutDetails);
         })
         .catch((err) => {
           logException(err.message);

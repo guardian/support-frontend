@@ -54,6 +54,7 @@ stories.add('ProductOptionSmall', () => {
     buttonCopy: text('Button copy - first option', 'Subscribe monthly for £5.99'),
     onClick: () => {},
     onView: () => {},
+    billingPeriod: 'Monthly',
   };
 
   const product2 = {
@@ -63,6 +64,7 @@ stories.add('ProductOptionSmall', () => {
     buttonCopy: text('Button copy - second option', 'Subscribe annually for £99'),
     onClick: () => {},
     onView: () => {},
+    billingPeriod: 'Monthly',
   };
 
   return (

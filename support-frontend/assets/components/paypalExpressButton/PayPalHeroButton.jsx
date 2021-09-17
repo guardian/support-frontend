@@ -9,29 +9,17 @@ import { space } from '@guardian/src-foundations';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { Action, formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import { Dispatch } from 'redux';
+import { type Action, formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import { type Dispatch } from 'redux';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { finalPrice } from 'helpers/productPrice/productPrices';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-
-type PayPalUserDetails = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  shipToStreet: string,
-  shipToCity: string,
-  shipToState: string,
-  shipToZip: string,
-  shipToCountryCode: string,
-}
-
-type PayPalCheckoutDetails = {
-  baid: string,
-  user: PayPalUserDetails
-}
+import type {
+  PayPalCheckoutDetails,
+  PayPalUserDetails,
+} from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 type PropTypes = {
   onPaymentAuthorised: Function,
@@ -79,10 +67,7 @@ function mapStateToProps(state: CheckoutState, ownProps) {
 function mapDispatchToProps() {
   return {
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
-
-    onPaymentAuthorised: wrappedCheckoutDetails => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
-      // TODO: the actual details are being wrapped in PayPalExpressButton.onPaymentAuthorised
-      const payPalCheckoutDetails: PayPalCheckoutDetails = wrappedCheckoutDetails.token;
+    onPayPalCheckoutCompleted: (payPalCheckoutDetails: PayPalCheckoutDetails) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
       updateStore(dispatch, payPalCheckoutDetails.user);
       onPaymentAuthorised(
         {
@@ -108,7 +93,7 @@ function PayPalHeroButton(props: PropTypes) {
   return (
     <div css={payPalButton}>
       <PayPalExpressButton
-        onPaymentAuthorisation={props.onPaymentAuthorised}
+        onPayPalCheckoutCompleted={props.onPayPalCheckoutCompleted}
         csrf={props.csrf}
         currencyId={props.currencyId}
         hasLoaded={props.hasLoaded}
