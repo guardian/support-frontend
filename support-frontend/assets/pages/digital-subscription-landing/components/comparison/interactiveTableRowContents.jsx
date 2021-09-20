@@ -10,25 +10,14 @@ import { headline } from '@guardian/src-foundations/typography';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
+import GridPicture from 'components/gridPicture/gridPicture';
+import GridImage from 'components/gridImage/gridImage';
 import { SvgNews } from 'components/icons/news';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
 import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
 import { SvgPadlock } from 'components/icons/padlock';
-
-import journalismPic from './temp/journalism.png';
-import adFreePic from './temp/adFree.png';
-import editionsPic from './temp/editions.png';
-import editionsDesktopPic from './temp/editionsDesktop.png';
-import guardianAppPic from './temp/guApp.png';
-import guardianAppDesktopPic from './temp/guAppDesktop.png';
-import offlineReadingEdPic from './temp/offlineReadingEditions.png';
-import offlineReadingEdDesktopPic from './temp/offlineReadingEditionsDesktop.png';
-import offlineReadingGuPic from './temp/offlineReadingGu.png';
-import offlineReadingGuDesktopPic from './temp/offlineReadingGuDesktop.png';
-import crosswordsPic from './temp/crosswords.png';
-import crosswordsDesktopPic from './temp/crosswordsDesktop.png';
 
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
@@ -337,7 +326,14 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
             journalism, so millions more can benefit.
           </p>
           <div css={detailsCellImageFirstContainer}>
-            <img src={journalismPic} alt="" />
+            <GridImage
+              gridId="comparisonTableJournalism"
+              srcSizes={[1000, 500]}
+              sizes="(max-width: 740px) 100%,
+                (max-width: 1067px) 150%,
+                800px"
+              imgType="png"
+            />
           </div>
         </div>),
       onClick: trackRowClick('journalism'),
@@ -364,7 +360,14 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
             and theguardian.com
           </p>
           <div css={detailsCellImageSecondContainer}>
-            <img src={adFreePic} alt="" />
+            <GridImage
+              gridId="comparisonTableAdFree"
+              srcSizes={[1000, 500]}
+              sizes="(max-width: 740px) 100%,
+                (max-width: 1067px) 150%,
+                800px"
+              imgType="png"
+            />
           </div>
         </div>),
       onClick: trackRowClick('adFree'),
@@ -398,14 +401,28 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
             and one-off special Editions are also available for you to enjoy.
           </p>
           <div css={[detailsCellImageFirstContainer, detailsCellImageContainerFullHeight]}>
-            <picture>
-              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={editionsPic} />
-              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={editionsDesktopPic} />
-              <img
-                src={editionsPic}
-                alt=""
-              />
-            </picture>
+            <GridPicture
+              sources={[
+                {
+                  gridId: 'comparisonTableEditionsMob',
+                  srcSizes: [500, 140],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(max-width: ${breakpoints.tablet - 1}px)`,
+                },
+                {
+                  gridId: 'comparisonTableEditionsDesktop',
+                  srcSizes: [1000, 500],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(min-width: ${breakpoints.tablet}px)`,
+                },
+              ]}
+              fallback="comparisonTableEditionsDesktop"
+              fallbackSize={1000}
+              altText=""
+              fallbackImgType="png"
+            />
           </div>
         </div>),
       onClick: trackRowClick('editionsApp'),
@@ -432,14 +449,28 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
             or keep curious by following topics that matter to you.
           </p>
           <div css={[detailsCellImageSecondContainer, detailsCellImageContainerBottomSpacing]}>
-            <picture>
-              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={guardianAppPic} />
-              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={guardianAppDesktopPic} />
-              <img
-                src={guardianAppPic}
-                alt=""
-              />
-            </picture>
+            <GridPicture
+              sources={[
+                {
+                  gridId: 'comparisonTableGuAppMob',
+                  srcSizes: [375, 140],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(max-width: ${breakpoints.tablet - 1}px)`,
+                },
+                {
+                  gridId: 'comparisonTableGuAppDesktop',
+                  srcSizes: [1000, 500],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(min-width: ${breakpoints.tablet}px)`,
+                },
+              ]}
+              fallback="comparisonTableGuAppDesktop"
+              fallbackSize={1000}
+              altText=""
+              fallbackImgType="png"
+            />
           </div>
         </div>),
       onClick: trackRowClick('premiumApp'),
@@ -462,14 +493,28 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
       details: (
         <div css={detailsCellOfflineReading}>
           <div css={appFeatureImageContainer}>
-            <picture>
-              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingEdPic} />
-              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingEdDesktopPic} />
-              <img
-                src={offlineReadingEdPic}
-                alt=""
-              />
-            </picture>
+            <GridPicture
+              sources={[
+                {
+                  gridId: 'comparisonTableOfflineReadingEditionsMob',
+                  srcSizes: [660, 434],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(max-width: ${breakpoints.tablet - 1}px)`,
+                },
+                {
+                  gridId: 'comparisonTableOfflineReadingEditionsDesktop',
+                  srcSizes: [700],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(min-width: ${breakpoints.tablet}px)`,
+                },
+              ]}
+              fallback="comparisonTableOfflineReadingEditionsDesktop"
+              fallbackSize={700}
+              altText=""
+              fallbackImgType="png"
+            />
             <AppFeatureWithIcon appName="Editions">
               <p>Download any edition from the last 30 days to read anytime, anywhere you are.</p>
             </AppFeatureWithIcon>
@@ -478,14 +523,28 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
             <AppFeatureWithIcon appName="Guardian">
               <p><strong>Enhanced offline reading.</strong> Download the news whenever it suits you</p>
             </AppFeatureWithIcon>
-            <picture>
-              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={offlineReadingGuPic} />
-              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={offlineReadingGuDesktopPic} />
-              <img
-                src={offlineReadingGuPic}
-                alt=""
-              />
-            </picture>
+            <GridPicture
+              sources={[
+                {
+                  gridId: 'comparisonTableOfflineReadingGuAppMob',
+                  srcSizes: [660, 408],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(max-width: ${breakpoints.tablet - 1}px)`,
+                },
+                {
+                  gridId: 'comparisonTableOfflineReadingGuAppDesktop',
+                  srcSizes: [690],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(min-width: ${breakpoints.tablet}px)`,
+                },
+              ]}
+              fallback="comparisonTableOfflineReadingGuAppDesktop"
+              fallbackSize={700}
+              altText=""
+              fallbackImgType="png"
+            />
           </div>
         </div>
       ),
@@ -514,14 +573,28 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
             </AppFeatureWithIcon>
           </div>
           <div css={detailsCellImageCrosswords}>
-            <picture>
-              <source media={`(max-width: ${breakpoints.tablet - 1}px)`} srcSet={crosswordsPic} />
-              <source media={`(min-width: ${breakpoints.tablet}px)`} srcSet={crosswordsDesktopPic} />
-              <img
-                src={crosswordsPic}
-                alt=""
-              />
-            </picture>
+            <GridPicture
+              sources={[
+                {
+                  gridId: 'comparisonTableCrosswordsMob',
+                  srcSizes: [244],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(max-width: ${breakpoints.tablet - 1}px)`,
+                },
+                {
+                  gridId: 'comparisonTableCrosswordsDesktop',
+                  srcSizes: [1000, 500],
+                  imgType: 'png',
+                  sizes: '100vw',
+                  media: `(min-width: ${breakpoints.tablet}px)`,
+                },
+              ]}
+              fallback="comparisonTableCrosswordsDesktop"
+              fallbackSize={1000}
+              altText=""
+              fallbackImgType="png"
+            />
           </div>
         </div>
       ),
