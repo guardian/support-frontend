@@ -14,16 +14,13 @@ import {
   checkEmail,
   emailRegexPattern,
 } from 'helpers/forms/formValidation';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import ContributionState from './ContributionState';
-import { MustSignIn } from './MustSignIn';
 import { type State } from '../contributionsLandingReducer';
 import {
   updateFirstName,
   updateLastName,
   updateEmail,
   updateBillingState,
-  getUserType,
 } from '../contributionsLandingActions';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { TextInput } from '@guardian/src-text-input';
@@ -38,12 +35,10 @@ type PropTypes = {|
   billingState: StateProvince | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: (Event) => void,
   updateLastName: (Event) => void,
   updateEmail: (Event) => void,
   updateBillingState: (Event) => void,
-  checkIfEmailHasPassword: (Event) => void,
   contributionType: ContributionType,
 |};
 
@@ -61,7 +56,6 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   billingState: getCheckoutFormValue(state.page.form.formData.billingState, state.page.user.stateField),
   isSignedIn: state.page.user.isSignedIn,
-  userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
 });
 
@@ -70,7 +64,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateBillingState: (event) => { dispatch(updateBillingState(event.target.value === '' ? null : event.target.value)); },
-  checkIfEmailHasPassword: (event) => { dispatch(getUserType(event.target.value)); },
 });
 
 
@@ -98,20 +91,12 @@ function ContributionFormFields(props: PropTypes) {
           autoComplete="email"
           supporting="example@domain.com"
           onInput={props.updateEmail}
-          onChange={props.checkIfEmailHasPassword}
           pattern={emailRegexPattern}
           error={checkoutFormHasBeenSubmitted && !checkEmail(email) ? 'Please provide a valid email address' : null}
           disabled={isSignedIn}
         />
       </div>
       <Signout isSignedIn />
-      <MustSignIn
-        isSignedIn={props.isSignedIn}
-        userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
-        contributionType={props.contributionType}
-        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
-        email={props.email}
-      />
       {props.contributionType !== 'ONE_OFF' ?
         <div>
           <div className={classNameWithModifiers('form__field', ['contribution-fname'])}>
