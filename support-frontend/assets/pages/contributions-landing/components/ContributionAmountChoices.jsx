@@ -41,6 +41,31 @@ const choiceCardGrid = css`
   }
 `;
 
+const choiceCardGridProductSetAbTestStyles = css`
+  ${until.mobileLandscape} {
+    > div {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 8px;
+
+      > label {
+        margin-bottom: 0px;
+      }
+    }
+  }
+`;
+
+const choiceCardGridProductSetAbTestFullWithOtherStyles = css`
+${choiceCardGridProductSetAbTestStyles}
+
+> div > label:last-of-type {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+`;
+
+
 type ContributionAmountChoicesProps = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
@@ -54,7 +79,9 @@ type ContributionAmountChoicesProps = {|
     CountryGroupId,
     ContributionType
   ) => () => void,
-  shouldShowFrequencyButtons: boolean
+  shouldShowFrequencyButtons: boolean,
+  // eslint-disable-next-line react/no-unused-prop-types
+  productSetAbTestVariant: boolean, // this is actually being used but eslint doesn't seem to know that
 |};
 
 const isSelected = (
@@ -72,12 +99,14 @@ const isSelected = (
   return amount === defaultAmount;
 };
 
-const ContributionAmountChoices = (props: ContributionAmountChoicesProps) =>
-  (props.shouldShowFrequencyButtons ? (
-    <ContributionAmountChoicesTwoColumnAfterMobile {...props} />
-  ) : (
-    <ContributionAmountChoicesDefault {...props} />
-  ));
+const ContributionAmountChoices = (props: ContributionAmountChoicesProps) => {
+  if (props.productSetAbTestVariant) {
+    return <ContributionAmountChoicesProductSetAbTest {...props} />;
+  } else if (props.shouldShowFrequencyButtons) {
+    return <ContributionAmountChoicesTwoColumnAfterMobile {...props} />;
+  }
+  return <ContributionAmountChoicesDefault {...props} />;
+};
 
 const ContributionAmountChoicesDefault = ({
   validAmounts,
@@ -182,5 +211,58 @@ const ContributionAmountChoicesTwoColumnAfterMobile = ({
     </div>
   </ChoiceCardGroup>
 );
+
+const ContributionAmountChoicesProductSetAbTest = ({
+  validAmounts,
+  defaultAmount,
+  countryGroupId,
+  contributionType,
+  showOther,
+  selectAmount,
+  selectedAmounts,
+  currency,
+  shouldShowFrequencyButtons,
+}: ContributionAmountChoicesProps) => {
+  const isOtherAmountFullWidth = validAmounts.length % 2 === 0;
+
+  return (
+    <ChoiceCardGroup name="amounts" columns={2} cssOverrides={isOtherAmountFullWidth ? choiceCardGridProductSetAbTestFullWithOtherStyles : choiceCardGridProductSetAbTestStyles}>
+      {validAmounts.map((amount: number) => (
+        <ChoiceCard
+          id={`contributionAmount-${amount}`}
+          name="contributionAmount"
+          value={amount}
+          checked={isSelected(
+          amount,
+          selectedAmounts,
+          contributionType,
+          defaultAmount,
+        )}
+          onChange={selectAmount(amount, countryGroupId, contributionType)}
+          label={
+            <ContributionAmountChoicesChoiceLabel
+              formattedAmount={formatAmount(
+              currencies[currency],
+              spokenCurrencies[currency],
+              amount,
+              false,
+            )}
+              shouldShowFrequencyButtons={shouldShowFrequencyButtons}
+              contributionType={contributionType}
+            />
+        }
+        />
+    ))}
+      <ChoiceCard
+        id="contributionAmount-other"
+        name="contributionAmount"
+        value="other"
+        checked={showOther}
+        onChange={selectAmount('other', countryGroupId, contributionType)}
+        label="Other"
+      />
+    </ChoiceCardGroup>
+  );
+};
 
 export default ContributionAmountChoices;

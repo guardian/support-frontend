@@ -42,12 +42,14 @@ const copy = {
     Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
     Sixday: <> for <strong>Guardian</strong>, delivered</>,
     Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
+    Saturday: <> for <strong>Guardian</strong>, delivered</>,
     Sunday: <> for <strong>Observer</strong>, delivered</>,
   },
   Collection: {
     Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
     Sixday: <> for <strong>Guardian</strong></>,
     Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
+    Saturday: <> for <strong>Guardian</strong></>,
     Sunday: <> for <strong>Observer</strong></>,
   },
 };
@@ -73,16 +75,29 @@ const getPlans = (
       productOption,
     );
 
+    let labelText;
+
+    switch (productOption) {
+      case 'Everyday':
+        labelText = 'Best Deal';
+        break;
+      case 'Saturday':
+        labelText = 'New';
+        break;
+      default:
+        labelText = '';
+    }
+
     return {
       title: getTitle(productOption),
       price: showPrice(priceAfterPromosApplied),
       href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode, isUsingGuestCheckout),
       onClick: sendTrackingEventsOnClick(trackingProperties),
       onView: sendTrackingEventsOnView(trackingProperties),
-      buttonCopy: 'Subscribe now',
+      buttonCopy: 'Subscribe',
       priceCopy: getPriceCopyString(nonDiscountedPrice, copy[fulfilmentOption][productOption]),
       offerCopy: getOfferText(priceAfterPromosApplied),
-      label: '',
+      label: labelText,
     };
   });
 

@@ -15,9 +15,6 @@
       top: -50px;
       min-width: 100%;
       height: 100%;
-      @include mq($from: wide) {
-        left: gu-span(2) * -1;
-      }
     }
 
     :global(.component-grid-picture__image) {

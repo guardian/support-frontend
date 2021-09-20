@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { type Action as UserAction } from 'helpers/user/userActions';
 import {
   amountOrOtherAmountIsValid,
@@ -158,12 +157,6 @@ function enableOrDisableForm() {
     const shouldBlockExistingRecurringContributor =
       isRecurringContributor && contributionTypeIsRecurring(state.page.form.contributionType);
 
-    const userCanContributeWithoutSigningIn = canContributeWithoutSigningIn(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      state.page.form.userTypeFromIdentityResponse,
-    );
-
     const formIsValid = getFormIsValid(formIsValidParameters(state));
     dispatch(setFormIsValid(formIsValid));
 
@@ -180,7 +173,6 @@ function enableOrDisableForm() {
     const shouldEnable =
       formIsValid
       && !(shouldBlockExistingRecurringContributor)
-      && userCanContributeWithoutSigningIn
       && (!recaptchaRequired || recaptchaVerified);
 
     dispatch(setFormIsSubmittable(shouldEnable, state.page.form.payPalData.buttonReady));

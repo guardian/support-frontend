@@ -7,7 +7,7 @@ import { css } from '@emotion/core';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { headline, textSans } from '@guardian/src-foundations/typography';
-import { from } from '@guardian/src-foundations/mq';
+import { from, between, until } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 
@@ -29,7 +29,12 @@ const productOption = css`
   ${textSans.medium()}
   position: relative;
   display: grid;
-  grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: min-content 1fr min-content;
+  grid-template-areas:
+    '. priceCopy'
+    '. priceCopy'
+    'button button';
   width: 100%;
   background-color: ${neutral[100]};
   color: ${neutral[7]};
@@ -37,32 +42,73 @@ const productOption = css`
   ${from.tablet} {
     min-height: 272px;
     width: 300px;
+    grid-template-columns: none;
+    grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
+    grid-template-areas: none;
   }
 `;
 
 const productOptionUnderline = css`
-  border-bottom: 1px solid ${neutral[86]};
+  ${from.tablet} {
+    border-bottom: 1px solid ${neutral[86]};
+  }
+`;
+
+const productOptionVerticalLine = css`
+  ${until.tablet} {
+    border-right: 1px solid ${neutral[86]};
+    margin-right: ${space[3]}px;
+    padding-right: ${space[3]}px;
+  }
 `;
 
 const productOptionTitle = css`
   ${headline.xsmall({ fontWeight: 'bold' })};
-  padding-bottom: ${space[4]}px;
-  margin-bottom: ${space[2]}px;
+  padding-bottom: ${space[5]}px;
+  ${from.tablet} {
+    margin-bottom: ${space[2]}px;
+  }
+  ${between.tablet.and.leftCol} {
+    ${headline.xxxsmall({ fontWeight: 'bold' })};
+  }
 `;
 
 const productOptionOfferCopy = css`
-  height: 100%;
-  padding-bottom: ${space[2]}px;
+  ${textSans.medium()};
+  ${from.tablet} {
+    height: 100%;
+    padding-bottom: ${space[2]}px;
+  }
+  ${between.tablet.and.leftCol} {
+    ${textSans.small()};
+  }
 `;
 
 const productOptionPrice = css`
   display: block;
-  ${headline.large({ fontWeight: 'bold' })};
+  padding-bottom: ${space[5]}px;
+  ${headline.xsmall({ fontWeight: 'bold' })};
+  ${between.tablet.and.leftCol} {
+    ${headline.small({ fontWeight: 'bold' })};
+  }
+  ${from.leftCol} {
+    ${headline.large({ fontWeight: 'bold' })};
+    padding-bottom: 0;
+  }
 `;
 
 const productOptionPriceCopy = css`
-  height: 100%;
-  margin-bottom: ${space[4]}px;
+  ${textSans.xsmall()};
+  ${from.tablet} {
+    height: 100%;
+    margin-bottom: ${space[4]}px;
+  }
+  ${between.phablet.and.leftCol} {
+    ${textSans.small()};
+  }
+  ${from.leftCol} {
+    ${textSans.medium()};
+  }
 `;
 
 const productOptionHighlight = css`
@@ -76,6 +122,41 @@ const productOptionHighlight = css`
   padding: ${space[2]}px ${space[3]}px;
   ${headline.xxsmall({ fontWeight: 'bold' })};
 `;
+
+const buttonDiv = css`
+  grid-area: button;
+  padding: ${space[3]}px 0;
+  ${between.mobileLandscape.and.tablet} {
+    grid-area: 3 / 1 / span 1 / span 1;
+    border-right: 1px solid ${neutral[86]};
+    margin-right: ${space[3]}px;
+    padding-right: ${space[3]}px;
+  }
+  ${from.tablet} {
+    grid-area: auto;
+    padding: 0;
+  }
+`;
+
+const button = css`
+  display: flex;
+  justify-content: center;
+  ${from.mobileLandscape} {
+    grid-area: priceCopy;
+    display: inline-flex;
+  }
+  ${from.tablet} {
+    grid-area: auto;
+    display: inline-flex;
+  }
+`;
+
+const priceCopyGridPlacement = css`
+  ${until.tablet} {
+    grid-area: priceCopy;
+  }
+`;
+
 function ProductOption(props: Product) {
   const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
     threshold: 0.5,
@@ -95,19 +176,32 @@ function ProductOption(props: Product) {
     }
   }, [hasBeenSeen]);
 
+  const productOptionMargin = props.label && css`
+  ${until.tablet} {
+    /* calculation belows are based on productOptionHighlight text size, line height and padding */
+    &:first-of-type {
+      margin-top: calc((20px * 1.5) + 8px) !important;
+    }
+    /* 16px alloted for margin between product options when a label is present */
+    &:not(first-of-type) {
+      margin-top: calc((20px * 1.5) + 8px + 16px) !important;
+    }
+    }
+  `;
+
   return (
-    <div ref={setElementToObserve} css={[productOption, props.cssOverrides]}>
-      <div>
+    <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin]}>
+      <div css={productOptionVerticalLine}>
         <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
         {props.children && props.children}
       </div>
-      <div>
+      <div css={productOptionVerticalLine}>
         <p css={[productOptionOfferCopy, productOptionUnderline]}>
           {props.offerCopy}
         </p>
       </div>
-      <div>
+      <div css={priceCopyGridPlacement}>
         {/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
         {/* eslint-disable-next-line jsx-a11y/aria-role */}
         <p role="text" css={productOptionPriceCopy}>
@@ -115,9 +209,10 @@ function ProductOption(props: Product) {
           {props.priceCopy}
         </p>
       </div>
-      <div>
+      <div css={buttonDiv}>
         <ThemeProvider theme={buttonReaderRevenue}>
           <LinkButton
+            css={button}
             href={props.href}
             onClick={props.onClick}
             aria-label={`${props.title}- ${props.buttonCopy}`}

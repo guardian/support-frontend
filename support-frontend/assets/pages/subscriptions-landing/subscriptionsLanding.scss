@@ -673,17 +673,15 @@
     width: 100%;
   }
 
-  img {
-    position: absolute;
-    bottom: 0;
-  }
-
   img:nth-child(1) {
     z-index: 2;
     left: 80px;
+    position: absolute;
+    bottom: 0;
 
     @include mq($until: leftCol) {
       left: 50px;
+      width: 90%;
     }
 
     @include mq($until: desktop) {
@@ -691,7 +689,8 @@
     }
 
     @include mq($until: tablet) {
-      display: none;
+      width: 100%;
+      position: inherit;
     }
   }
 
