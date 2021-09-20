@@ -4,6 +4,7 @@ import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
+import { brand } from '@guardian/src-foundations/palette';
 import { from, between } from '@guardian/src-foundations/mq';
 import { SvgInfo } from '@guardian/src-icons';
 
@@ -28,8 +29,8 @@ const pricesSection = css`
 const priceBoxes = css`
   margin-top: ${space[6]}px;
   justify-content: flex-start;
-  ${from.desktop} {
-    margin-top: ${space[9]}px;
+  ${from.tablet} {
+    margin-top: ${space[12]}px;
   }
 `;
 
@@ -75,6 +76,12 @@ const pricesInfo = css`
   margin-top: ${space[6]}px;
 `;
 
+const pricesTabs = css`
+  margin-top: ${space[6]}px;
+  display: flex;
+  border-bottom: 1px solid ${brand[600]};
+`;
+
 function Prices({
   activeTab, setTabAction, products,
 }: PropTypes) {
@@ -98,14 +105,13 @@ function Prices({
           />
         ))}
       </FlexContainer>
-      <div css={pricesInfo}>
-        {
-            activeTab === Collection ?
-              <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo> :
-              <LinkTo tab={Collection} setTabAction={setTabAction}>
-                  Switch to Subscription card
-              </LinkTo>
-          }
+      <div css={pricesTabs}>
+        <LinkTo tab={Collection} setTabAction={setTabAction} activeTab={activeTab} isPricesTabLink>
+          Subscription card
+        </LinkTo>
+        <LinkTo tab={HomeDelivery} setTabAction={setTabAction} activeTab={activeTab} isPricesTabLink>
+          Home Delivery
+        </LinkTo>
       </div>
       <div css={pricesInfo}>
         <ProductInfoChip icon={<SvgInfo />}>
