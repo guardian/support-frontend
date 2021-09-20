@@ -39,18 +39,18 @@ const getOfferText = (price: ProductPrice) => {
 // ---- Plans ----- //
 const copy = {
   HomeDelivery: {
-    Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
-    Sixday: <> for <strong>Guardian</strong>, delivered</>,
-    Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong>, delivered</>,
-    Saturday: <> for <strong>Guardian</strong>, delivered</>,
-    Sunday: <> for <strong>Observer</strong>, delivered</>,
+    Everyday: <> for <strong>the Guardian</strong> and <strong>the Observer</strong>, delivered</>,
+    Sixday: <> for <strong>the Guardian</strong>, delivered</>,
+    Weekend: <> for <strong>the Guardian</strong> and <strong>the Observer</strong>, delivered</>,
+    Saturday: <> for <strong>the Guardian</strong>, delivered</>,
+    Sunday: <> for <strong>the Observer</strong>, delivered</>,
   },
   Collection: {
-    Everyday: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
-    Sixday: <> for <strong>Guardian</strong></>,
-    Weekend: <> for <strong>Guardian</strong> and <strong>Observer</strong></>,
-    Saturday: <> for <strong>Guardian</strong></>,
-    Sunday: <> for <strong>Observer</strong></>,
+    Everyday: <> for <strong>the Guardian</strong> and <strong>the Observer</strong></>,
+    Sixday: <> for <strong>the Guardian</strong></>,
+    Weekend: <> for <strong>the Guardian</strong> and <strong>the Observer</strong></>,
+    Saturday: <> for <strong>the Guardian</strong></>,
+    Sunday: <> for <strong>the Observer</strong></>,
   },
 };
 
