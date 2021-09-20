@@ -125,34 +125,16 @@ const reducer = (commonState: CommonState) => createCheckoutReducer(
 const store = initRedux(reducer, true);
 
 // ----- Render ----- //
-function DigitalLandingPage({
-  countryGroupId,
-  currencyId,
-  participations,
-  productPrices,
-  promotionCopy,
-  orderIsAGift,
-}: DigitalLandingPropTypes) {
+function DigitalLandingPage(props: DigitalLandingPropTypes) {
+  const { productPrices, orderIsAGift, countryGroupId } = props;
+
   if (!productPrices) {
     return null;
   }
 
   useEffect(() => { showPayPal(store.dispatch); }, []);
   const isGift = orderIsAGift || false;
-  const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
-  const showComparisonTable = participations.comparisonTableTest === 'variant';
-  const isUsingGuestCheckout = true; // participations.subscriptionsGuestCheckoutTest === 'variant';
-  const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
-  const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
-  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-
-  // For CTAs in hero test
-  const heroPriceList = getHeroCtaProps(
-    productPrices,
-    currencyId,
-    countryGroupId,
-    isUsingGuestCheckout,
-  );
+  const path = isGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
 
   const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
     path,
@@ -169,11 +151,6 @@ function DigitalLandingPage({
     trackProduct: 'DigitalPack',
   });
 
-  const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
-    threshold: 0.3,
-    debounce: true,
-  });
-
   const footer = (
     <div className="footer-container">
       <div className="footer-alignment">
@@ -186,12 +163,60 @@ function DigitalLandingPage({
       </div>
     </div>);
 
+  const thankyouProps = {
+    countryGroupId: props.countryGroupId,
+    marketingConsent: (props.orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
+  };
+
   return (
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={footer}
-    >
-      {orderIsAGift ?
+    <Provider store={store}>
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={footer}
+      >
+        <CheckoutStage
+          checkoutForm={<DigitalLandingComponent {...props} />}
+          thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
+          thankYouContent={<ThankYouContent {...thankyouProps} />}
+          subscriptionProduct={DigitalPack}
+        />
+      </Page>
+    </Provider>
+  );
+}
+
+
+function DigitalLandingComponent({
+  countryGroupId,
+  currencyId,
+  participations,
+  productPrices,
+  promotionCopy,
+  orderIsAGift,
+}: DigitalLandingPropTypes) {
+  const isGift = orderIsAGift || false;
+  const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
+  const showComparisonTable = participations.comparisonTableTest === 'variant';
+  const isUsingGuestCheckout = true; // participations.subscriptionsGuestCheckoutTest === 'variant';
+  const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
+  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+
+  // For CTAs in hero test
+  const heroPriceList = getHeroCtaProps(
+    productPrices,
+    currencyId,
+    countryGroupId,
+    isUsingGuestCheckout,
+  );
+
+  const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
+    threshold: 0.3,
+    debounce: true,
+  });
+
+  return (
+    <span>
+    {orderIsAGift ?
         <HeroWithImage
           orderIsAGift={isGift}
           countryGroupId={countryGroupId}
@@ -202,74 +227,59 @@ function DigitalLandingPage({
           countryGroupId={countryGroupId}
           priceList={heroPriceList}
         />
-      }
-      {showComparisonTable &&
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={comparisonTableContainer}>
-            <ComparisonTable />
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      }
-      {showEventsComponent &&
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={eventsProductBlockContainer}>
-            <EventsModule />
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      }
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
-            <div ref={setElementToObserve}>
-              <ProductBlock
-                countryGroupId={countryGroupId}
-              />
-            </div>
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="dark" hasOverlap>
-        <CentredContainer>
-          <Prices
-            countryGroupId={countryGroupId}
-            currencyId={currencyId}
-            productPrices={productPrices}
-            orderIsAGift={isGift}
-            isUsingGuestCheckout={isUsingGuestCheckout}
-          />
-        </CentredContainer>
-      </FullWidthContainer>
-      <FullWidthContainer theme="white">
-        <CentredContainer>
-          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
-        </CentredContainer>
-      </FullWidthContainer>
-      <FeedbackWidget display={widgetShouldDisplay} />
-    </Page>
-  );
+    }
+    {showComparisonTable &&
+    <FullWidthContainer>
+      <CentredContainer>
+        <Block cssOverrides={comparisonTableContainer}>
+          <ComparisonTable />
+        </Block>
+      </CentredContainer>
+    </FullWidthContainer>
+    }
+    {showEventsComponent &&
+    <FullWidthContainer>
+      <CentredContainer>
+        <Block cssOverrides={eventsProductBlockContainer}>
+          <EventsModule />
+        </Block>
+      </CentredContainer>
+    </FullWidthContainer>
+    }
+    <FullWidthContainer>
+      <CentredContainer>
+        <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
+          <div ref={setElementToObserve}>
+            <ProductBlock
+              countryGroupId={countryGroupId}
+            />
+          </div>
+        </Block>
+      </CentredContainer>
+    </FullWidthContainer>
+    <FullWidthContainer theme="dark" hasOverlap>
+      <CentredContainer>
+        <Prices
+          countryGroupId={countryGroupId}
+          currencyId={currencyId}
+          productPrices={productPrices}
+          orderIsAGift={isGift}
+          isUsingGuestCheckout={isUsingGuestCheckout}
+        />
+      </CentredContainer>
+    </FullWidthContainer>
+    <FullWidthContainer theme="white">
+      <CentredContainer>
+        <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
+      </CentredContainer>
+    </FullWidthContainer>
+    <FeedbackWidget display={widgetShouldDisplay} />
+  </span>
+  )
 }
 
 setUpTrackingAndConsents();
 const props = digitalLandingProps();
-const thankyouProps = {
-  countryGroupId: props.countryGroupId,
-  marketingConsent: (props.orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
-};
-
-const content = (
-  <Provider store={store}>
-    <CheckoutStage
-      checkoutForm={<DigitalLandingPage {...props} />}
-      thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
-      thankYouContent={<ThankYouContent {...thankyouProps} />}
-      subscriptionProduct={DigitalPack}
-    />
-  </Provider>
-);
-
+const content = <DigitalLandingPage {...props}/>;
 
 renderPage(content, reactElementId[props.countryGroupId]);
