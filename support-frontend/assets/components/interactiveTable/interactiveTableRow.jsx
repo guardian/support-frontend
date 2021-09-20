@@ -20,8 +20,10 @@ const visuallyHidden = css`
 const tableRow = css`
   position: relative;
   width: 100%;
+  display: -ms-grid;
   display: grid;
   grid-template-columns: 1fr 40px 40px 42px;
+  -ms-grid-rows: 72px 1fr;
   grid-template-rows: 72px 1fr;
   text-align: left;
   background-color: ${neutral[100]};
@@ -35,6 +37,7 @@ const tableRow = css`
   }
 
   ${from.desktop} {
+    -ms-grid-columns: 1fr 72px 72px 60px;
     grid-template-columns: 1fr 72px 72px 60px;
   }
 `;
@@ -42,15 +45,17 @@ const tableRow = css`
 const tableHeaderRow = css`
   background-color: transparent;
   color: ${neutral[100]};
+  -ms-grid-rows: 1fr;
   grid-template-rows: 1fr;
 `;
 
 const tableRowOpen = css`
-  max-height: 600px;
+  max-height: 800px;
 `;
 
 const tableCell = css`
   display: flex;
+  flex: 0 1 auto;
   justify-content: center;
   align-items: center;
   max-height: 72px;
@@ -59,6 +64,7 @@ const tableCell = css`
 `;
 
 const headingCell = css`
+  -ms-grid-row-align: end;
   align-self: end;
   ${textSans.small({ fontWeight: 'bold' })}
   padding-bottom: 0;
@@ -66,6 +72,7 @@ const headingCell = css`
 `;
 
 const primaryTableCell = css`
+  -ms-grid-column: 1;
   justify-content: flex-start;
   padding-left: ${space[3]}px;
 
@@ -75,10 +82,12 @@ const primaryTableCell = css`
 `;
 
 const iconCell = css`
+  -ms-grid-column: 3;
   max-width: 48px;
 `;
 
 const expandableButtonCell = css`
+  -ms-grid-column: 4;
   max-height: 72px;
   display: flex;
   align-items: center;
@@ -88,8 +97,11 @@ const expandableButtonCell = css`
 `;
 
 const detailsCell = css`
-  max-height: unset;
+  max-height: 800px;
   min-height: 72px;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 4;
+  -ms-grid-row: 2;
   grid-column: 1 / span 4;
   background-color: ${sport[800]};
   border-top: ${borderStyle};
@@ -171,8 +183,22 @@ export type RowData = {|
 export function InteractiveTableHeaderRow({ columns }: { columns: CellData[] }) {
   return (
     <tr role="row" css={[tableRow, tableHeaderRow]}>
-      {columns.map(col => (
-        <th scope="col" role="columnHeader" css={col.isStyleless ? '' : [tableCell, headingCell, col.isIcon ? iconCell : '']}>
+      {columns.map((col, index) => (
+        <th
+          scope="col"
+          role="columnHeader"
+          css={col.isStyleless ? '' : [
+            tableCell,
+            headingCell,
+            ...(col.isIcon ? [
+              iconCell,
+              css`
+                -ms-grid-column: ${index + 1};
+              `,
+              ] : ['']
+            ),
+          ]}
+        >
           <span css={col.isHidden ? visuallyHidden : ''}>{col.content}</span>
         </th>
       ))}
@@ -202,7 +228,7 @@ export function InteractiveTableRow({
 
   return (
     <tr role="row" css={[tableRow, showDetails ? tableRowOpen : '']}>
-      {columns.map((column) => {
+      {columns.map((column, index) => {
         if (column.isPrimary) {
           return (
             <th scope="row" role="rowHeader" css={[tableCell, primaryTableCell]}>
@@ -210,7 +236,15 @@ export function InteractiveTableRow({
             </th>
           );
         }
-        return <td role="cell" css={[tableCell, iconCell]}>{column.content}</td>;
+        return (
+          <td
+            role="cell"
+            css={[tableCell, iconCell, css`
+              -ms-grid-column: ${index + 1};
+            `]}
+          >{column.content}
+          </td>
+          );
       })}
       <td role="cell" css={expandableButtonCell}>
         <Button
