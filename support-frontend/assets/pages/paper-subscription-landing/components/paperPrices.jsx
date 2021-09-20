@@ -75,6 +75,19 @@ const getPlans = (
       productOption,
     );
 
+    let labelText;
+
+    switch (productOption) {
+      case 'Everyday':
+        labelText = 'Best Deal';
+        break;
+      case 'Saturday':
+        labelText = 'New';
+        break;
+      default:
+        labelText = '';
+    }
+
     return {
       title: getTitle(productOption),
       price: showPrice(priceAfterPromosApplied),
@@ -84,7 +97,7 @@ const getPlans = (
       buttonCopy: 'Subscribe',
       priceCopy: getPriceCopyString(nonDiscountedPrice, copy[fulfilmentOption][productOption]),
       offerCopy: getOfferText(priceAfterPromosApplied),
-      label: '',
+      label: labelText,
     };
   });
 
