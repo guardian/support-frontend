@@ -75,18 +75,7 @@ const getPlans = (
       productOption,
     );
 
-    let labelText;
-
-    switch (productOption) {
-      case 'Everyday':
-        labelText = 'Best Deal';
-        break;
-      case 'Saturday':
-        labelText = 'New';
-        break;
-      default:
-        labelText = '';
-    }
+    const labelText = productOption === 'Everyday' ? 'Best Deal' : '';
 
     return {
       title: getTitle(productOption),
