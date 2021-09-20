@@ -151,12 +151,6 @@ const button = css`
   }
 `;
 
-const buttonCopySpan = css`
-  ${between.tablet.and.leftCol} {
-    display: none;
-  }
-`;
-
 const priceCopyGridPlacement = css`
   ${until.tablet} {
     grid-area: priceCopy;
@@ -195,8 +189,6 @@ function ProductOption(props: Product) {
     }
   `;
 
-  const buttonCopy = props.buttonCopy.split(' ');
-
   return (
     <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin]}>
       <div css={productOptionVerticalLine}>
@@ -223,9 +215,9 @@ function ProductOption(props: Product) {
             css={button}
             href={props.href}
             onClick={props.onClick}
-            aria-label={`${props.title}- ${props.buttonCopy} now`}
+            aria-label={`${props.title}- ${props.buttonCopy}`}
           >
-            {buttonCopy[0]}<span css={buttonCopySpan}>&nbsp;{buttonCopy[1]}</span>
+            {props.buttonCopy}
           </LinkButton>
         </ThemeProvider>
       </div>
