@@ -195,6 +195,8 @@ function ProductOption(props: Product) {
     }
   `;
 
+  const buttonCopy = props.buttonCopy.split(' ');
+
   return (
     <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin]}>
       <div css={productOptionVerticalLine}>
@@ -223,7 +225,7 @@ function ProductOption(props: Product) {
             onClick={props.onClick}
             aria-label={`${props.title}- ${props.buttonCopy} now`}
           >
-            {props.buttonCopy}<span css={buttonCopySpan}>&nbsp;now</span>
+            {buttonCopy[0]}<span css={buttonCopySpan}>&nbsp;{buttonCopy[1]}</span>
           </LinkButton>
         </ThemeProvider>
       </div>
