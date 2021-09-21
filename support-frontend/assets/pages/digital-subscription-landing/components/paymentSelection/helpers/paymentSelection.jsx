@@ -154,7 +154,7 @@ const getHeroCtaProps = (
       onClick,
       priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
       offerCopy,
-      buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
+      buttonCopy: 'Subscribe now', // changed for PayPal one click test getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
       billingPeriod: digitalBillingPeriod,
     };
   };
@@ -227,6 +227,7 @@ const getPaymentOptions = ({
         offerCopy: '',
         label: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].label,
         buttonCopy: 'Give this gift',
+        billingPeriod,
       } :
       {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
@@ -237,7 +238,8 @@ const getPaymentOptions = ({
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
         offerCopy,
         label: BILLING_PERIOD[digitalBillingPeriod].label,
-        buttonCopy: 'Start free trial',
+        buttonCopy: 'Subscribe now',
+        billingPeriod,
       };
 
   };

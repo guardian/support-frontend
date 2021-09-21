@@ -10,6 +10,9 @@ import { headline, textSans } from '@guardian/src-foundations/typography';
 import { from, between, until } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
 
 export type Product = {
   title: string,
@@ -23,6 +26,8 @@ export type Product = {
   onView: Function,
   label?: string,
   cssOverrides?: string,
+  showPayPalButton: boolean,
+  billingPeriod?: BillingPeriod,
 }
 
 const productOption = css`
@@ -124,6 +129,9 @@ const productOptionHighlight = css`
 `;
 
 const buttonDiv = css`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   grid-area: button;
   padding: ${space[3]}px 0;
   ${between.mobileLandscape.and.tablet} {
@@ -189,8 +197,15 @@ function ProductOption(props: Product) {
     }
   `;
 
+  const productOptionButtonHeight = props.showPayPalButton && css`
+    ${from.tablet} {
+      width: 330px;
+      grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 108px;
+    }
+  `;
+
   return (
-    <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin]}>
+    <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin, productOptionButtonHeight]}>
       <div css={productOptionVerticalLine}>
         <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
@@ -220,6 +235,7 @@ function ProductOption(props: Product) {
             {props.buttonCopy}
           </LinkButton>
         </ThemeProvider>
+        {props.showPayPalButton && <PayPalHeroButton billingPeriod={props.billingPeriod} />}
       </div>
     </div>
   );
@@ -230,6 +246,8 @@ ProductOption.defaultProps = {
   label: '',
   offerCopy: '',
   cssOverrides: '',
+  showPayPalButton: false,
+  billingPeriod: Monthly,
 };
 
 export default ProductOption;
