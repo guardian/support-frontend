@@ -88,7 +88,6 @@ function mapDispatchToProps() {
 const payPalButton = css`
   box-sizing: border-box;
   margin-top: ${space[3]}px;
-  min-width: 264px;
 `;
 
 function PayPalHeroButton(props: PropTypes) {

@@ -25,7 +25,7 @@ const productOptionSmallStyles = css`
   color: inherit;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   padding: ${space[1]}px 0 ${space[6]}px;
   padding-right: ${space[4]}px;
 
@@ -48,12 +48,17 @@ const priceCopyStyles = css`
   margin-top: ${space[2]}px;
 `;
 
+const buttonStyles = css`
+  justify-content: center;
+`;
+
 function ProductOptionSmall(props: ProductSmall) {
   return (
     <span css={[productOptionSmallStyles, props.cssOverrides]}>
       <p css={offerCopyStyles}>{props.offerCopy}</p>
       <ThemeProvider theme={buttonReaderRevenue}>
         <LinkButton
+          css={buttonStyles}
           href={props.href}
           onClick={props.onClick}
         >
