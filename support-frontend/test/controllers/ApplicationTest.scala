@@ -10,7 +10,7 @@ import config.{Configuration, RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
 import org.scalatestplus.mockito.MockitoSugar.mock
 import services._
-import com.gu.support.config.{AmazonPayConfigProvider, PayPalConfigProvider, Stage, StripeConfigProvider}
+import com.gu.support.config.{AmazonPayConfigProvider, PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import config.Configuration.{GuardianDomain, IdentityUrl}
 
 import scala.concurrent.ExecutionContext
@@ -22,6 +22,7 @@ import org.scalatest.matchers.must.Matchers
 class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
   implicit val timeout = Timeout(2.seconds)
+  val stage = Stages.DEV
 
   val actionRefiner = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
@@ -30,7 +31,8 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
-    csrfConfig = csrfConfig
+    csrfConfig = csrfConfig,
+    stage = stage
   )
 
   "/healthcheck" should {

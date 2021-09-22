@@ -1,13 +1,18 @@
 package actions
 
-import io.lemonlabs.uri.typesafe.dsl._
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger.Sanitizer
+import com.gu.support.config.Stage
 import config.Configuration.IdentityUrl
+import io.lemonlabs.uri.typesafe.dsl._
 import play.api.mvc.Results._
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 import play.filters.csrf._
 import services.{AsyncAuthenticationService, AuthenticatedIdUser}
 import utils.FastlyGEOIP
+
 import scala.concurrent.ExecutionContext
 
 object CustomActionBuilders {
@@ -23,7 +28,8 @@ class CustomActionBuilders(
   cc: ControllerComponents,
   addToken: CSRFAddToken,
   checkToken: CSRFCheck,
-  csrfConfig: CSRFConfig
+  csrfConfig: CSRFConfig,
+  stage: Stage
 )(implicit private val ec: ExecutionContext) {
 
   import CustomActionBuilders._
@@ -77,6 +83,18 @@ class CustomActionBuilders(
 
   def maybeAuthenticatedAction(identityClientId: String = membersIdentityClientId): ActionBuilder[OptionalAuthRequest, AnyContent] =
     PrivateAction andThen maybeAuthenticated(onUnauthenticated(identityClientId))
+
+  def alarmOnFailure[A](action: Action[A]): EssentialAction =
+    (v1: RequestHeader) => action.apply(v1).map { result =>
+      if (result.header.status.toString.head != '2') {
+        SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")
+        val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
+        AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+        result
+      } else {
+        result
+      }
+    }
 
   val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 

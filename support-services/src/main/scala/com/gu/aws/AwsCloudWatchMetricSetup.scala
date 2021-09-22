@@ -44,11 +44,10 @@ object AwsCloudWatchMetricSetup {
       )
     )
 
-  def serverSideValidationFailure(stage: Stage, product: String): MetricRequest =
+  def serverSideCreateFailure(stage: Stage): MetricRequest =
     getMetricRequest(
-      MetricName("ServerSideValidationFailure"),
+      MetricName("ServerSideCreateFailure"),
       Map(
-        MetricDimensionName("Product") -> MetricDimensionValue(product),
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
       )
     )

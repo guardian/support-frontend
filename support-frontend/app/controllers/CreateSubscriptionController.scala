@@ -46,8 +46,8 @@ class CreateSubscriptionController(
 
   type ApiResponseOrError[RES] = EitherT[Future, CreateSubscriptionError, RES]
 
-  def create: Action[CreateSupportWorkersRequest] =
-    maybeAuthenticatedAction().async(new LoggingCirceParser(components).requestParser) {
+  def create: EssentialAction =
+    alarmOnFailure(maybeAuthenticatedAction().async(new LoggingCirceParser(components).requestParser) {
       implicit request =>
         request.user match {
           case Some(user) =>
@@ -57,7 +57,7 @@ class CreateSubscriptionController(
             SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
             createGuestUserAndHandleRequest.getOrElse(InternalServerError)
         }
-    }
+    })
 
   def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
     for {
@@ -91,14 +91,6 @@ class CreateSubscriptionController(
 
       respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
     } else {
-      val productName = createSupportWorkersRequest.product match {
-        case _: Contribution => "Contribution"
-        case _: DigitalPack => "DigitalPack"
-        case _: Paper => "Paper"
-        case _: GuardianWeekly => "GuardianWeekly"
-      }
-      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideValidationFailure(stage, productName)
-      AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
       SafeLogger.warn(s"validation of the request body failed $createSupportWorkersRequest")
       respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
     }
