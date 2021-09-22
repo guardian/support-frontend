@@ -20,6 +20,8 @@ import type {
   PayPalCheckoutDetails,
   PayPalUserDetails,
 } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 type PropTypes = {
   onPayPalCheckoutCompleted: Function,
@@ -31,6 +33,8 @@ type PropTypes = {
   isTestUser: boolean,
   setupRecurringPayPalPayment: Function,
   amount: number,
+  trackingId: string,
+  product: SubscriptionProduct,
 }
 
 const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDetails) => {
@@ -80,8 +84,16 @@ function mapDispatchToProps() {
           getState(),
         );
       },
-    onClick: billingPeriod => (dispatch: Dispatch<Action>) =>
-      dispatch(formActionCreators.setBillingPeriod(billingPeriod)),
+    onClick: (billingPeriod, trackingId, product) => (dispatch: Dispatch<Action>) => {
+      const componentId = `${trackingId}-${billingPeriod}-${product}-PayPal`;
+      trackCheckoutSubmitAttempt(
+        componentId,
+        product,
+        PayPal,
+        product,
+      );
+      return dispatch(formActionCreators.setBillingPeriod(billingPeriod));
+    },
   };
 }
 
@@ -99,7 +111,7 @@ function PayPalHeroButton(props: PropTypes) {
         currencyId={props.currencyId}
         hasLoaded={props.hasLoaded}
         canOpen={() => true}
-        onClick={() => props.onClick(props.billingPeriod)}
+        onClick={() => props.onClick(props.billingPeriod, props.trackingId, props.product)}
         formClassName="form--contribution"
         isTestUser={props.isTestUser}
         setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}

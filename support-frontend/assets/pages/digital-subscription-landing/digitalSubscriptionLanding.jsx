@@ -199,9 +199,8 @@ function DigitalLandingComponent({
 
   const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
   const showComparisonTable = participations.comparisonTableTest === 'variant';
-  const isUsingGuestCheckout = participations.payPalOneClickTest === 'guestCheckout';
   const showPayPalButton = participations.payPalOneClickTest === 'payPal';
-  console.log(`paypal test variant = ${participations.payPalOneClickTest}`);
+  const isUsingGuestCheckout = showPayPalButton || participations.payPalOneClickTest === 'guestCheckout';
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 

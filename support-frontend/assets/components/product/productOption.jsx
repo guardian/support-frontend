@@ -13,6 +13,7 @@ import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 
 export type Product = {
   title: string,
@@ -238,7 +239,11 @@ function ProductOption(props: Product) {
             {props.buttonCopy}
           </LinkButton>
         </ThemeProvider>
-        {props.showPayPalButton && props.billingPeriod && <PayPalHeroButton billingPeriod={props.billingPeriod} />}
+        {props.showPayPalButton && props.billingPeriod && <PayPalHeroButton
+          billingPeriod={props.billingPeriod}
+          trackingId="subs-landing-page-price-card"
+          product={DigitalPack}
+        />}
       </div>
     </div>
   );

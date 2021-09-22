@@ -10,6 +10,7 @@ import { textSans, headline } from '@guardian/src-foundations/typography';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 
 export type ProductSmall = {
   offerCopy: string,
@@ -76,7 +77,11 @@ function ProductOptionSmall(props: ProductSmall) {
           Subscribe now {/* just for PayPal test */}
         </LinkButton>
       </ThemeProvider>
-      {props.showPayPalButton && <PayPalHeroButton billingPeriod={props.billingPeriod} />}
+      {props.showPayPalButton && <PayPalHeroButton
+        billingPeriod={props.billingPeriod}
+        product={DigitalPack}
+        trackingId="subs-landing-page-hero"
+      />}
       <p css={priceCopyStyles}>{props.priceCopy}</p>
     </span>
   );

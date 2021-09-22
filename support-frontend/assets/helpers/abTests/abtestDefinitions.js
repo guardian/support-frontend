@@ -196,7 +196,7 @@ export const tests: Tests = {
     isActive: true,
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
-    seed: 8,
+    seed: 11,
     optimizeId: 'xxx',
   },
 };
