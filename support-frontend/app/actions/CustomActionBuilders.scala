@@ -13,7 +13,7 @@ import play.filters.csrf._
 import services.{AsyncAuthenticationService, AuthenticatedIdUser}
 import utils.FastlyGEOIP
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
@@ -94,7 +94,12 @@ class CustomActionBuilders(
       } else {
         result
       }
-    }
+    }.recoverWith({ case throwable: Throwable =>
+      SafeLogger.error(scrub"pushing alarm metric - 5xx response caused by ${throwable}")
+      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
+      AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+      Future.failed(throwable)
+    })
 
   val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
