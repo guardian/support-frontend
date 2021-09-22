@@ -148,7 +148,7 @@ const StripeForm = (props: StripeFormPropTypes) => {
     return stripe.handleCardSetup(clientSecret, cardElement).then((result) => {
       if (result.error) {
         handleStripeError(result.error);
-        return Promise.resolve(result.error);
+        return Promise.reject(result.error);
       }
       return result.setupIntent.payment_method;
 
