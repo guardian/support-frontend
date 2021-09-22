@@ -28,7 +28,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
-import { getPriceDescription, getAdverbialSubscriptionDescription } from 'helpers/productPrice/priceDescriptions';
+import { getAdverbialSubscriptionDescription, getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 
 import type { Product as ProductOptionType } from 'components/product/productOption';
 
@@ -154,7 +154,7 @@ const getHeroCtaProps = (
       onClick,
       priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
       offerCopy,
-      buttonCopy: 'Subscribe now', // changed for PayPal one click test getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
+      buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
       billingPeriod: digitalBillingPeriod,
     };
   };

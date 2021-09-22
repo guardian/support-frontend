@@ -49,7 +49,7 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) =>
             onClick={product.onClick}
             onView={product.onView}
             label={product.label}
-            showPayPalButton={true}
+            showPayPalButton
             billingPeriod={product.billingPeriod}
           />
         )))

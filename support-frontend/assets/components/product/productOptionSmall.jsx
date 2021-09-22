@@ -6,7 +6,7 @@ import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
-import { textSans } from '@guardian/src-foundations/typography';
+import { textSans, headline } from '@guardian/src-foundations/typography';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -28,6 +28,7 @@ const productOptionSmallStyles = css`
   align-items: stretch;
   padding: ${space[1]}px 0 ${space[6]}px;
   padding-right: ${space[4]}px;
+  max-width: 300px;
 
   &:not(:last-of-type) {
     border-bottom: 1px solid ${brand[600]};
@@ -48,13 +49,22 @@ const priceCopyStyles = css`
   margin-top: ${space[2]}px;
 `;
 
+const titleCopyStyles = css`
+  ${headline.xxsmall({ fontWeight: 'bold' })}
+  text-transform: capitalize;
+  margin-bottom: 4px;
+`;
+
 const buttonStyles = css`
   justify-content: center;
 `;
 
 function ProductOptionSmall(props: ProductSmall) {
+  // This is a hack to avoid changing too much stuff around for the PayPal test
+  const titleCopy = props.buttonCopy.replace('Subscribe ', '');
   return (
     <span css={[productOptionSmallStyles, props.cssOverrides]}>
+      <p css={titleCopyStyles}>{titleCopy}</p>
       <p css={offerCopyStyles}>{props.offerCopy}</p>
       <ThemeProvider theme={buttonReaderRevenue}>
         <LinkButton
@@ -62,7 +72,7 @@ function ProductOptionSmall(props: ProductSmall) {
           href={props.href}
           onClick={props.onClick}
         >
-          {props.buttonCopy}
+          Subscribe now {/*just for PayPal test*/}
         </LinkButton>
       </ThemeProvider>
       <PayPalHeroButton billingPeriod={props.billingPeriod} />
