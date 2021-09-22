@@ -26,7 +26,7 @@ export type Product = {
   onView: Function,
   label?: string,
   cssOverrides?: string,
-  showPayPalButton: boolean,
+  showPayPalButton?: boolean,
   billingPeriod?: BillingPeriod,
 }
 
@@ -205,7 +205,10 @@ function ProductOption(props: Product) {
   `;
 
   return (
-    <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin, productOptionButtonHeight]}>
+    <div
+      ref={setElementToObserve}
+      css={[productOption, props.cssOverrides, productOptionMargin, productOptionButtonHeight]}
+    >
       <div css={productOptionVerticalLine}>
         <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
@@ -235,7 +238,7 @@ function ProductOption(props: Product) {
             {props.buttonCopy}
           </LinkButton>
         </ThemeProvider>
-        {props.showPayPalButton && <PayPalHeroButton billingPeriod={props.billingPeriod} />}
+        {props.showPayPalButton && props.billingPeriod && <PayPalHeroButton billingPeriod={props.billingPeriod} />}
       </div>
     </div>
   );

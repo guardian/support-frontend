@@ -121,6 +121,7 @@ const getHeroCtaProps = (
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   isUsingGuestCheckout: boolean,
+  showPayPalButton: boolean,
 ): ProductSmall[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -156,6 +157,7 @@ const getHeroCtaProps = (
       offerCopy,
       buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
       billingPeriod: digitalBillingPeriod,
+      showPayPalButton,
     };
   };
 
@@ -175,6 +177,7 @@ export type PaymentSelectionPropTypes = {|
   productPrices: ProductPrices;
   orderIsAGift: boolean;
   isUsingGuestCheckout: boolean;
+  showPayPalButton: boolean;
 |}
 
 // state
@@ -184,6 +187,7 @@ const getPaymentOptions = ({
   productPrices,
   orderIsAGift,
   isUsingGuestCheckout,
+  showPayPalButton,
 }: PaymentSelectionPropTypes): ProductOptionType[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -228,6 +232,7 @@ const getPaymentOptions = ({
         label: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].label,
         buttonCopy: 'Give this gift',
         billingPeriod,
+        showPayPalButton,
       } :
       {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
@@ -240,6 +245,7 @@ const getPaymentOptions = ({
         label: BILLING_PERIOD[digitalBillingPeriod].label,
         buttonCopy: 'Subscribe now',
         billingPeriod,
+        showPayPalButton,
       };
 
   };

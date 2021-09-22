@@ -199,7 +199,9 @@ function DigitalLandingComponent({
 
   const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
   const showComparisonTable = participations.comparisonTableTest === 'variant';
-  const isUsingGuestCheckout = true; // participations.subscriptionsGuestCheckoutTest === 'variant';
+  const isUsingGuestCheckout = participations.payPalOneClickTest === 'guestCheckout';
+  const showPayPalButton = participations.payPalOneClickTest === 'payPal';
+  console.log(`paypal test variant = ${participations.payPalOneClickTest}`);
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
@@ -209,6 +211,7 @@ function DigitalLandingComponent({
     currencyId,
     countryGroupId,
     isUsingGuestCheckout,
+    showPayPalButton,
   );
 
   const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
@@ -267,6 +270,7 @@ function DigitalLandingComponent({
             productPrices={productPrices}
             orderIsAGift={orderIsAGift}
             isUsingGuestCheckout={isUsingGuestCheckout}
+            showPayPalButton={showPayPalButton}
           />
         </CentredContainer>
       </FullWidthContainer>

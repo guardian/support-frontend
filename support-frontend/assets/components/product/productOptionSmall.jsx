@@ -19,6 +19,7 @@ export type ProductSmall = {
   onClick: Function,
   cssOverrides?: string | string[],
   billingPeriod: BillingPeriod,
+  showPayPalButton?: boolean,
 }
 
 const productOptionSmallStyles = css`
@@ -28,7 +29,7 @@ const productOptionSmallStyles = css`
   align-items: stretch;
   padding: ${space[1]}px 0 ${space[6]}px;
   padding-right: ${space[4]}px;
-  max-width: 300px;
+  max-width: 330px;
 
   &:not(:last-of-type) {
     border-bottom: 1px solid ${brand[600]};
@@ -72,10 +73,10 @@ function ProductOptionSmall(props: ProductSmall) {
           href={props.href}
           onClick={props.onClick}
         >
-          Subscribe now {/*just for PayPal test*/}
+          Subscribe now {/* just for PayPal test */}
         </LinkButton>
       </ThemeProvider>
-      <PayPalHeroButton billingPeriod={props.billingPeriod} />
+      {props.showPayPalButton && <PayPalHeroButton billingPeriod={props.billingPeriod} />}
       <p css={priceCopyStyles}>{props.priceCopy}</p>
     </span>
   );
@@ -84,6 +85,7 @@ function ProductOptionSmall(props: ProductSmall) {
 ProductOptionSmall.defaultProps = {
   offerCopy: '',
   cssOverrides: '',
+  showPayPalButton: false,
 };
 
 export default ProductOptionSmall;

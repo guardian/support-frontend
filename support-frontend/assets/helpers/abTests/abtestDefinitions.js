@@ -175,4 +175,28 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 13,
   },
+  payPalOneClickTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'guestCheckout',
+      },
+      {
+        id: 'payPal',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    seed: 8,
+    optimizeId: 'xxx',
+  },
 };
