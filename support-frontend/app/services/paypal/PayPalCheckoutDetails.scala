@@ -13,7 +13,7 @@ case class PayPalUserDetails(
 
 case class PayPalCheckoutDetails(
   baid: String,
-  user: PayPalUserDetails
+  user: Option[PayPalUserDetails]
 )
 
 import io.circe.Encoder

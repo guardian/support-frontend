@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPaymentWithShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
@@ -71,7 +71,7 @@ function mapStateToProps(state: CheckoutState, ownProps) {
 
 function mapDispatchToProps() {
   return {
-    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentWithShipping,
     onPayPalCheckoutCompleted: (payPalCheckoutDetails: PayPalCheckoutDetails) =>
       (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
         updateStore(dispatch, payPalCheckoutDetails.user);

@@ -96,6 +96,7 @@ const setupRecurringPayPalPayment = (
       amount,
       billingPeriod,
       currency,
+      requireShippingAddress: false,
     };
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
@@ -122,6 +123,7 @@ const setupSubscriptionPayPalPayment = (
   csrf: CsrfState,
   amount: number,
   billingPeriod: BillingPeriod,
+  requireShippingAddress: boolean,
 ) =>
   (): void => {
     const csrfToken = csrf.token;
@@ -130,6 +132,7 @@ const setupSubscriptionPayPalPayment = (
       amount,
       billingPeriod,
       currency,
+      requireShippingAddress,
     };
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
@@ -145,6 +148,24 @@ const setupSubscriptionPayPalPayment = (
         reject(err);
       });
   };
+
+const setupSubscriptionPayPalPaymentNoShipping = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: CsrfState,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) => setupSubscriptionPayPalPayment(resolve, reject, currency, csrf, amount, billingPeriod, false);
+
+const setupSubscriptionPayPalPaymentWithShipping = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: CsrfState,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) => setupSubscriptionPayPalPayment(resolve, reject, currency, csrf, amount, billingPeriod, true);
 
 function setupPayment(
   currencyId: IsoCurrency,
@@ -243,6 +264,7 @@ export {
   showPayPal,
   loadPayPalRecurring,
   payPalRequestData,
-  setupSubscriptionPayPalPayment,
+  setupSubscriptionPayPalPaymentNoShipping,
   setupRecurringPayPalPayment,
+  setupSubscriptionPayPalPaymentWithShipping,
 };

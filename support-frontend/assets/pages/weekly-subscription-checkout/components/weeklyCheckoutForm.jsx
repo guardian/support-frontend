@@ -69,7 +69,6 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -82,6 +81,7 @@ import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 
 // ----- Styles ----- //
@@ -159,7 +159,7 @@ function mapDispatchToProps() {
         trackSubmitAttempt(PayPal, GuardianWeekly, NoProductOptions);
       }
     },
-    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
   };
 }
 

@@ -27,7 +27,7 @@ import {
   formActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { signOut } from 'helpers/user/user';
 import GridImage from 'components/gridImage/gridImage';
@@ -137,7 +137,7 @@ function mapDispatchToProps() {
         trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
       }
     },
-    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
     signOut,
   };
 }

@@ -60,7 +60,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
 
   // Takes an NVP response and retrieves a given parameter as a string.
   private def retrieveNVPParam(response: QueryString, paramName: String) =
-    response.paramMap(paramName).headOption match {
+    response.paramMap.getOrElse(paramName, Nil).headOption match {
       case None =>
         SafeLogger.warn(s"Parameter $paramName was missing from the NVP response - $response")
         None
@@ -80,6 +80,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
 
   // Sets up a payment by contacting PayPal and returns the token.
   def retrieveToken(returnUrl: String, cancelUrl: String)(billingDetails: PayPalBillingDetails): Future[Option[String]] = {
+    val noShipping = if(billingDetails.requireShippingAddress) "0" else "1"
     val paymentParams = Map(
       "METHOD" -> "SetExpressCheckout",
       "PAYMENTREQUEST_0_PAYMENTACTION" -> "SALE",
@@ -91,7 +92,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
       "RETURNURL" -> returnUrl,
       "CANCELURL" -> cancelUrl,
       "BILLINGTYPE" -> "MerchantInitiatedBilling",
-      "NOSHIPPING" -> "0"
+      "NOSHIPPING" -> noShipping
     )
 
     nvpRequest(paymentParams).map { resp =>
@@ -100,12 +101,16 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   }
 
   // Sets up a payment by contacting PayPal and also fetches the users details.
-  def createAgreementAndRetrieveUser(token: Token): Future[Option[PayPalCheckoutDetails]] = {
-    for {
-      baid <- OptionT(createBillingAgreement(token))
-      userDetails <- OptionT(retrieveUserInformation(token))
-    } yield PayPalCheckoutDetails(baid, userDetails)
-  }.value
+  def createAgreementAndRetrieveUser(token: Token): Future[Option[PayPalCheckoutDetails]] =
+    createBillingAgreement(token).flatMap(
+      maybeBaid =>
+      retrieveUserInformation(token).map(maybeUserDetails =>
+        maybeBaid match {
+          case Some(baid) => Some(PayPalCheckoutDetails(baid, maybeUserDetails))
+          case _ => None
+        }
+      )
+    )
 
   def retrieveUserInformation(token: Token): Future[Option[PayPalUserDetails]] = {
     val paymentParams = Map(
@@ -128,8 +133,6 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
       )
     }
   }
-
-
 
   // Sends a request to PayPal to create billing agreement and returns BAID.
   def createBillingAgreement(token: Token): Future[Option[String]] = {
