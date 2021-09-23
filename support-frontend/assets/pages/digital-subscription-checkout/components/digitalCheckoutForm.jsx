@@ -156,7 +156,8 @@ function DigitalCheckoutForm(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
   const paymentMethods = supportedPaymentMethods(props.currencyId, props.country);
-  const isUsingGuestCheckout = true; // props.participations.subscriptionsGuestCheckoutTest === 'variant';
+  const isUsingGuestCheckout = props.participations.payPalOneClickTest === 'payPal' ||
+    props.participations.payPalOneClickTest === 'guestCheckout';
 
   return (
     <Content>

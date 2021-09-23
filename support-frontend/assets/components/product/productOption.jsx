@@ -10,7 +10,7 @@ import { headline, textSans } from '@guardian/src-foundations/typography';
 import { from, between, until } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
+import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
@@ -200,7 +200,6 @@ function ProductOption(props: Product) {
 
   const productOptionButtonHeight = props.showPayPalButton && css`
     ${from.tablet} {
-      width: 330px;
       grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 108px;
     }
   `;
@@ -239,7 +238,7 @@ function ProductOption(props: Product) {
             {props.buttonCopy}
           </LinkButton>
         </ThemeProvider>
-        {props.showPayPalButton && props.billingPeriod && <PayPalHeroButton
+        {props.showPayPalButton && props.billingPeriod && <PayPalOneClickCheckoutButton
           billingPeriod={props.billingPeriod}
           trackingId="subs-landing-page-price-card"
           product={DigitalPack}

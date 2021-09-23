@@ -69,7 +69,6 @@ class DigitalSubscriptionController(
           window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
           window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
           window.guardian.orderIsAGift = $orderIsAGift
-          window.guardian.isTestUser = false
           window.guardian.payPalEnvironment = {
             default: "${payPalConfigProvider.get().payPalEnvironment}",
             uat: "${payPalConfigProvider.get(true).payPalEnvironment}"

@@ -8,7 +8,7 @@ import { brand } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { textSans, headline } from '@guardian/src-foundations/typography';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
-import PayPalHeroButton from 'components/paypalExpressButton/PayPalHeroButton';
+import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 
@@ -77,7 +77,7 @@ function ProductOptionSmall(props: ProductSmall) {
           Subscribe now {/* just for PayPal test */}
         </LinkButton>
       </ThemeProvider>
-      {props.showPayPalButton && <PayPalHeroButton
+      {props.showPayPalButton && <PayPalOneClickCheckoutButton
         billingPeriod={props.billingPeriod}
         product={DigitalPack}
         trackingId="subs-landing-page-hero"

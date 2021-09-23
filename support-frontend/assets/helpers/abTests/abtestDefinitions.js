@@ -26,7 +26,7 @@ export const pageUrlRegexes = {
       // Requires /subscribe/digital and /gift, allows /checkout before /gift, allows any query string
       giftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?\/gift(\?.*)?$/,
       // Requires /subscribe/digital, allows /checkout, allows any query string
-      nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
+      nonGiftLandingAndCheckoutWithGuest: /\/subscribe\/digital(\/checkout|\/checkout\/guest)?(\?.*)?$/,
       nonGiftLandingNotAusNotUS: /((uk|ca|eu|nz|int)\/subscribe\/digital(?!\/gift).?(\\?.*)?$)|(\/subscribe\/digital\/checkout?(\\?.*)?$)/,
     },
     paper: {

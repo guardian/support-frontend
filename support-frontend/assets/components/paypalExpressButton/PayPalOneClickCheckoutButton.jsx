@@ -109,7 +109,7 @@ const payPalButton = css`
   margin-top: ${space[3]}px;
 `;
 
-function PayPalHeroButton(props: PropTypes) {
+function PayPalOneClickCheckoutButton(props: PropTypes) {
   const submissionErrorHeading = 'Sorry there was a problem';
   const errorReason = props.submissionError && 'amazon_pay_fatal';
   return (
@@ -135,5 +135,5 @@ function PayPalHeroButton(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps())(PayPalHeroButton);
+export default connect(mapStateToProps, mapDispatchToProps())(PayPalOneClickCheckoutButton);
 

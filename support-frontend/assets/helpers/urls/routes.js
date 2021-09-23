@@ -20,7 +20,7 @@ const routes: {
   contributionsMarketingConfirm: '/contribute/marketing-confirm',
   payPalSetupPayment: '/paypal/setup-payment',
   payPalCreateAgreement: '/paypal/create-agreement',
-  payPalExpressCheckout: '/paypal/express-checkout',
+  payPalOneClickCheckout: '/paypal/one-click-checkout',
   directDebitCheckAccount: '/direct-debit/check-account',
   payPalRestReturnURL: '/paypal/rest/return',
   subscriptionCreate: '/subscribe/create',
