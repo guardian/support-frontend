@@ -14,6 +14,7 @@ import { billingPeriodFromContrib, getAmount } from '../../contributions';
 import type { Csrf } from '../../csrf/csrfReducer';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { type Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type { Option } from 'helpers/types/option';
 
 
 export type SetupPayPalRequestType = (
@@ -37,7 +38,7 @@ export type PayPalUserDetails = {
 
 export type PayPalCheckoutDetails = {
   baid: string,
-  user: PayPalUserDetails
+  user: Option<PayPalUserDetails>,
 }
 
 // ----- Functions ----- //

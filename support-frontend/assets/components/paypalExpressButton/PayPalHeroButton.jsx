@@ -22,6 +22,7 @@ import type {
 } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 type PropTypes = {
   onPayPalCheckoutCompleted: Function,
@@ -35,6 +36,8 @@ type PropTypes = {
   amount: number,
   trackingId: string,
   product: SubscriptionProduct,
+  submissionError: string,
+  wasClicked: boolean,
 }
 
 const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDetails) => {
@@ -66,6 +69,8 @@ function mapStateToProps(state: CheckoutState, ownProps) {
       state.common.internationalisation.countryId,
       ownProps.billingPeriod,
     ).price,
+    submissionError: state.page.checkout.submissionError,
+    wasClicked: state.page.checkout.billingPeriod === ownProps.billingPeriod,
   };
 }
 
@@ -74,7 +79,9 @@ function mapDispatchToProps() {
     setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentWithShipping,
     onPayPalCheckoutCompleted: (payPalCheckoutDetails: PayPalCheckoutDetails) =>
       (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
-        updateStore(dispatch, payPalCheckoutDetails.user);
+        if (payPalCheckoutDetails.user) {
+          updateStore(dispatch, payPalCheckoutDetails.user);
+        }
         onPaymentAuthorised(
           {
             paymentMethod: PayPal,
@@ -103,8 +110,14 @@ const payPalButton = css`
 `;
 
 function PayPalHeroButton(props: PropTypes) {
+  const submissionErrorHeading = 'Sorry there was a problem';
+  const errorReason = props.submissionError && 'amazon_pay_fatal';
   return (
     <div css={payPalButton}>
+      {props.wasClicked && <GeneralErrorMessage
+        errorReason={errorReason}
+        errorHeading={submissionErrorHeading}
+      />}
       <PayPalExpressButton
         onPayPalCheckoutCompleted={props.onPayPalCheckoutCompleted}
         csrf={props.csrf}
