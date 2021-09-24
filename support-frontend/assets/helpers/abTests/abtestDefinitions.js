@@ -149,7 +149,7 @@ export const tests: Tests = {
       },
     },
     canRun: () => !hasCsrQueryParam(),
-    isActive: true,
+    isActive: false,
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
     seed: 10,
