@@ -40,7 +40,6 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
-// import ComparisonTable from './components/comparison/comparisonTable';
 import InteractiveTable from 'components/interactiveTable/interactiveTable';
 import { headers, footer, getRows } from './components/comparison/interactiveTableContents';
 
