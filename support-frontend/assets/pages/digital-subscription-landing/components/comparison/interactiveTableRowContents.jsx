@@ -396,7 +396,7 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
             {isAustralia ?
               'Australia Weekend brings you the stories you need to understand the week' :
               'the UK Daily brings you the stories you need for the day'}. With a beginning and an end,
-            it’s an immersive, considered alternative to your never-ending news feed.
+            it’s an immersive, considered alternative to your never-ending news feed.{' '}
             {isAustralia ? 'The UK Daily' : 'Australia Weekend'}{' '}
             and one-off special Editions are also available for you to enjoy.
           </p>

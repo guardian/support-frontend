@@ -40,12 +40,13 @@ const tableRow = css`
     -ms-grid-columns: 1fr 72px 72px 60px;
     grid-template-columns: 1fr 72px 72px 60px;
   }
+`;
 
+const tableContentRow = css`
   :hover {
     background-color: ${sport[800]};
   }
 `;
-
 
 const tableHeaderRow = css`
   background-color: transparent;
@@ -232,7 +233,7 @@ export function InteractiveTableRow({
   }
 
   return (
-    <tr role="row" css={[tableRow, showDetails ? tableRowOpen : '']}>
+    <tr role="row" css={[tableRow, tableContentRow, showDetails ? tableRowOpen : '']}>
       {columns.map((column, index) => {
         if (column.isPrimary) {
           return (
