@@ -30,7 +30,7 @@ const tableRow = css`
   max-height: 72px;
   overflow: hidden;
   will-change: max-height;
-  transition: max-height ${transitions.medium};
+  transition: all ${transitions.medium};
 
   :not(:first-of-type) {
     margin-top: ${space[2]}px;
@@ -40,7 +40,12 @@ const tableRow = css`
     -ms-grid-columns: 1fr 72px 72px 60px;
     grid-template-columns: 1fr 72px 72px 60px;
   }
+
+  :hover {
+    background-color: ${sport[800]};
+  }
 `;
+
 
 const tableHeaderRow = css`
   background-color: transparent;
