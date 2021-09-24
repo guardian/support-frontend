@@ -13,7 +13,7 @@ import { GBPCountries, UnitedStates } from '../../internationalisation/countryGr
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 
 const { subsShowcaseAndDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
-const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckout } = digiSub;
+const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } = digiSub;
 
 jest.mock('ophan', () => ({
   record: () => null,
@@ -603,9 +603,10 @@ it('targetPage matching', () => {
   expect(targetPageMatches(withAcquisitionParams, subsShowcaseAndDigiSubPages)).toEqual(true);
   expect(targetPageMatches('/us/subscribe/digital?test=blah', subsShowcaseAndDigiSubPages)).toEqual(true);
   // Test nonGiftLandingAndCheckout regex
-  expect(targetPageMatches('/uk/subscribe/digital', nonGiftLandingAndCheckout)).toEqual(true);
-  expect(targetPageMatches('/subscribe/digital/checkout', nonGiftLandingAndCheckout)).toEqual(true);
-  expect(targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingAndCheckout)).toEqual(false);
+  expect(targetPageMatches('/uk/subscribe/digital', nonGiftLandingAndCheckoutWithGuest)).toEqual(true);
+  expect(targetPageMatches('/subscribe/digital/checkout', nonGiftLandingAndCheckoutWithGuest)).toEqual(true);
+  expect(targetPageMatches('/subscribe/digital/checkout/guest', nonGiftLandingAndCheckoutWithGuest)).toEqual(true);
+  expect(targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingAndCheckoutWithGuest)).toEqual(false);
   // Test nonGiftLandingNotAusNotUS regex
   expect(targetPageMatches('/uk/subscribe/digital', nonGiftLandingNotAusNotUS)).toEqual(true);
   expect(targetPageMatches('/subscribe/digital/checkout', nonGiftLandingNotAusNotUS)).toEqual(true);
