@@ -100,7 +100,7 @@ function getPaymentMethods(
       return [Stripe, PayPal, AmazonPay];
     }
     return [Stripe, PayPal];
-  } else if (contributionType !== 'ONE_OFF' && countryGroupId === 'EURCountries' && getQueryParameter('sepa') === 'true') {
+  } else if (contributionType !== 'ONE_OFF' && countryGroupId === 'EURCountries') {
     return [Sepa, Stripe, PayPal];
   }
   return [Stripe, PayPal];
