@@ -119,7 +119,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     )
 
     nvpRequest(paymentParams).map { resp =>
-      for {
+      val userDetails = for {
         firstName <- retrieveNVPParam(resp, "FIRSTNAME")
         lastName <- retrieveNVPParam(resp, "LASTNAME")
         email <- retrieveNVPParam(resp, "EMAIL")
@@ -131,6 +131,9 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
       } yield PayPalUserDetails(
         firstName, lastName, email, shipToStreet, shipToCity, shipToState, shipToZip, shipToCountryCode
       )
+      if (userDetails.isEmpty)
+        SafeLogger.error(scrub"Unable to retrieve user details from PayPal with token $token, nvp response was $resp")
+      userDetails
     }
   }
 
