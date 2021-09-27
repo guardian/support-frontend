@@ -31,7 +31,7 @@ export type PayPalUserDetails = {
   email: string,
   shipToStreet: string,
   shipToCity: string,
-  shipToState: string,
+  shipToState: Option<string>,
   shipToZip: string,
   shipToCountryCode: string,
 }

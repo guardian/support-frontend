@@ -6,7 +6,7 @@ case class PayPalUserDetails(
   email: String,
   shipToStreet: String,
   shipToCity: String,
-  shipToState: String,
+  shipToState: Option[String],
   shipToZip: String,
   shipToCountryCode: String
 )

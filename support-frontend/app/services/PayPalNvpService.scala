@@ -125,7 +125,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
         email <- retrieveNVPParam(resp, "EMAIL")
         shipToStreet <- retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOSTREET")
         shipToCity <- retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOCITY")
-        shipToState <- retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOSTATE")
+        shipToState = retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOSTATE") // State/County may not be present
         shipToZip <- retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOZIP")
         shipToCountryCode <- retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE")
       } yield PayPalUserDetails(

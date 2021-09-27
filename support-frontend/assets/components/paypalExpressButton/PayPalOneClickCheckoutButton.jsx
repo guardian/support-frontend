@@ -51,7 +51,9 @@ const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDe
   dispatch(setLastName(payPalUserDetails.lastName));
   dispatch(setAddressLineOne(payPalUserDetails.shipToStreet));
   dispatch(setTownCity(payPalUserDetails.shipToCity));
-  dispatch(setState(payPalUserDetails.shipToState));
+  if (payPalUserDetails.shipToState) {
+    dispatch(setState(payPalUserDetails.shipToState));
+  }
   dispatch(setPostcode(payPalUserDetails.shipToZip));
   // $FlowIgnore stoopid flow
   dispatch(setCountry(payPalUserDetails.shipToCountryCode));
