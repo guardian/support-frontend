@@ -53,8 +53,10 @@ const priceCopyStyles = css`
 
 const titleCopyStyles = css`
   ${headline.xxsmall({ fontWeight: 'bold' })}
-  text-transform: capitalize;
   margin-bottom: 4px;
+  ::first-letter{
+    text-transform: capitalize;
+  }
 `;
 
 const buttonStyles = css`
