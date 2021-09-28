@@ -102,15 +102,10 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
 
   // Sets up a payment by contacting PayPal and also fetches the users details.
   def createAgreementAndRetrieveUser(token: Token): Future[Option[PayPalCheckoutDetails]] =
-    createBillingAgreement(token).flatMap(
-      maybeBaid =>
-      retrieveUserInformation(token).map(maybeUserDetails =>
-        maybeBaid match {
-          case Some(baid) => Some(PayPalCheckoutDetails(baid, maybeUserDetails))
-          case _ => None
-        }
-      )
-    )
+    for {
+      maybeBaid <- createBillingAgreement(token)
+      maybeUserDetails <- retrieveUserInformation(token)
+    } yield maybeBaid.map(baid => PayPalCheckoutDetails(baid, maybeUserDetails))
 
   def retrieveUserInformation(token: Token): Future[Option[PayPalUserDetails]] = {
     val paymentParams = Map(
@@ -119,7 +114,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     )
 
     nvpRequest(paymentParams).map { resp =>
-      val userDetails = for {
+      for {
         firstName <- retrieveNVPParam(resp, "FIRSTNAME")
         lastName <- retrieveNVPParam(resp, "LASTNAME")
         email <- retrieveNVPParam(resp, "EMAIL")
@@ -131,9 +126,6 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
       } yield PayPalUserDetails(
         firstName, lastName, email, shipToStreet, shipToCity, shipToState, shipToZip, shipToCountryCode
       )
-      if (userDetails.isEmpty)
-        SafeLogger.error(scrub"Unable to retrieve user details from PayPal with token $token, nvp response was $resp")
-      userDetails
     }
   }
 
