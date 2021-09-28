@@ -10,6 +10,10 @@ import { headline, textSans } from '@guardian/src-foundations/typography';
 import { from, between, until } from '@guardian/src-foundations/mq';
 import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 
 export type Product = {
   title: string,
@@ -23,6 +27,8 @@ export type Product = {
   onView: Function,
   label?: string,
   cssOverrides?: string,
+  showPayPalButton?: boolean,
+  billingPeriod?: BillingPeriod,
 }
 
 const productOption = css`
@@ -124,6 +130,9 @@ const productOptionHighlight = css`
 `;
 
 const buttonDiv = css`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   grid-area: button;
   padding: ${space[3]}px 0;
   ${between.mobileLandscape.and.tablet} {
@@ -189,8 +198,17 @@ function ProductOption(props: Product) {
     }
   `;
 
+  const productOptionButtonHeight = props.showPayPalButton && css`
+    ${from.tablet} {
+      grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 108px;
+    }
+  `;
+
   return (
-    <div ref={setElementToObserve} css={[productOption, props.cssOverrides, productOptionMargin]}>
+    <div
+      ref={setElementToObserve}
+      css={[productOption, props.cssOverrides, productOptionMargin, productOptionButtonHeight]}
+    >
       <div css={productOptionVerticalLine}>
         <h3 css={[productOptionTitle, productOptionUnderline]}>{props.title}</h3>
         {props.label && <span css={productOptionHighlight}>{props.label}</span>}
@@ -220,6 +238,11 @@ function ProductOption(props: Product) {
             {props.buttonCopy}
           </LinkButton>
         </ThemeProvider>
+        {props.showPayPalButton && props.billingPeriod && <PayPalOneClickCheckoutButton
+          billingPeriod={props.billingPeriod}
+          trackingId="one-click-checkout-price-card"
+          product={DigitalPack}
+        />}
       </div>
     </div>
   );
@@ -230,6 +253,8 @@ ProductOption.defaultProps = {
   label: '',
   offerCopy: '',
   cssOverrides: '',
+  showPayPalButton: false,
+  billingPeriod: Monthly,
 };
 
 export default ProductOption;

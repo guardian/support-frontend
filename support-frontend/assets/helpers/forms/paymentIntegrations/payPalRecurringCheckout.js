@@ -12,8 +12,9 @@ import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActi
 import { PayPal } from 'helpers/forms/paymentMethods';
 import { billingPeriodFromContrib, getAmount } from '../../contributions';
 import type { Csrf } from '../../csrf/csrfReducer';
-import type { State } from '../../../pages/contributions-landing/contributionsLandingReducer';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { type Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type { Option } from 'helpers/types/option';
 
 
 export type SetupPayPalRequestType = (
@@ -23,6 +24,22 @@ export type SetupPayPalRequestType = (
   amount: number,
   billingPeriod: BillingPeriod,
 ) => void
+
+export type PayPalUserDetails = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  shipToStreet: string,
+  shipToCity: string,
+  shipToState: Option<string>,
+  shipToZip: string,
+  shipToCountryCode: string,
+}
+
+export type PayPalCheckoutDetails = {
+  baid: string,
+  user: Option<PayPalUserDetails>,
+}
 
 // ----- Functions ----- //
 
@@ -80,6 +97,7 @@ const setupRecurringPayPalPayment = (
       amount,
       billingPeriod,
       currency,
+      requireShippingAddress: false,
     };
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
@@ -106,6 +124,7 @@ const setupSubscriptionPayPalPayment = (
   csrf: CsrfState,
   amount: number,
   billingPeriod: BillingPeriod,
+  requireShippingAddress: boolean,
 ) =>
   (): void => {
     const csrfToken = csrf.token;
@@ -114,6 +133,7 @@ const setupSubscriptionPayPalPayment = (
       amount,
       billingPeriod,
       currency,
+      requireShippingAddress,
     };
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
@@ -129,6 +149,24 @@ const setupSubscriptionPayPalPayment = (
         reject(err);
       });
   };
+
+const setupSubscriptionPayPalPaymentNoShipping = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: CsrfState,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) => setupSubscriptionPayPalPayment(resolve, reject, currency, csrf, amount, billingPeriod, false);
+
+const setupSubscriptionPayPalPaymentWithShipping = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: CsrfState,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) => setupSubscriptionPayPalPayment(resolve, reject, currency, csrf, amount, billingPeriod, true);
 
 function setupPayment(
   currencyId: IsoCurrency,
@@ -150,15 +188,14 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
   const body = { token: payPalData.paymentToken };
   const csrfToken = csrf.token;
 
-  return fetch(routes.payPalCreateAgreement, payPalRequestData(body, csrfToken || ''))
+  return fetch(routes.payPalOneClickCheckout, payPalRequestData(body, csrfToken || ''))
     .then(response => response.json());
 }
-
 
 function getPayPalOptions(
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  onPaymentAuthorisation: string => void,
+  onPayPalCheckoutCompleted: PayPalCheckoutDetails => void,
   canOpen: () => boolean,
   onClick: () => void,
   formClassName: string,
@@ -180,6 +217,7 @@ function getPayPalOptions(
       color: 'blue',
       size: 'responsive',
       label: 'pay',
+      tagline: false,
       layout: 'horizontal',
       fundingicons: false,
     },
@@ -209,8 +247,8 @@ function getPayPalOptions(
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {
       createAgreement(data, csrf)
-        .then((baid: Object) => {
-          onPaymentAuthorisation(baid.token);
+        .then((payPalCheckoutDetails: Object) => {
+          onPayPalCheckoutCompleted(payPalCheckoutDetails);
         })
         .catch((err) => {
           logException(err.message);
@@ -227,6 +265,7 @@ export {
   showPayPal,
   loadPayPalRecurring,
   payPalRequestData,
-  setupSubscriptionPayPalPayment,
+  setupSubscriptionPayPalPaymentNoShipping,
   setupRecurringPayPalPayment,
+  setupSubscriptionPayPalPaymentWithShipping,
 };

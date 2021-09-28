@@ -26,7 +26,7 @@ export const pageUrlRegexes = {
       // Requires /subscribe/digital and /gift, allows /checkout before /gift, allows any query string
       giftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?\/gift(\?.*)?$/,
       // Requires /subscribe/digital, allows /checkout, allows any query string
-      nonGiftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?(\?.*)?$/,
+      nonGiftLandingAndCheckoutWithGuest: /\/subscribe\/digital(\/checkout|\/checkout\/guest)?(\?.*)?$/,
       nonGiftLandingNotAusNotUS: /((uk|ca|eu|nz|int)\/subscribe\/digital(?!\/gift).?(\\?.*)?$)|(\/subscribe\/digital\/checkout?(\\?.*)?$)/,
     },
     paper: {
@@ -129,7 +129,7 @@ export const tests: Tests = {
     },
     isActive: false,
     referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckout,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
     seed: 10,
     optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
   },
@@ -174,5 +174,29 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 13,
+  },
+  payPalOneClickTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'guestCheckout',
+      },
+      {
+        id: 'payPal',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
+    seed: 11,
+    optimizeId: 'vkNaA-56TTeQBN8DB5YyZw',
   },
 };

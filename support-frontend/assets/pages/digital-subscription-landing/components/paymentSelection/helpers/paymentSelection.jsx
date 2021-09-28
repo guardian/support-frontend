@@ -28,7 +28,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { getFirstValidPrice, isNumeric } from 'helpers/productPrice/productPrices';
-import { getPriceDescription, getAdverbialSubscriptionDescription } from 'helpers/productPrice/priceDescriptions';
+import { getAdverbialSubscriptionDescription, getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 
 import type { Product as ProductOptionType } from 'components/product/productOption';
 
@@ -121,6 +121,7 @@ const getHeroCtaProps = (
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   isUsingGuestCheckout: boolean,
+  showPayPalButton: boolean,
 ): ProductSmall[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -155,6 +156,8 @@ const getHeroCtaProps = (
       priceCopy: getPriceDescription(productPrice, digitalBillingPeriod, false, false),
       offerCopy,
       buttonCopy: getAdverbialSubscriptionDescription(productPrice, digitalBillingPeriod),
+      billingPeriod: digitalBillingPeriod,
+      showPayPalButton,
     };
   };
 
@@ -174,6 +177,7 @@ export type PaymentSelectionPropTypes = {|
   productPrices: ProductPrices;
   orderIsAGift: boolean;
   isUsingGuestCheckout: boolean;
+  showPayPalButton: boolean;
 |}
 
 // state
@@ -183,6 +187,7 @@ const getPaymentOptions = ({
   productPrices,
   orderIsAGift,
   isUsingGuestCheckout,
+  showPayPalButton,
 }: PaymentSelectionPropTypes): ProductOptionType[] => {
   const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -226,6 +231,8 @@ const getPaymentOptions = ({
         offerCopy: '',
         label: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].label,
         buttonCopy: 'Give this gift',
+        billingPeriod,
+        showPayPalButton,
       } :
       {
         title: BILLING_PERIOD[digitalBillingPeriod].title,
@@ -236,7 +243,9 @@ const getPaymentOptions = ({
         priceCopy: BILLING_PERIOD[digitalBillingPeriod].salesCopy(currencyId, fullPrice, promotionalPrice),
         offerCopy,
         label: BILLING_PERIOD[digitalBillingPeriod].label,
-        buttonCopy: 'Start free trial',
+        buttonCopy: 'Subscribe now',
+        billingPeriod,
+        showPayPalButton,
       };
 
   };

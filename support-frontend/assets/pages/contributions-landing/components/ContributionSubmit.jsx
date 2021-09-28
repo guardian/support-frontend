@@ -22,6 +22,7 @@ import Button from 'components/button/button';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
 import type { AmazonPayData } from '../contributionsLandingReducer';
+import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 // ----- Types ----- //
 
@@ -89,6 +90,11 @@ function ContributionSubmit(props: PropTypes) {
   // if all payment methods are switched off, do not display the button
   const formClassName = 'form--contribution';
   const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
+  const onPayPalCheckoutCompleted = (payPalCheckoutDetails: PayPalCheckoutDetails) =>
+    props.onPaymentAuthorisation({
+      paymentMethod: PayPal,
+      token: payPalCheckoutDetails.baid,
+    });
 
   const submitButtonCopy = getContributeButtonCopyWithPaymentType(
     props.contributionType,
@@ -117,7 +123,7 @@ function ContributionSubmit(props: PropTypes) {
         className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
       >
         <PayPalExpressButton
-          onPaymentAuthorisation={props.onPaymentAuthorisation}
+          onPayPalCheckoutCompleted={onPayPalCheckoutCompleted}
           csrf={props.csrf}
           currencyId={props.currencyId}
           hasLoaded={props.payPalHasLoaded}

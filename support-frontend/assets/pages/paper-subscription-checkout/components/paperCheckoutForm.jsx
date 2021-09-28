@@ -58,7 +58,6 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import {
   paperProductsWithDigital,
@@ -83,6 +82,7 @@ import { getQueryParameter } from 'helpers/urls/url';
 import type { Participations } from 'helpers/abTests/abtest';
 import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
 import { hasCsrQueryParam } from 'components/csr/csrMode';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 const marginBottom = css`
   margin-bottom: ${space[6]}px;
@@ -176,7 +176,7 @@ function mapDispatchToProps() {
         trackSubmitAttempt(PayPal, Paper, state.page.checkout.productOption);
       }
     },
-    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
     signOut,
   };
 }

@@ -37,7 +37,7 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) =>
             return -1;
           }
           return 0;
-        }).map(product => (
+        }).map((product: Product) => (
           <ProductOption
             cssOverrides={product.label ? productOverrideWithLabel : productOverride}
             title={product.title}
@@ -49,6 +49,8 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) =>
             onClick={product.onClick}
             onView={product.onView}
             label={product.label}
+            showPayPalButton={product.showPayPalButton}
+            billingPeriod={product.billingPeriod}
           />
         )))
       }
@@ -60,6 +62,7 @@ function DigitalPaymentSelection({
   productPrices,
   orderIsAGift,
   isUsingGuestCheckout,
+  showPayPalButton,
 }: PaymentSelectionPropTypes) {
   const paymentOptions = getPaymentOptions({
     countryGroupId,
@@ -67,6 +70,7 @@ function DigitalPaymentSelection({
     productPrices,
     orderIsAGift,
     isUsingGuestCheckout,
+    showPayPalButton,
   });
 
   return <PaymentSelection paymentOptions={paymentOptions} />;
