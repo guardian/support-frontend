@@ -240,7 +240,7 @@ function ProductOption(props: Product) {
         </ThemeProvider>
         {props.showPayPalButton && props.billingPeriod && <PayPalOneClickCheckoutButton
           billingPeriod={props.billingPeriod}
-          trackingId="subs-landing-page-price-card"
+          trackingId="one-click-checkout-price-card"
           product={DigitalPack}
         />}
       </div>

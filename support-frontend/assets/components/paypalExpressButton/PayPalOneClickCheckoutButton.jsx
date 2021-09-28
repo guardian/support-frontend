@@ -127,6 +127,7 @@ function PayPalOneClickCheckoutButton(props: PropTypes) {
         hasLoaded={props.hasLoaded}
         canOpen={() => true}
         onClick={() => props.onClick(props.billingPeriod, props.trackingId, props.product)}
+        formClassName="form--contribution"
         isTestUser={props.isTestUser}
         setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
         amount={props.amount}

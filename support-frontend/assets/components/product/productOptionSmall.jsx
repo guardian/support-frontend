@@ -82,7 +82,7 @@ function ProductOptionSmall(props: ProductSmall) {
       {props.showPayPalButton && <PayPalOneClickCheckoutButton
         billingPeriod={props.billingPeriod}
         product={DigitalPack}
-        trackingId="subs-landing-page-hero"
+        trackingId="one-click-checkout-hero"
       />}
       <p css={priceCopyStyles}>{props.priceCopy}</p>
     </span>
