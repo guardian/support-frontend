@@ -182,7 +182,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
     props.setBillingCountry(props.deliveryCountry);
   };
   const paymentMethods = supportedPaymentMethods(props.currencyId, props.billingCountry);
-  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant';
+  const isUsingGuestCheckout = false;
 
   return (
     <Content modifierClasses={['your-details']}>
