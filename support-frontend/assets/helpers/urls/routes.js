@@ -75,7 +75,7 @@ function paperCheckoutUrl(
   productOptions: ProductOptions,
   promoCode?: Option<string>,
 ) {
-  const url = `${getOrigin()}/subscribe/paper/checkout/guest`;
+  const url = `${getOrigin()}/subscribe/paper/checkout`;
 
   return addQueryParamsToURL(url, { promoCode, fulfilmentOption, productOptions });
 }
