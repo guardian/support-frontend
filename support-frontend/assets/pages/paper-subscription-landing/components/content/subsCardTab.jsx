@@ -55,10 +55,14 @@ export const accordionContainer = css`
 
 // ----- Content ----- //
 
-const LinkToImovo = ({
+const LinkToInfo = ({
   trackingId,
+  url,
+  copy,
 }: {
-  trackingId: string
+  trackingId: string,
+  url: string,
+  copy: string,
 }) => {
   const trackClick = sendTrackingEventsOnClick({
     id: `${trackingId}_retailer-link`,
@@ -66,7 +70,7 @@ const LinkToImovo = ({
     componentType: 'ACQUISITIONS_OTHER',
   });
 
-  return <a onClick={trackClick} href="https://imovo.org/guardianstorefinder" target="_blank" rel="noopener noreferrer">Find your nearest participating retailer</a>;
+  return <a onClick={trackClick} href={url} target="_blank" rel="noopener noreferrer">{copy}</a>;
 };
 
 const collectonAccordionTrackingId = 'Paper_Collection-tab_Collection-accordion';
@@ -90,7 +94,7 @@ export const SubsCardFaqBlock = () => (
             Present your card to a newsagent each time you collect the newspaper. The newsagent will scan your
             card and will be reimbursed for each transaction automatically.
             </p>
-            <p><LinkToImovo trackingId={collectonAccordionTrackingId} /></p>
+            <p><LinkToInfo trackingId={collectonAccordionTrackingId} url="https://imovo.org/guardianstorefinder" copy="Find your nearest participating retailer" /></p>
           </>
           </TabAccordionRow>
           <TabAccordionRow trackingId={deliveryAccordionTrackingId} label="Delivery from your retailer">
@@ -99,7 +103,7 @@ export const SubsCardFaqBlock = () => (
             Simply give your preferred store / retailer the barcode printed on your
             Home Delivery Letter.
             </p>
-            <p><LinkToImovo trackingId={deliveryAccordionTrackingId} /></p>
+            <p><LinkToInfo trackingId={deliveryAccordionTrackingId} url="https://www.delivermynewspaper.co.uk" copy="Find your nearest delivery retailer" /></p>
           </>
           </TabAccordionRow>
         </Accordion>
