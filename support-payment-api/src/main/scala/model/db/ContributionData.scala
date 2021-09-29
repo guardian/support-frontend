@@ -9,10 +9,9 @@ import com.amazon.pay.response.model.AuthorizationDetails
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
-import model.PaymentProvider.{AmazonPay, SubscribeWithGoogle}
+import model.PaymentProvider.AmazonPay
 import model.acquisition.StripeCharge
 import model.paypal.PaypalApiError
-import model.subscribewithgoogle.GoogleRecordPayment
 import model.{Currency, PaymentProvider, PaymentStatus}
 
 import scala.util.Try
@@ -95,23 +94,6 @@ object ContributionData extends StrictLogging {
       amount = amount,
       countryCode = Some(countryCode),
       countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment)
-    )
-  }
-
-
-  def fromSubscribeWithGoogle(googleRecordPayment: GoogleRecordPayment, identityId: Option[Long]): ContributionData = {
-    ContributionData(
-      paymentProvider = SubscribeWithGoogle,
-      paymentStatus = PaymentStatus.Paid,
-      paymentId = googleRecordPayment.paymentId,
-      identityId = identityId,
-      email = googleRecordPayment.email,
-      // Time at which the object was created. Measured in seconds since the Unix epoch.
-      created = LocalDateTime.ofInstant(Instant.ofEpochMilli(googleRecordPayment.receivedTimestamp), ZoneOffset.UTC),
-      currency = Currency.withNameInsensitive(googleRecordPayment.currency),
-      amount = googleRecordPayment.amount,
-      countryCode = Some(googleRecordPayment.countryCode),
-      countrySubdivisionCode = None
     )
   }
 

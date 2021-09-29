@@ -2,7 +2,7 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
-import backend.{GoCardlessBackend, PaypalBackend, StripeBackend, SubscribeWithGoogleBackend}
+import backend.{GoCardlessBackend, PaypalBackend, StripeBackend}
 import cats.data.EitherT
 import cats.implicits._
 import com.gocardless.errors.GoCardlessApiException
@@ -60,9 +60,6 @@ class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: Applic
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
-
-  val subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
-    mock[RequestBasedProvider[SubscribeWithGoogleBackend]]
 
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
