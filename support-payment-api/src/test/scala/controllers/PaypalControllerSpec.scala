@@ -69,9 +69,6 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend] =
     mock[RequestBasedProvider[GoCardlessBackend]]
 
-  val subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
-    mock[RequestBasedProvider[SubscribeWithGoogleBackend]]
-
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
   override def router: Router = new Routes(
