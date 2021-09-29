@@ -87,7 +87,7 @@ const setUserTypeFromIdentityResponse =
     };
 
 const formActionCreators = {
-  setTitle: (title: string): Action => ({ type: 'SET_TITLE', title }),
+  setTitle: (title: string): Action => ({ type: 'SET_TITLE', title: (title !== '' ? title: null) }),
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
   setEmail: (email: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_EMAIL', email }))),
