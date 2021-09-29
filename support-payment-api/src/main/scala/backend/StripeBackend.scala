@@ -8,6 +8,7 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
@@ -34,7 +35,7 @@ class StripeBackend(
   stripeService: StripeService,
   val databaseService: ContributionsStoreService,
   identityService: IdentityService,
-  val ophanService: AnalyticsService,
+  val gaService: GoogleAnalyticsService,
   val bigQueryService: BigQueryService,
   val acquisitionsStreamService: AcquisitionsStreamService,
   emailService: EmailService,
@@ -222,11 +223,12 @@ class StripeBackend(
     )
 
     val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
+    val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
     track(
-      legacyAcquisition = stripeAcquisition,
       acquisition = AcquisitionDataRowBuilder.buildFromStripe(stripeAcquisition, contributionData),
-      contributionData
+      contributionData,
+      gaData
     )
   }
 
@@ -267,7 +269,7 @@ object StripeBackend {
     stripeService: StripeService,
     databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    ophanService: AnalyticsService,
+    gaService: GoogleAnalyticsService,
     bigQueryService: BigQueryService,
     acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
@@ -282,7 +284,7 @@ object StripeBackend {
       stripeService,
       databaseService,
       identityService,
-      ophanService,
+      gaService,
       bigQueryService,
       acquisitionsStreamService,
       emailService,
@@ -311,7 +313,7 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      services.AnalyticsService(configLoader, env),
+      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],
