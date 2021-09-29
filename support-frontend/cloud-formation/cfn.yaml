@@ -556,10 +556,10 @@ Resources:
         - ' '
         - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
-          - 'support-frontend create subscription call failed'
+          - 'support-frontend create recurring product call failed'
       AlarmDescription: !Join
         - ' '
-        - - 'Impact - Someone pressed buy on a subscription but received an error.'
+        - - 'Impact - Someone pressed buy on a recurring product but received an error.'
           - !FindInMap [ Constants, Alarm, Process ]
       MetricName: ServerSideCreateFailure
       Namespace: support-frontend
