@@ -14,9 +14,7 @@ import org.scalatest.wordspec.AsyncWordSpecLike
 
 class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
 
-  implicit val client: OkHttpClient = new OkHttpClient()
-
-  val service = new GoogleAnalyticsServiceImpl
+  val service = new GoogleAnalyticsServiceImpl(new OkHttpClient())
 
   def buildAcquisition(
     product: AcquisitionProduct,
@@ -166,7 +164,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
 
     //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
     "submit a request" ignore {
-      service.submit(weekly, gaData).fold(
+      service.submit(weekly, gaData, 5).fold(
         serviceError => {
           logger.error(s"$serviceError")
           fail()

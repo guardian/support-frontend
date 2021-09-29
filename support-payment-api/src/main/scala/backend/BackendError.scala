@@ -6,7 +6,6 @@ import model.DefaultThreadPool
 import services.{ContributionsStoreService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
 import cats.implicits._
-import com.gu.support.acquisitions.ga.models.GAError
 import model.amazonpay.{AmazonPayApiError => AmazonPayError}
 import model.stripe.{StripeApiError => StripeError}
 

@@ -10,6 +10,6 @@ object GoogleAnalyticsServiceBuilder {
       MockGoogleAnalyticsService
     } else {
 
-      new GoogleAnalyticsServiceImpl()(RequestRunners.client)
+      new GoogleAnalyticsServiceImpl(RequestRunners.client)
     }
 }

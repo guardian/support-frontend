@@ -28,7 +28,7 @@ import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 
 class StripeBackend(
