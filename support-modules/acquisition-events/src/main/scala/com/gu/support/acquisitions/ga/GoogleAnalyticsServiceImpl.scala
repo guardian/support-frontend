@@ -3,12 +3,13 @@ package com.gu.support.acquisitions.ga
 import cats.data.EitherT
 import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
 import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService._
+import com.gu.support.acquisitions.ga.GoogleAnalyticsServiceImpl._
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAError}
 import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, Paper, RecurringContribution}
 import com.gu.support.acquisitions.models.{AbTest, AcquisitionDataRow, AcquisitionProduct, PrintOptions}
 import com.gu.support.acquisitions.models.PrintProduct._
+import com.gu.support.acquisitions.utils.Retry
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{Call, Callback, HttpUrl, OkHttpClient, Request, RequestBody, Response}
 
@@ -18,7 +19,7 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
 
-object GoogleAnalyticsService {
+object GoogleAnalyticsServiceImpl {
   val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+\.\d+)".r
 
   // e.g. GUARDIAN_WEEKLY becomes GuardianWeekly
@@ -28,7 +29,16 @@ object GoogleAnalyticsService {
     .mkString("")
 }
 
-class GoogleAnalyticsService(implicit client: OkHttpClient) extends LazyLogging {
+trait GoogleAnalyticsService {
+  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit]
+}
+
+object MockGoogleAnalyticsService extends GoogleAnalyticsService {
+  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit] =
+    EitherT.fromEither(Right(()))
+}
+
+class GoogleAnalyticsServiceImpl()(implicit client: OkHttpClient) extends GoogleAnalyticsService with LazyLogging {
   private[ga] val gaPropertyId: String = "UA-51507017-5"
   private[ga] val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
 
@@ -224,8 +234,7 @@ class GoogleAnalyticsService(implicit client: OkHttpClient) extends LazyLogging 
     EitherT(p.future)
   }
 
-  def submit(acquisition: AcquisitionDataRow, gaData: GAData)(implicit ec: ExecutionContext): EitherT[Future, GAError, Unit] = {
-
+  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit] = Retry(maxRetries) {
     val url = endpoint.newBuilder()
       .addPathSegment("collect")
       .build()
