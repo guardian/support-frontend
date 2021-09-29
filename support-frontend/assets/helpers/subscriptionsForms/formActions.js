@@ -26,14 +26,14 @@ import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
-  | { type: 'SET_TITLE', title: string }
+  | { type: 'SET_TITLE', title: Option<string> }
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_EMAIL', email: string }
   | { type: 'SET_CONFIRM_EMAIL', email: string }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_TITLE_GIFT', titleGiftRecipient: string }
+  | { type: 'SET_TITLE_GIFT', titleGiftRecipient: Option<string> }
   | { type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient: string }
   | { type: 'SET_LAST_NAME_GIFT', lastNameGiftRecipient: string }
   | { type: 'SET_EMAIL_GIFT', emailGiftRecipient: string }
@@ -87,13 +87,13 @@ const setUserTypeFromIdentityResponse =
     };
 
 const formActionCreators = {
-  setTitle: (title: string): Action => ({ type: 'SET_TITLE', title: (title !== '' ? title: null) }),
+  setTitle: (title: string): Action => ({ type: 'SET_TITLE', title: (title !== '' ? title : null) }),
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
   setEmail: (email: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_EMAIL', email }))),
   setConfirmEmail: (email: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_CONFIRM_EMAIL', email }))),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
-  setTitleGift: (titleGiftRecipient: string): Action => ({ type: 'SET_TITLE_GIFT', titleGiftRecipient }),
+  setTitleGift: (titleGiftRecipient: string): Action => ({ type: 'SET_TITLE_GIFT', titleGiftRecipient: (titleGiftRecipient !== '' ? titleGiftRecipient : null) }),
   setFirstNameGift: (firstNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient }))),
   setLastNameGift: (lastNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME_GIFT', lastNameGiftRecipient }))),
   setEmailGift: (emailGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_EMAIL_GIFT', emailGiftRecipient }))),
