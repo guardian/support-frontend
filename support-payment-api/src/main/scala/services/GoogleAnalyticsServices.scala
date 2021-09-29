@@ -5,7 +5,7 @@ import model.Environment
 import okhttp3.OkHttpClient
 
 object GoogleAnalyticsServices {
-  val liveService = new GoogleAnalyticsServiceImpl()()(new OkHttpClient())
+  val liveService = new GoogleAnalyticsServiceImpl(new OkHttpClient())
 
   val testService = MockGoogleAnalyticsService
 

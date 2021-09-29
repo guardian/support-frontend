@@ -38,7 +38,7 @@ object MockGoogleAnalyticsService extends GoogleAnalyticsService {
     EitherT.fromEither(Right(()))
 }
 
-class GoogleAnalyticsServiceImpl()(implicit client: OkHttpClient) extends GoogleAnalyticsService with LazyLogging {
+class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsService with LazyLogging {
   private[ga] val gaPropertyId: String = "UA-51507017-5"
   private[ga] val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
 
