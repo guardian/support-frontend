@@ -16,7 +16,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
 
   implicit val client: OkHttpClient = new OkHttpClient()
 
-  val service = new GoogleAnalyticsService
+  val service = new GoogleAnalyticsServiceImpl
 
   def buildAcquisition(
     product: AcquisitionProduct,
@@ -161,7 +161,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     }
 
     "camel case" in {
-      GoogleAnalyticsService.camelCase("GUARDIAN_WEEKLY") shouldEqual "GuardianWeekly"
+      GoogleAnalyticsServiceImpl.camelCase("GUARDIAN_WEEKLY") shouldEqual "GuardianWeekly"
     }
 
     //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
