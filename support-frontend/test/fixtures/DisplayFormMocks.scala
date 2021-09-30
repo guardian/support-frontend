@@ -14,6 +14,7 @@ import play.api.mvc.RequestHeader
 import play.api.Environment
 import assets.{AssetsResolver, RefPath}
 import com.gu.identity.model.{PublicFields, User => IdUser}
+import com.gu.support.config.Stages
 import config.Configuration.IdentityUrl
 import services._
 import services.MembersDataService._
@@ -43,6 +44,8 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val asyncAuthenticationService = mock[AsyncAuthenticationService]
 
+  val stage = Stages.DEV
+
   val loggedInActionRefiner = new CustomActionBuilders(
     asyncAuthenticationService,
     idWebAppUrl = IdentityUrl(""),
@@ -50,7 +53,8 @@ trait DisplayFormMocks extends TestCSRFComponents {
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
-    csrfConfig = csrfConfig
+    csrfConfig = csrfConfig,
+    stage = stage
   )
 
   val loggedOutActionRefiner = new CustomActionBuilders(
@@ -60,7 +64,8 @@ trait DisplayFormMocks extends TestCSRFComponents {
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
-    csrfConfig = csrfConfig
+    csrfConfig = csrfConfig,
+    stage = stage
   )
 
   def mockedMembersDataService(data: (AccessCredentials.Cookies, Either[MembersDataServiceError, UserAttributes])): MembersDataService = {

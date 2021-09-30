@@ -15,7 +15,6 @@ trait TestThreadPoolsProvider extends AppThreadPoolsProvider {
       StripeThreadPool(testThreadPool),
       PaypalThreadPool(testThreadPool),
       GoCardlessThreadPool(testThreadPool),
-      SQSThreadPool(testThreadPool),
-      SubscribeWithGoogleThreadPool(testThreadPool)
+      SQSThreadPool(testThreadPool)
     )
 }

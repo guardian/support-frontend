@@ -54,6 +54,16 @@ class PayPalRegular(
     }
   }
 
+  def createAgreementAndRetrieveUser: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
+    withPaypalServiceForRequest(request) { service =>
+      service.createAgreementAndRetrieveUser(request.body)
+    }.map { maybePayPalCheckoutDetails =>
+      maybePayPalCheckoutDetails
+        .map(details => Ok(details.asJson))
+        .getOrElse(BadRequest("We were unable to create an agreement for this request (missing user details or baid)"))
+    }
+  }
+
   private def withPaypalServiceForRequest[T](request: CustomActionBuilders.OptionalAuthRequest[_])(fn: PayPalNvpService => T): T = {
     val isTestUser = testUsers.isTestUser(request)
     val service = payPalNvpServiceProvider.forUser(isTestUser)

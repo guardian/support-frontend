@@ -63,7 +63,6 @@
         default: "@defaultPayPalConfig.payPalEnvironment",
         uat: "@uatPayPalConfig.payPalEnvironment"
       };
-      window.guardian.csrf = { token: "@CSRF.getToken.value" };
 
       window.guardian.checkoutPostcodeLookup = "@settings.switches.experiments.get("checkoutPostcodeLookup").exists(_.isOn)"
 

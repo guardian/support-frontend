@@ -57,6 +57,7 @@ function Prices({
   orderIsAGift,
   isUsingGuestCheckout,
   cssOverrides = '',
+  showPayPalButton,
 }: PricesPropTypes) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
 
@@ -71,6 +72,7 @@ function Prices({
           productPrices={productPrices}
           orderIsAGift={orderIsAGift}
           isUsingGuestCheckout={isUsingGuestCheckout}
+          showPayPalButton={showPayPalButton}
         />
       </FlexContainer>
     </section>

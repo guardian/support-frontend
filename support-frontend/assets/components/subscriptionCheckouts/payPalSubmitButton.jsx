@@ -17,6 +17,7 @@ import { ErrorSummary } from './submitFormErrorSummary';
 import { type Option } from 'helpers/types/option';
 import { PayPal, type PaymentMethod } from 'helpers/forms/paymentMethods';
 import { hiddenIf } from 'helpers/utilities/utilities';
+import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 const payPalButton = css`
   box-sizing: border-box;
@@ -50,11 +51,17 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-
 function PayPalSubmitButton(props: PropTypes) {
   // We have to show/hide PayPalExpressButton rather than conditionally rendering it
   // because we don't want to destroy and replace the iframe each time.
   // See PayPalExpressButton for more info.
+
+  const onPayPalCheckoutCompleted = (payPalCheckoutDetails: PayPalCheckoutDetails) =>
+    props.onPaymentAuthorised({
+      paymentMethod: PayPal,
+      token: payPalCheckoutDetails.baid,
+    });
+
   return (
     <div css={payPalButton}>
       <div css={props.paymentMethod === PayPal ? showButton : hideButton}>
@@ -63,7 +70,7 @@ function PayPalSubmitButton(props: PropTypes) {
           className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}
         >
           <PayPalExpressButton
-            onPaymentAuthorisation={props.onPaymentAuthorised}
+            onPayPalCheckoutCompleted={onPayPalCheckoutCompleted}
             csrf={props.csrf}
             currencyId={props.currencyId}
             hasLoaded={props.payPalHasLoaded}

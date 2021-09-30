@@ -62,9 +62,6 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
   val goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend] =
     mock[RequestBasedProvider[GoCardlessBackend]]
 
-  val subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
-    mock[RequestBasedProvider[SubscribeWithGoogleBackend]]
-
   val mockStripeController = mock[StripeController]
 
   override def router: Router = new Routes(

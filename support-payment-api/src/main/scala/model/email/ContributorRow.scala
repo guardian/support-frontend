@@ -88,7 +88,6 @@ case class ContributorRow(
     case Stripe | StripeApplePay | StripePaymentRequestButton => "credit / debit card"
     case Paypal => "PayPal"
     case AmazonPay => "Amazon Pay"
-    case SubscribeWithGoogle => "Subscribe With Google" //todo: confirm phrase usage
   }
 
   def toJsonContributorRowSqsMessage: String = {

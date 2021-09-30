@@ -87,12 +87,6 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
-  val subscribeWithGoogleProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
-    new SubscribeWithGoogleBackend.Builder(configLoader, cloudWatchClient)
-      .buildRequestBasedProvider(requestEnvironments)
-      .valueOr(throw _)
-
-
   val amazonPayBackendProvider: RequestBasedProvider[AmazonPayBackend] =
     new AmazonPayBackend.Builder(configLoader, cloudWatchClient)
       .buildRequestBasedProvider(requestEnvironments)

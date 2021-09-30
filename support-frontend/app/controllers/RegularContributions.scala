@@ -37,14 +37,15 @@ class RegularContributions(
 
   implicit val a: AssetsResolver = assets
 
-  def create: Action[CreateSupportWorkersRequest] = maybeAuthenticatedAction().async(new LoggingCirceParser(components).requestParser) {
-    implicit request =>
-      request.user.fold {
-        createContributorAndUser()
-      } { fullUser =>
-        createContributorWithUser(fullUser)
-      }
-  }
+  def create: EssentialAction =
+    alarmOnFailure(maybeAuthenticatedAction().async(new LoggingCirceParser(components).requestParser) {
+      implicit request =>
+        request.user.fold {
+          createContributorAndUser()
+        } { fullUser =>
+          createContributorWithUser(fullUser)
+        }
+    })
 
   private def createContributorWithUser(fullUser: AuthenticatedIdUser)(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]) = {
     val billingPeriod = request.body.product.billingPeriod

@@ -22,7 +22,7 @@ export type DigitalLandingPropTypes = {|
   participations: Participations;
   productPrices: ?ProductPrices;
   promotionCopy: ?PromotionCopy;
-  orderIsAGift: ?boolean;
+  orderIsAGift: boolean;
 |}
 
 const countryGroupId = detectCountryGroup();
@@ -35,5 +35,5 @@ export const digitalLandingProps = (): DigitalLandingPropTypes => ({
   participations: initAbTests(countryId, countryGroupId, getSettings()),
   productPrices: getProductPrices(),
   promotionCopy: getPromotionCopy(),
-  orderIsAGift: getGlobal('orderIsAGift'),
+  orderIsAGift: getGlobal('orderIsAGift') || false,
 });

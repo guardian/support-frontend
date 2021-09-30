@@ -82,9 +82,6 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend] =
     mock[RequestBasedProvider[GoCardlessBackend]]
 
-  val subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
-    mock[RequestBasedProvider[SubscribeWithGoogleBackend]]
-
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),

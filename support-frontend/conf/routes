@@ -113,7 +113,6 @@ GET  /subscribe/paper                                              controllers.P
 GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
 GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
-GET  /subscribe/paper/checkout/guest                               controllers.PaperSubscriptionForm.displayGuestForm()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionForm.displayForm()
 
 # redemptions
@@ -141,6 +140,7 @@ GET  /test-users                                                   controllers.T
 
 POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
 POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement()
+POST /paypal/one-click-checkout                                    controllers.PayPalRegular.createAgreementAndRetrieveUser()
 GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
 GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 

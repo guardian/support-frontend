@@ -9,14 +9,12 @@ import { connect } from 'react-redux';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getPayPalOptions, type SetupPayPalRequestType } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PayPalAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { PayPal } from 'helpers/forms/paymentMethods';
 import { type Action, updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
 import AnimatedDots from 'components/spinners/animatedDots';
 
 type PropTypes = {|
-  onPaymentAuthorisation: Function,
+  onPayPalCheckoutCompleted: Function,
   csrf: CsrfState,
   currencyId: IsoCurrency,
   hasLoaded: boolean,
@@ -27,13 +25,8 @@ type PropTypes = {|
   amount: number,
   billingPeriod: BillingPeriod,
   setupRecurringPayPalPayment: SetupPayPalRequestType,
-  updatePayPalButtonReady: (boolean) => Action,
+  updatePayPalButtonReady: (boolean) => Action, // created in mapDispatchToProps should not be passed into the component
 |};
-
-const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
-  paymentMethod: PayPal,
-  token,
-});
 
 const mapDispatchToProps = (dispatch: Function) => ({
   updatePayPalButtonReady: (ready: boolean) =>
@@ -42,31 +35,29 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 const PayPalExpressButtonComponent = (props: PropTypes) => {
 
-  const onPaymentAuthorisation = (token: string): void => {
-    props.onPaymentAuthorisation(tokenToAuthorisation(token));
-  };
-
   // hasLoaded determines whether window.paypal is available
   if (!props.hasLoaded) {
     return <AnimatedDots appearance="dark" />;
   }
 
+  const paypalOptions = getPayPalOptions(
+    props.currencyId,
+    props.csrf,
+    props.onPayPalCheckoutCompleted,
+    props.canOpen,
+    props.onClick,
+    props.formClassName,
+    props.isTestUser,
+    props.amount,
+    props.billingPeriod,
+    props.setupRecurringPayPalPayment,
+    props.updatePayPalButtonReady,
+  );
+
   // This element contains an iframe which contains the actual button
   return React.createElement(
     window.paypal.Button.driver('react', { React, ReactDOM }),
-    getPayPalOptions(
-      props.currencyId,
-      props.csrf,
-      onPaymentAuthorisation,
-      props.canOpen,
-      props.onClick,
-      props.formClassName,
-      props.isTestUser,
-      props.amount,
-      props.billingPeriod,
-      props.setupRecurringPayPalPayment,
-      props.updatePayPalButtonReady,
-    ),
+    paypalOptions,
   );
 };
 

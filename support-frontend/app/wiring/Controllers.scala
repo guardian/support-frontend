@@ -78,6 +78,7 @@ trait Controllers {
     landingCopyProvider,
     assetsResolver,
     actionRefiners,
+    appConfig.regularPayPalConfigProvider,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,

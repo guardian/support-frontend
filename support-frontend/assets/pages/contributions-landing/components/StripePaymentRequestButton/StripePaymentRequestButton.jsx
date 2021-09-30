@@ -448,6 +448,20 @@ const PaymentRequestButton = (props: PropTypes) => {
     }
   }, [stripe, props.paymentRequestObject]);
 
+  useEffect(() => {
+    if (props.paymentRequestObject) {
+      props.paymentRequestObject.canMakePayment().then((result) => {
+        if (result && result.applePay) {
+          setPrbType('APPLE_PAY');
+        } else if (result && result.googlePay) {
+          setPrbType('GOOGLE_PAY');
+        } else if (result) {
+          setPrbType('PAY_NOW');
+        }
+      });
+    }
+  }, [props.paymentRequestObject]);
+
   if (!props.paymentRequestObject || props.stripePaymentRequestButtonData.paymentMethod === 'none') {
     return null;
   }

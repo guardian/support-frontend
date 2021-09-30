@@ -63,13 +63,3 @@ OPTIONS  /contribute/one-off/amazon-pay/execute-payment            controllers.A
 
 POST        /contribute/one-off/amazon-pay/notifications            controllers.AmazonPayController.notification
 OPTIONS     /contribute/one-off/amazon-pay/notifications            controllers.AppController.corsOptions
-#############################################
-# SUBSCRIBE WITH GOOGLE
-#############################################
-
-## These are disabled because they're currently unauthenticated, and record-payment
-## would let anyone insert junk data into our DB. SwG isn't actually live let,
-## so I'm switching these off until we add authentication or re-architect so the SwG
-## service can talk directly to the DB itself.
-# POST /contribute/one-off/swg/record-payment                   controllers.SubscribeWithGoogleController.recordPayment
-# POST /contribute/one-off/swg/refund-payment                   controllers.SubscribeWithGoogleController.refundPayment

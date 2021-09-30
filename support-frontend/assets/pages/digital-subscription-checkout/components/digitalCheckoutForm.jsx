@@ -27,7 +27,7 @@ import {
   formActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { signOut } from 'helpers/user/user';
 import GridImage from 'components/gridImage/gridImage';
@@ -137,7 +137,7 @@ function mapDispatchToProps() {
         trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
       }
     },
-    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
     signOut,
   };
 }
@@ -156,7 +156,8 @@ function DigitalCheckoutForm(props: PropTypes) {
   const submissionErrorHeading = props.submissionError === 'personal_details_incorrect' ? 'Sorry there was a problem' :
     'Sorry we could not process your payment';
   const paymentMethods = supportedPaymentMethods(props.currencyId, props.country);
-  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant';
+  const isUsingGuestCheckout = props.participations.payPalOneClickTest === 'payPal' ||
+    props.participations.payPalOneClickTest === 'guestCheckout';
 
   return (
     <Content>

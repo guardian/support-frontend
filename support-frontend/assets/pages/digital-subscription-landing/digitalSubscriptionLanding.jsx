@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import { renderPage } from 'helpers/rendering/render';
-import React from 'react';
+// $FlowIgnore - required for hooks
+import React, { useEffect } from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
@@ -21,7 +22,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { routes } from 'helpers/urls/routes';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 
 import Page from 'components/page/page';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -43,9 +44,19 @@ import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubs
 import InteractiveTable from 'components/interactiveTable/interactiveTable';
 import { headers, footer, getRows } from './components/comparison/interactiveTableContents';
 
-
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
+import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { Provider } from 'react-redux';
+import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
+import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
+import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
 
 const productBlockContainer = css`
   background-color: ${neutral[93]};
@@ -108,38 +119,25 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
+const reducer = (commonState: CommonState) => createCheckoutReducer(
+  commonState.internationalisation.countryId,
+  DigitalPack,
+  Monthly,
+  null, null, null,
+);
+
+const store = initRedux(reducer, true);
 
 // ----- Render ----- //
-function DigitalLandingPage({
-  countryGroupId,
-  currencyId,
-  participations,
-  productPrices,
-  promotionCopy,
-  orderIsAGift,
-}: DigitalLandingPropTypes) {
+function DigitalLandingPage(props: DigitalLandingPropTypes) {
+  const { productPrices, orderIsAGift, countryGroupId } = props;
+
   if (!productPrices) {
     return null;
   }
 
-  const isGift = orderIsAGift || false;
-  const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
-  const showComparisonTable = participations.comparisonTableTest2 === 'variant';
-  const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant';
+  useEffect(() => { showPayPal(store.dispatch); }, []);
   const path = orderIsAGift ? routes.digitalSubscriptionLandingGift : routes.digitalSubscriptionLanding;
-  const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
-  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-
-  // For comparison table
-  const localisedRows = getRows(countryGroupId);
-
-  // For CTAs in hero test
-  const heroPriceList = getHeroCtaProps(
-    productPrices,
-    currencyId,
-    countryGroupId,
-    isUsingGuestCheckout,
-  );
 
   const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
     path,
@@ -156,31 +154,82 @@ function DigitalLandingPage({
     trackProduct: 'DigitalPack',
   });
 
-  const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
-    threshold: 0.3,
-    debounce: true,
-  });
-
   const pageFooter = (
     <div className="footer-container">
       <div className="footer-alignment">
         <DigitalFooter
           country={countryGroupId}
-          orderIsAGift={isGift}
+          orderIsAGift={orderIsAGift}
           productPrices={productPrices}
           centred
         />
       </div>
     </div>);
 
+  const thankyouProps = {
+    countryGroupId: props.countryGroupId,
+    marketingConsent: (props.orderIsAGift ? <MarketingConsentGift /> : <MarketingConsent />),
+  };
+
   return (
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={pageFooter}
-    >
+    <Provider store={store}>
+      <Page
+        header={<CountrySwitcherHeader />}
+        footer={pageFooter}
+      >
+        <CheckoutStage
+          checkoutForm={<DigitalLandingComponent {...props} />}
+          thankYouContentPending={<ThankYouPendingContent includePaymentCopy {...thankyouProps} />}
+          thankYouContent={<ThankYouContent {...thankyouProps} />}
+          subscriptionProduct={DigitalPack}
+        />
+      </Page>
+    </Provider>
+  );
+}
+
+
+function DigitalLandingComponent({
+  countryGroupId,
+  currencyId,
+  participations,
+  productPrices,
+  promotionCopy,
+  orderIsAGift,
+}: DigitalLandingPropTypes) {
+  if (!productPrices) {
+    return null;
+  }
+
+  const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
+  const showComparisonTable = participations.comparisonTableTest2 === 'variant';
+  const showPayPalButton = participations.payPalOneClickTest === 'payPal';
+  const isUsingGuestCheckout = showPayPalButton || participations.payPalOneClickTest === 'guestCheckout';
+  const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
+  const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+
+  // For comparison table
+  const localisedRows = getRows(countryGroupId);
+
+  // For CTAs in hero test
+  const heroPriceList = getHeroCtaProps(
+    productPrices,
+    currencyId,
+    countryGroupId,
+    isUsingGuestCheckout,
+    showPayPalButton,
+  );
+
+  const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
+    threshold: 0.3,
+    debounce: true,
+  });
+
+  return (
+    <span>
       {orderIsAGift ?
         <HeroWithImage
-          orderIsAGift={isGift}
+          orderIsAGift={orderIsAGift}
           countryGroupId={countryGroupId}
           promotionCopy={sanitisedPromoCopy}
         /> :
@@ -204,50 +253,52 @@ function DigitalLandingPage({
         </CentredContainer>
       </FullWidthContainer>}
       {showEventsComponent &&
-        <FullWidthContainer>
-          <CentredContainer>
-            <Block cssOverrides={eventsProductBlockContainer}>
-              <EventsModule />
-            </Block>
-          </CentredContainer>
-        </FullWidthContainer>
-      }
-      {!showComparisonTable &&
       <FullWidthContainer>
         <CentredContainer>
-          <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
-            <div ref={setElementToObserve}>
-              <ProductBlock
-                countryGroupId={countryGroupId}
-              />
-            </div>
+          <Block cssOverrides={eventsProductBlockContainer}>
+            <EventsModule />
           </Block>
         </CentredContainer>
-      </FullWidthContainer>}
-      <FullWidthContainer theme="dark" hasOverlap={!showComparisonTable}>
+      </FullWidthContainer>
+      }
+      {!showComparisonTable &&
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
+              <div ref={setElementToObserve}>
+                <ProductBlock
+                  countryGroupId={countryGroupId}
+                />
+              </div>
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>}
+      <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
-          {/* $FlowIgnore inability to parse intersection type */}
+          {/* $FlowIgnore - issue with union type */}
           <Prices
             cssOverrides={showComparisonTable ? extraPaddingForComparisonTable : ''}
             countryGroupId={countryGroupId}
             currencyId={currencyId}
             productPrices={productPrices}
-            orderIsAGift={isGift}
+            orderIsAGift={orderIsAGift}
             isUsingGuestCheckout={isUsingGuestCheckout}
+            showPayPalButton={showPayPalButton}
           />
         </CentredContainer>
       </FullWidthContainer>
       <FullWidthContainer theme="white">
         <CentredContainer>
-          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={isGift} />
+          <GiftNonGiftCta product="digital" href={giftNonGiftLink} orderIsAGift={orderIsAGift} />
         </CentredContainer>
       </FullWidthContainer>
       <FeedbackWidget display={widgetShouldDisplay} />
-    </Page>
+    </span>
   );
 }
 
 setUpTrackingAndConsents();
 const props = digitalLandingProps();
+const content = <DigitalLandingPage {...props} />;
 
-renderPage(<DigitalLandingPage {...props} />, reactElementId[props.countryGroupId]);
+renderPage(content, reactElementId[props.countryGroupId]);

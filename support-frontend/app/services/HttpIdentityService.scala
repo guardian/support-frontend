@@ -180,7 +180,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       wsClient.url(s"$apiUrl/$endpoint")
         .withHttpHeaders(headers: _*)
         .withQueryStringParameters(parameters: _*)
-        .withRequestTimeout(1.second)
+        .withRequestTimeout(5.seconds)
         .withMethod("GET")
     )(func)
   }

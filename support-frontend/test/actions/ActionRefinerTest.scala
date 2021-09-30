@@ -1,5 +1,6 @@
 package actions
 
+import com.gu.support.config.{Stage, Stages}
 import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers._
@@ -22,6 +23,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
   val supportUrl = "https://support-url.local"
   val path = "/test-path"
   val fakeRequest = FakeRequest("GET", path)
+  val stage = Stages.DEV
 
   trait Mocks {
     val asyncAuthenticationService = mock[AsyncAuthenticationService]
@@ -31,7 +33,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     "include Cache-control: no-cache, private" in new Mocks {
       val actionRefiner =
-        new CustomActionBuilders(asyncAuthenticationService,IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)
+        new CustomActionBuilders(asyncAuthenticationService,IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage)
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
@@ -46,7 +48,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         .thenReturn(Future.successful(mock[AuthenticatedIdUser]))
 
       val actionRefiner = new CustomActionBuilders(
-        asyncAuthenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig
+        asyncAuthenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage
       )
       val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
       status(result) mustEqual Status.OK
@@ -63,7 +65,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
-        csrfConfig = csrfConfig
+        csrfConfig = csrfConfig,
+        stage = stage
       )
       val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
 
@@ -87,7 +90,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
-        csrfConfig = csrfConfig
+        csrfConfig = csrfConfig,
+        stage = stage
       )
       val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
@@ -102,7 +106,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
-        csrfConfig = csrfConfig
+        csrfConfig = csrfConfig,
+        stage = stage
       )
       val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
@@ -131,7 +136,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
-        csrfConfig = csrfConfig
+        csrfConfig = csrfConfig,
+        stage = stage
       )
       val result = actionRefiner.authenticatedTestUserAction()(Ok("authentication-test")).apply(fakeRequest)
       status(result) mustEqual Status.OK
@@ -149,7 +155,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
-        csrfConfig = csrfConfig
+        csrfConfig = csrfConfig,
+        stage = stage
       )
       val result = actionRefiner.authenticatedTestUserAction()(Ok("authentication-test")).apply(fakeRequest)
 
@@ -167,7 +174,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(asyncAuthenticationService.authenticateTestUser(any())).thenReturn(Future.failed(new RuntimeException))
 
       val actionRefiner =
-          new CustomActionBuilders(asyncAuthenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)
+          new CustomActionBuilders(asyncAuthenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage)
       val result = actionRefiner.authenticatedTestUserAction()(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

@@ -21,7 +21,7 @@ class GuardianWeeklyGiftCheckout(implicit val webDriver: WebDriver) extends Chec
   private val billingPostcode = id("billing-postcode")
   private val billingCountry = id("billing-country")
 
-  def fillForm() {
+  def fillForm(): Unit = {
     setValue(gifteeFirstName, "Gifty")
     setValue(gifteeLastName, "McGiftface")
     setValue(deliveryCountry, "United Kingdom")

@@ -13,6 +13,7 @@ const additionalDays = [{
   SixdayPlus: 8,
   WeekendPlus: 13,
   SundayPlus: 14,
+  SaturdayPlus: 13,
 }, {
   Everyday: 10,
   Sixday: 10,
@@ -23,6 +24,7 @@ const additionalDays = [{
   SixdayPlus: 10,
   WeekendPlus: 12,
   SundayPlus: 13,
+  SaturdayPlus: 12,
 }, {
   Everyday: 9,
   Sixday: 9,
@@ -33,6 +35,7 @@ const additionalDays = [{
   SixdayPlus: 9,
   WeekendPlus: 11,
   SundayPlus: 12,
+  SaturdayPlus: 11,
 }, {
   Everyday: 8,
   Sixday: 8,
@@ -43,6 +46,7 @@ const additionalDays = [{
   SixdayPlus: 8,
   WeekendPlus: 10,
   SundayPlus: 11,
+  SaturdayPlus: 10,
 }, {
   Everyday: 11,
   Sixday: 11,
@@ -53,6 +57,7 @@ const additionalDays = [{
   SixdayPlus: 11,
   WeekendPlus: 16,
   SundayPlus: 17,
+  SaturdayPlus: 16,
 }, {
   Everyday: 10,
   Sixday: 10,
@@ -63,6 +68,7 @@ const additionalDays = [{
   SixdayPlus: 10,
   WeekendPlus: 15,
   SundayPlus: 16,
+  SaturdayPlus: 15,
 }, {
   Everyday: 9,
   Sixday: 9,
@@ -73,6 +79,7 @@ const additionalDays = [{
   SixdayPlus: 9,
   WeekendPlus: 14,
   SundayPlus: 15,
+  SaturdayPlus: 14,
 }];
 
 const monthText = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
