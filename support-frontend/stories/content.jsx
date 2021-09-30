@@ -11,6 +11,8 @@ import Quote from 'components/quote/quote';
 import BlockLabel from 'components/blockLabel/blockLabel';
 import InteractiveTable from 'components/interactiveTable/interactiveTable';
 
+import { headers, footer, getRows } from 'pages/digital-subscription-landing/components/comparison/interactiveTableContents';
+
 const stories = storiesOf('Content components', module)
   .addDecorator(withKnobs({
     escapeHTML: false,
@@ -117,4 +119,13 @@ stories.add('Quote', () => {
 
 stories.add('Block label', () => <BlockLabel>Use this for stand-out labels on other content</BlockLabel>);
 
-stories.add('Interactive table', () => <InteractiveTable />);
+stories.add('Interactive table', () => (
+  <div style={{ maxWidth: '940px', margin: '0 auto', backgroundColor: '#DCDCDC' }}>
+    <InteractiveTable
+      caption={<>What&apos;s included in a paid digital subscription</>}
+      headers={headers}
+      rows={getRows('GBPCountries')}
+      footer={footer}
+    />
+  </div>
+));

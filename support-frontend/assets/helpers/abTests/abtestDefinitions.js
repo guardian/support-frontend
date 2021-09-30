@@ -111,7 +111,7 @@ export const tests: Tests = {
     seed: 10,
     optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
   },
-  comparisonTableTest: {
+  comparisonTableTest2: {
     variants: [
       {
         id: 'control',
@@ -130,7 +130,7 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
     seed: 10,
-    optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
+    optimizeId: 'unfNP7eZTLW4245wJOcxiw',
   },
   productSetTest: {
     variants: [
