@@ -3,9 +3,10 @@ package com.gu.support.acquisitions.ga
 import cats.data.EitherT
 import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
 import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
+import com.gu.support.acquisitions.ga.GoogleAnalyticsService.buildBody
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAError}
-import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, Paper, RecurringContribution, GuardianWeekly}
+import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, GuardianWeekly, Paper, RecurringContribution}
 import com.gu.support.acquisitions.models.{AbTest, AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct}
 import com.gu.support.acquisitions.utils.Retry
 import com.typesafe.scalalogging.LazyLogging
@@ -17,18 +18,20 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
 
-trait GoogleAnalyticsService extends LazyLogging {
+trait GoogleAnalyticsService {
   def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit]
+}
 
-  private[ga] val gaPropertyId: String = "UA-51507017-5"
-
+object GoogleAnalyticsService extends LazyLogging {
   private val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+\.\d+)".r
 
   // e.g. GUARDIAN_WEEKLY becomes GuardianWeekly
-  def camelCase(s: String): String = s
+  private[ga] def camelCase(s: String): String = s
     .split("_")
     .map(_.toLowerCase.capitalize)
     .mkString("")
+
+  private[ga] val gaPropertyId: String = "UA-51507017-5"
 
   private[ga] def buildBody(acquisition: AcquisitionDataRow, gaData: GAData)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestBody] = EitherT {
     getAnnualisedValue(acquisition)
