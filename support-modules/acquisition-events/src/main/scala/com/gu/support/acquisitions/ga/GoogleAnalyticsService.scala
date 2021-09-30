@@ -7,8 +7,9 @@ import com.gu.support.acquisitions.ga.GoogleAnalyticsService.buildBody
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAError}
 import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, GuardianWeekly, Paper, RecurringContribution}
-import com.gu.support.acquisitions.models.{AbTest, AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct}
+import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct}
 import com.gu.support.acquisitions.utils.Retry
+import com.gu.support.workers.AbTest
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{Call, Callback, HttpUrl, OkHttpClient, Request, RequestBody, Response}
 
