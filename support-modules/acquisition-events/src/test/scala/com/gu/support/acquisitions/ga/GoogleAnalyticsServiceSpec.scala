@@ -93,12 +93,12 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
 
   "A GAService" should {
     "get the correct Client ID" in {
-      service.sanitiseClientId("GA1.1.1633795050.1537436107") shouldEqual Right("1633795050.1537436107")
-      service.sanitiseClientId("").isLeft shouldBe true
-      service.sanitiseClientId("1633795050.1537436107") shouldEqual Right("1633795050.1537436107")
+      GoogleAnalyticsService.sanitiseClientId("GA1.1.1633795050.1537436107") shouldEqual Right("1633795050.1537436107")
+      GoogleAnalyticsService.sanitiseClientId("").isLeft shouldBe true
+      GoogleAnalyticsService.sanitiseClientId("1633795050.1537436107") shouldEqual Right("1633795050.1537436107")
     }
     "build a correct payload" in {
-      val maybePayload = service.buildPayload(weekly, 0D, gaData)
+      val maybePayload = GoogleAnalyticsService.buildPayload(weekly, 0D, gaData)
       maybePayload.isRight shouldBe true
 
       logger.info(maybePayload.right.get)
@@ -114,7 +114,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
 
     "Include the correct successfulSubscriptionSignUp value" in {
       val contributionPayload = payloadAsMap(
-        service
+        GoogleAnalyticsService
           .buildPayload(contribution, 25, gaData)
           .right.get
       )
@@ -122,7 +122,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       contributionPayload.get("cm10") shouldEqual None
 
       val digiPackPayload = payloadAsMap(
-        service
+        GoogleAnalyticsService
           .buildPayload(digiPack, 25, gaData)
           .right.get
       )
@@ -130,7 +130,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       digiPackPayload.get("cm10") shouldEqual Some("1")
 
       val weeklyPayload = payloadAsMap(
-        service
+        GoogleAnalyticsService
           .buildPayload(weekly, 25, gaData)
           .right.get
       )
@@ -141,25 +141,25 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     }
 
     "build a correct ABTest payload" in {
-      val tp = service.buildABTestPayload(digiPack.abTests)
+      val tp = GoogleAnalyticsService.buildABTestPayload(digiPack.abTests)
       tp shouldEqual "test_name=variant_name,second_test=control"
     }
 
     "build a correct OptimizeTests payload" in {
       val abTests = List(AbTest("optimize$$test_name", "0"), AbTest("optimize$$second_test", "1"))
-      val tp = service.buildOptimizeTestsPayload(abTests)
+      val tp = GoogleAnalyticsService.buildOptimizeTestsPayload(abTests)
       tp.testNames shouldEqual "test_name,second_test"
       tp.variantNames shouldEqual "0,1"
     }
 
     "get the correct conversion category" in {
-      service.getConversionCategory(digiPack) shouldEqual ConversionCategory.DigitalConversion
-      service.getConversionCategory(weekly) shouldEqual ConversionCategory.PrintConversion
-      service.getConversionCategory(contribution) shouldEqual ConversionCategory.ContributionConversion
+      GoogleAnalyticsService.getConversionCategory(digiPack) shouldEqual ConversionCategory.DigitalConversion
+      GoogleAnalyticsService.getConversionCategory(weekly) shouldEqual ConversionCategory.PrintConversion
+      GoogleAnalyticsService.getConversionCategory(contribution) shouldEqual ConversionCategory.ContributionConversion
     }
 
     "camel case" in {
-      GoogleAnalyticsServiceLive.camelCase("GUARDIAN_WEEKLY") shouldEqual "GuardianWeekly"
+      GoogleAnalyticsService.camelCase("GUARDIAN_WEEKLY") shouldEqual "GuardianWeekly"
     }
 
     //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
