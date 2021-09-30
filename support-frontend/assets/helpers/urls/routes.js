@@ -77,7 +77,7 @@ function paperCheckoutUrl(
 ) {
   const url = `${getOrigin()}/subscribe/paper/checkout`;
 
-  return addQueryParamsToURL(url, { promoCode, fulfilmentOption, productOptions });
+  return addQueryParamsToURL(url, { promoCode, fulfilment: fulfilmentOption, product: productOptions });
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
