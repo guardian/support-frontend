@@ -42,7 +42,7 @@ const SubscriptionsLandingPage = ({
     <Page
       header={<Header />}
       footer={
-        <Footer faqsLink="https://manage.theguardian.com/help-centre" centred />
+        <Footer centred />
         }
     >
       <SubscriptionLandingContent

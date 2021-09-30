@@ -12,7 +12,6 @@ export default function WeeklyFooter({ promoTermsLink, centred }: PropTypes) {
   return (
     <Footer
       centred={centred}
-      faqsLink="https://www.theguardian.com/help/2012/jan/19/guardian-weekly-faqs"
       termsConditionsLink="https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions"
     >
       <h3 css={footerTextHeading}>Promotion terms and conditions</h3>

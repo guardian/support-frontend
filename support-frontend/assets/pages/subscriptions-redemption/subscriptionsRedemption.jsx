@@ -38,10 +38,7 @@ const content = (
     <Page
       header={<Header display="guardianLogo" countryGroupId="GBPCountries" />}
       footer={
-        <Footer
-          faqsLink="https://manage.theguardian.com/help-centre"
-          termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
-        />}
+        <Footer termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions" />}
     >
       <CheckoutStage
         checkoutForm={<RedemptionForm />}

@@ -39,10 +39,7 @@ const reactElementId = 'paper-subscription-landing-page';
 // ----- Redux Store ----- //
 
 const paperSubsFooter = (
-  <Footer
-    faqsLink="https://manage.theguardian.com/help-centre"
-    termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
-  />);
+  <Footer termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions" />);
 
 // ----- Render ----- //
 
