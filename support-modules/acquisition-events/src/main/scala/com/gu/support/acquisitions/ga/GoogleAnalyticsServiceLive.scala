@@ -3,7 +3,6 @@ package com.gu.support.acquisitions.ga
 import cats.data.EitherT
 import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
 import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
-import com.gu.support.acquisitions.ga.GoogleAnalyticsServiceLive._
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAError}
 import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, Paper, RecurringContribution, GuardianWeekly}
@@ -18,20 +17,18 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
 
-object GoogleAnalyticsServiceLive {
-  val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+\.\d+)".r
+trait GoogleAnalyticsService extends LazyLogging {
+  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit]
+
+  private[ga] val gaPropertyId: String = "UA-51507017-5"
+
+  private val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+\.\d+)".r
 
   // e.g. GUARDIAN_WEEKLY becomes GuardianWeekly
   def camelCase(s: String): String = s
     .split("_")
     .map(_.toLowerCase.capitalize)
     .mkString("")
-}
-
-trait GoogleAnalyticsService extends LazyLogging {
-  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit]
-
-  private[ga] val gaPropertyId: String = "UA-51507017-5"
 
   private[ga] def buildBody(acquisition: AcquisitionDataRow, gaData: GAData)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestBody] = EitherT {
     getAnnualisedValue(acquisition)
