@@ -14,7 +14,7 @@ import org.scalatest.wordspec.AsyncWordSpecLike
 
 class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
 
-  val service = new GoogleAnalyticsServiceImpl(new OkHttpClient())
+  val service = new GoogleAnalyticsServiceLive(new OkHttpClient())
 
   def buildAcquisition(
     product: AcquisitionProduct,
@@ -159,7 +159,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     }
 
     "camel case" in {
-      GoogleAnalyticsServiceImpl.camelCase("GUARDIAN_WEEKLY") shouldEqual "GuardianWeekly"
+      GoogleAnalyticsServiceLive.camelCase("GUARDIAN_WEEKLY") shouldEqual "GuardianWeekly"
     }
 
     //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
