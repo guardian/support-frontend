@@ -3,7 +3,7 @@ package com.gu.support.acquisitions.ga
 import cats.data.EitherT
 import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
 import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
-import com.gu.support.acquisitions.ga.GoogleAnalyticsServiceImpl._
+import com.gu.support.acquisitions.ga.GoogleAnalyticsServiceLive._
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAError}
 import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, Paper, RecurringContribution, GuardianWeekly}
@@ -18,7 +18,7 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
 
-object GoogleAnalyticsServiceImpl {
+object GoogleAnalyticsServiceLive {
   val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+\.\d+)".r
 
   // e.g. GUARDIAN_WEEKLY becomes GuardianWeekly
@@ -28,18 +28,10 @@ object GoogleAnalyticsServiceImpl {
     .mkString("")
 }
 
-trait GoogleAnalyticsService {
+trait GoogleAnalyticsService extends LazyLogging {
   def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit]
-}
 
-object MockGoogleAnalyticsService extends GoogleAnalyticsService {
-  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit] =
-    EitherT.fromEither(Right(()))
-}
-
-class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsService with LazyLogging {
   private[ga] val gaPropertyId: String = "UA-51507017-5"
-  private[ga] val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
 
   private[ga] def buildBody(acquisition: AcquisitionDataRow, gaData: GAData)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestBody] = EitherT {
     getAnnualisedValue(acquisition)
@@ -206,6 +198,25 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
     abTests
       .map(test => s"${test.name}=${test.variant}")
       .mkString(",")
+}
+
+// For test specs, does nothing
+object GoogleAnalyticsServiceMock extends GoogleAnalyticsService {
+  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit] =
+    EitherT.fromEither(Right(()))
+}
+
+// For test conversions, logs the payload but doesn't send to GA
+object GoogleAnalyticsServiceTest extends GoogleAnalyticsService {
+  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit] =
+    buildBody(acquisition, gaData)
+      .leftMap[List[GAError]](err => List(err))
+      .map(_ => ())
+}
+
+// For live conversions
+class GoogleAnalyticsServiceLive(client: OkHttpClient) extends GoogleAnalyticsService with LazyLogging {
+  private[ga] val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
 
   private[ga] def executeRequest(request: Request): EitherT[Future, GAError, Unit] = {
     val p = Promise[Either[GAError, Unit]]

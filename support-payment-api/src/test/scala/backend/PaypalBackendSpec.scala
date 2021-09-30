@@ -5,7 +5,7 @@ import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, MockGoogleAnalyticsService}
+import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
 import model.paypal._
@@ -100,7 +100,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockPaypalService: PaypalService = mock[PaypalService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
-  val mockGaService: GoogleAnalyticsService = MockGoogleAnalyticsService
+  val mockGaService: GoogleAnalyticsService = GoogleAnalyticsServiceMock
   val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
