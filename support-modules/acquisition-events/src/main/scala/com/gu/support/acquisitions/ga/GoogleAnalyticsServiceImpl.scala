@@ -44,13 +44,12 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
 
   private[ga] def buildBody(acquisition: AcquisitionDataRow, gaData: GAData)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestBody] = EitherT {
     getAnnualisedValue(acquisition)
-      .fold(
-        error => {
-          logger.warn(s"Couldn't retrieve annualised value for this acquisition: $error")
-          buildPayload(acquisition, 0, gaData) // We still want to record the acquisition even if we can't get the AV
-        },
-        value => buildPayload(acquisition, value, gaData)
-      )
+      .leftMap(error => {
+        logger.warn(s"Couldn't retrieve annualised value for this acquisition: $error")
+        0D // We still want to record the acquisition even if we can't get the AV
+      })
+      .merge[Double]
+      .map(av => buildPayload(acquisition, av, gaData))
       .map { maybePayload =>
         maybePayload.map { payload =>
           logger.debug(s"GA payload: $payload")
