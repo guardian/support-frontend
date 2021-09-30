@@ -81,7 +81,6 @@ import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { Participations } from 'helpers/abTests/abtest';
 import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
-import { hasCsrQueryParam } from 'components/csr/csrMode';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 const marginBottom = css`
@@ -219,7 +218,6 @@ function PaperCheckoutForm(props: PropTypes) {
   const priceHasRedundantFloat = simplePrice.split('.')[1] === '00'; // checks whether price is something like '£10.00'
   const cleanedPrice = priceHasRedundantFloat ? simplePrice.replace(/\.(.*)/, '') : simplePrice; // removes decimal point if there are no pence
   const expandedPricingText = `${cleanedPrice} per month`;
-  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant' || hasCsrQueryParam();
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
     setIncludesDigiSub(event.target.checked);
@@ -313,7 +311,7 @@ function PaperCheckoutForm(props: PropTypes) {
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
-              isUsingGuestCheckout={isUsingGuestCheckout}
+              isUsingGuestCheckout
             />
           </FormSection>
 

@@ -1,6 +1,5 @@
 // @flow
 import type { Tests } from './abtest';
-import { hasCsrQueryParam } from 'components/csr/csrMode';
 
 // ----- Tests ----- //
 
@@ -132,28 +131,6 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
     seed: 10,
     optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
-  },
-  subscriptionsGuestCheckoutTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    canRun: () => !hasCsrQueryParam(),
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-    seed: 3,
-    optimizeId: 'tn3FveQmTeiTS4JtSUyzig',
   },
   productSetTest: {
     variants: [

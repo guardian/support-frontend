@@ -3,7 +3,7 @@
 // ----- Routes ----- //
 
 import { countryGroups, type CountryGroupId } from '../internationalisation/countryGroup';
-import { addQueryParamsToURL, getAllQueryParams, getOrigin, getQueryParameter, isProd } from './url';
+import { addQueryParamsToURL, getAllQueryParams, getOrigin, isProd } from './url';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { type Option } from 'helpers/types/option';
@@ -74,13 +74,10 @@ function paperCheckoutUrl(
   fulfilmentOption: FulfilmentOptions,
   productOptions: ProductOptions,
   promoCode?: Option<string>,
-  isUsingGuestCheckout: boolean,
 ) {
-  const url = isUsingGuestCheckout ?
-    `${getOrigin()}/subscribe/paper/checkout/guest?fulfilment=${fulfilmentOption}&product=${productOptions}`
-    : `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
+  const url = `${getOrigin()}/subscribe/paper/checkout`;
 
-  return addQueryParamsToURL(url, { promoCode, csr: getQueryParameter('csr') });
+  return addQueryParamsToURL(url, { promoCode, fulfilmentOption, productOptions });
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.

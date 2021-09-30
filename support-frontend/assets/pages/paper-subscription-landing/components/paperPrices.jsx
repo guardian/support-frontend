@@ -58,7 +58,6 @@ const copy = {
 const getPlans = (
   fulfilmentOption: PaperFulfilmentOptions,
   productPrices: ProductPrices,
-  isUsingGuestCheckout: boolean,
 ) =>
   ActivePaperProductTypes.map((productOption) => {
     const priceAfterPromosApplied = finalPrice(productPrices, fulfilmentOption, productOption);
@@ -80,7 +79,7 @@ const getPlans = (
     return {
       title: getTitle(productOption),
       price: showPrice(priceAfterPromosApplied),
-      href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode, isUsingGuestCheckout),
+      href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
       onClick: sendTrackingEventsOnClick(trackingProperties),
       onView: sendTrackingEventsOnView(trackingProperties),
       buttonCopy: 'Subscribe',
@@ -94,16 +93,15 @@ const getPlans = (
     productPrices: ?ProductPrices,
     tab: PaperFulfilmentOptions,
     setTabAction: (PaperFulfilmentOptions) => void,
-    isUsingGuestCheckout: boolean,
 |}
 
 function PaperProductPrices({
-  productPrices, tab, setTabAction, isUsingGuestCheckout,
+  productPrices, tab, setTabAction,
 }: PaperProductPricesProps) {
   if (!productPrices) {
     return null;
   }
-  const products = getPlans(tab, productPrices, isUsingGuestCheckout);
+  const products = getPlans(tab, productPrices);
 
   return <Prices activeTab={tab} products={products} setTabAction={setTabAction} />;
 }
