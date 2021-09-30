@@ -89,7 +89,7 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
         val productName = getProductName(acquisition)
         val conversionCategory = getConversionCategory(acquisition)
         val productCheckout = getProductCheckout(acquisition)
-        val body = Map(
+        val body = Map[String,String](
           "v" -> "1", //Version
           "cid" -> clientId,
           "tid" -> gaPropertyId,
@@ -100,12 +100,12 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
           // Custom Dimensions
           "cd12" -> acquisition.campaignCode.getOrElse(""), // Campaign code
           "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
-          "cd17" -> acquisition.paymentProvider.getOrElse(""), // Payment method
+          "cd17" -> acquisition.paymentProvider.map(_.value).getOrElse(""), // Payment method
           "cd19" -> acquisition.promoCode.getOrElse(""), // Promo code
-          "cd25" -> acquisition.labels.exists(_.contains("REUSED_EXISTING_PAYMENT_METHOD")), // usedExistingPaymentMethod
-          "cd26" -> acquisition.labels.exists(_.contains("gift-subscription")), // gift subscription
-          "cd27" -> productCheckout,
-          "cd30" -> acquisition.labels.exists(_.contains("corporate-subscription")), // corporate subscription
+          "cd25" -> acquisition.labels.exists(_.contains("REUSED_EXISTING_PAYMENT_METHOD")).toString, // usedExistingPaymentMethod
+          "cd26" -> acquisition.labels.exists(_.contains("gift-subscription")).toString, // gift subscription
+          "cd27" -> productCheckout.getOrElse(""),
+          "cd30" -> acquisition.labels.exists(_.contains("corporate-subscription")).toString, // corporate subscription
 
           // Custom metrics
           "cm10" -> getSuccessfulSubscriptionSignUpMetric(conversionCategory),
@@ -127,7 +127,7 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
           "pa" -> "purchase", //This is a purchase
           "pr1nm" -> productName, // Product Name
           "pr1ca" -> conversionCategory.description, // Product category
-          "pr1pr" -> annualisedValue, // Product Price - we are tracking the annualised value here as this is what goes into the revenue metric
+          "pr1pr" -> annualisedValue.toString, // Product Price - we are tracking the annualised value here as this is what goes into the revenue metric
           "pr1qt" -> "1", // Product Quantity
           "pr1cc" -> acquisition.promoCode.getOrElse(""), // Product coupon code.
           "pr1cm15" -> acquisition.amount.toString, // Custom metric 15 - purchasePrice
