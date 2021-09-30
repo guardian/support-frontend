@@ -76,7 +76,7 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
 
   private[ga] def getSuccessfulSubscriptionSignUpMetric(conversionCategory: ConversionCategory) =
     conversionCategory match {
-      case _: ConversionCategory.ContributionConversion.type => ""
+      case ConversionCategory.ContributionConversion => ""
       case _ => "1"
     }
 
