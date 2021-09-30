@@ -39,7 +39,7 @@ const content = (
       header={<Header countryGroupId={countryGroupId} />}
       footer={
         <Footer
-          faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+          faqsLink="https://manage.theguardian.com/help-centre"
           termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
         />}
     >

@@ -40,7 +40,7 @@ const reactElementId = 'paper-subscription-landing-page';
 
 const paperSubsFooter = (
   <Footer
-    faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+    faqsLink="https://manage.theguardian.com/help-centre"
     termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
   />);
 

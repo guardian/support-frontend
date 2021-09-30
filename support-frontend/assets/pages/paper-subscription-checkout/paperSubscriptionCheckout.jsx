@@ -62,7 +62,7 @@ const content = (
       header={<HeaderWrapper />}
       footer={
         <Footer
-          faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+          faqsLink="https://manage.theguardian.com/help-centre"
           termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
         >
           <p>By proceeding, you agree to our{' '}

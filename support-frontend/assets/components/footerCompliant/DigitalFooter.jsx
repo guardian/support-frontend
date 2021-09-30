@@ -69,7 +69,7 @@ const GiftLinks = (props: LinkTypes) => {
 
 function DigitalFooter({ productPrices, orderIsAGift, country }: PropTypes) {
   const faqsLink = orderIsAGift ? 'https://www.theguardian.com/help/2020/nov/23/guardian-gift-digital-subscription-faqs' :
-    'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions';
+    'https://manage.theguardian.com/help-centre';
   const termsConditionsLink = orderIsAGift ?
     'https://www.theguardian.com/help/2020/nov/24/gift-digital-subscriptions-terms-and-conditions' :
     'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';

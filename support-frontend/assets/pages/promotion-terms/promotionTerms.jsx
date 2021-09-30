@@ -38,7 +38,7 @@ const PromotionTermsPage = (props: State) => (
     <Page
       header={<Header countryGroupId={detect()} />}
       footer={<Footer
-        faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
+        faqsLink="https://manage.theguardian.com/help-centre"
         termsConditionsLink={getTermsConditionsLink(props.page.promotionTerms)}
       />}
     >
