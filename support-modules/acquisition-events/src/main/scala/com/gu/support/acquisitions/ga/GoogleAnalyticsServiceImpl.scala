@@ -51,7 +51,7 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
       .map(av => buildPayload(acquisition, av, gaData))
       .map { maybePayload =>
         maybePayload.map { payload =>
-          logger.debug(s"GA payload: $payload")
+          logger.info(s"GA payload: $payload")
           RequestBody.create(null, payload)
         }
       }
