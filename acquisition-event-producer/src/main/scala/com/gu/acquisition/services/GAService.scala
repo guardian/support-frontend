@@ -40,7 +40,7 @@ private[services] class GAService(implicit client: OkHttpClient)
       ).map {
       maybePayload =>
         maybePayload.map { payload =>
-          logger.debug(s"GA payload: $payload")
+          logger.info(s"GA payload: $payload")
           RequestBody.create(null, payload)
         }
     }
