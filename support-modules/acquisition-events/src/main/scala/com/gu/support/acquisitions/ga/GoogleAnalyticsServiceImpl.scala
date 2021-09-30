@@ -6,9 +6,8 @@ import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.gu.support.acquisitions.ga.GoogleAnalyticsServiceImpl._
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAError}
-import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, Paper, RecurringContribution}
-import com.gu.support.acquisitions.models.{AbTest, AcquisitionDataRow, AcquisitionProduct, PrintOptions}
-import com.gu.support.acquisitions.models.PrintProduct._
+import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, Paper, RecurringContribution, GuardianWeekly}
+import com.gu.support.acquisitions.models.{AbTest, AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct}
 import com.gu.support.acquisitions.utils.Retry
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{Call, Callback, HttpUrl, OkHttpClient, Request, RequestBody, Response}
@@ -158,10 +157,11 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
       case Contribution | RecurringContribution => Some("Contribution")
       case DigitalSubscription => Some("DigitalPack")
       case Paper => getProductCheckoutForPrint(acquisition.printOptions)
-      case default => None
+      case GuardianWeekly => Some("GuardianWeekly")
     }
 
-  private[ga] def getProductCheckoutForPrint(maybePrintOptions: Option[PrintOptions]) =
+  private[ga] def getProductCheckoutForPrint(maybePrintOptions: Option[PrintOptions]) = {
+    import com.gu.support.acquisitions.models.PrintProduct._
     maybePrintOptions.map(
       _.product match {
         case VoucherEveryday | VoucherSaturday | VoucherSunday | VoucherSixday | VoucherWeekend |
@@ -170,9 +170,10 @@ class GoogleAnalyticsServiceImpl(client: OkHttpClient) extends GoogleAnalyticsSe
         case VoucherEverydayPlus | VoucherSaturdayPlus | VoucherSundayPlus | VoucherSixdayPlus | VoucherWeekendPlus |
              HomeDeliveryEverydayPlus | HomeDeliverySaturdayPlus | HomeDeliverySundayPlus | HomeDeliverySixdayPlus | HomeDeliveryWeekendPlus
         => "PaperAndDigital"
-        case GuardianWeekly => "GuardianWeekly"
+        case PrintProduct.GuardianWeekly => "GuardianWeekly"
       }
     )
+  }
 
   private[ga] def getProductName(acquisition: AcquisitionDataRow) =
     acquisition.printOptions.map(po => camelCase(po.product.value)).getOrElse(camelCase(acquisition.product.value))
