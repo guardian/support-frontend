@@ -92,7 +92,7 @@ object GoogleAnalyticsService extends LazyLogging {
           // Custom Dimensions
           "cd12" -> acquisition.campaignCode.getOrElse(""), // Campaign code
           "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
-          "cd17" -> acquisition.paymentProvider.map(_.value).getOrElse(""), // Payment method
+          "cd17" -> camelCase(acquisition.paymentProvider.map(_.value).getOrElse("")), // Payment method
           "cd19" -> acquisition.promoCode.getOrElse(""), // Promo code
           "cd25" -> acquisition.labels.exists(_.contains("REUSED_EXISTING_PAYMENT_METHOD")).toString, // usedExistingPaymentMethod
           "cd26" -> acquisition.labels.exists(_.contains("gift-subscription")).toString, // gift subscription
@@ -122,7 +122,7 @@ object GoogleAnalyticsService extends LazyLogging {
           "pr1pr" -> annualisedValue.toString, // Product Price - we are tracking the annualised value here as this is what goes into the revenue metric
           "pr1qt" -> "1", // Product Quantity
           "pr1cc" -> acquisition.promoCode.getOrElse(""), // Product coupon code.
-          "pr1cm15" -> acquisition.amount.toString, // Custom metric 15 - purchasePrice
+          "pr1cm15" -> acquisition.amount.getOrElse("").toString, // Custom metric 15 - purchasePrice
           "cu" -> acquisition.currency.toString // Currency
         )
 

@@ -89,7 +89,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     abTests = List(AbTest("test_name", "variant_name"), AbTest("second_test", "control")),
     country = Country.US
   )
-  val gaData = GAData("support.code.dev-theguardian.com", "GA1.1.1633795050.1537436107", None, None)
+  val gaData = GAData("support.code.dev-theguardian.com", "GA1.1.1633795050.1537436107", Some("192.168.0.1"), Some("Mozilla/5.0"))
 
   "A GAService" should {
     "get the correct Client ID" in {
@@ -104,12 +104,25 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       logger.info(maybePayload.right.get)
       val payloadMap = payloadAsMap(maybePayload.right.get)
       payloadMap.get("ec") shouldEqual Some("PrintConversion")
+      payloadMap.get("ev") shouldEqual Some("24")
       payloadMap.get("ea") shouldEqual Some("GuardianWeekly")
       payloadMap.get("cu") shouldEqual Some("GBP")
       payloadMap.get("cid") shouldEqual Some("1633795050.1537436107")
       payloadMap.get("cd12") shouldEqual Some("FAKE_ACQUISITION_EVENT1,FAKE_ACQUISITION_EVENT2")
       payloadMap.get("pr1ca") shouldEqual Some("PrintSubscription")
-
+      payloadMap.get("cd17") shouldEqual Some("Stripe")
+      payloadMap.get("cd25") shouldEqual Some("false")
+      payloadMap.get("cd30") shouldEqual Some("false")
+      payloadMap.get("cd16") shouldEqual Some("test_name=variant_name,second_test=control")
+      payloadMap.get("pr1pr") shouldEqual Some("0.0")
+      payloadMap.get("dh") shouldEqual Some("support.code.dev-theguardian.com")
+      payloadMap.get("pr1nm") shouldEqual Some("GuardianWeekly")
+      payloadMap.get("ua") shouldEqual Some("Mozilla/5.0")
+      payloadMap.get("cid") shouldEqual Some("1633795050.1537436107")
+      payloadMap.get("cd26") shouldEqual Some("false")
+      payloadMap.get("cd27") shouldEqual Some("GuardianWeekly")
+      payloadMap.get("pr1cm15") shouldEqual Some("24.86")
+      payloadMap.get("uip") shouldEqual Some("192.168.0.1")
     }
 
     "Include the correct successfulSubscriptionSignUp value" in {
@@ -174,5 +187,10 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     }
   }
 
-  private def payloadAsMap(payload: String) = payload.split("&").map(text => text.split("=")).map(a => a(0) -> a(1)).toMap
+  private def payloadAsMap(payload: String) =
+    payload
+      .split("&")
+      .map(text => text.split("=").toList)
+      .map(a => a.head -> a.tail.mkString("="))
+      .toMap
 }
