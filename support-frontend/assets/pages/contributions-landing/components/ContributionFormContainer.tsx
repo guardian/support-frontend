@@ -1,5 +1,9 @@
 // ----- Imports ----- //
-import React, { useState } from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { brand } from '@guardian/src-foundations/palette';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
@@ -15,10 +19,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { glyph } from 'helpers/internationalisation/currency';
-import { get, remove, set } from 'helpers/storage/cookie';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getQueryParameter } from 'helpers/urls/url';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
@@ -26,13 +27,13 @@ import {
 } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
-import { ContributionsArticleCountWithOptOut } from './ContributionArticleCount';
 import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import {
 	PreviousGivingBodyCopy,
 	PreviousGivingHeaderCopy,
 } from './ContributionsFormBlurbPreviousGiving';
+import { ContributionsFormJournalismHighlights } from './ContributionsFormJournalismHighlights';
 
 // ----- Types ----- //
 
@@ -51,7 +52,7 @@ type PropTypes = {
 	referrerAcquisitionData: ReferrerAcquisitionData;
 	canShowTicker: boolean;
 	currency: IsoCurrency;
-	articleCountAbTestVariant: boolean;
+	shouldShowRichLandingPage: boolean;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -64,8 +65,8 @@ const mapStateToProps = (state: State) => ({
 	referrerAcquisitionData: state.common.referrerAcquisitionData,
 	canShowTicker: state.common.abParticipations.tickerTest === 'variant',
 	currency: state.common.internationalisation.currencyId,
-	articleCountAbTestVariant:
-		state.common.abParticipations.articleCountTest === 'variant',
+	shouldShowRichLandingPage:
+		state.common.abParticipations.richLandingPageTest === 'variant',
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
@@ -80,6 +81,80 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 		dispatch(onThirdPartyPaymentAuthorised(token));
 	},
 });
+
+// ----- Styles ----- //
+
+const styles = {
+	container: css`
+		width: 100%;
+	`,
+	richLandingPageContainer: css`
+		background-color: ${brand[800]};
+	`,
+	contentContainer: css`
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+
+		${from.tablet} {
+			flex-direction: row;
+			max-width: none;
+		}
+
+		${from.desktop} {
+			max-width: 980px;
+		}
+
+		${from.leftCol} {
+			max-width: 1140px;
+		}
+
+		${from.wide} {
+			max-width: 1300px;
+		}
+	`,
+	stickyFormContainer: css`
+		${from.tablet} {
+			position: sticky;
+			top: 0;
+			height: 100vh;
+			overflow: auto;
+			box-sizing: border-box;
+			max-width: none !important;
+			width: 420px;
+			flex-shrink: 0;
+		}
+
+		${from.leftCol} {
+			width: 520px;
+		}
+	`,
+	highlightsContainer: css`
+		padding-top: ${space[2]}px;
+		padding-bottom: ${space[3]}px;
+
+		${from.tablet} {
+			padding-left: ${space[2]}px;
+		}
+
+		${from.desktop} {
+			padding-left: ${space[9]}px;
+			padding-right: ${space[5]}px;
+		}
+
+		${from.leftCol} {
+			padding-left: 60px;
+			padding-right: 50px;
+			padding-bottom: ${space[9]}px;
+		}
+
+		${from.wide} {
+			padding-left: 50px;
+			padding-right: 20px;
+			padding-bottom: ${space[12]}px;
+		}
+	`,
+};
 
 // ----- Functions ----- //
 export type CountryMetaData = {
@@ -102,68 +177,11 @@ const defaultContributeCopy = (
 	</span>
 );
 
-const articleCountContributeCopy = (currency) => (
-	<span>
-		Thank you for turning to the Guardian on so many occasions. Show your
-		support for our open, fiercely independent journalism today with a
-		contribution of any size. Every {currency}1 we receive is so valuable for
-		our future.
-	</span>
-);
-
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 	headerCopy: defaultHeaderCopy,
 	contributeCopy: defaultContributeCopy,
 };
 // ----- Render ----- //
-type ArticleCountOptOut = {
-	hasOptedOut: boolean;
-	onArticleCountOptOut: () => void;
-	onArticleCountOptIn: () => void;
-};
-const ARTICLE_COUNT_OPT_OUT_COOKIE = {
-	name: 'gu_article_count_opt_out',
-	daysToLive: 90,
-};
-export const addArticleCountOptOutCookie = (): void =>
-	set(
-		ARTICLE_COUNT_OPT_OUT_COOKIE.name,
-		new Date().getTime().toString(),
-		ARTICLE_COUNT_OPT_OUT_COOKIE.daysToLive,
-	);
-export const removeArticleCountOptOutCookie = (): void =>
-	remove(ARTICLE_COUNT_OPT_OUT_COOKIE.name);
-export const hasArticleCountOptOutCookie = (): boolean =>
-	!!get(ARTICLE_COUNT_OPT_OUT_COOKIE.name);
-export function useArticleCountOptOut(): ArticleCountOptOut {
-	const [hasOptedOut, setHasOptedOut] = useState(hasArticleCountOptOutCookie());
-
-	function onArticleCountOptOut() {
-		setHasOptedOut(true);
-		addArticleCountOptOutCookie();
-	}
-
-	function onArticleCountOptIn() {
-		setHasOptedOut(false);
-		removeArticleCountOptOutCookie();
-	}
-
-	return {
-		hasOptedOut,
-		onArticleCountOptOut,
-		onArticleCountOptIn,
-	};
-}
-
-const getArticleCountFromUrl = (): number | null => {
-	const articleCount = getQueryParameter('numArticles');
-
-	if (articleCount) {
-		return parseInt(articleCount, 10);
-	}
-
-	return null;
-};
 
 function withProps(props: PropTypes) {
 	const campaignSettings = getCampaignSettings();
@@ -207,93 +225,91 @@ function withProps(props: PropTypes) {
 		props.referrerAcquisitionData,
 	);
 	const lastOneOffContribution = useLastOneOffContribution();
-	const numArticles = getArticleCountFromUrl();
-	const { hasOptedOut, onArticleCountOptIn, onArticleCountOptOut } =
-		useArticleCountOptOut();
-	const isArticleCountTest = props.articleCountAbTestVariant;
+
 	return (
-		<div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-			{!isArticleCountTest && showPreviousGiving && lastOneOffContribution && (
-				<ContributionFormBlurb
-					headerCopy={<PreviousGivingHeaderCopy userName={props.userName} />}
-					bodyCopy={
-						<PreviousGivingBodyCopy
-							lastOneOffContribution={lastOneOffContribution}
+		<div
+			css={[
+				styles.container,
+				...(props.shouldShowRichLandingPage
+					? [styles.richLandingPageContainer]
+					: []),
+			]}
+		>
+			<div
+				css={styles.contentContainer}
+				className="gu-content__content-contributions gu-content__content--flex"
+			>
+				<div
+					className="gu-content__form"
+					css={[
+						...(props.shouldShowRichLandingPage
+							? [styles.stickyFormContainer]
+							: []),
+					]}
+				>
+					<SecureTransactionIndicator modifierClasses={['top']} />
+
+					{props.canShowTicker &&
+					campaignSettings &&
+					campaignSettings.tickerSettings ? (
+						<ContributionTicker
+							{...campaignSettings.tickerSettings}
+							onGoalReached={props.setTickerGoalReached}
 						/>
-					}
-				/>
-			)}
+					) : null}
+					{props.tickerGoalReached &&
+					campaignSettings &&
+					campaignSettings.tickerSettings &&
+					campaignSettings.goalReachedCopy ? (
+						campaignSettings.goalReachedCopy
+					) : (
+						<div>
+							{countryGroupDetails.formMessage ? (
+								<div className="form-message">
+									{countryGroupDetails.formMessage}
+								</div>
+							) : null}
 
-			{isArticleCountTest && numArticles !== null && numArticles >= 5 ? (
-				<ContributionFormBlurb
-					headerCopy={
-						<ContributionsArticleCountWithOptOut
-							numArticles={numArticles}
-							isArticleCountOn={!hasOptedOut}
-							isMobileOnly={false}
-							onArticleCountOptOut={onArticleCountOptOut}
-							onArticleCountOptIn={onArticleCountOptIn}
-							defaultHeaderCopy={countryGroupDetails.headerCopy}
-							userName={props.userName}
-						/>
-					}
-					bodyCopy={articleCountContributeCopy(glyph(props.currency))}
-				/>
-			) : (
-				<ContributionFormBlurb
-					headerCopy={countryGroupDetails.headerCopy}
-					bodyCopy={countryGroupDetails.contributeCopy}
-				/>
-			)}
+							<ContributionForm
+								onPaymentAuthorisation={onPaymentAuthorisation}
+								campaignSettings={campaignSettings}
+							/>
+						</div>
+					)}
+				</div>
 
-			<div className="gu-content__form">
-				{isArticleCountTest && numArticles !== null && numArticles >= 5 && (
-					<ContributionsArticleCountWithOptOut
-						numArticles={numArticles}
-						isMobileOnly
-						isArticleCountOn={!hasOptedOut}
-						onArticleCountOptOut={onArticleCountOptOut}
-						onArticleCountOptIn={onArticleCountOptIn}
-						userName={null}
-						defaultHeaderCopy={null}
-					/>
-				)}
-
-				<SecureTransactionIndicator modifierClasses={['top']} />
-
-				{props.canShowTicker &&
-				campaignSettings &&
-				campaignSettings.tickerSettings ? (
-					<ContributionTicker
-						{...campaignSettings.tickerSettings}
-						onGoalReached={props.setTickerGoalReached}
-					/>
-				) : null}
-				{props.tickerGoalReached &&
-				campaignSettings &&
-				campaignSettings.tickerSettings &&
-				campaignSettings.goalReachedCopy ? (
-					campaignSettings.goalReachedCopy
+				{props.shouldShowRichLandingPage ? (
+					<div css={styles.highlightsContainer}>
+						<ContributionsFormJournalismHighlights />
+					</div>
 				) : (
 					<div>
-						{countryGroupDetails.formMessage ? (
-							<div className="form-message">
-								{countryGroupDetails.formMessage}
-							</div>
-						) : null}
+						{showPreviousGiving && lastOneOffContribution && (
+							<ContributionFormBlurb
+								headerCopy={
+									<PreviousGivingHeaderCopy userName={props.userName} />
+								}
+								bodyCopy={
+									<PreviousGivingBodyCopy
+										lastOneOffContribution={lastOneOffContribution}
+									/>
+								}
+							/>
+						)}
 
-						<ContributionForm
-							onPaymentAuthorisation={onPaymentAuthorisation}
-							campaignSettings={campaignSettings}
+						<ContributionFormBlurb
+							headerCopy={countryGroupDetails.headerCopy}
+							bodyCopy={countryGroupDetails.contributeCopy}
 						/>
 					</div>
 				)}
+
+				{campaignSettings?.extraComponent}
+				<DirectDebitPopUpForm
+					buttonText="Contribute with Direct Debit"
+					onPaymentAuthorisation={onPaymentAuthorisation}
+				/>
 			</div>
-			{campaignSettings?.extraComponent}
-			<DirectDebitPopUpForm
-				buttonText="Contribute with Direct Debit"
-				onPaymentAuthorisation={onPaymentAuthorisation}
-			/>
 		</div>
 	);
 }
