@@ -7,7 +7,6 @@ import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
-import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Title
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
@@ -18,7 +17,6 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
-import ophan.thrift.event.AbTest
 import org.joda.time.LocalDate
 import play.api.mvc.Call
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest

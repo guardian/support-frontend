@@ -2,7 +2,6 @@ package com.gu.acquisition.model
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._
-import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 import play.api.libs.json.{Reads, Writes, Json => PlayJson}
 
@@ -14,8 +13,8 @@ case class ReferrerAcquisitionData(
   referrerPageviewId: Option[String],
   referrerUrl: Option[String],
   componentId: Option[String],
-  componentType: Option[ComponentType],
-  source: Option[AcquisitionSource],
+  componentType: Option[String],
+  source: Option[String],
   abTests: Option[Set[AbTest]],
   queryParameters: Option[Set[QueryParameter]],
   hostname: Option[String],
