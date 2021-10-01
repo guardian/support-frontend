@@ -3,6 +3,7 @@ package utils
 
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.i18n.{Country, Currency}
+import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._

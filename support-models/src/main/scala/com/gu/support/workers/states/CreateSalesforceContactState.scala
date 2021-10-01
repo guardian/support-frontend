@@ -1,7 +1,8 @@
 package com.gu.support.workers.states
 
-import java.util.UUID
+import com.gu.support.acquisitions.AcquisitionData
 
+import java.util.UUID
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, User, _}
 import org.joda.time.LocalDate

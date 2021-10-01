@@ -1,7 +1,6 @@
 package services.stepfunctions
 
 import java.util.UUID
-
 import actions.CustomActionBuilders.AnyAuthRequest
 import akka.actor.ActorSystem
 import cats.data.EitherT
@@ -10,6 +9,7 @@ import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.i18n.Title
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
@@ -30,6 +30,7 @@ object CreateSupportWorkersRequest {
   import codecs.CirceDecoders._
   import com.gu.support.encoding.CustomCodecs.encodeEither
   import com.gu.support.encoding.CustomCodecs.decodeEither
+  import com.gu.support.acquisitions.ReferrerAcquisitionData.{abTestEncoder, abTestDecoder}
 
   implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
 

@@ -1,7 +1,7 @@
 package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{AbTest, QueryParameter}
+import com.gu.support.acquisitions.{AbTest, QueryParameter}
 import com.gu.support.zuora.api.ReaderType
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat

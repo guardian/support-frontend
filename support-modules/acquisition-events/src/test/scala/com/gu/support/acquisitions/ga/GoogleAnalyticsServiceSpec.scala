@@ -1,10 +1,11 @@
 package com.gu.support.acquisitions.ga
 
 import com.gu.i18n.{Country, Currency}
+import com.gu.support.acquisitions.AbTest
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData}
 import com.gu.support.acquisitions.models.AcquisitionProduct.{DigitalSubscription, Paper, RecurringContribution}
 import com.gu.support.acquisitions.models.PrintProduct.GuardianWeekly
-import com.gu.support.acquisitions.models.{AbTest, AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions}
+import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions}
 import com.gu.support.zuora.api.ReaderType
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.OkHttpClient
