@@ -43,7 +43,7 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
-import type { CheckoutState, WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
   getBillingAddress,
   getDeliveryAddress,

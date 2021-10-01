@@ -14,7 +14,6 @@ import type {
   CheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 

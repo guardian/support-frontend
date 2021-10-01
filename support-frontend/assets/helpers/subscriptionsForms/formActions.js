@@ -22,7 +22,6 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -31,7 +30,6 @@ export type Action =
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_EMAIL', email: string }
   | { type: 'SET_CONFIRM_EMAIL', email: string }
-  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_TITLE_GIFT', titleGiftRecipient: Option<string> }
   | { type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient: string }
@@ -154,6 +152,5 @@ export {
   setFormErrors,
   setSubmissionError,
   setFormSubmitted,
-  setUserTypeFromIdentityResponse,
   formActionCreators,
 };
