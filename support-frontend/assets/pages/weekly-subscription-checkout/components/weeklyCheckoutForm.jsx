@@ -182,7 +182,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
     props.setBillingCountry(props.deliveryCountry);
   };
   const paymentMethods = supportedPaymentMethods(props.currencyId, props.billingCountry);
-  const isUsingGuestCheckout = false;
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -230,12 +229,15 @@ function WeeklyCheckoutForm(props: PropTypes) {
               setLastName={props.setLastName}
               email={props.email}
               setEmail={props.setEmail}
+              confirmEmail={props.confirmEmail}
+              setConfirmEmail={props.setConfirmEmail}
               isSignedIn={props.isSignedIn}
+              checkIfEmailHasPassword={props.checkIfEmailHasPassword}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
-              isUsingGuestCheckout={isUsingGuestCheckout}
+              isUsingGuestCheckout
             />
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
