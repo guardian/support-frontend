@@ -40,14 +40,13 @@ const alignmentStyles = css`
 `;
 
 function ContributionsFooter() {
-  const faqsLink = 'https://manage.theguardian.com/help-centre';
   const termsConditionsLink =
     'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
 
   return (
     <div css={containerStyles}>
       <div css={alignmentStyles}>
-        <Footer faqsLink={faqsLink} termsConditionsLink={termsConditionsLink}>
+        <Footer termsConditionsLink={termsConditionsLink}>
           <p>
             The ultimate owner of the Guardian is The Scott Trust Limited, whose
             role it is to secure the editorial and financial independence of the
