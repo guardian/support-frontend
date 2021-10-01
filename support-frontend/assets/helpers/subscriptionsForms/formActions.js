@@ -79,12 +79,6 @@ const setFormSubmitted = (formSubmitted: boolean) => ({
   type: 'SET_FORM_SUBMITTED',
   formSubmitted,
 });
-const setUserTypeFromIdentityResponse =
-  (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
-    (dispatch: Function): void => {
-      dispatch(setFormSubmissionDependentValue(() =>
-        ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
-    };
 
 const formActionCreators = {
   setTitle: (title: string): Action => ({ type: 'SET_TITLE', title: (title !== '' ? title : null) }),
