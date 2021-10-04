@@ -47,7 +47,7 @@ import type {
   FormActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import type { CheckoutState, WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
   getBillingAddress,
   getDeliveryAddress,
@@ -144,7 +144,7 @@ function mapDispatchToProps() {
   const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
-    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
       checkIfEmailHasPassword(email)(dispatch, getState);
     },
     formIsValid: () =>
