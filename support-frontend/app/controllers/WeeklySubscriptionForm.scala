@@ -45,7 +45,7 @@ class WeeklySubscriptionForm(
     val maybeIdUser: EitherT[Future, String, Option[IdUser]] = request.user match {
       case Some(user) =>
         identityService.getUser(user.minimalUser).map(Some(_))
-      case _ => EitherT.rightT(None)
+      case None => EitherT.rightT(None)
     }
     maybeIdUser.fold(
       error => {
