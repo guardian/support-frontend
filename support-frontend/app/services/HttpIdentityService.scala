@@ -153,7 +153,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       wsClient.url(s"$apiUrl/guest")
         .withHttpHeaders(postHeaders(req): _*)
         .withBody(body)
-        .withRequestTimeout(1.second)
+        .withRequestTimeout(5.seconds)
         .withMethod("POST")
         .withQueryStringParameters(("accountVerificationEmail", "true"))
     ) { resp =>
