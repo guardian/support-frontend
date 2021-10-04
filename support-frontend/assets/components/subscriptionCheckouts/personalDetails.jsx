@@ -37,7 +37,7 @@ export type PropTypes = {
   setEmail: Function,
   confirmEmail?: Option<string>,
   setConfirmEmail?: Option<Function>,
-  checkIfEmailHasPassword?: Option<Function>,
+  fetchAndStoreUserType?: Option<Function>,
   isSignedIn: boolean,
   telephone: Option<string>,
   setTelephone: Function,
@@ -87,8 +87,8 @@ export default function PersonalDetails(props: PropTypes) {
     if (props.setEmail) { props.setEmail(e.target.value); }
   };
 
-  const maybeCheckEmail = (e) => {
-    if (props.checkIfEmailHasPassword) { props.checkIfEmailHasPassword(e.target.value); }
+  const maybeFetchAndStoreUsertype = (e) => {
+    if (props.fetchAndStoreUserType) { props.fetchAndStoreUserType(e.target.value); }
   };
 
   const maybeSetConfirmEmail = (e) => {
@@ -135,7 +135,7 @@ export default function PersonalDetails(props: PropTypes) {
         type="email"
         value={props.email}
         onInput={maybeSetEmail}
-        onChange={maybeCheckEmail}
+        onChange={maybeFetchAndStoreUsertype}
         error={firstError('email', props.formErrors)}
         pattern={emailRegexPattern}
         disabled={!props.isUsingGuestCheckout || props.isSignedIn}
@@ -159,5 +159,5 @@ export default function PersonalDetails(props: PropTypes) {
 PersonalDetails.defaultProps = {
   confirmEmail: null,
   setConfirmEmail: null,
-  checkIfEmailHasPassword: null,
+  fetchAndStoreUserType: null,
 };

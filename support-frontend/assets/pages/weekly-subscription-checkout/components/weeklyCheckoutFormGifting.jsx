@@ -83,6 +83,7 @@ import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 
 // ----- Styles ----- //
 
@@ -101,6 +102,7 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
+  fetchAndStoreUserType: Function,
   submitForm: Function,
   setBillingCountry: Function,
   billingAddressErrors: Array<Object>,
@@ -142,6 +144,9 @@ function mapDispatchToProps() {
   const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
+    fetchAndStoreUserType: email => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
+      fetchAndStoreUserType(email)(dispatch, getState);
+    },
     formIsValid: () =>
       (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
@@ -303,12 +308,14 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               setLastName={props.setLastName}
               email={props.email}
               setEmail={props.setEmail}
+              setConfirmEmail={props.setConfirmEmail}
               isSignedIn={props.isSignedIn}
+              fetchAndStoreUserType={props.fetchAndStoreUserType}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
-              isUsingGuestCheckout={false}
+              isUsingGuestCheckout
             />
           </FormSection>
           <FormSection title="Is the billing address the same as the recipient's address?">

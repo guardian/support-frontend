@@ -82,6 +82,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 
 
 // ----- Styles ----- //
@@ -102,6 +103,7 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
+  fetchAndStoreUserType: Function,
   submitForm: Function,
   setBillingCountry: Function,
   billingAddressErrors: Array<Object>,
@@ -142,6 +144,9 @@ function mapDispatchToProps() {
   const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
+    fetchAndStoreUserType: email => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
+      fetchAndStoreUserType(email)(dispatch, getState);
+    },
     formIsValid: () =>
       (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
@@ -182,7 +187,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
     props.setBillingCountry(props.deliveryCountry);
   };
   const paymentMethods = supportedPaymentMethods(props.currencyId, props.billingCountry);
-  const isUsingGuestCheckout = false;
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -230,12 +234,15 @@ function WeeklyCheckoutForm(props: PropTypes) {
               setLastName={props.setLastName}
               email={props.email}
               setEmail={props.setEmail}
+              confirmEmail={props.confirmEmail}
+              setConfirmEmail={props.setConfirmEmail}
               isSignedIn={props.isSignedIn}
+              fetchAndStoreUserType={props.fetchAndStoreUserType}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
-              isUsingGuestCheckout={isUsingGuestCheckout}
+              isUsingGuestCheckout
             />
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
