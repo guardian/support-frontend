@@ -5,7 +5,7 @@ import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { setUserTypeFromIdentityResponse } from 'helpers/subscriptionsForms/formActions';
 
-export const checkIfEmailHasPassword = (email: string) =>
+export const fetchAndStoreUserType = (email: string) =>
   (dispatch: Function, getState: () => CheckoutState | WithDeliveryCheckoutState): void => {
     const state = getState();
     const { csrf } = state.page;

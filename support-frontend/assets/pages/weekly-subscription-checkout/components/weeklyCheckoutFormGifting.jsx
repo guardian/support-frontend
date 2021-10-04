@@ -83,7 +83,7 @@ import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 
 // ----- Styles ----- //
 
@@ -102,7 +102,7 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
-  checkIfEmailHasPassword: Function,
+  fetchAndStoreUserType: Function,
   submitForm: Function,
   setBillingCountry: Function,
   billingAddressErrors: Array<Object>,
@@ -144,8 +144,8 @@ function mapDispatchToProps() {
   const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
-    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
-      checkIfEmailHasPassword(email)(dispatch, getState);
+    fetchAndStoreUserType: email => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => {
+      fetchAndStoreUserType(email)(dispatch, getState);
     },
     formIsValid: () =>
       (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
@@ -310,7 +310,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
               setEmail={props.setEmail}
               setConfirmEmail={props.setConfirmEmail}
               isSignedIn={props.isSignedIn}
-              checkIfEmailHasPassword={props.checkIfEmailHasPassword}
+              fetchAndStoreUserType={props.fetchAndStoreUserType}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
