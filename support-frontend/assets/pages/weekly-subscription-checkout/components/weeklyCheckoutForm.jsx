@@ -47,7 +47,7 @@ import type {
   FormActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CheckoutState, WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
   getBillingAddress,
   getDeliveryAddress,
@@ -82,6 +82,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
 
 
 // ----- Styles ----- //
@@ -102,6 +103,7 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
+  checkIfEmailHasPassword: Function,
   submitForm: Function,
   setBillingCountry: Function,
   billingAddressErrors: Array<Object>,
@@ -142,6 +144,9 @@ function mapDispatchToProps() {
   const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
+    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      checkIfEmailHasPassword(email)(dispatch, getState);
+    },
     formIsValid: () =>
       (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
