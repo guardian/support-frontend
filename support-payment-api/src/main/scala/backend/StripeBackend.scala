@@ -8,7 +8,6 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
@@ -28,14 +27,14 @@ import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 class StripeBackend(
   stripeService: StripeService,
   val databaseService: ContributionsStoreService,
   identityService: IdentityService,
-  val gaService: GoogleAnalyticsService,
+  val ophanService: AnalyticsService,
   val bigQueryService: BigQueryService,
   val acquisitionsStreamService: AcquisitionsStreamService,
   emailService: EmailService,
@@ -223,12 +222,11 @@ class StripeBackend(
     )
 
     val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
-    val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
     track(
+      legacyAcquisition = stripeAcquisition,
       acquisition = AcquisitionDataRowBuilder.buildFromStripe(stripeAcquisition, contributionData),
-      contributionData,
-      gaData
+      contributionData
     )
   }
 
@@ -269,7 +267,7 @@ object StripeBackend {
     stripeService: StripeService,
     databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    gaService: GoogleAnalyticsService,
+    ophanService: AnalyticsService,
     bigQueryService: BigQueryService,
     acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
@@ -284,7 +282,7 @@ object StripeBackend {
       stripeService,
       databaseService,
       identityService,
-      gaService,
+      ophanService,
       bigQueryService,
       acquisitionsStreamService,
       emailService,
@@ -313,7 +311,7 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
+      services.AnalyticsService(configLoader, env),
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],

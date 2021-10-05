@@ -8,7 +8,6 @@ import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmO
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 
 import javax.xml.datatype.DatatypeFactory
@@ -117,7 +116,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockAmazonPayService: AmazonPayService = mock[AmazonPayService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
-  val mockGaService: GoogleAnalyticsService = GoogleAnalyticsServiceMock
+  val mockOphanService: AnalyticsService = mock[AnalyticsService]
   val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
@@ -129,7 +128,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockAmazonPayService,
     mockIdentityService,
     mockEmailService,
-    mockGaService,
+    mockOphanService,
     mockBigQueryService,
     mockAcquisitionsStreamService,
     mockDatabaseService
@@ -187,6 +186,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockOrderTotal.getAmount).thenReturn("25")
 
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
@@ -205,6 +205,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
         when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
@@ -225,6 +226,10 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
 
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
@@ -244,7 +249,10 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthStatus.getReasonCode).thenReturn(expectedReason)
         when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
 
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
@@ -265,6 +273,10 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthStatus.getState).thenReturn("Declined")
         when(mockAuthStatus.getReasonCode).thenReturn("TransactionTimedOut")
         when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)

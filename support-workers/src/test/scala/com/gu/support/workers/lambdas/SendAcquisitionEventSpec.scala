@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import cats.data.EitherT
 
 import java.io.ByteArrayOutputStream
-import com.gu.acquisitions.GoogleAnalyticsServiceBuilder
+import com.gu.acquisitions.AcquisitionServiceBuilder
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventGWJson, sendAcquisitionEventJson, sendAcquisitionEventPrintJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -60,10 +60,10 @@ object MockAcquisitionHelper extends MockitoSugar {
     //Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val gaService = GoogleAnalyticsServiceBuilder.build(isTestService = true)
+    val acquisitionService = AcquisitionServiceBuilder.build(isTestService = true)
     val bigQueryService = new BigQueryService(configuration.bigQueryConfigProvider.get())
 
-    when(services.gaService).thenReturn(gaService)
+    when(services.acquisitionService).thenReturn(acquisitionService)
     when(services.bigQueryService).thenReturn(bigQueryService)
     when(services.acquisitionsStreamService).thenReturn(mockAcquisitionsStreamService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)

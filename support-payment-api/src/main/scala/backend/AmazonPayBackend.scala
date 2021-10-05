@@ -6,7 +6,6 @@ import com.amazon.pay.response.ipn.model.{Notification, NotificationType, Refund
 import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails, Status}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -30,7 +29,7 @@ class AmazonPayBackend(
     service: AmazonPayService,
     identityService: IdentityService,
     emailService: EmailService,
-    val gaService: GoogleAnalyticsService,
+    val ophanService: AnalyticsService,
     val bigQueryService: BigQueryService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService
@@ -121,12 +120,11 @@ class AmazonPayBackend(
 
   private def trackContribution(payment: AuthorizationDetails, acquisitionData: AmazonPayAcquisition, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): Future[List[BackendError]] = {
     val contributionData = ContributionData.fromAmazonPay(payment, identityId, email, acquisitionData.countryCode, clientBrowserInfo.countrySubdivisionCode, acquisitionData.amazonPayment.orderReferenceId)
-    val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
     track(
+      legacyAcquisition = acquisitionData,
       acquisition = AcquisitionDataRowBuilder.buildFromAmazonPay(acquisitionData, contributionData),
-      contributionData,
-      gaData
+      contributionData
     )
   }
 
@@ -170,13 +168,13 @@ object AmazonPayBackend {
     amazonPayService: AmazonPayService,
     databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    gaService: GoogleAnalyticsService,
+    ophanService: AnalyticsService,
     bigQueryService: BigQueryService,
     acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
-    new AmazonPayBackend(cloudWatchService, amazonPayService, identityService, emailService, gaService, bigQueryService, acquisitionsStreamService, databaseService)
+    new AmazonPayBackend(cloudWatchService, amazonPayService, identityService, emailService, ophanService, bigQueryService, acquisitionsStreamService, databaseService)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -195,7 +193,7 @@ object AmazonPayBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
+      services.AnalyticsService(configLoader, env),
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],

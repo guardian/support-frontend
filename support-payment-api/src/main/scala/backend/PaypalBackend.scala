@@ -6,7 +6,6 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
@@ -24,14 +23,14 @@ import services._
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.util.Try
 
 class PaypalBackend(
   paypalService: PaypalService,
   val databaseService: ContributionsStoreService,
   identityService: IdentityService,
-  val gaService: GoogleAnalyticsService,
+  val ophanService: AnalyticsService,
   val bigQueryService: BigQueryService,
   val acquisitionsStreamService: AcquisitionsStreamService,
   emailService: EmailService,
@@ -132,12 +131,11 @@ class PaypalBackend(
       case Left(err) => Future.successful(List(BackendError.fromPaypalAPIError(err)))
       case Right(contributionData) =>
         val paypalAcquisition = PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
-        val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
         track(
+          legacyAcquisition = paypalAcquisition,
           acquisition = AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData),
           contributionData,
-          gaData
         )
     }
   }
@@ -191,13 +189,13 @@ object PaypalBackend {
     paypalService: PaypalService,
     databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    gaService: GoogleAnalyticsService,
+    ophanService: AnalyticsService,
     bigQueryService: BigQueryService,
     acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
-    new PaypalBackend(paypalService, databaseService, identityService, gaService, bigQueryService, acquisitionsStreamService, emailService, cloudWatchService)
+    new PaypalBackend(paypalService, databaseService, identityService, ophanService, bigQueryService, acquisitionsStreamService, emailService, cloudWatchService)
   }
 
   class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
@@ -217,7 +215,7 @@ object PaypalBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
+      services.AnalyticsService(configLoader, env),
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(new BigQueryService(_)): InitializationResult[BigQueryService],

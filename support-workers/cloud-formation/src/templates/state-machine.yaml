@@ -68,6 +68,13 @@ States:
           Resource: "${SendAcquisitionEventLambda.Arn}"
           End: True
           {{> retry}}
+    - StartAt: SendOldAcquisitionEvent
+      States:
+        SendOldAcquisitionEvent:
+          Type: Task
+          Resource: "${SendOldAcquisitionEventLambda.Arn}"
+          End: True
+          {{> retry}}
     End: True
 
   FailureHandler:
