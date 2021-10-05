@@ -50,19 +50,15 @@ object GoogleAnalyticsService extends LazyLogging {
   }
 
   private[ga] def getAnnualisedValue(acquisition: AcquisitionDataRow)(implicit ec: ExecutionContext): EitherT[Future, String, Double] = {
-    acquisition.amount match {
-      case Some(amount) =>
-        val acquisitionModel = AcquisitionModel(amount.toDouble,
-          acquisition.product.value,
-          acquisition.currency.iso,
-          acquisition.paymentFrequency.value,
-          acquisition.paymentProvider.map(_.toString),
-          acquisition.printOptions.map(printOptions => PrintOptionsModel(printOptions.product.value, printOptions.deliveryCountry.alpha2))
-        )
-        EitherT(AnnualisedValueService.getAsyncAV(acquisitionModel, "ophan"))
-
-      case None => EitherT.fromEither[Future](Left("No amount for acquisition"))
-    }
+    val amount = acquisition.amount.getOrElse[BigDecimal](0.0)
+    val acquisitionModel = AcquisitionModel(amount.toDouble,
+      acquisition.product.value,
+      acquisition.currency.iso,
+      acquisition.paymentFrequency.value,
+      acquisition.paymentProvider.map(_.toString),
+      acquisition.printOptions.map(printOptions => PrintOptionsModel(printOptions.product.value, printOptions.deliveryCountry.alpha2))
+    )
+    EitherT(AnnualisedValueService.getAsyncAV(acquisitionModel, "ophan"))
   }
 
   private[ga] def getSuccessfulSubscriptionSignUpMetric(conversionCategory: ConversionCategory) =
