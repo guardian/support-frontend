@@ -2,12 +2,11 @@ package backend
 
 import cats.data.EitherT
 import cats.kernel.Semigroup
-import com.gu.acquisition.model.errors.AnalyticsServiceError
 import model.DefaultThreadPool
 import services.{ContributionsStoreService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
 import cats.implicits._
-import model.amazonpay.{AmazonPayApiError => AmazonPayError }
+import model.amazonpay.{AmazonPayApiError => AmazonPayError}
 import model.stripe.{StripeApiError => StripeError}
 
 import scala.concurrent.Future
@@ -17,9 +16,9 @@ sealed abstract class BackendError extends Exception {
     case BackendError.IdentityIdMissingError(err) => err
     case BackendError.Database(err) => err.getMessage
     case BackendError.IdentityServiceError(err) => err.getMessage
-    case BackendError.Ophan(err) => err.map(_.getMessage).mkString(", ")
     case BackendError.BigQueryError(err) => err
     case BackendError.AcquisitionsStreamError(err) => err
+    case BackendError.GoogleAnalyticsError(err) => err
     case BackendError.StripeApiError(err) => err.getMessage
     case BackendError.PaypalApiError(err) => err.message
     case BackendError.AmazonPayApiError(err) => err.message
@@ -33,9 +32,9 @@ object BackendError {
   final case class IdentityIdMissingError(error: String) extends BackendError
   final case class BigQueryError(error: String) extends BackendError
   final case class AcquisitionsStreamError(error: String) extends BackendError
+  final case class GoogleAnalyticsError(error: String) extends BackendError
   final case class Database(error: ContributionsStoreService.Error) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
-  final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
   final case class AmazonPayApiError(err: AmazonPayError) extends BackendError
@@ -63,7 +62,6 @@ object BackendError {
   def identityIdMissingError(err: String): BackendError = IdentityIdMissingError(err)
   def fromIdentityError(err: IdentityClient.ContextualError): BackendError = IdentityServiceError(err)
   def fromDatabaseError(err: ContributionsStoreService.Error): BackendError = Database(err)
-  def fromOphanError(err: List[AnalyticsServiceError]): BackendError = Ophan(err)
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)
   def fromStripeApiError(err: StripeError): BackendError = StripeApiError(err)
   def fromEmailError(err: EmailService.Error): BackendError = Email(err)

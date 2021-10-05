@@ -18,7 +18,6 @@ deployments:
         - "-UpdateSupporterProductDataLambda-"
         - "-FailureHandlerLambda-"
         - "-SendAcquisitionEventLambda-"
-        - "-SendOldAcquisitionEventLambda-"
         - "-PreparePaymentMethodForReuseLambda-"
       fileName: support-workers.jar
     dependencies: [cfn]

@@ -1,24 +1,22 @@
 package com.gu.support.workers.lambdas
 
+import cats.data.EitherT
 import com.amazonaws.services.lambda.runtime.Context
-import com.google.auth.oauth2.ServiceAccountCredentials
-import com.google.cloud.bigquery.BigQueryOptions
-import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.acquisition.model.{GAData, OphanIds}
-import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.acquisitions.AcquisitionDataRowBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
 import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.acquisitions.AcquisitionEventTable
+import com.gu.support.acquisitions.ga.models.GAData
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
+import com.gu.support.promotions.PromoCode
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -50,6 +48,23 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   }
 
+  private def buildGaData(state: SendAcquisitionEventState, requestInfo: RequestInfo): Either[String, GAData] = {
+    import cats.syntax.either._
+    for {
+      acquisitionData <- Either.fromOption(state.acquisitionData, "acquisition data not included")
+      ref = acquisitionData.referrerAcquisitionData
+      hostname <- Either.fromOption(ref.hostname, "missing hostname in referrer acquisition data")
+      gaClientId = ref.gaClientId.getOrElse(UUID.randomUUID().toString)
+      ipAddress = ref.ipAddress
+      userAgent = ref.userAgent
+    } yield GAData(
+      hostname = hostname,
+      clientId = gaClientId,
+      clientIpAddress = ipAddress,
+      clientUserAgent = userAgent
+    )
+  }
+
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
     sendPaymentSuccessMetric(state)
 
@@ -57,10 +72,15 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
     val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
     val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
+    val gaFuture = for {
+      gaData <- EitherT.fromEither(buildGaData(state, requestInfo)).leftMap(err => List(err))
+      result <- services.gaService.submit(acquisition, gaData, maxRetries = 5).leftMap(gaErrors => gaErrors.map(_.getMessage))
+    } yield result
 
     val result = for {
       streamResult <- streamFuture
       bigQueryResult <- biqQueryFuture
+      gaResult <- gaFuture
     } yield ()
 
     result.value.map {
@@ -77,6 +97,16 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
   }
 
+  private def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
+    case _: SendThankYouEmailContributionState => None
+    case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode
+    case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => s.promoCode
+    case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => None
+    case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => None
+    case s: SendThankYouEmailPaperState => s.promoCode
+    case s: SendThankYouEmailGuardianWeeklyState => s.promoCode
+  }
+
   private def logToElasticSearch(state: SendAcquisitionEventState) =
     LambdaExecutionResult.logResult(
       LambdaExecutionResult(
@@ -91,7 +121,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
           case _ => None
         },
         state.analyticsInfo.isGiftPurchase,
-        SendOldAcquisitionEvent.maybePromoCode(state.sendThankYouEmailState),
+        maybePromoCode(state.sendThankYouEmailState),
         state.user.billingAddress.country,
         state.user.deliveryAddress.map(_.country),
         None,

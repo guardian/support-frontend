@@ -1,8 +1,8 @@
 package model
 
-import java.util.UUID
+import com.gu.support.acquisitions.ga.models.GAData
 
-import com.gu.acquisition.model.GAData
+import java.util.UUID
 import play.api.mvc.Request
 
 case class ClientBrowserInfo(
