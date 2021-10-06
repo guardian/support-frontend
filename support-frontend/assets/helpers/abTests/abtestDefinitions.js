@@ -152,7 +152,7 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 13,
   },
-  payPalOneClickTestV2: {
+  payPalOneClickTestV3: {
     variants: [
       {
         id: 'control',
@@ -174,6 +174,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
     seed: 11,
-    optimizeId: 'mB8kTh9ySPCAtwHHrVWkQw',
+    optimizeId: 'dDHS42cERbuQb0BXe85-4g',
   },
 };
