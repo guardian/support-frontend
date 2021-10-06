@@ -46,6 +46,8 @@ const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDe
     setAddressLineOne, setTownCity, setPostcode, setState, setCountry,
   } = addressActionCreatorsFor('billing');
 
+  // $FlowIgnore stoopid flow
+  dispatch(setCountry(payPalUserDetails.shipToCountryCode));
   dispatch(setEmail(payPalUserDetails.email));
   dispatch(setFirstName(payPalUserDetails.firstName));
   dispatch(setLastName(payPalUserDetails.lastName));
@@ -55,8 +57,6 @@ const updateStore = (dispatch: Dispatch<Action>, payPalUserDetails: PayPalUserDe
     dispatch(setState(payPalUserDetails.shipToState));
   }
   dispatch(setPostcode(payPalUserDetails.shipToZip));
-  // $FlowIgnore stoopid flow
-  dispatch(setCountry(payPalUserDetails.shipToCountryCode));
 };
 
 function mapStateToProps(state: CheckoutState, ownProps) {

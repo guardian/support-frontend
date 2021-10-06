@@ -40,21 +40,7 @@ class PaperSubscriptionForm(
   implicit val a: AssetsResolver = assets
 
 
-  def displayForm(): Action[AnyContent] =
-    authenticatedAction(subscriptionsClientId).async { implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      identityService.getUser(request.user.minimalUser).fold(
-        error => {
-          SafeLogger.error(scrub"Failed to display paper subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error")
-          Future.successful(InternalServerError)
-        },
-        user => {
-          Future.successful(Ok(paperSubscriptionFormHtml(Some(user))))
-        }
-      ).flatten.map(_.withSettingsSurrogateKey)
-    }
-
-  def displayGuestForm(): Action[AnyContent] = {
+  def displayForm(): Action[AnyContent] = {
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     maybeAuthenticatedAction().async{ implicit request =>
         val maybeIdUser: EitherT[Future, String, Option[IdUser]] = request.user match {

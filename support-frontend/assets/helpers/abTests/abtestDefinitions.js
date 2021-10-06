@@ -1,6 +1,5 @@
 // @flow
 import type { Tests } from './abtest';
-import { hasCsrQueryParam } from 'components/csr/csrMode';
 
 // ----- Tests ----- //
 
@@ -112,7 +111,7 @@ export const tests: Tests = {
     seed: 10,
     optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
   },
-  comparisonTableTest: {
+  comparisonTableTest2: {
     variants: [
       {
         id: 'control',
@@ -131,29 +130,7 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
     seed: 10,
-    optimizeId: 'YlwEboxsQ4qmv03tF4lRvQ',
-  },
-  subscriptionsGuestCheckoutTest: {
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    canRun: () => !hasCsrQueryParam(),
-    isActive: true,
-    referrerControlled: false,
-    targetPage: pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-    seed: 3,
-    optimizeId: 'tn3FveQmTeiTS4JtSUyzig',
+    optimizeId: 'unfNP7eZTLW4245wJOcxiw',
   },
   productSetTest: {
     variants: [
@@ -175,7 +152,7 @@ export const tests: Tests = {
     targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
     seed: 13,
   },
-  payPalOneClickTest: {
+  payPalOneClickTestV2: {
     variants: [
       {
         id: 'control',
@@ -197,6 +174,6 @@ export const tests: Tests = {
     referrerControlled: false,
     targetPage: pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
     seed: 11,
-    optimizeId: 'vkNaA-56TTeQBN8DB5YyZw',
+    optimizeId: 'mB8kTh9ySPCAtwHHrVWkQw',
   },
 };

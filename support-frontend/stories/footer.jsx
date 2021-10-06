@@ -20,10 +20,7 @@ stories.add('Footer', () => {
   return (
     <FullWidthContainer theme="brand">
       <CentredContainer>
-        <Footer
-          faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-          termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
-        >
+        <Footer termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
           {contents &&
           <>
             Terms and conditions may (or may not) apply

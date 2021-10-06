@@ -19,7 +19,6 @@ import { BackToTop } from './BackToTop';
 
 type PropTypes = {|
   centred: boolean,
-  faqsLink: string,
   termsConditionsLink: string,
   children: Node,
 |};
@@ -28,7 +27,7 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function Footer({
-  centred, children, faqsLink, termsConditionsLink,
+  centred, children, termsConditionsLink,
 }: PropTypes) {
   const [consentManagementPlatform, setConsentManagementPlatform] = useState(null);
 
@@ -60,11 +59,9 @@ function Footer({
       }
         <FooterContent appearance={{ border: true, centred }}>
           <ul css={linksList}>
-            {faqsLink &&
-              <li css={link}>
-                <Link subdued href={faqsLink}>FAQs</Link>
-              </li>
-            }
+            <li css={link}>
+              <Link subdued href="https://manage.theguardian.com/help-centre">Help Centre</Link>
+            </li>
             <li css={link}>
               <Link subdued href="https://www.theguardian.com/help/contact-us">Contact us</Link>
             </li>
@@ -98,7 +95,6 @@ function Footer({
 
 Footer.defaultProps = {
   centred: false,
-  faqsLink: '',
   termsConditionsLink: '',
   children: [],
 };

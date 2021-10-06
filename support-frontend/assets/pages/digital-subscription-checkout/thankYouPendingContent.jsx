@@ -48,26 +48,15 @@ function ThankYouPendingContent(props: PropTypes) {
             our {(
               <a
                 onClick={sendTrackingEventsOnClick({
-                  id: 'faq',
-                  product: 'DigitalPack',
-                  componentType: 'ACQUISITIONS_BUTTON',
-                })}
-                href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-              >
-              FAQs page
-              </a>
-            )} to find answers to common user issues. Alternatively, you can also
-            visit our {(
-              <a
-                onClick={sendTrackingEventsOnClick({
                   id: 'help',
                   product: 'DigitalPack',
                   componentType: 'ACQUISITIONS_BUTTON',
                 })}
-                href="https://www.theguardian.com/help"
-              >Help page
+                href="https://manage.theguardian.com/help-centre"
+              >
+              Help Centre
               </a>
-            )} for customer support.
+            )} to find answers to common user issues and get customer support.
           </p>
         </Text>
       </Content>

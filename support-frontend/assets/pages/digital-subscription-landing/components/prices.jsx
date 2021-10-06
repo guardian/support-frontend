@@ -44,18 +44,25 @@ const ctaCopy = {
   },
 };
 
+type CSSOverridableType = {|
+  cssOverrides?: string;
+|}
+
+type PricesPropTypes = PaymentSelectionPropTypes & CSSOverridableType
+
 function Prices({
   countryGroupId,
   currencyId,
   productPrices,
   orderIsAGift,
   isUsingGuestCheckout,
+  cssOverrides = '',
   showPayPalButton,
-}: PaymentSelectionPropTypes) {
+}: PricesPropTypes) {
   const copy = orderIsAGift ? ctaCopy.gift : ctaCopy.standard;
 
   return (
-    <section css={pricesSection} id="subscribe">
+    <section css={[pricesSection, cssOverrides]} id="subscribe">
       <h2 css={pricesHeadline}>{copy.title}</h2>
       <p css={pricesSubHeadline}>{copy.paragraph}</p>
       <FlexContainer cssOverrides={priceBoxes}>

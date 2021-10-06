@@ -80,8 +80,7 @@ import { getPriceSummary, sensiblyGenerateDigiSubPrice } from 'pages/paper-subsc
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { Participations } from 'helpers/abTests/abtest';
-import { checkIfEmailHasPassword } from 'helpers/subscriptionsForms/guestCheckout';
-import { hasCsrQueryParam } from 'components/csr/csrMode';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 const marginBottom = css`
@@ -107,7 +106,7 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
-  checkIfEmailHasPassword: Function,
+  fetchAndStoreUserType: Function,
   submitForm: Function,
   billingAddressErrors: Array<Object>,
   deliveryAddressErrors: Array<Object>,
@@ -159,8 +158,8 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
-    checkIfEmailHasPassword: email => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
-      checkIfEmailHasPassword(email)(dispatch, getState);
+    fetchAndStoreUserType: email => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      fetchAndStoreUserType(email)(dispatch, getState);
     },
     formIsValid: () =>
       (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) => withDeliveryFormIsValid(getState()),
@@ -219,7 +218,6 @@ function PaperCheckoutForm(props: PropTypes) {
   const priceHasRedundantFloat = simplePrice.split('.')[1] === '00'; // checks whether price is something like '£10.00'
   const cleanedPrice = priceHasRedundantFloat ? simplePrice.replace(/\.(.*)/, '') : simplePrice; // removes decimal point if there are no pence
   const expandedPricingText = `${cleanedPrice} per month`;
-  const isUsingGuestCheckout = props.participations.subscriptionsGuestCheckoutTest === 'variant' || hasCsrQueryParam();
 
   function addDigitalSubscription(event: SyntheticInputEvent<HTMLInputElement>) {
     setIncludesDigiSub(event.target.checked);
@@ -308,12 +306,12 @@ function PaperCheckoutForm(props: PropTypes) {
               confirmEmail={props.confirmEmail}
               setConfirmEmail={props.setConfirmEmail}
               isSignedIn={props.isSignedIn}
-              checkIfEmailHasPassword={props.checkIfEmailHasPassword}
+              fetchAndStoreUserType={props.fetchAndStoreUserType}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
               formErrors={props.formErrors}
               signOut={props.signOut}
-              isUsingGuestCheckout={isUsingGuestCheckout}
+              isUsingGuestCheckout
             />
           </FormSection>
 

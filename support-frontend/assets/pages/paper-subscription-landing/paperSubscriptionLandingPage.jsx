@@ -31,7 +31,6 @@ import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { paperLandingProps, type PaperLandingPropTypes } from './paperSubscriptionLandingProps';
-import { hasCsrQueryParam } from 'components/csr/csrMode';
 
 // ----- Collection or delivery ----- //
 
@@ -40,10 +39,7 @@ const reactElementId = 'paper-subscription-landing-page';
 // ----- Redux Store ----- //
 
 const paperSubsFooter = (
-  <Footer
-    faqsLink="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions"
-    termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
-  />);
+  <Footer termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions" />);
 
 // ----- Render ----- //
 
@@ -51,10 +47,9 @@ const paperSubsFooter = (
 const pageQaId = 'qa-paper-subscriptions';
 
 
-const PaperLandingPage = ({ productPrices, promotionCopy, participations }: PaperLandingPropTypes) => {
+const PaperLandingPage = ({ productPrices, promotionCopy }: PaperLandingPropTypes) => {
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
   const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
-  const isUsingGuestCheckout = participations.subscriptionsGuestCheckoutTest === 'variant' || hasCsrQueryParam();
 
   const [selectedTab, setSelectedTab] = useState<PaperFulfilmentOptions>(fulfilment);
 
@@ -96,7 +91,6 @@ const PaperLandingPage = ({ productPrices, promotionCopy, participations }: Pape
             productPrices={productPrices}
             tab={selectedTab}
             setTabAction={setSelectedTab}
-            isUsingGuestCheckout={isUsingGuestCheckout}
           />
         </CentredContainer>
       </FullWidthContainer>

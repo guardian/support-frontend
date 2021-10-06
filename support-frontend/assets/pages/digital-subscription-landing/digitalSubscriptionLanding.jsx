@@ -41,7 +41,8 @@ import FeedbackWidget from 'pages/digital-subscription-landing/components/feedba
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { digitalLandingProps, type DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
-import ComparisonTable from './components/comparison/comparisonTable';
+import InteractiveTable from 'components/interactiveTable/interactiveTable';
+import { headers, footer, getRows } from './components/comparison/interactiveTableContents';
 
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
@@ -89,15 +90,18 @@ const eventsProductBlockContainer = css`
   }
 `;
 
-const comparisonTableContainer = css`
-    margin-top: 43px;
-    margin-bottom: ${space[2]}px;
-    padding-top: 0;
-    padding-bottom: 0;
+const extraPaddingForComparisonTable = css`
+  padding-top: ${space[6]}px;
+`;
+
+const interactiveTableContainer = css`
+  position: relative;
+  z-index: 1;
+  margin-top: -40px;
+  margin-bottom: ${space[2]}px;
 
   ${from.tablet} {
-    margin-top: 60px;
-    margin-bottom: ${space[2]}px;
+    margin-bottom: ${space[6]}px;
   }
 `;
 
@@ -150,7 +154,7 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
     trackProduct: 'DigitalPack',
   });
 
-  const footer = (
+  const pageFooter = (
     <div className="footer-container">
       <div className="footer-alignment">
         <DigitalFooter
@@ -171,7 +175,7 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
     <Provider store={store}>
       <Page
         header={<CountrySwitcherHeader />}
-        footer={footer}
+        footer={pageFooter}
       >
         <CheckoutStage
           checkoutForm={<DigitalLandingComponent {...props} />}
@@ -198,11 +202,14 @@ function DigitalLandingComponent({
   }
 
   const showEventsComponent = participations.emailDigiSubEventsTest === 'variant';
-  const showComparisonTable = participations.comparisonTableTest === 'variant';
+  const showComparisonTable = participations.comparisonTableTest2 === 'variant';
   const showPayPalButton = participations.payPalOneClickTest === 'payPal';
   const isUsingGuestCheckout = showPayPalButton || participations.payPalOneClickTest === 'guestCheckout';
   const giftNonGiftLink = orderIsAGift ? routes.digitalSubscriptionLanding : routes.digitalSubscriptionLandingGift;
   const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+
+  // For comparison table
+  const localisedRows = getRows(countryGroupId);
 
   // For CTAs in hero test
   const heroPriceList = getHeroCtaProps(
@@ -235,12 +242,16 @@ function DigitalLandingComponent({
       {showComparisonTable &&
       <FullWidthContainer>
         <CentredContainer>
-          <Block cssOverrides={comparisonTableContainer}>
-            <ComparisonTable />
-          </Block>
+          <div css={interactiveTableContainer} ref={setElementToObserve}>
+            <InteractiveTable
+              caption={<>What&apos;s included in a paid digital subscription</>}
+              headers={headers}
+              rows={localisedRows}
+              footer={footer}
+            />
+          </div>
         </CentredContainer>
-      </FullWidthContainer>
-      }
+      </FullWidthContainer>}
       {showEventsComponent &&
       <FullWidthContainer>
         <CentredContainer>
@@ -250,20 +261,23 @@ function DigitalLandingComponent({
         </CentredContainer>
       </FullWidthContainer>
       }
-      <FullWidthContainer>
-        <CentredContainer>
-          <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
-            <div ref={setElementToObserve}>
-              <ProductBlock
-                countryGroupId={countryGroupId}
-              />
-            </div>
-          </Block>
-        </CentredContainer>
-      </FullWidthContainer>
+      {!showComparisonTable &&
+        <FullWidthContainer>
+          <CentredContainer>
+            <Block cssOverrides={[productBlockContainer, showEventsComponent ? productBlockContainerWithEvents : '']}>
+              <div ref={setElementToObserve}>
+                <ProductBlock
+                  countryGroupId={countryGroupId}
+                />
+              </div>
+            </Block>
+          </CentredContainer>
+        </FullWidthContainer>}
       <FullWidthContainer theme="dark" hasOverlap>
         <CentredContainer>
+          {/* $FlowIgnore - issue with union type */}
           <Prices
+            cssOverrides={showComparisonTable ? extraPaddingForComparisonTable : ''}
             countryGroupId={countryGroupId}
             currencyId={currencyId}
             productPrices={productPrices}
