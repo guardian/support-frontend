@@ -48,3 +48,12 @@ export function set(name: string, value: string, daysToLive: ?number): void {
   document.cookie = `${name}=${value}; path=/; secure; expires=${expires.toUTCString()};${getDomainAttribute()}`;
 
 }
+
+export function remove(name: string): void {
+  const expires = 'expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  const path = 'path=/;';
+
+  // Remove cookie, implicitly using the document's domain.
+  document.cookie = `${name}=;${path}${expires} domain=${getShortDomain()};`;
+}
+
