@@ -1,15 +1,16 @@
 package services.stepfunctions
 
 import java.util.UUID
+
 import actions.CustomActionBuilders.AnyAuthRequest
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
+import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Title
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
@@ -17,6 +18,7 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
+import ophan.thrift.event.AbTest
 import org.joda.time.LocalDate
 import play.api.mvc.Call
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
@@ -27,8 +29,9 @@ import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
 
-  import com.gu.support.encoding.CustomCodecs._
-  import com.gu.support.acquisitions.ReferrerAcquisitionData.{abTestEncoder, abTestDecoder}
+  import codecs.CirceDecoders._
+  import com.gu.support.encoding.CustomCodecs.encodeEither
+  import com.gu.support.encoding.CustomCodecs.decodeEither
 
   implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
 

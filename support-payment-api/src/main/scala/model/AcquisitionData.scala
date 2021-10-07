@@ -1,6 +1,7 @@
 package model
 
-import com.gu.support.acquisitions.{AbTest, QueryParameter}
+import ophan.thrift.componentEvent.ComponentType
+import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 //-- common for stripe and paypal
 case class AcquisitionData(
@@ -12,8 +13,8 @@ case class AcquisitionData(
   referrerUrl: Option[String],
   componentId: Option[String],
   campaignCodes: Option[Set[String]],
-  componentType: Option[String],
-  source: Option[String],
+  componentType: Option[ComponentType],
+  source: Option[AcquisitionSource],
   abTests: Option[Set[AbTest]],
   queryParameters: Option[Set[QueryParameter]],
   gaId: Option[String],

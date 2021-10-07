@@ -6,6 +6,8 @@ import com.amazon.pay.response.ipn.model.{AuthorizationNotification, Notificatio
 import com.amazon.pay.response.model._
 import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmOrderReferenceResponseData, ResponseData}
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.acquisition.model.AcquisitionSubmission
+import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 
@@ -32,6 +34,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   //-- entities
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
   val countrySubdivisionCode = Some("NY")
+  val ophanError: List[AnalyticsServiceError] = List(AnalyticsServiceError.BuildError("Ophan error response"))
   val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
   val identityError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
@@ -88,6 +91,10 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.right(Future.successful(()))
   val unitPaymentResponseError: EitherT[Future, AmazonPayApiError, Unit] =
     EitherT.left(Future.successful(paymentError))
+  val acquisitionResponse: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
+    EitherT.right(Future.successful(mock[AcquisitionSubmission]))
+  val acquisitionResponseError: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
+    EitherT.left(Future.successful(ophanError))
   val databaseResponse: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
@@ -162,7 +169,7 @@ class AmazonPayBackendSpec extends AnyWordSpec
 
     "request" should {
       "return successful payment response even if identityService, " +
-        "databaseService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
+        "ophanService, databaseService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
         when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
         when(mockOrderReferenceStatus.getState).thenReturn("Open")

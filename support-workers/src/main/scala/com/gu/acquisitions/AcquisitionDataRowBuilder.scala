@@ -1,14 +1,14 @@
 package com.gu.acquisitions
 
 import com.gu.i18n.Country
-import com.gu.support.acquisitions.{AbTest, AcquisitionData, QueryParameter}
 import com.gu.support.catalog._
 import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import com.gu.support.workers.{AmazonPayPaymentMethod, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SepaPaymentMethod, SixWeekly, StripePaymentType}
+import com.gu.support.workers.{AcquisitionData, AmazonPayPaymentMethod, Annual, BillingPeriod, ClonedDirectDebitPaymentMethod, Contribution, CreditCardReferenceTransaction, DigitalPack, DirectDebitPaymentMethod, GuardianWeekly, Monthly, Paper, PayPalReferenceTransaction, PaymentMethod, ProductType, Quarterly, RequestInfo, SepaPaymentMethod, SixWeekly, StripePaymentType}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
+import com.gu.support.{acquisitions, catalog}
 import com.gu.support.acquisitions.models.AcquisitionType.{Purchase, Redemption}
 import com.gu.support.acquisitions.models.PaymentProvider.{AmazonPay, DirectDebit, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa}
 import com.gu.support.acquisitions.models.PrintProduct._
@@ -31,9 +31,9 @@ object AcquisitionDataRowBuilder {
       country = commonState.user.billingAddress.country,
       currency = commonState.product.currency,
       componentId = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentId),
-      componentType = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentType),
+      componentType = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentType.map(_.originalName)),
       campaignCode = state.acquisitionData.flatMap(_.referrerAcquisitionData.campaignCode),
-      source = state.acquisitionData.flatMap(_.referrerAcquisitionData.source),
+      source = state.acquisitionData.flatMap(_.referrerAcquisitionData.source.map(_.originalName)),
       referrerUrl = state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerUrl),
       abTests = state.acquisitionData.map(getAbTests).getOrElse(Nil),
       paymentFrequency = paymentFrequencyFromBillingPeriod(commonState.product.billingPeriod),
@@ -80,8 +80,12 @@ object AcquisitionDataRowBuilder {
       case _: AmazonPayPaymentMethod => AmazonPay
     }
 
-  private def getAbTests(data: AcquisitionData): List[AbTest] =
-    (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())).toList
+  private def getAbTests(data: AcquisitionData) =
+    (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set()))
+      .map(abTest => acquisitions.models.AbTest(
+        abTest.name,
+        abTest.variant
+      )).toList
 
   private def productTypeAndAmount(product: ProductType): (AcquisitionProduct, Option[BigDecimal]) = product match {
     case c: Contribution => (AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
@@ -210,8 +214,12 @@ object AcquisitionDataRowBuilder {
       case _ => false
     }
 
-  private def getQueryParameters(data: AcquisitionData): List[QueryParameter] =
-    data.referrerAcquisitionData.queryParameters.getOrElse(Set()).toList
+  private def getQueryParameters(data: AcquisitionData) =
+    data.referrerAcquisitionData.queryParameters.getOrElse(Set())
+      .map(queryParam => acquisitions.models.QueryParameter(
+        queryParam.name,
+        queryParam.value
+      )).toList
 
   case class AcquisitionTypeDetails(
     paymentMethod: Option[PaymentMethod],
