@@ -202,7 +202,7 @@ function withProps(props: PropTypes) {
         />
       )}
 
-      { isArticleCountTest && numArticles ? (
+      { isArticleCountTest && numArticles && numArticles >= 5 ? (
         <ContributionFormBlurb
           headerCopy={<ContributionsArticleCountWithOptOut
             numArticles={numArticles}
