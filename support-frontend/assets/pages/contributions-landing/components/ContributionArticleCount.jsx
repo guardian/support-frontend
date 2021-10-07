@@ -453,7 +453,7 @@ export function ArticleCountHeaderCopy({
   if (userName) {
     return (
       <>
-        Hi {userName}! You have read {numArticles} in the last 12 months
+        Hi {userName}! You have read {numArticles} articles in the last 12 months
       </>
     );
   }
