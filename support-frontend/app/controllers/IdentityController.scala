@@ -11,8 +11,6 @@ import play.api.libs.circe.Circe
 import services.{IdentityService}
 import cats.implicits._
 import config.Configuration.{GuardianDomain, IdentityUrl}
-import models.identity.responses.SetGuestPasswordResponseCookies
-import codecs.CirceDecoders._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try

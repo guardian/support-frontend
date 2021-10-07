@@ -2,13 +2,13 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
+import com.gu.support.acquisitions.AbTest
 import com.gu.support.workers.User
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.DigitalSubscriptionDirectPurchaseBuilder
-import ophan.thrift.event.AbTest
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

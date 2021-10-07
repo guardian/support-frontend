@@ -86,7 +86,6 @@ lazy val root = (project in file("."))
     `module-acquisition-events`,
     `module-rest`,
     `support-payment-api`,
-    `acquisition-event-producer`,
     `acquisitions-firehose-transformer`,
     `support-lambdas`
   )
@@ -120,10 +119,9 @@ lazy val `support-workers` = (project in file("support-workers"))
     `support-models` % "test->test;it->test;compile->compile",
     `support-config`,
     `support-internationalisation`,
-    `acquisition-event-producer`,
     `module-acquisition-events`,
     `supporter-product-data-dynamo`
-  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `acquisition-event-producer`, `supporter-product-data-dynamo`)
+  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
@@ -158,7 +156,7 @@ lazy val `support-models` = (project in file("support-models"))
     releaseSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-internationalisation`, `acquisition-event-producer`)
+  ).dependsOn(`support-internationalisation`)
   .aggregate(`support-internationalisation`)
 
 lazy val `support-config` = (project in file("support-config"))
@@ -203,31 +201,6 @@ lazy val `support-internationalisation` = (project in file("support-internationa
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
   )
-
-lazy val `acquisition-event-producer` = (project in file("acquisition-event-producer"))
-  .settings(
-    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
-    publishMavenStyle := true,
-    scalacOptions += "-Ymacro-annotations",
-    libraryDependencies ++= Seq(
-      "com.gu" %% "ophan-event-model" % "0.0.23" excludeAll ExclusionRule(organization = "com.typesafe.play"),
-      "com.gu" %% "fezziwig" % "1.5",
-      "com.typesafe.play" %% "play-json" % "2.7.4",
-      "io.circe" %% "circe-core" % "0.12.1",
-      "ch.qos.logback" % "logback-classic" % "1.2.3",
-      "com.gu" %% "acquisitions-value-calculator-client" % "2.0.6",
-      "com.squareup.okhttp3" % "okhttp" % "3.9.0",
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
-      "org.typelevel" %% "simulacrum" % "1.0.1",
-      "org.scalatest" %% "scalatest" % "3.1.1" % "test",
-      "org.scalactic" %% "scalactic" % "3.1.1",
-      "org.typelevel" %% "cats-core" % catsVersion,
-      "com.amazonaws" % "aws-java-sdk-kinesis" % awsClientVersion,
-      "com.gu" %% "thrift-serializer" % "4.0.3",
-      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
-    )
-  )
-
 
 lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
   .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)

@@ -4,17 +4,15 @@ import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.bigquery.{BigQueryOptions, QueryJobConfiguration}
 import com.gu.config.Configuration
 import com.gu.i18n.{Country, Currency}
-import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
 import com.gu.support.acquisitions.models.AcquisitionType.Purchase
 import com.gu.support.acquisitions.models.PaymentFrequency.Monthly
 import com.gu.support.acquisitions.models.PaymentProvider.PayPal
-import com.gu.support.acquisitions.models.{AbTest, AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct, QueryParameter}
-import com.gu.support.acquisitions.{BigQueryService, AcquisitionEventTable}
+import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct}
+import com.gu.support.acquisitions.{AbTest, AcquisitionEventTable, BigQueryService, QueryParameter}
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
-import org.joda.time.{DateTime, DateTimeZone}
-import org.joda.time.format.ISODateTimeFormat
+import org.joda.time.DateTime
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 

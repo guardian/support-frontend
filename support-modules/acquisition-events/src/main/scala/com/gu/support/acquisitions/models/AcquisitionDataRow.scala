@@ -1,15 +1,14 @@
 package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
+import com.gu.support.acquisitions.{AbTest, QueryParameter}
 import com.gu.support.zuora.api.ReaderType
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-
-import io.circe.parser.decode
 import io.circe.generic.auto._
 import io.circe.{Decoder, Encoder}
 
-import scala.util.{Try, Success, Failure}
+import scala.util.{Failure, Success, Try}
 
 case class AcquisitionDataRow(
   eventTimeStamp: DateTime,
@@ -56,19 +55,9 @@ object AcquisitionDataRow {
   implicit val encoder = Encoder[AcquisitionDataRow]
 }
 
-case class AbTest(
-  name: String,
-  variant: String
-)
-
 case class PrintOptions(
   product: PrintProduct,
   deliveryCountry: Country
-)
-
-case class QueryParameter(
-  name: String,
-  value: String
 )
 
 sealed abstract class PaymentFrequency(val value: String)

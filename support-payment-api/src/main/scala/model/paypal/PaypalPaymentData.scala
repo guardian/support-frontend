@@ -1,15 +1,15 @@
 package model.paypal
 
+import com.gu.support.acquisitions.{AbTest, QueryParameter}
 import io.circe.generic.JsonCodec
 import model.{AcquisitionData, Currency}
 import io.circe.Decoder
 import io.circe.generic.semiauto._
-import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 object PaypalJsonDecoder {
 
   import controllers.JsonReadableOps._
+  import com.gu.support.acquisitions.ReferrerAcquisitionData.{abTestDecoder, queryParameterDecoder}
 
   implicit val executePaypalPaymentDataDecoder: Decoder[ExecutePaypalPaymentData] =
     deriveDecoder[ExecutePaypalPaymentData]
@@ -27,8 +27,8 @@ object PaypalJsonDecoder {
       refererUrl <- downField("refererUrl").as[Option[String]]
       ophanPageviewId <- downField("ophanPageviewId").as[Option[String]]
       componentId <- downField("componentId").as[Option[String]]
-      componentType <- downField("componentType").as[Option[ComponentType]]
-      source <- downField("source").as[Option[AcquisitionSource]]
+      componentType <- downField("componentType").as[Option[String]]
+      source <- downField("source").as[Option[String]]
       identityId <- downField("idUser").as[Option[String]]
       abTest <- downField("abTest").as[Option[AbTest]]
       refererAbTest <- downField("refererAbTest").as[Option[AbTest]]

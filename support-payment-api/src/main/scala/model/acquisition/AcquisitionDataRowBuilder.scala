@@ -2,7 +2,6 @@ package model.acquisition
 
 import com.gu.i18n.Currency._
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.acquisitions
 import com.gu.support.acquisitions.models.PaymentProvider.{AmazonPay, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
 import com.gu.support.acquisitions.models._
 import com.gu.support.zuora.api.ReaderType
@@ -21,7 +20,6 @@ import model.Currency.{
 }
 import model.db.ContributionData
 import model.stripe.StripePaymentMethod
-import ophan.thrift.event.{AbTest, QueryParameter => ThriftQueryParam}
 import org.joda.time.{DateTime, DateTimeZone}
 
 object AcquisitionDataRowBuilder {
@@ -37,11 +35,11 @@ object AcquisitionDataRowBuilder {
       country = StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.componentId,
-      componentType = acquisitionData.componentType.map(_.originalName),
+      componentType = acquisitionData.componentType,
       campaignCode = acquisitionData.campaignCodes.map(_.mkString(", ")),
-      source = acquisitionData.source.map(_.originalName),
+      source = acquisitionData.source,
       referrerUrl = acquisitionData.referrerUrl,
-      abTests = mapAbTests(acquisitionData.abTests),
+      abTests = acquisitionData.abTests.map(_.toList).getOrElse(Nil),
       paymentFrequency = PaymentFrequency.OneOff,
       paymentProvider = Some(paymentProvider),
       printOptions = None,
@@ -58,7 +56,7 @@ object AcquisitionDataRowBuilder {
       zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
-      queryParameters = mapQueryParams(acquisitionData.queryParameters),
+      queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
       platform = acquisitionData.platform
     )
   }
@@ -74,11 +72,11 @@ object AcquisitionDataRowBuilder {
       country = acquisition.countryCode.flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.flatMap(_.componentId),
-      componentType = acquisitionData.flatMap(_.componentType.map(_.originalName)),
+      componentType = acquisitionData.flatMap(_.componentType),
       campaignCode = acquisitionData.flatMap(_.campaignCodes.map(_.mkString(", "))),
-      source = acquisitionData.flatMap(_.source.map(_.originalName)),
+      source = acquisitionData.flatMap(_.source),
       referrerUrl = acquisitionData.flatMap(_.referrerUrl),
-      abTests = mapAbTests(acquisitionData.flatMap(_.abTests)),
+      abTests = acquisitionData.flatMap(_.abTests.map(_.toList)).getOrElse(Nil),
       paymentFrequency = PaymentFrequency.OneOff,
       paymentProvider = Some(AmazonPay),
       printOptions = None,
@@ -95,7 +93,7 @@ object AcquisitionDataRowBuilder {
       zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
-      queryParameters = mapQueryParams(acquisitionData.flatMap(_.queryParameters)),
+      queryParameters = acquisitionData.flatMap(_.queryParameters.map(_.toList)).getOrElse(Nil),
       platform = acquisitionData.flatMap(_.platform)
     )
   }
@@ -112,11 +110,11 @@ object AcquisitionDataRowBuilder {
       country = country,
       currency = Currency.fromString(transaction.getAmount.getCurrency).getOrElse(GBP),
       componentId = acquisitionData.componentId,
-      componentType = acquisitionData.componentType.map(_.originalName),
+      componentType = acquisitionData.componentType,
       campaignCode = acquisitionData.campaignCodes.map(_.mkString(", ")),
-      source = acquisitionData.source.map(_.originalName),
+      source = acquisitionData.source,
       referrerUrl = acquisitionData.referrerUrl,
-      abTests = mapAbTests(acquisitionData.abTests),
+      abTests = acquisitionData.abTests.map(_.toList).getOrElse(Nil),
       paymentFrequency = PaymentFrequency.OneOff,
       paymentProvider = Some(PayPal),
       printOptions = None,
@@ -133,19 +131,10 @@ object AcquisitionDataRowBuilder {
       zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
-      queryParameters = mapQueryParams(acquisitionData.queryParameters),
+      queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
       platform = acquisitionData.platform
     )
   }
-
-  def mapAbTests(maybeTests: Option[Set[AbTest]]) =
-    maybeTests.map(
-      _.map(abTest =>
-        acquisitions.models.AbTest(
-          abTest.name,
-          abTest.variant
-        )).toList
-    ).getOrElse(Nil)
 
   def mapStripePaymentProvider(stripePaymentMethod: Option[StripePaymentMethod]): PaymentProvider =
     stripePaymentMethod match {
@@ -167,10 +156,4 @@ object AcquisitionDataRowBuilder {
       case ModelNOK => NOK
       case ModelDKK => DKK
     }
-
-  def mapQueryParams(maybeThriftParameters: Option[Set[ThriftQueryParam]]) =
-    maybeThriftParameters.map(_.toList.map(
-      thriftQueryParam => QueryParameter(thriftQueryParam.name, thriftQueryParam.value)
-    )).getOrElse(Nil)
-
 }
