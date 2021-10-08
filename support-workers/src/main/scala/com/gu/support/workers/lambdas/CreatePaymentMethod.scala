@@ -151,7 +151,11 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       BankTransferAccountNumber = sepa.iban,
       Email = user.primaryEmailAddress,
       IPAddress = ipAddress.take(15), // zuora doesn't support ipv6
-      GatewayOptionData = GatewayOptionData(List(GatewayOption("UserAgent", userAgent)))
+      GatewayOptionData = GatewayOptionData(List(
+        GatewayOption(
+          "UserAgent",
+          userAgent.take(255) // zuora's max length for GatewayOption values
+        )))
     ))
   }
 
