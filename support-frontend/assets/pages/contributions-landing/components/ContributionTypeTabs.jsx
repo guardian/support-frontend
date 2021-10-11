@@ -36,7 +36,6 @@ type PropTypes = {|
   contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId, boolean) => void,
   useLocalCurrency: boolean,
-  productSetAbTestVariant: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -69,7 +68,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-const tabGroupStyles = (checkedContributionType: ContributionType) => css`
+const groupStyles = css`
   > div {
     display: flex;
 
@@ -77,28 +76,12 @@ const tabGroupStyles = (checkedContributionType: ContributionType) => css`
     position: relative;
     z-index: 0;
 
-    label:nth-of-type(1) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      /* This is to override a margin that is added by source */
-      margin-right: 0;
-
-      z-index: ${checkedContributionType === 'ONE_OFF' ? 100 : 1}
+    label {
+      margin: 0 8px 0 0;
     }
 
-    label:nth-of-type(2) {
-      border-radius: 0;
-      margin-left: -1px;
-      margin-right: -1px;
-
-      z-index: ${checkedContributionType === 'MONTHLY' ? 100 : 1}
-    }
-
-    label:nth-of-type(3) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-
-      z-index: ${checkedContributionType === 'ANNUAL' ? 100 : 1}
+    label:last-of-type {
+      margin: 0;
     }
   }
 `;
@@ -111,7 +94,7 @@ function ContributionTypeTabs(props: PropTypes) {
   const renderChoiceCards = () => (
     <ChoiceCardGroup
       name="contributionTypes"
-      cssOverrides={props.productSetAbTestVariant ? tabGroupStyles(props.contributionType) : null}
+      cssOverrides={groupStyles}
     >
       {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
       const { contributionType } = contributionTypeSetting;
