@@ -146,6 +146,12 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   }
 
   def createSepaPaymentMethod(sepa: SepaPaymentFields, user: User, ipAddress: String, userAgent: String): Future[SepaPaymentMethod] = {
+    if (ipAddress.length() > 15) {
+      SafeLogger.warn(s"IPv6 Address: ${ipAddress} will be truncated to 15 characters")
+    }
+    if (userAgent.length() > 255) {
+      SafeLogger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
+    }
     Future.successful(SepaPaymentMethod(
       BankTransferAccountName = sepa.accountHolderName,
       BankTransferAccountNumber = sepa.iban,
