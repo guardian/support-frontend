@@ -121,7 +121,7 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val paperFormController = new PaperSubscriptionForm(
+  lazy val paperFormController = new PaperSubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
@@ -134,7 +134,7 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val weeklyFormController = new WeeklySubscriptionForm(
+  lazy val weeklyFormController = new WeeklySubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,

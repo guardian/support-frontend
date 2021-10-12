@@ -99,7 +99,10 @@ class DigitalSubscriptionFormController(
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
-    val uatMode = maybeIdUser.exists(idUser => testUsers.isTestUser(idUser.publicFields.displayName))
+
+    val maybeUatUsername =  maybeIdUser.flatMap(_.publicFields.displayName)
+      .orElse(request.cookies.get("_test_username").map(_.value))
+    val uatMode = testUsers.isTestUser(maybeUatUsername)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey
     val readerType = if (orderIsAGift) Gift else Direct

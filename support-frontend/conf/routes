@@ -103,8 +103,8 @@ GET  /subscribe/digital/checkout/thankyou-existing                       control
 GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly/gift                                        controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = true)
-GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = false)
-GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = true)
+GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscriptionFormController.displayForm(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
@@ -113,7 +113,7 @@ GET  /subscribe/paper                                              controllers.P
 GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
 GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
-GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionForm.displayForm()
+GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionFormController.displayForm()
 
 # redemptions
 GET  /subscribe/redeem                                             controllers.RedemptionController.displayForm(redemptionCode: String)
