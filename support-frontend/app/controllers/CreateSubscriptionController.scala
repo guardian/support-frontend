@@ -79,7 +79,8 @@ class CreateSubscriptionController(
 
     def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
       val isTestUser = testUsers.isTestUser(request)
-      client.createSubscription(request, createUser(idUser, createSupportWorkersRequest, isTestUser), request.uuid).leftMap(error => ServerError(error.toString))
+      client.createSubscription(request, createUser(idUser, createSupportWorkersRequest, isTestUser), request.uuid)
+        .leftMap(error => ServerError(error.toString))
     }
 
     if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
