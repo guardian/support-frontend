@@ -30,10 +30,7 @@ object AccessCredentials {
 case class IdMinimalUser(id: String, displayName: Option[String])
 case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMinimalUser)
 
-class AsyncAuthenticationService(
-    identityPlayAuthService: IdentityPlayAuthService,
-    testUserService: TestUserService
-)(implicit ec: ExecutionContext) {
+class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthService)(implicit ec: ExecutionContext) {
 
   import AsyncAuthenticationService._
 
@@ -50,10 +47,6 @@ class AsyncAuthenticationService(
         None
       }
 
-  def authenticateTestUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
-    authenticateUser(requestHeader).ensure(new RuntimeException("user not a test user")) { user =>
-       testUserService.isTestUser(user.minimalUser.displayName)
-    }
 }
 
 object AsyncAuthenticationService {
@@ -62,7 +55,7 @@ object AsyncAuthenticationService {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
     // TOOD: targetClient could probably be None - check and release in subsequent PR.
     val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = Some("membership"))
-    new AsyncAuthenticationService(identityPlayAuthService, testUserService)
+    new AsyncAuthenticationService(identityPlayAuthService)
   }
 
   def buildAuthenticatedUser(credentials: UserCredentials, user: User): AuthenticatedIdUser = {

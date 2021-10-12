@@ -65,21 +65,11 @@ class CustomActionBuilders(
   private def authenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
     new AsyncAuthenticatedBuilder(asyncAuthenticationService.authenticateUser, cc.parsers.defaultBodyParser, onUnauthenticated)
 
-  private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
-    new AsyncAuthenticatedBuilder(
-      asyncAuthenticationService.authenticateTestUser,
-      cc.parsers.defaultBodyParser,
-      onUnauthenticated
-    )
-
   val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   def authenticatedAction(identityClientId: String = membersIdentityClientId): ActionBuilder[AuthRequest, AnyContent] = {
     PrivateAction andThen authenticated(onUnauthenticated(identityClientId))
   }
-
-  def authenticatedTestUserAction(identityClientId: String = membersIdentityClientId): ActionBuilder[AuthRequest, AnyContent] =
-    PrivateAction andThen authenticatedTestUser(onUnauthenticated(identityClientId))
 
   def maybeAuthenticatedAction(identityClientId: String = membersIdentityClientId): ActionBuilder[OptionalAuthRequest, AnyContent] =
     PrivateAction andThen maybeAuthenticated(onUnauthenticated(identityClientId))

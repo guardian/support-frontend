@@ -52,7 +52,8 @@ class RegularContributions(
     SafeLogger.info(s"[${request.uuid}] User ${fullUser.minimalUser.id} is attempting to create a new $billingPeriod contribution")
     val result = for {
       user <- identityService.getUser(fullUser.minimalUser)
-      statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      isTestUser = testUsers.isTestUser(request)
+      statusResponse <- client.createSubscription(request, contributor(user, request.body, isTestUser), request.uuid).leftMap(_.toString)
     } yield statusResponse
     respondToClient(result, request.body, guestCheckout = false)
   }
@@ -63,7 +64,8 @@ class RegularContributions(
     val result = for {
       userId <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
       user <- identityService.getUser(IdMinimalUser(userId, None))
-      initialStatusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      isTestUser = testUsers.isTestUser(request)
+      initialStatusResponse <- client.createSubscription(request, contributor(user, request.body, isTestUser), request.uuid).leftMap(_.toString)
     } yield StatusResponse.fromStatusResponse(initialStatusResponse)
     respondToClient(result, request.body, guestCheckout = true)
   }
@@ -99,7 +101,7 @@ class RegularContributions(
     )
   }
 
-  private def contributor(user: IdUser, request: CreateSupportWorkersRequest) = {
+  private def contributor(user: IdUser, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
@@ -118,7 +120,7 @@ class RegularContributions(
       // TODO: in a subsequent PR set these values based on the respective user.
       allowThirdPartyMail = false,
       allowGURelatedMail = false,
-      isTestUser = testUsers.isTestUser(user.publicFields.username)
+      isTestUser = isTestUser
     )
   }
 

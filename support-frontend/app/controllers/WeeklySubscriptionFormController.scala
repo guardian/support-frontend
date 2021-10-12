@@ -65,9 +65,7 @@ class WeeklySubscriptionFormController(
     val css = "weeklySubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
 
-    val maybeUatUsername =  maybeIdUser.flatMap(_.publicFields.displayName)
-      .orElse(request.cookies.get("_test_username").map(_.value))
-    val uatMode = testUsers.isTestUser(maybeUatUsername)
+    val uatMode = testUsers.isTestUser(request)
     val defaultPromos = if (orderIsAGift)
       DefaultPromotions.GuardianWeekly.Gift.all
     else

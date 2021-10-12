@@ -56,7 +56,6 @@ class RedemptionController(
   val js = "subscriptionsRedemptionPage.js"
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
-  val testUserFromRequest = new TestUserFromRequest(identityService, testUsers)
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = maybeAuthenticatedAction().async {
     implicit request =>
@@ -65,10 +64,10 @@ class RedemptionController(
         fullUser <- identityService.getUser(minimalUser).toOption
       } yield fullUser).value
 
+      val isTestUser = testUsers.isTestUser(request)
+      val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
+      val normalisedCode = redemptionCode.toLowerCase(Locale.UK)
       for {
-        isTestUser <- testUserFromRequest.isTestUser(request)
-        codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
-        normalisedCode = redemptionCode.toLowerCase(Locale.UK)
         maybeUser <- futureMaybeUser
         form <- codeValidator.validate(redemptionCode).value.map(
           validationResult =>
@@ -154,7 +153,7 @@ class RedemptionController(
   private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode)(implicit request: AuthRequest[Any]) = {
     val processingPage: EitherT[Future, (String, Boolean), Result] = for {
       user <- identityService.getUser(request.user.minimalUser).leftMap((_, false))
-      isTestUser = testUserFromRequest.fromIdUser(user)
+      isTestUser = testUsers.isTestUser(request)
       codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
       readerType <- codeValidator.validate(redemptionCode).leftMap((_, isTestUser))
     } yield showProcessing(redemptionCode, readerType, user)
@@ -175,7 +174,7 @@ class RedemptionController(
       js = js,
       css = css,
       csrf = Some(CSRF.getToken.value),
-      isTestUser = testUserFromRequest.fromIdUser(user),
+      isTestUser = testUsers.isTestUser(request),
       stage = "processing",
       redemptionCode = redemptionCode,
       maybeRedemptionError = None,
@@ -201,35 +200,6 @@ class RedemptionController(
   def redirect(redemptionCode: RawRedemptionCode): Action[AnyContent] = CachedAction() { implicit request =>
     RedirectWithEncodedQueryString(routes.RedemptionController.displayForm(redemptionCode).url, request.queryString, status = MOVED_PERMANENTLY)
   }
-}
-
-class TestUserFromRequest(identityService: IdentityService, testUsers: TestUserService) {
-
-  def isTestUser(request: OptionalAuthRequest[AnyContent])(implicit req: RequestHeader, ec: ExecutionContext): Future[Boolean] =
-    request.user.map { authenticatedIdUser =>
-      identityService.getUser(authenticatedIdUser.minimalUser)
-    } match {
-      case None => Future.successful(fromCookies(request.cookies))
-      case Some(eventualErrorOrUser) =>
-        eventualErrorOrUser.fold(
-          message => {
-            SafeLogger.error(scrub"could not fetch user - assuming normal backend: $message")
-            false
-          },
-          fromIdUser
-        )
-    }
-
-  def fromCookies(cookies: Cookies): Boolean = {
-    val maybeCookieValue = cookies.get("_test_username").map(_.value)
-    testUsers.isTestUser(maybeCookieValue)
-  }
-
-  def fromIdUser(user: IdUser): Boolean = {
-    val displayName = user.publicFields.displayName
-    testUsers.isTestUser(displayName)
-  }
-
 }
 
 class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoTableAsync: DynamoTableAsync) {

@@ -66,9 +66,7 @@ class PaperSubscriptionFormController(
     val css = "paperSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
 
-    val maybeUatUsername =  maybeIdUser.flatMap(_.publicFields.displayName)
-      .orElse(request.cookies.get("_test_username").map(_.value))
-    val uatMode = testUsers.isTestUser(maybeUatUsername)
+    val uatMode = testUsers.isTestUser(request)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
 
