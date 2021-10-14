@@ -27,7 +27,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
   val authenticatedIdUser = AuthenticatedIdUser(credentials, IdMinimalUser("123", Some("test-user")))
 
   val testUsers = new TestUserService("test") {
-    override def isTestUser(displayName: Option[String]): Boolean = displayName.exists(_.startsWith("test"))
+    override def isTestUser(testUserName: Option[String]): Boolean = testUserName.exists(_.startsWith("test"))
   }
 
   val assetResolver = new AssetsResolver("", "", mock[Environment]) {

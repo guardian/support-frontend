@@ -22,7 +22,7 @@ import views.html.subscriptionCheckout
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PaperSubscriptionForm(
+class PaperSubscriptionFormController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
@@ -65,7 +65,8 @@ class PaperSubscriptionForm(
     val js = "paperSubscriptionCheckoutPage.js"
     val css = "paperSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
-    val uatMode = maybeIdUser.exists(idUser => testUsers.isTestUser(idUser.publicFields.displayName))
+
+    val uatMode = testUsers.isTestUser(request)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
 

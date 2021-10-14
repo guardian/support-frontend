@@ -88,9 +88,7 @@ class PayPalOneOff(
       "payerId" -> PayerID
     )
 
-    val queryStrings = request.queryString
-    val testUsername = request.cookies.get("_test_username")
-    val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
+    val isTestUser = testUsers.isTestUser(request)
     val userAgent = request.headers.get("user-agent")
 
     paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)

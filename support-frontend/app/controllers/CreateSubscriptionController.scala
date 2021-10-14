@@ -78,7 +78,9 @@ class CreateSubscriptionController(
     )
 
     def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
-      client.createSubscription(request, createUser(idUser, createSupportWorkersRequest), request.uuid).leftMap(error => ServerError(error.toString))
+      val isTestUser = testUsers.isTestUser(request)
+      client.createSubscription(request, createUser(idUser, createSupportWorkersRequest, isTestUser), request.uuid)
+        .leftMap(error => ServerError(error.toString))
     }
 
     if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
@@ -96,7 +98,7 @@ class CreateSubscriptionController(
     }
   }
 
-  private def createUser(user: IdUser, request: CreateSupportWorkersRequest) = {
+  private def createUser(user: IdUser, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
@@ -116,7 +118,7 @@ class CreateSubscriptionController(
       // TODO: in a subsequent PR set these values based on the respective user.
       allowThirdPartyMail = false,
       allowGURelatedMail = false,
-      isTestUser = testUsers.isTestUser(user.publicFields.displayName),
+      isTestUser = isTestUser,
       deliveryInstructions = request.deliveryInstructions
     )
   }
