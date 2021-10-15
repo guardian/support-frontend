@@ -105,6 +105,14 @@ const interactiveTableContainer = css`
   }
 `;
 
+const footerHackFix = css`
+  .component-left-margin-section:before {
+    content: none;
+  }
+  .component-content__content {
+    max-width: unset;
+  }
+`;
 // ----- Internationalisation ----- //
 
 const reactElementId: {
@@ -155,7 +163,7 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
   });
 
   const pageFooter = (
-    <div className="footer-container">
+    <div css={footerHackFix} className="footer-container">
       <div className="footer-alignment">
         <DigitalFooter
           country={countryGroupId}
