@@ -8,7 +8,7 @@ import { headline, textSans } from '@guardian/src-foundations/typography';
 import { ThemeProvider } from 'emotion-theming';
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
-// import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
+import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
@@ -246,13 +246,13 @@ function ProductOption(props: Product) {
 						{props.buttonCopy}
 					</LinkButton>
 				</ThemeProvider>
-				{/*{props.showPayPalButton && props.billingPeriod && (*/}
-				{/*	<PayPalOneClickCheckoutButton*/}
-				{/*		billingPeriod={props.billingPeriod}*/}
-				{/*		trackingId="one-click-checkout-price-card"*/}
-				{/*		product={DigitalPack}*/}
-				{/*	/>*/}
-				{/*)}*/}
+				{props.showPayPalButton && props.billingPeriod && (
+					<PayPalOneClickCheckoutButton
+						billingPeriod={props.billingPeriod}
+						trackingId="one-click-checkout-price-card"
+						product={DigitalPack}
+					/>
+				)}
 			</div>
 		</div>
 	);
