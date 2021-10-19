@@ -54,6 +54,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           analyticsInfo = zuoraSubscriptionState.analyticsInfo,
           sendThankYouEmailState = nextState,
           acquisitionData = zuoraSubscriptionState.acquisitionData,
+          csrUsername = zuoraSubscriptionState.csrUsername
         ),
         requestInfo,
       )

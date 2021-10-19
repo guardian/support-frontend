@@ -308,6 +308,7 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    csrUsername = None,
     billingAddress = Address(
       Some("123 easy street"),
       None,
@@ -344,6 +345,7 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    csrUsername = None,
     billingAddress = paperAddress,
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,
@@ -364,6 +366,7 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    csrUsername = None,
     billingAddress = paperAddress,
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,

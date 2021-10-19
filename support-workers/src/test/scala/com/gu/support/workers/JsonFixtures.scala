@@ -455,6 +455,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       None,
       None,
+      None,
       None
     ).asJson.spaces2
   val createDigiPackZuoraSubscriptionJson =
@@ -472,6 +473,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       None,
       None,
+      None,
       None
     ).asJson.spaces2
 
@@ -486,6 +488,7 @@ object JsonFixtures {
       user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(false, Stripe),
+      None,
       None,
       None,
       None
@@ -513,6 +516,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       None,
       None,
+      None,
       None
     ).asJson.spaces2
 
@@ -538,6 +542,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       None,
       None,
+      None,
       None
     ).asJson.spaces2
 
@@ -555,6 +560,7 @@ object JsonFixtures {
       userJsonWithDeliveryAddress,
       Paper(GBP, Monthly, HomeDelivery, Everyday),
       AnalyticsInfo(false, Stripe),
+      None,
       None,
       None,
       None
@@ -577,6 +583,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
       maybePromoCode,
+      None,
       None
     ).asJson.spaces2
 
@@ -601,6 +608,7 @@ object JsonFixtures {
       GuardianWeekly(GBP, Quarterly, RestOfWorld),
       AnalyticsInfo(false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
+      None,
       None,
       None
     ).asJson.spaces2
@@ -903,6 +911,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       None,
       Some("DJRHYMDS8"),
+      None,
       None
     ).asJson.spaces2
 

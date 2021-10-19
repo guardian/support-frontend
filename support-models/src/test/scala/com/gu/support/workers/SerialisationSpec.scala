@@ -79,6 +79,7 @@ object StatesTestData {
     paymentFields = Left(PayPalPaymentFields("baid")),
     firstDeliveryDate = None,
     promoCode = None,
+    csrUsername = None,
     acquisitionData = None,
     ipAddress = "127.0.0.1",
     userAgent = "TestAgent"
@@ -93,6 +94,7 @@ object StatesTestData {
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
     promoCode = None,
+    csrUsername = None,
     acquisitionData = None
   )
 
@@ -110,6 +112,7 @@ object StatesTestData {
     AnalyticsInfo(false, StripeApplePay),
     None,
     None,
+    csrUsername = None,
     None
   )
 
@@ -119,6 +122,7 @@ object StatesTestData {
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated,
     analyticsInfo = AnalyticsInfo(false, PayPal),
+    csrUsername = None,
     acquisitionData = None,
   )
 

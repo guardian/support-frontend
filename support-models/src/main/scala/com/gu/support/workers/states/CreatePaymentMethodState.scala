@@ -18,6 +18,7 @@ case class CreatePaymentMethodState(
   paymentFields: Either[PaymentFields, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
+  csrUsername: Option[String],
   acquisitionData: Option[AcquisitionData],
   ipAddress: String,
   userAgent: String

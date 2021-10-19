@@ -54,6 +54,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         state.analyticsInfo,
         None,
         None,
+        None,
         acquisitionData = state.acquisitionData
       ),
       requestInfo
