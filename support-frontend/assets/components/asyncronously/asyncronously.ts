@@ -1,5 +1,6 @@
-import type { Node, ComponentType } from 'react';
+import type { ComponentType, Node } from 'react';
 import { Component } from 'react';
+
 type PropTypes = {
 	loader: Promise<{
 		default: ComponentType<any>;

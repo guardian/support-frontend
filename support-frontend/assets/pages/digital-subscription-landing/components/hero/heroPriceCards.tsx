@@ -1,11 +1,12 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import { space } from '@guardian/src-foundations';
+import type { Node } from 'react';
+import React from 'react';
 import ProductOptionSmall from 'components/product/productOptionSmall';
+
 const priceCardContainer = css`
 	position: relative;
 	display: flex;

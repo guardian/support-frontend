@@ -1,5 +1,6 @@
-import type { ContributionTypes } from 'helpers/contributions';
 import type { TickerSettings } from 'components/ticker/contributionTicker';
+import type { ContributionTypes } from 'helpers/contributions';
+
 type CampaignCopy = {
 	headerCopy?:
 		| string

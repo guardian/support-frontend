@@ -1,16 +1,17 @@
-import { $Call } from 'utility-types';
 import React from 'react';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import { showPrice } from 'helpers/productPrice/productPrices';
+import type { $Call } from 'utility-types';
+import type { GridImg } from 'components/gridImage/gridImage';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
-type GridImageType = typeof import('components/gridImage/gridImage').default;
-import type { GridImg } from 'components/gridImage/gridImage';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
+import { showPrice } from 'helpers/productPrice/productPrices';
 import 'components/gridImage/gridImage';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
-import * as styles from './orderSummaryStyles';
 import { getGiftOrderSummaryText } from '../helpers';
+import * as styles from './orderSummaryStyles';
+
+type GridImageType = typeof import('components/gridImage/gridImage').default;
 type PropTypes = {
 	billingPeriod: DigitalBillingPeriod;
 	// eslint-disable-next-line react/no-unused-prop-types

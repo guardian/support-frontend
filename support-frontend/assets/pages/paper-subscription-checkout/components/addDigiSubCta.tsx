@@ -1,15 +1,16 @@
-// @ts-ignore - required for hooks
-import * as React from 'react';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
-import { headline } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
-import { brandAlt, neutral } from '@guardian/src-foundations/palette';
-import { from } from '@guardian/src-foundations/mq';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { Checkbox } from '@guardian/src-checkbox';
+import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { brandAlt, neutral } from '@guardian/src-foundations/palette';
+import { headline } from '@guardian/src-foundations/typography';
+import * as React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import { ListWithSubText } from 'components/list/list';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 type PropTypes = {
 	digiSubPrice: string;
 	addDigitalSubscription: (

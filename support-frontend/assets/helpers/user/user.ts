@@ -1,12 +1,13 @@
 // ----- Imports ----- //
-import { routes } from 'helpers/urls/routes';
 import * as cookie from 'helpers/storage/cookie';
 import { get as getCookie } from 'helpers/storage/cookie';
 import { getSession } from 'helpers/storage/storage';
+import type { Option } from 'helpers/types/option';
+import { getSignoutUrl } from 'helpers/urls/externalLinks';
+import { routes } from 'helpers/urls/routes';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import type { UserSetStateActions } from 'helpers/user/userActions';
-import { getSignoutUrl } from 'helpers/urls/externalLinks';
-import type { Option } from 'helpers/types/option';
+
 export type User = {
 	firstName: Option<string>;
 	lastName: Option<string>;
@@ -82,7 +83,7 @@ const getEmailValidatedFromUserCookie = (
 };
 
 const init = (
-	dispatch: (...args: Array<any>) => any,
+	dispatch: (...args: any[]) => any,
 	actions: UserSetStateActions = defaultUserActionFunctions,
 ) => {
 	const {

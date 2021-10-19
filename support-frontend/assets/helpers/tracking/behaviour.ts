@@ -1,7 +1,8 @@
-import { trackComponentEvents } from 'helpers/tracking/ophan';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
+import { trackComponentEvents } from 'helpers/tracking/ophan';
+
 export type ProductCheckout = 'Contribution' | SubscriptionProduct;
 
 const trackCheckoutSubmitAttempt = (

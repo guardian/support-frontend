@@ -1,32 +1,36 @@
-import { $Call } from 'utility-types';
 import React from 'react';
 import { connect } from 'react-redux';
-type GridImageType = typeof import('components/gridImage/gridImage').default;
+import type { $Call } from 'utility-types';
 import type { GridImg } from 'components/gridImage/gridImage';
 import 'components/gridImage/gridImage';
 import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { paperProductsWithoutDigital } from 'helpers/productPrice/productOptions';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
-import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
 	getPriceWithDiscount,
 	getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
+import { paperProductsWithoutDigital } from 'helpers/productPrice/productOptions';
 import type {
-	ProductPrices,
+	ActivePaperProducts,
+	ProductOptions,
+} from 'helpers/productPrice/productOptions';
+import type {
 	ProductPrice,
+	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
 	getOrderSummaryTitle,
 	getPriceSummary,
 } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
+
+type GridImageType = typeof import('components/gridImage/gridImage').default;
+
 type PropTypes = {
 	fulfilmentOption: FulfilmentOptions;
 	productOption: ActivePaperProducts;

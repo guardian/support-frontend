@@ -1,8 +1,9 @@
 import { css } from '@emotion/core';
-import { headline, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { background, border, text } from '@guardian/src-foundations/palette';
 import { from, until } from '@guardian/src-foundations/mq';
+import { background, border, text } from '@guardian/src-foundations/palette';
+import { headline, textSans } from '@guardian/src-foundations/typography/obj';
+
 export const wrapper = css`
 	background-color: ${background.primary};
 	color: ${text.primary};

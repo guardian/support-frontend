@@ -1,20 +1,21 @@
-// @ts-ignore - required for hooks
-import React, { useState, useEffect } from 'react';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
 import { LinkButton } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import ActionContainer from './components/ActionContainer';
-import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
-import SvgSpeechBubbleWithPlus from './components/SvgSpeechBubbleWithPlus';
-import styles from './styles';
-import { OPHAN_COMPONENT_ID_SURVEY } from './utils/ophan';
+import React, { useEffect, useState } from 'react';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import ActionBody from './components/ActionBody';
+import ActionContainer from './components/ActionContainer';
+import ActionHeader from './components/ActionHeader';
+import SvgSpeechBubbleWithPlus from './components/SvgSpeechBubbleWithPlus';
+import styles from './styles';
+import { OPHAN_COMPONENT_ID_SURVEY } from './utils/ophan';
+
 const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;

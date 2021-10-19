@@ -1,11 +1,11 @@
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import 'helpers/globalsAndSwitches/settings';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
 import type { ConfiguredRegionAmounts } from '../contributions';
 
-function getGlobal<T>(path: string = ''): Option<T> {
+function getGlobal<T>(path = ''): Option<T> {
 	const value = path
 		.replace(/\[(.+?)\]/g, '.$1')
 		.split('.')

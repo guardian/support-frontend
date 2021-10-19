@@ -5,30 +5,30 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
-import { renderError } from 'helpers/rendering/render';
+import { getAmounts } from 'helpers/abTests/helpers';
+import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-import {
-	getAllQueryParamsWithExclusions,
-	getQueryParameter,
-} from 'helpers/urls/url';
 import type {
 	CommonState,
 	Internationalisation,
 } from 'helpers/page/commonReducer';
-import { createCommonReducer } from 'helpers/page/commonReducer';
+import { renderError } from 'helpers/rendering/render';
 import {
 	getCampaign,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getSettings } from 'helpers/globalsAndSwitches/globals';
-import { getAmounts } from 'helpers/abTests/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import {
+	getAllQueryParamsWithExclusions,
+	getQueryParameter,
+} from 'helpers/urls/url';
+import { createCommonReducer } from 'helpers/page/commonReducer';
 import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 import {
@@ -118,7 +118,7 @@ function storeEnhancer(thunk: boolean) {
 // Initialises the page.
 function initRedux<S, A>(
 	pageReducer?: (arg0: CommonState) => Reducer<S, A> | null,
-	thunk: boolean = false,
+	thunk = false,
 ): Store<any, any, any> {
 	try {
 		const countryId: IsoCountry = detectCountry();

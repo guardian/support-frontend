@@ -1,8 +1,6 @@
+import DOMPurify from 'dompurify';
 import React from 'react';
 import snarkdown from 'snarkdown';
-import DOMPurify from 'dompurify';
-import { getQueryParameter } from 'helpers/urls/url';
-import type { Option } from 'helpers/types/option';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -13,6 +11,9 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { Option } from 'helpers/types/option';
+import { getQueryParameter } from 'helpers/urls/url';
+
 export type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;

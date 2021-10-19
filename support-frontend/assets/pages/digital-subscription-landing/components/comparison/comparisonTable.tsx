@@ -1,20 +1,21 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
 import { body } from '@guardian/src-foundations/typography';
+import React from 'react';
+import type { Node } from 'react';
 import BlockLabel from 'components/blockLabel/blockLabel';
-import { titleRow, tableContent, finalRow } from './tableContents';
 import type { Option } from 'helpers/types/option';
+import { finalRow, tableContent, titleRow } from './tableContents';
 import 'helpers/types/option';
+
 export type TableRow = {
 	icon: Option<Node>;
 	description: string | Node;
 	free: Option<Node>;
 	paid: Option<Node>;
-	cssOverrides?: Option<string> | Array<string>;
+	cssOverrides?: Option<string> | string[];
 };
 const borderStyle = `${border.primary} 1px solid`;
 const container = css`

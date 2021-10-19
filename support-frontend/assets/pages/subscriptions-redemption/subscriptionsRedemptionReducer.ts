@@ -1,13 +1,14 @@
 // ----- Imports ----- //
-import type { CommonState } from 'helpers/page/commonReducer';
+import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
+import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { CommonState } from 'helpers/page/commonReducer';
+import type { ReaderType } from 'helpers/productPrice/readerType';
 import type { Option } from 'helpers/types/option';
 import type { User } from 'helpers/user/user';
 import { getUser } from 'helpers/user/user';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
-import type { ReaderType } from 'helpers/productPrice/readerType';
+
 export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
 export type RedemptionFormState = {
 	stage: Stage;

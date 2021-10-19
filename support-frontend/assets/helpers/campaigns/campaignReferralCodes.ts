@@ -1,4 +1,5 @@
 import { isProd } from '../urls/url';
+
 const referralCodeEndpoint = isProd()
 	? 'https://contribution-referrals.support.guardianapis.com/referral-code'
 	: 'https://contribution-referrals-code.support.guardianapis.com/referral-code';

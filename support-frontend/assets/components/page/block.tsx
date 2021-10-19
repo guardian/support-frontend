@@ -1,9 +1,10 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
+import { neutral } from '@guardian/src-foundations/palette';
+import React from 'react';
+import type { Node } from 'react';
+
 type PropTypes = {
 	children: Node;
 	cssOverrides?: string | string[];

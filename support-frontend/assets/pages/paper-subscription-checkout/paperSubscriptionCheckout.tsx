@@ -1,26 +1,27 @@
 // ----- Imports ----- //
 import React from 'react';
 import { Provider } from 'react-redux';
-import { renderPage } from 'helpers/rendering/render';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
-import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
-import 'stylesheets/skeleton/skeleton.scss';
+import Page from 'components/page/page';
+import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
-import ThankYouContent from './components/thankYou';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { Paper } from 'helpers/productPrice/subscriptions';
+import { renderPage } from 'helpers/rendering/render';
+import 'stylesheets/skeleton/skeleton.scss';
+import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import CheckoutForm from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
+import ThankYouContent from './components/thankYou';
 import './_legacyImports.scss';
 import {
 	getFulfilmentOption,
 	getProductOption,
 	getStartDate,
 } from 'pages/paper-subscription-checkout/helpers/options';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { CommonState } from 'helpers/page/commonReducer';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
-import { Paper } from 'helpers/productPrice/subscriptions';
-import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import { FocusStyleManager } from '@guardian/src-utilities';
+
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 const fulfilmentOption = getFulfilmentOption();

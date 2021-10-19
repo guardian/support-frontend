@@ -1,11 +1,12 @@
 // flow
 import {
-	getProductOptions,
 	getCurrencySymbol,
 	getDisplayPrice,
+	getProductOptions,
 	getProductPrice,
 	getSavingPercentage,
 } from '../helpers/paymentSelection';
+
 jest.mock('ophan', () => {});
 describe('PaymentSelection', () => {
 	let productPrices;

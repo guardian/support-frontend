@@ -5,7 +5,7 @@ import './secureTransactionIndicator.scss';
 import SecurePadlock from './securePadlock.svg';
 // ----- Component ----- //
 type PropTypes = {
-	modifierClasses: Array<string>;
+	modifierClasses: string[];
 };
 const text = 'Secure transaction';
 export default function SecureTransactionIndicator(props: PropTypes) {

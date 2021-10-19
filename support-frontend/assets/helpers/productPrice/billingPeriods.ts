@@ -25,10 +25,7 @@ const weeklyBillingPeriods: WeeklyBillingPeriod[] = [
 ];
 const weeklyGiftBillingPeriods: WeeklyBillingPeriod[] = [Quarterly, Annual];
 
-function billingPeriodNoun(
-	billingPeriod: BillingPeriod,
-	fixedTerm: boolean = false,
-) {
+function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm = false) {
 	switch (billingPeriod) {
 		case Annual:
 			return fixedTerm ? '12 months' : 'Year';
@@ -57,10 +54,7 @@ function billingPeriodAdverb(billingPeriod: BillingPeriod) {
 	}
 }
 
-function billingPeriodTitle(
-	billingPeriod: BillingPeriod,
-	fixedTerm: boolean = false,
-) {
+function billingPeriodTitle(billingPeriod: BillingPeriod, fixedTerm = false) {
 	switch (billingPeriod) {
 		case Annual:
 			return fixedTerm ? '12 months' : billingPeriod;

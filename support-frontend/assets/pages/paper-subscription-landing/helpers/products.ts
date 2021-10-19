@@ -1,13 +1,14 @@
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	Everyday,
-	Sixday,
+	EverydayPlus,
 	SaturdayPlus,
+	Sixday,
+	SixdayPlus,
 	SundayPlus,
 	WeekendPlus,
-	SixdayPlus,
-	EverydayPlus,
 } from 'helpers/productPrice/productOptions';
+
 export const getTitle = (productOption: ProductOptions) => {
 	switch (productOption) {
 		case Sixday:

@@ -1,18 +1,19 @@
-import { $Call } from 'utility-types';
 import React, { Component } from 'react';
+import type { $Call } from 'utility-types';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import 'helpers/productPrice/productPrices';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import styles from './summary.module.scss';
-import { PriceLabel } from 'components/priceLabel/priceLabel';
-type GridImageType = typeof import('components/gridImage/gridImage').default;
 import type { GridImg } from 'components/gridImage/gridImage';
+import { PriceLabel } from 'components/priceLabel/priceLabel';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import 'components/gridImage/gridImage';
-import SvgDropdownArrowUp from './dropDownArrowUp.svg';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import SvgDropdownArrowUp from './dropDownArrowUp.svg';
+import styles from './summary.module.scss';
+
+type GridImageType = typeof import('components/gridImage/gridImage').default;
 // Types
 export type DataListItem = {
 	title: string;
@@ -70,7 +71,7 @@ const ChangeSubscription = (props: { route: string }) => (
 );
 
 const DropDownButton = (props: {
-	onClick: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
 	showDropDown: boolean;
 }) => (
 	<button
@@ -143,7 +144,7 @@ TabletAndDesktop.defaultProps = {
 
 const HideDropDown = (props: {
 	billingPeriod: BillingPeriod;
-	onClick: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
 	productPrice: ProductPrice;
 	showDropDown: boolean;
 	title: string;
@@ -171,7 +172,7 @@ const HideDropDown = (props: {
 const ShowDropDown = (
 	props: PropTypes & {
 		deliveryMethod: string | null;
-		onClick: (...args: Array<any>) => any;
+		onClick: (...args: any[]) => any;
 		showDropDown: boolean;
 		productPrice: ProductPrice;
 		billingPeriod: BillingPeriod;

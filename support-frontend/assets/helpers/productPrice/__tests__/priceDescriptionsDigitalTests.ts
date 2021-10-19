@@ -1,9 +1,10 @@
 // ----- Imports ----- //
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	getBillingDescription,
 	hasDiscountOrPromotion,
 } from 'helpers/productPrice/priceDescriptionsDigital';
-import { Monthly, Annual } from 'helpers/productPrice/billingPeriods';
+
 jest.mock('ophan', () => {});
 const productPriceMonthlyWithDiscount = {
 	price: 11.99,

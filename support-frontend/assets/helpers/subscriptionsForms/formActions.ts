@@ -1,24 +1,25 @@
-import type { Option } from 'helpers/types/option';
+import type { Action as DDAction } from 'components/directDebit/directDebitActions';
+import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
+import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { FormField, Stage } from './formFields';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { FormField, Stage } from './formFields';
 import * as storage from 'helpers/storage/storage';
 import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Action as DDAction } from 'components/directDebit/directDebitActions';
-import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
-import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { Option } from 'helpers/types/option';
+
 export type Action =
 	| {
 			type: 'SET_STAGE';
@@ -86,7 +87,7 @@ export type Action =
 	  }
 	| {
 			type: 'SET_FORM_ERRORS';
-			errors: FormError<FormField>[];
+			errors: Array<FormError<FormField>>;
 	  }
 	| {
 			type: 'SET_SUBMISSION_ERROR';
@@ -162,8 +163,8 @@ const setFormSubmitted = (formSubmitted: boolean) => ({
 const setUserTypeFromIdentityResponse =
 	(
 		userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-	): ((arg0: (...args: Array<any>) => any) => void) =>
-	(dispatch: (...args: Array<any>) => any): void => {
+	): ((arg0: (...args: any[]) => any) => void) =>
+	(dispatch: (...args: any[]) => any): void => {
 		dispatch(
 			setFormSubmissionDependentValue(() => ({
 				type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
@@ -177,22 +178,22 @@ const formActionCreators = {
 		type: 'SET_TITLE',
 		title: title !== '' ? title : null,
 	}),
-	setFirstName: (firstName: string): ((...args: Array<any>) => any) =>
+	setFirstName: (firstName: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_FIRST_NAME',
 			firstName,
 		})),
-	setLastName: (lastName: string): ((...args: Array<any>) => any) =>
+	setLastName: (lastName: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_LAST_NAME',
 			lastName,
 		})),
-	setEmail: (email: string): ((...args: Array<any>) => any) =>
+	setEmail: (email: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_EMAIL',
 			email,
 		})),
-	setConfirmEmail: (email: string): ((...args: Array<any>) => any) =>
+	setConfirmEmail: (email: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_CONFIRM_EMAIL',
 			email,
@@ -207,19 +208,17 @@ const formActionCreators = {
 	}),
 	setFirstNameGift: (
 		firstNameGiftRecipient: string,
-	): ((...args: Array<any>) => any) =>
+	): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_FIRST_NAME_GIFT',
 			firstNameGiftRecipient,
 		})),
-	setLastNameGift: (
-		lastNameGiftRecipient: string,
-	): ((...args: Array<any>) => any) =>
+	setLastNameGift: (lastNameGiftRecipient: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_LAST_NAME_GIFT',
 			lastNameGiftRecipient,
 		})),
-	setEmailGift: (emailGiftRecipient: string): ((...args: Array<any>) => any) =>
+	setEmailGift: (emailGiftRecipient: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_EMAIL_GIFT',
 			emailGiftRecipient,

@@ -1,10 +1,11 @@
 import React from 'react';
-import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
-import ContributionThankYou from './ContributionThankYou';
+import Page from 'components/page/page';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import ContributionThankYou from './ContributionThankYou';
 import 'helpers/internationalisation/countryGroup';
+
 type ContributionThankYouProps = {
 	countryGroupId: CountryGroupId;
 };

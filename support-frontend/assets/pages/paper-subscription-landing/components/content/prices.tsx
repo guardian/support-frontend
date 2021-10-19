@@ -1,12 +1,12 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { headline } from '@guardian/src-foundations/typography';
+import { between, from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import { from, between } from '@guardian/src-foundations/mq';
+import { headline } from '@guardian/src-foundations/typography';
 import { SvgInfo } from '@guardian/src-icons';
-import ProductInfoChip from 'components/product/productInfoChip';
+import React from 'react';
 import FlexContainer from 'components/containers/flexContainer';
+import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
 import {
@@ -15,6 +15,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import LinkTo from './linkTo';
+
 export type PropTypes = {
 	activeTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;

@@ -1,29 +1,30 @@
 // ----- Imports ----- //
-import React from 'react';
-import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
-import { LinkButton, buttonBrand } from '@guardian/src-button';
-import { SvgArrowDownStraight } from '@guardian/src-icons';
+import { buttonBrand, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
+import { SvgArrowDownStraight } from '@guardian/src-icons';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
+import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
-import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
-import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
+import PageTitle from 'components/page/pageTitle';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	detect,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import { promotionHTML } from 'helpers/productPrice/promotions';
 import {
 	fromCountryGroupId,
 	glyph,
 } from 'helpers/internationalisation/currency';
+import { promotionHTML } from 'helpers/productPrice/promotions';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 type PropTypes = {
 	orderIsAGift: boolean;
 	countryGroupId: CountryGroupId;

@@ -1,20 +1,20 @@
 import {
-	formError,
-	nonEmptyString,
-	notNull,
-	nonSillyCharacters,
-	validate,
-} from './validation';
-import type { FormField, FormFields } from './formFields';
-import type { FormError } from './validation';
-import {
-	checkOptionalEmail,
 	checkEmail,
 	checkGiftStartDate,
+	checkOptionalEmail,
 	emailAddressesMatch,
 } from 'helpers/forms/formValidation';
+import type { FormField, FormFields } from './formFields';
+import {
+	formError,
+	nonEmptyString,
+	nonSillyCharacters,
+	notNull,
+	validate,
+} from './validation';
+import type { FormError } from './validation';
 
-function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
+function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 	const { orderIsAGift, product, isSignedIn } = fields;
 	const userFormFields = [
 		{
@@ -152,7 +152,7 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
 	return validate(formFieldsToCheck);
 }
 
-function applyDeliveryRules(fields: FormFields): FormError<FormField>[] {
+function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
 	return validate([
 		{
 			rule: notNull(fields.startDate),

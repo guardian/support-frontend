@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import { connect } from 'react-redux';
-import MarketingConsent from 'components/marketingConsent/marketingConsent';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { Dispatch } from 'redux';
-import type { Action } from 'helpers/user/userActions';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
+import MarketingConsent from 'components/marketingConsent/marketingConsent';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getEmail } from 'helpers/subscriptionsForms/formFields';
+import type { Action } from 'helpers/user/userActions';
 
 const mapStateToProps = (state) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,

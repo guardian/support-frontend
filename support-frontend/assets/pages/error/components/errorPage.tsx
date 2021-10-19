@@ -1,16 +1,16 @@
 // ----- Imports ----- //
 import React from 'react';
-import Page from 'components/page/page';
-import Header from 'components/headers/header/header';
-import Footer from 'components/footerCompliant/Footer';
-import SquaresIntroduction from 'components/introduction/squaresIntroduction';
-import PageSection from 'components/pageSection/pageSection';
 import Rows from 'components/base/rows';
 import AnchorButton from 'components/button/anchorButton';
-import { contributionsEmail } from 'helpers/legal';
+import Footer from 'components/footerCompliant/Footer';
+import Header from 'components/headers/header/header';
+import SquaresIntroduction from 'components/introduction/squaresIntroduction';
+import Page from 'components/page/page';
+import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
 import { detect } from 'helpers/internationalisation/countryGroup';
+import { contributionsEmail } from 'helpers/legal';
 // ----- Types ----- //
 type PropTypes = {
 	errorCode?: string;

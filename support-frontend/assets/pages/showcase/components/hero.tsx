@@ -1,21 +1,20 @@
 import React from 'react';
+import GridImage from 'components/gridImage/gridImage';
 import {
-	GBPCountries,
 	AUDCountries,
 	Canada,
 	EURCountries,
+	GBPCountries,
 	International,
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import GridImage from 'components/gridImage/gridImage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import 'helpers/internationalisation/countryGroup';
-import { regionalContent } from './regionalContent';
 import HeroImg from './hero.svg';
+import { regionalContent } from './regionalContent';
 import './hero.scss';
 
-const Caption = (props: { className: string; captionText: String }) => (
+const Caption = (props: { className: string; captionText: string }) => (
 	<div className={props.className}>
 		<figcaption className="showcase-hero__caption">
 			<p>{props.captionText}</p>

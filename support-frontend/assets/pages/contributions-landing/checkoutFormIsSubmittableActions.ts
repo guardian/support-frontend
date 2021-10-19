@@ -1,6 +1,12 @@
 // ----- Imports ----- //
 import type { Action as UserAction } from 'helpers/user/userActions';
 import 'helpers/user/userActions';
+import type {
+	ContributionType,
+	OtherAmounts,
+	SelectedAmounts,
+} from 'helpers/contributions';
+import { contributionTypeIsRecurring } from 'helpers/contributions';
 import {
 	amountOrOtherAmountIsValid,
 	checkEmail,
@@ -9,20 +15,14 @@ import {
 	checkStateIfApplicable,
 	isValidIban,
 } from 'helpers/forms/formValidation';
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
-import { contributionTypeIsRecurring } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { StateProvince } from 'helpers/internationalisation/country';
-import type { State } from './contributionsLandingReducer';
-import type { Action as ContributionsLandingAction } from './contributionsLandingActions';
-import { setFormIsValid } from './contributionsLandingActions';
-import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
 import { AmazonPay, Sepa } from 'helpers/forms/paymentMethods';
+import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
+import type { StateProvince } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
+import { setFormIsValid } from './contributionsLandingActions';
+import type { Action as ContributionsLandingAction } from './contributionsLandingActions';
+import type { State } from './contributionsLandingReducer';
 // ----- Types ----- //
 type Action = ContributionsLandingAction | UserAction;
 
@@ -158,10 +158,7 @@ const formIsValidParameters = (state: State) => ({
 });
 
 function enableOrDisableForm() {
-	return (
-		dispatch: (...args: Array<any>) => any,
-		getState: () => State,
-	): void => {
+	return (dispatch: (...args: any[]) => any, getState: () => State): void => {
 		const state = getState();
 		const { isRecurringContributor } = state.page.user;
 		const shouldBlockExistingRecurringContributor =
@@ -191,7 +188,7 @@ function enableOrDisableForm() {
 }
 
 function setFormSubmissionDependentValue(setStateValue: () => Action) {
-	return (dispatch: (...args: Array<any>) => any): void => {
+	return (dispatch: (...args: any[]) => any): void => {
 		dispatch(setStateValue());
 		dispatch(enableOrDisableForm());
 	};

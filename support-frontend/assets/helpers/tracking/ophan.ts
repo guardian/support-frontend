@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getLocal, setLocal } from 'helpers/storage/storage';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 // ----- Types ----- //
 // These are to match Thrift definitions which can be found here:
 // https://dashboard.ophan.co.uk/docs/thrift/componentevent.html#Struct_ComponentEvent
@@ -47,9 +47,9 @@ export type OphanComponentType =
 type OphanComponent = {
 	componentType: OphanComponentType;
 	id?: string;
-	products?: ReadonlyArray<OphanProduct>;
+	products?: readonly OphanProduct[];
 	campaignCode?: string;
-	labels?: ReadonlyArray<string>;
+	labels?: readonly string[];
 };
 export type OphanComponentEvent = {
 	component: OphanComponent;

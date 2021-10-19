@@ -1,28 +1,19 @@
 import * as React from 'react';
 // constants
-import {
-	DigitalPack,
-	fixDecimals,
-	GuardianWeekly,
-	Paper,
-	sendTrackingEventsOnClick,
-} from 'helpers/productPrice/subscriptions';
-import { androidAppUrl, getIosAppUrl } from 'helpers/urls/externalLinks';
-import trackAppStoreLink from 'helpers/tracking/appCtaTracking';
-// images
-import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
-import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
-import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
-import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import DigitalPackshot from 'components/packshots/digital-packshot';
+import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
+import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
+import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
+import PaperPackshot from 'components/packshots/paper-packshot';
+import PremiumAppPackshot from 'components/packshots/premium-app-packshot';
+// images
 import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
-	GBPCountries,
 	EURCountries,
+	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import type { Option } from 'helpers/types/option';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Monthly,
@@ -35,17 +26,26 @@ import {
 	glyph,
 } from 'helpers/internationalisation/currency';
 import {
+	DigitalPack,
+	fixDecimals,
+	GuardianWeekly,
+	Paper,
+	sendTrackingEventsOnClick,
+} from 'helpers/productPrice/subscriptions';
+import trackAppStoreLink from 'helpers/tracking/appCtaTracking';
+import type { Option } from 'helpers/types/option';
+import { androidAppUrl, getIosAppUrl } from 'helpers/urls/externalLinks';
+import {
 	digitalSubscriptionLanding,
 	guardianWeeklyLanding,
 	paperSubsUrl,
 } from 'helpers/urls/routes';
-import PaperPackshot from 'components/packshots/paper-packshot';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 // types
 export type ProductButton = {
 	ctaButtonText: string;
 	link: string;
-	analyticsTracking: (...args: Array<any>) => any;
+	analyticsTracking: (...args: any[]) => any;
 	hierarchy?: string;
 };
 export type ProductCopy = {

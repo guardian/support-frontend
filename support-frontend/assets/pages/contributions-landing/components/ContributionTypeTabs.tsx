@@ -1,27 +1,27 @@
 /* eslint-disable react/no-unused-prop-types */
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
+import React from 'react';
 import { connect } from 'react-redux';
-import type { ContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	ContributionTypes,
+	ContributionTypeSetting,
+} from 'helpers/contributions';
 import 'helpers/contributions';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	getPaymentMethodToSelect,
 	toHumanReadableContributionType,
 } from 'helpers/forms/checkouts';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
-import type {
-	ContributionTypes,
-	ContributionTypeSetting,
-} from 'helpers/contributions';
-import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,
@@ -52,7 +52,7 @@ const mapStateToProps = (state: State) => ({
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	onSelectContributionType: (
 		contributionType: ContributionType,
 		switches: Switches,

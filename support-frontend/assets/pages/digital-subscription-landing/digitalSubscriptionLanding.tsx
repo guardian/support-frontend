@@ -1,29 +1,11 @@
 // ----- Imports ----- //
 import { renderPage } from 'helpers/rendering/render';
-// @ts-ignore - required for hooks
-import React, { useEffect } from 'react';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
-import { routes } from 'helpers/urls/routes';
-import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
-import Page from 'components/page/page';
-import FullWidthContainer from 'components/containers/fullWidthContainer';
-import CentredContainer from 'components/containers/centredContainer';
-import Block from 'components/page/block';
-import { getPromotionCopy } from 'helpers/productPrice/promotions';
+import React, { useEffect } from 'react';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
 import { HeroWithImage } from './components/hero/heroWithImage';
@@ -46,15 +28,34 @@ import {
 import 'stylesheets/skeleton/skeleton.scss';
 import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { Provider } from 'react-redux';
+import CentredContainer from 'components/containers/centredContainer';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import Block from 'components/page/block';
+import Page from 'components/page/page';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
+import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	AUDCountries,
+	Canada,
+	EURCountries,
+	GBPCountries,
+	International,
+	NZDCountries,
+	UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { getPromotionCopy } from 'helpers/productPrice/promotions';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { routes } from 'helpers/urls/routes';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
-import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
-import type { CommonState } from 'helpers/page/commonReducer';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
+
 const productBlockContainer = css`
 	background-color: ${neutral[93]};
 	border-top: none;

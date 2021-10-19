@@ -1,9 +1,10 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
+import React from 'react';
+import type { Node } from 'react';
+
 const expander = css`
 	summary::-webkit-details-marker {
 		display: none;

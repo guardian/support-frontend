@@ -1,22 +1,23 @@
-import React, { Component } from 'react';
 import { border } from '@guardian/src-foundations/palette';
+import React, { Component } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { Error } from 'components/forms/customFields/error';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
-import CalendarIcon from './calendarIcon.svg';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import CalendarIcon from './calendarIcon.svg';
 import { TextInput } from '@guardian/src-text-input';
 import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonBrandAlt } from '@guardian/src-button';
-import { Error } from 'components/forms/customFields/error';
 import {
+	dateIsOutsideRange,
 	getLatestAvailableDateText,
 	getRange,
-	dateIsOutsideRange,
 } from './helpers';
 import './styles.scss';
+
 const calendarIconContainer = css`
 	padding: 0;
 	border: none;
@@ -46,7 +47,7 @@ const marginTop = css`
 `;
 type PropTypes = {
 	value: string | null;
-	onChange: (...args: Array<any>) => any;
+	onChange: (...args: any[]) => any;
 };
 type StateTypes = {
 	day: string;
@@ -139,7 +140,7 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 		);
 	};
 	handleInput = (value: string, field: string) => {
-		if (/^[0-9]+$/.test(value) === true) {
+		if (/^[0-9]+$/.test(value)) {
 			this.setState(
 				{
 					[field]: value,

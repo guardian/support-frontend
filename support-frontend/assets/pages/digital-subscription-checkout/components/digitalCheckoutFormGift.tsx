@@ -5,28 +5,10 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import 'redux';
 import { TextArea } from '@guardian/src-text-area';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
-import CheckoutLayout, {
-	Content,
-} from 'components/subscriptionCheckouts/layout';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import {
-	finalPrice,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
-import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -64,10 +46,29 @@ import { withError } from 'hocs/withError';
 import DatePickerFields from 'components/datePicker/datePicker';
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import CheckoutLayout, {
+	Content,
+} from 'components/subscriptionCheckouts/layout';
 import { countries } from 'helpers/internationalisation/country';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import {
+	finalPrice,
+	getProductPrice,
+} from 'helpers/productPrice/productPrices';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type {
+	Action,
+	FormActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
+
 const controlTextAreaResizing = css`
 	resize: vertical;
 `;
@@ -76,8 +77,8 @@ type PropTypes = FormFields &
 	FormActionCreators & {
 		country: IsoCountry;
 		signOut: typeof signOut;
-		submitForm: (...args: Array<any>) => any;
-		formErrors: FormError<FormField>[];
+		submitForm: (...args: any[]) => any;
+		formErrors: Array<FormError<FormField>>;
 		submissionError: ErrorReason | null;
 		productPrices: ProductPrices;
 		currencyId: IsoCurrency;
@@ -86,9 +87,9 @@ type PropTypes = FormFields &
 		isTestUser: boolean;
 		amount: number;
 		billingPeriod: DigitalBillingPeriod;
-		setupRecurringPayPalPayment: (...args: Array<any>) => any;
-		validateForm: () => (...args: Array<any>) => any;
-		formIsValid: (...args: Array<any>) => any;
+		setupRecurringPayPalPayment: (...args: any[]) => any;
+		validateForm: () => (...args: any[]) => any;
+		formIsValid: (...args: any[]) => any;
 		addressErrors: Array<Record<string, any>>;
 		// eslint-disable-next-line react/no-unused-prop-types
 		participations: Participations;
@@ -205,7 +206,9 @@ function DigitalCheckoutFormGift(props: PropTypes) {
 							emailGiftRecipient={props.emailGiftRecipient || ''}
 							setEmailGift={props.setEmailGift}
 							formErrors={
-								props.formErrors as any as FormError<PersonalDetailsFormField>[]
+								props.formErrors as any as Array<
+									FormError<PersonalDetailsFormField>
+								>
 							}
 						/>
 					</FormSection>

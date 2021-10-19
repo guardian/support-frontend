@@ -3,16 +3,16 @@ import type { CountryGroupId } from '../internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
+	EURCountries,
 	GBPCountries,
+	International,
 	NZDCountries,
 	UnitedStates,
-	EURCountries,
-	International,
 } from '../internationalisation/countryGroup';
 import {
 	androidAppUrl,
-	getIosAppUrl,
 	getDailyEditionUrl,
+	getIosAppUrl,
 } from '../urls/externalLinks';
 // ----- Tests ----- //
 jest.mock('ophan', () => ({

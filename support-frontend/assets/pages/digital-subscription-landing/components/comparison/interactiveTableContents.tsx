@@ -1,11 +1,12 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
+import React from 'react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
 import { getLocalisedRows } from './interactiveTableRowContents';
+
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
 const descriptionIcon = css`

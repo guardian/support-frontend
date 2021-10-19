@@ -1,16 +1,17 @@
 // ----- Imports ----- //
+import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
-import {
-	getVariantsAsString,
-	init as abInit,
-	targetPageMatches,
-} from '../abtest';
-import type { Participations } from '../abtest';
 import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
-import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
+import {
+	init as abInit,
+	getVariantsAsString,
+	targetPageMatches,
+} from '../abtest';
+import type { Participations } from '../abtest';
+
 const { subsShowcaseAndDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;

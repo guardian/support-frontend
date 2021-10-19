@@ -1,11 +1,11 @@
+import { css } from '@emotion/core';
+import { Button, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
+import { Option, Select } from '@guardian/src-select';
+import { TextInput } from '@guardian/src-text-input';
+import { ThemeProvider } from 'emotion-theming';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TextInput } from '@guardian/src-text-input';
-import { Button, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { ThemeProvider } from 'emotion-theming';
-import { Select, Option } from '@guardian/src-select';
 import type {
 	PostcodeFinderActionCreators,
 	PostcodeFinderState,
@@ -15,6 +15,7 @@ import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import 'helpers/subscriptionsForms/addressType';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import 'components/subscriptionCheckouts/address/postcodeLookup';
+
 const root = css`
 	display: flex;
 	justify-content: flex-start;
@@ -76,7 +77,7 @@ class PostcodeFinder extends Component<PropTypes> {
 	}
 
 	selectRef: Element & {
-		focus: (...args: Array<any>) => any;
+		focus: (...args: any[]) => any;
 	};
 
 	render() {

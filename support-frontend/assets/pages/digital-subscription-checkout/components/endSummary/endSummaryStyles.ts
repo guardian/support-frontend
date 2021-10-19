@@ -1,8 +1,9 @@
 import { css } from '@emotion/core';
-import { textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { text, border, background } from '@guardian/src-foundations/palette';
+import { background, border, text } from '@guardian/src-foundations/palette';
+import { textSans } from '@guardian/src-foundations/typography/obj';
+
 export const list = css`
 	${from.desktop} {
 		color: ${text.primary};

@@ -1,40 +1,41 @@
 // ----- Imports ----- //
 import { getQueryParameter } from 'helpers/urls/url';
+import {
+	generateContributionTypes,
+	getFrequency,
+	toContributionType,
+} from 'helpers/contributions';
 import type {
 	ContributionType,
 	ContributionTypes,
+	SelectedAmounts,
 } from 'helpers/contributions';
-import {
-	getFrequency,
-	toContributionType,
-	generateContributionTypes,
-} from 'helpers/contributions';
-import * as storage from 'helpers/storage/storage';
-import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import 'helpers/globalsAndSwitches/settings';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import {
+	AmazonPay,
+	DirectDebit,
+	ExistingCard,
+	ExistingDirectDebit,
+	PayPal,
+	Sepa,
+	Stripe,
+} from 'helpers/forms/paymentMethods';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	currencies,
+	spokenCurrencies,
+} from 'helpers/internationalisation/currency';
 import type {
 	Currency,
 	IsoCurrency,
 	SpokenCurrency,
 } from 'helpers/internationalisation/currency';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
-import type { SelectedAmounts } from 'helpers/contributions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import {
-	DirectDebit,
-	PayPal,
-	Stripe,
-	AmazonPay,
-	Sepa,
-} from 'helpers/forms/paymentMethods';
-import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import * as storage from 'helpers/storage/storage';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 // ----- Types ----- //
 export type PaymentMethodSwitch =
 	| 'directDebit'
@@ -45,8 +46,8 @@ export type PaymentMethodSwitch =
 	| 'existingDirectDebit'
 	| 'amazonPay';
 type StripeHandler = {
-	open: (...args: Array<any>) => any;
-	close: (...args: Array<any>) => any;
+	open: (...args: any[]) => any;
+	close: (...args: any[]) => any;
 };
 export type ThirdPartyPaymentLibrary = StripeHandler;
 

@@ -6,6 +6,7 @@ import 'helpers/types/option';
 import SvgClose from 'components/svgs/close';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 import './mobileMenu.scss';
+
 export type Position = Option<{
 	x: number;
 	y: number;

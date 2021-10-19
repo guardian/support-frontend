@@ -1,29 +1,27 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { focusHalo } from '@guardian/src-foundations/accessibility';
+import { InlineError } from '@guardian/src-user-feedback';
+import React from 'react';
 import { connect } from 'react-redux';
+import DownChevronDs from 'components/svgs/downChevronDs';
 import type { StateProvince } from 'helpers/internationalisation/country';
 import {
-	usStates,
-	caStates,
 	auStates,
+	caStates,
+	usStates,
 } from 'helpers/internationalisation/country';
 import type {
-	CountryGroupId,
 	CountryGroup,
+	CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import {
-	countryGroups,
 	AUDCountries,
-} from 'helpers/internationalisation/countryGroup';
-import {
 	Canada,
+	countryGroups,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { InlineError } from '@guardian/src-user-feedback';
-import DownChevronDs from 'components/svgs/downChevronDs';
-import { focusHalo } from '@guardian/src-foundations/accessibility';
-import { space } from '@guardian/src-foundations';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 // ----- Types ----- //

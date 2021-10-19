@@ -4,7 +4,7 @@ import type { Action, Phase } from './directDebitActions';
 export type DirectDebitState = {
 	isPopUpOpen: boolean;
 	isDDGuaranteeOpen: boolean;
-	sortCodeArray: Array<string>;
+	sortCodeArray: string[];
 	sortCodeString: string;
 	accountNumber: string;
 	accountHolderName: string;

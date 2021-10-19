@@ -1,22 +1,22 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
+import { buttonReaderRevenueBrandAlt, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
-import { ThemeProvider } from 'emotion-theming';
-import { LinkButton, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
+import { from } from '@guardian/src-foundations/mq';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
+import 'helpers/internationalisation/countryGroup';
+import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
+import Text from 'components/text/text';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
-	getIosAppUrl,
 	androidAppUrl,
 	androidDailyUrl,
 	getDailyEditionUrl,
+	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import Text from 'components/text/text';
-import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
 // ----- Types ----- //
 type PropTypes = {
 	countryGroupId: CountryGroupId;

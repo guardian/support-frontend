@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { checkoutFormIsValid } from 'helpers/subscriptionsForms/formValidation';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Functions ----- //
 const enableOrDisablePayPalExpressCheckoutButton = (
@@ -16,7 +16,7 @@ const enableOrDisablePayPalExpressCheckoutButton = (
 
 function enableOrDisableForm() {
 	return (
-		dispatch: (...args: Array<any>) => any,
+		dispatch: (...args: any[]) => any,
 		getState: () => CheckoutState,
 	): void => {
 		enableOrDisablePayPalExpressCheckoutButton(checkoutFormIsValid(getState()));
@@ -24,7 +24,7 @@ function enableOrDisableForm() {
 }
 
 function setFormSubmissionDependentValue(setStateValue: () => Action) {
-	return (dispatch: (...args: Array<any>) => any): void => {
+	return (dispatch: (...args: any[]) => any): void => {
 		dispatch(setStateValue());
 		dispatch(enableOrDisableForm());
 	};

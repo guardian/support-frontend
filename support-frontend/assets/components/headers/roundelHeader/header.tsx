@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import React from 'react';
-import type { CountryGroup } from 'helpers/internationalisation/countryGroup';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { currencies } from 'helpers/internationalisation/currency';
 import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
 import SvgGlobe from 'components/svgs/globe';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroup } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
 // ----- Types ----- //
 type PropTypes = {
 	selectedCountryGroup: CountryGroup | null | undefined;

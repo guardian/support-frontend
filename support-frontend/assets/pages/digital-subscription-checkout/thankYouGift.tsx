@@ -1,27 +1,27 @@
 // ----- Imports ----- //
-import * as React from 'react';
-import { connect } from 'react-redux';
 import { css } from '@emotion/core';
-import { textSans, headline } from '@guardian/src-foundations/typography';
-import { text, sport, neutral } from '@guardian/src-foundations/palette';
+import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { LinkButton } from '@guardian/src-button';
+import { neutral, sport, text } from '@guardian/src-foundations/palette';
+import { headline, textSans } from '@guardian/src-foundations/typography';
 import { SvgCheckmark } from '@guardian/src-icons';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import GridImage from 'components/gridImage/gridImage';
 import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import OrderSummaryThankYou from 'pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou';
-import GridImage from 'components/gridImage/gridImage';
-import { PageSection } from 'pages/digital-subscription-checkout/components/thankYou/pageSection';
 import clock from 'pages/digital-subscription-checkout/components/thankYou/icons/clock.png';
-import list from 'pages/digital-subscription-checkout/components/thankYou/icons/list.png';
 import gift from 'pages/digital-subscription-checkout/components/thankYou/icons/gift.png';
+import list from 'pages/digital-subscription-checkout/components/thankYou/icons/list.png';
 import person from 'pages/digital-subscription-checkout/components/thankYou/icons/person.png';
 import phone from 'pages/digital-subscription-checkout/components/thankYou/icons/phone.png';
-import { formatUserDate } from 'helpers/utilities/dateConversions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { PageSection } from 'pages/digital-subscription-checkout/components/thankYou/pageSection';
 import 'helpers/internationalisation/countryGroup';
 // ----- Styles ----- //
 const topPageSection = css`

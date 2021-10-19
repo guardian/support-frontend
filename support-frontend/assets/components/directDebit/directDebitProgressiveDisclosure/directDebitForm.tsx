@@ -7,17 +7,17 @@ import type { Action, Phase } from 'components/directDebit/directDebitActions';
 import {
 	payDirectDebitClicked,
 	setDirectDebitFormPhase,
+	updateAccountHolderConfirmation,
 	updateAccountHolderName,
 	updateAccountNumber,
 	updateSortCodeString,
-	updateAccountHolderConfirmation,
 } from 'components/directDebit/directDebitActions';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 import Form from './components/form';
 import Playback from './components/playback';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import 'helpers/forms/errorReasons';
-import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 // ---- Types ----- //
 type PropTypes = {
 	buttonText: string;
@@ -38,7 +38,7 @@ type PropTypes = {
 	updateAccountHolderConfirmation: (
 		accountHolderConfirmation: React.SyntheticEvent<HTMLInputElement>,
 	) => void;
-	submitForm: (...args: Array<any>) => any;
+	submitForm: (...args: any[]) => any;
 	payDirectDebitClicked: () => void;
 	editDirectDebitClicked: () => void;
 	countryGroupId: CountryGroupId;
@@ -48,7 +48,7 @@ type PropTypes = {
 type Error = {
 	error: string;
 	message: string;
-	rule: (...args: Array<any>) => any;
+	rule: (...args: any[]) => any;
 };
 type StateTypes = {
 	accountHolderName: Error;

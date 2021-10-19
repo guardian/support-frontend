@@ -1,8 +1,6 @@
 // ----- Imports ----- //
 import React from 'react';
-import type { SelectedAmounts } from 'helpers/contributions';
-import 'helpers/contributions';
-import type { ContributionType } from 'helpers/contributions';
+import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
@@ -12,10 +10,11 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { formatAmount } from 'helpers/forms/checkouts';
-import { ChoiceCardGroup, ChoiceCard } from '@guardian/src-choice-card';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
 import ContributionAmountChoicesChoiceLabel from './ContributionAmountChoicesChoiceLabel';
 import { until } from '@guardian/src-foundations/mq';
 import { css } from '@emotion/core';
+
 const choiceCardGridStyles = css`
 	${until.mobileLandscape} {
 		> div {

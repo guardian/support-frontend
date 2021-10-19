@@ -1,22 +1,22 @@
 // ----- Imports ----- //
-// @ts-ignore - required for hooks
-import type { Node } from 'react';
-import React, { Children, useState, useEffect } from 'react';
+// @ts-expect-error - required for hooks
+import { ButtonLink, Link, linkBrand } from '@guardian/src-link';
 import { ThemeProvider } from 'emotion-theming';
-import { Link, ButtonLink, linkBrand } from '@guardian/src-link';
+import type { Node } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { copyrightNotice } from 'helpers/legal';
 import Rows from '../base/rows';
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
+import { BackToTop } from './BackToTop';
+import FooterContent from './containers/FooterContent';
 import {
 	backToTopLink,
 	componentFooter,
 	copyright,
-	linksList,
 	link,
+	linksList,
 } from './footerStyles';
-import FooterContent from './containers/FooterContent';
-import { BackToTop } from './BackToTop';
 // ----- Props ----- //
 type PropTypes = {
 	centred: boolean;

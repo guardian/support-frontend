@@ -1,28 +1,34 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import 'redux';
-import { RadioGroup, Radio } from '@guardian/src-radio';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
-import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
+import { Radio, RadioGroup } from '@guardian/src-radio';
 import Rows from 'components/base/rows';
-import Text from 'components/text/text';
 import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
+import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import GridImage from 'components/gridImage/gridImage';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
+import Text from 'components/text/text';
+import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import Summary from 'components/subscriptionCheckouts/summary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import type {
+	Action,
+	FormActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
+import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type {
 	FormField,
 	FormFields,
@@ -33,46 +39,40 @@ import { countries } from 'helpers/internationalisation/country';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
-import { signOut } from 'helpers/user/user';
-import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import {
+	submitWithDeliveryForm,
+	trackSubmitAttempt,
+} from 'helpers/subscriptionsForms/submit';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
 	getBillingAddress,
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import {
-	submitWithDeliveryForm,
-	trackSubmitAttempt,
-} from 'helpers/subscriptionsForms/submit';
+import { signOut } from 'helpers/user/user';
 import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
+import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { routes } from 'helpers/urls/routes';
-import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { SetCountryAction } from 'helpers/page/commonActions';
 import 'helpers/page/commonActions';
-import { Stripe, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
-import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import {
+	validateWithDeliveryForm,
+	withDeliveryFormIsValid,
+} from 'helpers/subscriptionsForms/formValidation';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import Total from 'components/subscriptionCheckouts/total/total';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { titles } from 'helpers/user/details';
-import { Select, Option as OptionForSelect } from '@guardian/src-select';
+import { Option as OptionForSelect, Select } from '@guardian/src-select';
 import { options } from 'components/forms/customFields/options';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -80,6 +80,8 @@ import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 // ----- Styles ----- //
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -91,21 +93,21 @@ type PropTypes = FormFields &
 		billingCountry: IsoCountry;
 		deliveryCountry: IsoCountry;
 		signOut: typeof signOut;
-		formErrors: FormError<FormField>[];
+		formErrors: Array<FormError<FormField>>;
 		submissionError: ErrorReason | null;
 		productPrices: ProductPrices;
-		fetchAndStoreUserType: (...args: Array<any>) => any;
-		submitForm: (...args: Array<any>) => any;
-		setBillingCountry: (...args: Array<any>) => any;
+		fetchAndStoreUserType: (...args: any[]) => any;
+		submitForm: (...args: any[]) => any;
+		setBillingCountry: (...args: any[]) => any;
 		billingAddressErrors: Array<Record<string, any>>;
 		deliveryAddressErrors: Array<Record<string, any>>;
 		isTestUser: boolean;
-		validateForm: () => (...args: Array<any>) => any;
+		validateForm: () => (...args: any[]) => any;
 		csrf: Csrf;
 		currencyId: IsoCurrency;
 		payPalHasLoaded: boolean;
-		formIsValid: (...args: Array<any>) => any;
-		setupRecurringPayPalPayment: (...args: Array<any>) => any;
+		formIsValid: (...args: any[]) => any;
+		setupRecurringPayPalPayment: (...args: any[]) => any;
 		participations: Participations;
 	};
 
@@ -286,7 +288,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									value="yes"
 									label="Yes"
 									name="billingAddressIsSame"
-									checked={props.billingAddressIsSame === true}
+									checked={props.billingAddressIsSame}
 									onChange={() => setBillingAddressIsSameHandler(true)}
 								/>
 
@@ -295,13 +297,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									label="No"
 									value="no"
 									name="billingAddressIsSame"
-									checked={props.billingAddressIsSame === false}
+									checked={!props.billingAddressIsSame}
 									onChange={() => setBillingAddressIsSameHandler(false)}
 								/>
 							</RadioGroup>
 						</Rows>
 					</FormSection>
-					{props.billingAddressIsSame === false ? (
+					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
 							<BillingAddress />
 						</FormSection>
@@ -318,7 +320,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 										formatUserDate(day),
 										formatMachineDate(day),
 									];
-									const hideDate = new RegExp('-12-25$').test(machineDate);
+									const hideDate = machineDate.endsWith('-12-25');
 
 									// Don't render input if Christmas day
 									if (hideDate) {

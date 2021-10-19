@@ -1,7 +1,8 @@
 import type { Node } from 'react';
 import React from 'react';
-import styles from './menu.module.scss';
 import SvgCheckmark from 'components/svgs/checkmark';
+import styles from './menu.module.scss';
+
 type itemProps = {
 	children: Node;
 	isSelected: boolean;

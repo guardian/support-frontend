@@ -1,10 +1,10 @@
 // ----- Imports ----- //
 import React from 'react';
-import SvgSquaresHeroDesktop from 'components/svgs/squaresHeroDesktop';
-import SvgSquaresHeroTablet from 'components/svgs/squaresHeroTablet';
-import SvgSquaresHeroMobile from 'components/svgs/squaresHeroMobile';
-import Highlights from 'components/highlights/highlights';
 import type { HeadingSize } from 'components/heading/heading';
+import Highlights from 'components/highlights/highlights';
+import SvgSquaresHeroDesktop from 'components/svgs/squaresHeroDesktop';
+import SvgSquaresHeroMobile from 'components/svgs/squaresHeroMobile';
+import SvgSquaresHeroTablet from 'components/svgs/squaresHeroTablet';
 import 'components/heading/heading';
 // ----- Types ----- //
 type PropTypes = {

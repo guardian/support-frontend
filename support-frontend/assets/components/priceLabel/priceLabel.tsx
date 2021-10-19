@@ -1,10 +1,11 @@
 // ----- Imports ----- //
 import React from 'react';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import { showPrice } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
+import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
+
 export type PropTypes = {
 	productPrice: ProductPrice;
 	billingPeriod: BillingPeriod;

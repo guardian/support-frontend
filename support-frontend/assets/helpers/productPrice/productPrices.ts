@@ -1,3 +1,4 @@
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	CountryGroup,
 	CountryGroupName,
@@ -7,17 +8,16 @@ import {
 	fromCountry,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
-import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { applyDiscount, getPromotion } from 'helpers/productPrice/promotions';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 // ----- Types ----- //
 export type ProductPrice = {
 	price: number;
@@ -89,7 +89,7 @@ function finalPrice(
 	);
 }
 
-const showPrice = (p: ProductPrice, isExtended: boolean = true): string => {
+const showPrice = (p: ProductPrice, isExtended = true): string => {
 	const showGlyph = isExtended ? extendedGlyph : glyph;
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };

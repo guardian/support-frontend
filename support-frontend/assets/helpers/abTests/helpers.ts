@@ -1,7 +1,8 @@
 import type { Participations } from 'helpers/abTests/abtest';
+import type { ContributionAmounts } from 'helpers/contributions';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ContributionAmounts } from 'helpers/contributions';
+
 type FallbackAmounts = Record<CountryGroupId, ContributionAmounts>;
 const FALLBACK_AMOUNTS: FallbackAmounts = {
 	GBPCountries: {

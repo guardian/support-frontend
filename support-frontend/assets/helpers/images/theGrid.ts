@@ -1,4 +1,4 @@
-import { $Keys } from 'utility-types';
+import type { $Keys } from 'utility-types';
 import catalogue from './imageCatalogue.json';
 // ----- Types ----- //
 export type ImageType = 'jpg' | 'png';

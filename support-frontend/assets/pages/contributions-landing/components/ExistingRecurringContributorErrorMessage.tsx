@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 import React from 'react';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionType } from 'helpers/contributions';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 // ---- Types ----- //
 type PropTypes = {
 	contributionType: ContributionType;

@@ -1,23 +1,23 @@
 // ----- Imports ----- //
 import React from 'react';
-import {
-	privacyLink,
-	contributionsTermsLinks,
-	philanthropyContactEmail,
-} from 'helpers/legal';
+import type { ContributionType } from 'helpers/contributions';
+import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { formatAmount } from 'helpers/forms/checkouts';
-import type { ContributionType } from 'helpers/contributions';
+import {
+	contributionsTermsLinks,
+	philanthropyContactEmail,
+	privacyLink,
+} from 'helpers/legal';
 import './termsPrivacy.scss';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import {
-	getLongMonth,
 	getDateWithOrdinal,
+	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
 // ---- Types ----- //
 type PropTypes = {

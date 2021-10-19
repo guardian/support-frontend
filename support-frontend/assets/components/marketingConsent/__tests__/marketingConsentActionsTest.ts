@@ -2,7 +2,7 @@
 import { marketingConsentActionsFor } from '../marketingConsentActions';
 // ----- Tests ----- //
 describe('Marketing Consent actions', () => {
-	const scope: string = 'ExampleScope';
+	const scope = 'ExampleScope';
 	const actions = marketingConsentActionsFor(scope);
 	it('should create an action to set an API error', () => {
 		const expectedAPIErrorTrue = {

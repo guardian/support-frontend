@@ -1,18 +1,18 @@
 // ----- Imports ----- //
 import { logException } from 'helpers/utilities/logger';
 import { routes } from 'helpers/urls/routes';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import * as storage from 'helpers/storage/storage';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { Csrf, Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import { billingPeriodFromContrib, getAmount } from '../../contributions';
-import type { Csrf } from '../../csrf/csrfReducer';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import * as storage from 'helpers/storage/storage';
 import 'pages/contributions-landing/contributionsLandingActions';
 import type { Option } from 'helpers/types/option';
+import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
+import { billingPeriodFromContrib, getAmount } from '../../contributions';
+
 export type SetupPayPalRequestType = (
 	resolve: (arg0: string) => void,
 	reject: (arg0: Error) => void,
@@ -49,7 +49,7 @@ function loadPayPalRecurring(): Promise<void> {
 	});
 }
 
-const showPayPal = (dispatch: (...args: Array<any>) => any) => {
+const showPayPal = (dispatch: (...args: any[]) => any) => {
 	loadPayPalRecurring().then(() => {
 		dispatch(setPayPalHasLoaded());
 	});
@@ -79,7 +79,7 @@ const setupRecurringPayPalPayment =
 		currency: IsoCurrency,
 		csrf: Csrf,
 	) =>
-	(dispatch: (...args: Array<any>) => any, getState: () => State): void => {
+	(dispatch: (...args: any[]) => any, getState: () => State): void => {
 		const state = getState();
 		const csrfToken = csrf.token;
 		const { contributionType } = state.page.form;

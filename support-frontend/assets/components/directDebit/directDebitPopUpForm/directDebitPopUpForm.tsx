@@ -2,8 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import type { Phase } from 'components/directDebit/directDebitActions';
-import type { Action } from 'components/directDebit/directDebitActions';
+import type { Action, Phase } from 'components/directDebit/directDebitActions';
 import {
 	closeDirectDebitPopUp,
 	resetDirectDebitFormError,

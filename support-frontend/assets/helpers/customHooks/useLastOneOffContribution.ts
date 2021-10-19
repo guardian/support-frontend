@@ -1,6 +1,7 @@
-// @ts-ignore - required for hooks
-import { useState, useEffect } from 'react';
+// @ts-expect-error - required for hooks
+import { useEffect, useState } from 'react';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+
 const MDAPI_URL = `${window.guardian.mdapiUrl}/user-attributes/me/one-off-contributions`;
 export type OneOffContribution = {
 	amount: number;

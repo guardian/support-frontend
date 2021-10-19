@@ -1,7 +1,8 @@
 import React from 'react';
 import Content from 'components/content/content';
-import Text from 'components/text/text';
 import NoOne from 'components/svgs/noOne';
+import Text from 'components/text/text';
+
 export default function NoOneEdits() {
 	return (
 		<Content appearance="grey">

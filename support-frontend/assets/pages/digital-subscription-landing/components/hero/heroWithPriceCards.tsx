@@ -1,31 +1,32 @@
 // ----- Imports ----- //
 import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
-import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
 import HeroRoundel from 'components/page/heroRoundel';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import { promotionHTML } from 'helpers/productPrice/promotions';
-import {
-	getTimeboundQuery,
-	getTimeboundCopy,
-} from 'helpers/timeBoundedCopy/timeBoundedCopy';
-import { HeroPriceCards } from './heroPriceCards';
-import DefaultRoundel from './defaultRoundel';
+import PageTitle from 'components/page/pageTitle';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import { promotionHTML } from 'helpers/productPrice/promotions';
 import {
+	getTimeboundCopy,
+	getTimeboundQuery,
+} from 'helpers/timeBoundedCopy/timeBoundedCopy';
+import DefaultRoundel from './defaultRoundel';
+import { HeroPriceCards } from './heroPriceCards';
+import {
+	circleTextGeneric,
+	embeddedRoundel,
 	heroCopy,
 	heroTitle,
 	paragraphs,
-	yellowHeading,
-	circleTextGeneric,
 	roundelOverrides,
-	embeddedRoundel,
+	yellowHeading,
 } from './heroWithPriceCardsStyles';
+
 type PropTypes = {
 	promotionCopy: PromotionCopy;
 	priceList: any[];

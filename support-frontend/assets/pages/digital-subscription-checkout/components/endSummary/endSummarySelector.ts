@@ -1,7 +1,7 @@
+import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 
 const getPromotion = (productPrice: ProductPrice): string | null =>
 	productPrice.promotions && productPrice.promotions.length > 0

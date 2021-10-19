@@ -1,21 +1,21 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
+import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
-import { textSans, headline } from '@guardian/src-foundations/typography';
-import { ThemeProvider } from 'emotion-theming';
-import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
+import { from } from '@guardian/src-foundations/mq';
+import { headline, textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
+import type { Node } from 'react';
 import GridImage from 'components/gridImage/gridImage';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-	getIosAppUrl,
 	androidAppUrl,
 	androidDailyUrl,
 	getDailyEditionUrl,
+	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 // ----- Types ----- //
@@ -128,7 +128,7 @@ type AppStoreLinkPropTypes = {
 	ariaLabel: string;
 	storeLink: string;
 	children: Node;
-	onClick: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
 };
 
 const AppStoreLink = ({

@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import React, { Children } from 'react';
 import type { Node } from 'react';
-import ContribLegal from 'components/legal/contribLegal/contribLegal';
-import { privacyLink, copyrightNotice } from 'helpers/legal';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import type { Appearance } from 'components/content/content';
 import Content from 'components/content/content';
+import ContribLegal from 'components/legal/contribLegal/contribLegal';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { copyrightNotice, privacyLink } from 'helpers/legal';
 import './footer.scss';
 import Rows from '../base/rows';
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';

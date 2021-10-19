@@ -6,6 +6,7 @@ import {
 	GBPCountries,
 	UnitedStates,
 } from '../countryGroup';
+
 const { jsdom } = global;
 // ----- Tests ----- //
 describe('detect country', () => {

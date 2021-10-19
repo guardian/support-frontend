@@ -1,4 +1,5 @@
 import { createAuthenticationEventParams } from '../identityComponentEvent';
+
 describe('createAuthenticationEventParams', () => {
 	it('creates authentication event params given a component Id', () => {
 		expect(createAuthenticationEventParams('signin_to_contribute')).toBe(

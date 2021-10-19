@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { marketingConsentActionsFor } from './marketingConsentActions';
 
 // ----- Functions ----- //
@@ -21,7 +21,7 @@ const requestData = (email: string, csrf: CsrfState) => ({
 function sendMarketingPreferencesToIdentity(
 	optIn: boolean,
 	email: string,
-	dispatch: (...args: Array<any>) => any,
+	dispatch: (...args: any[]) => any,
 	csrf: CsrfState,
 	scope: string,
 ): void {

@@ -1,16 +1,16 @@
-import { $Keys } from 'utility-types';
-// ----- Imports ----- //
 import { viewId } from 'ophan';
-import { get as getCookie } from 'helpers/storage/cookie';
-import { getQueryParameter } from 'helpers/urls/url';
-import { deserialiseJsonObject } from 'helpers/utilities/utilities';
+import type { $Keys } from 'utility-types';
+// ----- Imports ----- //
 import type { Participations } from 'helpers/abTests/abtest';
+import { getCampaignCode } from 'helpers/campaigns/campaigns';
+import { get as getCookie } from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
-	getAllQueryParamsWithExclusions,
 	getAllQueryParams,
+	getAllQueryParamsWithExclusions,
+	getQueryParameter,
 } from 'helpers/urls/url';
-import { getCampaignCode } from 'helpers/campaigns/campaigns';
+import { deserialiseJsonObject } from 'helpers/utilities/utilities';
 // ----- Types ----- //
 export type AcquisitionABTest = {
 	name: string;
@@ -20,7 +20,7 @@ export type QueryParameter = {
 	name: string;
 	value: string;
 };
-export type AcquisitionQueryParameters = Array<QueryParameter>;
+export type AcquisitionQueryParameters = QueryParameter[];
 export type OphanIds = {
 	pageviewId: string;
 	visitId: string | null | undefined;

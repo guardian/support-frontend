@@ -1,23 +1,23 @@
 import type { Node } from 'react';
 import React from 'react';
-import {
-	sendTrackingEventsOnClick,
-	sendTrackingEventsOnView,
-} from 'helpers/productPrice/subscriptions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	finalPrice,
 	getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
-import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { getTitle } from '../helpers/products';
 import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import {
+	sendTrackingEventsOnClick,
+	sendTrackingEventsOnView,
+} from 'helpers/productPrice/subscriptions';
+import { paperCheckoutUrl } from 'helpers/urls/routes';
+import { getTitle } from '../helpers/products';
 import Prices from './content/prices';
 
 // ---- Helpers ----- //

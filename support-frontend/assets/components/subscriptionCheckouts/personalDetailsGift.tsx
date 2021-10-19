@@ -1,22 +1,23 @@
-import React from 'react';
-import { TextInput } from '@guardian/src-text-input';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { TextInput } from '@guardian/src-text-input';
+import React from 'react';
+import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import 'helpers/subscriptionsForms/formFields';
+
 const marginBotom = css`
 	margin-bottom: ${space[6]}px;
 `;
 export type PropTypes = {
 	firstNameGiftRecipient: string;
-	setFirstNameGift: (...args: Array<any>) => any;
+	setFirstNameGift: (...args: any[]) => any;
 	lastNameGiftRecipient: string;
-	setLastNameGift: (...args: Array<any>) => any;
+	setLastNameGift: (...args: any[]) => any;
 	emailGiftRecipient: string;
-	setEmailGift: (...args: Array<any>) => any;
-	formErrors: FormError<FormField>[];
+	setEmailGift: (...args: any[]) => any;
+	formErrors: Array<FormError<FormField>>;
 };
 
 function PersonalDetailsGift(props: PropTypes) {

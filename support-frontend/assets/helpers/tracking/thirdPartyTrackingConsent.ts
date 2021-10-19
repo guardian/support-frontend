@@ -1,5 +1,6 @@
-import { logException } from 'helpers/utilities/logger';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { logException } from 'helpers/utilities/logger';
+
 type ConsentVector = Record<string, boolean>;
 type ConsentState = {
 	tcfv2?: {

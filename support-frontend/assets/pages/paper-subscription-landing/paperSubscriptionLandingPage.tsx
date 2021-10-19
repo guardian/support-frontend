@@ -1,31 +1,31 @@
 // ----- Imports ----- //
-// @ts-ignore
+// @ts-expect-error
 import React, { useState } from 'react';
-import Page from 'components/page/page';
-import Header from 'components/headers/header/header';
-import Footer from 'components/footerCompliant/Footer';
-import FullWidthContainer from 'components/containers/fullWidthContainer';
 import CentredContainer from 'components/containers/centredContainer';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import Footer from 'components/footerCompliant/Footer';
+import Header from 'components/headers/header/header';
 import Block from 'components/page/block';
+import Page from 'components/page/page';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
-import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
-import { getPromotionCopy } from 'helpers/productPrice/promotions';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
-import PaperHero from './components/hero/hero';
-import Tabs from './components/tabs';
-import Prices from './components/paperPrices';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { paperSubsUrl } from 'helpers/urls/routes';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import PaperHero from './components/hero/hero';
+import Prices from './components/paperPrices';
+import Tabs from './components/tabs';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
+import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 // ----- Collection or delivery ----- //
 const reactElementId = 'paper-subscription-landing-page';
 // ----- Redux Store ----- //

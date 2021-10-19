@@ -1,16 +1,16 @@
 // ----- Imports ----- //
-// @ts-ignore
-import React, { useState, useRef } from 'react';
-import SvgDropdownArrow from 'components/svgs/dropdownArrow';
+// @ts-expect-error
+import React, { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
-import type { Option } from 'helpers/types/option';
+import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import 'helpers/types/option';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { Option } from 'helpers/types/option';
 import './countryGroupSwitcher.scss';
 import styles from './countryGroupSwitcher.module.scss';
 // ----- Props ----- //

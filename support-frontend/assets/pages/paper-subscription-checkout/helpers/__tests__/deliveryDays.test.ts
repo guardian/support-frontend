@@ -1,19 +1,23 @@
 // ----- Imports ----- //
-import { getVoucherDays } from '../voucherDeliveryDays';
-import { daysTillNextDelivery, getHomeDeliveryDays } from '../homeDeliveryDays';
+import {
+	Everyday,
+	Sixday,
+	Sunday,
+	Weekend,
+} from 'helpers/productPrice/productOptions';
+import { DeliveryDays } from 'helpers/subscriptionsForms/deliveryDays';
 import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
-import { canDeliverOnNextDeliveryDay } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
-import { DeliveryDays } from 'helpers/subscriptionsForms/deliveryDays';
-import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';
 import {
-	Everyday,
-	Sixday,
-	Weekend,
-	Sunday,
-} from 'helpers/productPrice/productOptions';
+	canDeliverOnNextDeliveryDay,
+	daysTillNextDelivery,
+	getHomeDeliveryDays,
+} from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
+import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';
+import { getVoucherDays } from '../voucherDeliveryDays';
+
 jest.mock('ophan', () => {});
 // ----- Tests ----- //
 const monday = 1551075752198;

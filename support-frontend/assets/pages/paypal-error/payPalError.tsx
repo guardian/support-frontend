@@ -1,14 +1,14 @@
 // ----- Imports ----- //
+import { LinkButton } from '@guardian/src-button';
 import React from 'react';
-import Page from 'components/page/page';
-import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
+import Header from 'components/headers/header/header';
+import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';
 import QuestionsContact from 'components/questionsContact/questionsContact';
+import { detect } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import { detect } from 'helpers/internationalisation/countryGroup';
-import { LinkButton } from '@guardian/src-button';
 // ----- Page Startup ----- //
 setUpTrackingAndConsents();
 // ----- Render ----- //

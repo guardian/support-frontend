@@ -1,14 +1,15 @@
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 import React, { useEffect } from 'react';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import ActionBody from './components/ActionBody';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
 import BulletPointedList from './components/BulletPointedList';
 import SvgPersonWithTick from './components/SvgPersonWithTick';
 import { OPHAN_COMPONENT_ID_SIGN_UP } from './utils/ophan';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
+
 const listContainer = css`
 	margin-top: ${space[4]}px;
 `;

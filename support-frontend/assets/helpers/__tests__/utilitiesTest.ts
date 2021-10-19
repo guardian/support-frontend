@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 import {
 	ascending,
-	roundDp,
 	classNameWithModifiers,
 	deserialiseJsonObject,
+	roundDp,
 } from '../utilities/utilities';
 // ----- Tests ----- //
 describe('utilities', () => {

@@ -1,8 +1,8 @@
 // ----- Imports ----- //
-import * as cookie from 'helpers/storage/cookie';
-import { getQueryParameter } from 'helpers/urls/url';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import * as cookie from 'helpers/storage/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
 // ----- Types ----- //
 const GBPCountries: 'GBPCountries' = 'GBPCountries';
 const UnitedStates: 'UnitedStates' = 'UnitedStates';

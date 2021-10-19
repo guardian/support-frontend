@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
-import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import thunk from 'redux-thunk';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import WeeklyCheckoutFormGift from './weeklyCheckoutFormGifting';
 

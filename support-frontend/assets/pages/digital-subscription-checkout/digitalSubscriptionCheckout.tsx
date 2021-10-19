@@ -1,34 +1,34 @@
 // ----- Imports ----- //
 import React from 'react';
 import { Provider } from 'react-redux';
-import { renderPage } from 'helpers/rendering/render';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
-import Page from 'components/page/page';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
+import Page from 'components/page/page';
+import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
+import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { renderPage } from 'helpers/rendering/render';
+import { getQueryParameter } from 'helpers/urls/url';
+import CheckoutForm from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
+import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
 import ThankYouPendingContent from './thankYouPendingContent';
-import CheckoutForm from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
-import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
 import 'stylesheets/skeleton/skeleton.scss';
-import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
-import { getQueryParameter } from 'helpers/urls/url';
 import type {
 	DigitalBillingPeriod,
 	DigitalGiftBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import {
-	Monthly,
 	Annual,
+	Monthly,
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { CommonState } from 'helpers/page/commonReducer';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
-import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
-import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
 import { FocusStyleManager } from '@guardian/src-utilities';
 
 // ----- Redux Store ----- //

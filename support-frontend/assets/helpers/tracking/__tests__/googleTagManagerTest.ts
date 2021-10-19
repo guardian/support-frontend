@@ -1,6 +1,6 @@
 // ----- Imports ----- //
-import { mapFields } from '../googleTagManager';
 import { DirectDebit } from '../../forms/paymentMethods';
+import { mapFields } from '../googleTagManager';
 // ----- Tests ----- //
 jest.mock('ophan', () => ({
 	viewId: '123456',

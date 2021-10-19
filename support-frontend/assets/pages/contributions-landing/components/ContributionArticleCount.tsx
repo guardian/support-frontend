@@ -2,14 +2,14 @@
 
 /* eslint-disable react/require-default-props */
 // --- Imports --- //
-// @ts-ignore - required for hooks
-import React, { useState, useEffect } from 'react';
-import { textSans, headline } from '@guardian/src-foundations/typography';
-import { palette, space, brand } from '@guardian/src-foundations';
-import { Button } from '@guardian/src-button';
-import { ButtonLink } from '@guardian/src-link';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
+import { Button } from '@guardian/src-button';
+import { brand, palette, space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import { ButtonLink } from '@guardian/src-link';
+import React, { useEffect, useState } from 'react';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 // --- Styles --- //
 const topContainerMobile = css`

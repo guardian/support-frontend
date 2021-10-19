@@ -2,29 +2,30 @@ import { fetchJson } from 'helpers/async/fetch';
 import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import type { Dispatch } from 'redux';
 import 'redux';
-import type { Option } from 'helpers/types/option';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
+import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
 	PaymentResult,
 	RegularPaymentRequest,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
+import type { ReaderType } from 'helpers/productPrice/readerType';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
+import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
-import type { User } from 'helpers/user/user';
-import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getOrigin } from 'helpers/urls/url';
-import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import type { ReaderType } from 'helpers/productPrice/readerType';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import type { User } from 'helpers/user/user';
+
 type ValidationResult = {
 	valid: boolean;
 	readerType: Option<ReaderType>;
@@ -40,7 +41,7 @@ function validate(userCode: string) {
 		});
 	}
 
-	const isTestUser: boolean = !!getGlobal<string>('isTestUser');
+	const isTestUser = !!getGlobal<string>('isTestUser');
 	const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${
 		isTestUser ? '?isTestUser=true' : ''
 	}`;

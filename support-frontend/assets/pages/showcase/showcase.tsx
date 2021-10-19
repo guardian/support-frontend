@@ -1,31 +1,31 @@
 // ----- Imports ----- //
 import React from 'react';
-import { renderPage } from 'helpers/rendering/render';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
-import Page from 'components/page/page';
+import Content from 'components/content/content';
 import Footer from 'components/footerCompliant/Footer';
-import Heading from 'components/heading/heading';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import Heading from 'components/heading/heading';
+import Page from 'components/page/page';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect } from 'helpers/internationalisation/countryGroup';
 import {
-	GBPCountries,
 	AUDCountries,
 	Canada,
+	detect,
 	EURCountries,
+	GBPCountries,
 	International,
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import Content from 'components/content/content';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
+import { renderPage } from 'helpers/rendering/render';
 import 'stylesheets/skeleton/skeleton.scss';
-import WhySupportMatters from './components/whySupportMatters';
 import BreakingHeadlines from './components/breakingHeadlines';
-import NoOneEdits from './components/noOneEdits';
-import Hero from './components/hero';
-import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
+import CtaSubscribe from './components/ctaSubscribe';
+import Hero from './components/hero';
+import NoOneEdits from './components/noOneEdits';
 import OtherProducts from './components/otherProducts';
+import WhySupportMatters from './components/whySupportMatters';
 import './showcase.scss';
 // ----- Internationalisation ----- //
 const countryGroupId: CountryGroupId = detect();

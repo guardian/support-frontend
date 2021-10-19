@@ -1,12 +1,13 @@
 // ----- Imports ----- //
-import type { IsoCurrency } from '../currency';
-import { detect } from '../currency';
 import {
 	AUDCountries,
 	EURCountries,
 	GBPCountries,
 	UnitedStates,
 } from '../countryGroup';
+import type { IsoCurrency } from '../currency';
+import { detect } from '../currency';
+
 let mockCurrency: IsoCurrency | null | undefined = null;
 jest.mock('helpers/urls/url', () => ({
 	getQueryParameter: () => mockCurrency,

@@ -1,23 +1,18 @@
-import { $Call } from 'utility-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { TextInput } from '@guardian/src-text-input';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
+import { Option as OptionForSelect, Select } from '@guardian/src-select';
+import { TextInput } from '@guardian/src-text-input';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import type { $Call } from 'utility-types';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import { Select, Option as OptionForSelect } from '@guardian/src-select';
-import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import 'components/subscriptionCheckouts/address/postcodeFinderStore';
-import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import 'helpers/subscriptionsForms/addressType';
 import type {
 	ActionCreators as AddressActionCreators,
+	State as AddressState,
 	FormField,
 	FormFields,
-	State as AddressState,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import {
 	addressActionCreatorsFor,
@@ -26,19 +21,25 @@ import {
 	getStateFormErrors,
 	isPostcodeOptional,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { canShow } from 'hocs/canShow';
-import type { Option } from 'helpers/types/option';
+import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
+import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
+import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { Option } from 'helpers/types/option';
+import { canShow } from 'hocs/canShow';
+
 type StatePropTypes<GlobalState> = FormFields & {
 	countries: Record<string, string>;
 	scope: AddressType;
 	traverseState: (arg0: GlobalState) => AddressState;
-	formErrors: FormError<FormField>[];
+	formErrors: Array<FormError<FormField>>;
 };
 type PropTypes<GlobalState> = AddressActionCreators &
 	StatePropTypes<GlobalState>;

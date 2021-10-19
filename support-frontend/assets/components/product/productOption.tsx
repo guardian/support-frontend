@@ -1,18 +1,19 @@
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
+import { css } from '@emotion/core';
+import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
+import { between, from, until } from '@guardian/src-foundations/mq';
+import { brandAlt, neutral } from '@guardian/src-foundations/palette';
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import { ThemeProvider } from 'emotion-theming';
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
-import { ThemeProvider } from 'emotion-theming';
-import { css } from '@emotion/core';
-import { brandAlt, neutral } from '@guardian/src-foundations/palette';
-import { space } from '@guardian/src-foundations';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { from, between, until } from '@guardian/src-foundations/mq';
-import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
+// import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+
 export type Product = {
 	title: string;
 	price: string;
@@ -21,8 +22,8 @@ export type Product = {
 	priceCopy: Node;
 	buttonCopy: string;
 	href: string;
-	onClick: (...args: Array<any>) => any;
-	onView: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
+	onView: (...args: any[]) => any;
 	label?: string;
 	cssOverrides?: string;
 	showPayPalButton?: boolean;
@@ -245,13 +246,13 @@ function ProductOption(props: Product) {
 						{props.buttonCopy}
 					</LinkButton>
 				</ThemeProvider>
-				{props.showPayPalButton && props.billingPeriod && (
-					<PayPalOneClickCheckoutButton
-						billingPeriod={props.billingPeriod}
-						trackingId="one-click-checkout-price-card"
-						product={DigitalPack}
-					/>
-				)}
+				{/*{props.showPayPalButton && props.billingPeriod && (*/}
+				{/*	<PayPalOneClickCheckoutButton*/}
+				{/*		billingPeriod={props.billingPeriod}*/}
+				{/*		trackingId="one-click-checkout-price-card"*/}
+				{/*		product={DigitalPack}*/}
+				{/*	/>*/}
+				{/*)}*/}
 			</div>
 		</div>
 	);

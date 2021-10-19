@@ -1,6 +1,6 @@
-import { $Keys } from 'utility-types';
-// @ts-ignore
 import * as React from 'preact/compat';
+import type { $Keys } from 'utility-types';
+// @ts-expect-error
 const breakpoints = {
 	mobile: 320,
 	mobileMedium: 375,

@@ -2,28 +2,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
-import CheckoutLayout, {
-	Content,
-} from 'components/subscriptionCheckouts/layout';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import {
-	finalPrice,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
-import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -55,32 +37,50 @@ import { PayPal, Stripe, DirectDebit } from 'helpers/forms/paymentMethods';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import CheckoutLayout, {
+	Content,
+} from 'components/subscriptionCheckouts/layout';
 import { routes } from 'helpers/urls/routes';
-import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import type { Participations } from 'helpers/abTests/abtest';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import {
+	finalPrice,
+	getProductPrice,
+} from 'helpers/productPrice/productPrices';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type {
+	Action,
+	FormActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
+import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 // ----- Types ----- //
 type PropTypes = FormFields &
 	FormActionCreators & {
 		country: IsoCountry;
 		signOut: typeof signOut;
-		submitForm: (...args: Array<any>) => any;
-		formErrors: FormError<FormField>[];
+		submitForm: (...args: any[]) => any;
+		formErrors: Array<FormError<FormField>>;
 		submissionError: ErrorReason | null;
 		productPrices: ProductPrices;
 		currencyId: IsoCurrency;
-		fetchAndStoreUserType: (...args: Array<any>) => any;
+		fetchAndStoreUserType: (...args: any[]) => any;
 		csrf: Csrf;
 		payPalHasLoaded: boolean;
 		isTestUser: boolean;
 		amount: number;
 		billingPeriod: DigitalBillingPeriod;
-		setupRecurringPayPalPayment: (...args: Array<any>) => any;
-		validateForm: () => (...args: Array<any>) => any;
-		formIsValid: (...args: Array<any>) => any;
+		setupRecurringPayPalPayment: (...args: any[]) => any;
+		validateForm: () => (...args: any[]) => any;
+		formIsValid: (...args: any[]) => any;
 		addressErrors: Array<Record<string, any>>;
 		// eslint-disable-next-line react/no-unused-prop-types
 		participations: Participations;

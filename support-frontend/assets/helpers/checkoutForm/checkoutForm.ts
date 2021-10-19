@@ -17,7 +17,7 @@ export function shouldShowError(
 ): boolean {
 	return checkoutFormHasBeenSubmitted && !formFieldIsValid(field.id);
 }
-export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
+export const formInputs = (formClassName: string): HTMLInputElement[] => {
 	const form = document.querySelector(`.${formClassName}`);
 
 	if (form) {

@@ -1,4 +1,5 @@
-import { $Keys } from 'utility-types';
+import type { $Keys } from 'utility-types';
+
 export const titles: Record<string, string> = {
 	Ms: 'Ms',
 	Mr: 'Mr',

@@ -1,19 +1,20 @@
-import { $Keys } from 'utility-types';
-import type { Option } from 'helpers/types/option';
-import type { Title } from 'helpers/user/details';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { $Keys } from 'utility-types';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type {
 	AnyCheckoutState,
 	CheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { Option } from 'helpers/types/option';
+import type { Title } from 'helpers/user/details';
+
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 export type FormFields = {
 	title: Option<Title>;
@@ -44,7 +45,7 @@ export type FormField = $Keys<FormFields> | 'recaptcha';
 export type FormState = FormFields & {
 	stage: Stage;
 	product: SubscriptionProduct;
-	formErrors: FormError<FormField>[];
+	formErrors: Array<FormError<FormField>>;
 	submissionError: Option<ErrorReason>;
 	formSubmitted: boolean;
 	isTestUser: boolean;

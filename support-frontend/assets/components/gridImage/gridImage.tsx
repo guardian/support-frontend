@@ -4,9 +4,9 @@
 // ----- Imports ----- //
 import type { Node } from 'react';
 import React from 'react';
-import { gridUrl, gridSrcset } from 'helpers/images/theGrid';
+import { gridSrcset, gridUrl } from 'helpers/images/theGrid';
+import type { ImageId, ImageType } from 'helpers/images/theGrid';
 import { ascending, classNameWithModifiers } from 'helpers/utilities/utilities';
-import type { ImageType, ImageId } from 'helpers/images/theGrid';
 // ----- Constants ----- //
 const MIN_IMG_WIDTH = 300;
 // ----- Types ----- //

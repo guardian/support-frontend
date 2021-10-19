@@ -1,21 +1,22 @@
-import type { Node } from 'react';
-import React from 'react';
-import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
+import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import { space } from '@guardian/src-foundations';
-import { textSans, headline } from '@guardian/src-foundations/typography';
-import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import { ThemeProvider } from 'emotion-theming';
+import type { Node } from 'react';
+import React from 'react';
 import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+
 export type ProductSmall = {
 	offerCopy: string;
 	priceCopy: Node;
 	buttonCopy: string;
 	href: string;
-	onClick: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
 	cssOverrides?: string | string[];
 	billingPeriod: BillingPeriod;
 	showPayPalButton?: boolean;

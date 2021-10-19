@@ -1,4 +1,4 @@
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import type { User } from 'helpers/user/userReducer';
@@ -11,24 +11,24 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import {
-	from,
 	between,
-	until,
 	breakpoints,
+	from,
+	until,
 } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
+import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
+import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
 import ContributionThankYouSignIn from './ContributionThankYouSignIn';
 import ContributionThankYouSignUp from './ContributionThankYouSignUp';
-import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
+import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
 import ContributionThankYouSupportReminder from './ContributionThankYouSupportReminder';
 import ContributionThankYouSurvey from './ContributionThankYouSurvey';
-import ContributionThankYouSocialShare from './ContributionThankYouSocialShare';
-import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import {
-	trackUserData,
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
+	trackUserData,
 } from './utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
@@ -36,6 +36,7 @@ import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { getAmount } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+
 const container = css`
 	background: white;
 	padding: 0 ${space[3]}px;

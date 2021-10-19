@@ -1,6 +1,7 @@
+import { css } from '@emotion/core';
 import React from 'react';
 import { isInCsrMode, useCsrDetails } from 'components/csr/csrMode';
-import { css } from '@emotion/core';
+
 const container = css`
 	margin-bottom: 57px;
 `;

@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { getProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	Annual,
 	Quarterly,
@@ -10,6 +9,8 @@ import {
 	getWeeklyFulfilmentOption,
 	RestOfWorld,
 } from 'helpers/productPrice/fulfilmentOptions';
+import { getProductPrice } from 'helpers/productPrice/productPrices';
+
 jest.mock('ophan', () => {});
 // ----- Tests ----- //
 const productPrices = {

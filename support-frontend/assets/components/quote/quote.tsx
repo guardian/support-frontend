@@ -1,17 +1,18 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
-import { SvgQuote } from '@guardian/src-icons';
-import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
+import { from, until } from '@guardian/src-foundations/mq';
 import {
 	border,
 	brandAlt,
 	neutral,
 	sport,
 } from '@guardian/src-foundations/palette';
-import { from, until } from '@guardian/src-foundations/mq';
+import { headline } from '@guardian/src-foundations/typography';
+import { SvgQuote } from '@guardian/src-icons';
+import React from 'react';
+import type { Node } from 'react';
+
 const headshotSize = 68;
 const quoteFigure = css`
 	background-color: ${neutral[100]};

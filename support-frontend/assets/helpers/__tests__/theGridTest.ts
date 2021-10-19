@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 import {
-	gridUrl,
-	gridSrcset,
-	imageCatalogue,
 	GRID_DOMAIN,
+	gridSrcset,
+	gridUrl,
+	imageCatalogue,
 } from '../images/theGrid';
 // ----- Tests ----- //
 describe('theGrid', () => {

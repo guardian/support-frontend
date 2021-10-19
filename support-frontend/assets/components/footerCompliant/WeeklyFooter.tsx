@@ -1,6 +1,7 @@
 import React from 'react';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
+
 type PropTypes = {
 	promoTermsLink: string;
 	centred?: boolean;

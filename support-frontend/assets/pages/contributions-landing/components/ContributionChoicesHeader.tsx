@@ -1,8 +1,9 @@
-import * as React from 'react';
-import { headline } from '@guardian/src-foundations/typography';
+import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { css } from '@emotion/core';
+import { headline } from '@guardian/src-foundations/typography';
+import * as React from 'react';
+
 type ContributionAmountLabelProps = {
 	children: React.ReactNode;
 };

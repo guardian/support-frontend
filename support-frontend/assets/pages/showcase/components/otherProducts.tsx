@@ -3,6 +3,7 @@ import Content from 'components/content/content';
 import Text from 'components/text/text';
 import { getMemLink, getPatronsLink } from 'helpers/urls/externalLinks';
 import OtherProduct from './otherProduct';
+
 export default function OtherProducts() {
 	return (
 		<Content modifierClasses={['other-products']}>

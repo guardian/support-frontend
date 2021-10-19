@@ -1,29 +1,30 @@
-// @ts-ignore - required for hooks
-import React, { useState, useEffect } from 'react';
+// @ts-expect-error - required for hooks
+import { css } from '@emotion/core';
+import { Button } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
+import { neutral } from '@guardian/src-foundations/palette';
+import { textSans } from '@guardian/src-foundations/typography';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { Link } from '@guardian/src-link';
+import { Radio, RadioGroup } from '@guardian/src-radio';
+import React, { useEffect, useState } from 'react';
+import { privacyLink } from 'helpers/legal';
+import {
+	trackComponentClick,
+	trackComponentLoad,
+} from 'helpers/tracking/behaviour';
 import {
 	createOneOffReminderEndpoint,
 	createRecurringReminderEndpoint,
 } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { css } from '@emotion/core';
-import { textSans } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
-import { Button } from '@guardian/src-button';
-import { Link } from '@guardian/src-link';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { RadioGroup, Radio } from '@guardian/src-radio';
+import ActionBody from './components/ActionBody';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
 import SvgClock from './components/SvgClock';
 import styles from './styles';
 import { OPHAN_COMPONENT_ID_SET_REMINDER } from './utils/ophan';
-import {
-	trackComponentClick,
-	trackComponentLoad,
-} from 'helpers/tracking/behaviour';
-import { privacyLink } from 'helpers/legal';
+
 const form = css`
 	margin-top: ${space[5]}px;
 

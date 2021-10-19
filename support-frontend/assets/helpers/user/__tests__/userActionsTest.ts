@@ -1,4 +1,5 @@
 import { defaultUserActionFunctions } from '../defaultUserActionFunctions';
+
 jest.mock('ophan', () => () => ({}));
 describe('actions', () => {
 	const {
@@ -16,7 +17,7 @@ describe('actions', () => {
 		setEmailValidated,
 	} = defaultUserActionFunctions;
 	it('should create SET_DISPLAY_NAME action', () => {
-		const name: string = 'My Name';
+		const name = 'My Name';
 		const expectedAction = {
 			type: 'SET_DISPLAY_NAME',
 			name,
@@ -24,7 +25,7 @@ describe('actions', () => {
 		expect(setDisplayName(name)).toEqual(expectedAction);
 	});
 	it('should create SET_FIRST_NAME action', () => {
-		const name: string = 'John';
+		const name = 'John';
 		const expectedAction = {
 			type: 'SET_FIRST_NAME',
 			name,
@@ -32,7 +33,7 @@ describe('actions', () => {
 		expect(setFirstName(name)).toEqual(expectedAction);
 	});
 	it('should create SET_LAST_NAME action', () => {
-		const name: string = 'Doe';
+		const name = 'Doe';
 		const expectedAction = {
 			type: 'SET_LAST_NAME',
 			name,
@@ -40,7 +41,7 @@ describe('actions', () => {
 		expect(setLastName(name)).toEqual(expectedAction);
 	});
 	it('should create SET_FULL_NAME action', () => {
-		const name: string = 'John Doe';
+		const name = 'John Doe';
 		const expectedAction = {
 			type: 'SET_FULL_NAME',
 			name,
@@ -48,7 +49,7 @@ describe('actions', () => {
 		expect(setFullName(name)).toEqual(expectedAction);
 	});
 	it('should create SET_EMAIL action', () => {
-		const email: string = 'johndoe@example.com';
+		const email = 'johndoe@example.com';
 		const expectedAction = {
 			type: 'SET_EMAIL',
 			email,
@@ -56,7 +57,7 @@ describe('actions', () => {
 		expect(setEmail(email)).toEqual(expectedAction);
 	});
 	it('should create SET_STATEFIELD action', () => {
-		const stateField: string = 'CA';
+		const stateField = 'CA';
 		const expectedAction = {
 			type: 'SET_STATEFIELD',
 			stateField,
@@ -64,7 +65,7 @@ describe('actions', () => {
 		expect(setStateField(stateField)).toEqual(expectedAction);
 	});
 	it('should create SET_TEST_USER action', () => {
-		const testUser: boolean = true;
+		const testUser = true;
 		const expectedAction = {
 			type: 'SET_TEST_USER',
 			testUser,
@@ -72,7 +73,7 @@ describe('actions', () => {
 		expect(setTestUser(testUser)).toEqual(expectedAction);
 	});
 	it('should create SET_POST_DEPLOYMENT_TEST_USER action', () => {
-		const postDeploymentTestUser: boolean = true;
+		const postDeploymentTestUser = true;
 		const expectedAction = {
 			type: 'SET_POST_DEPLOYMENT_TEST_USER',
 			postDeploymentTestUser,
@@ -82,7 +83,7 @@ describe('actions', () => {
 		);
 	});
 	it('should create SET_GNM_MARKETING action', () => {
-		const preference: boolean = false;
+		const preference = false;
 		const expectedAction = {
 			type: 'SET_GNM_MARKETING',
 			preference,
@@ -90,7 +91,7 @@ describe('actions', () => {
 		expect(setGnmMarketing(preference)).toEqual(expectedAction);
 	});
 	it('should create SET_IS_SIGNED_IN action', () => {
-		const isSignedIn: boolean = true;
+		const isSignedIn = true;
 		const expectedAction = {
 			type: 'SET_IS_SIGNED_IN',
 			isSignedIn,
@@ -98,7 +99,7 @@ describe('actions', () => {
 		expect(setIsSignedIn(isSignedIn)).toEqual(expectedAction);
 	});
 	it('should create SET_EMAIL_VALIDATED action', () => {
-		const emailValidated: boolean = true;
+		const emailValidated = true;
 		const expectedAction = {
 			type: 'SET_EMAIL_VALIDATED',
 			emailValidated,
@@ -106,7 +107,7 @@ describe('actions', () => {
 		expect(setEmailValidated(emailValidated)).toEqual(expectedAction);
 	});
 	it('should create SET_IS_RETURNING_CONTRIBUTOR action', () => {
-		const isReturningContributor: boolean = true;
+		const isReturningContributor = true;
 		const expectedAction = {
 			type: 'SET_IS_RETURNING_CONTRIBUTOR',
 			isReturningContributor,

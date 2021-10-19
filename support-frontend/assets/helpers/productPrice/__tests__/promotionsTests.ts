@@ -1,11 +1,12 @@
 import {
-	getAppliedPromo,
 	applyDiscount,
-	hasIntroductoryPrice,
-	hasDiscount,
+	getAppliedPromo,
 	getPromotionCopy,
+	hasDiscount,
+	hasIntroductoryPrice,
 	promotionHTML,
 } from '../promotions';
+
 describe('getPromotionCopy', () => {
 	const sanitisablePromotionCopy = {
 		title: 'The Guardian Weekly',

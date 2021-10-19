@@ -1,12 +1,13 @@
 // ----- Imports ----- //
-import {
-	getMaxSavingVsRetail,
-	getProductPrice,
-	finalPrice,
-	getPriceWithDiscount,
-} from 'helpers/productPrice/paperProductPrices';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import {
+	finalPrice,
+	getMaxSavingVsRetail,
+	getPriceWithDiscount,
+	getProductPrice,
+} from 'helpers/productPrice/paperProductPrices';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+
 const productPrices = {
 	'United Kingdom': {
 		Collection: {

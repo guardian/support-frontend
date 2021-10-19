@@ -1,4 +1,5 @@
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+
 const M25_POSTCODE_PREFIXES = getGlobal('homeDeliveryPostcodes') || [];
 export const postcodeHasPrefix = (
 	postcode: string,

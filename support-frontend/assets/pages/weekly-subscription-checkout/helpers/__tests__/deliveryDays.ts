@@ -1,9 +1,9 @@
 // ----- Imports ----- //
-import { getWeeklyDays } from '../deliveryDays';
 import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
+import { getWeeklyDays } from '../deliveryDays';
 // ----- Tests ----- //
 const tuesday = 1551175752198;
 

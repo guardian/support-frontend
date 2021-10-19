@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Node } from 'react';
 import './stripeCardForm.scss';
+
 type PropTypes = {
 	label: Node;
 	hint?: Node;

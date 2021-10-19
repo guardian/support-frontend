@@ -5,6 +5,7 @@ import {
 	jsDayToFulfilmentDay,
 	numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
+
 const everyDayAndSixDay = [3, 3, 3, 3, 6, 5, 4];
 const weekendAndSaturday = [6, 5, 4, 3, 9, 8, 7];
 const sunday = [7, 6, 5, 4, 10, 9, 8];

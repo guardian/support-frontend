@@ -1,11 +1,11 @@
-// @ts-ignore - required for hooks
-import { useEffect, useState } from 'react';
+// @ts-expect-error - required for hooks
 import type { Stripe as StripeSDK } from '@stripe/stripe-js/pure';
 import { loadStripe } from '@stripe/stripe-js/pure';
+import { useEffect, useState } from 'react';
+import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { ContributionType } from 'helpers/contributions';
 
 const stripeCardFormIsIncomplete = (
 	paymentMethod: PaymentMethod,

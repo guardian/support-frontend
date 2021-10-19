@@ -1,10 +1,8 @@
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { combineReducers } from 'redux';
-import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { createUserReducer } from 'helpers/user/userReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
+import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
+import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import type {
 	FormFields as AddressFormFields,
 	State as AddressState,
@@ -12,14 +10,17 @@ import type {
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import csrf from 'helpers/csrf/csrfReducer';
-import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReduxState } from 'helpers/page/page';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
+import { createUserReducer } from 'helpers/user/userReducer';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+
 export type CheckoutState = ReduxState<{
 	checkout: FormState;
 	csrf: CsrfState;

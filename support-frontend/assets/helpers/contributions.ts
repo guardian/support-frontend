@@ -1,6 +1,10 @@
-import { $Keys } from 'utility-types';
+import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
-import { roundDp } from 'helpers/utilities/utilities';
+import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
+import type {
+	PaymentMethod,
+	PaymentMethodMap,
+} from 'helpers/forms/paymentMethods';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -8,14 +12,10 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { logException } from 'helpers/utilities/logger';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import type {
-	PaymentMethod,
-	PaymentMethodMap,
-} from 'helpers/forms/paymentMethods';
-import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
+import { logException } from 'helpers/utilities/logger';
+import { roundDp } from 'helpers/utilities/utilities';
 // ----- Types ----- //
 export type RegularContributionTypeMap<T> = {
 	MONTHLY: T;

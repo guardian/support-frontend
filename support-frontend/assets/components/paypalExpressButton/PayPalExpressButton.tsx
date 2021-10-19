@@ -1,7 +1,8 @@
 // ----- Imports ----- //
-import ReactDOM from 'react-dom';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import AnimatedDots from 'components/spinners/animatedDots';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { SetupPayPalRequestType } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { getPayPalOptions } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -10,14 +11,14 @@ import 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import { updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
-import AnimatedDots from 'components/spinners/animatedDots';
+
 type PropTypes = {
-	onPayPalCheckoutCompleted: (...args: Array<any>) => any;
+	onPayPalCheckoutCompleted: (...args: any[]) => any;
 	csrf: CsrfState;
 	currencyId: IsoCurrency;
 	hasLoaded: boolean;
 	canOpen: () => boolean;
-	onClick: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
 	formClassName: string;
 	isTestUser: boolean;
 	amount: number;
@@ -26,7 +27,7 @@ type PropTypes = {
 	updatePayPalButtonReady: (arg0: boolean) => Action; // created in mapDispatchToProps should not be passed into the component
 };
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	updatePayPalButtonReady: (ready: boolean) =>
 		dispatch(updatePayPalButtonReady(ready)),
 });

@@ -3,9 +3,9 @@ import type { Node } from 'react';
 import React from 'react';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
+import type { Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import SvgExclamationAlternate from '../svgs/exclamationAlternate';
-import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import './generalErrorMessage.scss';
 // ---- Types ----- //

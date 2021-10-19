@@ -2,33 +2,11 @@ import React from 'react';
 import type { Element } from 'react';
 // helpers
 import { getDigitalCheckout } from 'helpers/urls/externalLinks';
-import {
-	fixDecimals,
-	sendTrackingEventsOnClick,
-	sendTrackingEventsOnView,
-} from 'helpers/productPrice/subscriptions';
-import { currencies } from 'helpers/internationalisation/currency';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
 // types
 import type { Product } from 'components/product/productOption';
 import 'components/product/productOption';
-import type { ProductSmall } from 'components/product/productOptionSmall';
 import 'components/product/productOptionSmall';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	Annual,
-	Monthly,
-	Quarterly,
-} from 'helpers/productPrice/billingPeriods';
-import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
-import type {
-	ProductPrices,
-	BillingPeriods,
-	ProductPrice,
-} from 'helpers/productPrice/productPrices';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import {
@@ -40,12 +18,35 @@ import {
 	getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import type { Product as ProductOptionType } from 'components/product/productOption';
+import type { ProductSmall } from 'components/product/productOptionSmall';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
+import {
+	Annual,
+	Monthly,
+	Quarterly,
+} from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type {
+	BillingPeriods,
+	ProductPrice,
+	ProductPrices,
+} from 'helpers/productPrice/productPrices';
+import {
+	fixDecimals,
+	sendTrackingEventsOnClick,
+	sendTrackingEventsOnView,
+} from 'helpers/productPrice/subscriptions';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
+import type { Option } from 'helpers/types/option';
+
 export type PaymentOption = {
 	title: string;
 	href: string;
 	salesCopy: Element<'span'>;
 	offer: Option<string>;
-	onClick: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
 	label: Option<string>;
 };
 export const getProductOptions = (

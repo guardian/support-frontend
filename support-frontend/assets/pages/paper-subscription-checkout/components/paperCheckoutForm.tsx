@@ -1,36 +1,46 @@
 // ----- Imports ----- //
-// @ts-ignore - required for hooks
-import React, { useState, useEffect } from 'react';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import 'redux';
-import { RadioGroup, Radio } from '@guardian/src-radio';
+import { Radio, RadioGroup } from '@guardian/src-radio';
 import { TextArea } from '@guardian/src-text-area';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
 import Rows from 'components/base/rows';
-import Text from 'components/text/text';
 import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
+import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import { options } from 'components/forms/customFields/options';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import GridImage from 'components/gridImage/gridImage';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
+import Text from 'components/text/text';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type {
-	ProductPrices,
 	ProductPrice,
+	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import {
-	getProductPrice,
 	getPriceWithDiscount,
+	getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 import {
-	HomeDelivery,
 	Collection,
+	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
+import { paperSubsUrl } from 'helpers/urls/routes';
+import { getQueryParameter } from 'helpers/urls/url';
+import { titles } from 'helpers/user/details';
+import { signOut } from 'helpers/user/user';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -43,12 +53,11 @@ import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormActionCreators } from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { newspaperCountries } from 'helpers/internationalisation/country';
-import { signOut } from 'helpers/user/user';
+import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
+import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import type {
 	CheckoutState,
@@ -63,14 +72,11 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Stripe, DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
-import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import { validateWithDeliveryForm , withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import {
 	paperProductsWithDigital,
@@ -78,27 +84,21 @@ import {
 } from 'helpers/productPrice/productOptions';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
-import {
-	getPaymentStartDate,
-	getFormattedStartDate,
-} from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
-import { titles } from 'helpers/user/details';
-import { Select, Option as OptionForSelect } from '@guardian/src-select';
-import { options } from 'components/forms/customFields/options';
-import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
-import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
 import {
 	getPriceSummary,
 	sensiblyGenerateDigiSubPrice,
 } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
-import { paperSubsUrl } from 'helpers/urls/routes';
-import { getQueryParameter } from 'helpers/urls/url';
+import {
+	getFormattedStartDate,
+	getPaymentStartDate,
+} from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import { Option as OptionForSelect, Select } from '@guardian/src-select';
 import type { Participations } from 'helpers/abTests/abtest';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
@@ -114,21 +114,21 @@ const removeTopBorder = css`
 type PropTypes = FormFields &
 	FormActionCreators & {
 		signOut: typeof signOut;
-		formErrors: FormError<FormField>[];
+		formErrors: Array<FormError<FormField>>;
 		submissionError: ErrorReason | null;
 		productPrices: ProductPrices;
-		fetchAndStoreUserType: (...args: Array<any>) => any;
-		submitForm: (...args: Array<any>) => any;
+		fetchAndStoreUserType: (...args: any[]) => any;
+		submitForm: (...args: any[]) => any;
 		billingAddressErrors: Array<Record<string, any>>;
 		deliveryAddressErrors: Array<Record<string, any>>;
 		country: IsoCountry;
 		isTestUser: boolean;
-		validateForm: () => (...args: Array<any>) => any;
+		validateForm: () => (...args: any[]) => any;
 		csrf: Csrf;
 		currencyId: IsoCurrency;
 		payPalHasLoaded: boolean;
-		formIsValid: (...args: Array<any>) => any;
-		setupRecurringPayPalPayment: (...args: Array<any>) => any;
+		formIsValid: (...args: any[]) => any;
+		setupRecurringPayPalPayment: (...args: any[]) => any;
 		total: ProductPrice;
 		// eslint-disable-next-line react/no-unused-prop-types
 		amount: number;
@@ -408,7 +408,7 @@ function PaperCheckoutForm(props: PropTypes) {
 									value="yes"
 									label="Yes"
 									name="billingAddressIsSame"
-									checked={props.billingAddressIsSame === true}
+									checked={props.billingAddressIsSame}
 									onChange={() => props.setBillingAddressIsSame(true)}
 								/>
 
@@ -417,13 +417,13 @@ function PaperCheckoutForm(props: PropTypes) {
 									label="No"
 									value="no"
 									name="billingAddressIsSame"
-									checked={props.billingAddressIsSame === false}
+									checked={!props.billingAddressIsSame}
 									onChange={() => props.setBillingAddressIsSame(false)}
 								/>
 							</RadioGroup>
 						</Rows>
 					</FormSection>
-					{props.billingAddressIsSame === false ? (
+					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
 							<BillingAddress />
 						</FormSection>

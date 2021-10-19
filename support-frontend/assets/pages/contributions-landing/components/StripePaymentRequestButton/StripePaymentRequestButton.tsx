@@ -1,29 +1,35 @@
 // ----- Imports ----- //
-// @ts-ignore - required for hooks
-import React, { useEffect, useState } from 'react';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { connect } from 'react-redux';
-import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type {
 	ContributionType,
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type {
-	PaymentResult,
-	StripePaymentMethod,
-	StripePaymentRequestButtonMethod,
-} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import {
+	getAvailablePaymentRequestButtonPaymentMethod,
+	toHumanReadableContributionType,
+} from 'helpers/forms/checkouts';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
 	amountOrOtherAmountIsValid,
 	isValidEmail,
 } from 'helpers/forms/formValidation';
+import type {
+	PaymentAuthorisation,
+	PaymentResult,
+	StripePaymentMethod,
+	StripePaymentRequestButtonMethod,
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
 import {
@@ -38,18 +44,14 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import type { Option } from 'helpers/types/option';
 import { logException } from 'helpers/utilities/logger';
-import type {
-	State,
-	Stripe3DSResult,
-	StripePaymentRequestButtonData,
-} from 'pages/contributions-landing/contributionsLandingReducer';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,
-	paymentWaiting as setPaymentWaiting,
 	setHandleStripe3DS,
 	setPaymentRequestButtonPaymentMethod,
+	paymentWaiting as setPaymentWaiting,
 	setStripePaymentRequestButtonClicked,
 	setStripePaymentRequestButtonError,
 	updateBillingCountry,
@@ -59,19 +61,17 @@ import {
 	updateLastName,
 	updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
+import type {
+	State,
+	Stripe3DSResult,
+	StripePaymentRequestButtonData,
+} from 'pages/contributions-landing/contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import type { StripeAccount } from 'helpers/forms/stripe';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import {
-	toHumanReadableContributionType,
-	getAvailablePaymentRequestButtonPaymentMethod,
-} from 'helpers/forms/checkouts';
-import type { Option } from 'helpers/types/option';
 import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
-import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
 import type { LocalCurrencyCountry } from '../../../../helpers/internationalisation/localCurrencyCountry';
+import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
 import { Button } from '@guardian/src-button';
 // ----- Types -----//
 type PaymentRequestObject = Record<string, any>; // Just to make it clearer when we're passing this object around
@@ -103,9 +103,7 @@ type PropTypes = {
 	updateBillingState: (billingState: StateProvince | null) => void;
 	updateBillingCountry: (arg0: IsoCountry) => void;
 	paymentMethod: PaymentMethod;
-	setAssociatedPaymentMethod: () => (
-		arg0: (...args: Array<any>) => any,
-	) => void;
+	setAssociatedPaymentMethod: () => (arg0: (...args: any[]) => any) => void;
 	stripeAccount: StripeAccount;
 	stripeKey: string;
 	setPaymentWaiting: (isWaiting: boolean) => Action;
@@ -136,7 +134,7 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	onPaymentAuthorised: (paymentAuthorisation: PaymentAuthorisation) =>
 		dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
 	setPaymentRequestButtonPaymentMethod: (

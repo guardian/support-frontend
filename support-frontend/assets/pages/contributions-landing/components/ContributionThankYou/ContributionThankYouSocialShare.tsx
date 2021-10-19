@@ -1,33 +1,34 @@
-// @ts-ignore - required for hooks
-import React, { useEffect } from 'react';
+// @ts-expect-error - required for hooks
+import { css } from '@emotion/core';
 import { LinkButton } from '@guardian/src-button';
-import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
-import ActionContainer from './components/ActionContainer';
-import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
-import SvgShare from './components/SvgShare';
-import SvgLinkedIn from './components/SvgLinkedIn';
-import {
-	getFacebookShareLink,
-	getTwitterShareLink,
-	getLinkedInShareLink,
-	getEmailShareLink,
-} from './utils/social';
-import {
-	OPHAN_COMPONENT_ID_SOCIAL,
-	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
-	OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
-	OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
-	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
-} from './utils/ophan';
+import { space } from '@guardian/src-foundations';
+import { SvgEnvelope, SvgFacebook, SvgTwitter } from '@guardian/src-icons';
+import React, { useEffect } from 'react';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { generateReferralCode } from '../../../../helpers/campaigns/campaignReferralCodes';
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
+import ActionBody from './components/ActionBody';
+import ActionContainer from './components/ActionContainer';
+import ActionHeader from './components/ActionHeader';
+import SvgLinkedIn from './components/SvgLinkedIn';
+import SvgShare from './components/SvgShare';
+import {
+	OPHAN_COMPONENT_ID_SOCIAL,
+	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
+	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
+	OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
+	OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
+} from './utils/ophan';
+import {
+	getEmailShareLink,
+	getFacebookShareLink,
+	getLinkedInShareLink,
+	getTwitterShareLink,
+} from './utils/social';
+
 const buttonsContainer = css`
 	margin-top: ${space[6]}px;
 

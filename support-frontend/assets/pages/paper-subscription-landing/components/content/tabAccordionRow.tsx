@@ -1,7 +1,8 @@
-// @ts-ignore - required for hooks
-import * as React from 'react';
+// @ts-expect-error - required for hooks
 import { AccordionRow } from '@guardian/src-accordion';
+import * as React from 'react';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 type TabAccordionRowPropTypes = {
 	trackingId: string;
 	label: string;

@@ -1,4 +1,4 @@
-import type { Node, Element, ChildrenArray } from 'react';
+import type { ChildrenArray, Element, Node } from 'react';
 import React from 'react';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';

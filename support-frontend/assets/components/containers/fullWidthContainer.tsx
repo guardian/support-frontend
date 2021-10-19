@@ -1,11 +1,12 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
 import {
 	brand,
 	brandBackground,
 	neutral,
 } from '@guardian/src-foundations/palette';
+import type { Node } from 'react';
+import React from 'react';
+
 type Theme = 'light' | 'dark' | 'white' | 'brand';
 type PropTypes = {
 	cssOverrides?: string;

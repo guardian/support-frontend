@@ -10,6 +10,7 @@ import {
 	productOverride,
 	productOverrideWithLabel,
 } from './paymentSelectionStyles';
+
 export type PropTypes = {
 	paymentOptions: Product[];
 };

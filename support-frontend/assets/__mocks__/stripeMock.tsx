@@ -40,7 +40,7 @@ jest.mock('@stripe/react-stripe-js', () => {
 	function createStripeElementMock(elementType) {
 		type MockStripeElementProps = {
 			id: string;
-			onChange: (...args: Array<any>) => any;
+			onChange: (...args: any[]) => any;
 		};
 		return function MockStripeElement(props: MockStripeElementProps) {
 			function onChange(evt) {

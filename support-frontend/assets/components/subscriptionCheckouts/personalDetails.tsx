@@ -1,17 +1,18 @@
-import React from 'react';
-import { TextInput } from '@guardian/src-text-input';
 import { css } from '@emotion/core';
-import { ThemeProvider } from 'emotion-theming';
-import { textSans } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
 import { Button, buttonReaderRevenueBrandAlt } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
+import { textSans } from '@guardian/src-foundations/typography';
+import { TextInput } from '@guardian/src-text-input';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
+import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
+import { emailRegexPattern } from 'helpers/forms/formValidation';
+import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
-import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
-import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import 'helpers/subscriptionsForms/formFields';
-import { emailRegexPattern } from 'helpers/forms/formValidation';
+
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
@@ -24,23 +25,23 @@ const paragraphWithButton = css`
 `;
 export type PropTypes = {
 	firstName: string;
-	setFirstName: (...args: Array<any>) => any;
+	setFirstName: (...args: any[]) => any;
 	lastName: string;
-	setLastName: (...args: Array<any>) => any;
+	setLastName: (...args: any[]) => any;
 	email: string;
-	setEmail: (...args: Array<any>) => any;
+	setEmail: (...args: any[]) => any;
 	confirmEmail?: Option<string>;
-	setConfirmEmail?: Option<(...args: Array<any>) => any>;
-	fetchAndStoreUserType?: Option<(...args: Array<any>) => any>;
+	setConfirmEmail?: Option<(...args: any[]) => any>;
+	fetchAndStoreUserType?: Option<(...args: any[]) => any>;
 	isSignedIn: boolean;
 	telephone: Option<string>;
-	setTelephone: (...args: Array<any>) => any;
-	formErrors: FormError<FormField>[];
-	signOut: (...args: Array<any>) => any;
+	setTelephone: (...args: any[]) => any;
+	formErrors: Array<FormError<FormField>>;
+	signOut: (...args: any[]) => any;
 	isUsingGuestCheckout: boolean;
 };
 type SignedInEmailFooterTypes = {
-	handleSignOut: (...args: Array<any>) => any;
+	handleSignOut: (...args: any[]) => any;
 };
 
 const SignedInEmailFooter = (props: SignedInEmailFooterTypes) => (

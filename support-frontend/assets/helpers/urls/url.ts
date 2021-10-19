@@ -39,7 +39,7 @@ const getAllQueryParams = (): Array<[string, string]> =>
 const getAllQueryParamsWithExclusions = (
 	excluded: string[],
 ): Array<[string, string]> =>
-	getAllQueryParams().filter((p) => excluded.indexOf(p[0]) === -1);
+	getAllQueryParams().filter((p) => !excluded.includes(p[0]));
 
 // Takes a mapping of query params and adds to an absolute or relative URL.
 function addQueryParamsToURL(
@@ -77,7 +77,7 @@ function getBaseDomain(): Domain {
 	return DOMAINS.PROD;
 }
 
-function getAbsoluteURL(path: string = ''): string {
+function getAbsoluteURL(path = ''): string {
 	return `${getOrigin()}${path}`;
 }
 

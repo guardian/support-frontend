@@ -1,7 +1,7 @@
-import React from 'react';
-import { ThemeProvider } from 'emotion-theming';
-import { LinkButton, buttonBrandAlt } from '@guardian/src-button';
+import { buttonBrandAlt, LinkButton } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const AustraliaMapLink = () => (

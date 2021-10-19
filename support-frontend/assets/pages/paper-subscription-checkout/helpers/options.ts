@@ -1,4 +1,12 @@
 import type {
+	FulfilmentOptions,
+	PaperFulfilmentOptions,
+} from 'helpers/productPrice/fulfilmentOptions';
+import {
+	Collection,
+	HomeDelivery,
+} from 'helpers/productPrice/fulfilmentOptions';
+import type {
 	PaperProductOptions,
 	ProductOptions,
 } from 'helpers/productPrice/productOptions';
@@ -7,18 +15,10 @@ import {
 	Everyday,
 } from 'helpers/productPrice/productOptions';
 import { paperHasDeliveryEnabled } from 'helpers/productPrice/subscriptions';
-import type {
-	FulfilmentOptions,
-	PaperFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
 import { getQueryParameter } from 'helpers/urls/url';
-import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
-import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
+import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 
 function getProductOption(): PaperProductOptions {
 	const productInUrl = getQueryParameter('product');

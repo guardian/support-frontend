@@ -1,24 +1,24 @@
 // Docs: https://github.com/stripe/react-stripe-elements#using-the-paymentrequestbuttonelement
 // ----- Imports ----- //
 // We import from preact/compat here rather than react because flow doesn't like it if the child component uses redux
-// @ts-ignore - required for hooks
-import React, { useState } from 'preact/compat';
+// @ts-expect-error - required for hooks
 import { Elements } from '@stripe/react-stripe-js';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { StripeAccount } from 'helpers/forms/stripe';
-import {
-	getStripeKey,
-	stripeAccountForContributionType,
-	useStripeObjects,
-} from 'helpers/forms/stripe';
+import React, { useState } from 'preact/compat';
 import type {
 	ContributionType,
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
+import {
+	getStripeKey,
+	stripeAccountForContributionType,
+	useStripeObjects,
+} from 'helpers/forms/stripe';
+import type { StripeAccount } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 // ----- Types -----//
 

@@ -1,7 +1,8 @@
-import { getAbsoluteURL } from '../urls/url';
-import { pageView } from './ophan';
-import { successfulConversion } from './googleTagManager';
 import type { Participations } from '../abTests/abtest';
+import { getAbsoluteURL } from '../urls/url';
+import { successfulConversion } from './googleTagManager';
+import { pageView } from './ophan';
+
 export default function trackConversion(
 	participations: Participations,
 	currentRoute: string,

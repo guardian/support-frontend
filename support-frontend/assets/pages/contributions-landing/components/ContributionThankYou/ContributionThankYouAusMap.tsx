@@ -1,18 +1,19 @@
-// @ts-ignore - required for hooks
-import React, { useEffect } from 'react';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
 import { LinkButton } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import ActionContainer from './components/ActionContainer';
-import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
-import SvgAusMap from './components/SvgAusMap';
-import { OPHAN_COMPONENT_ID_AUS_MAP } from './utils/ophan';
+import React, { useEffect } from 'react';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import ActionBody from './components/ActionBody';
+import ActionContainer from './components/ActionContainer';
+import ActionHeader from './components/ActionHeader';
+import SvgAusMap from './components/SvgAusMap';
+import { OPHAN_COMPONENT_ID_AUS_MAP } from './utils/ophan';
+
 const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;

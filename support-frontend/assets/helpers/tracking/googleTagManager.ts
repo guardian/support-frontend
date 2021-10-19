@@ -1,13 +1,13 @@
 import uuidv4 from 'uuid';
-import * as storage from 'helpers/storage/storage';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getVariantsAsString } from 'helpers/abTests/abtest';
-import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-import { getQueryParameter } from 'helpers/urls/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import * as storage from 'helpers/storage/storage';
+import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
 import { DirectDebit, PayPal } from '../forms/paymentMethods';
+import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 // ----- Types ----- //
 type EventType =
 	| 'DataLayerReady'
@@ -54,11 +54,11 @@ const gaPropertyId = 'UA-51507017-5';
  */
 let vendorConsentsLookup = '';
 // Default userConsentsToGTM to false
-let userConsentsToGTM: boolean = false;
+let userConsentsToGTM = false;
 // Default scriptAdded to false
-let scriptAdded: boolean = false;
+let scriptAdded = false;
 // Default scriptReady to false
-let scriptReady: boolean = false;
+let scriptReady = false;
 // We store tracking events in these queues when userConsentsToGTM is false
 const googleTagManagerDataQueue: Array<() => void> = [];
 const googleAnalyticsEventQueue: Array<() => void> = [];

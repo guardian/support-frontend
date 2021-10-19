@@ -1,25 +1,24 @@
 // ----- Reducer ----- //
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { getUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { isTestUser } from 'helpers/user/user';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
-import { removeError } from 'helpers/subscriptionsForms/validation';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	NoProductOptions,
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-} from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	getWeeklyFulfilmentOption,
 	NoFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { FormState } from 'helpers/subscriptionsForms/formFields';
-import type { Option } from 'helpers/types/option';
+import {
+	NoProductOptions,
+	paperProductsWithDigital,
+	paperProductsWithoutDigital,
+} from 'helpers/productPrice/productOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
+import type { FormState } from 'helpers/subscriptionsForms/formFields';
+import { removeError } from 'helpers/subscriptionsForms/validation';
+import type { Option } from 'helpers/types/option';
+import { getUser, isTestUser } from 'helpers/user/user';
 
 function createFormReducer(
 	initialCountry: IsoCountry,

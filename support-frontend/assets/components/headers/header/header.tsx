@@ -1,19 +1,20 @@
 // ----- Imports ----- //
 import type { Node } from 'react';
 import React, { Component } from 'react';
-import type { Option } from 'helpers/types/option';
+import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import 'helpers/types/option';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { ElementResizer } from 'helpers/polyfills/layout';
 import { onElementResize } from 'helpers/polyfills/layout';
-import SvgGuardianLogo from 'components/svgs/guardianLogo';
-import Padlock from './padlock.svg';
+import type { Option } from 'helpers/types/option';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import MobileMenuToggler from './mobileMenuToggler';
+import Padlock from './padlock.svg';
 import './header.scss';
+
 export type PropTypes = {
 	utility: Option<Node>;
 	countryGroupId: CountryGroupId;

@@ -1,34 +1,35 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { textSans, headline } from '@guardian/src-foundations/typography';
-import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import React from 'react';
 import { connect } from 'react-redux';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
-import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
+import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { myAccountUrl } from 'helpers/urls/externalLinks';
-type MarketingConsent =
-	typeof import('components/subscriptionCheckouts/thankYou/marketingConsentContainer').default;
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import SubscriptionsSurvey from './subscriptionSurvey';
 import { HeroPicture } from './heroPicture';
 import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	Collection,
+	HomeDelivery,
+} from 'helpers/productPrice/fulfilmentOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import 'helpers/internationalisation/countryGroup';
-import AppsSection from './appsSection';
 import type { FormFields } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import AppsSection from './appsSection';
+
+type MarketingConsent =
+	typeof import('components/subscriptionCheckouts/thankYou/marketingConsentContainer').default;
 // ----- Types ----- //
 type PropTypes = FormFields & {
 	isPending: boolean;
@@ -96,7 +97,7 @@ const heroPictureHack = css`
 		left: 0;
 	}
 `;
-const whatNextText: Record<FulfilmentOptions, Array<string>> = {
+const whatNextText: Record<FulfilmentOptions, string[]> = {
 	[HomeDelivery]: [
 		'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how  to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.',
 		'Your newspaper will be delivered to your door.',

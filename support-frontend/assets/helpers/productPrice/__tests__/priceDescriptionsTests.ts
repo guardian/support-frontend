@@ -1,20 +1,21 @@
 // ----- Imports ----- //
 import {
-	getPriceDescription,
-	getAppliedPromoDescription,
-	getSimplifiedPriceDescription,
-	getAdverbialSubscriptionDescription,
-} from 'helpers/productPrice/priceDescriptions';
-import {
 	Annual,
 	Monthly,
 	Quarterly,
 	SixWeekly,
 } from 'helpers/productPrice/billingPeriods';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	getAdverbialSubscriptionDescription,
+	getAppliedPromoDescription,
+	getPriceDescription,
+	getSimplifiedPriceDescription,
+} from 'helpers/productPrice/priceDescriptions';
 import 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import 'helpers/productPrice/productPrices';
+
 jest.mock('ophan', () => {});
 const monthlyBillingPeriod: BillingPeriod = 'Monthly';
 const productPrice: ProductPrice = {

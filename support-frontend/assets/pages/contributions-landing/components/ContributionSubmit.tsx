@@ -1,29 +1,27 @@
 // ----- Imports ----- //
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
-import type { ContributionType } from 'helpers/contributions';
+import Button from 'components/button/button';
+import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
+import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
+import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import 'helpers/internationalisation/currency';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { SelectedAmounts } from 'helpers/contributions';
-import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
-import { hiddenIf } from 'helpers/utilities/utilities';
-import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
-import type { State } from '../contributionsLandingReducer';
+import { hiddenIf } from 'helpers/utilities/utilities';
+import type { AmazonPayData, State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { PayPal, AmazonPay } from 'helpers/forms/paymentMethods';
-import Button from 'components/button/button';
+import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
-import type { AmazonPayData } from '../contributionsLandingReducer';
-import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 // ----- Types ----- //
 type PropTypes = {
 	contributionType: ContributionType;
@@ -35,7 +33,7 @@ type PropTypes = {
 	currencyId: IsoCurrency;
 	csrf: CsrfState;
 	sendFormSubmitEventForPayPalRecurring: () => void;
-	setupRecurringPayPalPayment: (...args: Array<any>) => any;
+	setupRecurringPayPalPayment: (...args: any[]) => any;
 	payPalHasLoaded: boolean;
 	isTestUser: boolean;
 	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
@@ -69,13 +67,13 @@ function mapStateToProps(state: State) {
 	};
 }
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	sendFormSubmitEventForPayPalRecurring: () => {
 		dispatch(sendFormSubmitEventForPayPalRecurring());
 	},
 	setupRecurringPayPalPayment: (
-		resolve: (...args: Array<any>) => any,
-		reject: (...args: Array<any>) => any,
+		resolve: (...args: any[]) => any,
+		reject: (...args: any[]) => any,
 		currencyId: IsoCurrency,
 		csrf: CsrfState,
 	) => {

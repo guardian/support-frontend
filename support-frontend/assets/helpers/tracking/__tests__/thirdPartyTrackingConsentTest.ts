@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { onConsentChange as _onConsentChange } from '@guardian/consent-management-platform';
 import { onConsentChangeEvent } from '../thirdPartyTrackingConsent';
+
 const onConsentChange: any = _onConsentChange;
 jest.mock('@guardian/consent-management-platform', () => ({
 	onConsentChange: jest.fn(),

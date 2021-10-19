@@ -6,7 +6,7 @@ function ascending(a: number, b: number): number {
 }
 
 // Converts a number to a given number of decimal places, default two.
-function roundDp(num: number, dps: number = 2) {
+function roundDp(num: number, dps = 2) {
 	return Math.round(num * 10 ** dps) / 10 ** dps;
 }
 

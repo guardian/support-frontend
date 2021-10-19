@@ -1,10 +1,11 @@
-import React from 'react';
 import { css } from '@emotion/core';
-import { headline, textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { neutral } from '@guardian/src-foundations/palette';
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import React from 'react';
 import type { ListItemText } from 'components/list/list';
 import { ListWithSubText } from 'components/list/list';
+
 const container = css`
 	&:not(:last-of-type) {
 		border-bottom: 1px solid ${neutral[86]};

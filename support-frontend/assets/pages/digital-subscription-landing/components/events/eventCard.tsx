@@ -1,11 +1,12 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
-import { textSans, body } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
-import { space } from '@guardian/src-foundations';
+import { body, textSans } from '@guardian/src-foundations/typography';
+import type { Node } from 'react';
+import React from 'react';
 import { SvgCalendar } from 'components/icons/calendar';
+
 type PropTypes = {
 	eventType: string;
 	eventImage: Node;

@@ -1,10 +1,11 @@
+import cx from 'classnames';
 import React from 'react';
 import type { Node } from 'react';
-import cx from 'classnames';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
+
 type PropTypes = {
 	title: string;
 	subtitle: string;

@@ -1,16 +1,17 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { textSans } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
-import { ThemeProvider } from 'emotion-theming';
 import {
 	Button,
 	buttonReaderRevenueBrand,
 	buttonReaderRevenueBrandAlt,
 } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
+import { textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+
 const directDebitForm = css`
 	clear: left;
 	margin-top: 20px;
@@ -40,8 +41,8 @@ const ctaContainer = css`
 `;
 
 function Playback(props: {
-	editDirectDebitClicked: (...args: Array<any>) => any;
-	onSubmit: (...args: Array<any>) => any;
+	editDirectDebitClicked: (...args: any[]) => any;
+	onSubmit: (...args: any[]) => any;
 	accountHolderName: string;
 	accountNumber: string;
 	sortCodeString: string;

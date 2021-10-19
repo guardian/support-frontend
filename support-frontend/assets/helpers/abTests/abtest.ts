@@ -1,15 +1,15 @@
-import { $Keys } from 'utility-types';
 // ----- Imports ----- //
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import seedrandom from 'seedrandom';
+import type { $Keys } from 'utility-types';
 import * as cookie from 'helpers/storage/cookie';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
-import { tests } from './abtestDefinitions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { getQueryParameter } from 'helpers/urls/url';
+import { tests } from './abtestDefinitions';
 // ----- Types ----- //
 export type TestId = $Keys<typeof tests>;
 const breakpoints = {
@@ -61,8 +61,8 @@ export type Test = {
 };
 export type Tests = Record<string, Test>;
 // ----- Setup ----- //
-const MVT_COOKIE: string = 'GU_mvt_id';
-const MVT_MAX: number = 1000000;
+const MVT_COOKIE = 'GU_mvt_id';
+const MVT_MAX = 1000000;
 
 // ----- Functions ----- //
 // Attempts to retrieve the MVT id from a cookie, or sets it.

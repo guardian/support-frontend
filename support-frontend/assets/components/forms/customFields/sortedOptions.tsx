@@ -1,6 +1,6 @@
 // ----- Imports ----- //
-import React from 'react';
 import { Option } from '@guardian/src-select';
+import React from 'react';
 
 // ----- Functions ----- //
 function sortedOptions(

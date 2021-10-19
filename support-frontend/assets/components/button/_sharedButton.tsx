@@ -1,7 +1,7 @@
-import { $Keys } from 'utility-types';
 // ----- Imports ----- //
 import type { Node } from 'react';
 import React, { createElement } from 'react';
+import type { $Keys } from 'utility-types';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './button.scss';

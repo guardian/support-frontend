@@ -1,16 +1,17 @@
-import * as React from 'react';
 import { css } from '@emotion/core';
-import { titlepiece, body } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
+import { body, titlepiece } from '@guardian/src-foundations/typography';
+import * as React from 'react';
 import type { ContributionType } from 'helpers/contributions';
+import { formatAmount } from 'helpers/forms/checkouts';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { formatAmount } from 'helpers/forms/checkouts';
+
 const header = css`
 	background: white;
 	padding-top: ${space[4]}px;

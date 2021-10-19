@@ -4,7 +4,6 @@ module.exports = {
     showcasePage: 'pages/showcase/showcase.tsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.tsx',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.tsx',
-    fontLoader: 'helpers/rendering/fontLoader.ts',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.tsx',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx',
     digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.tsx',

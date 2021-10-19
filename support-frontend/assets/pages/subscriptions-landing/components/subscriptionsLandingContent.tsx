@@ -1,9 +1,9 @@
 import React from 'react';
 // components
-import SubscriptionsProduct from './subscriptionsProduct';
-import FeatureHeader from './featureHeader';
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
+import FeatureHeader from './featureHeader';
+import SubscriptionsProduct from './subscriptionsProduct';
 
 const isFeature = (index) => index === 0; // make the first card a feature
 

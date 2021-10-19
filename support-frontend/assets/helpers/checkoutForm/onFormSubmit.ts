@@ -1,8 +1,9 @@
-import type { ContributionType } from 'helpers/contributions';
 import { invalidReason } from 'helpers/checkoutForm/checkoutForm';
+import type { ContributionType } from 'helpers/contributions';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+
 type OldFlowOrNewFlow = 'opf' | 'npf';
 export type FormSubmitParameters = {
 	flowPrefix: OldFlowOrNewFlow;

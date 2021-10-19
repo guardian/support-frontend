@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server';
-import { content as showcase } from 'pages/showcase/showcase';
 import { EmptyContributionsLandingPage } from 'pages/contributions-landing/EmptyContributionsLandingPage';
+import { content as showcase } from 'pages/showcase/showcase';
 
 const render = (content) => renderToString(content);
 

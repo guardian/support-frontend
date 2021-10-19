@@ -1,10 +1,11 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { InlineError } from '@guardian/src-user-feedback';
-import { error as errorColour } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
+import { error as errorColour } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
+import { InlineError } from '@guardian/src-user-feedback';
+import React from 'react';
+
 const errorContainer = css`
 	border: 4px ${errorColour[400]} solid;
 	padding: ${space[3]}px;

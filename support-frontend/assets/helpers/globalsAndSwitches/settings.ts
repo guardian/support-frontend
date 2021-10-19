@@ -3,6 +3,7 @@ import type {
 	ContributionTypes,
 } from 'helpers/contributions';
 import 'helpers/contributions';
+
 export type Status = 'On' | 'Off';
 export type SwitchObject = Record<string, Status>;
 export type Switches = {

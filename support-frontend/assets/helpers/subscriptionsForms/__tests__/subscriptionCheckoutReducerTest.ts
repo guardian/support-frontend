@@ -1,9 +1,10 @@
 // ----- Imports ----- //
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
 	setFormErrors,
 	setStage,
 } from 'helpers/subscriptionsForms/formActions';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+
 jest.mock('ophan', () => () => ({}));
 // ----- Tests ----- //
 describe('Subscription Checkout Reducer', () => {

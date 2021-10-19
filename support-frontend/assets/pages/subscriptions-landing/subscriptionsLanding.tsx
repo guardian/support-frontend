@@ -1,7 +1,8 @@
 // ----- Imports ----- //
 import React from 'react';
-import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import Page from 'components/page/page';
 import {
 	AUDCountries,
 	Canada,
@@ -11,7 +12,6 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';

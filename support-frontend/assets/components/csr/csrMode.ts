@@ -1,5 +1,6 @@
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
 import { useEffect, useState } from 'react';
+
 const domains = [
 	'https://gnmtouchpoint.my.salesforce.com',
 	'https://gnmtouchpoint--dev1--c.cs88.visual.force.com',

@@ -1,26 +1,27 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { from, until, breakpoints } from '@guardian/src-foundations/mq';
+import { breakpoints, from, until } from '@guardian/src-foundations/mq';
 import {
 	background,
-	brandAltBackground,
 	brand,
+	brandAltBackground,
 } from '@guardian/src-foundations/palette';
-import { SvgCheckmark } from '@guardian/src-icons';
 import { headline } from '@guardian/src-foundations/typography';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { SvgCheckmark } from '@guardian/src-icons';
+import React from 'react';
+import type { Node } from 'react';
 import 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import GridPicture from 'components/gridPicture/gridPicture';
 import GridImage from 'components/gridImage/gridImage';
-import { SvgNews } from 'components/icons/news';
+import GridPicture from 'components/gridPicture/gridPicture';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
-import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
+import { SvgNews } from 'components/icons/news';
+import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgPadlock } from 'components/icons/padlock';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
 const descriptionIcon = css`

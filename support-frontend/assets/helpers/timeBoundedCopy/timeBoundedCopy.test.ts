@@ -1,4 +1,5 @@
 import { getTimeboundCopy } from './timeBoundedCopy';
+
 describe('Time bounded copy', () => {
 	const copy = 'Hello this is a test';
 	let testCopy;

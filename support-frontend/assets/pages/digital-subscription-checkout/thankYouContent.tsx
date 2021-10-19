@@ -3,18 +3,18 @@ import * as React from 'react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
 import Content from 'components/content/content';
-import Text, { LargeParagraph } from 'components/text/text';
-import AppsSection from './components/thankYou/appsSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import Text, { LargeParagraph } from 'components/text/text';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { Option } from 'helpers/types/option';
-import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import AppsSection from './components/thankYou/appsSection';
 import EventsModule from './components/thankYou/eventsModule';
-import type { Participations } from 'helpers/abTests/abtest';
+import ThankYouHero from './components/thankYou/hero';
 import 'helpers/abTests/abtest';
 // ----- Types ----- //
 export type PropTypes = {

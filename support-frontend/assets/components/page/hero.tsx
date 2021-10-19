@@ -4,11 +4,11 @@ import type { RoundelTheme } from './heroRoundel';
 import HeroRoundel from './heroRoundel';
 import {
 	hero,
-	heroRoundelContainer,
 	heroImage,
+	heroRoundelContainer,
+	roundelHidingPoints,
 	roundelNudgeDown,
 	roundelNudgeUp,
-	roundelHidingPoints,
 } from './heroStyles';
 // Options for moving the roundel position on mobile
 type RoundelNudgeDirection = 'up' | 'down' | 'none';

@@ -1,18 +1,19 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
-import { RadioGroup, Radio } from '@guardian/src-radio';
 import { SvgCreditCard, SvgDirectDebit, SvgPayPal } from '@guardian/src-icons';
+import { Radio, RadioGroup } from '@guardian/src-radio';
+import React from 'react';
+import type { Node } from 'react';
 import Rows from 'components/base/rows';
-import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import 'helpers/forms/paymentMethods';
 import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
+import type { Option } from 'helpers/types/option';
+
 type PropTypes = {
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: Option<PaymentMethod>;
-	setPaymentMethod: (...args: Array<any>) => any;
+	setPaymentMethod: (...args: any[]) => any;
 	validationError: Option<ErrorMessage>;
 };
 type RadioWithImagePropTypes = {
@@ -21,7 +22,7 @@ type RadioWithImagePropTypes = {
 	label: string;
 	name: string;
 	checked: boolean;
-	onChange: (...args: Array<any>) => any;
+	onChange: (...args: any[]) => any;
 };
 const radioWithImageStyles = css`
 	display: inline-flex;

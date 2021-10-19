@@ -1,13 +1,14 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { textSans, headline } from '@guardian/src-foundations/typography';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { from } from '@guardian/src-foundations/mq';
+import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from 'emotion-theming';
-import { LinkButton, buttonReaderRevenue } from '@guardian/src-button';
+import React from 'react';
 import Content from 'components/content/contentSimple';
+
 const subHeading = css`
 	margin-bottom: ${space[1]}px;
 	${headline.xxsmall({

@@ -1,42 +1,42 @@
 /* eslint-disable react/no-unused-state */
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
 import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/core';
 import { Button, buttonReaderRevenue } from '@guardian/src-button';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { space } from '@guardian/src-foundations';
-import { ThemeProvider } from 'emotion-theming';
-import { compose } from 'redux';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
 import * as stripeJs from '@stripe/react-stripe-js';
-import { ErrorSummary } from '../submitFormErrorSummary';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import 'helpers/subscriptionsForms/validation';
-import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import 'helpers/subscriptionsForms/formFields';
 import {
 	CardCvcElement,
 	CardExpiryElement,
 	CardNumberElement,
 } from '@stripe/react-stripe-js';
+import { ThemeProvider } from 'emotion-theming';
+import { compose } from 'redux';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 import './stripeForm.scss';
-import { fetchJson, requestOptions } from 'helpers/async/fetch';
-import { logException } from 'helpers/utilities/logger';
-import type { Option } from 'helpers/types/option';
-import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
 import { routes } from 'helpers/urls/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
+import { fetchJson, requestOptions } from 'helpers/async/fetch';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
+import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
+import type { FormField } from 'helpers/subscriptionsForms/formFields';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import type { Option } from 'helpers/types/option';
+import { logException } from 'helpers/utilities/logger';
+import { ErrorSummary } from '../submitFormErrorSummary';
 // Types
 export type StripeFormPropTypes = {
-	allErrors: FormError<FormField>[];
+	allErrors: Array<FormError<FormField>>;
 	stripeKey: string;
-	setStripePaymentMethod: (...args: Array<any>) => any;
-	submitForm: (...args: Array<any>) => any;
-	validateForm: (...args: Array<any>) => any;
+	setStripePaymentMethod: (...args: any[]) => any;
+	submitForm: (...args: any[]) => any;
+	validateForm: (...args: any[]) => any;
 	buttonText: string;
 	csrf: Csrf;
 	isTestUser: boolean;
@@ -52,7 +52,7 @@ type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
 type CardFieldsData = Record<CardFieldName, CardFieldData>;
 type CardFieldsValidationOutput = {
 	fieldData: CardFieldsData;
-	fieldErrors: FormError<CardFieldName>[];
+	fieldErrors: Array<FormError<CardFieldName>>;
 };
 // Styles for stripe elements
 const baseStyles = {
@@ -78,7 +78,9 @@ const StripeForm = (props: StripeFormPropTypes) => {
 	/**
 	 * State
 	 */
-	const [cardErrors, setCardErrors] = useState<FormError<CardFieldName>[]>([]);
+	const [cardErrors, setCardErrors] = useState<Array<FormError<CardFieldName>>>(
+		[],
+	);
 	const [setupIntentClientSecret, setSetupIntentClientSecret] =
 		useState<Option<string>>(null);
 	const [paymentWaiting, setPaymentWaiting] = useState<boolean>(false);

@@ -1,4 +1,10 @@
 import type { Dispatch } from 'redux';
+import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import {
+	applyBillingAddressRules,
+	applyDeliveryAddressRules,
+	setFormErrorsFor as setAddressFormErrorsFor,
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { setFormErrors } from 'helpers/subscriptionsForms/formActions';
 import type {
@@ -6,13 +12,6 @@ import type {
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import {
-	setFormErrorsFor as setAddressFormErrorsFor,
-	applyDeliveryAddressRules,
-	applyBillingAddressRules,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type {
 	CheckoutState,
 	WithDeliveryCheckoutState,
@@ -22,9 +21,11 @@ import {
 	getDeliveryAddressFields,
 	getFulfilmentOption,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { applyCheckoutRules, applyDeliveryRules } from './rules';
+
 type Error<T> = {
-	errors: FormError<T>[];
+	errors: Array<FormError<T>>;
 	errorAction: (arg0: any) => Action;
 };
 type AnyErrorType = Error<AddressFormField> | Error<FormField>;
@@ -46,7 +47,7 @@ function checkoutValidation(state: CheckoutState): AnyErrorType[] {
 }
 
 const shouldValidateBillingAddress = (fields: FormFields) =>
-	fields.billingAddressIsSame === false;
+	!fields.billingAddressIsSame;
 
 function withDeliveryValidation(
 	state: WithDeliveryCheckoutState,

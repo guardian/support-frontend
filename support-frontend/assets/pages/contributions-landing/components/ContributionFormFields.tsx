@@ -7,22 +7,22 @@ import type { StateProvince } from 'helpers/internationalisation/country';
 import 'helpers/internationalisation/country';
 import Signout from 'components/signout/signout';
 import {
-	checkFirstName,
-	checkLastName,
 	checkBillingState,
 	checkEmail,
+	checkFirstName,
+	checkLastName,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
-import ContributionState from './ContributionState';
-import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
+	updateBillingState,
+	updateEmail,
 	updateFirstName,
 	updateLastName,
-	updateEmail,
-	updateBillingState,
 } from '../contributionsLandingActions';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import type { State } from '../contributionsLandingReducer';
+import ContributionState from './ContributionState';
+import '../contributionsLandingReducer';
 import { TextInput } from '@guardian/src-text-input';
 // ----- Types ----- //
 
@@ -73,7 +73,7 @@ const mapStateToProps = (state: State) => ({
 	contributionType: state.page.form.contributionType,
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	updateFirstName: (event) => {
 		dispatch(updateFirstName(event.target.value));
 	},

@@ -35,7 +35,7 @@ function nonSillyCharacters(s: string | null | undefined): boolean {
 // ----- Functions ----- //
 function firstError<FieldType>(
 	field: FieldType,
-	errors: FormError<FieldType>[],
+	errors: Array<FormError<FieldType>>,
 ): Option<ErrorMessage> {
 	const msgs = errors
 		.filter((err) => err.field === field)
@@ -45,8 +45,8 @@ function firstError<FieldType>(
 
 function removeError<FieldType>(
 	field: FieldType,
-	formErrors: FormError<FieldType>[],
-): FormError<FieldType>[] {
+	formErrors: Array<FormError<FieldType>>,
+): Array<FormError<FieldType>> {
 	return formErrors.filter((error) => error.field !== field);
 }
 
@@ -60,7 +60,7 @@ function formError<FieldType>(
 	};
 }
 
-function validate<Err>(rules: Rule<Err>[]): Err[] {
+function validate<Err>(rules: Array<Rule<Err>>): Err[] {
 	return rules.reduce(
 		(errors, { rule, error }) => (rule ? errors : [...errors, error]),
 		[],

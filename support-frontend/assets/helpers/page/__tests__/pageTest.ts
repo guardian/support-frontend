@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { createCommonReducer } from '../commonReducer';
 import { GBPCountries } from '../../internationalisation/countryGroup';
+import { createCommonReducer } from '../commonReducer';
 // ----- Tests ----- //
 jest.mock('ophan', () => {});
 describe('reducer tests', () => {

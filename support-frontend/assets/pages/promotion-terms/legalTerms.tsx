@@ -5,10 +5,10 @@ import {
 	DigitalPack,
 	GuardianWeekly,
 } from 'helpers/productPrice/subscriptions';
-import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
-import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
 import DigitalPackTerms from 'pages/promotion-terms/DigitalPackTerms';
 import PaperTerms from 'pages/promotion-terms/PaperTerms';
+import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
+import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
 
 const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 	switch (props.promotionTerms.product) {

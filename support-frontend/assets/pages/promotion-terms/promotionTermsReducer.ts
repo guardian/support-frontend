@@ -1,13 +1,14 @@
 // ----- Imports ----- //
-import type { CommonState } from 'helpers/page/commonReducer';
 import {
 	getGlobal,
 	getProductPrices,
 } from 'helpers/globalsAndSwitches/globals';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect } from 'helpers/internationalisation/countryGroup';
+import type { CommonState } from 'helpers/page/commonReducer';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { PromotionTerms } from 'helpers/productPrice/promotions';
+
 export type PromotionTermsPropTypes = {
 	productPrices: ProductPrices;
 	promotionTerms: PromotionTerms;

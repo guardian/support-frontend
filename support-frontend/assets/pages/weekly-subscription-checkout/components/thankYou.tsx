@@ -1,27 +1,28 @@
 // ----- Imports ----- //
 import React from 'react';
 import { connect } from 'react-redux';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import GridPicture from 'components/gridPicture/gridPicture';
-import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/content';
-import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
-import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import GridPicture from 'components/gridPicture/gridPicture';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import {
-	homeDeliveryUrl,
-	manageSubsUrl,
-	helpCentreUrl,
-} from 'helpers/urls/externalLinks';
-type MarketingConsent =
-	typeof import('components/subscriptionCheckouts/thankYou/marketingConsentContainer').default;
+import OrderedList from 'components/list/orderedList';
+import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
-import { formatUserDate } from 'helpers/utilities/dateConversions';
+import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { FormFields } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
-import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import {
+	helpCentreUrl,
+	homeDeliveryUrl,
+	manageSubsUrl,
+} from 'helpers/urls/externalLinks';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
+
+type MarketingConsent =
+	typeof import('components/subscriptionCheckouts/thankYou/marketingConsentContainer').default;
 // ----- Types ----- //
 type PropTypes = FormFields & {
 	isPending: boolean;

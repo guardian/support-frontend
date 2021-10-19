@@ -1,5 +1,6 @@
-jest.mock('ophan', () => () => ({}));
 import { getEmailValidatedFromUserCookie } from 'helpers/user/user';
+
+jest.mock('ophan', () => () => ({}));
 
 const toCookie = (values) =>
 	`${btoa(JSON.stringify(values))}.the-secret-bit-that-we-ignore`;

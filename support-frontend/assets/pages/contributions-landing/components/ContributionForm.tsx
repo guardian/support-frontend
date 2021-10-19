@@ -1,19 +1,28 @@
 // ----- Imports ----- //
-import type { ThirdPartyPaymentLibraries } from 'helpers/contributions';
-import { getAmount } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
+import ProgressMessage from 'components/progressMessage/progressMessage';
+import type { CampaignSettings } from 'helpers/campaigns/campaigns';
+import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
+import { getAmount, logInvalidCombination } from 'helpers/contributions';
+import type {
+	ContributionAmounts,
+	ContributionType,
+	OtherAmounts,
+	PaymentMatrix,
+	SelectedAmounts,
+	ThirdPartyPaymentLibraries,
+} from 'helpers/contributions';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { CreatePaypalPaymentData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
-import { logInvalidCombination } from 'helpers/contributions';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import 'helpers/forms/errorReasons';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { CreatePaypalPaymentData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
@@ -22,50 +31,43 @@ import {
 	setUseLocalAmounts,
 	setUseLocalCurrencyFlag,
 } from '../../../helpers/page/commonActions';
-import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
-import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import 'helpers/identityApis';
-import type {
-	ContributionAmounts,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
-import type { CampaignSettings } from 'helpers/campaigns/campaigns';
-import ContributionFormFields from './ContributionFormFields';
-import ContributionTypeTabs from './ContributionTypeTabs';
 import ContributionAmount from './ContributionAmount';
-import PaymentMethodSelector from './PaymentMethodSelector';
+import ContributionFormFields from './ContributionFormFields';
 import ContributionSubmit from './ContributionSubmit';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
+import ContributionTypeTabs from './ContributionTypeTabs';
+import PaymentMethodSelector from './PaymentMethodSelector';
+import type {
+	SepaData,
+	State,
+} from 'pages/contributions-landing/contributionsLandingReducer';
 import 'pages/contributions-landing/contributionsLandingReducer';
 import {
-	paymentWaiting,
-	setCheckoutFormHasBeenSubmitted,
 	createOneOffPayPalPayment,
+	paymentWaiting,
 	selectAmount,
-	setSepaIban,
+	setCheckoutFormHasBeenSubmitted,
 	setSepaAccountHolderName,
+	setSepaIban,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
-import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	Sepa,
+	AmazonPay,
 	DirectDebit,
 	ExistingCard,
 	ExistingDirectDebit,
-	AmazonPay,
+	Sepa,
 } from 'helpers/forms/paymentMethods';
 import { logException } from 'helpers/utilities/logger';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { SepaForm } from 'pages/contributions-landing/components/SepaForm';
-import type { SepaData } from 'pages/contributions-landing/contributionsLandingReducer';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
 // ----- Types ----- //
 
@@ -163,7 +165,7 @@ const mapStateToProps = (state: State) => ({
 		state.common.abParticipations.productSetTest === 'variant',
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setPaymentIsWaiting: (isWaiting) => {
 		dispatch(paymentWaiting(isWaiting));
 	},

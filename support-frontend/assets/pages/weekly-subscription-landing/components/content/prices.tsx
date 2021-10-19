@@ -1,14 +1,15 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { body, headline } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
+import { body, headline } from '@guardian/src-foundations/typography';
 import { SvgInfo } from '@guardian/src-icons';
-import ProductInfoChip from 'components/product/productInfoChip';
-import SvgGift from 'components/svgs/gift';
+import React from 'react';
 import FlexContainer from 'components/containers/flexContainer';
+import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
+import SvgGift from 'components/svgs/gift';
+
 export type PropTypes = {
 	orderIsAGift: boolean;
 	products: Product[];

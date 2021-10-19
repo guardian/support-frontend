@@ -1,11 +1,12 @@
 import React from 'react';
-import Content, { NarrowContent } from 'components/content/content';
-import Text from 'components/text/text';
 import AnchorButton from 'components/button/anchorButton';
+import Content, { NarrowContent } from 'components/content/content';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
-import WithSupport from 'components/svgs/withSupport';
 import OneMillionCircles from 'components/svgs/oneMillionCircles';
+import WithSupport from 'components/svgs/withSupport';
+import Text from 'components/text/text';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 export default function CtaContribute() {
 	return (
 		<Content appearance="highlight" modifierClasses={['contribute']}>

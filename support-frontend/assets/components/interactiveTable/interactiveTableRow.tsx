@@ -1,15 +1,20 @@
-// @ts-ignore
-import type { Node } from 'react';
-import React, { useState } from 'react';
+// @ts-expect-error
 import { css } from '@emotion/core';
+import { Button } from '@guardian/src-button';
 import { space, transitions } from '@guardian/src-foundations';
+import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/accessibility';
 import { from } from '@guardian/src-foundations/mq';
-import { border, brandAltBackground } from '@guardian/src-foundations/palette';
+import {
+	border,
+	brandAltBackground,
+	neutral,
+	sport,
+} from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgChevronDownSingle } from '@guardian/src-icons';
-import { Button } from '@guardian/src-button';
-import { neutral, sport } from '@guardian/src-foundations/palette';
-import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/accessibility';
+import React, { useState } from 'react';
+import type { Node } from 'react';
+
 const borderStyle = `${border.secondary} 1px solid`;
 const visuallyHidden = css`
 	${_visuallyHidden}

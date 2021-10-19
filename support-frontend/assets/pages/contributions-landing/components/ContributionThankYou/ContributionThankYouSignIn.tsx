@@ -1,28 +1,29 @@
-// @ts-ignore - required for hooks
-import React, { useState, useEffect } from 'react';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
-import { body } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
 import { LinkButton } from '@guardian/src-button';
-import { ButtonLink } from '@guardian/src-link';
+import { space } from '@guardian/src-foundations';
+import { body } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import ActionContainer from './components/ActionContainer';
-import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
-import ExpandableContainer from './components/ExpandableContainer';
-import BulletPointedList from './components/BulletPointedList';
-import SvgPersonWithTick from './components/SvgPersonWithTick';
-import styles from './styles';
-import {
-	OPHAN_COMPONENT_ID_SIGN_IN,
-	OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
-} from './utils/ophan';
-import { routes } from 'helpers/urls/routes';
+import { ButtonLink } from '@guardian/src-link';
+import React, { useEffect, useState } from 'react';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import { routes } from 'helpers/urls/routes';
+import ActionBody from './components/ActionBody';
+import ActionContainer from './components/ActionContainer';
+import ActionHeader from './components/ActionHeader';
+import BulletPointedList from './components/BulletPointedList';
+import ExpandableContainer from './components/ExpandableContainer';
+import SvgPersonWithTick from './components/SvgPersonWithTick';
+import styles from './styles';
+import {
+	OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
+	OPHAN_COMPONENT_ID_SIGN_IN,
+} from './utils/ophan';
+
 const bodyText = css`
 	${body.small()};
 `;

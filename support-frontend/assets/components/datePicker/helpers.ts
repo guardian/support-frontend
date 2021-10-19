@@ -1,6 +1,6 @@
 import { DateUtils } from 'react-day-picker';
-import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
+import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
 const getRange = () => {
 	const rangeDate = new Date();

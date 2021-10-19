@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import { Option } from '@guardian/src-select';
 import type { Node } from 'react';
 import React from 'react';
-import { Option } from '@guardian/src-select';
 
 // ----- Functions ----- //
 const options = (optionsForMapping: Record<string, string>): Node =>

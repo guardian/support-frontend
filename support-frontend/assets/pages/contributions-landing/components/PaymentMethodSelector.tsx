@@ -1,7 +1,15 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
+import React from 'react';
 import { connect } from 'react-redux';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import AnimatedDots from 'components/spinners/animatedDots';
+import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
+import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
+import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
+import SvgPayPalDs from 'components/svgs/paypalDs';
+import { contributionTypeIsRecurring } from 'helpers/contributions';
 import {
 	getPaymentLabel,
 	getValidPaymentMethods,
@@ -9,51 +17,43 @@ import {
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import 'helpers/globalsAndSwitches/settings';
 import type { ContributionType } from 'helpers/contributions';
-import { contributionTypeIsRecurring } from 'helpers/contributions';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import 'helpers/internationalisation/currency';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	ExistingCard,
-	ExistingDirectDebit,
-	Stripe,
 	AmazonPay,
 	DirectDebit,
+	ExistingCard,
+	ExistingDirectDebit,
 	PayPal,
 	Sepa,
+	Stripe,
 } from 'helpers/forms/paymentMethods';
 import type { Action } from '../contributionsLandingActions';
 import {
+	loadAmazonPaySdk,
+	loadPayPalExpressSdk,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
-	loadPayPalExpressSdk,
-	loadAmazonPaySdk,
 } from '../contributionsLandingActions';
-import { isUsableExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import {
+	getExistingPaymentMethodLabel,
+	isUsableExistingPaymentMethod,
+	mapExistingPaymentMethodToPaymentMethod,
+	subscriptionsToExplainerList,
+	subscriptionToExplainerPart,
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type {
 	ExistingPaymentMethod,
 	RecentlySignedInExistingPaymentMethod,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
-import AnimatedDots from 'components/spinners/animatedDots';
-import {
-	getExistingPaymentMethodLabel,
-	mapExistingPaymentMethodToPaymentMethod,
-	subscriptionsToExplainerList,
-	subscriptionToExplainerPart,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import { RadioGroup, Radio } from '@guardian/src-radio';
-import SvgPayPalDs from 'components/svgs/paypalDs';
-import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
-import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
-import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
+import { Radio, RadioGroup } from '@guardian/src-radio';
 import SvgSepa from 'components/svgs/sepa';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
@@ -70,7 +70,7 @@ type PropTypes = {
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod;
 	updatePaymentMethod: (
 		arg0: PaymentMethod,
-	) => (arg0: (...args: Array<any>) => any) => void;
+	) => (arg0: (...args: any[]) => any) => void;
 	updateSelectedExistingPaymentMethod: (
 		arg0: RecentlySignedInExistingPaymentMethod | typeof undefined,
 	) => Action;
@@ -80,11 +80,11 @@ type PropTypes = {
 	amazonPayHasBegunLoading: boolean;
 	loadPayPalExpressSdk: (
 		contributionType: ContributionType,
-	) => (dispatch: (...args: Array<any>) => any) => void;
+	) => (dispatch: (...args: any[]) => any) => void;
 	loadAmazonPaySdk: (
 		countryGroupId: CountryGroupId,
 		isTestUser: boolean,
-	) => (dispatch: (...args: Array<any>) => any) => void;
+	) => (dispatch: (...args: any[]) => any) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 };
 

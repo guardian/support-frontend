@@ -1,5 +1,6 @@
-import { postcodeLookupUrl } from 'helpers/urls/routes';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { postcodeLookupUrl } from 'helpers/urls/routes';
+
 export type PostcodeFinderResult = {
 	lineOne?: string;
 	lineTwo?: string;

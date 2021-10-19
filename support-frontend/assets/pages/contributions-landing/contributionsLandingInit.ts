@@ -1,52 +1,54 @@
 // ----- Imports ----- //
 import type { Store } from 'redux';
 import 'redux';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Switches } from 'helpers/globalsAndSwitches/settings';
-import { getQueryParameter } from 'helpers/urls/url';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type {
+	ContributionType,
+	ContributionTypes,
+} from 'helpers/contributions';
 import {
+	getAmountFromUrl,
 	getContributionTypeFromSession,
 	getContributionTypeFromUrl,
-	getAmountFromUrl,
 	getPaymentMethodFromSession,
-	getValidPaymentMethods,
 	getValidContributionTypesFromUrlOrElse,
+	getValidPaymentMethods,
 } from 'helpers/forms/checkouts';
-import type { ContributionType } from 'helpers/contributions';
-import 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Action } from './contributionsLandingActions';
-import {
-	getUserType,
-	selectAmount,
-	updateOtherAmount,
-	updateContributionTypeAndPaymentMethod,
-	updatePaymentMethod,
-	updateSelectedExistingPaymentMethod,
-	updateUserFormData,
-	loadPayPalExpressSdk,
-	loadAmazonPaySdk,
-	setUserTypeFromIdentityResponse,
-} from './contributionsLandingActions';
-import type { State } from './contributionsLandingReducer';
-import './contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isUsableExistingPaymentMethod,
 	mapExistingPaymentMethodToPaymentMethod,
 	sendGetExistingPaymentMethodsRequest,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import {
-	setExistingPaymentMethods,
-	setContributionTypes,
-} from 'helpers/page/commonActions';
-import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { ContributionTypes } from 'helpers/contributions';
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { Switches } from 'helpers/globalsAndSwitches/settings';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { getQueryParameter } from 'helpers/urls/url';
+import 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
+import type { Action } from './contributionsLandingActions';
+import {
+	getUserType,
+	loadAmazonPaySdk,
+	loadPayPalExpressSdk,
+	selectAmount,
+	setUserTypeFromIdentityResponse,
+	updateContributionTypeAndPaymentMethod,
+	updateOtherAmount,
+	updatePaymentMethod,
+	updateSelectedExistingPaymentMethod,
+	updateUserFormData,
+} from './contributionsLandingActions';
+import type { State } from './contributionsLandingReducer';
+import './contributionsLandingReducer';
+import {
+	setContributionTypes,
+	setExistingPaymentMethods,
+} from 'helpers/page/commonActions';
+import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import * as storage from 'helpers/storage/storage';
 
 // ----- Functions ----- //
@@ -101,7 +103,7 @@ function getInitialContributionType(
 
 function initialisePaymentMethods(
 	state: State,
-	dispatch: (...args: Array<any>) => any,
+	dispatch: (...args: any[]) => any,
 ) {
 	const { currencyId } = state.common.internationalisation;
 	// initiate fetch of existing payment methods
@@ -160,7 +162,7 @@ function initialisePaymentMethods(
 
 function selectInitialAmounts(
 	state: State,
-	dispatch: (...args: Array<any>) => any,
+	dispatch: (...args: any[]) => any,
 	selectedContributionType: ContributionType,
 ) {
 	const { amounts } = state.common;
@@ -201,7 +203,7 @@ function getContributionTypes(state: State): ContributionTypes {
 
 function selectInitialContributionTypeAndPaymentMethod(
 	state: State,
-	dispatch: (...args: Array<any>) => any,
+	dispatch: (...args: any[]) => any,
 	contributionTypes: ContributionTypes,
 ): ContributionType {
 	const { countryId } = state.common.internationalisation;
@@ -238,7 +240,7 @@ function selectInitialContributionTypeAndPaymentMethod(
 	return contributionType;
 }
 
-const init = (store: Store<State, Action, (...args: Array<any>) => any>) => {
+const init = (store: Store<State, Action, (...args: any[]) => any>) => {
 	const { dispatch } = store;
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation

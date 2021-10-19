@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import React from 'react';
-import { contributionsEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { contributionsEmail } from 'helpers/legal';
 import {
 	ContactPageLink,
 	useDotcomContactPage,

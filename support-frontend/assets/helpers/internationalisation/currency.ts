@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 import { getQueryParameter } from 'helpers/urls/url';
+import type { IsoCountry } from './country';
 import type { CountryGroup, CountryGroupId } from './countryGroup';
 import { countryGroups, fromCountry } from './countryGroup';
-import type { IsoCountry } from './country';
 // ----- Types ----- //
 export type IsoCurrency =
 	| 'GBP'

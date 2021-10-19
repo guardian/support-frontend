@@ -4,6 +4,7 @@ import AnchorButton from 'components/button/anchorButton';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
+
 type PropTypes = {
 	title: string;
 	subtitle: string;

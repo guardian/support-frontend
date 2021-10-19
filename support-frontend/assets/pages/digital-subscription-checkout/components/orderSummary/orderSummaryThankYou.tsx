@@ -1,13 +1,15 @@
-import { $Call } from 'utility-types';
-import React from 'react';
 import { css } from '@emotion/core';
-import { headline, textSans } from '@guardian/src-foundations/typography/obj';
 import { space } from '@guardian/src-foundations';
-import { background, text, neutral } from '@guardian/src-foundations/palette';
-import { from, between, until } from '@guardian/src-foundations/mq';
-type GridImageType = typeof import('components/gridImage/gridImage').default;
+import { between, from, until } from '@guardian/src-foundations/mq';
+import { background, neutral, text } from '@guardian/src-foundations/palette';
+import { headline, textSans } from '@guardian/src-foundations/typography/obj';
+import React from 'react';
+import type { $Call } from 'utility-types';
 import type { GridImg } from 'components/gridImage/gridImage';
 import 'components/gridImage/gridImage';
+
+type GridImageType = typeof import('components/gridImage/gridImage').default;
+
 export const wrapper = css`
 	display: none;
 

@@ -1,15 +1,17 @@
 // ----- Imports ----- //
 import * as React from 'react';
 import Content from 'components/content/content';
-import Text, { LargeParagraph } from 'components/text/text';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import ThankYouHero from './components/thankYou/hero';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	DigitalPack,
+	sendTrackingEventsOnClick,
+} from 'helpers/productPrice/subscriptions';
 import 'helpers/internationalisation/countryGroup';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import Text, { LargeParagraph } from 'components/text/text';
+import ThankYouHero from './components/thankYou/hero';
 // ----- Types ----- //
 type PropTypes = {
 	countryGroupId: CountryGroupId;

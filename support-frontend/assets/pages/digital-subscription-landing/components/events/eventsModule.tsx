@@ -1,24 +1,25 @@
-import React from 'react';
 import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import {
 	background,
 	border,
+	culture,
 	lifestyle,
 	news,
-	culture,
 } from '@guardian/src-foundations/palette';
-import { headline, body, textSans } from '@guardian/src-foundations/typography';
+import { body, headline, textSans } from '@guardian/src-foundations/typography';
+import React from 'react';
+import BlockLabel from 'components/blockLabel/blockLabel';
 import { SvgTicket } from 'components/icons/ticket';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import EventCard from './eventCard';
 import {
-	keirStarmerImage,
 	felicityCloakeImage,
+	keirStarmerImage,
 	woleSoyinkaImage,
 } from './eventsImages';
-import BlockLabel from 'components/blockLabel/blockLabel';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
+
 const container = css`
 	box-sizing: border-box;
 	width: 100%;

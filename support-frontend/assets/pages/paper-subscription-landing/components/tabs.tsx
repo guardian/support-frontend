@@ -2,10 +2,10 @@
 import React from 'react';
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
-import { paperSubsUrl } from 'helpers/urls/routes';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { SubsCardFaqBlock } from './content/subsCardTab';
+import { paperSubsUrl } from 'helpers/urls/routes';
 import { ContentDeliveryFaqBlock } from './content/deliveryTab';
+import { SubsCardFaqBlock } from './content/subsCardTab';
 // ----- Tabs ----- //
 type TabOptions = {
 	name: string;

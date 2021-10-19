@@ -1,10 +1,11 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import { space } from '@guardian/src-foundations';
+import type { Node } from 'react';
+import React from 'react';
+
 type PropTypes = {
 	className: string;
 	appearance: {

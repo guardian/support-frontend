@@ -1,8 +1,12 @@
 // ----- Imports ----- //
 import * as React from 'react';
-import Page from 'components/page/page';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import CentredContainer from 'components/containers/centredContainer';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import Block from 'components/page/block';
+import Page from 'components/page/page';
+import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -14,22 +18,18 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { renderPage } from 'helpers/rendering/render';
-import { routes, promotionTermsUrl } from 'helpers/urls/routes';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
-import FullWidthContainer from 'components/containers/fullWidthContainer';
-import CentredContainer from 'components/containers/centredContainer';
-import Block from 'components/page/block';
-import GiftNonGiftCta from 'components/product/giftNonGiftCta';
+import { renderPage } from 'helpers/rendering/render';
+import { promotionTermsUrl, routes } from 'helpers/urls/routes';
 import 'stylesheets/skeleton/skeleton.scss';
-import { WeeklyHero } from './components/hero/hero';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
+import { WeeklyHero } from './components/hero/hero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 import './weeklySubscriptionLanding.scss';
 import {
-	promoQueryParam,
 	getPromotionCopy,
+	promoQueryParam,
 } from 'helpers/productPrice/promotions';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';

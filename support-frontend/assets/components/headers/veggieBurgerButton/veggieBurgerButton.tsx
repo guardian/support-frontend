@@ -3,12 +3,13 @@ import React from 'react';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import './veggieBurgerButton.scss';
+
 type PropTypes = {
 	children: Node;
 	label: string;
 	'aria-haspopup': Option<string>;
-	onClick: Option<(...args: Array<any>) => any>;
-	getRef: Option<(...args: Array<any>) => any>;
+	onClick: Option<(...args: any[]) => any>;
+	getRef: Option<(...args: any[]) => any>;
 	style: Option<{}>;
 };
 

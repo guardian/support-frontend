@@ -1,4 +1,5 @@
-import { $Keys } from 'utility-types';
+import type { $Keys } from 'utility-types';
+
 const Stripe: 'Stripe' = 'Stripe';
 const PayPal: 'PayPal' = 'PayPal';
 const DirectDebit: 'DirectDebit' = 'DirectDebit';

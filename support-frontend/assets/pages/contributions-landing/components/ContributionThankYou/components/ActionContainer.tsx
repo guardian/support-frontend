@@ -1,8 +1,9 @@
-import * as React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
+import * as React from 'react';
+
 const container = css`
 	background: white;
 	padding-top: ${space[2]}px;

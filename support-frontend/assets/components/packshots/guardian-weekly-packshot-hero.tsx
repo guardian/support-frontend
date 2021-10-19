@@ -1,6 +1,6 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { from, until } from '@guardian/src-foundations/mq';
+import React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 
 /** NOTE about packshot images

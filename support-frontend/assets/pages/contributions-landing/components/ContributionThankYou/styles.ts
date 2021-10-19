@@ -1,5 +1,6 @@
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
+
 const hideAfterDesktop = css`
 	display: block;
 

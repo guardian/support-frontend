@@ -1,16 +1,16 @@
 // ----- Imports ----- //
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import SvgSubscribe from 'components/svgs/subscribe';
-import SvgSubscribed from 'components/svgs/subscribed';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { checkEmail } from 'helpers/forms/formValidation';
-import { logException } from 'helpers/utilities/logger';
 import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import SvgSubscribe from 'components/svgs/subscribe';
+import SvgSubscribed from 'components/svgs/subscribed';
 import 'components/marketingConsent/marketingConsent.scss';
 import Text from 'components/text/text';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { checkEmail } from 'helpers/forms/formValidation';
+import { logException } from 'helpers/utilities/logger';
 // ----- Types ----- //
 type ButtonPropTypes = {
 	confirmOptIn: boolean | null | undefined;
@@ -35,7 +35,7 @@ function MarketingButton(props: ButtonPropTypes) {
 				Signed up
 			</NonInteractiveButton>
 		);
-	} else if (props.requestPending === true) {
+	} else if (props.requestPending) {
 		return (
 			<NonInteractiveButton
 				appearance="greyHollow"

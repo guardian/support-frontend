@@ -1,9 +1,9 @@
 // ----- Imports ----- //
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import CsrBanner from 'components/csr/csrBanner';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 // ----- Types ----- //
 type PropTypes = {
 	id: string | null | undefined;

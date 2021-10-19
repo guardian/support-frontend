@@ -19,6 +19,7 @@ import {
 	applyDiscount,
 	getAppliedPromo,
 } from 'helpers/productPrice/promotions';
+
 const country = 'GB';
 const billingPeriod = Monthly;
 

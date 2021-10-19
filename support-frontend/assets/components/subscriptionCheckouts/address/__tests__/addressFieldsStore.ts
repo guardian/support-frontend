@@ -1,13 +1,14 @@
 // ----- Imports ----- //
 import {
+	addressActionCreatorsFor,
+	addressReducerFor,
+	applyBillingAddressRules,
 	isPostcodeOptional,
 	isStateNullable,
 	setFormErrorsFor,
-	applyBillingAddressRules,
-	addressActionCreatorsFor,
-	addressReducerFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { isHomeDeliveryInM25 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+
 jest.mock('ophan', () => () => ({}));
 // ----- Tests ----- //
 describe('address form fields functionality', () => {

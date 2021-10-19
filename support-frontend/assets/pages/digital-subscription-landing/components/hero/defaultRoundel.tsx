@@ -1,8 +1,9 @@
-import React from 'react';
 import { css } from '@emotion/core';
-import { headline } from '@guardian/src-foundations/typography';
-import { from } from '@guardian/src-foundations/mq';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { headline } from '@guardian/src-foundations/typography';
+import React from 'react';
+
 export const circleTextTop = css`
 	${headline.xsmall({
 		fontWeight: 'bold',

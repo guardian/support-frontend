@@ -1,26 +1,27 @@
-// @ts-ignore - required for hooks
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
-import type { Action } from 'helpers/user/userActions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
+import { Button } from '@guardian/src-button';
+import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
-import { Button } from '@guardian/src-button';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import ActionContainer from './components/ActionContainer';
-import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
-import SvgNotification from './components/SvgNotification';
-import styles from './styles';
-import { OPHAN_COMPONENT_ID_MARKETING } from './utils/ophan';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
+import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import type { Action } from 'helpers/user/userActions';
+import ActionBody from './components/ActionBody';
+import ActionContainer from './components/ActionContainer';
+import ActionHeader from './components/ActionHeader';
+import SvgNotification from './components/SvgNotification';
+import styles from './styles';
+import { OPHAN_COMPONENT_ID_MARKETING } from './utils/ophan';
+
 const checkboxContainer = css`
 	margin-top: ${space[2]}px;
 

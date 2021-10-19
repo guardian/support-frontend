@@ -1,19 +1,20 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { setupSubscriptionPayPalPaymentWithShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
+import React from 'react';
+import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
+import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { setupSubscriptionPayPalPaymentWithShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { finalPrice } from 'helpers/productPrice/productPrices';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import type { Dispatch } from 'redux';
+import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import 'redux';
-import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { finalPrice } from 'helpers/productPrice/productPrices';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type {
@@ -22,16 +23,16 @@ import type {
 } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+
 type PropTypes = {
-	onPayPalCheckoutCompleted: (...args: Array<any>) => any;
+	onPayPalCheckoutCompleted: (...args: any[]) => any;
 	csrf: Csrf;
 	currencyId: IsoCurrency;
 	hasLoaded: boolean;
-	onClick: (...args: Array<any>) => any;
+	onClick: (...args: any[]) => any;
 	billingPeriod: BillingPeriod;
 	isTestUser: boolean;
-	setupRecurringPayPalPayment: (...args: Array<any>) => any;
+	setupRecurringPayPalPayment: (...args: any[]) => any;
 	amount: number;
 	trackingId: string;
 	product: SubscriptionProduct;

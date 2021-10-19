@@ -1,9 +1,10 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
 import { until } from '@guardian/src-foundations/mq';
+import { neutral } from '@guardian/src-foundations/palette';
+import React from 'react';
+import type { Node } from 'react';
+
 const section = css`
 	max-width: 100%;
 	margin: ${space[3]}px;

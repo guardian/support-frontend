@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import React from 'react';
 import { Content } from './Content';
+
 type PropTypes = {
 	appearance: {
 		centred?: boolean;

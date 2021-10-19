@@ -1,33 +1,32 @@
 import React from 'react';
+import type { Product } from 'components/product/productOption';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { currencies } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	billingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
 } from 'helpers/productPrice/billingPeriods';
+import 'components/product/productOption';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import { getSimplifiedPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import {
+	getFirstValidPrice,
+	getProductPrice,
+} from 'helpers/productPrice/productPrices';
+import type { ProductPrice , ProductPrices } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import { promoQueryParam } from 'helpers/productPrice/promotions';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import {
+	fixDecimals,
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import Prices from './content/prices';
-import type { Product } from 'components/product/productOption';
-import 'components/product/productOption';
-import {
-	getProductPrice,
-	getFirstValidPrice,
-} from 'helpers/productPrice/productPrices';
-import { getSimplifiedPriceDescription } from 'helpers/productPrice/priceDescriptions';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { getOrigin, getQueryParameter } from 'helpers/urls/url';
-import type { Promotion } from 'helpers/productPrice/promotions';
-import { promoQueryParam } from 'helpers/productPrice/promotions';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import { currencies } from 'helpers/internationalisation/currency';
-import { fixDecimals } from 'helpers/productPrice/subscriptions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import Prices from './content/prices';
 
 const getCheckoutUrl = (
 	billingPeriod: WeeklyBillingPeriod,

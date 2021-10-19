@@ -1,6 +1,7 @@
+import type { Config, ContributionAmounts } from '../contributions';
 import type { IsoCountry } from './country';
 import type { IsoCurrency } from './currency';
-import type { Config, ContributionAmounts } from '../contributions';
+
 export type LocalCurrencyCountry = {
 	countryCode: IsoCountry;
 	countryName: string;

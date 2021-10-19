@@ -1,18 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import type {
-	State,
-	AmazonPayData,
-} from 'pages/contributions-landing/contributionsLandingReducer';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
-import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
 import Button from 'components/button/button';
-import { logException } from 'helpers/utilities/logger';
 import AnimatedDots from 'components/spinners/animatedDots';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import { logException } from 'helpers/utilities/logger';
+import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
+import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type {
+	AmazonPayData,
+	State,
+} from 'pages/contributions-landing/contributionsLandingReducer';
+
 type PropTypes = {
 	amazonPayData: AmazonPayData;
 	setAmazonPayHasAccessToken: () => Action;
@@ -22,7 +23,7 @@ const mapStateToProps = (state: State) => ({
 	amazonPayData: state.page.form.amazonPayData,
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setAmazonPayHasAccessToken: () => dispatch(setAmazonPayHasAccessToken),
 });
 

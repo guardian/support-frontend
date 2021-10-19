@@ -1,11 +1,12 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
+import React from 'react';
 import FlexContainer from 'components/containers/flexContainer';
-import type { PaymentSelectionPropTypes } from './paymentSelection/helpers/paymentSelection';
 import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
+import type { PaymentSelectionPropTypes } from './paymentSelection/helpers/paymentSelection';
+
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
 `;

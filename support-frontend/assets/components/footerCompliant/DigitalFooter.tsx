@@ -1,8 +1,5 @@
 import React from 'react';
 // styles
-import { promotionTermsUrl } from 'helpers/urls/routes';
-import { getPromotion } from 'helpers/productPrice/promotions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
@@ -12,9 +9,13 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
+import { promotionTermsUrl } from 'helpers/urls/routes';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
+
 type PropTypes = {
 	productPrices: ProductPrices;
 	country: IsoCountry;
@@ -47,7 +48,7 @@ const MaybeLink = (props: { href: Option<string>; text: string }) =>
 const RegularLinks = (props: LinkTypes) => {
 	const annualUrl = getPromoUrl(props.productPrices, props.country, Annual);
 	const monthlyUrl = getPromoUrl(props.productPrices, props.country, Monthly);
-	const multipleOffers: boolean = !!(annualUrl && monthlyUrl);
+	const multipleOffers = !!(annualUrl && monthlyUrl);
 	return (
 		<span>
 			<MaybeLink href={monthlyUrl} text="monthly" />
@@ -65,7 +66,7 @@ const GiftLinks = (props: LinkTypes) => {
 		props.country,
 		Quarterly,
 	);
-	const multipleOffers: boolean = !!(annualUrl && quarterlyUrl);
+	const multipleOffers = !!(annualUrl && quarterlyUrl);
 	return (
 		<span>
 			<MaybeLink href={quarterlyUrl} text="quarterly" />

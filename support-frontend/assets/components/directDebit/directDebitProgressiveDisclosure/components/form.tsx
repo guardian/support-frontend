@@ -1,17 +1,18 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { TextInput } from '@guardian/src-text-input';
-import { Checkbox } from '@guardian/src-checkbox';
-import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonReaderRevenueBrand } from '@guardian/src-button';
+import { Checkbox } from '@guardian/src-checkbox';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import { TextInput } from '@guardian/src-text-input';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import 'helpers/forms/errorReasons';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
+
 const directDebitForm = css`
 	clear: left;
 	margin-top: 20px;
@@ -50,7 +51,7 @@ type PropTypes = {
 	updateAccountHolderConfirmation: EventHandler;
 	onChange: (
 		field: string,
-		dispatchUpdate: (...args: Array<any>) => any,
+		dispatchUpdate: (...args: any[]) => any,
 		event: React.SyntheticEvent<HTMLInputElement>,
 	) => void;
 	onSubmit: EventHandler;

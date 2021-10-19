@@ -1,24 +1,25 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
 import {
-	border,
 	background,
+	border,
 	brandAltBackground,
 } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgCheckmark } from '@guardian/src-icons';
-import { from } from '@guardian/src-foundations/mq';
-import type { TableRow } from './comparisonTable';
+import React from 'react';
 import './comparisonTable';
-import { SvgNews } from 'components/icons/news';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
-import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgCrosswords } from 'components/icons/crosswords';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
+import { SvgNews } from 'components/icons/news';
+import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgPadlock } from 'components/icons/padlock';
 import type { Option } from 'helpers/types/option';
+import type { TableRow } from './comparisonTable';
+
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
 const titleRowHeight = 30;
@@ -129,7 +130,7 @@ const Checkmark = (props: { borderLeft?: Option<string> }) => {
 Checkmark.defaultProps = {
 	borderLeft: null,
 };
-export const tableContent: Array<TableRow> = [
+export const tableContent: TableRow[] = [
 	{
 		icon: (
 			<div css={iconContainer}>

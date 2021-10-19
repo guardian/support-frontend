@@ -1,25 +1,26 @@
 // ----- Imports ----- //
-import React from 'react';
-import { ThemeProvider } from 'emotion-theming';
 import { css } from '@emotion/core';
-import { LinkButton, buttonBrand } from '@guardian/src-button';
-import { SvgArrowDownStraight } from '@guardian/src-icons';
+import { buttonBrand, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { between, from, until } from '@guardian/src-foundations/mq';
-import { body, headline } from '@guardian/src-foundations/typography';
 import { brandAlt } from '@guardian/src-foundations/palette';
+import { body, headline } from '@guardian/src-foundations/typography';
+import { SvgArrowDownStraight } from '@guardian/src-icons';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
-import PageTitle from 'components/page/pageTitle';
 import Hero from 'components/page/hero';
 import HeroRoundel, { roundelSizeMob } from 'components/page/heroRoundel';
+import PageTitle from 'components/page/pageTitle';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import 'helpers/productPrice/productPrices';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getDiscountCopy } from './discountCopy';
+
 type PropTypes = {
 	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;

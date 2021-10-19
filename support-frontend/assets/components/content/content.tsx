@@ -1,10 +1,10 @@
-import { $Keys } from 'utility-types';
 // ----- Imports ----- //
 import type { Node } from 'react';
 import React from 'react';
+import type { $Keys } from 'utility-types';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { Option } from 'helpers/types/option';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import 'helpers/types/option';
 import './content.scss';
 // ---- Types ----- //
@@ -25,7 +25,7 @@ type PropTypes = {
 	id?: Option<string>;
 	children: Node;
 	image: Option<Node>;
-	modifierClasses: Array<string>;
+	modifierClasses: string[];
 	innerBackground?: Option<string>;
 	needsHigherZindex: boolean;
 	border: Option<boolean>;

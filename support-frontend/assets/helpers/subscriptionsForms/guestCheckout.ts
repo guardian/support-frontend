@@ -1,14 +1,15 @@
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { setUserTypeFromIdentityResponse } from 'helpers/subscriptionsForms/formActions';
 import type {
 	CheckoutState,
 	WithDeliveryCheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { setUserTypeFromIdentityResponse } from 'helpers/subscriptionsForms/formActions';
+
 export const fetchAndStoreUserType =
 	(email: string) =>
 	(
-		dispatch: (...args: Array<any>) => any,
+		dispatch: (...args: any[]) => any,
 		getState: () => CheckoutState | WithDeliveryCheckoutState,
 	): void => {
 		const state = getState();

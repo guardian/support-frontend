@@ -1,13 +1,13 @@
-import React from 'react';
 import { css } from '@emotion/core';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import { LargeParagraph, Title } from 'components/text/text';
-import Content from 'components/content/content';
-import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { List } from 'components/list/list';
+import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
+import Content from 'components/content/content';
+import { List } from 'components/list/list';
+import { LargeParagraph, Title } from 'components/text/text';
+import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
 import { routes } from 'helpers/urls/routes';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 const landingPageForProduct = (props: PromotionTerms) => {
 	switch (props.product) {

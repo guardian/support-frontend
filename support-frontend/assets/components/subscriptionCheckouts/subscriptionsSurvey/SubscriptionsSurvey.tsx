@@ -1,10 +1,11 @@
 // ----- Imports ----- //
 import React from 'react';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import AnchorButton from 'components/button/anchorButton';
-import Text from 'components/text/text';
 import Content from 'components/content/content';
+import Text from 'components/text/text';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import './subscriptionsSurvey.scss';
+
 type PropTypes = {
 	product: SubscriptionProduct;
 };

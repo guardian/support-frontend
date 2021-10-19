@@ -1,4 +1,5 @@
 import React from 'react';
+
 export default function SvgSquaresHeroTablet() {
 	return (
 		<svg

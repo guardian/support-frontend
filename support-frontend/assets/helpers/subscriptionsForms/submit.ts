@@ -1,16 +1,30 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
 import 'redux';
+import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import type {
+	PaymentAuthorisation,
 	PaymentResult,
 	RegularPaymentRequest,
 	SubscriptionProductFields,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { Quarterly } from 'helpers/productPrice/billingPeriods';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import {
+	finalPrice,
+	getCurrency,
+	getProductPrice,
+} from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	setFormSubmitted,
@@ -26,37 +40,23 @@ import {
 	getBillingAddressFields,
 	getDeliveryAddressFields,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	finalPrice,
-	getCurrency,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { routes } from 'helpers/urls/routes';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Option } from 'helpers/types/option';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import { routes } from 'helpers/urls/routes';
 import {
 	validateCheckoutForm,
 	validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	DigitalPack,
 	GuardianWeekly,
-	Paper,
 	isPhysicalProduct,
+	Paper,
 } from 'helpers/productPrice/subscriptions';
-import { Quarterly } from 'helpers/productPrice/billingPeriods';
-import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import type { IsoCountry } from '../internationalisation/country';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Functions ----- //
 function getAddresses(state: AnyCheckoutState) {

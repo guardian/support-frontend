@@ -1,21 +1,21 @@
-// @ts-ignore - required for hooks
-import React, { useEffect, useState } from 'react';
+// @ts-expect-error - required for hooks
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
+import React, { useEffect, useState } from 'react';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getStripeKey } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 // Types
 type PropTypes = {
 	country: IsoCountry;
 	isTestUser: boolean;
-	allErrors: FormError<FormField>[];
-	setStripePaymentMethod: (...args: Array<any>) => any;
-	submitForm: (...args: Array<any>) => any;
-	validateForm: (...args: Array<any>) => any;
+	allErrors: Array<FormError<FormField>>;
+	setStripePaymentMethod: (...args: any[]) => any;
+	submitForm: (...args: any[]) => any;
+	validateForm: (...args: any[]) => any;
 	buttonText: string;
 	csrf: Csrf;
 };

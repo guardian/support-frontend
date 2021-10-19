@@ -1,7 +1,7 @@
-import * as storage from 'helpers/storage/storage';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import { checkAccount } from './helpers/ajax';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
+import * as storage from 'helpers/storage/storage';
+import { checkAccount } from './helpers/ajax';
 // ----- Types ----- //
 export type SortCodeIndex = 0 | 1 | 2;
 export type Phase = 'entry' | 'confirmation';
@@ -116,10 +116,10 @@ const setDirectDebitFormPhase = (phase: Phase): Action => ({
 	phase,
 });
 
-function payDirectDebitClicked(): (...args: Array<any>) => any {
+function payDirectDebitClicked(): (...args: any[]) => any {
 	return (
-		dispatch: (...args: Array<any>) => any,
-		getState: (...args: Array<any>) => any,
+		dispatch: (...args: any[]) => any,
+		getState: (...args: any[]) => any,
 	) => {
 		const {
 			sortCodeString,
@@ -181,10 +181,10 @@ function payDirectDebitClicked(): (...args: Array<any>) => any {
 
 function confirmDirectDebitClicked(
 	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void,
-): (...args: Array<any>) => any {
+): (...args: any[]) => any {
 	return (
-		dispatch: (...args: Array<any>) => any,
-		getState: (...args: Array<any>) => any,
+		dispatch: (...args: any[]) => any,
+		getState: (...args: any[]) => any,
 	) => {
 		const { sortCodeString, sortCodeArray, accountNumber, accountHolderName } =
 			getState().page.directDebit;

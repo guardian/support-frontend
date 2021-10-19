@@ -1,10 +1,10 @@
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
 import React, { useEffect, useState } from 'preact/compat';
+import ActionBody from './components/ActionBody';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
-import ActionBody from './components/ActionBody';
-import SvgShare from './components/SvgShare';
 import ShareableArticleContainer from './components/ShareableArticleContainer';
+import SvgShare from './components/SvgShare';
 
 const ContributionThankYouArticleShare = () => {
 	const [articleData, setArticleData] = useState(null);

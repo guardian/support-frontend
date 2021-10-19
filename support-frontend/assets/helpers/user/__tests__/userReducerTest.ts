@@ -1,10 +1,10 @@
 // ----- Imports ----- //
-import { createUserReducer } from '../userReducer';
 import {
 	Canada,
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
+import { createUserReducer } from '../userReducer';
 // ----- Tests ----- //
 describe('user reducer tests', () => {
 	it('should return the initial state', () => {

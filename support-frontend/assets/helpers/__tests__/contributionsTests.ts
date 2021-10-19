@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 import {
-	validateContribution,
-	parseContribution,
 	getMinContribution,
+	parseContribution,
+	validateContribution,
 } from '../contributions';
 import {
 	AUDCountries,

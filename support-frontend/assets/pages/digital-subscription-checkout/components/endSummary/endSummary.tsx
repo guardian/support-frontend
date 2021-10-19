@@ -1,8 +1,9 @@
 import React from 'react';
-import * as styles from './endSummaryStyles';
 import { connect } from 'react-redux';
-import mapStateToProps from './endSummarySelector';
 import { getGiftOrderSummaryText } from '../helpers';
+import mapStateToProps from './endSummarySelector';
+import * as styles from './endSummaryStyles';
+
 export type EndSummaryProps = {
 	priceDescription: string;
 	promotion: string;

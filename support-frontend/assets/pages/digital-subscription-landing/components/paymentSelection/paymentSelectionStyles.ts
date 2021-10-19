@@ -1,6 +1,7 @@
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
+
 export const paymentSelection = css`
 	display: flex;
 	flex-wrap: wrap;

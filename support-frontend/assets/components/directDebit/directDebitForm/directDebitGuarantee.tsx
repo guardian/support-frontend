@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
+
 type PropTypes = {
 	isDDGuaranteeOpen: boolean;
 	openDDGuaranteeClicked: () => void;

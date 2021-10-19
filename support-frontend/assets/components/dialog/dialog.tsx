@@ -30,9 +30,9 @@ class Dialog extends Component<PropTypes> {
 	}
 
 	componentDidUpdate(prevProps: PropTypes) {
-		if (prevProps.open === true && this.props.open === false) {
+		if (prevProps.open && !this.props.open) {
 			this.close();
-		} else if (prevProps.open === false && this.props.open === true) {
+		} else if (!prevProps.open && this.props.open) {
 			this.open();
 		}
 	}
@@ -64,7 +64,7 @@ class Dialog extends Component<PropTypes> {
 
 	ref:
 		| (HTMLDialogElement & {
-				focus: (...args: Array<any>) => any;
+				focus: (...args: any[]) => any;
 		  })
 		| null
 		| undefined;

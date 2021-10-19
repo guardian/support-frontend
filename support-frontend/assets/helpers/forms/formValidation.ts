@@ -3,26 +3,27 @@
 // src/main/scala/play/api/data/validation/Validation.scala#L81
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
+import { DateUtils } from 'react-day-picker';
 import { config } from 'helpers/contributions';
-import type {
-	CountryGroup,
-	CountryGroupId,
-} from 'helpers/internationalisation/countryGroup';
 import type {
 	ContributionType,
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
-import {
-	Canada,
-	UnitedStates,
-	AUDCountries,
-	countryGroups,
-} from '../internationalisation/countryGroup';
-import { DateUtils } from 'react-day-picker';
-import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
-import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
+import type {
+	CountryGroup,
+	CountryGroupId,
+} from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
+import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
+import {
+	AUDCountries,
+	Canada,
+	countryGroups,
+	UnitedStates,
+} from '../internationalisation/countryGroup';
+import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
+
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
 export const isEmpty: (arg0: string | null) => boolean = (input) =>

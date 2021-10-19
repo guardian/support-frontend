@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { createStore } from 'redux';
+import React from 'react';
 import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import { paperProducts } from '__mocks__/productInfoMocks';
 import GridImage from 'components/gridImage/gridImage';
 import PaperOrderSummary from './orderSummary';

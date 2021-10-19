@@ -1,16 +1,16 @@
 // ----- Imports ----- //
+import { isTestSwitchedOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import { currencies, detect } from '../internationalisation/currency';
 import { trackComponentEvents } from '../tracking/ophan';
 import type {
 	OphanAction,
 	OphanComponentEvent,
 	OphanComponentType,
 } from '../tracking/ophan';
-import { currencies, detect } from '../internationalisation/currency';
-import { isTestSwitchedOn } from 'helpers/globalsAndSwitches/globals';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 // ----- Types ------ //
 const DigitalPack: 'DigitalPack' = 'DigitalPack';
 const PremiumTier: 'PremiumTier' = 'PremiumTier';

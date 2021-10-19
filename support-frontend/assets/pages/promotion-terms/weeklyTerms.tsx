@@ -1,21 +1,22 @@
 import React from 'react';
 import { SansParagraph } from 'components/text/text';
-import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import {
 	fromCountryGroupName,
 	International,
 } from 'helpers/internationalisation/countryGroup';
-import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { extendedGlyph } from 'helpers/internationalisation/currency';
 import {
 	Annual,
 	postIntroductorySixForSixBillingPeriod,
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
+import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
+import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
+
 type NameAndSaving = {
 	name: CountryGroupName;
 	saving: string | null | undefined;

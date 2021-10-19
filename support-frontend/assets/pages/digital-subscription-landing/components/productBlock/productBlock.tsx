@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unused-prop-types */
-import React from 'react';
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
+import React from 'react';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import GridPicture from 'components/gridPicture/gridPicture';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -10,9 +10,10 @@ import { ListHeading } from 'components/productPage/productPageList/productPageL
 import BlockLabel from 'components/blockLabel/blockLabel';
 import {
 	Dropdown,
-	ProductCard,
 	ProductBlockSection,
+	ProductCard,
 } from './productBlockComponents';
+
 const labelMobileMargin = css`
 	margin-top: 20px;
 

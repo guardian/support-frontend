@@ -1,11 +1,11 @@
+import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	displayPrice,
 	getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	getAppliedPromo,
 	hasDiscount,

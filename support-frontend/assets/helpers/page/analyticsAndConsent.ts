@@ -1,16 +1,16 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
-import * as logger from 'helpers/utilities/logger';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import {
-	trackAbTests,
 	setReferrerDataInLocalStorage,
+	trackAbTests,
 } from 'helpers/tracking/ophan';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { isPostDeployUser } from 'helpers/user/user';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import * as logger from 'helpers/utilities/logger';
 import 'helpers/internationalisation/country';
 // ----- Functions ----- //
 // Sets up GA and logging.

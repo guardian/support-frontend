@@ -1,35 +1,38 @@
 // ----- Imports ----- //
-// @ts-ignore - required for hooks
-import React, { useEffect, useState, useRef } from 'react';
+// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
+import { TextInput } from '@guardian/src-text-input';
 import {
 	CardCvcElement,
 	CardExpiryElement,
 	CardNumberElement,
 } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import { TextInput } from '@guardian/src-text-input';
+import { Recaptcha } from 'components/recaptcha/recaptcha';
+import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
+import type { ContributionType } from 'helpers/contributions';
+import type { PaymentResult } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { Stripe } from 'helpers/forms/paymentMethods';
 import type {
 	State,
 	Stripe3DSResult,
 } from 'pages/contributions-landing/contributionsLandingReducer';
-import { Stripe } from 'helpers/forms/paymentMethods';
-import type { PaymentResult } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
-	paymentWaiting as setPaymentWaiting,
 	setCreateStripePaymentMethod,
 	setHandleStripe3DS,
+	paymentWaiting as setPaymentWaiting,
 	setStripeCardFormComplete,
 	setStripeRecurringRecaptchaVerified,
 	setStripeSetupIntentClientSecret,
+	updateRecaptchaToken,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type { ContributionType } from 'helpers/contributions';
 import 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { logException } from 'helpers/utilities/logger';
@@ -39,13 +42,10 @@ import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { updateRecaptchaToken } from '../../contributionsLandingActions';
 import { routes } from 'helpers/urls/routes';
-import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { InlineError } from '@guardian/src-user-feedback';
 import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
-import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 // ----- Types -----//
 
@@ -94,7 +94,7 @@ const mapStateToProps = (state: State) => ({
 	oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	onPaymentAuthorised: (paymentMethodId: string) =>
 		dispatch(
 			onThirdPartyPaymentAuthorised({

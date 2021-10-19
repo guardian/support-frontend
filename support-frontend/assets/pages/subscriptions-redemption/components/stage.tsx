@@ -4,20 +4,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ReaderType } from 'helpers/productPrice/readerType';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import type { Option } from 'helpers/types/option';
+import type { User } from 'helpers/user/user';
+import { createSubscription } from 'pages/subscriptions-redemption/api';
 import type {
 	Action,
 	RedemptionPageState,
 	Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { User } from 'helpers/user/user';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Participations } from 'helpers/abTests/abtest';
-import { createSubscription } from 'pages/subscriptions-redemption/api';
-import type { Option } from 'helpers/types/option';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { ReaderType } from 'helpers/productPrice/readerType';
 // ----- Types ----- //
 type PropTypes = {
 	stage: Stage;

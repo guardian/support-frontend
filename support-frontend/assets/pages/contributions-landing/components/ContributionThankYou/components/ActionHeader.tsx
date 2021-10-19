@@ -1,7 +1,8 @@
-import * as React from 'react';
 import { css } from '@emotion/core';
-import { body } from '@guardian/src-foundations/typography';
 import { from } from '@guardian/src-foundations/mq';
+import { body } from '@guardian/src-foundations/typography';
+import * as React from 'react';
+
 const text = css`
 	${body.medium({
 		fontWeight: 'bold',

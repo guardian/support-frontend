@@ -4,14 +4,14 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import {
-	getProductPrice,
-	getFirstValidPrice,
-	finalPrice,
-	getCurrency,
-	getCountryGroup,
-	showPrice,
 	displayPrice,
+	finalPrice,
+	getCountryGroup,
+	getCurrency,
+	getFirstValidPrice,
+	getProductPrice,
 	isNumeric,
+	showPrice,
 } from 'helpers/productPrice/productPrices';
 // ----- Tests ----- //
 jest.mock('ophan', () => {});

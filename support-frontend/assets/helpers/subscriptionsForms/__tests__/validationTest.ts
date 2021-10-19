@@ -1,11 +1,11 @@
 // ----- Imports ----- //
 import {
-	nonEmptyString,
-	notNull,
 	firstError,
 	formError,
-	validate,
+	nonEmptyString,
 	nonSillyCharacters,
+	notNull,
+	validate,
 } from '../validation';
 // ----- Tests ----- //
 describe('validation', () => {

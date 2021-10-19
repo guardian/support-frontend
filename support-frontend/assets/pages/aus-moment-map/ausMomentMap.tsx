@@ -1,14 +1,14 @@
 // ----- Imports ----- //
-// @ts-ignore
-import * as React from 'preact/compat';
-import * as ophan from 'ophan';
+// @ts-expect-error
 import { motion } from 'framer-motion';
+import * as ophan from 'ophan';
+import * as React from 'preact/compat';
 import { renderPage } from 'helpers/rendering/render';
 import './ausMomentMap.scss';
-import { Header } from 'pages/aus-moment-map/components/header';
-import { Map } from 'pages/aus-moment-map/components/map';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
+import { Header } from 'pages/aus-moment-map/components/header';
+import { Map } from 'pages/aus-moment-map/components/map';
 import type { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import 'pages/aus-moment-map/types/testimonials';
 import { TestimonialsContainer } from './components/testimonialsContainer';

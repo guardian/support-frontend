@@ -1,4 +1,7 @@
 // ----- Routes ----- //
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { Option } from 'helpers/types/option';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { countryGroups } from '../internationalisation/countryGroup';
 import {
@@ -7,10 +10,8 @@ import {
 	getOrigin,
 	isProd,
 } from './url';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
+
 const routes: Record<string, string> = {
 	recurringContribCheckout: '/contribute/recurring',
 	recurringContribCreate: '/contribute/recurring/create',
@@ -54,7 +55,7 @@ function postcodeLookupUrl(postcode: string): string {
 }
 
 function paperSubsUrl(
-	withDelivery: boolean = false,
+	withDelivery = false,
 	promoCode?: Option<string>,
 ): string {
 	const baseURL = [

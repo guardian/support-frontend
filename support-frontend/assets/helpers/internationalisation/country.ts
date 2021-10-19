@@ -1,8 +1,8 @@
-import { $Keys } from 'utility-types';
+import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
-import { getQueryParameter } from 'helpers/urls/url';
 import * as cookie from 'helpers/storage/cookie';
 import type { Option } from 'helpers/types/option';
+import { getQueryParameter } from 'helpers/urls/url';
 import 'helpers/types/option';
 import {
 	AUDCountries,
@@ -476,7 +476,7 @@ function stateProvinceFromString(
 
 function fromString(s: string): IsoCountry | null | undefined {
 	const candidateIso = s.toUpperCase();
-	const isoCountryArray: Array<IsoCountry> = Object.keys(countries);
+	const isoCountryArray: IsoCountry[] = Object.keys(countries);
 	const isoIndex = isoCountryArray.indexOf(candidateIso);
 
 	if (candidateIso === 'UK') {

@@ -1,15 +1,15 @@
-// @ts-ignore
-import * as React from 'preact/compat';
+// @ts-expect-error
 import { LinkButton } from '@guardian/src-button';
-import type {
-	TestimonialsCollection,
-	Testimonial,
-} from 'pages/aus-moment-map/types/testimonials';
 import { Button } from '@guardian/src-button';
-import { useWindowWidth } from '../hooks/useWindowWidth';
-import { contributeUrl } from '../utils';
 import { buttonDefault } from '@guardian/src-foundations/themes';
 import { ThemeProvider } from 'emotion-theming';
+import * as React from 'preact/compat';
+import type {
+	Testimonial,
+	TestimonialsCollection,
+} from 'pages/aus-moment-map/types/testimonials';
+import { useWindowWidth } from '../hooks/useWindowWidth';
+import { contributeUrl } from '../utils';
 
 const TestimonialCtaPrimary = () => (
 	<div className="testimonial-cta testimonial-cta-primary">
@@ -78,7 +78,7 @@ const TERRITORY_CODE_TO_FULL_NAME = {
 type TestimonialsForTerritoryProps = {
 	territory: string;
 	shouldScrollIntoView: boolean;
-	testimonials: Array<Testimonial>;
+	testimonials: Testimonial[];
 	selectedTerritory: string;
 	setSelectedTerritory: (arg0: string) => void;
 };
@@ -213,7 +213,7 @@ const TestimonialsForTerritory = (props: TestimonialsForTerritoryProps) => {
 };
 
 type TestimonialsExpandableSingleColumnProps = {
-	testimonials: Array<React.ReactNode>;
+	testimonials: React.ReactNode[];
 };
 const UNEXPANDED_NUMBER_OF_TESTIMONIALS = 3;
 
@@ -247,8 +247,8 @@ const TestimonialsExpandableSingleColumn = (
 };
 
 type TestimonialTwoColumnsProps = {
-	firstColumn: Array<React.ReactNode>;
-	secondColumn: Array<React.ReactNode>;
+	firstColumn: React.ReactNode[];
+	secondColumn: React.ReactNode[];
 };
 
 const TestimonialsTwoColumns = (props: TestimonialTwoColumnsProps) => (

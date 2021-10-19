@@ -2,37 +2,37 @@
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import 'helpers/forms/errorReasons';
 import { combineReducers } from 'redux';
+import 'helpers/contributions';
+import 'helpers/page/commonReducer';
+import 'helpers/internationalisation/country';
+import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type {
 	ContributionType,
+	OtherAmounts,
+	SelectedAmounts,
 	ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
-import 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
-import type { CommonState } from 'helpers/page/commonReducer';
-import 'helpers/page/commonReducer';
-import type { StateProvince } from 'helpers/internationalisation/country';
-import 'helpers/internationalisation/country';
-import type { User as UserState } from 'helpers/user/userReducer';
-import { createUserReducer } from 'helpers/user/userReducer';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
-import 'components/directDebit/directDebitReducer';
-import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import * as storage from 'helpers/storage/storage';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import 'helpers/identityApis';
 import type { Action } from './contributionsLandingActions';
 import './contributionsLandingActions';
-import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
-import '../../components/marketingConsent/marketingConsentReducer';
-import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type {
+	IsoCountry,
+	StateProvince,
+} from 'helpers/internationalisation/country';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { createUserReducer } from 'helpers/user/userReducer';
+import type { User as UserState } from 'helpers/user/userReducer';
+import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
+import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import type { IsoCountry } from '../../helpers/internationalisation/country';
 // ----- Types ----- //
 export type UserFormData = {
 	firstName: string | null;

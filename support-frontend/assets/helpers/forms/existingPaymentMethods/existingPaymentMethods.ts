@@ -1,14 +1,14 @@
 // ----- Imports ----- //
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { fetchJson } from 'helpers/async/fetch';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { logException } from '../../utilities/logger';
+import { getPaymentLabel } from '../checkouts';
 import {
 	DirectDebit,
 	ExistingCard,
 	ExistingDirectDebit,
 	Stripe,
 } from '../paymentMethods';
-import { getPaymentLabel } from '../checkouts';
 // ----- Types ----- //
 export type ExistingPaymentMethodSubscription = {
 	isActive: boolean;

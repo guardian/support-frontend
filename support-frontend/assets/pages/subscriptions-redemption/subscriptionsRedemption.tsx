@@ -1,17 +1,18 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { renderPage } from 'helpers/rendering/render';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
-import Page from 'components/page/page';
 import Footer from 'components/footerCompliant/Footer';
-import 'stylesheets/skeleton/skeleton.scss';
-import CheckoutStage from './components/stage';
-import reducer from './subscriptionsRedemptionReducer';
-import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
 import Header from 'components/headers/header/header';
-import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
-import MarketingConsent from './marketingConsentContainer';
+import Page from 'components/page/page';
+import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { renderPage } from 'helpers/rendering/render';
+import 'stylesheets/skeleton/skeleton.scss';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
+import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
+import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
+import CheckoutStage from './components/stage';
+import MarketingConsent from './marketingConsentContainer';
+import reducer from './subscriptionsRedemptionReducer';
+
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 const store = initRedux(reducer, true);

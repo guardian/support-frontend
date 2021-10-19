@@ -1,14 +1,15 @@
 import { css } from '@emotion/core';
-import { textSans } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
+import { from, until } from '@guardian/src-foundations/mq';
 import {
 	brand,
-	neutral,
-	brandText,
 	brandAlt,
 	brandBackground,
+	brandText,
+	neutral,
 } from '@guardian/src-foundations/palette';
-import { from, until } from '@guardian/src-foundations/mq';
-import { space } from '@guardian/src-foundations';
+import { textSans } from '@guardian/src-foundations/typography';
+
 export const componentFooter = css`
 	&,
 	& *,

@@ -1,6 +1,6 @@
-// @ts-ignore - required for hooks
-import { useEffect, useState, useRef } from 'react';
+// @ts-expect-error - required for hooks
 import libDebounce from 'lodash.debounce';
+import { useEffect, useRef, useState } from 'react';
 
 const useHasBeenSeen = (
 	options: IntersectionObserverOptions & {

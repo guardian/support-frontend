@@ -1,11 +1,12 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
-import GridImage from 'components/gridImage/gridImage';
+import { neutral } from '@guardian/src-foundations/palette';
+import React from 'react';
+import type { Node } from 'react';
 import FlexContainer from 'components/containers/flexContainer';
+import GridImage from 'components/gridImage/gridImage';
+
 type BenefitsSection = {
 	id: string;
 	content: Node;

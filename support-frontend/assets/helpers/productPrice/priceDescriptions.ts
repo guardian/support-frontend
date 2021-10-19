@@ -1,22 +1,24 @@
-import { fixDecimals } from 'helpers/productPrice/subscriptions';
+import {
+	extendedGlyph,
+	glyph as shortGlyph,
+} from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
-	billingPeriodNoun as upperCaseNoun,
 	billingPeriodAdverb,
 	postIntroductorySixForSixBillingPeriod,
+	billingPeriodNoun as upperCaseNoun,
 } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import {
-	glyph as shortGlyph,
-	extendedGlyph,
-} from 'helpers/internationalisation/currency';
-import type { IntroductoryPriceBenefit } from 'helpers/productPrice/promotions';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import type {
+	IntroductoryPriceBenefit,
+	Promotion,
+} from 'helpers/productPrice/promotions';
 import {
 	getAppliedPromo,
 	hasDiscount,
 	hasIntroductoryPrice,
 } from 'helpers/productPrice/promotions';
+import { fixDecimals } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 
 const displayPrice = (glyph: string, price: number) =>
@@ -36,10 +38,8 @@ const billingPeriodQuantifier = (
 		: ` for 1 ${noun}`;
 };
 
-const billingPeriodNoun = (
-	billingPeriod: BillingPeriod,
-	fixedTerm: boolean = false,
-) => upperCaseNoun(billingPeriod, fixedTerm).toLowerCase();
+const billingPeriodNoun = (billingPeriod: BillingPeriod, fixedTerm = false) =>
+	upperCaseNoun(billingPeriod, fixedTerm).toLowerCase();
 
 const standardRate = (
 	glyph: string,
@@ -121,8 +121,8 @@ const getIntroductoryPriceDescription = (
 function getPriceDescription(
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
-	compact: boolean = false,
-	useExtendedGlyph: boolean = true,
+	compact = false,
+	useExtendedGlyph = true,
 ): string {
 	const glyphFn = useExtendedGlyph ? extendedGlyph : shortGlyph;
 	const glyph = glyphFn(productPrice.currency);

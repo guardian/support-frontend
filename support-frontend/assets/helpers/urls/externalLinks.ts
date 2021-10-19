@@ -1,18 +1,17 @@
 // ----- Imports ----- //
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { deriveSubsAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { Participations } from 'helpers/abTests/abtest';
-import { getBaseDomain } from 'helpers/urls/url';
 import type {
 	DigitalBillingPeriod,
 	DigitalGiftBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { getOrigin } from './url';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { deriveSubsAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Option } from 'helpers/types/option';
+import { getBaseDomain, getOrigin } from 'helpers/urls/url';
 // ----- Types ----- //
 export type MemProduct = 'patrons' | 'events';
 export type SubsUrls = {

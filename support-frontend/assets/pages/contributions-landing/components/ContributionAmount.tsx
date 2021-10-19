@@ -1,12 +1,15 @@
 // ----- Imports ----- //
-import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import type {
 	ContributionAmounts,
 	ContributionType,
+	OtherAmounts,
+	SelectedAmounts,
 } from 'helpers/contributions';
 import { config } from 'helpers/contributions';
+import { formatAmount } from 'helpers/forms/checkouts';
+import { amountIsValid } from 'helpers/forms/formValidation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -14,10 +17,8 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { amountIsValid } from 'helpers/forms/formValidation';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { formatAmount } from 'helpers/forms/checkouts';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	selectAmount,
 	updateOtherAmount,
@@ -69,7 +70,7 @@ const mapStateToProps = (state: State) => ({
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	selectAmount: (amount, countryGroupId, contributionType) => () => {
 		trackComponentClick(
 			`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${

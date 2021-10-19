@@ -1,17 +1,22 @@
 // ----- Imports ----- //
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import ProgressMessage from 'components/progressMessage/progressMessage';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import ContributionTicker from 'components/ticker/contributionTicker';
+import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import ContributionTicker from 'components/ticker/contributionTicker';
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
+import { ContributionsArticleCountWithOptOut } from './ContributionArticleCount';
 import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import {
@@ -20,19 +25,14 @@ import {
 	setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
-import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import {
 	PreviousGivingBodyCopy,
 	PreviousGivingHeaderCopy,
 } from './ContributionsFormBlurbPreviousGiving';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import ProgressMessage from 'components/progressMessage/progressMessage';
-import { ContributionsArticleCountWithOptOut } from './ContributionArticleCount';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { glyph } from 'helpers/internationalisation/currency';
-import { get, set, remove } from 'helpers/storage/cookie';
+import { get, remove, set } from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
 // ----- Types ----- //
 
@@ -70,7 +70,7 @@ const mapStateToProps = (state: State) => ({
 		state.common.abParticipations.articleCountTest === 'variant',
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setPaymentIsWaiting: (isWaiting) => {
 		dispatch(paymentWaiting(isWaiting));
 	},

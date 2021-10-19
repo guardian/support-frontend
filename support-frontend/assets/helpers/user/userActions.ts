@@ -72,11 +72,11 @@ export type UserSetStateActions = {
 	// contributions landing page state as well as update the user state, hence the union type.
 	setIsSignedIn: (
 		arg0: boolean,
-	) => Action | ((arg0: (...args: Array<any>) => any) => void);
+	) => Action | ((arg0: (...args: any[]) => any) => void);
 	setIsRecurringContributor: () =>
 		| Action
-		| ((arg0: (...args: Array<any>) => any) => void);
+		| ((arg0: (...args: any[]) => any) => void);
 	setStateField: (
 		arg0: string,
-	) => Action | ((arg0: (...args: Array<any>) => any) => void);
+	) => Action | ((arg0: (...args: any[]) => any) => void);
 };

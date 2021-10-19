@@ -1,14 +1,15 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { textSans, headline } from '@guardian/src-foundations/typography';
+import { Button } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
 import { logException } from 'helpers/utilities/logger';
-import { Button } from '@guardian/src-button';
 import 'components/marketingConsent/marketingConsent.scss';
+
 const minorHeading = css`
 	${headline.xxsmall({
 		fontWeight: 'bold',

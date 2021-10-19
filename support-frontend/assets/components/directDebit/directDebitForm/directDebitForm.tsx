@@ -2,9 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import ErrorMessage from 'components/errorMessage/errorMessage';
-import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
-import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import type {
 	Action,
 	Phase,
@@ -21,20 +18,23 @@ import {
 	updateAccountNumber,
 	updateSortCode,
 } from 'components/directDebit/directDebitActions';
+import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
+import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
+import ErrorMessage from 'components/errorMessage/errorMessage';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
-import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
-import { contributionsEmail } from 'helpers/legal';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { contributionsEmail } from 'helpers/legal';
 import './directDebitForm.scss';
 // ---- Types ----- //
 type PropTypes = {
 	buttonText: string;
 	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
 	isDDGuaranteeOpen: boolean;
-	sortCodeArray: Array<string>;
+	sortCodeArray: string[];
 	accountNumber: string;
 	accountHolderName: string;
 	accountHolderConfirmation: boolean;
@@ -175,7 +175,7 @@ const DirectDebitForm = (props: PropTypes) => (
 // ----- Auxiliary components ----- //
 function AccountNumberInput(props: {
 	phase: Phase;
-	onChange: (...args: Array<any>) => any;
+	onChange: (...args: any[]) => any;
 	value: string;
 }) {
 	const editable = (
@@ -213,7 +213,7 @@ function AccountNumberInput(props: {
 function AccountHolderNameInput(props: {
 	phase: Phase;
 	value: string;
-	onChange: (...args: Array<any>) => any;
+	onChange: (...args: any[]) => any;
 }) {
 	const editable = (
 		<input
@@ -241,7 +241,7 @@ function AccountHolderNameInput(props: {
 function ConfirmationInput(props: {
 	phase: Phase;
 	checked: boolean;
-	onChange: (...args: Array<any>) => any;
+	onChange: (...args: any[]) => any;
 }) {
 	const editable = (
 		<span>
@@ -300,9 +300,9 @@ function ConfirmationInput(props: {
 function PaymentButton(props: {
 	buttonText: string;
 	phase: Phase;
-	onPayClick: (...args: Array<any>) => any;
-	onEditClick: (...args: Array<any>) => any;
-	onConfirmClick: (...args: Array<any>) => any;
+	onPayClick: (...args: any[]) => any;
+	onEditClick: (...args: any[]) => any;
+	onConfirmClick: (...args: any[]) => any;
 }) {
 	if (props.phase === 'entry') {
 		return (

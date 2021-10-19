@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
-import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import thunk from 'redux-thunk';
 import { digitalProducts } from '__mocks__/productInfoMocks';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DigitalCheckoutFormGift from './digitalCheckoutFormGift';
 
 const pageReducer = (commonState) =>

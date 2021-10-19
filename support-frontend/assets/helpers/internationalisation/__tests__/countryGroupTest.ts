@@ -8,6 +8,7 @@ import {
 	International,
 	UnitedStates,
 } from '../countryGroup';
+
 const { jsdom } = global;
 // ----- Tests ----- //
 describe('detect countryGroup', () => {

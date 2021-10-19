@@ -1,18 +1,18 @@
-import { directDebitReducer as reducer } from '../directDebitReducer';
 import {
-	openDirectDebitPopUp,
+	closeDirectDebitGuarantee,
 	closeDirectDebitPopUp,
 	openDirectDebitGuarantee,
-	closeDirectDebitGuarantee,
+	openDirectDebitPopUp,
+	resetDirectDebitFormError,
+	setDirectDebitFormError,
+	setDirectDebitFormPhase,
+	updateAccountHolderConfirmation,
+	updateAccountHolderName,
+	updateAccountNumber,
 	updateSortCode,
 	updateSortCodeString,
-	updateAccountNumber,
-	updateAccountHolderName,
-	updateAccountHolderConfirmation,
-	setDirectDebitFormError,
-	resetDirectDebitFormError,
-	setDirectDebitFormPhase,
 } from '../directDebitActions';
+import { directDebitReducer as reducer } from '../directDebitReducer';
 // ----- Tests ----- //
 describe('direct debit reducer tests', () => {
 	it('should return the initial state', () => {

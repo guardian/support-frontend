@@ -2,7 +2,7 @@
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { SubscriptionProduct } from './productPrice/subscriptions';
 // ----- Terms & Conditions ----- //
-const defaultContributionTermsLink: string =
+const defaultContributionTermsLink =
 	'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
 const contributionsTermsLinks: Record<CountryGroupId, string> = {
 	GBPCountries: defaultContributionTermsLink,
@@ -16,8 +16,7 @@ const contributionsTermsLinks: Record<CountryGroupId, string> = {
 	Canada: defaultContributionTermsLink,
 };
 // TBD update these before or early in the moment launch
-const defaultPhilanthropyContactEmail: string =
-	'us.philanthropy@theguardian.com';
+const defaultPhilanthropyContactEmail = 'us.philanthropy@theguardian.com';
 const philanthropyContactEmail: Record<CountryGroupId, string> = {
 	GBPCountries: defaultPhilanthropyContactEmail,
 	UnitedStates: defaultPhilanthropyContactEmail,

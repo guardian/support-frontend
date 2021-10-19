@@ -1,23 +1,24 @@
-// @ts-ignore - required for hooks
+// @ts-expect-error - required for hooks
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import {
+	setAmazonPayBillingAgreementConsentStatus,
+	setAmazonPayBillingAgreementId,
+	setAmazonPayOrderReferenceId,
+	setAmazonPayPaymentSelected,
+	setAmazonPayWalletIsStale,
+} from 'pages/contributions-landing/contributionsLandingActions';
 import type {
 	AmazonPayData,
 	State,
 } from 'pages/contributions-landing/contributionsLandingReducer';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
-import {
-	setAmazonPayWalletIsStale,
-	setAmazonPayOrderReferenceId,
-	setAmazonPayPaymentSelected,
-	setAmazonPayBillingAgreementId,
-	setAmazonPayBillingAgreementConsentStatus,
-} from 'pages/contributions-landing/contributionsLandingActions';
-import { connect } from 'react-redux';
 import './AmazonPay.scss';
 import { logException } from 'helpers/utilities/logger';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { ContributionType } from 'helpers/contributions';
 import { InlineError } from '@guardian/src-user-feedback';
+
 type PropTypes = {
 	amazonPayData: AmazonPayData;
 	setAmazonPayWalletIsStale: (arg0: boolean) => Action;
@@ -36,7 +37,7 @@ const mapStateToProps = (state: State) => ({
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
-const mapDispatchToProps = (dispatch: (...args: Array<any>) => any) => ({
+const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setAmazonPayWalletIsStale: (isReady: boolean) =>
 		dispatch(setAmazonPayWalletIsStale(isReady)),
 	setAmazonPayOrderReferenceId: (orderReferenceId: string) =>

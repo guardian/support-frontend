@@ -3,10 +3,11 @@ import type { Node } from 'react';
 import React, { Component } from 'react';
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { Position } from '../mobileMenu/mobileMenu';
 import MobileMenu from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 export default class MobileMenuToggler extends Component<
 	{
 		utility: Node;

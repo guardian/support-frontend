@@ -1,15 +1,16 @@
 // ----- Imports ----- //
+import { css } from '@emotion/core';
+import { Accordion } from '@guardian/src-accordion';
+import { space } from '@guardian/src-foundations';
+import { from, until } from '@guardian/src-foundations/mq';
+import { neutral } from '@guardian/src-foundations/palette';
+import { textSans } from '@guardian/src-foundations/typography';
 import React from 'react';
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
-import { Accordion } from '@guardian/src-accordion';
-import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
-import { space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
-import { TabAccordionRow } from './tabAccordionRow';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { TabAccordionRow } from './tabAccordionRow';
+
 const flexContainerOverride = css`
 	align-items: flex-start;
 	justify-content: space-between;

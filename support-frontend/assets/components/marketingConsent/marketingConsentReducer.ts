@@ -14,9 +14,7 @@ const initialState: State = {
 };
 
 // ----- Reducer ----- //
-function marketingConsentReducerFor(
-	scope: string,
-): (...args: Array<any>) => any {
+function marketingConsentReducerFor(scope: string): (...args: any[]) => any {
 	const marketingConsentReducer = (
 		state: State = initialState,
 		action: Action,

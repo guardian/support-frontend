@@ -1,20 +1,20 @@
 // ----- Imports ----- //
-// @ts-ignore - required for hooks
-import React, { useEffect, useState } from 'react';
+// @ts-expect-error - required for hooks
+import { Button, buttonBrand, LinkButton } from '@guardian/src-button';
 import { ThemeProvider } from 'emotion-theming';
-import { Button, LinkButton, buttonBrand } from '@guardian/src-button';
+import React, { useEffect, useState } from 'react';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
-	clickedCss,
-	hideWidget,
-	wrapper,
-	widgetTitle,
 	buttonStyles,
+	clickedCss,
 	feedbackLink,
 	header,
+	hideWidget,
+	widgetTitle,
+	wrapper,
 } from './feedbackWidgetStyles';
-import { SvgThumbsUp } from './thumbsUp';
 import { SvgThumbsDown } from './thumbsDown';
+import { SvgThumbsUp } from './thumbsUp';
 
 function FeedbackWidget({ display }: { display: boolean }) {
 	const [showWidget, setShowWidget] = useState<boolean>(display);

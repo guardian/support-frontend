@@ -1,8 +1,9 @@
-import type { Node } from 'react';
-import React from 'react';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { body } from '@guardian/src-foundations/typography';
+import React from 'react';
+import type { Node } from 'react';
+
 type PropTypes = {
 	children: Node;
 	icon?: Node;

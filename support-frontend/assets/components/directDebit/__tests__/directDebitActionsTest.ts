@@ -1,16 +1,17 @@
 import {
-	openDirectDebitPopUp,
+	closeDirectDebitGuarantee,
 	closeDirectDebitPopUp,
 	openDirectDebitGuarantee,
-	closeDirectDebitGuarantee,
-	updateSortCode,
-	updateSortCodeString,
+	openDirectDebitPopUp,
+	resetDirectDebitFormError,
+	setDirectDebitFormError,
+	updateAccountHolderConfirmation,
 	updateAccountHolderName,
 	updateAccountNumber,
-	updateAccountHolderConfirmation,
-	setDirectDebitFormError,
-	resetDirectDebitFormError,
+	updateSortCode,
+	updateSortCodeString,
 } from '../directDebitActions';
+
 describe('actions', () => {
 	it('should create an action to open the direct debit pop up', () => {
 		const expectedAction = {
@@ -37,7 +38,7 @@ describe('actions', () => {
 		expect(closeDirectDebitGuarantee()).toEqual(expectedAction);
 	});
 	it('should create an action to update the sort code', () => {
-		const partialSortCode: string = '12';
+		const partialSortCode = '12';
 		const expectedAction = {
 			type: 'DIRECT_DEBIT_UPDATE_SORT_CODE',
 			index: 0,
@@ -46,7 +47,7 @@ describe('actions', () => {
 		expect(updateSortCode(0, partialSortCode)).toEqual(expectedAction);
 	});
 	it('should create an action to update the sort code string', () => {
-		const sortCodeString: string = '121212';
+		const sortCodeString = '121212';
 		const expectedAction = {
 			type: 'DIRECT_DEBIT_UPDATE_SORT_CODE_STRING',
 			sortCodeString,
@@ -54,7 +55,7 @@ describe('actions', () => {
 		expect(updateSortCodeString(sortCodeString)).toEqual(expectedAction);
 	});
 	it('should create an action to update the account number', () => {
-		const accountNumber: string = '123456789';
+		const accountNumber = '123456789';
 		const expectedAction = {
 			type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_NUMBER',
 			accountNumber,
@@ -62,7 +63,7 @@ describe('actions', () => {
 		expect(updateAccountNumber(accountNumber)).toEqual(expectedAction);
 	});
 	it('should create an action to update the account holder name', () => {
-		const accountHolderName: string = 'John Doe';
+		const accountHolderName = 'John Doe';
 		const expectedAction = {
 			type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_NAME',
 			accountHolderName,
@@ -70,7 +71,7 @@ describe('actions', () => {
 		expect(updateAccountHolderName(accountHolderName)).toEqual(expectedAction);
 	});
 	it('should create an action to update the account holder confirmation', () => {
-		const accountHolderConfirmation: boolean = true;
+		const accountHolderConfirmation = true;
 		const expectedAction = {
 			type: 'DIRECT_DEBIT_UPDATE_ACCOUNT_HOLDER_CONFIRMATION',
 			accountHolderConfirmation,
@@ -80,7 +81,7 @@ describe('actions', () => {
 		);
 	});
 	it('should create an action to set the error message in the direct debit form', () => {
-		const message: string = 'this is an error';
+		const message = 'this is an error';
 		const expectedAction = {
 			type: 'DIRECT_DEBIT_SET_FORM_ERROR',
 			message,

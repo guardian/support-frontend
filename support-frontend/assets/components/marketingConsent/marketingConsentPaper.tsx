@@ -1,22 +1,23 @@
 // ----- Imports ----- //
-import React from 'react';
 import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
-import { space } from '@guardian/src-foundations';
-import { textSans, headline } from '@guardian/src-foundations/typography';
-import { ThemeProvider } from 'emotion-theming';
 import { Button, buttonBrandAlt } from '@guardian/src-button';
+import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { headline, textSans } from '@guardian/src-foundations/typography';
 import { SvgEnvelope } from '@guardian/src-icons';
+import { ThemeProvider } from 'emotion-theming';
+import React from 'react';
 import { connect } from 'react-redux';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { Dispatch } from 'redux';
-import type { Action } from 'helpers/user/userActions';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
-import { getEmail } from 'helpers/subscriptionsForms/formFields';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { getEmail } from 'helpers/subscriptionsForms/formFields';
+import type { Action } from 'helpers/user/userActions';
 import { logException } from 'helpers/utilities/logger';
+
 const subHeading = css`
 	margin-bottom: ${space[1]}px;
 	${headline.xxsmall({
@@ -94,7 +95,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 function MarketingButton(props: ButtonPropTypes) {
 	const confirmedOrPending =
-		props.confirmOptIn === true || props.requestPending === true;
+		props.confirmOptIn === true || props.requestPending;
 	const confirmedOptIn = props.confirmOptIn === true;
 
 	if (confirmedOrPending) {

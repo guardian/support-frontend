@@ -2,15 +2,15 @@ import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import 'helpers/tracking/acquisitions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { logPromise } from 'helpers/async/promise';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { addQueryParamsToURL } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import * as cookie from 'helpers/storage/cookie';
-import { addQueryParamsToURL } from 'helpers/urls/url';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import type { Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
-import type { Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 // ----- Types ----- //
 type UnexpectedError = {
 	type: 'unexpectedError';

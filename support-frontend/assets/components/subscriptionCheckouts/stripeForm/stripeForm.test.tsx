@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-unresolved
 import '__mocks__/stripeMock';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
 
 async function fillOutForm() {

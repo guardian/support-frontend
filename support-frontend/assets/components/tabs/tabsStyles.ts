@@ -1,8 +1,9 @@
 import { css } from '@emotion/core';
-import { brandAlt, neutral, border } from '@guardian/src-foundations/palette';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
+import { border, brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
+
 export const tabList = css`
 	display: flex;
 	align-items: flex-end;

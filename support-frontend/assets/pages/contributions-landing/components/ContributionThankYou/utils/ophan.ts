@@ -1,8 +1,9 @@
-import { trackComponentEvents } from 'helpers/tracking/ophan';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { trackComponentEvents } from 'helpers/tracking/ophan';
 import 'helpers/forms/paymentMethods';
 import type { ContributionType } from 'helpers/contributions';
 import 'helpers/contributions';
+
 export const OPHAN_COMPONENT_ID_SIGN_IN = 'sign-into-the-guardian-link';
 export const OPHAN_COMPONENT_ID_SIGN_UP = 'set-password';
 export const OPHAN_COMPONENT_ID_SET_REMINDER = 'reminder-test-link-clicked';

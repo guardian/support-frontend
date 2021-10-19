@@ -1,12 +1,13 @@
-import React from 'react';
 import { css } from '@emotion/core';
+import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
+import { SvgArrowRightStraight } from '@guardian/src-icons';
+import React from 'react';
 import { SvgTicket } from 'components/icons/ticket';
 import Text from 'components/text/text';
-import { LinkButton } from '@guardian/src-button';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { getMemLink, emailPreferences } from 'helpers/urls/externalLinks';
+import { emailPreferences, getMemLink } from 'helpers/urls/externalLinks';
+
 const marginForButton = css`
 	margin-bottom: ${space[3]}px;
 `;

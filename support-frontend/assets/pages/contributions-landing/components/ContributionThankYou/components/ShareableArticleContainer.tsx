@@ -1,17 +1,17 @@
-import React from 'react';
 import { css } from '@emotion/core';
-import { neutral, news } from '@guardian/src-foundations/palette';
 import { LinkButton } from '@guardian/src-button';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { SvgFacebook, SvgTwitter, SvgEnvelope } from '@guardian/src-icons';
-import {
-	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
-	OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
-	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
-} from '../utils/ophan';
-import { headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { until } from '@guardian/src-foundations/mq';
+import { neutral, news } from '@guardian/src-foundations/palette';
+import { headline } from '@guardian/src-foundations/typography';
+import { SvgEnvelope, SvgFacebook, SvgTwitter } from '@guardian/src-icons';
+import React from 'react';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {
+	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
+	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
+	OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
+} from '../utils/ophan';
 // Styles ///////////////////////////////////////////////////////////
 const outerContainer = css`
 	display: flex;

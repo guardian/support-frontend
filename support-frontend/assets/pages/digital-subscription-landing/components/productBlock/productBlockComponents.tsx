@@ -1,10 +1,11 @@
 /* eslint-disable react/no-unused-prop-types */
-// @ts-ignore
+// @ts-expect-error
+import cx from 'classnames';
 import type { Node } from 'react';
 import React, { useState } from 'react';
-import cx from 'classnames';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { arrowSvg } from '../arrow';
+
 type DigitalSubProduct = 'Daily' | 'App';
 export type DropdownPropTypes = {
 	children: Node;
@@ -28,7 +29,7 @@ export const Dropdown = ({
 );
 export type DropdownButtonPropTypes = {
 	showDropDown: boolean;
-	handleClick: (...args: Array<any>) => any;
+	handleClick: (...args: any[]) => any;
 	product: DigitalSubProduct;
 };
 export const DropdownButton = ({

@@ -1,10 +1,11 @@
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { isProd } from 'helpers/urls/url';
+import { logException } from 'helpers/utilities/logger';
 import {
 	setAmazonPayLoginObject,
 	setAmazonPayPaymentsObject,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import { isProd } from 'helpers/urls/url';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { logException } from 'helpers/utilities/logger';
+
 const amazonPaySupportedCountryGroups = ['UnitedStates'];
 
 const getAmazonRegion = (
@@ -29,7 +30,7 @@ const getAmazonPayClientId = (isSandbox: boolean): string =>
 // Amazon Pay callbacks - called after Widgets.js has loaded
 const setupAmazonPayCallbacks = (
 	countryGroupId: CountryGroupId,
-	dispatch: (...args: Array<any>) => any,
+	dispatch: (...args: any[]) => any,
 	isSandbox: boolean,
 ): void => {
 	window.onAmazonLoginReady = () => {
@@ -77,7 +78,7 @@ const loadAmazonPayScript = (isSandbox: boolean): void => {
 
 const setupAmazonPay = (
 	countryGroupId: CountryGroupId,
-	dispatch: (...args: Array<any>) => any,
+	dispatch: (...args: any[]) => any,
 	isTestUser: boolean,
 ): void => {
 	const isSandbox = isTestUser || !isProd();

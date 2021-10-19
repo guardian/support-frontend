@@ -5,48 +5,48 @@ import type {
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import 'helpers/tracking/acquisitions';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import 'helpers/forms/errorReasons';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import 'helpers/csrf/csrfReducer';
-import {
-	DigitalPack,
-	GuardianWeekly,
-	Paper,
-} from 'helpers/productPrice/subscriptions';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import 'helpers/productPrice/billingPeriods';
 import type { Participations } from 'helpers/abTests/abtest';
 import 'helpers/abTests/abtest';
-import type {
-	CaState,
-	IsoCountry,
-	UsState,
-} from 'helpers/internationalisation/country';
 import 'helpers/internationalisation/country';
-import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
-import { logPromise, pollUntilPromise } from 'helpers/async/promise';
-import { logException } from 'helpers/utilities/logger';
 import {
 	fetchJson,
 	getRequestOptions,
 	requestOptions,
 } from 'helpers/async/fetch';
-import trackConversion from 'helpers/tracking/conversions';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { logPromise, pollUntilPromise } from 'helpers/async/promise';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
+	AmazonPay,
 	DirectDebit,
 	ExistingCard,
 	ExistingDirectDebit,
 	PayPal,
-	Stripe,
-	AmazonPay,
 	Sepa,
+	Stripe,
 } from 'helpers/forms/paymentMethods';
-import type { Title } from 'helpers/user/details';
+import type {
+	CaState,
+	IsoCountry,
+	UsState,
+} from 'helpers/internationalisation/country';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ReaderType } from 'helpers/productPrice/readerType';
+import type {
+	DigitalPack,
+	GuardianWeekly,
+	Paper,
+} from 'helpers/productPrice/subscriptions';
+import trackConversion from 'helpers/tracking/conversions';
+import type { Option } from 'helpers/types/option';
+import type { Title } from 'helpers/user/details';
+import { logException } from 'helpers/utilities/logger';
 // ----- Types ----- //
 export type StripePaymentMethod =
 	| 'StripeCheckout'

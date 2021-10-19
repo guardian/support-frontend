@@ -1,10 +1,11 @@
 // flow
+import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import {
 	dateIsOutsideRange,
-	getRange,
 	getLatestAvailableDateText,
+	getRange,
 } from './helpers';
-import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+
 describe('datePickerHelpers', () => {
 	const RealDate = Date;
 

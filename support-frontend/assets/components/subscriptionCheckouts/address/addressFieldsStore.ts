@@ -1,39 +1,39 @@
-import { $Keys, $Call } from 'utility-types';
-// ----- Imports ----- //
 import type { Dispatch } from 'redux';
 import { combineReducers } from 'redux';
+import type { $Call, $Keys } from 'utility-types';
+// ----- Imports ----- //
+import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import { postcodeFinderReducerFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import {
+	M25_POSTCODE_PREFIXES,
+	postcodeIsWithinDeliveryArea,
+} from 'helpers/forms/deliveryCheck';
+import type { RegularPaymentRequestAddress } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromString } from 'helpers/internationalisation/country';
 import type { SetCountryAction } from 'helpers/page/commonActions';
 import { setCountry } from 'helpers/page/commonActions';
+import type { Scoped } from 'helpers/subscriptionsForms/scoped';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import {
 	formError,
 	nonEmptyString,
+	nonSillyCharacters,
 	notNull,
 	removeError,
 	validate,
-	nonSillyCharacters,
 } from 'helpers/subscriptionsForms/validation';
-import type { RegularPaymentRequestAddress } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { Scoped } from 'helpers/subscriptionsForms/scoped';
 import 'helpers/subscriptionsForms/scoped';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import 'helpers/subscriptionsForms/addressType';
-import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
-import { postcodeFinderReducerFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import {
-	postcodeIsWithinDeliveryArea,
-	M25_POSTCODE_PREFIXES,
-} from 'helpers/forms/deliveryCheck';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 // ----- Types ----- //
 export type FormFields = RegularPaymentRequestAddress;
 export type FormField = $Keys<FormFields>;
-export type FormErrors = FormError<FormField>[];
+export type FormErrors = Array<FormError<FormField>>;
 type AddressFieldsState = FormFields & {
 	formErrors: FormErrors;
 };
@@ -65,7 +65,7 @@ export type Action =
 	| SetCountryChangedAction
 	| (Scoped<AddressType> & {
 			type: 'SET_ADDRESS_FORM_ERRORS';
-			errors: FormError<FormField>[];
+			errors: Array<FormError<FormField>>;
 	  })
 	| (Scoped<AddressType> & {
 			type: 'SET_POSTCODE';
@@ -112,7 +112,7 @@ export const isHomeDeliveryInM25 = (
 const applyBillingAddressRules = (
 	fields: FormFields,
 	addressType: AddressType,
-): FormError<FormField>[] =>
+): Array<FormError<FormField>> =>
 	validate([
 		{
 			rule: nonEmptyString(fields.lineOne),
@@ -194,7 +194,7 @@ const applyDeliveryAddressRules = (
 	fulfilmentOption: Option<FulfilmentOptions>,
 	fields: FormFields,
 	addressType: AddressType,
-): FormError<FormField>[] => {
+): Array<FormError<FormField>> => {
 	const homeRules = validate([
 		{
 			rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
@@ -232,7 +232,7 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
 				});
 			}
 		},
-	setAddressLineOne: (lineOne: string): ((...args: Array<any>) => any) =>
+	setAddressLineOne: (lineOne: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			scope,
 			type: 'SET_ADDRESS_LINE_1',
@@ -243,19 +243,19 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
 		type: 'SET_ADDRESS_LINE_2',
 		lineTwo,
 	}),
-	setTownCity: (city: string): ((...args: Array<any>) => any) =>
+	setTownCity: (city: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			scope,
 			type: 'SET_TOWN_CITY',
 			city,
 		})),
-	setState: (state: string): ((...args: Array<any>) => any) =>
+	setState: (state: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_STATE',
 			state,
 			scope,
 		})),
-	setPostcode: (postCode: string): ((...args: Array<any>) => any) =>
+	setPostcode: (postCode: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_POSTCODE',
 			postCode,

@@ -1,9 +1,10 @@
 import React from 'react';
-import Heading from 'components/heading/heading';
 import AnchorButton from 'components/button/anchorButton';
+import Heading from 'components/heading/heading';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+
 type PropTypes = {
 	title: string;
 	description: string;
