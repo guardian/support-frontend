@@ -10,6 +10,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 const { getClassName } = require('./scripts/css');
 const entryPoints = require('./webpack.entryPoints');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const cssLoaders = [{
   loader: 'postcss-loader',
@@ -66,6 +67,12 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
       fileName: '../../conf/assets.map',
       writeToFileEmit: true,
     }),
+    ...(process.env.CI_ENV === 'github' ? [new BundleAnalyzerPlugin({
+      reportFilename: 'webpack-stats.html',
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      logLevel: 'warn',
+    })] : []),
     new MiniCssExtractPlugin({
       filename: path.join('stylesheets', cssFilename),
     }),
@@ -88,7 +95,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
     chunkFilename: `webpack/${jsFilename}`,
     filename: `javascripts/${jsFilename}`,
     publicPath: '/assets/',
-    strictModuleExceptionHandling: process.env.NODE_ENV === 'production',
   },
 
   resolve: {
@@ -100,14 +106,15 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
     modules: [
       path.resolve(__dirname, 'assets'),
       path.resolve(__dirname, 'node_modules'),
+      'node_modules',
     ],
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
 
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.([jt]sx?|mjs)$/,
         exclude: [
           {
             test: /node_modules/,
@@ -116,7 +123,16 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
             ],
           },
         ],
-        loader: 'babel-loader',
+        use: [{
+          loader: 'babel-loader',
+        },
+        {
+          loader: 'ts-loader',
+          options: {
+            configFile: 'tsconfig.json',
+            transpileOnly: true,
+          },
+        }],
       },
       {
         test: /\.(png|jpg|gif|ico)$/,

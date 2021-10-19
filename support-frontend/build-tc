@@ -24,12 +24,6 @@ fi
 
 ${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn install
 
-# Stop and starts flow daemon
-
-${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn flow stop
-
-${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn flow start
-
 # Building the html files used for Server Side Rendering
 ${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn run build-ssr
 
