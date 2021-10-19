@@ -1,94 +1,93 @@
 // -----  gu-sass ----- //
 @import '~stylesheets/gu-sass/gu-sass';
 
-
 .component-direct-debit-pop-up-form {
-  z-index: 7500;
-  display: block;
-  border: 0 none transparent;
-  overflow-x: hidden;
-  overflow-y: auto;
-  visibility: visible;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.6);
+	z-index: 7500;
+	display: block;
+	border: 0 none transparent;
+	overflow-x: hidden;
+	overflow-y: auto;
+	visibility: visible;
+	margin: 0;
+	padding: 0;
+	-webkit-tap-highlight-color: transparent;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.6);
 }
 
 .focus-target:focus {
-  outline: 0;
-  box-shadow: 0 0 1px 2px gu-colour(neutral-60);
+	outline: 0;
+	box-shadow: 0 0 1px 2px gu-colour(neutral-60);
 }
 
 .component-direct-debit-pop-up-form__content {
-  position: relative;
-  display: inline-block;
-  width: 296px;
-  padding: 10px;
-  @include mq($from: mobileMedium) {
-    width: 345px;
-  }
-  @include mq($from: mobileLandscape) {
-    width: 445px;
-  }
-  top: 2px;
-  @media(min-height: 780px) {
-    top: 25%;
-    transform: translateY(-25%);
-  }
-  min-height: 566px;
-  background-color: gu-colour(neutral-97);
-  text-align: left;
-  border-top: 1px solid gu-colour(neutral-7);
-  border-radius: 20px;
+	position: relative;
+	display: inline-block;
+	width: 296px;
+	padding: 10px;
+	@include mq($from: mobileMedium) {
+		width: 345px;
+	}
+	@include mq($from: mobileLandscape) {
+		width: 445px;
+	}
+	top: 2px;
+	@media (min-height: 780px) {
+		top: 25%;
+		transform: translateY(-25%);
+	}
+	min-height: 566px;
+	background-color: gu-colour(neutral-97);
+	text-align: left;
+	border-top: 1px solid gu-colour(neutral-7);
+	border-radius: 20px;
 }
 
 .component-direct-debit-pop-up-form__heading {
-  float: left;
-  font-family: $gu-headline;
-  font-weight: bolder;
-  font-size: 24px;
-  line-height: 30px;
-  max-width: 260px;
-  margin-top: $gu-v-spacing;
-  margin-bottom: $gu-v-spacing;
-  @include mq($from: mobileMedium) {
-    max-width: 280px;
-  }
-  @include mq($from: mobileLandscape) {
-    max-width: 400px;
-  }
+	float: left;
+	font-family: $gu-headline;
+	font-weight: bolder;
+	font-size: 24px;
+	line-height: 30px;
+	max-width: 260px;
+	margin-top: $gu-v-spacing;
+	margin-bottom: $gu-v-spacing;
+	@include mq($from: mobileMedium) {
+		max-width: 280px;
+	}
+	@include mq($from: mobileLandscape) {
+		max-width: 400px;
+	}
 }
 
 .component-direct-debit-pop-up-form__heading--title {
-  display: block;
-  margin-left: 20px;
+	display: block;
+	margin-left: 20px;
 }
 
 .component-direct-debit-pop-up-form__close-button {
-  border: solid 1px gu-colour(neutral-7);
-  border-radius: 800px;
-  background-color: gu-colour(neutral-97);
-  height: 40px;
-  width: 40px;
-  float: right;
-  cursor: pointer;
+	border: solid 1px gu-colour(neutral-7);
+	border-radius: 800px;
+	background-color: gu-colour(neutral-97);
+	height: 40px;
+	width: 40px;
+	float: right;
+	cursor: pointer;
 
-  // buttons don't work as flex containers in all browsers
-  // https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
-  span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	// buttons don't work as flex containers in all browsers
+	// https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
+	span {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
-    .svg-cross {
-      height: 19px;
-    }
-  }
+		.svg-cross {
+			height: 19px;
+		}
+	}
 }

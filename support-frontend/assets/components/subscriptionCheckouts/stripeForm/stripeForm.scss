@@ -1,28 +1,28 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-
 .StripeElement {
-  border: 2px solid gu-colour(neutral-60);
-  padding: 0.625rem;
-  margin: $gu-v-spacing / 2 0 $gu-v-spacing;
+	border: 2px solid gu-colour(neutral-60);
+	padding: 0.625rem;
+	margin: $gu-v-spacing / 2 0 $gu-v-spacing;
 }
 
 .component-credit-card-price {
-    @include gu-fontset-body-sans;
-    margin-top: $gu-v-spacing;
+	@include gu-fontset-body-sans;
+	margin-top: $gu-v-spacing;
 }
 
 .component-stripe-submit-button {
-  display: block;
-  margin-top: $gu-v-spacing * 2;
+	display: block;
+	margin-top: $gu-v-spacing * 2;
 }
 
 #stripeForm {
-  .component-checkout-form-section__heading {
-    margin-bottom: 0;
-  }
+	.component-checkout-form-section__heading {
+		margin-bottom: 0;
+	}
 }
 
-div#card-expiry.StripeElement, div#cvc.StripeElement {
-  width: 30%;
+div#card-expiry.StripeElement,
+div#cvc.StripeElement {
+	width: 30%;
 }

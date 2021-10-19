@@ -1,39 +1,59 @@
 // ----- Imports ----- //
-import { getRequestOptions } from "helpers/async/fetch";
-import { logPromise } from "helpers/async/promise";
-import { routes } from "helpers/urls/routes";
-import { fetchJson } from "helpers/async/fetch";
-import { checkEmail } from "helpers/forms/formValidation";
-import type { Csrf } from "helpers/csrf/csrfReducer";
+import { getRequestOptions } from 'helpers/async/fetch';
+import { logPromise } from 'helpers/async/promise';
+import { routes } from 'helpers/urls/routes';
+import { fetchJson } from 'helpers/async/fetch';
+import { checkEmail } from 'helpers/forms/formValidation';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 // ----- Types     ----- //
-type UserType = "new" | "guest" | "current";
-export type UserTypeFromIdentityResponse = UserType | "noRequestSent" | "requestPending" | "requestFailed";
+type UserType = 'new' | 'guest' | 'current';
+export type UserTypeFromIdentityResponse =
+	| UserType
+	| 'noRequestSent'
+	| 'requestPending'
+	| 'requestFailed';
 
 // ----- Functions ----- //
-function sendGetUserTypeFromIdentityRequest(email: string, csrf: Csrf, setUserTypeFromIdentityResponse: (arg0: UserTypeFromIdentityResponse) => void): Promise<UserTypeFromIdentityResponse> {
-  return fetchJson(`${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`, getRequestOptions('same-origin', csrf)).then((resp: {
-    userType: UserType;
-  }) => {
-    if (typeof resp.userType !== 'string') {
-      throw new Error('userType string was not present in response');
-    }
+function sendGetUserTypeFromIdentityRequest(
+	email: string,
+	csrf: Csrf,
+	setUserTypeFromIdentityResponse: (arg0: UserTypeFromIdentityResponse) => void,
+): Promise<UserTypeFromIdentityResponse> {
+	return fetchJson(
+		`${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
+		getRequestOptions('same-origin', csrf),
+	).then((resp: { userType: UserType }) => {
+		if (typeof resp.userType !== 'string') {
+			throw new Error('userType string was not present in response');
+		}
 
-    setUserTypeFromIdentityResponse(resp.userType);
-    return resp.userType;
-  });
+		setUserTypeFromIdentityResponse(resp.userType);
+		return resp.userType;
+	});
 }
 
-function getUserTypeFromIdentity(email: string, isSignedIn: boolean, csrf: Csrf, setUserTypeFromIdentityResponse: (arg0: UserTypeFromIdentityResponse) => void): Promise<UserTypeFromIdentityResponse> {
-  if (isSignedIn || !checkEmail(email)) {
-    setUserTypeFromIdentityResponse('noRequestSent');
-    return Promise.resolve('noRequestSent');
-  }
+function getUserTypeFromIdentity(
+	email: string,
+	isSignedIn: boolean,
+	csrf: Csrf,
+	setUserTypeFromIdentityResponse: (arg0: UserTypeFromIdentityResponse) => void,
+): Promise<UserTypeFromIdentityResponse> {
+	if (isSignedIn || !checkEmail(email)) {
+		setUserTypeFromIdentityResponse('noRequestSent');
+		return Promise.resolve('noRequestSent');
+	}
 
-  setUserTypeFromIdentityResponse('requestPending');
-  return logPromise(sendGetUserTypeFromIdentityRequest(email, csrf, setUserTypeFromIdentityResponse)).catch(() => {
-    setUserTypeFromIdentityResponse('requestFailed');
-    return 'requestFailed';
-  });
+	setUserTypeFromIdentityResponse('requestPending');
+	return logPromise(
+		sendGetUserTypeFromIdentityRequest(
+			email,
+			csrf,
+			setUserTypeFromIdentityResponse,
+		),
+	).catch(() => {
+		setUserTypeFromIdentityResponse('requestFailed');
+		return 'requestFailed';
+	});
 }
 
 export { getUserTypeFromIdentity };

@@ -1,119 +1,100 @@
 // ----- Imports ----- //
-import type { Action } from "./userActions";
+import type { Action } from './userActions';
 // ----- Types ----- //
 export type User = {
-  id: string | null | undefined;
-  email: string;
-  displayName: string | null | undefined;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  isTestUser: boolean | null | undefined;
-  isPostDeploymentTestUser: boolean;
-  stateField: string;
-  gnmMarketing: boolean;
-  isSignedIn: boolean;
-  isRecurringContributor: boolean;
-  emailValidated: boolean;
-  isReturningContributor: boolean;
+	id: string | null | undefined;
+	email: string;
+	displayName: string | null | undefined;
+	firstName: string;
+	lastName: string;
+	fullName: string;
+	isTestUser: boolean | null | undefined;
+	isPostDeploymentTestUser: boolean;
+	stateField: string;
+	gnmMarketing: boolean;
+	isSignedIn: boolean;
+	isRecurringContributor: boolean;
+	emailValidated: boolean;
+	isReturningContributor: boolean;
 };
 // ----- Setup ----- //
 const initialState: User = {
-  id: '',
-  email: '',
-  displayName: '',
-  firstName: '',
-  lastName: '',
-  fullName: '',
-  stateField: '',
-  isTestUser: null,
-  isPostDeploymentTestUser: false,
-  gnmMarketing: false,
-  isSignedIn: false,
-  isRecurringContributor: false,
-  emailValidated: false,
-  isReturningContributor: false
+	id: '',
+	email: '',
+	displayName: '',
+	firstName: '',
+	lastName: '',
+	fullName: '',
+	stateField: '',
+	isTestUser: null,
+	isPostDeploymentTestUser: false,
+	gnmMarketing: false,
+	isSignedIn: false,
+	isRecurringContributor: false,
+	emailValidated: false,
+	isReturningContributor: false,
 };
 
 // ----- Functions ----- //
 // ----- Reducer ----- //
 function createUserReducer() {
-  return function userReducer(state: User = initialState, action: Action): User {
-    switch (action.type) {
-      case 'SET_USER_ID':
-        return { ...state,
-          id: action.id
-        };
+	return function userReducer(
+		state: User = initialState,
+		action: Action,
+	): User {
+		switch (action.type) {
+			case 'SET_USER_ID':
+				return { ...state, id: action.id };
 
-      case 'SET_DISPLAY_NAME':
-        return { ...state,
-          displayName: action.name
-        };
+			case 'SET_DISPLAY_NAME':
+				return { ...state, displayName: action.name };
 
-      case 'SET_FIRST_NAME':
-        return { ...state,
-          firstName: action.name
-        };
+			case 'SET_FIRST_NAME':
+				return { ...state, firstName: action.name };
 
-      case 'SET_LAST_NAME':
-        return { ...state,
-          lastName: action.name
-        };
+			case 'SET_LAST_NAME':
+				return { ...state, lastName: action.name };
 
-      case 'SET_FULL_NAME':
-        return { ...state,
-          fullName: action.name
-        };
+			case 'SET_FULL_NAME':
+				return { ...state, fullName: action.name };
 
-      case 'SET_TEST_USER':
-        return { ...state,
-          isTestUser: action.testUser
-        };
+			case 'SET_TEST_USER':
+				return { ...state, isTestUser: action.testUser };
 
-      case 'SET_POST_DEPLOYMENT_TEST_USER':
-        return { ...state,
-          isPostDeploymentTestUser: action.postDeploymentTestUser
-        };
+			case 'SET_POST_DEPLOYMENT_TEST_USER':
+				return {
+					...state,
+					isPostDeploymentTestUser: action.postDeploymentTestUser,
+				};
 
-      case 'SET_EMAIL':
-        return { ...state,
-          email: action.email
-        };
+			case 'SET_EMAIL':
+				return { ...state, email: action.email };
 
-      case 'SET_STATEFIELD':
-        return { ...state,
-          stateField: action.stateField
-        };
+			case 'SET_STATEFIELD':
+				return { ...state, stateField: action.stateField };
 
-      case 'SET_GNM_MARKETING':
-        return { ...state,
-          gnmMarketing: action.preference
-        };
+			case 'SET_GNM_MARKETING':
+				return { ...state, gnmMarketing: action.preference };
 
-      case 'SET_IS_SIGNED_IN':
-        return { ...state,
-          isSignedIn: action.isSignedIn
-        };
+			case 'SET_IS_SIGNED_IN':
+				return { ...state, isSignedIn: action.isSignedIn };
 
-      case 'SET_IS_RECURRING_CONTRIBUTOR':
-        return { ...state,
-          isRecurringContributor: true
-        };
+			case 'SET_IS_RECURRING_CONTRIBUTOR':
+				return { ...state, isRecurringContributor: true };
 
-      case 'SET_EMAIL_VALIDATED':
-        return { ...state,
-          emailValidated: action.emailValidated
-        };
+			case 'SET_EMAIL_VALIDATED':
+				return { ...state, emailValidated: action.emailValidated };
 
-      case 'SET_IS_RETURNING_CONTRIBUTOR':
-        return { ...state,
-          isReturningContributor: action.isReturningContributor
-        };
+			case 'SET_IS_RETURNING_CONTRIBUTOR':
+				return {
+					...state,
+					isReturningContributor: action.isReturningContributor,
+				};
 
-      default:
-        return state;
-    }
-  };
+			default:
+				return state;
+		}
+	};
 }
 
 export { createUserReducer };

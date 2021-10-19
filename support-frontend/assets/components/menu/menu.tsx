@@ -1,47 +1,51 @@
-import type { Node } from "react";
-import React from "react";
-import styles from "./menu.module.scss";
-import SvgCheckmark from "components/svgs/checkmark";
+import type { Node } from 'react';
+import React from 'react';
+import styles from './menu.module.scss';
+import SvgCheckmark from 'components/svgs/checkmark';
 type itemProps = {
-  children: Node;
-  isSelected: boolean;
+	children: Node;
+	isSelected: boolean;
 };
 
 const Item = ({
-  isSelected,
-  children,
-  el: El,
-  ...props
+	isSelected,
+	children,
+	el: El,
+	...props
 }: itemProps & {
-  el: string;
-}) => <El {...props} className={styles.item} data-is-selected={isSelected}>
-    {children} {isSelected && [<SvgCheckmark />, <span className="visually-hidden">Selected</span>]}
-  </El>;
+	el: string;
+}) => (
+	<El {...props} className={styles.item} data-is-selected={isSelected}>
+		{children}{' '}
+		{isSelected && [
+			<SvgCheckmark />,
+			<span className="visually-hidden">Selected</span>,
+		]}
+	</El>
+);
 
 const LinkItem = ({
-  children,
-  ...props
+	children,
+	...props
 }: itemProps & {
-  href: string;
-}) => <Item el="a" {...props}>
-    {children}
-  </Item>;
+	href: string;
+}) => (
+	<Item el="a" {...props}>
+		{children}
+	</Item>
+);
 
-const ButtonItem = ({
-  children,
-  ...props
-}: itemProps) => <Item el="button" {...props}>
-    {children}
-  </Item>;
+const ButtonItem = ({ children, ...props }: itemProps) => (
+	<Item el="button" {...props}>
+		{children}
+	</Item>
+);
 
-const Menu = ({
-  children,
-  ...props
-}: {
-  children: Node;
-}) => <div {...props} className={styles.root}>
-    {children}
-  </div>;
+const Menu = ({ children, ...props }: { children: Node }) => (
+	<div {...props} className={styles.root}>
+		{children}
+	</div>
+);
 
 export default Menu;
 export { LinkItem, ButtonItem };

@@ -1,41 +1,41 @@
 .component-cta-link {
-  text-align: left;
-  background-color: gu-colour(neutral-7);
-  transition: background-color .3s;
-  border: none;
-  border-radius: 600px;
-  color: #fff;
-  cursor: pointer;
-  display: block;
-  font-family: $gu-text-sans-web;
-  font-size: 14px;
-  height: $gu-cta-height;
-  line-height: $gu-cta-height;
-  padding: 0 $gu-h-spacing;
-  position: relative;
-  text-decoration: none;
-  font-weight: 700;
+	text-align: left;
+	background-color: gu-colour(neutral-7);
+	transition: background-color 0.3s;
+	border: none;
+	border-radius: 600px;
+	color: #fff;
+	cursor: pointer;
+	display: block;
+	font-family: $gu-text-sans-web;
+	font-size: 14px;
+	height: $gu-cta-height;
+	line-height: $gu-cta-height;
+	padding: 0 $gu-h-spacing;
+	position: relative;
+	text-decoration: none;
+	font-weight: 700;
 
-  &:hover {
-    background-color: darken(gu-colour(neutral-7), 5%);
-  }
+	&:hover {
+		background-color: darken(gu-colour(neutral-7), 5%);
+	}
 
-  svg {
-    height: 16px;
-    position: absolute;
-    left: calc(100% - 34px);
-    top: 14px;
-    fill: #fff;
-  }
+	svg {
+		height: 16px;
+		position: absolute;
+		left: calc(100% - 34px);
+		top: 14px;
+		fill: #fff;
+	}
 }
 
 .component-cta-link--border {
-  border: 1px solid;
-  height: $gu-cta-height;
-  line-height: $gu-cta-height;
+	border: 1px solid;
+	height: $gu-cta-height;
+	line-height: $gu-cta-height;
 
-  svg {
-    top: 13px;
-    left: calc(100% - 33px);
-  }
+	svg {
+		top: 13px;
+		left: calc(100% - 33px);
+	}
 }

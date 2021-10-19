@@ -2,15 +2,14 @@
 
 #weekly-checkout__heading-form-section,
 #weekly-checkout__heading-form-section--second {
-  h1.component-checkout-form-section__heading.component-heading--gift,
-  h2.component-checkout-form-section__heading.component-heading--gift {
-    font-size: 28px;
-    line-height: 28px;
-    margin-bottom: 0;
+	h1.component-checkout-form-section__heading.component-heading--gift,
+	h2.component-checkout-form-section__heading.component-heading--gift {
+		font-size: 28px;
+		line-height: 28px;
+		margin-bottom: 0;
 
-    @include mq($from: tablet) {
-      font-size: 32px;
-    }
-  }
+		@include mq($from: tablet) {
+			font-size: 32px;
+		}
+	}
 }
-

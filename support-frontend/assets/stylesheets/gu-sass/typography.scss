@@ -10,8 +10,8 @@
 $gu-titlepiece: 'GT Guardian Titlepiece', Georgia, serif !default;
 $gu-headline: 'GH Guardian Headline', Georgia, serif !default;
 $gu-text-egyptian-web: 'GuardianTextEgyptian', Georgia, serif !default;
-$gu-text-sans-web: 'GuardianTextSans', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif !default;
-
+$gu-text-sans-web: 'GuardianTextSans', 'Helvetica Neue', Helvetica, Arial,
+	'Lucida Grande', sans-serif !default;
 
 // ----- Font Properties ----- //
 
@@ -20,7 +20,7 @@ $gu-fonts: (
 		family: $gu-text-egyptian-web,
 		sizes: (
 			17: 24px,
-		)
+		),
 	),
 	headline: (
 		family: $gu-headline,
@@ -33,7 +33,7 @@ $gu-fonts: (
 			32: 35px,
 			42: 45px,
 			50: 54px,
-		)
+		),
 	),
 	textSans: (
 		family: $gu-text-sans-web,
@@ -41,10 +41,9 @@ $gu-fonts: (
 			14: 18px,
 			16: 22px,
 			18: 24px,
-		)
-	)
+		),
+	),
 );
-
 
 // ----- Mixins ----- //
 
@@ -65,11 +64,9 @@ $gu-fonts: (
 	}
 }
 
-
 // ----- Font sets ----- //
 
 // Use these to get uniform responsive type across pages
-
 
 // ----- Nav ----- //
 @mixin gu-fontset-nav-desktop($size-only: false) {
@@ -85,7 +82,6 @@ $gu-fonts: (
 	}
 }
 
-
 // ----- Headings ----- //
 @mixin gu-fontset-heading-sans($size-only: false) {
 	@include gu-typeface(textSans, 18, $size-only);
@@ -95,10 +91,10 @@ $gu-fonts: (
 }
 @mixin gu-fontset-heading-large($size-only: false) {
 	@include gu-typeface(headline, 32, $size-only);
-  @include mq($from: tablet) {
+	@include mq($from: tablet) {
 		@include gu-typeface(headline, 42, $size-only: true);
-  }
-  @include mq($from: leftCol) {
+	}
+	@include mq($from: leftCol) {
 		@include gu-typeface(headline, 50, $size-only: true);
 	}
 	@if $size-only == false {
@@ -107,10 +103,10 @@ $gu-fonts: (
 }
 @mixin gu-fontset-heading-large-alt($size-only: false) {
 	@include gu-typeface(headline, 32, $size-only);
-  @include mq($from: tablet) {
+	@include mq($from: tablet) {
 		@include gu-typeface(headline, 32, $size-only: true);
-  }
-  @include mq($from: leftCol) {
+	}
+	@include mq($from: leftCol) {
 		@include gu-typeface(headline, 42, $size-only: true);
 	}
 	@if $size-only == false {
@@ -119,7 +115,7 @@ $gu-fonts: (
 }
 @mixin gu-fontset-heading($size-only: false) {
 	@include gu-typeface(headline, 22, $size-only);
-  @include mq($from: tablet) {
+	@include mq($from: tablet) {
 		@include gu-typeface(headline, 24, $size-only: true);
 	}
 	@if $size-only == false {
@@ -142,7 +138,7 @@ $gu-fonts: (
 }
 @mixin gu-fontset-body-large($size-only: false) {
 	@include gu-typeface(headline, 20, $size-only);
-  @include mq($from: tablet) {
+	@include mq($from: tablet) {
 		@include gu-typeface(headline, 22, $size-only: true);
 	}
 	@if $size-only == false {

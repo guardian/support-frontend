@@ -1,17 +1,19 @@
-import React from "react";
-import Text from "components/text/text";
+import React from 'react';
+import Text from 'components/text/text';
 export const cancellationCopy = {
-  title: 'You can cancel any time',
-  body: 'There is no set time on your agreement with us so you can end your subscription whenever you wish'
+	title: 'You can cancel any time',
+	body: 'There is no set time on your agreement with us so you can end your subscription whenever you wish',
 };
 
-const CancellationPolicy = () => <Text>
-    <p>
-      <strong>{cancellationCopy.title}</strong> {cancellationCopy.body}
-    </p>
-  </Text>;
+const CancellationPolicy = () => (
+	<Text>
+		<p>
+			<strong>{cancellationCopy.title}</strong> {cancellationCopy.body}
+		</p>
+	</Text>
+);
 
 CancellationPolicy.defaultProps = {
-  orderIsAGift: false
+	orderIsAGift: false,
 };
 export default CancellationPolicy;

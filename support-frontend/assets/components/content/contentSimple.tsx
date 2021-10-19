@@ -1,30 +1,30 @@
 // ----- Imports ----- //
-import type { Node } from "react";
-import React from "react";
-import { css } from "@emotion/core";
-import { space } from "@guardian/src-foundations";
-import { from } from "@guardian/src-foundations/mq";
-import { neutral } from "@guardian/src-foundations/palette";
-import LeftMarginSection from "components/leftMarginSection/leftMarginSection";
-import type { Option } from "helpers/types/option";
-import "helpers/types/option";
+import type { Node } from 'react';
+import React from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { from } from '@guardian/src-foundations/mq';
+import { neutral } from '@guardian/src-foundations/palette';
+import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import type { Option } from 'helpers/types/option';
+import 'helpers/types/option';
 // ---- Types ----- //
 type PropTypes = {
-  id?: Option<string>;
-  children: Node;
-  divider?: boolean;
+	id?: Option<string>;
+	children: Node;
+	divider?: boolean;
 };
 const container = css`
-  border: ${neutral[86]} 1px solid;
-  border-bottom: none;
-  width: 100%;
+	border: ${neutral[86]} 1px solid;
+	border-bottom: none;
+	width: 100%;
 `;
 const contentContainer = css`
-  width: 100%;
-  padding: 0 ${space[2]}px ${space[6]}px;
-  ${from.desktop} {
-    padding: 0 ${space[5]}px ${space[9]}px;
-  }
+	width: 100%;
+	padding: 0 ${space[2]}px ${space[6]}px;
+	${from.desktop} {
+		padding: 0 ${space[5]}px ${space[9]}px;
+	}
 `;
 const dividerLine = css`
   background-image: repeating-linear-gradient(to bottom,
@@ -48,28 +48,26 @@ const dividerContainer = css`
 `;
 
 // ----- Render ----- //
-const Content = ({
-  children,
-  id,
-  divider
-}: PropTypes) => <div id={id}>
-    <LeftMarginSection>
-      <div css={container}>
-        {divider && <Divider />}
-        <div css={contentContainer}>
-          {children}
-        </div>
-      </div>
-    </LeftMarginSection>
-  </div>;
+const Content = ({ children, id, divider }: PropTypes) => (
+	<div id={id}>
+		<LeftMarginSection>
+			<div css={container}>
+				{divider && <Divider />}
+				<div css={contentContainer}>{children}</div>
+			</div>
+		</LeftMarginSection>
+	</div>
+);
 
 Content.defaultProps = {
-  id: null,
-  divider: false
+	id: null,
+	divider: false,
 };
 
-const Divider = () => <div css={dividerContainer}>
-    <hr css={dividerLine} />
-  </div>;
+const Divider = () => (
+	<div css={dividerContainer}>
+		<hr css={dividerLine} />
+	</div>
+);
 
 export default Content;

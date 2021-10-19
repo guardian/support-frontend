@@ -1,87 +1,106 @@
-import React from "react";
-import { css } from "@emotion/core";
-import { space } from "@guardian/src-foundations";
-import { body, headline } from "@guardian/src-foundations/typography";
-import { from } from "@guardian/src-foundations/mq";
-import { SvgInfo } from "@guardian/src-icons";
-import ProductInfoChip from "components/product/productInfoChip";
-import SvgGift from "components/svgs/gift";
-import FlexContainer from "components/containers/flexContainer";
-import type { Product } from "components/product/productOption";
-import ProductOption from "components/product/productOption";
+import React from 'react';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { body, headline } from '@guardian/src-foundations/typography';
+import { from } from '@guardian/src-foundations/mq';
+import { SvgInfo } from '@guardian/src-icons';
+import ProductInfoChip from 'components/product/productInfoChip';
+import SvgGift from 'components/svgs/gift';
+import FlexContainer from 'components/containers/flexContainer';
+import type { Product } from 'components/product/productOption';
+import ProductOption from 'components/product/productOption';
 export type PropTypes = {
-  orderIsAGift: boolean;
-  products: Product[];
+	orderIsAGift: boolean;
+	products: Product[];
 };
 const pricesSection = css`
-  padding: 0 ${space[3]}px ${space[12]}px;
+	padding: 0 ${space[3]}px ${space[12]}px;
 `;
 const priceBoxes = css`
-  margin-top: ${space[6]}px;
-  justify-content: flex-start;
-  align-items: stretch;
-  ${from.desktop} {
-    margin-top: ${space[9]}px;
-  }
+	margin-top: ${space[6]}px;
+	justify-content: flex-start;
+	align-items: stretch;
+	${from.desktop} {
+		margin-top: ${space[9]}px;
+	}
 `;
 const productOverride = css`
-  &:not(:first-of-type) {
-    margin-top: ${space[4]}px;
-  }
-  ${from.tablet} {
-    &:not(:first-of-type) {
-      margin-top: 0;
-    }
-    &:not(:last-of-type) {
-      margin-right: ${space[5]}px;
-    }
-  }
+	&:not(:first-of-type) {
+		margin-top: ${space[4]}px;
+	}
+	${from.tablet} {
+		&:not(:first-of-type) {
+			margin-top: 0;
+		}
+		&:not(:last-of-type) {
+			margin-right: ${space[5]}px;
+		}
+	}
 `;
 const productOverrideWithLabel = css`
-  &:not(:first-of-type) {
-    margin-top: ${space[12]}px;
-  }
-  ${from.tablet} {
-    &:not(:first-of-type) {
-      margin-top: 0;
-    }
-    &:not(:last-of-type) {
-      margin-right: ${space[5]}px;
-    }
-  }
+	&:not(:first-of-type) {
+		margin-top: ${space[12]}px;
+	}
+	${from.tablet} {
+		&:not(:first-of-type) {
+			margin-top: 0;
+		}
+		&:not(:last-of-type) {
+			margin-right: ${space[5]}px;
+		}
+	}
 `;
 const pricesHeadline = css`
-  ${headline.medium({
-  fontWeight: 'bold'
-})};
+	${headline.medium({
+		fontWeight: 'bold',
+	})};
 `;
 const pricesSubHeadline = css`
-  ${body.medium()}
-  padding-bottom: ${space[2]}px;
+	${body.medium()}
+	padding-bottom: ${space[2]}px;
 `;
 const pricesInfo = css`
-  margin-top: ${space[6]}px;
+	margin-top: ${space[6]}px;
 `;
 
-function Prices({
-  orderIsAGift,
-  products
-}: PropTypes) {
-  return <section css={pricesSection} id="subscribe">
-      <h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
-      <p css={pricesSubHeadline}>{orderIsAGift ? 'Select a gift period' : 'Choose how you\'d like to pay'}</p>
-      <FlexContainer cssOverrides={priceBoxes}>
-        {products.map(product => <ProductOption cssOverrides={product.label ? productOverrideWithLabel : productOverride} title={product.title} price={product.price} offerCopy={product.offerCopy} priceCopy={product.priceCopy} buttonCopy={product.buttonCopy} href={product.href} onClick={product.onClick} onView={product.onView} label={product.label} />)}
-      </FlexContainer>
-      <div css={pricesInfo}>
-        {!orderIsAGift && <ProductInfoChip icon={<SvgGift />}>
-            Gifting is available
-        </ProductInfoChip>}
-        <ProductInfoChip icon={<SvgInfo />}>
-          Delivery cost included. {!orderIsAGift && 'You can cancel your subscription at any time'}
-        </ProductInfoChip>
-      </div>
-    </section>;
+function Prices({ orderIsAGift, products }: PropTypes) {
+	return (
+		<section css={pricesSection} id="subscribe">
+			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
+			<p css={pricesSubHeadline}>
+				{orderIsAGift ? 'Select a gift period' : "Choose how you'd like to pay"}
+			</p>
+			<FlexContainer cssOverrides={priceBoxes}>
+				{products.map((product) => (
+					<ProductOption
+						cssOverrides={
+							product.label ? productOverrideWithLabel : productOverride
+						}
+						title={product.title}
+						price={product.price}
+						offerCopy={product.offerCopy}
+						priceCopy={product.priceCopy}
+						buttonCopy={product.buttonCopy}
+						href={product.href}
+						onClick={product.onClick}
+						onView={product.onView}
+						label={product.label}
+					/>
+				))}
+			</FlexContainer>
+			<div css={pricesInfo}>
+				{!orderIsAGift && (
+					<ProductInfoChip icon={<SvgGift />}>
+						Gifting is available
+					</ProductInfoChip>
+				)}
+				<ProductInfoChip icon={<SvgInfo />}>
+					Delivery cost included.{' '}
+					{!orderIsAGift && 'You can cancel your subscription at any time'}
+				</ProductInfoChip>
+			</div>
+		</section>
+	);
 }
 
 export default Prices;

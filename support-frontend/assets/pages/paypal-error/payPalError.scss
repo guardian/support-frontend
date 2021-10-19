@@ -2,7 +2,6 @@
 @import '~stylesheets/skeleton/skeleton';
 @import '~stylesheets/gu-sass/gu-sass';
 
-
 // ----- Shared Components ----- //
 
 @import '~components/ctaLink/ctaLink';
@@ -14,48 +13,47 @@
 // ----- Page-Specific Styles ----- //
 
 #paypal-error-page {
+	// ----- Headings
 
-  // ----- Headings
+	.paypal-error__heading {
+		font-family: $gu-headline;
+		color: gu-colour(neutral-7);
+		font-size: 24px;
+		font-weight: bold;
 
-  .paypal-error__heading {
-    font-family: $gu-headline;
-    color: gu-colour(neutral-7);
-    font-size: 24px;
-    font-weight: bold;
+		@include mq($from: desktop) {
+			font-size: 42px;
+		}
+	}
 
-    @include mq($from: desktop) {
-      font-size: 42px;
-    }
-  }
+	.paypal-error__copy {
+		font-family: $gu-headline;
+		font-size: 20px;
+		font-weight: lighter;
+		color: gu-colour(neutral-7);
+		margin: $gu-v-spacing 0;
+		padding-bottom: 20px;
 
-  .paypal-error__copy {
-    font-family: $gu-headline;
-    font-size: 20px;
-    font-weight: lighter;
-    color: gu-colour(neutral-7);
-    margin: $gu-v-spacing 0;
-    padding-bottom: 20px;
+		@include mq($from: desktop) {
+			font-size: 28px;
+			width: 600px;
+			padding-bottom: 36px;
+		}
+	}
 
-    @include mq($from: desktop) {
-      font-size: 28px;
-      width: 600px;
-      padding-bottom: 36px;
-    }
-  }
+	.component-page-section__content {
+		padding-bottom: 48px;
 
-  .component-page-section__content {
-    padding-bottom: 48px;
+		@include mq($from: desktop) {
+			padding-bottom: 56px;
+		}
+	}
 
-    @include mq($from: desktop) {
-      padding-bottom: 56px;
-    }
-  }
+	.component-page-section__body {
+		padding-top: $gu-v-spacing;
 
-  .component-page-section__body {
-    padding-top: $gu-v-spacing;
-
-    @include mq($from: desktop) {
-      padding-left: $gu-h-spacing;
-    }
-  }
+		@include mq($from: desktop) {
+			padding-left: $gu-h-spacing;
+		}
+	}
 }

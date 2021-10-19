@@ -1,33 +1,40 @@
-import React from "react";
-import type { ContributionType } from "helpers/contributions";
-import "helpers/contributions";
-import { css } from "@emotion/core";
+import React from 'react';
+import type { ContributionType } from 'helpers/contributions';
+import 'helpers/contributions';
+import { css } from '@emotion/core';
 type ContributionAmountLabelProps = {
-  formattedAmount: string;
-  shouldShowFrequencyButtons: boolean;
-  contributionType: ContributionType;
+	formattedAmount: string;
+	shouldShowFrequencyButtons: boolean;
+	contributionType: ContributionType;
 };
 
 const ContributionAmountChoicesChoiceLabel = ({
-  formattedAmount,
-  shouldShowFrequencyButtons,
-  contributionType
+	formattedAmount,
+	shouldShowFrequencyButtons,
+	contributionType,
 }: ContributionAmountLabelProps) => {
-  let frequencyLabel = '';
+	let frequencyLabel = '';
 
-  if (shouldShowFrequencyButtons) {
-    if (contributionType === 'MONTHLY') {
-      frequencyLabel = ' per month';
-    }
+	if (shouldShowFrequencyButtons) {
+		if (contributionType === 'MONTHLY') {
+			frequencyLabel = ' per month';
+		}
 
-    if (contributionType === 'ANNUAL') {
-      frequencyLabel = ' per year';
-    }
-  }
+		if (contributionType === 'ANNUAL') {
+			frequencyLabel = ' per year';
+		}
+	}
 
-  return <div css={css`white-space: nowrap`}>
-      {formattedAmount}{frequencyLabel}
-    </div>;
+	return (
+		<div
+			css={css`
+				white-space: nowrap;
+			`}
+		>
+			{formattedAmount}
+			{frequencyLabel}
+		</div>
+	);
 };
 
 export default ContributionAmountChoicesChoiceLabel;
