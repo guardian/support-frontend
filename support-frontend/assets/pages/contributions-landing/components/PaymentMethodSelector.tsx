@@ -178,17 +178,17 @@ const noPaymentMethodsErrorMessage = (
 	/>
 );
 const radioCss = {
-	'& + span': {
+	'& + div': {
 		display: 'flex',
 		width: '100%',
 		margin: 0,
 		justifyContent: 'space-between',
 	},
-	'& + span svg': {
+	'& + div svg': {
 		width: '36px',
 		height: '24px',
 	},
-	'&:not(:checked) + span svg': {
+	'&:not(:checked) + div svg': {
 		filter: 'grayscale(100%)',
 	},
 };
