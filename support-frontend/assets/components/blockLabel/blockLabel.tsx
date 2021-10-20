@@ -4,7 +4,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { neutral, text } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 
 const blockLabel = css`
 	display: inline-block;
@@ -28,13 +28,17 @@ const blockLabel = css`
 		})};
 	}
 `;
-type PropTypes = {
-	children: Node;
-	tag?: string;
+type BlockLabelPropTypes = {
+	children: ReactNode;
+	tag?: keyof JSX.IntrinsicElements;
 	cssOverrides?: string | string[];
 };
 
-function BlockLabel({ children, tag = 'div', cssOverrides }: PropTypes) {
+function BlockLabel({
+	children,
+	tag = 'div',
+	cssOverrides,
+}: BlockLabelPropTypes): JSX.Element {
 	const TagName = tag;
 	return <TagName css={[blockLabel, cssOverrides]}>{children}</TagName>;
 }
