@@ -4,8 +4,8 @@
             "TS1208": 1,
             "TS7053": 27,
             "TS7006": 164,
-            "TS2305": 65,
-            "TS2322": 304,
+            "TS2305": 64,
+            "TS2322": 303,
             "TS2724": 2,
             "TS2578": 35,
             "TS2307": 22,
@@ -42,10 +42,8 @@
             "TS2694": 5,
             "TS7022": 3,
             "TS2525": 6,
-            "TS1149": 8,
             "TS2745": 2,
-            "TS2698": 6,
-            "TS1261": 2
+            "TS2698": 6
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
@@ -122,12 +120,11 @@
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 16,
             "assets/components/asyncronously/asyncronously.ts": 2,
             "assets/components/base/rows.tsx": 1,
-            "assets/components/blockLabel/blockLabel.tsx": 2,
             "assets/components/button/_sharedButton.tsx": 1,
             "assets/components/checkoutExpander/checkoutExpander.tsx": 1,
             "assets/components/checkoutForm/checkoutForm.tsx": 4,
             "assets/components/containers/centredContainer.tsx": 1,
-            "assets/components/containers/FlexContainer.tsx": 1,
+            "assets/components/containers/flexContainer.tsx": 1,
             "assets/components/containers/fullWidthContainer.tsx": 5,
             "assets/components/content/content.tsx": 2,
             "assets/components/content/contentSimple.tsx": 2,
@@ -182,7 +179,7 @@
             "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-redemption/components/stage.tsx": 3,
-            "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx": 3,
+            "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx": 2,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 5,
             "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
             "assets/components/headers/links/links.tsx": 1,
@@ -240,14 +237,14 @@
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx": 3,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/prices.tsx": 2,
+            "assets/pages/digital-subscription-landing/components/prices.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
             "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 12,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 4,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
-            "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 3,
-            "assets/pages/paper-subscription-landing/components/content/prices.tsx": 3,
-            "assets/pages/paper-subscription-landing/components/content/subsCardTab.tsx": 2,
+            "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
+            "assets/pages/paper-subscription-landing/components/content/prices.tsx": 2,
+            "assets/pages/paper-subscription-landing/components/content/subsCardTab.tsx": 1,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 2,
             "assets/pages/promotion-terms/promoDetails.tsx": 1,
             "assets/pages/showcase/components/ctaContribute.tsx": 1,
@@ -256,7 +253,7 @@
             "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1,
-            "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 3,
+            "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 2,
             "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
             "assets/pages/aus-moment-map/components/blurb.tsx": 1,
             "assets/pages/aus-moment-map/hooks/useWindowWidth.ts": 1,
@@ -344,10 +341,7 @@
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
-            "assets/helpers/productPrice/subscriptions.ts": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroWithImage.tsx": 1,
-            "assets/pages/weekly-subscription-landing/components/hero/hero.tsx": 1,
-            "assets/pages/weekly-subscription-landing/components/content/benefits.tsx": 2
+            "assets/helpers/productPrice/subscriptions.ts": 1
         }
     },
     "TS1208": [
@@ -1134,10 +1128,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/blockLabel/blockLabel.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/button/_sharedButton.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -1158,7 +1148,7 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/containers/FlexContainer.tsx",
+            "path": "assets/components/containers/flexContainer.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -1392,10 +1382,6 @@
             "message": "Type 'ComponentType<any>' is not assignable to type 'null'."
         },
         {
-            "path": "assets/components/blockLabel/blockLabel.tsx",
-            "message": "Type '{ children: any; css: (string | SerializedStyles | string[] | undefined)[]; }' is not assignable to type 'IntrinsicAttributes'."
-        },
-        {
             "path": "assets/components/checkoutForm/checkoutForm.tsx",
             "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
         },
@@ -1461,11 +1447,11 @@
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; label: string; autoComplete: string; type: \"text\"; inputmode: string; pattern: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; error: string; minLength: number; maxLength: number; width: 10; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"src\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ id: string; label: string; autoComplete: string; type: \"text\"; inputmode: string; pattern: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; error: string; minLength: number; maxLength: number; width: 10; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; value: string; autoComplete: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; minLength: number; maxLength: number; type: \"text\"; inputmode: string; pattern: string; label: string; error: string; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"src\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ id: string; value: string; autoComplete: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; minLength: number; maxLength: number; type: \"text\"; inputmode: string; pattern: string; label: string; error: string; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
@@ -1581,7 +1567,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type '{ css: SerializedStyles; id: string; label: string; type: \"text\"; maxlength: number; value: any; onChange: (e: ChangeEvent<HTMLInputElement>) => any; error: any; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"src\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ css: SerializedStyles; id: string; label: string; type: \"text\"; maxlength: number; value: any; onChange: (e: ChangeEvent<HTMLInputElement>) => any; error: any; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
@@ -1645,7 +1631,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"src\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
@@ -2033,7 +2019,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type '{ '& + span': { display: string; width: string; margin: number; justifyContent: string; }; '& + span svg': { width: string; height: string; }; '&:not(:checked) + span svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
+            "message": "Type '{ '& + div': { display: string; width: string; margin: number; justifyContent: string; }; '& + div svg': { width: string; height: string; }; '&:not(:checked) + div svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
@@ -2041,7 +2027,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type '{ '& + span': { display: string; width: string; margin: number; justifyContent: string; }; '& + span svg': { width: string; height: string; }; '&:not(:checked) + span svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
+            "message": "Type '{ '& + div': { display: string; width: string; margin: number; justifyContent: string; }; '& + div svg': { width: string; height: string; }; '&:not(:checked) + div svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
@@ -2417,7 +2403,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"src\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -2545,7 +2531,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"src\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -4727,39 +4713,39 @@
     "TS7016": [
         {
             "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
-            "message": "Could not find a declaration file for module 'react-dom'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Could not find a declaration file for module 'seedrandom'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'seedrandom'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Could not find a declaration file for module 'dompurify'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'dompurify'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'react-dom'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'preact/debug'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/ssrPages.ts",
-            "message": "Could not find a declaration file for module 'react-dom/server'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom/server'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Could not find a declaration file for module 'uuid'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'uuid'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/john_duffell/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         }
     ],
     "TS2554": [
@@ -5157,11 +5143,11 @@
     "TS2741": [
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"className\" | \"height\" | \"translate\" | ... 275 more ... | \"src\">'."
+            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"className\" | \"height\" | \"translate\" | ... 275 more ... | \"required\">'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Property 'value' is missing in type '{ id: string; image: any; label: string; name: string; checked: boolean; onChange: (...args: any[]) => any; }' but required in type 'Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | \"translate\" | ... 273 more ... | \"src\">'."
+            "message": "Property 'value' is missing in type '{ id: string; image: any; label: string; name: string; checked: boolean; onChange: (...args: any[]) => any; }' but required in type 'Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | \"translate\" | ... 273 more ... | \"required\">'."
         },
         {
             "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
@@ -5177,7 +5163,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Property 'value' is missing in type '{ label: string; defaultChecked: boolean; onChange: () => void; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"src\">'."
+            "message": "Property 'value' is missing in type '{ label: string; defaultChecked: boolean; onChange: () => void; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"required\">'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx",
@@ -5193,7 +5179,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx",
-            "message": "Property 'value' is missing in type '{ checked: boolean; onChange: () => void; supporting: string; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"src\">'."
+            "message": "Property 'value' is missing in type '{ checked: boolean; onChange: () => void; supporting: string; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"required\">'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSocialShare.tsx",
@@ -5645,7 +5631,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Namespace '\"/Users/john_duffell/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
+            "message": "Namespace '\"/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
         }
     ],
     "TS7022": [
@@ -5688,40 +5674,6 @@
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
         }
     ],
-    "TS1149": [
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithImage.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/animations/giftHeadingAnimation.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/animations/GiftHeadingAnimation.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/prices.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/flexContainer.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/FlexContainer.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/flexContainer.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/FlexContainer.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/prices.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/flexContainer.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/FlexContainer.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/subsCardTab.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/flexContainer.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/FlexContainer.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/flexContainer.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/FlexContainer.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/prices.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/flexContainer.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/containers/FlexContainer.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/hero/hero.tsx",
-            "message": "File name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/animations/giftHeadingAnimation.tsx' differs from already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/components/animations/GiftHeadingAnimation.tsx' only in casing."
-        }
-    ],
     "TS2745": [
         {
             "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
@@ -5756,16 +5708,6 @@
         {
             "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
             "message": "Spread types may only be created from object types."
-        }
-    ],
-    "TS1261": [
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/benefits.tsx",
-            "message": "Already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx' differs from file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/pages/weekly-subscription-landing/components/content/BenefitsContainer.tsx' only in casing."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/benefits.tsx",
-            "message": "Already included file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/pages/weekly-subscription-landing/components/content/benefitsHeading.tsx' differs from file name '/Users/john_duffell/code/support-frontend/support-frontend/assets/pages/weekly-subscription-landing/components/content/BenefitsHeading.tsx' only in casing."
         }
     ]
 }
