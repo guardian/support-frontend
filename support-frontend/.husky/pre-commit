@@ -1,0 +1,16 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+maybe_run_tsc() {
+  STAGED=$(git diff --cached --name-only | grep -E '\.(ts|tsx)$' || echo "")
+  len=${#STAGED}
+
+  if [ $len -gt 0 ]; then
+    node scripts/ts-log-errors.js
+    git add ./typescript-errors.json
+  else
+    echo "No Typescript changes"
+  fi
+}
+
+cd support-frontend && maybe_run_tsc && yarn lint-staged
