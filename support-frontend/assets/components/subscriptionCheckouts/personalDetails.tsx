@@ -137,8 +137,8 @@ export default function PersonalDetails(props: PropTypes) {
 				label="Email"
 				type="email"
 				value={props.email}
-				onInput={maybeSetEmail}
-				onChange={maybeFetchAndStoreUsertype}
+				onChange={maybeSetEmail}
+				onBlur={maybeFetchAndStoreUsertype}
 				error={firstError('email', props.formErrors)}
 				pattern={emailRegexPattern}
 				disabled={!props.isUsingGuestCheckout || props.isSignedIn}
