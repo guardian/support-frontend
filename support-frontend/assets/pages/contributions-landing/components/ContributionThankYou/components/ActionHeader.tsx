@@ -1,0 +1,25 @@
+import { css } from '@emotion/core';
+import { from } from '@guardian/src-foundations/mq';
+import { body } from '@guardian/src-foundations/typography';
+import * as React from 'react';
+
+const text = css`
+	${body.medium({
+		fontWeight: 'bold',
+	})};
+
+	${from.desktop} {
+		font-size: 20px;
+	}
+`;
+type ActionHeaderProps = {
+	title: string;
+};
+
+const ActionHeader = ({ title }: ActionHeaderProps) => (
+	<header>
+		<h1 css={text}>{title}</h1>
+	</header>
+);
+
+export default ActionHeader;

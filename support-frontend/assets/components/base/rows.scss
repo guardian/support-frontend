@@ -1,19 +1,19 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-base-rows--normal {
-  > * + * {
-    margin-top: $gu-v-spacing;
-  }
+	> * + * {
+		margin-top: $gu-v-spacing;
+	}
 }
 
 .component-base-rows--small {
-  > * + * {
-    margin-top: $gu-v-spacing / 2;
-  }
+	> * + * {
+		margin-top: $gu-v-spacing / 2;
+	}
 }
 
 .component-base-rows--large {
-  > * + * {
-    margin-top: $gu-v-spacing * 2;
-  }
+	> * + * {
+		margin-top: $gu-v-spacing * 2;
+	}
 }

@@ -2,88 +2,86 @@
 Standard sizes and margins for the content and headers.
 */
 .gu-content-margin {
-  box-sizing: border-box;
-  padding: 0 ($gu-h-spacing / 2);
+	box-sizing: border-box;
+	padding: 0 ($gu-h-spacing / 2);
 
-  @include mq($from: mobileLandscape) {
-    width: gu-breakpoint(mobileLandscape);
-    margin: 0 auto;
-    padding: 0 $gu-h-spacing;
-  }
+	@include mq($from: mobileLandscape) {
+		width: gu-breakpoint(mobileLandscape);
+		margin: 0 auto;
+		padding: 0 $gu-h-spacing;
+	}
 
-  @include mq($from: phablet) {
-    width: gu-breakpoint(phablet);
-    margin: 0 auto;
-    padding: 0 auto;
-  }
+	@include mq($from: phablet) {
+		width: gu-breakpoint(phablet);
+		margin: 0 auto;
+		padding: 0 auto;
+	}
 
-  @include mq($from: tablet) {
-    width: gu-breakpoint(tablet);
-    padding: 0 $gu-h-spacing;
-  }
+	@include mq($from: tablet) {
+		width: gu-breakpoint(tablet);
+		padding: 0 $gu-h-spacing;
+	}
 
-  @include mq($from: desktop) {
-    width: gu-breakpoint(desktop);
-    padding: 0 $gu-h-spacing 0 $gu-h-spacing*2;
-  }
+	@include mq($from: desktop) {
+		width: gu-breakpoint(desktop);
+		padding: 0 $gu-h-spacing 0 $gu-h-spacing * 2;
+	}
 
-  @include mq($from: leftCol) {
-    width: gu-breakpoint(leftCol);
-    padding: 0 $gu-h-spacing*1.5;
-  }
+	@include mq($from: leftCol) {
+		width: gu-breakpoint(leftCol);
+		padding: 0 $gu-h-spacing * 1.5;
+	}
 
-  @include mq($from: wide) {
-    width: gu-breakpoint(wide);
-  }
+	@include mq($from: wide) {
+		width: gu-breakpoint(wide);
+	}
 }
 
 .gu-content {
-  @supports (display: flex) {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
+	@supports (display: flex) {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
 }
 
 .gu-content__main {
-  @supports (display: flex) {
-    flex: 1 0 auto;
-  }
+	@supports (display: flex) {
+		flex: 1 0 auto;
+	}
 }
-
 
 /*
 Type defaults
 */
 html,
 dialog {
-    font-family: "GuardianTextEgyptian", Georgia, serif;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
+	font-family: 'GuardianTextEgyptian', Georgia, serif;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
 }
 
 body {
-    line-height: 1.5;
+	line-height: 1.5;
 }
 
 strong {
-  font-weight: bolder;
+	font-weight: bolder;
 }
-
 
 /*
 Assistive technologies guidance (non-visible)
 */
 .visually-hidden {
-  @include visually-hidden;
+	@include visually-hidden;
 }
-
 
 /*
 Disable forms pre hydration
 */
 [data-not-hydrated] {
-  input, button {
-    pointer-events: none;
-  }
+	input,
+	button {
+		pointer-events: none;
+	}
 }

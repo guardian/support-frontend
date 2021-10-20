@@ -1,39 +1,37 @@
 .component-questions-contact {
+	.component-page-section {
+		border-top: 1px solid gu-colour(neutral-86);
+	}
 
-  .component-page-section {
-    border-top: 1px solid gu-colour(neutral-86);
-  }
+	.component-page-section__heading {
+		font-family: $gu-headline;
+		font-size: 24px;
+		line-height: 1.17;
+		font-weight: bold;
+	}
 
-  .component-page-section__heading {
-    font-family: $gu-headline;
-    font-size: 24px;
-    line-height: 1.17;
-    font-weight: bold;
-  }
+	.component-page-section__header {
+		position: relative;
 
-  .component-page-section__header {
-    position: relative;
+		@include dropline;
+	}
 
-    @include dropline;
-  }
+	.component-page-section__body {
+		padding-top: $gu-v-spacing / 2;
+		padding-bottom: $gu-v-spacing * 2;
 
-  .component-page-section__body {
-    padding-top: $gu-v-spacing / 2;
-    padding-bottom: $gu-v-spacing * 2;
-
-    @include mq($from: desktop) {
-      padding-left: $gu-h-spacing;
-    }
-  }
-
+		@include mq($from: desktop) {
+			padding-left: $gu-h-spacing;
+		}
+	}
 }
 
 .component-questions-contact__description {
-  @include mq($from: phablet) { 
-    width: 500px;
-  }
+	@include mq($from: phablet) {
+		width: 500px;
+	}
 }
 
 .component-questions-contact__link {
-  color: gu-colour(neutral-7);
+	color: gu-colour(neutral-7);
 }

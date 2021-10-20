@@ -1,26 +1,26 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-footer {
-  @include gu-fontset-explainer;
-  font-weight: 400;
-  color: gu-colour(neutral-100);
+	@include gu-fontset-explainer;
+	font-weight: 400;
+	color: gu-colour(neutral-100);
 }
 
 .component-content.component-content--feature.component-content--faqs {
-  .component-content__content {
-    padding-top: 6px;
-  }
+	.component-content__content {
+		padding-top: 6px;
+	}
 }
 
 .component-footer a {
-  text-decoration: underline;
-  text-decoration-color: rgba(255,255,255,.86);
-  color: inherit;
-  &:hover {
-    text-decoration: underline;
-  }
+	text-decoration: underline;
+	text-decoration-color: rgba(255, 255, 255, 0.86);
+	color: inherit;
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 .component-footer__copyright {
-  font-size: 12px;
+	font-size: 12px;
 }

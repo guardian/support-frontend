@@ -1,98 +1,96 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-product-page-hero-heading {
-  position: relative;
+	position: relative;
 
-  .component-left-margin-section__content {
-    position: relative;
-    @include mq($from: tablet) {
-      border-left: 1px solid;
-      margin-left: -1px;
-    }
-  }
+	.component-left-margin-section__content {
+		position: relative;
+		@include mq($from: tablet) {
+			border-left: 1px solid;
+			margin-left: -1px;
+		}
+	}
 
-  &:not(.component-product-page-hero-heading--campaign) {
-    margin-top: -6rem;
+	&:not(.component-product-page-hero-heading--campaign) {
+		margin-top: -6rem;
 
-    @include mq($from: desktop) {
-      margin-top: -6.5rem;
-    }
+		@include mq($from: desktop) {
+			margin-top: -6.5rem;
+		}
 
-    @include mq($from: leftCol) {
-      margin-top: -7.5rem;
-    }
-
-  }
+		@include mq($from: leftCol) {
+			margin-top: -7.5rem;
+		}
+	}
 }
 
 .component-heading-block__overheading,
 .component-heading-block__overheading--thankyou {
-  @include gu-typeface(headline, 16);
-  display: inline-block;
-  line-height: 1;
-  font-weight: bold;
-  background-color: gu-colour(highlight-main);
-  color: gu-colour(neutral-7);
-  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
+	@include gu-typeface(headline, 16);
+	display: inline-block;
+	line-height: 1;
+	font-weight: bold;
+	background-color: gu-colour(highlight-main);
+	color: gu-colour(neutral-7);
+	padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
 
- .component-product-page-hero-heading--campaign & {
-  background-color: gu-colour(neutral-100);
-    @supports(transform:translateY(-100%)) {
-      transform: translateY(-100%);
-      position: absolute;
-    }
-  }
+	.component-product-page-hero-heading--campaign & {
+		background-color: gu-colour(neutral-100);
+		@supports (transform: translateY(-100%)) {
+			transform: translateY(-100%);
+			position: absolute;
+		}
+	}
 
-  @include mq($from: desktop) {
-    @include gu-typeface(headline, 22, $size-only: true);
-    line-height: 1;
-  }
+	@include mq($from: desktop) {
+		@include gu-typeface(headline, 22, $size-only: true);
+		line-height: 1;
+	}
 }
 
 .component-heading-block__overheading--thankyou {
-  background-color: gu-colour(neutral-7);
-  color: gu-colour(neutral-100);
+	background-color: gu-colour(neutral-7);
+	color: gu-colour(neutral-100);
 }
 
 .component-heading-block__fontSize {
-    font-size: 34px;
-    line-height: 115%;
+	font-size: 34px;
+	line-height: 115%;
 
-  @include mq($until: mobileLandscape) {
-    font-size: 28px;
-    line-height: 30px;
-  }
+	@include mq($until: mobileLandscape) {
+		font-size: 28px;
+		line-height: 30px;
+	}
 }
 
 .component-heading-block__gift {
-  .component-heading-block__fontSize {
+	.component-heading-block__fontSize {
+		@include mq($until: mobileLandscape) {
+			font-size: 26px;
+			line-height: 30px;
+		}
 
-    @include mq($until: mobileLandscape) {
-      font-size: 26px;
-      line-height: 30px;
-    }
-
-    @include mq($until: mobileMedium) {
-      font-size: 24px;
-      line-height: 28px;
-    }
-  }
+		@include mq($until: mobileMedium) {
+			font-size: 24px;
+			line-height: 28px;
+		}
+	}
 }
 
 %component-heading-block__card {
-  background-color: gu-colour(neutral-7);
-  color: gu-colour(neutral-100);
-  font-family: $gu-headline;
+	background-color: gu-colour(neutral-7);
+	color: gu-colour(neutral-100);
+	font-family: $gu-headline;
 }
 
 .component-heading-block__heading {
-  @extend %component-heading-block__card;
-  @include gu-fontset-heading-large-alt;
-  padding: ($gu-v-spacing /4) ($gu-h-spacing / 2) ($gu-v-spacing * 3);
+	@extend %component-heading-block__card;
+	@include gu-fontset-heading-large-alt;
+	padding: ($gu-v-spacing / 4) ($gu-h-spacing / 2) ($gu-v-spacing * 3);
 }
 
 .component-heading-block__banner {
-  @include gu-fontset-body;
-  border-top: 1px solid gu-colour(neutral-100);
-  padding: ($gu-v-spacing / 1.5) ($gu-h-spacing / 2) $gu-v-spacing;
+	@include gu-fontset-body;
+	border-top: 1px solid gu-colour(neutral-100);
+	padding: ($gu-v-spacing / 1.5) ($gu-h-spacing / 2) $gu-v-spacing;
 }
