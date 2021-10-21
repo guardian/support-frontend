@@ -463,7 +463,7 @@ const CardForm = (props: PropTypes) => {
 	/**
 	 * Rendering
 	 */
-	const fieldError: string | null | undefined =
+	const fieldError?: string =
 		errorMessageFromState(fieldStates.CardNumber) ||
 		errorMessageFromState(fieldStates.Expiry) ||
 		errorMessageFromState(fieldStates.CVC);
@@ -483,7 +483,7 @@ const CardForm = (props: PropTypes) => {
 		return undefined;
 	};
 
-	const errorMessage: string | null | undefined =
+	const errorMessage?: string =
 		fieldError || incompleteMessage();
 
 	const showCards = (country: IsoCountry) => {

@@ -175,7 +175,7 @@ function userInTest(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
-	acquisitionDataTest: AcquisitionABTest | null | undefined,
+	acquisitionDataTest?: AcquisitionABTest,
 ) {
 	const { audiences, referrerControlled } = test;
 
@@ -226,7 +226,7 @@ const trackOptimizeExperiment = (
 function assignUserToVariant(
 	mvtId: number,
 	test: Test,
-	acquisitionDataTest: AcquisitionABTest | null | undefined,
+	acquisitionDataTest?: AcquisitionABTest,
 ): number {
 	const { referrerControlled, seed } = test;
 
@@ -267,7 +267,7 @@ function getParticipations(
 	countryGroupId: CountryGroupId,
 ): Participations {
 	const participations: Participations = {};
-	const acquisitionDataTest: AcquisitionABTest | null | undefined =
+	const acquisitionDataTest?: AcquisitionABTest =
 		getTestFromAcquisitionData();
 	const isRemote = getIsRemoteFromAcquisitionData();
 
@@ -366,11 +366,11 @@ const init = (
 		country,
 		countryGroupId,
 	);
-	const urlParticipations: Participations | null | undefined =
+	const urlParticipations?: Participations =
 		getParticipationsFromUrl();
-	const serverSideParticipations: Participations | null | undefined =
+	const serverSideParticipations?: Participations =
 		getServerSideParticipations();
-	const amountsTestParticipations: Participations | null | undefined =
+	const amountsTestParticipations?: Participations =
 		getAmountsTestParticipations(countryGroupId, settings);
 	return {
 		...participations,

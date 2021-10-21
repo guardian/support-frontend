@@ -17,7 +17,7 @@ export type PricingCopy = Record<SubscriptionProduct, PriceCopy>;
 export type SubscriptionsLandingPropTypes = {
 	countryGroupId: CountryGroupId;
 	participations: Participations;
-	pricingCopy: PricingCopy | null | undefined;
+	pricingCopy?: PricingCopy;
 	referrerAcquisitions: ReferrerAcquisitionData;
 };
 const countryGroupId = detectCountryGroup();

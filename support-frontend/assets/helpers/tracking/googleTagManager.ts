@@ -26,7 +26,7 @@ type PaymentRequestAPIStatus =
 type GaEventData = {
 	category: string;
 	action: string;
-	label: string | null | undefined;
+	label?: string;
 };
 // these values match the keys used by @guardian/consent-management-platform
 const googleTagManagerKey = 'google-tag-manager';
@@ -155,7 +155,7 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
 	});
 }
 
-function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
+function ophanPaymentMethod(paymentMethod?: PaymentMethod) {
 	switch (paymentMethod) {
 		case DirectDebit:
 			return 'Gocardless';

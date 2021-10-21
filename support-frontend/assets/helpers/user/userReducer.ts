@@ -2,13 +2,13 @@
 import type { Action } from './userActions';
 // ----- Types ----- //
 export type User = {
-	id: string | null | undefined;
+	id?: string;
 	email: string;
-	displayName: string | null | undefined;
+	displayName?: string;
 	firstName: string;
 	lastName: string;
 	fullName: string;
-	isTestUser: boolean | null | undefined;
+	isTestUser?: boolean;
 	isPostDeploymentTestUser: boolean;
 	stateField: string;
 	gnmMarketing: boolean;

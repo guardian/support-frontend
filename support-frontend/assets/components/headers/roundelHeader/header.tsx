@@ -9,7 +9,7 @@ import type { CountryGroup } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 // ----- Types ----- //
 type PropTypes = {
-	selectedCountryGroup: CountryGroup | null | undefined;
+	selectedCountryGroup?: CountryGroup;
 };
 
 // ----- Render ----- //

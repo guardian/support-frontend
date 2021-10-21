@@ -3,7 +3,7 @@ import type { Action } from './marketingConsentActions';
 // ----- Types ----- //
 export type State = {
 	error: boolean;
-	confirmOptIn: boolean | null | undefined;
+	confirmOptIn?: boolean;
 	requestPending: boolean;
 };
 // ----- Setup ----- //

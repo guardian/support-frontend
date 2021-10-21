@@ -85,7 +85,7 @@ const backgroundImageSrc =
 FocusStyleManager.onlyShowFocusOnTabs(); // https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility
 
 const contributionsLandingPage = (
-	campaignCodeParameter: string | null | undefined,
+	campaignCodeParameter?: string,
 ) => (
 	<Page
 		classModifiers={['new-template', 'contribution-form', ...cssModifiers]}

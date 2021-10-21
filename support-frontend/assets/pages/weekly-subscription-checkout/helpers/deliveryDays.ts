@@ -9,7 +9,7 @@ const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
 const extraDelayWeeks = 2;
 
-const getWeeklyDays = (today: number | null | undefined): Date[] => {
+const getWeeklyDays = (today?: number): Date[] => {
 	const now = new Date(today || new Date().getTime());
 	const currentWeekday = now.getDay();
 

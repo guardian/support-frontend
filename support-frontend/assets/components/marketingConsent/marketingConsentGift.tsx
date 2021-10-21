@@ -29,10 +29,10 @@ const unsubscribeText = css`
 `;
 // ----- Types ----- //
 type PropTypes = {
-	confirmOptIn: boolean | null | undefined;
+	confirmOptIn?: boolean;
 	email: string;
 	csrf: CsrfState;
-	onClick: (arg0: string | null | undefined, arg1: CsrfState) => void;
+	onClick: (arg0?: string, arg1: CsrfState) => void;
 	error: boolean;
 };
 

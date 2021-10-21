@@ -13,10 +13,10 @@ import { checkEmail } from 'helpers/forms/formValidation';
 import { logException } from 'helpers/utilities/logger';
 // ----- Types ----- //
 type ButtonPropTypes = {
-	confirmOptIn: boolean | null | undefined;
+	confirmOptIn?: boolean;
 	email: string;
 	csrf: CsrfState;
-	onClick: (arg0: string | null | undefined, arg1: CsrfState) => void;
+	onClick: (arg0?: string, arg1: CsrfState) => void;
 	requestPending: boolean;
 };
 type PropTypes = ButtonPropTypes & {

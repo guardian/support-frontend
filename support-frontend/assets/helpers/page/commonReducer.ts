@@ -24,7 +24,7 @@ export type Internationalisation = {
 	defaultCurrency: IsoCurrency;
 };
 export type CommonState = {
-	campaign: Campaign | null | undefined;
+	campaign?: Campaign;
 	referrerAcquisitionData: ReferrerAcquisitionData;
 	otherQueryParams: Array<[string, string]>;
 	abParticipations: Participations;

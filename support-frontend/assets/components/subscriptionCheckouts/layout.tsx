@@ -15,7 +15,7 @@ type AsideWrapPosition = 'top' | 'bottom';
 type PropTypes = {
 	children: Node;
 	aside: Node;
-	wrapPosition: AsideWrapPosition | null | undefined;
+	wrapPosition?: AsideWrapPosition;
 };
 
 const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {

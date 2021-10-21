@@ -2,7 +2,7 @@
 import type { Action } from './csrfActions';
 // ----- Types ----- //
 export type Csrf = {
-	token: string | null | undefined;
+	token?: string;
 };
 // ----- Setup ----- //
 const initialState: Csrf =

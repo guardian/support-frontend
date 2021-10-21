@@ -212,7 +212,7 @@ function getPaymentMethodToSelect(
 }
 
 function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
-	const pm: string | null | undefined = storage.getSession(
+	const pm?: string = storage.getSession(
 		'selectedPaymentMethod',
 	);
 

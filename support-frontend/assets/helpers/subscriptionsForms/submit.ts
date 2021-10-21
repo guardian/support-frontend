@@ -300,7 +300,7 @@ function showPaymentMethod(
 }
 
 function trackSubmitAttempt(
-	paymentMethod: PaymentMethod | null | undefined,
+	paymentMethod?: PaymentMethod,
 	productType: SubscriptionProduct,
 	productOption: ProductOptions,
 ) {

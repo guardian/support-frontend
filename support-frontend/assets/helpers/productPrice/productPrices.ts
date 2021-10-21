@@ -39,7 +39,7 @@ export type BillingPeriods = Record<
 	Record<IsoCurrency, ProductPrice>
 >;
 
-const isNumeric = (num: number | null | undefined): boolean =>
+const isNumeric = (num?: number): boolean =>
 	num !== null && num !== undefined && !Number.isNaN(num);
 
 function getFirstValidPrice(...prices: Array<number | null | undefined>) {
@@ -54,8 +54,8 @@ function getProductPrice(
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption?: FulfilmentOptions,
+	productOption?: ProductOptions,
 ): ProductPrice {
 	const countryGroup = getCountryGroup(country);
 	// eslint-disable-next-line max-len
@@ -68,8 +68,8 @@ function finalPrice(
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption?: FulfilmentOptions,
+	productOption?: ProductOptions,
 ): ProductPrice {
 	return applyDiscount(
 		getProductPrice(
@@ -98,8 +98,8 @@ const displayPrice = (
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption?: FulfilmentOptions,
+	productOption?: ProductOptions,
 ) =>
 	showPrice(
 		getProductPrice(

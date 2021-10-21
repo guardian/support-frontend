@@ -13,7 +13,7 @@ const safeFetch = (url: string, opts) => {
 const getElement = (id: string): HTMLElement | null | undefined =>
 	document.getElementById(id);
 
-const getElementOrBody = (id: string | null | undefined): HTMLElement => {
+const getElementOrBody = (id?: string): HTMLElement => {
 	let element;
 
 	if (id) {
@@ -31,7 +31,7 @@ const getElementOrBody = (id: string | null | undefined): HTMLElement => {
 	return element;
 };
 
-const renderError = (e: Error, id: string | null | undefined) => {
+const renderError = (e: Error, id?: string) => {
 	safeFetch(window.guardian.settings.metricUrl, {
 		mode: 'no-cors',
 	}); // ignore result, fire and forget

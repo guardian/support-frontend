@@ -429,7 +429,7 @@ function auStateFromString(s: string): Option<AuState> {
 }
 
 function stateProvinceFieldFromString(
-	countryGroupId: CountryGroupId | null | undefined,
+	countryGroupId?: CountryGroupId,
 	s?: string,
 ): Option<StateProvince> {
 	if (!s) {
@@ -503,7 +503,7 @@ function findIsoCountry(country?: string): Option<IsoCountry> {
 }
 
 function fromCountryGroup(
-	countryGroupId: CountryGroupId | null | undefined = null,
+	countryGroupId?: CountryGroupId = null,
 ): IsoCountry | null | undefined {
 	switch (countryGroupId) {
 		case UnitedStates:
@@ -572,7 +572,7 @@ type TargetCountryGroups =
 
 function handleCountryForCountryGroup(
 	targetCountryGroup: TargetCountryGroups,
-	countryGroupId: CountryGroupId | null | undefined = null,
+	countryGroupId?: CountryGroupId = null,
 ): IsoCountry | null | undefined {
 	const paths: Record<TargetCountryGroups, string[]> = {
 		International: ['/int', '/int/'],
@@ -598,7 +598,7 @@ function handleCountryForCountryGroup(
 		return null;
 	}
 
-	const candidateCountry: IsoCountry | null | undefined =
+	const candidateCountry?: IsoCountry =
 		fromQueryParameter() || fromCookie() || fromGeolocation();
 
 	if (
@@ -612,7 +612,7 @@ function handleCountryForCountryGroup(
 }
 
 function detect(
-	countryGroupId: CountryGroupId | null | undefined = null,
+	countryGroupId?: CountryGroupId = null,
 ): IsoCountry {
 	const targetCountryGroups: TargetCountryGroups[] = [
 		International,

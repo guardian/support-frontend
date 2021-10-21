@@ -19,7 +19,7 @@ import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTer
 
 type NameAndSaving = {
 	name: CountryGroupName;
-	saving: string | null | undefined;
+	saving?: string;
 };
 const orderedCountryGroupNames: NameAndSaving[] = [
 	{
@@ -89,7 +89,7 @@ function getCountryPrice(
 	};
 }
 
-function getSaving(saving: string | null | undefined) {
+function getSaving(saving?: string) {
 	if (saving) {
 		return `, saving ${saving} off the cover price.`;
 	}

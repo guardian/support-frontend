@@ -5,9 +5,9 @@ import SharedButton, { defaultProps } from './_sharedButton';
 import './button.scss';
 // ----- Render ----- //
 type PropTypes = SharedButtonPropTypes & {
-	'aria-label': string | null | undefined;
+	'aria-label'?: string;
 	type: ('button' | 'submit') | null | undefined;
-	disabled: boolean | null | undefined;
+	disabled?: boolean;
 	trackingEvent?: () => void;
 };
 

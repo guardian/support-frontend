@@ -6,8 +6,8 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 export type PaperLandingPropTypes = {
-	productPrices: ProductPrices | null | undefined;
-	promotionCopy: PromotionCopy | null | undefined;
+	productPrices?: ProductPrices;
+	promotionCopy?: PromotionCopy;
 };
 export const paperLandingProps = (): PaperLandingPropTypes => ({
 	productPrices: getProductPrices(),

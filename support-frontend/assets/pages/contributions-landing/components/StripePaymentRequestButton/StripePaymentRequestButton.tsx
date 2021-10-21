@@ -112,7 +112,7 @@ type PropTypes = {
 		arg0: (clientSecret: string) => Promise<Stripe3DSResult>,
 	) => Action;
 	csrf: CsrfState;
-	localCurrencyCountry: LocalCurrencyCountry | null | undefined;
+	localCurrencyCountry?: LocalCurrencyCountry;
 	useLocalCurrency: boolean;
 };
 

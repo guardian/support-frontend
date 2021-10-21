@@ -22,7 +22,7 @@ export default class MobileMenuToggler extends Component<
 		buttonPosition: null,
 		menuOpen: false,
 	};
-	buttonRef: Element | null | undefined;
+	buttonRef?: Element;
 
 	render() {
 		const { menuOpen, buttonPosition } = this.state;

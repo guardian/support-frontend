@@ -31,7 +31,7 @@ function PageSection(props: PropTypes) {
 }
 
 // ----- Auxiliary Components ----- //
-function Heading(props: { heading: string | null | undefined }) {
+function Heading(props: { heading?: string }) {
 	if (props.heading) {
 		return <h2 className="component-page-section__heading">{props.heading}</h2>;
 	}

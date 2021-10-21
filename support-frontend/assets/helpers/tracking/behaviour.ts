@@ -8,7 +8,7 @@ export type ProductCheckout = 'Contribution' | SubscriptionProduct;
 const trackCheckoutSubmitAttempt = (
 	componentId: string,
 	eventDetails: string,
-	paymentMethod: PaymentMethod | null | undefined,
+	paymentMethod?: PaymentMethod,
 	productCheckout: ProductCheckout,
 ): void => {
 	gaEvent(
@@ -35,7 +35,7 @@ const trackCheckoutSubmitAttempt = (
 
 const trackThankYouPageLoaded = (
 	productCheckout: SubscriptionProduct,
-	paymentMethod: PaymentMethod | null | undefined,
+	paymentMethod?: PaymentMethod,
 ) => {
 	gaEvent(
 		{

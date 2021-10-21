@@ -15,14 +15,14 @@ export type FormError<FieldType> = {
 };
 
 // ----- Rules ----- //
-const nonEmptyString: (arg0: string | null | undefined) => boolean = (s) =>
+const nonEmptyString: (arg0?: string) => boolean = (s) =>
 	(s || '').trim() !== '';
 
 function notNull<A>(value: A): boolean {
 	return value !== null;
 }
 
-function nonSillyCharacters(s: string | null | undefined): boolean {
+function nonSillyCharacters(s?: string): boolean {
 	const nonAsciiRegex = /[^\x20-\x7E]/g;
 
 	if (!s) {

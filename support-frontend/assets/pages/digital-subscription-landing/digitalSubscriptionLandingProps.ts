@@ -20,8 +20,8 @@ export type DigitalLandingPropTypes = {
 	countryGroupId: CountryGroupId;
 	currencyId: IsoCurrency;
 	participations: Participations;
-	productPrices: ProductPrices | null | undefined;
-	promotionCopy: PromotionCopy | null | undefined;
+	productPrices?: ProductPrices;
+	promotionCopy?: PromotionCopy;
 	orderIsAGift: boolean;
 };
 const countryGroupId = detectCountryGroup();

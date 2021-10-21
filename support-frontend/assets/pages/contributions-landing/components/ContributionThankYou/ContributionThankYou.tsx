@@ -142,7 +142,7 @@ type ContributionThankYouProps = {
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	paymentMethod: PaymentMethod;
 	countryId: IsoCountry;
-	campaignCode: string | null | undefined;
+	campaignCode?: string;
 };
 
 const mapStateToProps = (state) => ({

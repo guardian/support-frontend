@@ -25,8 +25,8 @@ const billingPeriod = Monthly;
 
 function getProductPrice(
 	productPrices: ProductPrices,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption?: FulfilmentOptions,
+	productOption?: ProductOptions,
 ): ProductPrice {
 	return genericGetProductPrice(
 		productPrices,
@@ -41,8 +41,8 @@ function getProductPrice(
 // so one will be removed and the related code updated in a subsequent PR
 function finalPrice(
 	productPrices: ProductPrices,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption?: FulfilmentOptions,
+	productOption?: ProductOptions,
 ): ProductPrice {
 	return genericFinalPrice(
 		productPrices,

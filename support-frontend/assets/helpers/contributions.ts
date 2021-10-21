@@ -296,7 +296,7 @@ function getMinContribution(
 }
 
 function toContributionType(
-	s: string | null | undefined,
+	s?: string,
 ): ContributionType | null | undefined {
 	if (s) {
 		switch (s.toUpperCase()) {

@@ -47,7 +47,7 @@ type PropTypes = {
 function getMobileSummaryTitle(
 	productOption: ProductOptions,
 	fulfilmentOption: FulfilmentOptions,
-	includesDigiSub: boolean | null | undefined = false,
+	includesDigiSub?: boolean = false,
 ) {
 	return (
 		<>

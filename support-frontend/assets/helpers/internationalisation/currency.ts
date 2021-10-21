@@ -135,7 +135,7 @@ const spokenCurrencies: Record<IsoCurrency, SpokenCurrency> = {
 function fromCountryGroupId(
 	countryGroupId: CountryGroupId,
 ): IsoCurrency | null | undefined {
-	const countryGroup: CountryGroup | null | undefined =
+	const countryGroup?: CountryGroup =
 		countryGroups[countryGroupId];
 
 	if (!countryGroup) {

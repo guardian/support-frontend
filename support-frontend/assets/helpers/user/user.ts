@@ -66,7 +66,7 @@ const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
 // communication to a broader segment of engineering that also uses
 // the user cookie.
 const getEmailValidatedFromUserCookie = (
-	guuCookie: string | null | undefined,
+	guuCookie?: string,
 ) => {
 	if (guuCookie) {
 		const tokens = guuCookie.split('.');

@@ -45,7 +45,7 @@ type PropTypes = {
 	onThirdPartyPaymentAuthorised: (arg0: PaymentAuthorisation) => void;
 	setTickerGoalReached: () => void;
 	tickerGoalReached: boolean;
-	campaignCodeParameter: string | null | undefined;
+	campaignCodeParameter?: string;
 	isReturningContributor: boolean;
 	countryId: IsoCountry;
 	userName: string | null;

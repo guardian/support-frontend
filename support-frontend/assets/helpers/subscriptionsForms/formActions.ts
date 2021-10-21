@@ -133,7 +133,7 @@ export type Action =
 const setStage = (
 	stage: Stage,
 	product: SubscriptionProduct,
-	paymentMethod: PaymentMethod | null | undefined,
+	paymentMethod?: PaymentMethod,
 ): Action => {
 	if (stage === 'thankyou' || stage === 'thankyou-pending') {
 		trackThankYouPageLoaded(product, paymentMethod);

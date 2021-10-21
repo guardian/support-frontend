@@ -39,7 +39,7 @@ const buttonsContainer = css`
 type ContributionThankYouSocialShareProps = {
 	email: string;
 	createReferralCodes: boolean;
-	campaignCode: string | null | undefined;
+	campaignCode?: string;
 	countryId: IsoCountry;
 };
 

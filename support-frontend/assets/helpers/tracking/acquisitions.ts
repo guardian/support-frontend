@@ -23,37 +23,37 @@ export type QueryParameter = {
 export type AcquisitionQueryParameters = QueryParameter[];
 export type OphanIds = {
 	pageviewId: string;
-	visitId: string | null | undefined;
-	browserId: string | null | undefined;
+	visitId?: string;
+	browserId?: string;
 };
 // https://github.com/guardian/frontend/blob/master/static/src/javascripts/projects/common/modules/commercial/acquisitions-ophan.js
 export type ReferrerAcquisitionData = {
-	campaignCode: string | null | undefined;
-	referrerPageviewId: string | null | undefined;
+	campaignCode?: string;
+	referrerPageviewId?: string;
 	referrerUrl?: string;
-	componentId: string | null | undefined;
-	componentType: string | null | undefined;
-	source: string | null | undefined;
+	componentId?: string;
+	componentType?: string;
+	source?: string;
 	abTests: AcquisitionABTest[] | null | undefined;
 	// these aren't in the referrer acquisition data model on frontend, but they're convenient to include
 	// as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
-	queryParameters: AcquisitionQueryParameters | null | undefined;
+	queryParameters?: AcquisitionQueryParameters;
 	labels: string[] | null | undefined;
 };
 export type PaymentAPIAcquisitionData = {
 	pageviewId: string;
-	visitId: string | null | undefined;
-	browserId: string | null | undefined;
-	platform: string | null | undefined;
-	referrerPageviewId: string | null | undefined;
-	referrerUrl: string | null | undefined;
+	visitId?: string;
+	browserId?: string;
+	platform?: string;
+	referrerPageviewId?: string;
+	referrerUrl?: string;
 	campaignCodes: string[] | null | undefined;
-	componentId: string | null | undefined;
-	componentType: string | null | undefined;
-	source: string | null | undefined;
+	componentId?: string;
+	componentType?: string;
+	source?: string;
 	abTests: AcquisitionABTest[] | null | undefined;
-	gaId: string | null | undefined;
-	queryParameters: AcquisitionQueryParameters | null | undefined;
+	gaId?: string;
+	queryParameters?: AcquisitionQueryParameters;
 	labels: string[] | null | undefined;
 };
 // ----- Setup ----- //

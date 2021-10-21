@@ -3,7 +3,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 const appendReferralCode = (
 	url: string,
 	platform: string,
-	referralCode: string | null | undefined,
+	referralCode?: string,
 ): string =>
 	referralCode
 		? encodeURI(`${url}&referralData=thankyou_${platform}_${referralCode}`)
@@ -15,8 +15,8 @@ const INTCMP_MAIL = 'component-share-mail';
 const LANDING_PAGE_URL = 'https://support.theguardian.com/contribute';
 
 const emailLandingPageUrl = (
-	campaignCode: string | null | undefined,
-	referralCode: string | null | undefined,
+	campaignCode?: string,
+	referralCode?: string,
 ): string => {
 	const intcmp = campaignCode ? `${INTCMP_MAIL}-${campaignCode}` : INTCMP_MAIL;
 	return appendReferralCode(
@@ -38,8 +38,8 @@ const emailSubjectCopy = (countryId: IsoCountry) =>
 
 const emailBodyCopy = (
 	countryId: IsoCountry,
-	campaignCode: string | null | undefined,
-	referralCode: string | null | undefined,
+	campaignCode?: string,
+	referralCode?: string,
 ) =>
 	countryId === 'AU'
 		? `I support Guardian Australia because I believe in rigorous, independent journalism that’s open for everyone to read. Join me by making a contribution and together we can be a voice for change. #supportGuardianAustralia \r\n${emailLandingPageUrl(
@@ -52,8 +52,8 @@ const emailBodyCopy = (
 		  )}`;
 
 export const getFacebookShareLink = (
-	campaignCode: string | null | undefined,
-	referralCode: string | null | undefined,
+	campaignCode?: string,
+	referralCode?: string,
 ): string => {
 	const intcmp = campaignCode
 		? `${INTCMP_FACEBOOK}-${campaignCode}`
@@ -68,8 +68,8 @@ export const getFacebookShareLink = (
 };
 export const getTwitterShareLink = (
 	countryId: IsoCountry,
-	campaignCode: string | null | undefined,
-	referralCode: string | null | undefined,
+	campaignCode?: string,
+	referralCode?: string,
 ): string => {
 	const intcmp = campaignCode
 		? `${INTCMP_TWITTER}-${campaignCode}`
@@ -86,7 +86,7 @@ export const getTwitterShareLink = (
 	return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
 };
 export const getLinkedInShareLink = (
-	referralCode: string | null | undefined,
+	referralCode?: string,
 ): string => {
 	const encodedUrl = appendReferralCode(
 		LANDING_PAGE_URL,
@@ -97,8 +97,8 @@ export const getLinkedInShareLink = (
 };
 export const getEmailShareLink = (
 	countryId: IsoCountry,
-	campaignCode: string | null | undefined,
-	referralCode: string | null | undefined,
+	campaignCode?: string,
+	referralCode?: string,
 ): string => {
 	const encodedSubject = encodeURI(emailSubjectCopy(countryId));
 	const encodedBody = encodeURI(

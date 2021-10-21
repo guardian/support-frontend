@@ -7,7 +7,7 @@ import './rows.scss';
 type PropTypes = {
 	gap: 'small' | 'normal' | 'large';
 	children: Node;
-	className: string | null | undefined;
+	className?: string;
 };
 
 // ----- Component ----- //

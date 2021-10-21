@@ -51,7 +51,7 @@ export const campaign: CampaignSettings = {
 };
 
 function campaignEnabledForUser(
-	campaignCode: string | null | undefined,
+	campaignCode?: string,
 ): boolean {
 	if (currentCampaignPath && window.guardian.enableContributionsCampaign) {
 		return (
@@ -65,7 +65,7 @@ function campaignEnabledForUser(
 }
 
 export function getCampaignSettings(
-	campaignCode: string | null | undefined,
+	campaignCode?: string,
 ): CampaignSettings | null {
 	if (campaignEnabledForUser(campaignCode)) {
 		return campaign;

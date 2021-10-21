@@ -23,7 +23,7 @@ type PropTypes = {
 	billingPeriod: BillingPeriod;
 	changeSubscription?: string | null;
 	dataList: DataListItem[];
-	description: string | null | undefined;
+	description?: string;
 	image: $Call<GridImageType, GridImg>;
 	productPrice: ProductPrice;
 	title: string;
@@ -50,7 +50,7 @@ const DataList = (props: { dataList: DataListItem[] }) => (
 );
 
 const PromotionDiscount = (props: {
-	promotion: Promotion | null | undefined;
+	promotion?: Promotion;
 }) => (
 	<span>
 		{props.promotion && hasDiscount(props.promotion) && (

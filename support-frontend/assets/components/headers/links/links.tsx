@@ -23,8 +23,8 @@ type HeaderNavLink = {
 };
 type PropTypes = {
 	location: 'desktop' | 'mobile';
-	countryGroupId: CountryGroupId | null | undefined;
-	getRef: Option<(arg0: Element | null | undefined) => void>;
+	countryGroupId?: CountryGroupId;
+	getRef: Option<(arg0?: Element) => void>;
 };
 const links: HeaderNavLink[] = [
 	{
@@ -75,7 +75,7 @@ const links: HeaderNavLink[] = [
 ];
 
 function internationalisationID(
-	countryGroupId: CountryGroupId | null | undefined = null,
+	countryGroupId?: CountryGroupId = null,
 ): string | null | undefined {
 	if (countryGroupId != null) {
 		const group = countryGroups[countryGroupId];

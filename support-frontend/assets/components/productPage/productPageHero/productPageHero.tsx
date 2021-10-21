@@ -12,7 +12,7 @@ import './productPageHero.scss';
 type WrapperPropTypes = {
 	children: Node;
 	modifierClasses: Array<string | null | undefined>;
-	className: string | null | undefined;
+	className?: string;
 	appearance: 'grey' | 'feature' | 'custom' | 'campaign';
 };
 type PropTypes = WrapperPropTypes & {

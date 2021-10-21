@@ -34,7 +34,7 @@ type SharedButtonPropTypes = {
 	icon?: Node;
 	appearance: Appearance;
 	iconSide: IconSide;
-	getRef?: (arg0: Element | null | undefined) => void;
+	getRef?: (arg0?: Element) => void;
 	modifierClasses: string[];
 	postDeploymentTestID?: string;
 };

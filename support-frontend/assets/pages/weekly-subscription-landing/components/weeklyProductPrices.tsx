@@ -102,7 +102,7 @@ const weeklyProductProps = (
 
 type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
-	productPrices: ProductPrices | null | undefined;
+	productPrices?: ProductPrices;
 	orderIsAGift: boolean;
 };
 

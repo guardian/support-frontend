@@ -73,7 +73,7 @@ function getDiscountDescription(
 	price: number,
 	fixedTerm: boolean,
 	discountedPrice: number,
-	numberOfDiscountedPeriods: number | null | undefined,
+	numberOfDiscountedPeriods?: number,
 	billingPeriod: BillingPeriod,
 ) {
 	const noun = billingPeriodNoun(billingPeriod, fixedTerm);

@@ -7,7 +7,7 @@ import './button.scss';
 type PropTypes = SharedButtonPropTypes & {
 	'aria-label'?: string | null | undefined;
 	type: ('button' | 'submit') | null | undefined;
-	disabled: boolean | null | undefined;
+	disabled?: boolean;
 };
 
 const Button = (props: PropTypes) => (

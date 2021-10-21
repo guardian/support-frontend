@@ -42,14 +42,14 @@ const memUrls: Record<MemProduct, string> = {
 // Creates URLs for the membership site from promo codes and intCmp.
 function getMemLink(
 	product: MemProduct,
-	intCmp: string | null | undefined,
+	intCmp?: string,
 ): string {
 	const params = new URLSearchParams();
 	params.append('INTCMP', intCmp || defaultIntCmp);
 	return `${memUrls[product]}?${params.toString()}`;
 }
 
-function getPatronsLink(intCmp: string | null | undefined): string {
+function getPatronsLink(intCmp?: string): string {
 	const params = new URLSearchParams();
 	params.append('INTCMP', intCmp || defaultIntCmp);
 	return `${patronsUrl}?${params.toString()}`;
@@ -58,7 +58,7 @@ function getPatronsLink(intCmp: string | null | undefined): string {
 function buildParamString(
 	product: SubscriptionProduct,
 	countryGroupId: CountryGroupId,
-	intCmp: string | null | undefined,
+	intCmp?: string,
 	referrerAcquisitionData: ReferrerAcquisitionData | null,
 ): string {
 	const params = new URLSearchParams(window.location.search);
@@ -74,7 +74,7 @@ function buildParamString(
 
 function getLegacyPaperAndDigitalLink(
 	countryGroupId: CountryGroupId,
-	intCmp: string | null | undefined,
+	intCmp?: string,
 	referrerAcquisitionData: ReferrerAcquisitionData,
 	nativeAbParticipations: Participations,
 ) {
@@ -155,7 +155,7 @@ function getDailyEditionUrl(countryGroupId: CountryGroupId) {
 }
 
 const getProfileUrl =
-	(path: string) => (returnUrl: string | null | undefined) => {
+	(path: string) => (returnUrl?: string) => {
 		const encodedReturn = encodeURIComponent(returnUrl || window.location);
 		return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
 	};

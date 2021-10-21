@@ -10,9 +10,9 @@ import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 export type WeeklyLandingPropTypes = {
 	countryId: IsoCountry;
-	productPrices: ProductPrices | null | undefined;
-	promotionCopy: PromotionCopy | null | undefined;
-	orderIsAGift: boolean | null | undefined;
+	productPrices?: ProductPrices;
+	promotionCopy?: PromotionCopy;
+	orderIsAGift?: boolean;
 };
 export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
 	countryId: detectCountry(),

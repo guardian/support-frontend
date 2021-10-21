@@ -101,14 +101,14 @@ type PropTypes = {
 	amazonPayOrderReferenceId: string | null;
 	checkoutFormHasBeenSubmitted: boolean;
 	campaignSettings: CampaignSettings | null;
-	amazonPayBillingAgreementId: string | null | undefined;
-	localCurrencyCountry: LocalCurrencyCountry | null | undefined;
+	amazonPayBillingAgreementId?: string;
+	localCurrencyCountry?: LocalCurrencyCountry;
 	amounts: ContributionAmounts;
 	useLocalCurrency: boolean;
 	setUseLocalCurrency: (
 		arg0: boolean,
-		arg1: LocalCurrencyCountry | null | undefined,
-		arg2: number | null | undefined,
+		arg1?: LocalCurrencyCountry,
+		arg2?: number,
 	) => void;
 	defaultOneOffAmount: number | null;
 	sepaData: SepaData;

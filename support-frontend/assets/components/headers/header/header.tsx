@@ -23,7 +23,7 @@ export type PropTypes = {
 export type State = {
 	fitsLinksInOneRow: boolean;
 	fitsLinksAtAll: boolean;
-	isTestUser: boolean | null | undefined;
+	isTestUser?: boolean;
 };
 
 // ----- Metrics ----- //
@@ -48,7 +48,7 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 // ----- Component ----- //
 type TopNavPropTypes = {
 	utility: Node;
-	getLogoRef: (arg0: Element | null | undefined) => void;
+	getLogoRef: (arg0?: Element) => void;
 	display: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
 
@@ -117,9 +117,9 @@ export default class Header extends Component<PropTypes, State> {
 		}
 	}
 
-	logoRef: Element | null | undefined;
-	menuRef: Element | null | undefined;
-	containerRef: Element | null | undefined;
+	logoRef?: Element;
+	menuRef?: Element;
+	containerRef?: Element;
 	observer: ElementResizer;
 
 	render() {

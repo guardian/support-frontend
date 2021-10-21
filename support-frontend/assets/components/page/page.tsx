@@ -6,12 +6,12 @@ import CsrBanner from 'components/csr/csrBanner';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 // ----- Types ----- //
 type PropTypes = {
-	id: string | null | undefined;
+	id?: string;
 	header: Node;
 	footer: Node | null;
 	children: Node;
 	classModifiers: Array<string | null | undefined>;
-	backgroundImageSrc: string | null | undefined;
+	backgroundImageSrc?: string;
 }; // ----- Component ----- //
 
 export default function Page(props: PropTypes) {

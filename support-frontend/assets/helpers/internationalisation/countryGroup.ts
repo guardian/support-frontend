@@ -384,7 +384,7 @@ function fromCountry(isoCountry: string): CountryGroupId | null | undefined {
 }
 
 function fromQueryParameter(): CountryGroupId | null | undefined {
-	const countryGroup: string | null | undefined =
+	const countryGroup?: string =
 		getQueryParameter('countryGroup');
 
 	if (countryGroup) {
@@ -429,7 +429,7 @@ function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
 }
 
 function fromCountryGroupName(name: CountryGroupName): CountryGroup {
-	const groupId: CountryGroupId | null | undefined = Object.keys(
+	const groupId?: CountryGroupId = Object.keys(
 		countryGroups,
 	).find((key) => countryGroups[key].name === name);
 	return groupId ? countryGroups[groupId] : countryGroups.GBPCountries;

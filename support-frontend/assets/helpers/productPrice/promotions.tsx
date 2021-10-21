@@ -51,13 +51,13 @@ export type Promotion = {
 };
 const promoQueryParam = 'promoCode';
 
-const hasDiscount = (promotion: Promotion | null | undefined): boolean =>
+const hasDiscount = (promotion?: Promotion): boolean =>
 	promotion !== null &&
 	promotion !== undefined &&
 	isNumeric(promotion.discountedPrice);
 
 const hasIntroductoryPrice = (
-	promotion: Promotion | null | undefined,
+	promotion?: Promotion,
 ): boolean =>
 	promotion !== null &&
 	promotion !== undefined &&
@@ -65,7 +65,7 @@ const hasIntroductoryPrice = (
 
 function applyDiscount(
 	price: ProductPrice,
-	promotion: Promotion | null | undefined,
+	promotion?: Promotion,
 ) {
 	if (hasDiscount(promotion)) {
 		return { ...price, price: promotion.discountedPrice };
@@ -109,8 +109,8 @@ function getPromotion(
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption?: FulfilmentOptions,
+	productOption?: ProductOptions,
 ): Promotion | null | undefined {
 	return getAppliedPromo(
 		getProductPrice(
@@ -131,7 +131,7 @@ function getSanitisedHtml(markdownString: string) {
 }
 
 function getPromotionCopy(
-	promotionCopy: PromotionCopy | null | undefined,
+	promotionCopy?: PromotionCopy,
 ): PromotionCopy {
 	if (!promotionCopy) {
 		return {};

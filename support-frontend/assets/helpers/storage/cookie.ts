@@ -26,7 +26,7 @@ export function get(name: string): string | null | undefined {
 export function set(
 	name: string,
 	value: string,
-	daysToLive: number | null | undefined,
+	daysToLive?: number,
 ): void {
 	const expires = new Date();
 

@@ -8,7 +8,7 @@ import './text.scss';
 // ---- Types ----- //
 type PropTypes = {
 	title?: string | null;
-	className: string | null | undefined;
+	className?: string;
 	children?: Node | null | undefined;
 	headingSize: HeadingSize;
 };

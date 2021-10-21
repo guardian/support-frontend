@@ -48,7 +48,7 @@ type PropTypes = {
 	) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 	stripePaymentRequestButtonClicked: boolean;
-	localCurrencyCountry: LocalCurrencyCountry | null | undefined;
+	localCurrencyCountry?: LocalCurrencyCountry;
 	useLocalCurrency: boolean;
 };
 

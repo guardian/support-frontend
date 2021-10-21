@@ -5,7 +5,7 @@ import SvgExclamation from 'components/svgs/exclamation';
 // ---- Types ----- //
 type PropTypes = {
 	showError?: boolean;
-	message: string | null | undefined;
+	message?: string;
 	svg?: Node;
 }; // ----- Component ----- //
 

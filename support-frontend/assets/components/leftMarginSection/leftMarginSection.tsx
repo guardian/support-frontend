@@ -6,7 +6,7 @@ import './leftMarginSection.scss';
 // ----- Props ----- //
 type PropTypes = {
 	modifierClasses: Array<string | null | undefined>;
-	className: string | null | undefined;
+	className?: string;
 	children: Node;
 }; // ----- Component ----- //
 
