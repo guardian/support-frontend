@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
@@ -8,11 +7,9 @@ import { headline, textSans } from '@guardian/src-foundations/typography';
 import { ThemeProvider } from 'emotion-theming';
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
-import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
 
 export type Product = {
 	title: string;

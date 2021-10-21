@@ -3,13 +3,11 @@ import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import { headline, textSans } from '@guardian/src-foundations/typography';
+import { textSans } from '@guardian/src-foundations/typography';
 import { ThemeProvider } from 'emotion-theming';
 import type { Node } from 'react';
 import React from 'react';
-import PayPalOneClickCheckoutButton from 'components/paypalExpressButton/PayPalOneClickCheckoutButton';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
 
 export type ProductSmall = {
 	offerCopy: string;
