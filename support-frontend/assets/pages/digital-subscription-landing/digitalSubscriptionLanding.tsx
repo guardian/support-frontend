@@ -50,6 +50,7 @@ import {
 } from './components/comparison/interactiveTableContents';
 import { HeroWithImage } from './components/hero/heroWithImage';
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
+import { HeroWithPriceCardsClimate2021 } from './components/hero/heroWithPriceCardsClimate2021';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import Prices from './components/prices';
 import ProductBlock from './components/productBlock/productBlock';
@@ -211,6 +212,8 @@ function DigitalLandingComponent({
 	const showPayPalButton = participations.payPalOneClickTestV3 === 'payPal';
 	const isUsingGuestCheckout =
 		showPayPalButton || participations.payPalOneClickTestV3 === 'guestCheckout';
+	const showDigiSubClimateHeader =
+		participations.digiSubClimateHeader2021 === 'variant';
 
 	const giftNonGiftLink = orderIsAGift
 		? routes.digitalSubscriptionLanding
@@ -233,21 +236,38 @@ function DigitalLandingComponent({
 		debounce: true,
 	});
 
-	return (
-		<span>
-			{orderIsAGift ? (
+	const Hero = () => {
+		if (orderIsAGift) {
+			return (
 				<HeroWithImage
-					orderIsAGift={orderIsAGift}
 					countryGroupId={countryGroupId}
 					promotionCopy={sanitisedPromoCopy}
 				/>
-			) : (
-				<HeroWithPriceCards
+			);
+		}
+
+		if (showDigiSubClimateHeader) {
+			return (
+				<HeroWithPriceCardsClimate2021
 					promotionCopy={sanitisedPromoCopy}
 					countryGroupId={countryGroupId}
 					priceList={heroPriceList}
 				/>
-			)}
+			);
+		}
+
+		return (
+			<HeroWithPriceCards
+				promotionCopy={sanitisedPromoCopy}
+				countryGroupId={countryGroupId}
+				priceList={heroPriceList}
+			/>
+		);
+	};
+
+	return (
+		<span>
+			<Hero />
 			{showComparisonTable && (
 				<FullWidthContainer>
 					<CentredContainer>
