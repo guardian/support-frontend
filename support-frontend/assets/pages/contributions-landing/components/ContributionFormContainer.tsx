@@ -156,7 +156,7 @@ export function useArticleCountOptOut(): ArticleCountOptOut {
 	};
 }
 
-const getArticleCountFromUrl = (): number | null | undefined => {
+const getArticleCountFromUrl = (): number | null => {
 	const articleCount = getQueryParameter('numArticles');
 
 	if (articleCount) {
@@ -226,7 +226,7 @@ function withProps(props: PropTypes) {
 				/>
 			)}
 
-			{isArticleCountTest && numArticles && numArticles >= 5 ? (
+			{isArticleCountTest && numArticles !== null && numArticles >= 5 ? (
 				<ContributionFormBlurb
 					headerCopy={
 						<ContributionsArticleCountWithOptOut
@@ -249,7 +249,7 @@ function withProps(props: PropTypes) {
 			)}
 
 			<div className="gu-content__form">
-				{isArticleCountTest && numArticles && (
+				{isArticleCountTest && numArticles !== null && numArticles >= 5 && (
 					<ContributionsArticleCountWithOptOut
 						numArticles={numArticles}
 						isMobileOnly
