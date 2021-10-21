@@ -243,7 +243,6 @@ function DigitalCheckoutFormGift(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout={false}
 						/>
 					</FormSection>
 					<FormSection title="Billing address">

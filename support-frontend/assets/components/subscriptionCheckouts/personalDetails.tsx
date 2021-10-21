@@ -38,7 +38,6 @@ export type PropTypes = {
 	setTelephone: (...args: any[]) => any;
 	formErrors: Array<FormError<FormField>>;
 	signOut: (...args: any[]) => any;
-	isUsingGuestCheckout: boolean;
 };
 type SignedInEmailFooterTypes = {
 	handleSignOut: (...args: any[]) => any;
@@ -141,7 +140,7 @@ export default function PersonalDetails(props: PropTypes) {
 				onBlur={maybeFetchAndStoreUsertype}
 				error={firstError('email', props.formErrors)}
 				pattern={emailRegexPattern}
-				disabled={!props.isUsingGuestCheckout || props.isSignedIn}
+				disabled={props.isSignedIn}
 			/>
 			{confirmEmailInput}
 			{emailFooter}

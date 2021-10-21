@@ -159,9 +159,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 		props.currencyId,
 		props.country,
 	);
-	const isUsingGuestCheckout =
-		props.participations.payPalOneClickTestV3 === 'payPal' ||
-		props.participations.payPalOneClickTestV3 === 'guestCheckout';
+
 	return (
 		<Content>
 			<CheckoutLayout
@@ -210,7 +208,6 @@ function DigitalCheckoutForm(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout={isUsingGuestCheckout}
 						/>
 					</FormSection>
 					<FormSection title="Address">

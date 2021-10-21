@@ -372,7 +372,6 @@ function PaperCheckoutForm(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout
 						/>
 					</FormSection>
 

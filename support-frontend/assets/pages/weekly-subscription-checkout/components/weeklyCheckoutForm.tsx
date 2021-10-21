@@ -267,7 +267,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout
 						/>
 					</FormSection>
 					<FormSection title="Where should we deliver your magazine?">

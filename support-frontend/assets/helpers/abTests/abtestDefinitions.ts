@@ -135,31 +135,6 @@ export const tests: Tests = {
 		seed: 10,
 		optimizeId: 'unfNP7eZTLW4245wJOcxiw',
 	},
-	payPalOneClickTestV3: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'guestCheckout',
-			},
-			{
-				id: 'payPal',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage:
-			pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
-		seed: 11,
-		optimizeId: 'dDHS42cERbuQb0BXe85-4g',
-	},
 	articleCountTest: {
 		variants: [
 			{

@@ -50,7 +50,6 @@ const PaymentSelection = (
 					onClick={product.onClick}
 					onView={product.onView}
 					label={product.label}
-					showPayPalButton={product.showPayPalButton}
 					billingPeriod={product.billingPeriod}
 				/>
 			))}
@@ -62,16 +61,12 @@ function DigitalPaymentSelection({
 	currencyId,
 	productPrices,
 	orderIsAGift,
-	isUsingGuestCheckout,
-	showPayPalButton,
 }: PaymentSelectionPropTypes) {
 	const paymentOptions = getPaymentOptions({
 		countryGroupId,
 		currencyId,
 		productPrices,
 		orderIsAGift,
-		isUsingGuestCheckout,
-		showPayPalButton,
 	});
 	return <PaymentSelection paymentOptions={paymentOptions} />;
 }

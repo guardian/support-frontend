@@ -7,13 +7,13 @@
             "TS2305": 64,
             "TS2322": 303,
             "TS2724": 2,
-            "TS2578": 34,
+            "TS2578": 35,
             "TS2307": 22,
             "TS2339": 163,
             "TS2345": 165,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 24,
+            "TS6133": 29,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 21,
@@ -94,7 +94,7 @@
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionAmount.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionForm.tsx": 10,
-            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 7,
+            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 8,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx": 5,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx": 3,
@@ -157,8 +157,8 @@
             "assets/components/page/pageTitle.tsx": 5,
             "assets/components/pageSection/pageSection.tsx": 1,
             "assets/components/product/productInfoChip.tsx": 1,
-            "assets/components/product/productOption.tsx": 3,
-            "assets/components/product/productOptionSmall.tsx": 1,
+            "assets/components/product/productOption.tsx": 5,
+            "assets/components/product/productOptionSmall.tsx": 4,
             "assets/components/productPage/productPageHero/productPageHero.tsx": 1,
             "assets/components/quote/quote.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 2,
@@ -2662,6 +2662,10 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
+            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
             "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -4394,6 +4398,26 @@
             "message": "'isTestUser' is declared but its value is never read."
         },
         {
+            "path": "assets/components/product/productOption.tsx",
+            "message": "'PayPalOneClickCheckoutButton' is declared but its value is never read."
+        },
+        {
+            "path": "assets/components/product/productOption.tsx",
+            "message": "'DigitalPack' is declared but its value is never read."
+        },
+        {
+            "path": "assets/components/product/productOptionSmall.tsx",
+            "message": "'headline' is declared but its value is never read."
+        },
+        {
+            "path": "assets/components/product/productOptionSmall.tsx",
+            "message": "'PayPalOneClickCheckoutButton' is declared but its value is never read."
+        },
+        {
+            "path": "assets/components/product/productOptionSmall.tsx",
+            "message": "'DigitalPack' is declared but its value is never read."
+        },
+        {
             "path": "assets/helpers/forms/checkouts.ts",
             "message": "'allSwitches' is declared but its value is never read."
         },
@@ -4709,39 +4733,39 @@
     "TS7016": [
         {
             "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
-            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'seedrandom'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Could not find a declaration file for module 'dompurify'. 'support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'dompurify'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'preact/debug'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/ssrPages.ts",
-            "message": "Could not find a declaration file for module 'react-dom/server'. 'support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom/server'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Could not find a declaration file for module 'uuid'. 'support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'uuid'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. 'support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. 'support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         }
     ],
     "TS2554": [
@@ -5627,7 +5651,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Namespace '\"/Users/tom_pretty/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
+            "message": "Namespace '\"/Users/rupert_bates/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
         }
     ],
     "TS7022": [

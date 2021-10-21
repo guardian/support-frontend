@@ -147,8 +147,6 @@ const getHeroCtaProps = (
 	productPrices: ProductPrices,
 	currencyId: IsoCurrency,
 	countryGroupId: CountryGroupId,
-	isUsingGuestCheckout: boolean,
-	showPayPalButton: boolean,
 ): ProductSmall[] => {
 	const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -189,7 +187,6 @@ const getHeroCtaProps = (
 				digitalBillingPeriod,
 				promoCode,
 				false,
-				isUsingGuestCheckout,
 			),
 			onClick,
 			priceCopy: getPriceDescription(
@@ -204,7 +201,6 @@ const getHeroCtaProps = (
 				digitalBillingPeriod,
 			),
 			billingPeriod: digitalBillingPeriod,
-			showPayPalButton,
 		};
 	};
 
@@ -226,8 +222,6 @@ export type PaymentSelectionPropTypes = {
 	currencyId: IsoCurrency;
 	productPrices: ProductPrices;
 	orderIsAGift: boolean;
-	isUsingGuestCheckout: boolean;
-	showPayPalButton: boolean;
 };
 
 // state
@@ -236,8 +230,6 @@ const getPaymentOptions = ({
 	currencyId,
 	productPrices,
 	orderIsAGift,
-	isUsingGuestCheckout,
-	showPayPalButton,
 }: PaymentSelectionPropTypes): ProductOptionType[] => {
 	const productOptions = getProductOptions(productPrices, countryGroupId);
 
@@ -295,7 +287,6 @@ const getPaymentOptions = ({
 						billingPeriodForHref,
 						promoCode,
 						orderIsAGift,
-						false,
 					),
 					onClick,
 					onView: sendTrackingEventsOnView(trackingProperties),
@@ -304,7 +295,6 @@ const getPaymentOptions = ({
 					label: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].label,
 					buttonCopy: 'Give this gift',
 					billingPeriod,
-					showPayPalButton,
 			  }
 			: {
 					title: BILLING_PERIOD[digitalBillingPeriod].title,
@@ -317,7 +307,6 @@ const getPaymentOptions = ({
 						billingPeriodForHref,
 						promoCode,
 						orderIsAGift,
-						isUsingGuestCheckout,
 					),
 					onClick,
 					onView: sendTrackingEventsOnView(trackingProperties),
@@ -330,7 +319,6 @@ const getPaymentOptions = ({
 					label: BILLING_PERIOD[digitalBillingPeriod].label,
 					buttonCopy: 'Subscribe now',
 					billingPeriod,
-					showPayPalButton,
 			  };
 	};
 

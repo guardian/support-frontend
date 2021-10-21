@@ -26,7 +26,6 @@ export type Product = {
 	onView: (...args: any[]) => any;
 	label?: string;
 	cssOverrides?: string;
-	showPayPalButton?: boolean;
 	billingPeriod?: BillingPeriod;
 };
 const productOption = css`
@@ -198,13 +197,7 @@ function ProductOption(props: Product) {
 				}
 			}
 		`;
-	const productOptionButtonHeight =
-		props.showPayPalButton &&
-		css`
-			${from.tablet} {
-				grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 108px;
-			}
-		`;
+
 	return (
 		<div
 			ref={setElementToObserve}
@@ -212,7 +205,6 @@ function ProductOption(props: Product) {
 				productOption,
 				props.cssOverrides,
 				productOptionMargin,
-				productOptionButtonHeight,
 			]}
 		>
 			<div css={productOptionVerticalLine}>
@@ -246,13 +238,6 @@ function ProductOption(props: Product) {
 						{props.buttonCopy}
 					</LinkButton>
 				</ThemeProvider>
-				{props.showPayPalButton && props.billingPeriod && (
-					<PayPalOneClickCheckoutButton
-						billingPeriod={props.billingPeriod}
-						trackingId="one-click-checkout-price-card"
-						product={DigitalPack}
-					/>
-				)}
 			</div>
 		</div>
 	);
@@ -263,7 +248,6 @@ ProductOption.defaultProps = {
 	label: '',
 	offerCopy: '',
 	cssOverrides: '',
-	showPayPalButton: false,
 	billingPeriod: Monthly,
 };
 export default ProductOption;
