@@ -1,41 +1,26 @@
 // ----- Imports ----- //
-import { renderPage } from 'helpers/rendering/render';
 // @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import React, { useEffect } from 'react';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
-import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
-import { HeroWithImage } from './components/hero/heroWithImage';
-import ProductBlock from './components/productBlock/productBlock';
-import Prices from './components/prices';
-import GiftNonGiftCta from 'components/product/giftNonGiftCta';
-import DigitalFooter from 'components/footerCompliant/DigitalFooter';
-import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
-import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
-import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
-import type { DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
-import { digitalLandingProps } from './digitalSubscriptionLandingProps';
-import InteractiveTable from 'components/interactiveTable/interactiveTable';
-import {
-	headers,
-	footer,
-	getRows,
-} from './components/comparison/interactiveTableContents';
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
-import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { Provider } from 'react-redux';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
+import DigitalFooter from 'components/footerCompliant/DigitalFooter';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import InteractiveTable from 'components/interactiveTable/interactiveTable';
 import Block from 'components/page/block';
 import Page from 'components/page/page';
+import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -51,10 +36,25 @@ import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { renderPage } from 'helpers/rendering/render';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { routes } from 'helpers/urls/routes';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
+import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
+import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+import {
+	footer,
+	getRows,
+	headers,
+} from './components/comparison/interactiveTableContents';
+import { HeroWithImage } from './components/hero/heroWithImage';
+import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
+import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
+import Prices from './components/prices';
+import ProductBlock from './components/productBlock/productBlock';
+import type { DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
+import { digitalLandingProps } from './digitalSubscriptionLandingProps';
 
 const productBlockContainer = css`
 	background-color: ${neutral[93]};
@@ -211,9 +211,11 @@ function DigitalLandingComponent({
 	const showPayPalButton = participations.payPalOneClickTestV3 === 'payPal';
 	const isUsingGuestCheckout =
 		showPayPalButton || participations.payPalOneClickTestV3 === 'guestCheckout';
+
 	const giftNonGiftLink = orderIsAGift
 		? routes.digitalSubscriptionLanding
 		: routes.digitalSubscriptionLandingGift;
+
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	// For comparison table
 	const localisedRows = getRows(countryGroupId);
@@ -225,10 +227,12 @@ function DigitalLandingComponent({
 		isUsingGuestCheckout,
 		showPayPalButton,
 	);
+
 	const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.3,
 		debounce: true,
 	});
+
 	return (
 		<span>
 			{orderIsAGift ? (
