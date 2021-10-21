@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { tabButton, tabList, tabPanel } from './tabsStyles';
 
@@ -22,7 +22,7 @@ function Tabs({
 	tabElement,
 	tabs,
 	onTabChange,
-}: PropTypes): ReactElement {
+}: PropTypes): JSX.Element {
 	const TabControllerElement = tabElement;
 	return (
 		<div>
