@@ -10,7 +10,7 @@
             "TS2578": 34,
             "TS2307": 22,
             "TS2339": 163,
-            "TS2345": 165,
+            "TS2345": 167,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 24,
@@ -19,7 +19,7 @@
             "TS2769": 21,
             "TS2314": 8,
             "TS7016": 9,
-            "TS2554": 79,
+            "TS2554": 70,
             "TS2304": 18,
             "TS2741": 15,
             "TS2739": 17,
@@ -115,9 +115,9 @@
             "assets/pages/subscriptions-redemption/components/redemptionForm.tsx": 5,
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 8,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 9,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 16,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 15,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 16,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 15,
             "assets/components/asyncronously/asyncronously.ts": 2,
             "assets/components/base/rows.tsx": 1,
             "assets/components/button/_sharedButton.tsx": 1,
@@ -190,7 +190,7 @@
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 10,
             "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 12,
-            "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 3,
+            "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 31,
             "assets/components/subscriptionCheckouts/total/total.tsx": 5,
             "assets/components/svgs/amazonPayLogoDs.tsx": 1,
@@ -303,6 +303,7 @@
             "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts": 8,
             "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts": 5,
             "assets/helpers/productPrice/__tests__/productPricesTests.ts": 6,
+            "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/productPrice/priceDescriptions.ts": 6,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 15,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
@@ -313,7 +314,6 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummary.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 3,
             "assets/pages/subscriptions-redemption/marketingConsentContainer.ts": 1,
-            "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 4,
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
@@ -322,7 +322,6 @@
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
-            "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/tracking/behaviour.ts": 2,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
@@ -3797,6 +3796,10 @@
         },
         {
             "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
             "message": "Argument of type '{ 'United Kingdom': { Collection: { Sunday: { Monthly: { GBP: { price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; }[]; }; }; }; }; }; }' is not assignable to parameter of type 'ProductPrices'."
         },
         {
@@ -3830,6 +3833,22 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Argument of type '{ name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }' is not assignable to parameter of type 'Promotion'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
         },
         {
             "path": "assets/helpers/productPrice/priceDescriptions.ts",
@@ -4130,18 +4149,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Argument of type 'ProductPrice | { price: number; fixedTerm: boolean; currency: string; }' is not assignable to parameter of type 'ProductPrice'."
         }
     ],
     "TS7034": [
@@ -4750,10 +4757,6 @@
             "message": "Expected 5 arguments, but got 3."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
             "path": "assets/helpers/__tests__/formValidation.ts",
             "message": "Expected 3 arguments, but got 2."
         },
@@ -4843,11 +4846,7 @@
         },
         {
             "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
@@ -4860,22 +4859,6 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
         },
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
@@ -5003,7 +4986,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
@@ -5011,11 +4994,11 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx",
@@ -5042,24 +5025,12 @@
             "message": "Expected 1 arguments, but got 0."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Expected 5 arguments, but got 4."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Expected 5 arguments, but got 4."
         }
     ],
     "TS2304": [

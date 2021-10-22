@@ -43,11 +43,11 @@ const isNumeric = (num: number | null | undefined): boolean =>
 	num !== null && num !== undefined && !Number.isNaN(num);
 
 function getFirstValidPrice(...prices: Array<number | null | undefined>) {
-	return prices.find(isNumeric) || 0;
+	return prices.find(isNumeric) ?? 0;
 }
 
 function getCountryGroup(country: IsoCountry): CountryGroup {
-	return countryGroups[fromCountry(country) || GBPCountries];
+	return countryGroups[fromCountry(country) ?? GBPCountries];
 }
 
 function getProductPrice(
@@ -55,13 +55,12 @@ function getProductPrice(
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	productOption?: ProductOptions | null,
 ): ProductPrice {
 	const countryGroup = getCountryGroup(country);
-	// eslint-disable-next-line max-len
 	return productPrices[countryGroup.name][
-		fulfilmentOption || NoFulfilmentOptions
-	][productOption || NoProductOptions][billingPeriod][countryGroup.currency];
+		fulfilmentOption ?? NoFulfilmentOptions
+	][productOption ?? NoProductOptions][billingPeriod][countryGroup.currency];
 }
 
 function finalPrice(
