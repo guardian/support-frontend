@@ -53,6 +53,7 @@ type PropTypes = {
 	canShowTicker: boolean;
 	currency: IsoCurrency;
 	shouldShowRichLandingPage: boolean;
+	isSignedIn: boolean;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -67,6 +68,7 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage:
 		state.common.abParticipations.richLandingPageTest === 'variant',
+	isSignedIn: state.page.user.isSignedIn,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
@@ -224,7 +226,7 @@ function withProps(props: PropTypes) {
 	const showPreviousGiving = isInSupportAgainHeaderVariant(
 		props.referrerAcquisitionData,
 	);
-	const lastOneOffContribution = useLastOneOffContribution();
+	const lastOneOffContribution = useLastOneOffContribution(props.isSignedIn);
 
 	return (
 		<div
