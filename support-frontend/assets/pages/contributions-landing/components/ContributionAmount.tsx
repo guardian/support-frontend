@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { TextInput } from '@guardian/src-text-input';
 import React from 'react';
 import { connect } from 'react-redux';
 import type {
@@ -17,6 +18,7 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
+import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
@@ -26,8 +28,6 @@ import {
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
-import { TextInput } from '@guardian/src-text-input';
-import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 // ----- Types ----- //
 type PropTypes = {
 	countryGroupId: CountryGroupId;
@@ -70,16 +70,25 @@ const mapStateToProps = (state: State) => ({
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- temp solution
 const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	selectAmount: (amount, countryGroupId, contributionType) => () => {
-		trackComponentClick(
-			`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${
-				amount.value || amount
-			}`,
-		);
-		dispatch(selectAmount(amount, contributionType));
-	},
-	updateOtherAmount: (amount, countryGroupId, contributionType) => {
+	selectAmount:
+		(
+			amount: number | 'other',
+			countryGroupId: CountryGroupId,
+			contributionType: ContributionType,
+		) =>
+		() => {
+			trackComponentClick(
+				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
+			);
+			dispatch(selectAmount(amount, contributionType));
+		},
+	updateOtherAmount: (
+		amount: string,
+		countryGroupId: CountryGroupId,
+		contributionType: ContributionType,
+	) => {
 		dispatch(updateOtherAmount(amount, contributionType));
 	},
 });
@@ -113,17 +122,17 @@ function ContributionAmount(props: PropTypes) {
 		checkoutFormHasBeenSubmitted ||
 		stripePaymentRequestButtonClicked ||
 		!!otherAmount;
-	const otherAmountErrorMessage: string | null =
+	const otherAmountErrorMessage: string =
 		canShowOtherAmountErrorMessage &&
 		!amountIsValid(
-			otherAmount || '',
+			otherAmount ?? '',
 			props.countryGroupId,
 			props.contributionType,
 			props.localCurrencyCountry,
 			props.useLocalCurrency,
 		)
 			? `Please provide an amount between ${minAmount} and ${maxAmount}`
-			: null;
+			: '';
 	return (
 		<fieldset
 			className={classNameWithModifiers('form__radio-group', [
@@ -157,11 +166,11 @@ function ContributionAmount(props: PropTypes) {
 				>
 					<TextInput
 						id="contributionOther"
-						label={`Other amount (${otherLabelSymbol})`}
-						value={otherAmount}
+						label={`Other amount`}
+						value={`${otherLabelSymbol}${otherAmount ?? ''}`}
 						onChange={(e) =>
 							props.updateOtherAmount(
-								(e.target as any).value,
+								e.target.value.replace(/[^0-9]/g, ''),
 								props.countryGroupId,
 								props.contributionType,
 							)
@@ -175,6 +184,8 @@ function ContributionAmount(props: PropTypes) {
 						error={otherAmountErrorMessage}
 						autoComplete="off"
 						autoFocus
+						inputMode="numeric"
+						pattern="[0-9]*"
 					/>
 				</div>
 			)}

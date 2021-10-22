@@ -91,7 +91,6 @@
             "assets/pages/aus-moment-map/utils.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
-            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionForm.tsx": 10,
             "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 6,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
@@ -312,6 +311,7 @@
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
+            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -778,30 +778,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
             "message": "Parameter 'error' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Parameter 'amount' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Parameter 'countryGroupId' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Parameter 'contributionType' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Parameter 'amount' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Parameter 'countryGroupId' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Parameter 'contributionType' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
@@ -1858,14 +1834,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"appearance\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionAmountChoices.tsx",
