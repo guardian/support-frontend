@@ -22,7 +22,7 @@ exec(tscCmd, (error, stdout) => {
 
       const errorInstance = {
         path: errorPath,
-        message: shortenFullPathToRelativePath(errorMessage),
+        message: shortenFullPathsToRelativePaths(errorMessage),
       };
 
       const errorInstances = accumulator[errorCode]
@@ -110,9 +110,9 @@ exec(tscCmd, (error, stdout) => {
 });
 
 
-const FULL_PATH_REGEX = /'\/.*\/(?<relativePath>)support-frontend\/.* ' /gm
+const FULL_PATH_REGEX = /'\/.*\/(?<relativePath>support-frontend\/[^ ]+)'/gm
 
-function shortenFullPathToRelativePath(errorMessage) {
+function shortenFullPathsToRelativePaths(errorMessage) {
   const caputureGroups = FULL_PATH_REGEX.exec(errorMessage);
 
   if (!caputureGroups || !caputureGroups.groups) {
@@ -121,5 +121,5 @@ function shortenFullPathToRelativePath(errorMessage) {
 
   const { relativePath } = caputureGroups.groups;
 
-  return errorMessage.replace(FULL_PATH_REGEX, relativePath);
+  return errorMessage.replace(FULL_PATH_REGEX, `'${relativePath}'`);
 }
