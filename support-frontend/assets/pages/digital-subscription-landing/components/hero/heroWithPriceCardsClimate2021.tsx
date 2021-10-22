@@ -1,11 +1,11 @@
 // ----- Imports ----- //
+import { brand } from '@guardian/src-foundations/palette';
 import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import Hero from 'components/page/hero';
 import HeroRoundel from 'components/page/heroRoundel';
 import PageTitle from 'components/page/pageTitle';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { brand } from '@guardian/src-foundations/palette';
 import {
 	AUDCountries,
 	UnitedStates,
@@ -16,27 +16,26 @@ import {
 	getTimeboundCopy,
 	getTimeboundQuery,
 } from 'helpers/timeBoundedCopy/timeBoundedCopy';
+import { IconBlueEarth } from './climate2021/IconBlueEarth';
+import { IconStarburst } from './climate2021/IconStarburst';
+import { IconSwirl } from './climate2021/IconSwirl';
+import { IconTrees } from './climate2021/IconTrees';
 import DefaultRoundel from './defaultRoundel';
 import { HeroPriceCards } from './heroPriceCards';
 import {
 	circleTextGeneric,
 	embeddedRoundel,
 	heroCopy,
+	heroOverride,
 	heroTitle,
+	pageTitleOverride,
 	paragraphs,
 	roundelOverrides,
 	yellowHeading,
-
-	pageTitleOverride,
-	heroOverride,
 } from './heroWithPriceCardsClimate2021Styles';
 
-import { IconSwirl } from './climate2021/IconSwirl';
-import { IconTrees } from './climate2021/IconTrees';
-import { IconStarburst } from './climate2021/IconStarburst';
 // import { IconEarth } from './climate2021/IconEarth';
 // import { IconRedEarth } from './climate2021/IconRedEarth';
-import { IconBlueEarth } from './climate2021/IconBlueEarth';
 
 type PropTypes = {
 	promotionCopy: PromotionCopy;
@@ -102,15 +101,16 @@ function HeroWithPriceCardsClimate2021({
 
 	const copy = promoCopy || defaultCopy;
 	return (
-		<PageTitle 
-			title="Digital subscription" 
+		<PageTitle
+			title="Digital subscription"
 			cssOverrides={pageTitleOverride}
-			theme="digital">
+			theme="digital"
+		>
 			<CentredContainer>
-				<IconBlueEarth/>
-				<IconTrees/>
-				<IconSwirl/>
-				<IconStarburst/>
+				<IconBlueEarth />
+				<IconTrees />
+				<IconSwirl />
+				<IconStarburst />
 				<Hero
 					image={
 						<HeroPriceCards
