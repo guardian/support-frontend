@@ -5,7 +5,7 @@
             "TS7053": 27,
             "TS7006": 164,
             "TS2305": 64,
-            "TS2322": 303,
+            "TS2322": 312,
             "TS2724": 2,
             "TS2578": 35,
             "TS2307": 22,
@@ -13,7 +13,7 @@
             "TS2345": 165,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 24,
+            "TS6133": 25,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 21,
@@ -235,11 +235,16 @@
             "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
+            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconBlueEarth.tsx": 2,
+            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconStarburst.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconSwirl.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconTrees.tsx": 1,
             "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx": 3,
+            "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/prices.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
-            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 12,
+            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 11,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 4,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
@@ -2274,6 +2279,26 @@
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         },
         {
+            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconBlueEarth.tsx",
+            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconBlueEarth.tsx",
+            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconStarburst.tsx",
+            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconSwirl.tsx",
+            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconTrees.tsx",
+            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
+        },
+        {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
@@ -2284,6 +2309,26 @@
         {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx",
@@ -2324,10 +2369,6 @@
         {
             "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
             "message": "Type '{}' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { ...; }>, \"email\" | ... 2 more ... | \"confirmOptIn\"> | Omit<...>)'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Type '{ orderIsAGift: true; countryGroupId: CountryGroupId; promotionCopy: PromotionCopy; }' is not assignable to type 'IntrinsicAttributes & PropTypes'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
@@ -4474,6 +4515,10 @@
             "message": "'dispatch' is declared but its value is never read."
         },
         {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "'brand' is declared but its value is never read."
+        },
+        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
         },
@@ -4713,39 +4758,39 @@
     "TS7016": [
         {
             "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
-            "message": "Could not find a declaration file for module 'react-dom'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Could not find a declaration file for module 'seedrandom'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'seedrandom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Could not find a declaration file for module 'dompurify'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'dompurify'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'react-dom'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'preact/debug'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/ssrPages.ts",
-            "message": "Could not find a declaration file for module 'react-dom/server'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom/server'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Could not find a declaration file for module 'uuid'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'uuid'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         }
     ],
     "TS2554": [
@@ -5631,7 +5676,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Namespace '\"/Users/tom_forbes/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
+            "message": "Namespace '\"/Users/rik_roots/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
         }
     ],
     "TS7022": [

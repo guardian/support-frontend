@@ -5,6 +5,7 @@ import Hero from 'components/page/hero';
 import HeroRoundel from 'components/page/heroRoundel';
 import PageTitle from 'components/page/pageTitle';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { brand } from '@guardian/src-foundations/palette';
 import {
 	AUDCountries,
 	UnitedStates,
@@ -25,7 +26,17 @@ import {
 	paragraphs,
 	roundelOverrides,
 	yellowHeading,
-} from './heroWithPriceCardsStyles';
+
+	pageTitleOverride,
+	heroOverride,
+} from './heroWithPriceCardsClimate2021Styles';
+
+import { IconSwirl } from './climate2021/IconSwirl';
+import { IconTrees } from './climate2021/IconTrees';
+import { IconStarburst } from './climate2021/IconStarburst';
+// import { IconEarth } from './climate2021/IconEarth';
+// import { IconRedEarth } from './climate2021/IconRedEarth';
+import { IconBlueEarth } from './climate2021/IconBlueEarth';
 
 type PropTypes = {
 	promotionCopy: PromotionCopy;
@@ -38,7 +49,7 @@ const HeroCopy = () => (
 		<p>
 			<strong>With two innovative apps and ad-free reading,</strong> a digital
 			subscription gives you the richest experience of Guardian journalism. It
-			also sustains the independent reporting you love.
+			also sustains the independent reporting you love!
 		</p>
 	</>
 );
@@ -91,8 +102,15 @@ function HeroWithPriceCardsClimate2021({
 
 	const copy = promoCopy || defaultCopy;
 	return (
-		<PageTitle title="Digital subscription CLIMATE" theme="digital">
+		<PageTitle 
+			title="Digital subscription" 
+			cssOverrides={pageTitleOverride}
+			theme="digital">
 			<CentredContainer>
+				<IconBlueEarth/>
+				<IconTrees/>
+				<IconSwirl/>
+				<IconStarburst/>
 				<Hero
 					image={
 						<HeroPriceCards
@@ -109,6 +127,7 @@ function HeroWithPriceCardsClimate2021({
 							{roundelText}
 						</HeroRoundel>
 					}
+					cssOverrides={heroOverride}
 				>
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
