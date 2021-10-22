@@ -62,7 +62,7 @@ describe('Guardian Weekly checkout form', () => {
 					fulfilmentOption: 'Domestic',
 					productPrices: weeklyProducts,
 					formErrors: [],
-                    billingAddressIsSame: true,
+					billingAddressIsSame: true,
 				},
 				billingAddress: {
 					fields: {

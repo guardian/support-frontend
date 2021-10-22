@@ -5,12 +5,9 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { error, line, text } from '@guardian/src-foundations/palette';
 import 'redux';
-import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
-import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
-import { TextInput } from '@guardian/src-text-input';
 import { headline, textSans } from '@guardian/src-foundations/typography/obj';
-import type { User } from 'helpers/user/user';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { TextInput } from '@guardian/src-text-input';
 import { InlineError } from '@guardian/src-user-feedback';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
@@ -18,7 +15,10 @@ import Form from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
+import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
+import type { User } from 'helpers/user/user';
+import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import {
 	submitCode,
 	validateUserCode,

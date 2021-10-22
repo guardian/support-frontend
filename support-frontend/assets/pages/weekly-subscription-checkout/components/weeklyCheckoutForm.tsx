@@ -14,16 +14,23 @@ import Form, {
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import GridImage from 'components/gridImage/gridImage';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
-import Text from 'components/text/text';
-import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
+import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import Summary from 'components/subscriptionCheckouts/summary';
+import Text from 'components/text/text';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
+import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
+import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
-import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import type {
 	Action,
 	FormActionCreators,
@@ -34,11 +41,6 @@ import type {
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { countries } from 'helpers/internationalisation/country';
-import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
-import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
 import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
@@ -48,15 +50,13 @@ import {
 	getBillingAddress,
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import { routes } from 'helpers/urls/routes';
-import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { SetCountryAction } from 'helpers/page/commonActions';
 import 'helpers/page/commonActions';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
