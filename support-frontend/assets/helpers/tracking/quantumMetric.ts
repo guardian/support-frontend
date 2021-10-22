@@ -1,4 +1,5 @@
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { logException } from 'helpers/utilities/logger';
 
 const addQM = (): void => {
 	const qtm = document.createElement('script');
@@ -34,8 +35,8 @@ const init = (): void => {
 					}
 				});
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				logException('Failed to load Quantum Metric', error);
 			});
 	}
 };
