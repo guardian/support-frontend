@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { brand } from '@guardian/src-foundations/palette';
 import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import Hero from 'components/page/hero';
@@ -16,13 +15,15 @@ import {
 	getTimeboundCopy,
 	getTimeboundQuery,
 } from 'helpers/timeBoundedCopy/timeBoundedCopy';
-import { IconBlueEarth } from './climate2021/IconBlueEarth';
+// import { IconBlueEarth } from './climate2021/IconBlueEarth';
+import { IconSmallEarth } from './climate2021/IconSmallEarth';
 import { IconStarburst } from './climate2021/IconStarburst';
 import { IconSwirl } from './climate2021/IconSwirl';
 import { IconTrees } from './climate2021/IconTrees';
 import DefaultRoundel from './defaultRoundel';
 import { HeroPriceCards } from './heroPriceCards';
 import {
+	centredContainerOverride,
 	circleTextGeneric,
 	embeddedRoundel,
 	heroCopy,
@@ -46,9 +47,10 @@ type PropTypes = {
 const HeroCopy = () => (
 	<>
 		<p>
-			<strong>With two innovative apps and ad-free reading,</strong> a digital
-			subscription gives you the richest experience of Guardian journalism. It
-			also sustains the independent reporting you love!
+			Digital subscribers help to sustain the Guardian’s reporting on the
+			climate crisis. To say thank you, we offer{' '}
+			<strong>two innovative apps and ad-free reading,</strong> so you can
+			always catch up on world events without interruption.
 		</p>
 	</>
 );
@@ -74,9 +76,11 @@ function HeroWithPriceCardsClimate2021({
 }: PropTypes) {
 	const title = promotionCopy.title || (
 		<>
-			Subscribe for stories
+			Subscribe to support
 			<br />
-			<span css={yellowHeading}>that must be told</span>
+			{/*			<span css={yellowHeading}>urgent climate journalism</span>
+			 */}
+			urgent climate journalism
 		</>
 	);
 	const promoCopy = promotionHTML(promotionCopy.description, {
@@ -106,10 +110,9 @@ function HeroWithPriceCardsClimate2021({
 			cssOverrides={pageTitleOverride}
 			theme="digital"
 		>
-			<CentredContainer>
-				<IconBlueEarth />
+			<CentredContainer cssOverrides={centredContainerOverride}>
+				<IconSmallEarth />
 				<IconTrees />
-				<IconSwirl />
 				<IconStarburst />
 				<Hero
 					image={
@@ -135,6 +138,7 @@ function HeroWithPriceCardsClimate2021({
 					</section>
 				</Hero>
 			</CentredContainer>
+			<IconSwirl />
 		</PageTitle>
 	);
 }

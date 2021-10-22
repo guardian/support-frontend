@@ -78,21 +78,39 @@ export const roundelOverrides = css`
 
 	${from.tablet} {
 		display: flex;
+		transform: translate(${space[6]}px, -160%);
+	}
+	${from.desktop} {
+		transform: translate(${space[6]}px, -110%);
+	}
+	${from.wide} {
 		transform: translate(${space[6]}px, -75%);
 	}
 `;
 export const embeddedRoundel = css`
 	transform: translateY(0);
 `;
-
 export const pageTitleOverride = css`
 	:before {
 		background-color: ${brand[300]};
+		background-image: url('https://uploads.guim.co.uk/2020/09/22/Earth-A.min.620.png');
+		background-repeat: no-repeat;
+		background-size: 800px;
+		background-position: calc(100% + 400px) -500px;
 	}
 	background-color: ${brand[300]};
 	position: relative;
+	overflow: hidden;
 `;
-
+export const centredContainerOverride = css`
+	position: relative;
+	padding-top: 100px;
+	padding-left: 0;
+	${from.wide} {
+		padding-top: 0;
+		padding-left: 100px;
+	}
+`;
 export const heroOverride = css`
 	background-color: transparent;
 `;
