@@ -25,7 +25,8 @@
     "cache-ssr": "node scripts/ssrScript.js",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
-    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
+    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
+    "ts-errors": "node scripts/ts-log-errors.js"
   },
   "browserslist": [
     "Chrome >= 49",
