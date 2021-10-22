@@ -358,7 +358,6 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout
 						/>
 					</FormSection>
 					<FormSection title="Is the billing address the same as the recipient's address?">

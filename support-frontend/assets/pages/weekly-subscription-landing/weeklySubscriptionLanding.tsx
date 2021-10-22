@@ -62,7 +62,7 @@ const WeeklyLandingPage = ({
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
 	const promoTermsLink = promotionTermsUrl(
-		getQueryParameter(promoQueryParam) || defaultPromo,
+		getQueryParameter(promoQueryParam) ?? defaultPromo,
 	);
 	// ID for Selenium tests
 	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
@@ -87,7 +87,7 @@ const WeeklyLandingPage = ({
 			footer={<WeeklyFooter centred promoTermsLink={promoTermsLink} />}
 		>
 			<WeeklyHero
-				orderIsAGift={orderIsAGift || false}
+				orderIsAGift={orderIsAGift ?? false}
 				countryGroupId={countryGroupId}
 				promotionCopy={sanitisedPromoCopy}
 			/>
@@ -101,7 +101,7 @@ const WeeklyLandingPage = ({
 					<WeeklyProductPrices
 						countryId={countryId}
 						productPrices={productPrices}
-						orderIsAGift={orderIsAGift || false}
+						orderIsAGift={orderIsAGift ?? false}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
@@ -110,7 +110,7 @@ const WeeklyLandingPage = ({
 					<GiftNonGiftCta
 						product="Guardian Weekly"
 						href={giftNonGiftLink}
-						orderIsAGift={orderIsAGift || false}
+						orderIsAGift={orderIsAGift ?? false}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
