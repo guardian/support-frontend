@@ -4,8 +4,8 @@
             "TS1208": 1,
             "TS7053": 27,
             "TS7006": 164,
-            "TS2305": 64,
-            "TS2322": 303,
+            "TS2305": 63,
+            "TS2322": 299,
             "TS2724": 2,
             "TS2578": 34,
             "TS2307": 22,
@@ -125,7 +125,6 @@
             "assets/components/checkoutForm/checkoutForm.tsx": 4,
             "assets/components/containers/centredContainer.tsx": 1,
             "assets/components/containers/flexContainer.tsx": 1,
-            "assets/components/containers/fullWidthContainer.tsx": 5,
             "assets/components/content/content.tsx": 2,
             "assets/components/content/contentSimple.tsx": 2,
             "assets/components/dialog/dialog.tsx": 8,
@@ -1152,10 +1151,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/content/content.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -1384,22 +1379,6 @@
         {
             "path": "assets/components/checkoutForm/checkoutForm.tsx",
             "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/components/content/content.tsx",
@@ -5627,7 +5606,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Namespace '\"/Users/tom_pretty/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
+            "message": "Namespace '\"/Users/george_haberis/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
         }
     ],
     "TS7022": [
