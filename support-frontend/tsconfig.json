@@ -25,7 +25,8 @@
     "baseUrl": "./assets" // The baseUrl to be used when resolving absolute module paths
   },
   "include": [
-    "./assets", "./declaration.d.ts"  ], // The files to type check,
+    "./assets", "./declaration.d.ts"
+  ], // The files to type check,
   "exclude": [
     "node_modules"
   ], // The files to not type check
