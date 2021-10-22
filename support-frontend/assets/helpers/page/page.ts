@@ -14,10 +14,15 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import {
+	analyticsInitialisation,
+	consentInitialisation,
+} from 'helpers/page/analyticsAndConsent';
 import type {
 	CommonState,
 	Internationalisation,
 } from 'helpers/page/commonReducer';
+import { createCommonReducer } from 'helpers/page/commonReducer';
 import { renderError } from 'helpers/rendering/render';
 import {
 	getCampaign,
@@ -28,13 +33,8 @@ import {
 	getAllQueryParamsWithExclusions,
 	getQueryParameter,
 } from 'helpers/urls/url';
-import { createCommonReducer } from 'helpers/page/commonReducer';
 import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
-import {
-	analyticsInitialisation,
-	consentInitialisation,
-} from 'helpers/page/analyticsAndConsent';
 // ----- Types ----- //
 export type ReduxState<PageState> = {
 	common: CommonState;

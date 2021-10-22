@@ -24,13 +24,25 @@ import {
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import { Direct, Gift } from 'helpers/productPrice/readerType';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import {
+	DigitalPack,
+	GuardianWeekly,
+	isPhysicalProduct,
+	Paper,
+} from 'helpers/productPrice/subscriptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	setFormSubmitted,
 	setStage,
 	setSubmissionError,
 } from 'helpers/subscriptionsForms/formActions';
+import {
+	validateCheckoutForm,
+	validateWithDeliveryForm,
+} from 'helpers/subscriptionsForms/formValidation';
 import type {
 	AnyCheckoutState,
 	CheckoutState,
@@ -43,20 +55,8 @@ import {
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import {
-	validateCheckoutForm,
-	validateWithDeliveryForm,
-} from 'helpers/subscriptionsForms/formValidation';
-import {
-	DigitalPack,
-	GuardianWeekly,
-	isPhysicalProduct,
-	Paper,
-} from 'helpers/productPrice/subscriptions';
 import type { IsoCountry } from '../internationalisation/country';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import { Direct, Gift } from 'helpers/productPrice/readerType';
 
 // ----- Functions ----- //
 function getAddresses(state: AnyCheckoutState) {

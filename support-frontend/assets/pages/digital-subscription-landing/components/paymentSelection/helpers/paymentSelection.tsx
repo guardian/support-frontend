@@ -7,20 +7,11 @@ import type { Product } from 'components/product/productOption';
 import 'components/product/productOption';
 import 'components/product/productOptionSmall';
 import 'helpers/types/option';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import {
-	getFirstValidPrice,
-	isNumeric,
-} from 'helpers/productPrice/productPrices';
-import {
-	getAdverbialSubscriptionDescription,
-	getPriceDescription,
-} from 'helpers/productPrice/priceDescriptions';
 import type { Product as ProductOptionType } from 'components/product/productOption';
 import type { ProductSmall } from 'components/product/productOptionSmall';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	Annual,
@@ -28,11 +19,20 @@ import {
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	getAdverbialSubscriptionDescription,
+	getPriceDescription,
+} from 'helpers/productPrice/priceDescriptions';
+import {
+	getFirstValidPrice,
+	isNumeric,
+} from 'helpers/productPrice/productPrices';
 import type {
 	BillingPeriods,
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import {
 	fixDecimals,
 	sendTrackingEventsOnClick,

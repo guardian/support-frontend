@@ -13,13 +13,13 @@ import csrf from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReduxState } from 'helpers/page/page';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { FormState } from 'helpers/subscriptionsForms/formFields';
+import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { Option } from 'helpers/types/option';
 import { createUserReducer } from 'helpers/user/userReducer';
-import type { FormState } from 'helpers/subscriptionsForms/formFields';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 export type CheckoutState = ReduxState<{
 	checkout: FormState;

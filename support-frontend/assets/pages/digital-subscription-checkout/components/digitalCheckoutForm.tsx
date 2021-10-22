@@ -6,19 +6,6 @@ import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import { signOut } from 'helpers/user/user';
-import GridImage from 'components/gridImage/gridImage';
-import type {
-	FormField,
-	FormFields,
-} from 'helpers/subscriptionsForms/formFields';
-import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -37,13 +24,18 @@ import { PayPal, Stripe, DirectDebit } from 'helpers/forms/paymentMethods';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import GridImage from 'components/gridImage/gridImage';
+import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
-import { routes } from 'helpers/urls/routes';
-import type { Participations } from 'helpers/abTests/abtest';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -53,13 +45,21 @@ import {
 } from 'helpers/productPrice/productPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type {
 	Action,
 	FormActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
+import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import type {
+	FormField,
+	FormFields,
+} from 'helpers/subscriptionsForms/formFields';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { routes } from 'helpers/urls/routes';
+import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 // ----- Types ----- //
