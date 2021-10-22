@@ -1,20 +1,22 @@
+import type { SerializedStyles } from '@emotion/core';
 import { css } from '@emotion/core';
 import {
 	brand,
 	brandBackground,
 	neutral,
 } from '@guardian/src-foundations/palette';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 type Theme = 'light' | 'dark' | 'white' | 'brand';
+
 type PropTypes = {
 	cssOverrides?: string;
-	children: Node;
+	children: ReactNode;
 	theme?: Theme;
 	hasOverlap?: boolean;
 };
-const containerThemes: Record<Theme, string> = {
+const containerThemes: Record<Theme, SerializedStyles> = {
 	light: css`
 		background-color: ${neutral[93]};
 		color: ${neutral[7]};
@@ -56,8 +58,8 @@ function FullWidthContainer({
 	hasOverlap,
 	cssOverrides,
 	children,
-}: PropTypes) {
-	const themeStyles = containerThemes[theme || 'light'];
+}: PropTypes): JSX.Element {
+	const themeStyles = containerThemes[theme ?? 'light'];
 	return (
 		<div
 			css={[
