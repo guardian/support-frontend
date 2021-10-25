@@ -170,7 +170,7 @@ function ContributionAmount(props: PropTypes) {
 						value={`${otherLabelSymbol}${otherAmount ?? ''}`}
 						onChange={(e) =>
 							props.updateOtherAmount(
-								e.target.value.replace(/[^0-9]/g, ''),
+								e.target.value.slice(1),
 								props.countryGroupId,
 								props.contributionType,
 							)
