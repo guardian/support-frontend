@@ -3,7 +3,7 @@ import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import Hero from 'components/page/hero';
 import HeroRoundel from 'components/page/heroRoundel';
-import PageTitle from 'components/page/pageTitle';
+import PageTitle from './pageTitleClimate2021';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -15,13 +15,13 @@ import {
 	getTimeboundCopy,
 	getTimeboundQuery,
 } from 'helpers/timeBoundedCopy/timeBoundedCopy';
-// import { IconBlueEarth } from './climate2021/IconBlueEarth';
+// import { IconEarthContainer } from './climate2021/IconEarthContainer';
 import { IconSmallEarth } from './climate2021/IconSmallEarth';
 import { IconStarburst } from './climate2021/IconStarburst';
 import { IconSwirl } from './climate2021/IconSwirl';
 import { IconTrees } from './climate2021/IconTrees';
 import DefaultRoundel from './defaultRoundel';
-import { HeroPriceCards } from './heroPriceCards';
+import { HeroPriceCards } from './heroPriceCardsClimate2021';
 import {
 	centredContainerOverride,
 	circleTextGeneric,
@@ -34,9 +34,6 @@ import {
 	roundelOverrides,
 	yellowHeading,
 } from './heroWithPriceCardsClimate2021Styles';
-
-// import { IconEarth } from './climate2021/IconEarth';
-// import { IconRedEarth } from './climate2021/IconRedEarth';
 
 type PropTypes = {
 	promotionCopy: PromotionCopy;

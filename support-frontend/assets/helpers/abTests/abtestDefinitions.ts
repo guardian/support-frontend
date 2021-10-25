@@ -18,6 +18,8 @@ export const pageUrlRegexes = {
 			'(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
 		digiSubLandingPagesNotAus:
 			'(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
+		digiSubLandingPagesNotAusNotUs:
+			'(/(uk|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
 		digiSub: {
 			// Requires /subscribe/digital, allows /checkout and/or /gift, allows any query string
 			allLandingAndCheckout:
@@ -197,7 +199,7 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.digiSubLandingPages,
+		targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
 		seed: 12,
 	},
 };

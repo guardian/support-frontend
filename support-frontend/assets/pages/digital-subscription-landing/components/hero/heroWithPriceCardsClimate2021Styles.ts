@@ -91,12 +91,8 @@ export const embeddedRoundel = css`
 	transform: translateY(0);
 `;
 export const pageTitleOverride = css`
-	:before {
+	::before {
 		background-color: ${brand[300]};
-		background-image: url('https://uploads.guim.co.uk/2020/09/22/Earth-A.min.620.png');
-		background-repeat: no-repeat;
-		background-size: 800px;
-		background-position: calc(100% + 400px) -500px;
 	}
 	background-color: ${brand[300]};
 	position: relative;

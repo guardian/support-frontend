@@ -7,16 +7,18 @@ export const IconStarburst: React.FC = () => (
 		css={css`
 			position: absolute;
 			display: none;
-			${from.tablet} {
+			${from.phablet} {
 				display: block;
-				left: 60%;
+				left: 50%;
+				top: 0%;
+			}
+			${from.tablet} {
 				top: -20%;
 			}
 			${from.desktop} {
 				left: 65%;
 			}
 			${from.wide} {
-				left: 65%;
 				top: -25%;
 			}
 		`}
