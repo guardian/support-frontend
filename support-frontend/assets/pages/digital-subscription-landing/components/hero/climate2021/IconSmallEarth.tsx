@@ -6,12 +6,15 @@ export const IconSmallEarth: React.FC = () => (
 	<div
 		css={css`
 			position: absolute;
-			width: 80px;
+			width: 44px;
 			top: 0;
 			left: 10px;
 			${from.wide} {
 				top: 6%;
 				left: 1%;
+			}
+			${from.desktop} {
+				width: 56px;
 			}
 		`}
 	>

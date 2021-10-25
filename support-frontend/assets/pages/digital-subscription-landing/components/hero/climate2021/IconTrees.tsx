@@ -7,14 +7,14 @@ export const IconTrees: React.FC = () => (
 		css={css`
 			position: absolute;
 			left: 80%;
-			top: 60%;
+			top: 50%;
 			${from.tablet} {
 				left: 80%;
-				top: -18%;
+				top: -23%;
 			}
 			${from.desktop} {
 				left: 87%;
-				top: -10%;
+				top: -17%;
 			}
 			${from.wide} {
 				left: 97%;

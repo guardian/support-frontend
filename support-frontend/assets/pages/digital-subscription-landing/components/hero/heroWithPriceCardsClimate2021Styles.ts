@@ -100,8 +100,11 @@ export const pageTitleOverride = css`
 `;
 export const centredContainerOverride = css`
 	position: relative;
-	padding-top: 100px;
+	padding-top: 60px;
 	padding-left: 0;
+	${from.phablet} {
+		padding-top: 80px;
+	}
 	${from.wide} {
 		padding-top: 0;
 		padding-left: 100px;
