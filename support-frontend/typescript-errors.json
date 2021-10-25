@@ -5479,7 +5479,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Namespace '\"/Users/imogen_hardy/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
+            "message": "Namespace '\"support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
         }
     ],
     "TS7022": [
