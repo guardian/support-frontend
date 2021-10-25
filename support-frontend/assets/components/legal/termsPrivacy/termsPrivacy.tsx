@@ -1,5 +1,7 @@
 // ----- Imports ----- //
+import type { ReactElement } from 'react';
 import React from 'react';
+import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -14,7 +16,6 @@ import {
 	privacyLink,
 } from 'helpers/legal';
 import './termsPrivacy.scss';
-import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
@@ -29,13 +30,14 @@ type PropTypes = {
 };
 
 // ----- Component ----- //
-function TermsPrivacy(props: PropTypes) {
+function TermsPrivacy(props: PropTypes): ReactElement {
 	const terms = (
 		<a href={contributionsTermsLinks[props.countryGroupId]}>
 			Terms and Conditions
 		</a>
 	);
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
+
 	const gbpAmount = 100;
 
 	const regionalAmount = (
@@ -66,7 +68,7 @@ function TermsPrivacy(props: PropTypes) {
 	};
 
 	const getRegionalAmountString = (): string => {
-		const regionalPatronageAmount = regionalAmount(props.currency) || gbpAmount;
+		const regionalPatronageAmount = regionalAmount(props.currency) ?? gbpAmount;
 		return `${currencies[props.currency].glyph}${regionalPatronageAmount}`;
 	};
 
@@ -75,12 +77,15 @@ function TermsPrivacy(props: PropTypes) {
 			Find out more today
 		</a>
 	);
+
 	const americasContactLink = (
 		<a href="mailto:us.philanthropy@theguardian.com">contact us</a>
 	);
+
 	const customerQueriesLink = (
 		<a href="https://manage.theguardian.com/help-centre">go here</a>
 	);
+
 	const patronText = (
 		<div className="patrons">
 			<h4>Guardian Patrons programme</h4>
@@ -92,6 +97,7 @@ function TermsPrivacy(props: PropTypes) {
 			<br />
 		</div>
 	);
+
 	const patronAndPhilanthropicAskText = (
 		<div>
 			<div className="horizontalRule" />
@@ -123,7 +129,7 @@ function TermsPrivacy(props: PropTypes) {
 		</div>
 	);
 
-	if (props.campaignSettings && props.campaignSettings.termsAndConditions) {
+	if (props.campaignSettings?.termsAndConditions) {
 		return props.campaignSettings.termsAndConditions(
 			contributionsTermsLinks[props.countryGroupId],
 			philanthropyContactEmail[props.countryGroupId],
@@ -131,8 +137,6 @@ function TermsPrivacy(props: PropTypes) {
 	}
 
 	const isUSContributor = props.countryGroupId === 'UnitedStates';
-	const isNotOneOffContribution = props.contributionType !== 'ONE_OFF';
-	const shouldShowPhilanthropicAsk = isUSContributor && isNotOneOffContribution;
 
 	const recurringCopy = () => {
 		if (Number.isNaN(props.amount)) {
@@ -145,7 +149,7 @@ function TermsPrivacy(props: PropTypes) {
 		const amountCopy = formatAmount(
 			currencies[props.currency],
 			spokenCurrencies[props.currency],
-			parseFloat(props.amount),
+			props.amount,
 			false,
 		);
 
@@ -165,7 +169,7 @@ function TermsPrivacy(props: PropTypes) {
 	return (
 		<>
 			<div className="component-terms-privacy">
-				{props.contributionType !== 'ONE_OFF' ? (
+				{props.contributionType !== 'ONE_OFF' && (
 					<div className="component-terms-privacy__change">
 						{recurringCopy()}{' '}
 						<strong>
@@ -173,7 +177,7 @@ function TermsPrivacy(props: PropTypes) {
 							any time.
 						</strong>
 					</div>
-				) : null}
+				)}
 				<div className="component-terms-privacy__terms">
 					By proceeding, you are agreeing to our {terms}. To find out what
 					personal data we collect and how we use it, please visit our {privacy}
@@ -181,17 +185,13 @@ function TermsPrivacy(props: PropTypes) {
 				</div>
 			</div>
 			<br />
+			<div>{isUSContributor ? patronAndPhilanthropicAskText : patronText}</div>
 			<div>
-				{shouldShowPhilanthropicAsk
-					? patronAndPhilanthropicAskText
-					: patronText}
-			</div>
-			<div>
-				{isUSContributor ? (
+				{isUSContributor && (
 					<div className="customer-support-contact">
 						For regular customer queries, {customerQueriesLink}.
 					</div>
-				) : null}
+				)}
 			</div>
 		</>
 	);
