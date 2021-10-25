@@ -3,7 +3,6 @@ import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import Hero from 'components/page/hero';
 import HeroRoundel from 'components/page/heroRoundel';
-import PageTitle from './pageTitleClimate2021';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -32,8 +31,8 @@ import {
 	pageTitleOverride,
 	paragraphs,
 	roundelOverrides,
-	yellowHeading,
 } from './heroWithPriceCardsClimate2021Styles';
+import PageTitle from './pageTitleClimate2021';
 
 type PropTypes = {
 	promotionCopy: PromotionCopy;

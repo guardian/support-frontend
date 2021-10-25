@@ -3,15 +3,15 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { titlepiece } from '@guardian/src-foundations/typography';
-import { IconEarthContainer } from './climate2021/IconEarthContainer';
 import React from 'react';
 import type { Node } from 'react';
+import CentredContainer from 'components/containers/centredContainer';
 import {
 	digitalSubscriptionsBlue,
 	guardianWeeklyBlue,
 	paperSubscriptionsBlue,
 } from 'stylesheets/emotion/colours';
-import CentredContainer from 'components/containers/centredContainer';
+import { IconEarthContainer } from './climate2021/IconEarthContainer';
 
 type ThemeType = 'showcase' | 'digital' | 'weekly' | 'paper';
 type PropTypes = {
@@ -102,11 +102,11 @@ export const pageTitle = css`
 	}
 `;
 
-function PageTitle({ title, theme, cssOverrides, children }: PropTypes) {
+function PageTitle({ title, theme, cssOverrides, children }: PropTypes): JSX.Element {
 	return (
 		<div css={[header, headerThemes[theme], cssOverrides]}>
 			<CentredContainer>
-				<IconEarthContainer/>
+				<IconEarthContainer />
 				<h1 css={pageTitle}>{title}</h1>
 			</CentredContainer>
 			{children}
