@@ -14,17 +14,17 @@ import {
 	EURCountries,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	Monthly,
-	postIntroductorySixForSixBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
 import {
 	currencies,
 	detect,
 	fromCountryGroupId,
 	glyph,
 } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	Monthly,
+	postIntroductorySixForSixBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
 	fixDecimals,

@@ -9,16 +9,16 @@ import { PayPal } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { FormField, Stage } from './formFields';
-import * as storage from 'helpers/storage/storage';
-import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
-import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import * as storage from 'helpers/storage/storage';
+import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
+import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
 import type { Option } from 'helpers/types/option';
+import type { FormField, Stage } from './formFields';
 
 export type Action =
 	| {

@@ -4,22 +4,21 @@
             "TS1208": 1,
             "TS7053": 27,
             "TS7006": 164,
-            "TS2305": 64,
-            "TS2322": 312,
+            "TS2305": 65,
+            "TS2322": 308,
             "TS2724": 2,
-            "TS2578": 35,
-            "TS2307": 22,
+            "TS2578": 33,
             "TS2339": 163,
-            "TS2345": 165,
+            "TS2345": 167,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 25,
+            "TS6133": 24,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 21,
             "TS2314": 8,
             "TS7016": 9,
-            "TS2554": 79,
+            "TS2554": 70,
             "TS2304": 18,
             "TS2741": 15,
             "TS2739": 17,
@@ -42,6 +41,7 @@
             "TS2694": 5,
             "TS7022": 3,
             "TS2525": 6,
+            "TS2300": 10,
             "TS2745": 2,
             "TS2698": 6
         },
@@ -58,7 +58,7 @@
             "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 19,
             "assets/pages/contributions-landing/contributionsLandingInit.ts": 4,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 7,
+            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/paper-subscription-landing/components/tabs.tsx": 3,
             "assets/components/csr/csrMode.ts": 3,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
@@ -69,7 +69,7 @@
             "assets/components/signout/signout.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
-            "assets/components/subscriptionCheckouts/summary.tsx": 8,
+            "assets/components/subscriptionCheckouts/summary.tsx": 6,
             "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainer.ts": 2,
             "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts": 2,
             "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
@@ -88,19 +88,19 @@
             "assets/helpers/user/__tests__/userTest.ts": 1,
             "assets/helpers/user/user.ts": 24,
             "assets/helpers/utilities/dateFormatting.ts": 1,
-            "assets/pages/aus-moment-map/ausMomentMap.tsx": 8,
+            "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
             "assets/pages/aus-moment-map/utils.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionAmount.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionForm.tsx": 10,
-            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 8,
+            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 7,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx": 5,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx": 3,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSupportReminder.tsx": 3,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 40,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 38,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
@@ -113,11 +113,11 @@
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/subscriptions-redemption/components/redemptionForm.tsx": 5,
-            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 8,
+            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 7,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 9,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 16,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 15,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 16,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 15,
             "assets/components/asyncronously/asyncronously.ts": 2,
             "assets/components/base/rows.tsx": 1,
             "assets/components/button/_sharedButton.tsx": 1,
@@ -125,7 +125,6 @@
             "assets/components/checkoutForm/checkoutForm.tsx": 4,
             "assets/components/containers/centredContainer.tsx": 1,
             "assets/components/containers/flexContainer.tsx": 1,
-            "assets/components/containers/fullWidthContainer.tsx": 5,
             "assets/components/content/content.tsx": 2,
             "assets/components/content/contentSimple.tsx": 2,
             "assets/components/dialog/dialog.tsx": 8,
@@ -139,7 +138,7 @@
             "assets/components/forms/label.tsx": 2,
             "assets/components/generalErrorMessage/generalErrorMessage.tsx": 1,
             "assets/components/gridImage/gridImage.tsx": 1,
-            "assets/components/headers/header/header.tsx": 7,
+            "assets/components/headers/header/header.tsx": 6,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
@@ -149,7 +148,7 @@
             "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
             "assets/components/leftMarginSection/leftMarginSection.tsx": 1,
             "assets/components/list/orderedList.tsx": 1,
-            "assets/components/menu/menu.tsx": 3,
+            "assets/components/menu/menu.tsx": 2,
             "assets/components/orderSummary/orderSummary.tsx": 2,
             "assets/components/page/block.tsx": 1,
             "assets/components/page/hero.tsx": 3,
@@ -157,11 +156,11 @@
             "assets/components/page/pageTitle.tsx": 5,
             "assets/components/pageSection/pageSection.tsx": 1,
             "assets/components/product/productInfoChip.tsx": 1,
-            "assets/components/product/productOption.tsx": 3,
+            "assets/components/product/productOption.tsx": 2,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/productPage/productPageHero/productPageHero.tsx": 1,
             "assets/components/quote/quote.tsx": 1,
-            "assets/components/subscriptionCheckouts/layout.tsx": 2,
+            "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
             "assets/components/subscriptionCheckouts/stage.tsx": 1,
             "assets/components/tabs/tabs.tsx": 1,
@@ -174,13 +173,15 @@
             "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
             "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
             "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/hero/heroPriceCardsClimate2021.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx": 5,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx": 2,
             "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
             "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-redemption/components/stage.tsx": 3,
             "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx": 2,
-            "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 5,
+            "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
             "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/list/list.tsx": 6,
@@ -190,7 +191,7 @@
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 10,
             "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 12,
-            "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 3,
+            "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 31,
             "assets/components/subscriptionCheckouts/total/total.tsx": 5,
             "assets/components/svgs/amazonPayLogoDs.tsx": 1,
@@ -212,7 +213,7 @@
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 13,
             "assets/helpers/productPrice/productPrices.ts": 1,
             "assets/helpers/subscriptionsForms/rules.ts": 2,
-            "assets/helpers/tracking/acquisitions.ts": 4,
+            "assets/helpers/tracking/acquisitions.ts": 3,
             "assets/helpers/urls/url.ts": 3,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
@@ -235,16 +236,12 @@
             "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
-            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconBlueEarth.tsx": 2,
-            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconStarburst.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconSwirl.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/climate2021/IconTrees.tsx": 1,
             "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx": 3,
             "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/prices.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
-            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 11,
+            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 21,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 4,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
@@ -254,7 +251,7 @@
             "assets/pages/promotion-terms/promoDetails.tsx": 1,
             "assets/pages/showcase/components/ctaContribute.tsx": 1,
             "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
-            "assets/pages/showcase/components/hero.tsx": 4,
+            "assets/pages/showcase/components/hero.tsx": 3,
             "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1,
@@ -270,11 +267,6 @@
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSurvey.tsx": 1,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/components/datePicker/datePicker.tsx": 3,
-            "assets/components/secureTransactionIndicator/secureTransactionIndicator.tsx": 1,
-            "assets/helpers/page/analyticsAndConsent.ts": 1,
-            "assets/helpers/tracking/ophan.ts": 1,
-            "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 6,
             "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/campaigns/campaigns.ts": 8,
@@ -293,6 +285,7 @@
             "assets/pages/contributions-landing/checkoutFormIsSubmittableActions.ts": 5,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/pages/subscriptions-redemption/api.ts": 3,
+            "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
             "assets/components/legal/termsPrivacy/termsPrivacy.tsx": 1,
@@ -308,6 +301,7 @@
             "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts": 8,
             "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts": 5,
             "assets/helpers/productPrice/__tests__/productPricesTests.ts": 6,
+            "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/productPrice/priceDescriptions.ts": 6,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 15,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
@@ -316,9 +310,9 @@
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx": 5,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummary.tsx": 1,
+            "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 3,
             "assets/pages/subscriptions-redemption/marketingConsentContainer.ts": 1,
-            "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 4,
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
@@ -327,7 +321,6 @@
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
-            "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/tracking/behaviour.ts": 2,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
@@ -1157,10 +1150,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/content/content.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -1353,6 +1342,14 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCardsClimate2021.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
             "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -1389,22 +1386,6 @@
         {
             "path": "assets/components/checkoutForm/checkoutForm.tsx",
             "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/components/content/content.tsx",
@@ -2279,26 +2260,6 @@
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconBlueEarth.tsx",
-            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconBlueEarth.tsx",
-            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconStarburst.tsx",
-            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconSwirl.tsx",
-            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/climate2021/IconTrees.tsx",
-            "message": "Type 'string' is not assignable to type 'CSSProperties | undefined'."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
@@ -2320,7 +2281,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
@@ -2328,6 +2289,26 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
+            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
@@ -2659,10 +2640,6 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/components/product/productOption.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -2700,10 +2677,6 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -2781,96 +2754,6 @@
         {
             "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
             "message": "Unused '@ts-expect-error' directive."
-        }
-    ],
-    "TS2307": [
-        {
-            "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
-            "message": "Cannot find module './countryGroupSwitcher.module.scss' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "Cannot find module './calendarIcon.svg' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Cannot find module './padlock.svg' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/components/menu/menu.tsx",
-            "message": "Cannot find module './menu.module.scss' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/components/secureTransactionIndicator/secureTransactionIndicator.tsx",
-            "message": "Cannot find module './securePadlock.svg' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/layout.tsx",
-            "message": "Cannot find module './layout.module.scss' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Cannot find module './dropDownArrowUp.svg' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Cannot find module './summary.module.scss' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/helpers/page/analyticsAndConsent.ts",
-            "message": "Cannot find module 'ophan' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/helpers/tracking/acquisitions.ts",
-            "message": "Cannot find module 'ophan' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/helpers/tracking/ophan.ts",
-            "message": "Cannot find module 'ophan' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Cannot find module 'ophan' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Cannot find module './creditCardsROW.svg' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Cannot find module './creditCardsUS.svg' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
-            "message": "Cannot find module 'pages/digital-subscription-checkout/components/thankYou/icons/clock.png' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
-            "message": "Cannot find module 'pages/digital-subscription-checkout/components/thankYou/icons/gift.png' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
-            "message": "Cannot find module 'pages/digital-subscription-checkout/components/thankYou/icons/list.png' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
-            "message": "Cannot find module 'pages/digital-subscription-checkout/components/thankYou/icons/person.png' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
-            "message": "Cannot find module 'pages/digital-subscription-checkout/components/thankYou/icons/phone.png' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Cannot find module 'components/subscriptionCheckouts/thankYou/thankYou.module.scss' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "Cannot find module './hero.svg' or its corresponding type declarations."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Cannot find module 'components/subscriptionCheckouts/thankYou/thankYou.module.scss' or its corresponding type declarations."
         }
     ],
     "TS2339": [
@@ -3842,6 +3725,10 @@
         },
         {
             "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
             "message": "Argument of type '{ 'United Kingdom': { Collection: { Sunday: { Monthly: { GBP: { price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; }[]; }; }; }; }; }; }' is not assignable to parameter of type 'ProductPrices'."
         },
         {
@@ -3875,6 +3762,22 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Argument of type '{ name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }' is not assignable to parameter of type 'Promotion'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
         },
         {
             "path": "assets/helpers/productPrice/priceDescriptions.ts",
@@ -4175,18 +4078,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Argument of type 'ProductPrice | { price: number; fixedTerm: boolean; currency: string; }' is not assignable to parameter of type 'ProductPrice'."
         }
     ],
     "TS7034": [
@@ -4515,10 +4406,6 @@
             "message": "'dispatch' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "'brand' is declared but its value is never read."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
         },
@@ -4758,39 +4645,39 @@
     "TS7016": [
         {
             "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
-            "message": "Could not find a declaration file for module 'react-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Could not find a declaration file for module 'seedrandom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Could not find a declaration file for module 'dompurify'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'dompurify'. 'support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'react-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/ssrPages.ts",
-            "message": "Could not find a declaration file for module 'react-dom/server'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-dom/server'. 'support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Could not find a declaration file for module 'uuid'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'uuid'. 'support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. 'support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Could not find a declaration file for module 'react-router-dom'. '/Users/rik_roots/code/support-frontend/support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
+            "message": "Could not find a declaration file for module 'react-router-dom'. 'support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
         }
     ],
     "TS2554": [
@@ -4799,10 +4686,6 @@
             "message": "Expected 5 arguments, but got 3."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
             "path": "assets/helpers/__tests__/formValidation.ts",
             "message": "Expected 3 arguments, but got 2."
         },
@@ -4892,11 +4775,7 @@
         },
         {
             "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
@@ -4909,22 +4788,6 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Expected 5 arguments, but got 4."
         },
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
@@ -5052,7 +4915,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
@@ -5060,11 +4923,11 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
-            "message": "Expected 5 arguments, but got 3."
+            "message": "Expected 4-5 arguments, but got 3."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx",
@@ -5091,24 +4954,12 @@
             "message": "Expected 1 arguments, but got 0."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Expected 5 arguments, but got 4."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Expected 5 arguments, but got 4."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Expected 5 arguments, but got 4."
         }
     ],
     "TS2304": [
@@ -5676,7 +5527,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Namespace '\"/Users/rik_roots/code/support-frontend/support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
+            "message": "Namespace '\"support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
         }
     ],
     "TS7022": [
@@ -5717,6 +5568,48 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
+        }
+    ],
+    "TS2300": [
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'DigitalLandingPropTypes'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'digitalLandingProps'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'headers'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'footer'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'getRows'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'footer'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'getRows'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'headers'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'DigitalLandingPropTypes'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Duplicate identifier 'digitalLandingProps'."
         }
     ],
     "TS2745": [

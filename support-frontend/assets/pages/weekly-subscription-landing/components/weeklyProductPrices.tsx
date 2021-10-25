@@ -16,16 +16,23 @@ import {
 	getFirstValidPrice,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
-import type { ProductPrice , ProductPrices } from 'helpers/productPrice/productPrices';
+import type {
+	ProductPrice,
+	ProductPrices,
+} from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { promoQueryParam } from 'helpers/productPrice/promotions';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import {
+	getAppliedPromo,
+	promoQueryParam,
+} from 'helpers/productPrice/promotions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	fixDecimals,
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { getOrigin, getQueryParameter } from 'helpers/urls/url';
+import type { OphanComponentType } from '../../../helpers/tracking/ophan';
 import Prices from './content/prices';
 
 const getCheckoutUrl = (
@@ -57,8 +64,7 @@ const getMainDisplayPrice = (
 	promotion?: Promotion | null,
 ): number => {
 	if (promotion) {
-		const introductoryPrice =
-			promotion.introductoryPrice && promotion.introductoryPrice.price;
+		const introductoryPrice = promotion.introductoryPrice?.price;
 		return getFirstValidPrice(
 			promotion.discountedPrice,
 			introductoryPrice,
@@ -76,14 +82,13 @@ const weeklyProductProps = (
 ) => {
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
-	const offerCopy =
-		(promotion && promotion.landingPage && promotion.landingPage.roundel) || '';
+	const offerCopy = promotion?.landingPage?.roundel ?? '';
 	const trackingProperties = {
 		id: orderIsAGift
 			? `subscribe_now_cta_gift-${billingPeriod}`
 			: `subscribe_now_cta-${billingPeriod}`,
-		product: 'GuardianWeekly',
-		componentType: 'ACQUISITIONS_BUTTON',
+		product: 'GuardianWeekly' as SubscriptionProduct,
+		componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 	};
 	return {
 		title: billingPeriodTitle(billingPeriod, orderIsAGift),
@@ -94,7 +99,7 @@ const weeklyProductProps = (
 		),
 		buttonCopy: 'Subscribe now',
 		href: getCheckoutUrl(billingPeriod, orderIsAGift),
-		label: getPromotionLabel(promotion) || '',
+		label: getPromotionLabel(promotion) ?? '',
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
 	};
@@ -125,7 +130,7 @@ const getProducts = ({
 			: {
 					price: 0,
 					fixedTerm: false,
-					currency: 'GBP',
+					currency: 'GBP' as IsoCurrency,
 			  };
 		return weeklyProductProps(billingPeriod, productPrice, orderIsAGift);
 	});

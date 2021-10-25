@@ -17,25 +17,27 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { PersonalDetailsGift } from 'components/subscriptionCheckouts/personalDetailsGift';
 import Summary from 'components/subscriptionCheckouts/summary';
 import Text from 'components/text/text';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
+import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
+import type { SetCountryAction } from 'helpers/page/commonActions';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
-import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import type {
 	FormField,
 	FormFields,
 	FormField as PersonalDetailsFormField,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import { PersonalDetailsGift } from 'components/subscriptionCheckouts/personalDetailsGift';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { countries } from 'helpers/internationalisation/country';
-import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
-import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import type {
@@ -57,8 +59,6 @@ import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import type { SetCountryAction } from 'helpers/page/commonActions';
 import 'helpers/page/commonActions';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import {
@@ -358,7 +358,6 @@ function WeeklyCheckoutFormGifting(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout
 						/>
 					</FormSection>
 					<FormSection title="Is the billing address the same as the recipient's address?">

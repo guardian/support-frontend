@@ -5,6 +5,14 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import React, { useEffect } from 'react';
+import type { DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
+import { digitalLandingProps } from './digitalSubscriptionLandingProps';
+import InteractiveTable from 'components/interactiveTable/interactiveTable';
+import {
+	headers,
+	footer,
+	getRows,
+} from './components/comparison/interactiveTableContents';
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 import { Provider } from 'react-redux';
@@ -12,7 +20,6 @@ import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
-import InteractiveTable from 'components/interactiveTable/interactiveTable';
 import Block from 'components/page/block';
 import Page from 'components/page/page';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
@@ -209,9 +216,6 @@ function DigitalLandingComponent({
 	const showEventsComponent =
 		participations.emailDigiSubEventsTest === 'variant';
 	const showComparisonTable = participations.comparisonTableTest2 === 'variant';
-	const showPayPalButton = participations.payPalOneClickTestV3 === 'payPal';
-	const isUsingGuestCheckout =
-		showPayPalButton || participations.payPalOneClickTestV3 === 'guestCheckout';
 	const showDigiSubClimateHeader =
 		participations.digiSubClimateHeader2021 === 'variant';
 
@@ -227,8 +231,6 @@ function DigitalLandingComponent({
 		productPrices,
 		currencyId,
 		countryGroupId,
-		isUsingGuestCheckout,
-		showPayPalButton,
 	);
 
 	const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
@@ -320,8 +322,6 @@ function DigitalLandingComponent({
 						currencyId={currencyId}
 						productPrices={productPrices}
 						orderIsAGift={orderIsAGift}
-						isUsingGuestCheckout={isUsingGuestCheckout}
-						showPayPalButton={showPayPalButton}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>

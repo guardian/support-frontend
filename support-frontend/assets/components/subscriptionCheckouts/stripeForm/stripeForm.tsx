@@ -18,7 +18,6 @@ import { compose } from 'redux';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 import './stripeForm.scss';
-import { routes } from 'helpers/urls/routes';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
@@ -28,6 +27,7 @@ import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { Option } from 'helpers/types/option';
+import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { ErrorSummary } from '../submitFormErrorSummary';
 // Types

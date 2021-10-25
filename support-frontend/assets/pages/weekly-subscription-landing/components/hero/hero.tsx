@@ -140,11 +140,10 @@ function WeeklyHero({
 	countryGroupId,
 	promotionCopy,
 }: PropTypes) {
-	const currencyId = fromCountryGroupId(countryGroupId) || 'GBP';
+	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
 	const defaultRoundelText = (
 		<>
 			{/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
-			{/* eslint-disable-next-line jsx-a11y/aria-role */}
 			<div role="text">
 				Try
 				<div css={roundelCentreLine}>6 issues</div>
@@ -153,10 +152,10 @@ function WeeklyHero({
 		</>
 	);
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
-	const title = promotionCopy.title || defaultTitle;
+	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText =
-		promotionHTML(promotionCopy.roundel) || defaultRoundelText;
+		promotionHTML(promotionCopy.roundel) ?? defaultRoundelText;
 	return (
 		<PageTitle
 			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}

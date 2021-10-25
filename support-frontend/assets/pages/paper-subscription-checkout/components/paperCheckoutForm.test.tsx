@@ -63,7 +63,7 @@ describe('Newspaper checkout form', () => {
 					fulfilmentOption: 'Collection',
 					productPrices: paperProducts,
 					formErrors: [],
-                    billingAddressIsSame: true,
+					billingAddressIsSame: true,
 				},
 				billingAddress: {
 					fields: {

@@ -9,20 +9,6 @@ import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import { signOut } from 'helpers/user/user';
-import GridImage from 'components/gridImage/gridImage';
-import type {
-	FormField as PersonalDetailsFormField,
-	FormField,
-	FormFields,
-} from 'helpers/subscriptionsForms/formFields';
-import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import { PersonalDetailsDigitalGift } from 'components/subscriptionCheckouts/personalDetailsGift';
-import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
@@ -44,14 +30,20 @@ import EndSummaryMobile from 'pages/digital-subscription-checkout/components/end
 import type { Participations } from 'helpers/abTests/abtest';
 import { withError } from 'hocs/withError';
 import DatePickerFields from 'components/datePicker/datePicker';
+import GridImage from 'components/gridImage/gridImage';
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
-import { countries } from 'helpers/internationalisation/country';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { PersonalDetailsDigitalGift } from 'components/subscriptionCheckouts/personalDetailsGift';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { countries } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -61,12 +53,20 @@ import {
 } from 'helpers/productPrice/productPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type {
 	Action,
 	FormActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
+import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import type {
+	FormField,
+	FormFields,
+	FormField as PersonalDetailsFormField,
+} from 'helpers/subscriptionsForms/formFields';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { signOut } from 'helpers/user/user';
 import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 
 const controlTextAreaResizing = css`
@@ -243,7 +243,6 @@ function DigitalCheckoutFormGift(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout={false}
 						/>
 					</FormSection>
 					<FormSection title="Billing address">

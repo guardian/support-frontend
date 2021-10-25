@@ -20,23 +20,29 @@ import GridImage from 'components/gridImage/gridImage';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Text from 'components/text/text';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type {
-	ProductPrice,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
-import { showPrice } from 'helpers/productPrice/productPrices';
-import {
-	getPriceWithDiscount,
-	getProductPrice,
-} from 'helpers/productPrice/paperProductPrices';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
+import {
+	getPriceWithDiscount,
+	getProductPrice,
+} from 'helpers/productPrice/paperProductPrices';
+import type {
+	ProductPrice,
+	ProductPrices,
+} from 'helpers/productPrice/productPrices';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import { showPrice } from 'helpers/productPrice/productPrices';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import { titles } from 'helpers/user/details';
@@ -50,11 +56,11 @@ import type {
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
-import type { FormActionCreators } from 'helpers/subscriptionsForms/formActions';
+import type {
+	Action,
+	FormActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
 import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
@@ -73,9 +79,10 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { validateWithDeliveryForm , withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import {
+	validateWithDeliveryForm,
+	withDeliveryFormIsValid,
+} from 'helpers/subscriptionsForms/formValidation';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import {
@@ -93,9 +100,7 @@ import {
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import { Option as OptionForSelect, Select } from '@guardian/src-select';
-import type { Participations } from 'helpers/abTests/abtest';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
@@ -372,7 +377,6 @@ function PaperCheckoutForm(props: PropTypes) {
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
 							signOut={props.signOut}
-							isUsingGuestCheckout
 						/>
 					</FormSection>
 

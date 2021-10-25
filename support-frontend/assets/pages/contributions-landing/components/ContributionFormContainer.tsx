@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-// @ts-expect-error - required for hooks
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -11,32 +10,32 @@ import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving'
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { glyph } from 'helpers/internationalisation/currency';
+import { get, remove, set } from 'helpers/storage/cookie';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { getQueryParameter } from 'helpers/urls/url';
+import {
+	onThirdPartyPaymentAuthorised,
+	paymentWaiting,
+	setTickerGoalReached,
+} from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import { ContributionsArticleCountWithOptOut } from './ContributionArticleCount';
 import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import {
-	onThirdPartyPaymentAuthorised,
-	paymentWaiting,
-	setTickerGoalReached,
-} from '../contributionsLandingActions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import {
 	PreviousGivingBodyCopy,
 	PreviousGivingHeaderCopy,
 } from './ContributionsFormBlurbPreviousGiving';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { glyph } from 'helpers/internationalisation/currency';
-import { get, remove, set } from 'helpers/storage/cookie';
-import { getQueryParameter } from 'helpers/urls/url';
+
 // ----- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
 	paymentComplete: boolean;
 	countryGroupId: CountryGroupId;
@@ -55,7 +54,6 @@ type PropTypes = {
 	articleCountAbTestVariant: boolean;
 };
 
-/* eslint-enable react/no-unused-prop-types */
 const mapStateToProps = (state: State) => ({
 	paymentComplete: state.page.form.paymentComplete,
 	countryGroupId: state.common.internationalisation.countryGroupId,
@@ -70,6 +68,7 @@ const mapStateToProps = (state: State) => ({
 		state.common.abParticipations.articleCountTest === 'variant',
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
 const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setPaymentIsWaiting: (isWaiting) => {
 		dispatch(paymentWaiting(isWaiting));
@@ -156,7 +155,7 @@ export function useArticleCountOptOut(): ArticleCountOptOut {
 	};
 }
 
-const getArticleCountFromUrl = (): number | null | undefined => {
+const getArticleCountFromUrl = (): number | null => {
 	const articleCount = getQueryParameter('numArticles');
 
 	if (articleCount) {
@@ -168,10 +167,9 @@ const getArticleCountFromUrl = (): number | null | undefined => {
 
 function withProps(props: PropTypes) {
 	const campaignSettings = getCampaignSettings();
-	const campaignCopy =
-		campaignSettings && campaignSettings.copy
-			? campaignSettings.copy(props.tickerGoalReached)
-			: null;
+	const campaignCopy = campaignSettings?.copy
+		? campaignSettings.copy(props.tickerGoalReached)
+		: null;
 
 	const onPaymentAuthorisation = (
 		paymentAuthorisation: PaymentAuthorisation,
@@ -182,7 +180,7 @@ function withProps(props: PropTypes) {
 
 	const countryGroupDetails = {
 		...defaultHeaderCopyAndContributeCopy,
-		...(campaignCopy || {}),
+		...(campaignCopy ?? {}),
 	};
 
 	if (props.paymentComplete) {
@@ -226,7 +224,7 @@ function withProps(props: PropTypes) {
 				/>
 			)}
 
-			{isArticleCountTest && numArticles && numArticles >= 5 ? (
+			{isArticleCountTest && numArticles !== null && numArticles >= 5 ? (
 				<ContributionFormBlurb
 					headerCopy={
 						<ContributionsArticleCountWithOptOut
@@ -249,7 +247,7 @@ function withProps(props: PropTypes) {
 			)}
 
 			<div className="gu-content__form">
-				{isArticleCountTest && numArticles && (
+				{isArticleCountTest && numArticles !== null && numArticles >= 5 && (
 					<ContributionsArticleCountWithOptOut
 						numArticles={numArticles}
 						isMobileOnly
@@ -291,7 +289,7 @@ function withProps(props: PropTypes) {
 					</div>
 				)}
 			</div>
-			{campaignSettings && campaignSettings.extraComponent}
+			{campaignSettings?.extraComponent}
 			<DirectDebitPopUpForm
 				buttonText="Contribute with Direct Debit"
 				onPaymentAuthorisation={onPaymentAuthorisation}
@@ -300,7 +298,7 @@ function withProps(props: PropTypes) {
 	);
 }
 
-function withoutProps() {
+function withoutProps(): JSX.Element {
 	return (
 		<div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
 			<ContributionFormBlurb
