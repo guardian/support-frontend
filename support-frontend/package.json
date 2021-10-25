@@ -92,6 +92,7 @@
     "@guardian/pasteup": "1.0.0-alpha.7",
     "@guardian/src-accordion": "^3.2.0",
     "@guardian/src-button": "^2.8.2",
+    "@guardian/src-layout": "^2.8.1",
     "@guardian/src-checkbox": "^2.7.1",
     "@guardian/src-choice-card": "^2.0.0",
     "@guardian/src-foundations": "^2.3.0",

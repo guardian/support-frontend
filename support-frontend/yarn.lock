@@ -1343,6 +1343,13 @@
   dependencies:
     "@guardian/src-helpers" "^2.8.2"
 
+"@guardian/src-layout@^2.8.1":
+  version "2.8.2"
+  resolved "https://registry.yarnpkg.com/@guardian/src-layout/-/src-layout-2.8.2.tgz#ab6362bccefa39338217200653996a49d694c55a"
+  integrity sha512-3AFxd7TG7KBFpyfG5WiGG8/XhMAIQ1nMYm+E3Sdo8ZE0/gxWz8zGPoCAcIYlmdv+MGcckYECL5PpGfrLeyKX9Q==
+  dependencies:
+    "@guardian/src-helpers" "^2.8.2"
+
 "@guardian/src-link@^2.2.0":
   version "2.8.2"
   resolved "https://registry.yarnpkg.com/@guardian/src-link/-/src-link-2.8.2.tgz#dad228a4dfc5c0a8e3a7ae48563a939a95d8794f"

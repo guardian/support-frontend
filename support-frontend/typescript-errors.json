@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 27,
-            "TS7006": 164,
+            "TS7006": 163,
             "TS2305": 63,
             "TS2322": 299,
             "TS2724": 2,
@@ -93,7 +93,7 @@
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionAmount.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionForm.tsx": 10,
-            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 7,
+            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 6,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx": 5,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx": 3,
@@ -834,10 +834,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
             "message": "Parameter 'token' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "Parameter 'currency' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
