@@ -53,11 +53,15 @@ export type Promotion = {
 };
 const promoQueryParam = 'promoCode';
 
-const hasDiscount = (promotion: Promotion | null): boolean =>
+const hasDiscount = (
+	promotion: Promotion | undefined,
+): promotion is Promotion & Required<Pick<Promotion, 'discountedPrice'>> =>
 	isNumeric(promotion?.discountedPrice);
 
-const hasIntroductoryPrice = (promotion: Promotion | null): boolean =>
-	promotion !== null && !!promotion.introductoryPrice;
+const hasIntroductoryPrice = (
+	promotion: Promotion | undefined,
+): promotion is Promotion & Required<Pick<Promotion, 'introductoryPrice'>> =>
+	!!promotion?.introductoryPrice;
 
 function applyDiscount(
 	price: ProductPrice,

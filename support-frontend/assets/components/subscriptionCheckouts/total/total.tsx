@@ -2,14 +2,12 @@ import React from 'react';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { displayPrice } from 'helpers/productPrice/priceDescriptions';
-import { isNumeric } from 'helpers/productPrice/productPrices';
 import {
 	getAppliedPromo,
 	hasDiscount,
 	hasIntroductoryPrice,
 } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { Option } from 'helpers/types/option';
 import * as styles from './totalStyles';
 
 type Props = {
@@ -18,12 +16,12 @@ type Props = {
 	promotions?: Promotion[];
 };
 
-const getPrice = (promotion: Option<Promotion>, price: number): number => {
-	if (hasIntroductoryPrice(promotion) && promotion.introductoryPrice) {
+const getPrice = (promotion: Promotion | undefined, price: number): number => {
+	if (hasIntroductoryPrice(promotion)) {
 		return promotion.introductoryPrice.price;
 	}
 
-	if (hasDiscount(promotion) && isNumeric(promotion.discountedPrice)) {
+	if (hasDiscount(promotion)) {
 		return promotion.discountedPrice;
 	}
 

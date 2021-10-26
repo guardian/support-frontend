@@ -39,7 +39,7 @@ export type BillingPeriods = Record<
 	Record<IsoCurrency, ProductPrice>
 >;
 
-const isNumeric = (num: number | null | undefined): boolean =>
+const isNumeric = (num: number | null | undefined): num is number =>
 	num !== null && num !== undefined && !Number.isNaN(num);
 
 function getFirstValidPrice(...prices: Array<number | null | undefined>) {

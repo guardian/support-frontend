@@ -5,11 +5,11 @@
             "TS7053": 27,
             "TS7006": 161,
             "TS2305": 63,
-            "TS2322": 297,
+            "TS2322": 296,
             "TS2724": 2,
             "TS2578": 33,
             "TS2339": 163,
-            "TS2345": 178,
+            "TS2345": 169,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 23,
@@ -21,9 +21,9 @@
             "TS2304": 18,
             "TS2741": 15,
             "TS2739": 17,
-            "TS2531": 15,
+            "TS2531": 11,
             "TS2604": 4,
-            "TS2532": 4,
+            "TS2532": 1,
             "TS2556": 3,
             "TS2554": 63,
             "TS2344": 9,
@@ -104,7 +104,7 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 8,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 12,
+            "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 11,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 19,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
@@ -183,12 +183,11 @@
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/orderSummary/orderSummaryProduct.tsx": 1,
             "assets/components/page/page.tsx": 1,
-            "assets/components/priceLabel/priceLabel.tsx": 2,
+            "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 10,
             "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 31,
-            "assets/components/subscriptionCheckouts/total/total.tsx": 6,
             "assets/components/svgs/amazonPayLogoDs.tsx": 1,
             "assets/components/svgs/directDebitSymbolDs.tsx": 1,
             "assets/components/svgs/downChevronDs.tsx": 1,
@@ -296,8 +295,7 @@
             "assets/helpers/productPrice/__tests__/productPricesTests.ts": 6,
             "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
-            "assets/helpers/productPrice/priceDescriptions.ts": 9,
-            "assets/helpers/productPrice/priceDescriptionsDigital.ts": 2,
+            "assets/helpers/productPrice/priceDescriptions.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 15,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 6,
@@ -1633,10 +1631,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
             "message": "Type '{ className: any; productPrice: ProductPrice; billingPeriod: BillingPeriod; giftStyles: any; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"giftStyles\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
-            "message": "Type 'number | undefined' is not assignable to type 'number'."
         },
         {
             "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
@@ -3435,10 +3429,6 @@
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ hasLoaded: boolean; csrf: Csrf; productPrices: ProductPrices; currencyId: IsoCurrency; isTestUser: boolean; amount: number; submissionError: Option<...>; wasClicked: boolean; } & { ...; }, PropTypes>>'."
         },
         {
-            "path": "assets/components/priceLabel/priceLabel.tsx",
-            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
-        },
-        {
             "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
             "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
         },
@@ -3453,10 +3443,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts",
             "message": "Argument of type 'typeof MarketingConsentGift' is not assignable to parameter of type 'ComponentType<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
-            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Option<Promotion>'."
         },
         {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
@@ -3680,7 +3666,7 @@
         },
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type 'undefined' is not assignable to parameter of type 'Promotion | null'."
+            "message": "Argument of type 'null' is not assignable to parameter of type 'Promotion | undefined'."
         },
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
@@ -3736,31 +3722,7 @@
         },
         {
             "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Argument of type 'IntroductoryPriceBenefit | undefined' is not assignable to parameter of type 'IntroductoryPriceBenefit'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Argument of type 'number | undefined' is not assignable to parameter of type 'number'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
             "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Option<Promotion>'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptionsDigital.ts",
-            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptionsDigital.ts",
-            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
@@ -3989,10 +3951,6 @@
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
             "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Argument of type 'number | null | undefined' is not assignable to parameter of type 'Option<number>'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
@@ -4863,22 +4821,6 @@
             "message": "Object is possibly 'null'."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Object is possibly 'null'."
         },
@@ -4936,18 +4878,6 @@
     "TS2532": [
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
             "message": "Object is possibly 'undefined'."
         }
     ],
