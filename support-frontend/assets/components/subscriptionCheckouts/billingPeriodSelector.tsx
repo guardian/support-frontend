@@ -39,7 +39,7 @@ function BillingPeriodSelector(props: PropTypes) {
 							label={billingPeriodTitle(billingPeriod)}
 							value={billingPeriodTitle(billingPeriod)}
 							supporting={getPriceDescription(productPrice, billingPeriod)}
-							offer={getAppliedPromoDescription(billingPeriod, productPrice)}
+							offer={getAppliedPromoDescription(productPrice)}
 							name="billingPeriod"
 							checked={billingPeriod === props.selected}
 							onChange={() => props.onChange(billingPeriod)}
