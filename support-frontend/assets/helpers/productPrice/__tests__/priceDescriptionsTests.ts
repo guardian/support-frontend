@@ -129,7 +129,6 @@ describe('getAppliedPromoDescription', () => {
 	it('should return a landing page promotion roundel description', () => {
 		expect(
 			getAppliedPromoDescription(
-				monthlyBillingPeriod,
 				productPriceWithLandingPageDiscount,
 			),
 		).toBe('Save 50% for 3 months!');
