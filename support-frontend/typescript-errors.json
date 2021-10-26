@@ -2131,7 +2131,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"price\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
+            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"orderIsAGift\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
@@ -2139,7 +2139,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Type '{ orderIsAGift: boolean | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"price\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
+            "message": "Type '{ orderIsAGift: boolean | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"orderIsAGift\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",

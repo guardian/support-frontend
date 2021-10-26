@@ -67,9 +67,9 @@ function applyDiscount(
 	price: ProductPrice,
 	promotion: Promotion | undefined,
 ): ProductPrice {
-	if (promotion?.discountedPrice) {
+	if (hasDiscount(promotion)) {
 		return { ...price, price: promotion.discountedPrice };
-	} else if (promotion?.introductoryPrice?.price) {
+	} else if (hasIntroductoryPrice(promotion)) {
 		return {
 			...price,
 			price: promotion.introductoryPrice.price,
