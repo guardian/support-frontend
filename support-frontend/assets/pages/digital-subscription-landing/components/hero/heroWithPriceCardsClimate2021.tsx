@@ -14,7 +14,6 @@ import {
 	getTimeboundCopy,
 	getTimeboundQuery,
 } from 'helpers/timeBoundedCopy/timeBoundedCopy';
-// import { IconEarthContainer } from './climate2021/IconEarthContainer';
 import { IconSmallEarth } from './climate2021/IconSmallEarth';
 import { IconStarburst } from './climate2021/IconStarburst';
 import { IconSwirl } from './climate2021/IconSwirl';
@@ -73,10 +72,7 @@ function HeroWithPriceCardsClimate2021({
 	const title = promotionCopy.title || (
 		<>
 			Subscribe to support
-			<br />
-			{/*			<span css={yellowHeading}>urgent climate journalism</span>
-			 */}
-			urgent climate journalism
+			<br />urgent climate journalism
 		</>
 	);
 	const promoCopy = promotionHTML(promotionCopy.description, {
