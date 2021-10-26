@@ -51,15 +51,15 @@ class CreateSubscriptionController(
       implicit request =>
         request.user match {
           case Some(user) =>
-            SafeLogger.info(s"User ${user.minimalUser.id} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
+            SafeLogger.info(s"User ${user.minimalUser.id} is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
             handleCreateSupportWorkersRequest(user.minimalUser)
           case None =>
-            SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
+            SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
             createGuestUserAndHandleRequest.getOrElse(InternalServerError)
         }
     })
 
-  def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
+  private def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
     for {
       userId <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
       result <- EitherT.right[String](
@@ -67,7 +67,7 @@ class CreateSubscriptionController(
       )
     } yield result
 
-  def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser)(
+  private def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser)(
     implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]
   ): Future[Result] = {
 
@@ -77,28 +77,23 @@ class CreateSubscriptionController(
       telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
     )
 
-    def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
-      val isTestUser = testUsers.isTestUser(request)
-      client.createSubscription(request, createUser(idUser, createSupportWorkersRequest, isTestUser), request.uuid)
-        .leftMap(error => ServerError(error.toString))
-    }
-
     if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
-      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(idMinimalUser).leftMap(ServerError)
 
-      val result: ApiResponseOrError[StatusResponse] = for {
-        user <- userOrError
-        statusResponse <- subscriptionStatusOrError(user)
+      val result = for {
+        user <- identityService.getUser(idMinimalUser).leftMap(ServerError)
+        isTestUser = testUsers.isTestUser(request)
+        statusResponse <- client.createSubscription(request, buildUser(user, createSupportWorkersRequest, isTestUser), request.uuid)
+          .leftMap[CreateSubscriptionError](error => ServerError(error))
       } yield statusResponse
-
       respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
+
     } else {
       SafeLogger.warn(s"validation of the request body failed $createSupportWorkersRequest")
       respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
     }
   }
 
-  private def createUser(user: IdUser, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
+  private def buildUser(user: IdUser, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
@@ -127,17 +122,16 @@ class CreateSubscriptionController(
     result: EitherT[Future, CreateSubscriptionError, StatusResponse],
     billingPeriod: BillingPeriod
  )(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
-    val product = request.body.product.describe
     result.fold(
       { error =>
-        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod $product subscription, due to $error")
+        SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
         error match {
           case _: RequestValidationError => BadRequest
           case _: ServerError => InternalServerError
         }
       },
       { statusResponse =>
-        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod $product subscription")
+        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}")
         Accepted(statusResponse.asJson).withCookies(DigitalSubscriptionCookies.create(guardianDomain):_*)
       }
     )
