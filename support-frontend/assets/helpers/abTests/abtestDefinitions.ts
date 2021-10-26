@@ -135,7 +135,7 @@ export const tests: Tests = {
 		seed: 10,
 		optimizeId: 'unfNP7eZTLW4245wJOcxiw',
 	},
-	articleCountTest: {
+	richLandingPageTest: {
 		variants: [
 			{
 				id: 'control',
@@ -153,7 +153,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 11,
+		seed: 17,
 	},
 	digiSubClimateHeader2021: {
 		variants: [
