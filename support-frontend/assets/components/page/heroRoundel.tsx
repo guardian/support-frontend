@@ -1,10 +1,11 @@
 import { css } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
+import type { ReactElement, ReactNode } from 'react';
 import React from 'react';
-import type { Node } from 'react';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const roundelSizeMob = 100;
@@ -56,23 +57,27 @@ const roundelDigital = css`
 `;
 export type RoundelTheme = 'base' | 'digital';
 type PropTypes = {
-	children: Node;
+	children?: string | ReactNode;
 	theme?: RoundelTheme;
-	cssOverrides?: string | string[];
+	cssOverrides?: SerializedStyles | SerializedStyles[];
 };
-const themes: Record<RoundelTheme, string> = {
+const themes: Record<RoundelTheme, SerializedStyles> = {
 	base: roundelBase,
 	digital: roundelDigital,
 };
 
-function HeroRoundel({ children, cssOverrides, theme = 'base' }: PropTypes) {
+function HeroRoundel({
+	children,
+	cssOverrides,
+	theme = 'base',
+}: PropTypes): ReactElement {
 	return (
 		<div css={[heroRoundelStyles, themes[theme], cssOverrides]}>{children}</div>
 	);
 }
 
 HeroRoundel.defaultProps = {
-	cssOverrides: '',
 	theme: 'base',
 };
+
 export default HeroRoundel;
