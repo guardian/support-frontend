@@ -12,7 +12,7 @@
             "TS2345": 167,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 24,
+            "TS6133": 23,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 21,
@@ -40,7 +40,6 @@
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
-            "TS2307": 1,
             "TS2525": 6,
             "TS2300": 10,
             "TS2745": 2,
@@ -316,7 +315,6 @@
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -340,8 +338,7 @@
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
-            "assets/helpers/productPrice/subscriptions.ts": 1,
-            "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx": 1
+            "assets/helpers/productPrice/subscriptions.ts": 1
         }
     },
     "TS1208": [
@@ -4356,10 +4353,6 @@
             "message": "'countryGroupId' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "'countryGroupId' is declared but its value is never read."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
             "message": "'renderControl' is declared but its value is never read."
         },
@@ -5508,12 +5501,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
-        }
-    ],
-    "TS2307": [
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx",
-            "message": "Cannot find module '@guardian/src-layout' or its corresponding type declarations."
         }
     ],
     "TS2525": [

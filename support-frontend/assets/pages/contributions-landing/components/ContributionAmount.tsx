@@ -36,15 +36,14 @@ type PropTypes = {
 	amounts: ContributionAmounts;
 	selectedAmounts: SelectedAmounts;
 	selectAmount: (
-		arg0: number | 'other',
-		arg1: CountryGroupId,
-		arg2: ContributionType,
+		amount: number | 'other',
+		countryGroupId: CountryGroupId,
+		contributionType: ContributionType,
 	) => () => void;
 	otherAmounts: OtherAmounts;
 	updateOtherAmount: (
-		arg0: string,
-		arg1: CountryGroupId,
-		arg2: ContributionType,
+		amount: string,
+		contributionType: ContributionType,
 	) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 	stripePaymentRequestButtonClicked: boolean;
@@ -84,11 +83,7 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 			);
 			dispatch(selectAmount(amount, contributionType));
 		},
-	updateOtherAmount: (
-		amount: string,
-		countryGroupId: CountryGroupId,
-		contributionType: ContributionType,
-	) => {
+	updateOtherAmount: (amount: string, contributionType: ContributionType) => {
 		dispatch(updateOtherAmount(amount, contributionType));
 	},
 });
@@ -171,7 +166,6 @@ function ContributionAmount(props: PropTypes) {
 						onChange={(e) =>
 							props.updateOtherAmount(
 								e.target.value.slice(1),
-								props.countryGroupId,
 								props.contributionType,
 							)
 						}
