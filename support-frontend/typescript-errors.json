@@ -3,29 +3,29 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 27,
-            "TS7006": 157,
-            "TS2305": 65,
-            "TS2322": 306,
+            "TS7006": 161,
+            "TS2305": 63,
+            "TS2322": 297,
             "TS2724": 2,
             "TS2578": 33,
             "TS2339": 163,
-            "TS2345": 167,
+            "TS2345": 178,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 24,
+            "TS6133": 23,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 21,
             "TS2314": 8,
-            "TS7016": 9,
-            "TS2554": 70,
+            "TS7016": 8,
             "TS2304": 18,
             "TS2741": 15,
             "TS2739": 17,
-            "TS2531": 18,
+            "TS2531": 15,
             "TS2604": 4,
-            "TS2532": 2,
+            "TS2532": 4,
             "TS2556": 3,
+            "TS2554": 63,
             "TS2344": 9,
             "TS2569": 2,
             "TS2571": 14,
@@ -35,14 +35,11 @@
             "TS2707": 2,
             "TS2367": 4,
             "TS2740": 7,
-            "TS2533": 2,
             "TS2722": 2,
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
-            "TS2307": 1,
             "TS2525": 6,
-            "TS2300": 10,
             "TS2745": 2,
             "TS2698": 6
         },
@@ -66,7 +63,7 @@
             "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
-            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 14,
+            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
             "assets/components/signout/signout.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
@@ -78,12 +75,11 @@
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 17,
             "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts": 5,
-            "assets/helpers/productPrice/promotions.tsx": 7,
             "assets/helpers/rendering/render.ts": 7,
             "assets/helpers/rendering/ssrPages.ts": 2,
             "assets/helpers/storage/storage.ts": 1,
             "assets/helpers/subscriptionsForms/formReducer.ts": 5,
-            "assets/helpers/subscriptionsForms/submit.ts": 9,
+            "assets/helpers/subscriptionsForms/submit.ts": 10,
             "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts": 1,
             "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts": 30,
             "assets/helpers/user/__tests__/userTest.ts": 1,
@@ -93,8 +89,9 @@
             "assets/pages/aus-moment-map/utils.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
+            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionForm.tsx": 10,
-            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 6,
+            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 7,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx": 5,
             "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx": 3,
@@ -104,12 +101,12 @@
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 10,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 10,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 8,
             "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 12,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 20,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 19,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/subscriptions-redemption/components/redemptionForm.tsx": 5,
@@ -173,8 +170,6 @@
             "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
             "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
             "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroPriceCardsClimate2021.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx": 5,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx": 2,
             "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
             "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
@@ -188,12 +183,12 @@
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/orderSummary/orderSummaryProduct.tsx": 1,
             "assets/components/page/page.tsx": 1,
-            "assets/components/priceLabel/priceLabel.tsx": 1,
+            "assets/components/priceLabel/priceLabel.tsx": 2,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 10,
             "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 31,
-            "assets/components/subscriptionCheckouts/total/total.tsx": 5,
+            "assets/components/subscriptionCheckouts/total/total.tsx": 6,
             "assets/components/svgs/amazonPayLogoDs.tsx": 1,
             "assets/components/svgs/directDebitSymbolDs.tsx": 1,
             "assets/components/svgs/downChevronDs.tsx": 1,
@@ -210,8 +205,7 @@
             "assets/helpers/forms/recaptcha.ts": 1,
             "assets/helpers/globalsAndSwitches/globals.ts": 4,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
-            "assets/helpers/productPrice/__tests__/promotionsTests.ts": 13,
-            "assets/helpers/productPrice/productPrices.ts": 1,
+            "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
             "assets/helpers/subscriptionsForms/rules.ts": 2,
             "assets/helpers/tracking/acquisitions.ts": 3,
             "assets/helpers/urls/url.ts": 3,
@@ -237,11 +231,10 @@
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx": 3,
-            "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/prices.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
-            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 21,
+            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 12,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 4,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
@@ -302,7 +295,9 @@
             "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts": 5,
             "assets/helpers/productPrice/__tests__/productPricesTests.ts": 6,
             "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
-            "assets/helpers/productPrice/priceDescriptions.ts": 6,
+            "assets/helpers/productPrice/paperProductPrices.ts": 2,
+            "assets/helpers/productPrice/priceDescriptions.ts": 9,
+            "assets/helpers/productPrice/priceDescriptionsDigital.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 15,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 6,
@@ -311,28 +306,27 @@
             "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx": 5,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummary.tsx": 1,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 3,
+            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/subscriptions-redemption/marketingConsentContainer.ts": 1,
+            "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
-            "assets/helpers/tracking/behaviour.ts": 2,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
-            "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
-            "assets/pages/showcase/components/otherProducts.tsx": 2,
-            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 1,
             "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/helpers/subscriptionsForms/formActions.ts": 2,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx": 1,
             "assets/pages/subscriptions-redemption/subscriptionsRedemptionReducer.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
+            "assets/helpers/tracking/behaviour.ts": 2,
+            "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
+            "assets/pages/showcase/components/otherProducts.tsx": 2,
+            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 1,
             "assets/pages/promotion-terms/promotionTermsReducer.ts": 4,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/page/commonReducer.ts": 1,
@@ -340,8 +334,7 @@
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
-            "assets/helpers/productPrice/subscriptions.ts": 1,
-            "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx": 1
+            "assets/helpers/productPrice/subscriptions.ts": 1
         }
     },
     "TS1208": [
@@ -670,14 +663,6 @@
             "message": "Parameter 'error' implicitly has an 'any' type."
         },
         {
-            "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Parameter 'promotion' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Parameter 'promotion' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Parameter 'opts' implicitly has an 'any' type."
         },
@@ -786,6 +771,30 @@
             "message": "Parameter 'error' implicitly has an 'any' type."
         },
         {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Parameter 'amount' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Parameter 'countryGroupId' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Parameter 'contributionType' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Parameter 'amount' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Parameter 'countryGroupId' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Parameter 'contributionType' implicitly has an 'any' type."
+        },
+        {
             "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
             "message": "Parameter 'isWaiting' implicitly has an 'any' type."
         },
@@ -816,6 +825,10 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
             "message": "Parameter 'token' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
+            "message": "Parameter 'currency' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
@@ -908,10 +921,6 @@
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
@@ -1313,14 +1322,6 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCardsClimate2021.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -1730,14 +1731,6 @@
             "message": "Type 'null' is not assignable to type 'number | undefined'."
         },
         {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Type '{ price: number | undefined; savingVsRetail?: number | undefined; currency: IsoCurrency; fixedTerm: boolean; promotions?: Promotion[] | undefined; }' is not assignable to type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Type '{ css: string; dangerouslySetInnerHTML: { __html: string; }; }' is not assignable to type 'IntrinsicAttributes'."
-        },
-        {
             "path": "assets/helpers/subscriptionsForms/formReducer.ts",
             "message": "Type '{ stage: string; product: SubscriptionProduct; title: null; email: string; confirmEmail: null; firstName: string; lastName: string; isSignedIn: boolean; userTypeFromIdentityResponse: string; ... 22 more ...; giftDeliveryDate: null; }' is not assignable to type 'FormState'."
         },
@@ -1848,6 +1841,14 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"appearance\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Type 'string | null' is not assignable to type 'string | number | readonly string[] | undefined'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
+            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionAmountChoices.tsx",
@@ -2155,7 +2156,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"orderIsAGift\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
+            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"price\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
@@ -2163,7 +2164,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Type '{ orderIsAGift: boolean | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"orderIsAGift\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
+            "message": "Type '{ orderIsAGift: boolean | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"price\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",
@@ -2238,46 +2239,6 @@
             "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
@@ -2316,6 +2277,10 @@
         {
             "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
             "message": "Type '{}' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { ...; }>, \"email\" | ... 2 more ... | \"confirmOptIn\"> | Omit<...>)'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Type '{ orderIsAGift: true; countryGroupId: CountryGroupId; promotionCopy: PromotionCopy; }' is not assignable to type 'IntrinsicAttributes & PropTypes'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
@@ -3470,6 +3435,10 @@
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ hasLoaded: boolean; csrf: Csrf; productPrices: ProductPrices; currencyId: IsoCurrency; isTestUser: boolean; amount: number; submissionError: Option<...>; wasClicked: boolean; } & { ...; }, PropTypes>>'."
         },
         {
+            "path": "assets/components/priceLabel/priceLabel.tsx",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
+        },
+        {
             "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
             "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
         },
@@ -3484,6 +3453,10 @@
         {
             "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts",
             "message": "Argument of type 'typeof MarketingConsentGift' is not assignable to parameter of type 'ComponentType<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, PropTypes>>'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Option<Promotion>'."
         },
         {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
@@ -3695,11 +3668,19 @@
         },
         {
             "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
             "message": "Argument of type '{ 'United Kingdom': { Collection: { Sunday: { Monthly: { GBP: { price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; }[]; }; }; }; }; }; }' is not assignable to parameter of type 'ProductPrices'."
         },
         {
             "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
             "message": "Argument of type '\"8.99\"' is not assignable to parameter of type 'number | null | undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type 'undefined' is not assignable to parameter of type 'Promotion | null'."
         },
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
@@ -3746,12 +3727,40 @@
             "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
         },
         {
+            "path": "assets/helpers/productPrice/paperProductPrices.ts",
+            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/paperProductPrices.ts",
+            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/priceDescriptions.ts",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
+        },
+        {
             "path": "assets/helpers/productPrice/priceDescriptions.ts",
             "message": "Argument of type 'IntroductoryPriceBenefit | undefined' is not assignable to parameter of type 'IntroductoryPriceBenefit'."
         },
         {
             "path": "assets/helpers/productPrice/priceDescriptions.ts",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
+        },
+        {
+            "path": "assets/helpers/productPrice/priceDescriptions.ts",
             "message": "Argument of type 'number | undefined' is not assignable to parameter of type 'number'."
+        },
+        {
+            "path": "assets/helpers/productPrice/priceDescriptions.ts",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Option<Promotion>'."
+        },
+        {
+            "path": "assets/helpers/productPrice/priceDescriptionsDigital.ts",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
+        },
+        {
+            "path": "assets/helpers/productPrice/priceDescriptionsDigital.ts",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
@@ -3772,6 +3781,10 @@
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Argument of type 'Action' is not assignable to parameter of type 'never'."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/submit.ts",
+            "message": "Argument of type 'Promotion[] | null | undefined' is not assignable to parameter of type 'Promotion[] | undefined'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/submit.ts",
@@ -3987,15 +4000,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Argument of type '{ price: number | undefined; savingVsRetail?: number | undefined; currency: IsoCurrency; fixedTerm: boolean; promotions?: Promotion[] | undefined; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
             "message": "Argument of type 'typeof PaperOrderSummary' is not assignable to parameter of type 'ComponentType<Matching<{ fulfilmentOption: FulfilmentOptions; productOption: ProductOptions; billingPeriod: BillingPeriod; productPrices: ProductPrices; } & DispatchProp<...>, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Argument of type '{ price: number | undefined; savingVsRetail?: number | undefined; currency: IsoCurrency; fixedTerm: boolean; promotions?: Promotion[] | undefined; }' is not assignable to parameter of type 'ProductPrice'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -4044,6 +4049,10 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
         }
     ],
     "TS7034": [
@@ -4364,10 +4373,6 @@
             "message": "'renderControl' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
             "message": "'dispatch' is declared but its value is never read."
         },
@@ -4618,10 +4623,6 @@
             "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
-            "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Could not find a declaration file for module 'dompurify'. 'support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
@@ -4644,288 +4645,6 @@
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
             "message": "Could not find a declaration file for module 'react-router-dom'. 'support-frontend/node_modules/react-router-dom/index.js' implicitly has an 'any' type."
-        }
-    ],
-    "TS2554": [
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Expected 5 arguments, but got 3."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Expected 4-5 arguments, but got 3."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/tracking/behaviour.ts",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/tracking/behaviour.ts",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Expected 0 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Expected 5 arguments, but got 3."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Expected 4-5 arguments, but got 3."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Expected 5 arguments, but got 3."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Expected 4-5 arguments, but got 3."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
-            "message": "Expected 4-5 arguments, but got 3."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProducts.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProducts.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Expected 1 arguments, but got 0."
         }
     ],
     "TS2304": [
@@ -5168,18 +4887,6 @@
             "message": "Object is possibly 'null'."
         },
         {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/helpers/productPrice/priceDescriptions.ts",
-            "message": "Object is possibly 'null'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Object is possibly 'null'."
         },
@@ -5232,7 +4939,15 @@
             "message": "Object is possibly 'undefined'."
         },
         {
-            "path": "assets/helpers/productPrice/promotions.tsx",
+            "path": "assets/helpers/productPrice/priceDescriptions.ts",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/priceDescriptions.ts",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/priceDescriptions.ts",
             "message": "Object is possibly 'undefined'."
         }
     ],
@@ -5248,6 +4963,260 @@
         {
             "path": "assets/helpers/__tests__/contributionsTests.ts",
             "message": "A spread argument must either have a tuple type or be passed to a rest parameter."
+        }
+    ],
+    "TS2554": [
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/abTests/abtest.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/tracking/behaviour.ts",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/tracking/behaviour.ts",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Expected 0 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/user/user.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/showcase/components/otherProducts.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/showcase/components/otherProducts.tsx",
+            "message": "Expected 2 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
+            "message": "Expected 1 arguments, but got 0."
         }
     ],
     "TS2344": [
@@ -5448,16 +5417,6 @@
             "message": "Type 'PaymentRequestObject' is missing the following properties from type 'PaymentRequest': canMakePayment, show, isShowing, update, and 3 more."
         }
     ],
-    "TS2533": [
-        {
-            "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Object is possibly 'null' or 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "Object is possibly 'null' or 'undefined'."
-        }
-    ],
     "TS2722": [
         {
             "path": "assets/helpers/tracking/googleTagManager.ts",
@@ -5510,12 +5469,6 @@
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
         }
     ],
-    "TS2307": [
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx",
-            "message": "Cannot find module '@guardian/src-layout' or its corresponding type declarations."
-        }
-    ],
     "TS2525": [
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
@@ -5540,48 +5493,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        }
-    ],
-    "TS2300": [
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'DigitalLandingPropTypes'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'digitalLandingProps'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'headers'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'footer'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'getRows'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'footer'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'getRows'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'headers'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'DigitalLandingPropTypes'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'digitalLandingProps'."
         }
     ],
     "TS2745": [
