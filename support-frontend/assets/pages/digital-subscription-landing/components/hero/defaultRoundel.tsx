@@ -34,7 +34,7 @@ export const circleTextContainer = css`
 	}
 `;
 
-function DefaultRoundel() {
+function DefaultRoundel(): JSX.Element {
 	return (
 		<div css={circleTextContainer}>
 			<div css={circleTextTop}>14 day</div>
