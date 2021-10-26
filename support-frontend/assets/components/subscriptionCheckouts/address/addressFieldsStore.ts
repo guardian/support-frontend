@@ -32,7 +32,7 @@ import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/chec
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 // ----- Types ----- //
 export type FormFields = RegularPaymentRequestAddress;
-export type FormField = $Keys<FormFields>;
+export type FormField = keyof FormFields;
 export type FormErrors = Array<FormError<FormField>>;
 type AddressFieldsState = FormFields & {
 	formErrors: FormErrors;

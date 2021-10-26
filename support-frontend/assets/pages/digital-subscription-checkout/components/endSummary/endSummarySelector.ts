@@ -2,13 +2,14 @@ import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDig
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { EndSummaryProps } from './endSummary';
 
 const getPromotion = (productPrice: ProductPrice): string | null =>
 	productPrice.promotions && productPrice.promotions.length > 0
 		? productPrice.promotions[0].description
 		: null;
 
-function mapStateToProps(state: CheckoutState) {
+function mapStateToProps(state: CheckoutState): EndSummaryProps {
 	const { billingPeriod, productPrices, orderIsAGift } = state.page.checkout;
 	const productPrice = getProductPrice(
 		productPrices,
@@ -21,8 +22,8 @@ function mapStateToProps(state: CheckoutState) {
 		billingPeriod === 'Annual' ? billingPeriod : 'Quarterly';
 	return {
 		priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
-		promotion: getPromotion(productPrice),
-		orderIsAGift,
+		promotion: getPromotion(productPrice) ?? '',
+		orderIsAGift: orderIsAGift ?? false,
 		digitalGiftBillingPeriod,
 		price: showPrice(productPrice),
 	};

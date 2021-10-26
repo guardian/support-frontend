@@ -1,10 +1,11 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import 'react';
 import type { Option } from 'helpers/types/option';
 import { headOption } from 'helpers/types/option';
 // ----- Types ----- //
-export type ErrorMessage = string | Node;
+export type ErrorMessage = ReactNode;
+
 type Rule<Err> = {
 	rule: boolean;
 	error: Err;
@@ -16,7 +17,7 @@ export type FormError<FieldType> = {
 
 // ----- Rules ----- //
 const nonEmptyString: (arg0: string | null | undefined) => boolean = (s) =>
-	(s || '').trim() !== '';
+	(s ?? '').trim() !== '';
 
 function notNull<A>(value: A): boolean {
 	return value !== null;
@@ -61,7 +62,7 @@ function formError<FieldType>(
 }
 
 function validate<Err>(rules: Array<Rule<Err>>): Err[] {
-	return rules.reduce(
+	return rules.reduce<Err[]>(
 		(errors, { rule, error }) => (rule ? errors : [...errors, error]),
 		[],
 	);

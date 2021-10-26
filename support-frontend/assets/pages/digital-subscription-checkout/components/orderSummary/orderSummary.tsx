@@ -1,28 +1,24 @@
 import React from 'react';
-import type { $Call } from 'utility-types';
-import type { GridImg } from 'components/gridImage/gridImage';
+import type { ReactNode } from 'react';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
+import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
-import 'components/gridImage/gridImage';
-import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import { getGiftOrderSummaryText } from '../helpers';
 import * as styles from './orderSummaryStyles';
 
-type GridImageType = typeof import('components/gridImage/gridImage').default;
 type PropTypes = {
 	billingPeriod: DigitalBillingPeriod;
-	// eslint-disable-next-line react/no-unused-prop-types
-	changeSubscription?: string | null;
-	image: $Call<GridImageType, GridImg>;
+	changeSubscription?: string;
+	image: ReactNode;
 	productPrice: ProductPrice;
 	title: string;
 	orderIsAGift?: boolean;
 };
 
-function OrderSummary(props: PropTypes) {
+function OrderSummary(props: PropTypes): JSX.Element {
 	const giftBillingPeriod = props.billingPeriod === Annual ? Annual : Quarterly;
 	const giftPriceString = getGiftOrderSummaryText(
 		giftBillingPeriod,
@@ -46,7 +42,7 @@ function OrderSummary(props: PropTypes) {
 				</div>
 			</div>
 			<div css={styles.endSummary}>
-				<EndSummary orderIsAGift={props.orderIsAGift} />
+				<EndSummary />
 			</div>
 		</aside>
 	);

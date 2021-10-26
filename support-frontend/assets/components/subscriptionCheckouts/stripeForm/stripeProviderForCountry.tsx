@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import React, { useEffect, useState } from 'react';
@@ -20,14 +19,14 @@ type PropTypes = {
 	csrf: Csrf;
 };
 
-function StripeProviderForCountry(props: PropTypes) {
+function StripeProviderForCountry(props: PropTypes): JSX.Element {
 	const [stripeObject, setStripeObject] = useState<stripeJs.Stripe | null>(
 		null,
 	);
 	const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
 	useEffect(() => {
 		if (stripeObject === null) {
-			stripeJs.loadStripe(stripeKey).then(setStripeObject);
+			void stripeJs.loadStripe(stripeKey).then(setStripeObject);
 		}
 	}, []);
 	// `options` must be set even if it's empty, otherwise we get 'Unsupported prop change on Elements' warnings
