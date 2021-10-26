@@ -16,7 +16,9 @@ type ActionHeaderProps = {
 	title: string;
 };
 
-const ActionHeader = ({ title }: ActionHeaderProps) => (
+const ActionHeader: React.FC<ActionHeaderProps> = ({
+	title,
+}: ActionHeaderProps) => (
 	<header>
 		<h1 css={text}>{title}</h1>
 	</header>

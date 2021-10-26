@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import React, { useEffect } from 'react';
@@ -14,7 +13,7 @@ const listContainer = css`
 	margin-top: ${space[4]}px;
 `;
 
-const ContributionThankYouSignUp = () => {
+const ContributionThankYouSignUp: React.FC = () => {
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SIGN_UP);
 	}, []);
