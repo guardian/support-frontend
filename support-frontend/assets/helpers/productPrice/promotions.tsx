@@ -144,7 +144,7 @@ function getPromotionCopy(
 
 type PromotionHTMLModifiers = {
 	css?: string;
-	tag?: string;
+	tag?: keyof JSX.IntrinsicElements;
 };
 
 function promotionHTML(
@@ -159,7 +159,6 @@ function promotionHTML(
 	return (
 		<TagName
 			css={css}
-			// @ts-expect-error we don't want an error from this
 			dangerouslySetInnerHTML={{
 				__html: html,
 			}}

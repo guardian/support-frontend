@@ -39,7 +39,6 @@
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
-            "TS2307": 1,
             "TS2525": 6,
             "TS2300": 10,
             "TS2745": 2,
@@ -336,8 +335,7 @@
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
-            "assets/helpers/productPrice/subscriptions.ts": 1,
-            "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx": 1
+            "assets/helpers/productPrice/subscriptions.ts": 1
         }
     },
     "TS1208": [
@@ -5410,12 +5408,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
-        }
-    ],
-    "TS2307": [
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx",
-            "message": "Cannot find module '@guardian/src-layout' or its corresponding type declarations."
         }
     ],
     "TS2525": [

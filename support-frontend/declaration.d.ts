@@ -16,7 +16,3 @@ declare module 'ophan' {
 	export const sendInitialEvent: (...args: unknown[]) => void;
 	export const viewId: string;
 }
-
-declare module 'DOMPurify' {
-	export const sanitize: (markdown: string) => string;
-}
