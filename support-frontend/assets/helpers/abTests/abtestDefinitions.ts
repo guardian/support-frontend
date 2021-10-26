@@ -174,5 +174,6 @@ export const tests: Tests = {
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
 		seed: 12,
+		optimizeId: 'erMFDh79T6iyp2WhaG7CWQ',
 	},
 };
