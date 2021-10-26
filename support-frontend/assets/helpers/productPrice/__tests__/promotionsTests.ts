@@ -82,7 +82,7 @@ describe('getAppliedPromo', () => {
 			name: 'examplePromo2',
 			promoCode: 5678,
 		});
-		expect(getAppliedPromo()).toEqual(null);
+		expect(getAppliedPromo()).toEqual(undefined);
 	});
 });
 describe('applyDiscount', () => {

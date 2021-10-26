@@ -39,7 +39,7 @@ export type BillingPeriods = Record<
 	Record<IsoCurrency, ProductPrice>
 >;
 
-const isNumeric = (num: number | null | undefined): boolean =>
+const isNumeric = (num: number | null | undefined): num is number =>
 	num !== null && num !== undefined && !Number.isNaN(num);
 
 function getFirstValidPrice(...prices: Array<number | null | undefined>) {
@@ -54,21 +54,21 @@ function getProductPrice(
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption?: ProductOptions | null,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
 ): ProductPrice {
 	const countryGroup = getCountryGroup(country);
-	return productPrices[countryGroup.name][
-		fulfilmentOption ?? NoFulfilmentOptions
-	][productOption ?? NoProductOptions][billingPeriod][countryGroup.currency];
+	return productPrices[countryGroup.name][fulfilmentOption][productOption][
+		billingPeriod
+	][countryGroup.currency];
 }
 
 function finalPrice(
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
 ): ProductPrice {
 	return applyDiscount(
 		getProductPrice(
@@ -97,8 +97,8 @@ const displayPrice = (
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
 ) =>
 	showPrice(
 		getProductPrice(

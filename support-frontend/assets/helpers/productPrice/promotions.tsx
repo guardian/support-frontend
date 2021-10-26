@@ -4,7 +4,9 @@ import snarkdown from 'snarkdown';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
 	ProductPrices,
@@ -51,28 +53,25 @@ export type Promotion = {
 };
 const promoQueryParam = 'promoCode';
 
-const hasDiscount = (promotion: Promotion | null | undefined): boolean =>
-	promotion !== null &&
-	promotion !== undefined &&
-	isNumeric(promotion.discountedPrice);
+const hasDiscount = (
+	promotion: Promotion | undefined,
+): promotion is Promotion & Required<Pick<Promotion, 'discountedPrice'>> =>
+	isNumeric(promotion?.discountedPrice);
 
 const hasIntroductoryPrice = (
-	promotion: Promotion | null | undefined,
-): boolean =>
-	promotion !== null &&
-	promotion !== undefined &&
-	!!promotion.introductoryPrice;
+	promotion: Promotion | undefined,
+): promotion is Promotion & Required<Pick<Promotion, 'introductoryPrice'>> =>
+	!!promotion?.introductoryPrice;
 
 function applyDiscount(
 	price: ProductPrice,
-	promotion: Promotion | null | undefined,
-) {
+	promotion: Promotion | undefined,
+): ProductPrice {
 	if (hasDiscount(promotion)) {
 		return { ...price, price: promotion.discountedPrice };
 	} else if (hasIntroductoryPrice(promotion)) {
 		return {
 			...price,
-			// $FlowIgnore - we have checked this above
 			price: promotion.introductoryPrice.price,
 		};
 	}
@@ -80,21 +79,20 @@ function applyDiscount(
 	return price;
 }
 
-const matchesQueryParam = (promotion) =>
+const matchesQueryParam = (promotion: Promotion) =>
 	getQueryParameter(promoQueryParam) === promotion.promoCode;
 
-const introductoryPrice = (promotion) =>
-	promotion.introductoryPrice !== null &&
+const introductoryPrice = (promotion: Promotion) =>
 	promotion.introductoryPrice !== undefined;
 
 function getAppliedPromo(
-	promotions: Promotion[] | null | undefined,
-): Option<Promotion> {
+	promotions: Promotion[] | undefined,
+): Promotion | undefined {
 	if (promotions && promotions.length > 0) {
 		if (promotions.length > 1) {
 			return (
-				promotions.find(introductoryPrice) ||
-				promotions.find(matchesQueryParam) ||
+				promotions.find(introductoryPrice) ??
+				promotions.find(matchesQueryParam) ??
 				promotions[0]
 			);
 		}
@@ -102,16 +100,16 @@ function getAppliedPromo(
 		return promotions[0];
 	}
 
-	return null;
+	return undefined;
 }
 
 function getPromotion(
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
-): Promotion | null | undefined {
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
+): Promotion | undefined {
 	return getAppliedPromo(
 		getProductPrice(
 			productPrices,
@@ -123,7 +121,7 @@ function getPromotion(
 	);
 }
 
-function getSanitisedHtml(markdownString: string) {
+function getSanitisedHtml(markdownString: string): string {
 	// ensure we don't accidentally inject dangerous html into the page
 	return DOMPurify.sanitize(snarkdown(markdownString), {
 		ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'],
@@ -138,15 +136,15 @@ function getPromotionCopy(
 	}
 
 	return {
-		title: promotionCopy.title || '',
-		description: getSanitisedHtml(promotionCopy.description || ''),
-		roundel: getSanitisedHtml(promotionCopy.roundel || ''),
+		title: promotionCopy.title ?? '',
+		description: getSanitisedHtml(promotionCopy.description ?? ''),
+		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
 	};
 }
 
 type PromotionHTMLModifiers = {
 	css?: string;
-	tag?: string;
+	tag?: keyof JSX.IntrinsicElements;
 };
 
 function promotionHTML(
@@ -160,7 +158,7 @@ function promotionHTML(
 	const TagName = tag;
 	return (
 		<TagName
-			css={css} // eslint-disable-next-line react/no-danger
+			css={css}
 			dangerouslySetInnerHTML={{
 				__html: html,
 			}}

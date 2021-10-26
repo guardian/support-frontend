@@ -19,7 +19,6 @@ import {
 	hasIntroductoryPrice,
 } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
 
 const displayPrice = (glyph: string, price: number) =>
 	`${glyph}${fixDecimals(price)}`;
@@ -156,21 +155,8 @@ function getPriceDescription(
 	);
 }
 
-function getAppliedPromoDescription(
-	billingPeriod: BillingPeriod,
-	productPrice: ProductPrice,
-) {
-	const appliedPromo = getAppliedPromo(productPrice.promotions);
-
-	if (
-		appliedPromo &&
-		appliedPromo.landingPage &&
-		appliedPromo.landingPage.roundel
-	) {
-		return appliedPromo.landingPage.roundel;
-	}
-
-	return '';
+function getAppliedPromoDescription(productPrice: ProductPrice) {
+	return getAppliedPromo(productPrice.promotions)?.landingPage?.roundel ?? '';
 }
 
 function getSimplifiedPriceDescription(
@@ -181,7 +167,7 @@ function getSimplifiedPriceDescription(
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const termPrepositon = productPrice.fixedTerm ? 'for' : 'per';
 
-	if (promotion && promotion.introductoryPrice) {
+	if (hasIntroductoryPrice(promotion)) {
 		const introPrice = promotion.introductoryPrice;
 		const standardCopy = standardRate(
 			glyph,
@@ -196,7 +182,7 @@ function getSimplifiedPriceDescription(
 		return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
 	}
 
-	if (promotion && promotion.discountedPrice) {
+	if (hasDiscount(promotion)) {
 		const standardCopy = getStandardRateCopy(
 			glyph,
 			productPrice.price,
@@ -217,13 +203,13 @@ function getSimplifiedPriceDescription(
 
 function getPriceForDescription(
 	productPrice: ProductPrice,
-	promotion: Option<Promotion>,
+	promotion: Promotion | undefined,
 ) {
-	if (promotion && promotion.introductoryPrice) {
+	if (hasIntroductoryPrice(promotion)) {
 		return promotion.introductoryPrice.price;
 	}
 
-	if (promotion && promotion.discountedPrice) {
+	if (hasDiscount(promotion)) {
 		return promotion.discountedPrice;
 	}
 
