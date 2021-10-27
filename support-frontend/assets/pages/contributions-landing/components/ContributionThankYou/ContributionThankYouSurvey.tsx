@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
@@ -19,15 +18,19 @@ import { OPHAN_COMPONENT_ID_SURVEY } from './utils/ophan';
 const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;
+
 const AUS_SURVEY_LINK =
 	'https://guardiannewsampampmedia.formstack.com/forms/australia_2021';
 
-const ContributionThankYouSurvey = ({
-	countryId,
-}: {
+type ContributionThankYouSurveyProps = {
 	countryId: IsoCountry;
-}) => {
+};
+
+const ContributionThankYouSurvey: React.FC<ContributionThankYouSurveyProps> = ({
+	countryId,
+}: ContributionThankYouSurveyProps) => {
 	const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
+
 	const isAus = countryId === 'AU';
 	const url = isAus ? AUS_SURVEY_LINK : null;
 
@@ -38,6 +41,7 @@ const ContributionThankYouSurvey = ({
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
 	}, []);
+
 	const heading = isAus
 		? 'Tell us why you value Guardian Australia'
 		: 'Send us your thoughts';
@@ -75,6 +79,7 @@ const ContributionThankYouSurvey = ({
 									Fill out this short form to tell us more about your experience
 									of supporting us today – it only takes a minute.
 								</span>
+
 								<span css={styles.hideBeforeTablet}>
 									We would love to hear more about your experience of supporting
 									the Guardian today. Please fill out this short form – it only

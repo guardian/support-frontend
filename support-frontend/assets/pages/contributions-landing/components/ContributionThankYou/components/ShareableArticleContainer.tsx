@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/core';
 import { css } from '@emotion/core';
 import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
@@ -12,18 +13,22 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
 	OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
 } from '../utils/ophan';
+
 // Styles ///////////////////////////////////////////////////////////
+
 const outerContainer = css`
 	display: flex;
 	flex-direction: column;
 	margin-top: ${space[6]}px;
 `;
+
 const innerContainer = css`
 	display: flex;
 	flex-direction: row;
 	border-top: 1px solid ${news[400]};
 	background-color: ${neutral[97]};
 `;
+
 const genericButtonContainer = css`
 	margin-top: ${space[4]}px;
 	margin-left: ${space[2]}px;
@@ -33,6 +38,7 @@ const genericButtonContainer = css`
 		margin-right: ${space[2]}px;
 	}
 `;
+
 const wideButtonsContainer = css`
 	${genericButtonContainer}
 	display: block;
@@ -41,6 +47,7 @@ const wideButtonsContainer = css`
 		display: none;
 	}
 `;
+
 const narrowButtonsContainer = css`
 	${genericButtonContainer}
 	display: none;
@@ -49,6 +56,7 @@ const narrowButtonsContainer = css`
 		display: block;
 	}
 `;
+
 const headlineText = css`
 	text-decoration: none;
 	cursor: pointer;
@@ -59,10 +67,12 @@ const headlineText = css`
 	})};
 	font-weight: 600 !important;
 `;
+
 const button = css`
 	border: 1px solid ${neutral[86]};
 	color: ${news[400]};
 `;
+
 const imageContainer = css`
 	max-width: 45%;
 	padding: ${space[2]}px;
@@ -71,10 +81,12 @@ const imageContainer = css`
 		padding: ${space[1]}px;
 	}
 `;
+
 const image = css`
 	width: 100% !important;
 	width: 100% !important;
 `;
+
 const headlineAndButtonsContainer = css`
 	padding: ${space[2]}px ${space[2]}px ${space[2]}px 0;
 
@@ -82,7 +94,9 @@ const headlineAndButtonsContainer = css`
 		padding: ${space[1]}px ${space[1]}px ${space[1]}px 0;
 	}
 `;
+
 // Helpers //////////////////////////////////////////////////////////
+
 const INTCMP = 'enviro_moment_2020_thankyou_share';
 
 const appendIntcmpAndEncodeUrl = (
@@ -105,7 +119,10 @@ const twitterShareLink = (articleUrl: string) =>
 const emailShareLink = (articleUrl: string) =>
 	`mailto:?body=${appendIntcmpAndEncodeUrl(articleUrl, 'email')}`;
 
-const shareButtonsContainer = (styles: string, articleUrl: string) => (
+const shareButtonsContainer = (
+	styles: SerializedStyles,
+	articleUrl: string,
+) => (
 	<div css={styles}>
 		<LinkButton
 			href={facebookShareLink(articleUrl)}
@@ -117,7 +134,10 @@ const shareButtonsContainer = (styles: string, articleUrl: string) => (
 			icon={<SvgFacebook />}
 			css={button}
 			hideLabel
-		/>
+		>
+			Facebook
+		</LinkButton>
+
 		<LinkButton
 			href={twitterShareLink(articleUrl)}
 			onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
@@ -128,7 +148,10 @@ const shareButtonsContainer = (styles: string, articleUrl: string) => (
 			icon={<SvgTwitter />}
 			css={button}
 			hideLabel
-		/>
+		>
+			Twitter
+		</LinkButton>
+
 		<LinkButton
 			href={emailShareLink(articleUrl)}
 			onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
@@ -139,12 +162,15 @@ const shareButtonsContainer = (styles: string, articleUrl: string) => (
 			icon={<SvgEnvelope />}
 			css={button}
 			hideLabel
-		/>
+		>
+			Email
+		</LinkButton>
 	</div>
 );
 
 // Types ////////////////////////////////////////////////////////////
-type PropTypes = {
+
+type ShareableArticleContainerProps = {
 	articleUrl: string;
 	headline: string;
 	imageUrl: string;
@@ -152,27 +178,33 @@ type PropTypes = {
 };
 
 // Component ////////////////////////////////////////////////////////
-const ShareableArticleContainer = (props: PropTypes) => (
+
+const ShareableArticleContainer: React.FC<ShareableArticleContainerProps> = ({
+	articleUrl,
+	headline,
+	imageUrl,
+	imageAltText,
+}: ShareableArticleContainerProps) => (
 	<div css={outerContainer}>
 		<div css={innerContainer}>
 			<div css={imageContainer}>
-				<a href={props.articleUrl} target="_blank" rel="noopener noreferrer">
-					<img css={image} src={props.imageUrl} alt={props.imageAltText} />
+				<a href={articleUrl} target="_blank" rel="noopener noreferrer">
+					<img css={image} src={imageUrl} alt={imageAltText} />
 				</a>
 			</div>
 			<div css={headlineAndButtonsContainer}>
 				<a
-					href={props.articleUrl}
+					href={articleUrl}
 					css={headlineText}
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					{props.headline}
+					{headline}
 				</a>
-				{shareButtonsContainer(wideButtonsContainer, props.articleUrl)}
+				{shareButtonsContainer(wideButtonsContainer, articleUrl)}
 			</div>
 		</div>
-		{shareButtonsContainer(narrowButtonsContainer, props.articleUrl)}
+		{shareButtonsContainer(narrowButtonsContainer, articleUrl)}
 	</div>
 );
 
