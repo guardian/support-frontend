@@ -5,13 +5,13 @@
             "TS7053": 27,
             "TS7006": 149,
             "TS2305": 62,
-            "TS2322": 310,
+            "TS2322": 308,
             "TS2578": 32,
             "TS2339": 163,
             "TS2345": 166,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 23,
+            "TS6133": 25,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 20,
@@ -221,7 +221,6 @@
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 29,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 4,
@@ -310,6 +309,7 @@
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 3,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
@@ -2118,14 +2118,6 @@
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
             "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type '(FormError<FormField> | FormError<keyof RegularPaymentRequestAddress>)[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type '(FormError<FormField> | FormError<keyof RegularPaymentRequestAddress>)[]' is not assignable to type 'FormError<FormField>[]'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
@@ -4306,6 +4298,14 @@
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
             "message": "'dispatch' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
+            "message": "'FormField' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
+            "message": "'FormError' is declared but its value is never read."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",

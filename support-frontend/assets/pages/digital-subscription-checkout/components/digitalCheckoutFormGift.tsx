@@ -80,9 +80,7 @@ function mapStateToProps(state: CheckoutState) {
 			state.page.checkout.billingPeriod,
 		).price,
 		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
-		addressErrors: state.page.billingAddress.fields.formErrors as Array<
-			FormError<FormField>
-		>,
+		addressErrors: state.page.billingAddress.fields.formErrors,
 		participations: state.common.abParticipations,
 	};
 }
@@ -237,6 +235,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							country={props.country}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
+							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[...props.formErrors, ...props.addressErrors]}
 							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
@@ -270,6 +269,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
 							amount={props.amount}
 							billingPeriod={props.billingPeriod}
+							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[...props.formErrors, ...props.addressErrors]}
 						/>
 					) : null}
