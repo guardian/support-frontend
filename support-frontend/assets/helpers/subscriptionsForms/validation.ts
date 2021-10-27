@@ -1,9 +1,9 @@
 // ----- Imports ----- //
-import 'react';
+import type { ReactNode } from 'react';
 import type { Option } from 'helpers/types/option';
 import { headOption } from 'helpers/types/option';
 // ----- Types ----- //
-export type ErrorMessage = string;
+export type ErrorMessage = string | ReactNode;
 
 type Rule<Err> = {
 	rule: boolean;

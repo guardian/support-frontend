@@ -15,7 +15,6 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import type { FormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import CheckoutLayout, {
 	Content,
@@ -50,7 +49,6 @@ import {
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import { withError } from 'hocs/withError';
