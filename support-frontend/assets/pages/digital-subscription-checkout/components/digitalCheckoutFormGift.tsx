@@ -178,7 +178,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 					</FormSection>
 					<FormSection title="Gift delivery date">
 						<DatePickerWithError
-							error={firstError('giftDeliveryDate', props.formErrors)}
+							error={firstError('giftDeliveryDate', props.formErrors) as string}
 							value={props.giftDeliveryDate}
 							onChange={(date) => props.setDigitalGiftDeliveryDate(date)}
 						/>
@@ -220,7 +220,9 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 								availablePaymentMethods={paymentMethods}
 								paymentMethod={props.paymentMethod}
 								setPaymentMethod={props.setPaymentMethod}
-								validationError={firstError('paymentMethod', props.formErrors)}
+								validationError={
+									firstError('paymentMethod', props.formErrors) as string
+								}
 							/>
 						</FormSection>
 					) : null}
