@@ -1,10 +1,9 @@
-import type { ChildrenArray, Element, Node } from 'react';
-import React from 'react';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
-import type { HeadingSize } from 'components/heading/heading';
-import Heading from 'components/heading/heading';
 import type { SerializedStyles } from '@emotion/core';
+import type { FormHTMLAttributes, ReactNode } from 'react';
+import React from 'react';
+import Heading from 'components/heading/heading';
+import type { HeadingSize } from 'components/heading/heading';
+import type { Option } from 'helpers/types/option';
 import '@emotion/core';
 import './checkoutForm.scss';
 
@@ -15,7 +14,7 @@ Form "blocks". you need at least one of these.
 type FormSectionPropTypes = {
 	id?: string;
 	title: Option<string>;
-	children: Node;
+	children: ReactNode;
 	headingSize: HeadingSize;
 	border: 'full' | 'bottom' | 'top' | 'none';
 	cssOverrides?: Option<SerializedStyles>;
@@ -28,7 +27,7 @@ const FormSection = ({
 	border,
 	id,
 	cssOverrides,
-}: FormSectionPropTypes) => (
+}: FormSectionPropTypes): JSX.Element => (
 	<div
 		id={id}
 		className={`component-checkout-form-section component-checkout-form-section--${border} component-checkout-form-section__wrap`}
@@ -56,10 +55,10 @@ FormSection.defaultProps = {
 // Hidden version of form section
 type FormSectionHiddenPropTypes = {
 	title: Option<string>;
-	children: Node;
+	children: ReactNode;
 	headingSize: HeadingSize;
 	show?: boolean;
-	id?: Option<string>;
+	id?: string;
 };
 
 const FormSectionHiddenUntilSelected = ({
@@ -68,7 +67,7 @@ const FormSectionHiddenUntilSelected = ({
 	headingSize,
 	show,
 	id,
-}: FormSectionHiddenPropTypes) => (
+}: FormSectionHiddenPropTypes): JSX.Element => (
 	<div
 		id={id}
 		className={
@@ -104,11 +103,11 @@ FormSectionHiddenUntilSelected.defaultProps = {
 Form
 the top level form itself
 */
-type FormPropTypes = {
-	children: ChildrenArray<Element<any> | null>;
+type FormPropTypes = FormHTMLAttributes<HTMLFormElement> & {
+	children: ReactNode;
 };
 
-const Form = ({ children, ...otherProps }: FormPropTypes) => (
+const Form = ({ children, ...otherProps }: FormPropTypes): JSX.Element => (
 	<form {...otherProps} className="component-checkout-form">
 		{children}
 	</form>

@@ -106,7 +106,7 @@ export default function PersonalDetails(props: PropTypes) {
 			label="Confirm email"
 			type="email"
 			value={props.confirmEmail}
-			onInput={maybeSetConfirmEmail}
+			onChange={maybeSetConfirmEmail}
 			error={firstError('confirmEmail', props.formErrors)}
 			pattern={emailRegexPattern}
 		/>

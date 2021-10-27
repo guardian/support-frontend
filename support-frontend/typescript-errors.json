@@ -3,20 +3,19 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 27,
-            "TS7006": 152,
-            "TS2305": 65,
-            "TS2322": 300,
-            "TS2724": 2,
-            "TS2578": 24,
+            "TS7006": 146,
+            "TS2305": 63,
+            "TS2322": 287,
+            "TS2578": 23,
             "TS2339": 162,
-            "TS2345": 165,
+            "TS2345": 163,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
             "TS7031": 22,
             "TS2564": 2,
-            "TS2769": 21,
-            "TS2314": 8,
+            "TS2769": 20,
+            "TS2314": 7,
             "TS7016": 8,
             "TS2304": 18,
             "TS2741": 7,
@@ -34,12 +33,13 @@
             "TS1016": 2,
             "TS2707": 2,
             "TS2367": 4,
-            "TS2740": 7,
+            "TS2740": 6,
             "TS2722": 2,
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
             "TS2525": 6,
+            "TS2724": 1,
             "TS2300": 10,
             "TS2745": 2,
             "TS2698": 6
@@ -98,25 +98,22 @@
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 8,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 8,
             "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 11,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 19,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
-            "assets/pages/subscriptions-redemption/components/redemptionForm.tsx": 5,
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 7,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 9,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 15,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 13,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 15,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 13,
             "assets/components/asyncronously/asyncronously.ts": 2,
             "assets/components/base/rows.tsx": 1,
             "assets/components/button/_sharedButton.tsx": 1,
             "assets/components/checkoutExpander/checkoutExpander.tsx": 1,
-            "assets/components/checkoutForm/checkoutForm.tsx": 4,
             "assets/components/containers/centredContainer.tsx": 1,
             "assets/components/containers/flexContainer.tsx": 1,
             "assets/components/content/content.tsx": 2,
@@ -159,7 +156,7 @@
             "assets/components/subscriptionCheckouts/stage.tsx": 1,
             "assets/components/tabs/tabs.tsx": 1,
             "assets/components/text/text.tsx": 1,
-            "assets/helpers/subscriptionsForms/validation.ts": 3,
+            "assets/helpers/subscriptionsForms/validation.ts": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx": 2,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
@@ -221,7 +218,6 @@
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 29,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx": 3,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 3,
             "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
@@ -245,9 +241,9 @@
             "assets/pages/showcase/components/hero.tsx": 3,
             "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
+            "assets/pages/subscriptions-redemption/components/redemptionForm.tsx": 3,
             "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 2,
-            "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
             "assets/pages/aus-moment-map/components/blurb.tsx": 1,
             "assets/pages/aus-moment-map/hooks/useWindowWidth.ts": 1,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
@@ -294,7 +290,6 @@
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummary.tsx": 1,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/subscriptions-redemption/marketingConsentContainer.ts": 1,
@@ -303,6 +298,7 @@
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
@@ -877,10 +873,6 @@
             "message": "Parameter 'email' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Parameter 'ev' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
             "message": "Parameter 'commonState' implicitly has an 'any' type."
         },
@@ -891,10 +883,6 @@
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Parameter 'ev' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
@@ -953,10 +941,6 @@
             "message": "Parameter 'startDate' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'ev' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
             "message": "Parameter 'fulfilmentOption' implicitly has an 'any' type."
         },
@@ -975,10 +959,6 @@
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx",
             "message": "Parameter 'index' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
-            "message": "Parameter 'ev' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
@@ -1021,10 +1001,6 @@
             "message": "Parameter 'newState' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'ev' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Parameter 'initialState' implicitly has an 'any' type."
         },
@@ -1047,10 +1023,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Parameter 'newState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Parameter 'ev' implicitly has an 'any' type."
         }
     ],
     "TS2305": [
@@ -1068,14 +1040,6 @@
         },
         {
             "path": "assets/components/checkoutExpander/checkoutExpander.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/checkoutForm/checkoutForm.tsx",
-            "message": "Module '\"react\"' has no exported member 'ChildrenArray'."
-        },
-        {
-            "path": "assets/components/checkoutForm/checkoutForm.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -1319,10 +1283,6 @@
         {
             "path": "assets/components/asyncronously/asyncronously.ts",
             "message": "Type 'ComponentType<any>' is not assignable to type 'null'."
-        },
-        {
-            "path": "assets/components/checkoutForm/checkoutForm.tsx",
-            "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/content/content.tsx",
@@ -2062,47 +2022,15 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Type '{ children: (Element | null)[]; onSubmit: (ev: any) => void; }' is not assignable to type 'IntrinsicAttributes & FormPropTypes'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
             "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type '{ image: Element; title: string; description: string; productPrice: ProductPrice; billingPeriod: \"Annual\" | \"Monthly\"; changeSubscription: string; orderIsAGift: true; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"title\" | \"image\" | \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"changeSubscription\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type '{ children: (Element | null)[]; onSubmit: (ev: any) => void; }' is not assignable to type 'IntrinsicAttributes & FormPropTypes'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
             "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"orderIsAGift\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Type '{ orderIsAGift: boolean | undefined; }' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<...>, EndSummaryProps>, \"orderIsAGift\" | ... 3 more ... | \"digitalGiftBillingPeriod\"> | Omit<...>)'."
+            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"price\" | \"promotion\" | \"priceDescription\" | \"digitalGiftBillingPeriod\">'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",
@@ -2314,10 +2242,6 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: (Element | null)[]; onSubmit: (ev: any) => void; }' is not assignable to type 'IntrinsicAttributes & FormPropTypes'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
@@ -2414,10 +2338,6 @@
         },
         {
             "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
-            "message": "Type '{ children: Element[]; onSubmit: (ev: any) => void; }' is not assignable to type 'IntrinsicAttributes & FormPropTypes'."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
@@ -2446,10 +2366,6 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: (Element | null)[]; onSubmit: (ev: any) => void; }' is not assignable to type 'IntrinsicAttributes & FormPropTypes'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
@@ -2475,10 +2391,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type '{ children: (Element | null)[]; onSubmit: (ev: any) => void; }' is not assignable to type 'IntrinsicAttributes & FormPropTypes'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
@@ -2517,16 +2429,6 @@
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         }
     ],
-    "TS2724": [
-        {
-            "path": "assets/components/checkoutForm/checkoutForm.tsx",
-            "message": "'\"react\"' has no exported member named 'Element'. Did you mean 'CElement'?"
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "'\"react\"' has no exported member named 'Element'. Did you mean 'CElement'?"
-        }
-    ],
     "TS2578": [
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
@@ -2546,10 +2448,6 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -3837,14 +3735,6 @@
             "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ country: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummary.tsx",
-            "message": "Argument of type '({ promotion, priceDescription, orderIsAGift, digitalGiftBillingPeriod, price, }: EndSummaryProps) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ priceDescription: string; promotion: string | null; orderIsAGift: boolean | undefined; digitalGiftBillingPeriod: string; price: string; } & DispatchProp<AnyAction>, EndSummaryProps>>'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
             "message": "Argument of type 'DefaultRootState' is not assignable to parameter of type 'AnyCheckoutState'."
         },
@@ -4401,10 +4291,6 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/helpers/subscriptionsForms/validation.ts",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
@@ -4476,10 +4362,6 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
             "message": "Generic type '$Call' requires 1 type argument(s)."
         },
         {
@@ -5223,10 +5105,6 @@
             "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 109 more."
         },
         {
-            "path": "assets/helpers/subscriptionsForms/validation.ts",
-            "message": "Type 'Rule<Err>' is missing the following properties from type 'Err[]': length, pop, push, concat, and 29 more."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
             "message": "Type 'PaymentRequestObject' is missing the following properties from type 'PaymentRequest': canMakePayment, show, isShowing, update, and 3 more."
         }
@@ -5307,6 +5185,12 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
+        }
+    ],
+    "TS2724": [
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
+            "message": "'\"react\"' has no exported member named 'Element'. Did you mean 'CElement'?"
         }
     ],
     "TS2300": [

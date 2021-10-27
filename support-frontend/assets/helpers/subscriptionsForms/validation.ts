@@ -16,7 +16,7 @@ export type FormError<FieldType> = {
 
 // ----- Rules ----- //
 const nonEmptyString: (arg0: string | null | undefined) => boolean = (s) =>
-	(s || '').trim() !== '';
+	(s ?? '').trim() !== '';
 
 function notNull<A>(value: A): boolean {
 	return value !== null;
@@ -61,7 +61,7 @@ function formError<FieldType>(
 }
 
 function validate<Err>(rules: Array<Rule<Err>>): Err[] {
-	return rules.reduce(
+	return rules.reduce<Err[]>(
 		(errors, { rule, error }) => (rule ? errors : [...errors, error]),
 		[],
 	);
