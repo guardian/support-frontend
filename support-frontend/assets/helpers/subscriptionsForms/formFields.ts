@@ -1,5 +1,5 @@
+import type { $Keys } from 'utility-types';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { RegularPaymentRequestAddress } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -16,7 +16,6 @@ import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-
 export type FormFields = {
 	title: Option<Title>;
 	firstName: string;
@@ -42,12 +41,7 @@ export type FormFields = {
 	giftMessage: Option<string>;
 	giftDeliveryDate: Option<string>;
 };
-
-export type FormField =
-	| keyof FormFields
-	| keyof RegularPaymentRequestAddress
-	| 'recaptcha';
-
+export type FormField = $Keys<FormFields> | 'recaptcha';
 export type FormState = FormFields & {
 	stage: Stage;
 	product: SubscriptionProduct;

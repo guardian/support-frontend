@@ -5,7 +5,7 @@
             "TS7053": 27,
             "TS7006": 149,
             "TS2305": 62,
-            "TS2322": 308,
+            "TS2322": 310,
             "TS2578": 32,
             "TS2339": 163,
             "TS2345": 166,
@@ -18,7 +18,6 @@
             "TS2314": 7,
             "TS7016": 8,
             "TS2304": 18,
-            "TS6196": 1,
             "TS2741": 15,
             "TS2739": 17,
             "TS2531": 11,
@@ -184,7 +183,7 @@
             "assets/components/page/page.tsx": 1,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
-            "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 13,
+            "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/personalDetailsGift.tsx": 6,
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 31,
@@ -222,6 +221,7 @@
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 29,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 4,
@@ -310,7 +310,6 @@
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
@@ -1466,7 +1465,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -1474,19 +1473,19 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
@@ -1554,7 +1553,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type 'Option<ReactNode>' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
@@ -1566,19 +1565,19 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
@@ -1586,31 +1585,31 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
@@ -2121,6 +2120,14 @@
             "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
         },
         {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
+            "message": "Type '(FormError<FormField> | FormError<keyof RegularPaymentRequestAddress>)[]' is not assignable to type 'FormError<FormField>[]'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
+            "message": "Type '(FormError<FormField> | FormError<keyof RegularPaymentRequestAddress>)[]' is not assignable to type 'FormError<FormField>[]'."
+        },
+        {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
             "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"price\" | \"promotion\" | \"priceDescription\" | \"digitalGiftBillingPeriod\">'."
         },
@@ -2342,7 +2349,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -2350,7 +2357,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -2434,7 +2441,7 @@
         },
         {
             "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
-            "message": "Type 'Option<ReactNode>' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
@@ -2466,7 +2473,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -2474,7 +2481,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -2498,7 +2505,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
@@ -2510,7 +2517,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'string | undefined'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
@@ -4639,12 +4646,6 @@
         {
             "path": "assets/pages/subscriptions-redemption/components/stage.tsx",
             "message": "Cannot find name 'Dispatch'."
-        }
-    ],
-    "TS6196": [
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "'$Keys' is declared but never used."
         }
     ],
     "TS2741": [
