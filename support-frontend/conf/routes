@@ -62,7 +62,7 @@ GET  /thank-you-shareable-articles                                 controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
 
-POST /contribute/recurring/create                                  controllers.RegularContributions.create
+POST /contribute/recurring/create                                  controllers.CreateSubscriptionController.create()
 GET  /support-workers/status                                       controllers.SupportWorkersStatus.status(jobId: String)
 
 
