@@ -312,7 +312,6 @@
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -4327,10 +4326,6 @@
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",
-            "message": "'countryGroupId' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
             "message": "'countryGroupId' is declared but its value is never read."
         },
         {
