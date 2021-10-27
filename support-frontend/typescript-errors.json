@@ -33,7 +33,7 @@
             "TS1016": 2,
             "TS2707": 2,
             "TS2367": 4,
-            "TS2740": 8,
+            "TS2740": 6,
             "TS2722": 2,
             "TS1337": 1,
             "TS2694": 5,
@@ -102,7 +102,7 @@
             "assets/pages/contributions-landing/contributionsLanding.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 10,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
             "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 11,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
@@ -223,7 +223,7 @@
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
-            "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 4,
+            "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 3,
             "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
@@ -5302,14 +5302,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
             "message": "Type 'PaymentRequestObject' is missing the following properties from type 'PaymentRequest': canMakePayment, show, isShowing, update, and 3 more."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Type '{}' is missing the following properties from type '{ country: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; }': country, formErrors, submissionError, productPrices, and 29 more."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "Type '{}' is missing the following properties from type '{ country: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; }': country, formErrors, submissionError, productPrices, and 29 more."
         }
     ],
     "TS2722": [

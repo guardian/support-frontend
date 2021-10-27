@@ -283,4 +283,4 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 	);
 } // ----- Exports ----- //
 
-export default DigitalCheckoutFormGift;
+export default connector(DigitalCheckoutFormGift);
