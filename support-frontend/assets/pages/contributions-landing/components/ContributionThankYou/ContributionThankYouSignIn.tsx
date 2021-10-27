@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
@@ -12,6 +11,7 @@ import {
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
+import { catchPromiseHandler } from 'helpers/utilities/promise';
 import ActionBody from './components/ActionBody';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
@@ -27,6 +27,7 @@ import {
 const bodyText = css`
 	${body.small()};
 `;
+
 const expandableContainer = css`
 	margin-top: ${space[4]}px;
 
@@ -34,20 +35,27 @@ const expandableContainer = css`
 		margin-top: ${space[4]}px;
 	}
 `;
+
 const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;
+
 type ContributionThankYouSignInProps = {
 	email: string;
 	csrf: Csrf;
 };
 
-const ContributionThankYouSignIn = ({
+type CreateSignInUrlResponse = {
+	signInLink: string;
+};
+
+const ContributionThankYouSignIn: React.FC<ContributionThankYouSignInProps> = ({
 	email,
 	csrf,
 }: ContributionThankYouSignInProps) => {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
+
 	useEffect(() => {
 		const payload = {
 			email,
@@ -55,17 +63,22 @@ const ContributionThankYouSignIn = ({
 		fetch(routes.createSignInUrl, {
 			method: 'post',
 			headers: {
-				'Csrf-Token': csrf.token || '',
+				'Csrf-Token': csrf.token ?? '',
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(payload),
 		})
 			.then((response) => response.json())
-			.then((data) => setSignInUrl(data.signInLink));
+			.then((data) =>
+				setSignInUrl((data as CreateSignInUrlResponse).signInLink),
+			)
+			.catch(catchPromiseHandler('Error fetching sign in link'));
 	}, []);
+
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SIGN_IN);
 	}, []);
+
 	const actionIcon = <SvgPersonWithTick />;
 	const actionHeader = <ActionHeader title="Continue to your account" />;
 
@@ -92,6 +105,7 @@ const ContributionThankYouSignIn = ({
 						</ButtonLink>
 					)}
 				</span>
+
 				<span css={styles.hideBeforeTablet}>
 					By signing in, you enable us to recognise you as a supporter across
 					our website and apps. This means we will:
@@ -104,6 +118,7 @@ const ContributionThankYouSignIn = ({
 							You will be able to easily manage your recurring contributions,
 							subscriptions and newsletters in one place.
 						</p>
+
 						<p>
 							Make sure you sign in on each of the devices you use to read our
 							journalism – either today or next time you use them.
@@ -119,6 +134,7 @@ const ContributionThankYouSignIn = ({
 							'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
 						]}
 					/>
+
 					<p>
 						Make sure you sign in on each of the devices you use to read our
 						journalism – either today or next time you use them.

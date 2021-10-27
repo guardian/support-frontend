@@ -1,14 +1,5 @@
-// @ts-expect-error - required for hooks
-import React, { useEffect, useMemo } from 'react';
-import { connect } from 'react-redux';
-import type { User } from 'helpers/user/userReducer';
-import 'helpers/user/userReducer';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
-import type { ContributionType } from 'helpers/contributions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { css } from '@emotion/core';
+import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import {
 	between,
@@ -17,7 +8,21 @@ import {
 	until,
 } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
-import { LinkButton } from '@guardian/src-button';
+import React, { useEffect, useMemo } from 'react';
+import { connect } from 'react-redux';
+import type { CampaignSettings } from 'helpers/campaigns/campaigns';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type { ContributionType } from 'helpers/contributions';
+import { getAmount } from 'helpers/contributions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import type { User } from 'helpers/user/userReducer';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
@@ -30,12 +35,6 @@ import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
 } from './utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type { CampaignSettings } from 'helpers/campaigns/campaigns';
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import { getAmount } from 'helpers/contributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 const container = css`
 	background: white;
@@ -59,6 +58,7 @@ const container = css`
 		max-width: ${breakpoints.wide}px;
 	}
 `;
+
 const headerContainer = css`
 	${from.desktop} {
 		width: 60%;
@@ -67,6 +67,7 @@ const headerContainer = css`
 		width: calc(50% - ${space[3]}px);
 	}
 `;
+
 const columnsContainer = css`
 	display: flex;
 	flex-direction: column;
@@ -93,6 +94,7 @@ const columnsContainer = css`
 		}
 	}
 `;
+
 const columnContainer = css`
 	${until.tablet} {
 		& > * + * {
@@ -109,12 +111,13 @@ const columnContainer = css`
 		width: calc(50% - ${space[3]}px);
 	}
 `;
+
 const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
 const isLargeDonation = (
-	amount: string,
+	amount: number,
 	contributionType: ContributionType,
 	paymentMethod: PaymentMethod,
 ): boolean => {
@@ -128,14 +131,14 @@ const isLargeDonation = (
 		ANNUAL: 100,
 		ONE_OFF: 100,
 	};
-	return parseFloat(amount) >= largeDonations[contributionType];
+	return amount >= largeDonations[contributionType];
 };
 
 type ContributionThankYouProps = {
 	csrf: Csrf;
 	email: string;
 	contributionType: ContributionType;
-	amount: string;
+	amount: number;
 	currency: IsoCurrency;
 	name: string;
 	user: User;
@@ -145,9 +148,9 @@ type ContributionThankYouProps = {
 	campaignCode: string | null | undefined;
 };
 
-const mapStateToProps = (state) => ({
-	email: state.page.form.formData.email,
-	name: state.page.form.formData.firstName,
+const mapStateToProps = (state: State) => ({
+	email: state.page.form.formData.email ?? '',
+	name: state.page.form.formData.firstName ?? '',
 	contributionType: state.page.form.contributionType,
 	amount: getAmount(
 		state.page.form.selectedAmounts,
@@ -177,9 +180,12 @@ const ContributionThankYou = ({
 	campaignCode,
 }: ContributionThankYouProps) => {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const campaignSettings = useMemo<CampaignSettings | null>(() =>
-		getCampaignSettings(campaignCode),
+
+	const campaignSettings = useMemo<CampaignSettings | null>(
+		() => getCampaignSettings(campaignCode),
+		[],
 	);
+
 	useEffect(() => {
 		trackUserData(
 			paymentMethod,
@@ -189,46 +195,52 @@ const ContributionThankYou = ({
 			isLargeDonation(amount, contributionType, paymentMethod),
 		);
 	}, []);
+
 	const signUpAction = {
 		component: <ContributionThankYouSignUp />,
 		shouldShow: isNewAccount,
 	};
+
 	const signInAction = {
 		component: <ContributionThankYouSignIn email={email} csrf={csrf} />,
 		// Show this to existing guest accounts as well - it will take them through the password flow
-		shouldShow: !isNewAccount && !user.isSignedIn,
+		shouldShow: !isNewAccount && !user.isSignedIn && email.length > 0,
 	};
+
 	const marketingConsentAction = {
 		component: (
 			<ContributionThankYouMarketingConsent email={email} csrf={csrf} />
 		),
-		shouldShow: contributionType === 'ONE_OFF',
+		shouldShow: contributionType === 'ONE_OFF' && email.length > 0,
 	};
+
 	const supportReminderAction = {
 		component: <ContributionThankYouSupportReminder email={email} />,
-		shouldShow: contributionType === 'ONE_OFF',
+		shouldShow: contributionType === 'ONE_OFF' && email.length > 0,
 	};
+
 	const surveyAction = {
 		component: <ContributionThankYouSurvey countryId={countryId} />,
 		shouldShow: true,
 	};
+
 	const socialShareAction = {
 		component: (
 			<ContributionThankYouSocialShare
 				email={email}
-				createReferralCodes={
-					campaignSettings && campaignSettings.createReferralCodes
-				}
-				campaignCode={campaignSettings && campaignSettings.campaignCode}
+				createReferralCodes={campaignSettings?.createReferralCodes ?? false}
+				campaignCode={campaignSettings?.campaignCode}
 				countryId={countryId}
 			/>
 		),
 		shouldShow: true,
 	};
+
 	const ausMapAction = {
 		component: <ContributionThankYouAusMap />,
 		shouldShow: countryId === 'AU',
 	};
+
 	const defaultActions = [
 		signUpAction,
 		signInAction,
@@ -237,6 +249,7 @@ const ContributionThankYou = ({
 		surveyAction,
 		socialShareAction,
 	];
+
 	const ausActions = [
 		signUpAction,
 		signInAction,
@@ -246,13 +259,16 @@ const ContributionThankYou = ({
 		ausMapAction,
 		socialShareAction,
 	];
+
 	const actions = countryId === 'AU' ? ausActions : defaultActions;
 	const shownComponents = actions
 		.filter((action) => action.shouldShow)
 		.map((action) => action.component);
+
 	const numberOfComponentsInFirstColumn = shownComponents.length >= 6 ? 3 : 2;
 	const firstColumn = shownComponents.slice(0, numberOfComponentsInFirstColumn);
 	const secondColumn = shownComponents.slice(numberOfComponentsInFirstColumn);
+
 	return (
 		<div css={container}>
 			<div css={headerContainer}>

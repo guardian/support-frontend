@@ -3,28 +3,28 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 27,
-            "TS7006": 149,
+            "TS7006": 146,
             "TS2305": 63,
-            "TS2322": 290,
-            "TS2578": 32,
-            "TS2339": 163,
-            "TS2345": 166,
+            "TS2322": 287,
+            "TS2578": 23,
+            "TS2339": 162,
+            "TS2345": 163,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 23,
+            "TS6133": 22,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 20,
             "TS2314": 7,
             "TS7016": 8,
             "TS2304": 18,
-            "TS2741": 15,
+            "TS2741": 7,
             "TS2739": 17,
             "TS2531": 11,
             "TS2604": 4,
             "TS2532": 1,
             "TS2556": 3,
-            "TS2554": 63,
+            "TS2554": 62,
             "TS2344": 9,
             "TS2569": 2,
             "TS2571": 14,
@@ -93,9 +93,6 @@
             "assets/pages/contributions-landing/components/ContributionForm.tsx": 10,
             "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 6,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx": 5,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx": 3,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSupportReminder.tsx": 3,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 38,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
@@ -215,7 +212,6 @@
             "assets/pages/contributions-landing/components/ContributionAmountChoices.tsx": 2,
             "assets/pages/contributions-landing/components/ContributionState.tsx": 5,
             "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx": 3,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 10,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
@@ -251,11 +247,6 @@
             "assets/pages/aus-moment-map/components/blurb.tsx": 1,
             "assets/pages/aus-moment-map/hooks/useWindowWidth.ts": 1,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouAusMap.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSignIn.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSignUp.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSocialShare.tsx": 5,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSurvey.tsx": 1,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
@@ -299,7 +290,6 @@
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx": 5,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/subscriptions-redemption/marketingConsentContainer.ts": 1,
@@ -307,7 +297,6 @@
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
@@ -814,18 +803,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
             "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx",
-            "message": "Parameter 'article' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSupportReminder.tsx",
-            "message": "Parameter 'monthsUntilDate' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
@@ -1876,18 +1853,6 @@
             "message": "Type 'number | void' is not assignable to type 'string | number | undefined'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "Type 'boolean | null' is not assignable to type 'boolean'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSupportReminder.tsx",
-            "message": "Type 'number' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
             "message": "Type 'false | \"Please select a payment method\"' is not assignable to type 'string | undefined'."
         },
@@ -2518,42 +2483,6 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouAusMap.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSignIn.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSignUp.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSocialShare.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSupportReminder.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSurvey.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -3122,10 +3051,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
             "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouArticleShare.tsx",
-            "message": "Property 'map' does not exist on type 'never'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -3770,18 +3695,6 @@
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: keyof PaymentMethodMap<...>; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx",
-            "message": "Argument of type 'SerializedStyles' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx",
-            "message": "Argument of type 'SerializedStyles' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "Argument of type '({ csrf, email, name, contributionType, amount, currency, user, userTypeFromIdentityResponse, paymentMethod, countryId, campaignCode, }: ContributionThankYouProps) => JSX.Element' is not assignable to parameter of type 'ComponentType<Matching<{ email: any; name: any; contributionType: any; amount: number; currency: any; csrf: any; user: any; userTypeFromIdentityResponse: any; paymentMethod: any; countryId: any; campaignCode: any; } & DispatchProp<...>, ContributionThankYouProps>>'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ countryId: string; countryGroupId: CountryGroupId; currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; ... 7 more ...; checkoutFormHasBeenSubmitted: boolean; } & { ...; }, PropTypes>>'."
         },
@@ -4220,10 +4133,6 @@
             "message": "'countryGroupId' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "'countryGroupId' is declared but its value is never read."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
             "message": "'renderControl' is declared but its value is never read."
         },
@@ -4598,38 +4507,6 @@
             "message": "Property 'value' is missing in type '{ label: string; defaultChecked: boolean; onChange: () => void; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"required\">'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx",
-            "message": "Property 'children' is missing in type '{ href: string; onClick: () => void; target: \"_blank\"; rel: string; priority: \"tertiary\"; size: \"default\"; icon: Element; css: SerializedStyles; hideLabel: true; }' but required in type 'Pick<LinkButtonProps, \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"translate\" | \"icon\" | \"css\" | \"cssOverrides\" | ... 252 more ... | \"referrerPolicy\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx",
-            "message": "Property 'children' is missing in type '{ href: string; onClick: () => void; target: \"_blank\"; rel: string; priority: \"tertiary\"; size: \"default\"; icon: Element; css: SerializedStyles; hideLabel: true; }' but required in type 'Pick<LinkButtonProps, \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"translate\" | \"icon\" | \"css\" | \"cssOverrides\" | ... 252 more ... | \"referrerPolicy\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/ShareableArticleContainer.tsx",
-            "message": "Property 'children' is missing in type '{ href: string; onClick: () => void; target: \"_blank\"; rel: string; priority: \"tertiary\"; size: \"default\"; icon: Element; css: SerializedStyles; hideLabel: true; }' but required in type 'Pick<LinkButtonProps, \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"translate\" | \"icon\" | \"css\" | \"cssOverrides\" | ... 252 more ... | \"referrerPolicy\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx",
-            "message": "Property 'value' is missing in type '{ checked: boolean; onChange: () => void; supporting: string; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"required\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSocialShare.tsx",
-            "message": "Property 'children' is missing in type '{ href: string; onClick: () => void; target: \"_blank\"; rel: string; priority: \"tertiary\"; size: \"default\"; icon: Element; hideLabel: true; }' but required in type 'Pick<LinkButtonProps, \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"translate\" | \"icon\" | \"css\" | \"cssOverrides\" | ... 252 more ... | \"referrerPolicy\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSocialShare.tsx",
-            "message": "Property 'children' is missing in type '{ href: string; onClick: () => void; target: \"_blank\"; rel: string; priority: \"tertiary\"; size: \"default\"; icon: Element; hideLabel: true; }' but required in type 'Pick<LinkButtonProps, \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"translate\" | \"icon\" | \"css\" | \"cssOverrides\" | ... 252 more ... | \"referrerPolicy\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSocialShare.tsx",
-            "message": "Property 'children' is missing in type '{ href: string; onClick: () => void; target: \"_blank\"; rel: string; priority: \"tertiary\"; size: \"default\"; icon: Element; hideLabel: true; }' but required in type 'Pick<LinkButtonProps, \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"translate\" | \"icon\" | \"css\" | \"cssOverrides\" | ... 252 more ... | \"referrerPolicy\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSocialShare.tsx",
-            "message": "Property 'children' is missing in type '{ href: string; onClick: () => void; target: \"_blank\"; rel: string; priority: \"tertiary\"; size: \"default\"; icon: Element; hideLabel: true; }' but required in type 'Pick<LinkButtonProps, \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"translate\" | \"icon\" | \"css\" | \"cssOverrides\" | ... 252 more ... | \"referrerPolicy\">'."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
             "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
         }
@@ -4976,10 +4853,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "Expected 2 arguments, but got 1."
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",

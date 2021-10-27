@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { Button } from '@guardian/src-button';
 import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
@@ -29,9 +28,11 @@ const checkboxContainer = css`
 		margin-top: ${space[5]}px;
 	}
 `;
+
 const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;
+
 const ERROR_MESSAGE = "Please tick the box below, then click 'subscribe'";
 
 const mapStateToProps = () => ({});
@@ -64,9 +65,11 @@ const ContributionThankYouMarketingConsent = ({
 	const [hasConsented, setHasConsented] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
+
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_MARKETING);
 	}, []);
+
 	// reset error message when consent changes
 	useEffect(() => {
 		setErrorMessage(null);
@@ -102,6 +105,7 @@ const ContributionThankYouMarketingConsent = ({
 						<span css={styles.hideAfterTablet}>
 							Opt in to receive a regular newsletter from inside the Guardian.
 						</span>
+
 						<span css={styles.hideBeforeTablet}>
 							Our membership editor and others will discuss the most important
 							recent news stories and suggest compelling articles to read. Opt
@@ -109,14 +113,19 @@ const ContributionThankYouMarketingConsent = ({
 						</span>
 					</p>
 					<div css={checkboxContainer}>
-						<CheckboxGroup error={errorMessage}>
+						<CheckboxGroup
+							name="marketing-consent"
+							error={errorMessage ?? undefined}
+						>
 							<Checkbox
+								value="marketing-consent"
 								checked={hasConsented}
 								onChange={() => setHasConsented(!hasConsented)}
 								supporting="Stay up-to-date with our latest offers and the aims of the organisation, as well as the ways to enjoy and support our journalism."
 							/>
 						</CheckboxGroup>
 					</div>
+
 					<div css={buttonContainer}>
 						<Button
 							onClick={onSubmit}

@@ -50,7 +50,11 @@ type ActionContainerProps = {
 	body: React.ReactNode;
 };
 
-const ActionContainer = ({ icon, header, body }: ActionContainerProps) => (
+const ActionContainer: React.FC<ActionContainerProps> = ({
+	icon,
+	header,
+	body,
+}: ActionContainerProps) => (
 	<section css={container}>
 		<div css={iconContainer}>{icon}</div>
 		<div css={headerContainer}>{header}</div>

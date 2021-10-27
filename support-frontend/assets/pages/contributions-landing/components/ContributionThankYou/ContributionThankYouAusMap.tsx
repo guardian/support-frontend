@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
@@ -17,13 +16,15 @@ import { OPHAN_COMPONENT_ID_AUS_MAP } from './utils/ophan';
 const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;
+
 const AUS_MAP_URL =
 	'https://support.theguardian.com/aus-map?INTCMP=thankyou-page-aus-map-cta';
 
-const ContributionThankYouAusMap = () => {
+const ContributionThankYouAusMap: React.FC = () => {
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_AUS_MAP);
 	}, []);
+
 	const actionIcon = <SvgAusMap />;
 	const actionHeader = (
 		<ActionHeader title="Hear from supporters across Australia" />
@@ -52,6 +53,7 @@ const ContributionThankYouAusMap = () => {
 			</div>
 		</ActionBody>
 	);
+
 	return (
 		<ActionContainer
 			icon={actionIcon}

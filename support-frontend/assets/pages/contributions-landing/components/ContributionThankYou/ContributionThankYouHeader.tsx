@@ -49,7 +49,7 @@ type ContributionThankYouHeaderProps = {
 	showDirectDebitMessage: boolean;
 	paymentMethod: PaymentMethod;
 	contributionType: ContributionType;
-	amount: string;
+	amount: number;
 	currency: IsoCurrency;
 	shouldShowLargeDonationMessage: boolean;
 };
@@ -63,7 +63,7 @@ const ContributionThankYouHeader = ({
 	amount,
 	currency,
 	shouldShowLargeDonationMessage,
-}: ContributionThankYouHeaderProps) => {
+}: ContributionThankYouHeaderProps): JSX.Element => {
 	const title = (): React.ReactNode => {
 		const nameAndTrailingSpace: string =
 			name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
@@ -77,7 +77,7 @@ const ContributionThankYouHeader = ({
 					{formatAmount(
 						currencies[currency],
 						spokenCurrencies[currency],
-						parseFloat(amount),
+						amount,
 						false,
 					)}
 				</span>

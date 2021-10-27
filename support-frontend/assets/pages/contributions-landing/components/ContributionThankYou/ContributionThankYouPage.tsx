@@ -10,7 +10,7 @@ type ContributionThankYouProps = {
 	countryGroupId: CountryGroupId;
 };
 
-const ContributionThankYouPage = ({
+const ContributionThankYouPage: React.FC<ContributionThankYouProps> = ({
 	countryGroupId,
 }: ContributionThankYouProps) => (
 	<Page
