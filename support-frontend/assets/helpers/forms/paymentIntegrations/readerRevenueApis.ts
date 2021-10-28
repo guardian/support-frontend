@@ -204,18 +204,12 @@ export type PaymentAuthorisation =
 // standardised across payment methods & contribution types.
 // The only method/type combination which will not make use of this PayPal one-off,
 // because the end of that checkout happens on the backend after the user is redirected to our site.
-export type PaymentResult =
-	| {
-			paymentStatus: 'success';
-	  }
-	| {
-			paymentStatus: 'success';
-			subscriptionCreationPending: true;
-	  }
-	| {
-			paymentStatus: 'failure';
-			error: ErrorReason;
-	  };
+export type PaymentResult = {
+	paymentStatus: string;
+	subscriptionCreationPending?: true;
+	error?: ErrorReason;
+};
+
 // ----- Setup ----- //
 const PaymentSuccess: PaymentResult = {
 	paymentStatus: 'success',
