@@ -22,7 +22,6 @@ function Benefits({
 							<List
 								items={[
 									{
-// RIK HERE!
 										content: (participations.sixForSixSuppression === 'variant') ?
 											'Every issue delivered with up to 34% off the cover price' :
 											'Every issue delivered with up to 35% off the cover price',

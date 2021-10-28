@@ -87,7 +87,6 @@ function getGuardianWeeklyOfferCopy(
 	discountCopy: string,
 	participations: Participations,
 ) {
-	console.log('subscriptionsCopy', participations);
 	if (discountCopy !== '') {
 		return discountCopy;
 	}

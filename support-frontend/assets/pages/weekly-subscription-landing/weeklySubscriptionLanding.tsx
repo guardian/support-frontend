@@ -52,11 +52,8 @@ const WeeklyLandingPage = ({
 	productPrices,
 	promotionCopy,
 	orderIsAGift,
-
-
 	countryGroupId,
 	participations,
-
 }: WeeklyLandingPropTypes) => {
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift

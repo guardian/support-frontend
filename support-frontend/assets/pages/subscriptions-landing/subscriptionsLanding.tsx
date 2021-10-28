@@ -26,12 +26,6 @@ const SubscriptionsLandingPage = ({
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) => {
-
-
-	console.log(participations);
-
-
-	
 	const Header = headerWithCountrySwitcherContainer({
 		path: '/subscribe',
 		countryGroupId,
