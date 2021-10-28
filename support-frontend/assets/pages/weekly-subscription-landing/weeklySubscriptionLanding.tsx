@@ -52,6 +52,11 @@ const WeeklyLandingPage = ({
 	productPrices,
 	promotionCopy,
 	orderIsAGift,
+
+
+	countryGroupId,
+	participations,
+
 }: WeeklyLandingPropTypes) => {
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
@@ -90,10 +95,11 @@ const WeeklyLandingPage = ({
 				orderIsAGift={orderIsAGift ?? false}
 				countryGroupId={countryGroupId}
 				promotionCopy={sanitisedPromoCopy}
+				participations={participations}
 			/>
 			<FullWidthContainer>
 				<CentredContainer>
-					<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
+					<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits participations={participations} />}</Block>
 				</CentredContainer>
 			</FullWidthContainer>
 			<FullWidthContainer theme="dark" hasOverlap>
@@ -102,6 +108,7 @@ const WeeklyLandingPage = ({
 						countryId={countryId}
 						productPrices={productPrices}
 						orderIsAGift={orderIsAGift ?? false}
+						participations={participations}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>

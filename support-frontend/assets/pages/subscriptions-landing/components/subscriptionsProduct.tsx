@@ -5,6 +5,7 @@ import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
+import type { Participations } from 'helpers/abTests/abtest';
 
 type PropTypes = {
 	title: string;
@@ -15,6 +16,7 @@ type PropTypes = {
 	offer?: Option<string>;
 	isFeature?: Option<boolean>;
 	classModifier: string[];
+	participations: Participations;
 };
 
 const SubscriptionsProduct = ({

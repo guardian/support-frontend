@@ -24,11 +24,13 @@ import {
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { Participations } from 'helpers/abTests/abtest';
 
 type PropTypes = {
 	orderIsAGift: boolean;
 	countryGroupId: CountryGroupId;
 	promotionCopy: PromotionCopy;
+	participations: Participations;
 };
 const weeklyHeroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
@@ -139,23 +141,44 @@ function WeeklyHero({
 	orderIsAGift,
 	countryGroupId,
 	promotionCopy,
+	participations,
 }: PropTypes) {
 	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
-	const defaultRoundelText = (
-		<>
-			{/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
-			<div role="text">
-				Try
-				<div css={roundelCentreLine}>6 issues</div>
-				for {glyph(currencyId)}6
-			</div>
-		</>
-	);
+
+	let defaultRoundelText;
+	if (participations.sixForSixSuppression === 'variant') {
+
+		defaultRoundelText = (
+			<>
+				<div role="text">
+					Save<br/>
+					up to 34%<br/>
+					a year
+				</div>
+			</>
+		);
+	}
+	else {
+		defaultRoundelText = (
+			<>
+				{
+					// role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element
+				}
+				<div role="text">
+					Try
+					<div css={roundelCentreLine}>6 issues</div>
+					for {glyph(currencyId)}6
+				</div>
+			</>
+		);
+	}
+
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText =
 		promotionHTML(promotionCopy.roundel) ?? defaultRoundelText;
+
 	return (
 		<PageTitle
 			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}

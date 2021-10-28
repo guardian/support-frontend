@@ -2,8 +2,15 @@ import React from 'react';
 import { List } from 'components/list/list';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
+import type { Participations } from 'helpers/abTests/abtest';
 
-function Benefits() {
+type BenefitsPropTypes = {
+	participations: Participations;
+};
+
+function Benefits({
+	participations,
+}: BenefitsPropTypes) {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -15,7 +22,9 @@ function Benefits() {
 							<List
 								items={[
 									{
-										content:
+// RIK HERE!
+										content: (participations.sixForSixSuppression === 'variant') ?
+											'Every issue delivered with up to 34% off the cover price' :
 											'Every issue delivered with up to 35% off the cover price',
 									},
 									{

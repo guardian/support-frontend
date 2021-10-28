@@ -35,6 +35,8 @@ export const pageUrlRegexes = {
 			paperLandingWithGuestCheckout:
 				/\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
 		},
+		subsShowcaseAndWeeklyPages:
+			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\?.*)?$)',
 	},
 };
 export const tests: Tests = {
@@ -175,5 +177,26 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
 		seed: 12,
 		optimizeId: 'erMFDh79T6iyp2WhaG7CWQ',
+	},
+	sixForSixSuppression: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.subscriptions.subsShowcaseAndWeeklyPages,
+		seed: 13,
+		// optimizeId: 'erMFDh79T6iyp2WhaG7CWQ',
 	},
 };

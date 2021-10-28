@@ -41,6 +41,7 @@ import {
 	paperSubsUrl,
 } from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
+import type { Participations } from 'helpers/abTests/abtest';
 // types
 export type ProductButton = {
 	ctaButtonText: string;
@@ -56,6 +57,7 @@ export type ProductCopy = {
 	offer?: string;
 	buttons: ProductButton[];
 	classModifier?: string[];
+	participations: Participations;
 };
 const abTest = null;
 
@@ -83,13 +85,19 @@ const getDisplayPrice = (
 function getGuardianWeeklyOfferCopy(
 	countryGroupId: CountryGroupId,
 	discountCopy: string,
+	participations: Participations,
 ) {
+	console.log('subscriptionsCopy', participations);
 	if (discountCopy !== '') {
 		return discountCopy;
 	}
 
+	if (participations.sixForSixSuppression === 'variant') {
+		return '';
+	}
+
 	const currency = glyph(fromCountryGroupId(countryGroupId) || 'GBP');
-	return `6 issues for ${currency}6`;
+	return `6 issues for ${currency}6s`;
 }
 
 const getDigitalImage = (isTop: boolean, countryGroupId: CountryGroupId) => {
@@ -154,7 +162,9 @@ const guardianWeekly = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 	isTop: boolean,
+	participations: Participations,
 ): ProductCopy => ({
+
 	title: 'The Guardian Weekly',
 	subtitle: getDisplayPrice(
 		countryGroupId,
@@ -163,7 +173,7 @@ const guardianWeekly = (
 	),
 	description:
 		'A weekly, global magazine from the Guardian, with delivery worldwide',
-	offer: getGuardianWeeklyOfferCopy(countryGroupId, priceCopy.discountCopy),
+	offer: getGuardianWeeklyOfferCopy(countryGroupId, priceCopy.discountCopy, participations),
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
@@ -192,6 +202,7 @@ const guardianWeekly = (
 		},
 	],
 	productImage: getWeeklyImage(isTop),
+	participations: participations,
 });
 
 const getPaperImage = (isTop: boolean) => {
@@ -291,18 +302,19 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
 const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
+	participations: Participations,
 ): ProductCopy[] => {
 	if (countryGroupId === GBPCountries) {
 		return [
 			digital(countryGroupId, pricingCopy[DigitalPack], true),
-			guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], false),
+			guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], false, participations),
 			paper(countryGroupId, pricingCopy[Paper], false), // Removing the link to the old paper+digital page during the June 21 Sale
 			// paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
 			premiumApp(countryGroupId),
 		];
 	} else if (countryGroupId === EURCountries) {
 		return [
-			guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], true),
+			guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], true, participations),
 			digital(countryGroupId, pricingCopy[DigitalPack], false),
 			premiumApp(countryGroupId),
 		];
@@ -310,7 +322,7 @@ const getSubscriptionCopy = (
 
 	return [
 		digital(countryGroupId, pricingCopy[DigitalPack], true),
-		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], false),
+		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], false, participations),
 		premiumApp(countryGroupId),
 	];
 };

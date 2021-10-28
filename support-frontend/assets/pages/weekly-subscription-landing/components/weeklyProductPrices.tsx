@@ -34,6 +34,7 @@ import {
 import { getOrigin, getQueryParameter } from 'helpers/urls/url';
 import type { OphanComponentType } from '../../../helpers/tracking/ophan';
 import Prices from './content/prices';
+import type { Participations } from 'helpers/abTests/abtest';
 
 const getCheckoutUrl = (
 	billingPeriod: WeeklyBillingPeriod,
@@ -90,6 +91,7 @@ const weeklyProductProps = (
 		product: 'GuardianWeekly' as SubscriptionProduct,
 		componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 	};
+
 	return {
 		title: billingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
@@ -109,16 +111,25 @@ type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
 	productPrices: ProductPrices | null | undefined;
 	orderIsAGift: boolean;
+	participations: Participations;
 };
 
 const getProducts = ({
 	countryId,
 	productPrices,
 	orderIsAGift,
+	participations,
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
 		: weeklyBillingPeriods;
+
+	if (participations.sixForSixSuppression === 'variant') {
+
+		const index = billingPeriodsToUse.indexOf('SixWeekly');
+		if (index >= 0) billingPeriodsToUse.splice(index, 1);
+	}
+
 	return billingPeriodsToUse.map((billingPeriod) => {
 		const productPrice = productPrices
 			? getProductPrice(
@@ -132,6 +143,7 @@ const getProducts = ({
 					fixedTerm: false,
 					currency: 'GBP' as IsoCurrency,
 			  };
+
 		return weeklyProductProps(billingPeriod, productPrice, orderIsAGift);
 	});
 };
@@ -140,6 +152,7 @@ function WeeklyProductPrices({
 	countryId,
 	productPrices,
 	orderIsAGift,
+	participations,
 }: WeeklyProductPricesProps) {
 	if (!productPrices) {
 		return null;
@@ -149,6 +162,7 @@ function WeeklyProductPrices({
 		countryId,
 		productPrices,
 		orderIsAGift,
+		participations,
 	});
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
 } // ----- Exports ----- //

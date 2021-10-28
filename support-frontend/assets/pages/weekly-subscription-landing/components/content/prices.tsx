@@ -65,6 +65,7 @@ const pricesInfo = css`
 `;
 
 function Prices({ orderIsAGift, products }: PropTypes) {
+	console.log(products);
 	return (
 		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>

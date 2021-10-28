@@ -10,12 +10,13 @@ const isFeature = (index) => index === 0; // make the first card a feature
 const SubscriptionsLandingContent = ({
 	countryGroupId,
 	pricingCopy,
+	participations,
 }: SubscriptionsLandingPropTypes) => {
 	if (!pricingCopy) {
 		return null;
 	}
 
-	const subscriptionCopy = getSubscriptionCopy(countryGroupId, pricingCopy);
+	const subscriptionCopy = getSubscriptionCopy(countryGroupId, pricingCopy, participations);
 	return (
 		<div
 			className="subscriptions-landing-page"
@@ -33,6 +34,7 @@ const SubscriptionsLandingContent = ({
 						offer={product.offer || null}
 						isFeature={isFeature(index)}
 						classModifier={product.classModifier || []}
+						participations={participations}
 					/>
 				))}
 			</div>
