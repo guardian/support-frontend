@@ -97,7 +97,7 @@ function getGuardianWeeklyOfferCopy(
 	}
 
 	const currency = glyph(fromCountryGroupId(countryGroupId) || 'GBP');
-	return `6 issues for ${currency}6s`;
+	return `6 issues for ${currency}6`;
 }
 
 const getDigitalImage = (isTop: boolean, countryGroupId: CountryGroupId) => {
