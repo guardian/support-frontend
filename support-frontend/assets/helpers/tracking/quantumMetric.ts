@@ -3,7 +3,7 @@ import { logException } from 'helpers/utilities/logger';
 
 // Contribution landing page and thank you page (all regions)
 const contributionsRegex = /\/contribute(\/thankyou)?(\?.*)?$/;
-// Non-Gifting Digi Subs landing page, checkout and thankyou page (all regions)
+// Non-Gifting Digi Subs landing page, checkout and thank you page (all regions)
 const digiSubRegex = /\/subscribe\/digital(\/checkout|\/thankyou)?(\?.*)?$/;
 
 // For this POC targetPageMatches has been copied from abtest.ts
