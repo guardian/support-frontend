@@ -12,7 +12,8 @@ case class Switches(
   enableRecaptchaFrontend: SwitchState,
   experiments: Map[String, ExperimentSwitch],
   enableContributionsCampaign: SwitchState,
-  forceContributionsCampaign: SwitchState
+  forceContributionsCampaign: SwitchState,
+  enableQuantumMetric: SwitchState
 )
 
 object Switches {

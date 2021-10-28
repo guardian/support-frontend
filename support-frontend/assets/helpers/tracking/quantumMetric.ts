@@ -1,4 +1,4 @@
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { logException } from 'helpers/utilities/logger';
 
 const addQM = (): void => {
@@ -15,6 +15,10 @@ const addQM = (): void => {
 };
 
 const init = (): void => {
+	// Check feature switch is enabled
+	if (!isSwitchOn('enableQuantumMetric')) {
+		return;
+	}
 	/**
 	 * Dynamically load @guardian/consent-management-platform
 	 * on condition we're not server side rendering (ssr) the page.

@@ -112,7 +112,8 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         enableRecaptchaBackend = Off,
         enableRecaptchaFrontend = Off,
         enableContributionsCampaign = On,
-        forceContributionsCampaign = On
+        forceContributionsCampaign = On,
+        enableQuantumMetric = Off
       ),
       configuredAmounts,
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
