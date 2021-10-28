@@ -8,7 +8,7 @@
             "TS2322": 287,
             "TS2578": 23,
             "TS2339": 162,
-            "TS2345": 163,
+            "TS2345": 162,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
@@ -270,7 +270,6 @@
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
-            "assets/components/legal/termsPrivacy/termsPrivacy.tsx": 1,
             "assets/components/marketingConsent/helpers.ts": 1,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
@@ -3209,10 +3208,6 @@
         {
             "path": "assets/components/footerCompliant/Footer.tsx",
             "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
-        },
-        {
-            "path": "assets/components/legal/termsPrivacy/termsPrivacy.tsx",
-            "message": "Argument of type 'number' is not assignable to parameter of type 'string'."
         },
         {
             "path": "assets/components/list/list.tsx",
