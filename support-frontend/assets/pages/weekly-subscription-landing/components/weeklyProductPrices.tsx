@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Product } from 'components/product/productOption';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -34,7 +35,6 @@ import {
 import { getOrigin, getQueryParameter } from 'helpers/urls/url';
 import type { OphanComponentType } from '../../../helpers/tracking/ophan';
 import Prices from './content/prices';
-import type { Participations } from 'helpers/abTests/abtest';
 
 const getCheckoutUrl = (
 	billingPeriod: WeeklyBillingPeriod,
@@ -125,7 +125,6 @@ const getProducts = ({
 		: weeklyBillingPeriods;
 
 	if (participations.sixForSixSuppression === 'variant') {
-
 		const index = billingPeriodsToUse.indexOf('SixWeekly');
 		if (index >= 0) billingPeriodsToUse.splice(index, 1);
 	}
@@ -148,12 +147,18 @@ const getProducts = ({
 	});
 };
 
-function WeeklyProductPrices({
+// const WeeklyHero: React.FC<PropTypes> = ({
+// 	orderIsAGift,
+// 	countryGroupId,
+// 	promotionCopy,
+// 	participations,
+// }: PropTypes) => {
+const WeeklyProductPrices: React.FC<WeeklyProductPricesProps> = ({
 	countryId,
 	productPrices,
 	orderIsAGift,
 	participations,
-}: WeeklyProductPricesProps) {
+}: WeeklyProductPricesProps) => {
 	if (!productPrices) {
 		return null;
 	}
@@ -165,6 +170,6 @@ function WeeklyProductPrices({
 		participations,
 	});
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
-} // ----- Exports ----- //
+}; // ----- Exports ----- //
 
 export default WeeklyProductPrices;

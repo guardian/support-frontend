@@ -1,16 +1,14 @@
 import React from 'react';
 import { List } from 'components/list/list';
+import type { Participations } from 'helpers/abTests/abtest';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
-import type { Participations } from 'helpers/abTests/abtest';
 
 type BenefitsPropTypes = {
 	participations: Participations;
 };
 
-function Benefits({
-	participations,
-}: BenefitsPropTypes) {
+function Benefits({ participations }: BenefitsPropTypes) {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -22,9 +20,10 @@ function Benefits({
 							<List
 								items={[
 									{
-										content: (participations.sixForSixSuppression === 'variant') ?
-											'Every issue delivered with up to 34% off the cover price' :
-											'Every issue delivered with up to 35% off the cover price',
+										content:
+											participations.sixForSixSuppression === 'variant'
+												? 'Every issue delivered with up to 34% off the cover price'
+												: 'Every issue delivered with up to 35% off the cover price',
 									},
 									{
 										content: "Access to the magazine's digital archive",

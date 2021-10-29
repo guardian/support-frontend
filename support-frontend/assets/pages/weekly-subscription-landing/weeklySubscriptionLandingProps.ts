@@ -1,3 +1,5 @@
+import type { Participations } from 'helpers/abTests/abtest';
+import { init as initAbTests } from 'helpers/abTests/abtest';
 import {
 	getGlobal,
 	getProductPrices,
@@ -6,12 +8,10 @@ import {
 } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import type { Participations } from 'helpers/abTests/abtest';
-import { init as initAbTests } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 export type WeeklyLandingPropTypes = {
 	countryId: IsoCountry;

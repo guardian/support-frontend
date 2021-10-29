@@ -12,6 +12,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import PageTitle from 'components/page/pageTitle';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	detect,
@@ -24,7 +25,6 @@ import {
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import type { Participations } from 'helpers/abTests/abtest';
 
 type PropTypes = {
 	orderIsAGift: boolean;
@@ -137,28 +137,27 @@ const getFirstParagraph = (
 	);
 };
 
-function WeeklyHero({
+const WeeklyHero: React.FC<PropTypes> = ({
 	orderIsAGift,
 	countryGroupId,
 	promotionCopy,
 	participations,
-}: PropTypes) {
+}: PropTypes) => {
 	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
 
 	let defaultRoundelText;
 	if (participations.sixForSixSuppression === 'variant') {
-
 		defaultRoundelText = (
 			<>
 				<div role="text">
-					Save<br/>
-					up to 34%<br/>
-					a year
+					Save
+					<br />
+					up to 34%
+					<br />a year
 				</div>
 			</>
 		);
-	}
-	else {
+	} else {
 		defaultRoundelText = (
 			<>
 				{
@@ -226,6 +225,6 @@ function WeeklyHero({
 			</CentredContainer>
 		</PageTitle>
 	);
-}
+};
 
 export { WeeklyHero };

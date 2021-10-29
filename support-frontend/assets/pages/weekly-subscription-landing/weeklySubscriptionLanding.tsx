@@ -19,19 +19,19 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getPromotionCopy,
+	promoQueryParam,
+} from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { promotionTermsUrl, routes } from 'helpers/urls/routes';
 import 'stylesheets/skeleton/skeleton.scss';
+import { getQueryParameter } from 'helpers/urls/url';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyHero } from './components/hero/hero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 import './weeklySubscriptionLanding.scss';
-import {
-	getPromotionCopy,
-	promoQueryParam,
-} from 'helpers/productPrice/promotions';
-import { getQueryParameter } from 'helpers/urls/url';
 import type { WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
 import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
 // ----- Internationalisation ----- //
@@ -96,7 +96,13 @@ const WeeklyLandingPage = ({
 			/>
 			<FullWidthContainer>
 				<CentredContainer>
-					<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits participations={participations} />}</Block>
+					<Block>
+						{orderIsAGift ? (
+							<GiftBenefits />
+						) : (
+							<Benefits participations={participations} />
+						)}
+					</Block>
 				</CentredContainer>
 			</FullWidthContainer>
 			<FullWidthContainer theme="dark" hasOverlap>
