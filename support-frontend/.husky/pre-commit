@@ -2,12 +2,14 @@
 . "$(dirname "$0")/_/husky.sh"
 
 maybe_run_tsc() {
-  STAGED=$(git diff --cached --name-only | grep -E '\.(ts|tsx)$' || echo "")
+  STAGED=$(git diff --cached --name-only | grep -E -e '\.(ts|tsx)$' -e 'generate-history-csv\.sh' || echo "")
   len=${#STAGED}
 
   if [ $len -gt 0 ]; then
     node scripts/ts-log-errors.js
     git add ./typescript-errors.json
+    bash scripts/generate-history-csv.sh >./ts-error-history.csv
+    git add ./ts-error-history.csv
   else
     echo "No Typescript changes"
   fi
