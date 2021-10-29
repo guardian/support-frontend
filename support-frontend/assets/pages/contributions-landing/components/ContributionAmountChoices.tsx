@@ -1,19 +1,17 @@
 // ----- Imports ----- //
+import { css } from '@emotion/core';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
+import { until } from '@guardian/src-foundations/mq';
 import React from 'react';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
-import 'helpers/contributions';
+import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { formatAmount } from 'helpers/forms/checkouts';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
 import ContributionAmountChoicesChoiceLabel from './ContributionAmountChoicesChoiceLabel';
-import { until } from '@guardian/src-foundations/mq';
-import { css } from '@emotion/core';
 
 const choiceCardGridStyles = css`
 	${until.mobileLandscape} {
@@ -69,7 +67,7 @@ const isSelected = (
 	return amount === defaultAmount;
 };
 
-const ContributionAmountChoices = ({
+const ContributionAmountChoices: React.FC<ContributionAmountChoicesProps> = ({
 	validAmounts,
 	defaultAmount,
 	countryGroupId,
@@ -91,32 +89,36 @@ const ContributionAmountChoices = ({
 					: choiceCardGridStyles
 			}
 		>
-			{validAmounts.map((amount: number) => (
-				<ChoiceCard
-					id={`contributionAmount-${amount}`}
-					name="contributionAmount"
-					value={amount}
-					checked={isSelected(
-						amount,
-						selectedAmounts,
-						contributionType,
-						defaultAmount,
-					)}
-					onChange={selectAmount(amount, countryGroupId, contributionType)}
-					label={
-						<ContributionAmountChoicesChoiceLabel
-							formattedAmount={formatAmount(
-								currencies[currency],
-								spokenCurrencies[currency],
-								amount,
-								false,
-							)}
-							shouldShowFrequencyButtons={shouldShowFrequencyButtons}
-							contributionType={contributionType}
-						/>
-					}
-				/>
-			))}
+			<>
+				{validAmounts.map((amount: number) => (
+					<ChoiceCard
+						id={`contributionAmount-${amount}`}
+						key={`contributionAmount-${amount}`}
+						name="contributionAmount"
+						value={`${amount}`}
+						checked={isSelected(
+							amount,
+							selectedAmounts,
+							contributionType,
+							defaultAmount,
+						)}
+						onChange={selectAmount(amount, countryGroupId, contributionType)}
+						label={
+							<ContributionAmountChoicesChoiceLabel
+								formattedAmount={formatAmount(
+									currencies[currency],
+									spokenCurrencies[currency],
+									amount,
+									false,
+								)}
+								shouldShowFrequencyButtons={shouldShowFrequencyButtons}
+								contributionType={contributionType}
+							/>
+						}
+					/>
+				))}
+			</>
+
 			<ChoiceCard
 				id="contributionAmount-other"
 				name="contributionAmount"

@@ -5,7 +5,7 @@
             "TS7053": 27,
             "TS7006": 146,
             "TS2305": 63,
-            "TS2322": 287,
+            "TS2322": 285,
             "TS2578": 23,
             "TS2339": 162,
             "TS2345": 162,
@@ -209,7 +209,6 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/aus-moment-map/components/map.tsx": 4,
-            "assets/pages/contributions-landing/components/ContributionAmountChoices.tsx": 2,
             "assets/pages/contributions-landing/components/ContributionState.tsx": 5,
             "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 10,
@@ -1760,10 +1759,6 @@
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"appearance\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionAmountChoices.tsx",
-            "message": "Type 'number' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
             "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLFormElement>'."
         },
@@ -1870,10 +1865,6 @@
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
             "message": "Type '{ '& + div': { display: string; width: string; margin: number; justifyContent: string; }; '& + div svg': { width: string; height: string; }; '&:not(:checked) + div svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'Element[]' is not assignable to type 'Element'."
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
@@ -4560,7 +4551,7 @@
             "message": "Type '{ digitalSubscription: { startShowingOn: string; stopShowingOn: string; copy: Element; }[]; }' is missing the following properties from type 'TimedCopyCollection': newspaper, guardianWeekly"
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionAmountChoices.tsx",
+            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
             "message": "Type 'Element[]' is missing the following properties from type 'ReactElement<any, any>': type, props, key"
         },
         {
