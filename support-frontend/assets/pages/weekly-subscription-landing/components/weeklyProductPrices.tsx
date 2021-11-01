@@ -122,7 +122,7 @@ const getProducts = ({
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
-		: weeklyBillingPeriods;
+		: weeklyBillingPeriods(participations.sixForSixSuppression !== 'variant');
 
 	if (participations.sixForSixSuppression === 'variant') {
 		const index = billingPeriodsToUse.indexOf('SixWeekly');

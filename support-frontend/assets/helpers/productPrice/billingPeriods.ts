@@ -18,11 +18,14 @@ export type WeeklyBillingPeriod =
 	| typeof Quarterly
 	| typeof Annual;
 export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
-const weeklyBillingPeriods: WeeklyBillingPeriod[] = [
-	SixWeekly,
-	postIntroductorySixForSixBillingPeriod,
-	Annual,
-];
+
+const weeklyBillingPeriods = (
+	enableSixForSix: boolean,
+): WeeklyBillingPeriod[] =>
+	enableSixForSix
+		? [SixWeekly, postIntroductorySixForSixBillingPeriod, Annual]
+		: [postIntroductorySixForSixBillingPeriod, Annual];
+
 const weeklyGiftBillingPeriods: WeeklyBillingPeriod[] = [Quarterly, Annual];
 
 function billingPeriodNoun(billingPeriod: BillingPeriod, fixedTerm = false) {
