@@ -36,7 +36,7 @@ export const pageUrlRegexes = {
 				/\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
 		},
 		subsShowcaseAndWeeklyPages:
-			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\?.*)?$)',
+			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
 	},
 };
 export const tests: Tests = {
