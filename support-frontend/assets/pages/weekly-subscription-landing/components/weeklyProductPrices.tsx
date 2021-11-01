@@ -124,11 +124,6 @@ const getProducts = ({
 		? weeklyGiftBillingPeriods
 		: weeklyBillingPeriods(participations.sixForSixSuppression !== 'variant');
 
-	if (participations.sixForSixSuppression === 'variant') {
-		const index = billingPeriodsToUse.indexOf('SixWeekly');
-		if (index >= 0) billingPeriodsToUse.splice(index, 1);
-	}
-
 	return billingPeriodsToUse.map((billingPeriod) => {
 		const productPrice = productPrices
 			? getProductPrice(
@@ -147,12 +142,6 @@ const getProducts = ({
 	});
 };
 
-// const WeeklyHero: React.FC<PropTypes> = ({
-// 	orderIsAGift,
-// 	countryGroupId,
-// 	promotionCopy,
-// 	participations,
-// }: PropTypes) => {
 const WeeklyProductPrices: React.FC<WeeklyProductPricesProps> = ({
 	countryId,
 	productPrices,
