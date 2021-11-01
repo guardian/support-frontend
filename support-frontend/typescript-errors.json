@@ -2,12 +2,12 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS7053": 27,
+            "TS7053": 28,
             "TS7006": 146,
             "TS2305": 63,
-            "TS2322": 285,
-            "TS2578": 23,
-            "TS2339": 162,
+            "TS2322": 284,
+            "TS2578": 22,
+            "TS2339": 149,
             "TS2345": 162,
             "TS7034": 13,
             "TS7005": 47,
@@ -51,8 +51,9 @@
             "assets/components/headers/roundelHeader/header.tsx": 1,
             "assets/components/page/heroStyles.ts": 3,
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx": 30,
-            "assets/helpers/abTests/abtest.ts": 7,
+            "assets/helpers/abTests/abtest.ts": 6,
             "assets/helpers/contributions.ts": 2,
+            "assets/helpers/globalsAndSwitches/globals.ts": 4,
             "assets/helpers/internationalisation/countryGroup.ts": 4,
             "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 19,
             "assets/pages/contributions-landing/contributionsLandingInit.ts": 4,
@@ -79,12 +80,12 @@
             "assets/helpers/rendering/render.ts": 7,
             "assets/helpers/rendering/ssrPages.ts": 2,
             "assets/helpers/storage/storage.ts": 1,
-            "assets/helpers/subscriptionsForms/formReducer.ts": 5,
+            "assets/helpers/subscriptionsForms/formReducer.ts": 6,
             "assets/helpers/subscriptionsForms/submit.ts": 10,
             "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts": 1,
             "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts": 30,
             "assets/helpers/user/__tests__/userTest.ts": 1,
-            "assets/helpers/user/user.ts": 24,
+            "assets/helpers/user/user.ts": 19,
             "assets/helpers/utilities/dateFormatting.ts": 1,
             "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
             "assets/pages/aus-moment-map/utils.ts": 1,
@@ -192,13 +193,11 @@
             "assets/components/svgs/paypalDs.tsx": 1,
             "assets/components/svgs/questionMarkHintIcon.tsx": 1,
             "assets/components/svgs/sepa.tsx": 1,
-            "assets/helpers/__tests__/formValidation.ts": 33,
+            "assets/helpers/__tests__/formValidation.ts": 31,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
-            "assets/helpers/customHooks/useLastOneOffContribution.ts": 3,
             "assets/helpers/forms/deliveryCheck.ts": 1,
-            "assets/helpers/forms/formValidation.ts": 5,
+            "assets/helpers/forms/formValidation.ts": 4,
             "assets/helpers/forms/recaptcha.ts": 1,
-            "assets/helpers/globalsAndSwitches/globals.ts": 4,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
             "assets/helpers/subscriptionsForms/rules.ts": 2,
@@ -209,7 +208,7 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/aus-moment-map/components/map.tsx": 4,
-            "assets/pages/contributions-landing/components/ContributionState.tsx": 5,
+            "assets/pages/contributions-landing/components/ContributionState.tsx": 4,
             "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 10,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
@@ -251,8 +250,8 @@
             "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/campaigns/campaigns.ts": 8,
-            "assets/helpers/csrf/csrfReducer.ts": 3,
-            "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts": 2,
+            "assets/helpers/csrf/csrfReducer.ts": 2,
+            "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts": 1,
             "assets/helpers/forms/paymentIntegrations/amazonPay.ts": 11,
             "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts": 2,
             "assets/helpers/forms/stripe.ts": 6,
@@ -399,6 +398,10 @@
         {
             "path": "assets/helpers/contributions.ts",
             "message": "Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{ '1': string; '2': string; '5': string; '6': string; '7': string; '10': string; '15': string; '20': string; '25': string; '30': string; '35': string; '40': string; '50': string; '75': string; '100': string; '125': string; '166': string; '200': string; ... 7 more ...; '16000': string; }'."
+        },
+        {
+            "path": "assets/helpers/globalsAndSwitches/globals.ts",
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/internationalisation/countryGroup.ts",
@@ -1599,10 +1602,6 @@
             "message": "Type 'unknown' is not assignable to type 'string'."
         },
         {
-            "path": "assets/helpers/customHooks/useLastOneOffContribution.ts",
-            "message": "Type 'string' is not assignable to type 'IsoCurrency'."
-        },
-        {
             "path": "assets/helpers/forms/deliveryCheck.ts",
             "message": "Type 'unknown' is not assignable to type 'string[]'."
         },
@@ -2441,10 +2440,6 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/helpers/customHooks/useLastOneOffContribution.ts",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -2588,11 +2583,11 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
@@ -2608,43 +2603,35 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/__tests__/urlTest.ts",
@@ -2652,67 +2639,47 @@
         },
         {
             "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'serversideTests' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'serversideTests' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/campaigns/campaigns.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'enableContributionsCampaign' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/campaigns/campaigns.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'forceContributionsCampaign' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/customHooks/useLastOneOffContribution.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts",
             "message": "Property 'billingAccountId' does not exist on type 'ExistingPaymentMethod'."
         },
         {
-            "path": "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "path": "assets/helpers/forms/formValidation.ts",
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
@@ -2748,19 +2715,19 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
@@ -2776,31 +2743,27 @@
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -2824,11 +2787,11 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts",
@@ -2848,7 +2811,11 @@
         },
         {
             "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'productPrices' does not exist on type '{ mdapiUrl: string; }'."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
+            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/submit.ts",
@@ -2892,95 +2859,75 @@
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/helpers/utilities/logger.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -3016,15 +2963,15 @@
         },
         {
             "path": "assets/pages/contributions-landing/checkoutFormIsSubmittableActions.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
@@ -3032,15 +2979,11 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -3048,11 +2991,11 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -3060,15 +3003,15 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -3088,7 +3031,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -3104,27 +3047,27 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
@@ -3140,7 +3083,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "Property 'guardian' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
