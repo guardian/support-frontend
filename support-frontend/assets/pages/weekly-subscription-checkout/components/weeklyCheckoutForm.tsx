@@ -27,6 +27,7 @@ import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
+import type { SetCountryAction } from 'helpers/page/commonActions';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -57,7 +58,6 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import type { SetCountryAction } from 'helpers/page/commonActions';
 import 'helpers/page/commonActions';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import {
@@ -352,7 +352,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					<BillingPeriodSelector
 						fulfilmentOption={fulfilmentOption}
 						onChange={(billingPeriod) => props.setBillingPeriod(billingPeriod)}
-						billingPeriods={weeklyBillingPeriods}
+						billingPeriods={weeklyBillingPeriods(
+							props.participations.sixForSixSuppression !== 'variant',
+						)}
 						pricingCountry={props.deliveryCountry}
 						productPrices={props.productPrices}
 						selected={props.billingPeriod}

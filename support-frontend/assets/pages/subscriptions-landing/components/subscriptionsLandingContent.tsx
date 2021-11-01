@@ -7,15 +7,20 @@ import SubscriptionsProduct from './subscriptionsProduct';
 
 const isFeature = (index) => index === 0; // make the first card a feature
 
-const SubscriptionsLandingContent = ({
+const SubscriptionsLandingContent: React.FC<SubscriptionsLandingPropTypes> = ({
 	countryGroupId,
 	pricingCopy,
+	participations,
 }: SubscriptionsLandingPropTypes) => {
 	if (!pricingCopy) {
 		return null;
 	}
 
-	const subscriptionCopy = getSubscriptionCopy(countryGroupId, pricingCopy);
+	const subscriptionCopy = getSubscriptionCopy(
+		countryGroupId,
+		pricingCopy,
+		participations,
+	);
 	return (
 		<div
 			className="subscriptions-landing-page"
@@ -26,13 +31,14 @@ const SubscriptionsLandingContent = ({
 				{subscriptionCopy.map((product, index) => (
 					<SubscriptionsProduct
 						title={product.title}
-						subtitle={product.subtitle || ''}
+						subtitle={product.subtitle ?? ''}
 						description={product.description}
 						productImage={product.productImage}
 						buttons={product.buttons}
-						offer={product.offer || null}
+						offer={product.offer ?? null}
 						isFeature={isFeature(index)}
-						classModifier={product.classModifier || []}
+						classModifier={product.classModifier ?? []}
+						participations={participations}
 					/>
 				))}
 			</div>

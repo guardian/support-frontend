@@ -12,6 +12,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import PageTitle from 'components/page/pageTitle';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	detect,
@@ -29,6 +30,7 @@ type PropTypes = {
 	orderIsAGift: boolean;
 	countryGroupId: CountryGroupId;
 	promotionCopy: PromotionCopy;
+	participations: Participations;
 };
 const weeklyHeroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
@@ -135,27 +137,43 @@ const getFirstParagraph = (
 	);
 };
 
-function WeeklyHero({
+const WeeklyHero: React.FC<PropTypes> = ({
 	orderIsAGift,
 	countryGroupId,
 	promotionCopy,
-}: PropTypes) {
+	participations,
+}: PropTypes) => {
 	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
-	const defaultRoundelText = (
-		<>
-			{/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
-			<div role="text">
-				Try
-				<div css={roundelCentreLine}>6 issues</div>
-				for {glyph(currencyId)}6
-			</div>
-		</>
-	);
+
+	const defaultRoundelText = (participations.sixForSixSuppression === 'variant') ?
+		(
+			<>
+				<div role="text">
+					Save
+					<br />
+					up to 34%
+					<br />a year
+				</div>
+			</>
+		) : (
+			<>
+				{
+					// role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element
+				}
+				<div role="text">
+					Try
+					<div css={roundelCentreLine}>6 issues</div>
+					for {glyph(currencyId)}6
+				</div>
+			</>
+		);
+
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText =
 		promotionHTML(promotionCopy.roundel) ?? defaultRoundelText;
+
 	return (
 		<PageTitle
 			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
@@ -203,6 +221,6 @@ function WeeklyHero({
 			</CentredContainer>
 		</PageTitle>
 	);
-}
+};
 
 export { WeeklyHero };
