@@ -2,12 +2,12 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS7053": 20,
+            "TS7053": 21,
             "TS7006": 145,
             "TS2305": 61,
-            "TS2322": 272,
-            "TS2578": 23,
-            "TS2339": 162,
+            "TS2322": 271,
+            "TS2578": 22,
+            "TS2339": 149,
             "TS2345": 162,
             "TS7034": 13,
             "TS7005": 47,
@@ -51,6 +51,7 @@
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx": 30,
             "assets/helpers/abTests/abtest.ts": 6,
             "assets/helpers/contributions.ts": 2,
+            "assets/helpers/globalsAndSwitches/globals.ts": 4,
             "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 19,
             "assets/pages/contributions-landing/contributionsLandingInit.ts": 4,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
@@ -383,6 +384,10 @@
         {
             "path": "assets/helpers/contributions.ts",
             "message": "Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{ '1': string; '2': string; '5': string; '6': string; '7': string; '10': string; '15': string; '20': string; '25': string; '30': string; '35': string; '40': string; '50': string; '75': string; '100': string; '125': string; '166': string; '200': string; ... 7 more ...; '16000': string; }'."
+        },
+        {
+            "path": "assets/helpers/globalsAndSwitches/globals.ts",
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
