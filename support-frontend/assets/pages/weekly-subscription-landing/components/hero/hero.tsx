@@ -145,9 +145,8 @@ const WeeklyHero: React.FC<PropTypes> = ({
 }: PropTypes) => {
 	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
 
-	let defaultRoundelText;
-	if (participations.sixForSixSuppression === 'variant') {
-		defaultRoundelText = (
+	const defaultRoundelText = (participations.sixForSixSuppression === 'variant') ?
+		(
 			<>
 				<div role="text">
 					Save
@@ -156,9 +155,7 @@ const WeeklyHero: React.FC<PropTypes> = ({
 					<br />a year
 				</div>
 			</>
-		);
-	} else {
-		defaultRoundelText = (
+		) : (
 			<>
 				{
 					// role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element
@@ -170,7 +167,6 @@ const WeeklyHero: React.FC<PropTypes> = ({
 				</div>
 			</>
 		);
-	}
 
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
 	const title = promotionCopy.title ?? defaultTitle;

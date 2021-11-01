@@ -92,7 +92,7 @@ function getGuardianWeeklyOfferCopy(
 	}
 
 	if (participations.sixForSixSuppression === 'variant') {
-		return '';
+		return undefined;
 	}
 
 	const currency = glyph(fromCountryGroupId(countryGroupId) ?? 'GBP');

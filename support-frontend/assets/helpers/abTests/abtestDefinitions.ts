@@ -36,7 +36,7 @@ export const pageUrlRegexes = {
 				/\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
 		},
 		subsShowcaseAndWeeklyPages:
-			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\?.*)?$)',
+			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
 	},
 };
 export const tests: Tests = {
@@ -197,6 +197,6 @@ export const tests: Tests = {
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.subscriptions.subsShowcaseAndWeeklyPages,
 		seed: 13,
-		// optimizeId: 'erMFDh79T6iyp2WhaG7CWQ',
+		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
 };
