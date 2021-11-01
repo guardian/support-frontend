@@ -1,4 +1,6 @@
-import type { Node } from 'react';
+import type { SerializedStyles } from '@emotion/react';
+import type { Breakpoint } from '@guardian/src-foundations/mq';
+import type { ReactElement, ReactNode } from 'react';
 import React from 'react';
 import type { RoundelTheme } from './heroRoundel';
 import HeroRoundel from './heroRoundel';
@@ -11,22 +13,21 @@ import {
 	roundelNudgeUp,
 } from './heroStyles';
 // Options for moving the roundel position on mobile
-type RoundelNudgeDirection = 'up' | 'down' | 'none';
+type RoundelNudgeDirection = 'up' | 'down';
 type PropTypes = {
-	image: Node;
-	children: Node;
-	cssOverrides?: string;
+	image: ReactNode;
+	children: ReactNode;
+	cssOverrides?: SerializedStyles;
 	// You can pass either text content for the roundel, or a whole instance of a HeroRoundel component
-	roundelElement?: Node;
-	roundelText?: Node;
+	roundelElement?: ReactNode;
+	roundelText?: ReactNode;
 	roundelNudgeDirection?: RoundelNudgeDirection;
-	hideRoundelBelow?: string;
+	hideRoundelBelow?: Breakpoint;
 	roundelTheme?: RoundelTheme;
 };
-const roundelNudges: Record<RoundelNudgeDirection, string> = {
+const roundelNudges: Record<RoundelNudgeDirection, SerializedStyles> = {
 	up: roundelNudgeUp,
 	down: roundelNudgeDown,
-	none: '',
 };
 
 function Hero({
@@ -38,17 +39,22 @@ function Hero({
 	hideRoundelBelow,
 	roundelNudgeDirection = 'up',
 	roundelTheme = 'base',
-}: PropTypes) {
+}: PropTypes): ReactElement {
 	const nudgeCSS = roundelNudges[roundelNudgeDirection];
 	const hideRoundel = hideRoundelBelow
 		? roundelHidingPoints[hideRoundelBelow]
-		: '';
+		: [];
+	const heroRoundelCssOverrides = [
+		...(hideRoundelBelow ? [roundelHidingPoints[hideRoundelBelow]] : []),
+		nudgeCSS,
+	];
+
 	return (
 		<div css={[hero, cssOverrides]}>
 			{roundelText && !roundelElement && (
 				<div css={heroRoundelContainer}>
 					<HeroRoundel
-						cssOverrides={[nudgeCSS, hideRoundel]}
+						cssOverrides={heroRoundelCssOverrides}
 						theme={roundelTheme}
 					>
 						{roundelText}
@@ -64,12 +70,4 @@ function Hero({
 	);
 }
 
-Hero.defaultProps = {
-	cssOverrides: '',
-	roundelElement: null,
-	roundelText: null,
-	roundelNudgeDirection: 'up',
-	hideRoundelBelow: '',
-	roundelTheme: 'base',
-};
 export default Hero;

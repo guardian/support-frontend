@@ -1,5 +1,7 @@
 import { css } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
+import type { Breakpoint } from '@guardian/src-foundations/mq';
 import { from, until } from '@guardian/src-foundations/mq';
 import { brand, neutral } from '@guardian/src-foundations/palette';
 import { body, headline } from '@guardian/src-foundations/typography';
@@ -92,7 +94,7 @@ export const roundelNudgeDown = css`
 	}
 `;
 
-function hideUntilBreakpoint(breakpoint): string {
+function hideUntilBreakpoint(breakpoint: Breakpoint): SerializedStyles {
 	return css`
 		${until[breakpoint]} {
 			display: none;
@@ -100,7 +102,7 @@ function hideUntilBreakpoint(breakpoint): string {
 	`;
 }
 
-export const roundelHidingPoints: Record<string, string> = {
+export const roundelHidingPoints: Record<Breakpoint, SerializedStyles> = {
 	mobile: hideUntilBreakpoint('mobile'),
 	mobileMedium: hideUntilBreakpoint('mobileMedium'),
 	mobileLandscape: hideUntilBreakpoint('mobileLandscape'),

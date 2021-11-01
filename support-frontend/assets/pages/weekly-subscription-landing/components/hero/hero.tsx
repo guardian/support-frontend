@@ -142,11 +142,11 @@ const WeeklyHero: React.FC<PropTypes> = ({
 	countryGroupId,
 	promotionCopy,
 	participations,
-}: PropTypes) => {
+}) => {
 	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
 
-	const defaultRoundelText = (participations.sixForSixSuppression === 'variant') ?
-		(
+	const defaultRoundelText =
+		participations.sixForSixSuppression === 'variant' ? (
 			<>
 				<div role="text">
 					Save

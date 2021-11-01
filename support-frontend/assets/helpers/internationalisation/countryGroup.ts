@@ -3,14 +3,16 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
+
 // ----- Types ----- //
-const GBPCountries: 'GBPCountries' = 'GBPCountries';
-const UnitedStates: 'UnitedStates' = 'UnitedStates';
-const AUDCountries: 'AUDCountries' = 'AUDCountries';
-const EURCountries: 'EURCountries' = 'EURCountries';
-const NZDCountries: 'NZDCountries' = 'NZDCountries';
-const Canada: 'Canada' = 'Canada';
-const International: 'International' = 'International';
+const GBPCountries = 'GBPCountries';
+const UnitedStates = 'UnitedStates';
+const AUDCountries = 'AUDCountries';
+const EURCountries = 'EURCountries';
+const NZDCountries = 'NZDCountries';
+const Canada = 'Canada';
+const International = 'International';
+
 export type CountryGroupId =
 	| typeof GBPCountries
 	| typeof UnitedStates
@@ -377,10 +379,11 @@ function fromCountry(isoCountry: string): CountryGroupId | null | undefined {
 		return GBPCountries;
 	}
 
-	const countryGroup = Object.keys(countryGroups).find((countryGroupId) =>
-		countryGroups[countryGroupId].countries.includes(isoCountry),
+	const countryGroup = (Object.keys(countryGroups) as CountryGroupId[]).find(
+		(countryGroupId) =>
+			countryGroups[countryGroupId].countries.includes(isoCountry),
 	);
-	return countryGroup || null;
+	return countryGroup ?? null;
 }
 
 function fromQueryParameter(): CountryGroupId | null | undefined {
@@ -416,22 +419,22 @@ function fromGeolocation(): CountryGroupId | null | undefined {
 
 function detect(): CountryGroupId {
 	return (
-		fromPath() ||
-		fromQueryParameter() ||
-		fromCookie() ||
-		fromGeolocation() ||
+		fromPath() ??
+		fromQueryParameter() ??
+		fromCookie() ??
+		fromGeolocation() ??
 		GBPCountries
 	);
 }
 
 function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
-	return fromString(countryGroupId) || GBPCountries;
+	return fromString(countryGroupId) ?? GBPCountries;
 }
 
 function fromCountryGroupName(name: CountryGroupName): CountryGroup {
-	const groupId: CountryGroupId | null | undefined = Object.keys(
-		countryGroups,
-	).find((key) => countryGroups[key].name === name);
+	const groupId = (Object.keys(countryGroups) as CountryGroupId[]).find(
+		(key) => countryGroups[key].name === name,
+	);
 	return groupId ? countryGroups[groupId] : countryGroups.GBPCountries;
 }
 
