@@ -38,7 +38,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
-	const tabItems = (Object.keys(tabs) as Array<keyof typeof tabs>).map(
+	const tabItems = (Object.keys(tabs) as PaperFulfilmentOptions[]).map(
 		(fulfilmentMethod) => {
 			const TabContent = tabs[fulfilmentMethod].content;
 			return {

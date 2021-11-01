@@ -22,7 +22,7 @@ export const hero = css`
 	}
 
 	/* Typography defaults */
-	${body.small()}
+	${body.small()};
 
 	${from.mobileMedium} {
 		${body.medium()};
