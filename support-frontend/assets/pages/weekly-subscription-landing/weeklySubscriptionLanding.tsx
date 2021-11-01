@@ -100,7 +100,7 @@ const WeeklyLandingPage = ({
 						{orderIsAGift ? (
 							<GiftBenefits />
 						) : (
-							<Benefits participations={participations} />
+							<Benefits/>
 						)}
 					</Block>
 				</CentredContainer>

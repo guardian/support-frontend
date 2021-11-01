@@ -1,14 +1,9 @@
 import React from 'react';
 import { List } from 'components/list/list';
-import type { Participations } from 'helpers/abTests/abtest';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
-type BenefitsPropTypes = {
-	participations: Participations;
-};
-
-function Benefits({ participations }: BenefitsPropTypes) {
+const Benefits: React.FC = () => {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -21,9 +16,7 @@ function Benefits({ participations }: BenefitsPropTypes) {
 								items={[
 									{
 										content:
-											participations.sixForSixSuppression === 'variant'
-												? 'Every issue delivered with up to 34% off the cover price'
-												: 'Every issue delivered with up to 35% off the cover price',
+											'Every issue delivered with up to 34% off the cover price',
 									},
 									{
 										content: "Access to the magazine's digital archive",
@@ -42,6 +35,6 @@ function Benefits({ participations }: BenefitsPropTypes) {
 			]}
 		/>
 	);
-}
+};
 
 export default Benefits;
