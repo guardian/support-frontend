@@ -4,7 +4,7 @@
             "TS1208": 1,
             "TS7053": 21,
             "TS7006": 145,
-            "TS2305": 61,
+            "TS2305": 60,
             "TS2322": 271,
             "TS2578": 22,
             "TS2339": 149,
@@ -16,7 +16,7 @@
             "TS2564": 2,
             "TS2769": 20,
             "TS2314": 7,
-            "TS7016": 8,
+            "TS7016": 9,
             "TS2304": 18,
             "TS2741": 7,
             "TS2739": 17,
@@ -38,6 +38,7 @@
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
+            "TS2307": 1,
             "TS2525": 6,
             "TS2724": 1,
             "TS2300": 10,
@@ -149,7 +150,6 @@
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
             "assets/components/subscriptionCheckouts/stage.tsx": 1,
-            "assets/components/tabs/tabs.tsx": 1,
             "assets/components/text/text.tsx": 1,
             "assets/helpers/subscriptionsForms/validation.ts": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx": 2,
@@ -294,6 +294,7 @@
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
+            "assets/helpers/productPrice/promotions.tsx": 1,
             "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/helpers/subscriptionsForms/formActions.ts": 2,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
@@ -311,7 +312,8 @@
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
-            "assets/helpers/productPrice/subscriptions.ts": 1
+            "assets/helpers/productPrice/subscriptions.ts": 1,
+            "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx": 1
         }
     },
     "TS1208": [
@@ -1155,10 +1157,6 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/stage.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/tabs/tabs.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -4214,6 +4212,10 @@
             "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
+            "path": "assets/helpers/productPrice/promotions.tsx",
+            "message": "Could not find a declaration file for module 'dompurify'. 'support-frontend/node_modules/dompurify/dist/purify.cjs.js' implicitly has an 'any' type."
+        },
+        {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
@@ -4990,6 +4992,12 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
+        }
+    ],
+    "TS2307": [
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx",
+            "message": "Cannot find module '@guardian/src-layout' or its corresponding type declarations."
         }
     ],
     "TS2525": [
