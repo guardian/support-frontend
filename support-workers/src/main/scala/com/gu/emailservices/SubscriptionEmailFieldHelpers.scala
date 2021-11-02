@@ -1,13 +1,12 @@
 package com.gu.emailservices
 
-import java.text.DecimalFormat
-
 import com.gu.i18n.Currency
-import com.gu.support.promotions.{IntroductoryPriceBenefit, Promotion}
+import com.gu.support.promotions.{IntroductoryPriceBenefit, Issue, Promotion}
 import com.gu.support.workers._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{LocalDate, Months}
 
+import java.text.DecimalFormat
 import scala.util.Try
 
 object SubscriptionEmailFieldHelpers {
@@ -48,8 +47,11 @@ object SubscriptionEmailFieldHelpers {
   ): String =
     Try(paymentSchedule.payments.tail.head).fold(
       _ => "",
-      payment => s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(benefit.periodLength, benefit.periodType.toString.toLowerCase)}, " +
-        s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}"
+      payment => {
+        val issues = if (benefit == IntroductoryPriceBenefit(6, 7, Issue)) 6 else benefit.periodLength
+        s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(issues, benefit.periodType.toString.toLowerCase)}, " +
+          s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}"
+      }
     )
 
   def giftNoun(billingPeriod: BillingPeriod): String = billingPeriod match {
