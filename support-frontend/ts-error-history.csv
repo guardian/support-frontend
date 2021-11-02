@@ -27,6 +27,7 @@
 1635852493000,1176,f056c92f9efc0da1c69b5e97521ac02db2953ace
 1635863794000,1177,089a9830ebe7bfb1edb8030411cb5dcfc493bccf
 <<<<<<< HEAD
+<<<<<<< HEAD
 1635948065000,1175,c8245359c3399fed0bb47210eabe41a2e44cca9b
 1636034346000,1175,4d803f868016043807ddd73b024c9330ff530169
 1636469052000,1175,f9a802b7d8546007a129deb732eca53da97ba9de
@@ -38,9 +39,17 @@
 1637070377000,1135,596e3e86b5e80d3349c6e611a4cb9d7d895a4592
 1637079329000,1116,HEAD
 =======
+=======
+>>>>>>> 0eb5c4e08 (regenerate integrity attribute for Quantum Metric)
 <<<<<<< HEAD
 1635946639000,1175,HEAD
 =======
 1635865123000,1177,HEAD
 >>>>>>> 5ba16bda1 (update window.d.ts)
+<<<<<<< HEAD
 >>>>>>> 7f5fadddf (update window.d.ts)
+=======
+=======
+1635870667000,1177,HEAD
+>>>>>>> 820ebe391 (regenerate integrity attribute for Quantum Metric)
+>>>>>>> 0eb5c4e08 (regenerate integrity attribute for Quantum Metric)
