@@ -286,7 +286,7 @@ function withProps(props: PropTypes) {
 					</div>
 				) : (
 					<div>
-						{showPreviousGiving && lastOneOffContribution && (
+						{showPreviousGiving && lastOneOffContribution ? (
 							<ContributionFormBlurb
 								headerCopy={
 									<PreviousGivingHeaderCopy userName={props.userName} />
@@ -297,12 +297,12 @@ function withProps(props: PropTypes) {
 									/>
 								}
 							/>
+						) : (
+							<ContributionFormBlurb
+								headerCopy={countryGroupDetails.headerCopy}
+								bodyCopy={countryGroupDetails.contributeCopy}
+							/>
 						)}
-
-						<ContributionFormBlurb
-							headerCopy={countryGroupDetails.headerCopy}
-							bodyCopy={countryGroupDetails.contributeCopy}
-						/>
 					</div>
 				)}
 
