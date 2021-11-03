@@ -17,8 +17,9 @@ const addQM = (): void => {
 	const qtm = document.createElement('script');
 	qtm.type = 'text/javascript';
 	qtm.async = true;
-	qtm.src = 'https://cdn.quantummetric.com/qscripts/quantum-gnm.js';
-	qtm.integrity = 'sha256-IuXtX1j/zKyI5LbQrGw8iwgzo3Yv7JKnHJU8jGHOC1U=';
+	qtm.src =
+		'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js';
+	qtm.integrity = 'sha256-EgTDwEe1o6/yOkCHRanpJrDBbdGyHnc+mxy6Cxd9vzk=';
 	qtm.crossOrigin = 'anonymous';
 	const d = document.getElementsByTagName('script')[0];
 	if (!window.QuantumMetricAPI && d.parentNode) {
