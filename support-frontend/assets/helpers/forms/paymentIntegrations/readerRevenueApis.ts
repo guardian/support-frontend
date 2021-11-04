@@ -47,6 +47,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 import { logException } from 'helpers/utilities/logger';
+import { debug } from 'webpack';
 // ----- Types ----- //
 export type StripePaymentMethod =
 	| 'StripeCheckout'
@@ -348,6 +349,7 @@ function postRegularPaymentRequest(
 	participations: Participations,
 	csrf: CsrfState,
 ): Promise<PaymentResult> {
+  debugger
 	return logPromise(
 		fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)),
 	)

@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import React from 'react';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -11,14 +10,17 @@ import Text from 'components/text/text';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
 import { logException } from 'helpers/utilities/logger';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+
 // ----- Types ----- //
 type ButtonPropTypes = {
 	confirmOptIn: boolean | null | undefined;
 	email: string;
 	csrf: CsrfState;
-	onClick: (arg0: string | null | undefined, arg1: CsrfState) => void;
+	onClick: (email: string, csrf: CsrfState) => void;
 	requestPending: boolean;
 };
+
 type PropTypes = ButtonPropTypes & {
 	error: boolean;
 };
@@ -60,7 +62,7 @@ function MarketingButton(props: ButtonPropTypes) {
 	);
 }
 
-function MarketingConsent(props: PropTypes) {
+function MarketingConsent(props: PropTypes): JSX.Element | null {
 	if (props.error) {
 		return (
 			<GeneralErrorMessage
