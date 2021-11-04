@@ -6,6 +6,7 @@ import 'helpers/contributions';
 
 export const OPHAN_COMPONENT_ID_SIGN_IN = 'sign-into-the-guardian-link';
 export const OPHAN_COMPONENT_ID_SIGN_UP = 'set-password';
+export const OPHAN_COMPONENT_ID_TIP_JAR = 'tip-jar';
 export const OPHAN_COMPONENT_ID_SET_REMINDER = 'reminder-test-link-clicked';
 export const OPHAN_COMPONENT_ID_MARKETING = 'marketing-permissions';
 export const OPHAN_COMPONENT_ID_SURVEY = 'contribution-thankyou-survey';

@@ -35,6 +35,7 @@ import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
 } from './utils/ophan';
+import ContributionThankYouTipJar from "./ContributionThankYouTipJar";
 
 const container = css`
 	background: white;
@@ -196,10 +197,15 @@ const ContributionThankYou = ({
 		);
 	}, []);
 
-	const signUpAction = {
-		component: <ContributionThankYouSignUp />,
-		shouldShow: isNewAccount,
+	const tipJarAction = {
+		component: <ContributionThankYouTipJar />,
+		shouldShow: true,
 	};
+
+    const signUpAction = {
+        component: <ContributionThankYouSignUp />,
+        shouldShow: isNewAccount,
+    };
 
 	const signInAction = {
 		component: <ContributionThankYouSignIn email={email} csrf={csrf} />,
@@ -242,6 +248,7 @@ const ContributionThankYou = ({
 	};
 
 	const defaultActions = [
+        tipJarAction,
 		signUpAction,
 		signInAction,
 		marketingConsentAction,
