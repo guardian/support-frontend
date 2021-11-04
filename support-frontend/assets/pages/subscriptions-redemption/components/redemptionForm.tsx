@@ -1,24 +1,23 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { Button } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { error, line, text } from '@guardian/src-foundations/palette';
-import 'redux';
 import { headline, textSans } from '@guardian/src-foundations/typography/obj';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { TextInput } from '@guardian/src-text-input';
 import { InlineError } from '@guardian/src-user-feedback';
+import React from 'react';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import Form from 'components/checkoutForm/checkoutForm';
+import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
-import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
-import type { Option } from 'helpers/types/option';
-import type { User } from 'helpers/user/user';
-import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
+import { doesUserAppearToBeSignedIn, signOut } from 'helpers/user/user';
 import {
 	submitCode,
 	validateUserCode,
@@ -29,53 +28,97 @@ import type {
 	RedemptionPageState,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
-type PropTypes = {
-	user: User;
-	userCode: Option<string>;
-	error: Option<ErrorMessage>;
-	setUserCode: (arg0: string) => void;
-	submit: (arg0: string) => void;
-};
+// type PropTypes = {
+// 	user: User;
+// 	userCode: Option<string>;
+// 	error: Option<ErrorMessage>;
+// 	setUserCode: (arg0: string) => void;
+// 	submit: (arg0: string) => void;
+// };
 
 function mapStateToProps(state: RedemptionPageState) {
 	return {
 		user: state.page.user,
 		userCode: state.page.userCode,
 		error: state.page.error,
+		firstName: state.page.checkout.firstName,
+		lastName: state.page.checkout.lastName,
+		email: state.page.checkout.email,
+		confirmEmail: state.page.checkout.confirmEmail,
+		telephone: state.page.checkout.telephone,
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps() {
 	return {
-		setUserCode: (userCode: string) => validateUserCode(userCode, dispatch),
-		submit: (userCode: string) => submitCode(userCode, dispatch),
+		setUserCode: (userCode: string) => (dispatch: Dispatch<Action>) =>
+			validateUserCode(userCode, dispatch),
+		submit: (userCode: string) => (dispatch: Dispatch<Action>) =>
+			submitCode(userCode, dispatch),
+		setFirstName: (firstName: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_FIRST_NAME',
+				firstName,
+			}),
+		setLastName: (lastName: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_LAST_NAME',
+				lastName,
+			}),
+		setEmail: (email: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_EMAIL',
+				email,
+			}),
+		setTelephone: (telephone: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_TELEPHONE',
+				telephone,
+			}),
+		setConfirmEmail: (email: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_CONFIRM_EMAIL',
+				email,
+			}),
+		fetchAndStoreUserType:
+			(email: string) =>
+			(dispatch: Dispatch<Action>, getState: () => RedemptionPageState) => {
+				fetchAndStoreUserType(email)(dispatch, getState);
+			},
+		signOut,
 	};
 }
+
+const connector = connect(mapStateToProps, mapDispatchToProps());
+
+type PropTypes = ConnectedProps<typeof connector>;
+
+const missingName = css`
+	border: 4px solid ${error['400']};
+	padding: 8px;
+	margin-bottom: ${space[6]}px;
+	${textSans.medium()};
+`;
+
+const detailsCss = css`
+	margin-top: 16px;
+	margin-left: 32px;
+	a,
+	a:visited {
+		${textSans.small()};
+		color: ${text.primary};
+		${from.desktop} {
+			${textSans.medium()};
+		}
+	}
+	ol {
+		list-style-type: decimal;
+	}
+`;
 
 const MissingNamesMessage = () => {
-	const mainCss = css`
-		border: 4px solid ${error['400']};
-		padding: 8px;
-		margin-bottom: ${space[6]}px;
-		${textSans.medium()};
-	`;
-	const detailsCss = css`
-		margin-top: 16px;
-		margin-left: 32px;
-		a,
-		a:visited {
-			${textSans.small()};
-			color: ${text.primary};
-			${from.desktop} {
-				${textSans.medium()};
-			}
-		}
-		ol {
-			list-style-type: decimal;
-		}
-	`;
 	return (
-		<div role="status" aria-live="assertive" css={mainCss}>
+		<div role="status" aria-live="assertive" css={missingName}>
 			<InlineError>
 				We notice you&apos;ve already set up a Guardian username and password,
 				please complete your account to proceed.
@@ -100,29 +143,32 @@ const MissingNamesMessage = () => {
 	);
 };
 
+const redemptionForm = css`
+	padding: ${space[2]}px;
+`;
+
+const instructionsDivCss = css`
+	margin-top: -10px;
+	padding: ${space[2]}px;
+	${from.tablet} {
+		min-height: 475px;
+	}
+	hr {
+		border: 0;
+		border-top: solid 1px ${line.primary};
+	}
+`;
+
+const hrCss = css`
+	margin-bottom: 16px;
+`;
+const headingCss = css`
+	${headline.xsmall()};
+	font-weight: bold;
+	margin-bottom: 16px;
+`;
+
 function RedemptionForm(props: PropTypes) {
-	const mainCss = css`
-		padding: ${space[2]}px;
-	`;
-	const instructionsDivCss = css`
-		margin-top: -10px;
-		padding: ${space[2]}px;
-		${from.tablet} {
-			min-height: 475px;
-		}
-		hr {
-			border: 0;
-			border-top: solid 1px ${line.primary};
-		}
-	`;
-	const hrCss = css`
-		margin-bottom: 16px;
-	`;
-	const headingCss = css`
-		${headline.xsmall()};
-		font-weight: bold;
-		margin-bottom: 16px;
-	`;
 	const validationText = props.error ? null : 'This code is valid';
 	const signedIn = doesUserAppearToBeSignedIn();
 	const missingNames =
@@ -137,30 +183,44 @@ function RedemptionForm(props: PropTypes) {
 							ev.preventDefault();
 						}}
 					>
-						<div css={mainCss}>
-							<h2 css={headingCss}>
+						<div css={redemptionForm}>
+							<h1 css={headingCss}>
 								Enjoy your Digital Subscription from the Guardian
-							</h2>
+							</h1>
 							{missingNames ? <MissingNamesMessage /> : null}
-							<div>
+							<FormSection>
 								<TextInput
 									autoComplete="off"
-									value={props.userCode}
+									value={props.userCode ?? ''}
 									onChange={(e) => props.setUserCode(e.target.value)}
-									error={props.error}
-									success={validationText}
+									error={props.error ?? ''}
+									success={validationText ?? ''}
 									label="Insert code"
-									css={css`
-										max-width: 300px;
-									`}
 								/>
-							</div>
+							</FormSection>
+							<FormSection title="Your details">
+								<PersonalDetails
+									firstName={props.user.firstName}
+									setFirstName={props.setFirstName}
+									lastName={props.user.lastName}
+									setLastName={props.setLastName}
+									email={props.user.email}
+									setEmail={props.setEmail}
+									confirmEmail={props.confirmEmail}
+									setConfirmEmail={props.setConfirmEmail}
+									isSignedIn={props.user.isSignedIn}
+									fetchAndStoreUserType={props.fetchAndStoreUserType}
+									telephone={props.telephone}
+									setTelephone={props.setTelephone}
+									formErrors={[]}
+									signOut={props.signOut}
+								/>
+							</FormSection>
 						</div>
 						<div css={instructionsDivCss}>
 							<hr css={hrCss} />
 							<Button
-								onClick={() => props.submit(props.userCode || '')}
-								showIcon
+								onClick={() => props.submit(props.userCode ?? '')}
 								iconSide="right"
 								icon={<SvgArrowRightStraight />}
 							>
@@ -174,4 +234,4 @@ function RedemptionForm(props: PropTypes) {
 	);
 } // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(RedemptionForm);
+export default connector(RedemptionForm);

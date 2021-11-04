@@ -1,8 +1,7 @@
-import { fetchJson } from 'helpers/async/fetch';
-import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import type { Dispatch } from 'redux';
 import 'redux';
 import type { Participations } from 'helpers/abTests/abtest';
+import { fetchJson } from 'helpers/async/fetch';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -25,6 +24,7 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { getOrigin } from 'helpers/urls/url';
 import type { User } from 'helpers/user/user';
+import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 type ValidationResult = {
 	valid: boolean;
@@ -32,7 +32,7 @@ type ValidationResult = {
 	errorMessage: Option<string>;
 };
 
-function validate(userCode: string) {
+function validate(userCode: string): Promise<ValidationResult> {
 	if (userCode === '') {
 		return Promise.resolve({
 			valid: false,
@@ -45,7 +45,7 @@ function validate(userCode: string) {
 	const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${
 		isTestUser ? '?isTestUser=true' : ''
 	}`;
-	return fetchJson(validationUrl, {});
+	return fetchJson(validationUrl, {}) as Promise<ValidationResult>;
 }
 
 function dispatchError(dispatch: Dispatch<Action>, error: Option<string>) {
@@ -71,15 +71,15 @@ function validateWithServer(userCode: string, dispatch: Dispatch<Action>) {
 			dispatchError(dispatch, result.errorMessage);
 			dispatchReaderType(dispatch, result.readerType);
 		})
-		.catch((error) => {
+		.catch((error: Error) => {
 			dispatchError(
 				dispatch,
-				`An error occurred while validating this code: ${error}`,
+				`An error occurred while validating this code: ${error.message}`,
 			);
 		});
 }
 
-function validateUserCode(userCode: string, dispatch: Dispatch<Action>) {
+function validateUserCode(userCode: string, dispatch: Dispatch<Action>): void {
 	dispatch({
 		type: 'SET_USER_CODE',
 		userCode,
@@ -93,7 +93,7 @@ function validateUserCode(userCode: string, dispatch: Dispatch<Action>) {
 	}
 }
 
-function submitCode(userCode: string, dispatch: Dispatch<Action>) {
+function submitCode(userCode: string, dispatch: Dispatch<Action>): void {
 	validate(userCode)
 		.then((result: ValidationResult) => {
 			if (result.valid) {
@@ -103,10 +103,10 @@ function submitCode(userCode: string, dispatch: Dispatch<Action>) {
 				dispatchError(dispatch, result.errorMessage);
 			}
 		})
-		.catch((error) => {
+		.catch((error: Error) => {
 			dispatchError(
 				dispatch,
-				`An error occurred while validating this code: ${error}`,
+				`An error occurred while validating this code: ${error.message}`,
 			);
 		});
 }
@@ -128,8 +128,8 @@ function buildRegularPaymentRequest(
 	};
 	return {
 		title: null,
-		firstName: firstName || '',
-		lastName: lastName || '',
+		firstName: firstName ?? '',
+		lastName: lastName ?? '',
 		billingAddress: {
 			country: countryId,
 			state: null,
@@ -139,7 +139,7 @@ function buildRegularPaymentRequest(
 			city: null,
 		},
 		deliveryAddress: null,
-		email: email || '',
+		email: email ?? '',
 		telephoneNumber: null,
 		product,
 		firstDeliveryDate: null,
@@ -162,7 +162,7 @@ function createSubscription(
 	participations: Participations,
 	csrf: Csrf,
 	dispatch: Dispatch<Action>,
-) {
+): void {
 	if (readerType == null) {
 		dispatchError(
 			dispatch,
@@ -190,7 +190,7 @@ function createSubscription(
 				window.location.replace(thankyouUrl);
 			}
 		} else {
-			dispatchError(dispatch, appropriateErrorMessage(result.error));
+			dispatchError(dispatch, appropriateErrorMessage(result.error ?? ''));
 			dispatch({
 				type: 'SET_STAGE',
 				stage: 'form',
@@ -203,7 +203,9 @@ function createSubscription(
 		data,
 		participations,
 		csrf,
-	).then(handleSubscribeResult);
+	)
+		.then(handleSubscribeResult)
+		.catch(() => null);
 }
 
 export { validateUserCode, submitCode, createSubscription };

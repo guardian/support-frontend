@@ -11,6 +11,8 @@ const mapStateToProps = (state: RedemptionPageState) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,
 	email: state.page.user.email,
 	csrf: state.page.csrf,
+	error: state.page.marketingConsent.requestPending,
+	requestPending: state.page.marketingConsent.requestPending,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
