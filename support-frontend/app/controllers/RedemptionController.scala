@@ -120,7 +120,7 @@ class RedemptionController(
         </script>""")
     })
 
-  def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit request: AuthRequest[Any]): Result = {
+  def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit request: OptionalAuthRequest[Any]): Result = {
     SafeLogger.error(scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}")
     Ok(subscriptionRedemptionForm(
       title = title,
@@ -139,26 +139,24 @@ class RedemptionController(
   }
 
   def displayProcessing(redemptionCode: RawRedemptionCode): Action[AnyContent] =
-    authenticatedAction(subscriptionsClientId).async {
-      implicit request: AuthRequest[Any] =>
-        userHasDigitalSubscription(membersDataService, request.user).flatMap(
-          userHasSub =>
-            if (userHasSub)
-              Future.successful(redirectToExistingThankYouPage)
-            else
-              tryToShowProcessingPage(redemptionCode)
-        )
+    maybeAuthenticatedAction(subscriptionsClientId).async { implicit request =>
+      tryToShowProcessingPage(redemptionCode)
     }
 
-  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode)(implicit request: AuthRequest[Any]) = {
-    val processingPage: EitherT[Future, (String, Boolean), Result] = for {
-      user <- identityService.getUser(request.user.minimalUser).leftMap((_, false))
-      isTestUser = testUsers.isTestUser(request)
-      codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
-      readerType <- codeValidator.validate(redemptionCode).leftMap((_, isTestUser))
-    } yield showProcessing(redemptionCode, readerType, user)
+  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode)(implicit request: OptionalAuthRequest[Any]) = {
+    val isTestUser = testUsers.isTestUser(request)
+    val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
+    val maybeProcessingPage = request.user match {
+      case Some(user) => for {
+          authedUser <- identityService.getUser(user.minimalUser).leftMap((_, false))
+          readerType <- codeValidator.validate(redemptionCode).leftMap((_, isTestUser))
+        } yield showProcessing(redemptionCode, readerType, Some(authedUser))
+      case _ => {
+        codeValidator.validate(redemptionCode).map(readerType => showProcessing(redemptionCode, readerType, None)).leftMap((_, isTestUser))
+      }
+    }
 
-    processingPage.leftMap {
+    maybeProcessingPage.leftMap {
       case (error, isTestUser) => displayError(redemptionCode, error, isTestUser)
     }.merge
   }
@@ -166,8 +164,8 @@ class RedemptionController(
   private def showProcessing(
     redemptionCode: RawRedemptionCode,
     readerType: ReaderType,
-    user: IdUser
-  )(implicit request: AuthRequest[Any]): Result =
+    user: Option[IdUser]
+  )(implicit request: OptionalAuthRequest[Any]): Result =
     Ok(subscriptionRedemptionForm(
       title = title,
       mainElement = id,
@@ -179,7 +177,7 @@ class RedemptionController(
       redemptionCode = redemptionCode,
       maybeRedemptionError = None,
       maybeReaderType = Some(readerType),
-      user = Some(user),
+      user = user,
       submitted = true
     ))
 
