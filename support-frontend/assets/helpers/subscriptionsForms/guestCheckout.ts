@@ -15,15 +15,12 @@ export const fetchAndStoreUserType =
 			| CheckoutState
 			| WithDeliveryCheckoutState
 			| RedemptionPageState,
+		callback = (userType: UserTypeFromIdentityResponse) =>
+			void dispatch(setUserTypeFromIdentityResponse(userType)),
 	): void => {
 		const state = getState();
 		const { csrf } = state.page;
 		const { isSignedIn } = state.page.checkout;
-		void getUserTypeFromIdentity(
-			email,
-			isSignedIn,
-			csrf,
-			(userType: UserTypeFromIdentityResponse) =>
-				void dispatch(setUserTypeFromIdentityResponse(userType)),
-		);
+
+		void getUserTypeFromIdentity(email, isSignedIn, csrf, callback);
 	};

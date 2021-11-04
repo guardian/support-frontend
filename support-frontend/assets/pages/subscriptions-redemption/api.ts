@@ -23,7 +23,6 @@ import {
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { getOrigin } from 'helpers/urls/url';
-import type { User } from 'helpers/user/user';
 import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 type ValidationResult = {
@@ -93,12 +92,35 @@ function validateUserCode(userCode: string, dispatch: Dispatch<Action>): void {
 	}
 }
 
-function submitCode(userCode: string, dispatch: Dispatch<Action>): void {
+function submitCode(
+	userCode: string,
+	readerType: Option<ReaderType>,
+	firstName: string,
+	lastName: string,
+	email: string,
+	telephone: string,
+	currencyId: IsoCurrency,
+	countryId: IsoCountry,
+	participations: Participations,
+	csrf: Csrf,
+	dispatch: Dispatch<Action>,
+): void {
 	validate(userCode)
 		.then((result: ValidationResult) => {
 			if (result.valid) {
-				const submitUrl = `${getOrigin()}/subscribe/redeem/create/${userCode}`;
-				window.location.assign(submitUrl);
+				createSubscription(
+					userCode,
+					readerType,
+					firstName,
+					lastName,
+					email,
+					telephone,
+					currencyId,
+					countryId,
+					participations,
+					csrf,
+					dispatch,
+				);
 			} else {
 				dispatchError(dispatch, result.errorMessage);
 			}
@@ -114,12 +136,14 @@ function submitCode(userCode: string, dispatch: Dispatch<Action>): void {
 function buildRegularPaymentRequest(
 	userCode: string,
 	readerType: ReaderType,
-	user: User,
+	firstName: string,
+	lastName: string,
+	email: string,
+	telephone: string,
 	currencyId: IsoCurrency,
 	countryId: IsoCountry,
 	participations: Participations,
 ): RegularPaymentRequest {
-	const { firstName, lastName, email } = user;
 	const product = {
 		productType: DigitalPack,
 		currency: currencyId,
@@ -128,8 +152,8 @@ function buildRegularPaymentRequest(
 	};
 	return {
 		title: null,
-		firstName: firstName ?? '',
-		lastName: lastName ?? '',
+		firstName,
+		lastName,
 		billingAddress: {
 			country: countryId,
 			state: null,
@@ -139,8 +163,8 @@ function buildRegularPaymentRequest(
 			city: null,
 		},
 		deliveryAddress: null,
-		email: email ?? '',
-		telephoneNumber: null,
+		email: email,
+		telephoneNumber: telephone,
 		product,
 		firstDeliveryDate: null,
 		paymentFields: {
@@ -156,7 +180,10 @@ function buildRegularPaymentRequest(
 function createSubscription(
 	userCode: string,
 	readerType: Option<ReaderType>,
-	user: User,
+	firstName: string,
+	lastName: string,
+	email: string,
+	telephone: string,
 	currencyId: IsoCurrency,
 	countryId: IsoCountry,
 	participations: Participations,
@@ -174,11 +201,16 @@ function createSubscription(
 	const data = buildRegularPaymentRequest(
 		userCode,
 		readerType,
-		user,
+		firstName,
+		lastName,
+		email,
+		telephone,
 		currencyId,
 		countryId,
 		participations,
 	);
+
+	console.log(data);
 
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {

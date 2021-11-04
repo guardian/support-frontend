@@ -1,7 +1,8 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -11,33 +12,36 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
-import type { User } from 'helpers/user/user';
 import { createSubscription } from 'pages/subscriptions-redemption/api';
 import type {
 	Action,
 	RedemptionPageState,
 	Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+
 // ----- Types ----- //
 type PropTypes = {
 	stage: Stage;
-	checkoutForm: Node;
-	thankYouContentPending: Node;
-	thankYouContent: Node;
-	userCode: string;
+	checkoutForm: ReactNode;
+	thankYouContentPending: ReactNode;
+	thankYouContent: ReactNode;
+	userCode: Option<string>;
 	readerType: Option<ReaderType>;
-	user: User;
+	firstName: string;
+	lastName: string;
+	email: string;
+	telephone: string;
 	currencyId: IsoCurrency;
 	countryId: IsoCountry;
 	participations: Participations;
-	csrf: Option<Csrf>;
+	csrf: Csrf;
 	createSub: (arg0: PropTypes) => void;
 };
 
 // ----- State/Props Maps ----- //
 function mapStateToProps(state: RedemptionPageState) {
 	return {
-		stage: state.page.stage,
+		stage: state.page.checkout.stage,
 		userCode: state.page.userCode,
 		readerType: state.page.readerType,
 		user: state.page.user,
@@ -45,21 +49,26 @@ function mapStateToProps(state: RedemptionPageState) {
 		countryId: state.common.internationalisation.countryId,
 		participations: state.common.abParticipations,
 		csrf: state.page.csrf,
+		firstName: state.page.checkout.firstName,
+		lastName: state.page.checkout.lastName,
+		email: state.page.checkout.email,
+		telephone: state.page.checkout.telephone,
 	};
 }
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
 	const createSub = (props: PropTypes) =>
 		createSubscription(
-			props.userCode,
+			props.userCode ?? '',
 			props.readerType,
-			props.user,
+			props.firstName,
+			props.lastName,
+			props.email,
+			props.telephone,
 			props.currencyId,
 			props.countryId,
 			props.participations,
-			props.csrf || {
-				token: '',
-			},
+			props.csrf,
 			dispatch,
 		);
 

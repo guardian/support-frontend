@@ -1,9 +1,9 @@
-import { routes } from 'helpers/urls/routes';
 import type {
 	AcquisitionABTest,
 	OphanIds,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
+import { routes } from 'helpers/urls/routes';
 import 'helpers/tracking/acquisitions';
 import 'helpers/forms/errorReasons';
 import 'helpers/csrf/csrfReducer';
@@ -349,7 +349,6 @@ function postRegularPaymentRequest(
 	participations: Participations,
 	csrf: CsrfState,
 ): Promise<PaymentResult> {
-  debugger
 	return logPromise(
 		fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)),
 	)
