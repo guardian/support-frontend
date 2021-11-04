@@ -76,7 +76,7 @@ class RedemptionController(
               mainElement = id,
               js = js,
               css = css,
-              csrf = None,
+              csrf = Some(CSRF.getToken.value),
               isTestUser = isTestUser,
               stage = "checkout",
               redemptionCode = normalisedCode,
