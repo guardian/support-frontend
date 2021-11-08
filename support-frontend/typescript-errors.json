@@ -8,7 +8,7 @@
             "TS2322": 271,
             "TS2578": 22,
             "TS2339": 149,
-            "TS2345": 162,
+            "TS2345": 159,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
@@ -192,10 +192,10 @@
             "assets/helpers/forms/formValidation.ts": 4,
             "assets/helpers/forms/recaptcha.ts": 1,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
+            "assets/helpers/page/page.ts": 8,
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
             "assets/helpers/subscriptionsForms/rules.ts": 2,
-            "assets/helpers/tracking/acquisitions.ts": 3,
-            "assets/helpers/urls/url.ts": 3,
+            "assets/helpers/tracking/acquisitions.ts": 5,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -250,7 +250,6 @@
             "assets/helpers/forms/stripe.ts": 6,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 3,
-            "assets/helpers/page/page.ts": 7,
             "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts": 5,
             "assets/helpers/tracking/__tests__/googleTagManagerTest.ts": 2,
             "assets/helpers/tracking/googleTagManager.ts": 12,
@@ -265,7 +264,6 @@
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
             "assets/helpers/abTests/__tests__/abtestTest.ts": 7,
-            "assets/helpers/forms/checkouts.ts": 5,
             "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
             "assets/helpers/page/__tests__/pageTest.ts": 4,
@@ -280,6 +278,7 @@
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
+            "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/subscriptions-redemption/marketingConsentContainer.ts": 1,
@@ -287,7 +286,7 @@
             "assets/helpers/internationalisation/country.ts": 2,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
+            "assets/helpers/forms/checkouts.ts": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -1563,6 +1562,10 @@
             "message": "Type 'string | null | undefined' is not assignable to type 'string | number | symbol'."
         },
         {
+            "path": "assets/helpers/page/page.ts",
+            "message": "Type '[string, string][] | string[][]' is not assignable to type '[string, string][]'."
+        },
+        {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Type 'null' is not assignable to type 'number | undefined'."
         },
@@ -1637,10 +1640,6 @@
         {
             "path": "assets/helpers/tracking/acquisitions.ts",
             "message": "Type 'Record<string, any> | null | undefined' is not assignable to type 'ReferrerAcquisitionData | null | undefined'."
-        },
-        {
-            "path": "assets/helpers/urls/url.ts",
-            "message": "Type 'string[][]' is not assignable to type '[string, string][]'."
         },
         {
             "path": "assets/helpers/utilities/utilities.ts",
@@ -3177,22 +3176,6 @@
             "message": "Argument of type 'string | number | null' is not assignable to parameter of type 'string'."
         },
         {
-            "path": "assets/helpers/forms/checkouts.ts",
-            "message": "Argument of type '{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\" | null | undefined; }[]' is not assignable to parameter of type 'ContributionTypeSetting[]'."
-        },
-        {
-            "path": "assets/helpers/forms/checkouts.ts",
-            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/helpers/forms/checkouts.ts",
-            "message": "Argument of type 'string | null' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/helpers/forms/checkouts.ts",
-            "message": "Argument of type 'number | \"other\"' is not assignable to parameter of type 'number'."
-        },
-        {
             "path": "assets/helpers/forms/formValidation.ts",
             "message": "Argument of type 'Date | null' is not assignable to parameter of type 'Date'."
         },
@@ -3417,6 +3400,14 @@
             "message": "Argument of type '{ campaignCode: string; referrerPageviewId: string; referrerUrl: string; componentId: string; componentType: string; source: string; abTests: { name: string; variant: string; }[]; queryParameters: { ...; }[]; }' is not assignable to parameter of type 'ReferrerAcquisitionData'."
         },
         {
+            "path": "assets/helpers/tracking/acquisitions.ts",
+            "message": "Argument of type '[string, string][] | string[][]' is not assignable to parameter of type '[string, string][]'."
+        },
+        {
+            "path": "assets/helpers/tracking/acquisitions.ts",
+            "message": "Argument of type '[string, string][] | string[][]' is not assignable to parameter of type '[string, string][]'."
+        },
+        {
             "path": "assets/helpers/tracking/googleTagManager.ts",
             "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
         },
@@ -3427,14 +3418,6 @@
         {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "Argument of type 'string | Location' is not assignable to parameter of type 'string | number | boolean'."
-        },
-        {
-            "path": "assets/helpers/urls/url.ts",
-            "message": "Argument of type 'Location' is not assignable to parameter of type 'string | URL'."
-        },
-        {
-            "path": "assets/helpers/urls/url.ts",
-            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
         },
         {
             "path": "assets/helpers/user/__tests__/userReducerTest.ts",
@@ -3519,6 +3502,10 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: keyof PaymentMethodMap<...>; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
+            "message": "Argument of type 'string' is not assignable to parameter of type 'keyof PaymentMethodMap<null>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
