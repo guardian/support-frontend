@@ -52,8 +52,9 @@ const init = (): void => {
 			onConsentChange((state) => {
 				// Check users consent state
 				if (
-					state.ccpa?.doNotSell === false ||
-					(state.tcfv2?.consents &&
+					state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
+					state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
+					(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
 						state.tcfv2.consents['1'] && // Store and/or access information on a device
 						state.tcfv2.consents['8'] && // Measure content performance
 						state.tcfv2.consents['10']) // Develop and improve products
