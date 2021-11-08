@@ -12,17 +12,6 @@ import type { RedemptionPageState } from 'pages/subscriptions-redemption/subscri
 function mapStateToProps(state: RedemptionPageState) {
 	return {
 		stage: state.page.checkout.stage,
-		userCode: state.page.userCode,
-		readerType: state.page.readerType,
-		user: state.page.user,
-		currencyId: state.common.internationalisation.currencyId,
-		countryId: state.common.internationalisation.countryId,
-		participations: state.common.abParticipations,
-		csrf: state.page.csrf,
-		firstName: state.page.checkout.firstName,
-		lastName: state.page.checkout.lastName,
-		email: state.page.checkout.email,
-		telephone: state.page.checkout.telephone,
 	};
 }
 

@@ -26,6 +26,7 @@ import { getOrigin } from 'helpers/urls/url';
 import type {
 	Action,
 	RedemptionPageState,
+	Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 type ValidationResult = {
@@ -67,6 +68,13 @@ function dispatchReaderType(
 	});
 }
 
+function dispatchStage(dispatch: Dispatch<Action>, stage: Stage) {
+	dispatch({
+		type: 'SET_STAGE',
+		stage,
+	});
+}
+
 function validateWithServer(userCode: string, dispatch: Dispatch<Action>) {
 	validate(userCode)
 		.then((result: ValidationResult) => {
@@ -100,7 +108,6 @@ function validateFormFields(
 	state: RedemptionPageState,
 ) {
 	const formFieldErrors = applyRedemptionRules(state.page.checkout);
-	console.log(formFieldErrors);
 
 	if (formFieldErrors.length) {
 		dispatch({
@@ -117,20 +124,14 @@ function submitCode(
 ): void {
 	const userCode = state.page.userCode ?? '';
 	if (validateFormFields(dispatch, state)) {
-		dispatch({
-			type: 'SET_STAGE',
-			stage: 'processing',
-		});
+		dispatchStage(dispatch, 'processing');
 		validate(userCode)
 			.then((result: ValidationResult) => {
 				if (result.valid) {
 					createSubscription(dispatch, state);
 				} else {
 					dispatchError(dispatch, result.errorMessage);
-					dispatch({
-						type: 'SET_STAGE',
-						stage: 'form',
-					});
+					dispatchStage(dispatch, 'form');
 				}
 			})
 			.catch((error: Error) => {
@@ -138,6 +139,7 @@ function submitCode(
 					dispatch,
 					`An error occurred while validating this code: ${error.message}`,
 				);
+				dispatchStage(dispatch, 'form');
 			});
 	}
 }
@@ -213,22 +215,13 @@ function createSubscription(
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {
 			if (result.subscriptionCreationPending) {
-				dispatch({
-					type: 'SET_STAGE',
-					stage: 'thankyou-pending',
-				});
+				dispatchStage(dispatch, 'thankyou-pending');
 			} else {
-				dispatch({
-					type: 'SET_STAGE',
-					stage: 'thankyou',
-				});
+				dispatchStage(dispatch, 'thankyou');
 			}
 		} else {
 			dispatchError(dispatch, appropriateErrorMessage(result.error ?? ''));
-			dispatch({
-				type: 'SET_STAGE',
-				stage: 'form',
-			});
+			dispatchStage(dispatch, 'form');
 		}
 	};
 
