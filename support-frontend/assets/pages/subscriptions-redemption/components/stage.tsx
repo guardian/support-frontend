@@ -1,42 +1,12 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
 import React from 'react';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
-import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ReaderType } from 'helpers/productPrice/readerType';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
-import { createSubscription } from 'pages/subscriptions-redemption/api';
-import type {
-	Action,
-	RedemptionPageState,
-	Stage,
-} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-
-// ----- Types ----- //
-type PropTypes = {
-	stage: Stage;
-	checkoutForm: ReactNode;
-	thankYouContentPending: ReactNode;
-	thankYouContent: ReactNode;
-	userCode: Option<string>;
-	readerType: Option<ReaderType>;
-	firstName: string;
-	lastName: string;
-	email: string;
-	telephone: string;
-	currencyId: IsoCurrency;
-	countryId: IsoCountry;
-	participations: Participations;
-	csrf: Csrf;
-	createSub: (arg0: PropTypes) => void;
-};
+import type { RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 // ----- State/Props Maps ----- //
 function mapStateToProps(state: RedemptionPageState) {
@@ -56,26 +26,13 @@ function mapStateToProps(state: RedemptionPageState) {
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-	const createSub = (props: PropTypes) =>
-		createSubscription(
-			props.userCode ?? '',
-			props.readerType,
-			props.firstName,
-			props.lastName,
-			props.email,
-			props.telephone,
-			props.currencyId,
-			props.countryId,
-			props.participations,
-			props.csrf,
-			dispatch,
-		);
+const connector = connect(mapStateToProps);
 
-	return {
-		createSub,
-	};
-}
+type PropTypes = ConnectedProps<typeof connector> & {
+	checkoutForm: ReactNode;
+	thankYouContentPending: ReactNode;
+	thankYouContent: ReactNode;
+};
 
 // ----- Component ----- //
 function CheckoutStage(props: PropTypes) {
@@ -97,7 +54,6 @@ function CheckoutStage(props: PropTypes) {
 			);
 
 		case 'processing':
-			props.createSub(props);
 			return (
 				<div className="checkout-content">
 					{props.checkoutForm}
@@ -112,4 +68,4 @@ function CheckoutStage(props: PropTypes) {
 	}
 } // ----- Export ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(CheckoutStage);
+export default connector(CheckoutStage);

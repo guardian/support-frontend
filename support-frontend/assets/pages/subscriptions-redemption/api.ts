@@ -2,7 +2,6 @@ import type { Dispatch } from 'redux';
 import 'redux';
 import type { Participations } from 'helpers/abTests/abtest';
 import { fetchJson } from 'helpers/async/fetch';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
@@ -15,6 +14,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { applyRedemptionRules } from 'helpers/subscriptionsForms/rules';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
@@ -23,7 +23,10 @@ import {
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { getOrigin } from 'helpers/urls/url';
-import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type {
+	Action,
+	RedemptionPageState,
+} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 type ValidationResult = {
 	valid: boolean;
@@ -92,45 +95,51 @@ function validateUserCode(userCode: string, dispatch: Dispatch<Action>): void {
 	}
 }
 
-function submitCode(
-	userCode: string,
-	readerType: Option<ReaderType>,
-	firstName: string,
-	lastName: string,
-	email: string,
-	telephone: string,
-	currencyId: IsoCurrency,
-	countryId: IsoCountry,
-	participations: Participations,
-	csrf: Csrf,
+function validateFormFields(
 	dispatch: Dispatch<Action>,
-): void {
-	validate(userCode)
-		.then((result: ValidationResult) => {
-			if (result.valid) {
-				createSubscription(
-					userCode,
-					readerType,
-					firstName,
-					lastName,
-					email,
-					telephone,
-					currencyId,
-					countryId,
-					participations,
-					csrf,
-					dispatch,
-				);
-			} else {
-				dispatchError(dispatch, result.errorMessage);
-			}
-		})
-		.catch((error: Error) => {
-			dispatchError(
-				dispatch,
-				`An error occurred while validating this code: ${error.message}`,
-			);
+	state: RedemptionPageState,
+) {
+	const formFieldErrors = applyRedemptionRules(state.page.checkout);
+	console.log(formFieldErrors);
+
+	if (formFieldErrors.length) {
+		dispatch({
+			type: 'SET_FORM_ERRORS',
+			errors: formFieldErrors,
 		});
+	}
+	return formFieldErrors.length === 0;
+}
+
+function submitCode(
+	dispatch: Dispatch<Action>,
+	state: RedemptionPageState,
+): void {
+	const userCode = state.page.userCode ?? '';
+	if (validateFormFields(dispatch, state)) {
+		dispatch({
+			type: 'SET_STAGE',
+			stage: 'processing',
+		});
+		validate(userCode)
+			.then((result: ValidationResult) => {
+				if (result.valid) {
+					createSubscription(dispatch, state);
+				} else {
+					dispatchError(dispatch, result.errorMessage);
+					dispatch({
+						type: 'SET_STAGE',
+						stage: 'form',
+					});
+				}
+			})
+			.catch((error: Error) => {
+				dispatchError(
+					dispatch,
+					`An error occurred while validating this code: ${error.message}`,
+				);
+			});
+	}
 }
 
 function buildRegularPaymentRequest(
@@ -178,19 +187,10 @@ function buildRegularPaymentRequest(
 }
 
 function createSubscription(
-	userCode: string,
-	readerType: Option<ReaderType>,
-	firstName: string,
-	lastName: string,
-	email: string,
-	telephone: string,
-	currencyId: IsoCurrency,
-	countryId: IsoCountry,
-	participations: Participations,
-	csrf: Csrf,
 	dispatch: Dispatch<Action>,
+	state: RedemptionPageState,
 ): void {
-	if (readerType == null) {
+	if (state.page.readerType == null) {
 		dispatchError(
 			dispatch,
 			'An error occurred while redeeming this code, please try again later',
@@ -199,27 +199,29 @@ function createSubscription(
 	}
 
 	const data = buildRegularPaymentRequest(
-		userCode,
-		readerType,
-		firstName,
-		lastName,
-		email,
-		telephone,
-		currencyId,
-		countryId,
-		participations,
+		state.page.userCode ?? '',
+		state.page.readerType,
+		state.page.checkout.firstName,
+		state.page.checkout.lastName,
+		state.page.checkout.email,
+		state.page.checkout.telephone,
+		state.common.internationalisation.currencyId,
+		state.common.internationalisation.countryId,
+		state.common.abParticipations,
 	);
-
-	console.log(data);
 
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {
 			if (result.subscriptionCreationPending) {
-				const thankyouUrl = `${getOrigin()}/subscribe/redeem/thankyou-pending`;
-				window.location.replace(thankyouUrl);
+				dispatch({
+					type: 'SET_STAGE',
+					stage: 'thankyou-pending',
+				});
 			} else {
-				const thankyouUrl = `${getOrigin()}/subscribe/redeem/thankyou`;
-				window.location.replace(thankyouUrl);
+				dispatch({
+					type: 'SET_STAGE',
+					stage: 'thankyou',
+				});
 			}
 		} else {
 			dispatchError(dispatch, appropriateErrorMessage(result.error ?? ''));
@@ -233,8 +235,8 @@ function createSubscription(
 	postRegularPaymentRequest(
 		routes.subscriptionCreate,
 		data,
-		participations,
-		csrf,
+		state.common.abParticipations,
+		state.page.csrf,
 	)
 		.then(handleSubscribeResult)
 		.catch(() => null);

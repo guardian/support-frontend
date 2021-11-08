@@ -16,13 +16,7 @@ import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ReaderType } from 'helpers/productPrice/readerType';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
-import type { Option } from 'helpers/types/option';
 import { doesUserAppearToBeSignedIn, signOut } from 'helpers/user/user';
 import {
 	submitCode,
@@ -42,36 +36,9 @@ import type {
 // 	submit: (arg0: string) => void;
 // };
 
-function submit(
-	userCode: string,
-	readerType: Option<ReaderType>,
-	firstName: string,
-	lastName: string,
-	email: string,
-	telephone: string,
-	currencyId: IsoCurrency,
-	countryId: IsoCountry,
-	participations: Participations,
-	csrf: Csrf,
-) {
-	return (dispatch: Dispatch<Action>) =>
-		submitCode(
-			userCode,
-			readerType,
-			firstName,
-			lastName,
-			email,
-			telephone,
-			currencyId,
-			countryId,
-			participations,
-			csrf,
-			dispatch,
-		);
-}
-
 function mapStateToProps(state: RedemptionPageState) {
 	return {
+		stage: state.page.checkout.stage,
 		user: state.page.user,
 		userCode: state.page.userCode,
 		readerType: state.page.readerType,
@@ -82,6 +49,7 @@ function mapStateToProps(state: RedemptionPageState) {
 		email: state.page.checkout.email,
 		confirmEmail: state.page.checkout.confirmEmail,
 		telephone: state.page.checkout.telephone,
+		formErrors: state.page.checkout.errors,
 		currencyId: state.common.internationalisation.currencyId,
 		countryId: state.common.internationalisation.countryId,
 		participations: state.common.abParticipations,
@@ -92,7 +60,9 @@ function mapDispatchToProps() {
 	return {
 		setUserCode: (userCode: string) => (dispatch: Dispatch<Action>) =>
 			validateUserCode(userCode, dispatch),
-		submit,
+		submitForm:
+			() => (dispatch: Dispatch<Action>, getState: () => RedemptionPageState) =>
+				submitCode(dispatch, getState()),
 		setFirstName: (firstName: string) => (dispatch: Dispatch<Action>) =>
 			dispatch({
 				type: 'SET_FIRST_NAME',
@@ -219,22 +189,6 @@ function RedemptionForm(props: PropTypes) {
 	const signedIn = doesUserAppearToBeSignedIn();
 	const missingNames =
 		signedIn && props.user.firstName === '' && props.user.lastName === '';
-	const buttonText = signedIn ? 'Activate' : 'Continue to account setup';
-
-	function submitForm() {
-		props.submit(
-			props.userCode ?? '',
-			props.readerType,
-			props.firstName,
-			props.lastName,
-			props.email,
-			props.telephone,
-			props.currencyId,
-			props.countryId,
-			props.participations,
-			props.csrf,
-		);
-	}
 
 	return (
 		<div>
@@ -243,6 +197,7 @@ function RedemptionForm(props: PropTypes) {
 					<Form
 						onSubmit={(ev) => {
 							ev.preventDefault();
+							props.submitForm();
 						}}
 					>
 						<div css={redemptionForm}>
@@ -274,7 +229,7 @@ function RedemptionForm(props: PropTypes) {
 									fetchAndStoreUserType={props.fetchAndStoreUserType}
 									telephone={props.telephone}
 									setTelephone={props.setTelephone}
-									formErrors={[]}
+									formErrors={props.formErrors}
 									signOut={props.signOut}
 								/>
 							</FormSection>
@@ -282,11 +237,11 @@ function RedemptionForm(props: PropTypes) {
 						<div css={instructionsDivCss}>
 							<hr css={hrCss} />
 							<Button
-								onClick={submitForm}
+								type="submit"
 								iconSide="right"
 								icon={<SvgArrowRightStraight />}
 							>
-								{buttonText}
+								Activate
 							</Button>
 						</div>
 					</Form>

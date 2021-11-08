@@ -116,10 +116,7 @@ GET  /subscribe/paper/checkout                                     controllers.P
 
 # redemptions
 GET  /subscribe/redeem                                             controllers.RedemptionController.displayForm(redemptionCode: String)
-GET  /subscribe/redeem/create/:redemptionCode                      controllers.RedemptionController.displayProcessing(redemptionCode: String)
 GET  /subscribe/redeem/validate/:redemptionCode                    controllers.RedemptionController.validateCode(redemptionCode: String, isTestUser: Option[Boolean])
-GET  /subscribe/redeem/thankyou                                    controllers.RedemptionController.displayThankYou(stage = "thankyou")
-GET  /subscribe/redeem/thankyou-pending                            controllers.RedemptionController.displayThankYou(stage = "thankyou-pending")
 GET  /r/:redemptionCode                                            controllers.RedemptionController.redirect(redemptionCode: String)
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)

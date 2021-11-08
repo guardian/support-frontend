@@ -9,6 +9,8 @@ import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { CommonState } from 'helpers/page/commonReducer';
 import type { ReaderType } from 'helpers/productPrice/readerType';
+import type { FormField } from 'helpers/subscriptionsForms/formFields';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { getUser } from 'helpers/user/user';
 import type { User } from 'helpers/user/userReducer';
@@ -25,6 +27,7 @@ export type RedemptionCheckoutState = {
 	telephone: string;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
+	errors: Array<FormError<FormField>>;
 };
 
 export type RedemptionFormState = {
@@ -44,6 +47,10 @@ export type RedemptionPageState = {
 
 // ------- Actions ---------- //
 export type Action =
+	| {
+			type: 'SET_STAGE';
+			stage: Stage;
+	  }
 	| {
 			type: 'SET_USER_CODE';
 			userCode: string;
@@ -83,6 +90,10 @@ export type Action =
 	| {
 			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE';
 			userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
+	  }
+	| {
+			type: 'SET_FORM_ERRORS';
+			errors: Array<FormError<FormField>>;
 	  };
 
 function createRedemptionCheckoutReducer() {
@@ -97,6 +108,7 @@ function createRedemptionCheckoutReducer() {
 		telephone: '',
 		userTypeFromIdentityResponse: 'noRequestSent',
 		isSignedIn: user.isSignedIn,
+		errors: [],
 	};
 
 	const redemptionCheckoutReducer = (
@@ -144,6 +156,11 @@ function createRedemptionCheckoutReducer() {
 				return {
 					...previousState,
 					userTypeFromIdentityResponse: action.userTypeFromIdentityResponse,
+				};
+			case 'SET_FORM_ERRORS':
+				return {
+					...previousState,
+					errors: action.errors,
 				};
 
 			default:
