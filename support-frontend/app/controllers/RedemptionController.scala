@@ -87,7 +87,6 @@ class RedemptionController(
             ))
         )
       } yield form
-
   }
 
   def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit request: OptionalAuthRequest[Any]): Result = {
