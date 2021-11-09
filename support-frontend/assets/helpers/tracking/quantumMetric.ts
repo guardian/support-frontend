@@ -19,7 +19,7 @@ const addQM = (): void => {
 	qtm.async = true;
 	qtm.src =
 		'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js';
-	qtm.integrity = 'sha256-EgTDwEe1o6/yOkCHRanpJrDBbdGyHnc+mxy6Cxd9vzk=';
+	qtm.integrity = 'sha256-wlN4E8ntYnyvTWN4KnYXUDtF8ZBCLtP0BQs1FBEheU4=';
 	qtm.crossOrigin = 'anonymous';
 	const d = document.getElementsByTagName('script')[0];
 	if (!window.QuantumMetricAPI && d.parentNode) {
