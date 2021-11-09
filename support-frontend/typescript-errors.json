@@ -2163,7 +2163,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/helpers/options.ts",
-            "message": "Type 'string | null | undefined' is not assignable to type 'PaperProductOptions'."
+            "message": "Type 'string' is not assignable to type 'PaperProductOptions'."
         },
         {
             "path": "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx",
@@ -3593,7 +3593,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/helpers/options.ts",
-            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type '\"Saturday\" | \"Sunday\" | \"Weekend\" | \"Sixday\" | \"Everyday\"'."
+            "message": "Argument of type 'string' is not assignable to parameter of type '\"Saturday\" | \"Sunday\" | \"Weekend\" | \"Sixday\" | \"Everyday\"'."
         },
         {
             "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",

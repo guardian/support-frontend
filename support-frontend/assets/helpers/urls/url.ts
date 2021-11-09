@@ -12,10 +12,7 @@ const DOMAINS: Record<Env, Domain> = {
 };
 
 // ----- Functions ----- //
-const getQueryParameter = (
-	paramName: string,
-	defaultValue?: string,
-): string | null | undefined => {
+const getQueryParameter = (paramName: string, defaultValue = ''): string => {
 	const params = new URL(window.location.href).searchParams;
 	return (
 		params.get(paramName) ??

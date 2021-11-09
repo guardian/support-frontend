@@ -123,7 +123,7 @@ function getIsRemoteFromAcquisitionData(): boolean {
 function getTestFromAcquisitionData(): AcquisitionABTest | null | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
-	if (acquisitionDataParam == null) {
+	if (!acquisitionDataParam) {
 		return null;
 	}
 

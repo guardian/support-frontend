@@ -136,7 +136,7 @@ function getAmountFromUrl(): number | 'other' | null {
 		return 'other';
 	}
 
-	const amount = parseInt(selected as string, 10);
+	const amount = parseInt(selected, 10);
 
 	if (!Number.isNaN(amount)) {
 		return amount;
