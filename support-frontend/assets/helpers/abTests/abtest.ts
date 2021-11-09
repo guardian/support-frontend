@@ -88,7 +88,7 @@ function getParticipationsFromUrl(): Participations | null | undefined {
 
 	if (hashUrl.startsWith('#ab-')) {
 		const [testId, variant] = decodeURI(hashUrl.substr(4)).split('=');
-		const test = {};
+		const test: Record<string, string> = {};
 		test[testId] = variant;
 		return test;
 	}
@@ -97,7 +97,7 @@ function getParticipationsFromUrl(): Participations | null | undefined {
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
-	if (window && window.guardian && window.guardian.serversideTests) {
+	if (!(Object.keys(window.guardian.serversideTests).length === 0)) {
 		return window.guardian.serversideTests;
 	}
 
@@ -112,8 +112,8 @@ function getIsRemoteFromAcquisitionData(): boolean {
 	}
 
 	try {
-		const data = JSON.parse(queryString);
-		return data && !!data.isRemote;
+		const data = JSON.parse(queryString) as Record<string, unknown>;
+		return !!data.isRemote;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
 		return false;
@@ -128,13 +128,12 @@ function getTestFromAcquisitionData(): AcquisitionABTest | null | undefined {
 	}
 
 	try {
-		const acquisitionData = JSON.parse(acquisitionDataParam);
+		const acquisitionData = JSON.parse(acquisitionDataParam) as Record<
+			'abTest',
+			AcquisitionABTest
+		>;
 
-		if (
-			acquisitionData.abTest &&
-			acquisitionData.abTest.name &&
-			acquisitionData.abTest.variant
-		) {
+		if (acquisitionData.abTest.name && acquisitionData.abTest.variant) {
 			return acquisitionData.abTest;
 		}
 
@@ -158,10 +157,10 @@ function userInBreakpoint(audience: Audience): boolean {
 
 	const minWidthMediaQuery = minWidth
 		? `(min-width:${breakpoints[minWidth]}px)`
-		: null;
+		: '';
 	const maxWidthMediaQuery = maxWidth
 		? `(max-width:${breakpoints[maxWidth]}px)`
-		: null;
+		: '';
 	const mediaQuery =
 		minWidthMediaQuery && maxWidthMediaQuery
 			? `${minWidthMediaQuery} and ${maxWidthMediaQuery}`
@@ -184,7 +183,7 @@ function userInTest(
 	}
 
 	const audience =
-		audiences[country] || audiences[countryGroupId] || audiences.ALL;
+		audiences[country] ?? audiences[countryGroupId] ?? audiences.ALL;
 
 	if (!audience) {
 		return false;
@@ -200,7 +199,7 @@ function userInTest(
 }
 
 function randomNumber(mvtId: number, seed: number): number {
-	const rng = seedrandom(mvtId + seed);
+	const rng = seedrandom(`${mvtId + seed}`);
 	return Math.abs(rng.int32());
 }
 
@@ -252,7 +251,7 @@ function assignUserToVariant(
 function targetPageMatches(
 	locationPath: string,
 	targetPage: (string | null | undefined) | RegExp,
-) {
+): boolean {
 	if (!targetPage) {
 		return true;
 	}
@@ -327,10 +326,6 @@ function getAmountsTestParticipations(
 	countryGroupId: CountryGroupId,
 	settings: Settings,
 ): Participations | null | undefined {
-	if (!settings.amounts) {
-		return null;
-	}
-
 	if (
 		!targetPageMatches(
 			window.location.pathname,
@@ -383,7 +378,7 @@ const init = (
 const getVariantsAsString = (participation: Participations): string => {
 	const variants: string[] = [];
 	Object.keys(participation).forEach((testId) => {
-		variants.push(`${testId}=${participation[testId as any]}`);
+		variants.push(`${testId}=${participation[testId]}`);
 	});
 	return variants.join('; ');
 };
