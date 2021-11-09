@@ -114,7 +114,7 @@ const getIntroductoryPriceDescription = (
 		introPrice.periodLength,
 		introPrice.periodType,
 	);
-	return `${glyph}${introPrice.price}${separator}${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
+	return `${glyph}${introPrice.price}${separator}6 ${periodType} (then ${standardCopy})`;
 };
 
 function getPriceDescription(
@@ -179,7 +179,7 @@ function getSimplifiedPriceDescription(
 			introPrice.periodLength,
 			introPrice.periodType,
 		);
-		return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
+		return `for 6 ${periodType} (then ${standardCopy})`;
 	}
 
 	if (hasDiscount(promotion)) {
