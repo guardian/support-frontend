@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import seedrandom from 'seedrandom';
 import type { $Keys } from 'utility-types';
-import * as cookie from 'helpers/storage/cookie';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
+import * as cookie from 'helpers/storage/cookie';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { getQueryParameter } from 'helpers/urls/url';
 import { tests } from './abtestDefinitions';
