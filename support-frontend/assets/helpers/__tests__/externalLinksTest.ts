@@ -53,7 +53,7 @@ describe('externalLinks', () => {
 		});
 		const usDefaultLink = `${appStoreRoot}/us/${iosPremiumAppProduct}${iosPremiumTail}`;
 		it('should return default /us/ app store link for EU and International countries', () => {
-			[EURCountries, International].forEach((c) =>
+			([EURCountries, International] as CountryGroupId[]).forEach((c) =>
 				expect(getIosAppUrl(c).startsWith(usDefaultLink)),
 			);
 		});
@@ -82,7 +82,7 @@ describe('externalLinks', () => {
 		});
 		const usDefaultLink = `${appStoreRoot}/us/${iosDailyEditionProduct}${iosPremiumTail}`;
 		it('should return default /us/ app store link for EU and International countries', () => {
-			[EURCountries, International].forEach((c) =>
+			([EURCountries, International] as CountryGroupId[]).forEach((c) =>
 				expect(getDailyEditionUrl(c).startsWith(usDefaultLink)),
 			);
 		});

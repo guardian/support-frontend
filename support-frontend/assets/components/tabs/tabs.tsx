@@ -1,4 +1,4 @@
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { tabButton, tabList, tabPanel } from './tabsStyles';
 
@@ -8,16 +8,21 @@ type TabProps = {
 	text: string;
 	href?: string;
 	selected: boolean;
-	content: Node;
+	content: ReactNode;
 };
 type PropTypes = {
 	tabsLabel: string;
 	tabElement: TabElement;
 	tabs: TabProps[];
-	onTabChange: (tabName: any) => void;
+	onTabChange: (tabName: string) => void;
 };
 
-function Tabs({ tabsLabel, tabElement, tabs, onTabChange }: PropTypes) {
+function Tabs({
+	tabsLabel,
+	tabElement,
+	tabs,
+	onTabChange,
+}: PropTypes): JSX.Element {
 	const TabControllerElement = tabElement;
 	return (
 		<div>

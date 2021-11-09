@@ -1,9 +1,10 @@
 import cx from 'classnames';
 import React from 'react';
 import type { Node } from 'react';
+import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
-import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
@@ -15,9 +16,10 @@ type PropTypes = {
 	offer?: Option<string>;
 	isFeature?: Option<boolean>;
 	classModifier: string[];
+	participations: Participations;
 };
 
-const SubscriptionsProduct = ({
+const SubscriptionsProduct: React.FC<PropTypes> = ({
 	classModifier,
 	productImage,
 	isFeature,

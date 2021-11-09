@@ -37,17 +37,19 @@ type PropTypes = {
 };
 
 // ----- Component ----- //
-function PaperTabs({ selectedTab, setTabAction }: PropTypes) {
-	const tabItems = Object.keys(tabs).map((fulfilmentMethod) => {
-		const TabContent = tabs[fulfilmentMethod].content;
-		return {
-			id: fulfilmentMethod,
-			text: tabs[fulfilmentMethod].name,
-			href: tabs[fulfilmentMethod].href,
-			selected: fulfilmentMethod === selectedTab,
-			content: <TabContent setTabAction={setTabAction} />,
-		};
-	});
+function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
+	const tabItems = (Object.keys(tabs) as PaperFulfilmentOptions[]).map(
+		(fulfilmentMethod) => {
+			const TabContent = tabs[fulfilmentMethod].content;
+			return {
+				id: fulfilmentMethod,
+				text: tabs[fulfilmentMethod].name,
+				href: tabs[fulfilmentMethod].href,
+				selected: fulfilmentMethod === selectedTab,
+				content: <TabContent setTabAction={setTabAction} />,
+			};
+		},
+	);
 	return (
 		<Outset>
 			<Tabs

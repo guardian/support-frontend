@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Product } from 'components/product/productOption';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -90,6 +91,7 @@ const weeklyProductProps = (
 		product: 'GuardianWeekly' as SubscriptionProduct,
 		componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 	};
+
 	return {
 		title: billingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
@@ -109,16 +111,19 @@ type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
 	productPrices: ProductPrices | null | undefined;
 	orderIsAGift: boolean;
+	participations: Participations;
 };
 
 const getProducts = ({
 	countryId,
 	productPrices,
 	orderIsAGift,
+	participations,
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
-		: weeklyBillingPeriods;
+		: weeklyBillingPeriods(participations.sixForSixSuppression !== 'variant');
+
 	return billingPeriodsToUse.map((billingPeriod) => {
 		const productPrice = productPrices
 			? getProductPrice(
@@ -132,15 +137,17 @@ const getProducts = ({
 					fixedTerm: false,
 					currency: 'GBP' as IsoCurrency,
 			  };
+
 		return weeklyProductProps(billingPeriod, productPrice, orderIsAGift);
 	});
 };
 
-function WeeklyProductPrices({
+const WeeklyProductPrices: React.FC<WeeklyProductPricesProps> = ({
 	countryId,
 	productPrices,
 	orderIsAGift,
-}: WeeklyProductPricesProps) {
+	participations,
+}: WeeklyProductPricesProps) => {
 	if (!productPrices) {
 		return null;
 	}
@@ -149,8 +156,9 @@ function WeeklyProductPrices({
 		countryId,
 		productPrices,
 		orderIsAGift,
+		participations,
 	});
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
-} // ----- Exports ----- //
+}; // ----- Exports ----- //
 
 export default WeeklyProductPrices;
