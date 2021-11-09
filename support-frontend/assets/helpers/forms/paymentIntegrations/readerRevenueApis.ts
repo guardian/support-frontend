@@ -1,17 +1,4 @@
-import type {
-	AcquisitionABTest,
-	OphanIds,
-	ReferrerAcquisitionData,
-} from 'helpers/tracking/acquisitions';
-import { routes } from 'helpers/urls/routes';
-import 'helpers/tracking/acquisitions';
-import 'helpers/forms/errorReasons';
-import 'helpers/csrf/csrfReducer';
-import 'helpers/productPrice/billingPeriods';
 import type { Participations } from 'helpers/abTests/abtest';
-import 'helpers/abTests/abtest';
-import 'helpers/internationalisation/country';
-import 'helpers/types/option';
 import {
 	fetchJson,
 	getRequestOptions,
@@ -43,11 +30,17 @@ import type {
 	GuardianWeekly,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
+import type {
+	AcquisitionABTest,
+	OphanIds,
+	ReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
+import { routes } from 'helpers/urls/routes';
 import type { Title } from 'helpers/user/details';
 import { logException } from 'helpers/utilities/logger';
-import { debug } from 'webpack';
+
 // ----- Types ----- //
 export type StripePaymentMethod =
 	| 'StripeCheckout'
@@ -211,6 +204,14 @@ export type PaymentResult = {
 	error?: ErrorReason;
 };
 
+type Status = 'failure' | 'pending' | 'success';
+
+type StatusResponse = {
+	status: Status;
+	trackingUri: string;
+	failureReason?: ErrorReason;
+};
+
 // ----- Setup ----- //
 const PaymentSuccess: PaymentResult = {
 	paymentStatus: 'success',
@@ -288,8 +289,8 @@ function regularPaymentFieldsFromAuthorisation(
 function checkRegularStatus(
 	participations: Participations,
 	csrf: CsrfState,
-): (arg0: Record<string, any>) => Promise<PaymentResult> {
-	const handleCompletion = (json) => {
+): (statusResponse: StatusResponse) => Promise<PaymentResult> {
+	const handleCompletion = (json: StatusResponse) => {
 		switch (json.status) {
 			case 'success':
 			case 'pending':
@@ -309,19 +310,20 @@ function checkRegularStatus(
 	};
 
 	// Exhaustion of the maximum number of polls is considered a payment success
-	const handleExhaustedPolls = (error) => {
+	const handleExhaustedPolls = (error: Error | undefined) => {
 		if (error === undefined) {
-			return Promise.resolve({
+			const exhaustedResult: PaymentResult = {
 				paymentStatus: 'success',
 				subscriptionCreationPending: true,
-			});
+			};
+			return exhaustedResult;
 		}
 
 		throw error;
 	};
 
-	return (json) => {
-		switch (json.status) {
+	return (statusResponse: StatusResponse) => {
+		switch (statusResponse.status) {
 			case 'pending':
 				return logPromise(
 					pollUntilPromise(
@@ -329,15 +331,17 @@ function checkRegularStatus(
 						POLLING_INTERVAL,
 						() =>
 							fetchJson(
-								json.trackingUri,
+								statusResponse.trackingUri,
 								getRequestOptions('same-origin', csrf),
-							),
-						(json2) => json2.status === 'pending',
-					).then(handleCompletion, handleExhaustedPolls),
+							) as Promise<StatusResponse>,
+						(json2: StatusResponse) => json2.status === 'pending',
+					)
+						.then(handleCompletion)
+						.catch(handleExhaustedPolls),
 				);
 
 			default:
-				return Promise.resolve(handleCompletion(json));
+				return Promise.resolve(handleCompletion(statusResponse));
 		}
 	};
 }
@@ -352,19 +356,19 @@ function postRegularPaymentRequest(
 	return logPromise(
 		fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)),
 	)
-		.then((response) => {
+		.then((response: Response) => {
 			if (response.status === 500) {
 				logException(`500 Error while trying to post to ${uri}`);
 				return {
 					paymentStatus: 'failure',
 					error: 'internal_error',
-				};
+				} as PaymentResult;
 			} else if (response.status === 400) {
 				logException(`Bad request error while trying to post to ${uri}`);
 				return {
 					paymentStatus: 'failure',
 					error: 'personal_details_incorrect',
-				};
+				} as PaymentResult;
 			}
 
 			return response.json().then(checkRegularStatus(participations, csrf));

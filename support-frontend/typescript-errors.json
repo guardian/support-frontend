@@ -3,15 +3,15 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 21,
-            "TS7006": 145,
+            "TS7006": 143,
             "TS2305": 59,
-            "TS2322": 261,
+            "TS2322": 259,
             "TS2578": 22,
             "TS2339": 147,
-            "TS2345": 159,
+            "TS2345": 158,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 23,
+            "TS6133": 22,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 20,
@@ -72,7 +72,6 @@
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 17,
-            "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts": 6,
             "assets/helpers/rendering/render.ts": 7,
             "assets/helpers/rendering/ssrPages.ts": 2,
             "assets/helpers/storage/storage.ts": 1,
@@ -594,14 +593,6 @@
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
             "message": "Parameter 'data' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts",
-            "message": "Parameter 'json' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts",
-            "message": "Parameter 'error' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
@@ -1530,14 +1521,6 @@
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
             "message": "Type '(value: void | PromiseLike<void>) => void' is not assignable to type '(this: GlobalEventHandlers, ev: Event) => any'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts",
-            "message": "Type '(json: Record<string, any>) => Promise<PaymentResult | { paymentStatus: string; error: any; } | { paymentStatus: string; subscriptionCreationPending: boolean; }>' is not assignable to type '(arg0: Record<string, any>) => Promise<PaymentResult>'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts",
-            "message": "Type 'Promise<Response | { paymentStatus: string; error: \"unknown\"; }>' is not assignable to type 'Promise<PaymentResult>'."
         },
         {
             "path": "assets/helpers/forms/recaptcha.ts",
@@ -3150,10 +3133,6 @@
             "message": "Argument of type 'Record<string, any>' is not assignable to parameter of type 'PayPalCheckoutDetails'."
         },
         {
-            "path": "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts",
-            "message": "Argument of type '(response: Response) => Promise<PaymentResult> | { paymentStatus: string; error: string; }' is not assignable to parameter of type '(value: Response) => PaymentResult | PromiseLike<PaymentResult>'."
-        },
-        {
             "path": "assets/helpers/identityApis.ts",
             "message": "Argument of type '(resp: {    userType: UserType;}) => UserType' is not assignable to parameter of type '(value: Record<string, any>) => \"current\" | \"new\" | \"guest\" | PromiseLike<\"current\" | \"new\" | \"guest\">'."
         },
@@ -3846,10 +3825,6 @@
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
             "message": "'formClassName' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts",
-            "message": "'debug' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts",
