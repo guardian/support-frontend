@@ -10,8 +10,10 @@ import * as cookie from 'helpers/storage/cookie';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { getQueryParameter } from 'helpers/urls/url';
 import { tests } from './abtestDefinitions';
+
 // ----- Types ----- //
 export type TestId = $Keys<typeof tests>;
+
 const breakpoints = {
 	mobile: 320,
 	mobileMedium: 375,
@@ -22,25 +24,33 @@ const breakpoints = {
 	leftCol: 1140,
 	wide: 1300,
 };
+
 type Breakpoint = $Keys<typeof breakpoints>;
+
 type BreakpointRange = {
 	minWidth?: Breakpoint;
 	maxWidth?: Breakpoint;
 };
+
 export type Participations = Record<TestId, string>;
+
 type Audience = {
 	offset: number;
 	size: number;
 	breakpoint?: BreakpointRange;
 };
+
 type Audiences = { [key in IsoCountry | CountryGroupId | 'ALL']?: Audience };
+
 type AcquisitionABTest = {
 	name: string;
 	variant: string;
 };
+
 export type Variant = {
 	id: string;
 };
+
 export type Test = {
 	variants: Variant[];
 	audiences: Audiences;
@@ -59,7 +69,9 @@ export type Test = {
 	targetPage?: string | RegExp;
 	optimizeId?: string; // The id of the Optimize experiment which this test maps to
 };
+
 export type Tests = Record<string, Test>;
+
 // ----- Setup ----- //
 const MVT_COOKIE = 'GU_mvt_id';
 const MVT_MAX = 1000000;
@@ -97,7 +109,7 @@ function getParticipationsFromUrl(): Participations | null | undefined {
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
-	if (!(Object.keys(window.guardian.serversideTests).length === 0)) {
+	if (window.guardian.serversideTests) {
 		return window.guardian.serversideTests;
 	}
 

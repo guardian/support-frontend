@@ -380,7 +380,7 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -2474,11 +2474,11 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
@@ -2494,35 +2494,35 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/__tests__/urlTest.ts",
@@ -2530,19 +2530,19 @@
         },
         {
             "path": "assets/helpers/campaigns/campaigns.ts",
-            "message": "Property 'enableContributionsCampaign' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'enableContributionsCampaign' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/campaigns/campaigns.ts",
-            "message": "Property 'forceContributionsCampaign' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'forceContributionsCampaign' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts",
@@ -2550,19 +2550,19 @@
         },
         {
             "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
@@ -2598,19 +2598,19 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
@@ -2626,27 +2626,27 @@
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -2670,11 +2670,11 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts",
@@ -2694,11 +2694,11 @@
         },
         {
             "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'productPrices' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'productPrices' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/submit.ts",
@@ -2742,75 +2742,75 @@
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/helpers/utilities/logger.ts",
-            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -2846,15 +2846,15 @@
         },
         {
             "path": "assets/pages/contributions-landing/checkoutFormIsSubmittableActions.ts",
-            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
@@ -2862,11 +2862,11 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -2874,11 +2874,11 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -2886,15 +2886,15 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'v2recaptchaPublicKey' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -2914,7 +2914,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -2930,27 +2930,27 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'recaptchaEnabled' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'geoip' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
@@ -2966,7 +2966,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; serversideTests: Participations; }'."
+            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; serversideTests: Participations | null | undefined; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",

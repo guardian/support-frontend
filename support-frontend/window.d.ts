@@ -7,7 +7,7 @@ declare global {
 	interface Window {
 		guardian: {
 			mdapiUrl: string;
-			serversideTests: Participations;
+			serversideTests: Participations | null | undefined;
 		};
 	}
 }
