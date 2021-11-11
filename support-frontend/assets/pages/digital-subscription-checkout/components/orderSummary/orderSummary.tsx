@@ -5,6 +5,7 @@ import { Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import { getGiftOrderSummaryText } from '../helpers';
 import * as styles from './orderSummaryStyles';
@@ -27,6 +28,14 @@ function OrderSummary(props: PropTypes): JSX.Element {
 	const priceString = props.orderIsAGift
 		? giftPriceString
 		: getBillingDescription(props.productPrice, props.billingPeriod);
+
+	const isPatron =
+		props.productPrice.promotions?.find(
+			(promotion: Promotion) =>
+				promotion.numberOfDiscountedPeriods &&
+				promotion.numberOfDiscountedPeriods >= 100,
+		) !== undefined;
+
 	return (
 		<aside css={styles.wrapper}>
 			<div css={styles.topLine}>
@@ -38,7 +47,7 @@ function OrderSummary(props: PropTypes): JSX.Element {
 				<div css={styles.textBlock}>
 					<h4>{props.title}</h4>
 					<p>{priceString}</p>
-					{!props.orderIsAGift && <span>14 day free trial</span>}
+					{!props.orderIsAGift && !isPatron && <span>14 day free trial</span>}
 				</div>
 			</div>
 			<div css={styles.endSummary}>

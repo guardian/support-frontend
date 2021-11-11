@@ -77,6 +77,11 @@ function getDiscountDescription(
 ) {
 	const noun = billingPeriodNoun(billingPeriod, fixedTerm);
 
+	// Free patron digisub specific copy
+	if (numberOfDiscountedPeriods && numberOfDiscountedPeriods >= 100) {
+		return "You won't pay anything for the duration of your Patrons membership";
+	}
+
 	if (numberOfDiscountedPeriods) {
 		const discountCopy = `You'll pay ${displayPrice(
 			glyph,

@@ -10,9 +10,12 @@ export type EndSummaryProps = {
 	orderIsAGift: boolean;
 	digitalGiftBillingPeriod: 'Annual' | 'Quarterly';
 	price: string;
+	isPatron: boolean;
 };
 
-const Dot = () => <div css={styles.dot} />;
+function Dot() {
+	return <div css={styles.dot} />;
+}
 
 function EndSummary({
 	promotion,
@@ -20,6 +23,7 @@ function EndSummary({
 	orderIsAGift = false,
 	digitalGiftBillingPeriod,
 	price,
+	isPatron = false,
 }: EndSummaryProps) {
 	const giftText = getGiftOrderSummaryText(digitalGiftBillingPeriod, price);
 	return (
@@ -30,6 +34,7 @@ function EndSummary({
 				<NonGiftSummary
 					promotion={promotion}
 					priceDescription={priceDescription}
+					isPatron={isPatron}
 				/>
 			)}
 		</span>
@@ -74,6 +79,7 @@ function GiftSummary(props: GiftSummaryTypes) {
 type NonGiftSummaryTypes = {
 	priceDescription: string;
 	promotion: string;
+	isPatron: boolean;
 };
 
 function NonGiftSummary(props: NonGiftSummaryTypes) {
@@ -84,17 +90,21 @@ function NonGiftSummary(props: NonGiftSummaryTypes) {
 				<div css={styles.listMain}>{props.promotion}</div>
 				<span css={styles.subText}>{props.priceDescription}</span>
 			</li>
-			<li>
-				<Dot />
-				<div css={styles.listMain}>14-day free trial</div>
-				<span css={styles.subText}>
-					Your first payment will occur after the trial ends
-				</span>
-			</li>
-			<li>
-				<Dot />
-				<div css={styles.listMain}>You can cancel any time</div>
-			</li>
+			{props.isPatron && (
+				<>
+					<li>
+						<Dot />
+						<div css={styles.listMain}>14-day free trial</div>
+						<span css={styles.subText}>
+							Your first payment will occur after the trial ends
+						</span>
+					</li>
+					<li>
+						<Dot />
+						<div css={styles.listMain}>You can cancel any time</div>
+					</li>
+				</>
+			)}
 		</ul>
 	);
 }

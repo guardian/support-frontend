@@ -1,9 +1,4 @@
 import React from 'react';
-import type { Element } from 'react';
-// helpers
-import { getDigitalCheckout } from 'helpers/urls/externalLinks';
-// types
-import type { Product } from 'components/product/productOption';
 import 'components/product/productOption';
 import 'components/product/productOptionSmall';
 import 'helpers/types/option';
@@ -33,41 +28,43 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	fixDecimals,
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
+import type { OphanComponentType } from 'helpers/tracking/ophan';
 import type { Option } from 'helpers/types/option';
+import { getDigitalCheckout } from 'helpers/urls/externalLinks';
 
-export type PaymentOption = {
-	title: string;
-	href: string;
-	salesCopy: Element<'span'>;
-	offer: Option<string>;
-	onClick: (...args: any[]) => any;
-	label: Option<string>;
-};
 export const getProductOptions = (
 	productPrices: ProductPrices,
 	countryGroupId: CountryGroupId,
-) =>
+): Record<BillingPeriod, Record<IsoCurrency, ProductPrice>> =>
 	productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions
 		.NoProductOptions;
+
 export const getCurrencySymbol = (currencyId: IsoCurrency): string =>
 	currencies[currencyId].glyph;
-export const getDisplayPrice = (currencyId: IsoCurrency, price: number) =>
-	getCurrencySymbol(currencyId) + fixDecimals(price);
+
+export const getDisplayPrice = (
+	currencyId: IsoCurrency,
+	price: number,
+): string => getCurrencySymbol(currencyId) + fixDecimals(price);
+
 export const getProductPrice = (
 	productOptions: BillingPeriods,
 	billingPeriod: BillingPeriod,
 	currencyId: IsoCurrency,
 ): ProductPrice => productOptions[billingPeriod][currencyId];
+
 export const getSavingPercentage = (
 	annualCost: number,
 	monthlyCostAnnualized: number,
-) => `${Math.round((1 - annualCost / monthlyCostAnnualized) * 100)}%`;
+): string => `${Math.round((1 - annualCost / monthlyCostAnnualized) * 100)}%`;
+
 const BILLING_PERIOD = {
 	[Monthly]: {
 		title: 'Monthly',
@@ -76,7 +73,11 @@ const BILLING_PERIOD = {
 			displayPrice: number,
 			promotionalPrice: Option<number>,
 		) => {
-			const display = (price) => getDisplayPrice(currencyId, price);
+			const display = (price: number) => getDisplayPrice(currencyId, price);
+
+			if (promotionalPrice === 0) {
+				return;
+			}
 
 			return promotionalPrice ? (
 				<span>
@@ -102,7 +103,11 @@ const BILLING_PERIOD = {
 			displayPrice: number,
 			promotionalPrice: Option<number>,
 		) => {
-			const display = (price) => getDisplayPrice(currencyId, price);
+			const display = (price: number) => getDisplayPrice(currencyId, price);
+
+			if (promotionalPrice === 0) {
+				return;
+			}
 
 			return isNumeric(promotionalPrice) ? (
 				<span>
@@ -120,6 +125,7 @@ const BILLING_PERIOD = {
 		label: 'Best Deal',
 	},
 };
+
 const BILLING_PERIOD_GIFT = {
 	[Quarterly]: {
 		title: '3 months',
@@ -162,14 +168,14 @@ const getHeroCtaProps = (
 		);
 		const promotion = getAppliedPromo(productPrice.promotions);
 		const promoCode = promotion ? promotion.promoCode : null;
-		const offerCopy =
-			promotion && promotion.landingPage && promotion.landingPage.roundel
-				? promotion.landingPage.roundel
-				: BILLING_PERIOD[digitalBillingPeriod].offer;
+		const offerCopy = promotion?.landingPage?.roundel
+			? promotion.landingPage.roundel
+			: BILLING_PERIOD[digitalBillingPeriod].offer;
+
 		const trackingProperties = {
 			id: `subscribe_now_cta_hero-${billingPeriod}`,
-			product: 'DigitalPack',
-			componentType: 'ACQUISITIONS_BUTTON',
+			product: 'DigitalPack' as SubscriptionProduct,
+			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 		};
 
 		const onClick = () => {
@@ -204,7 +210,7 @@ const getHeroCtaProps = (
 		};
 	};
 
-	return Object.keys(productOptions)
+	return (Object.keys(productOptions) as BillingPeriod[])
 		.sort((optA, optB) => {
 			if (optA === 'Annual') {
 				return 1;
@@ -233,7 +239,9 @@ const getPaymentOptions = ({
 }: PaymentSelectionPropTypes): ProductOptionType[] => {
 	const productOptions = getProductOptions(productPrices, countryGroupId);
 
-	const createPaymentOption = (billingPeriod: BillingPeriod): Product => {
+	const createPaymentOption = (
+		billingPeriod: BillingPeriod,
+	): ProductOptionType => {
 		const digitalBillingPeriod =
 			billingPeriod === 'Monthly' || billingPeriod === 'Annual'
 				? billingPeriod
@@ -257,16 +265,15 @@ const getPaymentOptions = ({
 			promotion && isNumeric(promotion.discountedPrice)
 				? promotion.discountedPrice
 				: null;
-		const offerCopy =
-			promotion && promotion.landingPage && promotion.landingPage.roundel
-				? promotion.landingPage.roundel
-				: BILLING_PERIOD[digitalBillingPeriod].offer;
+		const offerCopy = promotion?.landingPage?.roundel
+			? promotion.landingPage.roundel
+			: BILLING_PERIOD[digitalBillingPeriod].offer;
 		const trackingProperties = {
 			id: orderIsAGift
 				? `subscribe_now_cta_gift-${billingPeriod}`
 				: `subscribe_now_cta-${billingPeriod}`,
-			product: 'DigitalPack',
-			componentType: 'ACQUISITIONS_BUTTON',
+			product: 'DigitalPack' as SubscriptionProduct,
+			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 		};
 
 		const onClick = () => {
@@ -322,7 +329,9 @@ const getPaymentOptions = ({
 			  };
 	};
 
-	return Object.keys(productOptions).map(createPaymentOption);
+	return (Object.keys(productOptions) as BillingPeriod[]).map(
+		createPaymentOption,
+	);
 };
 
 export { getHeroCtaProps, getPaymentOptions };
