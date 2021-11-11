@@ -8,7 +8,7 @@
             "TS2322": 271,
             "TS2578": 22,
             "TS2339": 147,
-            "TS2345": 158,
+            "TS2345": 153,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
@@ -18,7 +18,7 @@
             "TS2314": 7,
             "TS7016": 7,
             "TS2304": 18,
-            "TS2741": 7,
+            "TS2741": 5,
             "TS2739": 17,
             "TS2531": 11,
             "TS2604": 4,
@@ -262,7 +262,6 @@
             "assets/components/marketingConsent/helpers.ts": 1,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
-            "assets/helpers/abTests/__tests__/abtestTest.ts": 7,
             "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
             "assets/helpers/page/__tests__/pageTest.ts": 4,
@@ -3135,26 +3134,6 @@
             "message": "Argument of type '(done: any, fail: any) => void' is not assignable to parameter of type 'ProvidesCallback | undefined'."
         },
         {
-            "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
-            "message": "Argument of type '{ mockTest: { type: string; variants: { id: string; }[]; audiences: { US: { offset: number; size: number; breakpoint: { minWidth: string; maxWidth: string; }; }; }; isActive: boolean; referrerControlled: boolean; seed: number; }; }' is not assignable to parameter of type 'Tests'."
-        },
-        {
-            "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
-            "message": "Argument of type '{ mockTest: { type: string; variants: { id: string; }[]; audiences: { US: { offset: number; size: number; breakpoint: { minWidth: string; }; }; }; isActive: boolean; referrerControlled: boolean; seed: number; }; }' is not assignable to parameter of type 'Tests'."
-        },
-        {
-            "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
-            "message": "Argument of type '{ mockTest: { type: string; variants: { id: string; }[]; audiences: { US: { offset: number; size: number; breakpoint: { minWidth: string; maxWidth: undefined; }; }; }; isActive: boolean; referrerControlled: boolean; seed: number; }; }' is not assignable to parameter of type 'Tests'."
-        },
-        {
-            "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
-            "message": "Argument of type '{ mockTest: { type: string; variants: { id: string; }[]; audiences: { US: { offset: number; size: number; breakpoint: { maxWidth: string; }; }; }; isActive: boolean; referrerControlled: boolean; seed: number; }; }' is not assignable to parameter of type 'Tests'."
-        },
-        {
-            "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
-            "message": "Argument of type '{ mockTest: { type: string; variants: { id: string; }[]; audiences: { US: { offset: number; size: number; breakpoint: { minWidth: undefined; maxWidth: string; }; }; }; isActive: boolean; referrerControlled: boolean; seed: number; }; }' is not assignable to parameter of type 'Tests'."
-        },
-        {
             "path": "assets/helpers/contributions.ts",
             "message": "Argument of type 'string | number | null' is not assignable to parameter of type 'string'."
         },
@@ -4281,14 +4260,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
             "message": "Property 'value' is missing in type '{ id: string; image: any; label: string; name: string; checked: boolean; onChange: (...args: any[]) => any; }' but required in type 'Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | \"translate\" | ... 273 more ... | \"required\">'."
-        },
-        {
-            "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
-            "message": "Property 'control' is missing in type '{}' but required in type 'ConfiguredRegionAmounts'."
-        },
-        {
-            "path": "assets/helpers/abTests/__tests__/abtestTest.ts",
-            "message": "Property 'control' is missing in type '{}' but required in type 'ConfiguredRegionAmounts'."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",
