@@ -23,11 +23,7 @@ export function get(name: string): string | null | undefined {
 	return null;
 }
 // Sets a cookie, modified from dotcom (https://github.com/guardian/frontend).
-export function set(
-	name: string,
-	value: string,
-	daysToLive: number | null | undefined,
-): void {
+export function set(name: string, value: string, daysToLive?: number): void {
 	const expires = new Date();
 
 	if (daysToLive) {

@@ -1,17 +1,19 @@
 // ----- Imports ----- //
 import seedrandom from 'seedrandom';
 import type { $Keys } from 'utility-types';
-import * as cookie from 'helpers/storage/cookie';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
+import * as cookie from 'helpers/storage/cookie';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { getQueryParameter } from 'helpers/urls/url';
 import { tests } from './abtestDefinitions';
+
 // ----- Types ----- //
 export type TestId = $Keys<typeof tests>;
+
 const breakpoints = {
 	mobile: 320,
 	mobileMedium: 375,
@@ -22,25 +24,33 @@ const breakpoints = {
 	leftCol: 1140,
 	wide: 1300,
 };
+
 type Breakpoint = $Keys<typeof breakpoints>;
+
 type BreakpointRange = {
 	minWidth?: Breakpoint;
 	maxWidth?: Breakpoint;
 };
+
 export type Participations = Record<TestId, string>;
+
 type Audience = {
 	offset: number;
 	size: number;
 	breakpoint?: BreakpointRange;
 };
+
 type Audiences = { [key in IsoCountry | CountryGroupId | 'ALL']?: Audience };
+
 type AcquisitionABTest = {
 	name: string;
 	variant: string;
 };
+
 export type Variant = {
 	id: string;
 };
+
 export type Test = {
 	variants: Variant[];
 	audiences: Audiences;
@@ -59,7 +69,9 @@ export type Test = {
 	targetPage?: string | RegExp;
 	optimizeId?: string; // The id of the Optimize experiment which this test maps to
 };
+
 export type Tests = Record<string, Test>;
+
 // ----- Setup ----- //
 const MVT_COOKIE = 'GU_mvt_id';
 const MVT_MAX = 1000000;
@@ -88,7 +100,7 @@ function getParticipationsFromUrl(): Participations | null | undefined {
 
 	if (hashUrl.startsWith('#ab-')) {
 		const [testId, variant] = decodeURI(hashUrl.substr(4)).split('=');
-		const test = {};
+		const test: Participations = {};
 		test[testId] = variant;
 		return test;
 	}
@@ -97,7 +109,7 @@ function getParticipationsFromUrl(): Participations | null | undefined {
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
-	if (window && window.guardian && window.guardian.serversideTests) {
+	if (window.guardian.serversideTests) {
 		return window.guardian.serversideTests;
 	}
 
@@ -112,8 +124,8 @@ function getIsRemoteFromAcquisitionData(): boolean {
 	}
 
 	try {
-		const data = JSON.parse(queryString);
-		return data && !!data.isRemote;
+		const data = JSON.parse(queryString) as { isRemote?: boolean };
+		return !!data.isRemote;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
 		return false;
@@ -128,13 +140,14 @@ function getTestFromAcquisitionData(): AcquisitionABTest | null | undefined {
 	}
 
 	try {
-		const acquisitionData = JSON.parse(acquisitionDataParam);
+		const acquisitionData = JSON.parse(acquisitionDataParam) as {
+			abTest?: {
+				name: string;
+				variant: string;
+			};
+		};
 
-		if (
-			acquisitionData.abTest &&
-			acquisitionData.abTest.name &&
-			acquisitionData.abTest.variant
-		) {
+		if (acquisitionData.abTest?.variant) {
 			return acquisitionData.abTest;
 		}
 
@@ -159,13 +172,20 @@ function userInBreakpoint(audience: Audience): boolean {
 	const minWidthMediaQuery = minWidth
 		? `(min-width:${breakpoints[minWidth]}px)`
 		: null;
+
 	const maxWidthMediaQuery = maxWidth
 		? `(max-width:${breakpoints[maxWidth]}px)`
 		: null;
+
 	const mediaQuery =
 		minWidthMediaQuery && maxWidthMediaQuery
 			? `${minWidthMediaQuery} and ${maxWidthMediaQuery}`
-			: minWidthMediaQuery || maxWidthMediaQuery;
+			: minWidthMediaQuery ?? maxWidthMediaQuery;
+
+	if (!mediaQuery) {
+		return false;
+	}
+
 	return window.matchMedia(mediaQuery).matches;
 }
 
@@ -184,7 +204,7 @@ function userInTest(
 	}
 
 	const audience =
-		audiences[country] || audiences[countryGroupId] || audiences.ALL;
+		audiences[country] ?? audiences[countryGroupId] ?? audiences.ALL;
 
 	if (!audience) {
 		return false;
@@ -200,7 +220,8 @@ function userInTest(
 }
 
 function randomNumber(mvtId: number, seed: number): number {
-	const rng = seedrandom(mvtId + seed);
+	const numberToSeed = mvtId + seed;
+	const rng = seedrandom(numberToSeed.toString());
 	return Math.abs(rng.int32());
 }
 
@@ -252,7 +273,7 @@ function assignUserToVariant(
 function targetPageMatches(
 	locationPath: string,
 	targetPage: (string | null | undefined) | RegExp,
-) {
+): boolean {
 	if (!targetPage) {
 		return true;
 	}
@@ -327,10 +348,6 @@ function getAmountsTestParticipations(
 	countryGroupId: CountryGroupId,
 	settings: Settings,
 ): Participations | null | undefined {
-	if (!settings.amounts) {
-		return null;
-	}
-
 	if (
 		!targetPageMatches(
 			window.location.pathname,

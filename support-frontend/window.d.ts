@@ -5,6 +5,7 @@ declare global {
 	interface Window {
 		guardian: {
 			mdapiUrl: string;
+			serversideTests?: Record<string, string>;
 		};
 	}
 }
