@@ -6,25 +6,10 @@ import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { countries } from 'helpers/internationalisation/country';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	checkoutFormIsValid,
-	validateCheckoutForm,
-} from 'helpers/subscriptionsForms/formValidation';
-import {
-	submitCheckoutForm,
-	trackSubmitAttempt,
-} from 'helpers/subscriptionsForms/submit';
-import { PayPal, Stripe, DirectDebit } from 'helpers/forms/paymentMethods';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import CheckoutLayout, {
 	Content,
@@ -32,10 +17,14 @@ import CheckoutLayout, {
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import { countries } from 'helpers/internationalisation/country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -44,6 +33,7 @@ import {
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type {
@@ -55,13 +45,25 @@ import type {
 	FormField,
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
+import {
+	checkoutFormIsValid,
+	validateCheckoutForm,
+} from 'helpers/subscriptionsForms/formValidation';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
+import {
+	submitCheckoutForm,
+	trackSubmitAttempt,
+} from 'helpers/subscriptionsForms/submit';
+import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
-import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
+import OrderSummary, {
+	isPatron,
+} from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 // ----- Types ----- //
 type PropTypes = FormFields &
 	FormActionCreators & {
@@ -235,7 +237,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 							allErrors={[...props.addressErrors, ...props.formErrors]}
 							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
-							buttonText="Start your free trial now"
+							buttonText={isPatron ? 'Continue' : 'Start your free trial now'}
 							csrf={props.csrf}
 						/>
 					</FormSectionHiddenUntilSelected>

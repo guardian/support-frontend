@@ -19,6 +19,8 @@ type PropTypes = {
 	orderIsAGift?: boolean;
 };
 
+export let isPatron: boolean;
+
 function OrderSummary(props: PropTypes): JSX.Element {
 	const giftBillingPeriod = props.billingPeriod === Annual ? Annual : Quarterly;
 	const giftPriceString = getGiftOrderSummaryText(
@@ -29,7 +31,7 @@ function OrderSummary(props: PropTypes): JSX.Element {
 		? giftPriceString
 		: getBillingDescription(props.productPrice, props.billingPeriod);
 
-	const isPatron =
+	isPatron =
 		props.productPrice.promotions?.find(
 			(promotion: Promotion) =>
 				promotion.numberOfDiscountedPeriods &&
