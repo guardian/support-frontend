@@ -145,7 +145,7 @@ type ContributionThankYouProps = {
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	paymentMethod: PaymentMethod;
 	countryId: IsoCountry;
-	campaignCode: string | null | undefined;
+	campaignCode?: string;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -166,7 +166,7 @@ const mapStateToProps = (state: State) => ({
 	campaignCode: state.common.referrerAcquisitionData.campaignCode,
 });
 
-const ContributionThankYou = ({
+function ContributionThankYou({
 	csrf,
 	email,
 	name,
@@ -178,7 +178,7 @@ const ContributionThankYou = ({
 	paymentMethod,
 	countryId,
 	campaignCode,
-}: ContributionThankYouProps) => {
+}: ContributionThankYouProps) {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 
 	const campaignSettings = useMemo<CampaignSettings | null>(
@@ -305,6 +305,6 @@ const ContributionThankYou = ({
 			</div>
 		</div>
 	);
-};
+}
 
 export default connect(mapStateToProps)(ContributionThankYou);

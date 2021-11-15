@@ -2,30 +2,28 @@ import type { TickerSettings } from 'components/ticker/contributionTicker';
 import type { ContributionTypes } from 'helpers/contributions';
 
 type CampaignCopy = {
-	headerCopy?:
-		| string
-		| React.ReactElement<React.ComponentProps<string>, string>;
-	contributeCopy?:
-		| string
-		| React.ReactElement<React.ComponentProps<string>, string>;
+	headerCopy?: string | JSX.Element;
+	contributeCopy?: string | JSX.Element;
 };
+
 export type CampaignSettings = {
 	campaignCode: string;
 	copy?: (goalReached: boolean) => CampaignCopy;
-	formMessage?: React.ReactElement<React.ComponentProps<string>, string>;
+	formMessage?: JSX.Element;
 	termsAndConditions?: (
 		contributionsTermsLink: string,
 		contactEmail: string,
-	) => React.ReactElement<React.ComponentProps<string>, string>;
+	) => JSX.Element;
 	cssModifiers?: string[];
 	contributionTypes?: ContributionTypes;
 	backgroundImage?: string;
-	extraComponent?: React.ReactElement<React.ComponentProps<string>, string>;
+	extraComponent?: JSX.Element;
 	tickerSettings?: TickerSettings;
-	goalReachedCopy?: React.ReactElement<React.ComponentProps<string>, string>;
+	goalReachedCopy?: JSX.Element;
 	// If set, the form will be replaced with this if goal reached
 	createReferralCodes: boolean;
 };
+
 const currentCampaignPath: string | null = 'au/contribute';
 
 const aus2021Copy = (): CampaignCopy => ({
@@ -65,7 +63,7 @@ function campaignEnabledForUser(
 }
 
 export function getCampaignSettings(
-	campaignCode: string | null | undefined,
+	campaignCode?: string,
 ): CampaignSettings | null {
 	if (campaignEnabledForUser(campaignCode)) {
 		return campaign;
