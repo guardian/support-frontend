@@ -5,10 +5,10 @@
             "TS7053": 21,
             "TS7006": 141,
             "TS2305": 60,
-            "TS2322": 271,
+            "TS2322": 268,
             "TS2578": 22,
             "TS2339": 147,
-            "TS2345": 163,
+            "TS2345": 162,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
@@ -192,7 +192,6 @@
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
             "assets/helpers/subscriptionsForms/rules.ts": 2,
-            "assets/helpers/tracking/acquisitions.ts": 3,
             "assets/helpers/urls/url.ts": 3,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
@@ -278,7 +277,6 @@
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/subscriptions-redemption/marketingConsentContainer.ts": 1,
@@ -1608,18 +1606,6 @@
         {
             "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
             "message": "Type 'number' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/helpers/tracking/acquisitions.ts",
-            "message": "Type 'string' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/helpers/tracking/acquisitions.ts",
-            "message": "Type 'string' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/helpers/tracking/acquisitions.ts",
-            "message": "Type 'Record<string, any> | null | undefined' is not assignable to type 'ReferrerAcquisitionData | null | undefined'."
         },
         {
             "path": "assets/helpers/urls/url.ts",
@@ -3494,10 +3480,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: keyof PaymentMethodMap<...>; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
