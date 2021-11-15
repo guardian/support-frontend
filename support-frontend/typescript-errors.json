@@ -8,7 +8,7 @@
             "TS2322": 259,
             "TS2578": 22,
             "TS2339": 147,
-            "TS2345": 158,
+            "TS2345": 159,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
@@ -16,7 +16,7 @@
             "TS2564": 2,
             "TS2769": 20,
             "TS2314": 7,
-            "TS7016": 8,
+            "TS7016": 7,
             "TS2304": 17,
             "TS2741": 7,
             "TS2739": 16,
@@ -3093,6 +3093,10 @@
             "message": "Argument of type 'string | null' is not assignable to parameter of type 'string'."
         },
         {
+            "path": "assets/helpers/abTests/abtest.ts",
+            "message": "Argument of type 'number' is not assignable to parameter of type 'string | undefined'."
+        },
+        {
             "path": "assets/helpers/contributions.ts",
             "message": "Argument of type 'string | number | null' is not assignable to parameter of type 'string'."
         },
@@ -4111,10 +4115,6 @@
         {
             "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
             "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
