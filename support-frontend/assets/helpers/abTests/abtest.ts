@@ -400,7 +400,7 @@ const init = (
 const getVariantsAsString = (participation: Participations): string => {
 	const variants: string[] = [];
 	Object.keys(participation).forEach((testId) => {
-		variants.push(`${testId}=${participation[testId as any]}`);
+		variants.push(`${testId}=${participation[testId]}`);
 	});
 	return variants.join('; ');
 };
