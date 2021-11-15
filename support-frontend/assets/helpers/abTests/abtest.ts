@@ -1,4 +1,6 @@
 // ----- Imports ----- //
+// TODO: install @types/seedrandom
+// @ts-expect-error:next-line
 import seedrandom from 'seedrandom';
 import type { $Keys } from 'utility-types';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
@@ -100,9 +102,7 @@ function getParticipationsFromUrl(): Participations | null | undefined {
 
 	if (hashUrl.startsWith('#ab-')) {
 		const [testId, variant] = decodeURI(hashUrl.substr(4)).split('=');
-		const test: Record<string, string> = {};
-		test[testId] = variant;
-		return test;
+		return { [testId]: variant };
 	}
 
 	return null;
@@ -124,7 +124,7 @@ function getIsRemoteFromAcquisitionData(): boolean {
 	}
 
 	try {
-		const data = JSON.parse(queryString) as Record<string, unknown>;
+		const data = JSON.parse(queryString) as { isRemote?: boolean };
 		return !!data.isRemote;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
@@ -140,12 +140,11 @@ function getTestFromAcquisitionData(): AcquisitionABTest | null | undefined {
 	}
 
 	try {
-		const acquisitionData = JSON.parse(acquisitionDataParam) as Record<
-			'abTest',
-			AcquisitionABTest
-		>;
+		const acquisitionData = JSON.parse(acquisitionDataParam) as {
+			abTest?: AcquisitionABTest;
+		};
 
-		if (acquisitionData.abTest.name && acquisitionData.abTest.variant) {
+		if (acquisitionData.abTest?.variant) {
 			return acquisitionData.abTest;
 		}
 
@@ -169,15 +168,20 @@ function userInBreakpoint(audience: Audience): boolean {
 
 	const minWidthMediaQuery = minWidth
 		? `(min-width:${breakpoints[minWidth]}px)`
-		: '';
+		: null;
 	const maxWidthMediaQuery = maxWidth
 		? `(max-width:${breakpoints[maxWidth]}px)`
-		: '';
+		: null;
 	const mediaQuery =
 		minWidthMediaQuery && maxWidthMediaQuery
 			? `${minWidthMediaQuery} and ${maxWidthMediaQuery}`
-			: minWidthMediaQuery || maxWidthMediaQuery;
-	return window.matchMedia(mediaQuery).matches;
+			: minWidthMediaQuery ?? maxWidthMediaQuery;
+
+	if (typeof mediaQuery === 'string') {
+		return window.matchMedia(mediaQuery).matches;
+	}
+
+	return false;
 }
 
 function userInTest(
@@ -211,7 +215,12 @@ function userInTest(
 }
 
 function randomNumber(mvtId: number, seed: number): number {
-	const rng = seedrandom(`${mvtId + seed}`);
+	// TODO: once @types/seedrandom is installed pass the seedrandom function
+	// the expected type i.e. a string (when there is not an abtest running!)
+
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment -- until @types/seedrandom is included rng will be of type "any"
+	const rng = seedrandom(mvtId + seed);
+	// eslint-disable-next-line -- diabling unsafe member access .int32 on an "any" value
 	return Math.abs(rng.int32());
 }
 

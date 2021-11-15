@@ -30,6 +30,7 @@ const emptySettings = {
 		UnitedStates: {},
 	},
 };
+
 const acquisitionDataMockTestControl = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -38,6 +39,7 @@ const acquisitionDataMockTestControl = {
 		variant: 'control',
 	},
 };
+
 const acquisitionDataMockTestVariant = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -46,6 +48,7 @@ const acquisitionDataMockTestVariant = {
 		variant: 'variant',
 	},
 };
+
 const acquisitionDataMockTest2Control = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -54,6 +57,7 @@ const acquisitionDataMockTest2Control = {
 		variant: 'control',
 	},
 };
+
 const acquisitionDataMockTest2Variant = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -62,18 +66,23 @@ const acquisitionDataMockTest2Variant = {
 		variant: 'variant',
 	},
 };
+
 const mockTestControl = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTestControl),
 )}`;
+
 const mockTestVariant = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTestVariant),
 )}`;
+
 const mockTest2Control = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTest2Control),
 )}`;
+
 const mockTest2Variant = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTest2Variant),
 )}`;
+
 describe('basic behaviour of init', () => {
 	Object.defineProperty(window, 'matchMedia', {
 		value: jest.fn().mockImplementation(() => ({
@@ -120,6 +129,7 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The referrerControlled user should be allocated to the variant bucket', () => {
 		document.cookie = 'GU_mvt_id=12345';
 		window.history.pushState({}, 'Test Title', mockTestVariant);
@@ -157,6 +167,7 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The user should be allocated to the variant bucket', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -178,7 +189,7 @@ describe('basic behaviour of init', () => {
 				},
 				isActive: true,
 				referrerControlled: false,
-				seed: 6,
+				seed: 2,
 			},
 		};
 		const country = 'GB';
@@ -194,6 +205,7 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The user should be allocated to the control bucket', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -215,7 +227,7 @@ describe('basic behaviour of init', () => {
 				},
 				isActive: true,
 				referrerControlled: false,
-				seed: 5,
+				seed: 8,
 			},
 		};
 		const country = 'GB';
@@ -231,6 +243,7 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The user should not be allocated in a test for a different country', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -268,6 +281,7 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for both (min and max) breakpoints if they are provided', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -311,6 +325,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for min breakpoints if only min is provided', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -353,6 +368,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for min breakpoints if only min is provided and max is undefined', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -396,6 +412,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for max breakpoints if only max is provided', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -438,6 +455,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should be able to differentiate country groups', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		window.history.pushState({}, 'Test Title', mockTestControl);
@@ -476,6 +494,7 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for min breakpoints if only max is provided and min is undefined', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -519,6 +538,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('A post-deployment test user should not be allocated into a test', () => {
 		const postDeploymentTestCookie = '_post_deploy_user=true; path=/;';
 
@@ -564,6 +584,7 @@ describe('basic behaviour of init', () => {
 		expect(participations).toEqual(expectedParticipations);
 		deleteCookie();
 	});
+
 	it('Does not allocate a locally rendered epic user into the RemoteEpicVariants AB test', () => {
 		const url = `/test.html?acquisitionData=${encodeURI(
 			JSON.stringify(acquisitionDataMockTestControl),
@@ -577,6 +598,7 @@ describe('basic behaviour of init', () => {
 		);
 		expect(participations.RemoteEpicVariants).toBe(undefined);
 	});
+
 	it('Allocates a remotely rendered epic user into the RemoteEpicVariants AB test', () => {
 		const data = {
 			isRemote: true,
@@ -593,6 +615,7 @@ describe('basic behaviour of init', () => {
 		expect(participations.RemoteEpicVariants).toBe('remote');
 	});
 });
+
 describe('Correct allocation in a multi test environment', () => {
 	afterEach(() => {
 		window.localStorage.clear();
@@ -834,6 +857,7 @@ describe('Correct allocation in a multi test environment', () => {
 		expect(participations).toEqual(expectedParticipations);
 	});
 });
+
 it('targetPage matching', () => {
 	expect(
 		targetPageMatches('/uk/subscribe/paper', subsShowcaseAndDigiSubPages),
