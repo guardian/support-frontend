@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { getUser } from './user';
 import type { Action } from './userActions';
 // ----- Types ----- //
 export type User = {
@@ -17,27 +18,31 @@ export type User = {
 	emailValidated: boolean;
 	isReturningContributor: boolean;
 };
-// ----- Setup ----- //
-const initialState: User = {
-	id: '',
-	email: '',
-	displayName: '',
-	firstName: '',
-	lastName: '',
-	fullName: '',
-	stateField: '',
-	isTestUser: null,
-	isPostDeploymentTestUser: false,
-	gnmMarketing: false,
-	isSignedIn: false,
-	isRecurringContributor: false,
-	emailValidated: false,
-	isReturningContributor: false,
-};
 
-// ----- Functions ----- //
 // ----- Reducer ----- //
-function createUserReducer() {
+function createUserReducer(): (
+	state: User | undefined,
+	action: Action,
+) => User {
+	const userInfo = getUser();
+
+	const initialState: User = {
+		id: '',
+		email: userInfo.email ?? '',
+		displayName: '',
+		firstName: userInfo.firstName ?? '',
+		lastName: userInfo.lastName ?? '',
+		fullName: '',
+		stateField: '',
+		isTestUser: null,
+		isPostDeploymentTestUser: false,
+		gnmMarketing: false,
+		isSignedIn: userInfo.isSignedIn,
+		isRecurringContributor: false,
+		emailValidated: false,
+		isReturningContributor: false,
+	};
+
 	return function userReducer(
 		state: User = initialState,
 		action: Action,

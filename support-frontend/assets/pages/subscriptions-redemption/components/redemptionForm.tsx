@@ -40,6 +40,7 @@ function mapStateToProps(state: RedemptionPageState) {
 		email: state.page.checkout.email,
 		confirmEmail: state.page.checkout.confirmEmail,
 		telephone: state.page.checkout.telephone,
+		isSignedIn: state.page.checkout.isSignedIn,
 		formErrors: state.page.checkout.errors,
 		currencyId: state.common.internationalisation.currencyId,
 		countryId: state.common.internationalisation.countryId,
@@ -154,15 +155,15 @@ function RedemptionForm(props: PropTypes) {
 							</FormSection>
 							<FormSection title="Your details">
 								<PersonalDetails
-									firstName={props.user.firstName}
+									firstName={props.firstName}
 									setFirstName={props.setFirstName}
-									lastName={props.user.lastName}
+									lastName={props.lastName}
 									setLastName={props.setLastName}
-									email={props.user.email}
+									email={props.email}
 									setEmail={props.setEmail}
 									confirmEmail={props.confirmEmail}
 									setConfirmEmail={props.setConfirmEmail}
-									isSignedIn={props.user.isSignedIn}
+									isSignedIn={props.isSignedIn}
 									fetchAndStoreUserType={props.fetchAndStoreUserType}
 									telephone={props.telephone}
 									setTelephone={props.setTelephone}

@@ -9,7 +9,7 @@ import type { RedemptionPageState } from 'pages/subscriptions-redemption/subscri
 
 const mapStateToProps = (state: RedemptionPageState) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,
-	email: state.page.user.email,
+	email: state.page.checkout.email,
 	csrf: state.page.csrf,
 	error: state.page.marketingConsent.requestPending,
 	requestPending: state.page.marketingConsent.requestPending,
