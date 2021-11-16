@@ -124,7 +124,7 @@ function storeReferrerAcquisitionDataInSessionStorage(
 }
 
 const toAcquisitionQueryParameters = (
-	parameters: Array<[string, string]>,
+	parameters: Array<[string, string]> | string[][],
 ): AcquisitionQueryParameters => {
 	return parameters.map(([name, value]) => ({ name, value }));
 };
@@ -140,12 +140,14 @@ const participationsToAcquisitionABTest = (
 
 // Builds the acquisition object from data and other sources.
 function buildReferrerAcquisitionData(
-	acquisitionData: Record<string, any>,
+	acquisitionData: Record<string, unknown>,
 ): ReferrerAcquisitionData {
 	// This was how referrer pageview id used to be passed.
 	const referrerPageviewId =
 		(acquisitionData.referrerPageviewId as string | undefined) ??
 		getQueryParameter('REFPVID');
+
+	console.log(getCampaignCode() === null);
 
 	const campaignCode =
 		getCampaignCode() ??
@@ -153,6 +155,7 @@ function buildReferrerAcquisitionData(
 		getQueryParameter('INTCMP') ??
 		getQueryParameter('CMP') ??
 		undefined;
+
 	const parameterExclusions = [
 		'REFPVID',
 		'INTCMP',
@@ -252,7 +255,7 @@ function deriveSubsAcquisitionData(
 	return { ...referrerAcquisitionData, abTests };
 }
 
-function deserialiseReferralData(serialised: string): Record<string, any> {
+function deserialiseReferralData(serialised: string): Record<string, unknown> {
 	const [source, socialPlatform, referralCode] = serialised.split('_');
 	return {
 		componentId: `${source}_${socialPlatform}`,
@@ -279,7 +282,7 @@ function getReferrerAcquisitionDataFromSessionStorage():
 
 // Reads the acquisition data from the &acquistionData param containing a serialised JSON string.
 function getAcquisitionDataFromAcquisitionDataParam():
-	| Record<string, any>
+	| Record<string, unknown>
 	| null
 	| undefined {
 	if (getQueryParameter(ACQUISITIONS_PARAM)) {
@@ -291,7 +294,7 @@ function getAcquisitionDataFromAcquisitionDataParam():
 
 // Reads the acquisition data from the &referralData param containing _ separated values.
 function getAcquisitionDataFromReferralDataParam():
-	| Record<string, any>
+	| Record<string, unknown>
 	| null
 	| undefined {
 	if (getQueryParameter(REFERRAL_DATA_PARAM)) {
@@ -305,7 +308,7 @@ function getAcquisitionDataFromReferralDataParam():
 
 // Generates appropriate acquisition data from the various, known, PPC params
 function getAcquisitionDataFromPPCParams():
-	| Record<string, any>
+	| Record<string, unknown>
 	| null
 	| undefined {
 	if (getQueryParameter('gclid')) {

@@ -12,15 +12,12 @@ const DOMAINS: Record<Env, Domain> = {
 };
 
 // ----- Functions ----- //
-const getQueryParameter = (
-	paramName: string,
-	defaultValue?: string,
-): string | null | undefined => {
-	const params = new URL(window.location).searchParams;
+const getQueryParameter = (paramName: string, defaultValue = ''): string => {
+	const params = new URL(window.location.href).searchParams;
 	return (
-		params.get(paramName) ||
-		params.get(paramName.toLowerCase()) ||
-		params.get(paramName.toUpperCase()) ||
+		params.get(paramName) ??
+		params.get(paramName.toLowerCase()) ??
+		params.get(paramName.toUpperCase()) ??
 		defaultValue
 	);
 };
@@ -29,7 +26,7 @@ const getQueryParameter = (
 // Turn into array of 'param=value'
 // Turn each param into array of '[param, value]'
 // Filter out items that are not key-value pairs
-const getAllQueryParams = (): Array<[string, string]> =>
+const getAllQueryParams = (): Array<[string, string]> | string[][] =>
 	window.location.search
 		.slice(1)
 		.split('&')
@@ -38,8 +35,8 @@ const getAllQueryParams = (): Array<[string, string]> =>
 
 const getAllQueryParamsWithExclusions = (
 	excluded: string[],
-): Array<[string, string]> =>
-	getAllQueryParams().filter((p) => !excluded.includes(p[0]));
+): Array<[string, string]> | string[][] =>
+	getAllQueryParams().filter((p: string[]) => !excluded.includes(p[0]));
 
 // Takes a mapping of query params and adds to an absolute or relative URL.
 function addQueryParamsToURL(
@@ -48,11 +45,9 @@ function addQueryParamsToURL(
 ): string {
 	const [baseUrl, ...oldParams] = urlString.split('?');
 	const searchParams = new URLSearchParams(oldParams.join('&'));
-	Object.keys(params).forEach((key) => {
-		if (params[key] !== undefined && params[key] !== null) {
-			searchParams.set(key, params[key]);
-		}
-	});
+	Object.keys(params).forEach(
+		(key) => params[key] && searchParams.set(key, params[key] as string),
+	);
 	return `${baseUrl}?${searchParams.toString()}`;
 }
 
