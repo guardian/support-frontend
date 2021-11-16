@@ -5,6 +5,8 @@ declare global {
 	interface Window {
 		guardian: {
 			mdapiUrl: string;
+			enableContributionsCampaign: boolean;
+			forceContributionsCampaign: boolean;
 		};
 	}
 }

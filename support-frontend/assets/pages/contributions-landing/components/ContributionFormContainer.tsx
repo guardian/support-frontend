@@ -73,13 +73,13 @@ const mapStateToProps = (state: State) => ({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
 const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	setPaymentIsWaiting: (isWaiting) => {
+	setPaymentIsWaiting: (isWaiting: boolean) => {
 		dispatch(paymentWaiting(isWaiting));
 	},
 	setTickerGoalReached: () => {
 		dispatch(setTickerGoalReached());
 	},
-	onThirdPartyPaymentAuthorised: (token) => {
+	onThirdPartyPaymentAuthorised: (token: PaymentAuthorisation) => {
 		dispatch(onThirdPartyPaymentAuthorised(token));
 	},
 });
@@ -161,9 +161,9 @@ const styles = {
 // ----- Functions ----- //
 export type CountryMetaData = {
 	headerCopy: string;
-	contributeCopy?: React.ReactElement<React.ComponentProps<string>, string>;
+	contributeCopy?: JSX.Element;
 	// Optional message to display at the top of the form
-	formMessage?: React.ReactElement<React.ComponentProps<string>, string>;
+	formMessage?: JSX.Element;
 };
 const defaultHeaderCopy =
 	'Support\xa0our\njournalism\xa0with\na\xa0contribution\nof\xa0any\xa0size';
