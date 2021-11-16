@@ -160,9 +160,6 @@ export const tests: Tests = {
 	sixForSixSuppression: {
 		variants: [
 			{
-				id: 'control',
-			},
-			{
 				id: 'variant',
 			},
 		],
