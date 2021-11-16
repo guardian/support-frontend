@@ -118,6 +118,30 @@ function validateFormFields(
 	return formFieldErrors.length === 0;
 }
 
+function handleCodeValidationResult(
+	dispatch: Dispatch<Action>,
+	state: RedemptionPageState,
+) {
+	return function handleResult(result: ValidationResult) {
+		if (result.valid) {
+			createSubscription(dispatch, state);
+		} else {
+			dispatchError(dispatch, result.errorMessage);
+			dispatchStage(dispatch, 'form');
+		}
+	};
+}
+
+function handleCodeValidationError(dispatch: Dispatch<Action>) {
+	return function handleError(error: Error) {
+		dispatchError(
+			dispatch,
+			`An error occurred while validating this code: ${error.message}`,
+		);
+		dispatchStage(dispatch, 'form');
+	};
+}
+
 function submitCode(
 	dispatch: Dispatch<Action>,
 	state: RedemptionPageState,
@@ -126,21 +150,8 @@ function submitCode(
 	if (validateFormFields(dispatch, state)) {
 		dispatchStage(dispatch, 'processing');
 		validate(userCode)
-			.then((result: ValidationResult) => {
-				if (result.valid) {
-					createSubscription(dispatch, state);
-				} else {
-					dispatchError(dispatch, result.errorMessage);
-					dispatchStage(dispatch, 'form');
-				}
-			})
-			.catch((error: Error) => {
-				dispatchError(
-					dispatch,
-					`An error occurred while validating this code: ${error.message}`,
-				);
-				dispatchStage(dispatch, 'form');
-			});
+			.then(handleCodeValidationResult(dispatch, state))
+			.catch(handleCodeValidationError(dispatch));
 	}
 }
 

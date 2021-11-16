@@ -194,17 +194,18 @@ export type PaymentAuthorisation =
 	| ExistingCardAuthorisation
 	| ExistingDirectDebitAuthorisation
 	| AmazonPayAuthorisation;
+
+type Status = 'failure' | 'pending' | 'success';
+
 // Represents the end state of the checkout process,
 // standardised across payment methods & contribution types.
 // The only method/type combination which will not make use of this PayPal one-off,
 // because the end of that checkout happens on the backend after the user is redirected to our site.
 export type PaymentResult = {
-	paymentStatus: string;
+	paymentStatus: Status;
 	subscriptionCreationPending?: true;
 	error?: ErrorReason;
 };
-
-type Status = 'failure' | 'pending' | 'success';
 
 type StatusResponse = {
 	status: Status;
@@ -301,10 +302,11 @@ function checkRegularStatus(
 				const failureReason = json.failureReason
 					? json.failureReason
 					: 'unknown';
-				return {
+				const failureResult: PaymentResult = {
 					paymentStatus: 'failure',
 					error: failureReason,
 				};
+				return failureResult;
 			}
 		}
 	};
