@@ -15,6 +15,7 @@ import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { signOut } from 'helpers/user/user';
 import {
@@ -170,6 +171,9 @@ function RedemptionForm(props: PropTypes) {
 									formErrors={props.formErrors}
 									signOut={props.signOut}
 								/>
+								{props.formErrors.length > 0 && (
+									<ErrorSummary errors={props.formErrors} />
+								)}
 							</FormSection>
 						</div>
 						<div css={instructionsDivCss}>
