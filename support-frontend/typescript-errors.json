@@ -4,8 +4,8 @@
             "TS1208": 1,
             "TS7053": 20,
             "TS7006": 141,
-            "TS2305": 60,
-            "TS2322": 268,
+            "TS2305": 58,
+            "TS2322": 262,
             "TS2578": 22,
             "TS2339": 145,
             "TS2345": 151,
@@ -40,7 +40,6 @@
             "TS7022": 3,
             "TS2525": 6,
             "TS2724": 1,
-            "TS2300": 10,
             "TS2745": 2,
             "TS2698": 6
         },
@@ -155,8 +154,6 @@
             "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
             "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
             "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroPriceCardsClimate2021.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx": 5,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx": 2,
             "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
             "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
@@ -211,11 +208,10 @@
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx": 3,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/prices.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
-            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 21,
+            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 12,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 4,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
@@ -1167,14 +1163,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCardsClimate2021.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -1969,34 +1957,6 @@
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCardsClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/pageTitleClimate2021.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
@@ -2035,6 +1995,10 @@
         {
             "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
             "message": "Type '{}' is not assignable to type 'IntrinsicAttributes & (Omit<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { ...; }>, \"email\" | ... 2 more ... | \"confirmOptIn\"> | Omit<...>)'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
+            "message": "Type '{ orderIsAGift: true; countryGroupId: CountryGroupId; promotionCopy: PromotionCopy; }' is not assignable to type 'IntrinsicAttributes & PropTypes'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
@@ -4847,48 +4811,6 @@
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
             "message": "'\"react\"' has no exported member named 'Element'. Did you mean 'CElement'?"
-        }
-    ],
-    "TS2300": [
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'DigitalLandingPropTypes'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'digitalLandingProps'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'headers'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'footer'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'getRows'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'footer'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'getRows'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'headers'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'DigitalLandingPropTypes'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Duplicate identifier 'digitalLandingProps'."
         }
     ],
     "TS2745": [
