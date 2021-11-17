@@ -31,32 +31,19 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import Summary from 'components/subscriptionCheckouts/summary';
 import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
-// import type { Csrf } from 'helpers/csrf/csrfReducer';
-// import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-// import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
-// import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import type { SetCountryAction } from 'helpers/page/commonActions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-// import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type {
-	Action,
-	// FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import type {
-	// FormField,
-	// FormFields,
-	FormField as PersonalDetailsFormField,
-} from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	validateWithDeliveryForm,
@@ -72,7 +59,6 @@ import {
 	getBillingAddress,
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
@@ -166,28 +152,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps());
 
 // ----- Types ----- //
 type PropTypes = ConnectedProps<typeof connector>;
-// type PropTypes = FormFields &
-// 	FormActionCreators & {
-// 		billingCountry: IsoCountry;
-// 		deliveryCountry: IsoCountry;
-// 		signOut: typeof signOut;
-// 		formErrors: Array<FormError<FormField>>;
-// 		submissionError: ErrorReason | null;
-// 		productPrices: ProductPrices;
-// 		fetchAndStoreUserType: (...args: any[]) => any;
-// 		submitForm: (...args: any[]) => any;
-// 		setBillingCountry: (...args: any[]) => any;
-// 		billingAddressErrors: Array<Record<string, any>>;
-// 		deliveryAddressErrors: Array<Record<string, any>>;
-// 		country: IsoCountry;
-// 		isTestUser: boolean;
-// 		validateForm: () => (...args: any[]) => any;
-// 		csrf: Csrf;
-// 		currencyId: IsoCurrency;
-// 		payPalHasLoaded: boolean;
-// 		formIsValid: (...args: any[]) => any;
-// 		setupRecurringPayPalPayment: (...args: any[]) => any;
-// 	};
 
 // ----- Form Fields ----- //
 const DeliveryAddress = withStore(
@@ -275,25 +239,22 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							{options(titles)}
 						</Select>
 						<PersonalDetailsGift
-							firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
+							firstNameGiftRecipient={props.firstNameGiftRecipient ?? ''}
 							setFirstNameGift={props.setFirstNameGift}
-							lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
+							lastNameGiftRecipient={props.lastNameGiftRecipient ?? ''}
 							setLastNameGift={props.setLastNameGift}
-							emailGiftRecipient={props.emailGiftRecipient || ''}
+							emailGiftRecipient={props.emailGiftRecipient ?? ''}
 							setEmailGift={props.setEmailGift}
-							formErrors={
-								props.formErrors as any as Array<
-									FormError<PersonalDetailsFormField>
-								>
-							}
+							formErrors={props.formErrors}
 						/>
 					</FormSection>
 					<FormSection title="Gift delivery date">
 						<Rows>
 							<RadioGroup
 								id="startDate"
-								error={firstError('startDate', props.formErrors)}
-								legend="Gift delivery date"
+								name="startDate"
+								error={firstError('startDate', props.formErrors) as string}
+								label="Gift delivery date"
 							>
 								{days.map((day) => {
 									const [userDate, machineDate] = [
@@ -374,7 +335,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 								id="billingAddressIsSame"
 								name="billingAddressIsSame"
 								orientation="vertical"
-								error={firstError('billingAddressIsSame', props.formErrors)}
+								error={
+									firstError('billingAddressIsSame', props.formErrors) as string
+								}
 							>
 								<Radio
 									value="yes"
@@ -406,7 +369,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 								availablePaymentMethods={paymentMethods}
 								paymentMethod={props.paymentMethod}
 								setPaymentMethod={props.setPaymentMethod}
-								validationError={firstError('paymentMethod', props.formErrors)}
+								validationError={
+									firstError('paymentMethod', props.formErrors) as string
+								}
 							/>
 						</FormSection>
 					) : null}
@@ -419,6 +384,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							country={props.deliveryCountry}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
+							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[
 								...props.billingAddressErrors,
 								...props.deliveryAddressErrors,
@@ -461,6 +427,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
 							amount={price.price}
 							billingPeriod={props.billingPeriod}
+							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[
 								...props.billingAddressErrors,
 								...props.deliveryAddressErrors,
