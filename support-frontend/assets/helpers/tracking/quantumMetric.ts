@@ -1,7 +1,7 @@
 import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { logException } from 'helpers/utilities/logger';
 
-const pathIsValid = (): boolean => {
+function pathIsValid(): boolean {
 	const locationPath = window.location.pathname;
 	// Contribution landing page and thank you page (all regions)
 	const contributionsRegex = /\/contribute(\/thankyou)?(\?.*)?$/;
@@ -11,9 +11,9 @@ const pathIsValid = (): boolean => {
 	return [contributionsRegex, digiSubRegex].some(
 		(pathRegEx) => locationPath.match(pathRegEx) != null,
 	);
-};
+}
 
-const addQM = (): void => {
+function addQM(): void {
 	const qtm = document.createElement('script');
 	qtm.type = 'text/javascript';
 	qtm.async = true;
@@ -25,9 +25,9 @@ const addQM = (): void => {
 	if (!window.QuantumMetricAPI && d.parentNode) {
 		d.parentNode.insertBefore(qtm, d);
 	}
-};
+}
 
-const init = (): void => {
+function init(): void {
 	/**
 	 * Return immediately if we're Server Side Rendering OR
 	 * The feature switch is off OR
@@ -66,6 +66,6 @@ const init = (): void => {
 		.catch((error) => {
 			logException('Failed to load Quantum Metric', error);
 		});
-};
+}
 
 export { init };
