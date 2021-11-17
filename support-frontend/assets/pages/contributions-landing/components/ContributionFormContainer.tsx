@@ -66,8 +66,7 @@ const mapStateToProps = (state: State) => ({
 	referrerAcquisitionData: state.common.referrerAcquisitionData,
 	canShowTicker: state.common.abParticipations.tickerTest === 'variant',
 	currency: state.common.internationalisation.currencyId,
-	shouldShowRichLandingPage:
-		state.common.abParticipations.richLandingPageTest === 'variant',
+	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
 });
 
