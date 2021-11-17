@@ -17,10 +17,10 @@ import 'helpers/internationalisation/country';
 // ----- Functions ----- //
 
 // Sets up GA and logging.
-const analyticsInitialisation = (
+function analyticsInitialisation(
 	participations: Participations,
 	acquisitionData: ReferrerAcquisitionData,
-): void => {
+): void {
 	setReferrerDataInLocalStorage(acquisitionData);
 	googleTagManager.init(participations);
 	ophan.init();
@@ -30,9 +30,9 @@ const analyticsInitialisation = (
 	initLogger().catch((err) => {
 		throw err;
 	});
-};
+}
 
-const consentInitialisation = async (country: IsoCountry): Promise<void> => {
+async function consentInitialisation(country: IsoCountry): Promise<void> {
 	/**
 	 * Dynamically load @guardian/consent-management-platform
 	 * on condition we're not server side rendering (ssr) the page.
@@ -44,6 +44,6 @@ const consentInitialisation = async (country: IsoCountry): Promise<void> => {
 			country,
 		});
 	}
-};
+}
 
 export { analyticsInitialisation, consentInitialisation };
