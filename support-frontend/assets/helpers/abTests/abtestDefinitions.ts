@@ -157,32 +157,8 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 17,
 	},
-	digiSubClimateHeader2021: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
-		seed: 12,
-		optimizeId: 'erMFDh79T6iyp2WhaG7CWQ',
-	},
 	sixForSixSuppression: {
 		variants: [
-			{
-				id: 'control',
-			},
 			{
 				id: 'variant',
 			},

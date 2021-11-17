@@ -1,6 +1,7 @@
+// ----- Imports ----- //
+
 import { viewId } from 'ophan';
 import type { $Keys } from 'utility-types';
-// ----- Imports ----- //
 import type { Participations } from 'helpers/abTests/abtest';
 import { getCampaignCode } from 'helpers/campaigns/campaigns';
 import { get as getCookie } from 'helpers/storage/cookie';
@@ -11,24 +12,30 @@ import {
 	getQueryParameter,
 } from 'helpers/urls/url';
 import { deserialiseJsonObject } from 'helpers/utilities/utilities';
+
 // ----- Types ----- //
+
 export type AcquisitionABTest = {
 	name: string;
 	variant: string;
 };
+
 export type QueryParameter = {
 	name: string;
 	value: string;
 };
+
 export type AcquisitionQueryParameters = QueryParameter[];
+
 export type OphanIds = {
 	pageviewId: string;
 	visitId: string | null | undefined;
 	browserId: string | null | undefined;
 };
+
 // https://github.com/guardian/frontend/blob/master/static/src/javascripts/projects/common/modules/commercial/acquisitions-ophan.js
 export type ReferrerAcquisitionData = {
-	campaignCode: string | null | undefined;
+	campaignCode?: string;
 	referrerPageviewId: string | null | undefined;
 	referrerUrl?: string;
 	componentId: string | null | undefined;
@@ -40,6 +47,7 @@ export type ReferrerAcquisitionData = {
 	queryParameters: AcquisitionQueryParameters | null | undefined;
 	labels: string[] | null | undefined;
 };
+
 export type PaymentAPIAcquisitionData = {
 	pageviewId: string;
 	visitId: string | null | undefined;
@@ -56,11 +64,15 @@ export type PaymentAPIAcquisitionData = {
 	queryParameters: AcquisitionQueryParameters | null | undefined;
 	labels: string[] | null | undefined;
 };
+
 // ----- Setup ----- //
+
 const ACQUISITIONS_PARAM = 'acquisitionData';
 const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 const REFERRAL_DATA_PARAM = 'referralData';
+
 // ----- Campaigns ----- //
+
 const campaigns: Record<string, string[]> = {
 	seven_fifty_middle: ['gdnwb_copts_editorial_memco_seven_fifty_middle'],
 	seven_fifty_end: ['gdnwb_copts_editorial_memco_seven_fifty_end'],
@@ -76,9 +88,11 @@ const campaigns: Record<string, string[]> = {
 	banner_just_one_control: ['banner_just_one_control'],
 	banner_just_one_just_one: ['banner_just_one_just_one'],
 };
+
 export type Campaign = $Keys<typeof campaigns>;
 
 // ----- Functions ----- //
+
 // Retrieves the user's campaign, if known, from the campaign code.
 function getCampaign(
 	acquisition: ReferrerAcquisitionData,
@@ -92,7 +106,7 @@ function getCampaign(
 	return (
 		Object.keys(campaigns).find((campaign) =>
 			campaigns[campaign].includes(campaignCode),
-		) || null
+		) ?? null
 	);
 }
 
@@ -110,41 +124,38 @@ function storeReferrerAcquisitionDataInSessionStorage(
 }
 
 const toAcquisitionQueryParameters = (
-	parameters: Array<[string, string]>,
-): AcquisitionQueryParameters =>
-	parameters.reduce((array, item) => {
-		array.push({
-			name: item[0],
-			value: item[1],
-		});
-		return array;
-	}, []);
+	parameters: Array<[string, string]> | string[][],
+): AcquisitionQueryParameters => {
+	return parameters.map(([name, value]) => ({ name, value }));
+};
 
 const participationsToAcquisitionABTest = (
 	participations: Participations,
 ): AcquisitionABTest[] => {
-	const response: AcquisitionABTest[] = [];
-	Object.keys(participations).forEach((participation) => {
-		response.push({
-			name: participation,
-			variant: participations[participation as any],
-		});
-	});
-	return response;
+	return Object.entries(participations).map(([name, variant]) => ({
+		name,
+		variant,
+	}));
 };
 
 // Builds the acquisition object from data and other sources.
 function buildReferrerAcquisitionData(
-	acquisitionData: Record<string, any>,
+	acquisitionData: Record<string, unknown>,
 ): ReferrerAcquisitionData {
 	// This was how referrer pageview id used to be passed.
 	const referrerPageviewId =
-		acquisitionData.referrerPageviewId || getQueryParameter('REFPVID');
+		(acquisitionData.referrerPageviewId as string | undefined) ??
+		getQueryParameter('REFPVID');
+
+	console.log(getCampaignCode() === null);
+
 	const campaignCode =
-		getCampaignCode() ||
-		acquisitionData.campaignCode ||
-		getQueryParameter('INTCMP') ||
-		getQueryParameter('CMP');
+		getCampaignCode() ??
+		(acquisitionData.campaignCode as string | undefined) ??
+		getQueryParameter('INTCMP') ??
+		getQueryParameter('CMP') ??
+		undefined;
+
 	const parameterExclusions = [
 		'REFPVID',
 		'INTCMP',
@@ -154,26 +165,29 @@ function buildReferrerAcquisitionData(
 		'currency',
 	];
 	const queryParameters =
-		acquisitionData.queryParameters ||
+		(acquisitionData.queryParameters as
+			| AcquisitionQueryParameters
+			| null
+			| undefined) ??
 		toAcquisitionQueryParameters(
 			getAllQueryParamsWithExclusions(parameterExclusions),
 		);
 	const source =
 		campaignCode && /^PPC_/i.test(campaignCode)
 			? 'PPC'
-			: acquisitionData.source;
+			: (acquisitionData.source as string | null | undefined);
 	return {
 		referrerPageviewId,
 		campaignCode,
-		referrerUrl: acquisitionData.referrerUrl,
-		componentId: acquisitionData.componentId,
-		componentType: acquisitionData.componentType,
+		referrerUrl: acquisitionData.referrerUrl as string | undefined,
+		componentId: acquisitionData.componentId as string | undefined,
+		componentType: acquisitionData.componentType as string | undefined,
 		source,
-		abTests: acquisitionData.abTest
+		abTests: (acquisitionData.abTest
 			? [acquisitionData.abTest]
-			: acquisitionData.abTests,
+			: acquisitionData.abTests) as AcquisitionABTest[] | null | undefined,
 		queryParameters: queryParameters.length > 0 ? queryParameters : [],
-		labels: acquisitionData.labels,
+		labels: acquisitionData.labels as string[] | null | undefined,
 	};
 }
 
@@ -195,7 +209,7 @@ const getAbTests = (
 ) => {
 	const alltests = [
 		...participationsToAcquisitionABTest(participations),
-		...(referrerAcquisitionData.abTests || []),
+		...(referrerAcquisitionData.abTests ?? []),
 	];
 	return alltests.reduce(
 		(acc: AcquisitionABTest[], abTest: AcquisitionABTest) =>
@@ -241,7 +255,7 @@ function deriveSubsAcquisitionData(
 	return { ...referrerAcquisitionData, abTests };
 }
 
-function deserialiseReferralData(serialised: string): Record<string, any> {
+function deserialiseReferralData(serialised: string): Record<string, unknown> {
 	const [source, socialPlatform, referralCode] = serialised.split('_');
 	return {
 		componentId: `${source}_${socialPlatform}`,
@@ -261,16 +275,18 @@ function getReferrerAcquisitionDataFromSessionStorage():
 	| null
 	| undefined {
 	const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
-	return stored ? deserialiseJsonObject(stored) : null;
+	return stored
+		? (deserialiseJsonObject(stored) as ReferrerAcquisitionData)
+		: null;
 }
 
 // Reads the acquisition data from the &acquistionData param containing a serialised JSON string.
 function getAcquisitionDataFromAcquisitionDataParam():
-	| Record<string, any>
+	| Record<string, unknown>
 	| null
 	| undefined {
 	if (getQueryParameter(ACQUISITIONS_PARAM)) {
-		return deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
+		return deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) ?? '');
 	}
 
 	return null;
@@ -278,12 +294,12 @@ function getAcquisitionDataFromAcquisitionDataParam():
 
 // Reads the acquisition data from the &referralData param containing _ separated values.
 function getAcquisitionDataFromReferralDataParam():
-	| Record<string, any>
+	| Record<string, unknown>
 	| null
 	| undefined {
 	if (getQueryParameter(REFERRAL_DATA_PARAM)) {
 		return deserialiseReferralData(
-			getQueryParameter(REFERRAL_DATA_PARAM) || '',
+			getQueryParameter(REFERRAL_DATA_PARAM) ?? '',
 		);
 	}
 
@@ -292,7 +308,7 @@ function getAcquisitionDataFromReferralDataParam():
 
 // Generates appropriate acquisition data from the various, known, PPC params
 function getAcquisitionDataFromPPCParams():
-	| Record<string, any>
+	| Record<string, unknown>
 	| null
 	| undefined {
 	if (getQueryParameter('gclid')) {
@@ -311,12 +327,12 @@ function getAcquisitionDataFromPPCParams():
 function getReferrerAcquisitionData(): ReferrerAcquisitionData {
 	// Read acquisitonData from the various query params, or from sessionStorage, in the following precedence
 	const candidateAcquisitionData =
-		getAcquisitionDataFromReferralDataParam() ||
-		getAcquisitionDataFromAcquisitionDataParam() ||
-		getAcquisitionDataFromPPCParams() ||
+		getAcquisitionDataFromReferralDataParam() ??
+		getAcquisitionDataFromAcquisitionDataParam() ??
+		getAcquisitionDataFromPPCParams() ??
 		getReferrerAcquisitionDataFromSessionStorage();
 	const referrerAcquisitionData = buildReferrerAcquisitionData(
-		candidateAcquisitionData || {},
+		candidateAcquisitionData ?? {},
 	);
 	storeReferrerAcquisitionDataInSessionStorage(referrerAcquisitionData);
 	return referrerAcquisitionData;

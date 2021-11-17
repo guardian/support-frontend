@@ -9,6 +9,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.api.routing.Router
 import play.filters.HttpFiltersComponents
+import play.filters.cors.{CORSComponents, CORSConfig}
 import play.filters.gzip.GzipFilter
 
 trait AppComponents extends PlayComponents
@@ -20,6 +21,7 @@ trait AppComponents extends PlayComponents
   with ActionBuilders
   with Assets
   with GoogleAuth
+  with CORSComponents
   with HttpFiltersComponents {
   self: BuiltInComponentsFromContext =>
 
@@ -35,7 +37,10 @@ trait AppComponents extends PlayComponents
   override lazy val httpErrorHandler = customHandler
   override lazy val errorController = new ErrorController(actionRefiners, customHandler)
 
+  final override lazy val corsConfig: CORSConfig = CORSConfig().withOriginsAllowed(_ == appConfig.supportUrl)
+
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
+    corsFilter,
     new SetCookiesCheck(),
     securityHeadersFilter,
     new CacheHeadersCheck(),
