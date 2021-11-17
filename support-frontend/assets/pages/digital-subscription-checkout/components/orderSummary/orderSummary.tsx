@@ -5,23 +5,21 @@ import { Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import { getGiftOrderSummaryText } from '../helpers';
 import * as styles from './orderSummaryStyles';
 
-type PropTypes = {
+type OrderSummaryPropTypes = {
 	billingPeriod: DigitalBillingPeriod;
 	changeSubscription?: string;
 	image: ReactNode;
 	productPrice: ProductPrice;
 	title: string;
 	orderIsAGift?: boolean;
+	isPatron?: boolean;
 };
 
-export let isPatron: boolean;
-
-function OrderSummary(props: PropTypes): JSX.Element {
+function OrderSummary(props: OrderSummaryPropTypes): JSX.Element {
 	const giftBillingPeriod = props.billingPeriod === Annual ? Annual : Quarterly;
 	const giftPriceString = getGiftOrderSummaryText(
 		giftBillingPeriod,
@@ -30,13 +28,6 @@ function OrderSummary(props: PropTypes): JSX.Element {
 	const priceString = props.orderIsAGift
 		? giftPriceString
 		: getBillingDescription(props.productPrice, props.billingPeriod);
-
-	isPatron =
-		props.productPrice.promotions?.find(
-			(promotion: Promotion) =>
-				promotion.numberOfDiscountedPeriods &&
-				promotion.numberOfDiscountedPeriods >= 100,
-		) !== undefined;
 
 	return (
 		<aside css={styles.wrapper}>
@@ -49,7 +40,9 @@ function OrderSummary(props: PropTypes): JSX.Element {
 				<div css={styles.textBlock}>
 					<h4>{props.title}</h4>
 					<p>{priceString}</p>
-					{!props.orderIsAGift && !isPatron && <span>14 day free trial</span>}
+					{!props.orderIsAGift && !props.isPatron && (
+						<span>14 day free trial</span>
+					)}
 				</div>
 			</div>
 			<div css={styles.endSummary}>

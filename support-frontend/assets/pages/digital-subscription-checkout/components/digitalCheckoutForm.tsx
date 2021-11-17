@@ -33,6 +33,7 @@ import {
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
@@ -61,9 +62,7 @@ import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
-import OrderSummary, {
-	isPatron,
-} from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
+import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
 // ----- Types ----- //
 type PropTypes = FormFields &
 	FormActionCreators & {
@@ -84,7 +83,6 @@ type PropTypes = FormFields &
 		validateForm: () => (...args: any[]) => any;
 		formIsValid: (...args: any[]) => any;
 		addressErrors: Array<Record<string, any>>;
-		// eslint-disable-next-line react/no-unused-prop-types
 		participations: Participations;
 	};
 
@@ -162,6 +160,13 @@ function DigitalCheckoutForm(props: PropTypes) {
 		props.country,
 	);
 
+	const isPatron =
+		productPrice.promotions?.find(
+			(promotion: Promotion) =>
+				promotion.numberOfDiscountedPeriods &&
+				promotion.numberOfDiscountedPeriods >= 100,
+		) !== undefined;
+
 	return (
 		<Content>
 			<CheckoutLayout
@@ -185,6 +190,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 						productPrice={productPrice}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.digitalSubscriptionLanding}
+						isPatron={isPatron}
 					/>
 				}
 			>
