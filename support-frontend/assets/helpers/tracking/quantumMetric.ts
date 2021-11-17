@@ -4,7 +4,7 @@ import { logException } from 'helpers/utilities/logger';
 function pathIsValid(): boolean {
 	const locationPath = window.location.pathname;
 	// Contribution landing page and thank you page (all regions)
-	const contributionsRegex = /\/contribute(\/thankyou)?(\?.*)?$/;
+	const contributionsRegex = /(\/contribute|\/thankyou)?(\?.*)?$/;
 	// Non-Gifting Digi Subs landing page, checkout and thank you page (all regions)
 	const digiSubRegex = /\/subscribe\/digital(\/checkout|\/thankyou)?(\?.*)?$/;
 
