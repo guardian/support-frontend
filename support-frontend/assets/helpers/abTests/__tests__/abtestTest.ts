@@ -189,7 +189,7 @@ describe('basic behaviour of init', () => {
 				},
 				isActive: true,
 				referrerControlled: false,
-				seed: 2,
+				seed: 6,
 			},
 		};
 		const country = 'GB';
@@ -227,7 +227,7 @@ describe('basic behaviour of init', () => {
 				},
 				isActive: true,
 				referrerControlled: false,
-				seed: 8,
+				seed: 5,
 			},
 		};
 		const country = 'GB';
