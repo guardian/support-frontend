@@ -13,6 +13,7 @@ declare global {
 		};
 		googleTagManagerDataLayer?: Array<Record<string, unknown>>;
 		gtag_enable_tcf_support?: boolean;
+		QuantumMetricAPI: unknown;
 	}
 }
 /* ~ this line is required as per TypeScript's global-modifying-module.d.ts instructions */

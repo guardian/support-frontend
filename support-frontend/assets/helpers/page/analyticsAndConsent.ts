@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import * as ophan from 'ophan';
+import ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -9,23 +9,30 @@ import {
 	setReferrerDataInLocalStorage,
 	trackAbTests,
 } from 'helpers/tracking/ophan';
+import { init as initQuantumMetric } from 'helpers/tracking/quantumMetric';
 import { isPostDeployUser } from 'helpers/user/user';
-import * as logger from 'helpers/utilities/logger';
+import { init as initLogger } from 'helpers/utilities/logger';
 import 'helpers/internationalisation/country';
+
 // ----- Functions ----- //
+
 // Sets up GA and logging.
-export function analyticsInitialisation(
+function analyticsInitialisation(
 	participations: Participations,
 	acquisitionData: ReferrerAcquisitionData,
 ): void {
 	setReferrerDataInLocalStorage(acquisitionData);
 	googleTagManager.init(participations);
 	ophan.init();
+	initQuantumMetric();
 	trackAbTests(participations);
-	// Logging.
-	logger.init();
+	// Sentry logging.
+	initLogger().catch((err) => {
+		throw err;
+	});
 }
-export async function consentInitialisation(country: IsoCountry) {
+
+async function consentInitialisation(country: IsoCountry): Promise<void> {
 	/**
 	 * Dynamically load @guardian/consent-management-platform
 	 * on condition we're not server side rendering (ssr) the page.
@@ -38,3 +45,5 @@ export async function consentInitialisation(country: IsoCountry) {
 		});
 	}
 }
+
+export { analyticsInitialisation, consentInitialisation };
