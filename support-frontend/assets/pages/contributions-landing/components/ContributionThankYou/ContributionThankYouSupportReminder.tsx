@@ -7,6 +7,7 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { Link } from '@guardian/src-link';
 import { Radio, RadioGroup } from '@guardian/src-radio';
 import React, { useEffect, useState } from 'react';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { privacyLink } from 'helpers/legal';
 import {
 	trackComponentClick,
@@ -127,6 +128,22 @@ const getDefaultReminderChoices = (): ReminderChoice[] => [
 	getOneOffReminderChoiceWithDefaultLabel(9),
 ];
 
+const GIVING_TUESDAY_CHOICE: ReminderChoice = {
+	type: 'ONE_OFF',
+	label: 'on Giving Tuesday (30 November)',
+	signup: {
+		reminderPeriod: '2021-11-01',
+		reminderOption: 'giving-tuesday-2021',
+	},
+};
+
+const getUsReminderChoices = (): ReminderChoice[] => [
+	getRecurringReminderChoice(),
+	GIVING_TUESDAY_CHOICE,
+	getOneOffReminderChoiceWithDefaultLabel(6),
+	getOneOffReminderChoiceWithDefaultLabel(9),
+];
+
 const getReminderUrl = (choice: ReminderChoice): string => {
 	if (choice.type === 'ONE_OFF') {
 		return createOneOffReminderEndpoint;
@@ -137,128 +154,134 @@ const getReminderUrl = (choice: ReminderChoice): string => {
 
 type ContributionThankYouSupportReminderProps = {
 	email: string;
+	countryId: IsoCountry;
 };
 
-const ContributionThankYouSupportReminder: React.FC<ContributionThankYouSupportReminderProps> =
-	({ email }: ContributionThankYouSupportReminderProps) => {
-		const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
-		const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
-		useEffect(() => {
-			trackComponentLoad(OPHAN_COMPONENT_ID_SET_REMINDER);
-		}, []);
-		const reminderChoices = getDefaultReminderChoices();
+function ContributionThankYouSupportReminder({
+	email,
+	countryId,
+}: ContributionThankYouSupportReminderProps): JSX.Element {
+	const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
+	const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
 
-		const setReminder = () => {
-			const choice = reminderChoices[selectedChoiceIndex];
-			const url = getReminderUrl(choice);
-			fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					email,
-					reminderPlatform: REMINDER_PLATFORM,
-					reminderComponent: REMINDER_COMPONENT,
-					reminderStage: REMINDER_STAGE,
-					...choice.signup,
-				}),
-			})
-				.then((response) => {
-					if (!response.ok) {
-						logException('Reminder sign up failed at the point of request');
-					}
-				})
-				.catch(catchPromiseHandler('Error creating reminder sign up'));
-		};
+	useEffect(() => {
+		trackComponentLoad(OPHAN_COMPONENT_ID_SET_REMINDER);
+	}, []);
 
-		const onSubmit = () => {
-			setReminder();
-			trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
-			setHasBeenInteractedWith(true);
-		};
+	const reminderChoices =
+		countryId === 'US' ? getUsReminderChoices() : getDefaultReminderChoices();
 
-		const actionIcon = <SvgClock />;
-		const actionHeader = (
-			<ActionHeader
-				title={
-					hasBeenCompleted
-						? 'Your support reminder is set'
-						: 'Set a support reminder'
+	const setReminder = () => {
+		const choice = reminderChoices[selectedChoiceIndex];
+		const url = getReminderUrl(choice);
+		fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email,
+				reminderPlatform: REMINDER_PLATFORM,
+				reminderComponent: REMINDER_COMPONENT,
+				reminderStage: REMINDER_STAGE,
+				...choice.signup,
+			}),
+		})
+			.then((response) => {
+				if (!response.ok) {
+					logException('Reminder sign up failed at the point of request');
 				}
-			/>
-		);
-		const actionBody = (
-			<ActionBody>
-				{hasBeenCompleted ? (
-					<p>
-						We will be in touch at the time you selected, so look out for a
-						message from the Guardian in your inbox.
-					</p>
-				) : (
-					<>
-						<p>
-							<span css={styles.hideAfterTablet}>
-								Choose a time when we can invite you to support our journalism
-								again. We’ll send you a maximum of two reminder emails, with no
-								obligation.
-							</span>
-							<span css={styles.hideBeforeTablet}>
-								Many readers choose to support Guardian journalism by making
-								single contributions at various points in the year. Opt in to
-								whichever time suits you best, and we’ll send you a maximum of
-								two reminder emails, with no obligation.
-							</span>
-						</p>
-						<form css={form}>
-							<RadioGroup name="reminder" label="I'd like to be reminded in:">
-								{reminderChoices.map((choice, index) => (
-									<Radio
-										value={choice.label}
-										label={choice.label}
-										checked={selectedChoiceIndex === index}
-										onChange={() => setSelectedChoiceIndex(index)}
-									/>
-								))}
-							</RadioGroup>
-						</form>
-						<div css={buttonContainer}>
-							<Button
-								onClick={onSubmit}
-								priority="primary"
-								size="default"
-								icon={<SvgArrowRightStraight />}
-								iconSide="right"
-								nudgeIcon
-							>
-								Set my reminder
-							</Button>
-						</div>
-						<p css={privacyText}>
-							To find out what personal data we collect and how we use it,
-							please visit our{' '}
-							<Link
-								css={privacyTextLink}
-								href={privacyLink}
-								target="_blank"
-								rel="noopener noreferrer"
-								priority="secondary"
-							>
-								Privacy Policy
-							</Link>
-							.
-						</p>
-					</>
-				)}
-			</ActionBody>
-		);
-		return (
-			<ActionContainer
-				icon={actionIcon}
-				header={actionHeader}
-				body={actionBody}
-			/>
-		);
+			})
+			.catch(catchPromiseHandler('Error creating reminder sign up'));
 	};
+
+	const onSubmit = () => {
+		setReminder();
+		trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
+		setHasBeenInteractedWith(true);
+	};
+
+	const actionIcon = <SvgClock />;
+	const actionHeader = (
+		<ActionHeader
+			title={
+				hasBeenCompleted
+					? 'Your support reminder is set'
+					: 'Set a support reminder'
+			}
+		/>
+	);
+	const actionBody = (
+		<ActionBody>
+			{hasBeenCompleted ? (
+				<p>
+					We will be in touch at the time you selected, so look out for a
+					message from the Guardian in your inbox.
+				</p>
+			) : (
+				<>
+					<p>
+						<span css={styles.hideAfterTablet}>
+							Choose a time when we can invite you to support our journalism
+							again. We’ll send you a maximum of two reminder emails, with no
+							obligation.
+						</span>
+						<span css={styles.hideBeforeTablet}>
+							Many readers choose to support Guardian journalism by making
+							single contributions at various points in the year. Opt in to
+							whichever time suits you best, and we’ll send you a maximum of two
+							reminder emails, with no obligation.
+						</span>
+					</p>
+					<form css={form}>
+						<RadioGroup name="reminder" label="I'd like to be reminded in:">
+							{reminderChoices.map((choice, index) => (
+								<Radio
+									value={choice.label}
+									label={choice.label}
+									checked={selectedChoiceIndex === index}
+									onChange={() => setSelectedChoiceIndex(index)}
+								/>
+							))}
+						</RadioGroup>
+					</form>
+					<div css={buttonContainer}>
+						<Button
+							onClick={onSubmit}
+							priority="primary"
+							size="default"
+							icon={<SvgArrowRightStraight />}
+							iconSide="right"
+							nudgeIcon
+						>
+							Set my reminder
+						</Button>
+					</div>
+					<p css={privacyText}>
+						To find out what personal data we collect and how we use it, please
+						visit our{' '}
+						<Link
+							css={privacyTextLink}
+							href={privacyLink}
+							target="_blank"
+							rel="noopener noreferrer"
+							priority="secondary"
+						>
+							Privacy Policy
+						</Link>
+						.
+					</p>
+				</>
+			)}
+		</ActionBody>
+	);
+	return (
+		<ActionContainer
+			icon={actionIcon}
+			header={actionHeader}
+			body={actionBody}
+		/>
+	);
+}
 
 export default ContributionThankYouSupportReminder;
