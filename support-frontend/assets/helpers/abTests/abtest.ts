@@ -1,6 +1,4 @@
 // ----- Imports ----- //
-// TODO: install @types/seedrandom
-// @ts-expect-error:next-line
 import seedrandom from 'seedrandom';
 import type { $Keys } from 'utility-types';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
@@ -215,12 +213,7 @@ function userInTest(
 }
 
 function randomNumber(mvtId: number, seed: number): number {
-	// TODO: once @types/seedrandom is installed pass the seedrandom function
-	// the expected type i.e. a string (when there is not an abtest running!)
-
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment -- until @types/seedrandom is included rng will be of type "any"
-	const rng = seedrandom(mvtId + seed);
-	// eslint-disable-next-line -- diabling unsafe member access .int32 on an "any" value
+	const rng = seedrandom(`${mvtId + seed}`);
 	return Math.abs(rng.int32());
 }
 

@@ -215,7 +215,12 @@ function ContributionThankYou({
 	};
 
 	const supportReminderAction = {
-		component: <ContributionThankYouSupportReminder email={email} />,
+		component: (
+			<ContributionThankYouSupportReminder
+				email={email}
+				countryId={countryId}
+			/>
+		),
 		shouldShow: contributionType === 'ONE_OFF' && email.length > 0,
 	};
 
