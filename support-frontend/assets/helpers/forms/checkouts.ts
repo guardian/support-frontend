@@ -341,14 +341,19 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 // . {applePay: true} - applePay is available
 // . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
 function getAvailablePaymentRequestButtonPaymentMethod(
-	result: Record<string, unknown>,
+	result: Record<string, unknown> | null,
 	contributionType: ContributionType,
 ): StripePaymentMethod | null {
 	const switchKey = switchKeyForContributionType(contributionType);
 
-	if (result.applePay === true && isSwitchOn(`${switchKey}.stripeApplePay`)) {
+	if (
+		result &&
+		result.applePay === true &&
+		isSwitchOn(`${switchKey}.stripeApplePay`)
+	) {
 		return 'StripeApplePay';
 	} else if (
+		result &&
 		result.applePay === false &&
 		isSwitchOn(`${switchKey}.stripePaymentRequestButton`)
 	) {
