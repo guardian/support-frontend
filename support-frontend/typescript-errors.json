@@ -3,12 +3,12 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 20,
-            "TS7006": 141,
+            "TS7006": 138,
             "TS2305": 58,
             "TS2322": 262,
             "TS2578": 22,
-            "TS2339": 145,
-            "TS2345": 151,
+            "TS2339": 136,
+            "TS2345": 144,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
@@ -18,13 +18,13 @@
             "TS2314": 7,
             "TS7016": 5,
             "TS2304": 18,
-            "TS2741": 5,
+            "TS2741": 6,
             "TS2739": 17,
             "TS2531": 11,
             "TS2604": 4,
             "TS2532": 1,
             "TS2556": 3,
-            "TS2554": 57,
+            "TS2554": 51,
             "TS2569": 2,
             "TS2571": 14,
             "TS2411": 1,
@@ -34,12 +34,10 @@
             "TS2707": 2,
             "TS2367": 4,
             "TS2740": 6,
-            "TS2722": 2,
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
             "TS2525": 6,
-            "TS2724": 1,
             "TS2745": 2,
             "TS2698": 6
         },
@@ -73,7 +71,6 @@
             "assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts": 5,
             "assets/helpers/rendering/render.ts": 7,
             "assets/helpers/rendering/ssrPages.ts": 2,
-            "assets/helpers/storage/storage.ts": 1,
             "assets/helpers/subscriptionsForms/formReducer.ts": 6,
             "assets/helpers/subscriptionsForms/submit.ts": 10,
             "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts": 1,
@@ -93,7 +90,6 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 11,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
@@ -242,11 +238,9 @@
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 3,
             "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts": 5,
-            "assets/helpers/tracking/__tests__/googleTagManagerTest.ts": 2,
-            "assets/helpers/tracking/googleTagManager.ts": 12,
             "assets/helpers/utilities/logger.ts": 1,
             "assets/pages/contributions-landing/checkoutFormIsSubmittableActions.ts": 5,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 6,
+            "assets/pages/contributions-landing/contributionsLanding.tsx": 4,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/pages/subscriptions-redemption/api.ts": 3,
             "assets/components/datePicker/datePicker.tsx": 2,
@@ -266,6 +260,7 @@
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 15,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
+            "assets/helpers/tracking/googleTagManager.ts": 2,
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
@@ -285,11 +280,11 @@
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/helpers/subscriptionsForms/formActions.ts": 2,
+            "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx": 1,
             "assets/pages/subscriptions-redemption/subscriptionsRedemptionReducer.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
-            "assets/helpers/tracking/behaviour.ts": 2,
             "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 2,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 1,
@@ -605,10 +600,6 @@
             "message": "Parameter 'content' implicitly has an 'any' type."
         },
         {
-            "path": "assets/helpers/storage/storage.ts",
-            "message": "Parameter 'storage' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/helpers/subscriptionsForms/formReducer.ts",
             "message": "Parameter 'action' implicitly has an 'any' type."
         },
@@ -815,14 +806,6 @@
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Parameter 'price' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Parameter 'price' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -1878,7 +1861,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Type '{ image: Element; title: string; description: string; productPrice: ProductPrice; billingPeriod: \"Annual\" | \"Monthly\"; changeSubscription: string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"title\" | \"image\" | \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"changeSubscription\">> & Partial<...>'."
+            "message": "Type '{ image: Element; title: string; description: string; productPrice: ProductPrice; billingPeriod: \"Annual\" | \"Monthly\"; changeSubscription: string; isPatron: boolean; }' is not assignable to type 'IntrinsicAttributes & Pick<OrderSummaryPropTypes, \"title\" | \"image\" | \"billingPeriod\" | \"productPrice\" | \"isPatron\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
@@ -1890,7 +1873,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"price\" | \"promotion\" | \"priceDescription\" | \"digitalGiftBillingPeriod\">'."
+            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"price\" | \"promotion\" | \"priceDescription\" | \"digitalGiftBillingPeriod\" | \"isPatron\">'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",
@@ -2629,42 +2612,6 @@
             "message": "Property 'subscriptionCreationPending' does not exist on type '{ paymentStatus: \"success\"; } | { paymentStatus: \"success\"; subscriptionCreationPending: true; }'."
         },
         {
-            "path": "assets/helpers/tracking/__tests__/googleTagManagerTest.ts",
-            "message": "Property 'currency' does not exist on type '{ paymentMethod: string | null | undefined; }'."
-        },
-        {
-            "path": "assets/helpers/tracking/__tests__/googleTagManagerTest.ts",
-            "message": "Property 'orderId' does not exist on type '{ paymentMethod: string | null | undefined; }'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Property 'googleTagManagerDataLayer' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Property 'googleTagManagerDataLayer' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Property 'googleTagManagerDataLayer' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Property 'googleTagManagerDataLayer' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Property 'googleTagManagerDataLayer' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Property 'googleTagManagerDataLayer' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Property 'gtag_enable_tcf_support' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
             "path": "assets/helpers/user/user.ts",
             "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; }'."
         },
@@ -3291,10 +3238,6 @@
             "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
         },
         {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
-        },
-        {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "Argument of type 'string | Location' is not assignable to parameter of type 'string | number | boolean'."
         },
@@ -3437,30 +3380,6 @@
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Argument of type '{ positive: true; negative: false; }' is not assignable to parameter of type 'SetStateAction<{ positive: boolean; negative: boolean; open: boolean; }>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Argument of type '(billingPeriod: BillingPeriod) => ProductSmall' is not assignable to parameter of type '(value: string, index: number, array: string[]) => ProductSmall'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Argument of type '(billingPeriod: BillingPeriod) => Product' is not assignable to parameter of type '(value: string, index: number, array: string[]) => Product'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
@@ -4179,6 +4098,10 @@
             "message": "Property 'value' is missing in type '{ label: string; defaultChecked: boolean; onChange: () => void; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"required\">'."
         },
         {
+            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
+            "message": "Property 'isPatron' is missing in type '{ priceDescription: string; promotion: string; orderIsAGift: boolean; digitalGiftBillingPeriod: \"Annual\" | \"Quarterly\"; price: string; }' but required in type 'EndSummaryProps'."
+        },
+        {
             "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
             "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
         }
@@ -4455,14 +4378,6 @@
             "message": "Expected 6 arguments, but got 1."
         },
         {
-            "path": "assets/helpers/tracking/behaviour.ts",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/tracking/behaviour.ts",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
             "path": "assets/helpers/user/__tests__/userReducerTest.ts",
             "message": "Expected 0 arguments, but got 1."
         },
@@ -4524,26 +4439,10 @@
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
             "message": "Expected 1 arguments, but got 0."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
             "message": "Expected 2 arguments, but got 1."
         },
         {
@@ -4729,16 +4628,6 @@
             "message": "Type 'PaymentRequestObject' is missing the following properties from type 'PaymentRequest': canMakePayment, show, isShowing, update, and 3 more."
         }
     ],
-    "TS2722": [
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Cannot invoke an object which is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Cannot invoke an object which is possibly 'undefined'."
-        }
-    ],
     "TS1337": [
         {
             "path": "assets/helpers/urls/externalLinks.ts",
@@ -4805,12 +4694,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        }
-    ],
-    "TS2724": [
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "'\"react\"' has no exported member named 'Element'. Did you mean 'CElement'?"
         }
     ],
     "TS2745": [
