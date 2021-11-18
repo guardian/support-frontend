@@ -4,6 +4,7 @@ import {
 	checkOptionalEmail,
 	emailAddressesMatch,
 } from 'helpers/forms/formValidation';
+import type { RedemptionCheckoutState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import type { FormField, FormFields } from './formFields';
 import {
 	formError,
@@ -14,9 +15,63 @@ import {
 } from './validation';
 import type { FormError } from './validation';
 
+type CheckoutRule = {
+	rule: boolean;
+	error: FormError<FormField>;
+};
+
+function applyRedemptionRules(
+	fields: RedemptionCheckoutState,
+): Array<FormError<FormField>> {
+	const redemptionFormRules: CheckoutRule[] = [
+		{
+			rule: nonEmptyString(fields.firstName),
+			error: formError('firstName', 'Please enter a first name.'),
+		},
+		{
+			rule: nonSillyCharacters(fields.firstName),
+			error: formError(
+				'firstName',
+				'Please use only letters, numbers and punctuation.',
+			),
+		},
+		{
+			rule: nonEmptyString(fields.lastName),
+			error: formError('lastName', 'Please enter a last name.'),
+		},
+		{
+			rule: nonSillyCharacters(fields.lastName),
+			error: formError(
+				'lastName',
+				'Please use only letters, numbers and punctuation.',
+			),
+		},
+		{
+			rule: nonSillyCharacters(fields.telephone),
+			error: formError(
+				'telephone',
+				'Please use only letters, numbers and punctuation.',
+			),
+		},
+		{
+			rule: checkEmail(fields.email),
+			error: formError('email', 'Please enter a valid email address.'),
+		},
+		{
+			rule: emailAddressesMatch(
+				fields.isSignedIn,
+				fields.email,
+				fields.confirmEmail,
+			),
+			error: formError('confirmEmail', 'The email addresses do not match.'),
+		},
+	];
+	return validate(redemptionFormRules);
+}
+
 function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 	const { orderIsAGift, product, isSignedIn } = fields;
-	const userFormFields = [
+	const userFormFields: CheckoutRule[] = [
 		{
 			rule: nonEmptyString(fields.firstName),
 			error: formError('firstName', 'Please enter a first name.'),
@@ -59,7 +114,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError('paymentMethod', 'Please select a payment method.'),
 		},
 	];
-	const giftFormFields =
+	const giftFormFields: CheckoutRule[] =
 		product === 'DigitalPack'
 			? [
 					{
@@ -153,7 +208,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 }
 
 function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
-	return validate([
+	const deliveryRules: CheckoutRule[] = [
 		{
 			rule: notNull(fields.startDate),
 			error: formError('startDate', 'Please select a start date'),
@@ -165,7 +220,8 @@ function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
 				'Please indicate whether the billing address is the same as the delivery address',
 			),
 		},
-	]).concat(applyCheckoutRules(fields));
+	];
+	return validate(deliveryRules).concat(applyCheckoutRules(fields));
 }
 
-export { applyCheckoutRules, applyDeliveryRules };
+export { applyCheckoutRules, applyDeliveryRules, applyRedemptionRules };

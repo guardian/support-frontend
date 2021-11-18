@@ -1,6 +1,5 @@
 // ----- Imports ----- //
-import type { Store } from 'redux';
-import type { Reducer } from 'redux';
+import type { Reducer, Store } from 'redux';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -101,7 +100,6 @@ function buildInitialState(
 
 // Enables redux devtools extension and optional redux-thunk.
 
-/* eslint-disable no-underscore-dangle */
 function storeEnhancer(thunk: boolean) {
 	if (thunk) {
 		const composeEnhancers =
@@ -150,12 +148,12 @@ function initRedux<S, A>(
 		);
 		return store;
 	} catch (err) {
-		renderError(err, null);
+		renderError(err as Error, null);
 		throw err;
 	}
 }
 
-function setUpTrackingAndConsents() {
+function setUpTrackingAndConsents(): void {
 	const countryId: IsoCountry = detectCountry();
 	const countryGroupId: CountryGroupId = detectCountryGroup();
 	const settings = getSettings();
@@ -165,7 +163,7 @@ function setUpTrackingAndConsents() {
 		settings,
 	);
 	const acquisitionData = getReferrerAcquisitionData();
-	consentInitialisation(countryId);
+	void consentInitialisation(countryId);
 	analyticsInitialisation(participations, acquisitionData);
 }
 

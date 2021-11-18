@@ -5,7 +5,6 @@ import type { RedemptionPageState } from 'pages/subscriptions-redemption/subscri
 function mapStateToProps(state: RedemptionPageState) {
 	return {
 		countryGroupId: state.common.internationalisation.countryGroupId,
-		// $FlowIgnore -- paymentMethod can be null (see thankYouContent.jsx) but Flow won't allow it
 		paymentMethod: null,
 		includePaymentCopy: false,
 	};
