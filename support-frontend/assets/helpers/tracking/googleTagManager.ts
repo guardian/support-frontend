@@ -1,4 +1,4 @@
-import uuidv4 from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -8,12 +8,14 @@ import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
 import { DirectDebit, PayPal } from '../forms/paymentMethods';
 import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
+
 // ----- Types ----- //
 type EventType =
 	| 'DataLayerReady'
 	| 'SuccessfulConversion'
 	| 'GAEvent'
 	| 'AppStoreCtaClick';
+
 type PaymentRequestAPIStatus =
 	| 'PaymentRequestAPINotAvailable'
 	| 'CanMakePaymentNotAvailable'
@@ -23,11 +25,13 @@ type PaymentRequestAPIStatus =
 	| 'PromiseNotSupported'
 	| 'PromiseRejected'
 	| 'PaymentApiPromiseRejected';
+
 type GaEventData = {
 	category: string;
 	action: string;
 	label: string | null | undefined;
 };
+
 // these values match the keys used by @guardian/consent-management-platform
 const googleTagManagerKey = 'google-tag-manager';
 const googleAnalyticsKey = 'google-analytics';
@@ -65,7 +69,7 @@ const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
 function getOrderId() {
-	let value = storage.getSession('orderId');
+	let value: string | null | undefined = storage.getSession('orderId');
 
 	if (value === null) {
 		value = uuidv4();
@@ -77,12 +81,8 @@ function getOrderId() {
 
 function getCurrency(): string {
 	const currency = detectCurrency(detectCountryGroup());
-
-	if (currency) {
-		storage.setSession('currency', currency);
-	}
-
-	return storage.getSession('currency') || 'GBP';
+	storage.setSession('currency', currency);
+	return storage.getSession('currency') ?? 'GBP';
 }
 
 function getContributionValue(): number {
@@ -92,7 +92,7 @@ function getContributionValue(): number {
 		storage.setSession('contributionValue', String(parseFloat(param)));
 	}
 
-	return parseFloat(storage.getSession('contributionValue')) || 0;
+	return parseFloat(storage.getSession('contributionValue') as string) || 0;
 }
 
 function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
@@ -133,10 +133,6 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
 			};
 			const request = new PaymentRequest(supportedInstruments, details);
 
-			if (request && !request.canMakePayment) {
-				resolve('CanMakePaymentNotAvailable');
-			}
-
 			request
 				.canMakePayment()
 				.then((result) => {
@@ -173,16 +169,18 @@ function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
 // from our PaymentMethod type to Ophan's type so that
 // it is consistent with the conversion data from
 // the acquisition-event-producer library
-function mapFields(data: Record<string, any>) {
+function mapFields(data: Record<string, unknown>): Record<string, unknown> {
 	const { paymentMethod, ...others } = data;
 	return {
-		paymentMethod: ophanPaymentMethod(paymentMethod),
+		paymentMethod: ophanPaymentMethod(
+			paymentMethod as PaymentMethod | null | undefined,
+		),
 		...others,
 	};
 }
 
-function push(data: Record<string, any>) {
-	window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+function push(data: Record<string, unknown>) {
+	window.googleTagManagerDataLayer = window.googleTagManagerDataLayer ?? [];
 	window.googleTagManagerDataLayer.push(mapFields(data));
 }
 
@@ -190,7 +188,7 @@ function getData(
 	event: EventType,
 	participations: Participations,
 	paymentRequestApiStatus?: PaymentRequestAPIStatus,
-): Record<string, any> {
+): Record<string, unknown> {
 	const orderId = getOrderId();
 	const value = getContributionValue();
 	const currency = getCurrency();
@@ -212,10 +210,10 @@ function getData(
 		 * to "OptedIn".
 		 * */
 		thirdPartyTrackingConsent: 'OptedIn',
-		paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
-		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-		campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-		internalCampaignCode: getQueryParameter('INTCMP') || undefined,
+		paymentMethod: storage.getSession('selectedPaymentMethod') ?? undefined,
+		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') ?? undefined,
+		campaignCodeTeam: getQueryParameter('CMP_TU') ?? undefined,
+		internalCampaignCode: getQueryParameter('INTCMP') ?? undefined,
 		experience: getVariantsAsString(participations),
 		paymentRequestApiStatus,
 		vendorConsentsLookup, // eg. "google-analytics,twitter"
@@ -260,17 +258,17 @@ function pushToDataLayer(event: EventType, participations: Participations) {
 function processQueues() {
 	while (googleAnalyticsEventQueue.length > 0) {
 		const queuedEvent = googleAnalyticsEventQueue.shift();
-		queuedEvent();
+		queuedEvent?.();
 	}
 
 	while (googleTagManagerDataQueue.length > 0) {
 		const queuedEvent = googleTagManagerDataQueue.shift();
-		queuedEvent();
+		queuedEvent?.();
 	}
 }
 
 function addTagManagerScript() {
-	window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+	window.googleTagManagerDataLayer = window.googleTagManagerDataLayer ?? [];
 	window.googleTagManagerDataLayer.push({
 		'gtm.start': new Date().getTime(),
 		event: 'gtm.js',
@@ -292,65 +290,68 @@ function addTagManagerScript() {
 		processQueues();
 	};
 
-	if (firstScript && firstScript.parentNode) {
+	if (firstScript.parentNode) {
 		firstScript.parentNode.insertBefore(googleTagManagerScript, firstScript);
 		scriptAdded = true;
 	}
 }
 
-function init(participations: Participations) {
+async function init(participations: Participations): Promise<void> {
 	/**
 	 * The callback passed to onConsentChangeEvent is called
 	 * each time consent changes. EG. if a user consents via the CMP.
 	 * The callback will receive the user's consent as the parameter
 	 * "thirdPartyTrackingConsent".
 	 */
-	onConsentChangeEvent((thirdPartyTrackingConsent: Record<string, boolean>) => {
-		// Update vendorConsentsLookup value based on thirdPartyTrackingConsent
-		vendorConsentsLookup = Object.keys(thirdPartyTrackingConsent)
-			.filter((vendorKey) => thirdPartyTrackingConsent[vendorKey])
-			.join(',');
+	await onConsentChangeEvent(
+		(thirdPartyTrackingConsent: Record<string, boolean>) => {
+			// Update vendorConsentsLookup value based on thirdPartyTrackingConsent
+			vendorConsentsLookup = Object.keys(thirdPartyTrackingConsent)
+				.filter((vendorKey) => thirdPartyTrackingConsent[vendorKey])
+				.join(',');
 
-		/**
-		 * Update userConsentsToGTM value when
-		 * consent changes via the CMP library.
-		 */
-		userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey];
+			/**
+			 * Update userConsentsToGTM value when
+			 * consent changes via the CMP library.
+			 */
+			userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey];
 
-		if (userConsentsToGTM) {
-			if (!scriptAdded) {
-				/**
-				 * Instruction for Google Analytics
-				 * to leverage the TCFv2 framework
-				 */
-				window.gtag_enable_tcf_support = true;
+			if (userConsentsToGTM) {
+				if (!scriptAdded) {
+					/**
+					 * Instruction for Google Analytics
+					 * to leverage the TCFv2 framework
+					 */
+					window.gtag_enable_tcf_support = true;
 
-				/**
-				 * Add Google Tag Manager script to the page
-				 * If it hasn't been added already.
-				 */
-				addTagManagerScript();
-			} else {
-				/**
-				 * If Google Tag Manager script has benn added already process pending events
-				 * in googleAnalyticsEventQueue and googleTagManagerDataQueue. This also
-				 * clears the queues as it executes each function in them.
-				 */
-				processQueues();
+					/**
+					 * Add Google Tag Manager script to the page
+					 * If it hasn't been added already.
+					 */
+					addTagManagerScript();
+				} else {
+					/**
+					 * If Google Tag Manager script has benn added already process pending events
+					 * in googleAnalyticsEventQueue and googleTagManagerDataQueue. This also
+					 * clears the queues as it executes each function in them.
+					 */
+					processQueues();
+				}
 			}
-		}
-	}, vendorIds);
+		},
+		vendorIds,
+	);
 	pushToDataLayer('DataLayerReady', participations);
 }
 
-function successfulConversion(participations: Participations) {
+function successfulConversion(participations: Participations): void {
 	sendData('SuccessfulConversion', participations);
 }
 
 function gaEvent(
 	gaEventData: GaEventData,
-	additionalFields: Record<string, any> | null | undefined,
-) {
+	additionalFields?: Record<string, unknown> | null,
+): void {
 	const pushEventToGA = () => {
 		push({
 			event: 'GAEvent',
@@ -372,7 +373,7 @@ function gaEvent(
 	}
 }
 
-function appStoreCtaClick() {
+function appStoreCtaClick(): void {
 	sendData('AppStoreCtaClick', {
 		TestName: '',
 	});
