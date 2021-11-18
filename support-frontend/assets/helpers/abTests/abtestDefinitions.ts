@@ -137,26 +137,6 @@ export const tests: Tests = {
 		seed: 10,
 		optimizeId: 'unfNP7eZTLW4245wJOcxiw',
 	},
-	richLandingPageTest: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 17,
-	},
 	sixForSixSuppression: {
 		variants: [
 			{
