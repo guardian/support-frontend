@@ -10,16 +10,18 @@ import {
 	getVariantsAsString,
 	targetPageMatches,
 } from '../abtest';
-import type { Participations } from '../abtest';
+import type { Participations, Tests } from '../abtest';
 
 const { subsShowcaseAndDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;
+
 jest.mock('ophan', () => ({
 	record: () => null,
 }));
+
 // ----- Tests ----- //
-const emptySettings: Settings = {
+const emptySettings = {
 	switches: {
 		experiments: {},
 	},
@@ -28,6 +30,7 @@ const emptySettings: Settings = {
 		UnitedStates: {},
 	},
 };
+
 const acquisitionDataMockTestControl = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -36,6 +39,7 @@ const acquisitionDataMockTestControl = {
 		variant: 'control',
 	},
 };
+
 const acquisitionDataMockTestVariant = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -44,6 +48,7 @@ const acquisitionDataMockTestVariant = {
 		variant: 'variant',
 	},
 };
+
 const acquisitionDataMockTest2Control = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -52,6 +57,7 @@ const acquisitionDataMockTest2Control = {
 		variant: 'control',
 	},
 };
+
 const acquisitionDataMockTest2Variant = {
 	componentId: 'acquisitions-subscription-banner',
 	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
@@ -60,30 +66,33 @@ const acquisitionDataMockTest2Variant = {
 		variant: 'variant',
 	},
 };
+
 const mockTestControl = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTestControl),
 )}`;
+
 const mockTestVariant = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTestVariant),
 )}`;
+
 const mockTest2Control = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTest2Control),
 )}`;
+
 const mockTest2Variant = `/test.html?acquisitionData=${encodeURI(
 	JSON.stringify(acquisitionDataMockTest2Variant),
 )}`;
+
 describe('basic behaviour of init', () => {
-	beforeEach(() => {
-		window.matchMedia =
-			window.matchMedia ||
-			jest.fn(() => ({
-				matches: false,
-			}));
+	Object.defineProperty(window, 'matchMedia', {
+		value: jest.fn().mockImplementation(() => ({
+			matches: false,
+		})),
 	});
 	afterEach(() => {
 		window.localStorage.clear();
 	});
-	it('The user should be allocated in the control bucket', () => {
+	it('The referrerControlled user should be allocated to the control bucket', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		window.history.pushState({}, 'Test Title', mockTestControl);
 		const tests = {
@@ -112,7 +121,7 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			GBPCountries,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		const expectedParticipations: Participations = {
@@ -120,7 +129,8 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
-	it('The user should be allocated in the variant bucket', () => {
+
+	it('The referrerControlled user should be allocated to the variant bucket', () => {
 		document.cookie = 'GU_mvt_id=12345';
 		window.history.pushState({}, 'Test Title', mockTestVariant);
 		const tests = {
@@ -149,7 +159,7 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			GBPCountries,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		const expectedParticipations: Participations = {
@@ -157,7 +167,8 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
-	it('The user should be allocated in the variant bucket', () => {
+
+	it('The user should be allocated to the variant bucket', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
 			mockTest: {
@@ -178,7 +189,7 @@ describe('basic behaviour of init', () => {
 				},
 				isActive: true,
 				referrerControlled: false,
-				seed: 2,
+				seed: 6,
 			},
 		};
 		const country = 'GB';
@@ -186,7 +197,7 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		const expectedParticipations: Participations = {
@@ -194,6 +205,45 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
+	it('The user should be allocated to the control bucket', () => {
+		document.cookie = 'GU_mvt_id=12346';
+		const tests = {
+			mockTest: {
+				type: 'OTHER',
+				variants: [
+					{
+						id: 'control',
+					},
+					{
+						id: 'variant',
+					},
+				],
+				audiences: {
+					GB: {
+						offset: 0,
+						size: 1,
+					},
+				},
+				isActive: true,
+				referrerControlled: false,
+				seed: 5,
+			},
+		};
+		const country = 'GB';
+		const countryGroupId = GBPCountries;
+		const participations: Participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings as Settings,
+			tests,
+		);
+		const expectedParticipations: Participations = {
+			mockTest: 'control',
+		};
+		expect(participations).toEqual(expectedParticipations);
+	});
+
 	it('The user should not be allocated in a test for a different country', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -223,7 +273,7 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		const expectedParticipations: Participations = {
@@ -231,6 +281,7 @@ describe('basic behaviour of init', () => {
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for both (min and max) breakpoints if they are provided', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -264,8 +315,8 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
-			tests,
+			emptySettings as Settings,
+			tests as Tests,
 		);
 		const expectedParticipations: Participations = {
 			mockTest: 'notintest',
@@ -274,6 +325,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for min breakpoints if only min is provided', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -306,8 +358,8 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
-			tests,
+			emptySettings as Settings,
+			tests as Tests,
 		);
 		const expectedParticipations: Participations = {
 			mockTest: 'notintest',
@@ -316,6 +368,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for min breakpoints if only min is provided and max is undefined', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -349,8 +402,8 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
-			tests,
+			emptySettings as Settings,
+			tests as Tests,
 		);
 		const expectedParticipations: Participations = {
 			mockTest: 'notintest',
@@ -359,6 +412,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for max breakpoints if only max is provided', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -391,8 +445,8 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
-			tests,
+			emptySettings as Settings,
+			tests as Tests,
 		);
 		const expectedParticipations: Participations = {
 			mockTest: 'notintest',
@@ -401,6 +455,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should be able to differentiate country groups', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		window.history.pushState({}, 'Test Title', mockTestControl);
@@ -431,14 +486,15 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
-			tests,
+			emptySettings as Settings,
+			tests as Tests,
 		);
 		const expectedParticipations: Participations = {
 			mockTest: 'control',
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('The ab test framework should check for min breakpoints if only max is provided and min is undefined', () => {
 		document.cookie = 'GU_mvt_id=12346';
 		const tests = {
@@ -472,8 +528,8 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
-			tests,
+			emptySettings as Settings,
+			tests as Tests,
 		);
 		const expectedParticipations: Participations = {
 			mockTest: 'notintest',
@@ -482,6 +538,7 @@ describe('basic behaviour of init', () => {
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual(expectedParticipations);
 	});
+
 	it('A post-deployment test user should not be allocated into a test', () => {
 		const postDeploymentTestCookie = '_post_deploy_user=true; path=/;';
 
@@ -518,7 +575,7 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		const expectedParticipations: Participations = {
@@ -527,6 +584,7 @@ describe('basic behaviour of init', () => {
 		expect(participations).toEqual(expectedParticipations);
 		deleteCookie();
 	});
+
 	it('Does not allocate a locally rendered epic user into the RemoteEpicVariants AB test', () => {
 		const url = `/test.html?acquisitionData=${encodeURI(
 			JSON.stringify(acquisitionDataMockTestControl),
@@ -535,11 +593,12 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			'GB',
 			GBPCountries,
-			emptySettings,
+			emptySettings as Settings,
 			{},
 		);
 		expect(participations.RemoteEpicVariants).toBe(undefined);
 	});
+
 	it('Allocates a remotely rendered epic user into the RemoteEpicVariants AB test', () => {
 		const data = {
 			isRemote: true,
@@ -550,12 +609,13 @@ describe('basic behaviour of init', () => {
 		const participations: Participations = abInit(
 			'GB',
 			GBPCountries,
-			emptySettings,
+			emptySettings as Settings,
 			{},
 		);
 		expect(participations.RemoteEpicVariants).toBe('remote');
 	});
 });
+
 describe('Correct allocation in a multi test environment', () => {
 	afterEach(() => {
 		window.localStorage.clear();
@@ -643,7 +703,7 @@ describe('Correct allocation in a multi test environment', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		const expectedParticipations: Participations = {
@@ -660,7 +720,7 @@ describe('Correct allocation in a multi test environment', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		const expectedParticipations: Participations = {
@@ -677,7 +737,7 @@ describe('Correct allocation in a multi test environment', () => {
 		let participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		let expectedParticipations: Participations = {
@@ -688,7 +748,12 @@ describe('Correct allocation in a multi test environment', () => {
 		window.localStorage.clear();
 		document.cookie = 'GU_mvt_id=510001';
 		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(country, countryGroupId, emptySettings, tests);
+		participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings as Settings,
+			tests,
+		);
 		expectedParticipations = {
 			mockTest: 'variant',
 			mockTest2: 'notintest',
@@ -703,7 +768,7 @@ describe('Correct allocation in a multi test environment', () => {
 		let participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		let expectedParticipations: Participations = {
@@ -714,7 +779,12 @@ describe('Correct allocation in a multi test environment', () => {
 		window.localStorage.clear();
 		document.cookie = 'GU_mvt_id=510001';
 		window.history.pushState({}, 'Test Title', mockTest2Variant);
-		participations = abInit(country, countryGroupId, emptySettings, tests);
+		participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings as Settings,
+			tests,
+		);
 		expectedParticipations = {
 			mockTest: 'notintest',
 			mockTest2: 'variant',
@@ -732,7 +802,7 @@ describe('Correct allocation in a multi test environment', () => {
 		let participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		let expectedParticipations: Participations = {
@@ -743,7 +813,12 @@ describe('Correct allocation in a multi test environment', () => {
 		window.localStorage.clear();
 		document.cookie = 'GU_mvt_id=150001';
 		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(country, countryGroupId, emptySettings, tests);
+		participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings as Settings,
+			tests,
+		);
 		expectedParticipations = {
 			mockTest: 'variant',
 			mockTest2: 'notintest',
@@ -758,7 +833,7 @@ describe('Correct allocation in a multi test environment', () => {
 		let participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
+			emptySettings as Settings,
 			tests,
 		);
 		let expectedParticipations: Participations = {
@@ -769,7 +844,12 @@ describe('Correct allocation in a multi test environment', () => {
 		window.localStorage.clear();
 		document.cookie = 'GU_mvt_id=150001';
 		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(country, GBPCountries, emptySettings, tests);
+		participations = abInit(
+			country,
+			GBPCountries,
+			emptySettings as Settings,
+			tests,
+		);
 		expectedParticipations = {
 			mockTest: 'variant',
 			mockTest2: 'notintest',
@@ -777,6 +857,7 @@ describe('Correct allocation in a multi test environment', () => {
 		expect(participations).toEqual(expectedParticipations);
 	});
 });
+
 it('targetPage matching', () => {
 	expect(
 		targetPageMatches('/uk/subscribe/paper', subsShowcaseAndDigiSubPages),

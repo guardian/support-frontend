@@ -9,16 +9,17 @@ import EndSummary from 'pages/digital-subscription-checkout/components/endSummar
 import { getGiftOrderSummaryText } from '../helpers';
 import * as styles from './orderSummaryStyles';
 
-type PropTypes = {
+type OrderSummaryPropTypes = {
 	billingPeriod: DigitalBillingPeriod;
 	changeSubscription?: string;
 	image: ReactNode;
 	productPrice: ProductPrice;
 	title: string;
 	orderIsAGift?: boolean;
+	isPatron?: boolean;
 };
 
-function OrderSummary(props: PropTypes): JSX.Element {
+function OrderSummary(props: OrderSummaryPropTypes): JSX.Element {
 	const giftBillingPeriod = props.billingPeriod === Annual ? Annual : Quarterly;
 	const giftPriceString = getGiftOrderSummaryText(
 		giftBillingPeriod,
@@ -27,6 +28,7 @@ function OrderSummary(props: PropTypes): JSX.Element {
 	const priceString = props.orderIsAGift
 		? giftPriceString
 		: getBillingDescription(props.productPrice, props.billingPeriod);
+
 	return (
 		<aside css={styles.wrapper}>
 			<div css={styles.topLine}>
@@ -38,7 +40,9 @@ function OrderSummary(props: PropTypes): JSX.Element {
 				<div css={styles.textBlock}>
 					<h4>{props.title}</h4>
 					<p>{priceString}</p>
-					{!props.orderIsAGift && <span>14 day free trial</span>}
+					{!props.orderIsAGift && !props.isPatron && (
+						<span>14 day free trial</span>
+					)}
 				</div>
 			</div>
 			<div css={styles.endSummary}>
