@@ -16,7 +16,7 @@
             "TS2564": 2,
             "TS2769": 20,
             "TS2314": 7,
-            "TS7016": 5,
+            "TS7016": 6,
             "TS2304": 18,
             "TS2741": 6,
             "TS2739": 17,
@@ -278,6 +278,7 @@
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
+            "assets/helpers/abTests/abtest.ts": 1,
             "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/helpers/subscriptionsForms/formActions.ts": 2,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
@@ -3988,6 +3989,10 @@
         {
             "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
             "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/abTests/abtest.ts",
+            "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
