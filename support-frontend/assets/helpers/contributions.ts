@@ -54,7 +54,9 @@ export type AmountSelection = {
 	amounts: number[];
 	defaultAmount: number;
 };
-export type ContributionAmounts = Record<ContributionType, AmountSelection>;
+export type ContributionAmounts = {
+	[type in ContributionType]: AmountSelection;
+};
 export type AmountsTestVariant = {
 	name: string;
 	amounts: ContributionAmounts;
@@ -120,7 +122,6 @@ const getAmount = (
 
 // ----- Setup ----- //
 
-/* eslint-disable quote-props */
 const numbersInWords = {
 	'1': 'one',
 	'2': 'two',
@@ -150,7 +151,6 @@ const numbersInWords = {
 	'16000': 'sixteen thousand',
 };
 
-/* eslint-enable  quote-props */
 const defaultConfig: Config = {
 	ANNUAL: {
 		min: 10,

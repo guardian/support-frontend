@@ -3,12 +3,12 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 20,
-            "TS7006": 136,
+            "TS7006": 130,
             "TS2305": 57,
-            "TS2322": 250,
+            "TS2322": 248,
             "TS2578": 22,
             "TS2339": 134,
-            "TS2345": 140,
+            "TS2345": 139,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 22,
@@ -18,7 +18,7 @@
             "TS2314": 7,
             "TS7016": 6,
             "TS2304": 17,
-            "TS2741": 6,
+            "TS2741": 5,
             "TS2739": 16,
             "TS2531": 11,
             "TS2604": 4,
@@ -81,7 +81,6 @@
             "assets/pages/aus-moment-map/utils.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
-            "assets/pages/contributions-landing/components/ContributionForm.tsx": 10,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 38,
@@ -679,30 +678,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
             "message": "Parameter 'error' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Parameter 'isWaiting' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Parameter 'useLocalCurrency' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Parameter 'localCurrencyCountry' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Parameter 'defaultOneOffAmount' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Parameter 'iban' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Parameter 'name' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
@@ -1575,14 +1550,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"appearance\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLFormElement>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Type 'string' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
@@ -3227,10 +3194,6 @@
             "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ isWaiting: boolean; countryGroupId: CountryGroupId; email: string | null; otherAmounts: OtherAmounts; paymentMethod: keyof PaymentMethodMap<null>; ... 23 more ...; productSetAbTestVariant: boolean; } & { ...; }, PropTypes>>'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ firstName: string | null; lastName: string | null; email: string | null; checkoutFormHasBeenSubmitted: boolean; billingState: string | null; isSignedIn: boolean; contributionType: keyof RegularContributionTypeMap<...> | \"ONE_OFF\"; } & { ...; }, PropTypes>>'."
         },
@@ -4001,10 +3964,6 @@
         {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "Property 'patrons' is missing in type '{ events: string; }' but required in type 'Record<MemProduct, string>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionForm.tsx",
-            "message": "Property 'value' is missing in type '{ label: string; defaultChecked: boolean; onChange: () => void; }' but required in type 'Pick<CheckboxProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | ... 274 more ... | \"required\">'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",

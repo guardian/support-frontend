@@ -20,7 +20,7 @@
     "noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied any type
     "baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
     "paths": {
-      "ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"]
+      "ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
     }
   },
   "include": ["./assets", "./declaration.d.ts", "./window.d.ts"], // The files to type check,
