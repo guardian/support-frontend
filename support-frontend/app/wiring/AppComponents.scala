@@ -1,5 +1,6 @@
 package wiring
 
+import com.gu.monitoring.SafeLogger
 import controllers.AssetsComponents
 import filters.{CacheHeadersCheck, SetCookiesCheck}
 import lib.{CustomHttpErrorHandler, ErrorController}
@@ -10,6 +11,7 @@ import play.api.mvc.EssentialFilter
 import play.api.routing.Router
 import play.filters.HttpFiltersComponents
 import play.filters.cors.{CORSComponents, CORSConfig}
+import play.filters.csp.CSPComponents
 import play.filters.gzip.GzipFilter
 
 trait AppComponents extends PlayComponents
@@ -22,13 +24,14 @@ trait AppComponents extends PlayComponents
   with Assets
   with GoogleAuth
   with CORSComponents
+  with CSPComponents
   with HttpFiltersComponents {
   self: BuiltInComponentsFromContext =>
 
   private lazy val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
     environment,
     configuration,
-    sourceMapper,
+    devContext.map(_.sourceMapper),
     Some(router),
     assetsResolver,
     allSettingsProvider,
@@ -40,6 +43,7 @@ trait AppComponents extends PlayComponents
   final override lazy val corsConfig: CORSConfig = CORSConfig().withOriginsAllowed(_ == appConfig.supportUrl)
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
+    cspFilter,
     corsFilter,
     new SetCookiesCheck(),
     securityHeadersFilter,
