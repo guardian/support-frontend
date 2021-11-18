@@ -18,8 +18,9 @@ function addQM(): void {
 	qtm.type = 'text/javascript';
 	qtm.async = true;
 	qtm.src =
-		'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js';
-	qtm.integrity = 'sha256-wlN4E8ntYnyvTWN4KnYXUDtF8ZBCLtP0BQs1FBEheU4=';
+		'https://assets.quantummetric.com/instrumentation/1.33.0/quantum-gnm.js';
+	qtm.integrity =
+		'sha384-aRs7c9S69dV9fGKEfDLqj7QsQUJo2KAfdXtqKIAxOuiCLWgCcVvQnQdq7rTcAhbR';
 	qtm.crossOrigin = 'anonymous';
 	const d = document.getElementsByTagName('script')[0];
 	if (!window.QuantumMetricAPI && d.parentNode) {
