@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { getQueryParameter } from 'helpers/urls/url';
 import {
 	generateContributionTypes,
 	getFrequency,
@@ -8,6 +7,7 @@ import {
 import type {
 	ContributionType,
 	ContributionTypes,
+	ContributionTypeSetting,
 	SelectedAmounts,
 } from 'helpers/contributions';
 import 'helpers/globalsAndSwitches/settings';
@@ -35,6 +35,7 @@ import type {
 	SpokenCurrency,
 } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage/storage';
+import { getQueryParameter } from 'helpers/urls/url';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 // ----- Types ----- //
 export type PaymentMethodSwitch =
@@ -46,8 +47,8 @@ export type PaymentMethodSwitch =
 	| 'existingDirectDebit'
 	| 'amazonPay';
 type StripeHandler = {
-	open: (...args: any[]) => any;
-	close: (...args: any[]) => any;
+	open: (...args: unknown[]) => unknown;
+	close: (...args: unknown[]) => unknown;
 };
 export type ThirdPartyPaymentLibrary = StripeHandler;
 
@@ -95,7 +96,7 @@ function getValidContributionTypesFromUrlOrElse(
 				.filter(Boolean)
 				.map((contributionType) => ({
 					contributionType,
-				})),
+				})) as ContributionTypeSetting[],
 		);
 	}
 
@@ -191,7 +192,7 @@ function getValidPaymentMethods(
 	return getPaymentMethods(contributionType, countryId, countryGroupId).filter(
 		(paymentMethod) =>
 			isSwitchOn(
-				`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`,
+				`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,
 			),
 	);
 }
@@ -201,7 +202,7 @@ function getPaymentMethodToSelect(
 	allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-) {
+): string {
 	const validPaymentMethods = getValidPaymentMethods(
 		contributionType,
 		allSwitches,
@@ -262,9 +263,11 @@ const formatAmount = (
 		}`;
 	}
 
+	const amountText = /^(\d+\.\d)$/.test(`${amount}`) ? `${amount}0` : amount;
+
 	const valueWithGlyph = currency.isSuffixGlyph
-		? `${amount}${glyph}`
-		: `${glyph}${amount}`;
+		? `${amountText}${glyph}`
+		: `${glyph}${amountText}`;
 	return valueWithGlyph.trim();
 };
 
@@ -273,17 +276,18 @@ const getContributeButtonCopy = (
 	maybeOtherAmount: string | null,
 	selectedAmounts: SelectedAmounts,
 	currency: IsoCurrency,
-) => {
+): string => {
 	const frequency = getFrequency(contributionType);
 	const amount =
 		selectedAmounts[contributionType] === 'other'
-			? parseInt(maybeOtherAmount, 10)
+			? parseFloat(maybeOtherAmount as string)
 			: selectedAmounts[contributionType];
+
 	const amountCopy = amount
 		? formatAmount(
 				currencies[currency],
 				spokenCurrencies[currency],
-				amount,
+				amount as number,
 				false,
 		  )
 		: '';
@@ -296,7 +300,7 @@ const getContributeButtonCopyWithPaymentType = (
 	selectedAmounts: SelectedAmounts,
 	currency: IsoCurrency,
 	paymentMethod: PaymentMethod,
-) => {
+): string => {
 	const paymentDescriptionCopy = getPaymentDescription(
 		contributionType,
 		paymentMethod,
@@ -337,19 +341,14 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 // . {applePay: true} - applePay is available
 // . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
 function getAvailablePaymentRequestButtonPaymentMethod(
-	result: Record<string, any>,
+	result: Record<string, unknown>,
 	contributionType: ContributionType,
 ): StripePaymentMethod | null {
 	const switchKey = switchKeyForContributionType(contributionType);
 
-	if (
-		result &&
-		result.applePay === true &&
-		isSwitchOn(`${switchKey}.stripeApplePay`)
-	) {
+	if (result.applePay === true && isSwitchOn(`${switchKey}.stripeApplePay`)) {
 		return 'StripeApplePay';
 	} else if (
-		result &&
 		result.applePay === false &&
 		isSwitchOn(`${switchKey}.stripePaymentRequestButton`)
 	) {

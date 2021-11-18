@@ -2,7 +2,7 @@
 // Checks if local/sessionStorage is usable. Need to do more than check if
 // 'window.localStorage' is defined, because Safari <11 in private browsing
 // mode is weird and sets the storage size to 0.
-function isStorageAvailable(storage): boolean {
+function isStorageAvailable(storage: Storage): boolean {
 	try {
 		storage.setItem('storageTest', 'testValue');
 

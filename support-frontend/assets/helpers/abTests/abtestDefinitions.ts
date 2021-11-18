@@ -130,59 +130,15 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false,
 		targetPage:
 			pageUrlRegexes.subscriptions.digiSub.nonGiftLandingAndCheckoutWithGuest,
 		seed: 10,
 		optimizeId: 'unfNP7eZTLW4245wJOcxiw',
 	},
-	richLandingPageTest: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 17,
-	},
-	digiSubClimateHeader2021: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.digiSubLandingPagesNotAus,
-		seed: 12,
-		optimizeId: 'erMFDh79T6iyp2WhaG7CWQ',
-	},
 	sixForSixSuppression: {
 		variants: [
-			{
-				id: 'control',
-			},
 			{
 				id: 'variant',
 			},

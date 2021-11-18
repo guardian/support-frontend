@@ -77,6 +77,15 @@ function getDiscountDescription(
 ) {
 	const noun = billingPeriodNoun(billingPeriod, fixedTerm);
 
+	const minNumberOfDiscountedPeriodsForPatrons = 100;
+
+	if (
+		numberOfDiscountedPeriods &&
+		numberOfDiscountedPeriods >= minNumberOfDiscountedPeriodsForPatrons
+	) {
+		return "You won't pay anything for the duration of your Patrons membership";
+	}
+
 	if (numberOfDiscountedPeriods) {
 		const discountCopy = `You'll pay ${displayPrice(
 			glyph,
