@@ -67,8 +67,6 @@ export function getCampaignSettings(
   campaignCode?: string,
 ): CampaignSettings | null {
   if (campaignEnabledForUser(campaignCode)) {
-    console.log('campaignEnabledForUser: ', campaignEnabledForUser(campaignCode))
-
     return campaign;
   }
 

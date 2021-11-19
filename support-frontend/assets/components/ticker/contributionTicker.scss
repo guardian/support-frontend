@@ -59,8 +59,6 @@ $progress-bar-height: 10px;
 	}
 }
 
-.contributions-landing-ticker__label {}
-
 .contributions-landing-ticker__progress-bar {
 	position: relative;
 }
@@ -69,13 +67,11 @@ $progress-bar-height: 10px;
 	width: calc(100%);
 	height: $progress-bar-height;
 	overflow: hidden;
-	//background-color: #dcdcdc;
   background-color: #DDA7A1;
 	position: absolute;
 }
 
 .contributions-landing-ticker__filled-progress {
-	//background-color: gu-colour(highlight-main);
   background-color: #C70000;
 	position: absolute;
 	top: 0;
