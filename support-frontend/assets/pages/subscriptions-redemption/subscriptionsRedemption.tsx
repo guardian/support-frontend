@@ -1,8 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import type { Store } from 'redux';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -11,13 +13,26 @@ import RedemptionForm from 'pages/subscriptions-redemption/components/redemption
 import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
 import CheckoutStage from './components/stage';
 import MarketingConsent from './marketingConsentContainer';
+import type {
+	Action,
+	RedemptionFormState,
+} from './subscriptionsRedemptionReducer';
 import reducer from './subscriptionsRedemptionReducer';
 
 setUpTrackingAndConsents();
+
 // ----- Redux Store ----- //
-const store = initRedux(reducer, true);
+// @ts-expect-error TODO: Fix this once the page setup stuff is fixed
+const store = initRedux<RedemptionFormState, Action>(reducer, true) as Store<
+	{
+		page: RedemptionFormState;
+		common: CommonState;
+	},
+	Action
+>;
 const state = store.getState();
 const { countryGroupId } = state.common.internationalisation;
+
 const thankyouProps = {
 	countryGroupId,
 	marketingConsent: <MarketingConsent />,

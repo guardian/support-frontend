@@ -1,24 +1,23 @@
-import React from 'react';
 import { css } from '@emotion/core';
 import { Button } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { error, line, text } from '@guardian/src-foundations/palette';
-import 'redux';
-import { headline, textSans } from '@guardian/src-foundations/typography/obj';
+import { line } from '@guardian/src-foundations/palette';
+import { headline } from '@guardian/src-foundations/typography/obj';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { TextInput } from '@guardian/src-text-input';
-import { InlineError } from '@guardian/src-user-feedback';
+import React from 'react';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import Form from 'components/checkoutForm/checkoutForm';
+import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
-import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
-import type { Option } from 'helpers/types/option';
-import type { User } from 'helpers/user/user';
-import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
+import { signOut } from 'helpers/user/user';
 import {
 	submitCode,
 	validateUserCode,
@@ -29,105 +28,108 @@ import type {
 	RedemptionPageState,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
-type PropTypes = {
-	user: User;
-	userCode: Option<string>;
-	error: Option<ErrorMessage>;
-	setUserCode: (arg0: string) => void;
-	submit: (arg0: string) => void;
-};
-
 function mapStateToProps(state: RedemptionPageState) {
 	return {
+		stage: state.page.checkout.stage,
 		user: state.page.user,
 		userCode: state.page.userCode,
+		readerType: state.page.readerType,
+		csrf: state.page.csrf,
 		error: state.page.error,
+		firstName: state.page.checkout.firstName,
+		lastName: state.page.checkout.lastName,
+		email: state.page.checkout.email,
+		confirmEmail: state.page.checkout.confirmEmail,
+		telephone: state.page.checkout.telephone,
+		isSignedIn: state.page.checkout.isSignedIn,
+		formErrors: state.page.checkout.errors,
+		currencyId: state.common.internationalisation.currencyId,
+		countryId: state.common.internationalisation.countryId,
+		participations: state.common.abParticipations,
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps() {
 	return {
-		setUserCode: (userCode: string) => validateUserCode(userCode, dispatch),
-		submit: (userCode: string) => submitCode(userCode, dispatch),
+		setUserCode: (userCode: string) => (dispatch: Dispatch<Action>) =>
+			validateUserCode(userCode, dispatch),
+		submitForm:
+			() => (dispatch: Dispatch<Action>, getState: () => RedemptionPageState) =>
+				submitCode(dispatch, getState()),
+		setFirstName: (firstName: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_FIRST_NAME',
+				firstName,
+			}),
+		setLastName: (lastName: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_LAST_NAME',
+				lastName,
+			}),
+		setEmail: (email: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_EMAIL',
+				email,
+			}),
+		setTelephone: (telephone: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_TELEPHONE',
+				telephone,
+			}),
+		setConfirmEmail: (email: string) => (dispatch: Dispatch<Action>) =>
+			dispatch({
+				type: 'SET_CONFIRM_EMAIL',
+				email,
+			}),
+		fetchAndStoreUserType:
+			(email: string) =>
+			(dispatch: Dispatch<Action>, getState: () => RedemptionPageState) => {
+				fetchAndStoreUserType(email)(
+					dispatch,
+					getState,
+					(userType) =>
+						void dispatch({
+							type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
+							userTypeFromIdentityResponse: userType,
+						}),
+				);
+			},
+		signOut,
 	};
 }
 
-const MissingNamesMessage = () => {
-	const mainCss = css`
-		border: 4px solid ${error['400']};
-		padding: 8px;
-		margin-bottom: ${space[6]}px;
-		${textSans.medium()};
-	`;
-	const detailsCss = css`
-		margin-top: 16px;
-		margin-left: 32px;
-		a,
-		a:visited {
-			${textSans.small()};
-			color: ${text.primary};
-			${from.desktop} {
-				${textSans.medium()};
-			}
-		}
-		ol {
-			list-style-type: decimal;
-		}
-	`;
-	return (
-		<div role="status" aria-live="assertive" css={mainCss}>
-			<InlineError>
-				We notice you&apos;ve already set up a Guardian username and password,
-				please complete your account to proceed.
-			</InlineError>
-			<div css={detailsCss}>
-				<ol>
-					<li>
-						Go to{' '}
-						<a
-							href="https://manage.theguardian.com/account-settings"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Account settings
-						</a>
-						, add your first name and last name and save changes.
-					</li>
-					<li>Refresh this page to continue</li>
-				</ol>
-			</div>
-		</div>
-	);
-};
+const connector = connect(mapStateToProps, mapDispatchToProps());
+
+type PropTypes = ConnectedProps<typeof connector>;
+
+const redemptionForm = css`
+	padding: ${space[2]}px;
+`;
+
+const instructionsDivCss = css`
+	margin-top: -10px;
+	padding: ${space[2]}px;
+	${from.tablet} {
+		min-height: 475px;
+	}
+	hr {
+		border: 0;
+		border-top: solid 1px ${line.primary};
+	}
+`;
+
+const hrCss = css`
+	margin-bottom: 16px;
+`;
+const headingCss = css`
+	${headline.xsmall()};
+	font-weight: bold;
+	margin-bottom: 16px;
+`;
 
 function RedemptionForm(props: PropTypes) {
-	const mainCss = css`
-		padding: ${space[2]}px;
-	`;
-	const instructionsDivCss = css`
-		margin-top: -10px;
-		padding: ${space[2]}px;
-		${from.tablet} {
-			min-height: 475px;
-		}
-		hr {
-			border: 0;
-			border-top: solid 1px ${line.primary};
-		}
-	`;
-	const hrCss = css`
-		margin-bottom: 16px;
-	`;
-	const headingCss = css`
-		${headline.xsmall()};
-		font-weight: bold;
-		margin-bottom: 16px;
-	`;
 	const validationText = props.error ? null : 'This code is valid';
-	const signedIn = doesUserAppearToBeSignedIn();
-	const missingNames =
-		signedIn && props.user.firstName === '' && props.user.lastName === '';
-	const buttonText = signedIn ? 'Activate' : 'Continue to account setup';
+
 	return (
 		<div>
 			<Content>
@@ -135,36 +137,53 @@ function RedemptionForm(props: PropTypes) {
 					<Form
 						onSubmit={(ev) => {
 							ev.preventDefault();
+							props.submitForm();
 						}}
 					>
-						<div css={mainCss}>
-							<h2 css={headingCss}>
+						<div css={redemptionForm}>
+							<h1 css={headingCss}>
 								Enjoy your Digital Subscription from the Guardian
-							</h2>
-							{missingNames ? <MissingNamesMessage /> : null}
-							<div>
+							</h1>
+							<FormSection>
 								<TextInput
 									autoComplete="off"
-									value={props.userCode}
+									value={props.userCode ?? ''}
 									onChange={(e) => props.setUserCode(e.target.value)}
-									error={props.error}
-									success={validationText}
+									error={props.error ?? ''}
+									success={validationText ?? ''}
 									label="Insert code"
-									css={css`
-										max-width: 300px;
-									`}
 								/>
-							</div>
+							</FormSection>
+							<FormSection title="Your details">
+								<PersonalDetails
+									firstName={props.firstName}
+									setFirstName={props.setFirstName}
+									lastName={props.lastName}
+									setLastName={props.setLastName}
+									email={props.email}
+									setEmail={props.setEmail}
+									confirmEmail={props.confirmEmail}
+									setConfirmEmail={props.setConfirmEmail}
+									isSignedIn={props.isSignedIn}
+									fetchAndStoreUserType={props.fetchAndStoreUserType}
+									telephone={props.telephone}
+									setTelephone={props.setTelephone}
+									formErrors={props.formErrors}
+									signOut={props.signOut}
+								/>
+								{props.formErrors.length > 0 && (
+									<ErrorSummary errors={props.formErrors} />
+								)}
+							</FormSection>
 						</div>
 						<div css={instructionsDivCss}>
 							<hr css={hrCss} />
 							<Button
-								onClick={() => props.submit(props.userCode || '')}
-								showIcon
+								type="submit"
 								iconSide="right"
 								icon={<SvgArrowRightStraight />}
 							>
-								{buttonText}
+								Activate
 							</Button>
 						</div>
 					</Form>
@@ -174,4 +193,4 @@ function RedemptionForm(props: PropTypes) {
 	);
 } // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(RedemptionForm);
+export default connector(RedemptionForm);

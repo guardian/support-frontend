@@ -76,7 +76,7 @@ class RedemptionController(
               mainElement = id,
               js = js,
               css = css,
-              csrf = None,
+              csrf = Some(CSRF.getToken.value),
               isTestUser = isTestUser,
               stage = "checkout",
               redemptionCode = normalisedCode,
@@ -87,40 +87,9 @@ class RedemptionController(
             ))
         )
       } yield form
-
   }
 
-  def displayThankYou(stage: String): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async {
-    implicit request: AuthRequest[Any] =>
-      identityService.getUser(request.user.minimalUser).fold(
-        error => {
-          SafeLogger.error(scrub"Failed to retrieve user email for thank you page so marketing consent was not shown. Error was - ${error}")
-          thankYouPage(stage, None)
-        },
-        user => thankYouPage(stage, Some(user))
-      )
-  }
-
-  def thankYouPage(stage: String, user: Option[IdUser])(implicit request: AuthRequest[Any]): Result =
-    Ok(views.html.main(
-      title = title,
-      mainElement = id,
-      mainJsBundle = Left(RefPath(js)),
-      mainStyleBundle = Left(RefPath(css)),
-      csrf = Some(CSRF.getToken.value)
-    ) {
-      Html(s"""
-        <script type="text/javascript">
-          window.guardian.stage = "${stage}";
-          window.guardian.user = {
-            firstName: "${user.map(_.privateFields.firstName).getOrElse("")}",
-            lastName: "${user.map(_.privateFields.secondName).getOrElse("")}",
-            email: "${user.map(_.primaryEmailAddress).getOrElse("")}",
-          };
-        </script>""")
-    })
-
-  def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit request: AuthRequest[Any]): Result = {
+  def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit request: OptionalAuthRequest[Any]): Result = {
     SafeLogger.error(scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}")
     Ok(subscriptionRedemptionForm(
       title = title,
@@ -137,51 +106,6 @@ class RedemptionController(
       submitted = false
     ))
   }
-
-  def displayProcessing(redemptionCode: RawRedemptionCode): Action[AnyContent] =
-    authenticatedAction(subscriptionsClientId).async {
-      implicit request: AuthRequest[Any] =>
-        userHasDigitalSubscription(membersDataService, request.user).flatMap(
-          userHasSub =>
-            if (userHasSub)
-              Future.successful(redirectToExistingThankYouPage)
-            else
-              tryToShowProcessingPage(redemptionCode)
-        )
-    }
-
-  private def tryToShowProcessingPage(redemptionCode: RawRedemptionCode)(implicit request: AuthRequest[Any]) = {
-    val processingPage: EitherT[Future, (String, Boolean), Result] = for {
-      user <- identityService.getUser(request.user.minimalUser).leftMap((_, false))
-      isTestUser = testUsers.isTestUser(request)
-      codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
-      readerType <- codeValidator.validate(redemptionCode).leftMap((_, isTestUser))
-    } yield showProcessing(redemptionCode, readerType, user)
-
-    processingPage.leftMap {
-      case (error, isTestUser) => displayError(redemptionCode, error, isTestUser)
-    }.merge
-  }
-
-  private def showProcessing(
-    redemptionCode: RawRedemptionCode,
-    readerType: ReaderType,
-    user: IdUser
-  )(implicit request: AuthRequest[Any]): Result =
-    Ok(subscriptionRedemptionForm(
-      title = title,
-      mainElement = id,
-      js = js,
-      css = css,
-      csrf = Some(CSRF.getToken.value),
-      isTestUser = testUsers.isTestUser(request),
-      stage = "processing",
-      redemptionCode = redemptionCode,
-      maybeRedemptionError = None,
-      maybeReaderType = Some(readerType),
-      user = Some(user),
-      submitted = true
-    ))
 
   def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
     val testUser = isTestUser.getOrElse(false)

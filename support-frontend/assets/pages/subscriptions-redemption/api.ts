@@ -1,9 +1,7 @@
-import { fetchJson } from 'helpers/async/fetch';
-import type { Action } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import type { Dispatch } from 'redux';
 import 'redux';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { fetchJson } from 'helpers/async/fetch';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
@@ -16,6 +14,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { applyRedemptionRules } from 'helpers/subscriptionsForms/rules';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
@@ -24,7 +23,11 @@ import {
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { getOrigin } from 'helpers/urls/url';
-import type { User } from 'helpers/user/user';
+import type {
+	Action,
+	RedemptionPageState,
+	Stage,
+} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 type ValidationResult = {
 	valid: boolean;
@@ -32,7 +35,7 @@ type ValidationResult = {
 	errorMessage: Option<string>;
 };
 
-function validate(userCode: string) {
+function validate(userCode: string): Promise<ValidationResult> {
 	if (userCode === '') {
 		return Promise.resolve({
 			valid: false,
@@ -45,7 +48,7 @@ function validate(userCode: string) {
 	const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${
 		isTestUser ? '?isTestUser=true' : ''
 	}`;
-	return fetchJson(validationUrl, {});
+	return fetchJson(validationUrl, {}) as Promise<ValidationResult>;
 }
 
 function dispatchError(dispatch: Dispatch<Action>, error: Option<string>) {
@@ -65,21 +68,28 @@ function dispatchReaderType(
 	});
 }
 
+function dispatchStage(dispatch: Dispatch<Action>, stage: Stage) {
+	dispatch({
+		type: 'SET_STAGE',
+		stage,
+	});
+}
+
 function validateWithServer(userCode: string, dispatch: Dispatch<Action>) {
 	validate(userCode)
 		.then((result: ValidationResult) => {
 			dispatchError(dispatch, result.errorMessage);
 			dispatchReaderType(dispatch, result.readerType);
 		})
-		.catch((error) => {
+		.catch((error: Error) => {
 			dispatchError(
 				dispatch,
-				`An error occurred while validating this code: ${error}`,
+				`An error occurred while validating this code: ${error.message}`,
 			);
 		});
 }
 
-function validateUserCode(userCode: string, dispatch: Dispatch<Action>) {
+function validateUserCode(userCode: string, dispatch: Dispatch<Action>): void {
 	dispatch({
 		type: 'SET_USER_CODE',
 		userCode,
@@ -93,33 +103,69 @@ function validateUserCode(userCode: string, dispatch: Dispatch<Action>) {
 	}
 }
 
-function submitCode(userCode: string, dispatch: Dispatch<Action>) {
-	validate(userCode)
-		.then((result: ValidationResult) => {
-			if (result.valid) {
-				const submitUrl = `${getOrigin()}/subscribe/redeem/create/${userCode}`;
-				window.location.assign(submitUrl);
-			} else {
-				dispatchError(dispatch, result.errorMessage);
-			}
-		})
-		.catch((error) => {
-			dispatchError(
-				dispatch,
-				`An error occurred while validating this code: ${error}`,
-			);
+function validateFormFields(
+	dispatch: Dispatch<Action>,
+	state: RedemptionPageState,
+) {
+	const formFieldErrors = applyRedemptionRules(state.page.checkout);
+
+	if (formFieldErrors.length) {
+		dispatch({
+			type: 'SET_FORM_ERRORS',
+			errors: formFieldErrors,
 		});
+	}
+	return formFieldErrors.length === 0;
+}
+
+function handleCodeValidationResult(
+	dispatch: Dispatch<Action>,
+	state: RedemptionPageState,
+) {
+	return function handleResult(result: ValidationResult) {
+		if (result.valid) {
+			createSubscription(dispatch, state);
+		} else {
+			dispatchError(dispatch, result.errorMessage);
+			dispatchStage(dispatch, 'form');
+		}
+	};
+}
+
+function handleCodeValidationError(dispatch: Dispatch<Action>) {
+	return function handleError(error: Error) {
+		dispatchError(
+			dispatch,
+			`An error occurred while validating this code: ${error.message}`,
+		);
+		dispatchStage(dispatch, 'form');
+	};
+}
+
+function submitCode(
+	dispatch: Dispatch<Action>,
+	state: RedemptionPageState,
+): void {
+	const userCode = state.page.userCode ?? '';
+	if (validateFormFields(dispatch, state)) {
+		dispatchStage(dispatch, 'processing');
+		validate(userCode)
+			.then(handleCodeValidationResult(dispatch, state))
+			.catch(handleCodeValidationError(dispatch));
+	}
 }
 
 function buildRegularPaymentRequest(
 	userCode: string,
 	readerType: ReaderType,
-	user: User,
+	firstName: string,
+	lastName: string,
+	email: string,
+	telephone: string,
 	currencyId: IsoCurrency,
 	countryId: IsoCountry,
 	participations: Participations,
 ): RegularPaymentRequest {
-	const { firstName, lastName, email } = user;
 	const product = {
 		productType: DigitalPack,
 		currency: currencyId,
@@ -128,8 +174,8 @@ function buildRegularPaymentRequest(
 	};
 	return {
 		title: null,
-		firstName: firstName || '',
-		lastName: lastName || '',
+		firstName,
+		lastName,
 		billingAddress: {
 			country: countryId,
 			state: null,
@@ -139,8 +185,8 @@ function buildRegularPaymentRequest(
 			city: null,
 		},
 		deliveryAddress: null,
-		email: email || '',
-		telephoneNumber: null,
+		email: email,
+		telephoneNumber: telephone,
 		product,
 		firstDeliveryDate: null,
 		paymentFields: {
@@ -154,16 +200,10 @@ function buildRegularPaymentRequest(
 }
 
 function createSubscription(
-	userCode: string,
-	readerType: Option<ReaderType>,
-	user: User,
-	currencyId: IsoCurrency,
-	countryId: IsoCountry,
-	participations: Participations,
-	csrf: Csrf,
 	dispatch: Dispatch<Action>,
-) {
-	if (readerType == null) {
+	state: RedemptionPageState,
+): void {
+	if (state.page.readerType == null) {
 		dispatchError(
 			dispatch,
 			'An error occurred while redeeming this code, please try again later',
@@ -172,38 +212,38 @@ function createSubscription(
 	}
 
 	const data = buildRegularPaymentRequest(
-		userCode,
-		readerType,
-		user,
-		currencyId,
-		countryId,
-		participations,
+		state.page.userCode ?? '',
+		state.page.readerType,
+		state.page.checkout.firstName,
+		state.page.checkout.lastName,
+		state.page.checkout.email,
+		state.page.checkout.telephone,
+		state.common.internationalisation.currencyId,
+		state.common.internationalisation.countryId,
+		state.common.abParticipations,
 	);
 
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {
 			if (result.subscriptionCreationPending) {
-				const thankyouUrl = `${getOrigin()}/subscribe/redeem/thankyou-pending`;
-				window.location.replace(thankyouUrl);
+				dispatchStage(dispatch, 'thankyou-pending');
 			} else {
-				const thankyouUrl = `${getOrigin()}/subscribe/redeem/thankyou`;
-				window.location.replace(thankyouUrl);
+				dispatchStage(dispatch, 'thankyou');
 			}
 		} else {
-			dispatchError(dispatch, appropriateErrorMessage(result.error));
-			dispatch({
-				type: 'SET_STAGE',
-				stage: 'form',
-			});
+			dispatchError(dispatch, appropriateErrorMessage(result.error ?? ''));
+			dispatchStage(dispatch, 'form');
 		}
 	};
 
 	postRegularPaymentRequest(
 		routes.subscriptionCreate,
 		data,
-		participations,
-		csrf,
-	).then(handleSubscribeResult);
+		state.common.abParticipations,
+		state.page.csrf,
+	)
+		.then(handleSubscribeResult)
+		.catch(() => null);
 }
 
 export { validateUserCode, submitCode, createSubscription };
