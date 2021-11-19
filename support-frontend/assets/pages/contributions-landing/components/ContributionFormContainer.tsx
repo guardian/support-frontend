@@ -64,10 +64,10 @@ const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
 	userName: state.page.user.firstName,
 	referrerAcquisitionData: state.common.referrerAcquisitionData,
-	canShowTicker: state.common.abParticipations.tickerTest === 'variant',
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
+  canShowTicker: state.common.abParticipations.tickerTest === 'variant',
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
