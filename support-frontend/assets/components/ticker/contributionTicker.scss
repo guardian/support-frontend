@@ -6,7 +6,7 @@ $progress-bar-height: 10px;
 	padding: 18px 0 28px 0;
 	margin: 0 -10px;
 	border-bottom: 1px solid gu-colour(neutral-86);
-	font-family: $gu-headline;
+	font-family: $gu-text-sans-web;
 }
 
 .contributions-landing-ticker--hidden {
@@ -59,9 +59,7 @@ $progress-bar-height: 10px;
 	}
 }
 
-.contributions-landing-ticker__label {
-	font-style: italic;
-}
+.contributions-landing-ticker__label {}
 
 .contributions-landing-ticker__progress-bar {
 	position: relative;
