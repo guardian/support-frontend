@@ -50,7 +50,7 @@ type PropTypes = {
 	countryId: IsoCountry;
 	userName: string | null;
 	referrerAcquisitionData: ReferrerAcquisitionData;
-	canShowTicker: boolean;
+	// canShowTicker: boolean;
 	currency: IsoCurrency;
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
@@ -67,7 +67,7 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
-  canShowTicker: state.common.abParticipations.tickerTest === 'variant',
+  // canShowTicker: state.common.abParticipations.tickerTest === 'variant',
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
@@ -250,8 +250,7 @@ function withProps(props: PropTypes) {
 				>
 					<SecureTransactionIndicator modifierClasses={['top']} />
 
-					{props.canShowTicker &&
-					campaignSettings &&
+					{campaignSettings &&
 					campaignSettings.tickerSettings ? (
 						<ContributionTicker
 							{...campaignSettings.tickerSettings}
