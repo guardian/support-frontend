@@ -3,12 +3,12 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 20,
-            "TS7006": 130,
+            "TS7006": 126,
             "TS2305": 57,
-            "TS2322": 248,
+            "TS2322": 241,
             "TS2578": 22,
             "TS2339": 134,
-            "TS2345": 139,
+            "TS2345": 138,
             "TS7034": 13,
             "TS7005": 47,
             "TS6133": 21,
@@ -84,7 +84,7 @@
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 38,
-            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
+            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 13,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
@@ -727,10 +727,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
             "message": "Parameter 'confirmResult' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
