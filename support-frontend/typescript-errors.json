@@ -3,15 +3,15 @@
         "byCode": {
             "TS1208": 1,
             "TS7053": 20,
-            "TS7006": 130,
+            "TS7006": 126,
             "TS2305": 57,
-            "TS2322": 248,
+            "TS2322": 241,
             "TS2578": 22,
             "TS2339": 134,
-            "TS2345": 139,
+            "TS2345": 138,
             "TS7034": 13,
             "TS7005": 47,
-            "TS6133": 22,
+            "TS6133": 21,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 20,
@@ -24,7 +24,7 @@
             "TS2604": 4,
             "TS2532": 1,
             "TS2556": 3,
-            "TS2554": 51,
+            "TS2554": 48,
             "TS2569": 2,
             "TS2571": 14,
             "TS2411": 1,
@@ -84,7 +84,7 @@
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 38,
-            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
+            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 13,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
@@ -94,9 +94,8 @@
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 9,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 13,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 12,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 13,
             "assets/components/asyncronously/asyncronously.ts": 2,
             "assets/components/base/rows.tsx": 1,
             "assets/components/button/_sharedButton.tsx": 1,
@@ -278,7 +277,6 @@
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 2,
-            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 1,
             "assets/pages/promotion-terms/promotionTermsReducer.ts": 4,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/page/commonReducer.ts": 1,
@@ -735,10 +733,6 @@
             "message": "Parameter 'result' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "Parameter 'commonState' implicitly has an 'any' type."
         },
@@ -885,18 +879,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Parameter 'country' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Parameter 'newState' implicitly has an 'any' type."
         }
     ],
     "TS2305": [
@@ -2080,34 +2062,6 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type '(Element | null)[]' is not assignable to type 'Element | Element[]'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: any; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
         },
         {
@@ -3301,10 +3255,6 @@
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
             "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
         }
@@ -3636,10 +3586,6 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
             "message": "'dispatch' is declared but its value is never read."
         }
     ],
@@ -4311,18 +4257,6 @@
         {
             "path": "assets/pages/showcase/components/otherProducts.tsx",
             "message": "Expected 2 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Expected 1 arguments, but got 0."
         }
     ],
     "TS2569": [

@@ -9,8 +9,8 @@ const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
 const extraDelayWeeks = 2;
 
-const getWeeklyDays = (today: number | null | undefined): Date[] => {
-	const now = new Date(today || new Date().getTime());
+const getWeeklyDays = (today?: number): Date[] => {
+	const now = new Date(today ?? new Date().getTime());
 	const currentWeekday = now.getDay();
 
 	const isChrismassy = (d: Date) => d.getDate() === 27 && d.getMonth() === 11;
