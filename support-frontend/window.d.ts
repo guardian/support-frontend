@@ -10,7 +10,14 @@ declare global {
 			serversideTests?: Participations | null;
 			enableContributionsCampaign: boolean;
 			forceContributionsCampaign: boolean;
+			recaptchaEnabled?: boolean;
+			geoip?: {
+				countryCode: string;
+				stateCode?: string;
+			};
 		};
+		enablePayPalButton?: () => void;
+		disablePayPalButton?: () => void;
 		googleTagManagerDataLayer?: Array<Record<string, unknown>>;
 		gtag_enable_tcf_support?: boolean;
 		QuantumMetricAPI: unknown;

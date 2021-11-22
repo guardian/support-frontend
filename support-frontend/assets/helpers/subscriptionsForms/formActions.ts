@@ -1,3 +1,4 @@
+import type { Dispatch } from 'redux';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -155,7 +156,7 @@ const setSubmissionError = (error: ErrorReason): Action => ({
 	error,
 });
 
-const setFormSubmitted = (formSubmitted: boolean) => ({
+const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	type: 'SET_FORM_SUBMITTED',
 	formSubmitted,
 });
