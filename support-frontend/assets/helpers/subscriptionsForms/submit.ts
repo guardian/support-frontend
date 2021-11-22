@@ -121,7 +121,7 @@ const getProduct = (
 	};
 };
 
-const getPromoCode = (promotions: Promotion[] | undefined) => {
+const getPromoCode = (promotions?: Promotion[]) => {
 	const promotion = getAppliedPromo(promotions);
 	return promotion ? promotion.promoCode : null;
 };

@@ -156,7 +156,7 @@ const setSubmissionError = (error: ErrorReason): Action => ({
 	error,
 });
 
-const setFormSubmitted = (formSubmitted: boolean) => ({
+const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	type: 'SET_FORM_SUBMITTED',
 	formSubmitted,
 });
