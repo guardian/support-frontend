@@ -1,3 +1,4 @@
+import type { Dispatch } from 'redux';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { ErrorReason } from 'helpers/forms/errorReasons';

@@ -17,7 +17,7 @@
             "TS2769": 20,
             "TS2314": 7,
             "TS7016": 6,
-            "TS2304": 8,
+            "TS2304": 6,
             "TS2741": 5,
             "TS2739": 16,
             "TS2531": 11,
@@ -270,7 +270,6 @@
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/helpers/abTests/abtest.ts": 1,
             "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
-            "assets/helpers/subscriptionsForms/formActions.ts": 2,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx": 1,
@@ -3631,14 +3630,6 @@
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Cannot find name 'Stage'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formActions.ts",
-            "message": "Cannot find name 'Dispatch'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formActions.ts",
-            "message": "Cannot find name 'Dispatch'."
         }
     ],
     "TS2741": [
