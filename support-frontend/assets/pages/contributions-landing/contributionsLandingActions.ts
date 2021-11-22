@@ -1,9 +1,12 @@
 // ----- Imports ----- //
-import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import 'helpers/forms/checkouts';
+import type { Dispatch } from 'redux';
+import { getForm } from 'helpers/checkoutForm/checkoutForm';
+import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
+import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
+import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay';
 import type {
@@ -20,6 +23,7 @@ import {
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
+import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	AmazonPayAuthorisation,
 	PaymentAuthorisation,
@@ -33,37 +37,6 @@ import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
-import type {
-	IsoCountry,
-	StateProvince,
-} from 'helpers/internationalisation/country';
-import {
-	findIsoCountry,
-	stateProvinceFromString,
-} from 'helpers/internationalisation/country';
-import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import * as cookie from 'helpers/storage/cookie';
-import * as storage from 'helpers/storage/storage';
-import {
-	derivePaymentApiAcquisitionData,
-	getOphanIds,
-	getSupportAbTests,
-} from 'helpers/tracking/acquisitions';
-import trackConversion from 'helpers/tracking/conversions';
-import { routes } from 'helpers/urls/routes';
-import { logException } from 'helpers/utilities/logger';
-import { getForm } from 'helpers/checkoutForm/checkoutForm';
-import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
-import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import type {
-	State,
-	Stripe3DSResult,
-	UserFormData,
-} from './contributionsLandingReducer';
-import './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -78,9 +51,35 @@ import {
 	getStripeKey,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
-import type { Option } from 'helpers/types/option';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
+import type {
+	IsoCountry,
+	StateProvince,
+} from 'helpers/internationalisation/country';
+import {
+	findIsoCountry,
+	stateProvinceFromString,
+} from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import * as cookie from 'helpers/storage/cookie';
+import * as storage from 'helpers/storage/storage';
+import {
+	derivePaymentApiAcquisitionData,
+	getOphanIds,
+	getSupportAbTests,
+} from 'helpers/tracking/acquisitions';
+import trackConversion from 'helpers/tracking/conversions';
+import type { Option } from 'helpers/types/option';
+import { routes } from 'helpers/urls/routes';
+import { logException } from 'helpers/utilities/logger';
+import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
+import type {
+	State,
+	Stripe3DSResult,
+	UserFormData,
+} from './contributionsLandingReducer';
 
 export type Action =
 	| {
@@ -284,33 +283,27 @@ const updatePayPalButtonReady = (ready: boolean): Action => ({
 
 // Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
 const updateContributionType =
-	(
-		contributionType: ContributionType,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(contributionType: ContributionType) =>
+	(dispatch: Dispatch, getState: () => State): void => {
 		dispatch(updatePayPalButtonReady(false));
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_CONTRIBUTION_TYPE',
-				contributionType,
-			})),
-		);
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_CONTRIBUTION_TYPE',
+			contributionType,
+		}))(dispatch, getState);
 	};
 
 const updatePaymentMethod =
-	(paymentMethod: PaymentMethod): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(paymentMethod: PaymentMethod) =>
+	(dispatch: Dispatch, getState: () => State): void => {
 		// PayPal one-off redirects away from the site before hitting the thank you page
 		// so we need to store the payment method in the storage so that it is available on the
 		// thank you page in all scenarios.
 		storage.setSession('selectedPaymentMethod', paymentMethod);
 		dispatch(updatePayPalButtonReady(false));
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_PAYMENT_METHOD',
-				paymentMethod,
-			})),
-		);
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_PAYMENT_METHOD',
+			paymentMethod,
+		}))(dispatch, getState);
 	};
 
 const updateSelectedExistingPaymentMethod = (
@@ -321,51 +314,43 @@ const updateSelectedExistingPaymentMethod = (
 });
 
 const updateFirstName =
-	(firstName: string): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_FIRST_NAME',
-				firstName,
-			})),
-		);
+	(firstName: string) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_FIRST_NAME',
+			firstName,
+		}))(dispatch, getState);
 	};
 
 const updateLastName =
-	(lastName: string): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_LAST_NAME',
-				lastName,
-			})),
-		);
+	(lastName: string) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_LAST_NAME',
+			lastName,
+		}))(dispatch, getState);
 	};
 
 const updateEmail =
-	(email: string): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(email: string) =>
+	(dispatch: Dispatch, getState: () => State): void => {
 		// PayPal one-off redirects away from the site before hitting the thank you page
 		// so we need to store the email in the storage so that it is available on the
 		// thank you page in all scenarios.
 		storage.setSession('gu.email', email);
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_EMAIL',
-				email,
-			})),
-		);
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_EMAIL',
+			email,
+		}))(dispatch, getState);
 	};
 
 const updateRecaptchaToken =
-	(recaptchaToken: string): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_RECAPTCHA_TOKEN',
-				recaptchaToken,
-			})),
-		);
+	(recaptchaToken: string) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_RECAPTCHA_TOKEN',
+			recaptchaToken,
+		}))(dispatch, getState);
 	};
 
 const setPaymentRequestButtonPaymentMethod = (
@@ -394,27 +379,21 @@ const setStripePaymentRequestButtonError = (
 });
 
 const updateUserFormData =
-	(userFormData: UserFormData): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_USER_FORM_DATA',
-				userFormData,
-			})),
-		);
+	(userFormData: UserFormData) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_USER_FORM_DATA',
+			userFormData,
+		}))(dispatch, getState);
 	};
 
 const updateBillingState =
-	(
-		billingState: StateProvince | null,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_BILLING_STATE',
-				billingState,
-			})),
-		);
+	(billingState: StateProvince | null) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_BILLING_STATE',
+			billingState,
+		}))(dispatch, getState);
 	};
 
 const updateBillingCountry = (billingCountry: IsoCountry | null): Action => ({
@@ -423,18 +402,13 @@ const updateBillingCountry = (billingCountry: IsoCountry | null): Action => ({
 });
 
 const selectAmount =
-	(
-		amount: number | 'other',
-		contributionType: ContributionType,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SELECT_AMOUNT',
-				amount,
-				contributionType,
-			})),
-		);
+	(amount: number | 'other', contributionType: ContributionType) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SELECT_AMOUNT',
+			amount,
+			contributionType,
+		}))(dispatch, getState);
 	};
 
 const setCheckoutFormHasBeenSubmitted = (): Action => ({
@@ -442,18 +416,13 @@ const setCheckoutFormHasBeenSubmitted = (): Action => ({
 });
 
 const updateOtherAmount =
-	(
-		otherAmount: string,
-		contributionType: ContributionType,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'UPDATE_OTHER_AMOUNT',
-				otherAmount,
-				contributionType,
-			})),
-		);
+	(otherAmount: string, contributionType: ContributionType) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'UPDATE_OTHER_AMOUNT',
+			otherAmount,
+			contributionType,
+		}))(dispatch, getState);
 	};
 
 const paymentSuccess = (): Action => ({
@@ -468,20 +437,6 @@ const paymentWaiting = (isWaiting: boolean): Action => ({
 const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
-});
-
-const setHasSeenDirectDebitThankYouCopy = (): Action => ({
-	type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY',
-});
-
-const setThirdPartyPaymentLibrary = (
-	thirdPartyPaymentLibraryByContrib: Record<
-		ContributionType,
-		Record<PaymentMethod, ThirdPartyPaymentLibrary>
-	>,
-): Action => ({
-	type: 'UPDATE_PAYMENT_READY',
-	thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
 });
 
 const setAmazonPayHasBegunLoading = (): Action => ({
@@ -516,109 +471,95 @@ const setAmazonPayFatalError: Action = {
 
 const setAmazonPayPaymentSelected =
 	(paymentSelected: boolean) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_AMAZON_PAY_PAYMENT_SELECTED',
-				paymentSelected,
-			})),
-		);
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_AMAZON_PAY_PAYMENT_SELECTED',
+			paymentSelected,
+		}))(dispatch, getState);
 	};
 
 const setAmazonPayOrderReferenceId =
 	(orderReferenceId: string) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID',
-				orderReferenceId,
-			})),
-		);
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID',
+			orderReferenceId,
+		}))(dispatch, getState);
 	};
 
 const setAmazonPayBillingAgreementId =
 	(amazonBillingAgreementId: string) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID',
-				amazonBillingAgreementId,
-			})),
-		);
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID',
+			amazonBillingAgreementId,
+		}))(dispatch, getState);
 	};
 
 const setAmazonPayBillingAgreementConsentStatus =
-	(
-		amazonBillingAgreementConsentStatus: boolean,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS',
-				amazonBillingAgreementConsentStatus,
-			})),
-		);
+	(amazonBillingAgreementConsentStatus: boolean) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS',
+			amazonBillingAgreementConsentStatus,
+		}))(dispatch, getState);
 	};
 
 const setUserTypeFromIdentityResponse =
-	(
-		userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(userTypeFromIdentityResponse: UserTypeFromIdentityResponse) =>
+	(dispatch: Dispatch, getState: () => State): void => {
 		// PayPal one-off redirects away from the site before hitting the thank you page, and we'll need userType
 		storage.setSession(
 			'userTypeFromIdentityResponse',
 			userTypeFromIdentityResponse,
 		);
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-				userTypeFromIdentityResponse,
-			})),
-		);
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
+			userTypeFromIdentityResponse,
+		}))(dispatch, getState);
 	};
 
 // We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
 const loadPayPalExpressSdk =
 	(contributionType: ContributionType) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(dispatch: Dispatch): void => {
 		if (contributionType !== 'ONE_OFF') {
 			dispatch(setPayPalHasBegunLoading());
-			loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
+			void loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 		}
 	};
 
 const loadAmazonPaySdk =
 	(countryGroupId: CountryGroupId, isTestUser: boolean) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(dispatch: Dispatch): void => {
 		dispatch(setAmazonPayHasBegunLoading());
 		setupAmazonPay(countryGroupId, dispatch, isTestUser);
 	};
 
 const updateContributionTypeAndPaymentMethod =
 	(contributionType: ContributionType, paymentMethodToSelect: PaymentMethod) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		// PayPal one-off redirects away from the site before hitting the thank you page
 		// so we need to store the contrib type & payment method in the storage so that it is available on the
 		// thank you page in all scenarios.
 		storage.setSession('selectedContributionType', contributionType);
 		storage.setSession('selectedPaymentMethod', paymentMethodToSelect);
-		dispatch(updateContributionType(contributionType));
-		dispatch(updatePaymentMethod(paymentMethodToSelect));
+		updateContributionType(contributionType)(dispatch, getState);
+		updatePaymentMethod(paymentMethodToSelect)(dispatch, getState);
 	};
 
 const getUserType =
 	(email: string) =>
-	(dispatch: (...args: any[]) => any, getState: () => State): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const { csrf } = state.page;
 		const { isSignedIn } = state.page.user;
-		getUserTypeFromIdentity(
+		void getUserTypeFromIdentity(
 			email,
 			isSignedIn,
 			csrf,
 			(userType: UserTypeFromIdentityResponse) =>
-				dispatch(setUserTypeFromIdentityResponse(userType)),
+				setUserTypeFromIdentityResponse(userType)(dispatch, getState),
 		);
 	};
 
@@ -642,74 +583,61 @@ const setHandleStripe3DS = (
 });
 
 const setStripeCardFormComplete =
-	(isComplete: boolean): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_STRIPE_CARD_FORM_COMPLETE',
-				isComplete,
-			})),
-		);
+	(isComplete: boolean) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_STRIPE_CARD_FORM_COMPLETE',
+			isComplete,
+		}))(dispatch, getState);
 	};
 
 const setStripeSetupIntentClientSecret =
-	(
-		setupIntentClientSecret: string,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET',
-				setupIntentClientSecret,
-			})),
-		);
+	(setupIntentClientSecret: string) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET',
+			setupIntentClientSecret,
+		}))(dispatch, getState);
 	};
 
 const setStripeRecurringRecaptchaVerified =
-	(recaptchaVerified: boolean): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED',
-				recaptchaVerified,
-			})),
-		);
+	(recaptchaVerified: boolean) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED',
+			recaptchaVerified,
+		}))(dispatch, getState);
 	};
 
 const setSepaIban =
 	(iban: string | null) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_SEPA_IBAN',
-				iban,
-			})),
-		);
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_SEPA_IBAN',
+			iban,
+		}))(dispatch, getState);
 	};
 
 const setSepaAccountHolderName =
 	(accountHolderName: string | null) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_SEPA_ACCOUNT_HOLDER_NAME',
-				accountHolderName,
-			})),
-		);
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_SEPA_ACCOUNT_HOLDER_NAME',
+			accountHolderName,
+		}))(dispatch, getState);
 	};
 
 const sendFormSubmitEventForPayPalRecurring =
 	() =>
-	(dispatch: (...args: any[]) => any, getState: () => State): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
 			flowPrefix: 'npf',
 			form: getForm('form--contribution'),
 			isSignedIn: state.page.user.isSignedIn,
-			setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
 			setCheckoutFormHasBeenSubmitted: () =>
-				dispatch(setCheckoutFormHasBeenSubmitted()),
+				void dispatch(setCheckoutFormHasBeenSubmitted()),
 		};
 		onFormSubmit(formSubmitParameters);
 	};
@@ -720,7 +648,7 @@ const stripeOneOffRecaptchaToken = (state: State): string => {
 	}
 
 	// see https://github.com/guardian/payment-api/pull/195
-	return state.page.form.oneOffRecaptchaToken || '';
+	return state.page.form.oneOffRecaptchaToken ?? '';
 };
 
 const buildStripeChargeDataFromAuthorisation = (
@@ -734,7 +662,7 @@ const buildStripeChargeDataFromAuthorisation = (
 			state.page.form.formData.otherAmounts,
 			state.page.form.contributionType,
 		),
-		email: state.page.form.formData.email || '',
+		email: state.page.form.formData.email ?? '',
 		stripePaymentMethod,
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
@@ -744,7 +672,7 @@ const buildStripeChargeDataFromAuthorisation = (
 	publicKey: getStripeKey(
 		stripeAccountForContributionType[state.page.form.contributionType],
 		state.common.internationalisation.countryId,
-		state.page.user.isTestUser || false,
+		state.page.user.isTestUser ?? false,
 	),
 	recaptchaToken: stripeOneOffRecaptchaToken(state),
 });
@@ -808,10 +736,10 @@ function getBillingCountryAndState(
 	// the country and state from GEO-IP, and failing that, the page's base country, ultimately from the countryGroup
 	// (e.g. DE for Europe, IN for International, GB for United Kingdom).
 	const billingCountry =
-		findIsoCountry(window.guardian.geoip.countryCode) || pageBaseCountry;
+		findIsoCountry(window.guardian.geoip?.countryCode) ?? pageBaseCountry;
 	const billingState = stateProvinceFromString(
 		billingCountry,
-		window.guardian.geoip.stateCode,
+		window.guardian.geoip?.stateCode,
 	);
 	return {
 		billingCountry,
@@ -828,9 +756,9 @@ function regularPaymentRequestFromAuthorisation(
 		state,
 	);
 	return {
-		firstName: (state.page.form.formData.firstName || '').trim(),
-		lastName: (state.page.form.formData.lastName || '').trim(),
-		email: (state.page.form.formData.email || '').trim(),
+		firstName: (state.page.form.formData.firstName ?? '').trim(),
+		lastName: (state.page.form.formData.lastName ?? '').trim(),
+		email: (state.page.form.formData.email ?? '').trim(),
 		billingAddress: {
 			lineOne: null,
 			// required go cardless field
@@ -844,7 +772,6 @@ function regularPaymentRequestFromAuthorisation(
 			// required go cardless field
 			country: billingCountry, // required Zuora field
 		},
-		deliveryAddress: null,
 		product: {
 			productType: 'Contribution',
 			amount: getAmount(
@@ -878,7 +805,7 @@ const amazonPayDataFromAuthorisation = (
 			state.page.form.contributionType,
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
-		email: state.page.form.formData.email || '',
+		email: state.page.form.formData.email ?? '',
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
 		state.common.referrerAcquisitionData,
@@ -912,12 +839,12 @@ const onPaymentResult =
 				default: {
 					// Payment Request button has its own error message, separate from the form
 					const isPaymentRequestButton =
-						paymentAuthorisation.stripePaymentMethod &&
+						paymentAuthorisation.paymentMethod == Stripe &&
 						(paymentAuthorisation.stripePaymentMethod ===
 							'StripePaymentRequestButton' ||
 							paymentAuthorisation.stripePaymentMethod === 'StripeApplePay');
 
-					if (isPaymentRequestButton) {
+					if (isPaymentRequestButton && result.error) {
 						dispatch(
 							setStripePaymentRequestButtonError(
 								result.error,
@@ -942,9 +869,11 @@ const onPaymentResult =
 
 						// Reset any updates the previous payment method had made to the form's billingCountry or billingState
 						dispatch(updateBillingCountry(null));
-						dispatch(updateBillingState(null));
+						updateBillingState(null)(dispatch, getState);
 						// Finally, trigger the form display
-						dispatch(paymentFailure(result.error));
+						if (result.error) {
+							dispatch(paymentFailure(result.error));
+						}
 					}
 
 					dispatch(paymentWaiting(false));
@@ -957,7 +886,7 @@ const onPaymentResult =
 const onCreateOneOffPayPalPaymentResponse =
 	(paymentResult: Promise<CreatePayPalPaymentResponse>) =>
 	(dispatch: Dispatch<Action>, getState: () => State): void => {
-		paymentResult.then((result: CreatePayPalPaymentResponse) => {
+		void paymentResult.then((result: CreatePayPalPaymentResponse) => {
 			const state = getState();
 			const acquisitionData = derivePaymentApiAcquisitionData(
 				state.common.referrerAcquisitionData,
@@ -995,12 +924,10 @@ const onCreateOneOffPayPalPaymentResponse =
 // and "execute payment" for Stripe, and these are not synonymous.
 const createOneOffPayPalPayment =
 	(data: CreatePaypalPaymentData) =>
-	(dispatch: Dispatch<Action>): void => {
-		dispatch(
-			onCreateOneOffPayPalPaymentResponse(
-				postOneOffPayPalCreatePaymentRequest(data),
-			),
-		);
+	(dispatch: Dispatch<Action>, getState: () => State): void => {
+		onCreateOneOffPayPalPaymentResponse(
+			postOneOffPayPalCreatePaymentRequest(data),
+		)(dispatch, getState);
 	};
 
 const makeCreateStripePaymentIntentRequest =
@@ -1009,23 +936,19 @@ const makeCreateStripePaymentIntentRequest =
 		handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
 		paymentAuthorisation: PaymentAuthorisation,
 	) =>
-	(dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-		dispatch(
-			onPaymentResult(
-				processStripePaymentIntentRequest(data, handleStripe3DS),
-				paymentAuthorisation,
-			),
-		);
+	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
+		onPaymentResult(
+			processStripePaymentIntentRequest(data, handleStripe3DS),
+			paymentAuthorisation,
+		)(dispatch, getState);
 
 const executeAmazonPayOneOffPayment =
 	(data: AmazonPayData, paymentAuthorisation: PaymentAuthorisation) =>
-	(dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-		dispatch(
-			onPaymentResult(
-				postOneOffAmazonPayExecutePaymentRequest(data),
-				paymentAuthorisation,
-			),
-		);
+	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
+		onPaymentResult(
+			postOneOffAmazonPayExecutePaymentRequest(data),
+			paymentAuthorisation,
+		)(dispatch, getState);
 
 function recurringPaymentAuthorisationHandler(
 	dispatch: Dispatch<Action>,
@@ -1036,17 +959,15 @@ function recurringPaymentAuthorisationHandler(
 		paymentAuthorisation,
 		state,
 	);
-	return dispatch(
-		onPaymentResult(
-			postRegularPaymentRequest(
-				routes.recurringContribCreate,
-				request,
-				state.common.abParticipations,
-				state.page.csrf,
-			),
-			paymentAuthorisation,
+	return onPaymentResult(
+		postRegularPaymentRequest(
+			routes.recurringContribCreate,
+			request,
+			state.common.abParticipations,
+			state.page.csrf,
 		),
-	);
+		paymentAuthorisation,
+	)(dispatch, () => state);
 }
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -1063,15 +984,15 @@ const recurringPaymentAuthorisationHandlers = {
 	ExistingDirectDebit: recurringPaymentAuthorisationHandler,
 	AmazonPay: recurringPaymentAuthorisationHandler,
 };
-const error = {
+const error: PaymentResult = {
 	paymentStatus: 'failure',
 	error: 'internal_error',
 };
 const paymentAuthorisationHandlers: PaymentMatrix<
 	(
-		arg0: Dispatch<Action>,
-		arg1: State,
-		arg2: PaymentAuthorisation,
+		dispatch: Dispatch<Action>,
+		state: State,
+		paymentAuthorisation: PaymentAuthorisation,
 	) => Promise<PaymentResult>
 > = {
 	ONE_OFF: {
@@ -1098,13 +1019,11 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 							),
 							paymentMethodId: paymentAuthorisation.paymentMethodId,
 						};
-						return dispatch(
-							makeCreateStripePaymentIntentRequest(
-								stripeData,
-								handle3DS,
-								paymentAuthorisation,
-							),
-						);
+						return makeCreateStripePaymentIntentRequest(
+							stripeData,
+							handle3DS,
+							paymentAuthorisation,
+						)(dispatch, () => state);
 					}
 
 					// It shouldn't be possible to get this far without the handle3DS having been set
@@ -1148,12 +1067,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 				paymentAuthorisation.paymentMethod === AmazonPay &&
 				paymentAuthorisation.orderReferenceId !== undefined
 			) {
-				return dispatch(
-					executeAmazonPayOneOffPayment(
-						amazonPayDataFromAuthorisation(paymentAuthorisation, state),
-						paymentAuthorisation,
-					),
-				);
+				return executeAmazonPayOneOffPayment(
+					amazonPayDataFromAuthorisation(paymentAuthorisation, state),
+					paymentAuthorisation,
+				)(dispatch, () => state);
 			}
 
 			return Promise.resolve(error);
@@ -1181,10 +1098,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 
 const onThirdPartyPaymentAuthorised =
 	(paymentAuthorisation: PaymentAuthorisation) =>
-	(
-		dispatch: (...args: any[]) => any,
-		getState: () => State,
-	): Promise<PaymentResult> => {
+	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> => {
 		const state = getState();
 		return paymentAuthorisationHandlers[state.page.form.contributionType][
 			state.page.form.paymentMethod
@@ -1201,7 +1115,6 @@ export {
 	updateBillingState,
 	updateBillingCountry,
 	updateUserFormData,
-	setThirdPartyPaymentLibrary,
 	setAmazonPayHasBegunLoading,
 	setAmazonPayLoginObject,
 	setAmazonPayPaymentsObject,
@@ -1221,7 +1134,6 @@ export {
 	onThirdPartyPaymentAuthorised,
 	setCheckoutFormHasBeenSubmitted,
 	createOneOffPayPalPayment,
-	setHasSeenDirectDebitThankYouCopy,
 	getUserType,
 	setFormIsValid,
 	sendFormSubmitEventForPayPalRecurring,

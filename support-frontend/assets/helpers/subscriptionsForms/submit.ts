@@ -6,6 +6,7 @@ import type {
 	PaymentAuthorisation,
 	PaymentResult,
 	RegularPaymentRequest,
+	RegularPaymentRequestAddress,
 	SubscriptionProductFields,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
@@ -55,11 +56,15 @@ import {
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import type { IsoCountry } from '../internationalisation/country';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
+type Addresses = {
+	deliveryAddress?: RegularPaymentRequestAddress;
+	billingAddress: RegularPaymentRequestAddress;
+};
+
 // ----- Functions ----- //
-function getAddresses(state: AnyCheckoutState) {
+function getAddresses(state: AnyCheckoutState): Addresses {
 	if (isPhysicalProduct(state.page.checkout.product)) {
 		const deliveryAddressFields = getDeliveryAddressFields(
 			state as any as WithDeliveryCheckoutState,
@@ -74,7 +79,6 @@ function getAddresses(state: AnyCheckoutState) {
 
 	return {
 		billingAddress: getBillingAddressFields(state),
-		deliveryAddress: null,
 	};
 }
 
@@ -94,14 +98,14 @@ const getProduct = (
 	if (product === DigitalPack) {
 		return {
 			productType: DigitalPack,
-			currency: currencyId || state.common.internationalisation.currencyId,
+			currency: currencyId ?? state.common.internationalisation.currencyId,
 			billingPeriod,
 			readerType,
 		};
 	} else if (product === GuardianWeekly) {
 		return {
 			productType: GuardianWeekly,
-			currency: currencyId || state.common.internationalisation.currencyId,
+			currency: currencyId ?? state.common.internationalisation.currencyId,
 			billingPeriod,
 			fulfilmentOptions: fulfilmentOption,
 		};
@@ -110,14 +114,14 @@ const getProduct = (
 	/* Paper or PaperAndDigital */
 	return {
 		productType: Paper,
-		currency: currencyId || state.common.internationalisation.currencyId,
+		currency: currencyId ?? state.common.internationalisation.currencyId,
 		billingPeriod,
 		fulfilmentOptions: fulfilmentOption,
 		productOptions: productOption,
 	};
 };
 
-const getPromoCode = (promotions: Promotion[] | null | undefined) => {
+const getPromoCode = (promotions: Promotion[] | undefined) => {
 	const promotion = getAppliedPromo(promotions);
 	return promotion ? promotion.promoCode : null;
 };
@@ -213,13 +217,13 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', product, paymentMethod));
 			}
-		} else {
+		} else if (result.error) {
 			dispatch(setSubmissionError(result.error));
 		}
 	};
 
 	dispatch(setFormSubmitted(true));
-	postRegularPaymentRequest(
+	void postRegularPaymentRequest(
 		routes.subscriptionCreate,
 		data,
 		abParticipations,
@@ -229,9 +233,6 @@ function onPaymentAuthorised(
 
 function checkStripeUserType(
 	onAuthorised: (pa: PaymentAuthorisation) => void,
-	isTestUser: boolean,
-	price: number,
-	currency: IsoCurrency,
 	stripePaymentMethodId: Option<string>,
 ) {
 	if (stripePaymentMethodId != null) {
@@ -260,25 +261,14 @@ const directDebitAuthorised = (
 };
 
 function showPaymentMethod(
-	dispatch: Dispatch<Action>,
 	onAuthorised: (pa: PaymentAuthorisation) => void,
-	isTestUser: boolean,
-	price: number,
-	currency: IsoCurrency,
-	country: IsoCountry,
 	paymentMethod: Option<PaymentMethod>,
 	stripePaymentMethod: Option<string>,
 	state: AnyCheckoutState,
 ): void {
 	switch (paymentMethod) {
 		case Stripe:
-			checkStripeUserType(
-				onAuthorised,
-				isTestUser,
-				price,
-				currency,
-				stripePaymentMethod,
-			);
+			checkStripeUserType(onAuthorised, stripePaymentMethod);
 			break;
 
 		case DirectDebit:
@@ -306,9 +296,9 @@ function trackSubmitAttempt(
 ) {
 	const componentId =
 		productOption === NoProductOptions
-			? `subs-checkout-submit-${productType}-${paymentMethod || ''}`
+			? `subs-checkout-submit-${productType}-${paymentMethod ?? ''}`
 			: `subs-checkout-submit-${productType}-${productOption}-${
-					paymentMethod || ''
+					paymentMethod ?? ''
 			  }`;
 	trackCheckoutSubmitAttempt(
 		componentId,
@@ -318,7 +308,7 @@ function trackSubmitAttempt(
 	);
 }
 
-function getPricingCountry(product, addresses) {
+function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {
 	if (product === GuardianWeekly && addresses.deliveryAddress) {
 		return addresses.deliveryAddress.country;
 	}
@@ -327,8 +317,7 @@ function getPricingCountry(product, addresses) {
 }
 
 function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
-	const { paymentMethod, product, productOption, isTestUser } =
-		state.page.checkout;
+	const { paymentMethod, product, productOption } = state.page.checkout;
 	const addresses = getAddresses(state);
 	const pricingCountry = getPricingCountry(product, addresses);
 	trackSubmitAttempt(paymentMethod, product, productOption);
@@ -354,7 +343,6 @@ function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
 		);
 	}
 
-	const { price, currency } = priceDetails;
 	const currencyId = getCurrency(pricingCountry);
 	const stripePaymentMethod =
 		paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
@@ -362,17 +350,7 @@ function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
 	const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
 		onPaymentAuthorised(paymentAuthorisation, dispatch, state, currencyId);
 
-	showPaymentMethod(
-		dispatch,
-		onAuthorised,
-		isTestUser,
-		price,
-		currency,
-		pricingCountry,
-		paymentMethod,
-		stripePaymentMethod,
-		state,
-	);
+	showPaymentMethod(onAuthorised, paymentMethod, stripePaymentMethod, state);
 }
 
 function submitWithDeliveryForm(
