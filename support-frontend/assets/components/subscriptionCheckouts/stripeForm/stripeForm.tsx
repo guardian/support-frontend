@@ -145,12 +145,12 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 
 	const handleCardSetup = (clientSecret: Option<string>) => {
 		const cardElement = elements?.getElement(CardNumberElement);
-		if (clientSecret && cardElement) {
+		if (stripe && clientSecret && cardElement) {
 			return stripe
-				?.confirmCardSetup(clientSecret, {
+				.confirmCardSetup(clientSecret, {
 					payment_method: { card: cardElement },
 				})
-				?.then((result) => {
+				.then((result) => {
 					if (result.error) {
 						handleStripeError(result.error);
 						return Promise.reject(result.error);
@@ -353,12 +353,14 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 			void loadRecaptchaV2();
 		}
 	}, [stripe]);
+
 	useEffect(() => {
 		if (paymentWaiting && setupIntentClientSecret) {
 			// User has already completed the form and clicked the button, so go ahead and complete the subscription
 			void handleCardSetupAndPay();
 		}
 	}, [setupIntentClientSecret]);
+
 	// Handle the payment once all state updates to the card data, errors list, etc
 	// have completed after hitting the submit button
 	useEffect(() => {
