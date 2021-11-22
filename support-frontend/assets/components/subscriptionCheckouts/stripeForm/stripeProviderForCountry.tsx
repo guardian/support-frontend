@@ -10,7 +10,7 @@ import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 
 // Types
-type PropTypes = {
+export type PropTypes = {
 	country: IsoCountry;
 	isTestUser: boolean;
 	allErrors: Array<FormError<FormField>>;

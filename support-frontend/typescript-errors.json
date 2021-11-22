@@ -2,21 +2,20 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS7053": 17,
-            "TS7006": 119,
             "TS2305": 57,
-            "TS2322": 239,
+            "TS2322": 238,
             "TS2578": 21,
             "TS2339": 113,
-            "TS2345": 138,
-            "TS7034": 13,
-            "TS7005": 47,
+            "TS7006": 117,
+            "TS2345": 137,
+            "TS7053": 14,
+            "TS7034": 7,
+            "TS7005": 23,
             "TS6133": 21,
             "TS7031": 22,
             "TS2564": 2,
-            "TS2769": 19,
+            "TS2769": 21,
             "TS2314": 7,
-            "TS7016": 6,
             "TS2304": 17,
             "TS2741": 5,
             "TS2739": 16,
@@ -33,6 +32,7 @@
             "TS2367": 4,
             "TS2740": 6,
             "TS2531": 9,
+            "TS7016": 1,
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
@@ -42,58 +42,6 @@
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
-            "assets/__mocks__/stripeMock.tsx": 5,
-            "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
-            "assets/helpers/contributions.ts": 2,
-            "assets/helpers/globalsAndSwitches/globals.ts": 4,
-            "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 19,
-            "assets/pages/contributions-landing/contributionsLandingInit.ts": 3,
-            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
-            "assets/components/csr/csrMode.ts": 3,
-            "assets/components/datePicker/datePickerHelpers.test.ts": 2,
-            "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
-            "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
-            "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
-            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
-            "assets/components/signout/signout.tsx": 1,
-            "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
-            "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
-            "assets/components/subscriptionCheckouts/summary.tsx": 6,
-            "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainer.ts": 1,
-            "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts": 2,
-            "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
-            "assets/helpers/__tests__/checkoutsTest.ts": 7,
-            "assets/helpers/__tests__/promiseTest.ts": 3,
-            "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 17,
-            "assets/helpers/rendering/render.ts": 7,
-            "assets/helpers/rendering/ssrPages.ts": 2,
-            "assets/helpers/subscriptionsForms/formReducer.ts": 6,
-            "assets/helpers/subscriptionsForms/submit.ts": 10,
-            "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts": 1,
-            "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts": 30,
-            "assets/helpers/user/__tests__/userTest.ts": 1,
-            "assets/helpers/user/user.ts": 19,
-            "assets/helpers/utilities/dateFormatting.ts": 1,
-            "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
-            "assets/pages/aus-moment-map/utils.ts": 1,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
-            "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
-            "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 29,
-            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
-            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
-            "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 9,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 12,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
             "assets/components/asyncronously/asyncronously.ts": 2,
             "assets/components/base/rows.tsx": 1,
             "assets/components/button/_sharedButton.tsx": 1,
@@ -147,10 +95,13 @@
             "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx": 2,
             "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
+            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx": 2,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
+            "assets/components/datePicker/datePickerHelpers.test.ts": 2,
+            "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
             "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/list/list.tsx": 6,
@@ -160,8 +111,11 @@
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 10,
             "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 12,
+            "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
-            "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 31,
+            "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
+            "assets/components/subscriptionCheckouts/summary.tsx": 6,
+            "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
             "assets/components/svgs/amazonPayLogoDs.tsx": 1,
             "assets/components/svgs/directDebitSymbolDs.tsx": 1,
             "assets/components/svgs/downChevronDs.tsx": 1,
@@ -174,22 +128,32 @@
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/forms/deliveryCheck.ts": 1,
             "assets/helpers/forms/formValidation.ts": 4,
+            "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 17,
             "assets/helpers/forms/recaptcha.ts": 1,
+            "assets/helpers/globalsAndSwitches/globals.ts": 4,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
             "assets/helpers/page/page.ts": 7,
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
+            "assets/helpers/subscriptionsForms/formReducer.ts": 6,
+            "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts": 30,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/aus-moment-map/components/map.tsx": 4,
+            "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 19,
+            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
+            "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionState.tsx": 4,
             "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 10,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 29,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 30,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 2,
@@ -202,6 +166,9 @@
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
             "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 11,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 4,
+            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
             "assets/pages/paper-subscription-landing/components/content/prices.tsx": 2,
@@ -213,13 +180,20 @@
             "assets/pages/showcase/components/hero.tsx": 3,
             "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 9,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 12,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 2,
+            "assets/components/csr/csrMode.ts": 3,
+            "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
             "assets/pages/aus-moment-map/components/blurb.tsx": 1,
             "assets/pages/aus-moment-map/hooks/useWindowWidth.ts": 1,
+            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
+            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
+            "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
+            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts": 1,
@@ -228,17 +202,40 @@
             "assets/helpers/forms/stripe.ts": 6,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 3,
+            "assets/helpers/rendering/render.ts": 8,
             "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts": 5,
+            "assets/helpers/user/user.ts": 19,
             "assets/helpers/utilities/logger.ts": 1,
             "assets/pages/contributions-landing/checkoutFormIsSubmittableActions.ts": 4,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 4,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
+            "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
+            "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
+            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
+            "assets/components/signout/signout.tsx": 1,
+            "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainer.ts": 1,
+            "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts": 2,
+            "assets/helpers/__tests__/checkoutsTest.ts": 7,
+            "assets/helpers/__tests__/promiseTest.ts": 3,
+            "assets/helpers/rendering/ssrPages.ts": 1,
+            "assets/helpers/subscriptionsForms/submit.ts": 10,
+            "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts": 1,
+            "assets/helpers/user/__tests__/userTest.ts": 1,
+            "assets/helpers/utilities/dateFormatting.ts": 1,
+            "assets/pages/aus-moment-map/utils.ts": 1,
+            "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
+            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
+            "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
+            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
             "assets/components/marketingConsent/helpers.ts": 1,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
+            "assets/helpers/contributions.ts": 2,
             "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
             "assets/helpers/page/__tests__/pageTest.ts": 4,
@@ -250,11 +247,11 @@
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 15,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
-            "assets/helpers/tracking/googleTagManager.ts": 2,
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
+            "assets/pages/contributions-landing/contributionsLandingInit.ts": 3,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
@@ -267,7 +264,6 @@
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
-            "assets/helpers/abTests/abtest.ts": 1,
             "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/helpers/subscriptionsForms/formActions.ts": 2,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
@@ -290,554 +286,6 @@
         {
             "path": "assets/__mocks__/imageMock.ts",
             "message": "'imageMock.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module."
-        }
-    ],
-    "TS7053": [
-        {
-            "path": "assets/__mocks__/stripeMock.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'."
-        },
-        {
-            "path": "assets/__mocks__/stripeMock.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'."
-        },
-        {
-            "path": "assets/__mocks__/stripeMock.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<PropTypes> & Readonly<{ children?: ReactNode; }>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/helpers/contributions.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{ '1': string; '2': string; '5': string; '6': string; '7': string; '10': string; '15': string; '20': string; '25': string; '30': string; '35': string; '40': string; '50': string; '75': string; '100': string; '125': string; '166': string; '200': string; ... 7 more ...; '16000': string; }'."
-        },
-        {
-            "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; recaptchaEnabled: boolean; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ QLD: string; NSW: string; NT: string; SA: string; TAS: string; VIC: string; WA: string; ACT: string; }'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'ContributionAmounts'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ... 7 more ...; EverydayPlus: { ...; ...'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<FulfilmentOptions, string[]>'."
-        }
-    ],
-    "TS7006": [
-        {
-            "path": "assets/__mocks__/stripeMock.tsx",
-            "message": "Parameter 'elementType' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/__mocks__/stripeMock.tsx",
-            "message": "Parameter 'evt' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/csr/csrMode.ts",
-            "message": "Parameter 'domain' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/csr/csrMode.ts",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/datePicker/datePickerHelpers.test.ts",
-            "message": "Parameter 'param' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'field' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'dispatchUpdate' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'ownProps' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'trackingId' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'product' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/signout/signout.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'r' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'key' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Parameter 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainer.ts",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'isFeature' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'index' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'hierarchy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Parameter 'key' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/__tests__/promiseTest.ts",
-            "message": "Parameter 'done' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/__tests__/promiseTest.ts",
-            "message": "Parameter 'fail' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'resolve' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'reject' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'actions' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'actions' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'data' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Parameter 'opts' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/rendering/ssrPages.ts",
-            "message": "Parameter 'content' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Parameter 'action' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Parameter 'currentOption' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/submit.ts",
-            "message": "Parameter 'product' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/submit.ts",
-            "message": "Parameter 'addresses' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts",
-            "message": "Parameter 'addressReducers' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
-            "message": "Parameter 'callback' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
-            "message": "Parameter 'callback' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
-            "message": "Parameter 'callback' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
-            "message": "Parameter 'callback' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
-            "message": "Parameter 'callback' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userTest.ts",
-            "message": "Parameter 'values' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Parameter 'x' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/utilities/dateFormatting.ts",
-            "message": "Parameter 'd' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Parameter 'territory' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Parameter 'territory' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/utils.ts",
-            "message": "Parameter 'componentId' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
-            "message": "Parameter 'response' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'error' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'billingAgreement' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'orderReference' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'error' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'value' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'update' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'token' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'token' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Parameter 'confirmResult' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Parameter 'commonState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Parameter 'commonState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'searchText' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'content' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'node' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'element' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'originalState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'setStartDate' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'startDate' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'fulfilmentOption' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'item' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Parameter 'tab' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Parameter 'activeTab' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx",
-            "message": "Parameter 'index' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'isPending' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'orderIsGift' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'country' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'newState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
         }
     ],
     "TS2305": [
@@ -1302,10 +750,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Type 'Promise<{ json: () => Promise<{ client_secret: string; }>; }>' is not assignable to type 'Promise<Response>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
@@ -2568,6 +2012,476 @@
             "message": "Property 'title' does not exist on type '{ title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { ...; }'."
         }
     ],
+    "TS7006": [
+        {
+            "path": "assets/components/csr/csrMode.ts",
+            "message": "Parameter 'domain' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/csr/csrMode.ts",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/datePicker/datePickerHelpers.test.ts",
+            "message": "Parameter 'param' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
+            "message": "Parameter 'state' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx",
+            "message": "Parameter 'state' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Parameter 'state' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Parameter 'field' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Parameter 'dispatchUpdate' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
+            "message": "Parameter 'state' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Parameter 'ownProps' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Parameter 'trackingId' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Parameter 'product' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/signout/signout.tsx",
+            "message": "Parameter 'state' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'r' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'key' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
+            "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
+            "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
+            "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
+            "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/summary.tsx",
+            "message": "Parameter 'props' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainer.ts",
+            "message": "Parameter 'state' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts",
+            "message": "Parameter 'state' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
+            "message": "Parameter 'isFeature' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
+            "message": "Parameter 'index' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
+            "message": "Parameter 'hierarchy' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Parameter 'key' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/__tests__/promiseTest.ts",
+            "message": "Parameter 'done' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/__tests__/promiseTest.ts",
+            "message": "Parameter 'fail' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Parameter 'resolve' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Parameter 'reject' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Parameter 'actions' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Parameter 'actions' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Parameter 'data' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Parameter 'opts' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/ssrPages.ts",
+            "message": "Parameter 'content' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
+            "message": "Parameter 'action' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
+            "message": "Parameter 'currentOption' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/submit.ts",
+            "message": "Parameter 'product' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/submit.ts",
+            "message": "Parameter 'addresses' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts",
+            "message": "Parameter 'addressReducers' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
+            "message": "Parameter 'callback' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
+            "message": "Parameter 'callback' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
+            "message": "Parameter 'callback' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
+            "message": "Parameter 'callback' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
+            "message": "Parameter 'callback' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userTest.ts",
+            "message": "Parameter 'values' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/user/user.ts",
+            "message": "Parameter 'x' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/utilities/dateFormatting.ts",
+            "message": "Parameter 'd' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
+            "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
+            "message": "Parameter 'territory' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
+            "message": "Parameter 'territory' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/utils.ts",
+            "message": "Parameter 'componentId' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
+            "message": "Parameter 'response' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'error' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'billingAgreement' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'orderReference' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'error' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'update' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'token' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'token' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'confirmResult' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
+            "message": "Parameter 'commonState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
+            "message": "Parameter 'component' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
+            "message": "Parameter 'email' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
+            "message": "Parameter 'commonState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
+            "message": "Parameter 'component' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'searchText' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'content' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'node' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'element' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'originalState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'component' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
+            "message": "Parameter 'component' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
+            "message": "Parameter 'email' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
+            "message": "Parameter 'setStartDate' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
+            "message": "Parameter 'startDate' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
+            "message": "Parameter 'fulfilmentOption' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
+            "message": "Parameter 'item' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
+            "message": "Parameter 'tab' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
+            "message": "Parameter 'activeTab' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx",
+            "message": "Parameter 'index' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
+            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
+            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
+            "message": "Parameter 'isPending' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
+            "message": "Parameter 'orderIsGift' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
+            "message": "Parameter 'component' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "Parameter 'email' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "Parameter 'country' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "Parameter 'newState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
+            "message": "Parameter 'initialState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
+            "message": "Parameter 'component' implicitly has an 'any' type."
+        }
+    ],
     "TS2345": [
         {
             "path": "assets/components/datePicker/datePicker.tsx",
@@ -2934,10 +2848,6 @@
             "message": "Argument of type '{ campaignCode: string; referrerPageviewId: string; referrerUrl: string; componentId: string; componentType: string; source: string; abTests: { name: string; variant: string; }[]; queryParameters: { ...; }[]; }' is not assignable to parameter of type 'ReferrerAcquisitionData'."
         },
         {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
-        },
-        {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "Argument of type 'string | Location' is not assignable to parameter of type 'string | number | boolean'."
         },
@@ -3122,34 +3032,68 @@
             "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
         }
     ],
+    "TS7053": [
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Readonly<StateTypes>'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<PropTypes> & Readonly<{ children?: ReactNode; }>'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
+        },
+        {
+            "path": "assets/helpers/contributions.ts",
+            "message": "Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{ '1': string; '2': string; '5': string; '6': string; '7': string; '10': string; '15': string; '20': string; '25': string; '30': string; '35': string; '40': string; '50': string; '75': string; '100': string; '125': string; '166': string; '200': string; ... 7 more ...; '16000': string; }'."
+        },
+        {
+            "path": "assets/helpers/globalsAndSwitches/globals.ts",
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; recaptchaEnabled: boolean; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ QLD: string; NSW: string; NT: string; SA: string; TAS: string; VIC: string; WA: string; ACT: string; }'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'ContributionAmounts'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ... 7 more ...; EverydayPlus: { ...; ...'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<FulfilmentOptions, string[]>'."
+        }
+    ],
     "TS7034": [
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
             "message": "Variable 'cardErrors' implicitly has type 'any[]' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'props' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'stripeForm' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'submitForm' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'validateForm' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'setStripePaymentMethod' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'errorProps' implicitly has type 'any' in some locations where its type cannot be determined."
         },
         {
             "path": "assets/helpers/internationalisation/country.ts",
@@ -3180,102 +3124,6 @@
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
             "message": "Variable 'cardErrors' implicitly has an 'any[]' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'validateForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'setStripePaymentMethod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'submitForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'validateForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'setStripePaymentMethod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'submitForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'setStripePaymentMethod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'submitForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'validateForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'stripeForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'errorProps' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'stripeForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'errorProps' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'validateForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'setStripePaymentMethod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'submitForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'stripeForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'errorProps' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'submitForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'stripeForm' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
-            "message": "Variable 'submitForm' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/internationalisation/country.ts",
@@ -3578,6 +3426,14 @@
             "message": "No overload matches this call."
         },
         {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "No overload matches this call."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "No overload matches this call."
+        },
+        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
@@ -3658,32 +3514,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
             "message": "Generic type '$Call' requires 1 type argument(s)."
-        }
-    ],
-    "TS7016": [
-        {
-            "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
-            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/abTests/abtest.ts",
-            "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/rendering/ssrPages.ts",
-            "message": "Could not find a declaration file for module 'react-dom/server'. 'support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/tracking/googleTagManager.ts",
-            "message": "Could not find a declaration file for module 'uuid'. 'support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
         }
     ],
     "TS2304": [
@@ -4264,6 +4094,12 @@
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
             "message": "Object is possibly 'null'."
+        }
+    ],
+    "TS7016": [
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         }
     ],
     "TS1337": [
