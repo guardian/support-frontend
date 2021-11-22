@@ -50,7 +50,6 @@ type PropTypes = {
 	countryId: IsoCountry;
 	userName: string | null;
 	referrerAcquisitionData: ReferrerAcquisitionData;
-	canShowTicker: boolean;
 	currency: IsoCurrency;
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
@@ -64,7 +63,6 @@ const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
 	userName: state.page.user.firstName,
 	referrerAcquisitionData: state.common.referrerAcquisitionData,
-	canShowTicker: state.common.abParticipations.tickerTest === 'variant',
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
@@ -250,9 +248,7 @@ function withProps(props: PropTypes) {
 				>
 					<SecureTransactionIndicator modifierClasses={['top']} />
 
-					{props.canShowTicker &&
-					campaignSettings &&
-					campaignSettings.tickerSettings ? (
+					{campaignSettings?.tickerSettings ? (
 						<ContributionTicker
 							{...campaignSettings.tickerSettings}
 							onGoalReached={props.setTickerGoalReached}

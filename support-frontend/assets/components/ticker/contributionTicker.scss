@@ -6,7 +6,7 @@ $progress-bar-height: 10px;
 	padding: 18px 0 28px 0;
 	margin: 0 -10px;
 	border-bottom: 1px solid gu-colour(neutral-86);
-	font-family: $gu-headline;
+	font-family: $gu-text-sans-web;
 }
 
 .contributions-landing-ticker--hidden {
@@ -36,6 +36,7 @@ $progress-bar-height: 10px;
 	align-items: flex-end;
 	padding-bottom: 6px;
 	line-height: 1;
+  font-size: 17px;
 }
 
 .contributions-landing-ticker__goal,
@@ -45,7 +46,6 @@ $progress-bar-height: 10px;
 }
 
 .contributions-landing-ticker__so-far .contributions-landing-ticker__count {
-	font-size: 24px;
 	font-weight: 800;
 	margin-bottom: 2px;
 }
@@ -59,10 +59,6 @@ $progress-bar-height: 10px;
 	}
 }
 
-.contributions-landing-ticker__label {
-	font-style: italic;
-}
-
 .contributions-landing-ticker__progress-bar {
 	position: relative;
 }
@@ -71,12 +67,12 @@ $progress-bar-height: 10px;
 	width: calc(100%);
 	height: $progress-bar-height;
 	overflow: hidden;
-	background-color: #dcdcdc;
+  background-color: #DDA7A1;
 	position: absolute;
 }
 
 .contributions-landing-ticker__filled-progress {
-	background-color: gu-colour(highlight-main);
+  background-color: #C70000;
 	position: absolute;
 	top: 0;
 	left: 0;
