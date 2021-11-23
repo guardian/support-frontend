@@ -15,6 +15,7 @@ import com.gu.support.config.Stage
 import com.gu.support.workers.{BillingPeriod, Contribution, DigitalPack, GuardianWeekly, Paper, User}
 import config.Configuration.GuardianDomain
 import cookies.DigitalSubscriptionCookies
+import io.circe
 import io.circe.syntax._
 import lib.PlayImplicits._
 import play.api.libs.circe.Circe
@@ -147,6 +148,11 @@ class CreateSubscriptionController(
 }
 
 class LoggingCirceParser(controllerComponents: ControllerComponents) extends Circe {
+
+  override protected def onCirceError(e: io.circe.Error): Result = {
+    SafeLogger.warn(s"circe decode failure: $e")
+    super.onCirceError(e)
+  }
 
   val requestParser: BodyParser[CreateSupportWorkersRequest] = {
     val underlying = circe.json[CreateSupportWorkersRequest]
