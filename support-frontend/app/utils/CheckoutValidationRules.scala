@@ -6,84 +6,116 @@ import com.gu.support.catalog.{Collection, Domestic, FulfilmentOptions, HomeDeli
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
-import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
+import utils.CheckoutValidationRules._
 
 object CheckoutValidationRules {
-  def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = createSupportWorkersRequest.product match {
-    case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d.readerType)
-    case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
-    case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
-    case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
+
+  sealed trait Result {
+    def and(right: Result): Result = (this, right) match {
+      case (Invalid(leftMessage), Invalid(rightMessage)) => Invalid(leftMessage + " and " + rightMessage)
+      case (Valid, Valid) => Valid
+      case (invalid: Invalid, Valid) => invalid
+      case (Valid, invalid: Invalid) => invalid
+    }
   }
+  case class Invalid(message: String) extends Result
+  case object Valid extends Result
+
+  def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
+    createSupportWorkersRequest.product match {
+      case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d.readerType)
+      case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
+      case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
+      case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
+    }
+
+  implicit class WithMessage(isSuccess: Boolean) {
+    def otherwise(message: String): Result =
+      if (isSuccess) Valid else Invalid(message)
+  }
+
 }
 
 object SimpleCheckoutFormValidation {
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean =
-    noEmptyNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) &&
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
+    noEmptyNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) and
       noExcessivelyLongNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName)
 
-  private def noEmptyNameFields(firstName: String, lastName: String) = !firstName.isEmpty && !lastName.isEmpty
+  private def noEmptyNameFields(firstName: String, lastName: String): Result =
+    firstName.nonEmpty.otherwise("first name was empty") and
+      lastName.nonEmpty.otherwise("last name was empty")
 
-  private def noExcessivelyLongNameFields(firstName: String, lastName: String) = !(firstName.length > 40) && !(lastName.length > 80)
+  private def noExcessivelyLongNameFields(firstName: String, lastName: String): Result =
+    (firstName.length <= 40).otherwise("first name was longer than 40 chars") and
+      (lastName.length <= 80).otherwise("last name was longer than 80 chars")
 
 }
 
 object PaidProductValidation {
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean =
-    SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
+    SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
       hasValidPaymentDetailsForPaidProduct(createSupportWorkersRequest.paymentFields)
 
-  def hasValidPaymentDetailsForPaidProduct(paymentDetails: Either[PaymentFields, RedemptionData]): Boolean =
-    paymentDetails fold (
-      paymentFields => noEmptyPaymentFields(paymentFields),
-      redemptionData => false
-    )
+  def hasValidPaymentDetailsForPaidProduct(paymentDetails: Either[PaymentFields, RedemptionData]): Result =
+    paymentDetails match {
+      case Left(paymentFields) => noEmptyPaymentFields(paymentFields)
+      case Right(redemptionData) => Invalid("paid product can't be a redemption")
+    }
 
-  def noEmptyPaymentFields(paymentFields: PaymentFields): Boolean = paymentFields match {
+  def noEmptyPaymentFields(paymentFields: PaymentFields): Result = paymentFields match {
     case directDebitDetails: DirectDebitPaymentFields =>
-      directDebitDetails.accountHolderName.nonEmpty && directDebitDetails.accountNumber.nonEmpty && directDebitDetails.sortCode.nonEmpty
-    case _: StripePaymentMethodPaymentFields => true // already validated in PaymentMethodId.apply
-    case stripeDetails: StripeSourcePaymentFields => stripeDetails.stripeToken.nonEmpty
-    case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty
-    case existingDetails: ExistingPaymentFields => existingDetails.billingAccountId.nonEmpty
+      directDebitDetails.accountHolderName.nonEmpty.otherwise("DD account name missing") and
+        directDebitDetails.accountNumber.nonEmpty.otherwise("DD account number missing") and
+        directDebitDetails.sortCode.nonEmpty.otherwise("DD sort code missing")
+    case _: StripePaymentMethodPaymentFields => Valid // already validated in PaymentMethodId.apply
+    case stripeDetails: StripeSourcePaymentFields => stripeDetails.stripeToken.nonEmpty.otherwise("stripe token missing")
+    case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
+    case existingDetails: ExistingPaymentFields => existingDetails.billingAccountId.nonEmpty.otherwise("existing billing account id missing")
   }
 
 }
 
 object AddressAndCurrencyValidationRules {
 
-  def deliveredToUkAndPaidInGbp(countryFromRequest: Country, currencyFromRequest: Currency): Boolean =
-    countryFromRequest == Country.UK && currencyFromRequest == GBP
+  def deliveredToUkAndPaidInGbp(countryFromRequest: Country, currencyFromRequest: Currency): Result =
+    (countryFromRequest == Country.UK).otherwise(s"should be delivered to UK, was $countryFromRequest") and
+      (currencyFromRequest == GBP).otherwise(s"should be paid for in GBP, was $currencyFromRequest")
 
-  def hasAddressLine1AndCity(address: Address): Boolean = {
-    address.lineOne.isDefined && address.city.isDefined
+  def hasAddressLine1AndCity(address: Address): Result = {
+    address.lineOne.isDefined.otherwise("must have address line 1") and
+      address.city.isDefined.otherwise("must have a city")
   }
 
 
-  def hasStateIfRequired(countryFromRequest: Country, stateFromRequest: Option[String]): Boolean =
+  def hasStateIfRequired(countryFromRequest: Country, stateFromRequest: Option[String]): Result =
     if (countryFromRequest == Country.US || countryFromRequest == Country.Canada || countryFromRequest == Country.Australia) {
-      stateFromRequest.isDefined
-    } else true
+      stateFromRequest.isDefined.otherwise(s"state is required for $countryFromRequest")
+    } else Valid
 
 
-  def hasPostcodeIfRequired(countryFromRequest: Country, postcodeFromRequest: Option[String]): Boolean =
+  def hasPostcodeIfRequired(countryFromRequest: Country, postcodeFromRequest: Option[String]): Result =
     if (
       countryFromRequest == Country.UK ||
         countryFromRequest == Country.US ||
         countryFromRequest == Country.Canada ||
         countryFromRequest == Country.Australia
     ) {
-      postcodeFromRequest.isDefined
-    } else true
+      postcodeFromRequest.isDefined.otherwise(s"postcode is required for $countryFromRequest")
+    } else Valid
 
 
-  def currencyIsSupportedForCountry(countryFromRequest: Country, currencyFromRequest: Currency): Boolean = {
+  def currencyIsSupportedForCountry(countryFromRequest: Country, currencyFromRequest: Currency): Result = {
     val countryGroupsForCurrency = CountryGroup.allGroups.filter(_.currency == currencyFromRequest)
-    countryGroupsForCurrency.flatMap(_.countries).contains(countryFromRequest)
+    val isValid = countryGroupsForCurrency.flatMap(_.countries).contains(countryFromRequest)
+
+    val validCurrenciesForCountry = CountryGroup.allGroups.filter(_.countries.contains(countryFromRequest)).flatMap { countryGroup =>
+      countryGroup.currency :: countryGroup.additionalCurrencies
+    }
+    isValid.otherwise(s"currency $currencyFromRequest is not supported for country $countryFromRequest, can only have ${validCurrenciesForCountry}")
   }
 
 }
@@ -92,22 +124,22 @@ object DigitalPackValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, readerType: ReaderType): Boolean = {
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, readerType: ReaderType): Result = {
     import createSupportWorkersRequest._
     import createSupportWorkersRequest.billingAddress._
     import createSupportWorkersRequest.product._
 
 
     def isValidRedemption =
-      SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
+      SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
         hasStateIfRequired(country, state)
 
     def isValidPaidSub(paymentFields: PaymentFields) =
-      SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
-        hasStateIfRequired(country, state) &&
-        hasAddressLine1AndCity(billingAddress) &&
-        hasPostcodeIfRequired(country, postCode) &&
-        currencyIsSupportedForCountry(country, currency) &&
+      SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
+        hasStateIfRequired(country, state) and
+        hasAddressLine1AndCity(billingAddress) and
+        hasPostcodeIfRequired(country, postCode) and
+        currencyIsSupportedForCountry(country, currency) and
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
     val Purchase = Left
@@ -119,7 +151,7 @@ object DigitalPackValidation {
         isValidPaidSub(paymentFields)
       case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption
       case (_: Redemption[_, _], ReaderType.Gift, None) => SimpleCheckoutFormValidation.passes(createSupportWorkersRequest)
-      case _ => false
+      case _ => Invalid(s"invalid digital subscription request: paymentFields: $paymentFields, readerType: $readerType, giftRecipient: $giftRecipient")
     }
   }
 }
@@ -128,24 +160,15 @@ object GuardianWeeklyValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
-
-    val maybeValid = for {
-      address <- createSupportWorkersRequest.deliveryAddress
-    } yield {
-
-      val deliveryAddressHasAddressLine1AndCity = hasAddressLine1AndCity(address)
-
-      PaidProductValidation.passes(createSupportWorkersRequest) &&
-        createSupportWorkersRequest.firstDeliveryDate.nonEmpty &&
-        hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) &&
-        deliveryAddressHasAddressLine1AndCity
-
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
+    createSupportWorkersRequest.deliveryAddress match {
+      case Some(address) =>
+        PaidProductValidation.passes(createSupportWorkersRequest) and
+          createSupportWorkersRequest.firstDeliveryDate.nonEmpty.otherwise("first delivery date is required") and
+          hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) and
+          hasAddressLine1AndCity(address)
+      case None => Invalid("missing delivery address")
     }
-
-    maybeValid.contains(true)
-
-  }
 
 }
 
@@ -153,33 +176,33 @@ object PaperValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, fulfilmentOptions: FulfilmentOptions): Boolean = {
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, fulfilmentOptions: FulfilmentOptions): Result = {
 
     val maybeValid = for {
-      address <- createSupportWorkersRequest.deliveryAddress
-      postCode <- address.postCode
+      address <- createSupportWorkersRequest.deliveryAddress.toRight(Invalid("missing delivery address"))
+      postCode <- address.postCode.toRight(Invalid("missing post code"))
     } yield {
 
       val hasDeliveryAddressInUKAndPaidInGbp = deliveredToUkAndPaidInGbp(address.country, createSupportWorkersRequest.product.currency)
       val deliveryAddressHasAddressLine1AndCity = hasAddressLine1AndCity(address)
       val validPostcode = fulfilmentOptions match {
         case HomeDelivery => postcodeIsWithinDeliveryArea(postCode)
-        case Collection => true
-        case Domestic => false
-        case RestOfWorld => false
-        case NoFulfilmentOptions => false
+        case Collection => Valid
+        case Domestic => Invalid("domestic is not valid for paper")
+        case RestOfWorld => Invalid("rest of world is not valid for paper")
+        case NoFulfilmentOptions => Invalid("no fulfilment options is not valid for paper")
       }
 
-      PaidProductValidation.passes(createSupportWorkersRequest) &&
-        hasDeliveryAddressInUKAndPaidInGbp &&
-        createSupportWorkersRequest.firstDeliveryDate.nonEmpty &&
-        hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) &&
-        deliveryAddressHasAddressLine1AndCity &&
+      PaidProductValidation.passes(createSupportWorkersRequest) and
+        hasDeliveryAddressInUKAndPaidInGbp and
+        createSupportWorkersRequest.firstDeliveryDate.nonEmpty.otherwise("first delivery date is missing") and
+        hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) and
+        deliveryAddressHasAddressLine1AndCity and
         validPostcode
 
     }
 
-    maybeValid.contains(true)
+    maybeValid.merge
 
   }
 
@@ -190,8 +213,8 @@ object PaperValidation {
 
   }
 
-  def postcodeIsWithinDeliveryArea(postcode: String): Boolean =
-    M25_POSTCODE_PREFIXES.contains(getPrefix(postcode))
+  def postcodeIsWithinDeliveryArea(postcode: String): Result =
+    M25_POSTCODE_PREFIXES.contains(getPrefix(postcode)).otherwise(s"postcode $postcode is not within M25")
 
   val M25_POSTCODE_OLD_PREFIXES = List(
     "BR1", "BR2", "BR3", "BR4", "BR5", "BR6", "BR7", "BR8",

@@ -22,6 +22,7 @@ import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{AuthenticatedIdUser, IdMinimalUser, IdentityService, TestUserService}
+import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.NormalisedTelephoneNumber.asFormattedString
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
@@ -83,18 +84,19 @@ class CreateSubscriptionController(
         .leftMap(error => ServerError(error.toString))
     }
 
-    if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
-      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(idMinimalUser).leftMap(ServerError)
+    CheckoutValidationRules.validate(createSupportWorkersRequest) match {
+      case Valid =>
+        val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(idMinimalUser).leftMap(ServerError)
 
-      val result: ApiResponseOrError[StatusResponse] = for {
-        user <- userOrError
-        statusResponse <- subscriptionStatusOrError(user)
-      } yield statusResponse
+        val result: ApiResponseOrError[StatusResponse] = for {
+          user <- userOrError
+          statusResponse <- subscriptionStatusOrError(user)
+        } yield statusResponse
 
-      respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
-    } else {
-      SafeLogger.warn(s"validation of the request body failed $createSupportWorkersRequest")
-      respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
+        respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
+      case Invalid(message) =>
+        SafeLogger.warn(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
+        respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
     }
   }
 
