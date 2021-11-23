@@ -28,7 +28,7 @@ type OrderSummaryProductProps = {
 	productInfo: ListItemText[];
 };
 
-function OrderSummaryProduct(props: OrderSummaryProductProps) {
+function OrderSummaryProduct(props: OrderSummaryProductProps): JSX.Element {
 	return (
 		<div css={container}>
 			<h4 css={title}>{props.productName}</h4>

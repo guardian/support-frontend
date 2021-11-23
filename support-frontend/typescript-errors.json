@@ -2,20 +2,21 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 57,
-            "TS2322": 227,
+            "TS2305": 55,
+            "TS2322": 220,
             "TS2578": 21,
             "TS2339": 86,
             "TS7006": 115,
-            "TS2345": 132,
+            "TS2345": 130,
             "TS7053": 14,
             "TS7034": 7,
             "TS7005": 23,
             "TS6133": 16,
             "TS7031": 22,
             "TS2564": 2,
-            "TS2769": 21,
-            "TS2314": 7,
+            "TS2769": 19,
+            "TS7016": 5,
+            "TS2314": 6,
             "TS2304": 6,
             "TS2741": 5,
             "TS2739": 16,
@@ -32,7 +33,6 @@
             "TS2367": 4,
             "TS2740": 6,
             "TS2531": 9,
-            "TS7016": 1,
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
@@ -60,7 +60,6 @@
             "assets/components/forms/customFields/options.tsx": 1,
             "assets/components/forms/label.tsx": 2,
             "assets/components/generalErrorMessage/generalErrorMessage.tsx": 1,
-            "assets/components/gridImage/gridImage.tsx": 1,
             "assets/components/headers/header/header.tsx": 6,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
@@ -72,7 +71,6 @@
             "assets/components/leftMarginSection/leftMarginSection.tsx": 1,
             "assets/components/list/orderedList.tsx": 1,
             "assets/components/menu/menu.tsx": 2,
-            "assets/components/orderSummary/orderSummary.tsx": 2,
             "assets/components/page/block.tsx": 1,
             "assets/components/page/pageTitle.tsx": 5,
             "assets/components/pageSection/pageSection.tsx": 1,
@@ -104,9 +102,7 @@
             "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
             "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
             "assets/components/headers/links/links.tsx": 1,
-            "assets/components/list/list.tsx": 6,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
-            "assets/components/orderSummary/orderSummaryProduct.tsx": 1,
             "assets/components/page/page.tsx": 1,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 10,
@@ -164,7 +160,7 @@
             "assets/pages/digital-subscription-landing/components/prices.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
             "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 11,
-            "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 4,
+            "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
@@ -173,7 +169,6 @@
             "assets/pages/paper-subscription-landing/components/content/prices.tsx": 2,
             "assets/pages/paper-subscription-landing/components/content/subsCardTab.tsx": 1,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
-            "assets/pages/promotion-terms/promoDetails.tsx": 1,
             "assets/pages/showcase/components/ctaContribute.tsx": 1,
             "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
             "assets/pages/showcase/components/hero.tsx": 3,
@@ -193,7 +188,7 @@
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
-            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
+            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts": 1,
@@ -202,7 +197,7 @@
             "assets/helpers/forms/stripe.ts": 6,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 3,
-            "assets/helpers/rendering/render.ts": 8,
+            "assets/helpers/rendering/render.ts": 7,
             "assets/helpers/user/user.ts": 20,
             "assets/helpers/utilities/logger.ts": 1,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 4,
@@ -215,7 +210,7 @@
             "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts": 2,
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
             "assets/helpers/__tests__/promiseTest.ts": 3,
-            "assets/helpers/rendering/ssrPages.ts": 1,
+            "assets/helpers/rendering/ssrPages.ts": 2,
             "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts": 1,
             "assets/helpers/user/__tests__/userTest.ts": 1,
             "assets/helpers/utilities/dateFormatting.ts": 1,
@@ -260,6 +255,7 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
+            "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
@@ -359,10 +355,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/gridImage/gridImage.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/headers/header/header.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -404,10 +396,6 @@
         },
         {
             "path": "assets/components/menu/menu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/orderSummary/orderSummary.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -605,32 +593,12 @@
             "message": "Type 'string' is not assignable to type 'number | undefined'."
         },
         {
-            "path": "assets/components/list/list.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/list/list.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/list/list.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/list/list.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
             "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"appearance\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/components/menu/menu.tsx",
             "message": "Type '{ children: any[]; className: any; \"data-is-selected\": boolean; }' is not assignable to type 'IntrinsicAttributes'."
-        },
-        {
-            "path": "assets/components/orderSummary/orderSummaryProduct.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/components/page/page.tsx",
@@ -1265,10 +1233,6 @@
             "message": "Type 'string | SerializedStyles' is not assignable to type 'SerializedStyles'."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/appsSection.tsx",
             "message": "Type '\"normal\"' is not assignable to type 'LineHeight | undefined'."
         },
@@ -1338,10 +1302,6 @@
         },
         {
             "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promoDetails.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
@@ -2357,14 +2317,6 @@
             "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
         },
         {
-            "path": "assets/components/list/list.tsx",
-            "message": "Argument of type 'typeof ListItem' is not assignable to parameter of type 'ComponentType<ListItemProps>'."
-        },
-        {
-            "path": "assets/components/list/list.tsx",
-            "message": "Argument of type 'typeof ListItemWithSubtext' is not assignable to parameter of type 'ComponentType<ListItemProps>'."
-        },
-        {
             "path": "assets/components/marketingConsent/helpers.ts",
             "message": "Argument of type '{ method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; credentials: string; body: string; }' is not assignable to parameter of type 'RequestInit'."
         },
@@ -3223,14 +3175,6 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
@@ -3283,11 +3227,29 @@
             "message": "No overload matches this call."
         }
     ],
-    "TS2314": [
+    "TS7016": [
         {
-            "path": "assets/components/orderSummary/orderSummary.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
+            "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
         },
+        {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
+            "message": "Could not find a declaration file for module 'react-dom/test-utils'. 'support-frontend/node_modules/react-dom/test-utils.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/ssrPages.ts",
+            "message": "Could not find a declaration file for module 'react-dom/server'. 'support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
+        }
+    ],
+    "TS2314": [
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Generic type '$Call' requires 1 type argument(s)."
@@ -3867,12 +3829,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
             "message": "Object is possibly 'null'."
-        }
-    ],
-    "TS7016": [
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         }
     ],
     "TS1337": [
