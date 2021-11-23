@@ -1,3 +1,7 @@
+/* eslint-disable eslint-comments/require-description -- This is a mocks file, it is not intended to be good code! */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 
 const mockElement = () => ({
@@ -8,13 +12,13 @@ const mockElement = () => ({
 });
 
 const mockElements = () => {
-	const elements = {};
+	const elements: Record<string, any> = {};
 	return {
 		create: jest.fn((type) => {
 			elements[type] = mockElement();
 			return elements[type];
 		}),
-		getElement: jest.fn((type) => elements[type] || null),
+		getElement: jest.fn((type) => elements[type] || mockElement()),
 	};
 };
 
@@ -24,8 +28,7 @@ const mockStripe = () => ({
 	createSource: jest.fn(),
 	createPaymentMethod: jest.fn(),
 	confirmCardPayment: jest.fn(),
-	confirmCardSetup: jest.fn(),
-	handleCardSetup: jest.fn().mockResolvedValue({
+	confirmCardSetup: jest.fn().mockResolvedValue({
 		setupIntent: {
 			payment_method: 'mock',
 		},
@@ -37,13 +40,13 @@ const mockStripe = () => ({
 jest.mock('@stripe/react-stripe-js', () => {
 	const stripe = jest.requireActual('@stripe/react-stripe-js');
 
-	function createStripeElementMock(elementType) {
+	function createStripeElementMock(elementType: string) {
 		type MockStripeElementProps = {
 			id: string;
 			onChange: (...args: any[]) => any;
 		};
 		return function MockStripeElement(props: MockStripeElementProps) {
-			function onChange(evt) {
+			function onChange(evt: any) {
 				return props.onChange({
 					...evt,
 					elementType,

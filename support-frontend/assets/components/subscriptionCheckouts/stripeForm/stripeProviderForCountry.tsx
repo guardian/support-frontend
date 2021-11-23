@@ -7,14 +7,16 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { Option } from 'helpers/types/option';
+
 // Types
-type PropTypes = {
+export type PropTypes = {
 	country: IsoCountry;
 	isTestUser: boolean;
 	allErrors: Array<FormError<FormField>>;
-	setStripePaymentMethod: (...args: any[]) => any;
-	submitForm: (...args: any[]) => any;
-	validateForm: (...args: any[]) => any;
+	setStripePaymentMethod: (stripePaymentMethod: Option<string>) => void;
+	submitForm: () => void;
+	validateForm: () => void;
 	buttonText: string;
 	csrf: Csrf;
 };
