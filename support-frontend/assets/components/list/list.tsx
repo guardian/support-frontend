@@ -95,7 +95,7 @@ function ListItem({ item, colour, size }: ListItemProps) {
 ListItem.defaultProps = {
 	size: 'large',
 	colour: 'light',
-};
+} as Partial<ListItemProps>;
 
 function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
 	return (
@@ -112,11 +112,9 @@ function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
 ListItemWithSubtext.defaultProps = {
 	size: 'large',
 	colour: 'light',
-};
+} as Partial<ListItemProps>;
 
-function ListWith(
-	ListItemComponent: typeof ListItem | typeof ListItemWithSubtext,
-) {
+function ListWith(ListItemComponent: React.FC<ListItemProps>) {
 	function ListComponent(props: ListProps) {
 		return (
 			<ul css={[list, props.cssOverrides]}>
