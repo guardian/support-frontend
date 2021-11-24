@@ -147,8 +147,6 @@ function buildReferrerAcquisitionData(
 		(acquisitionData.referrerPageviewId as string | undefined) ??
 		getQueryParameter('REFPVID');
 
-	console.log(getCampaignCode() === null);
-
 	const campaignCode =
 		getCampaignCode() ??
 		(acquisitionData.campaignCode as string | undefined) ??

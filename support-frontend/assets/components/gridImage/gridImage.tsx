@@ -2,7 +2,6 @@
 // This code is designed to work with a single image at one or more crops
 // If you want to work with multiple (different) images, maybe try gridPicture instead
 // ----- Imports ----- //
-import type { Node } from 'react';
 import React from 'react';
 import { gridSrcset, gridUrl } from 'helpers/images/theGrid';
 import type { ImageId, ImageType } from 'helpers/images/theGrid';
@@ -20,20 +19,20 @@ export type GridImg = {
 };
 type PropTypes = GridImg; // ----- Component ----- //
 
-export default function GridImage(props: PropTypes): Node {
+export default function GridImage(props: PropTypes): JSX.Element | null {
 	if (props.srcSizes.length < 1) {
 		return null;
 	}
 
 	const sorted = props.srcSizes.sort(ascending);
 	const srcSet = gridSrcset(props.gridId, sorted, props.imgType);
-	const fallbackSize = sorted.find((_) => _ > MIN_IMG_WIDTH) || sorted[0];
+	const fallbackSize = sorted.find((_) => _ > MIN_IMG_WIDTH) ?? sorted[0];
 	const fallbackSrc = gridUrl(props.gridId, fallbackSize, props.imgType);
 	return (
 		<img
 			className={classNameWithModifiers(
 				'component-grid-image',
-				props.classModifiers || [],
+				props.classModifiers ?? [],
 			)}
 			sizes={props.sizes}
 			srcSet={srcSet}

@@ -86,9 +86,6 @@ case class StatusResponse(
 )
 
 object StatusResponse {
-  def fromStatusResponse(statusResponse: StatusResponse): StatusResponse =
-    StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason)
-
   implicit val codec: Codec[StatusResponse] = deriveCodec
 }
 
