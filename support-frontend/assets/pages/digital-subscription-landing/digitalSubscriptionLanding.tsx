@@ -296,9 +296,9 @@ function DigitalLandingComponent({
 			<FullWidthContainer theme="dark" hasOverlap>
 				<CentredContainer>
 					<Prices
-						cssOverrides={...showComparisonTable
-							? [extraPaddingForComparisonTable]
-							: []}
+						cssOverrides={[
+							...(showComparisonTable ? [extraPaddingForComparisonTable] : []),
+						]}
 						countryGroupId={countryGroupId}
 						currencyId={currencyId}
 						productPrices={productPrices}
