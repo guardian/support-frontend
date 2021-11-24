@@ -1,4 +1,5 @@
 import { css } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brand, brandAlt } from '@guardian/src-foundations/palette';
@@ -15,7 +16,7 @@ type ListProps = {
 	items: ListItemText[];
 	bulletSize?: ListBulletSize;
 	bulletColour?: ListBulletColour;
-	cssOverrides?: string;
+	cssOverrides?: SerializedStyles;
 };
 type ListItemProps = {
 	item: ListItemText;
@@ -73,11 +74,11 @@ const listItemMainText = css`
 	display: block;
 	font-weight: 700;
 `;
-const bulletColours: Record<ListBulletColour, string> = {
+const bulletColours: Record<ListBulletColour, SerializedStyles> = {
 	light: listItemBulletLight,
 	dark: listItemBulletDark,
 };
-const bulletSizes: Record<ListBulletSize, string> = {
+const bulletSizes: Record<ListBulletSize, SerializedStyles> = {
 	large: listItemBulletLarge,
 	small: listItemBulletSmall,
 };
@@ -94,7 +95,7 @@ function ListItem({ item, colour, size }: ListItemProps) {
 ListItem.defaultProps = {
 	size: 'large',
 	colour: 'light',
-};
+} as Partial<ListItemProps>;
 
 function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
 	return (
@@ -111,9 +112,9 @@ function ListItemWithSubtext({ item, colour, size }: ListItemProps) {
 ListItemWithSubtext.defaultProps = {
 	size: 'large',
 	colour: 'light',
-};
+} as Partial<ListItemProps>;
 
-function ListWith(ListItemComponent: React.ComponentType<ListItemProps>) {
+function ListWith(ListItemComponent: React.FC<ListItemProps>) {
 	function ListComponent(props: ListProps) {
 		return (
 			<ul css={[list, props.cssOverrides]}>
@@ -121,8 +122,8 @@ function ListWith(ListItemComponent: React.ComponentType<ListItemProps>) {
 					<ListItemComponent
 						key={item.content}
 						item={item}
-						colour={props.bulletColour || 'light'}
-						size={props.bulletSize || 'large'}
+						colour={props.bulletColour ?? 'light'}
+						size={props.bulletSize ?? 'large'}
 					/>
 				))}
 			</ul>
