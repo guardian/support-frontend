@@ -26,16 +26,19 @@ const getQueryParameter = (paramName: string, defaultValue = ''): string => {
 // Turn into array of 'param=value'
 // Turn each param into array of '[param, value]'
 // Filter out items that are not key-value pairs
-const getAllQueryParams = (): Array<[string, string]> | string[][] =>
+const getAllQueryParams = (): Array<[string, string]> =>
 	window.location.search
 		.slice(1)
 		.split('&')
 		.map((a) => a.split('='))
-		.filter((a) => a.length === 2 && a.every((e) => e !== ''));
+		// Asserting the return type because this filter means this will *always* return an array of arrays of two strings
+		.filter((a) => a.length === 2 && a.every((e) => e !== '')) as Array<
+		[string, string]
+	>;
 
 const getAllQueryParamsWithExclusions = (
 	excluded: string[],
-): Array<[string, string]> | string[][] =>
+): Array<[string, string]> =>
 	getAllQueryParams().filter((p: string[]) => !excluded.includes(p[0]));
 
 // Takes a mapping of query params and adds to an absolute or relative URL.

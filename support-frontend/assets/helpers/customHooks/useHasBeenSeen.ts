@@ -1,12 +1,12 @@
-// @ts-expect-error - required for hooks
 import libDebounce from 'lodash.debounce';
+import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 const useHasBeenSeen = (
-	options: IntersectionObserverOptions & {
+	options: IntersectionObserverInit & {
 		debounce?: boolean;
 	},
-) => {
+): [boolean, Dispatch<SetStateAction<HTMLElement | null>>] => {
 	const [hasBeenSeen, setHasBeenSeen] = useState<boolean>(false);
 	const [elementToObserve, setElementToObserve] = useState<HTMLElement | null>(
 		null,

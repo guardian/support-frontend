@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Reducer } from 'react';
+import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
