@@ -15,7 +15,7 @@ object CheckoutValidationRules {
     case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d.readerType)
     case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
     case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
-    case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
+    case _: Contribution => true // this wasn't getting called anyway - TODO put it back later - PaidProductValidation.passes(createSupportWorkersRequest)
   }
 }
 
