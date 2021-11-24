@@ -13,7 +13,7 @@ import { AUDCountries } from 'helpers/internationalisation/countryGroup';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { heroCopy, mobileLineBreak, paragraphs } from './heroWithImageStyles';
+import { heroCopy, paragraphs } from './heroWithImageStyles';
 
 type PropTypes = {
 	promotionCopy: PromotionCopy;
