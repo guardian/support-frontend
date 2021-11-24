@@ -1,6 +1,6 @@
 import type { Dispatch } from 'redux';
 import { combineReducers } from 'redux';
-import type { $Call, $Keys } from 'utility-types';
+import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
 import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import { postcodeFinderReducerFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
@@ -13,8 +13,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromString } from 'helpers/internationalisation/country';
 import type { SetCountryAction } from 'helpers/page/commonActions';
 import { setCountry } from 'helpers/page/commonActions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { Scoped } from 'helpers/subscriptionsForms/scoped';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { FormError, Rule } from 'helpers/subscriptionsForms/validation';
 import {
 	formError,
 	nonEmptyString,
@@ -23,13 +26,7 @@ import {
 	removeError,
 	validate,
 } from 'helpers/subscriptionsForms/validation';
-import 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import 'helpers/subscriptionsForms/scoped';
-import type { AddressType } from 'helpers/subscriptionsForms/addressType';
-import 'helpers/subscriptionsForms/addressType';
 import type { Option } from 'helpers/types/option';
-import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 // ----- Types ----- //
 export type FormFields = RegularPaymentRequestAddress;
 export type FormField = $Keys<FormFields>;
@@ -45,6 +42,7 @@ export type SetCountryChangedAction = Scoped<AddressType> & {
 	type: 'SET_COUNTRY_CHANGED';
 	country: IsoCountry;
 };
+
 export type Action =
 	| (Scoped<AddressType> & {
 			type: 'SET_ADDRESS_LINE_2';
@@ -112,8 +110,8 @@ export const isHomeDeliveryInM25 = (
 const applyBillingAddressRules = (
 	fields: FormFields,
 	addressType: AddressType,
-): Array<FormError<FormField>> =>
-	validate([
+): FormErrors => {
+	const rules: Array<Rule<FormError<FormField>>> = [
 		{
 			rule: nonEmptyString(fields.lineOne),
 			error: formError('lineOne', `Please enter a ${addressType} address.`),
@@ -188,14 +186,16 @@ const applyBillingAddressRules = (
 					: `Please enter a ${addressType} state name no longer than 40 characters`,
 			),
 		},
-	]);
+	];
+	return validate(rules);
+};
 
 const applyDeliveryAddressRules = (
 	fulfilmentOption: Option<FulfilmentOptions>,
 	fields: FormFields,
 	addressType: AddressType,
 ): Array<FormError<FormField>> => {
-	const homeRules = validate([
+	const rules: Array<Rule<FormError<FormField>>> = [
 		{
 			rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
 			error: formError(
@@ -203,9 +203,10 @@ const applyDeliveryAddressRules = (
 				'The address and postcode you entered is outside of our delivery area. Please go back to purchase a voucher subscription instead.',
 			),
 		},
-	]);
-	const billingRules = applyBillingAddressRules(fields, addressType);
-	return [...homeRules, ...billingRules];
+	];
+	const homeErrors = validate(rules);
+	const billingErrors = applyBillingAddressRules(fields, addressType);
+	return [...homeErrors, ...billingErrors];
 };
 
 // ----- Action Creators ----- //
@@ -263,12 +264,11 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
 		})),
 });
 
-export type ActionCreators = $Call<
-	typeof addressActionCreatorsFor,
-	AddressType
->;
+export type ActionCreators = ReturnType<typeof addressActionCreatorsFor>;
 
 // ----- Reducer ----- //
+export type AddressReducer = ReturnType<typeof addressReducerFor>;
+
 function addressReducerFor(scope: AddressType, initialCountry: IsoCountry) {
 	const initialState = {
 		country: initialCountry,

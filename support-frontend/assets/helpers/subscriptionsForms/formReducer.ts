@@ -1,5 +1,5 @@
 // ----- Reducer ----- //
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -15,13 +15,13 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-import type { FormState } from 'helpers/subscriptionsForms/formFields';
+import type { FormState, Stage } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { getUser, isTestUser } from 'helpers/user/user';
+import type { UserTypeFromIdentityResponse } from '../identityApis';
 
 function createFormReducer(
-	initialCountry: IsoCountry,
 	product: SubscriptionProduct,
 	initialBillingPeriod: BillingPeriod,
 	startDate: Option<string>,
@@ -32,15 +32,16 @@ function createFormReducer(
 
 	const { productPrices, orderIsAGift } = window.guardian;
 	const initialState = {
-		stage: 'checkout',
+		stage: 'checkout' as Stage,
 		product,
 		title: null,
-		email: user.email || '',
+		email: user.email ?? '',
 		confirmEmail: null,
-		firstName: user.firstName || '',
-		lastName: user.lastName || '',
+		firstName: user.firstName ?? '',
+		lastName: user.lastName ?? '',
 		isSignedIn: user.isSignedIn,
-		userTypeFromIdentityResponse: 'noRequestSent',
+		userTypeFromIdentityResponse:
+			'noRequestSent' as UserTypeFromIdentityResponse,
 		startDate,
 		telephone: null,
 		billingAddressIsSame: true,
@@ -55,8 +56,8 @@ function createFormReducer(
 		formSubmitted: false,
 		isTestUser: isTestUser(),
 		productPrices,
-		productOption: productOption || NoProductOptions,
-		fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
+		productOption: productOption ?? NoProductOptions,
+		fulfilmentOption: fulfilmentOption ?? NoFulfilmentOptions,
 		payPalHasLoaded: false,
 		orderIsAGift,
 		stripePaymentMethod: null,
@@ -67,18 +68,18 @@ function createFormReducer(
 	};
 
 	const getFulfilmentOption = (
-		action,
-		currentOption, // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
-	) =>
+		action: SetCountryChangedAction,
+		currentOption: FulfilmentOptions, // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
+	): FulfilmentOptions =>
 		// because it may mean a switch between domestic and rest of the world
 		product === GuardianWeekly && action.scope === 'delivery'
 			? getWeeklyFulfilmentOption(action.country)
 			: currentOption;
 
-	return (
+	return function (
 		originalState: FormState = initialState,
 		action: Action,
-	): FormState => {
+	): FormState {
 		const state = {
 			...originalState,
 			debugInfo: `${originalState.debugInfo} ${JSON.stringify(action)}\n`,

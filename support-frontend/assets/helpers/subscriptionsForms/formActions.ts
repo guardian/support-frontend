@@ -8,7 +8,6 @@ import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/rea
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -69,10 +68,6 @@ export type Action =
 	| {
 			type: 'SET_EMAIL_GIFT';
 			emailGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_COUNTRY_CHANGED';
-			country: IsoCountry;
 	  }
 	| {
 			type: 'SET_START_DATE';

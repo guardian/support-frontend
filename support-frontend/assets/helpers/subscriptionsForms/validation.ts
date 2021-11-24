@@ -1,11 +1,9 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
-import 'react';
 import type { Option } from 'helpers/types/option';
 import { headOption } from 'helpers/types/option';
 // ----- Types ----- //
-export type ErrorMessage = string | Node;
-type Rule<Err> = {
+export type ErrorMessage = string | JSX.Element;
+export type Rule<Err> = {
 	rule: boolean;
 	error: Err;
 };
@@ -37,7 +35,7 @@ function firstError<FieldType>(
 	field: FieldType,
 	errors: Array<FormError<FieldType>>,
 ): Option<ErrorMessage> {
-	const msgs = errors
+	const msgs: ErrorMessage[] = errors
 		.filter((err) => err.field === field)
 		.map((err) => err.message);
 	return headOption(msgs);
