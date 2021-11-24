@@ -178,7 +178,7 @@ object PaperValidation {
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, fulfilmentOptions: FulfilmentOptions): Result = {
 
-    val maybeValid = for {
+    val maybeValid: Either[Result, Result] = for {
       address <- createSupportWorkersRequest.deliveryAddress.toRight(Invalid("missing delivery address"))
       postCode <- address.postCode.toRight(Invalid("missing post code"))
     } yield {
@@ -202,7 +202,7 @@ object PaperValidation {
 
     }
 
-    maybeValid.merge
+    maybeValid.merge // since we have Either[Result, Result] we can .merge it into a Result
 
   }
 
