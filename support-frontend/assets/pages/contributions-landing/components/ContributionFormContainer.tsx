@@ -246,14 +246,15 @@ function withProps(props: PropTypes) {
 							: []),
 					]}
 				>
-					<SecureTransactionIndicator modifierClasses={['top']} />
-
 					{campaignSettings?.tickerSettings ? (
 						<ContributionTicker
 							{...campaignSettings.tickerSettings}
 							onGoalReached={props.setTickerGoalReached}
 						/>
 					) : null}
+
+					<SecureTransactionIndicator modifierClasses={['top']} />
+
 					{props.tickerGoalReached &&
 					campaignSettings &&
 					campaignSettings.tickerSettings &&

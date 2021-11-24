@@ -1,26 +1,22 @@
 import { SvgInfo } from '@guardian/src-icons';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
-import type { $Call } from 'utility-types';
-import type { GridImg } from 'components/gridImage/gridImage';
 import 'components/gridImage/gridImage';
 import * as styles from './orderSummaryStyles';
 
-type GridImageType = typeof import('components/gridImage/gridImage').default;
-
 type MobileOrderSummary = {
-	title: Node;
-	price: Node;
+	title: ReactNode;
+	price: ReactNode;
 };
 type PropTypes = {
-	children: Node;
+	children: ReactNode;
 	changeSubscription?: string | null;
-	image: $Call<GridImageType, GridImg>;
+	image: JSX.Element | null;
 	mobileSummary: MobileOrderSummary;
-	total: Node;
+	total: ReactNode;
 };
 
-function OrderSummary(props: PropTypes) {
+function OrderSummary(props: PropTypes): JSX.Element {
 	return (
 		<aside css={styles.wrapper}>
 			<div css={styles.topLine}>
