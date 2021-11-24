@@ -80,9 +80,6 @@ const roundelCentreLine = css`
 		})}
 	}
 `;
-const giftHeroSubHeading = css`
-	font-weight: 700;
-`;
 const showOnMobile = css`
 	display: block;
 
