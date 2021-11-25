@@ -1,12 +1,11 @@
 // ----- Types ----- //
-export type ErrorMessage = string | JSX.Element;
 export type Rule<Err> = {
 	rule: boolean;
 	error: Err;
 };
 export type FormError<FieldType> = {
 	field: FieldType;
-	message: ErrorMessage;
+	message: string;
 };
 
 // ----- Rules ----- //
@@ -31,8 +30,8 @@ function nonSillyCharacters(s: string | null | undefined): boolean {
 function firstError<FieldType>(
 	field: FieldType,
 	errors: Array<FormError<FieldType>>,
-): ErrorMessage | undefined {
-	const msgs: ErrorMessage[] = errors
+): string | undefined {
+	const msgs: string[] = errors
 		.filter((err) => err.field === field)
 		.map((err) => err.message);
 	return msgs[0];
@@ -47,7 +46,7 @@ function removeError<FieldType>(
 
 function formError<FieldType>(
 	field: FieldType,
-	message: ErrorMessage,
+	message: string,
 ): FormError<FieldType> {
 	return {
 		field,

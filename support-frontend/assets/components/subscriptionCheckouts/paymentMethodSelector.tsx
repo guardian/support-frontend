@@ -7,14 +7,13 @@ import Rows from 'components/base/rows';
 import 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import 'helpers/forms/paymentMethods';
-import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 
 type PropTypes = {
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: Option<PaymentMethod>;
 	setPaymentMethod: (...args: any[]) => any;
-	validationError: Option<ErrorMessage>;
+	validationError: string | undefined;
 };
 type RadioWithImagePropTypes = {
 	id: string;
@@ -34,12 +33,14 @@ const paymentIcon = css`
 	max-width: 40px;
 `;
 
-const RadioWithImage = (props: RadioWithImagePropTypes) => (
-	<div css={radioWithImageStyles}>
-		<Radio {...props} />
-		<div css={paymentIcon}>{props.image}</div>
-	</div>
-);
+function RadioWithImage(props: RadioWithImagePropTypes) {
+	return (
+		<div css={radioWithImageStyles}>
+			<Radio {...props} />
+			<div css={paymentIcon}>{props.image}</div>
+		</div>
+	);
+}
 
 const paymentMethodIcons: Record<PaymentMethod, Node> = {
 	Stripe: <SvgCreditCard />,
