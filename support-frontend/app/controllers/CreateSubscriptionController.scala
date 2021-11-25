@@ -1,35 +1,6 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
-import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
-import akka.stream.scaladsl.Flow
-import akka.util.ByteString
-import cats.data.EitherT
-import cats.implicits._
-import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
-import com.gu.identity.model.{User => IdUser}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
-import com.gu.support.config.Stage
-import com.gu.support.workers.{BillingPeriod, Contribution, DigitalPack, GuardianWeekly, Paper, User}
-import config.Configuration.GuardianDomain
-import cookies.DigitalSubscriptionCookies
-import io.circe
-import io.circe.syntax._
-import lib.PlayImplicits._
-import play.api.libs.circe.Circe
-import play.api.libs.streams.Accumulator
-import play.api.mvc._
-import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{AuthenticatedIdUser, IdMinimalUser, IdentityService, TestUserService}
-import utils.CheckoutValidationRules.{Invalid, Valid}
-import utils.NormalisedTelephoneNumber.asFormattedString
-import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
-
-import scala.concurrent.{ExecutionContext, Future}
-
-import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
@@ -48,6 +19,7 @@ import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdMinimalUser, IdentityService, TestUserService}
+import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.NormalisedTelephoneNumber.asFormattedString
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
