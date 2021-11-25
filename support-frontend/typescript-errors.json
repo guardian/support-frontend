@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 54,
-            "TS2322": 227,
+            "TS2322": 230,
             "TS2578": 21,
             "TS2339": 83,
             "TS7006": 112,
@@ -145,7 +145,7 @@
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 7,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 1,
@@ -160,7 +160,7 @@
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 18,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
             "assets/pages/paper-subscription-landing/components/content/prices.tsx": 2,
@@ -173,7 +173,7 @@
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 13,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 14,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 2,
             "assets/components/csr/csrMode.ts": 3,
             "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
@@ -623,7 +623,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -635,7 +635,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -643,7 +643,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -651,7 +651,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -659,7 +659,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
@@ -695,19 +695,19 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
@@ -715,31 +715,31 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
@@ -1107,6 +1107,10 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'Option<ErrorMessage>'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
             "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
         },
         {
@@ -1279,7 +1283,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1287,7 +1291,11 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'Option<ErrorMessage>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1371,7 +1379,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -1379,11 +1387,15 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'Option<ErrorMessage>' is not assignable to type 'string | undefined'."
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
             "message": "Type '(Element | null)[]' is not assignable to type 'Element | Element[]'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "Type 'ErrorMessage | undefined' is not assignable to type 'Option<ErrorMessage>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",

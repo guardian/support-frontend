@@ -1,6 +1,3 @@
-// ----- Imports ----- //
-import type { Option } from 'helpers/types/option';
-import { headOption } from 'helpers/types/option';
 // ----- Types ----- //
 export type ErrorMessage = string | JSX.Element;
 export type Rule<Err> = {
@@ -34,11 +31,11 @@ function nonSillyCharacters(s: string | null | undefined): boolean {
 function firstError<FieldType>(
 	field: FieldType,
 	errors: Array<FormError<FieldType>>,
-): Option<ErrorMessage> {
+): ErrorMessage | undefined {
 	const msgs: ErrorMessage[] = errors
 		.filter((err) => err.field === field)
 		.map((err) => err.message);
-	return headOption(msgs);
+	return msgs[0];
 }
 
 function removeError<FieldType>(
@@ -65,7 +62,6 @@ function validate<Err>(rules: Array<Rule<Err>>): Err[] {
 	);
 }
 
-// -------- Forms------------ //
 // ----- Exports ----- //
 export {
 	nonEmptyString,
