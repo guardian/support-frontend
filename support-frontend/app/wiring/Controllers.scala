@@ -121,7 +121,7 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val paperFormController = new PaperSubscriptionForm(
+  lazy val paperFormController = new PaperSubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
@@ -134,7 +134,7 @@ trait Controllers {
     appConfig.recaptchaConfigProvider
   )
 
-  lazy val weeklyFormController = new WeeklySubscriptionForm(
+  lazy val weeklyFormController = new WeeklySubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
@@ -153,9 +153,7 @@ trait Controllers {
     identityService,
     testUsers,
     controllerComponents,
-    appConfig.supportUrl,
-    appConfig.guardianDomain,
-    appConfig.stage
+    appConfig.guardianDomain
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
@@ -174,16 +172,6 @@ trait Controllers {
     testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
     allSettingsProvider,
     appConfig.stage
-  )
-
-  lazy val regularContributionsController = new RegularContributions(
-    supportWorkersClient,
-    assetsResolver,
-    actionRefiners,
-    identityService,
-    testUsers,
-    controllerComponents,
-    appConfig.guardianDomain
   )
 
   lazy val payPalRegularController = new PayPalRegular(

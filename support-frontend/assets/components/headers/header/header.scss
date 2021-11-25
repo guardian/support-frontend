@@ -7,334 +7,337 @@ $header-links-min-width: gu-span(12);
 
 // Retain the original box-sizing value for the header
 // to preserve logo positioning logic across the CSS and JS
-.component-header, .component-header * {
-  box-sizing: content-box;
+.component-header,
+.component-header * {
+	box-sizing: content-box;
 }
 
 .component-header {
-  background-color: gu-colour(brand-main);
-  display: flex;
-  align-items: center;
-  justify-content: stretch;
-  overflow: hidden;
+	background-color: gu-colour(brand-main);
+	display: flex;
+	align-items: center;
+	justify-content: stretch;
+	overflow: hidden;
 
-  .component-dialog {
-    align-items: stretch;
-    justify-content: flex-start;
-  }
+	.component-dialog {
+		align-items: stretch;
+		justify-content: flex-start;
+	}
 
-  .svg-guardian-logo {
-    display: block;
-    float: right;
-    margin-top: $gu-v-spacing / 2.4;
-    margin-bottom: $gu-v-spacing * 1.5;
-    height: 48px;
-    width: auto;
-    @include mq($from: mobileLandscape) {
-      height: 56px;
-    }
-    @include mq($from: tablet) {
-      height: 72px;
-    }
-    @include mq($from: desktop) {
-      height: 95px;
-    }
-  }
+	.svg-guardian-logo {
+		display: block;
+		float: right;
+		margin-top: $gu-v-spacing / 2.4;
+		margin-bottom: $gu-v-spacing * 1.5;
+		height: 48px;
+		width: auto;
+		@include mq($from: mobileLandscape) {
+			height: 56px;
+		}
+		@include mq($from: tablet) {
+			height: 72px;
+		}
+		@include mq($from: desktop) {
+			height: 95px;
+		}
+	}
 }
 
 .component-header--padlock {
-  margin-right: $gu-h-spacing /3;
-  display: inline-block;
-  margin-top: 2px;
+	margin-right: $gu-h-spacing / 3;
+	display: inline-block;
+	margin-top: 2px;
 }
 
 .component-header-mobile-menu-toggler {
-  display: none;
-  .component-header--display-veggie-burger & {
-    display: block;
-  }
-  [data-not-hydrated] & {
-    display: none;
-  }
-  & > .component-veggie-burger-button {
-    margin-left: $gu-h-spacing / 4;
-    /*aligned with the logo*/
-    margin-top: 22px;
-    @include mq($from: mobileLandscape) {
-      margin-top: 28px;
-    }
-    @include mq($from: tablet) {
-      margin-top: 40px;
-    }
-  }
-  .component-dialog--open .component-header-mobile-menu {
-    animation: open-menu $gu-animation-speed-med cubic-bezier(0.23, 1, 0.32, 1) both;
-  }
+	display: none;
+	.component-header--display-veggie-burger & {
+		display: block;
+	}
+	[data-not-hydrated] & {
+		display: none;
+	}
+	& > .component-veggie-burger-button {
+		margin-left: $gu-h-spacing / 4;
+		/*aligned with the logo*/
+		margin-top: 22px;
+		@include mq($from: mobileLandscape) {
+			margin-top: 28px;
+		}
+		@include mq($from: tablet) {
+			margin-top: 40px;
+		}
+	}
+	.component-dialog--open .component-header-mobile-menu {
+		animation: open-menu $gu-animation-speed-med cubic-bezier(0.23, 1, 0.32, 1)
+			both;
+	}
 }
 
 @keyframes open-menu {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
 }
 
 .component-header__wrapper {
-  width: 100%;
-  margin: auto;
-  padding: 0 ($gu-h-spacing / 2);
-  position: relative;
-  flex: 1 1 auto;
+	width: 100%;
+	margin: auto;
+	padding: 0 ($gu-h-spacing / 2);
+	position: relative;
+	flex: 1 1 auto;
 
-  @include mq($from: tablet) {
-    max-width: $header-links-min-width;
-  }
+	@include mq($from: tablet) {
+		max-width: $header-links-min-width;
+	}
 
-  @include mq($from: leftCol) {
-    max-width: gu-span(14);
-  }
+	@include mq($from: leftCol) {
+		max-width: gu-span(14);
+	}
 
-  @include mq($from: wide) {
-    max-width: gu-span(16);
-  }
+	@include mq($from: wide) {
+		max-width: gu-span(16);
+	}
 }
 
 .component-header__row {
-  display: flex;
-  width: 100%;
-  & > .component-header-topnav {
-    flex: 1 1 auto;
-  }
-  & > .component-header-links {
-    flex: 1 1 auto;
-  }
+	display: flex;
+	width: 100%;
+	& > .component-header-topnav {
+		flex: 1 1 auto;
+	}
+	& > .component-header-links {
+		flex: 1 1 auto;
+	}
 }
 
 .component-header-topnav {
-  display: flex;
-  justify-content: space-between
+	display: flex;
+	justify-content: space-between;
 }
 
 .component-header-topnav__utility {
-  padding-top: $gu-v-spacing / 2;
+	padding-top: $gu-v-spacing / 2;
 }
 
 .component-header-topnav-logo {
-  @include mq($from: tablet) {
-    width: gu-span(5);
-    background-color: gu-colour(brand-main);
-    float: right;
-    .component-header--one-row & {
-      border-left: 1px solid gu-colour(brand-pastel);
-      z-index: 10;
-      position: relative;
-    }
-  }
-  @include mq($from: wide) {
-    padding-right: gu-span(1) + $gu-h-spacing;
-  }
+	@include mq($from: tablet) {
+		width: gu-span(5);
+		background-color: gu-colour(brand-main);
+		float: right;
+		.component-header--one-row & {
+			border-left: 1px solid gu-colour(brand-pastel);
+			z-index: 10;
+			position: relative;
+		}
+	}
+	@include mq($from: wide) {
+		padding-right: gu-span(1) + $gu-h-spacing;
+	}
 }
 
 .component-header-topnav-logo__graun {
-  float: right;
-  height: 100%;
-  flex: 0 1 auto;
+	float: right;
+	height: 100%;
+	flex: 0 1 auto;
 }
 
 .component-header-links--desktop {
-  display: flex;
-  justify-content: flex-start;
-  background-color: gu-colour(brand-main);
-  border-top: 1px solid gu-colour(brand-pastel);
-  z-index: 9;
-  white-space: nowrap;
-  margin: 0 ($gu-h-spacing * -2) 0 ($gu-h-spacing * -1);
-  box-sizing: border-box;
+	display: flex;
+	justify-content: flex-start;
+	background-color: gu-colour(brand-main);
+	border-top: 1px solid gu-colour(brand-pastel);
+	z-index: 9;
+	white-space: nowrap;
+	margin: 0 ($gu-h-spacing * -2) 0 ($gu-h-spacing * -1);
+	box-sizing: border-box;
 
-  @media (min-width: $header-links-min-width + 40) {
-    margin: 0 ($gu-h-spacing * -1);
-    border-left: 1px solid gu-colour(brand-pastel);
-    border-right: 1px solid gu-colour(brand-pastel);
-  }
+	@media (min-width: $header-links-min-width + 40) {
+		margin: 0 ($gu-h-spacing * -1);
+		border-left: 1px solid gu-colour(brand-pastel);
+		border-right: 1px solid gu-colour(brand-pastel);
+	}
 
-  .component-header--display-veggie-burger & {
-    position: absolute;
-    height: 0;
-    overflow: hidden;
-  }
-  .component-header--one-row & {
-    position: absolute;
-    bottom: 0;
-    left: $gu-h-spacing / 2;
-    right: gu-span(5);
-  }
+	.component-header--display-veggie-burger & {
+		position: absolute;
+		height: 0;
+		overflow: hidden;
+	}
+	.component-header--one-row & {
+		position: absolute;
+		bottom: 0;
+		left: $gu-h-spacing / 2;
+		right: gu-span(5);
+	}
 
-  .component-header-links__ul {
-    list-style: none;
-    display: inline-flex;
-    width: auto;
-    > * {
-      flex: 0 0 auto;
-      display: block;
-    }
-  }
+	.component-header-links__ul {
+		list-style: none;
+		display: inline-flex;
+		width: auto;
+		> * {
+			flex: 0 0 auto;
+			display: block;
+		}
+	}
 
-  .component-header-links__link {
-    @include gu-fontset-nav-desktop;
-    color: gu-colour(neutral-100);
-    text-decoration: none;
-    display: block;
-    height: $gu-v-spacing * 3.5;
-    padding: ($gu-v-spacing/1.75) ($gu-h-spacing * 1.5) ($gu-v-spacing/1.5) ($gu-h-spacing/3);
-    overflow: hidden;
-    position: relative;
-    box-shadow: inset 0 0 0 gu-colour(highlight-main);
-    transition: $gu-transition;
-    box-sizing: border-box;
+	.component-header-links__link {
+		@include gu-fontset-nav-desktop;
+		color: gu-colour(neutral-100);
+		text-decoration: none;
+		display: block;
+		height: $gu-v-spacing * 3.5;
+		padding: ($gu-v-spacing/1.75) ($gu-h-spacing * 1.5) ($gu-v-spacing/1.5)
+			($gu-h-spacing/3);
+		overflow: hidden;
+		position: relative;
+		box-shadow: inset 0 0 0 gu-colour(highlight-main);
+		transition: $gu-transition;
+		box-sizing: border-box;
 
-    &:hover {
-      box-shadow: inset 0 4px 0 gu-colour(highlight-main);
-    }
+		&:hover {
+			box-shadow: inset 0 4px 0 gu-colour(highlight-main);
+		}
 
-    &:after {
-      content: '';
-      position: absolute;
-      right: 0;
-      bottom: 14px;
-      top: 0;
-      width: 1px;
-      background-color: gu-colour(brand-pastel);
-    }
-  }
+		&:after {
+			content: '';
+			position: absolute;
+			right: 0;
+			bottom: 14px;
+			top: 0;
+			width: 1px;
+			background-color: gu-colour(brand-pastel);
+		}
+	}
 
-  .component-header-links__li--active {
-    .component-header-links__link {
-      box-shadow: inset 0 4px 0 gu-colour(highlight-main);
-    }
-  }
+	.component-header-links__li--active {
+		.component-header-links__link {
+			box-shadow: inset 0 4px 0 gu-colour(highlight-main);
+		}
+	}
 
-  .component-header-links__li:first-child > .component-header-links__link {
-    padding-left: $gu-h-spacing;
-  }
+	.component-header-links__li:first-child > .component-header-links__link {
+		padding-left: $gu-h-spacing;
+	}
 
-  .component-header-links__li:last-child > .component-header-links__link {
-    &:after {
-      display: none;
-    }
-  }
+	.component-header-links__li:last-child > .component-header-links__link {
+		&:after {
+			display: none;
+		}
+	}
 }
 
 .component-header--display-checkout {
-  .component-header__wrapper {
-    max-width: 50rem;
+	.component-header__wrapper {
+		max-width: 50rem;
 
-    @include mq($from: tablet, $until: desktop) {
-      max-width: 100%;
-      padding: 0;
-      margin: 0;
-    }
+		@include mq($from: tablet, $until: desktop) {
+			max-width: 100%;
+			padding: 0;
+			margin: 0;
+		}
 
-    @include mq($from: leftCol) {
-      max-width: 60rem;
-    }
+		@include mq($from: leftCol) {
+			max-width: 60rem;
+		}
 
-    .component-header-topnav {
-      @include mq($until: tablet) {
-        justify-content: space-between;
-      }
+		.component-header-topnav {
+			@include mq($until: tablet) {
+				justify-content: space-between;
+			}
 
-      @include mq($from: tablet, $until: desktop) {
-        justify-content: flex-end;
-      }
+			@include mq($from: tablet, $until: desktop) {
+				justify-content: flex-end;
+			}
 
-      .component-header-topnav__utility {
-        display: none;
-      }
+			.component-header-topnav__utility {
+				display: none;
+			}
 
-      .component-header-topnav__checkout {
-        display: flex;
-        flex: 0 0 490px;
-        color: gu-colour(neutral-100);
-        @include gu-fontset-body-sans;
-        border-right: 1px solid gu-colour(brand-pastel);
+			.component-header-topnav__checkout {
+				display: flex;
+				flex: 0 0 490px;
+				color: gu-colour(neutral-100);
+				@include gu-fontset-body-sans;
+				border-right: 1px solid gu-colour(brand-pastel);
 
-        @include mq($until: tablet) {
-          flex: none;
-          border-right: none;
-        }
+				@include mq($until: tablet) {
+					flex: none;
+					border-right: none;
+				}
 
-        .component-header-topnav--checkout-text {
-          border-top: 1px solid gu-colour(brand-pastel);
-          border-left: 1px solid gu-colour(brand-pastel);
-          padding: $gu-v-spacing $gu-h-spacing;
-          width: 100%;
-          align-self: flex-end;
+				.component-header-topnav--checkout-text {
+					border-top: 1px solid gu-colour(brand-pastel);
+					border-left: 1px solid gu-colour(brand-pastel);
+					padding: $gu-v-spacing $gu-h-spacing;
+					width: 100%;
+					align-self: flex-end;
 
-          :nth-child(2) {
-            display: inline-block;
-            vertical-align: top;
-          }
+					:nth-child(2) {
+						display: inline-block;
+						vertical-align: top;
+					}
 
-          @include mq($until: tablet) {
-            border-left: none;
-            border-top: none;
-            padding-left: $gu-h-spacing /4;
-          }
-        }
+					@include mq($until: tablet) {
+						border-left: none;
+						border-top: none;
+						padding-left: $gu-h-spacing / 4;
+					}
+				}
 
-        @include mq($from: tablet, $until: desktop) {
-          display: none;
-        }
+				@include mq($from: tablet, $until: desktop) {
+					display: none;
+				}
 
-        @include mq($from: leftCol) {
-          flex: 0 0 650px;
-        }
-      }
-    }
+				@include mq($from: leftCol) {
+					flex: 0 0 650px;
+				}
+			}
+		}
 
-    .component-header-topnav-logo {
-      flex: 0 1 auto;
+		.component-header-topnav-logo {
+			flex: 0 1 auto;
 
-      @include mq($from: desktop) {
-        margin-right: -30px;
-      }
-    }
-  }
+			@include mq($from: desktop) {
+				margin-right: -30px;
+			}
+		}
+	}
 
-  .component-header-topnav-logo {
-    padding-right: $gu-h-spacing /2;
-    padding-top: $gu-v-spacing /2;
-  }
+	.component-header-topnav-logo {
+		padding-right: $gu-h-spacing / 2;
+		padding-top: $gu-v-spacing / 2;
+	}
 }
 
 .component-header-checkout--row {
-  width: 100%;
-  color: gu-colour(neutral-100);
-  @include gu-fontset-body-sans;
-  padding: $gu-v-spacing;
-  border-top: 1px solid gu-colour(brand-pastel);
+	width: 100%;
+	color: gu-colour(neutral-100);
+	@include gu-fontset-body-sans;
+	padding: $gu-v-spacing;
+	border-top: 1px solid gu-colour(brand-pastel);
 
-  @include mq($from: desktop) {
-    display: none;
-  }
+	@include mq($from: desktop) {
+		display: none;
+	}
 
-  @include mq($until: tablet) {
-    display: none;
-  }
+	@include mq($until: tablet) {
+		display: none;
+	}
 }
 
 .component-header-links__li.component-header-links__li--show-on-tablet {
-  display: block;
+	display: block;
 
-  // custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
-  @media (min-width: 884px) {
-    display: none;
-  }
+	// custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
+	@media (min-width: 884px) {
+		display: none;
+	}
 }
 
 .test-user-banner {
-  background-color: red;
-  width: 100%;
+	background-color: red;
+	width: 100%;
 }

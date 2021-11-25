@@ -6,29 +6,29 @@ import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
 sealed trait ProductOptions
 
-sealed trait PaperProductOptions extends ProductOptions
+sealed abstract class PaperProductOptions(val hasDigitalSubscription: Boolean) extends ProductOptions
 
 case object NoProductOptions extends ProductOptions
 
-case object Saturday extends PaperProductOptions
+case object Saturday extends PaperProductOptions(false)
 
-case object SaturdayPlus extends PaperProductOptions
+case object SaturdayPlus extends PaperProductOptions(true)
 
-case object Sunday extends PaperProductOptions
+case object Sunday extends PaperProductOptions(false)
 
-case object SundayPlus extends PaperProductOptions
+case object SundayPlus extends PaperProductOptions(true)
 
-case object Weekend extends PaperProductOptions
+case object Weekend extends PaperProductOptions(false)
 
-case object WeekendPlus extends PaperProductOptions
+case object WeekendPlus extends PaperProductOptions(true)
 
-case object SixdayPlus extends PaperProductOptions
+case object SixdayPlus extends PaperProductOptions(true)
 
-case object Sixday extends PaperProductOptions
+case object Sixday extends PaperProductOptions(false)
 
-case object EverydayPlus extends PaperProductOptions
+case object EverydayPlus extends PaperProductOptions(true)
 
-case object Everyday extends PaperProductOptions
+case object Everyday extends PaperProductOptions(false)
 
 object ProductOptions {
   val allProductOptions = NoProductOptions :: PaperProductOptions.productOptions

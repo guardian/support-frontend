@@ -8,5 +8,5 @@ This imports the Guardian colour pallette from pasteup as a sass map.
 // Given the name of the colour this returns the hex value.
 // It is essentially just a wrapper around map-get.
 @function gu-colour($name) {
-    @return map-get($palette, $name);
+	@return map-get($palette, $name);
 }

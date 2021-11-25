@@ -1,14 +1,13 @@
 const defaultConfig = {...require('../webpack.dev.js')};
 
 defaultConfig.module.rules.push({
-  test: /stories\/.*?\.(js|jsx)$/,
+  test: /stories\/.*?\.(js|jsx|ts|tsx)$/,
   loaders: [
     {
       loader: require.resolve('@storybook/addon-storysource/loader'),
-      options: { 
+      options: {
         injectDecorator: true,
-        parser: 'typescript' 
-        // we use flow but flow is closer to ts than vanilla js
+        parser: 'typescript'
       }
     }
   ],

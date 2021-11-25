@@ -1,27 +1,25 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
-import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
+import actions.CustomActionBuilders.OptionalAuthRequest
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.config.Stage
-import com.gu.support.workers.{BillingPeriod, Contribution, DigitalPack, GuardianWeekly, Paper, User}
+import com.gu.support.workers._
 import config.Configuration.GuardianDomain
-import cookies.DigitalSubscriptionCookies
 import io.circe.syntax._
 import lib.PlayImplicits._
+import org.joda.time.DateTime
 import play.api.libs.circe.Circe
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{AuthenticatedIdUser, IdMinimalUser, IdentityService, TestUserService}
+import services.{IdMinimalUser, IdentityService, TestUserService}
+import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.NormalisedTelephoneNumber.asFormattedString
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
@@ -29,14 +27,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CreateSubscriptionController(
   client: SupportWorkersClient,
-  val actionRefiners: CustomActionBuilders,
+  actionRefiners: CustomActionBuilders,
   identityService: IdentityService,
   testUsers: TestUserService,
   components: ControllerComponents,
-  val supportUrl: String,
-  val guardianDomain: GuardianDomain,
-  stage: Stage
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
+  guardianDomain: GuardianDomain
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   import actionRefiners._
 
@@ -51,15 +47,15 @@ class CreateSubscriptionController(
       implicit request =>
         request.user match {
           case Some(user) =>
-            SafeLogger.info(s"User ${user.minimalUser.id} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
+            SafeLogger.info(s"User ${user.minimalUser.id} is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
             handleCreateSupportWorkersRequest(user.minimalUser)
           case None =>
-            SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product} subscription [${request.uuid}]")
-            createGuestUserAndHandleRequest.getOrElse(InternalServerError)
+            SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
+            createGuestUserAndHandleRequest().getOrElse(InternalServerError)
         }
     })
 
-  def createGuestUserAndHandleRequest(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
+  private def createGuestUserAndHandleRequest()(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
     for {
       userId <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
       result <- EitherT.right[String](
@@ -67,7 +63,7 @@ class CreateSubscriptionController(
       )
     } yield result
 
-  def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser)(
+  private def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser)(
     implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]
   ): Future[Result] = {
 
@@ -77,26 +73,76 @@ class CreateSubscriptionController(
       telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
     )
 
-    def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
-      client.createSubscription(request, createUser(idUser, createSupportWorkersRequest), request.uuid).leftMap(error => ServerError(error.toString))
-    }
+    CheckoutValidationRules.validate(createSupportWorkersRequest) match {
+      case Valid =>
+        val result = for {
+          user <- identityService.getUser(idMinimalUser).leftMap(ServerError)
+          isTestUser = testUsers.isTestUser(request)
+          statusResponse <- client.createSubscription(request, buildUser(user, createSupportWorkersRequest, isTestUser), request.uuid)
+            .leftMap[CreateSubscriptionError](error => ServerError(error))
+        } yield statusResponse
+        respondToClient(result, createSupportWorkersRequest.product)
 
-    if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
-      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(idMinimalUser).leftMap(ServerError)
-
-      val result: ApiResponseOrError[StatusResponse] = for {
-        user <- userOrError
-        statusResponse <- subscriptionStatusOrError(user)
-      } yield statusResponse
-
-      respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
-    } else {
-      SafeLogger.warn(s"validation of the request body failed $createSupportWorkersRequest")
-      respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
+      case Invalid(message) =>
+        SafeLogger.warn(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
+        respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product)
     }
   }
 
-  private def createUser(user: IdUser, request: CreateSupportWorkersRequest) = {
+  private def respondToClient(
+    result: EitherT[Future, CreateSubscriptionError, StatusResponse],
+    product: ProductType
+  )(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
+    result.fold(
+      { error =>
+        SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
+        error match {
+          case _: RequestValidationError => BadRequest
+          case _: ServerError => InternalServerError
+        }
+      },
+      { statusResponse =>
+        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}")
+        Accepted(statusResponse.asJson).withCookies(cookies(product):_*)
+      }
+    )
+  }
+
+  private def cookies(product: ProductType) = {
+    // Setting the user attributes cookies used by frontend. See:
+    // https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
+    val standardCookies = List(
+      "gu_user_features_expiry" -> DateTime.now.plusDays(1).getMillis.toString,
+      "gu_hide_support_messaging" -> true.toString
+    )
+    val productCookies = product match {
+      case Contribution(amount, currency, billingPeriod) => List(
+        s"gu.contributions.recurring.contrib-timestamp.$billingPeriod" -> DateTime.now.getMillis.toString,
+        "gu_recurring_contributor" -> true.toString
+      )
+      case DigitalPack(currency, billingPeriod, readerType) => List(
+        "gu_digital_subscriber" -> true.toString,
+        "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString
+      )
+      case p: Paper if p.productOptions.hasDigitalSubscription => List(
+        "gu_digital_subscriber" -> true.toString,
+        "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString
+      )
+      case _: Paper => List.empty
+      case _: GuardianWeekly => List.empty
+    }
+    (standardCookies ++ productCookies).map { case (name, value) =>
+      Cookie(
+        name = name,
+        value = value,
+        secure = true,
+        httpOnly = false,
+        domain = Some(guardianDomain.value)
+      )
+    }
+  }
+
+  private def buildUser(user: IdUser, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
@@ -116,33 +162,19 @@ class CreateSubscriptionController(
       // TODO: in a subsequent PR set these values based on the respective user.
       allowThirdPartyMail = false,
       allowGURelatedMail = false,
-      isTestUser = testUsers.isTestUser(user.publicFields.displayName),
+      isTestUser = isTestUser,
       deliveryInstructions = request.deliveryInstructions
     )
   }
 
-  protected def respondToClient(
-    result: EitherT[Future, CreateSubscriptionError, StatusResponse],
-    billingPeriod: BillingPeriod
- )(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
-    val product = request.body.product.describe
-    result.fold(
-      { error =>
-        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod $product subscription, due to $error")
-        error match {
-          case _: RequestValidationError => BadRequest
-          case _: ServerError => InternalServerError
-        }
-      },
-      { statusResponse =>
-        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod $product subscription")
-        Accepted(statusResponse.asJson).withCookies(DigitalSubscriptionCookies.create(guardianDomain):_*)
-      }
-    )
-  }
 }
 
 class LoggingCirceParser(controllerComponents: ControllerComponents) extends Circe {
+
+  override protected def onCirceError(e: io.circe.Error): Result = {
+    SafeLogger.warn(s"circe decode failure: $e")
+    super.onCirceError(e)
+  }
 
   val requestParser: BodyParser[CreateSupportWorkersRequest] = {
     val underlying = circe.json[CreateSupportWorkersRequest]

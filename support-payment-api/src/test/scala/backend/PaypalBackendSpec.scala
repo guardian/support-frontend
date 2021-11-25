@@ -3,8 +3,6 @@ package backend
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.acquisition.model.AcquisitionSubmission
-import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
@@ -37,7 +35,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     body = PaypalRefundWebHookBody("parent_payment_id", "{}"),
     headers = Map.empty
   )
-  val ophanError: List[AnalyticsServiceError] = List(AnalyticsServiceError.BuildError("Ophan error response"))
   val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
 
   val identityError = IdentityClient.ContextualError(
@@ -71,10 +68,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val unitPaymentResponseError: EitherT[Future, PaypalApiError, Unit] =
     EitherT.left(Future.successful(paymentError))
-  val acquisitionResponse: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
-    EitherT.right(Future.successful(mock[AcquisitionSubmission]))
-  val acquisitionResponseError: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
-    EitherT.left(Future.successful(ophanError))
   val databaseResponse: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
@@ -174,7 +167,7 @@ class PaypalBackendSpec
 
       }
 
-      "return successful payment response even if identityService, ophanService, " +
+      "return successful payment response even if identityService, " +
         "databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
         val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
@@ -199,7 +192,7 @@ class PaypalBackendSpec
       }
 
       "return successful payment response even if identityService, " +
-        "ophanService, databaseService and emailService fail" in new PaypalBackendFixture {
+        "databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
         val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
@@ -247,7 +240,7 @@ class PaypalBackendSpec
 
     "tracking the contribution" should {
 
-      "return just a DB error if Ophan succeeds but DB fails" in new PaypalBackendFixture {
+      "return just a DB error if BigQuery succeeds but DB fails" in new PaypalBackendFixture {
         populatePaymentMock()
 
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
@@ -255,7 +248,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
 
-        val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
+        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result = paypalBackend invokePrivate trackContribution(paymentMock, acquisitionData, "a@b.com", None, clientBrowserInfo)
 
         result.futureValue mustBe List(BackendError.Database(dbError))
@@ -268,7 +261,7 @@ class PaypalBackendSpec
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
 
-        val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
+        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val errors = List(
           BackendError.BigQueryError(bigQueryErrorMessage),
           BackendError.AcquisitionsStreamError(streamResponseErrorMessage)

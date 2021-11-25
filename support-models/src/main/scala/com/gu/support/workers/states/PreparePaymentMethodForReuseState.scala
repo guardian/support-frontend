@@ -1,7 +1,8 @@
 package com.gu.support.workers.states
 
-import java.util.UUID
+import com.gu.support.acquisitions.AcquisitionData
 
+import java.util.UUID
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.{User, _}

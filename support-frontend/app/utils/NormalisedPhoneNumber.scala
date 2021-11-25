@@ -7,7 +7,7 @@ import com.gu.monitoring.SafeLogger
 
 import scala.util.{Failure, Success, Try}
 
-case class NormalisedTelephoneNumber(countryCode:String, localNumber: String)
+case class NormalisedTelephoneNumber(countryCode: String, localNumber: String)
 
 object NormalisedTelephoneNumber {
 

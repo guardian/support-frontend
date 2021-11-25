@@ -1,7 +1,6 @@
 package controllers
 
 import akka.util.ByteString
-import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.syntax._
@@ -10,18 +9,10 @@ import play.api.http.{MimeTypes, Writeable}
 import play.api.libs.circe.Circe
 import play.api.mvc.{Result, Results}
 import model.{AcquisitionData, ResultBody}
-import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 object JsonReadableOps {
-  implicit val componentTypeDecoder: Decoder[ComponentType] =
-    decodeThriftEnum[ComponentType]
-  implicit val acquisitionSourceDecoder: Decoder[AcquisitionSource] =
-    decodeThriftEnum[AcquisitionSource]
-  implicit val abTestDecoder: Decoder[AbTest] =
-    decodeThriftStruct[AbTest]
-  implicit val queryParameterDecoder: Decoder[QueryParameter] =
-    decodeThriftStruct[QueryParameter]
+  import com.gu.support.acquisitions.ReferrerAcquisitionData._
+
   implicit val acquisitionPaypalDataDecoder: Decoder[AcquisitionData] =
     deriveDecoder[AcquisitionData]
 }

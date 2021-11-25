@@ -112,7 +112,8 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         enableRecaptchaBackend = Off,
         enableRecaptchaFrontend = Off,
         enableContributionsCampaign = On,
-        forceContributionsCampaign = On
+        forceContributionsCampaign = On,
+        enableQuantumMetric = Off
       ),
       configuredAmounts,
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
@@ -175,35 +176,21 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
   }
 
   "GET subscribe/digital/checkout" should {
-
-    "redirect unauthenticated user to signup page" in new DigitalSubscriptionsDisplayForm {
-
-      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.failed(new RuntimeException))
-
-      val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
-      status(result) mustBe 303
-      header("Location", result).value must be("https://identity-url.local/signin?" +
-        "returnUrl=/&" +
-        "skipConfirmation=true&" +
-        "skipValidationReturn=true&" +
-        "clientId=subscriptions&" +
-        "componentEventParams=componentType%3Didentityauthentication%26componentId%3Dsignin_redirect_for_supporters")
-    }
-
-    "redirect user with a dp to ty page" in new DigitalSubscriptionsDisplayForm {
-      when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
-
-      val result = fakeRequestAuthenticatedWith(
-        membersDataService = mockedMembersDataService(hasFailed = false, hasDp = true)
-      )
-      status(result) mustBe 302
-      header("Location", result).value must endWith("thankyou-existing")
-    }
+//    TODO: We have an outstanding card to work out what to do with existing subscribers
+//    "redirect user with a dp to ty page" in new DigitalSubscriptionsDisplayForm {
+//      when(asyncAuthenticationService.tryAuthenticateUser(any()))
+//        .thenReturn(Future.successful(Some(authenticatedIdUser)))
+//
+//      val result = fakeRequestAuthenticatedWith(
+//        membersDataService = mockedMembersDataService(hasFailed = false, hasDp = true)
+//      )
+//      status(result) mustBe 302
+//      header("Location", result).value must endWith("thankyou-existing")
+//    }
 
     "return a 500 if the call to get additional data from identity fails" in new DigitalSubscriptionsDisplayForm {
-      when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
+      when(asyncAuthenticationService.tryAuthenticateUser(any()))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
 
       val result = fakeRequestAuthenticatedWith(
         identityService = mockedIdentityService(authenticatedIdUser.minimalUser -> "not found".asLeft)
@@ -212,8 +199,8 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     }
 
     "not redirect users if membersDataService errors" in new DigitalSubscriptionsDisplayForm {
-      when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
+      when(asyncAuthenticationService.tryAuthenticateUser(any()))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
 
       val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(hasFailed = true, hasDp = true)
@@ -223,8 +210,8 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     }
 
     "return form if user is signed in and call to identity is successful" in new DigitalSubscriptionsDisplayForm {
-      when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
+      when(asyncAuthenticationService.tryAuthenticateUser(any()))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
 
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedInActionRefiner)
 

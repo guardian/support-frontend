@@ -5,8 +5,6 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.acquisition.model.AcquisitionSubmission
-import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.stripe.model.Charge.PaymentMethodDetails
@@ -76,8 +74,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(stripeApiError))
   val paymentServiceIntentResponse: EitherT[Future, StripeApiError, PaymentIntent] =
     EitherT.right(Future.successful(paymentIntentMock))
-  val acquisitionResponse: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
-    EitherT.right(Future.successful(mock[AcquisitionSubmission]))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.right(Future.successful(1L))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
@@ -197,7 +193,7 @@ with WSClientProvider {
       }
 
       "return successful payment response even if identityService, " +
-        "ophanService, databaseService, bigQueryService and emailService all fail" in new StripeBackendFixture {
+        "databaseService, bigQueryService and emailService all fail" in new StripeBackendFixture {
         populateChargeMock()
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)

@@ -2,50 +2,52 @@
 
 .hero,
 .heroGuardianWeeklyNonGifting {
-  background-color: gu-colour(brand-main);
-  border-top: 1px solid gu-colour(brand-pastel);
-  @include mq($from: tablet) {
+	background-color: gu-colour(brand-main);
+	border-top: 1px solid gu-colour(brand-pastel);
+	@include mq($from: tablet) {
+		:global(.component-heading-block) {
+			margin-top: 26em;
+		}
 
-   :global(.component-heading-block) {
-      margin-top: 26em;
-    }
+		:global(.component-grid-picture) {
+			position: absolute;
+			top: -50px;
+			min-width: 100%;
+			height: 100%;
+			@include mq($from: wide) {
+				left: gu-span(2) * -1;
+			}
+		}
 
-    :global(.component-grid-picture) {
-      position: absolute;
-      top: -50px;
-      min-width: 100%;
-      height: 100%;
-    }
+		:global(.component-grid-picture__image) {
+			height: 100%;
+			display: block;
+		}
+	}
 
-    :global(.component-grid-picture__image) {
-      height: 100%;
-      display: block;
-    }
-  }
-
-  @include mq($until: tablet) {
-    :global(.component-grid-picture) {
-      max-height: 20em;
-      overflow: hidden;
-      display: block;
-    }
-    :global(.component-grid-picture__image) {
-      max-width: gu-span(8);
-      margin: auto;
-      float: none;
-      display: block;
-    }
-  }
+	@include mq($until: tablet) {
+		:global(.component-grid-picture) {
+			max-height: 20em;
+			overflow: hidden;
+			display: block;
+		}
+		:global(.component-grid-picture__image) {
+			max-width: gu-span(8);
+			margin: auto;
+			float: none;
+			display: block;
+		}
+	}
 }
 
 .heroGuardianWeeklyNonGifting {
-  background-color: #66c2e9;
+	background-color: #66c2e9;
 
-  :global(.component-grid-picture) {
-    top: 0;
-  }
+	:global(.component-grid-picture) {
+		top: 0;
+	}
 }
 
 .thank-you-link {
-  cursor: pointer;
+	cursor: pointer;
 }

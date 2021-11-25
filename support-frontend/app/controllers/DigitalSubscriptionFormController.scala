@@ -43,31 +43,6 @@ class DigitalSubscriptionFormController(
 
   def displayForm(orderIsAGift: Boolean): Action[AnyContent] = {
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    if (settings.switches.enableDigitalSubGifting.isOn || !orderIsAGift) {
-      authenticatedAction(subscriptionsClientId).async { implicit request =>
-
-        identityService.getUser(request.user.minimalUser).fold(
-          error => {
-            SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error")
-            Future.successful(InternalServerError)
-          },
-          user =>
-            if (orderIsAGift)
-              Future.successful(Ok(digitalSubscriptionFormHtml(Some(user), orderIsAGift = true)))
-            else for (alreadyADigitalSubscriber <- userHasDigitalSubscription(membersDataService, request.user)) yield
-              if (alreadyADigitalSubscriber)
-                redirectToExistingThankYouPage
-              else
-                Ok(digitalSubscriptionFormHtml(Some(user), orderIsAGift = false))
-        ).flatten.map(_.withSettingsSurrogateKey)
-      }
-    } else {
-      Action(Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey)
-    }
-  }
-
-  def displayGuestForm(orderIsAGift: Boolean): Action[AnyContent] = {
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     maybeAuthenticatedAction().async { implicit request =>
       val maybeIdUser: EitherT[Future, String, Option[IdUser]] = request.user match {
         case Some(user) =>
@@ -99,7 +74,8 @@ class DigitalSubscriptionFormController(
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
-    val uatMode = maybeIdUser.exists(idUser => testUsers.isTestUser(idUser.publicFields.displayName))
+
+    val uatMode = testUsers.isTestUser(request)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey
     val readerType = if (orderIsAGift) Gift else Direct

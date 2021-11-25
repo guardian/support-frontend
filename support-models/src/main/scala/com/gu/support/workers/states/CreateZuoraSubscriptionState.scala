@@ -4,11 +4,12 @@ import com.gu.i18n.Country
 
 import java.util.UUID
 import com.gu.salesforce.Salesforce.{SalesforceContactRecords, SfContactId}
+import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
-import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime, decodeCountry, encodeCountryAsAlpha2}
+import com.gu.support.encoding.CustomCodecs.{decodeCountry, decodeLocalTime, encodeCountryAsAlpha2, encodeLocalTime}
 import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}

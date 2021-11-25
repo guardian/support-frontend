@@ -3,102 +3,96 @@
 $progress-bar-height: 10px;
 
 .contributions-landing-ticker {
-  padding: 18px 0 28px 0;
-  margin: 0 -10px;
-  border-bottom: 1px solid gu-colour(neutral-86);
-  font-family: $gu-headline;
+	padding: 18px 0 28px 0;
+	margin: 0 -10px;
+	font-family: $gu-text-sans-web;
 }
 
 .contributions-landing-ticker--hidden {
-  visibility: hidden;
-  .contributions-landing-ticker__border {
-    visibility: visible;
-  }
+	visibility: hidden;
+	.contributions-landing-ticker__border {
+		visibility: visible;
+	}
 }
 
 .contributions-landing-ticker {
-  @include mq($until: tablet) {
-    display: none;
-  }
-
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .contributions-landing-ticker__values,
 .contributions-landing-ticker__progress-bar {
-  margin: 0 10px;
+	margin: 0 10px;
 }
 
 .contributions-landing-ticker__values {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-bottom: 6px;
-  line-height: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	padding-bottom: 6px;
+	line-height: 1;
+  font-size: 17px;
 }
 
-.contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
-  display: flex;
-  flex-direction: column;
+.contributions-landing-ticker__goal,
+.contributions-landing-ticker__so-far {
+	display: flex;
+	flex-direction: column;
 }
 
 .contributions-landing-ticker__so-far .contributions-landing-ticker__count {
-  font-size: 24px;
-  font-weight: 800;
-  margin-bottom: 2px;
+	font-weight: 800;
+	margin-bottom: 2px;
 }
 
 .contributions-landing-ticker__goal {
-  align-items: flex-end;
+	align-items: flex-end;
 
-  .contributions-landing-ticker__count {
-    font-weight: bold;
-    margin-bottom: 2px;
-  }
-}
-
-.contributions-landing-ticker__label {
-  font-style: italic;
+	.contributions-landing-ticker__count {
+		font-weight: bold;
+		margin-bottom: 2px;
+	}
 }
 
 .contributions-landing-ticker__progress-bar {
-  position: relative;
+	position: relative;
 }
 
 .contributions-landing-ticker__progress {
-  width: calc(100%);
-  height: $progress-bar-height;
-  overflow: hidden;
-  background-color: #dcdcdc;
-  position: absolute;
+	width: calc(100%);
+	height: $progress-bar-height;
+	overflow: hidden;
+  background-color: #DDA7A1;
+	position: absolute;
 }
 
 .contributions-landing-ticker__filled-progress {
-  background-color: gu-colour(highlight-main);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transform: translateX(-100%);
-  transition: transform 3s cubic-bezier(.25, .55, .2, .85);
+  background-color: #C70000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	transform: translateX(-100%);
+	transition: transform 3s cubic-bezier(0.25, 0.55, 0.2, 0.85);
 }
 
 .contributions-landing-ticker__marker {
-  visibility: hidden;
-  border-right: 2px solid gu-colour(neutral-7);
-  content: ' ';
-  display: block;
-  height: 12px;
-  margin-top: -2px;
+	visibility: hidden;
+	border-right: 2px solid gu-colour(neutral-7);
+	content: ' ';
+	display: block;
+	height: 12px;
+	margin-top: -2px;
 }
 
-.contributions-landing-ticker--goal-reached .contributions-landing-ticker__marker {
-  visibility: visible;
+.contributions-landing-ticker--goal-reached
+	.contributions-landing-ticker__marker {
+	visibility: visible;
 }
 
 // Post-goal copy
-.contributions-landing-ticker--goal-reached .contributions-landing-ticker__count {
-  font-size: 16px;
+.contributions-landing-ticker--goal-reached
+	.contributions-landing-ticker__count {
+	font-size: 16px;
 }

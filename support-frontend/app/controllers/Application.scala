@@ -138,11 +138,8 @@ class Application(
   }
 
   private def shareImageUrl(settings: AllSettings): String = {
-    // Standard image
-    // "https://i.guim.co.uk/img/media/74b15a65c479bfe53151fceeb7d948f125a66af2/0_0_2400_1260/1000.png?quality=85&s=4b52891c0a86da6c08f2dc6e8308d211"
-
-    // AUS 2021 appeal image
-    "https://i.guim.co.uk/img/media/8b9e82bb323f76edbfec5cf5f0e2ccd3c7e00b12/0_1_1000_525/1000.png?quality=85&s=a77669466491c22436d12f058d352a72"
+    // Autumn 2021 generic image
+    "https://i.guim.co.uk/img/media/5366cacfd2081e5a4af259318238b3f82610d32e/0_0_1000_525/1000.png?quality=85&s=966978166c0983aef68828559ede40d8"
   }
 
   private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],

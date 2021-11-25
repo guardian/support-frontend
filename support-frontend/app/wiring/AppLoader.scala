@@ -36,7 +36,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
         ComposedConfigurationLocation(List(privateConfigLocal, privateConfigSSM, publicConfig))
     }
 
-    initialConfiguration ++ Configuration(loadedConfig)
+    Configuration(loadedConfig).withFallback(initialConfiguration)
   }
 
   override def load(context: Context): Application = {

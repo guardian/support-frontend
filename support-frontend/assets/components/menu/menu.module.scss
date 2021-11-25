@@ -1,70 +1,71 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .root {
-  background: gu-colour(neutral-100);
-  border: 1px solid gu-colour(neutral-93);
-  overflow: hidden;
-  border-radius: 4px;
+	background: gu-colour(neutral-100);
+	border: 1px solid gu-colour(neutral-93);
+	overflow: hidden;
+	border-radius: 4px;
 
-  @include mq($until: tablet) {
-    position: fixed!important;
-    top: auto!important;
-    left: 0!important;
-    right: 0!important;
-    bottom: 0!important;
-    max-height: 70vh;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    /*accomodate iphone safari bottom bar popping out*/
-    padding-bottom: $gu-v-spacing * 5;
-    padding-bottom: 10vh;
-    overflow: auto;
-  }
+	@include mq($until: tablet) {
+		position: fixed !important;
+		top: auto !important;
+		left: 0 !important;
+		right: 0 !important;
+		bottom: 0 !important;
+		max-height: 70vh;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		/*accomodate iphone safari bottom bar popping out*/
+		padding-bottom: $gu-v-spacing * 5;
+		padding-bottom: 10vh;
+		overflow: auto;
+	}
 }
 
 .item {
-  box-sizing: border-box;
-  display: block;
-  @include gu-fontset-body-sans;
-  padding: $gu-v-spacing/2 $gu-h-spacing*4 $gu-v-spacing*1.5 $gu-h-spacing;
-  color: gu-colour(neutral-7);
-  text-decoration: none;
-  position: relative;
-  appearance: none;
-  border: 0;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  
-  &[data-is-selected] {
-    font-weight: bold;
-  }
+	box-sizing: border-box;
+	display: block;
+	@include gu-fontset-body-sans;
+	padding: $gu-v-spacing/2 $gu-h-spacing * 4 $gu-v-spacing * 1.5 $gu-h-spacing;
+	color: gu-colour(neutral-7);
+	text-decoration: none;
+	position: relative;
+	appearance: none;
+	border: 0;
+	width: 100%;
+	text-align: left;
+	cursor: pointer;
 
-  &:after {
-    background: gu-colour(neutral-93);
-    height: 1px;
-    position: absolute;
-    content: '';
-    display: block;
-    left: $gu-h-spacing;
-    bottom: 0;
-    right: 0;
-  }
+	&[data-is-selected] {
+		font-weight: bold;
+	}
 
-  &:hover, &:focus {
-    background: gu-colour(neutral-97);
-    outline: none;
-  }
+	&:after {
+		background: gu-colour(neutral-93);
+		height: 1px;
+		position: absolute;
+		content: '';
+		display: block;
+		left: $gu-h-spacing;
+		bottom: 0;
+		right: 0;
+	}
 
-  & :global(.svg-checkmark) {
-    position: absolute;
-    right: $gu-v-spacing *.85;
-    height: $gu-v-spacing;
-    top: $gu-v-spacing *.85;
-    fill: gu-colour(state-success);
-  }
+	&:hover,
+	&:focus {
+		background: gu-colour(neutral-97);
+		outline: none;
+	}
+
+	& :global(.svg-checkmark) {
+		position: absolute;
+		right: $gu-v-spacing * 0.85;
+		height: $gu-v-spacing;
+		top: $gu-v-spacing * 0.85;
+		fill: gu-colour(state-success);
+	}
 }
 
 .root .item {
-  margin-bottom: -1px;
+	margin-bottom: -1px;
 }

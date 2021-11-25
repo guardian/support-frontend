@@ -2,649 +2,651 @@
 @import '~stylesheets/skeleton/skeleton';
 
 body {
-  width: 100%;
-  max-width: 100vw;
-  left: 0;
-  top: 0;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
+	width: 100%;
+	max-width: 100vw;
+	left: 0;
+	top: 0;
+	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
 }
 
-.map-page, .map-page * {
-  box-sizing: content-box;
+.map-page,
+.map-page * {
+	box-sizing: content-box;
 }
 
 .map-page {
-  display: flex;
-  flex-shrink: 0;
-  flex-direction: column;
-  height: 100vh;
-  @include mq($from:desktop) {
-    overflow-x: hidden;
-  }
+	display: flex;
+	flex-shrink: 0;
+	flex-direction: column;
+	height: 100vh;
+	@include mq($from: desktop) {
+		overflow-x: hidden;
+	}
 }
 
 #header-wrapper {
-  display: flex;
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 100vw;
-  border: 0;
-  background-color: gu-colour(brand-main);
-  box-sizing: border-box;
-  padding: 12px 5%;
-  @include mq($until:tablet) {
-    padding: 4px 2%;
-  }
+	display: flex;
+	flex-shrink: 0;
+	width: 100%;
+	max-width: 100vw;
+	border: 0;
+	background-color: gu-colour(brand-main);
+	box-sizing: border-box;
+	padding: 12px 5%;
+	@include mq($until: tablet) {
+		padding: 4px 2%;
+	}
 }
 
 #header {
-  font-family: $gu-headline;
-  font-weight: 900;
-  font-size: 36px;
-  color: gu-colour(neutral-93);
-  @include mq($until:tablet) {
-    display: none;
-  }
-  @include mq($until:desktop) {
-    font-size: 30px;
-    top: 20px;
-  }
+	font-family: $gu-headline;
+	font-weight: 900;
+	font-size: 36px;
+	color: gu-colour(neutral-93);
+	@include mq($until: tablet) {
+		display: none;
+	}
+	@include mq($until: desktop) {
+		font-size: 30px;
+		top: 20px;
+	}
 }
 
 .header-cta-text-full {
-  display: none;
-  @include mq($from:tablet) {
-    display: block;
-  }
+	display: none;
+	@include mq($from: tablet) {
+		display: block;
+	}
 }
 
 .header-cta-text-short {
-  display: block;
-  @include mq($from:tablet) {
-    display: none;
-  }
+	display: block;
+	@include mq($from: tablet) {
+		display: none;
+	}
 }
 
 .testimonial-cta-primary-link-button {
-  margin-top: 16px;
+	margin-top: 16px;
 }
 
 .testimonial-cta-secondary-link-button {
-  margin-top: 16px;
+	margin-top: 16px;
 }
 
 .button-cta-secondary {
-  background-color: #052962;
-  margin-top: 16px;
-  padding: 8px 20px;
+	background-color: #052962;
+	margin-top: 16px;
+	padding: 8px 20px;
 
-  &:hover {
-    background-color: #041F4A;
-  }
+	&:hover {
+		background-color: #041f4a;
+	}
 }
 
 .logo {
-  margin-left: auto;
-  width: 110px;
+	margin-left: auto;
+	width: 110px;
 
-  @include mq($from:tablet) {
-    width: 240px;
-  }
+	@include mq($from: tablet) {
+		width: 240px;
+	}
 
-  @include mq($from:desktop) {
-    width: 295px;
-  }
+	@include mq($from: desktop) {
+		width: 295px;
+	}
 
-  svg {
-    display: block;
-  }
+	svg {
+		display: block;
+	}
 }
 
 .map {
-  @include mq($until:desktop) {
-    width: 100%;
-  }
+	@include mq($until: desktop) {
+		width: 100%;
+	}
 }
 
 .clone {
-  visibility: hidden;
+	visibility: hidden;
 }
 
 .map.sticky {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  text-align: center;
-  z-index: 500 !important;
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	text-align: center;
+	z-index: 500 !important;
 
-  .map-background {
-    background-color: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 0;
-  }
+	.map-background {
+		background-color: white;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 0;
+	}
 
-  .svg-wrapper {
-    top: 0;
-    width: 35%;
-    overflow: hidden;
-  }
+	.svg-wrapper {
+		top: 0;
+		width: 35%;
+		overflow: hidden;
+	}
 
-  .territory-label-full {
-    display: none;
-  }
+	.territory-label-full {
+		display: none;
+	}
 
-  .territory-label-abbr {
-    display: none;
+	.territory-label-abbr {
+		display: none;
 
-    @include mq($from: tablet) {
-      display: block;
-    }
-  }
+		@include mq($from: tablet) {
+			display: block;
+		}
+	}
 }
 
 .svg-wrapper {
-  display: inline-block;
-  position: relative;
-  width: 85%;
-  padding-bottom: 80%;
-  vertical-align: middle;
-  overflow: hidden;
-  box-sizing: border-box;
+	display: inline-block;
+	position: relative;
+	width: 85%;
+	padding-bottom: 80%;
+	vertical-align: middle;
+	overflow: hidden;
+	box-sizing: border-box;
 }
 
 .svg-content {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .territory {
-  @include mq($from:desktop) {
-    cursor: pointer;
+	@include mq($from: desktop) {
+		cursor: pointer;
 
-    &:hover {
-      .territory-landmass {
-        color: #04FFFF;
-      }
+		&:hover {
+			.territory-landmass {
+				color: #04ffff;
+			}
 
-      .territory-label-on-landmass {
-        color: gu-colour(neutral-7);
-      }
-    }
-  }
+			.territory-label-on-landmass {
+				color: gu-colour(neutral-7);
+			}
+		}
+	}
 
-  .territory-landmass {
-    color: gu-colour(brand-main);
-  }
+	.territory-landmass {
+		color: gu-colour(brand-main);
+	}
 
-  .territory-label {
-    color: gu-colour(neutral-7);
-  }
+	.territory-label {
+		color: gu-colour(neutral-7);
+	}
 
-  .territory-label-on-landmass {
-    color: gu-colour(neutral-100);
-  }
+	.territory-label-on-landmass {
+		color: gu-colour(neutral-100);
+	}
 
-  .territory-label-full {
-    display: none;
+	.territory-label-full {
+		display: none;
 
-    @include mq($from:tablet) {
-      display: inline-block;
-    }
-  }
+		@include mq($from: tablet) {
+			display: inline-block;
+		}
+	}
 
-  .territory-label-abbr {
-    @include mq($from:tablet) {
-      display: none;
-    }
-  }
+	.territory-label-abbr {
+		@include mq($from: tablet) {
+			display: none;
+		}
+	}
 }
 
 .territory-selected {
-  .territory-landmass {
-    color: #04FFFF;
-  }
+	.territory-landmass {
+		color: #04ffff;
+	}
 
-  .territory-label-on-landmass {
-    color: gu-colour(neutral-7);
-  }
+	.territory-label-on-landmass {
+		color: gu-colour(neutral-7);
+	}
 }
 
 .map-caption {
-  font-family: $gu-text-sans-web;
-  font-size: 17.5px;
-  text-align: center;
-  @include mq($until:desktop) {
-    display: none;
-  }
+	font-family: $gu-text-sans-web;
+	font-size: 17.5px;
+	text-align: center;
+	@include mq($until: desktop) {
+		display: none;
+	}
 }
 
-h2.blurb, h2.selected-territory {
-  text-align: left;
-  font-family: $gu-titlepiece;
-  font-weight: bold;
-  font-size: 48px;
-  color: gu-colour(neutral-7);
-  line-height: 100%;
+h2.blurb,
+h2.selected-territory {
+	text-align: left;
+	font-family: $gu-titlepiece;
+	font-weight: bold;
+	font-size: 48px;
+	color: gu-colour(neutral-7);
+	line-height: 100%;
 }
 
 h2.blurb {
-  @include mq($until:tablet) {
-    margin-top: 1vh;
-  }
-  @include mq($until:desktop) {
-    margin-top: 3vh;
-  }
-  @include mq($from:desktop) {
-    margin-top: 0;
-  }
+	@include mq($until: tablet) {
+		margin-top: 1vh;
+	}
+	@include mq($until: desktop) {
+		margin-top: 3vh;
+	}
+	@include mq($from: desktop) {
+		margin-top: 0;
+	}
 }
 
 h2.blurb-slim {
-  font-size: 38px;
-  margin-top: 30px;
+	font-size: 38px;
+	margin-top: 30px;
 }
 
 p.blurb {
-  text-align: left;
-  font-family: $gu-text-egyptian-web;
-  color: gu-colour(neutral-20);
-  font-size: 17.5px;
-  line-height: 135%;
-  margin-bottom: 20px;
-  margin-top: 10px;
+	text-align: left;
+	font-family: $gu-text-egyptian-web;
+	color: gu-colour(neutral-20);
+	font-size: 17.5px;
+	line-height: 135%;
+	margin-bottom: 20px;
+	margin-top: 10px;
 }
 
 .supporters-total {
-  font-family: $gu-titlepiece;
-  font-weight: bold;
-  line-height: 115%;
-  font-size: 30px;
-  color: gu-colour(neutral-7);
+	font-family: $gu-titlepiece;
+	font-weight: bold;
+	line-height: 115%;
+	font-size: 30px;
+	color: gu-colour(neutral-7);
 }
 
 .supporters-total-caption {
-  font-family: $gu-text-sans-web;
-  font-size: 17.5px;
-  line-height: 135%;
-  //margin-top: -1.25em;
-  color: gu-colour(neutral-20);
+	font-family: $gu-text-sans-web;
+	font-size: 17.5px;
+	line-height: 135%;
+	//margin-top: -1.25em;
+	color: gu-colour(neutral-20);
 }
 
 .social-links {
-  position: relative;
-  margin: 3em auto 0;
-  display: block;
-  float: none;
-  width: 100%;
-  bottom: 10px;
-  border-top: 1px solid gu-colour(neutral-86);
-  box-sizing: border-box;
-  padding-top: 2px;
+	position: relative;
+	margin: 3em auto 0;
+	display: block;
+	float: none;
+	width: 100%;
+	bottom: 10px;
+	border-top: 1px solid gu-colour(neutral-86);
+	box-sizing: border-box;
+	padding-top: 2px;
 }
 
 .social-link {
-  cursor: pointer;
-  padding: 2px;
+	cursor: pointer;
+	padding: 2px;
 }
 
 .social-link:hover > circle:first-child {
-  fill: gu-colour(neutral-86);
+	fill: gu-colour(neutral-86);
 }
 
 .main {
-  flex-grow: 1;
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  position: relative;
-  width: 100%;
-  max-width: 100vw;
-  box-sizing: border-box;
-  @include mq($until: desktop) {
-    align-items: flex-start;
-    align-content: flex-start;
-    flex-direction: column;
-  }
+	flex-grow: 1;
+	align-items: center;
+	display: flex;
+	flex-shrink: 0;
+	position: relative;
+	width: 100%;
+	max-width: 100vw;
+	box-sizing: border-box;
+	@include mq($until: desktop) {
+		align-items: flex-start;
+		align-content: flex-start;
+		flex-direction: column;
+	}
 }
 
 .left {
-  left: 0;
-  width: 100%;
-  display: inline-block;
-  text-align: center;
-  box-sizing: border-box;
-  padding-top: 1.5em;
-  @include mq($from: desktop) {
-    height: 100%;
-    max-width: 50vw;
-    overflow-x: hidden;
-  }
+	left: 0;
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	box-sizing: border-box;
+	padding-top: 1.5em;
+	@include mq($from: desktop) {
+		height: 100%;
+		max-width: 50vw;
+		overflow-x: hidden;
+	}
 }
 
 .left-padded-inner {
-  display: none;
-  padding-left: 10%;
-  padding-right: 10%;
+	display: none;
+	padding-left: 10%;
+	padding-right: 10%;
 }
 
 .right {
-  right: 0;
-  height: 100%;
-  display: inline-block;
-  text-align: left;
-  width: 45%;
-  overflow: hidden;
-  padding: 5% 5% 5% 0;
-  box-sizing: border-box;
-  @include mq($until: desktop) {
-    width: 100%;
-    padding: 10vh 0 0 0;
-  }
+	right: 0;
+	height: 100%;
+	display: inline-block;
+	text-align: left;
+	width: 45%;
+	overflow: hidden;
+	padding: 5% 5% 5% 0;
+	box-sizing: border-box;
+	@include mq($until: desktop) {
+		width: 100%;
+		padding: 10vh 0 0 0;
+	}
 }
 
 .testimonials-overlay {
-  @include mq($from: desktop) {
-    background-color: gu-colour(neutral-100);
-    overflow: hidden;
-    position: absolute;
-    right: -59vw;
-    width: 59vw;
-    top: 0;
-    height: 100%;
-    z-index: 200;
-  }
+	@include mq($from: desktop) {
+		background-color: gu-colour(neutral-100);
+		overflow: hidden;
+		position: absolute;
+		right: -59vw;
+		width: 59vw;
+		top: 0;
+		height: 100%;
+		z-index: 200;
+	}
 }
 
 .close-button {
-  z-index: 300;
-  cursor: pointer;
-  position: absolute;
-  right: 10%;
-  top: 5%;
-  @include mq($until: desktop) {
-    display: none;
-  }
+	z-index: 300;
+	cursor: pointer;
+	position: absolute;
+	right: 10%;
+	top: 5%;
+	@include mq($until: desktop) {
+		display: none;
+	}
 }
 
 .close-button > path {
-  fill: gu-colour(neutral-7);
+	fill: gu-colour(neutral-7);
 }
 
 .close-button > rect {
-  stroke: gu-colour(neutral-7);
-  fill: gu-colour(neutral-100);
+	stroke: gu-colour(neutral-7);
+	fill: gu-colour(neutral-100);
 }
 
 .close-button:hover > rect {
-  fill: gu-colour(neutral-93);
+	fill: gu-colour(neutral-93);
 }
 
 span.selected-territory {
-  background-color: gu-colour(neutral-93);
-  color: gu-colour(brand-main);
-  display: inline-block;
-  padding-bottom: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: center;
-  top: -10px;
-  left: 0;
+	background-color: gu-colour(neutral-93);
+	color: gu-colour(brand-main);
+	display: inline-block;
+	padding-bottom: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+	vertical-align: center;
+	top: -10px;
+	left: 0;
 }
 
 .blurb-wrapper {
-  width: 100%;
-  box-sizing: border-box;
-  text-align: left;
+	width: 100%;
+	box-sizing: border-box;
+	text-align: left;
 
-  padding: 0 12px;
+	padding: 0 12px;
 
-  @include mq($from:tablet) {
-    padding: 0 34px;
-  }
+	@include mq($from: tablet) {
+		padding: 0 34px;
+	}
 }
 
 .testimonials-wrapper {
-  border-top: 1px solid gu-colour(neutral-93);
-  width: 90%;
-  display: flex;
-  flex-shrink: 0;
+	border-top: 1px solid gu-colour(neutral-93);
+	width: 90%;
+	display: flex;
+	flex-shrink: 0;
 }
 
 .testimonials-container {
-  padding-bottom: 48px;
-  max-height: 100%;
-  position: relative;
-  @include mq($from:desktop) {
-    overflow-y: scroll;
-  }
+	padding-bottom: 48px;
+	max-height: 100%;
+	position: relative;
+	@include mq($from: desktop) {
+		overflow-y: scroll;
+	}
 }
 
 .testimonials-container-header.sticky {
-  @include mq($until:desktop) {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: white;
-    z-index: 600;
-  }
+	@include mq($until: desktop) {
+		position: fixed;
+		top: 0;
+		width: 100%;
+		background-color: white;
+		z-index: 600;
+	}
 }
 
 .testimonials-container-header {
-  top: 0;
-  background-color: white;
-  font-weight: bold;
-  color: gu-colour(neutral-7);
-  margin-top: 0;
-  padding: 10px 0 0 12px;
-  font-size: 20px;
+	top: 0;
+	background-color: white;
+	font-weight: bold;
+	color: gu-colour(neutral-7);
+	margin-top: 0;
+	padding: 10px 0 0 12px;
+	font-size: 20px;
 
-  @include mq($from: tablet) {
-    padding-top: 10px;
-    padding-left: 34px;
-    font-family: $gu-text-egyptian-web;
-    text-align: left;
-    font-size: 28px;
-  }
+	@include mq($from: tablet) {
+		padding-top: 10px;
+		padding-left: 34px;
+		font-family: $gu-text-egyptian-web;
+		text-align: left;
+		font-size: 28px;
+	}
 
-  @include mq($from: desktop) {
-    padding: 35px 12px 4px 0;
-    line-height: 1;
-    font-family: $gu-titlepiece;
-    font-size: 48px;
-  }
+	@include mq($from: desktop) {
+		padding: 35px 12px 4px 0;
+		line-height: 1;
+		font-family: $gu-titlepiece;
+		font-size: 48px;
+	}
 }
 
 .testimonials-for-territory:last-child {
-  @include mq($from:desktop) {
-    padding-bottom: 500px;
-  }
+	@include mq($from: desktop) {
+		padding-bottom: 500px;
+	}
 }
 
 .testimonials-for-territory:first-child {
-  margin-top: 0;
+	margin-top: 0;
 }
 
 .testimonials-for-territory {
-  @include mq($until:desktop) {
-    margin-top: 50px;
-  }
+	@include mq($until: desktop) {
+		margin-top: 50px;
+	}
 }
 
 .testimonials-for-territory-header {
-  padding: 12px 12px 4px 12px;
-  border-bottom: 2px solid #052962;
-  line-height: 1;
-  background-color: white;
+	padding: 12px 12px 4px 12px;
+	border-bottom: 2px solid #052962;
+	line-height: 1;
+	background-color: white;
 
-  h2 {
-    margin: 0 0 0 12px;
-    font-family: $gu-text-egyptian-web;
-    font-size: 24px;
-    font-weight: 800;
-    color: #052962;
+	h2 {
+		margin: 0 0 0 12px;
+		font-family: $gu-text-egyptian-web;
+		font-size: 24px;
+		font-weight: 800;
+		color: #052962;
 
-    @include mq($from:desktop) {
-      margin: 0;
-      font-family: $gu-titlepiece;
-      font-size: 48px;
-      padding: 0 5px 10px 5px;
-    }
-  }
+		@include mq($from: desktop) {
+			margin: 0;
+			font-family: $gu-titlepiece;
+			font-size: 48px;
+			padding: 0 5px 10px 5px;
+		}
+	}
 
-  @include mq($from:tablet) {
-    padding: 12px 34px 4px 34px;
-  }
+	@include mq($from: tablet) {
+		padding: 12px 34px 4px 34px;
+	}
 
-  @include mq($from:desktop) {
-    padding: 12px 0 20px 0;
-    border-bottom: none;
-    position: sticky;
-    top: 0;
-  }
+	@include mq($from: desktop) {
+		padding: 12px 0 20px 0;
+		border-bottom: none;
+		position: sticky;
+		top: 0;
+	}
 }
 
 .testimonials-for-territory-header.sticky {
-  width: 100%;
-  background-color: white;
-  position: fixed;
+	width: 100%;
+	background-color: white;
+	position: fixed;
 }
 
 .testimonials-for-territory-header-text-and-icon-container {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
 
-  svg {
-    @include mq($from:desktop) {
-      display: none;
-    }
-  }
+	svg {
+		@include mq($from: desktop) {
+			display: none;
+		}
+	}
 }
 
 .testimonials-columns-container {
-  padding: 0 12px;
-  display: flex;
-  flex-shrink: 0;
-  flex-direction: column;
+	padding: 0 12px;
+	display: flex;
+	flex-shrink: 0;
+	flex-direction: column;
 
-  @include mq($from: tablet) {
-    flex-direction: row;
-    padding: 0 34px;
-  }
+	@include mq($from: tablet) {
+		flex-direction: row;
+		padding: 0 34px;
+	}
 
-  @include mq($from: desktop) {
-    flex-direction: row;
-    margin-right: 10%;
-    padding: 0;
-  }
+	@include mq($from: desktop) {
+		flex-direction: row;
+		margin-right: 10%;
+		padding: 0;
+	}
 }
 
 .testimonials-container-header {
-  br {
-    @include mq($until: desktop) {
-      display: none;
-    }
-  }
+	br {
+		@include mq($until: desktop) {
+			display: none;
+		}
+	}
 }
 
 .testimonials-first-column {
-  width: 100%;
-  @include mq($from:tablet) {
-    width: 50%;
-  }
+	width: 100%;
+	@include mq($from: tablet) {
+		width: 50%;
+	}
 
-  > .testimonial-component:nth-child(even) {
-    background-color: gu-colour(neutral-97);
-  }
+	> .testimonial-component:nth-child(even) {
+		background-color: gu-colour(neutral-97);
+	}
 }
 
 .testimonials-second-column {
-  width: 100%;
-  @include mq($from:tablet) {
-    width: 50%;
-  }
+	width: 100%;
+	@include mq($from: tablet) {
+		width: 50%;
+	}
 
-  @include mq($from: tablet) {
-    margin-left: 12px;
-  }
-  > .testimonial-component:nth-child(odd) {
-    background-color: gu-colour(neutral-97);
-  }
+	@include mq($from: tablet) {
+		margin-left: 12px;
+	}
+	> .testimonial-component:nth-child(odd) {
+		background-color: gu-colour(neutral-97);
+	}
 }
 
 .testimonial-component {
-  margin-top: 12px;
-  border: 1px solid gu-colour(neutral-86);
-  padding: 12px;
-  font-family: $gu-text-egyptian-web;
-  font-size: 17px;
+	margin-top: 12px;
+	border: 1px solid gu-colour(neutral-86);
+	padding: 12px;
+	font-family: $gu-text-egyptian-web;
+	font-size: 17px;
 }
 
 .testimonial-component-details {
-  margin-top: 4px;
-  font-weight: 800;
+	margin-top: 4px;
+	font-weight: 800;
 }
 
 .testimonial-cta {
-  margin-top: 12px;
-  padding: 12px;
+	margin-top: 12px;
+	padding: 12px;
 
-  h3 {
-    font-family: $gu-headline;
-    font-size: 20px;
-    margin: 0;
-    font-weight: 800;
-  }
+	h3 {
+		font-family: $gu-headline;
+		font-size: 20px;
+		margin: 0;
+		font-weight: 800;
+	}
 
-  p {
-    margin: 4px 0 0 0;
-  }
+	p {
+		margin: 4px 0 0 0;
+	}
 }
 
 .testimonial-cta-primary {
-  background-color: #F1F8FC;
-  border: 1px solid #052962;
+	background-color: #f1f8fc;
+	border: 1px solid #052962;
 }
 
 .testimonial-cta-secondary {
-  background-color: gu-colour(neutral-97);
-  border: 1px solid gu-colour(neutral-86);
-  @include mq($from: tablet) {
-    display: none;
-  }
+	background-color: gu-colour(neutral-97);
+	border: 1px solid gu-colour(neutral-86);
+	@include mq($from: tablet) {
+		display: none;
+	}
 }
 
 .testimonials-read-more-button-container {
-  margin-top: 12px;
-  margin-left: 12px;
+	margin-top: 12px;
+	margin-left: 12px;
 }
 
 .padded-multiline {
-  @include mq($from:desktop) {
-    line-height: 1.2;
-    margin-left: -0.25rem !important;
+	@include mq($from: desktop) {
+		line-height: 1.2;
+		margin-left: -0.25rem !important;
 
-    span {
-      background-color: gu-colour(neutral-93);
-      color: gu-colour(brand-main);
-      display: inline;
-      padding: 0.25rem;
-      box-decoration-break: clone;
-      -webkit-box-decoration-break: clone;
-    }
-  }
+		span {
+			background-color: gu-colour(neutral-93);
+			color: gu-colour(brand-main);
+			display: inline;
+			padding: 0.25rem;
+			box-decoration-break: clone;
+			-webkit-box-decoration-break: clone;
+		}
+	}
 }
 
 .midpoint-ctas {
-  margin: 38px 12px 0 12px;
-  @include mq($from: tablet) {
-    display: none;
-  }
+	margin: 38px 12px 0 12px;
+	@include mq($from: tablet) {
+		display: none;
+	}
 }

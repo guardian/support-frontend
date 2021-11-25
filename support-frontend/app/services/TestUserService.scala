@@ -1,9 +1,9 @@
 package services
 
 import java.time.Duration.ofDays
-
 import actions.CustomActionBuilders
 import com.gu.identity.testing.usernames.TestUsernames
+import play.api.mvc.RequestHeader
 
 object TestUserService {
   def apply(secret: String): TestUserService = new TestUserService(secret)
@@ -17,13 +17,11 @@ class TestUserService(secret: String) {
     recency = ValidityPeriod
   )
 
-  def isTestUser[A](request: CustomActionBuilders.OptionalAuthRequest[_]): Boolean = {
-    val userName = request.user.map(user => user.minimalUser.displayName).getOrElse(request.cookies.get("_test_username").map(_.value))
+  def isTestUser[A](request: RequestHeader): Boolean = {
+    val userName = request.cookies.get("_test_username").map(_.value)
     isTestUser(userName)
   }
 
-  def isTestUser(displayName: Option[String]): Boolean =
-    displayName.flatMap(_.split(' ').headOption).exists(testUsers.isValid)
-
-  def isTestUser(user: AuthenticatedIdUser): Boolean = isTestUser(user.minimalUser.displayName)
+  def isTestUser(testUserName: Option[String]): Boolean =
+    testUserName.flatMap(_.split(' ').headOption).exists(testUsers.isValid)
 }

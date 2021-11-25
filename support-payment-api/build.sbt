@@ -43,7 +43,6 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
   "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
-  "org.apache.thrift" % "libthrift" % "0.14.2",// needed for snyk deps https://app.snyk.io/vuln/SNYK-JAVA-ORGAPACHETHRIFT-173706
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,

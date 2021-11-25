@@ -1,20 +1,19 @@
 package model.stripe
 
+import com.gu.support.acquisitions.{AbTest, QueryParameter}
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto._
 import model.{AcquisitionData, Currency}
-import ophan.thrift.componentEvent.ComponentType
-import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
 
 import scala.collection.immutable.IndexedSeq
 
 object StripeJsonDecoder {
 
   import controllers.JsonReadableOps._
-  import NonEmptyString.decoder
   import StripePublicKey.decoder
+  import com.gu.support.acquisitions.ReferrerAcquisitionData.{abTestDecoder, queryParameterDecoder}
 
   // This will decode Stripe charge data in the format expected by the old contributions-frontend API.
   private val legacyStripeChargeDataDecoder: Decoder[LegacyStripeChargeRequest] = Decoder.instance { cursor =>
@@ -33,8 +32,8 @@ object StripeJsonDecoder {
       intcmp <- downField("intcmp").as[Option[String]]
       platform <- downField("platform").as[Option[String]]
       componentId <- downField("componentId").as[Option[String]]
-      componentType <- downField("componentType").as[Option[ComponentType]]
-      source <- downField("source").as[Option[AcquisitionSource]]
+      componentType <- downField("componentType").as[Option[String]]
+      source <- downField("source").as[Option[String]]
       identityId <- downField("idUser").as[Option[String]]
       abTest <- downField("abTest").as[Option[AbTest]]
       refererAbTest <- downField("refererAbTest").as[Option[AbTest]]

@@ -2,24 +2,24 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 :root {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 /**** FOOTER HACK ****/
 .component-left-margin-section:before {
-  content: none;
+	content: none;
 }
 
 .component-content.component-content--feature,
 .component-left-margin-section__content {
-  margin: 0 auto;
-  max-width: 1290px;
+	margin: 0 auto;
+	max-width: 1290px;
 }
 
 .component-footer {
-  background-color: gu-colour('brand-main');
+	background-color: gu-colour('brand-main');
 }
 
 .component-content__content {
-  max-width: unset;
+	max-width: unset;
 }

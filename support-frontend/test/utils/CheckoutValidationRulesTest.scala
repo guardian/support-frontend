@@ -1,9 +1,9 @@
 
 package utils
 
-import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.i18n.{Country, Currency}
+import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._
@@ -13,28 +13,29 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
+import utils.CheckoutValidationRules.{Invalid, Valid}
 
 class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validDigitalPackRequest
 
   "SimpleCheckoutFormValidation.passes" should "return true when there are no empty strings" in {
-    SimpleCheckoutFormValidation.passes(validDigitalPackRequest) shouldBe true
+    SimpleCheckoutFormValidation.passes(validDigitalPackRequest) shouldBe Valid
   }
 
   it should "reject empty strings in the name field" in {
     val requestMissingFirstName = validDigitalPackRequest.copy(firstName = "")
-    SimpleCheckoutFormValidation.passes(requestMissingFirstName) shouldBe false
+    SimpleCheckoutFormValidation.passes(requestMissingFirstName) shouldBe an[Invalid]
   }
 
   it should "reject a first name which is too long" in {
     val requestWithLongFirstName = validDigitalPackRequest.copy(firstName = "TooLongToBeFirstNameAccordingToSalesforce")
-    SimpleCheckoutFormValidation.passes(requestWithLongFirstName) shouldBe false
+    SimpleCheckoutFormValidation.passes(requestWithLongFirstName) shouldBe an[Invalid]
   }
 
   it should "reject a last name which is too long" in {
     val requestWithLongLastName = validDigitalPackRequest.copy(lastName = "TooLongToBeLastNameAccordingToSalesforceTooLongToBeLastNameAccordingToSalesforce1")
-    SimpleCheckoutFormValidation.passes(requestWithLongLastName) shouldBe false
+    SimpleCheckoutFormValidation.passes(requestWithLongLastName) shouldBe an[Invalid]
   }
 
 }
@@ -47,14 +48,14 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = None),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Canada and there is no state selected" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, state = None),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Australia and there is no state selected" in {
@@ -62,7 +63,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, state = None),
       product = DigitalPack(Currency.AUD, Monthly)
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Australia and there is no postcode" in {
@@ -70,7 +71,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
       product = DigitalPack(Currency.AUD, Monthly)
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is United Kingdom and there is no postcode" in {
@@ -78,7 +79,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
       product = DigitalPack(Currency.GBP, Monthly)
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is United States and there is no postcode" in {
@@ -86,7 +87,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
       product = DigitalPack(Currency.USD, Monthly)
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Canada and there is no postcode" in {
@@ -94,7 +95,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
       product = DigitalPack(Currency.CAD, Monthly)
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
 
   it should "also allow a missing postcode in other countries" in {
@@ -102,12 +103,12 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Ireland, postCode = None),
       product = DigitalPack(Currency.EUR, Monthly)
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe true
+    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe Valid
   }
 
   it should "fail if the source payment field received is an empty string" in {
     val requestMissingState = validDigitalPackRequest.copy(paymentFields = Left(StripeSourcePaymentFields("", None)))
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
   }
 
   it should "succeed for a standard country and currency combination" in {
@@ -115,7 +116,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, state = None),
       product = DigitalPack(Currency.GBP, Annual),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe true
+    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe Valid
   }
 
   it should "fail if the country and currency combination is unsupported" in {
@@ -123,7 +124,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = Some("VA")),
       product = DigitalPack(Currency.GBP, Annual)
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address line or a city for billing address" in {
@@ -136,7 +137,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       country = Country.UK
     )
     val requestMissingAddressLineAndCity = validDigitalPackRequest.copy(billingAddress = badBillingAddress)
-    DigitalPackValidation.passes(requestMissingAddressLineAndCity, Direct) shouldBe false
+    DigitalPackValidation.passes(requestMissingAddressLineAndCity, Direct) shouldBe an[Invalid]
   }
 
   it should "succeed when there is a valid corporate sub" in {
@@ -145,7 +146,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get))
     )
 
-    DigitalPackValidation.passes(corporateSub, Corporate) shouldBe true
+    DigitalPackValidation.passes(corporateSub, Corporate) shouldBe Valid
   }
 
   it should "succeed when there is a valid gift sub purchase" in {
@@ -154,7 +155,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       giftRecipient = Some(GiftRecipientRequest(None, "bob", "builder", Some("bob@gu.com"), Some("have a nice sub"), Some(new LocalDate(2020, 10, 2))))
     )
 
-    DigitalPackValidation.passes(giftPurchase, Gift) shouldBe true
+    DigitalPackValidation.passes(giftPurchase, Gift) shouldBe Valid
   }
 
   it should "succeed when there is a valid gift sub redemption" in {
@@ -163,7 +164,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get))
     )
 
-    DigitalPackValidation.passes(giftRedemption, Gift) shouldBe true
+    DigitalPackValidation.passes(giftRedemption, Gift) shouldBe Valid
   }
 
 }
@@ -174,32 +175,32 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
 
   "PaperValidation.passes" should "fail if the delivery country is US" in {
     val requestDeliveredToUs = validPaperRequest.copy(deliveryAddress = validPaperRequest.deliveryAddress map(_.copy(country = Country.US)))
-    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe false
+    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe an[Invalid]
   }
 
   it should "fail if the currency is USD" in {
     val requestDeliveredToUs = validPaperRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday))
-    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe false
+    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe an[Invalid]
   }
 
   it should "succeed HD if the country is UK and the currency is GBP" in {
     val requestDeliveredToUs = validPaperRequest
-    PaperValidation.passes(requestDeliveredToUs, HomeDelivery) shouldBe true
+    PaperValidation.passes(requestDeliveredToUs, HomeDelivery) shouldBe Valid
   }
 
   it should "fail HD if outside the M25" in {
     val requestDeliveredToUs = validPaperRequest.copy(deliveryAddress = validPaperRequest.deliveryAddress.map(_.copy(postCode = Some("TS1 1AA"))))
-    PaperValidation.passes(requestDeliveredToUs, HomeDelivery) shouldBe false
+    PaperValidation.passes(requestDeliveredToUs, HomeDelivery) shouldBe an[Invalid]
   }
 
   it should "succeed Collection if the country is UK and the currency is GBP" in {
     val requestDeliveredToUs = validPaperRequest
-    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe true
+    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe Valid
   }
 
   it should "fail if there is no first delivery date" in {
     val requestDeliveredToUs = validPaperRequest.copy(firstDeliveryDate = None)
-    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe false
+    PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address data for billing address" in {
@@ -212,7 +213,7 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
         country = Country.UK
       )
       val requestMissingAddressLineAndCity = validPaperRequest.copy(billingAddress = emptyAddress)
-      PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe false
+      PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address data for delivery address" in {
@@ -225,12 +226,12 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
       country = Country.UK
     )
     val requestMissingAddressLineAndCity = validPaperRequest.copy(deliveryAddress = Some(emptyAddress))
-    PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe false
+    PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe an[Invalid]
   }
 
   it should "not allow corporate redemptions for paper products" in {
     val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get)))
-    PaperValidation.passes(requestWithCorporateRedemption, Collection) shouldBe false
+    PaperValidation.passes(requestWithCorporateRedemption, Collection) shouldBe an[Invalid]
   }
 
 }
@@ -241,22 +242,22 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
 
   it should "succeed if the delivery country is US" in {
     val requestDeliveredToUs = validWeeklyRequest.copy(deliveryAddress = validWeeklyRequest.deliveryAddress map(_.copy(country = Country.US)))
-    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe true
+    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe Valid
   }
 
   it should "succeed if the currency is USD" in {
     val requestDeliveredToUs = validWeeklyRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday))
-    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe true
+    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe Valid
   }
 
   it should "succeed if the country is UK and the currency is GBP" in {
     val requestDeliveredToUs = validWeeklyRequest
-    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe true
+    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe Valid
   }
 
   it should "fail if there is no first delivery date" in {
     val requestDeliveredToUs = validWeeklyRequest.copy(firstDeliveryDate = None)
-    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe false
+    GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address data for billing address" in {
@@ -269,7 +270,7 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
       country = Country.UK
     )
     val requestMissingAddressLineAndCity = validWeeklyRequest.copy(billingAddress = emptyAddress)
-    GuardianWeeklyValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+    GuardianWeeklyValidation.passes(requestMissingAddressLineAndCity) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address data for delivery address" in {
@@ -282,12 +283,12 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
       country = Country.UK
     )
     val requestMissingAddressLineAndCity = validWeeklyRequest.copy(deliveryAddress = Some(emptyAddress))
-    GuardianWeeklyValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+    GuardianWeeklyValidation.passes(requestMissingAddressLineAndCity) shouldBe an[Invalid]
   }
 
   it should "not allow corporate redemptions for paper products" in {
     val requestWithCorporateRedemption = validWeeklyRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get)))
-    GuardianWeeklyValidation.passes(requestWithCorporateRedemption) shouldBe false
+    GuardianWeeklyValidation.passes(requestWithCorporateRedemption) shouldBe an[Invalid]
   }
 
 }

@@ -21,7 +21,6 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-lambda" % awsClientVersion,
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.dripower" %% "play-circe" % playCirceVersion,
-  "com.gu" %% "fezziwig" % "1.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,

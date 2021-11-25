@@ -62,7 +62,7 @@ GET  /thank-you-shareable-articles                                 controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
 
-POST /contribute/recurring/create                                  controllers.RegularContributions.create
+POST /contribute/recurring/create                                  controllers.CreateSubscriptionController.create()
 GET  /support-workers/status                                       controllers.SupportWorkersStatus.status(jobId: String)
 
 
@@ -96,15 +96,14 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/gift     controllers.D
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout/gift  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout/gift")
 GET  /subscribe/digital/checkout                                         controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = false)
-GET  /subscribe/digital/checkout/guest                                   controllers.DigitalSubscriptionFormController.displayGuestForm(orderIsAGift: Boolean = false)
 GET  /subscribe/digital/checkout/gift                                    controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
 GET  /subscribe/digital/checkout/thankyou-existing                       controllers.DigitalSubscriptionFormController.displayThankYouExisting()
 
 GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly/gift                                        controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = true)
-GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = false)
-GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscriptionForm.displayForm(orderIsAGift: Boolean = true)
+GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscriptionFormController.displayForm(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
@@ -113,14 +112,11 @@ GET  /subscribe/paper                                              controllers.P
 GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
 GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
-GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionForm.displayForm()
+GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionFormController.displayForm()
 
 # redemptions
 GET  /subscribe/redeem                                             controllers.RedemptionController.displayForm(redemptionCode: String)
-GET  /subscribe/redeem/create/:redemptionCode                      controllers.RedemptionController.displayProcessing(redemptionCode: String)
 GET  /subscribe/redeem/validate/:redemptionCode                    controllers.RedemptionController.validateCode(redemptionCode: String, isTestUser: Option[Boolean])
-GET  /subscribe/redeem/thankyou                                    controllers.RedemptionController.displayThankYou(stage = "thankyou")
-GET  /subscribe/redeem/thankyou-pending                            controllers.RedemptionController.displayThankYou(stage = "thankyou-pending")
 GET  /r/:redemptionCode                                            controllers.RedemptionController.redirect(redemptionCode: String)
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
