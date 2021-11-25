@@ -13,7 +13,7 @@ import { AUDCountries } from 'helpers/internationalisation/countryGroup';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { heroCopy, mobileLineBreak, paragraphs } from './heroWithImageStyles';
+import { heroCopy, paragraphs } from './heroWithImageStyles';
 
 type PropTypes = {
 	promotionCopy: PromotionCopy;
@@ -22,11 +22,6 @@ type PropTypes = {
 
 const GiftCopy = () => (
 	<p>
-		<strong>
-			Share what matters most,
-			<br css={mobileLineBreak} /> even when apart
-		</strong>
-		<br />
 		Show that you care with the gift of a digital gift subscription. Your loved
 		ones will get the richest, ad-free experience of our independent journalism
 		and your gift will help fund our work.

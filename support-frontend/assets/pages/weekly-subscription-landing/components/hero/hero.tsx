@@ -80,9 +80,6 @@ const roundelCentreLine = css`
 		})}
 	}
 `;
-const giftHeroSubHeading = css`
-	font-weight: 700;
-`;
 const showOnMobile = css`
 	display: block;
 
@@ -115,9 +112,6 @@ const getFirstParagraph = (
 	if (orderIsAGift) {
 		return (
 			<>
-				<h3 css={giftHeroSubHeading}>
-					Stay on the same page, even when you’re apart
-				</h3>
 				<p>
 					Share the gift of clarity with the Guardian Weekly magazine. A
 					round-up of the world news, opinion and long reads that have shaped
