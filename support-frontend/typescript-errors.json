@@ -2249,15 +2249,15 @@
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
