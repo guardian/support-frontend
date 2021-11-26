@@ -6,20 +6,19 @@ import {
 	getWeeklyFulfilmentOption,
 	NoFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	NoProductOptions,
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,
 } from 'helpers/productPrice/productOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-import type { FormState, Stage } from 'helpers/subscriptionsForms/formFields';
+import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { getUser, isTestUser } from 'helpers/user/user';
-import type { UserTypeFromIdentityResponse } from '../identityApis';
 
 function createFormReducer(
 	product: SubscriptionProduct,
@@ -31,8 +30,8 @@ function createFormReducer(
 	const user = getUser(); // TODO: Is this unnecessary? It could use the user reducer
 
 	const { productPrices, orderIsAGift } = window.guardian;
-	const initialState = {
-		stage: 'checkout' as Stage,
+	const initialState: FormState = {
+		stage: 'checkout',
 		product,
 		title: null,
 		email: user.email ?? '',
@@ -40,8 +39,7 @@ function createFormReducer(
 		firstName: user.firstName ?? '',
 		lastName: user.lastName ?? '',
 		isSignedIn: user.isSignedIn,
-		userTypeFromIdentityResponse:
-			'noRequestSent' as UserTypeFromIdentityResponse,
+		userTypeFromIdentityResponse: 'noRequestSent',
 		startDate,
 		telephone: null,
 		billingAddressIsSame: true,

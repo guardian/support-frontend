@@ -6,7 +6,7 @@ import type { Option } from 'helpers/types/option';
 import './error.scss';
 // ----- Types ----- //
 export type PropsForHoc = {
-	error: string | undefined;
+	error?: string;
 };
 type Props = PropsForHoc & {
 	children?: Option<ReactNode>;
