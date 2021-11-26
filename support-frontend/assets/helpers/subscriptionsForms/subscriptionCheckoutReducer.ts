@@ -5,6 +5,7 @@ import type { State as MarketingConsentState } from 'components/marketingConsent
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import type {
 	FormFields as AddressFormFields,
+	AddressReducer,
 	State as AddressState,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
@@ -40,19 +41,21 @@ export type WithDeliveryCheckoutState = ReduxState<{
 	directDebit: DirectDebitState;
 }>;
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
+type AddressReducers = {
+	billingAddress: AddressReducer;
+	deliveryAddress?: AddressReducer;
+};
 
 function createReducer(
-	initialCountry: IsoCountry,
 	product: SubscriptionProduct,
 	initialBillingPeriod: BillingPeriod,
 	startDate: Option<string>,
 	productOption: Option<ProductOptions>,
 	fulfilmentOption: Option<FulfilmentOptions>,
-	addressReducers,
+	addressReducers: AddressReducers,
 ) {
 	return combineReducers({
 		checkout: createFormReducer(
-			initialCountry,
 			product,
 			initialBillingPeriod,
 			startDate,
@@ -79,7 +82,6 @@ function createCheckoutReducer(
 		billingAddress: addressReducerFor('billing', initialCountry),
 	};
 	return createReducer(
-		initialCountry,
 		product,
 		initialBillingPeriod,
 		startDate,
@@ -102,7 +104,6 @@ function createWithDeliveryCheckoutReducer(
 		deliveryAddress: addressReducerFor('delivery', initialCountry),
 	};
 	return createReducer(
-		initialCountry,
 		product,
 		initialBillingPeriod,
 		startDate,

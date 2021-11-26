@@ -1,21 +1,16 @@
 import type { Dispatch } from 'redux';
 import type { $Call } from 'utility-types';
-import 'redux';
-import 'helpers/types/option';
-import type { Scoped } from 'helpers/subscriptionsForms/scoped';
-import 'helpers/subscriptionsForms/scoped';
-import type { AddressType } from 'helpers/subscriptionsForms/addressType';
-import 'helpers/subscriptionsForms/addressType';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import type { ErrorMessage } from 'helpers/subscriptionsForms/validation';
+import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import type { Scoped } from 'helpers/subscriptionsForms/scoped';
 import type { Option } from 'helpers/types/option';
 
 export type PostcodeFinderState = {
 	results: PostcodeFinderResult[];
 	isLoading: boolean;
 	postcode: Option<string>;
-	error: Option<ErrorMessage>;
+	error: Option<string>;
 };
 export type PostcodeFinderActions =
 	| (Scoped<AddressType> & {
@@ -84,12 +79,11 @@ const initialState = {
 	error: null,
 };
 
-const postcodeFinderReducerFor =
-	(scope: AddressType) =>
-	(
+const postcodeFinderReducerFor = (scope: AddressType) =>
+	function (
 		state: PostcodeFinderState = initialState,
 		action: PostcodeFinderActions,
-	): PostcodeFinderState => {
+	): PostcodeFinderState {
 		if (action.scope !== scope) {
 			return state;
 		}

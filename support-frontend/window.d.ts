@@ -1,4 +1,5 @@
 import type { Participations } from 'helpers/abTests/abtest';
+import type { ProductPrices } from './assets/helpers/productPrice/productPrices';
 
 declare global {
 	/* ~ Here, declare things that go in the global namespace, or augment
@@ -16,6 +17,8 @@ declare global {
 				countryCode: string;
 				stateCode?: string;
 			};
+			productPrices: ProductPrices;
+			orderIsAGift: boolean;
 		};
 		enablePayPalButton?: () => void;
 		disablePayPalButton?: () => void;

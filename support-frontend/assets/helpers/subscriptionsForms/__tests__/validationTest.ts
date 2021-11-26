@@ -65,10 +65,10 @@ describe('validation', () => {
 			expect(firstError('foo', someErrors)).toBe('bar');
 		});
 		it('should return null if there are no matching errors', () => {
-			expect(firstError('bar', someErrors)).toBeNull();
+			expect(firstError('bar', someErrors)).toBeUndefined();
 		});
 		it('should return null if there are no errors at all', () => {
-			expect(firstError('foo', [])).toBeNull();
+			expect(firstError('foo', [])).toBeUndefined();
 		});
 	});
 	describe('formError', () => {

@@ -8,7 +8,6 @@ import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/rea
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -69,10 +68,6 @@ export type Action =
 	| {
 			type: 'SET_EMAIL_GIFT';
 			emailGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_COUNTRY_CHANGED';
-			country: IsoCountry;
 	  }
 	| {
 			type: 'SET_START_DATE';
@@ -161,40 +156,35 @@ const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	formSubmitted,
 });
 
-const setUserTypeFromIdentityResponse =
-	(
-		userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-	): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-				userTypeFromIdentityResponse,
-			})),
-		);
-	};
+const setUserTypeFromIdentityResponse = (
+	userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+) =>
+	setFormSubmissionDependentValue(() => ({
+		type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
+		userTypeFromIdentityResponse,
+	}));
 
 const formActionCreators = {
 	setTitle: (title: string): Action => ({
 		type: 'SET_TITLE',
 		title: title !== '' ? title : null,
 	}),
-	setFirstName: (firstName: string): ((...args: any[]) => any) =>
+	setFirstName: (firstName: string) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_FIRST_NAME',
 			firstName,
 		})),
-	setLastName: (lastName: string): ((...args: any[]) => any) =>
+	setLastName: (lastName: string) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_LAST_NAME',
 			lastName,
 		})),
-	setEmail: (email: string): ((...args: any[]) => any) =>
+	setEmail: (email: string) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_EMAIL',
 			email,
 		})),
-	setConfirmEmail: (email: string): ((...args: any[]) => any) =>
+	setConfirmEmail: (email: string) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_CONFIRM_EMAIL',
 			email,
@@ -207,19 +197,17 @@ const formActionCreators = {
 		type: 'SET_TITLE_GIFT',
 		titleGiftRecipient: titleGiftRecipient !== '' ? titleGiftRecipient : null,
 	}),
-	setFirstNameGift: (
-		firstNameGiftRecipient: string,
-	): ((...args: any[]) => any) =>
+	setFirstNameGift: (firstNameGiftRecipient: string) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_FIRST_NAME_GIFT',
 			firstNameGiftRecipient,
 		})),
-	setLastNameGift: (lastNameGiftRecipient: string): ((...args: any[]) => any) =>
+	setLastNameGift: (lastNameGiftRecipient: string) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_LAST_NAME_GIFT',
 			lastNameGiftRecipient,
 		})),
-	setEmailGift: (emailGiftRecipient: string): ((...args: any[]) => any) =>
+	setEmailGift: (emailGiftRecipient: string) =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_EMAIL_GIFT',
 			emailGiftRecipient,
