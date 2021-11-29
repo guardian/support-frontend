@@ -18,7 +18,6 @@ import {
 import DefaultRoundel from './defaultRoundel';
 import { HeroPriceCards } from './heroPriceCards';
 import {
-	circleTextGeneric,
 	embeddedRoundel,
 	heroCopy,
 	heroTitle,
@@ -72,9 +71,6 @@ function HeroWithPriceCards({
 	const promoCopy = promotionHTML(promotionCopy.description, {
 		tag: 'div',
 	});
-	const roundelText = promotionHTML(promotionCopy.roundel, {
-		css: circleTextGeneric,
-	}) || <DefaultRoundel />;
 	const nonAusCopy = getTimeboundCopy(
 		'digitalSubscription',
 		getTimeboundQuery() || new Date(),
@@ -99,14 +95,14 @@ function HeroWithPriceCards({
 							priceList={priceList}
 							roundel={
 								<HeroRoundel cssOverrides={embeddedRoundel} theme="digital">
-									{roundelText}
+									<DefaultRoundel />
 								</HeroRoundel>
 							}
 						/>
 					}
 					roundelElement={
 						<HeroRoundel cssOverrides={roundelOverrides} theme="digital">
-							{roundelText}
+							<DefaultRoundel />
 						</HeroRoundel>
 					}
 				>
