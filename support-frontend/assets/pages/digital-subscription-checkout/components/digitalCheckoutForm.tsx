@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import Form, {
@@ -36,7 +36,10 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import {
+	formActionCreators,
+	setCsrCustomerData,
+} from 'helpers/subscriptionsForms/formActions';
 import type {
 	Action,
 	FormActionCreators,
@@ -63,6 +66,8 @@ import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
+import type { CsrCustomerData } from '../../../components/csr/csrMode';
+import { isSalesforceDomain } from '../../../components/csr/csrMode';
 // ----- Types ----- //
 type PropTypes = FormFields &
 	FormActionCreators & {
@@ -84,6 +89,7 @@ type PropTypes = FormFields &
 		formIsValid: (...args: any[]) => any;
 		addressErrors: Array<Record<string, any>>;
 		participations: Participations;
+		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
 	};
 
 // ----- Map State/Props ----- //
@@ -115,12 +121,12 @@ function mapDispatchToProps() {
 	return {
 		...formActionCreators,
 		fetchAndStoreUserType:
-			(email) =>
+			(email: string) =>
 			(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
 				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		formIsValid:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() => (_dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
 				checkoutFormIsValid(getState()),
 		submitForm:
 			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
@@ -139,6 +145,7 @@ function mapDispatchToProps() {
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
 		signOut,
+		setCsrCustomerData: setCsrCustomerData,
 	};
 }
 
@@ -146,6 +153,17 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 function DigitalCheckoutForm(props: PropTypes) {
+	useEffect(() => {
+		function checkForParentMessage(event: MessageEvent) {
+			if (isSalesforceDomain(event.origin)) {
+				props.setCsrCustomerData(JSON.parse(event.data));
+			}
+		}
+
+		window.addEventListener('message', checkForParentMessage);
+		return () => window.removeEventListener('message', checkForParentMessage);
+	}, []);
+
 	const productPrice = getProductPrice(
 		props.productPrices,
 		props.country,

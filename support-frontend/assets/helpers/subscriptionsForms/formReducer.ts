@@ -221,6 +221,11 @@ function createFormReducer(
 						? paperProductsWithDigital[state.productOption]
 						: paperProductsWithoutDigital[state.productOption],
 				};
+			case 'SET_CSR_USERNAME':
+				return {
+					...state,
+					csrUsername: action.username,
+				};
 
 			default:
 				return state;

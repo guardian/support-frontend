@@ -18,6 +18,8 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
 import type { Option } from 'helpers/types/option';
+import type { CsrCustomerData } from '../../components/csr/csrMode';
+import { csrUserName } from '../../components/csr/csrMode';
 import type { FormField, Stage } from './formFields';
 
 export type Action =
@@ -120,6 +122,10 @@ export type Action =
 	| {
 			type: 'SET_ADD_DIGITAL_SUBSCRIPTION';
 			addDigital: boolean;
+	  }
+	| {
+			type: 'SET_CSR_USERNAME';
+			username: string;
 	  }
 	| AddressAction
 	| PayPalAction
@@ -274,7 +280,38 @@ const formActionCreators = {
 		type: 'SET_ADD_DIGITAL_SUBSCRIPTION',
 		addDigital,
 	}),
+	setCsrUsername: (username: string): Action => ({
+		type: 'SET_CSR_USERNAME',
+		username,
+	}),
 };
+
+function setCsrCustomerData(csrCustomerData: CsrCustomerData) {
+	return (dispatch: Dispatch<Action>, getState: () => CheckoutState): void => {
+		csrCustomerData.customer.email &&
+			formActionCreators.setEmail(csrCustomerData.customer.email)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.email &&
+			formActionCreators.setConfirmEmail(csrCustomerData.customer.email)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.firstName &&
+			formActionCreators.setFirstName(csrCustomerData.customer.firstName)(
+				dispatch,
+				getState,
+			);
+		formActionCreators.setLastName(csrCustomerData.customer.lastName)(
+			dispatch,
+			getState,
+		);
+
+		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
+	};
+}
+
 export type FormActionCreators = typeof formActionCreators;
 export {
 	setStage,
@@ -282,5 +319,6 @@ export {
 	setSubmissionError,
 	setFormSubmitted,
 	setUserTypeFromIdentityResponse,
+	setCsrCustomerData,
 	formActionCreators,
 };

@@ -146,6 +146,7 @@ export type RegularPaymentRequest = {
 	telephoneNumber: Option<string>;
 	promoCode?: Option<string>;
 	deliveryInstructions?: Option<string>;
+	csrUsername?: string;
 	debugInfo: string;
 };
 export type StripePaymentIntentAuthorisation = {

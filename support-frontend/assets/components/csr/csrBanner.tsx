@@ -1,6 +1,6 @@
 import { css } from '@emotion/core';
 import React from 'react';
-import { isInCsrMode, useCsrDetails } from 'components/csr/csrMode';
+import { csrUserName, useCsrCustomerData } from 'components/csr/csrMode';
 
 const container = css`
 	margin-bottom: 57px;
@@ -16,20 +16,21 @@ const banner = css`
 	z-index: 10;
 `;
 
-const CsrBanner = () => {
-	const csrUsername = useCsrDetails();
+function CsrBanner() {
+	const csrCustomerData = useCsrCustomerData();
 
-	if (isInCsrMode()) {
+	if (csrCustomerData) {
 		return (
 			<div css={container}>
 				<div css={banner}>
-					You are in customer support mode. Signed in as: {csrUsername}
+					You are in customer support mode. Signed in as:{' '}
+					{csrUserName(csrCustomerData)}
 				</div>
 			</div>
 		);
 	}
 
 	return null;
-};
+}
 
 export default CsrBanner;

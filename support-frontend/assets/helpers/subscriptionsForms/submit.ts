@@ -148,6 +148,7 @@ function buildRegularPaymentRequest(
 		productOption,
 		productPrices,
 		deliveryInstructions,
+		csrUserName,
 		debugInfo,
 	} = state.page.checkout;
 	const addresses = getAddresses(state);
