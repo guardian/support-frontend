@@ -167,7 +167,7 @@ const setUserTypeFromIdentityResponse = (
 const formActionCreators = {
 	setTitle: (title: string): Action => ({
 		type: 'SET_TITLE',
-		title: title !== '' ? title : null,
+		title: title !== 'Select a title' ? title : null,
 	}),
 	setFirstName: (firstName: string) =>
 		setFormSubmissionDependentValue(() => ({
@@ -195,7 +195,8 @@ const formActionCreators = {
 	}),
 	setTitleGift: (titleGiftRecipient: string): Action => ({
 		type: 'SET_TITLE_GIFT',
-		titleGiftRecipient: titleGiftRecipient !== '' ? titleGiftRecipient : null,
+		titleGiftRecipient:
+			titleGiftRecipient !== 'Select a title' ? titleGiftRecipient : null,
 	}),
 	setFirstNameGift: (firstNameGiftRecipient: string) =>
 		setFormSubmissionDependentValue(() => ({
