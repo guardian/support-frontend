@@ -334,7 +334,10 @@ function setCsrCustomerData(
 				getState,
 			);
 		csrCustomerData.customer.state &&
-			addressActions.setState(csrCustomerData.customer.state)(dispatch);
+			addressActions.setState(csrCustomerData.customer.state)(
+				dispatch,
+				getState,
+			);
 	};
 }
 
