@@ -11,7 +11,7 @@ testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "com.gu" %% "simple-configuration-ssm" % "1.5.7-SNAPSHOT",
+  "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
