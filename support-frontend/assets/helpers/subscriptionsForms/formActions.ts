@@ -1,6 +1,9 @@
 import type { Dispatch } from 'redux';
+import type { CsrCustomerData } from 'components/csr/csrMode';
+import { csrUserName } from 'components/csr/csrMode';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -18,8 +21,7 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
 import type { Option } from 'helpers/types/option';
-import type { CsrCustomerData } from '../../components/csr/csrMode';
-import { csrUserName } from '../../components/csr/csrMode';
+import type { AddressType } from './addressType';
 import type { FormField, Stage } from './formFields';
 
 export type Action =
@@ -286,8 +288,11 @@ const formActionCreators = {
 	}),
 };
 
-function setCsrCustomerData(csrCustomerData: CsrCustomerData) {
-	return (dispatch: Dispatch<Action>, getState: () => CheckoutState): void => {
+function setCsrCustomerData(
+	addressType: AddressType,
+	csrCustomerData: CsrCustomerData,
+) {
+	return (dispatch: Dispatch, getState: () => CheckoutState): void => {
 		csrCustomerData.customer.email &&
 			formActionCreators.setEmail(csrCustomerData.customer.email)(
 				dispatch,
@@ -309,6 +314,27 @@ function setCsrCustomerData(csrCustomerData: CsrCustomerData) {
 		);
 
 		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
+
+		const addressActions = addressActionCreatorsFor(addressType);
+		csrCustomerData.customer.country &&
+			addressActions.setCountry(csrCustomerData.customer.country)(dispatch);
+		csrCustomerData.customer.street &&
+			addressActions.setAddressLineOne(csrCustomerData.customer.street)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.city &&
+			addressActions.setTownCity(csrCustomerData.customer.city)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.postcode &&
+			addressActions.setPostcode(csrCustomerData.customer.postcode)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.state &&
+			addressActions.setState(csrCustomerData.customer.state)(dispatch);
 	};
 }
 

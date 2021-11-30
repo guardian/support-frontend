@@ -417,15 +417,15 @@ function stateProvinceFromMap(
 }
 
 function usStateFromString(s: string): Option<UsState> {
-	return stateProvinceFromMap(s, usStates) || null;
+	return stateProvinceFromMap(s, usStates) ?? null;
 }
 
 function caStateFromString(s: string): Option<CaState> {
-	return stateProvinceFromMap(s, caStates) || null;
+	return stateProvinceFromMap(s, caStates) ?? null;
 }
 
 function auStateFromString(s: string): Option<AuState> {
-	return stateProvinceFromMap(s, auStates) || null;
+	return stateProvinceFromMap(s, auStates) ?? null;
 }
 
 function stateProvinceFieldFromString(
@@ -474,6 +474,28 @@ function stateProvinceFromString(
 	}
 }
 
+function stateProvinceFromNameMap(
+	name: string,
+	states: Record<string, string>,
+): StateProvince | undefined {
+	const stateRecord = Object.entries(states).find((value) => value[1] === name);
+	return stateRecord?.[0];
+}
+
+function stateProvinceFromFullName(
+	country: IsoCountry,
+	stateName: string,
+): StateProvince | undefined {
+	switch (country) {
+		case 'US':
+			return stateProvinceFromNameMap(stateName, usStates);
+		case 'CA':
+			return stateProvinceFromNameMap(stateName, caStates);
+		case 'AU':
+			return stateProvinceFromNameMap(stateName, auStates);
+	}
+}
+
 function fromString(s: string): IsoCountry | null | undefined {
 	const candidateIso = s.toUpperCase();
 	const isoCountryArray: IsoCountry[] = Object.keys(countries);
@@ -490,14 +512,14 @@ function fromString(s: string): IsoCountry | null | undefined {
 	return null;
 }
 
-function findIsoCountry(country?: string): Option<IsoCountry> {
+function findIsoCountry(country?: string | null): Option<IsoCountry> {
 	if (!country) {
 		return null;
 	}
 
 	return (
-		fromString(country) ||
-		Object.keys(countries).find((key) => countries[key] === country) ||
+		fromString(country) ??
+		Object.keys(countries).find((key) => countries[key] === country) ??
 		null
 	);
 }
@@ -573,7 +595,7 @@ type TargetCountryGroups =
 function handleCountryForCountryGroup(
 	targetCountryGroup: TargetCountryGroups,
 	countryGroupId: CountryGroupId | null | undefined = null,
-): IsoCountry | null | undefined {
+): IsoCountry | null {
 	const paths: Record<TargetCountryGroups, string[]> = {
 		International: ['/int', '/int/'],
 		EURCountries: ['/eu', '/eu/'],
@@ -599,7 +621,7 @@ function handleCountryForCountryGroup(
 	}
 
 	const candidateCountry: IsoCountry | null | undefined =
-		fromQueryParameter() || fromCookie() || fromGeolocation();
+		fromQueryParameter() ?? fromCookie() ?? fromGeolocation();
 
 	if (
 		candidateCountry &&
@@ -621,7 +643,7 @@ function detect(
 		GBPCountries,
 		AUDCountries,
 	];
-	let country = null;
+	let country: IsoCountry | null = null;
 	targetCountryGroups.forEach((targetCountryGroupId) => {
 		const candidateCountry = handleCountryForCountryGroup(
 			targetCountryGroupId,
@@ -635,11 +657,11 @@ function detect(
 
 	if (country === null) {
 		country =
-			fromCountryGroup(countryGroupId) ||
-			fromPath() ||
-			fromQueryParameter() ||
-			fromCookie() ||
-			fromGeolocation() ||
+			fromCountryGroup(countryGroupId) ??
+			fromPath() ??
+			fromQueryParameter() ??
+			fromCookie() ??
+			fromGeolocation() ??
 			'GB';
 	}
 
@@ -661,5 +683,6 @@ export {
 	fromGeolocation,
 	stateProvinceFieldFromString,
 	stateProvinceFromString,
+	stateProvinceFromFullName,
 	fromCountryGroup,
 };

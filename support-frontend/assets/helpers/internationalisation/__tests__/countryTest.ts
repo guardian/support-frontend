@@ -1,5 +1,10 @@
 // ----- Imports ----- //
-import { detect, findIsoCountry, stateProvinceFromString } from '../country';
+import {
+	detect,
+	findIsoCountry,
+	stateProvinceFromFullName,
+	stateProvinceFromString,
+} from '../country';
 import {
 	AUDCountries,
 	EURCountries,
@@ -242,8 +247,8 @@ describe('find iso country', () => {
 });
 describe('find a state for a given country using stateProvinceFromString', () => {
 	it('should return null if no country or state', () => {
-		expect(stateProvinceFromString(null, null)).toBe(null);
-		expect(stateProvinceFromString('US', null)).toBe(null);
+		expect(stateProvinceFromString(null)).toBe(null);
+		expect(stateProvinceFromString('US')).toBe(null);
 		expect(stateProvinceFromString('US', '')).toBe(null);
 		expect(stateProvinceFromString(null, 'NY')).toBe(null);
 		expect(stateProvinceFromString('', 'NY')).toBe(null);
@@ -274,5 +279,10 @@ describe('find a state for a given country using stateProvinceFromString', () =>
 		expect(stateProvinceFromString('CA', 'YT')).toBe('YT'); // Yukon does not start with 2 letter code
 
 		expect(stateProvinceFromString('CA', 'Yukon')).toBe('YT');
+	});
+});
+describe('find a state for a given country using stateProvinceFromFullName', () => {
+	it('should return the correct StateCode', () => {
+		expect(stateProvinceFromFullName('US', 'Arkansas')).toBe('AR');
 	});
 });

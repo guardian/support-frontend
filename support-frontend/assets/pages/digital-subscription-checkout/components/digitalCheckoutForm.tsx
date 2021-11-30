@@ -6,6 +6,8 @@ import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
+import type { CsrCustomerData } from 'components/csr/csrMode';
+import { isSalesforceDomain, parseCustomerData } from 'components/csr/csrMode';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
@@ -23,32 +25,32 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { countries } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import {
 	finalPrice,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type {
+	Action,
+	FormActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
 	setCsrCustomerData,
 } from 'helpers/subscriptionsForms/formActions';
 import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
-import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type {
 	FormField,
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
+import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	checkoutFormIsValid,
 	validateCheckoutForm,
@@ -58,16 +60,14 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { firstError } from 'helpers/subscriptionsForms/validation';
+import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
-import type { CsrCustomerData } from '../../../components/csr/csrMode';
-import { isSalesforceDomain } from '../../../components/csr/csrMode';
 // ----- Types ----- //
 type PropTypes = FormFields &
 	FormActionCreators & {
@@ -145,7 +145,8 @@ function mapDispatchToProps() {
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
 		signOut,
-		setCsrCustomerData: setCsrCustomerData,
+		setCsrCustomerData: (customerData: CsrCustomerData) =>
+			setCsrCustomerData('billing', customerData),
 	};
 }
 
@@ -156,7 +157,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 	useEffect(() => {
 		function checkForParentMessage(event: MessageEvent) {
 			if (isSalesforceDomain(event.origin)) {
-				props.setCsrCustomerData(JSON.parse(event.data));
+				props.setCsrCustomerData(parseCustomerData(event.data));
 			}
 		}
 
