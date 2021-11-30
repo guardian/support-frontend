@@ -40,9 +40,9 @@ const getInternationalisationFromCountry = (
 	internationalisation: Internationalisation,
 ) => {
 	const countryGroupId =
-		fromCountry(countryId) || internationalisation.countryGroupId;
+		fromCountry(countryId) ?? internationalisation.countryGroupId;
 	const currencyId =
-		fromCountryGroupId(countryGroupId) || internationalisation.currencyId;
+		fromCountryGroupId(countryGroupId) ?? internationalisation.currencyId;
 	return {
 		countryGroupId,
 		currencyId,
@@ -51,9 +51,7 @@ const getInternationalisationFromCountry = (
 };
 
 // Sets up the common reducer with its initial state.
-function createCommonReducer(
-	initialState: CommonState,
-): (state?: CommonState, action: Action) => CommonState {
+function createCommonReducer(initialState: CommonState) {
 	return function commonReducer(
 		state: CommonState = initialState,
 		action: Action,

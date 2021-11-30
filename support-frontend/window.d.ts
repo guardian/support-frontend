@@ -29,6 +29,8 @@ declare global {
 			render: (arg0: string, arg1: Record<string, any>) => void;
 		};
 		v2OnloadCallback: () => void;
+		__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R;
+		__REDUX_DEVTOOLS_EXTENSION__?: () => undefined;
 	}
 }
 /* ~ this line is required as per TypeScript's global-modifying-module.d.ts instructions */

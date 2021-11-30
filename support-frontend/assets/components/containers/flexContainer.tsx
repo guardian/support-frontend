@@ -1,12 +1,13 @@
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
+import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 type PropTypes = {
-	cssOverrides?: string;
-	children: Node;
-};
+	children: ReactNode;
+} & CSSOverridable;
+
 const flexContainer = css`
 	display: flex;
 	flex-direction: column;
@@ -15,7 +16,7 @@ const flexContainer = css`
 	}
 `;
 
-function FlexContainer(props: PropTypes) {
+function FlexContainer(props: PropTypes): JSX.Element {
 	return <div css={[flexContainer, props.cssOverrides]}>{props.children}</div>;
 }
 

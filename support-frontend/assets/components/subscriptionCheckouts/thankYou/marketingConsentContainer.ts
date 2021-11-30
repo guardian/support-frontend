@@ -6,9 +6,10 @@ import MarketingConsent from 'components/marketingConsent/marketingConsent';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getEmail } from 'helpers/subscriptionsForms/formFields';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Action } from 'helpers/user/userActions';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: CheckoutState) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,
 	email: getEmail(state),
 	csrf: state.page.csrf,
