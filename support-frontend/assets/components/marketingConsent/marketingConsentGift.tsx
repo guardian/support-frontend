@@ -16,28 +16,32 @@ const minorHeading = css`
 	})};
 	margin-bottom: ${space[3]}px;
 `;
+
 const sansText = css`
 	${textSans.medium()};
 `;
+
 const marginTopAndBottom = css`
 	margin: ${space[3]}px 0 ${space[1]}px;
 `;
+
 const unsubscribeText = css`
 	${textSans.small()};
 	font-style: italic;
 	margin-bottom: ${space[4]}px;
 `;
+
 // ----- Types ----- //
 type PropTypes = {
 	confirmOptIn: boolean | null | undefined;
 	email: string;
 	csrf: CsrfState;
-	onClick: (arg0: string | null | undefined, arg1: CsrfState) => void;
+	onClick: (email: string, csrf: CsrfState) => void;
 	error: boolean;
 };
 
 // ----- Render ----- //
-function MarketingConsentGift(props: PropTypes) {
+function MarketingConsentGift(props: PropTypes): JSX.Element | null {
 	if (props.error) {
 		return (
 			<GeneralErrorMessage

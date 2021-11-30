@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Reducer, Store } from 'redux';
+import type { Action, Reducer, Store } from 'redux';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -34,6 +34,7 @@ import {
 } from 'helpers/urls/url';
 import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
+
 // ----- Types ----- //
 export type ReduxState<PageState> = {
 	common: CommonState;
@@ -87,7 +88,7 @@ function buildInitialState(
 
 	const amounts = getAmounts(settings, abParticipations, countryGroupId);
 	return {
-		campaign: acquisitionData ? getCampaign(acquisitionData) : null,
+		campaign: getCampaign(acquisitionData),
 		referrerAcquisitionData: acquisitionData,
 		otherQueryParams,
 		internationalisation,
@@ -103,7 +104,7 @@ function buildInitialState(
 function storeEnhancer(thunk: boolean) {
 	if (thunk) {
 		const composeEnhancers =
-			window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+			window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?? compose;
 		return composeEnhancers(applyMiddleware(thunkMiddleware));
 	}
 
@@ -112,12 +113,18 @@ function storeEnhancer(thunk: boolean) {
 		: undefined;
 }
 
-/* eslint-enable no-underscore-dangle */
 // Initialises the page.
-function initRedux<S, A>(
-	pageReducer?: (arg0: CommonState) => Reducer<S, A> | null,
+/*
+  A note on the generics here. PageState is an abstract type representing anything we might assign
+  to the `page` key in Redux state (see ReduxState type above), and PageAction is its corresponding
+  abstract type representing any Redux action associated with whatever we pass as PageState.
+  This allows us to construct a Redux store with state and action types for `common` determined by this function,
+  but state and action types for `page` determined when this function is called
+*/
+function initRedux<PageState, PageAction extends Action>(
+	pageReducer?: (commonState: CommonState) => Reducer<PageState, PageAction>,
 	thunk = false,
-): Store<any, any, any> {
+): Store<ReduxState<PageState>> {
 	try {
 		const countryId: IsoCountry = detectCountry();
 		const countryGroupId: CountryGroupId = detectCountryGroup();
@@ -139,10 +146,12 @@ function initRedux<S, A>(
 			acquisitionData,
 		);
 		const commonReducer = createCommonReducer(initialState);
+
 		const store = createStore(
-			combineReducers({
-				page: pageReducer ? pageReducer(initialState) : null,
+			combineReducers<ReduxState<PageState>>({
 				common: commonReducer,
+				page:
+					pageReducer?.(initialState) ?? ({} as Reducer<PageState, PageAction>),
 			}),
 			storeEnhancer(thunk),
 		);

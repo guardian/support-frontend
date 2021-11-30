@@ -150,9 +150,7 @@ function buildReferrerAcquisitionData(
 	const campaignCode =
 		getCampaignCode() ??
 		(acquisitionData.campaignCode as string | undefined) ??
-		getQueryParameter('INTCMP') ??
-		getQueryParameter('CMP') ??
-		undefined;
+		(getQueryParameter('INTCMP') || getQueryParameter('CMP') || undefined);
 
 	const parameterExclusions = [
 		'REFPVID',
@@ -284,7 +282,7 @@ function getAcquisitionDataFromAcquisitionDataParam():
 	| null
 	| undefined {
 	if (getQueryParameter(ACQUISITIONS_PARAM)) {
-		return deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) ?? '');
+		return deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM));
 	}
 
 	return null;
@@ -296,9 +294,7 @@ function getAcquisitionDataFromReferralDataParam():
 	| null
 	| undefined {
 	if (getQueryParameter(REFERRAL_DATA_PARAM)) {
-		return deserialiseReferralData(
-			getQueryParameter(REFERRAL_DATA_PARAM) ?? '',
-		);
+		return deserialiseReferralData(getQueryParameter(REFERRAL_DATA_PARAM));
 	}
 
 	return null;
