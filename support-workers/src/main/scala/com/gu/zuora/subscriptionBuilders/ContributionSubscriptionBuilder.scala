@@ -12,7 +12,7 @@ class ContributionSubscriptionBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: ContributionState): SubscribeItem = {
+  def build(state: ContributionState, csrUsername: Option[String]): SubscribeItem = {
     val contributionConfig = config(state.product.billingPeriod)
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       contributionConfig.productRatePlanId,
@@ -21,7 +21,8 @@ class ContributionSubscriptionBuilder(
           ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = state.product.amount) //Pass the amount the user selected into Zuora
         )
       ),
-      readerType = Direct
+      readerType = Direct,
+      csrUsername = csrUsername
     )
     subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
   }

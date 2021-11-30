@@ -148,7 +148,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
         SalesforceContactRecord("", ""),
-      )
+      ), None
     ).toOption.get
 
   lazy val threeMonthGiftPurchase =
@@ -160,7 +160,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
         SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", "")))
-      )
+      ), None
     ).toOption.get
 
 }

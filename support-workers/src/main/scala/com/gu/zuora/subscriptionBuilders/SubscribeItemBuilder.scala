@@ -5,6 +5,7 @@ import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.workers.{Address, GeneratedGiftCode, PaymentMethod, SalesforceContactRecord, User}
+import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.SubscribeItemBuilder.buildContactDetails
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -60,6 +61,7 @@ class SubscribeItemBuilder(
     initialTermPeriodType: PeriodType = Month,
     redemptionCode: Option[RawRedemptionCode] = None,
     giftNotificationEmailDate: Option[LocalDate] = None,
+    csrUsername: Option[String] = None
   ): SubscriptionData =
     SubscriptionData(
       List(
@@ -80,6 +82,8 @@ class SubscribeItemBuilder(
         initialTermPeriodType = initialTermPeriodType,
         redemptionCode = redemptionCode,
         giftNotificationEmailDate = giftNotificationEmailDate,
+        createdByCsr = csrUsername,
+        acquisitionSource = csrUsername.map(_ => CSR)
       )
     )
 

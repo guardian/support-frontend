@@ -5,13 +5,13 @@
             "TS2305": 53,
             "TS2322": 207,
             "TS2578": 19,
-            "TS2339": 84,
+            "TS2339": 83,
             "TS2345": 127,
             "TS7006": 103,
             "TS7053": 14,
             "TS7034": 6,
             "TS7005": 22,
-            "TS6133": 12,
+            "TS6133": 11,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 14,
@@ -191,7 +191,6 @@
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/rendering/render.ts": 7,
-            "assets/helpers/subscriptionsForms/submit.ts": 2,
             "assets/helpers/user/user.ts": 20,
             "assets/helpers/utilities/logger.ts": 1,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 4,
@@ -1590,10 +1589,6 @@
             "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
-            "path": "assets/helpers/subscriptionsForms/submit.ts",
-            "message": "Property 'csrUserName' does not exist on type 'FormState'."
-        },
-        {
             "path": "assets/helpers/user/user.ts",
             "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
@@ -2852,10 +2847,6 @@
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
             "message": "'formClassName' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/submit.ts",
-            "message": "'csrUserName' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",

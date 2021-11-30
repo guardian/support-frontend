@@ -22,7 +22,8 @@ class DigitalSubscriptionGiftPurchaseBuilder(
 ) {
 
   def build(
-    state: DigitalSubscriptionGiftPurchaseState
+    state: DigitalSubscriptionGiftPurchaseState,
+    csrUsername: Option[String]
   )(implicit ec: ExecutionContext): Either[PromoError, (SubscribeItem, GeneratedGiftCode)] = {
 
     import com.gu.WithLoggingSugar._
@@ -45,6 +46,7 @@ class DigitalSubscriptionGiftPurchaseBuilder(
       initialTermPeriodType = Month,
       redemptionCode = Some(giftCode.value),
       giftNotificationEmailDate = Some(state.giftRecipient.deliveryDate),
+      csrUsername = csrUsername
     )
 
     applyPromoCodeIfPresent(

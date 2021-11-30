@@ -18,7 +18,7 @@ class GuardianWeeklySubscriptionBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: GuardianWeeklyState): Either[PromoError, SubscribeItem] = {
+  def build(state: GuardianWeeklyState, csrUsername: Option[String]): Either[PromoError, SubscribeItem] = {
 
     val contractEffectiveDate = dateGenerator.today
 
@@ -42,7 +42,8 @@ class GuardianWeeklySubscriptionBuilder(
       readerType = readerType,
       autoRenew = autoRenew,
       initialTerm = initialTerm,
-      initialTermPeriodType = initialTermPeriodType
+      initialTermPeriodType = initialTermPeriodType,
+      csrUsername = csrUsername
     )
 
     applyPromoCodeIfPresent(

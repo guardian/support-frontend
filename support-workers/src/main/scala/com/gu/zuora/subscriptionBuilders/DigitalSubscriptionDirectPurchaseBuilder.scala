@@ -16,7 +16,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: DigitalSubscriptionDirectPurchaseState): Either[PromoError, SubscribeItem] = {
+  def build(state: DigitalSubscriptionDirectPurchaseState, csrUsername: Option[String]): Either[PromoError, SubscribeItem] = {
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(state.product, environment), state.product.describe)
 
@@ -29,6 +29,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       contractAcceptanceDate = contractAcceptanceDate,
       readerType = state.product.readerType,
       initialTermPeriodType = Month,
+      csrUsername = csrUsername
     )
 
     applyPromoCodeIfPresent(

@@ -148,7 +148,7 @@ function buildRegularPaymentRequest(
 		productOption,
 		productPrices,
 		deliveryInstructions,
-		csrUserName,
+		csrUsername,
 		debugInfo,
 	} = state.page.checkout;
 	const addresses = getAddresses(state);
@@ -193,6 +193,7 @@ function buildRegularPaymentRequest(
 		promoCode,
 		deliveryInstructions,
 		debugInfo,
+		csrUsername,
 	};
 }
 
