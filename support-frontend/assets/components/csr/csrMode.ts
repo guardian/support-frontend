@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import type {
 	CaState,
 	IsoCountry,
@@ -79,22 +79,19 @@ const parseCustomerData = (data: string): CsrCustomerData => {
 	};
 };
 
-const useCsrCustomerData = (): CsrCustomerData | undefined => {
-	const [csrCustomerData, setCsrCustomerData] = useState<
-		CsrCustomerData | undefined
-	>(undefined);
-
+const useCsrCustomerData = (
+	callback: (csrCustomerData: CsrCustomerData) => void,
+) => {
 	useEffect(() => {
 		function checkForParentMessage(event: MessageEvent) {
 			if (isSalesforceDomain(event.origin)) {
-				setCsrCustomerData(parseCustomerData(event.data));
+				callback(parseCustomerData(event.data));
 			}
 		}
 
 		window.addEventListener('message', checkForParentMessage);
 		return () => window.removeEventListener('message', checkForParentMessage);
 	}, []);
-	return csrCustomerData;
 };
 
 const csrUserName = (csrCustomerData: CsrCustomerData) =>

@@ -1,17 +1,21 @@
 // ----- Imports ----- //
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { Radio, RadioGroup } from '@guardian/src-radio';
+import { Option as OptionForSelect, Select } from '@guardian/src-select';
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import 'redux';
-import { Radio, RadioGroup } from '@guardian/src-radio';
 import Rows from 'components/base/rows';
 import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
+import type { CsrCustomerData } from 'components/csr/csrMode';
+import { useCsrCustomerData } from 'components/csr/csrMode';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
+import { options } from 'components/forms/customFields/options';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
@@ -20,28 +24,48 @@ import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingP
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
+import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Summary from 'components/subscriptionCheckouts/summary';
+import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import type { SetCountryAction } from 'helpers/page/commonActions';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type {
 	Action,
 	FormActionCreators,
 } from 'helpers/subscriptionsForms/formActions';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import {
+	formActionCreators,
+	setCsrCustomerData,
+} from 'helpers/subscriptionsForms/formActions';
 import type {
 	FormField,
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import {
+	validateWithDeliveryForm,
+	withDeliveryFormIsValid,
+} from 'helpers/subscriptionsForms/formValidation';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
@@ -51,37 +75,16 @@ import {
 	getBillingAddress,
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
+import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
 import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import 'helpers/page/commonActions';
-import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import {
-	validateWithDeliveryForm,
-	withDeliveryFormIsValid,
-} from 'helpers/subscriptionsForms/formValidation';
-import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import Total from 'components/subscriptionCheckouts/total/total';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import { titles } from 'helpers/user/details';
-import { Option as OptionForSelect, Select } from '@guardian/src-select';
-import { options } from 'components/forms/customFields/options';
-import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
-import type { Participations } from 'helpers/abTests/abtest';
-import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
-import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 // ----- Styles ----- //
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -89,7 +92,6 @@ const marginBottom = css`
 // ----- Types ----- //
 type PropTypes = FormFields &
 	FormActionCreators & {
-		// eslint-disable-next-line react/no-unused-prop-types
 		billingCountry: IsoCountry;
 		deliveryCountry: IsoCountry;
 		signOut: typeof signOut;
@@ -109,6 +111,7 @@ type PropTypes = FormFields &
 		formIsValid: (...args: any[]) => any;
 		setupRecurringPayPalPayment: (...args: any[]) => any;
 		participations: Participations;
+		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
 	};
 
 // ----- Map State/Props ----- //
@@ -139,7 +142,7 @@ function mapDispatchToProps() {
 	return {
 		...formActionCreators,
 		fetchAndStoreUserType:
-			(email) =>
+			(email: string) =>
 			(
 				dispatch: Dispatch<Action>,
 				getState: () => WithDeliveryCheckoutState,
@@ -148,7 +151,10 @@ function mapDispatchToProps() {
 			},
 		formIsValid:
 			() =>
-			(dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			(
+				_dispatch: Dispatch<Action>,
+				getState: () => WithDeliveryCheckoutState,
+			) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() =>
@@ -156,7 +162,7 @@ function mapDispatchToProps() {
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
 		setBillingCountry:
-			(country) =>
+			(country: string) =>
 			(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
 				setCountry(country)(dispatch),
 		validateForm:
@@ -176,6 +182,8 @@ function mapDispatchToProps() {
 				}
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
+		setCsrCustomerData: (customerData: CsrCustomerData) =>
+			setCsrCustomerData('delivery', customerData),
 	};
 }
 
@@ -190,6 +198,8 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 function WeeklyCheckoutForm(props: PropTypes) {
+	useCsrCustomerData(props.setCsrCustomerData);
+
 	const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
 	const price = getProductPrice(
 		props.productPrices,
@@ -202,7 +212,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 			? 'Sorry there was a problem'
 			: 'Sorry we could not process your payment';
 
-	const setBillingAddressIsSameHandler = (newState) => {
+	const setBillingAddressIsSameHandler = (newState: boolean) => {
 		props.setBillingAddressIsSame(newState);
 		props.setBillingCountry(props.deliveryCountry);
 	};
@@ -279,7 +289,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								hideLabel
 								id="billingAddressIsSame"
 								name="billingAddressIsSame"
-								orienntation="vertical"
+								orientation="vertical"
 								error={firstError('billingAddressIsSame', props.formErrors)}
 							>
 								<Radio
@@ -314,28 +324,25 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								error={firstError('startDate', props.formErrors)}
 								legend="Please select the first publication you’d like to receive"
 							>
-								{days.map((day) => {
-									const [userDate, machineDate] = [
-										formatUserDate(day),
-										formatMachineDate(day),
-									];
-									const hideDate = machineDate.endsWith('-12-25');
-
+								{days
 									// Don't render input if Christmas day
-									if (hideDate) {
-										return null;
-									}
+									.filter((day) => !formatMachineDate(day).endsWith('-12-25'))
+									.map((day) => {
+										const [userDate, machineDate] = [
+											formatUserDate(day),
+											formatMachineDate(day),
+										];
 
-									return (
-										<Radio
-											label={userDate}
-											value={userDate}
-											name={machineDate}
-											checked={machineDate === props.startDate}
-											onChange={() => props.setStartDate(machineDate)}
-										/>
-									);
-								})}
+										return (
+											<Radio
+												label={userDate}
+												value={userDate}
+												name={machineDate}
+												checked={machineDate === props.startDate}
+												onChange={() => props.setStartDate(machineDate)}
+											/>
+										);
+									})}
 							</RadioGroup>
 							<Text className="component-text__paddingTop">
 								<p className="component-text__sans">

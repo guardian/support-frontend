@@ -3,15 +3,15 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 53,
-            "TS2322": 208,
-            "TS2578": 20,
+            "TS2322": 207,
+            "TS2578": 19,
             "TS2339": 84,
             "TS2345": 127,
-            "TS7006": 109,
+            "TS7006": 103,
             "TS7053": 14,
             "TS7034": 6,
             "TS7005": 22,
-            "TS6133": 14,
+            "TS6133": 12,
             "TS7031": 22,
             "TS2564": 2,
             "TS2769": 14,
@@ -157,7 +157,7 @@
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 12,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
             "assets/pages/paper-subscription-landing/components/content/prices.tsx": 2,
@@ -170,7 +170,7 @@
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 12,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 2,
             "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
             "assets/pages/aus-moment-map/components/blurb.tsx": 1,
@@ -1291,15 +1291,11 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
             "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '(Element | null)[]' is not assignable to type 'Element | Element[]'."
+            "message": "Type '{ children: Element[]; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -1389,10 +1385,6 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -2606,18 +2598,6 @@
             "message": "Parameter 'component' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'setStartDate' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'startDate' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
             "message": "Parameter 'fulfilmentOption' implicitly has an 'any' type."
         },
@@ -2664,18 +2644,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'country' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'newState' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
@@ -2912,14 +2880,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "'dispatch' is declared but its value is never read."
         }
     ],
     "TS7031": [

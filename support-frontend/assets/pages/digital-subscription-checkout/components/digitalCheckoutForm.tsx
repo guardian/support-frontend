@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import Form, {
@@ -7,7 +7,7 @@ import Form, {
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
 import type { CsrCustomerData } from 'components/csr/csrMode';
-import { isSalesforceDomain, parseCustomerData } from 'components/csr/csrMode';
+import { useCsrCustomerData } from 'components/csr/csrMode';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
@@ -154,16 +154,7 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 function DigitalCheckoutForm(props: PropTypes) {
-	useEffect(() => {
-		function checkForParentMessage(event: MessageEvent) {
-			if (isSalesforceDomain(event.origin)) {
-				props.setCsrCustomerData(parseCustomerData(event.data));
-			}
-		}
-
-		window.addEventListener('message', checkForParentMessage);
-		return () => window.removeEventListener('message', checkForParentMessage);
-	}, []);
+	useCsrCustomerData(props.setCsrCustomerData);
 
 	const productPrice = getProductPrice(
 		props.productPrices,

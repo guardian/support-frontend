@@ -1,5 +1,6 @@
 import { css } from '@emotion/core';
-import React from 'react';
+import React, { useState } from 'react';
+import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName, useCsrCustomerData } from 'components/csr/csrMode';
 
 const container = css`
@@ -17,7 +18,10 @@ const banner = css`
 `;
 
 function CsrBanner() {
-	const csrCustomerData = useCsrCustomerData();
+	const [csrCustomerData, setCsrCustomerData] = useState<
+		CsrCustomerData | undefined
+	>(undefined);
+	useCsrCustomerData(setCsrCustomerData);
 
 	if (csrCustomerData) {
 		return (
