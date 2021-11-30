@@ -59,8 +59,6 @@ const domains = [
 const isSalesforceDomain = (domain: string): boolean =>
 	!!domains.find((element) => element === domain);
 
-const isInCsrMode = (): boolean => window.location !== window.parent.location;
-
 const parseCustomerData = (data: string): CsrCustomerData => {
 	const salesforceData: SalesforceData = JSON.parse(data) as SalesforceData;
 	const isoCountry = findIsoCountry(salesforceData.customer.country);
@@ -98,7 +96,6 @@ const csrUserName = (csrCustomerData: CsrCustomerData) =>
 	`${csrCustomerData.csr.firstName} ${csrCustomerData.csr.lastName}`;
 
 export {
-	isInCsrMode,
 	useCsrCustomerData,
 	isSalesforceDomain,
 	csrUserName,
