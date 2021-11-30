@@ -13,7 +13,7 @@ object CustomCodecs extends InternationalisationCodecs with HelperCodecs with Ei
 
 trait InternationalisationCodecs {
   implicit val encodeTitle: Encoder[Title] = Encoder.encodeString.contramap(_.title)
-  implicit val decodeTitle: Decoder[Title] = Decoder.decodeString.emap(title => Title.fromString(title).toRight(s"Unrecognised title $title"))
+  implicit val decodeTitle: Decoder[Title] = Decoder.decodeString.emap(title => Title.fromString(title).toRight(s"Unrecognised title '$title'"))
 
   implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
 

@@ -128,18 +128,18 @@ const getDefaultReminderChoices = (): ReminderChoice[] => [
 	getOneOffReminderChoiceWithDefaultLabel(9),
 ];
 
-const GIVING_TUESDAY_CHOICE: ReminderChoice = {
+const NYE_CHOICE: ReminderChoice = {
 	type: 'ONE_OFF',
-	label: 'on Giving Tuesday (30 November)',
+	label: 'at the end of the year (31 December)',
 	signup: {
-		reminderPeriod: '2021-11-01',
-		reminderOption: 'giving-tuesday-2021',
+		reminderPeriod: '2021-12-01',
+		reminderOption: 'nye-2021',
 	},
 };
 
 const getUsReminderChoices = (): ReminderChoice[] => [
 	getRecurringReminderChoice(),
-	GIVING_TUESDAY_CHOICE,
+	NYE_CHOICE,
 	getOneOffReminderChoiceWithDefaultLabel(6),
 	getOneOffReminderChoiceWithDefaultLabel(9),
 ];

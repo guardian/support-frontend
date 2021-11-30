@@ -2,20 +2,20 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 53,
-            "TS2322": 201,
+            "TS2305": 51,
+            "TS2322": 191,
             "TS2578": 20,
-            "TS2339": 90,
-            "TS7006": 113,
-            "TS2345": 131,
+            "TS2339": 80,
+            "TS7006": 110,
+            "TS2345": 129,
             "TS7053": 14,
             "TS7034": 7,
             "TS7005": 23,
-            "TS6133": 16,
+            "TS6133": 14,
             "TS7031": 22,
             "TS2564": 2,
-            "TS2769": 20,
-            "TS2314": 6,
+            "TS2769": 15,
+            "TS2314": 5,
             "TS2304": 5,
             "TS2741": 5,
             "TS2739": 16,
@@ -23,7 +23,7 @@
             "TS2556": 3,
             "TS2554": 48,
             "TS2569": 2,
-            "TS2571": 14,
+            "TS2571": 11,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
@@ -54,7 +54,6 @@
             "assets/components/footerCompliant/containers/Content.tsx": 1,
             "assets/components/footerCompliant/containers/FooterContent.tsx": 1,
             "assets/components/footerCompliant/Footer.tsx": 4,
-            "assets/components/forms/customFields/error.tsx": 2,
             "assets/components/forms/customFields/options.tsx": 1,
             "assets/components/forms/label.tsx": 2,
             "assets/components/generalErrorMessage/generalErrorMessage.tsx": 1,
@@ -80,7 +79,6 @@
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
             "assets/components/subscriptionCheckouts/stage.tsx": 1,
             "assets/components/text/text.tsx": 1,
-            "assets/helpers/subscriptionsForms/validation.ts": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx": 2,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
@@ -102,8 +100,7 @@
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
             "assets/components/priceLabel/priceLabel.tsx": 1,
-            "assets/components/subscriptionCheckouts/address/addressFields.tsx": 10,
-            "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts": 12,
+            "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
@@ -119,14 +116,12 @@
             "assets/components/svgs/sepa.tsx": 1,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
-            "assets/helpers/forms/deliveryCheck.ts": 1,
             "assets/helpers/forms/formValidation.ts": 2,
             "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 15,
             "assets/helpers/forms/recaptcha.ts": 1,
             "assets/helpers/globalsAndSwitches/globals.ts": 4,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
-            "assets/helpers/subscriptionsForms/formReducer.ts": 6,
             "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts": 30,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
@@ -143,19 +138,18 @@
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 29,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
-            "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx": 1,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/prices.tsx": 1,
@@ -166,8 +160,9 @@
             "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 9,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 8,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 12,
+            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
             "assets/components/csr/csrMode.ts": 3,
             "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
@@ -192,9 +187,7 @@
             "assets/helpers/user/user.ts": 20,
             "assets/helpers/utilities/logger.ts": 1,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
-            "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 3,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
-            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 5,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
             "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
@@ -202,16 +195,15 @@
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/rendering/ssrPages.ts": 1,
-            "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts": 1,
             "assets/helpers/user/__tests__/userTest.ts": 1,
             "assets/helpers/utilities/dateFormatting.ts": 1,
             "assets/pages/aus-moment-map/utils.ts": 1,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
@@ -228,7 +220,7 @@
             "assets/helpers/productPrice/__tests__/productPricesTests.ts": 6,
             "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
-            "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 15,
+            "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
@@ -243,7 +235,6 @@
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/helpers/forms/checkouts.ts": 1,
-            "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -322,10 +313,6 @@
         },
         {
             "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/forms/customFields/error.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -426,10 +413,6 @@
         },
         {
             "path": "assets/components/text/text.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/validation.ts",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -551,10 +534,6 @@
             "message": "Type 'EventHandler' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'."
         },
         {
-            "path": "assets/components/forms/customFields/error.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
             "path": "assets/components/forms/label.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
@@ -612,51 +591,19 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type '{ css: SerializedStyles; id: string; label: string; type: \"text\"; maxlength: number; value: any; onChange: (e: ChangeEvent<HTMLInputElement>) => any; error: any; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"required\"> & Partial<...> & Partial<...>'."
+            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'unknown' is not assignable to type 'string[]'."
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"lineTwo\">' is not assignable to type 'FormError<\"lineOne\">'."
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"city\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"city\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"postCode\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"postCode\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"postCode\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"country\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"state\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<\"state\">' is not assignable to type 'FormError<\"lineOne\">'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
-            "message": "Type 'FormError<string>[]' is not assignable to type 'FormError<keyof RegularPaymentRequestAddress>[]'."
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
@@ -680,7 +627,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: any; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: string | undefined; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
@@ -755,10 +702,6 @@
             "message": "Type 'unknown' is not assignable to type 'string'."
         },
         {
-            "path": "assets/helpers/forms/deliveryCheck.ts",
-            "message": "Type 'unknown' is not assignable to type 'string[]'."
-        },
-        {
             "path": "assets/helpers/forms/formValidation.ts",
             "message": "Type 'string | null' is not assignable to type 'string'."
         },
@@ -781,10 +724,6 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Type 'null' is not assignable to type 'number | undefined'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Type '{ stage: string; product: SubscriptionProduct; title: null; email: string; confirmEmail: null; firstName: string; lastName: string; isSignedIn: boolean; userTypeFromIdentityResponse: string; ... 22 more ...; giftDeliveryDate: null; }' is not assignable to type 'FormState'."
         },
         {
             "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
@@ -1127,10 +1066,6 @@
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
@@ -1188,7 +1123,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: any; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1196,7 +1131,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: any; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1268,7 +1203,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: any; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -1285,6 +1220,14 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
             "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
+            "message": "Type 'boolean | undefined' is not assignable to type 'boolean'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
+            "message": "Type 'boolean | undefined' is not assignable to type 'boolean'."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/content/prices.tsx",
@@ -1444,11 +1387,11 @@
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts",
@@ -1456,11 +1399,11 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
@@ -1496,19 +1439,19 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
@@ -1516,27 +1459,27 @@
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -1548,83 +1491,75 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'productPrices' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/utilities/logger.ts",
-            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -1644,11 +1579,11 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
@@ -1676,27 +1611,15 @@
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "Property 'orderIsAGift' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "Property 'orderIsAGift' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "Property 'productPrices' does not exist on type 'unknown'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -1713,26 +1636,6 @@
         {
             "path": "assets/pages/showcase/components/hero.tsx",
             "message": "Property 'title' does not exist on type '{ title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { ...; }'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Property 'orderIsAGift' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Property 'billingPeriod' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Property 'productPrices' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Property 'fulfilmentOption' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Property 'productOption' does not exist on type 'unknown'."
         }
     ],
     "TS7006": [
@@ -1891,18 +1794,6 @@
         {
             "path": "assets/helpers/rendering/ssrPages.ts",
             "message": "Parameter 'content' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Parameter 'action' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Parameter 'currentOption' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/subscriptionCheckoutReducer.ts",
-            "message": "Parameter 'addressReducers' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts",
@@ -2240,15 +2131,15 @@
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
@@ -2273,6 +2164,10 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
             "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Argument of type 'typeof AddressFields' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormErrors; traverseState: (arg0: any) => State; scope: AddressType; country: string; state: string | null; lineOne: Option<string>; lineTwo: Option<...>; postCode: Option<...>; city: Option<...>; countries: Record<...>; } & { ...; }, ClassAttributes<...> & ... 2 more ... & { ......'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts",
@@ -2512,19 +2407,7 @@
         },
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Argument of type 'Action' is not assignable to parameter of type 'never'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Argument of type 'Action' is not assignable to parameter of type 'never'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Argument of type 'Action' is not assignable to parameter of type 'never'."
         },
         {
             "path": "assets/helpers/tracking/__tests__/acquisitionsTest.ts",
@@ -2754,7 +2637,7 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; }'."
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -2917,14 +2800,6 @@
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
             "message": "'formClassName' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/checkoutFormIsSubmittableActions.ts",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "'initialCountry' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",
@@ -3097,23 +2972,11 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
             "message": "No overload matches this call."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
         {
@@ -3133,14 +2996,6 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "No overload matches this call."
         }
@@ -3148,10 +3003,6 @@
     "TS2314": [
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFieldsStore.ts",
             "message": "Generic type '$Call' requires 1 type argument(s)."
         },
         {
@@ -3540,18 +3391,6 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Object is of type 'unknown'."
         },
         {

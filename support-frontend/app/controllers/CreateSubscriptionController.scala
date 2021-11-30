@@ -19,6 +19,7 @@ import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdMinimalUser, IdentityService, TestUserService}
+import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.NormalisedTelephoneNumber.asFormattedString
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
@@ -72,19 +73,19 @@ class CreateSubscriptionController(
       telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
     )
 
-    if (CheckoutValidationRules.validate(createSupportWorkersRequest)) {
+    CheckoutValidationRules.validate(createSupportWorkersRequest) match {
+      case Valid =>
+        val result = for {
+          user <- identityService.getUser(idMinimalUser).leftMap(ServerError)
+          isTestUser = testUsers.isTestUser(request)
+          statusResponse <- client.createSubscription(request, buildUser(user, createSupportWorkersRequest, isTestUser), request.uuid)
+            .leftMap[CreateSubscriptionError](error => ServerError(error))
+        } yield statusResponse
+        respondToClient(result, createSupportWorkersRequest.product)
 
-      val result = for {
-        user <- identityService.getUser(idMinimalUser).leftMap(ServerError)
-        isTestUser = testUsers.isTestUser(request)
-        statusResponse <- client.createSubscription(request, buildUser(user, createSupportWorkersRequest, isTestUser), request.uuid)
-          .leftMap[CreateSubscriptionError](error => ServerError(error))
-      } yield statusResponse
-      respondToClient(result, createSupportWorkersRequest.product)
-
-    } else {
-      SafeLogger.warn(s"validation of the request body failed $createSupportWorkersRequest")
-      respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product)
+      case Invalid(message) =>
+        SafeLogger.warn(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
+        respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product)
     }
   }
 
@@ -169,6 +170,11 @@ class CreateSubscriptionController(
 }
 
 class LoggingCirceParser(controllerComponents: ControllerComponents) extends Circe {
+
+  override protected def onCirceError(e: io.circe.Error): Result = {
+    SafeLogger.warn(s"circe decode failure: $e")
+    super.onCirceError(e)
+  }
 
   val requestParser: BodyParser[CreateSupportWorkersRequest] = {
     val underlying = circe.json[CreateSupportWorkersRequest]
