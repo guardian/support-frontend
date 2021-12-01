@@ -2,8 +2,6 @@ package admin.settings
 
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
-
-import admin.ServersideAbTest
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsS3Client
@@ -60,7 +58,7 @@ case class SettingsSources(switches: SettingsSource, amounts: SettingsSource, co
 object SettingsSources {
   def fromConfig(config: Config, stage: Stage): Either[Throwable, SettingsSources] = {
     for {
-      switchesSource <- SettingsSource.fromConfig(config, "switches", stage)
+      switchesSource <- SettingsSource.fromConfig(config, "switches_v2", stage)
       amountsSource <- SettingsSource.fromConfig(config, "configured-amounts", stage)
       contributionTypesSource <- SettingsSource.fromConfig(config, "contributionTypes", stage)
     } yield SettingsSources(switchesSource, amountsSource, contributionTypesSource)
@@ -107,76 +105,3 @@ object SettingsSource extends LazyLogging {
   }
 
 }
-
-case class PaymentMethodsSwitch(
-  stripe: SwitchState,
-  stripeApplePay: SwitchState,
-  stripePaymentRequestButton: SwitchState,
-  payPal: SwitchState,
-  directDebit: Option[SwitchState],
-  existingCard: Option[SwitchState],
-  existingDirectDebit: Option[SwitchState],
-  amazonPay: Option[SwitchState],
-  sepa: Option[SwitchState]
-)
-case class ExperimentSwitch(name: String, description: String, state: SwitchState) {
-  def isOn: Boolean = state == SwitchState.On
-
-  def isInVariant(participation: ServersideAbTest.Participation): Boolean =
-    participation == ServersideAbTest.Variant && isOn
-
-  def isInControl(participation: ServersideAbTest.Participation): Boolean =
-    participation == ServersideAbTest.Control && isOn
-}
-
-
-object PaymentMethodsSwitch {
-  def fromConfig(config: Config): PaymentMethodsSwitch =
-    PaymentMethodsSwitch(
-      SwitchState.fromConfig(config, "stripe"),
-      SwitchState.fromConfig(config, "stripeApplePay"),
-      SwitchState.fromConfig(config, "stripePaymentRequestButton"),
-      SwitchState.fromConfig(config, "payPal"),
-      SwitchState.optionFromConfig(config, "directDebit"),
-      SwitchState.optionFromConfig(config, "existingCard"),
-      SwitchState.optionFromConfig(config, "existingDirectDebit"),
-      SwitchState.optionFromConfig(config, "amazonPay"),
-      SwitchState.optionFromConfig(config, "sepa")
-    )
-  implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
-}
-
-object ExperimentSwitch {
-  def fromConfig(config: Config): ExperimentSwitch =
-    ExperimentSwitch(
-      config.getString("name"),
-      config.getString("description"),
-      SwitchState.fromConfig(config, "state")
-    )
-  implicit val experimentSwitchCodec: Codec[ExperimentSwitch] = deriveCodec
-}
-
-sealed trait SwitchState {
-  def isOn: Boolean
-}
-
-object SwitchState {
-  def optionFromConfig(config: Config, path: String): Option[SwitchState] =
-    if(config.hasPath(path))
-      Some(fromConfig(config, path))
-    else
-      None
-
-  def fromConfig(config: Config, path: String): SwitchState = fromString(config.getString(path))
-
-  def fromString(s: String): SwitchState = if (s.toLowerCase == "on") On else Off
-
-  case object On extends SwitchState { val isOn = true }
-
-  case object Off extends SwitchState { val isOn = false }
-
-  implicit val switchStateEncoder: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
-  implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map(SwitchState.fromString)
-
-}
-
