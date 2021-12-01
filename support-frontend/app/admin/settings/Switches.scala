@@ -6,15 +6,9 @@ import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder, Json}
 import io.circe.optics.JsonPath._
 
-sealed trait SwitchState {
-  def isOn: Boolean
-}
-case object On extends SwitchState {
-  def isOn: Boolean = true
-}
-case object Off extends SwitchState {
-  def isOn: Boolean = false
-}
+sealed abstract class SwitchState(val isOn: Boolean)
+case object On extends SwitchState(true)
+case object Off extends SwitchState(false)
 
 object SwitchState {
   import io.circe.generic.extras.semiauto.{ deriveEnumerationDecoder, deriveEnumerationEncoder }
