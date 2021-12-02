@@ -97,13 +97,7 @@ object Switches {
     root.each.obj.modify { switchGroup =>
       switchGroup("switches")
         .flatMap(_.asObject)
-        .map { switches =>
-          val flattenedSwitches = switches.mapValues(flattenSwitchState)
-          switchGroup
-            .deepMerge(flattenedSwitches)
-            .remove("switches")
-            .remove("description")
-        }
+        .map(switches => switches.mapValues(flattenSwitchState))
         .getOrElse(switchGroup)
     }
 
