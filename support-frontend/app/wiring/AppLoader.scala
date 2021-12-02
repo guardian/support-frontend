@@ -9,6 +9,7 @@ import play.api._
 import software.amazon.awssdk.auth.credentials._
 
 import java.io.File
+import scala.util.{Success, Try}
 
 class AppLoader extends ApplicationLoader with StrictLogging {
 
@@ -18,25 +19,28 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     EnvironmentVariableCredentialsProvider.create()
   ).build
 
-  private def getParameterStoreConfig(initialConfiguration: Configuration): Configuration = {
-    val identity = AppIdentity.whoAmI(defaultAppName = "support-frontend", CredentialsProvider)
-    val loadedConfig = ConfigurationLoader.load(identity, CredentialsProvider) {
-      case AwsIdentity(app, stack, stage, _) =>
-        val privateConfig = SSMConfigurationLocation(s"/$stack/$app/$stage")
-        val publicConfig = ResourceConfigurationLocation(s"$stage.public.conf")
+  private def getParameterStoreConfig(isDev: Boolean): Try[Configuration] = {
+    for {
+      identity <- if (isDev)
+        Success(DevIdentity("support-frontend"))
+      else
+        AppIdentity.whoAmI(defaultAppName = "support-frontend", CredentialsProvider)
+      loadedConfig <- Try(ConfigurationLoader.load(identity, CredentialsProvider) {
+        case AwsIdentity(app, stack, stage, region) =>
+          val privateConfig = SSMConfigurationLocation(s"/$stack/$app/$stage", region)
+          val publicConfig = ResourceConfigurationLocation(s"$stage.public.conf")
 
-        ComposedConfigurationLocation(List(privateConfig, publicConfig))
+          ComposedConfigurationLocation(List(privateConfig, publicConfig))
 
-      case DevIdentity(_) =>
-        //If a local private config file exists then override any DEV Parameter Store config
-        val privateConfigLocal = FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))
-        val privateConfigSSM = SSMConfigurationLocation(s"/support/frontend/DEV")
-        val publicConfig = ResourceConfigurationLocation(s"DEV.public.conf")
+        case DevIdentity(_) =>
+          //If a local private config file exists then override any DEV Parameter Store config
+          val privateConfigLocal = FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))
+          val privateConfigSSM = SSMConfigurationLocation(s"/support/frontend/DEV", "eu-west-1")
+          val publicConfig = ResourceConfigurationLocation(s"DEV.public.conf")
 
-        ComposedConfigurationLocation(List(privateConfigLocal, privateConfigSSM, publicConfig))
-    }
-
-    Configuration(loadedConfig).withFallback(initialConfiguration)
+          ComposedConfigurationLocation(List(privateConfigLocal, privateConfigSSM, publicConfig))
+      })
+    } yield Configuration(loadedConfig)
   }
 
   override def load(context: Context): Application = {
@@ -45,15 +49,18 @@ class AppLoader extends ApplicationLoader with StrictLogging {
       _.configure(context.environment)
     }
 
-    val contextWithConfig = context.copy(initialConfiguration = getParameterStoreConfig(context.initialConfiguration))
+    val isDev = context.environment.mode == Mode.Dev
+
+    val contextWithConfig = getParameterStoreConfig(isDev).map(config =>
+      context.copy(initialConfiguration = config.withFallback(context.initialConfiguration))
+    )
 
     try {
-      (new BuiltInComponentsFromContext(contextWithConfig) with AppComponents).application
+      (new BuiltInComponentsFromContext(contextWithConfig.get) with AppComponents).application
     } catch {
-      case err: Throwable => {
+      case err: Throwable =>
         logger.error("Could not start application", err)
         throw err
-      }
     }
   }
 }
