@@ -964,7 +964,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
-            "message": "Type '{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; showOtherAmount: boolean; formData: { firstName: string | null; lastName: string | null; ... 4 more ...; checkoutFormHasBeenSubmitted: boolean; }; ... 17 more ...; oneOffRecaptchaToken: string | null; }' is not assignable to type 'FormState'."
+            "message": "Type '{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; showOtherAmount: boolean; formData: { otherAmounts: OtherAmounts; ... 5 more ...; email: string | null; }; ... 17 more ...; oneOffRecaptchaToken: string | null; }' is not assignable to type 'FormState'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
