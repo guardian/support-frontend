@@ -1,10 +1,5 @@
 // ----- Imports ----- //
-import {
-	detect,
-	findIsoCountry,
-	stateProvinceFromFullName,
-	stateProvinceFromString,
-} from '../country';
+import { detect, findIsoCountry, stateProvinceFromString } from '../country';
 import {
 	AUDCountries,
 	EURCountries,
@@ -279,10 +274,5 @@ describe('find a state for a given country using stateProvinceFromString', () =>
 		expect(stateProvinceFromString('CA', 'YT')).toBe('YT'); // Yukon does not start with 2 letter code
 
 		expect(stateProvinceFromString('CA', 'Yukon')).toBe('YT');
-	});
-});
-describe('find a state for a given country using stateProvinceFromFullName', () => {
-	it('should return the correct StateCode', () => {
-		expect(stateProvinceFromFullName('US', 'Arkansas')).toBe('AR');
 	});
 });
