@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
@@ -218,7 +219,7 @@ export type Action =
 	  }
 	| {
 			type: 'SET_HANDLE_STRIPE_3DS';
-			handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>;
+			handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>;
 	  }
 	| {
 			type: 'SET_STRIPE_CARD_FORM_COMPLETE';
@@ -576,7 +577,7 @@ const setCreateStripePaymentMethod = (
 });
 
 const setHandleStripe3DS = (
-	handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+	handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 ): Action => ({
 	type: 'SET_HANDLE_STRIPE_3DS',
 	handleStripe3DS,
