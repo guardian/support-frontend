@@ -150,15 +150,6 @@ const renderVerificationCopy = (
 const errorMessageFromState = (state: CardFieldState): string | null =>
 	state.name === 'Error' ? state.errorMessage : null;
 
-function getRecaptchaSiteKey(isTestUser: boolean) {
-	if (typeof window.guardian.v2recaptchaPublicKey === 'string') {
-		return window.guardian.v2recaptchaPublicKey;
-	}
-	return isTestUser
-		? window.guardian.v2recaptchaPublicKey.uat
-		: window.guardian.v2recaptchaPublicKey.default;
-}
-
 function CardForm(props: PropTypes) {
 	/**
 	 * State
@@ -253,7 +244,7 @@ function CardForm(props: PropTypes) {
 		}
 
 		window.grecaptcha?.render('robot_checkbox', {
-			sitekey: getRecaptchaSiteKey(props.isTestUser),
+			sitekey: window.guardian.v2recaptchaPublicKey,
 			callback: (token: string) => {
 				trackComponentLoad('contributions-recaptcha-client-token-received');
 				props.setStripeRecurringRecaptchaVerified(true);
@@ -295,7 +286,7 @@ function CardForm(props: PropTypes) {
 
 	const setupRecaptchaTokenForOneOff = () => {
 		window.grecaptcha?.render('robot_checkbox', {
-			sitekey: getRecaptchaSiteKey(props.isTestUser),
+			sitekey: window.guardian.v2recaptchaPublicKey,
 			callback: (token: string) => {
 				trackComponentLoad('contributions-recaptcha-client-token-received');
 				props.setOneOffRecaptchaToken(token);

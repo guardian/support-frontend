@@ -11,7 +11,7 @@ declare global {
 			serversideTests?: Participations | null;
 			enableContributionsCampaign: boolean;
 			forceContributionsCampaign: boolean;
-			v2recaptchaPublicKey: string | { default: string; uat: string };
+			v2recaptchaPublicKey: string;
 			recaptchaEnabled?: boolean;
 			geoip?: {
 				countryCode: string;

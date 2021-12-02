@@ -18,7 +18,7 @@ import config.{RecaptchaConfigProvider, StringsConfig}
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
-import services.{IdentityService, MembersDataService, PaymentAPIService}
+import services.{IdentityService, MembersDataService, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,6 +38,7 @@ class Application(
   actionRefiners: CustomActionBuilders,
   val assets: AssetsResolver,
   identityService: IdentityService,
+  testUsers: TestUserService,
   components: ControllerComponents,
   oneOffStripeConfigProvider: StripeConfigProvider,
   regularStripeConfigProvider: StripeConfigProvider,
@@ -161,6 +162,7 @@ class Application(
     )
 
     val serversideTests = generateParticipations(Nil)
+    val uatMode = testUsers.isTestUser(request)
 
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
@@ -187,8 +189,7 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKeyDefault = recaptchaConfigProvider.get().v2PublicKey,
-      v2recaptchaConfigPublicKeyUat = recaptchaConfigProvider.get(true).v2PublicKey,
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
       serversideTests = serversideTests
     )
   }

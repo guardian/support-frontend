@@ -20,6 +20,7 @@ trait Controllers {
     actionRefiners,
     assetsResolver,
     identityService,
+    testUsers,
     controllerComponents,
     appConfig.oneOffStripeConfigProvider,
     appConfig.regularStripeConfigProvider,
