@@ -518,7 +518,6 @@ function CardForm(props: PropTypes) {
 								options={{
 									style: fieldStyle,
 								}}
-								// placeholder=""
 								onChange={onChange('Expiry')}
 								onFocus={() => setCurrentlySelected('Expiry')}
 								onBlur={() => setCurrentlySelected(null)}
@@ -554,7 +553,6 @@ function CardForm(props: PropTypes) {
 								options={{
 									style: fieldStyle,
 								}}
-								// placeholder=""
 								onChange={onChange('CVC')}
 								onFocus={() => setCurrentlySelected('CVC')}
 								onBlur={() => setCurrentlySelected(null)}
