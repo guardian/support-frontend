@@ -227,6 +227,12 @@ function createFormReducer(
 					csrUsername: action.username,
 				};
 
+			case 'SET_SALESFORCE_CASE_ID':
+				return {
+					...state,
+					salesforceCaseId: action.caseId,
+				};
+
 			default:
 				return state;
 		}

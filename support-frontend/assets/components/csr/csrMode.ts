@@ -8,16 +8,24 @@ import { findIsoCountry } from 'helpers/internationalisation/country';
 
 // ---- Example JSON ----
 // {
-//   "title": null,
+//   "customer": {
 //   "street": "Kings Place, York Way",
-//   "state": "Arkansas",
-//   "postcode": "N1 9GU",
-//   "lastName": "Mouse",
-//   "firstName": "Mickey",
-//   "email": "rupert.bates@gu.com",
-//   "country": "United States",
-//   "city": "London"
+//     "state": "AR",
+//     "salutation": null,
+//     "postcode": "N1 9GU",
+//     "lastName": "Mickey",
+//     "firstName": "Mouse",
+//     "email": "rupert.bates@gu.com",
+//     "country": "United States",
+//     "city": "London"
+// },
+//   "csr": {
+//   "lastName": "Bates",
+//     "firstName": "Rupert"
+// },
+//   "caseId": "5009E00000J6QnmQAF"
 // }
+
 type SalesforceData = {
 	customer: {
 		salutation: string | null;
@@ -31,6 +39,7 @@ type SalesforceData = {
 		country: string | null;
 	};
 	csr: { lastName: string; firstName: string };
+	caseId: string;
 };
 
 export type CsrCustomerData = {
@@ -46,6 +55,7 @@ export type CsrCustomerData = {
 		country: IsoCountry | null;
 	};
 	csr: { lastName: string; firstName: string };
+	caseId: string;
 };
 
 const domains = [
@@ -68,6 +78,7 @@ const parseCustomerData = (data: string): CsrCustomerData => {
 	return {
 		csr: salesforceData.csr,
 		customer: customer,
+		caseId: salesforceData.caseId,
 	};
 };
 

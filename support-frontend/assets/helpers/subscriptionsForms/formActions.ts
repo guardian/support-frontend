@@ -129,6 +129,10 @@ export type Action =
 			type: 'SET_CSR_USERNAME';
 			username: string;
 	  }
+	| {
+			type: 'SET_SALESFORCE_CASE_ID';
+			caseId: string;
+	  }
 	| AddressAction
 	| PayPalAction
 	| DDAction;
@@ -286,6 +290,10 @@ const formActionCreators = {
 		type: 'SET_CSR_USERNAME',
 		username,
 	}),
+	setSalesforceCaseId: (caseId: string): Action => ({
+		type: 'SET_SALESFORCE_CASE_ID',
+		caseId,
+	}),
 };
 
 function setCsrCustomerData(
@@ -314,6 +322,7 @@ function setCsrCustomerData(
 		);
 
 		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
+		dispatch(formActionCreators.setSalesforceCaseId(csrCustomerData.caseId));
 
 		const addressActions = addressActionCreatorsFor(addressType);
 		csrCustomerData.customer.country &&
