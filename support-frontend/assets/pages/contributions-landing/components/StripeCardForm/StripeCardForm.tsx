@@ -9,7 +9,7 @@ import {
 } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
@@ -17,6 +17,7 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { ContributionType } from 'helpers/contributions';
+import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
@@ -148,15 +149,6 @@ const renderVerificationCopy = (
 
 const errorMessageFromState = (state: CardFieldState): string | null =>
 	state.name === 'Error' ? state.errorMessage : null;
-
-// Hook for monitoring the previous state of a prop
-function usePrevious<T>(value: T) {
-	const ref = useRef<T>();
-	useEffect(() => {
-		ref.current = value;
-	});
-	return ref.current;
-}
 
 function getRecaptchaSiteKey(isTestUser: boolean) {
 	if (typeof window.guardian.v2recaptchaPublicKey === 'string') {
@@ -424,6 +416,7 @@ function CardForm(props: PropTypes) {
 			}
 		}
 	}, [stripe, elements, props.contributionType, zipCode]);
+
 	// If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
 	// then go ahead and process the recurring contribution
 	const previousSetupIntentClientSecret = usePrevious(
