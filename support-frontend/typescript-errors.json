@@ -4,9 +4,9 @@
             "TS1208": 1,
             "TS2305": 51,
             "TS2322": 184,
-            "TS2578": 19,
-            "TS2339": 75,
-            "TS7006": 104,
+            "TS2578": 18,
+            "TS2339": 73,
+            "TS7006": 98,
             "TS2345": 127,
             "TS7053": 14,
             "TS7034": 7,
@@ -17,19 +17,19 @@
             "TS2769": 15,
             "TS2314": 5,
             "TS2304": 5,
-            "TS2741": 5,
+            "TS2741": 6,
             "TS2739": 16,
             "TS2532": 6,
             "TS2556": 3,
             "TS2554": 48,
             "TS2569": 2,
+            "TS7016": 2,
             "TS2571": 11,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
             "TS2740": 6,
             "TS2531": 4,
-            "TS7016": 1,
             "TS1337": 1,
             "TS2694": 5,
             "TS7022": 3,
@@ -137,7 +137,7 @@
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
-            "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
+            "assets/pages/contributions-landing/contributionsLandingReducer.ts": 5,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
@@ -168,7 +168,6 @@
             "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
             "assets/pages/aus-moment-map/components/blurb.tsx": 1,
             "assets/pages/aus-moment-map/hooks/useWindowWidth.ts": 1,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
@@ -246,6 +245,7 @@
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 2,
+            "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/pages/promotion-terms/promotionTermsReducer.ts": 4,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
@@ -1244,10 +1244,6 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -1355,11 +1351,11 @@
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts",
@@ -1367,11 +1363,11 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
@@ -1407,19 +1403,19 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
@@ -1427,27 +1423,27 @@
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/forms/stripe.ts",
-            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -1459,75 +1455,75 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/helpers/utilities/logger.ts",
-            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -1546,28 +1542,20 @@
             "message": "Property 'offsetTop' does not exist on type 'unknown'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
             "message": "Property 'showPrivacyManager' does not exist on type 'never'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -1794,30 +1782,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Parameter 'response' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'error' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'billingAgreement' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'orderReference' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Parameter 'error' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
@@ -2553,7 +2517,7 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 4 more ...; amazonPaySellerId: { ...; }; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -2974,6 +2938,10 @@
             "message": "Property 'patrons' is missing in type '{ events: string; }' but required in type 'Record<MemProduct, string>'."
         },
         {
+            "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
+            "message": "Property 'Widgets' is missing in type 'Record<string, any>' but required in type 'AmazonPaymentsObject'."
+        },
+        {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
             "message": "Property 'isPatron' is missing in type '{ priceDescription: string; promotion: string; orderIsAGift: boolean; digitalGiftBillingPeriod: \"Annual\" | \"Quarterly\"; price: string; }' but required in type 'EndSummaryProps'."
         },
@@ -3292,6 +3260,16 @@
             "message": "Type 'HTMLFormControlsCollection' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators."
         }
     ],
+    "TS7016": [
+        {
+            "path": "assets/helpers/customHooks/useHasBeenSeen.ts",
+            "message": "Could not find a declaration file for module 'lodash.debounce'. 'support-frontend/node_modules/lodash.debounce/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+        }
+    ],
     "TS2571": [
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
@@ -3422,12 +3400,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
             "message": "Object is possibly 'null'."
-        }
-    ],
-    "TS7016": [
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         }
     ],
     "TS1337": [

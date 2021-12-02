@@ -17,8 +17,8 @@ import csrf from 'helpers/csrf/csrfReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import * as storage from 'helpers/storage/storage';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import * as storage from 'helpers/storage/storage';
 import 'helpers/identityApis';
 import type { Action } from './contributionsLandingActions';
 import './contributionsLandingActions';
@@ -65,9 +65,59 @@ export type StripeCardFormData = {
 	createPaymentMethod: ((clientSecret: string | null) => void) | null;
 	handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null; // For single only
 };
+type Wallet = {
+	bind: (ID: string) => void;
+};
+type Consent = {
+	bind: (ID: string) => void;
+};
+export type BaseWalletConfig = {
+	sellerId: string;
+	design: {
+		designMode: string;
+	};
+	onPaymentSelect: () => void;
+	onError: (error: { getErrorMessage: () => string }) => void;
+};
+type WalletConfig = BaseWalletConfig & {
+	onReady?: (billingAgreement: {
+		getAmazonBillingAgreementId: () => string;
+	}) => void;
+	agreementType: string;
+	amazonOrderReferenceId?: string | null;
+	onOrderReferenceCreate?: (orderReference: {
+		getAmazonOrderReferenceId: () => string;
+	}) => void;
+};
+type WalletConstructor = {
+	new (baseWalletConfig: WalletConfig): Wallet;
+};
+export type ConsentConfig = {
+	sellerId: string;
+	amazonBillingAgreementId: string;
+	onReady: (billingAgreementConsentStatus: {
+		getConsentStatus: () => 'true' | 'false';
+	}) => void;
+	onConsent: (billingAgreementConsentStatus: {
+		getConsentStatus: () => 'true' | 'false';
+	}) => void;
+	design: {
+		designMode: string;
+	};
+	onError: (error: { getErrorMessage: () => string }) => void;
+};
+type ConsentConstructor = {
+	new (baseConsentConfig: ConsentConfig): Consent;
+};
+export type AmazonPaymentsObject = {
+	Widgets: {
+		Wallet: WalletConstructor;
+		Consent: ConsentConstructor;
+	};
+};
 export type AmazonPayLibrary = {
 	amazonLoginObject: Record<string, any> | null;
-	amazonPaymentsObject: Record<string, any> | null;
+	amazonPaymentsObject: AmazonPaymentsObject | null;
 };
 export type AmazonPayData = {
 	hasBegunLoading: boolean;
