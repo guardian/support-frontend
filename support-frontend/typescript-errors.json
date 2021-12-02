@@ -7,7 +7,7 @@
             "TS2578": 18,
             "TS2339": 73,
             "TS7006": 98,
-            "TS2345": 127,
+            "TS2345": 128,
             "TS7053": 14,
             "TS7034": 7,
             "TS7005": 23,
@@ -223,6 +223,7 @@
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
+            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingInit.ts": 3,
@@ -2372,6 +2373,10 @@
         {
             "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
             "message": "Argument of type 'string' is not assignable to parameter of type '((prevState: null) => null) | null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",

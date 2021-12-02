@@ -1,5 +1,10 @@
+import { InlineError } from '@guardian/src-user-feedback';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import type { ThunkDispatch } from 'redux-thunk';
+import type { ContributionType } from 'helpers/contributions';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { logException } from 'helpers/utilities/logger';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
@@ -16,10 +21,6 @@ import type {
 	State,
 } from 'pages/contributions-landing/contributionsLandingReducer';
 import './AmazonPay.scss';
-import { logException } from 'helpers/utilities/logger';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import type { ContributionType } from 'helpers/contributions';
-import { InlineError } from '@guardian/src-user-feedback';
 
 type PropTypes = {
 	amazonPayData: AmazonPayData;
@@ -39,7 +40,7 @@ const mapStateToProps = (state: State) => ({
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 	setAmazonPayWalletIsStale: (isReady: boolean) =>
 		dispatch(setAmazonPayWalletIsStale(isReady)),
 	setAmazonPayOrderReferenceId: (orderReferenceId: string) =>
