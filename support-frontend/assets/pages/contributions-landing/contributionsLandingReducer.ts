@@ -41,27 +41,23 @@ export interface UserFormData {
 	email: string | null;
 	billingState: string | null;
 }
-
 interface FormData extends UserFormData {
 	otherAmounts: OtherAmounts;
 	billingState: StateProvince | null;
 	billingCountry: IsoCountry | null;
 	checkoutFormHasBeenSubmitted: boolean;
 }
-
 export interface StripePaymentRequestButtonData {
 	paymentMethod: 'none' | StripePaymentMethod;
 	stripePaymentRequestButtonClicked: boolean;
 	paymentError: ErrorReason | null;
 }
-
 export interface Stripe3DSResult {
 	error?: Record<string, any>;
 	paymentIntent: {
 		id: string;
 	};
 }
-
 export interface StripeCardFormData {
 	formComplete: boolean;
 	setupIntentClientSecret: string | null;
@@ -70,15 +66,12 @@ export interface StripeCardFormData {
 	createPaymentMethod: ((clientSecret: string | null) => void) | null;
 	handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null; // For single only
 }
-
 interface Wallet {
 	bind: (ID: string) => void;
 }
-
 interface Consent {
 	bind: (ID: string) => void;
 }
-
 export interface BaseWalletConfig {
 	sellerId: string;
 	design: {
@@ -87,7 +80,6 @@ export interface BaseWalletConfig {
 	onPaymentSelect: () => void;
 	onError: (error: { getErrorMessage: () => string }) => void;
 }
-
 interface WalletConfig extends BaseWalletConfig {
 	onReady?: (billingAgreement: {
 		getAmazonBillingAgreementId: () => string;
@@ -98,11 +90,9 @@ interface WalletConfig extends BaseWalletConfig {
 		getAmazonOrderReferenceId: () => string;
 	}) => void;
 }
-
 interface WalletConstructor {
 	new (baseWalletConfig: WalletConfig): Wallet;
 }
-
 export interface ConsentConfig {
 	sellerId: string;
 	amazonBillingAgreementId: string;
@@ -117,23 +107,19 @@ export interface ConsentConfig {
 	};
 	onError: (error: { getErrorMessage: () => string }) => void;
 }
-
 interface ConsentConstructor {
 	new (baseConsentConfig: ConsentConfig): Consent;
 }
-
 export interface AmazonPaymentsObject {
 	Widgets: {
 		Wallet: WalletConstructor;
 		Consent: ConsentConstructor;
 	};
 }
-
 export interface AmazonPayLibrary {
 	amazonLoginObject: Record<string, any> | null;
 	amazonPaymentsObject: AmazonPaymentsObject | null;
 }
-
 export interface AmazonPayData {
 	hasBegunLoading: boolean;
 	// to avoid loading the sdk more than once
@@ -153,18 +139,15 @@ export interface AmazonPayData {
 	// for recurring contributions
 	amazonBillingAgreementConsentStatus: boolean; // for recurring contributions
 }
-
 export interface PayPalData {
 	hasBegunLoading: boolean;
 	hasLoaded: boolean;
 	buttonReady: boolean;
 }
-
 export interface SepaData {
 	iban: string | null;
 	accountHolderName: string | null;
 }
-
 interface FormState {
 	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
@@ -191,7 +174,6 @@ interface FormState {
 	tickerGoalReached: boolean;
 	oneOffRecaptchaToken: string | null;
 }
-
 interface PageState {
 	form: FormState;
 	user: UserState;
@@ -199,7 +181,6 @@ interface PageState {
 	directDebit: DirectDebitState;
 	marketingConsent: MarketingConsentState;
 }
-
 export interface State {
 	common: CommonState;
 	page: PageState;
