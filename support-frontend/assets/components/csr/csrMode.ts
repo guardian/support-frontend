@@ -4,10 +4,7 @@ import type {
 	IsoCountry,
 	UsState,
 } from 'helpers/internationalisation/country';
-import {
-	findIsoCountry,
-	stateProvinceFromFullName,
-} from 'helpers/internationalisation/country';
+import { findIsoCountry } from 'helpers/internationalisation/country';
 
 // ---- Example JSON ----
 // {
@@ -23,7 +20,7 @@ import {
 // }
 type SalesforceData = {
 	customer: {
-		title: string | null;
+		salutation: string | null;
 		firstName: string | null;
 		lastName: string;
 		email: string | null;
@@ -62,13 +59,10 @@ const isSalesforceDomain = (domain: string): boolean =>
 const parseCustomerData = (data: string): CsrCustomerData => {
 	const salesforceData: SalesforceData = JSON.parse(data) as SalesforceData;
 	const isoCountry = findIsoCountry(salesforceData.customer.country);
-	const state =
-		isoCountry &&
-		salesforceData.customer.state &&
-		stateProvinceFromFullName(isoCountry, salesforceData.customer.state);
+	const { salutation, ...otherData } = salesforceData.customer;
 	const customer = {
-		...salesforceData.customer,
-		state: state ?? null,
+		...otherData,
+		title: salutation,
 		country: isoCountry,
 	};
 	return {

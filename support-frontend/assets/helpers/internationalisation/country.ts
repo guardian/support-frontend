@@ -474,28 +474,6 @@ function stateProvinceFromString(
 	}
 }
 
-function stateProvinceFromNameMap(
-	name: string,
-	states: Record<string, string>,
-): StateProvince | undefined {
-	const stateRecord = Object.entries(states).find((value) => value[1] === name);
-	return stateRecord?.[0];
-}
-
-function stateProvinceFromFullName(
-	country: IsoCountry,
-	stateName: string,
-): StateProvince | undefined {
-	switch (country) {
-		case 'US':
-			return stateProvinceFromNameMap(stateName, usStates);
-		case 'CA':
-			return stateProvinceFromNameMap(stateName, caStates);
-		case 'AU':
-			return stateProvinceFromNameMap(stateName, auStates);
-	}
-}
-
 function fromString(s: string): IsoCountry | null | undefined {
 	const candidateIso = s.toUpperCase();
 	const isoCountryArray: IsoCountry[] = Object.keys(countries);
@@ -644,6 +622,7 @@ function detect(
 		AUDCountries,
 	];
 	let country: IsoCountry | null = null;
+
 	targetCountryGroups.forEach((targetCountryGroupId) => {
 		const candidateCountry = handleCountryForCountryGroup(
 			targetCountryGroupId,
@@ -683,6 +662,5 @@ export {
 	fromGeolocation,
 	stateProvinceFieldFromString,
 	stateProvinceFromString,
-	stateProvinceFromFullName,
 	fromCountryGroup,
 };
