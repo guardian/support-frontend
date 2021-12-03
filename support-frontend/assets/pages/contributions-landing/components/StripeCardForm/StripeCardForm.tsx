@@ -1,26 +1,31 @@
 // ----- Imports ----- //
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { TextInput } from '@guardian/src-text-input';
+import { InlineError } from '@guardian/src-user-feedback';
 import {
 	CardCvcElement,
 	CardExpiryElement,
 	CardNumberElement,
 } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
-import React, { useEffect, useRef, useState } from 'react';
+import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
+import React, { useEffect, useState } from 'react';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { ContributionType } from 'helpers/contributions';
-import type { PaymentResult } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { usePrevious } from 'helpers/customHooks/usePrevious';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { isValidZipCode } from 'helpers/forms/formValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
-import type {
-	State,
-	Stripe3DSResult,
-} from 'pages/contributions-landing/contributionsLandingReducer';
-import 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { routes } from 'helpers/urls/routes';
+import { logException } from 'helpers/utilities/logger';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,
@@ -33,50 +38,16 @@ import {
 	setStripeSetupIntentClientSecret,
 	updateRecaptchaToken,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import 'helpers/contributions';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import { logException } from 'helpers/utilities/logger';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type {
+	State,
+	Stripe3DSResult,
+} from 'pages/contributions-landing/contributionsLandingReducer';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { routes } from 'helpers/urls/routes';
-import { InlineError } from '@guardian/src-user-feedback';
 import { StripeCardFormField } from './StripeCardFormField';
 import './stripeCardForm.scss';
-import { isValidZipCode } from 'helpers/forms/formValidation';
-// ----- Types -----//
 
-/* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
-	onPaymentAuthorised: (paymentMethodId: string) => Promise<PaymentResult>;
-	paymentFailure: (paymentError: ErrorReason) => Action;
-	contributionType: ContributionType;
-	setCreateStripePaymentMethod: (
-		arg0: (clientSecret: string | null) => void,
-	) => Action;
-	setHandleStripe3DS: (
-		arg0: (clientSecret: string) => Promise<Stripe3DSResult>,
-	) => Action;
-	setPaymentWaiting: (isWaiting: boolean) => Action;
-	paymentWaiting: boolean;
-	setStripeCardFormComplete: (isComplete: boolean) => Action;
-	setStripeSetupIntentClientSecret: (clientSecret: string) => Action;
-	setStripeRecurringRecaptchaVerified: (arg0: boolean) => Action;
-	checkoutFormHasBeenSubmitted: boolean;
-	stripeKey: string;
-	country: IsoCountry;
-	countryGroupId: CountryGroupId;
-	csrf: CsrfState;
-	setupIntentClientSecret: string | null;
-	recurringRecaptchaVerified: boolean;
-	formIsSubmittable: boolean;
-	setOneOffRecaptchaToken: (arg0: string) => Action;
-	oneOffRecaptchaToken: string;
-	isTestUser: boolean;
-};
+// ----- Types -----//
 
 const mapStateToProps = (state: State) => ({
 	contributionType: state.page.form.contributionType,
@@ -84,6 +55,7 @@ const mapStateToProps = (state: State) => ({
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 	paymentWaiting: state.page.form.isWaiting,
 	country: state.common.internationalisation.countryId,
+	currency: state.common.internationalisation.currencyId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	csrf: state.page.csrf,
 	setupIntentClientSecret:
@@ -92,9 +64,10 @@ const mapStateToProps = (state: State) => ({
 		state.page.form.stripeCardFormData.recurringRecaptchaVerified,
 	formIsSubmittable: state.page.form.formIsSubmittable,
 	oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
+	isTestUser: state.page.user.isTestUser ?? false,
 });
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 	onPaymentAuthorised: (paymentMethodId: string) =>
 		dispatch(
 			onThirdPartyPaymentAuthorised({
@@ -123,6 +96,12 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 		dispatch(setStripeRecurringRecaptchaVerified(recaptchaVerified)),
 });
 
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & {
+	stripeKey: string;
+};
+
 type CardFieldState =
 	| {
 			name: 'Error';
@@ -134,7 +113,9 @@ type CardFieldState =
 	| {
 			name: 'Complete';
 	  };
+
 type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
+
 const fieldStyle = {
 	base: {
 		fontFamily:
@@ -143,9 +124,10 @@ const fieldStyle = {
 			color: '#999999',
 		},
 		fontSize: '17px',
-		lineHeight: 1.5,
+		lineHeight: '1.5',
 	},
 };
+
 const zipCodeContainerStyles = css`
 	margin-top: 0.65rem;
 `;
@@ -168,16 +150,7 @@ const renderVerificationCopy = (
 const errorMessageFromState = (state: CardFieldState): string | null =>
 	state.name === 'Error' ? state.errorMessage : null;
 
-// Hook for monitoring the previous state of a prop
-const usePrevious = (value) => {
-	const ref = useRef();
-	useEffect(() => {
-		ref.current = value;
-	});
-	return ref.current;
-};
-
-const CardForm = (props: PropTypes) => {
+function CardForm(props: PropTypes) {
 	/**
 	 * State
 	 */
@@ -204,38 +177,40 @@ const CardForm = (props: PropTypes) => {
 	const [zipCode, setZipCode] = useState('');
 	const showZipCodeField = props.country === 'US';
 
-	const updateZipCode = (event) => setZipCode(event.target.value);
+	const updateZipCode = (event: React.ChangeEvent<HTMLInputElement>) =>
+		setZipCode(event.target.value);
 
 	/**
 	 * Handlers
 	 */
-	const onChange = (fieldName: CardFieldName) => (update) => {
-		const newFieldState = () => {
-			if (update.error) {
-				return {
-					name: 'Error',
-					errorMessage: update.error.message,
-				};
-			}
+	const onChange =
+		(fieldName: CardFieldName) => (update: StripeElementChangeEvent) => {
+			const newFieldState = () => {
+				if (update.error) {
+					return {
+						name: 'Error',
+						errorMessage: update.error.message,
+					};
+				}
 
-			if (update.complete) {
-				return {
-					name: 'Complete',
-				};
-			}
+				if (update.complete) {
+					return {
+						name: 'Complete',
+					};
+				}
 
-			return {
-				name: 'Incomplete',
+				return {
+					name: 'Incomplete',
+				};
 			};
+
+			setFieldStates((prevData) => ({
+				...prevData,
+				[fieldName]: newFieldState(),
+			}));
 		};
 
-		setFieldStates((prevData) => ({
-			...prevData,
-			[fieldName]: newFieldState(),
-		}));
-	};
-
-	const handleStripeError = (errorData: any): void => {
+	const handleStripeError = (errorData: StripeError): void => {
 		props.setPaymentWaiting(false);
 		logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
 
@@ -268,11 +243,9 @@ const CardForm = (props: PropTypes) => {
 			return;
 		}
 
-		window.grecaptcha.render('robot_checkbox', {
-			sitekey: props.isTestUser
-				? window.guardian.v2recaptchaPublicKey.uat
-				: window.guardian.v2recaptchaPublicKey.default,
-			callback: (token) => {
+		window.grecaptcha?.render('robot_checkbox', {
+			sitekey: window.guardian.v2recaptchaPublicKey,
+			callback: (token: string) => {
 				trackComponentLoad('contributions-recaptcha-client-token-received');
 				props.setStripeRecurringRecaptchaVerified(true);
 				fetchJson(
@@ -300,9 +273,9 @@ const CardForm = (props: PropTypes) => {
 							);
 						}
 					})
-					.catch((err) => {
+					.catch((err: Error) => {
 						logException(
-							`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err}`,
+							`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err.message}`,
 						);
 						props.paymentFailure('internal_error');
 						props.setPaymentWaiting(false);
@@ -312,11 +285,9 @@ const CardForm = (props: PropTypes) => {
 	};
 
 	const setupRecaptchaTokenForOneOff = () => {
-		window.grecaptcha.render('robot_checkbox', {
-			sitekey: props.isTestUser
-				? window.guardian.v2recaptchaPublicKey.uat
-				: window.guardian.v2recaptchaPublicKey.default,
-			callback: (token) => {
+		window.grecaptcha?.render('robot_checkbox', {
+			sitekey: window.guardian.v2recaptchaPublicKey,
+			callback: (token: string) => {
 				trackComponentLoad('contributions-recaptcha-client-token-received');
 				props.setOneOffRecaptchaToken(token);
 			},
@@ -325,7 +296,7 @@ const CardForm = (props: PropTypes) => {
 
 	const setupOneOffRecaptcha = (): void => {
 		if (window.guardian.recaptchaEnabled) {
-			if (window.grecaptcha && window.grecaptcha.render) {
+			if (window.grecaptcha?.render) {
 				setupRecaptchaTokenForOneOff();
 			} else {
 				window.v2OnloadCallback = setupRecaptchaTokenForOneOff;
@@ -336,55 +307,61 @@ const CardForm = (props: PropTypes) => {
 	const setupOneOffHandlers = (): void => {
 		props.setCreateStripePaymentMethod(() => {
 			props.setPaymentWaiting(true);
-			const cardElement = elements.getElement(CardNumberElement);
-			stripe
-				.createPaymentMethod({
-					type: 'card',
-					card: cardElement,
-					billing_details: {
-						address: {
-							postal_code: zipCode,
+			const cardElement = elements?.getElement(CardNumberElement);
+			if (cardElement) {
+				void stripe
+					?.createPaymentMethod({
+						type: 'card',
+						card: cardElement,
+						billing_details: {
+							address: {
+								postal_code: zipCode,
+							},
+						},
+					})
+					.then((result) => {
+						if (result.error) {
+							handleStripeError(result.error);
+						} else {
+							void props.onPaymentAuthorised(result.paymentMethod.id);
+						}
+					});
+			}
+		});
+		// @ts-expect-error TODO: This needs fixing in the reducer; we may always get undefined because we can't be sure the Stripe SDK will load
+		props.setHandleStripe3DS((clientSecret: string) => {
+			trackComponentLoad('stripe-3ds');
+			return stripe?.handleCardAction(clientSecret);
+		});
+	};
+
+	const handleCardSetupForRecurring = (clientSecret: string): void => {
+		const cardElement = elements?.getElement(CardNumberElement);
+		if (cardElement) {
+			void stripe
+				?.confirmCardSetup(clientSecret, {
+					payment_method: {
+						card: cardElement,
+						billing_details: {
+							address: {
+								postal_code: zipCode,
+							},
 						},
 					},
 				})
 				.then((result) => {
 					if (result.error) {
 						handleStripeError(result.error);
-					} else {
-						props.onPaymentAuthorised(result.paymentMethod.id);
+					} else if (result.setupIntent.payment_method) {
+						void props.onPaymentAuthorised(result.setupIntent.payment_method);
 					}
 				});
-		});
-		props.setHandleStripe3DS((clientSecret: string) => {
-			trackComponentLoad('stripe-3ds');
-			return stripe.handleCardAction(clientSecret);
-		});
-	};
-
-	const handleCardSetupForRecurring = (clientSecret: string): void => {
-		const cardElement = elements.getElement(CardNumberElement);
-		stripe
-			.handleCardSetup(clientSecret, cardElement, {
-				payment_method_data: {
-					billing_details: {
-						address: {
-							postal_code: zipCode,
-						},
-					},
-				},
-			})
-			.then((result) => {
-				if (result.error) {
-					handleStripeError(result.error);
-				} else {
-					props.onPaymentAuthorised(result.setupIntent.payment_method);
-				}
-			});
+		}
 	};
 
 	const setupRecurringRecaptcha = (): void => {
 		if (window.guardian.recaptchaEnabled) {
-			if (window.grecaptcha && window.grecaptcha.render) {
+			if (window.grecaptcha?.render) {
 				setupRecurringRecaptchaCallback();
 			} else {
 				window.v2OnloadCallback = setupRecurringRecaptchaCallback;
@@ -430,6 +407,7 @@ const CardForm = (props: PropTypes) => {
 			}
 		}
 	}, [stripe, elements, props.contributionType, zipCode]);
+
 	// If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
 	// then go ahead and process the recurring contribution
 	const previousSetupIntentClientSecret = usePrevious(
@@ -464,8 +442,8 @@ const CardForm = (props: PropTypes) => {
 	 * Rendering
 	 */
 	const fieldError: string | null | undefined =
-		errorMessageFromState(fieldStates.CardNumber) ||
-		errorMessageFromState(fieldStates.Expiry) ||
+		errorMessageFromState(fieldStates.CardNumber) ??
+		errorMessageFromState(fieldStates.Expiry) ??
 		errorMessageFromState(fieldStates.CVC);
 	const showZipCodeError =
 		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
@@ -484,7 +462,7 @@ const CardForm = (props: PropTypes) => {
 	};
 
 	const errorMessage: string | null | undefined =
-		fieldError || incompleteMessage();
+		fieldError ?? incompleteMessage();
 
 	const showCards = (country: IsoCountry) => {
 		if (country === 'US') {
@@ -520,7 +498,7 @@ const CardForm = (props: PropTypes) => {
 						}}
 						onChange={onChange('CardNumber')}
 						onFocus={() => setCurrentlySelected('CardNumber')}
-						onBlur={setCurrentlySelected(null)}
+						onBlur={() => setCurrentlySelected(null)}
 					/>
 				}
 				error={fieldStates.CardNumber.name === 'Error'}
@@ -540,10 +518,9 @@ const CardForm = (props: PropTypes) => {
 								options={{
 									style: fieldStyle,
 								}}
-								placeholder=""
 								onChange={onChange('Expiry')}
 								onFocus={() => setCurrentlySelected('Expiry')}
-								onBlur={setCurrentlySelected(null)}
+								onBlur={() => setCurrentlySelected(null)}
 							/>
 						}
 						error={fieldStates.Expiry.name === 'Error'}
@@ -576,10 +553,9 @@ const CardForm = (props: PropTypes) => {
 								options={{
 									style: fieldStyle,
 								}}
-								placeholder=""
 								onChange={onChange('CVC')}
 								onFocus={() => setCurrentlySelected('CVC')}
-								onBlur={setCurrentlySelected(null)}
+								onBlur={() => setCurrentlySelected(null)}
 							/>
 						}
 						error={fieldStates.CVC.name === 'Error'}
@@ -596,7 +572,7 @@ const CardForm = (props: PropTypes) => {
 						label="ZIP code"
 						value={zipCode}
 						onChange={updateZipCode}
-						error={showZipCodeError ? 'Please enter a valid ZIP code' : null}
+						error={showZipCodeError ? 'Please enter a valid ZIP code' : ''}
 					/>
 				</div>
 			)}
@@ -617,6 +593,6 @@ const CardForm = (props: PropTypes) => {
 			) : null}
 		</div>
 	);
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardForm);
+export default connector(CardForm);

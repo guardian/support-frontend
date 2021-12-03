@@ -3,11 +3,11 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 51,
-            "TS2322": 191,
-            "TS2578": 20,
-            "TS2339": 80,
-            "TS7006": 110,
-            "TS2345": 129,
+            "TS2322": 184,
+            "TS2578": 19,
+            "TS2339": 75,
+            "TS7006": 104,
+            "TS2345": 127,
             "TS7053": 14,
             "TS7034": 7,
             "TS7005": 23,
@@ -19,7 +19,7 @@
             "TS2304": 5,
             "TS2741": 5,
             "TS2739": 16,
-            "TS2532": 8,
+            "TS2532": 6,
             "TS2556": 3,
             "TS2554": 48,
             "TS2569": 2,
@@ -28,7 +28,7 @@
             "TS7017": 4,
             "TS2367": 4,
             "TS2740": 6,
-            "TS2531": 9,
+            "TS2531": 4,
             "TS7016": 1,
             "TS1337": 1,
             "TS2694": 5,
@@ -135,7 +135,7 @@
             "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 10,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 29,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
@@ -946,36 +946,8 @@
             "message": "Type 'string | null' is not assignable to type 'string | undefined'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type 'StripeCardNumberElement | null' is not assignable to type 'StripeCardElement | StripeCardNumberElement | { token: string; }'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type '{ base: { fontFamily: string; '::placeholder': { color: string; }; fontSize: string; lineHeight: number; }; }' is not assignable to type 'StripeElementStyle'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type 'void' is not assignable to type '(() => any) | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type '{ base: { fontFamily: string; '::placeholder': { color: string; }; fontSize: string; lineHeight: number; }; }' is not assignable to type 'StripeElementStyle'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type 'void' is not assignable to type '(() => any) | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type '{ base: { fontFamily: string; '::placeholder': { color: string; }; fontSize: string; lineHeight: number; }; }' is not assignable to type 'StripeElementStyle'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type 'void' is not assignable to type '(() => any) | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
+            "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"country\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
@@ -1277,10 +1249,6 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -1590,26 +1558,6 @@
             "message": "Property 'showPrivacyManager' does not exist on type 'never'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'uat' does not exist on type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'default' does not exist on type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'uat' does not exist on type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'default' does not exist on type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Property 'handleCardSetup' does not exist on type 'Stripe'."
-        },
-        {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
             "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
@@ -1890,30 +1838,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
             "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'value' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'update' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'token' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'token' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
@@ -2508,14 +2432,6 @@
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ countryId: string; countryGroupId: CountryGroupId; currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; ... 7 more ...; checkoutFormHasBeenSubmitted: boolean; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Argument of type '(clientSecret: string) => Promise<PaymentIntentResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<Stripe3DSResult>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Argument of type '(props: PropTypes) => JSX.Element' is not assignable to parameter of type 'ComponentType<Matching<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; paymentWaiting: boolean; country: string; ... 5 more ...; oneOffRecaptchaToken: string | null; } & { ...; }, PropTypes>>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
@@ -3156,14 +3072,6 @@
         {
             "path": "assets/helpers/user/user.ts",
             "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Object is possibly 'undefined'."
         }
     ],
     "TS2556": [
@@ -3505,26 +3413,6 @@
         },
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Object is possibly 'null'."
         },
         {
