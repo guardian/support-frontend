@@ -4,7 +4,7 @@ import { neutral, space } from '@guardian/src-foundations';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import type { RenderPrbInput } from 'components/StripePaymentRequestButton/StripePaymentRequestButton';
+import type { RenderPaymentRequestButtonInput } from 'components/StripePaymentRequestButton/StripePaymentRequestButton';
 import StripePaymentRequestButtonContainer from 'components/StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import type {
 	ContributionType,
@@ -40,21 +40,21 @@ function StripePaymentRequestButton({
 			contributionType={contributionType}
 			selectedAmounts={selectedAmounts}
 			otherAmounts={otherAmounts}
-			renderPrb={({
+			renderPaymentRequestButton={({
 				type,
 				paymentRequest,
 				paymentRequestError,
-				onStripePrbClick,
-				onCustomPrbClick,
+				onStripeButtonClick,
+				onCustomButtonClick,
 			}) => (
-				<Prb
+				<PaymentRequestButton
 					country={country}
 					contributionType={contributionType}
 					type={type}
 					paymentRequest={paymentRequest}
 					paymentRequestError={paymentRequestError}
-					onStripePrbClick={onStripePrbClick}
-					onCustomPrbClick={onCustomPrbClick}
+					onStripeButtonClick={onStripeButtonClick}
+					onCustomButtonClick={onCustomButtonClick}
 				/>
 			)}
 		/>
@@ -63,48 +63,49 @@ function StripePaymentRequestButton({
 
 // ---- Helper component ---- //
 
-interface PrbProps extends RenderPrbInput {
+interface PaymentRequestButtonProps extends RenderPaymentRequestButtonInput {
 	country: IsoCountry;
 	contributionType: ContributionType;
 }
 
-function Prb({
+function PaymentRequestButton({
 	country,
 	contributionType,
 	type,
 	paymentRequest,
 	paymentRequestError,
-	onStripePrbClick,
-	onCustomPrbClick,
-}: PrbProps) {
+	onStripeButtonClick,
+	onCustomButtonClick,
+}: PaymentRequestButtonProps) {
 	const countryGroupId = fromCountry(country);
 
 	const isUkOrEuRecurring =
 		contributionType !== 'ONE_OFF' &&
 		(countryGroupId === 'GBPCountries' || countryGroupId === 'EURCountries');
 
-	const shouldShowPrb =
+	const shouldShow =
 		type === 'APPLE_PAY' || type === 'GOOGLE_PAY' || !isUkOrEuRecurring;
 
-	if (!shouldShowPrb) {
+	if (!shouldShow) {
 		return null;
 	}
 
-	const shouldShowStripePrb = type === 'APPLE_PAY' || type === 'GOOGLE_PAY';
+	const shouldRenderStripeElement =
+		type === 'APPLE_PAY' || type === 'GOOGLE_PAY';
 
 	return (
 		<>
-			{shouldShowStripePrb ? (
+			{shouldRenderStripeElement ? (
 				<PaymentRequestButtonElement
 					options={{
 						paymentRequest,
-						style: styles.stripePrb,
+						style: styles.stripeButton,
 					}}
-					onClick={onStripePrbClick}
+					onClick={onStripeButtonClick}
 				/>
 			) : (
 				<div>
-					<Button onClick={onCustomPrbClick} css={styles.customPrb}>
+					<Button onClick={onCustomButtonClick} css={styles.customButton}>
 						Pay with saved card
 					</Button>
 				</div>
@@ -122,13 +123,13 @@ function Prb({
 //  ---- Styles ---- //
 
 const styles = {
-	stripePrb: {
+	stripeButton: {
 		paymentRequestButton: {
 			theme: 'dark',
 			height: '42px',
 		},
 	} as const,
-	customPrb: css`
+	customButton: css`
 		width: 100%;
 		justify-content: center;
 		margin: ${space[6]}px 0;

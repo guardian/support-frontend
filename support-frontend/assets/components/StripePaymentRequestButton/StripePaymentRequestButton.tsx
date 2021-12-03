@@ -64,21 +64,23 @@ import { trackComponentEvents } from '../../helpers/tracking/ophan';
 
 // ----- Types -----//
 
-type PrbType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
+type PaymentRequestButtonType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
 
-export interface RenderPrbInput {
-	type: PrbType;
+export interface RenderPaymentRequestButtonInput {
+	type: PaymentRequestButtonType;
 	paymentRequest: PaymentRequest;
 	paymentRequestError: ErrorReason | null;
-	onStripePrbClick: (
+	onStripeButtonClick: (
 		event: StripePaymentRequestButtonElementClickEvent,
 	) => void;
-	onCustomPrbClick: (
+	onCustomButtonClick: (
 		event: StripePaymentRequestButtonElementClickEvent,
 	) => void;
 }
 
-export type RenderPrb = (input: RenderPrbInput) => JSX.Element;
+export type RenderPaymentRequestButton = (
+	input: RenderPaymentRequestButtonInput,
+) => JSX.Element;
 
 interface PropsFromParent {
 	paymentRequestObject: PaymentRequest | null;
@@ -86,7 +88,7 @@ interface PropsFromParent {
 	amount: number;
 	stripeAccount: StripeAccount;
 	stripeKey: string;
-	renderPrb: RenderPrb;
+	renderPaymentRequestButton: RenderPaymentRequestButton;
 }
 
 const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
@@ -418,7 +420,7 @@ function setUpPaymentListenerSca(
 
 function PaymentRequestButton(props: PropTypes) {
 	const stripe = stripeJs.useStripe();
-	const [prbType, setPrbType] = useState<PrbType>('NONE');
+	const [type, setType] = useState<PaymentRequestButtonType>('NONE');
 
 	function initialisePaymentRequest() {
 		if (!stripe) {
@@ -448,11 +450,11 @@ function PaymentRequestButton(props: PropTypes) {
 				trackComponentLoad(`${paymentMethod}-loaded`);
 
 				if (result?.applePay) {
-					setPrbType('APPLE_PAY');
+					setType('APPLE_PAY');
 				} else if (result?.googlePay) {
-					setPrbType('GOOGLE_PAY');
+					setType('GOOGLE_PAY');
 				} else if (result) {
-					setPrbType('PAY_NOW');
+					setType('PAY_NOW');
 				}
 
 				trackComponentLoad(`${paymentMethod}-displayed`);
@@ -492,11 +494,11 @@ function PaymentRequestButton(props: PropTypes) {
 		if (props.paymentRequestObject) {
 			void props.paymentRequestObject.canMakePayment().then((result) => {
 				if (result?.applePay) {
-					setPrbType('APPLE_PAY');
+					setType('APPLE_PAY');
 				} else if (result?.googlePay) {
-					setPrbType('GOOGLE_PAY');
+					setType('GOOGLE_PAY');
 				} else if (result) {
-					setPrbType('PAY_NOW');
+					setType('PAY_NOW');
 				}
 			});
 		}
@@ -511,12 +513,12 @@ function PaymentRequestButton(props: PropTypes) {
 
 	return (
 		<div>
-			{props.renderPrb({
-				type: prbType,
+			{props.renderPaymentRequestButton({
+				type: type,
 				paymentRequest: props.paymentRequestObject,
 				paymentRequestError: props.stripePaymentRequestButtonData.paymentError,
-				onStripePrbClick: getClickHandler(props, false),
-				onCustomPrbClick: getClickHandler(props, true),
+				onStripeButtonClick: getClickHandler(props, false),
+				onCustomButtonClick: getClickHandler(props, true),
 			})}
 		</div>
 	);
