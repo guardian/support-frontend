@@ -19,6 +19,10 @@ declare global {
 			};
 			productPrices: ProductPrices;
 			orderIsAGift: boolean;
+			amazonPaySellerId: {
+				default: string;
+				uat: string;
+			};
 		};
 		enablePayPalButton?: () => void;
 		disablePayPalButton?: () => void;

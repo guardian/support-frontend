@@ -1,6 +1,10 @@
-// @ts-expect-error - required for hooks
+import { InlineError } from '@guardian/src-user-feedback';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import type { ThunkDispatch } from 'redux-thunk';
+import type { ContributionType } from 'helpers/contributions';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { logException } from 'helpers/utilities/logger';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
@@ -11,13 +15,12 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type {
 	AmazonPayData,
+	AmazonPaymentsObject,
+	BaseWalletConfig,
+	ConsentConfig,
 	State,
 } from 'pages/contributions-landing/contributionsLandingReducer';
 import './AmazonPay.scss';
-import { logException } from 'helpers/utilities/logger';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import type { ContributionType } from 'helpers/contributions';
-import { InlineError } from '@guardian/src-user-feedback';
 
 type PropTypes = {
 	amazonPayData: AmazonPayData;
@@ -37,7 +40,7 @@ const mapStateToProps = (state: State) => ({
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 	setAmazonPayWalletIsStale: (isReady: boolean) =>
 		dispatch(setAmazonPayWalletIsStale(isReady)),
 	setAmazonPayOrderReferenceId: (orderReferenceId: string) =>
@@ -61,13 +64,13 @@ const getSellerId = (isTestUser: boolean): string =>
 		? window.guardian.amazonPaySellerId.uat
 		: window.guardian.amazonPaySellerId.default;
 
-const AmazonPayWalletComponent = (props: PropTypes) => {
+function AmazonPayWalletComponent(props: PropTypes) {
 	const createWalletWidget = (
-		amazonPaymentsObject: Record<string, any>,
+		amazonPaymentsObject: AmazonPaymentsObject,
 	): void => {
 		props.setAmazonPayPaymentSelected(false); // in case we've previously created a wallet
 
-		const baseWalletConfig = {
+		const baseWalletConfig: BaseWalletConfig = {
 			sellerId: getSellerId(props.isTestUser),
 			design: {
 				designMode: 'responsive',
@@ -108,10 +111,10 @@ const AmazonPayWalletComponent = (props: PropTypes) => {
 	};
 
 	const createConsentWidget = (
-		amazonPaymentsObject: Record<string, any>,
+		amazonPaymentsObject: AmazonPaymentsObject,
 		amazonBillingAgreementId: string,
 	): void => {
-		const consentConfig = {
+		const consentConfig: ConsentConfig = {
 			amazonBillingAgreementId,
 			sellerId: getSellerId(props.isTestUser),
 			design: {
@@ -135,6 +138,7 @@ const AmazonPayWalletComponent = (props: PropTypes) => {
 				logException(`Amazon Pay consent error: ${error.getErrorMessage()}`);
 			},
 		};
+
 		new amazonPaymentsObject.Widgets.Consent(consentConfig).bind(
 			'ConsentWidgetDiv',
 		);
@@ -197,7 +201,7 @@ const AmazonPayWalletComponent = (props: PropTypes) => {
 	}
 
 	return null;
-};
+}
 
 const AmazonPayWallet = connect(
 	mapStateToProps,
