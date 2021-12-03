@@ -1,8 +1,4 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { Button } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import type {
 	PaymentIntentResult,
@@ -16,7 +12,6 @@ import React, { useEffect, useState } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import {
 	getAvailablePaymentRequestButtonPaymentMethod,
@@ -65,9 +60,25 @@ import {
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
-import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
+import { trackComponentEvents } from '../../helpers/tracking/ophan';
 
 // ----- Types -----//
+
+type PrbType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
+
+export interface RenderPrbInput {
+	type: PrbType;
+	paymentRequest: PaymentRequest;
+	paymentRequestError: ErrorReason | null;
+	onStripePrbClick: (
+		event: StripePaymentRequestButtonElementClickEvent,
+	) => void;
+	onCustomPrbClick: (
+		event: StripePaymentRequestButtonElementClickEvent,
+	) => void;
+}
+
+export type RenderPrb = (input: RenderPrbInput) => JSX.Element;
 
 interface PropsFromParent {
 	paymentRequestObject: PaymentRequest | null;
@@ -75,6 +86,7 @@ interface PropsFromParent {
 	amount: number;
 	stripeAccount: StripeAccount;
 	stripeKey: string;
+	renderPrb: RenderPrb;
 }
 
 const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
@@ -402,28 +414,6 @@ function setUpPaymentListenerSca(
 	});
 }
 
-const paymentButtonStyle = {
-	paymentRequestButton: {
-		theme: 'dark',
-		height: '42px',
-	},
-} as const;
-
-// ---- Styles ----- //
-
-const customPrbStyles = css`
-	width: 100%;
-	justify-content: center;
-	margin: ${space[6]}px 0;
-	background: #323457;
-
-	&:hover {
-		background: #1c1d31;
-	}
-`;
-
-type PrbType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
-
 // ---- Component ----- //
 
 function PaymentRequestButton(props: PropTypes) {
@@ -465,28 +455,17 @@ function PaymentRequestButton(props: PropTypes) {
 					setPrbType('PAY_NOW');
 				}
 
-				const isUkOrEuRecurring =
-					props.contributionType !== 'ONE_OFF' &&
-					(props.countryGroupId === 'GBPCountries' ||
-						props.countryGroupId === 'EURCountries');
-				const shouldShowPrb =
-					Boolean(result?.applePay) ||
-					Boolean(result?.googlePay) ||
-					!isUkOrEuRecurring;
-
-				if (shouldShowPrb) {
-					trackComponentLoad(`${paymentMethod}-displayed`);
-					props.setPaymentRequestButtonPaymentMethod(
-						paymentMethod,
-						props.stripeAccount,
-					);
-					setUpPaymentListenerSca(
-						props,
-						stripe,
-						paymentRequestObject,
-						paymentMethod,
-					);
-				}
+				trackComponentLoad(`${paymentMethod}-displayed`);
+				props.setPaymentRequestButtonPaymentMethod(
+					paymentMethod,
+					props.stripeAccount,
+				);
+				setUpPaymentListenerSca(
+					props,
+					stripe,
+					paymentRequestObject,
+					paymentMethod,
+				);
 			} else {
 				props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
 			}
@@ -530,38 +509,15 @@ function PaymentRequestButton(props: PropTypes) {
 		return null;
 	}
 
-	const shouldShowStripePrb =
-		prbType === 'APPLE_PAY' || prbType === 'GOOGLE_PAY';
 	return (
-		<div
-			className="stripe-payment-request-button__container"
-			data-for-stripe-account={props.stripeAccount}
-			data-for-contribution-type={props.contributionType}
-		>
-			{shouldShowStripePrb ? (
-				<PaymentRequestButtonElement
-					options={{
-						paymentRequest: props.paymentRequestObject,
-						style: paymentButtonStyle,
-					}}
-					className="stripe-payment-request-button__button"
-					onClick={getClickHandler(props, false)}
-				/>
-			) : (
-				<div>
-					<Button onClick={getClickHandler(props, true)} css={customPrbStyles}>
-						Pay with saved card
-					</Button>
-				</div>
-			)}
-
-			{props.stripePaymentRequestButtonData.paymentError && (
-				<GeneralErrorMessage
-					errorReason={props.stripePaymentRequestButtonData.paymentError}
-				/>
-			)}
-
-			<div className="stripe-payment-request-button__divider">or</div>
+		<div>
+			{props.renderPrb({
+				type: prbType,
+				paymentRequest: props.paymentRequestObject,
+				paymentRequestError: props.stripePaymentRequestButtonData.paymentError,
+				onStripePrbClick: getClickHandler(props, false),
+				onCustomPrbClick: getClickHandler(props, true),
+			})}
 		</div>
 	);
 }

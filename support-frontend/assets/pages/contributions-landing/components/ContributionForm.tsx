@@ -63,7 +63,8 @@ import ContributionSubmit from './ContributionSubmit';
 import ContributionTypeTabs from './ContributionTypeTabs';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
-import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import StripePaymentRequestButton from './StripePaymentRequestButton';
+
 // ----- Types ----- //
 
 type PropTypes = {
@@ -362,7 +363,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					</CheckboxGroup>
 				)}
 			</div>
-			<StripePaymentRequestButtonContainer
+			<StripePaymentRequestButton
 				currency={props.currency}
 				contributionType={props.contributionType}
 				isTestUser={props.isTestUser}
