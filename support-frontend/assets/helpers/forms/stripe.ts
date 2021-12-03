@@ -1,5 +1,4 @@
-// @ts-expect-error - required for hooks
-import type { Stripe as StripeSDK } from '@stripe/stripe-js/pure';
+import type { Stripe as StripeJs } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js/pure';
 import { useEffect, useState } from 'react';
 import type { ContributionType } from 'helpers/contributions';
@@ -21,6 +20,17 @@ const stripeAccountForContributionType: Record<
 	MONTHLY: 'REGULAR',
 	ANNUAL: 'REGULAR',
 };
+
+export interface StripeKey {
+	ONE_OFF: {
+		uat: string;
+		default: string;
+	};
+	REGULAR: {
+		uat: string;
+		default: string;
+	};
+}
 
 function getStripeKey(
 	stripeAccount: StripeAccount,
@@ -50,16 +60,20 @@ function getStripeKey(
 const stripeScriptHasBeenAddedToPage = (): boolean =>
 	!!document.querySelector("script[src^='https://js.stripe.com']");
 
+interface StripeObjects {
+	ONE_OFF: StripeJs | null;
+	REGULAR: StripeJs | null;
+}
+
 export const useStripeObjects = (
 	stripeAccount: StripeAccount,
 	stripeKey: string,
-) => {
-	const [stripeObjects, setStripeObjects] = useState<
-		Record<StripeAccount, StripeSDK | null>
-	>({
+): StripeObjects => {
+	const [stripeObjects, setStripeObjects] = useState<StripeObjects>({
 		REGULAR: null,
 		ONE_OFF: null,
 	});
+
 	useEffect(() => {
 		if (stripeObjects[stripeAccount] === null) {
 			if (!stripeScriptHasBeenAddedToPage()) {
@@ -68,7 +82,7 @@ export const useStripeObjects = (
 				});
 			}
 
-			loadStripe(stripeKey).then((newStripe) => {
+			void loadStripe(stripeKey).then((newStripe) => {
 				setStripeObjects((prevData) => ({
 					...prevData,
 					[stripeAccount]: newStripe,

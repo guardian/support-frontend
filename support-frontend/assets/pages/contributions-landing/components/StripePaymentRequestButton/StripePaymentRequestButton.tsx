@@ -1,18 +1,23 @@
 // ----- Imports ----- //
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
+import { Button } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
+import type {
+	PaymentIntentResult,
+	PaymentRequest,
+	PaymentRequestCompleteStatus,
+	PaymentRequestPaymentMethodEvent,
+	Stripe as StripeJs,
+	StripePaymentRequestButtonElementClickEvent,
+} from '@stripe/stripe-js';
 import React, { useEffect, useState } from 'react';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
 import {
 	getAvailablePaymentRequestButtonPaymentMethod,
 	toHumanReadableContributionType,
@@ -28,14 +33,8 @@ import type {
 	StripePaymentMethod,
 	StripePaymentRequestButtonMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import 'helpers/internationalisation/countryGroup';
-import {
-	trackComponentClick,
-	trackComponentLoad,
-} from 'helpers/tracking/behaviour';
+import { Stripe } from 'helpers/forms/paymentMethods';
+import type { StripeAccount } from 'helpers/forms/stripe';
 import type {
 	IsoCountry,
 	StateProvince,
@@ -44,9 +43,12 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import {
+	trackComponentClick,
+	trackComponentLoad,
+} from 'helpers/tracking/behaviour';
 import type { Option } from 'helpers/types/option';
 import { logException } from 'helpers/utilities/logger';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,
 	setHandleStripe3DS,
@@ -61,62 +63,21 @@ import {
 	updateLastName,
 	updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type {
-	State,
-	Stripe3DSResult,
-	StripePaymentRequestButtonData,
-} from 'pages/contributions-landing/contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { Stripe } from 'helpers/forms/paymentMethods';
-import type { StripeAccount } from 'helpers/forms/stripe';
-import type { Csrf as CsrfState } from '../../../../helpers/csrf/csrfReducer';
-import type { LocalCurrencyCountry } from '../../../../helpers/internationalisation/localCurrencyCountry';
+import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { trackComponentEvents } from '../../../../helpers/tracking/ophan';
-import { Button } from '@guardian/src-button';
-// ----- Types -----//
-type PaymentRequestObject = Record<string, any>; // Just to make it clearer when we're passing this object around
 
-/* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
-	paymentRequestObject: PaymentRequestObject | null;
-	setPaymentRequestObject: (paymentRequestObject: PaymentRequestObject) => void;
-	country: IsoCountry;
-	currency: IsoCurrency;
-	selectedAmounts: SelectedAmounts;
-	otherAmounts: OtherAmounts;
-	contributionType: ContributionType;
-	countryGroupId: CountryGroupId;
-	billingState: StateProvince | null;
-	isTestUser: boolean;
+// ----- Types -----//
+
+interface PropsFromParent {
+	paymentRequestObject: PaymentRequest | null;
+	setPaymentRequestObject: (paymentRequestObject: PaymentRequest) => void;
 	amount: number;
-	stripePaymentRequestButtonData: StripePaymentRequestButtonData;
-	setPaymentRequestButtonPaymentMethod: (
-		arg0: StripePaymentRequestButtonMethod,
-		arg1: StripeAccount,
-	) => void;
-	onPaymentAuthorised: (arg0: PaymentAuthorisation) => Promise<PaymentResult>;
-	setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) => void;
-	toggleOtherPaymentMethods: () => void;
-	updateEmail: (arg0: string) => void;
-	updateFirstName: (arg0: string) => void;
-	updateLastName: (arg0: string) => void;
-	updateBillingState: (billingState: StateProvince | null) => void;
-	updateBillingCountry: (arg0: IsoCountry) => void;
-	paymentMethod: PaymentMethod;
-	setAssociatedPaymentMethod: () => (arg0: (...args: any[]) => any) => void;
 	stripeAccount: StripeAccount;
 	stripeKey: string;
-	setPaymentWaiting: (isWaiting: boolean) => Action;
-	setError: (error: ErrorReason, stripeAccount: StripeAccount) => Action;
-	setHandleStripe3DS: (
-		arg0: (clientSecret: string) => Promise<Stripe3DSResult>,
-	) => Action;
-	csrf: CsrfState;
-	localCurrencyCountry: LocalCurrencyCountry | null | undefined;
-	useLocalCurrency: boolean;
-};
+}
 
-const mapStateToProps = (state: State, ownProps: PropTypes) => ({
+const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 	selectedAmounts: state.page.form.selectedAmounts,
 	otherAmounts: state.page.form.formData.otherAmounts,
 	stripePaymentRequestButtonData:
@@ -125,16 +86,15 @@ const mapStateToProps = (state: State, ownProps: PropTypes) => ({
 	country: state.common.internationalisation.countryId,
 	billingState: state.page.form.formData.billingState,
 	currency: state.common.internationalisation.currencyId,
-	isTestUser: state.page.user.isTestUser || false,
+	isTestUser: state.page.user.isTestUser ?? false,
 	contributionType: state.page.form.contributionType,
 	paymentMethod: state.page.form.paymentMethod,
-	switches: state.common.settings.switches,
 	csrf: state.page.csrf,
 	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 	onPaymentAuthorised: (paymentAuthorisation: PaymentAuthorisation) =>
 		dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
 	setPaymentRequestButtonPaymentMethod: (
@@ -159,17 +119,22 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setError: (error: ErrorReason, stripeAccount: StripeAccount) =>
 		dispatch(setStripePaymentRequestButtonError(error, stripeAccount)),
 	setHandleStripe3DS: (
-		handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 	) => dispatch(setHandleStripe3DS(handleStripe3DS)),
 });
 
-// ----- Functions -----//
-function updatePayerEmail(
-	data: Record<string, any>,
-	setEmail: (arg0: string) => void,
-) {
-	const email = data.payerEmail;
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type PropTypes = PropsFromRedux & PropsFromParent;
+
+// ----- Functions -----//
+
+function updatePayerEmail(
+	email: string | undefined,
+	setEmail: (email: string) => void,
+) {
 	if (email) {
 		if (isValidEmail(email)) {
 			setEmail(email);
@@ -184,12 +149,12 @@ function updatePayerEmail(
 }
 
 function updatePayerName(
-	data: Record<string, any>,
-	setFirstName: (arg0: string) => void,
-	setLastName: (arg0: string) => void,
+	payerName: string | undefined,
+	setFirstName: (firstName: string) => void,
+	setLastName: (lastName: string) => void,
 ): boolean {
 	// NB: This turns "    jean    claude    van    damme     " into ["jean", "claude", "van", "damme"]
-	const nameParts = data.payerName.trim().replace(/\s+/g, ' ').split(' ');
+	const nameParts = payerName?.trim().replace(/\s+/g, ' ').split(' ') ?? [];
 
 	if (nameParts.length > 2) {
 		setFirstName(nameParts[0]);
@@ -234,7 +199,7 @@ function updateTotal(props: PropTypes) {
 // We need to intercept the click ourselves because we need to check
 // that the user has entered a valid amount before we allow them to continue
 function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
-	function onClick(event) {
+	function onClick(event: StripePaymentRequestButtonElementClickEvent) {
 		trackComponentClick('apple-pay-clicked');
 		updateTotal(props);
 		props.setAssociatedPaymentMethod();
@@ -272,7 +237,7 @@ function fetchClientSecret(props: PropTypes): Promise<string> {
 		),
 	).then((result) => {
 		if (result.client_secret) {
-			return Promise.resolve(result.client_secret);
+			return Promise.resolve(result.client_secret as string);
 		}
 
 		return Promise.reject(
@@ -285,10 +250,10 @@ function fetchClientSecret(props: PropTypes): Promise<string> {
 // The given processPayment function handles any specific payment completion tasks.
 function onPayment(
 	props: PropTypes,
-	paymentRequestComplete: (arg0: string) => void,
-	paymentRequestData: Record<string, any>,
-	billingCountryFromCard?: string,
-	billingStateFromCard?: string,
+	paymentRequestComplete: (status: PaymentRequestCompleteStatus) => void,
+	paymentMethodEvent: PaymentRequestPaymentMethodEvent,
+	billingCountryFromCard: string | null,
+	billingStateFromCard: string | null,
 	processPayment: () => void,
 ): void {
 	// Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
@@ -298,33 +263,36 @@ function onPayment(
 	// the backend job finishes.
 	paymentRequestComplete('success');
 	// We always need an email address to do ecommerce on support.theguardian.com
-	updatePayerEmail(paymentRequestData, props.updateEmail);
+	updatePayerEmail(paymentMethodEvent.payerEmail, props.updateEmail);
 	// Single doesn't need a name, but recurring (i.e. Zuora and Salesforce) needs a non-empty first and last name.
 	const nameValueOk: boolean =
 		props.contributionType === 'ONE_OFF' ||
 		updatePayerName(
-			paymentRequestData,
+			paymentMethodEvent.payerName,
 			props.updateFirstName,
 			props.updateLastName,
 		);
 	// Single doesn't need a state, however recurring (i.e. Zuora) needs a valid state for US and CA billing countries.
 	const validatedCountryFromCard: Option<IsoCountry> = findIsoCountry(
-		billingCountryFromCard,
+		billingCountryFromCard ?? undefined,
 	);
 	const billingAccountRequiresAState =
 		props.contributionType !== 'ONE_OFF' &&
-		['US', 'CA'].includes(validatedCountryFromCard);
+		['US', 'CA'].includes(validatedCountryFromCard ?? '');
 	let countryAndStateValueOk = !billingAccountRequiresAState; // If Zuora requires a state then we're not OK yet.
 
 	if (validatedCountryFromCard) {
 		const validatedBillingStateFromCard: Option<StateProvince> =
-			stateProvinceFromString(validatedCountryFromCard, billingStateFromCard);
+			stateProvinceFromString(
+				validatedCountryFromCard,
+				billingStateFromCard ?? undefined,
+			);
 
 		if (billingAccountRequiresAState && !validatedBillingStateFromCard) {
 			logException(
 				`Invalid billing state: ${
-					billingStateFromCard || ''
-				} for billing country: ${billingCountryFromCard || ''}`,
+					billingStateFromCard ?? ''
+				} for billing country: ${billingCountryFromCard ?? ''}`,
 			); // Don't update the form, because the user may pick another payment method that doesn't update formData.
 		} else {
 			// Update the form data with the billing country value and a valid-or-null billing state
@@ -335,12 +303,12 @@ function onPayment(
 	}
 
 	if (nameValueOk && countryAndStateValueOk) {
-		if (paymentRequestData.methodName) {
+		if (paymentMethodEvent.methodName) {
 			// https://stripe.com/docs/stripe-js/reference#payment-response-object
 			// methodName:
 			// "The unique name of the payment handler the customer
 			// chose to authorize payment. For example, 'basic-card'."
-			trackComponentClick(`${paymentRequestData.methodName}-paymentAuthorised`);
+			trackComponentClick(`${paymentMethodEvent.methodName}-paymentAuthorised`);
 		}
 
 		props.setPaymentWaiting(true);
@@ -352,16 +320,17 @@ function onPayment(
 
 function setUpPaymentListenerSca(
 	props: PropTypes,
-	stripe: stripeJs.Stripe,
-	paymentRequest: Record<string, any>,
+	stripe: StripeJs,
+	paymentRequest: PaymentRequest,
 	stripePaymentMethod: StripePaymentMethod,
 ) {
-	paymentRequest.on('paymentmethod', ({ complete, paymentMethod, ...data }) => {
+	paymentRequest.on('paymentmethod', (paymentMethodEvent) => {
+		const { complete, paymentMethod } = paymentMethodEvent;
+
 		const processPayment = () => {
 			const walletType =
-				paymentMethod && paymentMethod.card && paymentMethod.card.wallet
-					? paymentMethod.card.wallet.type
-					: 'no-wallet';
+				(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';
+
 			trackComponentEvents({
 				component: {
 					componentType: 'ACQUISITIONS_OTHER',
@@ -372,7 +341,7 @@ function setUpPaymentListenerSca(
 			});
 
 			if (props.contributionType === 'ONE_OFF') {
-				props
+				void props
 					.onPaymentAuthorised({
 						paymentMethod: Stripe,
 						paymentMethodId: paymentMethod.id,
@@ -384,7 +353,7 @@ function setUpPaymentListenerSca(
 				// and then provide the associated clientSecret for confirmation
 				fetchClientSecret(props)
 					.then((clientSecret: string) => {
-						stripe
+						void stripe
 							.confirmCardSetup(clientSecret, {
 								payment_method: paymentMethod.id,
 							})
@@ -396,7 +365,7 @@ function setUpPaymentListenerSca(
 									);
 									props.setPaymentWaiting(false);
 								} else {
-									props
+									void props
 										.onPaymentAuthorised({
 											paymentMethod: Stripe,
 											paymentMethodId: paymentMethod.id,
@@ -407,9 +376,15 @@ function setUpPaymentListenerSca(
 							});
 					})
 					.catch((error) => {
-						logException(
-							`Error confirming recurring contribution from Payment Request Button: ${error}`,
-						);
+						if (error instanceof Error) {
+							logException(
+								`Error confirming recurring contribution from Payment Request Button: - message: ${error.message}`,
+							);
+						} else {
+							logException(
+								'Error confirming recurring contribution from Payment Request Button',
+							);
+						}
 						props.setError('internal_error', props.stripeAccount);
 						props.setPaymentWaiting(false);
 					});
@@ -419,9 +394,9 @@ function setUpPaymentListenerSca(
 		onPayment(
 			props,
 			complete,
-			data,
-			paymentMethod.billing_details.address.country,
-			paymentMethod.billing_details.address.state,
+			paymentMethodEvent,
+			paymentMethod.billing_details.address?.country ?? null,
+			paymentMethod.billing_details.address?.state ?? null,
 			processPayment,
 		);
 	});
@@ -432,8 +407,10 @@ const paymentButtonStyle = {
 		theme: 'dark',
 		height: '42px',
 	},
-};
+} as const;
+
 // ---- Styles ----- //
+
 const customPrbStyles = css`
 	width: 100%;
 	justify-content: center;
@@ -444,15 +421,21 @@ const customPrbStyles = css`
 		background: #1c1d31;
 	}
 `;
+
 type PrbType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
 
 // ---- Component ----- //
-const PaymentRequestButton = (props: PropTypes) => {
+
+function PaymentRequestButton(props: PropTypes) {
 	const stripe = stripeJs.useStripe();
 	const [prbType, setPrbType] = useState<PrbType>('NONE');
 
 	function initialisePaymentRequest() {
-		const paymentRequestObject: PaymentRequestObject = stripe.paymentRequest({
+		if (!stripe) {
+			return;
+		}
+
+		const paymentRequestObject = stripe.paymentRequest({
 			country: props.country,
 			currency: props.currency.toLowerCase(),
 			total: {
@@ -464,7 +447,8 @@ const PaymentRequestButton = (props: PropTypes) => {
 			requestPayerEmail: true,
 			requestPayerName: props.contributionType !== 'ONE_OFF',
 		});
-		paymentRequestObject.canMakePayment().then((result) => {
+
+		void paymentRequestObject.canMakePayment().then((result) => {
 			const paymentMethod = getAvailablePaymentRequestButtonPaymentMethod(
 				result,
 				props.contributionType,
@@ -473,9 +457,9 @@ const PaymentRequestButton = (props: PropTypes) => {
 			if (paymentMethod) {
 				trackComponentLoad(`${paymentMethod}-loaded`);
 
-				if (result && result.applePay) {
+				if (result?.applePay) {
 					setPrbType('APPLE_PAY');
-				} else if (result && result.googlePay) {
+				} else if (result?.googlePay) {
 					setPrbType('GOOGLE_PAY');
 				} else if (result) {
 					setPrbType('PAY_NOW');
@@ -486,8 +470,8 @@ const PaymentRequestButton = (props: PropTypes) => {
 					(props.countryGroupId === 'GBPCountries' ||
 						props.countryGroupId === 'EURCountries');
 				const shouldShowPrb =
-					(result && result.applePay) ||
-					(result && result.googlePay) ||
+					Boolean(result?.applePay) ||
+					Boolean(result?.googlePay) ||
 					!isUkOrEuRecurring;
 
 				if (shouldShowPrb) {
@@ -527,10 +511,10 @@ const PaymentRequestButton = (props: PropTypes) => {
 	}, [stripe, props.paymentRequestObject]);
 	useEffect(() => {
 		if (props.paymentRequestObject) {
-			props.paymentRequestObject.canMakePayment().then((result) => {
-				if (result && result.applePay) {
+			void props.paymentRequestObject.canMakePayment().then((result) => {
+				if (result?.applePay) {
 					setPrbType('APPLE_PAY');
-				} else if (result && result.googlePay) {
+				} else if (result?.googlePay) {
 					setPrbType('GOOGLE_PAY');
 				} else if (result) {
 					setPrbType('PAY_NOW');
@@ -558,9 +542,9 @@ const PaymentRequestButton = (props: PropTypes) => {
 				<PaymentRequestButtonElement
 					options={{
 						paymentRequest: props.paymentRequestObject,
+						style: paymentButtonStyle,
 					}}
 					className="stripe-payment-request-button__button"
-					style={paymentButtonStyle}
 					onClick={getClickHandler(props, false)}
 				/>
 			) : (
@@ -580,9 +564,6 @@ const PaymentRequestButton = (props: PropTypes) => {
 			<div className="stripe-payment-request-button__divider">or</div>
 		</div>
 	);
-};
+}
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(PaymentRequestButton);
+export default connector(PaymentRequestButton);

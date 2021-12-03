@@ -1,9 +1,6 @@
 // ----- Imports ----- //
-import 'helpers/forms/errorReasons';
+import type { PaymentIntentResult } from '@stripe/stripe-js';
 import { combineReducers } from 'redux';
-import 'helpers/contributions';
-import 'helpers/page/commonReducer';
-import 'helpers/internationalisation/country';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type {
@@ -17,8 +14,6 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import 'helpers/identityApis';
-import './contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type {
@@ -64,7 +59,7 @@ export interface StripeCardFormData {
 	recurringRecaptchaVerified: boolean;
 	// These callbacks must be initialised after the StripeCardForm component has been created
 	createPaymentMethod: ((clientSecret: string | null) => void) | null;
-	handle3DS: ((clientSecret: string) => Promise<Stripe3DSResult>) | null; // For single only
+	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only
 }
 interface Wallet {
 	bind: (ID: string) => void;
