@@ -2,12 +2,7 @@
 import { Elements } from '@stripe/react-stripe-js';
 import type { PaymentRequest } from '@stripe/stripe-js';
 import React, { useState } from 'react';
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
-import { getAmount } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	getStripeKey,
 	stripeAccountForContributionType,
@@ -15,7 +10,6 @@ import {
 } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { RenderPaymentRequestButton } from './StripePaymentRequestButton';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
@@ -23,11 +17,9 @@ import StripePaymentRequestButton from './StripePaymentRequestButton';
 
 type PropTypes = {
 	country: IsoCountry;
-	currency: IsoCurrency;
 	isTestUser: boolean;
 	contributionType: ContributionType;
-	selectedAmounts: SelectedAmounts;
-	otherAmounts: OtherAmounts;
+	amount: number;
 	renderPaymentRequestButton: RenderPaymentRequestButton;
 };
 
@@ -38,32 +30,26 @@ interface PrbObjects {
 
 // ----- Component ----- //
 
-function StripePaymentRequestButtonContainer(
-	props: PropTypes,
-): JSX.Element | null {
+function StripePaymentRequestButtonContainer({
+	country,
+	contributionType,
+	isTestUser,
+	amount,
+	renderPaymentRequestButton,
+}: PropTypes): JSX.Element | null {
 	// Maintain the PRB objects here because we must not re-create them when user switches between regular/one-off.
 	// We have to create the PRB object inside the Elements component.
 	const [prbObjects, setPrbObjects] = useState<PrbObjects>({
 		ONE_OFF: null,
 		REGULAR: null,
 	});
-	const stripeAccount =
-		stripeAccountForContributionType[props.contributionType];
-	const stripeKey = getStripeKey(
-		stripeAccount,
-		props.country,
-		props.isTestUser,
-	);
+	const stripeAccount = stripeAccountForContributionType[contributionType];
+	const stripeKey = getStripeKey(stripeAccount, country, isTestUser);
 	const stripeObjects = useStripeObjects(stripeAccount, stripeKey);
 	const showStripePaymentRequestButton =
-		isInStripePaymentRequestAllowedCountries(props.country);
+		isInStripePaymentRequestAllowedCountries(country);
 
 	if (showStripePaymentRequestButton && stripeObjects[stripeAccount]) {
-		const amount = getAmount(
-			props.selectedAmounts,
-			props.otherAmounts,
-			props.contributionType,
-		);
 		// `options` must be set even if it's empty, otherwise we get 'Unsupported prop change on Elements' warnings
 		// in the console
 		const elementsOptions = {};
@@ -86,7 +72,7 @@ function StripePaymentRequestButtonContainer(
 						setPaymentRequestObject={(prbObject) =>
 							setPrbObjects({ ...prbObjects, [stripeAccount]: prbObject })
 						}
-						renderPaymentRequestButton={props.renderPaymentRequestButton}
+						renderPaymentRequestButton={renderPaymentRequestButton}
 					/>
 				</Elements>
 			</div>

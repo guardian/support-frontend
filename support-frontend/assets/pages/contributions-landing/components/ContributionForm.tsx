@@ -364,12 +364,14 @@ function ContributionForm(props: PropTypes): JSX.Element {
 				)}
 			</div>
 			<StripePaymentRequestButton
-				currency={props.currency}
 				contributionType={props.contributionType}
 				isTestUser={props.isTestUser}
 				country={props.country}
-				otherAmounts={props.otherAmounts}
-				selectedAmounts={props.selectedAmounts}
+				amount={getAmount(
+					props.selectedAmounts,
+					props.otherAmounts,
+					props.contributionType,
+				)}
 			/>
 			<div className={classNameWithModifiers('form', ['content'])}>
 				<ContributionFormFields />
