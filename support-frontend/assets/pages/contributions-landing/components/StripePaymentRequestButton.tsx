@@ -6,40 +6,29 @@ import React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { RenderPaymentRequestButtonInput } from 'components/StripePaymentRequestButton/StripePaymentRequestButton';
 import StripePaymentRequestButtonContainer from 'components/StripePaymentRequestButton/StripePaymentRequestButtonContainer';
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 interface StripePaymentRequestButtonProps {
 	country: IsoCountry;
-	currency: IsoCurrency;
 	isTestUser: boolean;
 	contributionType: ContributionType;
-	selectedAmounts: SelectedAmounts;
-	otherAmounts: OtherAmounts;
+	amount: number;
 }
 
 function StripePaymentRequestButton({
 	country,
-	currency,
 	isTestUser,
 	contributionType,
-	selectedAmounts,
-	otherAmounts,
+	amount,
 }: StripePaymentRequestButtonProps): JSX.Element {
 	return (
 		<StripePaymentRequestButtonContainer
 			country={country}
-			currency={currency}
 			isTestUser={isTestUser}
 			contributionType={contributionType}
-			selectedAmounts={selectedAmounts}
-			otherAmounts={otherAmounts}
+			amount={amount}
 			renderPaymentRequestButton={({
 				type,
 				paymentRequest,
