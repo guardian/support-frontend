@@ -17,44 +17,44 @@ object SwitchState {
 }
 
 case class FeatureSwitches(
-  enableQuantumMetric: SwitchState = Off,
-  usStripeAccountForSingle: SwitchState = On
+  enableQuantumMetric: SwitchState,
+  usStripeAccountForSingle: SwitchState
 )
 
 case class CampaignSwitches(
-  enableContributionsCampaign: SwitchState = Off,
-  forceContributionsCampaign: SwitchState = Off
+  enableContributionsCampaign: SwitchState,
+  forceContributionsCampaign: SwitchState
 )
 
 case class SubscriptionsSwitches(
-  enableDigitalSubGifting: SwitchState = On,
-  useDotcomContactPage: SwitchState = On,
-  checkoutPostcodeLookup: SwitchState = On
+  enableDigitalSubGifting: SwitchState,
+  useDotcomContactPage: SwitchState,
+  checkoutPostcodeLookup: SwitchState
 )
 
 case class RecaptchaSwitches(
-  enableRecaptchaBackend: SwitchState = On,
-  enableRecaptchaFrontend: SwitchState = On
+  enableRecaptchaBackend: SwitchState,
+  enableRecaptchaFrontend: SwitchState
 )
 
 case class OneOffPaymentMethodSwitches(
-  stripe: SwitchState = On,
-  stripeApplePay: SwitchState = On,
-  stripePaymentRequestButton: SwitchState = On,
-  payPal: SwitchState = On,
-  amazonPay: SwitchState = On
+  stripe: SwitchState,
+  stripeApplePay: SwitchState,
+  stripePaymentRequestButton: SwitchState,
+  payPal: SwitchState,
+  amazonPay: SwitchState
 )
 
 case class RecurringPaymentMethodSwitches(
-  stripe: SwitchState = On,
-  stripeApplePay: SwitchState = On,
-  stripePaymentRequestButton: SwitchState = On,
-  payPal: SwitchState = On,
-  directDebit: SwitchState = On,
-  existingCard: SwitchState = On,
-  existingDirectDebit: SwitchState = On,
-  amazonPay: SwitchState = Off,
-  sepa: SwitchState = Off
+  stripe: SwitchState,
+  stripeApplePay: SwitchState,
+  stripePaymentRequestButton: SwitchState,
+  payPal: SwitchState,
+  directDebit: SwitchState,
+  existingCard: SwitchState,
+  existingDirectDebit: SwitchState,
+  amazonPay: SwitchState,
+  sepa: SwitchState
 )
 
 case class Switches(
@@ -102,6 +102,7 @@ object Switches {
     }
 
   implicit private val customConfig: Configuration = Configuration.default.withDefaults
+
   private val switchesEncoder = Encoder[Switches]
   private val switchesDecoder = Decoder[Switches].prepare(_.withFocus(flattenAllSwitches))
 

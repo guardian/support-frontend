@@ -103,12 +103,12 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     val allSettings = AllSettings(
       Switches(
-        oneOffPaymentMethods = OneOffPaymentMethodSwitches(),
-        recurringPaymentMethods = RecurringPaymentMethodSwitches(),
-        subscriptionsSwitches = SubscriptionsSwitches(),
-        featureSwitches = FeatureSwitches(),
-        campaignSwitches = CampaignSwitches(),
-        recaptchaSwitches = RecaptchaSwitches()
+        oneOffPaymentMethods = OneOffPaymentMethodSwitches(On,On,On,On,On),
+        recurringPaymentMethods = RecurringPaymentMethodSwitches(On,On,On,On,Off,On,On,On,Off),
+        subscriptionsSwitches = SubscriptionsSwitches(On,On,On),
+        featureSwitches = FeatureSwitches(On, On),
+        campaignSwitches = CampaignSwitches(On, On),
+        recaptchaSwitches = RecaptchaSwitches(On, On)
       ),
       configuredAmounts,
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
