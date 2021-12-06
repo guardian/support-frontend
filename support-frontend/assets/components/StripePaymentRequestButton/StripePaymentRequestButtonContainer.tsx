@@ -16,6 +16,7 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { RenderPaymentRequestButton } from './StripePaymentRequestButton';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
 // ----- Types -----//
@@ -27,6 +28,7 @@ type PropTypes = {
 	contributionType: ContributionType;
 	selectedAmounts: SelectedAmounts;
 	otherAmounts: OtherAmounts;
+	renderPaymentRequestButton: RenderPaymentRequestButton;
 };
 
 interface PrbObjects {
@@ -84,6 +86,7 @@ function StripePaymentRequestButtonContainer(
 						setPaymentRequestObject={(prbObject) =>
 							setPrbObjects({ ...prbObjects, [stripeAccount]: prbObject })
 						}
+						renderPaymentRequestButton={props.renderPaymentRequestButton}
 					/>
 				</Elements>
 			</div>
