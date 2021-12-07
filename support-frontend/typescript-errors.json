@@ -617,7 +617,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Type '{ children: Element[]; legend: string; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"error\" | \"className\" | \"name\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; legend: string; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
@@ -625,7 +625,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: string | undefined; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"error\" | \"className\" | \"name\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: string | undefined; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
@@ -1089,7 +1089,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"error\" | \"className\" | \"name\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1097,7 +1097,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"error\" | \"className\" | \"name\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1169,7 +1169,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"error\" | \"className\" | \"name\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -2869,7 +2869,7 @@
     "TS2741": [
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"error\" | \"value\" | \"dir\" | ... 275 more ... | \"enterKeyHint\">'."
+            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"value\" | \"dir\" | \"size\" | ... 275 more ... | \"enterKeyHint\">'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
@@ -3305,7 +3305,7 @@
         },
         {
             "path": "assets/helpers/productPrice/subscriptions.ts",
-            "message": "Type '{ GBPCountries: number; }' is missing the following properties from type 'Record<CountryGroupId, number>': Canada, UnitedStates, AUDCountries, EURCountries, and 2 more."
+            "message": "Type '{ GBPCountries: number; }' is missing the following properties from type 'Record<CountryGroupId, number>': UnitedStates, AUDCountries, EURCountries, International, and 2 more."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
