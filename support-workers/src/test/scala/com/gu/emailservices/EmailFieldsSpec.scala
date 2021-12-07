@@ -83,10 +83,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack",
-        |"IdentityUserId" : "1234",
-        |"UserAttributes" : {
-        |   "unmanaged_digital_subscription_in_events_test" : false
-        |}
+        |"IdentityUserId" : "1234"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
