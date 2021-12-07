@@ -12,7 +12,6 @@ case class SendAcquisitionEventState(
   requestId: UUID,
   sendThankYouEmailState: SendThankYouEmailState,
   analyticsInfo: AnalyticsInfo,
-  csrUsername: Option[String],
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState {
   override def user: User = sendThankYouEmailState.user

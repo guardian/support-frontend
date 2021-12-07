@@ -456,7 +456,8 @@ object JsonFixtures {
       None,
       None,
       None,
-      None
+      None,
+      None,
     ).asJson.spaces2
   val createDigiPackZuoraSubscriptionJson =
     CreateZuoraSubscriptionState(
@@ -474,7 +475,8 @@ object JsonFixtures {
       None,
       None,
       None,
-      None
+      None,
+      None,
     ).asJson.spaces2
 
   val createDigiPackCorporateSubscriptionJson =
@@ -491,7 +493,8 @@ object JsonFixtures {
       None,
       None,
       None,
-      None
+      None,
+      None,
     ).asJson.spaces2
 
   def createDigiPackGiftSubscriptionJson(requestId: UUID): String =
@@ -514,6 +517,7 @@ object JsonFixtures {
       user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(false, Stripe),
+      None,
       None,
       None,
       None,
@@ -543,6 +547,7 @@ object JsonFixtures {
       None,
       None,
       None,
+      None,
       None
     ).asJson.spaces2
 
@@ -560,6 +565,7 @@ object JsonFixtures {
       userJsonWithDeliveryAddress,
       Paper(GBP, Monthly, HomeDelivery, Everyday),
       AnalyticsInfo(false, Stripe),
+      None,
       None,
       None,
       None,
@@ -583,6 +589,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
       maybePromoCode,
+      None,
       None,
       None
     ).asJson.spaces2
@@ -610,7 +617,8 @@ object JsonFixtures {
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
       None,
       None,
-      None
+      None,
+      None,
     ).asJson.spaces2
 
   val failureJson =
@@ -911,6 +919,7 @@ object JsonFixtures {
       AnalyticsInfo(false, Stripe),
       None,
       Some("DJRHYMDS8"),
+      None,
       None,
       None
     ).asJson.spaces2

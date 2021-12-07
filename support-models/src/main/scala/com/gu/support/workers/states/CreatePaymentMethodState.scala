@@ -19,6 +19,7 @@ case class CreatePaymentMethodState(
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
   csrUsername: Option[String],
+  salesforceCaseId: Option[String],
   acquisitionData: Option[AcquisitionData],
   ipAddress: String,
   userAgent: String

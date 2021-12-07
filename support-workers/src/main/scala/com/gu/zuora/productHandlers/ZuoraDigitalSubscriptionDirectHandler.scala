@@ -22,9 +22,9 @@ class ZuoraDigitalSubscriptionDirectHandler(
   def isUserInEventsTest(maybeAbTests: Option[Set[AbTest]]) =
     maybeAbTests.exists(_.toList.exists(test => test.name == "emailDigiSubEventsTest" && test.variant == "variant"))
 
-  def subscribe(state: DigitalSubscriptionDirectPurchaseState, csrUsername: Option[String], maybeAbTests: Option[Set[AbTest]]): Future[SendThankYouEmailState] =
+  def subscribe(state: DigitalSubscriptionDirectPurchaseState, csrUsername: Option[String], salesforceCaseId: Option[String]): Future[SendThankYouEmailState] =
     for {
-      subscribeItem <- Future.fromTry(digitalSubscriptionDirectPurchaseBuilder.build(state, csrUsername).leftMap(BuildSubscribePromoError).toTry)
+      subscribeItem <- Future.fromTry(digitalSubscriptionDirectPurchaseBuilder.build(state, csrUsername, salesforceCaseId).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
@@ -36,7 +36,6 @@ class ZuoraDigitalSubscriptionDirectHandler(
       state.promoCode,
       account.value,
       sub.value,
-      Some(isUserInEventsTest(maybeAbTests)),
     )
 
 }

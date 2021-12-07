@@ -102,7 +102,6 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         None,
         "acno",
         "A-S00045678",
-        None,
       )
     ).map(_.map(ef => parse(ef.payload)))
     actual.map(inside(_) {

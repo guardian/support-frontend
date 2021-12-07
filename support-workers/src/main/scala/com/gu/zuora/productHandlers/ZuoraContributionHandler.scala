@@ -16,9 +16,9 @@ class ZuoraContributionHandler(
   user: User,
 ) {
 
-  def subscribe(state: ContributionState, csrUsername: Option[String]): Future[SendThankYouEmailState] =
+  def subscribe(state: ContributionState): Future[SendThankYouEmailState] =
     for {
-      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(contributionSubscriptionBuilder.build(state, csrUsername))
+      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(contributionSubscriptionBuilder.build(state))
     } yield SendThankYouEmailContributionState(user, state.product, state.paymentMethod, account.value, sub.value)
 
 }

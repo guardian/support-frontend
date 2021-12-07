@@ -15,7 +15,7 @@ class PaperSubscriptionBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: PaperState, csrUsername: Option[String]): Either[PromoError, SubscribeItem] = {
+  def build(state: PaperState, csrUsername: Option[String], salesforceCaseId: Option[String]): Either[PromoError, SubscribeItem] = {
 
     import state._
 
@@ -28,7 +28,8 @@ class PaperSubscriptionBuilder(
       contractAcceptanceDate = state.firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
       readerType = Direct,
-      csrUsername = csrUsername
+      csrUsername = csrUsername,
+      salesforceCaseId = salesforceCaseId,
     )
 
     applyPromoCodeIfPresent(promotionService, promoCode, user.billingAddress.country, productRatePlanId, subscriptionData).map { subscriptionData =>

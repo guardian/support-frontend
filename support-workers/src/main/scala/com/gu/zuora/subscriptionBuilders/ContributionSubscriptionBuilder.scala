@@ -12,7 +12,7 @@ class ContributionSubscriptionBuilder(
   subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: ContributionState, csrUsername: Option[String]): SubscribeItem = {
+  def build(state: ContributionState): SubscribeItem = {
     val contributionConfig = config(state.product.billingPeriod)
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       contributionConfig.productRatePlanId,
@@ -22,7 +22,6 @@ class ContributionSubscriptionBuilder(
         )
       ),
       readerType = Direct,
-      csrUsername = csrUsername
     )
     subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
   }

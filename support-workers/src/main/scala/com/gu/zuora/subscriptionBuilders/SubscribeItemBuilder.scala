@@ -61,7 +61,8 @@ class SubscribeItemBuilder(
     initialTermPeriodType: PeriodType = Month,
     redemptionCode: Option[RawRedemptionCode] = None,
     giftNotificationEmailDate: Option[LocalDate] = None,
-    csrUsername: Option[String] = None
+    csrUsername: Option[String] = None,
+    salesforceCaseId: Option[String] = None,
   ): SubscriptionData =
     SubscriptionData(
       List(
@@ -83,7 +84,8 @@ class SubscribeItemBuilder(
         redemptionCode = redemptionCode,
         giftNotificationEmailDate = giftNotificationEmailDate,
         createdByCsr = csrUsername,
-        acquisitionSource = csrUsername.map(_ => CSR)
+        acquisitionSource = csrUsername.map(_ => CSR),
+        acquisitionCase = salesforceCaseId,
       )
     )
 

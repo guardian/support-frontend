@@ -34,17 +34,17 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
       case state: DigitalSubscriptionDirectPurchaseState =>
-        zuoraDigitalSubscriptionDirectHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.acquisitionData.map(_.supportAbTests))
+        zuoraDigitalSubscriptionDirectHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
       case state: DigitalSubscriptionGiftPurchaseState =>
-        zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(state, zuoraSubscriptionState.csrUsername)
+        zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
       case state: DigitalSubscriptionCorporateRedemptionState =>
         zuoraDigitalSubscriptionCorporateRedemptionHandler.subscribe(state)
       case state: ContributionState =>
-        zuoraContributionHandler.subscribe(state, zuoraSubscriptionState.csrUsername)
+        zuoraContributionHandler.subscribe(state)
       case state: PaperState =>
-        zuoraPaperHandler.subscribe(state, zuoraSubscriptionState.csrUsername)
+        zuoraPaperHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
       case state: GuardianWeeklyState =>
-        zuoraGuardianWeeklyHandler.subscribe(state, zuoraSubscriptionState.csrUsername)
+        zuoraGuardianWeeklyHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
     }
 
     eventualSendThankYouEmailState.map { nextState =>
@@ -54,7 +54,6 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           analyticsInfo = zuoraSubscriptionState.analyticsInfo,
           sendThankYouEmailState = nextState,
           acquisitionData = zuoraSubscriptionState.acquisitionData,
-          csrUsername = zuoraSubscriptionState.csrUsername
         ),
         requestInfo,
       )

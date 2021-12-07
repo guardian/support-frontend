@@ -80,6 +80,7 @@ object StatesTestData {
     firstDeliveryDate = None,
     promoCode = None,
     csrUsername = None,
+    salesforceCaseId = None,
     acquisitionData = None,
     ipAddress = "127.0.0.1",
     userAgent = "TestAgent"
@@ -95,6 +96,7 @@ object StatesTestData {
     firstDeliveryDate = None,
     promoCode = None,
     csrUsername = None,
+    salesforceCaseId = None,
     acquisitionData = None
   )
 
@@ -113,6 +115,7 @@ object StatesTestData {
     None,
     None,
     csrUsername = None,
+    salesforceCaseId = None,
     None
   )
 
@@ -122,7 +125,6 @@ object StatesTestData {
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated,
     analyticsInfo = AnalyticsInfo(false, PayPal),
-    csrUsername = None,
     acquisitionData = None,
   )
 

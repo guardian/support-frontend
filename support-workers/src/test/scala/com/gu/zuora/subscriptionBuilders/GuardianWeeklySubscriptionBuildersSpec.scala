@@ -96,7 +96,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ), None
+    ), None, None
   ).toOption.get.subscriptionData
 
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
@@ -113,7 +113,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ), None
+    ), None, None
   ).toOption.get.subscriptionData
 
 }

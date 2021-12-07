@@ -56,6 +56,7 @@ case class CreateSupportWorkersRequest(
   paymentFields: Either[PaymentFields, RedemptionData],
   promoCode: Option[PromoCode],
   csrUsername: Option[String],
+  salesforceCaseId: Option[String],
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: Set[AbTest],
@@ -157,6 +158,7 @@ class SupportWorkersClient(
         )),
         promoCode = request.body.promoCode,
         csrUsername = request.body.csrUsername,
+        salesforceCaseId = request.body.salesforceCaseId,
         firstDeliveryDate = request.body.firstDeliveryDate,
         userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
         ipAddress = request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress)

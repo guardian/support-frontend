@@ -16,9 +16,9 @@ class ZuoraPaperHandler(
   paperSubscriptionBuilder: PaperSubscriptionBuilder,
 ) {
 
-  def subscribe(state: PaperState, csrUsername: Option[String]): Future[SendThankYouEmailState] =
+  def subscribe(state: PaperState, csrUsername: Option[String], salesforceCaseId: Option[String]): Future[SendThankYouEmailState] =
     for {
-      subscribeItem <- Future.fromTry(paperSubscriptionBuilder.build(state, csrUsername).leftMap(BuildSubscribePromoError).toTry)
+      subscribeItem <- Future.fromTry(paperSubscriptionBuilder.build(state, csrUsername, salesforceCaseId).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
