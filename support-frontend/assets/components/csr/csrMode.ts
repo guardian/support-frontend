@@ -1,12 +1,12 @@
-// @ts-expect-error - required for hooks
+import type { SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
 
-const domains = [
-	'https://gnmtouchpoint.my.salesforce.com',
+const domains: string[] = [
 	'https://gnmtouchpoint--dev1--c.cs88.visual.force.com',
+	'https://gnmtouchpoint--c.eu31.visual.force.com',
 ];
 
-const isSalesforceDomain = (domain) =>
+const isSalesforceDomain = (domain: string) =>
 	domains.find((element) => element === domain);
 
 const isInCsrMode = () => window.location !== window.parent.location;
@@ -14,7 +14,10 @@ const isInCsrMode = () => window.location !== window.parent.location;
 const useCsrDetails = () => {
 	const [csrUsername, setCsrUsername] = useState('');
 
-	function checkForParentMessage(event) {
+	function checkForParentMessage(event: {
+		origin: string;
+		data: SetStateAction<string>;
+	}) {
 		if (isSalesforceDomain(event.origin)) {
 			setCsrUsername(event.data);
 		}
