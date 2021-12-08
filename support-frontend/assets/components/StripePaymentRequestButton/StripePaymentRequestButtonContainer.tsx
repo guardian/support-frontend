@@ -67,6 +67,7 @@ function StripePaymentRequestButtonContainer({
 					<StripePaymentRequestButton
 						stripeAccount={stripeAccount}
 						amount={amount}
+						contributionType={contributionType}
 						stripeKey={stripeKey}
 						paymentRequestObject={prbObjects[stripeAccount]}
 						setPaymentRequestObject={(prbObject) =>

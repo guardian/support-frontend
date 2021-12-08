@@ -13,15 +13,13 @@ import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	getAvailablePaymentRequestButtonPaymentMethod,
 	toHumanReadableContributionType,
 } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import {
-	amountOrOtherAmountIsValid,
-	isValidEmail,
-} from 'helpers/forms/formValidation';
+import { amountIsValid, isValidEmail } from 'helpers/forms/formValidation';
 import type {
 	PaymentAuthorisation,
 	PaymentResult,
@@ -86,14 +84,13 @@ interface PropsFromParent {
 	paymentRequestObject: PaymentRequest | null;
 	setPaymentRequestObject: (paymentRequestObject: PaymentRequest) => void;
 	amount: number;
+	contributionType: ContributionType;
 	stripeAccount: StripeAccount;
 	stripeKey: string;
 	renderPaymentRequestButton: RenderPaymentRequestButton;
 }
 
 const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
-	selectedAmounts: state.page.form.selectedAmounts,
-	otherAmounts: state.page.form.formData.otherAmounts,
 	stripePaymentRequestButtonData:
 		state.page.form.stripePaymentRequestButtonData[ownProps.stripeAccount],
 	countryGroupId: state.common.internationalisation.countryGroupId,
@@ -101,7 +98,6 @@ const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 	billingState: state.page.form.formData.billingState,
 	currency: state.common.internationalisation.currencyId,
 	isTestUser: state.page.user.isTestUser ?? false,
-	contributionType: state.page.form.contributionType,
 	paymentMethod: state.page.form.paymentMethod,
 	csrf: state.page.csrf,
 	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
@@ -218,18 +214,18 @@ function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
 		updateTotal(props);
 		props.setAssociatedPaymentMethod();
 		props.setStripePaymentRequestButtonClicked(props.stripeAccount);
-		const amountIsValid = amountOrOtherAmountIsValid(
-			props.selectedAmounts,
-			props.otherAmounts,
-			props.contributionType,
+
+		const isValid = amountIsValid(
+			props.amount.toString(),
 			props.countryGroupId,
+			props.contributionType,
 			props.localCurrencyCountry,
 			props.useLocalCurrency,
 		);
 
-		if (isCustomPrb && amountIsValid && props.paymentRequestObject) {
+		if (isCustomPrb && isValid && props.paymentRequestObject) {
 			props.paymentRequestObject.show();
-		} else if (!isCustomPrb && !amountIsValid) {
+		} else if (!isCustomPrb && !isValid) {
 			event.preventDefault();
 		}
 	}
