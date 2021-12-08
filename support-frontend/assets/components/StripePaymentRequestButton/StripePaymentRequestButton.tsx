@@ -24,7 +24,6 @@ import type {
 	PaymentAuthorisation,
 	PaymentResult,
 	StripePaymentMethod,
-	StripePaymentRequestButtonMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import type { StripeAccount } from 'helpers/forms/stripe';
@@ -45,7 +44,6 @@ import { logException } from 'helpers/utilities/logger';
 import {
 	onThirdPartyPaymentAuthorised,
 	setHandleStripe3DS,
-	setPaymentRequestButtonPaymentMethod,
 	paymentWaiting as setPaymentWaiting,
 	setStripePaymentRequestButtonClicked,
 	setStripePaymentRequestButtonError,
@@ -113,13 +111,6 @@ const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 	onPaymentAuthorised: (paymentAuthorisation: PaymentAuthorisation) =>
 		dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
-	setPaymentRequestButtonPaymentMethod: (
-		paymentMethod: StripePaymentRequestButtonMethod,
-		stripeAccount: StripeAccount,
-	) =>
-		dispatch(
-			setPaymentRequestButtonPaymentMethod(paymentMethod, stripeAccount),
-		),
 	updateEmail: (email: string) => dispatch(updateEmail(email)),
 	updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
 	updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
@@ -467,16 +458,11 @@ function PaymentRequestButton(props: PropTypes) {
 				}
 
 				trackComponentLoad(`${paymentMethod}-displayed`);
-				props.setPaymentRequestButtonPaymentMethod(
-					paymentMethod,
-					props.stripeAccount,
-				);
 				setUpPaymentListenerSca(props, stripe, paymentRequest, paymentMethod);
 
 				props.setPaymentRequestObject({ status: 'AVAILABLE', paymentRequest });
 			} else {
 				props.setPaymentRequestObject({ status: 'NOT_AVAILABLE' });
-				props.setPaymentRequestButtonPaymentMethod('none', props.stripeAccount);
 			}
 		});
 
