@@ -17,13 +17,15 @@ function notNull<A>(value: A): boolean {
 }
 
 function nonSillyCharacters(s: string | null | undefined): boolean {
-	const nonAsciiRegex = /[^\x20-\x7E]/g;
+	// This is a unicode property escape
+	// cf. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes
+	const containsEmojiRegex = /\p{Emoji_Presentation}/u;
 
 	if (!s) {
 		return true;
 	}
 
-	return !nonAsciiRegex.test(s);
+	return !containsEmojiRegex.test(s);
 }
 
 // ----- Functions ----- //
