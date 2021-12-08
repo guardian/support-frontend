@@ -10,6 +10,7 @@ import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
+import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api.{Day, Month, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import org.joda.time.LocalDate
@@ -71,6 +72,12 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     nonGift.ratePlanData.head.ratePlan.productRatePlanId shouldBe "2c92c0f965dc30640165f150c0956859"
   }
 
+  it should "have set csrUsername and salesforceCaseId" in {
+    csrSubscription.subscription.acquisitionSource shouldBe Some(CSR)
+    csrSubscription.subscription.createdByCsr shouldBe Some("Dan Csr")
+    csrSubscription.subscription.acquisitionCase shouldBe Some("test_case_id")
+  }
+
   lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
@@ -96,7 +103,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ),
+    ), None, None
   ).toOption.get.subscriptionData
 
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
@@ -113,7 +120,24 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ),
+    ), None, None
+  ).toOption.get.subscriptionData
+
+  lazy val csrSubscription = new GuardianWeeklySubscriptionBuilder(
+    promotionService,
+    SANDBOX,
+    DateGenerator(saleDate),
+    subscribeItemBuilder,
+  ).build(
+    GuardianWeeklyState(
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+      None,
+      weekly,
+      PayPalReferenceTransaction("baid", "hi@gu.com"),
+      firstDeliveryDate,
+      None,
+      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+    ), Some("Dan Csr"), Some("test_case_id")
   ).toOption.get.subscriptionData
 
 }

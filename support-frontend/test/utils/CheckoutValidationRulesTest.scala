@@ -308,6 +308,8 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    csrUsername = None,
+    salesforceCaseId = None,
     billingAddress = Address(
       Some("123 easy street"),
       None,
@@ -344,11 +346,13 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    csrUsername = None,
+    salesforceCaseId = None,
     billingAddress = paperAddress,
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,
     deliveryInstructions = None,
-    debugInfo = None
+    debugInfo = None,
   )
 
   val validWeeklyRequest = CreateSupportWorkersRequest(
@@ -364,6 +368,8 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    csrUsername = None,
+    salesforceCaseId = None,
     billingAddress = paperAddress,
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,

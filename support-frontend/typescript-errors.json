@@ -3,23 +3,24 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 51,
-            "TS2322": 183,
-            "TS2578": 16,
-            "TS2339": 67,
-            "TS7006": 94,
+            "TS2322": 190,
+            "TS2578": 18,
+            "TS2339": 80,
             "TS2345": 128,
+            "TS7006": 101,
             "TS7053": 14,
-            "TS7034": 7,
-            "TS7005": 23,
-            "TS6133": 14,
-            "TS7031": 20,
+            "TS7034": 6,
+            "TS7005": 22,
+            "TS6133": 11,
+            "TS7031": 22,
             "TS2564": 2,
-            "TS2769": 15,
+            "TS2769": 13,
+            "TS7016": 8,
             "TS2314": 5,
             "TS2304": 5,
-            "TS2741": 6,
+            "TS2741": 5,
             "TS2739": 16,
-            "TS2532": 6,
+            "TS2532": 8,
             "TS2556": 3,
             "TS2554": 48,
             "TS2569": 2,
@@ -27,12 +28,12 @@
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
-            "TS2740": 5,
-            "TS2531": 2,
-            "TS7016": 1,
+            "TS2740": 6,
+            "TS2531": 9,
             "TS1337": 1,
-            "TS2694": 4,
+            "TS2694": 5,
             "TS7022": 3,
+            "TS1016": 1,
             "TS2707": 1,
             "TS2525": 6,
             "TS2745": 2,
@@ -134,10 +135,11 @@
             "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 10,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLandingReducer.ts": 5,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 29,
+            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 2,
+            "assets/pages/contributions-landing/contributionsLandingReducer.ts": 4,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 6,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
@@ -148,7 +150,7 @@
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 17,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 12,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/content/prices.tsx": 1,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
@@ -159,52 +161,42 @@
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 12,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
-            "assets/components/csr/csrMode.ts": 3,
             "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
             "assets/pages/aus-moment-map/components/blurb.tsx": 1,
             "assets/pages/aus-moment-map/hooks/useWindowWidth.ts": 1,
+            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 9,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
+            "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 14,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
-            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
+            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts": 1,
             "assets/helpers/forms/paymentIntegrations/amazonPay.ts": 11,
             "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts": 2,
+            "assets/helpers/forms/stripe.ts": 6,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryTest.ts": 3,
-            "assets/helpers/rendering/render.ts": 8,
+            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
+            "assets/helpers/rendering/render.ts": 7,
             "assets/helpers/user/user.ts": 20,
             "assets/helpers/utilities/logger.ts": 1,
             "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
-            "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
-            "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
-            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
-            "assets/components/signout/signout.tsx": 1,
-            "assets/helpers/__tests__/checkoutsTest.ts": 7,
-            "assets/helpers/__tests__/promiseTest.ts": 3,
-            "assets/helpers/rendering/ssrPages.ts": 1,
-            "assets/helpers/user/__tests__/userTest.ts": 1,
-            "assets/helpers/utilities/dateFormatting.ts": 1,
-            "assets/pages/aus-moment-map/utils.ts": 1,
-            "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
-            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
-            "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
             "assets/components/marketingConsent/helpers.ts": 1,
+            "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
+            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
+            "assets/helpers/__tests__/checkoutsTest.ts": 7,
+            "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/contributions.ts": 2,
             "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
@@ -217,25 +209,37 @@
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
+            "assets/helpers/tracking/googleTagManager.ts": 2,
             "assets/helpers/urls/externalLinks.ts": 6,
             "assets/helpers/user/__tests__/userReducerTest.ts": 26,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
             "assets/pages/contributions-landing/contributionsLandingInit.ts": 3,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/promotion-terms/promotionTerms.tsx": 1,
+            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
-            "assets/helpers/internationalisation/country.ts": 2,
+            "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
+            "assets/components/signout/signout.tsx": 1,
+            "assets/helpers/rendering/ssrPages.ts": 2,
+            "assets/helpers/user/__tests__/userTest.ts": 1,
+            "assets/helpers/utilities/dateFormatting.ts": 1,
+            "assets/pages/aus-moment-map/utils.ts": 1,
+            "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
+            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
+            "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/helpers/forms/checkouts.ts": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
+            "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 1,
+            "assets/helpers/abTests/abtest.ts": 1,
+            "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
@@ -517,11 +521,11 @@
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; label: string; autoComplete: string; type: \"text\"; inputmode: string; pattern: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; error: string; minLength: number; maxLength: number; width: 10; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ id: string; label: string; autoComplete: string; type: \"text\"; inputmode: string; pattern: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; error: string; minLength: number; maxLength: number; width: 10; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; value: string; autoComplete: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; minLength: number; maxLength: number; type: \"text\"; inputmode: string; pattern: string; label: string; error: string; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ id: string; value: string; autoComplete: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; minLength: number; maxLength: number; type: \"text\"; inputmode: string; pattern: string; label: string; error: string; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
@@ -553,7 +557,7 @@
         },
         {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
-            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"appearance\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/components/menu/menu.tsx",
@@ -609,7 +613,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Type '{ children: any[]; onChange: (e: ChangeEvent<HTMLSelectElement>) => void; forwardRef: (r: any) => void; id: string; label: string; }' is not assignable to type 'IntrinsicAttributes & Pick<SelectProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | ... 257 more ... | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: any[]; onChange: (e: ChangeEvent<HTMLSelectElement>) => void; forwardRef: (r: any) => void; id: string; label: string; }' is not assignable to type 'IntrinsicAttributes & Pick<SelectProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | ... 257 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
@@ -617,15 +621,15 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Type '{ children: Element[]; legend: string; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; legend: string; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: string | undefined; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: string | undefined; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
@@ -653,7 +657,7 @@
         },
         {
             "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/components/svgs/amazonPayLogoDs.tsx",
@@ -805,7 +809,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
-            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"appearance\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
@@ -944,8 +948,40 @@
             "message": "Type 'string | null' is not assignable to type 'string | undefined'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
-            "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"csrf\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type 'StripeCardNumberElement | null' is not assignable to type 'StripeCardElement | StripeCardNumberElement | { token: string; }'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type '{ base: { fontFamily: string; '::placeholder': { color: string; }; fontSize: string; lineHeight: number; }; }' is not assignable to type 'StripeElementStyle'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type 'void' is not assignable to type '(() => any) | undefined'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type '{ base: { fontFamily: string; '::placeholder': { color: string; }; fontSize: string; lineHeight: number; }; }' is not assignable to type 'StripeElementStyle'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type 'void' is not assignable to type '(() => any) | undefined'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type '{ base: { fontFamily: string; '::placeholder': { color: string; }; fontSize: string; lineHeight: number; }; }' is not assignable to type 'StripeElementStyle'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type 'void' is not assignable to type '(() => any) | undefined'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
+            "message": "Type '{ stripeAccount: StripeAccount; amount: number; stripeKey: string; paymentRequestObject: Record<string, any> | null; setPaymentRequestObject: (prbObject: PaymentRequestObject) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<PropTypes, \"country\" | \"currency\" | \"paymentMethod\" | \"csrf\" | \"countryGroupId\" | \"useLocalCurrency\" | \"isTestUser\" | ... 17 more ... | \"setError\"> & PropTypes'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
@@ -957,7 +993,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
-            "message": "Type '{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; showOtherAmount: boolean; formData: { otherAmounts: OtherAmounts; ... 5 more ...; email: string | null; }; ... 17 more ...; oneOffRecaptchaToken: string | null; }' is not assignable to type 'FormState'."
+            "message": "Type '{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; showOtherAmount: boolean; formData: { firstName: string | null; lastName: string | null; ... 4 more ...; checkoutFormHasBeenSubmitted: boolean; }; ... 17 more ...; oneOffRecaptchaToken: string | null; }' is not assignable to type 'FormState'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
@@ -1089,15 +1125,15 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1121,11 +1157,11 @@
         },
         {
             "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/hero.tsx",
@@ -1137,7 +1173,7 @@
         },
         {
             "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
@@ -1169,15 +1205,11 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"required\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '(Element | null)[]' is not assignable to type 'Element | Element[]'."
+            "message": "Type '{ children: Element[]; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"cssOverrides\" | \"name\" | \"error\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -1203,10 +1235,6 @@
     "TS2578": [
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/components/csr/csrMode.ts",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -1238,7 +1266,23 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -1251,10 +1295,6 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -1337,11 +1377,11 @@
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'csrf' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts",
@@ -1349,11 +1389,11 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'amazonPayClientId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
@@ -1389,23 +1429,47 @@
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'paymentApiUrl' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'payPalEnvironment' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
             "message": "Property 'paypal' does not exist on type 'Window & typeof globalThis'."
+        },
+        {
+            "path": "assets/helpers/forms/stripe.ts",
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
+            "path": "assets/helpers/forms/stripe.ts",
+            "message": "Property 'stripeKeyAustralia' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
+            "path": "assets/helpers/forms/stripe.ts",
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
+            "path": "assets/helpers/forms/stripe.ts",
+            "message": "Property 'stripeKeyUnitedStates' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
+            "path": "assets/helpers/forms/stripe.ts",
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
+            "path": "assets/helpers/forms/stripe.ts",
+            "message": "Property 'stripeKeyDefaultCurrencies' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -1417,75 +1481,75 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'settings' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'uatMode' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'email' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/user/user.ts",
-            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'user' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/helpers/utilities/logger.ts",
-            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'gitCommitId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -1504,20 +1568,48 @@
             "message": "Property 'offsetTop' does not exist on type 'unknown'."
         },
         {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Property 'amazonPaySellerId' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
             "message": "Property 'showPrivacyManager' does not exist on type 'never'."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Property 'uat' does not exist on type 'string'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Property 'default' does not exist on type 'string'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Property 'uat' does not exist on type 'string'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Property 'default' does not exist on type 'string'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Property 'handleCardSetup' does not exist on type 'Stripe'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Property 'polyfillVersion' does not exist on type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -1536,15 +1628,521 @@
             "message": "Property 'title' does not exist on type '{ title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { ...; }'."
         }
     ],
+    "TS2345": [
+        {
+            "path": "assets/components/datePicker/datePicker.tsx",
+            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
+        },
+        {
+            "path": "assets/components/datePicker/datePicker.tsx",
+            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
+        },
+        {
+            "path": "assets/components/directDebit/__tests__/directDebitReducerTest.ts",
+            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
+            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
+            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
+            "message": "Argument of type '{ [x: number]: any; }' is not assignable to parameter of type 'StateTypes | Pick<StateTypes, keyof StateTypes> | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | ... 1 more ... | null) | null'."
+        },
+        {
+            "path": "assets/components/directDebit/helpers/ajax.ts",
+            "message": "Argument of type '{ method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; credentials: string; body: string; }' is not assignable to parameter of type 'RequestInit'."
+        },
+        {
+            "path": "assets/components/footerCompliant/Footer.tsx",
+            "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
+        },
+        {
+            "path": "assets/components/marketingConsent/helpers.ts",
+            "message": "Argument of type '{ method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; credentials: string; body: string; }' is not assignable to parameter of type 'RequestInit'."
+        },
+        {
+            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
+            "message": "Argument of type 'typeof MarketingConsent' is not assignable to parameter of type 'ComponentType<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { error: boolean; }>>'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => void' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ hasLoaded: boolean; csrf: Csrf; productPrices: ProductPrices; currencyId: IsoCurrency; isTestUser: boolean; amount: number; submissionError: Option<...>; wasClicked: boolean; } & { ...; }, PropTypes>>'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
+            "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Argument of type 'typeof AddressFields' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormErrors; traverseState: (arg0: any) => State; scope: AddressType; country: string; state: string | null; lineOne: Option<string>; lineTwo: Option<...>; postCode: Option<...>; city: Option<...>; countries: Record<...>; } & { ...; }, ClassAttributes<...> & ... 2 more ... & { ......'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts",
+            "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
+        },
+        {
+            "path": "assets/helpers/__tests__/promiseTest.ts",
+            "message": "Argument of type '(done: any, fail: any) => void' is not assignable to parameter of type 'ProvidesCallback | undefined'."
+        },
+        {
+            "path": "assets/helpers/contributions.ts",
+            "message": "Argument of type 'string | number | null' is not assignable to parameter of type 'string'."
+        },
+        {
+            "path": "assets/helpers/forms/formValidation.ts",
+            "message": "Argument of type 'Date | null' is not assignable to parameter of type 'Date'."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
+        },
+        {
+            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
+            "message": "Argument of type 'Record<string, any>' is not assignable to parameter of type 'PayPalCheckoutDetails'."
+        },
+        {
+            "path": "assets/helpers/identityApis.ts",
+            "message": "Argument of type '(resp: {    userType: UserType;}) => UserType' is not assignable to parameter of type '(value: Record<string, any>) => \"current\" | \"new\" | \"guest\" | PromiseLike<\"current\" | \"new\" | \"guest\">'."
+        },
+        {
+            "path": "assets/helpers/internationalisation/__tests__/currencyTest.ts",
+            "message": "Argument of type '\"ZZ\"' is not assignable to parameter of type 'CountryGroupId'."
+        },
+        {
+            "path": "assets/helpers/page/__tests__/pageTest.ts",
+            "message": "Argument of type '{ campaign: string; referrerAcquisitionData: { referrerPageviewId: null; campaignCode: null; componentId: null; componentType: null; source: null; abTests: never[]; queryParameters: never[]; }; internationalisation: { ...; }; abParticipations: {}; otherQueryParams: never[]; settings: { ...; }; }' is not assignable to parameter of type 'CommonState'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { amount: number; durationMonths: number; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { amount: number; durationMonths: number; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '{ 'United Kingdom': { Collection: { Sunday: { Monthly: { GBP: { price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; }[]; }; }; }; }; }; }' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
+            "message": "Argument of type '\"8.99\"' is not assignable to parameter of type 'number | null | undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type 'null' is not assignable to parameter of type 'Promotion | undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type '{}' is not assignable to parameter of type 'Promotion'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type '{ discountedPrice: number; }' is not assignable to parameter of type 'Promotion'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type '{ discountedPrice: number; }' is not assignable to parameter of type 'Promotion'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type '({ name: string; description: string; promoCode: number; discountedPrice: number; introductoryPrice?: undefined; } | { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; discountedPrice?: undefined; })[]' is not assignable to parameter of type 'Promotion[]'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; }[]; }' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Argument of type '{ name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }' is not assignable to parameter of type 'Promotion'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
+            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/paperProductPrices.ts",
+            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/paperProductPrices.ts",
+            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Argument of type 'unknown' is not assignable to parameter of type 'Error'."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
+        },
+        {
+            "path": "assets/helpers/tracking/__tests__/acquisitionsTest.ts",
+            "message": "Argument of type '{ campaignCode: string; referrerPageviewId: string; referrerUrl: string; componentId: string; componentType: string; source: string; abTests: { name: string; variant: string; }[]; queryParameters: { ...; }[]; }' is not assignable to parameter of type 'ReferrerAcquisitionData'."
+        },
+        {
+            "path": "assets/helpers/tracking/googleTagManager.ts",
+            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
+        },
+        {
+            "path": "assets/helpers/urls/externalLinks.ts",
+            "message": "Argument of type 'string | Location' is not assignable to parameter of type 'string | number | boolean'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; testUser: boolean; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; postDeploymentTestUser: boolean; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; email: string; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; stateField: string; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; preference: boolean; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
+            "message": "Argument of type '{ type: string; isReturningContributor: boolean; }' is not assignable to parameter of type 'Action'."
+        },
+        {
+            "path": "assets/helpers/user/user.ts",
+            "message": "Argument of type 'string | undefined' is not assignable to parameter of type 'string'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
+            "message": "Argument of type 'null' is not assignable to parameter of type 'TestimonialsCollection | (() => TestimonialsCollection)'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
+            "message": "Argument of type 'string' is not assignable to parameter of type '((prevState: null) => null) | null'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
+            "message": "Argument of type 'string' is not assignable to parameter of type '((prevState: null) => null) | null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
+            "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ firstName: string | null; lastName: string | null; email: string | null; checkoutFormHasBeenSubmitted: boolean; billingState: string | null; isSignedIn: boolean; contributionType: keyof RegularContributionTypeMap<...> | \"ONE_OFF\"; } & { ...; }, PropTypes>>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
+            "message": "Argument of type 'typeof ContributionState' is not assignable to parameter of type 'ComponentType<never>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: PaymentMethod; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
+            "message": "Argument of type 'string' is not assignable to parameter of type 'PaymentMethod'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ countryId: string; countryGroupId: CountryGroupId; currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; ... 7 more ...; checkoutFormHasBeenSubmitted: boolean; } & { ...; }, PropTypes>>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Argument of type '(clientSecret: string) => Promise<PaymentIntentResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<Stripe3DSResult>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Argument of type '(props: PropTypes) => JSX.Element' is not assignable to parameter of type 'ComponentType<Matching<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; paymentWaiting: boolean; country: string; ... 5 more ...; oneOffRecaptchaToken: string | null; } & { ...; }, PropTypes>>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Argument of type 'Option<string>' is not assignable to parameter of type 'string'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Argument of type '(clientSecret: string) => Promise<PaymentIntentResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<Stripe3DSResult>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'AnyAction'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "Argument of type 'string' is not assignable to parameter of type 'keyof RegularContributionTypeMap<null> | \"ONE_OFF\"'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
+            "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ country: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 31 more ...; salesforceCaseId?: string | undefined; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
+            "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
+            "message": "Argument of type 'DefaultRootState' is not assignable to parameter of type 'AnyCheckoutState'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
+            "message": "Argument of type 'typeof ThankYouGift' is not assignable to parameter of type 'ComponentType<Matching<{ giftDeliveryDate: Option<string>; giftRecipient: Option<string>; } & DispatchProp<AnyAction>, PropTypes>>'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
+            "message": "Argument of type '{ positive: true; negative: false; }' is not assignable to parameter of type 'SetStateAction<{ positive: boolean; negative: boolean; open: boolean; }>'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
+            "message": "Argument of type 'typeof PaperOrderSummary' is not assignable to parameter of type 'ComponentType<Matching<{ fulfilmentOption: FulfilmentOptions; productOption: ProductOptions; billingPeriod: BillingPeriod; productPrices: ProductPrices; } & DispatchProp<...>, PropTypes>>'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; billingAddressErrors: FormErrors; ... 33 more ...; salesforceCaseId?: string | undefined; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/helpers/options.ts",
+            "message": "Argument of type 'string' is not assignable to parameter of type '\"Saturday\" | \"Sunday\" | \"Weekend\" | \"Sixday\" | \"Everyday\"'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",
+            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",
+            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
+            "message": "Argument of type 'null' is not assignable to parameter of type 'string'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/promotionTerms.tsx",
+            "message": "Argument of type 'ReduxState<{ productPrices: ProductPrices | null | undefined; promotionTerms: any; countryGroupId: CountryGroupId; }>' is not assignable to parameter of type 'State'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
+            "message": "Argument of type 'DefaultRootState' is not assignable to parameter of type 'AnyCheckoutState'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 31 more ...; salesforceCaseId?: string | undefined; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
+            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
+        }
+    ],
     "TS7006": [
-        {
-            "path": "assets/components/csr/csrMode.ts",
-            "message": "Parameter 'domain' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/csr/csrMode.ts",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
         {
             "path": "assets/components/datePicker/datePickerHelpers.test.ts",
             "message": "Parameter 'param' implicitly has an 'any' type."
@@ -1746,6 +2344,30 @@
             "message": "Parameter 'response' implicitly has an 'any' type."
         },
         {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'error' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'billingAgreement' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'orderReference' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'billingAgreementConsentStatus' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
+            "message": "Parameter 'error' implicitly has an 'any' type."
+        },
+        {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
             "message": "Parameter 'event' implicitly has an 'any' type."
         },
@@ -1766,6 +2388,46 @@
             "message": "Parameter 'event' implicitly has an 'any' type."
         },
         {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'update' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'token' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'token' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'confirmResult' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "Parameter 'commonState' implicitly has an 'any' type."
         },
@@ -1776,10 +2438,6 @@
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
@@ -1830,18 +2488,6 @@
             "message": "Parameter 'component' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'setStartDate' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Parameter 'startDate' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
             "message": "Parameter 'fulfilmentOption' implicitly has an 'any' type."
         },
@@ -1890,18 +2536,6 @@
             "message": "Parameter 'component' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'email' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'country' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Parameter 'newState' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Parameter 'initialState' implicitly has an 'any' type."
         },
@@ -1912,520 +2546,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        }
-    ],
-    "TS2345": [
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
-        },
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
-        },
-        {
-            "path": "assets/components/directDebit/__tests__/directDebitReducerTest.ts",
-            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Argument of type '{ [x: number]: any; }' is not assignable to parameter of type 'StateTypes | Pick<StateTypes, keyof StateTypes> | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | ... 1 more ... | null) | null'."
-        },
-        {
-            "path": "assets/components/directDebit/helpers/ajax.ts",
-            "message": "Argument of type '{ method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; credentials: string; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
-        },
-        {
-            "path": "assets/components/marketingConsent/helpers.ts",
-            "message": "Argument of type '{ method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; credentials: string; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Argument of type 'typeof MarketingConsent' is not assignable to parameter of type 'ComponentType<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { error: boolean; }>>'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ hasLoaded: boolean; csrf: Csrf; productPrices: ProductPrices; currencyId: IsoCurrency; isTestUser: boolean; amount: number; submissionError: Option<...>; wasClicked: boolean; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
-            "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Argument of type 'typeof AddressFields' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormErrors; traverseState: (arg0: any) => State; scope: AddressType; country: string; state: string | null; lineOne: Option<string>; lineTwo: Option<...>; postCode: Option<...>; city: Option<...>; countries: Record<...>; } & { ...; }, ClassAttributes<...> & ... 2 more ... & { ......'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts",
-            "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
-        },
-        {
-            "path": "assets/helpers/__tests__/promiseTest.ts",
-            "message": "Argument of type '(done: any, fail: any) => void' is not assignable to parameter of type 'ProvidesCallback | undefined'."
-        },
-        {
-            "path": "assets/helpers/contributions.ts",
-            "message": "Argument of type 'string | number | null' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Argument of type 'Date | null' is not assignable to parameter of type 'Date'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type 'Record<string, any>' is not assignable to parameter of type 'PayPalCheckoutDetails'."
-        },
-        {
-            "path": "assets/helpers/identityApis.ts",
-            "message": "Argument of type '(resp: {    userType: UserType;}) => UserType' is not assignable to parameter of type '(value: Record<string, any>) => \"current\" | \"new\" | \"guest\" | PromiseLike<\"current\" | \"new\" | \"guest\">'."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
-            "message": "Argument of type 'null' is not assignable to parameter of type 'string | undefined'."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
-            "message": "Argument of type 'null' is not assignable to parameter of type 'string | undefined'."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/currencyTest.ts",
-            "message": "Argument of type '\"ZZ\"' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/page/__tests__/pageTest.ts",
-            "message": "Argument of type '{ campaign: string; referrerAcquisitionData: { referrerPageviewId: null; campaignCode: null; componentId: null; componentType: null; source: null; abTests: never[]; queryParameters: never[]; }; internationalisation: { ...; }; abParticipations: {}; otherQueryParams: never[]; settings: { ...; }; }' is not assignable to parameter of type 'CommonState'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { amount: number; durationMonths: number; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { amount: number; durationMonths: number; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Sunday: { Monthly: { GBP: { price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; }[]; }; }; }; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '\"8.99\"' is not assignable to parameter of type 'number | null | undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type 'null' is not assignable to parameter of type 'Promotion | undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{}' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ discountedPrice: number; }' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ discountedPrice: number; }' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '({ name: string; description: string; promoCode: number; discountedPrice: number; introductoryPrice?: undefined; } | { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; discountedPrice?: undefined; })[]' is not assignable to parameter of type 'Promotion[]'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Argument of type 'unknown' is not assignable to parameter of type 'Error'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/helpers/tracking/__tests__/acquisitionsTest.ts",
-            "message": "Argument of type '{ campaignCode: string; referrerPageviewId: string; referrerUrl: string; componentId: string; componentType: string; source: string; abTests: { name: string; variant: string; }[]; queryParameters: { ...; }[]; }' is not assignable to parameter of type 'ReferrerAcquisitionData'."
-        },
-        {
-            "path": "assets/helpers/urls/externalLinks.ts",
-            "message": "Argument of type 'string | Location' is not assignable to parameter of type 'string | number | boolean'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; name: string; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; testUser: boolean; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; postDeploymentTestUser: boolean; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; email: string; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; stateField: string; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; preference: boolean; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/__tests__/userReducerTest.ts",
-            "message": "Argument of type '{ type: string; isReturningContributor: boolean; }' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/helpers/user/user.ts",
-            "message": "Argument of type 'string | undefined' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Argument of type 'null' is not assignable to parameter of type 'TestimonialsCollection | (() => TestimonialsCollection)'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Argument of type 'string' is not assignable to parameter of type '((prevState: null) => null) | null'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Argument of type 'string' is not assignable to parameter of type '((prevState: null) => null) | null'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
-            "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ firstName: string | null; lastName: string | null; email: string | null; checkoutFormHasBeenSubmitted: boolean; billingState: string | null; isSignedIn: boolean; contributionType: keyof RegularContributionTypeMap<...> | \"ONE_OFF\"; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Argument of type 'typeof ContributionState' is not assignable to parameter of type 'ComponentType<never>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: PaymentMethod; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
-            "message": "Argument of type 'string' is not assignable to parameter of type 'PaymentMethod'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ countryId: string; countryGroupId: CountryGroupId; currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; ... 7 more ...; checkoutFormHasBeenSubmitted: boolean; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
-            "message": "Argument of type '(clientSecret: string) => Promise<Stripe3DSResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<PaymentIntentResult>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'AnyAction'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Argument of type '(clientSecret: string) => Promise<PaymentIntentResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<Stripe3DSResult>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Argument of type 'string' is not assignable to parameter of type 'keyof RegularContributionTypeMap<null> | \"ONE_OFF\"'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ country: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
-            "message": "Argument of type 'DefaultRootState' is not assignable to parameter of type 'AnyCheckoutState'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
-            "message": "Argument of type 'typeof ThankYouGift' is not assignable to parameter of type 'ComponentType<Matching<{ giftDeliveryDate: Option<string>; giftRecipient: Option<string>; } & DispatchProp<AnyAction>, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Argument of type '{ positive: true; negative: false; }' is not assignable to parameter of type 'SetStateAction<{ positive: boolean; negative: boolean; open: boolean; }>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Argument of type 'typeof PaperOrderSummary' is not assignable to parameter of type 'ComponentType<Matching<{ fulfilmentOption: FulfilmentOptions; productOption: ProductOptions; billingPeriod: BillingPeriod; productPrices: ProductPrices; } & DispatchProp<...>, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; billingAddressErrors: FormErrors; ... 31 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/helpers/options.ts",
-            "message": "Argument of type 'string' is not assignable to parameter of type '\"Saturday\" | \"Sunday\" | \"Weekend\" | \"Sixday\" | \"Everyday\"'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",
-            "message": "Argument of type '{ id: string; product: string; componentType: string; }' is not assignable to parameter of type 'TrackingProperties'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
-            "message": "Argument of type 'null' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTerms.tsx",
-            "message": "Argument of type 'ReduxState<{ productPrices: ProductPrices | null | undefined; promotionTerms: any; countryGroupId: CountryGroupId; }>' is not assignable to parameter of type 'State'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Argument of type 'DefaultRootState' is not assignable to parameter of type 'AnyCheckoutState'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 29 more ...; giftDeliveryDate: Option<...>; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "Argument of type 'Promotion | undefined' is not assignable to parameter of type 'Promotion | null'."
         }
     ],
     "TS7053": [
@@ -2467,7 +2587,7 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; ... 7 more ...; stripeKeyDefaultCurrencies: StripeKey; }'."
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ mdapiUrl: string; serversideTests?: Participations | null | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; v2recaptchaPublicKey: string; recaptchaEnabled?: boolean | undefined; geoip?: { ...; } | undefined; productPrices: ProductPrices; orderIsAGift: boolean; }'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -2490,10 +2610,6 @@
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
             "message": "Variable 'cardErrors' implicitly has type 'any[]' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/helpers/internationalisation/country.ts",
-            "message": "Variable 'country' implicitly has type 'any' in some locations where its type cannot be determined."
         },
         {
             "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
@@ -2520,10 +2636,6 @@
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
             "message": "Variable 'cardErrors' implicitly has an 'any[]' type."
-        },
-        {
-            "path": "assets/helpers/internationalisation/country.ts",
-            "message": "Variable 'country' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
@@ -2648,24 +2760,12 @@
             "message": "'renderControl' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
             "message": "'dispatch' is declared but its value is never read."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "'dispatch' is declared but its value is never read."
         }
     ],
     "TS7031": [
@@ -2700,6 +2800,14 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
             "message": "Binding element 'isLoading' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Binding element 'complete' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Binding element 'paymentMethod' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
@@ -2782,14 +2890,6 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
@@ -2820,6 +2920,40 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "No overload matches this call."
+        }
+    ],
+    "TS7016": [
+        {
+            "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
+            "message": "Could not find a declaration file for module 'react-dom/test-utils'. 'support-frontend/node_modules/react-dom/test-utils.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/abTests/abtest.ts",
+            "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/customHooks/useHasBeenSeen.ts",
+            "message": "Could not find a declaration file for module 'lodash.debounce'. 'support-frontend/node_modules/lodash.debounce/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/ssrPages.ts",
+            "message": "Could not find a declaration file for module 'react-dom/server'. 'support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/tracking/googleTagManager.ts",
+            "message": "Could not find a declaration file for module 'uuid'. 'support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
         }
     ],
     "TS2314": [
@@ -2869,19 +3003,15 @@
     "TS2741": [
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"value\" | \"dir\" | \"size\" | ... 275 more ... | \"enterKeyHint\">'."
+            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"className\" | \"height\" | \"translate\" | ... 275 more ... | \"required\">'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Property 'value' is missing in type '{ id: string; image: any; label: string; name: string; checked: boolean; onChange: (...args: any[]) => any; }' but required in type 'Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"value\" | \"dir\" | \"size\" | ... 273 more ... | \"enterKeyHint\">'."
+            "message": "Property 'value' is missing in type '{ id: string; image: any; label: string; name: string; checked: boolean; onChange: (...args: any[]) => any; }' but required in type 'Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"className\" | \"height\" | \"translate\" | ... 273 more ... | \"required\">'."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "Property 'patrons' is missing in type '{ events: string; }' but required in type 'Record<MemProduct, string>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
-            "message": "Property 'Widgets' is missing in type 'Record<string, any>' but required in type 'AmazonPaymentsObject'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
@@ -2981,6 +3111,14 @@
         },
         {
             "path": "assets/helpers/user/user.ts",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Object is possibly 'undefined'."
         }
     ],
@@ -3305,11 +3443,15 @@
         },
         {
             "path": "assets/helpers/productPrice/subscriptions.ts",
-            "message": "Type '{ GBPCountries: number; }' is missing the following properties from type 'Record<CountryGroupId, number>': UnitedStates, AUDCountries, EURCountries, International, and 2 more."
+            "message": "Type '{ GBPCountries: number; }' is missing the following properties from type 'Record<CountryGroupId, number>': Canada, UnitedStates, AUDCountries, EURCountries, and 2 more."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 109 more."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Type 'PaymentRequestObject' is missing the following properties from type 'PaymentRequest': canMakePayment, show, isShowing, update, and 3 more."
         }
     ],
     "TS2531": [
@@ -3320,12 +3462,34 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Object is possibly 'null'."
-        }
-    ],
-    "TS7016": [
+        },
         {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Object is possibly 'null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Object is possibly 'null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Object is possibly 'null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Object is possibly 'null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Object is possibly 'null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Object is possibly 'null'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Object is possibly 'null'."
         }
     ],
     "TS1337": [
@@ -3350,6 +3514,10 @@
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
             "message": "Namespace 'React' has no exported member 'ReactNode'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "Namespace '\"support-frontend/node_modules/@stripe/react-stripe-js/dist/react-stripe\"' has no exported member 'Stripe'."
         }
     ],
     "TS7022": [
@@ -3364,6 +3532,12 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
+        }
+    ],
+    "TS1016": [
+        {
+            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
+            "message": "A required parameter cannot follow an optional parameter."
         }
     ],
     "TS2707": [

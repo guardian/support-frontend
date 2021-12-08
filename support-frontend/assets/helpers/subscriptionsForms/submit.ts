@@ -148,6 +148,8 @@ function buildRegularPaymentRequest(
 		productOption,
 		productPrices,
 		deliveryInstructions,
+		csrUsername,
+		salesforceCaseId,
 		debugInfo,
 	} = state.page.checkout;
 	const addresses = getAddresses(state);
@@ -191,6 +193,8 @@ function buildRegularPaymentRequest(
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
 		promoCode,
 		deliveryInstructions,
+		csrUsername,
+		salesforceCaseId,
 		debugInfo,
 	};
 }

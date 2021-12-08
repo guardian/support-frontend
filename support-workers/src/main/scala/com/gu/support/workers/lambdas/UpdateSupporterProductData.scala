@@ -65,7 +65,7 @@ object UpdateSupporterProductData {
             ))
           .toRight(())
           .map(Some(_))
-      case SendThankYouEmailDigitalSubscriptionDirectPurchaseState(user, product, _, _, _, _, subscriptionNumber, _) =>
+      case SendThankYouEmailDigitalSubscriptionDirectPurchaseState(user, product, _, _, _, _, subscriptionNumber) =>
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
