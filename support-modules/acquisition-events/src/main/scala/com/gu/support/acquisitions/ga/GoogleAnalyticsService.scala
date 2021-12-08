@@ -10,6 +10,7 @@ import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAErro
 import com.gu.support.acquisitions.models.AcquisitionProduct.{Contribution, DigitalSubscription, GuardianWeekly, Paper, RecurringContribution}
 import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct}
 import com.gu.support.acquisitions.utils.Retry
+import com.gu.support.zuora.api.ReaderType
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.{Call, Callback, HttpUrl, OkHttpClient, Request, RequestBody, Response}
 
@@ -34,25 +35,27 @@ object GoogleAnalyticsService extends LazyLogging {
 
   private[ga] val gaPropertyId: String = "UA-51507017-5"
 
-  private[ga] def buildBody(acquisition: AcquisitionDataRow, gaData: GAData)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestBody] = EitherT {
-    getAnnualisedValue(acquisition)
-      .leftMap(error => {
-        logger.warn(s"Couldn't retrieve annualised value for this acquisition: $error")
-        0D // We still want to record the acquisition even if we can't get the AV
-      })
-      .merge[Double]
-      .map(av => buildPayload(acquisition, av, gaData))
-      .map { maybePayload =>
-        maybePayload.map { payload =>
-          logger.info(s"GA payload: $payload")
-          RequestBody.create(null, payload)
+  private[ga] def buildBody(acquisition: AcquisitionDataRow, gaData: GAData)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestBody] =
+    EitherT {
+      getAnnualisedValue(acquisition)
+        .leftMap(error => {
+          logger.warn(s"Couldn't retrieve annualised value for this acquisition: $error")
+          0D // We still want to record the acquisition even if we can't get the AV
+        })
+        .merge[Double]
+        .map(av => buildPayload(acquisition, av, gaData))
+        .map { maybePayload =>
+          maybePayload.map { payload =>
+            logger.info(s"GA payload: $payload")
+            RequestBody.create(null, payload)
+          }
         }
-      }
-  }
+    }
 
   private[ga] def getAnnualisedValue(acquisition: AcquisitionDataRow)(implicit ec: ExecutionContext): EitherT[Future, String, Double] = {
     val amount = acquisition.amount.getOrElse[BigDecimal](0.0)
-    val acquisitionModel = AcquisitionModel(amount.toDouble,
+    val acquisitionModel = AcquisitionModel(
+      amount.toDouble,
       acquisition.product.value,
       acquisition.currency.iso,
       acquisition.paymentFrequency.value,
@@ -68,7 +71,12 @@ object GoogleAnalyticsService extends LazyLogging {
       case _ => "1"
     }
 
-  private[ga] def buildPayload(acquisition: AcquisitionDataRow, annualisedValue: Double, gaData: GAData, transactionId: Option[String] = None): Either[BuildError, String] = {
+  private[ga] def buildPayload(
+    acquisition: AcquisitionDataRow,
+    annualisedValue: Double,
+    gaData: GAData,
+    transactionId: Option[String] = None
+  ): Either[BuildError, String] = {
     val tid = transactionId.getOrElse(UUID.randomUUID().toString)
     val goExp = buildOptimizeTestsPayload(acquisition.abTests)
 
@@ -78,7 +86,7 @@ object GoogleAnalyticsService extends LazyLogging {
         val productName = getProductName(acquisition)
         val conversionCategory = getConversionCategory(acquisition)
         val productCheckout = getProductCheckout(acquisition)
-        val body = Map[String,String](
+        val body = Map[String, String](
           "v" -> "1", //Version
           "cid" -> clientId,
           "tid" -> gaPropertyId,
@@ -91,10 +99,10 @@ object GoogleAnalyticsService extends LazyLogging {
           "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
           "cd17" -> camelCase(acquisition.paymentProvider.map(_.value).getOrElse("")), // Payment method
           "cd19" -> acquisition.promoCode.getOrElse(""), // Promo code
-          "cd25" -> acquisition.labels.exists(_.contains("REUSED_EXISTING_PAYMENT_METHOD")).toString, // usedExistingPaymentMethod
-          "cd26" -> acquisition.labels.exists(_.contains("gift-subscription")).toString, // gift subscription
+          "cd25" -> acquisition.reusedExistingPaymentMethod.toString,
+          "cd26" -> (acquisition.readerType == ReaderType.Gift).toString,
           "cd27" -> productCheckout.getOrElse(""),
-          "cd30" -> acquisition.labels.exists(_.contains("corporate-subscription")).toString, // corporate subscription
+          "cd30" -> (acquisition.readerType == ReaderType.Corporate).toString,
 
           // Custom metrics
           "cm10" -> getSuccessfulSubscriptionSignUpMetric(conversionCategory),
@@ -124,7 +132,7 @@ object GoogleAnalyticsService extends LazyLogging {
         )
 
         body
-          .filter { case (key, value) => value != "" }
+          .filter { case (_, value) => value != "" }
           .map { case (key, value) => s"$key=$value" }
           .mkString("&")
     }
@@ -242,22 +250,25 @@ class GoogleAnalyticsServiceLive(client: OkHttpClient) extends GoogleAnalyticsSe
     EitherT(p.future)
   }
 
-  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit] = Retry(maxRetries) {
-    val url = endpoint.newBuilder()
-      .addPathSegment("collect")
-      .build()
+  def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit ec: ExecutionContext): EitherT[Future, List[GAError], Unit] =
+    Retry(maxRetries) {
 
-    def buildRequest(requestBody: RequestBody): Request =
-      new Request.Builder()
-        .url(url)
-        .addHeader("User-Agent", gaData.clientUserAgent.getOrElse(""))
-        .post(requestBody)
+      val url = endpoint.newBuilder()
+        .addPathSegment("collect")
         .build()
 
-    for {
-      requestBody <- buildBody(acquisition, gaData)
-      request = buildRequest(requestBody)
-      result <- executeRequest(request)
-    } yield result
-  }
+      def buildRequest(requestBody: RequestBody): Request =
+        new Request.Builder()
+          .url(url)
+          .addHeader("User-Agent", gaData.clientUserAgent.getOrElse(""))
+          .post(requestBody)
+          .build()
+
+      for {
+        requestBody <- buildBody(acquisition, gaData)
+        request = buildRequest(requestBody)
+        result <- executeRequest(request)
+      } yield result
+
+    }
 }
