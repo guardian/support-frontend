@@ -161,14 +161,15 @@ describe('Guardian Weekly checkout form', () => {
 			expect(
 				screen.queryAllByText(
 					'Please use only letters, numbers and punctuation.',
-				),
-			).toBeTruthy();
+				).length,
+			).toBeGreaterThan(0);
 		});
 
 		it('should not display an error message when only valid characters are entered', async () => {
 			const firstNameInput = await screen.findByLabelText('First name');
 			fireEvent.change(firstNameInput, {
 				target: {
+					// This is a right single quotation character, *not* an apostrophe
 					value: 'O’Connor',
 				},
 			});
@@ -188,7 +189,7 @@ describe('Guardian Weekly checkout form', () => {
 				screen.queryAllByText(
 					'Please use only letters, numbers and punctuation.',
 				),
-			).toBeTruthy();
+			).toHaveLength(0);
 		});
 	});
 });
