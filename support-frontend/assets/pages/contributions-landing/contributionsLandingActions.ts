@@ -32,7 +32,6 @@ import type {
 	RegularPaymentRequest,
 	StripePaymentIntentAuthorisation,
 	StripePaymentMethod,
-	StripePaymentRequestButtonMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	postRegularPaymentRequest,
@@ -197,11 +196,6 @@ export type Action =
 			formIsSubmittable: boolean;
 	  }
 	| {
-			type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD';
-			paymentMethod: StripePaymentRequestButtonMethod;
-			stripeAccount: StripeAccount;
-	  }
-	| {
 			type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED';
 			stripeAccount: StripeAccount;
 	  }
@@ -353,15 +347,6 @@ const updateRecaptchaToken =
 			recaptchaToken,
 		}))(dispatch, getState);
 	};
-
-const setPaymentRequestButtonPaymentMethod = (
-	paymentMethod: 'none' | StripePaymentMethod,
-	stripeAccount: StripeAccount,
-): Action => ({
-	type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD',
-	paymentMethod,
-	stripeAccount,
-});
 
 const setStripePaymentRequestButtonClicked = (
 	stripeAccount: StripeAccount,
@@ -1138,7 +1123,6 @@ export {
 	getUserType,
 	setFormIsValid,
 	sendFormSubmitEventForPayPalRecurring,
-	setPaymentRequestButtonPaymentMethod,
 	setStripePaymentRequestButtonClicked,
 	setStripePaymentRequestButtonError,
 	setTickerGoalReached,

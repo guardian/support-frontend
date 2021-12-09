@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import { Elements } from '@stripe/react-stripe-js';
-import type { PaymentRequest } from '@stripe/stripe-js';
 import React, { useState } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import {
@@ -10,7 +9,10 @@ import {
 } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
-import type { RenderPaymentRequestButton } from './StripePaymentRequestButton';
+import type {
+	PaymentRequestObject,
+	RenderPaymentRequestButton,
+} from './StripePaymentRequestButton';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
 // ----- Types -----//
@@ -21,11 +23,12 @@ type PropTypes = {
 	contributionType: ContributionType;
 	amount: number;
 	renderPaymentRequestButton: RenderPaymentRequestButton;
+	renderFallback?: () => JSX.Element;
 };
 
 interface PrbObjects {
-	ONE_OFF: PaymentRequest | null;
-	REGULAR: PaymentRequest | null;
+	ONE_OFF: PaymentRequestObject;
+	REGULAR: PaymentRequestObject;
 }
 
 // ----- Component ----- //
@@ -36,12 +39,13 @@ function StripePaymentRequestButtonContainer({
 	isTestUser,
 	amount,
 	renderPaymentRequestButton,
+	renderFallback,
 }: PropTypes): JSX.Element | null {
 	// Maintain the PRB objects here because we must not re-create them when user switches between regular/one-off.
 	// We have to create the PRB object inside the Elements component.
 	const [prbObjects, setPrbObjects] = useState<PrbObjects>({
-		ONE_OFF: null,
-		REGULAR: null,
+		ONE_OFF: { status: 'NOT_LOADED' },
+		REGULAR: { status: 'NOT_LOADED' },
 	});
 	const stripeAccount = stripeAccountForContributionType[contributionType];
 	const stripeKey = getStripeKey(stripeAccount, country, isTestUser);
@@ -67,12 +71,14 @@ function StripePaymentRequestButtonContainer({
 					<StripePaymentRequestButton
 						stripeAccount={stripeAccount}
 						amount={amount}
+						contributionType={contributionType}
 						stripeKey={stripeKey}
 						paymentRequestObject={prbObjects[stripeAccount]}
 						setPaymentRequestObject={(prbObject) =>
 							setPrbObjects({ ...prbObjects, [stripeAccount]: prbObject })
 						}
 						renderPaymentRequestButton={renderPaymentRequestButton}
+						renderFallback={renderFallback}
 					/>
 				</Elements>
 			</div>

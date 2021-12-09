@@ -83,10 +83,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  }
         |},
         |"DataExtensionName" : "digipack",
-        |"IdentityUserId" : "1234",
-        |"UserAttributes" : {
-        |   "unmanaged_digital_subscription_in_events_test" : false
-        |}
+        |"IdentityUserId" : "1234"
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
@@ -102,7 +99,6 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         None,
         "acno",
         "A-S00045678",
-        None,
       )
     ).map(_.map(ef => parse(ef.payload)))
     actual.map(inside(_) {

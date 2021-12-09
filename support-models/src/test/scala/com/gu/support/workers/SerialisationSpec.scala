@@ -79,6 +79,8 @@ object StatesTestData {
     paymentFields = Left(PayPalPaymentFields("baid")),
     firstDeliveryDate = None,
     promoCode = None,
+    csrUsername = None,
+    salesforceCaseId = None,
     acquisitionData = None,
     ipAddress = "127.0.0.1",
     userAgent = "TestAgent"
@@ -93,6 +95,8 @@ object StatesTestData {
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
     promoCode = None,
+    csrUsername = None,
+    salesforceCaseId = None,
     acquisitionData = None
   )
 
@@ -110,6 +114,8 @@ object StatesTestData {
     AnalyticsInfo(false, StripeApplePay),
     None,
     None,
+    csrUsername = None,
+    salesforceCaseId = None,
     None
   )
 

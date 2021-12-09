@@ -21,7 +21,7 @@ class ContributionSubscriptionBuilder(
           ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = state.product.amount) //Pass the amount the user selected into Zuora
         )
       ),
-      readerType = Direct
+      readerType = Direct,
     )
     subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
   }

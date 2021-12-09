@@ -139,6 +139,30 @@ sealed trait ReaderType {
   def value: String
 }
 
+object AcquisitionSource {
+
+  case object CSR extends AcquisitionSource {
+    val value = "CSR"
+  }
+
+  case object Unknown extends AcquisitionSource {
+    val value = "Unknown"
+  }
+
+  def fromString(s: String): AcquisitionSource =
+    s match {
+      case CSR.value => CSR
+      case _ => Unknown
+    }
+
+  implicit val decode: Decoder[AcquisitionSource] = Decoder.decodeString.map(code => fromString(code))
+  implicit val encod: Encoder[AcquisitionSource] = Encoder.encodeString.contramap[AcquisitionSource](_.toString)
+
+}
+sealed trait AcquisitionSource {
+  def value: String
+}
+
 object RatePlan {
   implicit val codec: Codec[RatePlan] = capitalizingCodec
 }
@@ -161,6 +185,9 @@ object Subscription {
     .renameField("CorporateAccountId", "CorporateAccountId__c")
     .renameField("CreatedRequestId", "CreatedRequestId__c")
     .renameField("GiftNotificationEmailDate", "GiftNotificationEmailDate__c")
+    .renameField("AcquisitionSource", "AcquisitionSource__c")
+    .renameField("CreatedByCsr", "CreatedByCSR__c")
+    .renameField("AcquisitionCase", "AcquisitionCase__c")
   )
 }
 
@@ -179,6 +206,9 @@ case class Subscription(
   redemptionCode: Option[RawRedemptionCode] = None,
   corporateAccountId: Option[String] = None,
   giftNotificationEmailDate: Option[LocalDate] = None,
+  acquisitionSource: Option[AcquisitionSource] = None,
+  createdByCsr: Option[String] = None,
+  acquisitionCase: Option[String] = None,
 )
 
 object RatePlanChargeData {

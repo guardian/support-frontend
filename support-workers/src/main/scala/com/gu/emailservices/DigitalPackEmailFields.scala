@@ -274,9 +274,7 @@ class DigitalPackEmailFields(
         paymentFieldsAttributes
       ),
         state.user,
-        Some(JsonObject.fromMap(
-          Map("unmanaged_digital_subscription_in_events_test" -> Json.fromBoolean(state.isInEventsTest.getOrElse(false)))
-        ))
+        None,
       )
     )
   }

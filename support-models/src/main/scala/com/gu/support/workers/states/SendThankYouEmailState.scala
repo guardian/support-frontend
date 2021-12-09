@@ -36,7 +36,6 @@ object SendThankYouEmailState {
     promoCode: Option[PromoCode],
     accountNumber: String,
     subscriptionNumber: String,
-    isInEventsTest: Option[Boolean],
   ) extends SendThankYouEmailDigitalSubscriptionState
 
   case class SendThankYouEmailDigitalSubscriptionGiftPurchaseState(

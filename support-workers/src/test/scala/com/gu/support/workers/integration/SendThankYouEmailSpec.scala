@@ -150,7 +150,6 @@ object SendDigitalPackEmail extends App {
       None,
       acno,
       subno,
-      None,
     )
   ))
 

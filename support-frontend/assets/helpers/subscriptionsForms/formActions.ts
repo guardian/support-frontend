@@ -1,6 +1,9 @@
 import type { Dispatch } from 'redux';
+import type { CsrCustomerData } from 'components/csr/csrMode';
+import { csrUserName } from 'components/csr/csrMode';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -18,6 +21,7 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
 import type { Option } from 'helpers/types/option';
+import type { AddressType } from './addressType';
 import type { FormField, Stage } from './formFields';
 
 export type Action =
@@ -120,6 +124,14 @@ export type Action =
 	| {
 			type: 'SET_ADD_DIGITAL_SUBSCRIPTION';
 			addDigital: boolean;
+	  }
+	| {
+			type: 'SET_CSR_USERNAME';
+			username: string;
+	  }
+	| {
+			type: 'SET_SALESFORCE_CASE_ID';
+			caseId: string;
 	  }
 	| AddressAction
 	| PayPalAction
@@ -274,7 +286,70 @@ const formActionCreators = {
 		type: 'SET_ADD_DIGITAL_SUBSCRIPTION',
 		addDigital,
 	}),
+	setCsrUsername: (username: string): Action => ({
+		type: 'SET_CSR_USERNAME',
+		username,
+	}),
+	setSalesforceCaseId: (caseId: string): Action => ({
+		type: 'SET_SALESFORCE_CASE_ID',
+		caseId,
+	}),
 };
+
+function setCsrCustomerData(
+	addressType: AddressType,
+	csrCustomerData: CsrCustomerData,
+) {
+	return (dispatch: Dispatch, getState: () => CheckoutState): void => {
+		csrCustomerData.customer.email &&
+			formActionCreators.setEmail(csrCustomerData.customer.email)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.email &&
+			formActionCreators.setConfirmEmail(csrCustomerData.customer.email)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.firstName &&
+			formActionCreators.setFirstName(csrCustomerData.customer.firstName)(
+				dispatch,
+				getState,
+			);
+		formActionCreators.setLastName(csrCustomerData.customer.lastName)(
+			dispatch,
+			getState,
+		);
+
+		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
+		dispatch(formActionCreators.setSalesforceCaseId(csrCustomerData.caseId));
+
+		const addressActions = addressActionCreatorsFor(addressType);
+		csrCustomerData.customer.country &&
+			addressActions.setCountry(csrCustomerData.customer.country)(dispatch);
+		csrCustomerData.customer.street &&
+			addressActions.setAddressLineOne(csrCustomerData.customer.street)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.city &&
+			addressActions.setTownCity(csrCustomerData.customer.city)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.postcode &&
+			addressActions.setPostcode(csrCustomerData.customer.postcode)(
+				dispatch,
+				getState,
+			);
+		csrCustomerData.customer.state &&
+			addressActions.setState(csrCustomerData.customer.state)(
+				dispatch,
+				getState,
+			);
+	};
+}
+
 export type FormActionCreators = typeof formActionCreators;
 export {
 	setStage,
@@ -282,5 +357,6 @@ export {
 	setSubmissionError,
 	setFormSubmitted,
 	setUserTypeFromIdentityResponse,
+	setCsrCustomerData,
 	formActionCreators,
 };

@@ -146,6 +146,8 @@ export type RegularPaymentRequest = {
 	telephoneNumber: Option<string>;
 	promoCode?: Option<string>;
 	deliveryInstructions?: Option<string>;
+	csrUsername?: string;
+	salesforceCaseId?: string;
 	debugInfo: string;
 };
 export type StripePaymentIntentAuthorisation = {

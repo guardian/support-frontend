@@ -40,6 +40,8 @@ export type FormFields = {
 	deliveryInstructions: Option<string>;
 	giftMessage: Option<string>;
 	giftDeliveryDate: Option<string>;
+	csrUsername?: string;
+	salesforceCaseId?: string;
 };
 export type FormField = $Keys<FormFields> | 'recaptcha';
 export type FormState = FormFields & {

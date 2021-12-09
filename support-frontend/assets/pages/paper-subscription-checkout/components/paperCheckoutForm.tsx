@@ -1,18 +1,19 @@
 // ----- Imports ----- //
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
+import { Radio, RadioGroup } from '@guardian/src-radio';
+import { Option as OptionForSelect, Select } from '@guardian/src-select';
+import { TextArea } from '@guardian/src-text-area';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import 'redux';
-import { Radio, RadioGroup } from '@guardian/src-radio';
-import { TextArea } from '@guardian/src-text-area';
 import Rows from 'components/base/rows';
 import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
+import type { CsrCustomerData } from 'components/csr/csrMode';
+import { useCsrCustomerData } from 'components/csr/csrMode';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -28,43 +29,54 @@ import Text from 'components/text/text';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import { newspaperCountries } from 'helpers/internationalisation/country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	getPriceWithDiscount,
 	getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
+import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import {
+	paperProductsWithDigital,
+	paperProductsWithoutDigital,
+} from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
 import { showPrice } from 'helpers/productPrice/productPrices';
-import { paperSubsUrl } from 'helpers/urls/routes';
-import { getQueryParameter } from 'helpers/urls/url';
-import { titles } from 'helpers/user/details';
-import { signOut } from 'helpers/user/user';
+import { Paper } from 'helpers/productPrice/subscriptions';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type {
+	Action,
+	FormActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
 import {
-	formatMachineDate,
-	formatUserDate,
-} from 'helpers/utilities/dateConversions';
+	formActionCreators,
+	setCsrCustomerData,
+} from 'helpers/subscriptionsForms/formActions';
 import type {
 	FormField,
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
-import { newspaperCountries } from 'helpers/internationalisation/country';
-import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
-import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
-import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
+import {
+	validateWithDeliveryForm,
+	withDeliveryFormIsValid,
+} from 'helpers/subscriptionsForms/formValidation';
+import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
+import {
+	submitWithDeliveryForm,
+	trackSubmitAttempt,
+} from 'helpers/subscriptionsForms/submit';
 import type {
 	CheckoutState,
 	WithDeliveryCheckoutState,
@@ -73,24 +85,19 @@ import {
 	getBillingAddress,
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import { paperSubsUrl } from 'helpers/urls/routes';
+import { getQueryParameter } from 'helpers/urls/url';
+import { titles } from 'helpers/user/details';
+import { signOut } from 'helpers/user/user';
 import {
-	submitWithDeliveryForm,
-	trackSubmitAttempt,
-} from 'helpers/subscriptionsForms/submit';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import {
-	validateWithDeliveryForm,
-	withDeliveryFormIsValid,
-} from 'helpers/subscriptionsForms/formValidation';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
-import {
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-} from 'helpers/productPrice/productOptions';
-import { Paper } from 'helpers/productPrice/subscriptions';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+	formatMachineDate,
+	formatUserDate,
+} from 'helpers/utilities/dateConversions';
+import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
+import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
+import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import {
 	getPriceSummary,
 	sensiblyGenerateDigiSubPrice,
@@ -99,10 +106,6 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import { Option as OptionForSelect, Select } from '@guardian/src-select';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
-import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -135,11 +138,11 @@ type PropTypes = FormFields &
 		formIsValid: (...args: any[]) => any;
 		setupRecurringPayPalPayment: (...args: any[]) => any;
 		total: ProductPrice;
-		// eslint-disable-next-line react/no-unused-prop-types
 		amount: number;
 		productOption: ActivePaperProducts;
 		fulfilmentOption: FulfilmentOptions;
 		participations: Participations;
+		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
 	};
 
 // ----- Map State/Props ----- //
@@ -174,13 +177,16 @@ function mapDispatchToProps() {
 	return {
 		...formActionCreators,
 		fetchAndStoreUserType:
-			(email) =>
+			(email: string) =>
 			(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
 				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		formIsValid:
 			() =>
-			(dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			(
+				_dispatch: Dispatch<Action>,
+				getState: () => WithDeliveryCheckoutState,
+			) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() =>
@@ -204,6 +210,8 @@ function mapDispatchToProps() {
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
 		signOut,
+		setCsrCustomerData: (customerData: CsrCustomerData) =>
+			setCsrCustomerData('delivery', customerData),
 	};
 }
 
@@ -221,7 +229,10 @@ const BillingAddress = withStore(
 
 // ----- Lifecycle hooks ----- //
 // Updated to use useEffect so it only fires once (like componentDidMount)
-function setSubsCardStartDateInState(setStartDate, startDate) {
+function setSubsCardStartDateInState(
+	setStartDate: (s: string) => void,
+	startDate: Date,
+) {
 	useEffect(() => {
 		setStartDate(formatMachineDate(startDate));
 	}, []);
@@ -229,6 +240,7 @@ function setSubsCardStartDateInState(setStartDate, startDate) {
 
 // ----- Component ----- //
 function PaperCheckoutForm(props: PropTypes) {
+	useCsrCustomerData(props.setCsrCustomerData);
 	const days = getDays(props.fulfilmentOption, props.productOption);
 	const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
 	const fulfilmentOptionDescriptor = isHomeDelivery

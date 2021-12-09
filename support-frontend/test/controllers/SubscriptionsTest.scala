@@ -1,7 +1,6 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.SwitchState.{Off, On}
 import admin.settings._
 import assets.RefPath
 import cats.data.EitherT
@@ -104,16 +103,12 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     val allSettings = AllSettings(
       Switches(
-        oneOffPaymentMethods = PaymentMethodsSwitch(On, On, On, On, None, None, None, None, None),
-        recurringPaymentMethods = PaymentMethodsSwitch(On, On, On, On, Some(On), Some(On), Some(On), None, None),
-        experiments = Map.empty,
-        enableDigitalSubGifting = On,
-        useDotcomContactPage = Some(SwitchState.Off),
-        enableRecaptchaBackend = Off,
-        enableRecaptchaFrontend = Off,
-        enableContributionsCampaign = On,
-        forceContributionsCampaign = On,
-        enableQuantumMetric = Off
+        oneOffPaymentMethods = OneOffPaymentMethodSwitches(On,On,On,On,On),
+        recurringPaymentMethods = RecurringPaymentMethodSwitches(On,On,On,On,Off,On,On,On,Off),
+        subscriptionsSwitches = SubscriptionsSwitches(On,On,On),
+        featureSwitches = FeatureSwitches(On, On),
+        campaignSwitches = CampaignSwitches(On, On),
+        recaptchaSwitches = RecaptchaSwitches(On, On)
       ),
       configuredAmounts,
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),

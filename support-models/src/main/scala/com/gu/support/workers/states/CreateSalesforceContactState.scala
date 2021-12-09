@@ -18,6 +18,8 @@ case class CreateSalesforceContactState(
   paymentMethod: Either[PaymentMethod, RedemptionData],
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
+  csrUsername: Option[String],
+  salesforceCaseId: Option[String],
   acquisitionData: Option[AcquisitionData]
 ) extends FailureHandlerState
 

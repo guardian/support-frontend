@@ -89,7 +89,6 @@ deployToCode := {
     "-UpdateSupporterProductDataLambda-",
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
-    "-SendOldAcquisitionEventLambda-",
     "-PreparePaymentMethodForReuseLambda-",
   ).foreach(functionPartial =>
     s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!

@@ -15,6 +15,7 @@ import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState}
+import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
@@ -85,6 +86,12 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     giftNotificationEmailDate shouldBe Some(new LocalDate(2020, 12, 1))
   }
 
+  "SubscriptionData" should "have set acquisitionSource csrUsername and salesforceCaseId" in {
+    csrSubscription.subscription.acquisitionSource shouldBe Some(CSR)
+    csrSubscription.subscription.createdByCsr shouldBe Some("Dan Csr")
+    csrSubscription.subscription.acquisitionCase shouldBe Some("test_case_id")
+  }
+
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
@@ -148,7 +155,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
         SalesforceContactRecord("", ""),
-      )
+      ), None, None
     ).toOption.get
 
   lazy val threeMonthGiftPurchase =
@@ -160,7 +167,17 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
         SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", "")))
-      )
+      ), None, None
     ).toOption.get
+
+  lazy val csrSubscription = subscriptionDirectPurchaseBuilder.build(
+    DigitalSubscriptionDirectPurchaseState(
+      Country.UK,
+      DigitalPack(GBP, Monthly),
+      PayPalReferenceTransaction("baid", "hi@gu.com"),
+      None,
+      SalesforceContactRecord("", ""),
+    ), Some("Dan Csr"), Some("test_case_id")
+  ).toOption.get.subscriptionData
 
 }

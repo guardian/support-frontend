@@ -37,7 +37,7 @@ function init(): void {
 	 */
 	if (
 		getGlobal('ssr') ||
-		!isSwitchOn('enableQuantumMetric') ||
+		!isSwitchOn('featureSwitches.enableQuantumMetric') ||
 		!pathIsValid()
 	) {
 		return;

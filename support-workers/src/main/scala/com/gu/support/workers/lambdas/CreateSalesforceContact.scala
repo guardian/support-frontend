@@ -75,7 +75,7 @@ class NextState(state: CreateSalesforceContactState) {
       product,
       purchase,
       salesforceContactRecords.buyer,
-    ), requestId, user, product, analyticsInfo, None, None, acquisitionData)
+    ), requestId, user, product, analyticsInfo, None, None, state.csrUsername, state.salesforceCaseId, acquisitionData)
 
   def toNextDSRedemption(
     product: DigitalPack,
@@ -85,7 +85,7 @@ class NextState(state: CreateSalesforceContactState) {
       user.id,
       product,
       redemptionData,
-    ), requestId, user, product, analyticsInfo, None, None, acquisitionData)
+    ), requestId, user, product, analyticsInfo, None, None, state.csrUsername, state.salesforceCaseId, acquisitionData)
 
   def toNextDSCorporate(
     salesforceContactRecord: SalesforceContactRecord,
@@ -96,7 +96,7 @@ class NextState(state: CreateSalesforceContactState) {
       product,
       redemptionData,
       salesforceContactRecord,
-    ), requestId, user, product, analyticsInfo, None, None, acquisitionData)
+    ), requestId, user, product, analyticsInfo, None, None, state.csrUsername, state.salesforceCaseId, acquisitionData)
 
   def toNextWeekly(
     salesforceContactRecords: SalesforceContactRecords,
@@ -111,7 +111,7 @@ class NextState(state: CreateSalesforceContactState) {
       firstDeliveryDate.get,
       promoCode,
       salesforceContactRecords,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, acquisitionData)
+    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
 
   def toNextPaper(
     salesforceContactRecord: SalesforceContactRecord,
@@ -125,7 +125,7 @@ class NextState(state: CreateSalesforceContactState) {
       firstDeliveryDate.get,
       promoCode,
       salesforceContactRecord,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, acquisitionData)
+    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
 
   def toNextDSGift(
     salesforceContactRecords: SalesforceContactRecords,
@@ -139,7 +139,7 @@ class NextState(state: CreateSalesforceContactState) {
       purchase,
       promoCode,
       salesforceContactRecords,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, acquisitionData)
+    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
 
   def toNextDSDirect(
     salesforceContactRecord: SalesforceContactRecord,
@@ -152,6 +152,6 @@ class NextState(state: CreateSalesforceContactState) {
       purchase,
       promoCode,
       salesforceContactRecord,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, acquisitionData)
+    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
 
 }

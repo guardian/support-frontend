@@ -79,7 +79,7 @@
     }
   };
   window.guardian.stripeKeyUnitedStates = {
-    @if(settings.switches.experiments.get("usStripeAccountForSingle").exists(_.isOn)) {
+    @if(settings.switches.featureSwitches.usStripeAccountForSingle.isOn) {
         ONE_OFF: {
             default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.forCountry(Some(Country.US)).publicKey",
             uat: "@paymentMethodConfigs.oneOffUatStripeConfig.forCountry(Some(Country.US)).publicKey"
@@ -110,10 +110,10 @@
     window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
   }
 
-  window.guardian.forceContributionsCampaign = @settings.switches.forceContributionsCampaign.isOn
-  window.guardian.enableContributionsCampaign = @settings.switches.enableContributionsCampaign.isOn
+  window.guardian.forceContributionsCampaign = @settings.switches.campaignSwitches.forceContributionsCampaign.isOn
+  window.guardian.enableContributionsCampaign = @settings.switches.campaignSwitches.enableContributionsCampaign.isOn
 
-  window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
+  window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
   </script>
 }

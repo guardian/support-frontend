@@ -22,6 +22,8 @@ case class CreateZuoraSubscriptionState(
   analyticsInfo: AnalyticsInfo,
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
+  csrUsername: Option[String],
+  salesforceCaseId: Option[String],
   acquisitionData: Option[AcquisitionData]
 ) extends FailureHandlerState
 

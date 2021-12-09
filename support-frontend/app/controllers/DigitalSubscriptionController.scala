@@ -43,7 +43,7 @@ class DigitalSubscriptionController(
       implicit request =>
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
-        if (!settings.switches.enableDigitalSubGifting.isOn && orderIsAGift) {
+        if (!settings.switches.subscriptionsSwitches.enableDigitalSubGifting.isOn && orderIsAGift) {
           Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey
         } else {
           val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))

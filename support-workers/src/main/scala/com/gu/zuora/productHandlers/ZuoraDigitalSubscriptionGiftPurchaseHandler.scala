@@ -22,9 +22,9 @@ class ZuoraDigitalSubscriptionGiftPurchaseHandler(
   user: User,
 ) {
 
-  def subscribe(state: DigitalSubscriptionGiftPurchaseState): Future[SendThankYouEmailState] =
+  def subscribe(state: DigitalSubscriptionGiftPurchaseState, csrUsername: Option[String], salesforceCaseId: Option[String]): Future[SendThankYouEmailState] =
     for {
-      subscriptionBuildResult <- Future.fromTry(digitalSubscriptionGiftPurchaseBuilder.build(state).leftMap(BuildSubscribePromoError).toTry)
+      subscriptionBuildResult <- Future.fromTry(digitalSubscriptionGiftPurchaseBuilder.build(state, csrUsername, salesforceCaseId).leftMap(BuildSubscribePromoError).toTry)
         .withEventualLogging("subscription data")
       (subscribeItem, giftCode) = subscriptionBuildResult
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
