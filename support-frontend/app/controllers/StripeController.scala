@@ -45,8 +45,8 @@ class StripeController(
   import services.SetupIntent.encoder
 
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] = PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
-    val recaptchaBackendEnabled = settingsProvider.getAllSettings().switches.enableRecaptchaBackend.isOn
-    val recaptchaFrontendEnabled = settingsProvider.getAllSettings().switches.enableRecaptchaFrontend.isOn
+    val recaptchaBackendEnabled = settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaBackend.isOn
+    val recaptchaFrontendEnabled = settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
 
     // We never validate on backend unless frontend validation is Enabled
     val recaptchaEnabled = recaptchaFrontendEnabled && recaptchaBackendEnabled

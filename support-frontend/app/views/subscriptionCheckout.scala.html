@@ -64,11 +64,11 @@
         uat: "@uatPayPalConfig.payPalEnvironment"
       };
 
-      window.guardian.checkoutPostcodeLookup = "@settings.switches.experiments.get("checkoutPostcodeLookup").exists(_.isOn)"
+      window.guardian.checkoutPostcodeLookup = "@settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
 
       window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
 
-      window.guardian.recaptchaEnabled = @settings.switches.enableRecaptchaFrontend.isOn
+      window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
 
       window.guardian.isTestUser = @uatMode
 
