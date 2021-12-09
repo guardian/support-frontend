@@ -3,18 +3,18 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 50,
-            "TS2322": 182,
+            "TS2322": 181,
             "TS2578": 14,
             "TS2339": 67,
             "TS2345": 126,
-            "TS7006": 85,
+            "TS7006": 82,
             "TS7053": 14,
             "TS7034": 6,
             "TS7005": 22,
             "TS6133": 11,
-            "TS7031": 20,
+            "TS7031": 18,
             "TS2564": 2,
-            "TS2769": 15,
+            "TS2769": 14,
             "TS2314": 5,
             "TS2304": 5,
             "TS2741": 6,
@@ -34,7 +34,7 @@
             "TS2694": 4,
             "TS7022": 3,
             "TS2707": 1,
-            "TS2525": 6,
+            "TS2525": 5,
             "TS2745": 2,
             "TS2698": 6
         },
@@ -157,7 +157,6 @@
             "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 8,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
@@ -1147,10 +1146,6 @@
         {
             "path": "assets/pages/subscriptions-redemption/api.ts",
             "message": "Type 'null' is not assignable to type 'RegularPaymentRequestAddress | undefined'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Type 'Promise<{ json: () => Promise<{ client_secret: string; }>; }>' is not assignable to type 'Promise<Response>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -2341,18 +2336,6 @@
             "message": "Parameter 'orderIsGift' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Parameter 'initialState' implicitly has an 'any' type."
         },
@@ -2651,14 +2634,6 @@
             "message": "Binding element 'children' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Binding element 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Binding element 'children' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Binding element 'initialState' implicitly has an 'any' type."
         },
@@ -2728,10 +2703,6 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
         {
@@ -3300,10 +3271,6 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
         },
         {
