@@ -13,7 +13,6 @@ import csrf from 'helpers/csrf/csrfReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type {
@@ -43,7 +42,6 @@ interface FormData extends UserFormData {
 	checkoutFormHasBeenSubmitted: boolean;
 }
 export interface StripePaymentRequestButtonData {
-	paymentMethod: 'none' | StripePaymentMethod;
 	stripePaymentRequestButtonClicked: boolean;
 	paymentError: ErrorReason | null;
 }
@@ -239,12 +237,10 @@ function createFormReducer() {
 		},
 		stripePaymentRequestButtonData: {
 			ONE_OFF: {
-				paymentMethod: 'none',
 				stripePaymentRequestButtonClicked: false,
 				paymentError: null,
 			},
 			REGULAR: {
-				paymentMethod: 'none',
 				stripePaymentRequestButtonClicked: false,
 				paymentError: null,
 			},
@@ -502,18 +498,6 @@ function createFormReducer() {
 					formData: {
 						...state.formData,
 						billingCountry: action.billingCountry,
-					},
-				};
-
-			case 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD':
-				return {
-					...state,
-					stripePaymentRequestButtonData: {
-						...state.stripePaymentRequestButtonData,
-						[action.stripeAccount]: {
-							...state.stripePaymentRequestButtonData[action.stripeAccount],
-							paymentMethod: action.paymentMethod,
-						},
 					},
 				};
 
