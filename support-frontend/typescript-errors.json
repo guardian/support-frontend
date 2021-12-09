@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 51,
+            "TS2305": 50,
             "TS2322": 182,
             "TS2578": 14,
             "TS2339": 67,
@@ -18,7 +18,7 @@
             "TS2314": 5,
             "TS2304": 5,
             "TS2741": 6,
-            "TS2739": 16,
+            "TS2739": 15,
             "TS2532": 6,
             "TS2556": 3,
             "TS2554": 48,
@@ -78,7 +78,6 @@
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
             "assets/components/subscriptionCheckouts/stage.tsx": 1,
             "assets/components/text/text.tsx": 1,
-            "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx": 2,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
@@ -409,10 +408,6 @@
         },
         {
             "path": "assets/components/text/text.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -2862,10 +2857,6 @@
         {
             "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
             "message": "Type '{ ONE_OFF: { min: number; minInWords: string; max: number; maxInWords: string; default: number; }; }' is missing the following properties from type 'Config': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx",
-            "message": "Type '{ digitalSubscription: { startShowingOn: string; stopShowingOn: string; copy: Element; }[]; }' is missing the following properties from type 'TimedCopyCollection': newspaper, guardianWeekly"
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",

@@ -1,20 +1,23 @@
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 
 type LandingPage = 'digitalSubscription' | 'newspaper' | 'guardianWeekly';
+
 type TimeBoundCopy = {
 	startShowingOn: string;
 	stopShowingOn?: string;
-	copy: Node;
+	copy: ReactNode;
 };
-type TimedCopyCollection = Record<LandingPage, TimeBoundCopy[]>;
+
+type TimedCopyCollection = Partial<Record<LandingPage, TimeBoundCopy[]>>;
+
 const timedCopy: TimedCopyCollection = {
 	digitalSubscription: [
 		{
-			startShowingOn: '2021-07-23',
-			stopShowingOn: '2021-09-18',
+			startShowingOn: '2021-12-23',
+			stopShowingOn: '2021-12-31',
 			copy: (
 				<>
 					<p>
@@ -23,15 +26,18 @@ const timedCopy: TimedCopyCollection = {
 						journalism. It also sustains the independent reporting you love.
 					</p>
 					<p>
-						Plus, to mark the 32nd Olympics, access our Olympic legends special
-						edition which looks at 30 of the greatest Olympic moments.
+						Plus, revisit the year's most fascinating stories with our special
+						edition '2021: a lookback', available exclusively to subscribers for
+						a limited time.
 					</p>
 				</>
 			),
 		},
 	],
 };
+
 const forceQueryKey = 'forceTimeboundCopy';
+
 export function getTimeboundQuery(): Option<Date> {
 	const { search } = window.location;
 
@@ -47,11 +53,12 @@ export function getTimeboundQuery(): Option<Date> {
 
 	return null;
 }
+
 export function getTimeboundCopy(
 	page: LandingPage,
 	currentDate: Date,
 	timedCopyData: TimedCopyCollection = timedCopy,
-): Node {
+): ReactNode {
 	const copyListForPage = timedCopyData[page];
 
 	if (copyListForPage) {
