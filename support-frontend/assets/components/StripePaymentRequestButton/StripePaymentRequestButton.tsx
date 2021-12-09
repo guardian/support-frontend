@@ -189,11 +189,7 @@ const onComplete = (res: PaymentResult) => {
 };
 
 function updateTotal(props: PropTypes) {
-	// When the other tab is clicked, the value of amount is NaN
-	if (
-		!Number.isNaN(props.amount) &&
-		props.paymentRequestObject.status === 'AVAILABLE'
-	) {
+	if (props.paymentRequestObject.status === 'AVAILABLE') {
 		props.paymentRequestObject.paymentRequest.update({
 			total: {
 				label: `${toHumanReadableContributionType(
@@ -211,7 +207,6 @@ function updateTotal(props: PropTypes) {
 function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
 	function onClick(event: StripePaymentRequestButtonElementClickEvent) {
 		trackComponentClick('apple-pay-clicked');
-		updateTotal(props);
 		props.setAssociatedPaymentMethod();
 		props.setStripePaymentRequestButtonClicked(props.stripeAccount);
 
@@ -223,14 +218,15 @@ function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
 			props.useLocalCurrency,
 		);
 
-		if (
-			isCustomPrb &&
-			isValid &&
-			props.paymentRequestObject.status === 'AVAILABLE'
-		) {
-			props.paymentRequestObject.paymentRequest.show();
-		} else if (!isCustomPrb && !isValid) {
+		if (!isValid) {
 			event.preventDefault();
+			return;
+		}
+
+		updateTotal(props);
+
+		if (isCustomPrb && props.paymentRequestObject.status === 'AVAILABLE') {
+			props.paymentRequestObject.paymentRequest.show();
 		}
 	}
 
@@ -417,7 +413,6 @@ function setUpPaymentListenerSca(
 }
 
 // ---- Component ----- //
-
 function PaymentRequestButton(props: PropTypes) {
 	const stripe = stripeJs.useStripe();
 	const [type, setType] = useState<PaymentRequestButtonType>('NONE');

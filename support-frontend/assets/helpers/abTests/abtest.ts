@@ -334,8 +334,6 @@ function getParticipations(
 	return participations;
 }
 
-const allLandingPagesAndThankyouPages = '/??/contribute|thankyou(/.*)?$';
-
 function getAmountsTestParticipations(
 	countryGroupId: CountryGroupId,
 	settings: Settings,
@@ -343,7 +341,7 @@ function getAmountsTestParticipations(
 	if (
 		!targetPageMatches(
 			window.location.pathname,
-			allLandingPagesAndThankyouPages,
+			'/??/contribute|contribute-in-epic|thankyou(/.*)?$',
 		)
 	) {
 		return null;
