@@ -59,8 +59,8 @@ export type CsrCustomerData = {
 };
 
 const domains = [
-	'https://gnmtouchpoint.my.salesforce.com',
 	'https://gnmtouchpoint--dev1--c.cs88.visual.force.com',
+	'https://gnmtouchpoint--c.eu31.visual.force.com',
 ];
 
 const isSalesforceDomain = (domain: string): boolean =>
