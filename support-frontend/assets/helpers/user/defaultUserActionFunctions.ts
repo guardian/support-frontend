@@ -1,7 +1,7 @@
 import { setSession } from 'helpers/storage/storage';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { Action } from './userActions';
 import './userActions';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
 // ----- Actions Creators ----- //
 function setId(id: string): Action {

@@ -2,8 +2,10 @@ import { getEmailValidatedFromUserCookie } from 'helpers/user/user';
 
 jest.mock('ophan', () => () => ({}));
 
-const toCookie = (values) =>
-	`${btoa(JSON.stringify(values))}.the-secret-bit-that-we-ignore`;
+const toCookie = (values: Array<string | number | boolean>) =>
+	`${Buffer.from(JSON.stringify(values)).toString(
+		'base64',
+	)}.the-secret-bit-that-we-ignore`;
 
 describe('user tests', () => {
 	it('should return false if no cookie', () => {

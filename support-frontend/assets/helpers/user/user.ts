@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { Dispatch } from 'redux';
 import * as cookie from 'helpers/storage/cookie';
 import { get as getCookie } from 'helpers/storage/cookie';
 import { getSession } from 'helpers/storage/storage';
@@ -17,12 +18,7 @@ export type User = {
 
 // ----- Functions ----- //
 function getUser(): User {
-	if (
-		window &&
-		window.guardian &&
-		window.guardian.user &&
-		window.guardian.user.email !== ''
-	) {
+	if (window.guardian.user && window.guardian.user.email !== '') {
 		const { firstName, lastName, email } = window.guardian.user;
 		return {
 			firstName: typeof firstName === 'string' ? firstName : null,
@@ -41,9 +37,10 @@ function getUser(): User {
 }
 
 function isTestUser(): boolean {
-	const isDefined = (x) => x !== null && x !== undefined;
+	const isDefined = (x: boolean | string | null | undefined) =>
+		x !== null && x !== undefined;
 
-	const uatMode = window.guardian && window.guardian.uatMode;
+	const uatMode = window.guardian.uatMode;
 	const testCookie = cookie.get('_test_username');
 	return isDefined(uatMode) || isDefined(testCookie);
 }
@@ -51,11 +48,11 @@ function isTestUser(): boolean {
 const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
-const signOut = () => {
+const signOut = (): void => {
 	window.location.href = getSignoutUrl();
 };
 
-const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
+const doesUserAppearToBeSignedIn = (): boolean => !!cookie.get('GU_U');
 
 // JTL: The user cookie is built to have particular values at
 // particular indices by design. Index 7 in the cookie object represents
@@ -66,13 +63,15 @@ const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
 // communication to a broader segment of engineering that also uses
 // the user cookie.
 const getEmailValidatedFromUserCookie = (
-	guuCookie: string | null | undefined,
-) => {
+	guuCookie?: string | null,
+): boolean => {
 	if (guuCookie) {
 		const tokens = guuCookie.split('.');
 
 		try {
-			const parsed = JSON.parse(atob(tokens[0]));
+			const parsed = JSON.parse(
+				Buffer.from(tokens[0], 'base64').toString(),
+			) as unknown[];
 			return !!parsed[7];
 		} catch (e) {
 			return false;
@@ -83,9 +82,9 @@ const getEmailValidatedFromUserCookie = (
 };
 
 const init = (
-	dispatch: (...args: any[]) => any,
+	dispatch: Dispatch,
 	actions: UserSetStateActions = defaultUserActionFunctions,
-) => {
+): void => {
 	const {
 		setId,
 		setDisplayName,
@@ -101,15 +100,11 @@ const init = (
 		setEmailValidated,
 		setIsReturningContributor,
 	} = actions;
-	const windowHasUser = window.guardian && window.guardian.user;
+	const windowHasUser = window.guardian.user;
 	const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
 
 	function getEmailFromBrowser(): string | null | undefined {
-		if (window.guardian && window.guardian.email) {
-			return window.guardian.email;
-		}
-
-		return getSession('gu.email');
+		return window.guardian.email ?? getSession('gu.email');
 	}
 
 	const emailFromBrowser = getEmailFromBrowser();
@@ -143,43 +138,45 @@ const init = (
 	}
 
 	if (windowHasUser) {
-		dispatch(setId(window.guardian.user.id));
-		dispatch(setEmail(window.guardian.user.email));
-		dispatch(setDisplayName(window.guardian.user.displayName));
-		dispatch(setFirstName(window.guardian.user.firstName));
-		dispatch(setLastName(window.guardian.user.lastName));
-		dispatch(
-			setFullName(
-				`${window.guardian.user.firstName} ${window.guardian.user.lastName}`,
-			),
-		);
+		const { id, email, displayName, firstName, lastName, address4 } =
+			windowHasUser;
+
+		id && dispatch(setId(id));
+		email && dispatch(setEmail(email));
+		displayName && dispatch(setDisplayName(displayName));
+		firstName && dispatch(setFirstName(firstName));
+		lastName && dispatch(setLastName(lastName));
+		dispatch(setFullName(`${firstName} ${lastName}`));
+
 		// default value from Identity Billing Address, or Fastly GEO-IP
-		dispatch(
-			setStateField(
-				window.guardian.user.address4 || window.guardian.geoip.stateCode,
-			),
-		);
+		if (address4) {
+			dispatch(setStateField(address4));
+		} else {
+			window.guardian.geoip?.stateCode &&
+				dispatch(setStateField(window.guardian.geoip.stateCode));
+		}
+
 		dispatch(setIsSignedIn(true));
 		dispatch(
 			setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))),
 		);
-		fetch(`${window.guardian.mdapiUrl}/user-attributes/me`, {
+		void fetch(`${window.guardian.mdapiUrl}/user-attributes/me`, {
 			mode: 'cors',
 			credentials: 'include',
 		})
 			.then((response) => response.json())
-			.then((attributes) => {
+			.then((attributes: Record<string, unknown>) => {
 				if (attributes.recurringContributionPaymentPlan) {
 					dispatch(setIsRecurringContributor());
 				}
 			});
 	} else if (userAppearsLoggedIn) {
 		// TODO - remove in another PR as this condition is deprecated
-		fetch(routes.oneOffContribAutofill, {
+		void fetch(routes.oneOffContribAutofill, {
 			credentials: 'include',
 		}).then((response) => {
 			if (response.ok) {
-				response.json().then((data) => {
+				void response.json().then((data: Record<string, string>) => {
 					if (data.id) {
 						dispatch(setIsSignedIn(true));
 						dispatch(setId(data.id));
@@ -204,7 +201,8 @@ const init = (
 			dispatch(setEmail(emailFromBrowser));
 		}
 
-		dispatch(setStateField(window.guardian.geoip.stateCode));
+		window.guardian.geoip?.stateCode &&
+			dispatch(setStateField(window.guardian.geoip.stateCode));
 	}
 };
 

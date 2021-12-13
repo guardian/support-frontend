@@ -12,13 +12,16 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { deriveSubsAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Option } from 'helpers/types/option';
 import { getBaseDomain, getOrigin } from 'helpers/urls/url';
+
 // ----- Types ----- //
-export type MemProduct = 'patrons' | 'events';
+export type MemProduct = 'events';
 export type SubsUrls = {
+	[key in SubscriptionProduct]: string;
+} & {
 	GuardianWeeklyGift: string;
 	DigitalPackGift: string;
-	[key: SubscriptionProduct]: string;
 };
+
 // ----- Setup ----- //
 const subsUrl = `https://subscribe.${getBaseDomain()}`;
 const patronsUrl = 'https://patrons.theguardian.com';
@@ -40,18 +43,15 @@ const memUrls: Record<MemProduct, string> = {
 
 // ----- Functions ----- //
 // Creates URLs for the membership site from promo codes and intCmp.
-function getMemLink(
-	product: MemProduct,
-	intCmp: string | null | undefined,
-): string {
+function getMemLink(product: MemProduct, intCmp?: string | null): string {
 	const params = new URLSearchParams();
-	params.append('INTCMP', intCmp || defaultIntCmp);
+	params.append('INTCMP', intCmp ?? defaultIntCmp);
 	return `${memUrls[product]}?${params.toString()}`;
 }
 
 function getPatronsLink(intCmp: string | null | undefined): string {
 	const params = new URLSearchParams();
-	params.append('INTCMP', intCmp || defaultIntCmp);
+	params.append('INTCMP', intCmp ?? defaultIntCmp);
 	return `${patronsUrl}?${params.toString()}`;
 }
 
@@ -62,7 +62,7 @@ function buildParamString(
 	referrerAcquisitionData: ReferrerAcquisitionData | null,
 ): string {
 	const params = new URLSearchParams(window.location.search);
-	const maybeCustomIntcmp = intCmp || defaultIntCmp;
+	const maybeCustomIntcmp = intCmp ?? defaultIntCmp;
 	params.set('INTCMP', maybeCustomIntcmp);
 
 	if (referrerAcquisitionData) {
@@ -77,7 +77,7 @@ function getLegacyPaperAndDigitalLink(
 	intCmp: string | null | undefined,
 	referrerAcquisitionData: ReferrerAcquisitionData,
 	nativeAbParticipations: Participations,
-) {
+): string {
 	const acquisitionData = deriveSubsAcquisitionData(
 		referrerAcquisitionData,
 		nativeAbParticipations,
@@ -115,22 +115,18 @@ function getDigitalCheckout(
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
 	const groupFromId = countryGroups[cgId];
 
-	if (groupFromId) {
-		switch (groupFromId.supportInternationalisationId.toLowerCase()) {
-			case 'uk':
-				return 'gb';
+	switch (groupFromId.supportInternationalisationId.toLowerCase()) {
+		case 'uk':
+			return 'gb';
 
-			case 'int':
-				return 'us';
+		case 'int':
+			return 'us';
 
-			case 'eu':
-				return 'us';
+		case 'eu':
+			return 'us';
 
-			default:
-				return groupFromId.supportInternationalisationId.toLowerCase();
-		}
-	} else {
-		return 'us';
+		default:
+			return groupFromId.supportInternationalisationId.toLowerCase();
 	}
 }
 
@@ -140,22 +136,21 @@ function getAppleStoreUrl(product: string, countryGroupId: CountryGroupId) {
 	return `https://apps.apple.com/${appStoreCountryCode}/app/${product}`;
 }
 
-function getIosAppUrl(countryGroupId: CountryGroupId) {
+function getIosAppUrl(countryGroupId: CountryGroupId): string {
 	return getAppleStoreUrl('the-guardian/id409128287', countryGroupId);
 }
 
-function getDailyEditionUrl(countryGroupId: CountryGroupId) {
+function getDailyEditionUrl(countryGroupId: CountryGroupId): string {
 	return getAppleStoreUrl(
 		'the-guardian-daily-edition/id452707806',
 		countryGroupId,
 	);
 }
 
-const getProfileUrl =
-	(path: string) => (returnUrl: string | null | undefined) => {
-		const encodedReturn = encodeURIComponent(returnUrl || window.location);
-		return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
-	};
+const getProfileUrl = (path: string) => (returnUrl?: string | null) => {
+	const encodedReturn = encodeURIComponent(returnUrl ?? window.location.href);
+	return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
+};
 
 const getSignoutUrl = getProfileUrl('signout');
 const getReauthenticateUrl = getProfileUrl('reauthenticate');
