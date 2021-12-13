@@ -5,11 +5,11 @@ import type { Action } from './userActions';
 export type User = {
 	id: string | null | undefined;
 	email: string;
-	displayName: string | null | undefined;
+	displayName?: string | null;
 	firstName: string;
 	lastName: string;
 	fullName: string;
-	isTestUser: boolean | null | undefined;
+	isTestUser?: boolean | null;
 	isPostDeploymentTestUser: boolean;
 	stateField: string;
 	gnmMarketing: boolean;
@@ -17,6 +17,7 @@ export type User = {
 	isRecurringContributor: boolean;
 	emailValidated: boolean;
 	isReturningContributor: boolean;
+	address4?: string | null;
 };
 
 // ----- Reducer ----- //

@@ -55,28 +55,23 @@ export type Action =
 			type: 'SET_IS_RETURNING_CONTRIBUTOR';
 			isReturningContributor: boolean;
 	  };
+
 export type UserSetStateActions = {
-	setId: (arg0: string) => Action;
-	setDisplayName: (arg0: string) => Action;
-	setFirstName: (arg0: string) => Action;
-	setLastName: (arg0: string) => Action;
-	setFullName: (arg0: string) => Action;
-	setEmail: (arg0: string) => Action;
-	setTestUser: (arg0: boolean) => Action;
-	setPostDeploymentTestUser: (arg0: boolean) => Action;
-	setGnmMarketing: (arg0: boolean) => Action;
-	setEmailValidated: (arg0: boolean) => Action;
-	setIsReturningContributor: (arg0: boolean) => Action;
+	setId: (id: string) => Action;
+	setDisplayName: (displayName: string) => Action;
+	setFirstName: (firstName: string) => Action;
+	setLastName: (lastName: string) => Action;
+	setFullName: (fullName: string) => Action;
+	setEmail: (email: string) => Action;
+	setTestUser: (testUser: boolean) => Action;
+	setPostDeploymentTestUser: (postDeploymentTestUser: boolean) => Action;
+	setGnmMarketing: (gnmMarketing: boolean) => Action;
+	setEmailValidated: (emailValidated: boolean) => Action;
+	setIsReturningContributor: (isReturningContributor: boolean) => Action;
 	// When we change either of these in the context of the contributions landing page,
 	// we need to dispatch some additional actions to update some state in the
 	// contributions landing page state as well as update the user state, hence the union type.
-	setIsSignedIn: (
-		arg0: boolean,
-	) => Action | ((arg0: (...args: any[]) => any) => void);
-	setIsRecurringContributor: () =>
-		| Action
-		| ((arg0: (...args: any[]) => any) => void);
-	setStateField: (
-		arg0: string,
-	) => Action | ((arg0: (...args: any[]) => any) => void);
+	setIsSignedIn: (isSignedIn: boolean) => Action;
+	setIsRecurringContributor: () => Action;
+	setStateField: (stateField: string) => Action;
 };

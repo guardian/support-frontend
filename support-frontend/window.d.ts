@@ -1,5 +1,6 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import type { StripeKey } from 'helpers/forms/stripe';
+import type { User } from 'helpers/user/userReducer';
 import type { ProductPrices } from './assets/helpers/productPrice/productPrices';
 
 declare global {
@@ -8,25 +9,28 @@ declare global {
 	 */
 	interface Window {
 		guardian: {
-			mdapiUrl: string;
-			serversideTests?: Participations | null;
-			enableContributionsCampaign: boolean;
-			forceContributionsCampaign: boolean;
-			v2recaptchaPublicKey: string;
-			recaptchaEnabled?: boolean;
-			geoip?: {
-				countryCode: string;
-				stateCode?: string;
-			};
-			productPrices: ProductPrices;
-			orderIsAGift: boolean;
 			amazonPaySellerId: {
 				default: string;
 				uat: string;
 			};
+			email?: string;
+			enableContributionsCampaign: boolean;
+			forceContributionsCampaign: boolean;
+			geoip?: {
+				countryCode: string;
+				stateCode?: string;
+			};
+			mdapiUrl: string;
+			orderIsAGift: boolean;
+			productPrices: ProductPrices;
+			recaptchaEnabled?: boolean;
+			serversideTests?: Participations | null;
 			stripeKeyAustralia: StripeKey;
-			stripeKeyUnitedStates: StripeKey;
 			stripeKeyDefaultCurrencies: StripeKey;
+			stripeKeyUnitedStates: StripeKey;
+			uatMode: unknown;
+			user?: User;
+			v2recaptchaPublicKey: string;
 		};
 		enablePayPalButton?: () => void;
 		disablePayPalButton?: () => void;
