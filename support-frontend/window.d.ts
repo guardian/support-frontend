@@ -28,7 +28,7 @@ declare global {
 			stripeKeyAustralia: StripeKey;
 			stripeKeyDefaultCurrencies: StripeKey;
 			stripeKeyUnitedStates: StripeKey;
-			uatMode: unknown;
+			uatMode?: boolean;
 			user?: User;
 			v2recaptchaPublicKey: string;
 		};

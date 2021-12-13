@@ -37,9 +37,10 @@ function getUser(): User {
 }
 
 function isTestUser(): boolean {
-	const isDefined = (x: unknown) => x !== null && x !== undefined;
+	const isDefined = (x: boolean | string | null | undefined) =>
+		x !== null && x !== undefined;
 
-	const uatMode: unknown = window.guardian.uatMode;
+	const uatMode = window.guardian.uatMode;
 	const testCookie = cookie.get('_test_username');
 	return isDefined(uatMode) || isDefined(testCookie);
 }
