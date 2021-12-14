@@ -14,3 +14,4 @@ deployments:
       fileName: support-logs-retention-lambda.zip
       functionNames: [support-logs-retention-lambda-]
       prefixStack: false
+    dependencies: [support-logs-retention-lambda-cfn]
