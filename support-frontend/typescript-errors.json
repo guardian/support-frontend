@@ -3,18 +3,19 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 50,
-            "TS2322": 185,
+            "TS2322": 184,
             "TS2578": 14,
-            "TS2339": 54,
-            "TS2345": 111,
-            "TS7006": 82,
+            "TS2339": 52,
+            "TS2345": 112,
+            "TS7006": 80,
             "TS7053": 14,
             "TS7034": 6,
             "TS7005": 22,
             "TS6133": 11,
             "TS7031": 18,
             "TS2564": 2,
-            "TS2769": 14,
+            "TS2769": 12,
+            "TS7016": 8,
             "TS2314": 5,
             "TS2304": 5,
             "TS2741": 5,
@@ -23,13 +24,12 @@
             "TS2556": 3,
             "TS2554": 31,
             "TS2569": 2,
-            "TS2571": 5,
+            "TS2571": 11,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
             "TS2740": 5,
-            "TS2531": 6,
-            "TS7016": 1,
+            "TS2531": 2,
             "TS2694": 4,
             "TS7022": 3,
             "TS2707": 1,
@@ -125,7 +125,7 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/aus-moment-map/components/map.tsx": 4,
-            "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 17,
+            "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 19,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionState.tsx": 2,
@@ -133,7 +133,6 @@
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 9,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 10,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 5,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
@@ -168,7 +167,7 @@
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
-            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
+            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts": 1,
@@ -176,8 +175,9 @@
             "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
-            "assets/helpers/rendering/render.ts": 8,
+            "assets/helpers/rendering/render.ts": 7,
             "assets/helpers/utilities/logger.ts": 1,
+            "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
@@ -201,6 +201,7 @@
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/helpers/tracking/__tests__/acquisitionsTest.ts": 1,
+            "assets/helpers/tracking/googleTagManager.ts": 2,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
@@ -215,7 +216,7 @@
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/signout/signout.tsx": 1,
-            "assets/helpers/rendering/ssrPages.ts": 1,
+            "assets/helpers/rendering/ssrPages.ts": 2,
             "assets/helpers/utilities/dateFormatting.ts": 1,
             "assets/pages/aus-moment-map/utils.ts": 1,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
@@ -229,6 +230,9 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
+            "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx": 1,
+            "assets/helpers/abTests/abtest.ts": 1,
+            "assets/helpers/customHooks/useHasBeenSeen.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
@@ -469,7 +473,7 @@
         },
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
-            "message": "Type '{ children: (Element | Element[])[]; style: { top: number; left: number; position: string; }; }' is not assignable to type 'IntrinsicAttributes & { children: Node; }'."
+            "message": "Type '{ children: (Element | Element[])[]; style: { top: number; left: number; position: string; }; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
         },
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
@@ -505,11 +509,11 @@
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; label: string; autoComplete: string; type: \"text\"; inputmode: string; pattern: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; error: string; minLength: number; maxLength: number; width: 10; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | ... 279 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ id: string; label: string; autoComplete: string; type: \"text\"; inputmode: string; pattern: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; error: string; minLength: number; maxLength: number; width: 10; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; value: string; autoComplete: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; minLength: number; maxLength: number; type: \"text\"; inputmode: string; pattern: string; label: string; error: string; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | ... 279 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ id: string; value: string; autoComplete: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; minLength: number; maxLength: number; type: \"text\"; inputmode: string; pattern: string; label: string; error: string; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
@@ -597,7 +601,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Type '{ children: any[]; onChange: (e: ChangeEvent<HTMLSelectElement>) => void; forwardRef: (r: any) => void; id: string; label: string; }' is not assignable to type 'IntrinsicAttributes & Pick<SelectProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"value\" | ... 257 more ... | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: any[]; onChange: (e: ChangeEvent<HTMLSelectElement>) => void; forwardRef: (r: any) => void; id: string; label: string; }' is not assignable to type 'IntrinsicAttributes & Pick<SelectProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | ... 257 more ... | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
@@ -605,15 +609,15 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Type '{ children: Element[]; legend: string; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"id\" | \"children\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; legend: string; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | ... 277 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: string | undefined; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"id\" | \"children\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; id: string; label: string; hideLabel: true; error: string | undefined; role: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
@@ -641,7 +645,7 @@
         },
         {
             "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/components/svgs/amazonPayLogoDs.tsx",
@@ -778,6 +782,14 @@
         {
             "path": "assets/pages/aus-moment-map/components/map.tsx",
             "message": "Type '(() => void) | null' is not assignable to type 'MouseEventHandler<SVGGElement> | undefined'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
@@ -928,18 +940,6 @@
             "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"csrf\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Type '{ exact: true; path: string; render: () => Element; }' is not assignable to type 'IntrinsicAttributes & (PathRouteProps | LayoutRouteProps | IndexRouteProps)'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Type '{ exact: true; path: string; render: (props: any) => Element; }' is not assignable to type 'IntrinsicAttributes & (PathRouteProps | LayoutRouteProps | IndexRouteProps)'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Type '{ exact: true; path: string; render: (props: any) => Element; }' is not assignable to type 'IntrinsicAttributes & (PathRouteProps | LayoutRouteProps | IndexRouteProps)'."
-        },
-        {
             "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
             "message": "Type '{ Stripe: null; AmazonPay: null; }' is not assignable to type '{ Stripe: StripeHandler | null; }'."
         },
@@ -1081,7 +1081,7 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: Node; }'."
+            "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1093,15 +1093,15 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"id\" | \"children\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | ... 277 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"id\" | \"children\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
@@ -1125,11 +1125,11 @@
         },
         {
             "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/hero.tsx",
@@ -1141,7 +1141,7 @@
         },
         {
             "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
@@ -1161,7 +1161,7 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: Node; }'."
+            "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -1169,11 +1169,11 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | ... 277 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | ... 278 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"id\" | \"children\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
+            "message": "Type '{ children: Element[]; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & Pick<RadioGroupProps, \"label\" | \"children\" | \"id\" | \"className\" | \"name\" | \"error\" | \"cssOverrides\" | \"supporting\"> & Partial<...> & Partial<...>'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -1417,27 +1417,19 @@
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'scrollTop' does not exist on type 'never'."
+            "message": "Property 'offsetTop' does not exist on type 'unknown'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'scrollTop' does not exist on type 'never'."
+            "message": "Property 'offsetHeight' does not exist on type 'unknown'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'addEventListener' does not exist on type 'never'."
+            "message": "Property 'parentNode' does not exist on type 'unknown'."
         },
         {
             "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'removeEventListener' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'parentNode' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'parentNode' does not exist on type 'never'."
+            "message": "Property 'offsetTop' does not exist on type 'unknown'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
@@ -1559,7 +1551,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Argument of type 'typeof AddressFields' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormErrors; traverseState: (arg0: GlobalState) => State; scope: AddressType; country: string; state: string | null; lineOne: Option<string>; lineTwo: Option<...>; postCode: Option<...>; city: Option<...>; countries: Record<...>; } & { ...; }, ClassAttributes<...> & ... 2 more ......'."
+            "message": "Argument of type 'typeof AddressFields' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormErrors; traverseState: (arg0: any) => State; scope: AddressType; country: string; state: string | null; lineOne: Option<string>; lineTwo: Option<...>; postCode: Option<...>; city: Option<...>; countries: Record<...>; } & { ...; }, ClassAttributes<...> & ... 2 more ... & { ......'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts",
@@ -1796,6 +1788,10 @@
         {
             "path": "assets/helpers/tracking/__tests__/acquisitionsTest.ts",
             "message": "Argument of type '{ campaignCode: string; referrerPageviewId: string; referrerUrl: string; componentId: string; componentType: string; source: string; abTests: { name: string; variant: string; }[]; queryParameters: { ...; }[]; }' is not assignable to parameter of type 'ReferrerAcquisitionData'."
+        },
+        {
+            "path": "assets/helpers/tracking/googleTagManager.ts",
+            "message": "Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'."
         },
         {
             "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
@@ -2130,14 +2126,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
             "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Parameter 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Parameter 'props' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
@@ -2574,14 +2562,6 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
@@ -2608,6 +2588,40 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "No overload matches this call."
+        }
+    ],
+    "TS7016": [
+        {
+            "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.test.tsx",
+            "message": "Could not find a declaration file for module 'react-dom/test-utils'. 'support-frontend/node_modules/react-dom/test-utils.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/abTests/abtest.ts",
+            "message": "Could not find a declaration file for module 'seedrandom'. 'support-frontend/node_modules/seedrandom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/customHooks/useHasBeenSeen.ts",
+            "message": "Could not find a declaration file for module 'lodash.debounce'. 'support-frontend/node_modules/lodash.debounce/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'react-dom'. 'support-frontend/node_modules/react-dom/index.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/rendering/ssrPages.ts",
+            "message": "Could not find a declaration file for module 'react-dom/server'. 'support-frontend/node_modules/react-dom/server.js' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/tracking/googleTagManager.ts",
+            "message": "Could not find a declaration file for module 'uuid'. 'support-frontend/node_modules/uuid/index.js' implicitly has an 'any' type."
         }
     ],
     "TS2314": [
@@ -2657,11 +2671,11 @@
     "TS2741": [
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"value\" | \"dir\" | \"size\" | \"children\" | ... 275 more ... | \"enterKeyHint\">'."
+            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"id\" | \"onChange\" | \"value\" | \"dir\" | \"size\" | ... 275 more ... | \"enterKeyHint\">'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Property 'value' is missing in type '{ id: string; image: Node; label: string; name: string; checked: boolean; onChange: (...args: any[]) => any; }' but required in type 'Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"value\" | \"dir\" | \"size\" | \"children\" | ... 273 more ... | \"enterKeyHint\">'."
+            "message": "Property 'value' is missing in type '{ id: string; image: any; label: string; name: string; checked: boolean; onChange: (...args: any[]) => any; }' but required in type 'Pick<RadioProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | \"type\" | \"id\" | \"onChange\" | \"value\" | \"dir\" | \"size\" | ... 273 more ... | \"enterKeyHint\">'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
@@ -2679,7 +2693,7 @@
     "TS2739": [
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ Stripe: Element; PayPal: Element; DirectDebit: Element; }' is missing the following properties from type 'Record<PaymentMethod, Node>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
+            "message": "Type '{ Stripe: Element; PayPal: Element; DirectDebit: Element; }' is missing the following properties from type 'Record<PaymentMethod, any>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
@@ -2916,6 +2930,30 @@
             "message": "Object is of type 'unknown'."
         },
         {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
             "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
             "message": "Object is of type 'unknown'."
         },
@@ -2989,7 +3027,7 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 111 more."
+            "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 109 more."
         }
     ],
     "TS2531": [
@@ -3000,28 +3038,6 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is possibly 'null'."
-        }
-    ],
-    "TS7016": [
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         }
     ],
     "TS2694": [
