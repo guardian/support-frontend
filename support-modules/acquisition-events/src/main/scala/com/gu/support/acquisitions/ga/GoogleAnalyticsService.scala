@@ -187,15 +187,9 @@ object GoogleAnalyticsService extends LazyLogging {
 
   case class OptimizeTestsPayload(testNames: String, variantNames: String)
   private[ga] def buildOptimizeTestsPayload(abTests: List[AbTest]): OptimizeTestsPayload = {
-    val optimizePrefix = "optimize$$"
-    val testVariantMap: Map[String,String] = abTests
-      .filter(test => test.name.startsWith(optimizePrefix))
-      .map(test => test.name.replace(optimizePrefix, "") -> test.variant)
-      .toMap
-
     OptimizeTestsPayload(
-      testVariantMap.keys.mkString(","),
-      testVariantMap.values.mkString(",")
+      abTests.map(_.name).mkString(","),
+      abTests.map(_.variant).mkString(",")
     )
   }
 

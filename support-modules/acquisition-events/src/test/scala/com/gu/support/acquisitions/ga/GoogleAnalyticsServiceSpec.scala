@@ -124,6 +124,8 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       payloadMap.get("cd27") shouldEqual Some("GuardianWeekly")
       payloadMap.get("pr1cm15") shouldEqual Some("24.86")
       payloadMap.get("uip") shouldEqual Some("192.168.0.1")
+      payloadMap.get("xid") shouldEqual Some("test_name,second_test")
+      payloadMap.get("xvar") shouldEqual Some("variant_name,control")
     }
 
     "Include the correct successfulSubscriptionSignUp value" in {
@@ -160,7 +162,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     }
 
     "build a correct OptimizeTests payload" in {
-      val abTests = List(AbTest("optimize$$test_name", "0"), AbTest("optimize$$second_test", "1"))
+      val abTests = List(AbTest("test_name", "0"), AbTest("second_test", "1"))
       val tp = GoogleAnalyticsService.buildOptimizeTestsPayload(abTests)
       tp.testNames shouldEqual "test_name,second_test"
       tp.variantNames shouldEqual "0,1"
