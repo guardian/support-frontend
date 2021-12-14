@@ -325,8 +325,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								legend="Please select the first publication you’d like to receive"
 							>
 								{days
-									// Don't render input if Christmas day
+									// Don't render input if Christmas day or Christmas eve
 									.filter((day) => !formatMachineDate(day).endsWith('-12-25'))
+									.filter((day) => !formatMachineDate(day).endsWith('-12-24'))
 									.map((day) => {
 										const [userDate, machineDate] = [
 											formatUserDate(day),
