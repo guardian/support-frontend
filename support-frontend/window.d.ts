@@ -20,6 +20,7 @@ declare global {
 				countryCode: string;
 				stateCode?: string;
 			};
+			gitCommitId?: string;
 			mdapiUrl: string;
 			orderIsAGift: boolean;
 			productPrices: ProductPrices;

@@ -211,9 +211,9 @@ function getData(
 		 * */
 		thirdPartyTrackingConsent: 'OptedIn',
 		paymentMethod: storage.getSession('selectedPaymentMethod') ?? undefined,
-		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') ?? undefined,
-		campaignCodeTeam: getQueryParameter('CMP_TU') ?? undefined,
-		internalCampaignCode: getQueryParameter('INTCMP') ?? undefined,
+		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+		campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+		internalCampaignCode: getQueryParameter('INTCMP') || undefined,
 		experience: getVariantsAsString(participations),
 		paymentRequestApiStatus,
 		vendorConsentsLookup, // eg. "google-analytics,twitter"
