@@ -256,22 +256,26 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 								error={firstError('startDate', props.formErrors) as string}
 								label="Gift delivery date"
 							>
-								{days.map((day) => {
-									const [userDate, machineDate] = [
-										formatUserDate(day),
-										formatMachineDate(day),
-									];
+								{days
+									// Don't render input if Christmas day or Christmas eve
+									.filter((day) => !formatMachineDate(day).endsWith('-12-25'))
+									.filter((day) => !formatMachineDate(day).endsWith('-12-24'))
+									.map((day) => {
+										const [userDate, machineDate] = [
+											formatUserDate(day),
+											formatMachineDate(day),
+										];
 
-									return (
-										<Radio
-											label={userDate}
-											value={userDate}
-											name={machineDate}
-											checked={machineDate === props.startDate}
-											onChange={() => props.setStartDate(machineDate)}
-										/>
-									);
-								})}
+										return (
+											<Radio
+												label={userDate}
+												value={userDate}
+												name={machineDate}
+												checked={machineDate === props.startDate}
+												onChange={() => props.setStartDate(machineDate)}
+											/>
+										);
+									})}
 							</RadioGroup>
 							<Text className="component-text__paddingTop">
 								<p className="component-text__sans">
