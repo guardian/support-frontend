@@ -76,21 +76,10 @@ const isSwitchOn = (switchName: string): boolean => {
 	return !!(sw && sw === 'On');
 };
 
-const isTestSwitchedOn = (testName: string): boolean => {
-	const test = getGlobal(`settings.switches.experiments.${testName}`);
-
-	if (test) {
-		return !!(test && test.state && test.state === 'On');
-	}
-
-	return false;
-};
-
 export {
 	getProductPrices,
 	getPromotionCopy,
 	getGlobal,
-	isTestSwitchedOn,
 	getSettings,
 	isSwitchOn,
 };

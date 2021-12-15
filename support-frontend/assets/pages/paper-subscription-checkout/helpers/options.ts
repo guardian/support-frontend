@@ -14,7 +14,6 @@ import {
 	ActivePaperProductTypes,
 	Everyday,
 } from 'helpers/productPrice/productOptions';
-import { paperHasDeliveryEnabled } from 'helpers/productPrice/subscriptions';
 import { getQueryParameter } from 'helpers/urls/url';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
@@ -30,7 +29,7 @@ function getProductOption(): PaperProductOptions {
 
 function getFulfilmentOption(): PaperFulfilmentOptions {
 	const fulfilmentInUrl = getQueryParameter('fulfilment');
-	return paperHasDeliveryEnabled() && fulfilmentInUrl === 'HomeDelivery'
+	return fulfilmentInUrl === 'HomeDelivery'
 		? HomeDelivery
 		: Collection;
 }
