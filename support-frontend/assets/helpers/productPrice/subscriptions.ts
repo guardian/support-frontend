@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { isTestSwitchedOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
@@ -180,10 +179,6 @@ const getNewsstandSavingPercentage = (
 const getNewsstandPrice = (productOption: PaperProductOptions) =>
 	newsstandPrices[productOption];
 
-// Paper product
-const paperHasDeliveryEnabled = (): boolean =>
-	isTestSwitchedOn('paperHomeDeliveryEnabled');
-
 // ----- Exports ----- //
 export {
 	sendTrackingEventsOnClick,
@@ -194,7 +189,6 @@ export {
 	getNewsstandSavingPercentage,
 	getNewsstandPrice,
 	fixDecimals,
-	paperHasDeliveryEnabled,
 	DigitalPack,
 	PaperAndDigital,
 	Paper,
