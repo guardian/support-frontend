@@ -24,7 +24,6 @@
             "TS2556": 3,
             "TS2554": 31,
             "TS2569": 2,
-            "TS2571": 11,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
@@ -32,6 +31,7 @@
             "TS2531": 2,
             "TS2694": 4,
             "TS7022": 3,
+            "TS2571": 9,
             "TS2707": 1,
             "TS2525": 5,
             "TS2745": 2,
@@ -116,7 +116,7 @@
             "assets/helpers/forms/formValidation.ts": 2,
             "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 15,
             "assets/helpers/forms/recaptcha.ts": 1,
-            "assets/helpers/globalsAndSwitches/globals.ts": 4,
+            "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
             "assets/helpers/tracking/__tests__/thirdPartyTrackingConsentTest.ts": 30,
@@ -240,13 +240,13 @@
             "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
-            "assets/pages/promotion-terms/promotionTermsReducer.ts": 4,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
             "assets/helpers/productPrice/subscriptions.ts": 1,
+            "assets/pages/promotion-terms/promotionTermsReducer.ts": 4,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 1
         }
     },
@@ -2920,52 +2920,6 @@
             "message": "Type 'HTMLFormControlsCollection' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators."
         }
     ],
-    "TS2571": [
-        {
-            "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        }
-    ],
     "TS2411": [
         {
             "path": "assets/helpers/globalsAndSwitches/settings.ts",
@@ -3070,6 +3024,44 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
+        }
+    ],
+    "TS2571": [
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
+            "message": "Object is of type 'unknown'."
         }
     ],
     "TS2707": [
