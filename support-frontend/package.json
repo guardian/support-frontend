@@ -213,7 +213,8 @@
     "ssri": "^6.0.2",
     "y18n": "^4.0.1",
     "immer": "^9.0.6",
-    "serialize-javascript": "^4.0.0"
+    "serialize-javascript": "^4.0.0",
+    "prismjs": "^1.25.0"
   },
   "lint-staged": {
     "./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
