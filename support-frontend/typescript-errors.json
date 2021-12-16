@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 50,
-            "TS2322": 171,
+            "TS2322": 172,
             "TS2578": 14,
             "TS2339": 51,
             "TS2345": 110,
@@ -16,13 +16,12 @@
             "TS2564": 2,
             "TS2769": 14,
             "TS2314": 5,
-            "TS2304": 3,
-            "TS6196": 1,
+            "TS2304": 5,
             "TS2741": 5,
             "TS2739": 15,
             "TS2532": 4,
             "TS2556": 3,
-            "TS2554": 29,
+            "TS2554": 31,
             "TS2569": 2,
             "TS2411": 1,
             "TS7017": 4,
@@ -198,7 +197,7 @@
             "assets/helpers/productPrice/__tests__/productPricesTests.ts": 6,
             "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
-            "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 5,
+            "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
@@ -588,6 +587,10 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Type 'null' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>> | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
@@ -2490,12 +2493,14 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
             "message": "Cannot find name 'GlobalState'."
-        }
-    ],
-    "TS6196": [
+        },
         {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "'InputWithButtonProps' is declared but never used."
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Cannot find name 'Stage'."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Cannot find name 'Stage'."
         }
     ],
     "TS2741": [
@@ -2710,6 +2715,14 @@
         {
             "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
             "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
         },
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
