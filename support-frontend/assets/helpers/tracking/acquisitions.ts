@@ -29,40 +29,40 @@ export type AcquisitionQueryParameters = QueryParameter[];
 
 export type OphanIds = {
 	pageviewId: string;
-	visitId: string | null | undefined;
-	browserId: string | null | undefined;
+	visitId?: string | null;
+	browserId?: string | null;
 };
 
 // https://github.com/guardian/frontend/blob/master/static/src/javascripts/projects/common/modules/commercial/acquisitions-ophan.js
 export type ReferrerAcquisitionData = {
 	campaignCode?: string;
-	referrerPageviewId?: string | null;
+	referrerPageviewId?: string;
 	referrerUrl?: string;
-	componentId?: string | null;
-	componentType?: string | null;
-	source?: string | null;
-	abTests?: AcquisitionABTest[] | null;
+	componentId?: string;
+	componentType?: string;
+	source?: string;
+	abTests?: AcquisitionABTest[];
 	// these aren't in the referrer acquisition data model on frontend, but they're convenient to include
 	// as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
-	queryParameters?: AcquisitionQueryParameters | null;
-	labels?: string[] | null;
+	queryParameters?: AcquisitionQueryParameters;
+	labels?: string[];
 };
 
 export type PaymentAPIAcquisitionData = {
 	pageviewId: string;
 	visitId?: string | null;
 	browserId?: string | null;
-	platform?: string | null;
-	referrerPageviewId?: string | null;
-	referrerUrl?: string | null;
-	campaignCodes?: string[] | null;
-	componentId?: string | null;
-	componentType?: string | null;
-	source?: string | null;
-	abTests?: AcquisitionABTest[] | null;
+	platform?: string;
+	referrerPageviewId?: string;
+	referrerUrl?: string;
+	campaignCodes?: string[];
+	componentId?: string;
+	componentType?: string;
+	source?: string;
+	abTests?: AcquisitionABTest[];
 	gaId?: string | null;
-	queryParameters?: AcquisitionQueryParameters | null;
-	labels?: string[] | null;
+	queryParameters?: AcquisitionQueryParameters;
+	labels?: string[];
 };
 
 // ----- Setup ----- //
@@ -173,7 +173,7 @@ function buildReferrerAcquisitionData(
 	const source =
 		campaignCode && /^PPC_/i.test(campaignCode)
 			? 'PPC'
-			: (acquisitionData.source as string | null | undefined);
+			: (acquisitionData.source as string | undefined);
 
 	return {
 		referrerPageviewId,
@@ -184,9 +184,9 @@ function buildReferrerAcquisitionData(
 		source,
 		abTests: (acquisitionData.abTest
 			? [acquisitionData.abTest]
-			: acquisitionData.abTests) as AcquisitionABTest[] | null | undefined,
+			: acquisitionData.abTests) as AcquisitionABTest[] | undefined,
 		queryParameters: queryParameters.length > 0 ? queryParameters : [],
-		labels: acquisitionData.labels as string[] | null | undefined,
+		labels: acquisitionData.labels as string[] | undefined,
 	};
 }
 
