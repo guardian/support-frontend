@@ -1,6 +1,5 @@
 // ----- Imports ----- //
-import { logException } from 'helpers/utilities/logger';
-import { routes } from 'helpers/urls/routes';
+import type { Dispatch } from 'redux';
 import type { Csrf, Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/forms/paymentMethods';
@@ -9,6 +8,8 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import * as storage from 'helpers/storage/storage';
 import 'pages/contributions-landing/contributionsLandingActions';
 import type { Option } from 'helpers/types/option';
+import { routes } from 'helpers/urls/routes';
+import { logException } from 'helpers/utilities/logger';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { billingPeriodFromContrib, getAmount } from '../../contributions';
@@ -16,11 +17,12 @@ import { billingPeriodFromContrib, getAmount } from '../../contributions';
 export type SetupPayPalRequestType = (
 	resolve: (arg0: string) => void,
 	reject: (arg0: Error) => void,
-	arg2: IsoCurrency,
-	arg3: CsrfState,
+	isoCurrency: IsoCurrency,
+	csrfState: CsrfState,
 	amount: number,
 	billingPeriod: BillingPeriod,
 ) => void;
+
 export type PayPalUserDetails = {
 	firstName: string;
 	lastName: string;
@@ -31,6 +33,7 @@ export type PayPalUserDetails = {
 	shipToZip: string;
 	shipToCountryCode: string;
 };
+
 export type PayPalCheckoutDetails = {
 	baid: string;
 	user: Option<PayPalUserDetails>;
@@ -39,23 +42,24 @@ export type PayPalCheckoutDetails = {
 // ----- Functions ----- //
 function loadPayPalRecurring(): Promise<void> {
 	return new Promise((resolve) => {
-		const script = document.createElement('script');
-		script.onload = resolve;
+		const script: HTMLScriptElement = document.createElement('script');
+		script.onload = () => resolve;
 		script.src = 'https://www.paypalobjects.com/api/checkout.js';
 
-		if (document.head) {
-			document.head.appendChild(script);
-		}
+		document.head.appendChild(script);
 	});
 }
 
-const showPayPal = (dispatch: (...args: any[]) => any) => {
-	loadPayPalRecurring().then(() => {
+const showPayPal = (dispatch: Dispatch): void => {
+	void loadPayPalRecurring().then(() => {
 		dispatch(setPayPalHasLoaded());
 	});
 };
 
-function payPalRequestData(bodyObj: Record<string, any>, csrfToken: string) {
+function payPalRequestData(
+	bodyObj: Record<string, unknown>,
+	csrfToken: string,
+): Partial<RequestInit> {
 	return {
 		credentials: 'include',
 		method: 'POST',
@@ -79,7 +83,7 @@ const setupRecurringPayPalPayment =
 		currency: IsoCurrency,
 		csrf: Csrf,
 	) =>
-	(dispatch: (...args: any[]) => any, getState: () => State): void => {
+	(_dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const csrfToken = csrf.token;
 		const { contributionType } = state.page.form;
@@ -98,7 +102,7 @@ const setupRecurringPayPalPayment =
 		};
 		fetch(
 			routes.payPalSetupPayment,
-			payPalRequestData(requestBody, csrfToken || ''),
+			payPalRequestData(requestBody, csrfToken ?? ''),
 		)
 			.then((response) => (response.ok ? response.json() : null))
 			.then(
@@ -144,7 +148,7 @@ const setupSubscriptionPayPalPayment =
 		};
 		fetch(
 			routes.payPalSetupPayment,
-			payPalRequestData(requestBody, csrfToken || ''),
+			payPalRequestData(requestBody, csrfToken ?? ''),
 		)
 			.then((response) => (response.ok ? response.json() : null))
 			.then(
@@ -173,7 +177,7 @@ const setupSubscriptionPayPalPaymentNoShipping = (
 	csrf: CsrfState,
 	amount: number,
 	billingPeriod: BillingPeriod,
-) =>
+): (() => void) =>
 	setupSubscriptionPayPalPayment(
 		resolve,
 		reject,
@@ -191,7 +195,7 @@ const setupSubscriptionPayPalPaymentWithShipping = (
 	csrf: CsrfState,
 	amount: number,
 	billingPeriod: BillingPeriod,
-) =>
+): (() => void) =>
 	setupSubscriptionPayPalPayment(
 		resolve,
 		reject,
@@ -209,7 +213,7 @@ function setupPayment(
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
 ) {
-	return (resolve, reject) => {
+	return (resolve: (arg0: string) => void, reject: (arg0: Error) => void) => {
 		setupPayPalPayment(
 			resolve,
 			reject,
@@ -221,21 +225,24 @@ function setupPayment(
 	};
 }
 
-function getPayPalEnvironment(isTestUser: boolean): string {
-	return isTestUser
+const getPayPalEnvironment = (isTestUser: boolean): string =>
+	isTestUser
 		? window.guardian.payPalEnvironment.uat
 		: window.guardian.payPalEnvironment.default;
-}
 
-function createAgreement(payPalData: Record<string, any>, csrf: CsrfState) {
+async function createAgreement(
+	payPalData: Record<string, unknown>,
+	csrf: CsrfState,
+) {
 	const body = {
 		token: payPalData.paymentToken,
 	};
 	const csrfToken = csrf.token;
-	return fetch(
+	const response = await fetch(
 		routes.payPalOneClickCheckout,
-		payPalRequestData(body, csrfToken || ''),
-	).then((response) => response.json());
+		payPalRequestData(body, csrfToken ?? ''),
+	);
+	return (await response.json()) as Record<string, unknown>;
 }
 
 function getPayPalOptions(
@@ -244,14 +251,17 @@ function getPayPalOptions(
 	onPayPalCheckoutCompleted: (arg0: PayPalCheckoutDetails) => void,
 	canOpen: () => boolean,
 	onClick: () => void,
-	formClassName: string,
+	_formClassName: string,
 	isTestUser: boolean,
 	amount: number,
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
 	updatePayPalButtonReady: (arg0: boolean) => Action,
-): Record<string, any> {
-	function toggleButton(actions): void {
+): Record<string, unknown> {
+	function toggleButton(actions: {
+		enable: () => void;
+		disable: () => void;
+	}): void {
 		return canOpen() ? actions.enable() : actions.disable();
 	}
 
@@ -268,7 +278,7 @@ function getPayPalOptions(
 		// Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
 		commit: true,
 
-		validate(actions) {
+		validate(actions: { enable: () => void; disable: () => void }) {
 			window.enablePayPalButton = actions.enable;
 			window.disablePayPalButton = actions.disable;
 			toggleButton(actions);
@@ -288,12 +298,14 @@ function getPayPalOptions(
 			setupPayPalPayment,
 		),
 		// This function is called when the user finishes with PayPal interface (approves payment).
-		onAuthorize: (data) => {
+		onAuthorize: (data: Record<string, unknown>) => {
 			createAgreement(data, csrf)
-				.then((payPalCheckoutDetails: Record<string, any>) => {
-					onPayPalCheckoutCompleted(payPalCheckoutDetails);
-				})
-				.catch((err) => {
+				.then((payPalCheckoutDetails) =>
+					onPayPalCheckoutCompleted(
+						payPalCheckoutDetails as PayPalCheckoutDetails,
+					),
+				)
+				.catch((err: { message: string }) => {
 					logException(err.message);
 				});
 		},

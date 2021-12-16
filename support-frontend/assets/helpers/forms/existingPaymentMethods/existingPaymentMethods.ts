@@ -9,16 +9,21 @@ import {
 	ExistingDirectDebit,
 	Stripe,
 } from '../paymentMethods';
+import type { PaymentMethod } from '../paymentMethods';
+
 // ----- Types ----- //
 export type ExistingPaymentMethodSubscription = {
 	isActive: boolean;
 	isCancelled: boolean;
 	name: string;
 };
+
 type ExistingPaymentType = 'Card' | 'DirectDebit';
+
 export type NotRecentlySignedInExistingPaymentMethod = {
 	paymentType: ExistingPaymentType;
 };
+
 export type RecentlySignedInExistingPaymentMethod = {
 	paymentType: ExistingPaymentType;
 	billingAccountId: string;
@@ -26,6 +31,7 @@ export type RecentlySignedInExistingPaymentMethod = {
 	card?: string;
 	mandate?: string;
 };
+
 export type ExistingPaymentMethod =
 	| NotRecentlySignedInExistingPaymentMethod
 	| RecentlySignedInExistingPaymentMethod;
@@ -34,7 +40,11 @@ export type ExistingPaymentMethod =
 function isUsableExistingPaymentMethod(
 	existingPaymentMethod: ExistingPaymentMethod,
 ): boolean {
-	return !!existingPaymentMethod.billingAccountId;
+	if ('billingAccountId' in existingPaymentMethod) {
+		return !!existingPaymentMethod.billingAccountId;
+	} else {
+		return false;
+	}
 }
 
 function sendGetExistingPaymentMethodsRequest(
@@ -63,7 +73,7 @@ function sendGetExistingPaymentMethodsRequest(
 
 function mapExistingPaymentMethodToPaymentMethod(
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-) {
+): PaymentMethod {
 	if (existingPaymentMethod.mandate) {
 		return ExistingDirectDebit;
 	}
@@ -89,14 +99,14 @@ function getExistingPaymentMethodLabel(
 
 function subscriptionToExplainerPart(
 	subscription: ExistingPaymentMethodSubscription,
-) {
+): string {
 	const activeOrRecentPrefix = subscription.isActive ? 'current' : 'recent';
 	return `${
 		subscription.isCancelled ? 'recently cancelled' : activeOrRecentPrefix
 	} ${subscription.name}`;
 }
 
-function subscriptionsToExplainerList(subscriptionParts: string[]) {
+function subscriptionsToExplainerList(subscriptionParts: string[]): string {
 	return subscriptionParts
 		.slice(0, -1)
 		.join(', ')
