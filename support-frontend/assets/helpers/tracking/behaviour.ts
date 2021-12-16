@@ -22,6 +22,7 @@ const trackCheckoutSubmitAttempt = (
 			productCheckout,
 		},
 	);
+
 	trackComponentEvents({
 		component: {
 			componentType: 'ACQUISITIONS_BUTTON',
@@ -36,7 +37,7 @@ const trackCheckoutSubmitAttempt = (
 const trackThankYouPageLoaded = (
 	productCheckout: SubscriptionProduct,
 	paymentMethod: PaymentMethod | null | undefined,
-) => {
+): void => {
 	gaEvent(
 		{
 			category: 'Thank you page load',
@@ -49,7 +50,7 @@ const trackThankYouPageLoaded = (
 		},
 	);
 
-	if (trackComponentEvents) {
+	if (typeof trackComponentEvents === 'function') {
 		trackComponentEvents({
 			component: {
 				componentType: 'ACQUISITIONS_OTHER',
@@ -57,7 +58,7 @@ const trackThankYouPageLoaded = (
 				labels: ['checkout-submit'],
 			},
 			action: 'VIEW',
-			value: `thank-you-page-loaded-${productCheckout}-${paymentMethod || ''}`,
+			value: `thank-you-page-loaded-${productCheckout}-${paymentMethod ?? ''}`,
 		});
 	}
 };
@@ -68,6 +69,7 @@ const trackComponentClick = (componentId: string): void => {
 		action: componentId,
 		label: componentId,
 	});
+
 	trackComponentEvents({
 		component: {
 			componentType: 'ACQUISITIONS_OTHER',
@@ -83,6 +85,7 @@ const trackComponentLoad = (componentId: string): void => {
 		action: componentId,
 		label: componentId,
 	});
+
 	trackComponentEvents({
 		component: {
 			componentType: 'ACQUISITIONS_OTHER',

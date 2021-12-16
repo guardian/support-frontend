@@ -1,10 +1,12 @@
 // ----- Imports ----- //
 import { DirectDebit } from '../../forms/paymentMethods';
 import { mapFields } from '../googleTagManager';
+
 // ----- Tests ----- //
 jest.mock('ophan', () => ({
 	viewId: '123456',
 }));
+
 describe('googleTagManager', () => {
 	it('should map a support frontend PaymentMethod type to Ophan payment methods', () => {
 		const input = {
@@ -13,6 +15,7 @@ describe('googleTagManager', () => {
 			paymentMethod: DirectDebit,
 		};
 		const mapped = mapFields(input);
+
 		expect(mapped.paymentMethod).toEqual('Gocardless');
 		expect(mapped.currency).toEqual('GBP');
 		expect(mapped.orderId).toEqual(1);
