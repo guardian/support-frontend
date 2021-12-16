@@ -61,6 +61,6 @@ object Promotions {
     starts = new DateTime(1971, 2, 20, 12, 0, 0, 0),
     expires = None,
     discount = None, freeTrial = None, incentive = None,
-    introductoryPrice = Some(IntroductoryPriceBenefit(6, 6, Issue))
+    introductoryPrice = Some(IntroductoryPriceBenefit(price = 6, periodLength = 6, periodType = Issue))
   )
 }
