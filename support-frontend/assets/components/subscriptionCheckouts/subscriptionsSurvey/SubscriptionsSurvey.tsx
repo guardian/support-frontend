@@ -10,7 +10,7 @@ type PropTypes = {
 	product: SubscriptionProduct;
 };
 const surveyLinks: Record<SubscriptionProduct, string> = {
-	DigitalPack: 'https://www.surveymonkey.com/r/PQMWMHW',
+	DigitalPack: 'https://www.surveymonkey.co.uk/r/SLKWCHT',
 	GuardianWeekly: 'https://www.surveymonkey.co.uk/r/9DRKP78',
 	Paper: 'https://www.surveymonkey.co.uk/r/99PGHSX',
 };
