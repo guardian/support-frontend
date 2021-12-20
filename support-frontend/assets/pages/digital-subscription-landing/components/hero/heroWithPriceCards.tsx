@@ -32,36 +32,40 @@ type PropTypes = {
 	countryGroupId: CountryGroupId;
 };
 
-const HeroCopy = () => (
-	<>
-		<p>
-			<strong>With two innovative apps and ad-free reading,</strong> a digital
-			subscription gives you the richest experience of Guardian journalism. It
-			also sustains the independent reporting you love.
-		</p>
-	</>
-);
+function HeroCopy() {
+	return (
+		<>
+			<p>
+				<strong>With two innovative apps and ad-free reading,</strong> a digital
+				subscription gives you the richest experience of Guardian journalism. It
+				also sustains the independent reporting you love.
+			</p>
+		</>
+	);
+}
 
-const HeroCopyAus = () => (
-	<>
-		<p>
-			<strong>With two innovative apps and ad-free reading,</strong> a digital
-			subscription gives you the richest experience of Guardian journalism,
-			while helping to sustain vital, independent reporting.
-		</p>
-		<p>
-			Start your free trial today and enjoy exclusive access to the new weekly
-			edition, Australia Weekend.
-		</p>
-	</>
-);
+function HeroCopyAus() {
+	return (
+		<>
+			<p>
+				<strong>With two innovative apps and ad-free reading,</strong> a digital
+				subscription gives you the richest experience of Guardian journalism,
+				while helping to sustain vital, independent reporting.
+			</p>
+			<p>
+				Start your free trial today and enjoy exclusive access to the new weekly
+				edition, Australia Weekend.
+			</p>
+		</>
+	);
+}
 
 function HeroWithPriceCards({
 	promotionCopy,
 	priceList,
 	countryGroupId,
-}: PropTypes) {
-	const title = promotionCopy.title || (
+}: PropTypes): JSX.Element {
+	const title = promotionCopy.title ?? (
 		<>
 			Subscribe for stories
 			<br />
@@ -73,8 +77,8 @@ function HeroWithPriceCards({
 	});
 	const nonAusCopy = getTimeboundCopy(
 		'digitalSubscription',
-		getTimeboundQuery() || new Date(),
-	) || <HeroCopy />;
+		getTimeboundQuery() ?? new Date(),
+	) ?? <HeroCopy />;
 	let defaultCopy;
 
 	if (countryGroupId === AUDCountries) {
@@ -85,7 +89,10 @@ function HeroWithPriceCards({
 		defaultCopy = nonAusCopy;
 	}
 
-	const copy = promoCopy || defaultCopy;
+	const copy = promoCopy ?? defaultCopy;
+
+	const isPatronPromo = promotionCopy.title === 'Patrons';
+
 	return (
 		<PageTitle title="Digital subscription" theme="digital">
 			<CentredContainer>
@@ -94,16 +101,20 @@ function HeroWithPriceCards({
 						<HeroPriceCards
 							priceList={priceList}
 							roundel={
-								<HeroRoundel cssOverrides={embeddedRoundel} theme="digital">
-									<DefaultRoundel />
-								</HeroRoundel>
+								!isPatronPromo && (
+									<HeroRoundel cssOverrides={embeddedRoundel} theme="digital">
+										<DefaultRoundel />
+									</HeroRoundel>
+								)
 							}
 						/>
 					}
 					roundelElement={
-						<HeroRoundel cssOverrides={roundelOverrides} theme="digital">
-							<DefaultRoundel />
-						</HeroRoundel>
+						!isPatronPromo && (
+							<HeroRoundel cssOverrides={roundelOverrides} theme="digital">
+								<DefaultRoundel />
+							</HeroRoundel>
+						)
 					}
 				>
 					<section css={heroCopy}>
