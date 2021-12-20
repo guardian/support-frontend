@@ -21,22 +21,19 @@ const buttonContainer = css`
 
 const AUS_SURVEY_LINK =
 	'https://guardiannewsampampmedia.formstack.com/forms/australia_2021';
+const ROW_SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/VDQ32ND';
 
 type ContributionThankYouSurveyProps = {
 	countryId: IsoCountry;
 };
 
-const ContributionThankYouSurvey: React.FC<ContributionThankYouSurveyProps> = ({
+function ContributionThankYouSurvey({
 	countryId,
-}: ContributionThankYouSurveyProps) => {
+}: ContributionThankYouSurveyProps): JSX.Element {
 	const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
 
 	const isAus = countryId === 'AU';
-	const url = isAus ? AUS_SURVEY_LINK : null;
-
-	if (!url) {
-		return null;
-	}
+	const url = isAus ? AUS_SURVEY_LINK : ROW_SURVEY_LINK;
 
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
@@ -114,6 +111,6 @@ const ContributionThankYouSurvey: React.FC<ContributionThankYouSurveyProps> = ({
 			body={actionBody}
 		/>
 	);
-};
+}
 
 export default ContributionThankYouSurvey;
