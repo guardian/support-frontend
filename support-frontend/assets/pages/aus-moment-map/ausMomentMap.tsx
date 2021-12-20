@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-// @ts-expect-error
 import { motion } from 'framer-motion';
 import * as ophan from 'ophan';
 import * as React from 'preact/compat';
@@ -17,36 +16,48 @@ import { useWindowWidth } from './hooks/useWindowWidth';
 // ----- Custom hooks ----- //
 const useTestimonials = () => {
 	const [testimonials, setTestimonials] =
-		React.useState<TestimonialsCollection>(null);
+		React.useState<TestimonialsCollection | null>(null);
+
 	const testimonialsEndpoint =
 		'https://interactive.guim.co.uk/docsdata/18tKS4fsHcEo__gdAwp3UySA3-FVje72_adHBZBhWjXE.json';
+
 	React.useEffect(() => {
-		fetch(testimonialsEndpoint)
+		void fetch(testimonialsEndpoint)
 			.then((response) => response.json())
-			.then((data) => data.sheets)
-			.then((testimonialsData) => setTestimonials(testimonialsData));
+			.then((data: { sheets: Record<string, unknown> }) => data.sheets)
+			.then((testimonialsData) =>
+				setTestimonials(testimonialsData as TestimonialsCollection),
+			);
 	}, []);
+
 	return testimonials;
 };
 
 const territories = ['NSW', 'ACT', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
 
 // ----- Render ----- //
-const AusMomentMap = () => {
-	const [selectedTerritory, setSelectedTerritory] = React.useState(null);
+function AusMomentMap(): JSX.Element {
+	const [selectedTerritory, setSelectedTerritory] = React.useState<
+		string | null
+	>(null);
 	const [shouldScrollIntoView, setShouldScrollIntoView] = React.useState(false);
-	const mapRef = React.useRef(null);
-	const testimonialsContainerRef = React.useRef(null);
+
+	const mapRef = React.useRef<HTMLDivElement>(null);
+	const testimonialsContainerRef = React.useRef<HTMLDivElement>(null);
+
 	const testimonials = useTestimonials();
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
+
 	ophan.init();
+
 	React.useEffect(() => {
 		if (windowWidthIsLessThan('desktop')) {
 			setSelectedTerritory(null);
 		}
 	});
+
 	React.useEffect(() => {
-		const onKeyDown = (e) => {
+		const onKeyDown = (e: { key: string }) => {
 			if (e.key === 'Escape') {
 				setSelectedTerritory(null);
 			}
@@ -68,10 +79,12 @@ const AusMomentMap = () => {
 		window.addEventListener('keydown', onKeyDown);
 		return () => window.removeEventListener('keydown', onKeyDown);
 	}, [selectedTerritory]);
+
 	const animationTransition = {
 		type: 'tween',
 		duration: 0.2,
 	};
+
 	const mapVariants = {
 		initial: {
 			width: '100%',
@@ -80,6 +93,7 @@ const AusMomentMap = () => {
 			width: '40%',
 		},
 	};
+
 	const testimonialsVariants = {
 		mobile: {
 			x: '0vw',
@@ -91,6 +105,7 @@ const AusMomentMap = () => {
 			x: '-59vw',
 		},
 	};
+
 	const blurbVariants = {
 		initial: {
 			display: 'none',
@@ -145,7 +160,12 @@ const AusMomentMap = () => {
 					{windowWidthIsLessThan('desktop') && <Blurb />}
 					<Map
 						selectedTerritory={selectedTerritory}
-						setSelectedTerritory={(territory) => {
+						setSelectedTerritory={(
+							territory:
+								| string
+								| ((prevState: string | null) => string | null)
+								| null,
+						) => {
 							setSelectedTerritory(territory);
 							setShouldScrollIntoView(true);
 						}}
@@ -180,7 +200,7 @@ const AusMomentMap = () => {
 			</div>
 		</div>
 	);
-};
+}
 
 renderPage(<AusMomentMap />, 'aus-moment-map');
 export { AusMomentMap };

@@ -1,6 +1,6 @@
 // ----- Imports ----- //
-// @ts-expect-error
 import * as React from 'preact/compat';
+import type { ReactNode } from 'react';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 import ActSvg from './territories/actSvg';
 import NewSouthWalesSvg from './territories/newSouthWalesSvg';
@@ -12,29 +12,32 @@ import VictoriaSvg from './territories/victoriaSvg';
 import WesternAustraliaSvg from './territories/westernAustraliaSvg';
 
 type TerritorySvgContainerProps = {
-	onClick: () => void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the expected type: MouseEventHandler<SVGGElement> is not assignable
+	onClick: any;
 	isSelected: boolean;
-	children: React.ReactNode;
+	children: ReactNode;
 };
 
-const TerritorySvgContainer = (props: TerritorySvgContainerProps) => {
+function TerritorySvgContainer(props: TerritorySvgContainerProps) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	return (
 		<g
 			className={`territory ${props.isSelected ? 'territory-selected' : ''}`}
-			onClick={windowWidthIsGreaterThan('desktop') ? props.onClick : null}
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- the expected type: MouseEventHandler<SVGGElement> is not assignable
+			onClick={windowWidthIsGreaterThan('desktop') && props.onClick}
 		>
 			{props.children}
 		</g>
 	);
-};
+}
 
 type MapProps = {
-	selectedTerritory: string;
+	selectedTerritory: string | null;
 	setSelectedTerritory: (arg0: string) => void;
 };
+
 export const Map = React.forwardRef(
-	(props: MapProps, ref: React.Ref<typeof Map>) => (
+	(props: MapProps, ref: React.Ref<HTMLDivElement>) => (
 		<div className="map" ref={ref}>
 			<div className="map-background" />
 			<div className="svg-wrapper">

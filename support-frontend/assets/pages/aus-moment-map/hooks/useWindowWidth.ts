@@ -1,6 +1,6 @@
 import * as React from 'preact/compat';
 import type { $Keys } from 'utility-types';
-// @ts-expect-error
+
 const breakpoints = {
 	mobile: 320,
 	mobileMedium: 375,
@@ -11,8 +11,13 @@ const breakpoints = {
 	leftCol: 1140,
 	wide: 1300,
 };
+
 type Breakpoint = $Keys<typeof breakpoints>;
-export const useWindowWidth = () => {
+
+export const useWindowWidth = (): Record<
+	string,
+	(breakpoint: Breakpoint) => boolean
+> => {
 	function getWindowWidth() {
 		return window.innerWidth;
 	}
