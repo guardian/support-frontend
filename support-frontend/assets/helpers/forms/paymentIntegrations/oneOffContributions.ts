@@ -135,7 +135,7 @@ function paymentApiEndpointWithMode(url: string) {
 function paymentResultFromObject(
 	json: Record<string, unknown>,
 ): Promise<PaymentResult> {
-	if ('error' in json) {
+	if (json.error) {
 		const paymentError: PaymentError = json as PaymentError;
 		const failureReason: ErrorReason = paymentError.error.failureReason
 			? paymentError.error.failureReason
@@ -217,10 +217,10 @@ const processStripePaymentIntentRequest = (
 function createPayPalPaymentResponseFromObject(
 	res: Record<string, unknown>,
 ): CreatePayPalPaymentResponse {
-	if ('data' in res) {
+	if (res.data) {
 		const payPalPaymentSuccess = res.data as CreatePayPalPaymentSuccess;
 
-		if ('approvalUrl' in payPalPaymentSuccess) {
+		if (payPalPaymentSuccess.approvalUrl) {
 			return {
 				type: 'success',
 				data: {
@@ -230,10 +230,10 @@ function createPayPalPaymentResponseFromObject(
 		}
 	}
 
-	if ('error' in res) {
+	if (res.error) {
 		const payPalApiError = res.error as PayPalApiError;
 
-		if ('message' in payPalApiError) {
+		if (payPalApiError.message) {
 			return {
 				type: 'error',
 				error: {

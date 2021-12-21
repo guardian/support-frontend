@@ -4,7 +4,7 @@ const loadRecaptchaV2 = (): Promise<void> =>
 		recaptchaScript.src =
 			'https://www.google.com/recaptcha/api.js?onload=v2OnloadCallback&render=explicit';
 		recaptchaScript.onerror = reject;
-		recaptchaScript.onload = () => resolve;
+		recaptchaScript.onload = () => resolve();
 
 		document.head.appendChild(recaptchaScript);
 	});

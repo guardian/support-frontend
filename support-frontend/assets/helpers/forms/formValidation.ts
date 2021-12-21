@@ -33,15 +33,9 @@ export const isEmpty: (arg0: string | null) => boolean = (input) =>
 export const isNotEmpty: (arg0: string | null) => boolean = (input) =>
 	!isEmpty(input);
 
-export const isNotTooFarInTheFuture: (arg0: Date | null) => boolean = (
-	date,
-) => {
+export const isNotTooFarInTheFuture: (arg0: Date) => boolean = (date) => {
 	const rangeDate = new Date();
 	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
-
-	if (!date) {
-		return false;
-	}
 
 	const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
 	return dateIsInsideRange;
@@ -90,7 +84,11 @@ export const checkGiftStartDate: (arg0: string | null) => boolean = (
 	rawDate,
 ) => {
 	const date = rawDate ? new Date(rawDate) : null;
-	return isNotEmpty(rawDate) && isNotTooFarInTheFuture(date);
+
+	if (isNotEmpty(rawDate) && date) {
+		return isNotTooFarInTheFuture(date);
+	}
+	return false;
 };
 
 export const amountIsValid = (
@@ -130,7 +128,8 @@ export const amountOrOtherAmountIsValid = (
 		selectedAmounts[contributionType] &&
 		selectedAmounts[contributionType] === 'other'
 	) {
-		if (otherAmounts[contributionType].amount) {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- otherAmounts[contributionType] may be undefined
+		if (otherAmounts[contributionType]?.amount) {
 			if (typeof otherAmounts[contributionType].amount === 'string') {
 				amt = otherAmounts[contributionType].amount as string;
 			}

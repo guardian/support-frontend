@@ -42,9 +42,8 @@ function isUsableExistingPaymentMethod(
 ): boolean {
 	if ('billingAccountId' in existingPaymentMethod) {
 		return !!existingPaymentMethod.billingAccountId;
-	} else {
-		return false;
 	}
+	return false;
 }
 
 function sendGetExistingPaymentMethodsRequest(

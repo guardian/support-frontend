@@ -15,13 +15,13 @@
             "TS7031": 18,
             "TS2564": 2,
             "TS2769": 14,
+            "TS2554": 32,
             "TS2314": 5,
             "TS2304": 5,
             "TS2741": 5,
             "TS2739": 14,
             "TS2532": 4,
             "TS2556": 3,
-            "TS2554": 31,
             "TS2569": 2,
             "TS2411": 1,
             "TS7017": 4,
@@ -161,7 +161,7 @@
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
-            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
+            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
@@ -219,12 +219,12 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
+            "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
-            "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
@@ -2299,6 +2299,136 @@
             "message": "No overload matches this call."
         }
     ],
+    "TS2554": [
+        {
+            "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
+            "message": "Expected 10 arguments, but got 11."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/showcase/components/otherProducts.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        }
+    ],
     "TS2314": [
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -2453,132 +2583,6 @@
         {
             "path": "assets/helpers/__tests__/contributionsTests.ts",
             "message": "A spread argument must either have a tuple type or be passed to a rest parameter."
-        }
-    ],
-    "TS2554": [
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProducts.tsx",
-            "message": "Expected 1 arguments, but got 0."
         }
     ],
     "TS2569": [

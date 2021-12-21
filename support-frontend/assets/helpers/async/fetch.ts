@@ -12,12 +12,23 @@ async function fetchJson(
 	return (await resp.json()) as Record<string, unknown>;
 }
 
+type GetRequestHeaders = {
+	'Content-Type': 'application/json';
+	'Csrf-Token'?: string;
+};
+
+type GetRequestOptions = {
+	method: 'GET';
+	headers: GetRequestHeaders;
+	credentials: Credentials;
+};
+
 /** Builds a `RequestInit` object for use with GET requests using the Fetch API */
 function getRequestOptions(
 	credentials: Credentials,
 	csrf: CsrfState | null,
-): Record<string, unknown> {
-	const headers =
+): GetRequestOptions {
+	const headers: GetRequestHeaders =
 		csrf !== null
 			? {
 					'Content-Type': 'application/json',
@@ -26,6 +37,7 @@ function getRequestOptions(
 			: {
 					'Content-Type': 'application/json',
 			  };
+
 	return {
 		method: 'GET',
 		headers,

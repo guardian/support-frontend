@@ -40,15 +40,15 @@ export type PayPalCheckoutDetails = {
 };
 
 // ----- Functions ----- //
-function loadPayPalRecurring(): Promise<void> {
+const loadPayPalRecurring = (): Promise<void> => {
 	return new Promise((resolve) => {
 		const script: HTMLScriptElement = document.createElement('script');
-		script.onload = () => resolve;
+		script.onload = () => resolve();
 		script.src = 'https://www.paypalobjects.com/api/checkout.js';
 
 		document.head.appendChild(script);
 	});
-}
+};
 
 const showPayPal = (dispatch: Dispatch): void => {
 	void loadPayPalRecurring().then(() => {
@@ -56,10 +56,10 @@ const showPayPal = (dispatch: Dispatch): void => {
 	});
 };
 
-function payPalRequestData(
+const payPalRequestData = (
 	bodyObj: Record<string, unknown>,
 	csrfToken: string,
-): Partial<RequestInit> {
+): Partial<RequestInit> => {
 	return {
 		credentials: 'include',
 		method: 'POST',
@@ -69,7 +69,7 @@ function payPalRequestData(
 		},
 		body: JSON.stringify(bodyObj),
 	};
-}
+};
 
 // This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
 // It happens when the user clicks the recurring PayPal button,
@@ -206,14 +206,14 @@ const setupSubscriptionPayPalPaymentWithShipping = (
 		true,
 	);
 
-function setupPayment(
+const setupPayment = (
 	currencyId: IsoCurrency,
 	csrf: CsrfState,
 	amount: number,
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
-) {
-	return (resolve: (arg0: string) => void, reject: (arg0: Error) => void) => {
+) => {
+	return (resolve: (arg0: string) => void, reject: (error: Error) => void) => {
 		setupPayPalPayment(
 			resolve,
 			reject,
@@ -223,17 +223,17 @@ function setupPayment(
 			billingPeriod,
 		);
 	};
-}
+};
 
 const getPayPalEnvironment = (isTestUser: boolean): string =>
 	isTestUser
 		? window.guardian.payPalEnvironment.uat
 		: window.guardian.payPalEnvironment.default;
 
-async function createAgreement(
+const createAgreement = async (
 	payPalData: Record<string, unknown>,
 	csrf: CsrfState,
-) {
+) => {
 	const body = {
 		token: payPalData.paymentToken,
 	};
@@ -243,21 +243,20 @@ async function createAgreement(
 		payPalRequestData(body, csrfToken ?? ''),
 	);
 	return (await response.json()) as Record<string, unknown>;
-}
+};
 
-function getPayPalOptions(
+const getPayPalOptions = (
 	currencyId: IsoCurrency,
 	csrf: CsrfState,
 	onPayPalCheckoutCompleted: (arg0: PayPalCheckoutDetails) => void,
 	canOpen: () => boolean,
 	onClick: () => void,
-	_formClassName: string,
 	isTestUser: boolean,
 	amount: number,
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
 	updatePayPalButtonReady: (arg0: boolean) => Action,
-): Record<string, unknown> {
+): Record<string, unknown> => {
 	function toggleButton(actions: {
 		enable: () => void;
 		disable: () => void;
@@ -310,7 +309,7 @@ function getPayPalOptions(
 				});
 		},
 	};
-}
+};
 
 // ----- Exports ----- //
 export {
