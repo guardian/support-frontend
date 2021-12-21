@@ -3,7 +3,6 @@ import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import React, { useEffect, useState } from 'react';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -19,33 +18,21 @@ const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;
 
-const AUS_SURVEY_LINK =
-	'https://guardiannewsampampmedia.formstack.com/forms/australia_2021';
-const ROW_SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/VDQ32ND';
-
-type ContributionThankYouSurveyProps = {
-	countryId: IsoCountry;
-};
-
-function ContributionThankYouSurvey({
-	countryId,
-}: ContributionThankYouSurveyProps): JSX.Element {
+function ContributionThankYouSurvey(): JSX.Element {
 	const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
-
-	const isAus = countryId === 'AU';
-	const url = isAus ? AUS_SURVEY_LINK : ROW_SURVEY_LINK;
 
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
 	}, []);
 
-	const heading = isAus
-		? 'Tell us why you value Guardian Australia'
-		: 'Send us your thoughts';
 	const actionIcon = <SvgSpeechBubbleWithPlus />;
 	const actionHeader = (
 		<ActionHeader
-			title={hasBeenCompleted ? 'Thank you for sharing your thoughts' : heading}
+			title={
+				hasBeenCompleted
+					? 'Thank you for sharing your thoughts'
+					: 'Send us your thoughts'
+			}
 		/>
 	);
 
@@ -63,32 +50,21 @@ function ContributionThankYouSurvey({
 			) : (
 				<>
 					<p>
-						{isAus && (
-							<span>
-								We would love to know more about your decision to support our
-								journalism today. We’ll publish a selection of our favourite
-								messages, so other readers can enjoy them too.
-							</span>
-						)}
-						{!isAus && (
-							<>
-								<span css={styles.hideAfterTablet}>
-									Fill out this short form to tell us more about your experience
-									of supporting us today – it only takes a minute.
-								</span>
+						<span css={styles.hideAfterTablet}>
+							Fill out this short form to tell us more about your experience of
+							supporting us today – it only takes a minute.
+						</span>
 
-								<span css={styles.hideBeforeTablet}>
-									We would love to hear more about your experience of supporting
-									the Guardian today. Please fill out this short form – it only
-									takes a minute.
-								</span>
-							</>
-						)}
+						<span css={styles.hideBeforeTablet}>
+							We would love to hear more about your experience of supporting the
+							Guardian today. Please fill out this short form – it only takes a
+							minute.
+						</span>
 					</p>
 					<div css={buttonContainer}>
 						<LinkButton
 							onClick={onClick}
-							href={url}
+							href="https://www.surveymonkey.co.uk/r/VDQ32ND"
 							target="_blank"
 							rel="noopener noreferrer"
 							priority="primary"
@@ -97,7 +73,7 @@ function ContributionThankYouSurvey({
 							iconSide="right"
 							nudgeIcon
 						>
-							{isAus ? 'Share your thoughts' : 'Provide feedback'}
+							Provide feedback
 						</LinkButton>
 					</div>
 				</>
