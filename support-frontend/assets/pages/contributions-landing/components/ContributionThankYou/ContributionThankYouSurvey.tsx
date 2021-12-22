@@ -73,13 +73,14 @@ function ContributionThankYouSurvey(): JSX.Element {
 							iconSide="right"
 							nudgeIcon
 						>
-							Provide feedback
+							Share your thoughts
 						</LinkButton>
 					</div>
 				</>
 			)}
 		</ActionBody>
 	);
+
 	return (
 		<ActionContainer
 			icon={actionIcon}

@@ -18,7 +18,7 @@
             "TS2314": 5,
             "TS2304": 5,
             "TS2741": 5,
-            "TS2739": 15,
+            "TS2739": 14,
             "TS2532": 4,
             "TS2556": 3,
             "TS2554": 31,
@@ -230,7 +230,6 @@
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
-            "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
@@ -2537,10 +2536,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
             "message": "Type '{ Stripe: string; PayPal: string; DirectDebit: string; }' is missing the following properties from type 'Record<PaymentMethod, string>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx",
-            "message": "Type '{ DigitalPack: string; GuardianWeekly: string; Paper: string; }' is missing the following properties from type 'Record<SubscriptionProduct, string>': PremiumTier, DailyEdition, PaperAndDigital"
         },
         {
             "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
