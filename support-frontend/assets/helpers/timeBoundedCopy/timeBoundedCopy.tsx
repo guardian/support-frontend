@@ -27,8 +27,8 @@ const timedCopy: TimedCopyCollection = {
 					</p>
 					<p>
 						Plus, revisit the year's most fascinating stories with our special
-						edition '2021: a lookback', available exclusively to subscribers for
-						a limited time.
+						edition '2021 Highs, hits, hopes', available exclusively to
+						subscribers for a limited time.
 					</p>
 				</>
 			),
