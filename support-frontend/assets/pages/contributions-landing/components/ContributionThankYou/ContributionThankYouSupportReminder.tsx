@@ -7,7 +7,6 @@ import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { Link } from '@guardian/src-link';
 import { Radio, RadioGroup } from '@guardian/src-radio';
 import React, { useEffect, useState } from 'react';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { privacyLink } from 'helpers/legal';
 import {
 	trackComponentClick,
@@ -128,22 +127,6 @@ const getDefaultReminderChoices = (): ReminderChoice[] => [
 	getOneOffReminderChoiceWithDefaultLabel(9),
 ];
 
-const NYE_CHOICE: ReminderChoice = {
-	type: 'ONE_OFF',
-	label: 'at the end of the year (31 December)',
-	signup: {
-		reminderPeriod: '2021-12-01',
-		reminderOption: 'nye-2021',
-	},
-};
-
-const getUsReminderChoices = (): ReminderChoice[] => [
-	getRecurringReminderChoice(),
-	NYE_CHOICE,
-	getOneOffReminderChoiceWithDefaultLabel(6),
-	getOneOffReminderChoiceWithDefaultLabel(9),
-];
-
 const getReminderUrl = (choice: ReminderChoice): string => {
 	if (choice.type === 'ONE_OFF') {
 		return createOneOffReminderEndpoint;
@@ -154,12 +137,10 @@ const getReminderUrl = (choice: ReminderChoice): string => {
 
 type ContributionThankYouSupportReminderProps = {
 	email: string;
-	countryId: IsoCountry;
 };
 
 function ContributionThankYouSupportReminder({
 	email,
-	countryId,
 }: ContributionThankYouSupportReminderProps): JSX.Element {
 	const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
 	const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
@@ -168,8 +149,7 @@ function ContributionThankYouSupportReminder({
 		trackComponentLoad(OPHAN_COMPONENT_ID_SET_REMINDER);
 	}, []);
 
-	const reminderChoices =
-		countryId === 'US' ? getUsReminderChoices() : getDefaultReminderChoices();
+	const reminderChoices = getDefaultReminderChoices();
 
 	const setReminder = () => {
 		const choice = reminderChoices[selectedChoiceIndex];
