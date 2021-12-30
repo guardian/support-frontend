@@ -2,7 +2,6 @@
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import { neutral } from '@guardian/src-foundations/palette';
 import React, { useEffect } from 'react';
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
@@ -51,31 +50,8 @@ import { HeroWithImage } from './components/hero/heroWithImage';
 import { HeroWithPriceCards } from './components/hero/heroWithPriceCards';
 import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSelection';
 import Prices from './components/prices';
-import ProductBlock from './components/productBlock/productBlock';
 import { digitalLandingProps } from './digitalSubscriptionLandingProps';
 import type { DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
-
-const productBlockContainer = css`
-	background-color: ${neutral[93]};
-	border-top: none;
-	border-right: none;
-	margin-top: ${space[3]}px;
-	padding-top: 0;
-
-	${from.tablet} {
-		background-color: ${neutral[100]};
-		margin-top: ${space[12]}px;
-		border-top: 1px solid ${neutral[86]};
-		border-right: 1px solid ${neutral[86]};
-	}
-`;
-
-const productBlockContainerWithEvents = css`
-	margin-top: 0;
-	${from.tablet} {
-		margin-top: ${space[6]}px;
-	}
-`;
 
 const eventsProductBlockContainer = css`
 	margin-top: 43px;
@@ -215,7 +191,6 @@ function DigitalLandingComponent({
 
 	const showEventsComponent =
 		participations.emailDigiSubEventsTest === 'variant';
-	const showComparisonTable = participations.comparisonTableTest2 === 'variant';
 	const giftNonGiftLink = orderIsAGift
 		? routes.digitalSubscriptionLanding
 		: routes.digitalSubscriptionLandingGift;
@@ -250,22 +225,18 @@ function DigitalLandingComponent({
 					priceList={heroPriceList}
 				/>
 			)}
-			{showComparisonTable && (
-				<FullWidthContainer>
-					<CentredContainer>
-						<div css={interactiveTableContainer} ref={setElementToObserve}>
-							<InteractiveTable
-								caption={
-									<>What&apos;s included in a paid digital subscription</>
-								}
-								headers={headers}
-								rows={localisedRows}
-								footer={footer}
-							/>
-						</div>
-					</CentredContainer>
-				</FullWidthContainer>
-			)}
+			<FullWidthContainer>
+				<CentredContainer>
+					<div css={interactiveTableContainer} ref={setElementToObserve}>
+						<InteractiveTable
+							caption={<>What&apos;s included in a paid digital subscription</>}
+							headers={headers}
+							rows={localisedRows}
+							footer={footer}
+						/>
+					</div>
+				</CentredContainer>
+			</FullWidthContainer>
 			{showEventsComponent && (
 				<FullWidthContainer>
 					<CentredContainer>
@@ -275,30 +246,10 @@ function DigitalLandingComponent({
 					</CentredContainer>
 				</FullWidthContainer>
 			)}
-			{!showComparisonTable && (
-				<FullWidthContainer>
-					<CentredContainer>
-						<Block
-							cssOverrides={[
-								productBlockContainer,
-								...(showEventsComponent
-									? [productBlockContainerWithEvents]
-									: []),
-							]}
-						>
-							<div ref={setElementToObserve}>
-								<ProductBlock countryGroupId={countryGroupId} />
-							</div>
-						</Block>
-					</CentredContainer>
-				</FullWidthContainer>
-			)}
 			<FullWidthContainer theme="dark" hasOverlap>
 				<CentredContainer>
 					<Prices
-						cssOverrides={[
-							...(showComparisonTable ? [extraPaddingForComparisonTable] : []),
-						]}
+						cssOverrides={[extraPaddingForComparisonTable]}
 						countryGroupId={countryGroupId}
 						currencyId={currencyId}
 						productPrices={productPrices}

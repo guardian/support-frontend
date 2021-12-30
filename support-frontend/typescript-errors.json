@@ -2,9 +2,9 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 50,
-            "TS2322": 172,
-            "TS2578": 14,
+            "TS2305": 49,
+            "TS2322": 167,
+            "TS2578": 13,
             "TS2339": 51,
             "TS2345": 110,
             "TS7006": 75,
@@ -83,7 +83,6 @@
             "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
             "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
             "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx": 2,
             "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
@@ -142,7 +141,6 @@
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx": 5,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
@@ -423,10 +421,6 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -984,26 +978,6 @@
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx",
-            "message": "Type '{ title: string; subtitle: string; image: Element; first: boolean; second: boolean; }' is not assignable to type 'IntrinsicAttributes & Pick<ProductCardPropTypes, keyof ProductCardPropTypes> & Partial<Pick<ProductCardPropTypes, never>> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx",
-            "message": "Type '{ title: string; subtitle: string; image: Element; first: boolean; second: boolean; secondImage: boolean; }' is not assignable to type 'IntrinsicAttributes & Pick<ProductCardPropTypes, keyof ProductCardPropTypes> & Partial<Pick<ProductCardPropTypes, never>> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx",
-            "message": "Type '{ title: string; subtitle: string; image: Element; first: boolean; second: boolean; }' is not assignable to type 'IntrinsicAttributes & Pick<ProductCardPropTypes, keyof ProductCardPropTypes> & Partial<Pick<ProductCardPropTypes, never>> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlock.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
             "message": "Type 'string | SerializedStyles' is not assignable to type 'SerializedStyles'."
         },
@@ -1179,10 +1153,6 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/productBlock/productBlockComponents.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
