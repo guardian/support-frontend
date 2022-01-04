@@ -30,3 +30,4 @@ deployments:
       prefixPackage: false
       prefixStack: false
       cacheControl: public, max-age=3600
+      publicReadAcl: true
