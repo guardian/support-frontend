@@ -8,6 +8,7 @@ deployments:
       prefixPackage: false
       prefixStack: false
       cacheControl: public, max-age=31536000
+      publicReadAcl: true
   cfn:
     type: cloud-formation
     app: frontend
