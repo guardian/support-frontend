@@ -6,12 +6,12 @@
             "TS2322": 167,
             "TS2578": 13,
             "TS2339": 51,
-            "TS2345": 110,
+            "TS2345": 109,
             "TS7006": 75,
-            "TS7053": 14,
+            "TS7053": 13,
             "TS7034": 5,
             "TS7005": 10,
-            "TS6133": 11,
+            "TS6133": 12,
             "TS7031": 18,
             "TS2564": 2,
             "TS2769": 14,
@@ -201,7 +201,6 @@
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 1,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
-            "assets/pages/contributions-landing/contributionsLandingInit.ts": 3,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
@@ -221,6 +220,7 @@
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/helpers/forms/checkouts.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
+            "assets/pages/contributions-landing/contributionsLandingInit.ts": 2,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -1748,10 +1748,6 @@
             "message": "Argument of type '(clientSecret: string) => Promise<PaymentIntentResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<Stripe3DSResult>'."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Argument of type 'string' is not assignable to parameter of type 'keyof RegularContributionTypeMap<null> | \"ONE_OFF\"'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
             "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
         },
@@ -2164,10 +2160,6 @@
             "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ QLD: string; NSW: string; NT: string; SA: string; TAS: string; VIC: string; WA: string; ACT: string; }'."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'ContributionAmounts'."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ... 7 more ...; EverydayPlus: { ...; ...'."
         },
@@ -2276,6 +2268,10 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
             "message": "'renderControl' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "'selectAmount' is declared but its value is never read."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",

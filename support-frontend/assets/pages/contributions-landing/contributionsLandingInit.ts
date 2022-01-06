@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { Store } from 'redux';
-import 'redux';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
@@ -25,16 +24,22 @@ import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { getQueryParameter } from 'helpers/urls/url';
-import 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	setContributionTypes,
+	setExistingPaymentMethods,
+} from 'helpers/page/commonActions';
+import * as storage from 'helpers/storage/storage';
+import { getQueryParameter } from 'helpers/urls/url';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
+import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import type { Action } from './contributionsLandingActions';
 import {
 	getUserType,
 	loadAmazonPaySdk,
 	loadPayPalExpressSdk,
 	selectAmount,
+	selectAmounts,
 	setUserTypeFromIdentityResponse,
 	updateContributionTypeAndPaymentMethod,
 	updateOtherAmount,
@@ -43,13 +48,6 @@ import {
 	updateUserFormData,
 } from './contributionsLandingActions';
 import type { State } from './contributionsLandingReducer';
-import './contributionsLandingReducer';
-import {
-	setContributionTypes,
-	setExistingPaymentMethods,
-} from 'helpers/page/commonActions';
-import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
-import * as storage from 'helpers/storage/storage';
 
 // ----- Functions ----- //
 function getInitialPaymentMethod(
@@ -81,7 +79,7 @@ function getInitialContributionType(
 	contributionTypes: ContributionTypes,
 ): ContributionType {
 	const contributionType =
-		getContributionTypeFromUrl() || getContributionTypeFromSession();
+		getContributionTypeFromUrl() ?? getContributionTypeFromSession();
 
 	// make sure we don't select a contribution type which isn't on the page
 	if (
@@ -167,32 +165,55 @@ function selectInitialAmounts(
 ) {
 	const { amounts } = state.common;
 	const amountFromUrl = getAmountFromUrl();
-	Object.keys(amounts).forEach((contributionType) => {
-		if (amountFromUrl && contributionType === selectedContributionType) {
-			if (
-				amountFromUrl !== 'other' &&
-				amounts[contributionType].amounts.includes(amountFromUrl)
-			) {
-				dispatch(selectAmount(amountFromUrl, contributionType));
-			} else {
-				dispatch(selectAmount('other', contributionType));
 
-				if (amountFromUrl !== 'other') {
-					dispatch(updateOtherAmount(`${amountFromUrl}`, contributionType));
-				}
-			}
-		} else {
-			const { defaultAmount } = amounts[contributionType];
-			dispatch(selectAmount(defaultAmount, contributionType));
+	const amountForSelectedContributionType = () => {
+		if (!amountFromUrl) {
+			return {
+				amount: amounts[selectedContributionType].defaultAmount,
+			};
 		}
-	});
+
+		if (amountFromUrl == 'other') {
+			return { amount: 'other' };
+		}
+
+		if (amounts[selectedContributionType].amounts.includes(amountFromUrl)) {
+			return { amount: amountFromUrl };
+		}
+
+		// This means there is a query parameter specifying an amount,
+		// but that amount isn't available as one of the choice cards.
+		// In this case we want to select the 'other' choice card
+		// and additionally  prefill the 'other' field with the amount.
+		return { amount: 'other', otherAmount: amountFromUrl };
+	};
+
+	const defaults = {
+		ONE_OFF: amounts.ONE_OFF.defaultAmount,
+		MONTHLY: amounts.MONTHLY.defaultAmount,
+		ANNUAL: amounts.ANNUAL.defaultAmount,
+	};
+
+	const { amount: selectedAmount, otherAmount } =
+		amountForSelectedContributionType();
+
+	dispatch(
+		selectAmounts({
+			...defaults,
+			[selectedContributionType]: selectedAmount,
+		}),
+	);
+
+	if (otherAmount) {
+		dispatch(updateOtherAmount(`${otherAmount}`, selectedContributionType));
+	}
 }
 
 // Override the settings from the server if contributionTypes are defined in url params or campaign settings
 function getContributionTypes(state: State): ContributionTypes {
 	const campaignSettings = getCampaignSettings();
 
-	if (campaignSettings && campaignSettings.contributionTypes) {
+	if (campaignSettings?.contributionTypes) {
 		return campaignSettings.contributionTypes;
 	}
 
@@ -230,7 +251,7 @@ function selectInitialContributionTypeAndPaymentMethod(
 
 		case AmazonPay:
 			dispatch(
-				loadAmazonPaySdk(countryGroupId, state.page.user.isTestUser || false),
+				loadAmazonPaySdk(countryGroupId, state.page.user.isTestUser ?? false),
 			);
 			break;
 

@@ -4,7 +4,11 @@ import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
+import type {
+	ContributionType,
+	PaymentMatrix,
+	SelectedAmounts,
+} from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -170,6 +174,10 @@ export type Action =
 			type: 'SELECT_AMOUNT';
 			amount: number | 'other';
 			contributionType: ContributionType;
+	  }
+	| {
+			type: 'SELECT_AMOUNTS';
+			amounts: SelectedAmounts;
 	  }
 	| {
 			type: 'UPDATE_OTHER_AMOUNT';
@@ -394,6 +402,15 @@ const selectAmount =
 			type: 'SELECT_AMOUNT',
 			amount,
 			contributionType,
+		}))(dispatch, getState);
+	};
+
+const selectAmounts =
+	(amounts: SelectedAmounts) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SELECT_AMOUNTS',
+			amounts,
 		}))(dispatch, getState);
 	};
 
@@ -1113,6 +1130,7 @@ export {
 	setAmazonPayPaymentSelected,
 	setUserTypeFromIdentityResponse,
 	selectAmount,
+	selectAmounts,
 	updateOtherAmount,
 	paymentFailure,
 	paymentWaiting,
