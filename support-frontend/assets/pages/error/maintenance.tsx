@@ -11,9 +11,12 @@ setUpTrackingAndConsents();
 const content = (
 	<ErrorPage
 		headings={[
-			"Sorry, we've had to take our website down for essential maintenance",
+			"We're doing",
+			'some essential',
+			'maintenance on',
+			'our website today',
 		]}
-		copy="We're working hard to get things back online soon, so please come back later and try again"
+		copy="We'll be back up and running very soon, so please come back later to complete your payment. Thank you for your support."
 		supportLink={false}
 	/>
 );
