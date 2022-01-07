@@ -3,8 +3,10 @@ import React from 'react';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import ErrorPage from './components/errorPage';
+
 // ----- Page Startup ----- //
 setUpTrackingAndConsents();
+
 // ----- Render ----- //
 const content = (
 	<ErrorPage

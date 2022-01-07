@@ -11,15 +11,19 @@ import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
 import { detect } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
+
 // ----- Types ----- //
 type PropTypes = {
 	errorCode?: string;
 	headings: string[];
 	copy: string;
 	reportLink?: boolean;
-}; // ----- Component ----- //
+	supportLink?: boolean;
+};
 
-export default function ErrorPage(props: PropTypes) {
+// ----- Component ----- //
+
+export default function ErrorPage(props: PropTypes): JSX.Element {
 	return (
 		<Page header={<Header countryGroupId={detect()} />} footer={<Footer />}>
 			<SquaresIntroduction
@@ -30,16 +34,18 @@ export default function ErrorPage(props: PropTypes) {
 				<Text>
 					<LargeParagraph>
 						<span className="error-copy__text">{props.copy} </span>
-						<ReportLink show={props.reportLink || false} />
+						<ReportLink show={props.reportLink ?? false} />
 					</LargeParagraph>
 					<Rows>
-						<AnchorButton
-							aria-label="click here to support the Guardian"
-							href="/"
-							modifierClasses={['support-the-guardian']}
-						>
-							Support the Guardian
-						</AnchorButton>
+						{props.supportLink && (
+							<AnchorButton
+								aria-label="click here to support the Guardian"
+								href="/"
+								modifierClasses={['support-the-guardian']}
+							>
+								Support the Guardian
+							</AnchorButton>
+						)}
 						<br />
 						<AnchorButton
 							aria-label="click here to return to the Guardian home page"
@@ -74,5 +80,6 @@ function ReportLink(props: { show: boolean }) {
 // ----- Default Props ----- //
 ErrorPage.defaultProps = {
 	reportLink: false,
+	supportLink: true,
 	errorCode: null,
 };

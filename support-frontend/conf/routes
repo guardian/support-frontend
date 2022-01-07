@@ -8,6 +8,10 @@ GET /cookies                                                       controllers.D
 
 GET /unsupported-browser                                           controllers.Application.unsupportedBrowser()
 
+# ----- Down For Maintenance ----- #
+
+GET /maintenance                                                   controllers.Application.downForMaintenance()
+
 # ----- Remove trailing slashes so that /uk/ redirects to /uk ---- #
 
 GET  /*path/                                                       controllers.Application.removeTrailingSlash(path: String)

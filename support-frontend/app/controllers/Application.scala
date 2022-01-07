@@ -138,6 +138,16 @@ class Application(
       ).map(_.withSettingsSurrogateKey)
   }
 
+  def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
+    Ok(views.html.main(
+      "Support the Guardian | Down for essential maintenance",
+      views.EmptyDiv("down-for-maintenance-page"),
+      Left(RefPath("downForMaintenancePage.js")),
+      Left(RefPath("downForMaintenancePage.css"))
+    )()(assets, request, settingsProvider.getAllSettings()))
+      .withSettingsSurrogateKey
+  }
+
   private def shareImageUrl(settings: AllSettings): String = {
     // Autumn 2021 generic image
     "https://i.guim.co.uk/img/media/5366cacfd2081e5a4af259318238b3f82610d32e/0_0_1000_525/1000.png?quality=85&s=966978166c0983aef68828559ede40d8"
