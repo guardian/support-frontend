@@ -16,6 +16,7 @@ module.exports = {
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
     error404Page: 'pages/error/error404.tsx',
     error500Page: 'pages/error/error500.tsx',
+    downForMaintenancePage: 'pages/error/maintenance.tsx',
     unsupportedBrowserStyles: 'stylesheets/fallback-pages/unsupportedBrowser.scss',
     contributionsRedirectStyles: 'stylesheets/fallback-pages/contributionsRedirect.scss',
     promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',

@@ -10,15 +10,14 @@ setUpTrackingAndConsents();
 // ----- Render ----- //
 const content = (
 	<ErrorPage
-		errorCode="500"
 		headings={[
-			'sorry - we seem',
-			'to be having a',
-			'problem completing',
-			'your request',
+			"We're doing",
+			'some essential',
+			'maintenance on',
+			'our website today',
 		]}
-		copy="Please try again. If the problem persists, "
-		reportLink
+		copy="We'll be back up and running very soon, so please come back later to complete your payment. Thank you for your support."
+		supportLink={false}
 	/>
 );
-renderPage(content, 'error-500-page');
+renderPage(content, 'down-for-maintenance-page');
