@@ -561,6 +561,14 @@ function createFormReducer() {
 					},
 				};
 
+			case 'SELECT_AMOUNTS':
+				return {
+					...state,
+					selectedAmounts: {
+						...action.amounts,
+					},
+				};
+
 			case 'UPDATE_OTHER_AMOUNT':
 				return {
 					...state,
