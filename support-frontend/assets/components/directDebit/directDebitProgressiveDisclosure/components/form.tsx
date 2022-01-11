@@ -29,7 +29,8 @@ const passThroughClicksToInput = css`
 		pointer-events: none;
 	}
 `;
-type EventHandler = (e: React.SyntheticEvent<HTMLInputElement>) => void;
+type EventHandler = (e: React.ChangeEvent<HTMLInputElement>) => void;
+
 type PropTypes = {
 	accountHolderName: string;
 	sortCodeString: string;
@@ -52,9 +53,9 @@ type PropTypes = {
 	onChange: (
 		field: string,
 		dispatchUpdate: (...args: any[]) => any,
-		event: React.SyntheticEvent<HTMLInputElement>,
+		event: React.ChangeEvent<HTMLInputElement>,
 	) => void;
-	onSubmit: EventHandler;
+	onSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 function Form(props: PropTypes) {
@@ -72,7 +73,7 @@ function Form(props: PropTypes) {
 							e,
 						)
 					}
-					maxLength="40"
+					maxLength={40}
 					label="Bank account holder name"
 					error={props.accountHolderNameError}
 				/>
@@ -84,7 +85,7 @@ function Form(props: PropTypes) {
 					label="Sort code"
 					autoComplete="off"
 					type="text"
-					inputmode="numeric"
+					inputMode="numeric"
 					pattern="[0-9]*"
 					value={props.sortCodeString}
 					onChange={(e) =>
@@ -108,7 +109,7 @@ function Form(props: PropTypes) {
 					minLength={6}
 					maxLength={8}
 					type="text"
-					inputmode="numeric"
+					inputMode="numeric"
 					pattern="[0-9]*"
 					label="Account number"
 					error={props.accountNumberError}
