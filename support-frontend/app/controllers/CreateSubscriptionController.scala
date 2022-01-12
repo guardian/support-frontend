@@ -1,12 +1,10 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.OptionalAuthRequest
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.workers._
@@ -17,8 +15,9 @@ import org.joda.time.DateTime
 import play.api.libs.circe.Circe
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
+import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdMinimalUser, IdentityService, TestUserService}
+import services.{IdentityService, TestUserService}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.NormalisedTelephoneNumber.asFormattedString
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
@@ -43,29 +42,34 @@ class CreateSubscriptionController(
   type ApiResponseOrError[RES] = EitherT[Future, CreateSubscriptionError, RES]
 
   def create: EssentialAction =
-    alarmOnFailure(maybeAuthenticatedAction().async(new LoggingCirceParser(components).requestParser) {
+    alarmOnFailure(PrivateAction.async(new LoggingCirceParser(components).requestParser) {
       implicit request =>
-        request.user match {
-          case Some(user) =>
-            SafeLogger.info(s"User ${user.minimalUser.id} is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
-            handleCreateSupportWorkersRequest(user.minimalUser)
-          case None =>
-            SafeLogger.info(s"Guest user ${request.body.email} is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
-            createGuestUserAndHandleRequest().getOrElse(InternalServerError)
-        }
+        val res = for {
+          maybeLoggedInUser <- EitherT.right[CreateSubscriptionError](asyncAuthenticationService.tryAuthenticateUser(request))
+          maybeLoggedInIdentityIdAndEmail = maybeLoggedInUser.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
+          userDesc = maybeLoggedInIdentityIdAndEmail match {
+            case None => s"Guest User ${request.body.email}"
+            case Some(idAndEmail) => s"User ${idAndEmail.primaryEmailAddress}"
+          }
+          _ = SafeLogger.info(s"$userDesc is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
+          userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
+            case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
+            case None => getOrCreateIdentityUser(request.body).leftMap(ServerError)
+          }
+          result <- handleCreateSupportWorkersRequest(userAndEmail)
+        } yield result
+        respondToClient(res, request.body.product)
     })
 
-  private def createGuestUserAndHandleRequest()(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): EitherT[Future, String, Result] =
-    for {
-      userId <- identityService.getOrCreateUserIdFromEmail(request.body.email, request.body.firstName, request.body.lastName)
-      result <- EitherT.right[String](
-        handleCreateSupportWorkersRequest(IdMinimalUser(userId, None))
-      )
-    } yield result
+  private def getOrCreateIdentityUser(body: CreateSupportWorkersRequest): EitherT[Future, String, IdentityIdAndEmail] = {
+    val existingIdentityId = identityService.getUserIdFromEmail(body.email)
+    val identityId = existingIdentityId.leftFlatMap(_ => identityService.createUserIdFromEmailUser(body.email, body.firstName, body.lastName))
+    identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
+  }
 
-  private def handleCreateSupportWorkersRequest(idMinimalUser: IdMinimalUser)(
-    implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]
-  ): Future[Result] = {
+  private def handleCreateSupportWorkersRequest(identityIdAndEmail: IdentityIdAndEmail)(
+    implicit request: Request[CreateSupportWorkersRequest]
+  ): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
 
     val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 
@@ -75,24 +79,22 @@ class CreateSubscriptionController(
 
     CheckoutValidationRules.validate(createSupportWorkersRequest) match {
       case Valid =>
-        val result = for {
-          user <- identityService.getUser(idMinimalUser).leftMap(ServerError)
-          isTestUser = testUsers.isTestUser(request)
-          statusResponse <- client.createSubscription(request, buildUser(user, createSupportWorkersRequest, isTestUser), request.uuid)
+        val isTestUser = testUsers.isTestUser(request)
+        for {
+          statusResponse <- client.createSubscription(request, buildUser(identityIdAndEmail, createSupportWorkersRequest, isTestUser), request.uuid)
             .leftMap[CreateSubscriptionError](error => ServerError(error))
         } yield statusResponse
-        respondToClient(result, createSupportWorkersRequest.product)
 
       case Invalid(message) =>
         SafeLogger.warn(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
-        respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product)
+        EitherT.leftT(RequestValidationError("validation of the request body failed"))
     }
   }
 
   private def respondToClient(
     result: EitherT[Future, CreateSubscriptionError, StatusResponse],
     product: ProductType
-  )(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
+  )(implicit request: Request[CreateSupportWorkersRequest]): Future[Result] = {
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
@@ -142,10 +144,10 @@ class CreateSubscriptionController(
     }
   }
 
-  private def buildUser(user: IdUser, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
+  private def buildUser(identityIdAndEmail: IdentityIdAndEmail, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
     User(
-      id = user.id,
-      primaryEmailAddress = user.primaryEmailAddress,
+      id = identityIdAndEmail.id,
+      primaryEmailAddress = identityIdAndEmail.primaryEmailAddress,
       title = request.title,
       firstName = request.firstName,
       lastName = request.lastName,

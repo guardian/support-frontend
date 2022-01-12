@@ -1,7 +1,8 @@
 package services
 
 import cats.implicits._
-import com.gu.identity.auth.UserCredentials
+import com.gu.identity.auth.IdentityClient.Error
+import com.gu.identity.auth.{IdentityClient, UserCredentials}
 import com.gu.identity.model.User
 import com.gu.identity.play.IdentityPlayAuthService
 import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
@@ -27,43 +28,35 @@ object AccessCredentials {
   }
   case class Token(tokenText: String) extends AccessCredentials
 }
-case class IdMinimalUser(id: String, displayName: Option[String])
-case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMinimalUser)
 
 class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthService)(implicit ec: ExecutionContext) {
 
   import AsyncAuthenticationService._
 
-  def authenticateUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
+  def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
     identityPlayAuthService.getUserFromRequest(requestHeader)
-      .map { case (credentials, user) => buildAuthenticatedUser(credentials, user) }
-      .unsafeToFuture()
-
-  def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
-    authenticateUser(requestHeader)
-      .map(user => Option(user))
-      .handleError { err =>
-        logUserAuthenticationError(err)
-        None
+          .map { case (_, user) => user }
+          .unsafeToFuture()
+      .map(user => Some(user))
+      .recover {
+        case _: UserCredentialsMissingError => None // user not signed in
+        case IdentityClient.Errors(List(Error("Access Denied"))) => None // invalid SC_GU_U cookie?
+        case err => // something else went wrong - we should alert on this
+          logUserAuthenticationError(err)
+          None
       }
 
 }
 
 object AsyncAuthenticationService {
 
+  case class IdentityIdAndEmail(id: String, primaryEmailAddress: String)
+
   def apply(config: Identity, testUserService: TestUserService)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
     // TOOD: targetClient could probably be None - check and release in subsequent PR.
     val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = Some("membership"))
     new AsyncAuthenticationService(identityPlayAuthService)
-  }
-
-  def buildAuthenticatedUser(credentials: UserCredentials, user: User): AuthenticatedIdUser = {
-    val accessCredentials = credentials match {
-      case UserCredentials.SCGUUCookie(value) => AccessCredentials.Cookies(scGuU = value)
-      case UserCredentials.CryptoAccessToken(value, _) => AccessCredentials.Token(tokenText = value)
-    }
-    AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
   }
 
   // Logs failure to authenticate a user.

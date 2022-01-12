@@ -26,8 +26,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
 
   val actionRefiner = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
-    idWebAppUrl = IdentityUrl(""),
-    supportUrl = "",
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
@@ -40,7 +38,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       val result = new Application(
         actionRefiner,
         mock[AssetsResolver],
-        mock[IdentityService],
         mock[TestUserService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
@@ -63,7 +60,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       val result = new Application(
         actionRefiner,
         mock[AssetsResolver],
-        mock[IdentityService],
         mock[TestUserService],
         stubControllerComponents(),
         mock[StripeConfigProvider],

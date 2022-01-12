@@ -2,18 +2,13 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath, StyleContent}
-import cats.data.EitherT
-import cats.implicits._
+import assets.{AssetsResolver, RefPath}
 import com.gu.identity.model.{User => IdUser}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
-import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import play.api.mvc._
 import play.twirl.api.Html
 import services._
@@ -21,15 +16,13 @@ import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionFormController(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
-  identityService: IdentityService,
   testUsers: TestUserService,
-  membersDataService: MembersDataService,
   stripeConfigProvider: StripeConfigProvider,
   payPalConfigProvider: PayPalConfigProvider,
   components: ControllerComponents,
@@ -43,24 +36,8 @@ class DigitalSubscriptionFormController(
 
   def displayForm(orderIsAGift: Boolean): Action[AnyContent] = {
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    maybeAuthenticatedAction().async { implicit request =>
-      val maybeIdUser: EitherT[Future, String, Option[IdUser]] = request.user match {
-        case Some(user) =>
-          identityService.getUser(user.minimalUser).map(Some(_))
-        case _ => EitherT.rightT(None)
-      }
-      maybeIdUser.fold(
-        error => {
-          val maybeIdentityId = request.user.map(_.minimalUser.id).getOrElse("unknown identity id")
-          SafeLogger.error(scrub"Failed to display digital subscriptions form for ${maybeIdentityId} due to error from identityService: $error")
-          InternalServerError
-        },
-        user =>
-          if (orderIsAGift)
-            Ok(digitalSubscriptionFormHtml(user, orderIsAGift = true))
-          else
-            Ok(digitalSubscriptionFormHtml(user, orderIsAGift = false))
-      ).map(_.withSettingsSurrogateKey)
+    maybeAuthenticatedAction() { implicit request =>
+      Ok(digitalSubscriptionFormHtml(request.user, orderIsAGift)).withSettingsSurrogateKey
     }
   }
 

@@ -1,9 +1,8 @@
 package wiring
 
-import assets.RefPath
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.setupWarningRequest
-import controllers.{CSSElementForStage, _}
+import controllers._
 import lib.ErrorController
 import play.api.BuiltInComponentsFromContext
 
@@ -19,7 +18,6 @@ trait Controllers {
   lazy val applicationController = new Application(
     actionRefiners,
     assetsResolver,
-    identityService,
     testUsers,
     controllerComponents,
     appConfig.oneOffStripeConfigProvider,
@@ -48,7 +46,6 @@ trait Controllers {
 
   lazy val subscriptionsController = new SubscriptionsController(
     actionRefiners,
-    identityService,
     priceSummaryServiceProvider,
     assetsResolver,
     controllerComponents,
@@ -61,8 +58,6 @@ trait Controllers {
     actionRefiners,
     assetsResolver,
     allSettingsProvider,
-    identityService,
-    membersDataService,
     testUsers,
     controllerComponents,
     dynamoTableAsyncProvider,
@@ -112,9 +107,7 @@ trait Controllers {
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
-    identityService,
     testUsers,
-    membersDataService,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
@@ -126,7 +119,6 @@ trait Controllers {
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
-    identityService,
     testUsers,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
@@ -139,7 +131,6 @@ trait Controllers {
     priceSummaryServiceProvider,
     assetsResolver,
     actionRefiners,
-    identityService,
     testUsers,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
@@ -168,7 +159,6 @@ trait Controllers {
     actionRefiners = actionRefiners,
     recaptchaService = recaptchaService,
     stripeService = stripeService,
-    identityService = identityService,
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
     testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
     allSettingsProvider,
@@ -190,7 +180,6 @@ trait Controllers {
     testUsers,
     controllerComponents,
     paymentAPIService,
-    identityService,
     allSettingsProvider
   )
 
@@ -211,7 +200,6 @@ trait Controllers {
     identityService,
     controllerComponents,
     actionRefiners,
-    appConfig.guardianDomain,
     appConfig.identity.webappUrl,
     () => AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(setupWarningRequest(appConfig.stage))
   )

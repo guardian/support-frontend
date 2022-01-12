@@ -1,7 +1,6 @@
 package services.stepfunctions
 
 import java.util.UUID
-import actions.CustomActionBuilders.AnyAuthRequest
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
@@ -18,7 +17,7 @@ import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
 import org.joda.time.LocalDate
-import play.api.mvc.Call
+import play.api.mvc.{Call, Request}
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import services.stepfunctions.SupportWorkersClient._
 
@@ -101,7 +100,7 @@ class SupportWorkersClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
-  private def referrerAcquisitionDataWithGAFields(request: AnyAuthRequest[CreateSupportWorkersRequest]): ReferrerAcquisitionData = {
+  private def referrerAcquisitionDataWithGAFields(request: Request[CreateSupportWorkersRequest]): ReferrerAcquisitionData = {
     val hostname = request.host
     val gaClientId = request.cookies.get("_ga").map(_.value)
     val userAgent = request.headers.get("user-agent")
@@ -136,7 +135,7 @@ class SupportWorkersClient(
     }
 
   def createSubscription(
-    request: AnyAuthRequest[CreateSupportWorkersRequest],
+    request: Request[CreateSupportWorkersRequest],
     user: User,
     requestId: UUID
   ): EitherT[Future, String, StatusResponse] = {
