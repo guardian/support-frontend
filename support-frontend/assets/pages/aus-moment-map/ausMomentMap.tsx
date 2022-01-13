@@ -160,12 +160,7 @@ function AusMomentMap(): JSX.Element {
 					{windowWidthIsLessThan('desktop') && <Blurb />}
 					<Map
 						selectedTerritory={selectedTerritory}
-						setSelectedTerritory={(
-							territory:
-								| string
-								| ((prevState: string | null) => string | null)
-								| null,
-						) => {
+						setSelectedTerritory={(territory) => {
 							setSelectedTerritory(territory);
 							setShouldScrollIntoView(true);
 						}}

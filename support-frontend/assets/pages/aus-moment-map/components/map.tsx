@@ -12,19 +12,22 @@ import VictoriaSvg from './territories/victoriaSvg';
 import WesternAustraliaSvg from './territories/westernAustraliaSvg';
 
 type TerritorySvgContainerProps = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the expected type: MouseEventHandler<SVGGElement> is not assignable
-	onClick: any;
+	onClick: () => void;
 	isSelected: boolean;
 	children: ReactNode;
 };
 
 function TerritorySvgContainer(props: TerritorySvgContainerProps) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
+
+	const handleClick = () => {
+		windowWidthIsGreaterThan('desktop') && props.onClick;
+	};
+
 	return (
 		<g
 			className={`territory ${props.isSelected ? 'territory-selected' : ''}`}
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- the expected type: MouseEventHandler<SVGGElement> is not assignable
-			onClick={windowWidthIsGreaterThan('desktop') && props.onClick}
+			onClick={handleClick}
 		>
 			{props.children}
 		</g>
