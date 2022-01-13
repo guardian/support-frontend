@@ -20,7 +20,7 @@ import {
 } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
 
-const displayPrice = (glyph: string, price: number) =>
+const displayPrice = (glyph: string, price: number): string =>
 	`${glyph}${fixDecimals(price)}`;
 
 const billingPeriodQuantifier = (
@@ -123,7 +123,7 @@ const getIntroductoryPriceDescription = (
 		introPrice.periodLength,
 		introPrice.periodType,
 	);
-	return `${glyph}${introPrice.price}${separator}6 ${periodType} (then ${standardCopy})`;
+	return `${glyph}${introPrice.price}${separator}${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
 };
 
 function getPriceDescription(
@@ -164,14 +164,14 @@ function getPriceDescription(
 	);
 }
 
-function getAppliedPromoDescription(productPrice: ProductPrice) {
+function getAppliedPromoDescription(productPrice: ProductPrice): string {
 	return getAppliedPromo(productPrice.promotions)?.landingPage?.roundel ?? '';
 }
 
 function getSimplifiedPriceDescription(
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
-) {
+): string {
 	const glyph = extendedGlyph(productPrice.currency);
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const termPrepositon = productPrice.fixedTerm ? 'for' : 'per';
@@ -188,7 +188,7 @@ function getSimplifiedPriceDescription(
 			introPrice.periodLength,
 			introPrice.periodType,
 		);
-		return `for 6 ${periodType} (then ${standardCopy})`;
+		return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
 	}
 
 	if (hasDiscount(promotion)) {
@@ -228,7 +228,7 @@ function getPriceForDescription(
 function getAdverbialSubscriptionDescription(
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
-) {
+): string {
 	const glyph = shortGlyph(productPrice.currency);
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const price = getPriceForDescription(productPrice, promotion);
