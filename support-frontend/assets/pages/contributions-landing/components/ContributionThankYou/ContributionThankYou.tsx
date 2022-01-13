@@ -215,17 +215,12 @@ function ContributionThankYou({
 	};
 
 	const supportReminderAction = {
-		component: (
-			<ContributionThankYouSupportReminder
-				email={email}
-				countryId={countryId}
-			/>
-		),
+		component: <ContributionThankYouSupportReminder email={email} />,
 		shouldShow: contributionType === 'ONE_OFF' && email.length > 0,
 	};
 
 	const surveyAction = {
-		component: <ContributionThankYouSurvey countryId={countryId} />,
+		component: <ContributionThankYouSurvey />,
 		shouldShow: true,
 	};
 

@@ -26,3 +26,4 @@ deployments:
     parameters:
       bucket: support-workers-dist
       cacheControl: private
+      publicReadAcl: false

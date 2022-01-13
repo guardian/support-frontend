@@ -6,7 +6,7 @@ import { pageView } from './ophan';
 export default function trackConversion(
 	participations: Participations,
 	currentRoute: string,
-) {
+): void {
 	// Fire GTM conversion events
 	successfulConversion(participations);
 	// Send an Ophan pageview. Because this function is used to track page views

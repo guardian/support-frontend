@@ -51,7 +51,7 @@ trait CheckoutPage extends Page with Browser {
     switchToParentFrame
     switchToFrame(1)
     setValue(expiry, "12")
-    setValue(expiry, "21")
+    setValue(expiry, "50")
     switchToParentFrame
     switchToFrame(2)
     setValue(cvc, "123")

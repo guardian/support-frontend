@@ -3,9 +3,11 @@ import * as ophan from 'ophan';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+
 // ----- Types ----- //
 // These are to match Thrift definitions which can be found here:
 // https://dashboard.ophan.co.uk/docs/thrift/componentevent.html#Struct_ComponentEvent
+
 type OphanProduct =
 	| 'CONTRIBUTION'
 	| 'RECURRING_CONTRIBUTION'
@@ -14,6 +16,7 @@ type OphanProduct =
 	| 'MEMBERSHIP_PARTNER'
 	| 'DIGITAL_SUBSCRIPTION'
 	| 'PRINT_SUBSCRIPTION';
+
 export type OphanAction =
 	| 'INSERT'
 	| 'VIEW'
@@ -24,6 +27,7 @@ export type OphanAction =
 	| 'ANSWER'
 	| 'VOTE'
 	| 'CLICK';
+
 export type OphanComponentType =
 	| 'READERS_QUESTIONS_ATOM'
 	| 'QANDA_ATOM'
@@ -44,6 +48,7 @@ export type OphanComponentType =
 	| 'ACQUISITIONS_EDITORIAL_LINK'
 	| 'ACQUISITIONS_BUTTON'
 	| 'ACQUISITIONS_OTHER';
+
 type OphanComponent = {
 	componentType: OphanComponentType;
 	id?: string;
@@ -51,6 +56,7 @@ type OphanComponent = {
 	campaignCode?: string;
 	labels?: readonly string[];
 };
+
 export type OphanComponentEvent = {
 	component: OphanComponent;
 	action: OphanAction;
@@ -61,24 +67,26 @@ export type OphanComponentEvent = {
 		variant: string;
 	};
 };
+
 type OphanABEvent = {
 	variantName: string;
 	complete: boolean;
 	campaignCodes?: string[];
 };
+
 type OphanABPayload = Record<TestId, OphanABEvent>;
 
 // ----- Functions ----- //
-const trackComponentEvents = (componentEvent: OphanComponentEvent) =>
+const trackComponentEvents = (componentEvent: OphanComponentEvent): void =>
 	ophan.record({
 		componentEvent,
 	});
 
-const pageView = (url: string, referrer: string) => {
+const pageView = (url: string, referrer: string): void => {
 	try {
 		ophan.sendInitialEvent(url, referrer);
 	} catch (e) {
-		console.log(`Error in Ophan tracking: ${e}`);
+		console.log(`Error in Ophan tracking: ${e as string}`);
 	}
 };
 
@@ -106,18 +114,16 @@ const trackAbTests = (participations: Participations): void =>
 const setReferrerDataInLocalStorage = (
 	acquisitionData: ReferrerAcquisitionData,
 ): void => {
-	if (acquisitionData) {
-		const { referrerUrl, referrerPageviewId } = acquisitionData;
+	const { referrerUrl, referrerPageviewId } = acquisitionData;
 
-		if (!getLocal('ophan_follow') && referrerUrl && referrerPageviewId) {
-			setLocal(
-				'ophan_follow',
-				JSON.stringify({
-					refViewId: referrerPageviewId,
-					ref: referrerUrl,
-				}),
-			);
-		}
+	if (!getLocal('ophan_follow') && referrerUrl && referrerPageviewId) {
+		setLocal(
+			'ophan_follow',
+			JSON.stringify({
+				refViewId: referrerPageviewId,
+				ref: referrerUrl,
+			}),
+		);
 	}
 };
 

@@ -9,16 +9,21 @@ import './subscriptionsSurvey.scss';
 type PropTypes = {
 	product: SubscriptionProduct;
 };
-const surveyLinks: Record<SubscriptionProduct, string> = {
-	DigitalPack: 'https://www.surveymonkey.com/r/PQMWMHW',
+
+const surveyLinks: Partial<Record<SubscriptionProduct, string>> = {
+	DigitalPack: 'https://www.surveymonkey.co.uk/r/SLKWCHT',
 	GuardianWeekly: 'https://www.surveymonkey.co.uk/r/9DRKP78',
 	Paper: 'https://www.surveymonkey.co.uk/r/99PGHSX',
 };
-export const SubscriptionsSurvey = ({ product }: PropTypes) => {
+
+export function SubscriptionsSurvey({
+	product,
+}: PropTypes): JSX.Element | null {
 	const surveyLink = surveyLinks[product];
 	const title = 'Tell us about your subscription';
 	const message =
 		'Please take this short survey to tell us why you purchased your subscription';
+
 	return surveyLink ? (
 		<Content>
 			<section className="component-subscriptions-survey">
@@ -33,4 +38,4 @@ export const SubscriptionsSurvey = ({ product }: PropTypes) => {
 			</section>
 		</Content>
 	) : null;
-};
+}

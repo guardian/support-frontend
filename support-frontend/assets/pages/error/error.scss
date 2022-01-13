@@ -17,7 +17,8 @@
 // ----- Page ----- //
 
 #error-404-page,
-#error-500-page {
+#error-500-page,
+#down-for-maintenance-page {
 	.component-page-section--ctas {
 		@include multiline-top-border;
 
