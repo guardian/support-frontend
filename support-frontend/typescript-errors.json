@@ -3,25 +3,25 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 49,
-            "TS2322": 163,
+            "TS2322": 160,
             "TS2578": 8,
-            "TS2339": 47,
-            "TS2345": 106,
-            "TS7006": 71,
+            "TS2339": 31,
+            "TS2345": 103,
+            "TS7006": 66,
             "TS7053": 12,
             "TS7034": 5,
             "TS7005": 10,
-            "TS6133": 12,
+            "TS6133": 9,
             "TS7031": 18,
             "TS2564": 2,
             "TS2769": 14,
+            "TS2554": 32,
             "TS2314": 5,
             "TS2304": 5,
             "TS2741": 5,
             "TS2739": 14,
             "TS2532": 4,
             "TS2556": 3,
-            "TS2554": 31,
             "TS2569": 2,
             "TS2411": 1,
             "TS7017": 4,
@@ -111,9 +111,6 @@
             "assets/components/svgs/sepa.tsx": 1,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
-            "assets/helpers/forms/formValidation.ts": 2,
-            "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 15,
-            "assets/helpers/forms/recaptcha.ts": 1,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
             "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
@@ -158,12 +155,9 @@
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
-            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
+            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
-            "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts": 1,
-            "assets/helpers/forms/paymentIntegrations/amazonPay.ts": 11,
-            "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/rendering/render.ts": 8,
@@ -177,6 +171,7 @@
             "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
+            "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx": 1,
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/contributions.ts": 2,
@@ -193,7 +188,7 @@
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 1,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
@@ -217,12 +212,12 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
+            "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
-            "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
@@ -669,18 +664,6 @@
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'unknown' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Type 'string | null' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Type '(value: void | PromiseLike<void>) => void' is not assignable to type '(this: GlobalEventHandlers, ev: Event) => any'."
-        },
-        {
-            "path": "assets/helpers/forms/recaptcha.ts",
-            "message": "Type '(value: void | PromiseLike<void>) => void' is not assignable to type '(this: GlobalEventHandlers, ev: Event) => any'."
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
@@ -1188,7 +1171,7 @@
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
-            "message": "Property 'paypal' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'Button' does not exist on type '{ FUNDING: { CREDIT: unknown; }; }'."
         },
         {
             "path": "assets/helpers/__tests__/urlTest.ts",
@@ -1196,75 +1179,11 @@
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/forms/existingPaymentMethods/existingPaymentMethods.ts",
-            "message": "Property 'billingAccountId' does not exist on type 'ExistingPaymentMethod'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazonPayClientId' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'onAmazonLoginReady' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazon' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazon' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazon' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'amazon' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'onAmazonPaymentsReady' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'OffAmazonPayments' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "Property 'OffAmazonPayments' does not exist on type 'Window & typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiUrl' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/oneOffContributions.ts",
-            "message": "Property 'paymentApiPayPalEndpoint' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'payPalEnvironment' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Property 'paypal' does not exist on type 'Window & typeof globalThis'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -1276,11 +1195,11 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
@@ -1288,15 +1207,15 @@
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -1409,6 +1328,10 @@
             "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
         },
         {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
+            "message": "Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<Option<string>>'."
+        },
+        {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
             "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
         },
@@ -1453,28 +1376,8 @@
             "message": "Argument of type 'string | number | null' is not assignable to parameter of type 'string'."
         },
         {
-            "path": "assets/helpers/forms/formValidation.ts",
-            "message": "Argument of type 'Date | null' is not assignable to parameter of type 'Date'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type '{ credentials: string; method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Argument of type 'Record<string, any>' is not assignable to parameter of type 'PayPalCheckoutDetails'."
-        },
-        {
             "path": "assets/helpers/identityApis.ts",
-            "message": "Argument of type '(resp: {    userType: UserType;}) => UserType' is not assignable to parameter of type '(value: Record<string, any>) => \"current\" | \"new\" | \"guest\" | PromiseLike<\"current\" | \"new\" | \"guest\">'."
+            "message": "Argument of type '(resp: {    userType: UserType;}) => UserType' is not assignable to parameter of type '(value: Record<string, unknown>) => \"current\" | \"new\" | \"guest\" | PromiseLike<\"current\" | \"new\" | \"guest\">'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/currencyTest.ts",
@@ -1667,6 +1570,10 @@
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Argument of type '(clientSecret: string) => Promise<Stripe3DSResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<PaymentIntentResult>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
+            "message": "Argument of type 'unknown' is not assignable to parameter of type 'string'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
@@ -1863,26 +1770,6 @@
             "message": "Parameter 'fail' implicitly has an 'any' type."
         },
         {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'resolve' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'reject' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'actions' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'actions' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "Parameter 'data' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Parameter 'opts' implicitly has an 'any' type."
         },
@@ -2066,7 +1953,7 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -2149,18 +2036,6 @@
         {
             "path": "assets/helpers/forms/checkouts.ts",
             "message": "'allSwitches' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/amazonPay.ts",
-            "message": "'resolve' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "'formClassName' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",
@@ -2333,6 +2208,136 @@
             "message": "No overload matches this call."
         }
     ],
+    "TS2554": [
+        {
+            "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
+            "message": "Expected 10 arguments, but got 11."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/__tests__/formValidation.ts",
+            "message": "Expected 3 arguments, but got 2."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        },
+        {
+            "path": "assets/pages/showcase/components/otherProducts.tsx",
+            "message": "Expected 1 arguments, but got 0."
+        }
+    ],
     "TS2314": [
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -2487,132 +2492,6 @@
         {
             "path": "assets/helpers/__tests__/contributionsTests.ts",
             "message": "A spread argument must either have a tuple type or be passed to a rest parameter."
-        }
-    ],
-    "TS2554": [
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProducts.tsx",
-            "message": "Expected 1 arguments, but got 0."
         }
     ],
     "TS2569": [

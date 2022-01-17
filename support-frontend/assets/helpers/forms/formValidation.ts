@@ -26,52 +26,71 @@ import type { LocalCurrencyCountry } from '../internationalisation/localCurrency
 
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
+
 export const isEmpty: (arg0: string | null) => boolean = (input) =>
 	typeof input === 'undefined' || input == null || input.trim().length === 0;
+
 export const isNotEmpty: (arg0: string | null) => boolean = (input) =>
 	!isEmpty(input);
-export const isNotTooFarInTheFuture: (arg0: Date | null) => boolean = (
-	date,
-) => {
+
+export const isNotTooFarInTheFuture: (arg0: Date) => boolean = (date) => {
 	const rangeDate = new Date();
 	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
+
 	const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
 	return dateIsInsideRange;
 };
+
 export const isValidEmail: (arg0: string | null) => boolean = (input) =>
 	!!input && new RegExp(emailRegexPattern).test(input);
-export const isValidZipCode = (zipCode: string) =>
+
+export const isValidZipCode = (zipCode: string): boolean =>
 	/^\d{5}(-\d{4})?$/.test(zipCode);
+
 export const isLargerOrEqual: (arg0: number, arg1: string) => boolean = (
 	min,
 	input,
 ) => min <= parseFloat(input);
+
 export const isSmallerOrEqual: (arg0: number, arg1: string) => boolean = (
 	max,
 	input,
 ) => parseFloat(input) <= max;
+
 export const maxTwoDecimals: (arg0: string) => boolean = (input) =>
 	new RegExp('^\\d+\\.?\\d{0,2}$').test(input);
+
 export const checkFirstName: (arg0: string | null) => boolean = isNotEmpty;
+
 export const checkLastName: (arg0: string | null) => boolean = isNotEmpty;
+
 export const checkBillingState: (arg0: string | null) => boolean = (s) =>
 	typeof s === 'string' && isNotEmpty(s);
+
 export const checkEmail: (arg0: string | null) => boolean = (input) =>
 	isNotEmpty(input) && isValidEmail(input);
+
 export const emailAddressesMatch: (
 	arg0: boolean,
 	arg1: string,
 	arg2: Option<string>,
 ) => boolean = (isSignedIn, email, confirmEmail) =>
 	isSignedIn || email === confirmEmail;
+
 export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
 	isEmpty(input) || isValidEmail(input);
+
 export const checkGiftStartDate: (arg0: string | null) => boolean = (
 	rawDate,
 ) => {
 	const date = rawDate ? new Date(rawDate) : null;
-	return isNotEmpty(rawDate) && isNotTooFarInTheFuture(date);
+
+	if (isNotEmpty(rawDate) && date) {
+		return isNotTooFarInTheFuture(date);
+	}
+	return false;
 };
+
 export const amountIsValid = (
 	input: string,
 	countryGroupId: CountryGroupId,
@@ -94,6 +113,7 @@ export const amountIsValid = (
 		maxTwoDecimals(input)
 	);
 };
+
 export const amountOrOtherAmountIsValid = (
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,
@@ -108,11 +128,11 @@ export const amountOrOtherAmountIsValid = (
 		selectedAmounts[contributionType] &&
 		selectedAmounts[contributionType] === 'other'
 	) {
-		if (
-			otherAmounts[contributionType] &&
-			otherAmounts[contributionType].amount
-		) {
-			amt = otherAmounts[contributionType].amount;
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- otherAmounts[contributionType] may be undefined
+		if (otherAmounts[contributionType]?.amount) {
+			if (typeof otherAmounts[contributionType].amount === 'string') {
+				amt = otherAmounts[contributionType].amount as string;
+			}
 		}
 	} else if (selectedAmounts[contributionType]) {
 		amt = selectedAmounts[contributionType].toString();
@@ -140,7 +160,7 @@ export const checkStateIfApplicable: (
 			return checkBillingState(billingState);
 		} else if (countryGroupId === AUDCountries) {
 			// Allow no state to be selected if the user is GEO-IP'd to one of the non AU countries that use AUD.
-			if (window.guardian && window.guardian.geoip) {
+			if (window.guardian.geoip) {
 				const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
 				const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(
 					(c) => c !== 'AU',
