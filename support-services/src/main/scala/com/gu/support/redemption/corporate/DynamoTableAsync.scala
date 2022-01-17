@@ -10,8 +10,8 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, GetItemRequest, UpdateItemRequest}
 
-import scala.collection.JavaConverters._
-import scala.compat.java8.FutureConverters._
+import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 object DynamoTableAsync {
@@ -61,7 +61,7 @@ class DynamoTableAsync(
       .key(Map(primaryKeyName -> AttributeValue.builder.s(key).build).asJava)
       .build
 
-    val eventualGetItemResponse = dynamoDBAsyncClient.getItem(getItemRequest).toScala.recoverWith {
+    val eventualGetItemResponse = dynamoDBAsyncClient.getItem(getItemRequest).asScala.recoverWith {
       case cex: CompletionException => Future.failed(cex.getCause)
     }
 
@@ -90,7 +90,7 @@ class DynamoTableAsync(
       ).asJava)
       .build
 
-    val eventualUpdateItemResponse = dynamoDBAsyncClient.updateItem(updateItemRequest).toScala.recoverWith {
+    val eventualUpdateItemResponse = dynamoDBAsyncClient.updateItem(updateItemRequest).asScala.recoverWith {
       case cex: CompletionException => Future.failed(cex.getCause)
     }
 
