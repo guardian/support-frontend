@@ -8,7 +8,7 @@ import play.api.mvc._
 import services.CloudWatchService
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
+import scala.concurrent.duration.FiniteDuration
 import play.api.libs.circe.Circe
 
 /**
@@ -19,7 +19,7 @@ import play.api.libs.circe.Circe
   * from the backend, not the browser.
   */
 
-case class RateLimitingSettings(maxRequests: Int, interval: Duration)
+case class RateLimitingSettings(maxRequests: Int, interval: FiniteDuration)
 
 class RateLimitingAction(
   val parse: PlayBodyParsers,
@@ -43,8 +43,8 @@ class RateLimitingAction(
       .expireAfter(
         // Start timing from when the ip is first cached, and do not restart the timer after updates
         create = (_: IpAddress, _: Int) => settings.interval,
-        update = (_: IpAddress, _: Int, currentDuration: Duration) => currentDuration,
-        read = (_: IpAddress, _: Int, currentDuration: Duration) => currentDuration
+        update = (_: IpAddress, _: Int, currentDuration: FiniteDuration) => currentDuration,
+        read = (_: IpAddress, _: Int, currentDuration: FiniteDuration) => currentDuration
       )
       .maximumSize(1000)
       .build[IpAddress, Int]()
