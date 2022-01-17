@@ -3,12 +3,12 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 49,
-            "TS2322": 164,
-            "TS2578": 13,
-            "TS2339": 35,
-            "TS2345": 106,
-            "TS7006": 70,
-            "TS7053": 13,
+            "TS2322": 160,
+            "TS2578": 8,
+            "TS2339": 31,
+            "TS2345": 103,
+            "TS7006": 66,
+            "TS7053": 12,
             "TS7034": 5,
             "TS7005": 10,
             "TS6133": 9,
@@ -29,12 +29,11 @@
             "TS2740": 5,
             "TS2531": 2,
             "TS7016": 1,
-            "TS2694": 4,
-            "TS7022": 3,
-            "TS2571": 9,
             "TS2707": 1,
             "TS2525": 5,
             "TS2745": 2,
+            "TS7022": 1,
+            "TS2571": 3,
             "TS2698": 6
         },
         "byPath": {
@@ -119,8 +118,6 @@
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
-            "assets/pages/aus-moment-map/components/map.tsx": 4,
-            "assets/pages/aus-moment-map/components/testimonialsContainer.tsx": 19,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionState.tsx": 2,
@@ -154,9 +151,6 @@
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
-            "assets/pages/aus-moment-map/ausMomentMap.tsx": 7,
-            "assets/pages/aus-moment-map/components/blurb.tsx": 1,
-            "assets/pages/aus-moment-map/hooks/useWindowWidth.ts": 1,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
@@ -206,7 +200,6 @@
             "assets/components/signout/signout.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/helpers/utilities/dateFormatting.ts": 1,
-            "assets/pages/aus-moment-map/utils.ts": 1,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
@@ -231,8 +224,8 @@
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
             "assets/helpers/productPrice/subscriptions.ts": 1,
-            "assets/pages/promotion-terms/promotionTermsReducer.ts": 4,
-            "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 1
+            "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 1,
+            "assets/pages/promotion-terms/promotionTermsReducer.ts": 4
         }
     },
     "TS1208": [
@@ -701,22 +694,6 @@
             "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & Props & { children?: ReactNode; }'."
         },
         {
-            "path": "assets/pages/aus-moment-map/components/map.tsx",
-            "message": "Type '(() => void) | null' is not assignable to type 'MouseEventHandler<SVGGElement> | undefined'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Type 'RefObject<unknown>' is not assignable to type 'Ref<HTMLDivElement> | undefined'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
         },
@@ -1111,26 +1088,6 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/blurb.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/map.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/hooks/useWindowWidth.ts",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -1243,22 +1200,6 @@
         {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'offsetTop' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'offsetHeight' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'parentNode' does not exist on type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Property 'offsetTop' does not exist on type 'unknown'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
@@ -1599,18 +1540,6 @@
             "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
         },
         {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Argument of type 'null' is not assignable to parameter of type 'TestimonialsCollection | (() => TestimonialsCollection)'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Argument of type 'string' is not assignable to parameter of type '((prevState: null) => null) | null'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Argument of type 'string' is not assignable to parameter of type '((prevState: null) => null) | null'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
             "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
         },
@@ -1853,22 +1782,6 @@
             "message": "Parameter 'd' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Parameter 'territory' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/ausMomentMap.tsx",
-            "message": "Parameter 'territory' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/utils.ts",
-            "message": "Parameter 'componentId' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Parameter 'response' implicitly has an 'any' type."
         },
@@ -2041,10 +1954,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
             "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ QLD: string; NSW: string; NT: string; SA: string; TAS: string; VIC: string; WA: string; ACT: string; }'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -2675,76 +2584,6 @@
             "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         }
     ],
-    "TS2694": [
-        {
-            "path": "assets/pages/aus-moment-map/components/map.tsx",
-            "message": "Namespace 'React' has no exported member 'ReactNode'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Namespace 'React' has no exported member 'ReactNode'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Namespace 'React' has no exported member 'ReactNode'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Namespace 'React' has no exported member 'ReactNode'."
-        }
-    ],
-    "TS7022": [
-        {
-            "path": "assets/pages/aus-moment-map/components/map.tsx",
-            "message": "'Map' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "'TestimonialsContainer' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
-        }
-    ],
-    "TS2571": [
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        }
-    ],
     "TS2707": [
         {
             "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
@@ -2781,6 +2620,26 @@
         {
             "path": "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx",
             "message": "This JSX tag's 'children' prop expects type 'ReactElement<any, string | JSXElementConstructor<any>>[]' which requires multiple children, but only a single child was provided."
+        }
+    ],
+    "TS7022": [
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
+        }
+    ],
+    "TS2571": [
+        {
+            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
+            "message": "Object is of type 'unknown'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
+            "message": "Object is of type 'unknown'."
         }
     ],
     "TS2698": [
