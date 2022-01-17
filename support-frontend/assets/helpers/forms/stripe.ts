@@ -92,6 +92,7 @@ export const useStripeObjects = (
 	}, [stripeAccount]);
 	return stripeObjects;
 };
+
 export {
 	stripeCardFormIsIncomplete,
 	stripeAccountForContributionType,
