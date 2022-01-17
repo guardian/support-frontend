@@ -3,7 +3,7 @@ package actions
 import com.github.blemale.scaffeine.{Cache, Scaffeine}
 import com.typesafe.scalalogging.StrictLogging
 import controllers.JsonUtils
-import model.{PaymentProvider, RequestEnvironments, ResultBody}
+import model.{PaymentProvider, ResultBody}
 import play.api.mvc._
 import services.CloudWatchService
 
