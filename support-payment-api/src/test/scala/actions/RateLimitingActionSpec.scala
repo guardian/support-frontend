@@ -10,6 +10,7 @@ import play.api.test.Helpers._
 import services.CloudWatchService
 
 import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -17,7 +18,7 @@ class RateLimitingActionSpec extends AnyWordSpec with Matchers with Results with
   val cc = stubControllerComponents()
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
-  private def newAction(maxRequests: Int, interval: Duration) =
+  private def newAction(maxRequests: Int, interval: FiniteDuration) =
     new RateLimitingAction(
       cc.parsers,
       cc.executionContext,
