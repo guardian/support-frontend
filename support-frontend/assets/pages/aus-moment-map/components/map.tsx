@@ -21,7 +21,7 @@ function TerritorySvgContainer(props: TerritorySvgContainerProps) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 
 	const handleClick = () => {
-		windowWidthIsGreaterThan('desktop') && props.onClick;
+		windowWidthIsGreaterThan('desktop') && props.onClick();
 	};
 
 	return (
