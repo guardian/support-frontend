@@ -3,12 +3,12 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 49,
-            "TS2322": 167,
-            "TS2578": 13,
-            "TS2339": 51,
-            "TS2345": 109,
-            "TS7006": 75,
-            "TS7053": 13,
+            "TS2322": 163,
+            "TS2578": 8,
+            "TS2339": 47,
+            "TS2345": 106,
+            "TS7006": 71,
+            "TS7053": 12,
             "TS7034": 5,
             "TS7005": 10,
             "TS6133": 12,
@@ -2067,10 +2067,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
             "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; geoip?: { countryCode: string; stateCode?: string | undefined; } | undefined; ... 11 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/testimonialsContainer.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ QLD: string; NSW: string; NT: string; SA: string; TAS: string; VIC: string; WA: string; ACT: string; }'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
