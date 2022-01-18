@@ -213,6 +213,8 @@ const setupPayment = (
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
 ) => {
+	console.trace('arguments --->', arguments);
+
 	return (resolve: (arg0: string) => void, reject: (error: Error) => void) => {
 		setupPayPalPayment(
 			resolve,
@@ -251,6 +253,7 @@ const getPayPalOptions = (
 	onPayPalCheckoutCompleted: (arg0: PayPalCheckoutDetails) => void,
 	canOpen: () => boolean,
 	onClick: () => void,
+	_formClassName: string,
 	isTestUser: boolean,
 	amount: number,
 	billingPeriod: BillingPeriod,
