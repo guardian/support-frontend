@@ -251,6 +251,7 @@ const getPayPalOptions = (
 	onPayPalCheckoutCompleted: (arg0: PayPalCheckoutDetails) => void,
 	canOpen: () => boolean,
 	onClick: () => void,
+	_formClassName: string,
 	isTestUser: boolean,
 	amount: number,
 	billingPeriod: BillingPeriod,
