@@ -213,8 +213,6 @@ const setupPayment = (
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
 ) => {
-	console.trace('arguments --->', arguments);
-
 	return (resolve: (arg0: string) => void, reject: (error: Error) => void) => {
 		setupPayPalPayment(
 			resolve,

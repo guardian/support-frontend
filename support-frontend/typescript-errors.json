@@ -23,7 +23,6 @@
             "TS2556": 3,
             "TS2554": 31,
             "TS2569": 2,
-            "TS2496": 1,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
@@ -219,7 +218,6 @@
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
-            "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
@@ -2500,12 +2498,6 @@
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'HTMLFormControlsCollection' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators."
-        }
-    ],
-    "TS2496": [
-        {
-            "path": "assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts",
-            "message": "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression."
         }
     ],
     "TS2411": [
