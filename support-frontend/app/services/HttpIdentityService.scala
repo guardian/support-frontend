@@ -105,22 +105,19 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  private def getHeaders(): List[(String, String)] = List(
-    "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken")
-  ).flattenValues
-
-  private def postHeaders(): List[(String, String)] = List(
-    "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken"),
-    "Content-Type" -> Some("application/json")
-  ).flattenValues
-
-  def getUserIdFromEmail(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, String] = {
-    get(s"user", getHeaders(), List("emailAddress" -> email)) { resp =>
-      resp.json.validate[UserResponse].asEither.map(
-        userResponse => userResponse.user.id
-      ).leftMap(_.mkString(","))
+  def getUserIdFromEmail(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, String] =
+    execute(
+      wsClient.url(s"$apiUrl/user")
+        .withHttpHeaders(List("X-GU-ID-Client-Access-Token" -> s"Bearer $apiClientToken"): _*)
+        .withQueryStringParameters(List("emailAddress" -> email): _*)
+        .withRequestTimeout(5.seconds)
+        .withMethod("GET")
+    ) { resp =>
+      resp.json.validate[UserResponse]
+        .asEither
+        .leftMap(_.mkString(","))
+        .map(userResponse => userResponse.user.id)
     }
-  }
 
   def createUserIdFromEmailUser(
     email: String,
@@ -136,30 +133,20 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     )
     execute(
       wsClient.url(s"$apiUrl/guest")
-        .withHttpHeaders(postHeaders(): _*)
+        .withHttpHeaders(List(
+          "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken"),
+          "Content-Type" -> Some("application/json")
+        ).flattenValues: _*)
         .withBody(body)
         .withRequestTimeout(5.seconds)
         .withMethod("POST")
         .withQueryStringParameters(("accountVerificationEmail", "true"))
     ) { resp =>
-        resp.json.validate[GuestRegistrationResponse]
-          .asEither
-          .bimap(_.mkString(","), response => response.guestRegistrationRequest.userId)
-      }
-  }
-
-  private def get[A](
-    endpoint: String,
-    headers: List[(String, String)],
-    parameters: List[(String, String)]
-  )(func: WSResponse => Either[String, A])(implicit ec: ExecutionContext) = {
-    execute(
-      wsClient.url(s"$apiUrl/$endpoint")
-        .withHttpHeaders(headers: _*)
-        .withQueryStringParameters(parameters: _*)
-        .withRequestTimeout(5.seconds)
-        .withMethod("GET")
-    )(func)
+      resp.json.validate[GuestRegistrationResponse]
+        .asEither
+        .leftMap(_.mkString(","))
+        .map(response => response.guestRegistrationRequest.userId)
+    }
   }
 
   private def uriWithoutQuery(uri: URI) = uri.toString.takeWhile(_ != '?')
