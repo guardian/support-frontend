@@ -1,6 +1,5 @@
 package services.stepfunctions
 
-import java.util.UUID
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
@@ -15,18 +14,17 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
-import com.gu.support.workers.{Status, _}
+import com.gu.support.workers._
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import org.joda.time.LocalDate
 import play.api.mvc.{Call, Request}
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import services.stepfunctions.SupportWorkersClient._
-import utils.NormalisedTelephoneNumber
 
+import java.util.UUID
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
-import scala.util.chaining._
 
 object CreateSupportWorkersRequest {
 
@@ -35,14 +33,7 @@ object CreateSupportWorkersRequest {
 
   implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
 
-  implicit val codec: Decoder[CreateSupportWorkersRequest] = deriveDecoder[CreateSupportWorkersRequest].map { in =>
-    val updatedPhoneNumber = for {
-      phoneNo <- in.telephoneNumber
-      updatedNo <- NormalisedTelephoneNumber.formatFromStringAndCountry(phoneNo, in.billingAddress.country).tap(_.left.foreach(SafeLogger.warn)).toOption
-    } yield updatedNo
-
-    in.copy(telephoneNumber = updatedPhoneNumber)
-  }
+  implicit val codec: Decoder[CreateSupportWorkersRequest] = deriveDecoder[CreateSupportWorkersRequest]
 
   case class GiftRecipientRequest(
     title: Option[Title],

@@ -17,10 +17,11 @@ import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
-import utils.CheckoutValidationRules
 import utils.CheckoutValidationRules.{Invalid, Valid}
+import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.chaining._
 
 object CreateSubscriptionController {
 
@@ -147,7 +148,11 @@ class CreateSubscriptionController(
       lastName = request.lastName,
       billingAddress = request.billingAddress,
       deliveryAddress = request.deliveryAddress,
-      telephoneNumber = request.telephoneNumber,
+      telephoneNumber = for {
+          phoneNo <- request.telephoneNumber
+          updatedNo <- NormalisedTelephoneNumber.formatFromStringAndCountry(phoneNo, request.billingAddress.country)
+            .tap(_.left.foreach(SafeLogger.warn)).toOption
+        } yield updatedNo,
       allowMembershipMail = false,
       // Previously the values for the fields allowThirdPartyMail and allowGURelatedMail
       // were derived by looking for the fields: statusFields.receive3rdPartyMarketing and
