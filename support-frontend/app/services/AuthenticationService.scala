@@ -1,8 +1,7 @@
 package services
 
-import cats.implicits._
+import com.gu.identity.auth.IdentityClient
 import com.gu.identity.auth.IdentityClient.Error
-import com.gu.identity.auth.{IdentityClient, UserCredentials}
 import com.gu.identity.model.User
 import com.gu.identity.play.IdentityPlayAuthService
 import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
@@ -31,18 +30,24 @@ object AccessCredentials {
 
 class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthService)(implicit ec: ExecutionContext) {
 
-  import AsyncAuthenticationService._
-
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
     identityPlayAuthService.getUserFromRequest(requestHeader)
-          .map { case (_, user) => user }
-          .unsafeToFuture()
+      .map { case (_, user) => user }
+      .unsafeToFuture()
       .map(user => Some(user))
       .recover {
-        case _: UserCredentialsMissingError => None // user not signed in
-        case IdentityClient.Errors(List(Error("Access Denied"))) => None // invalid SC_GU_U cookie?
-        case err => // something else went wrong - we should alert on this
-          logUserAuthenticationError(err)
+        case _: UserCredentialsMissingError =>
+          // user not signed in https://github.com/guardian/identity/pull/1578
+          None
+        case IdentityClient.Errors(List(Error("Access Denied"))) =>
+          // scalastyle:off
+          // invalid SC_GU_U cookie?
+          // https://github.com/guardian/identity/blob/424b5170f1b892778fe94f9b3d9a540fb5181e9d/identity-model/src/main/scala/com/gu/identity/model/Errors.scala#L60
+          // scalastyle:on
+          None
+        case err =>
+          // something else went wrong - we should alert on this
+          SafeLogger.error(scrub"unable to authorize user", err)
           None
       }
 
@@ -59,14 +64,4 @@ object AsyncAuthenticationService {
     new AsyncAuthenticationService(identityPlayAuthService)
   }
 
-  // Logs failure to authenticate a user.
-  // User shouldn't necessarily be signed in,
-  // in which case, don't log failure to authenticate as an error.
-  // All other failures are considered errors.
-  def logUserAuthenticationError(error: Throwable): Unit =
-    error match {
-      // Utilises the custom error introduced in: https://github.com/guardian/identity/pull/1578
-      case _: UserCredentialsMissingError => // user not signed in
-      case _ => SafeLogger.error(scrub"unable to authorize user", error)
-    }
 }

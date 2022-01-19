@@ -46,10 +46,9 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[AmazonPayConfigProvider],
         mock[RecaptchaConfigProvider],
         mock[PaymentAPIService],
-        mock[MembersDataService],
+        "",
         mock[StringsConfig],
         mock[AllSettingsProvider],
-        mock[GuardianDomain],
         mock[Stage],
         "support.thegulocal.com"
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
@@ -68,10 +67,9 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[AmazonPayConfigProvider],
         mock[RecaptchaConfigProvider],
         mock[PaymentAPIService],
-        mock[MembersDataService],
+        "",
         mock[StringsConfig],
         mock[AllSettingsProvider],
-        mock[GuardianDomain],
         mock[Stage],
         "support.thegulocal.com"
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())

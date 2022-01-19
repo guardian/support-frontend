@@ -26,10 +26,9 @@ trait Controllers {
     appConfig.amazonPayConfigProvider,
     appConfig.recaptchaConfigProvider,
     paymentAPIService,
-    membersDataService,
+    appConfig.membersDataServiceApiUrl,
     stringsConfig,
     allSettingsProvider,
-    appConfig.guardianDomain,
     appConfig.stage,
     appConfig.supportUrl
   )

@@ -12,12 +12,11 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
-import config.Configuration.GuardianDomain
 import config.{RecaptchaConfigProvider, StringsConfig}
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
-import services.{MembersDataService, PaymentAPIService, TestUserService}
+import services.{PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,10 +43,9 @@ class Application(
   amazonPayConfigProvider: AmazonPayConfigProvider,
   recaptchaConfigProvider: RecaptchaConfigProvider,
   paymentAPIService: PaymentAPIService,
-  membersDataService: MembersDataService,
+  mdapiUrl: String,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  guardianDomain: GuardianDomain,
   stage: Stage,
   val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
@@ -188,7 +186,7 @@ class Application(
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      mdapiUrl = membersDataService.apiUrl,
+      mdapiUrl = mdapiUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       geoData = geoData,

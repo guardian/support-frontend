@@ -2,34 +2,27 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings._
-import assets.RefPath
-import cats.data.EitherT
-import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
-import com.gu.support.promotions.{PromoCode, PromotionServiceProvider}
+import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
 import com.gu.support.zuora.api.ReaderType
-import com.gu.support.zuora.api.ReaderType.Direct
 import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
-import config.{RecaptchaConfigProvider, RecaptchaConfig, StringsConfig}
+import config.{RecaptchaConfig, RecaptchaConfigProvider}
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatest.OptionValues._
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
-import services.MembersDataService._
-import services.stepfunctions.SupportWorkersClient
-import services.{AccessCredentials, IdentityService, MembersDataService, TestUserService}
+import services.TestUserService
 
 import scala.concurrent.Future
 
