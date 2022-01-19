@@ -9,6 +9,10 @@ declare global {
 	 */
 	interface Window {
 		guardian: {
+			amazonPayClientId: {
+				default: string;
+				uat: string;
+			};
 			amazonPaySellerId: {
 				default: string;
 				uat: string;
@@ -23,6 +27,12 @@ declare global {
 			gitCommitId?: string;
 			mdapiUrl: string;
 			orderIsAGift: boolean;
+			paymentApiPayPalEndpoint: string;
+			paymentApiUrl: string;
+			payPalEnvironment: {
+				default: string;
+				uat: string;
+			};
 			productPrices: ProductPrices;
 			recaptchaEnabled?: boolean;
 			serversideTests?: Participations | null;
@@ -33,14 +43,29 @@ declare global {
 			user?: User;
 			v2recaptchaPublicKey: string;
 		};
-		enablePayPalButton?: () => void;
-		disablePayPalButton?: () => void;
-		googleTagManagerDataLayer?: Array<Record<string, unknown>>;
-		gtag_enable_tcf_support?: boolean;
-		QuantumMetricAPI: unknown;
-		grecaptcha?: {
-			render: (arg0: string, arg1: Record<string, any>) => void;
+
+		amazon?: {
+			Login: {
+				setClientId: (clientId: string) => void;
+				setSandboxMode: (sandboxMode: boolean) => void;
+			};
 		};
+		disablePayPalButton?: () => void;
+		enablePayPalButton?: () => void;
+		googleTagManagerDataLayer?: Array<Record<string, unknown>>;
+		grecaptcha?: {
+			render: (arg0: string, arg1: Record<string, unknown>) => void;
+		};
+		gtag_enable_tcf_support?: boolean;
+		OffAmazonPayments?: Record<string, unknown>;
+		onAmazonLoginReady: unknown;
+		onAmazonPaymentsReady: () => void;
+		paypal: {
+			FUNDING: {
+				CREDIT: unknown;
+			};
+		};
+		QuantumMetricAPI: unknown;
 		v2OnloadCallback: () => void;
 		__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R;
 		__REDUX_DEVTOOLS_EXTENSION__?: () => undefined;

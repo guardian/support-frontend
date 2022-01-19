@@ -47,11 +47,8 @@ object SubscriptionEmailFieldHelpers {
   ): String =
     Try(paymentSchedule.payments.tail.head).fold(
       _ => "",
-      payment => {
-        val issues = if (benefit == IntroductoryPriceBenefit(6, 7, Issue)) 6 else benefit.periodLength
-        s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(issues, benefit.periodType.toString.toLowerCase)}, " +
-          s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}"
-      }
+      payment => s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(benefit.periodLength, benefit.periodType.toString.toLowerCase)}, " +
+        s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}"
     )
 
   def giftNoun(billingPeriod: BillingPeriod): String = billingPeriod match {

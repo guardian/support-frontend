@@ -1,18 +1,18 @@
 // ----- Imports ----- //
-// @ts-expect-error
 import * as React from 'preact/compat';
 import { SocialLinks } from 'pages/aus-moment-map/components/socialLinks';
 
-const enableSupporterCount = true;
+const enableSupporterCount = true as boolean;
 
 const useSupportersCount = () => {
 	const [supportersCount, setSupportersCount] = React.useState(0);
 	const supportersCountEndpoint = '/supporters-ticker.json';
+
 	React.useEffect(() => {
 		if (enableSupporterCount) {
-			fetch(supportersCountEndpoint)
+			void fetch(supportersCountEndpoint)
 				.then((response) => response.json())
-				.then((data) => setSupportersCount(data.total));
+				.then((data: { total: number }) => setSupportersCount(data.total));
 		}
 	}, []);
 	return supportersCount;
@@ -21,8 +21,9 @@ const useSupportersCount = () => {
 type PropTypes = {
 	slim?: boolean;
 };
+
 // ----- Render ----- //
-export const Blurb = (props: PropTypes) => {
+export function Blurb(props: PropTypes): JSX.Element {
 	const supportersCount = useSupportersCount();
 	return (
 		<div className="blurb-wrapper">
@@ -56,7 +57,8 @@ export const Blurb = (props: PropTypes) => {
 			<SocialLinks />
 		</div>
 	);
-};
+}
+
 Blurb.defaultProps = {
 	slim: false,
 };
