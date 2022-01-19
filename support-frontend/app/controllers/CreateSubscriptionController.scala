@@ -1,28 +1,36 @@
 package controllers
 
+import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import akka.stream.scaladsl.Flow
-import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.workers._
 import config.Configuration.GuardianDomain
+import controllers.CreateSubscriptionController._
 import io.circe.syntax._
 import lib.PlayImplicits._
 import org.joda.time.DateTime
 import play.api.libs.circe.Circe
-import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
+import utils.CheckoutValidationRules
 import utils.CheckoutValidationRules.{Invalid, Valid}
-import utils.NormalisedTelephoneNumber.asFormattedString
-import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
 import scala.concurrent.{ExecutionContext, Future}
+
+object CreateSubscriptionController {
+
+  sealed abstract class CreateSubscriptionError(message: String)
+  case class ServerError(message: String) extends CreateSubscriptionError(message)
+  case class RequestValidationError(message: String) extends CreateSubscriptionError(message)
+
+  type ApiResponseOrError[RES] = EitherT[Future, CreateSubscriptionError, RES]
+
+}
 
 class CreateSubscriptionController(
   client: SupportWorkersClient,
@@ -35,31 +43,35 @@ class CreateSubscriptionController(
 
   import actionRefiners._
 
-  sealed abstract class CreateSubscriptionError(message: String)
-  case class ServerError(message: String) extends CreateSubscriptionError(message)
-  case class RequestValidationError(message: String) extends CreateSubscriptionError(message)
-
-  type ApiResponseOrError[RES] = EitherT[Future, CreateSubscriptionError, RES]
-
   def create: EssentialAction =
-    alarmOnFailure(PrivateAction.async(new LoggingCirceParser(components).requestParser) {
-      implicit request =>
-        val res = for {
-          maybeLoggedInUser <- EitherT.right[CreateSubscriptionError](asyncAuthenticationService.tryAuthenticateUser(request))
-          maybeLoggedInIdentityIdAndEmail = maybeLoggedInUser.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
-          userDesc = maybeLoggedInIdentityIdAndEmail match {
-            case None => s"Guest User ${request.body.email}"
-            case Some(idAndEmail) => s"User ${idAndEmail.primaryEmailAddress}"
-          }
-          _ = SafeLogger.info(s"$userDesc is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
+    LoggingAndAlarmOnFailure {
+      MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
+
+        val maybeLoggedInIdentityIdAndEmail = request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
+        logIncomingRequest(request, maybeLoggedInIdentityIdAndEmail)
+
+        val errorOrStatusResponse = for {
           userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
             case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
             case None => getOrCreateIdentityUser(request.body).leftMap(ServerError)
           }
-          result <- handleCreateSupportWorkersRequest(userAndEmail)
-        } yield result
-        respondToClient(res, request.body.product)
-    })
+          _ <- validate(request)
+          supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
+          statusResponse <- client.createSubscription(request, supportWorkersUser, request.uuid).leftMap[CreateSubscriptionError](ServerError)
+        } yield statusResponse
+
+        toHttpResponse(errorOrStatusResponse, request.body.product)
+
+      }
+    }
+
+  private def logIncomingRequest(request: OptionalAuthRequest[CreateSupportWorkersRequest], maybeLoggedInIdentityIdAndEmail: Option[IdentityIdAndEmail]) = {
+    val userDesc = maybeLoggedInIdentityIdAndEmail match {
+      case None => s"Guest User ${request.body.email}"
+      case Some(idAndEmail) => s"User ${idAndEmail.primaryEmailAddress}"
+    }
+    SafeLogger.info(s"$userDesc is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
+  }
 
   private def getOrCreateIdentityUser(body: CreateSupportWorkersRequest): EitherT[Future, String, IdentityIdAndEmail] = {
     val existingIdentityId = identityService.getUserIdFromEmail(body.email)
@@ -67,31 +79,13 @@ class CreateSubscriptionController(
     identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }
 
-  private def handleCreateSupportWorkersRequest(identityIdAndEmail: IdentityIdAndEmail)(
-    implicit request: Request[CreateSupportWorkersRequest]
-  ): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
-
-    val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
-
-    val createSupportWorkersRequest = request.body.copy(
-      telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
-    )
-
-    CheckoutValidationRules.validate(createSupportWorkersRequest) match {
-      case Valid =>
-        val isTestUser = testUsers.isTestUser(request)
-        for {
-          statusResponse <- client.createSubscription(request, buildUser(identityIdAndEmail, createSupportWorkersRequest, isTestUser), request.uuid)
-            .leftMap[CreateSubscriptionError](error => ServerError(error))
-        } yield statusResponse
-
-      case Invalid(message) =>
-        SafeLogger.warn(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
-        EitherT.leftT(RequestValidationError("validation of the request body failed"))
+  private def validate(request: Request[CreateSupportWorkersRequest]): EitherT[Future, CreateSubscriptionError, Unit] =
+    CheckoutValidationRules.validate(request.body) match {
+      case Valid => EitherT.pure(())
+      case Invalid(message) => EitherT.leftT(RequestValidationError(message))
     }
-  }
 
-  private def respondToClient(
+  private def toHttpResponse(
     result: EitherT[Future, CreateSubscriptionError, StatusResponse],
     product: ProductType
   )(implicit request: Request[CreateSupportWorkersRequest]): Future[Result] = {
@@ -118,11 +112,11 @@ class CreateSubscriptionController(
       "gu_hide_support_messaging" -> true.toString
     )
     val productCookies = product match {
-      case Contribution(amount, currency, billingPeriod) => List(
+      case Contribution(_, _, billingPeriod) => List(
         s"gu.contributions.recurring.contrib-timestamp.$billingPeriod" -> DateTime.now.getMillis.toString,
         "gu_recurring_contributor" -> true.toString
       )
-      case DigitalPack(currency, billingPeriod, readerType) => List(
+      case _: DigitalPack => List(
         "gu_digital_subscriber" -> true.toString,
         "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString
       )
@@ -144,7 +138,7 @@ class CreateSubscriptionController(
     }
   }
 
-  private def buildUser(identityIdAndEmail: IdentityIdAndEmail, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
+  private def buildSupportWorkersUser(identityIdAndEmail: IdentityIdAndEmail, request: CreateSupportWorkersRequest, isTestUser: Boolean) = {
     User(
       id = identityIdAndEmail.id,
       primaryEmailAddress = identityIdAndEmail.primaryEmailAddress,
@@ -169,26 +163,4 @@ class CreateSubscriptionController(
     )
   }
 
-}
-
-class LoggingCirceParser(controllerComponents: ControllerComponents) extends Circe {
-
-  override protected def onCirceError(e: io.circe.Error): Result = {
-    SafeLogger.warn(s"circe decode failure: $e")
-    super.onCirceError(e)
-  }
-
-  val requestParser: BodyParser[CreateSupportWorkersRequest] = {
-    val underlying = circe.json[CreateSupportWorkersRequest]
-    BodyParser.apply("LoggingCirceParser(" + underlying.toString() + ")") {
-      requestHeader: RequestHeader =>
-        val accumulator: Accumulator[ByteString, Either[Result, CreateSupportWorkersRequest]] = underlying.apply(requestHeader)
-        accumulator.through(Flow.fromFunction { (byteString: ByteString) =>
-          SafeLogger.info("incoming POST: " + byteString.utf8String)
-          byteString
-        })
-    }
-  }
-
-  def parse: PlayBodyParsers = controllerComponents.parsers
 }

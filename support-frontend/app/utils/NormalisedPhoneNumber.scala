@@ -11,36 +11,27 @@ case class NormalisedTelephoneNumber(countryCode: String, localNumber: String)
 
 object NormalisedTelephoneNumber {
 
-  def asFormattedString(normalisedTelephoneNumber: NormalisedTelephoneNumber): String =
+  private def asFormattedString(normalisedTelephoneNumber: NormalisedTelephoneNumber): String =
     s"+${normalisedTelephoneNumber.countryCode}${normalisedTelephoneNumber.localNumber}"
 
-  def fromStringAndCountry(phone: Option[String], country: Country): Option[NormalisedTelephoneNumber] = {
-    for {
-      number <- phone
-      parsed <- parseToOption(number, country.alpha2)
-    } yield {
-      NormalisedTelephoneNumber(parsed.getCountryCode.toString, parsed.getNationalNumber.toString)
-    }
+  def formatFromStringAndCountry(phoneNumber: String, country: Country): Either[String, String] = {
+    fromStringAndCountry(phoneNumber, country).map(asFormattedString)
   }
-
-  private def parseToOption(phone: String, countryCode: String): Option[PhoneNumber] = {
+  def fromStringAndCountry(phoneNumber: String, country: Country): Either[String, NormalisedTelephoneNumber] = {
     val phoneNumberUtil = PhoneNumberUtil.getInstance()
+    val countryCode = country.alpha2
 
-    Try(phoneNumberUtil.parse(phone, countryCode)) match {
-      case Success(number) => {
-        phoneNumberUtil.isValidNumber(number) match {
-          case true => Some(number)
-          case false => {
-            SafeLogger.warn(s"We tried to normalise number $phone, countryCode: $countryCode but it was not a valid number")
-            None
-          }
-        }
-      }
-      case Failure(err) => {
-        SafeLogger.warn(s"We tried to normalise number $phone, countryCode: $countryCode but something went wrong: ${err.getMessage}")
-        None
-      }
+    val parsed = Try(phoneNumberUtil.parse(phoneNumber, countryCode)).toEither
+    val withError = parsed.left.map { err =>
+      s"We tried to normalise number $phoneNumber, countryCode: $countryCode but something went wrong: ${err.toString}"
     }
+    val validated = withError.filterOrElse(
+      phoneNumberUtil.isValidNumber,
+      s"We tried to normalise number $phoneNumber, countryCode: $countryCode but it was not a valid number"
+    )
+    validated.map(parsed =>
+      NormalisedTelephoneNumber(parsed.getCountryCode.toString, parsed.getNationalNumber.toString)
+    )
   }
 
 }

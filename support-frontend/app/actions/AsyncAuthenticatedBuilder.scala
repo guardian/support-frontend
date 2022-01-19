@@ -1,5 +1,6 @@
 package actions
 
+import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import com.gu.identity.model.User
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
@@ -18,7 +19,7 @@ final class AsyncAuthenticatedBuilder(
   userinfo: RequestHeader => Future[Option[User]],
   override val parser: BodyParser[AnyContent]
 )(implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[AsyncAuthenticatedBuilder.WRAPPER, AnyContent] { // scalastyle:ignore
+  extends ActionBuilder[OptionalAuthRequest, AnyContent] { // scalastyle:ignore
 
   override def invokeBlock[BODYTYPE](
     request: Request[BODYTYPE],
@@ -31,5 +32,5 @@ final class AsyncAuthenticatedBuilder(
 
 }
 object AsyncAuthenticatedBuilder {
-  type WRAPPER[BODYTYPE] = AuthenticatedRequest[BODYTYPE, Option[User]]
+  type OptionalAuthRequest[BODYTYPE] = AuthenticatedRequest[BODYTYPE, Option[User]]
 }

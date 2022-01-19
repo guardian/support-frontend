@@ -37,7 +37,7 @@ class PaperSubscriptionFormController(
 
   def displayForm(): Action[AnyContent] = {
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    maybeAuthenticatedAction() { implicit request =>
+    MaybeAuthenticatedAction { implicit request =>
       Ok(paperSubscriptionFormHtml(request.user)).withSettingsSurrogateKey
     }
   }

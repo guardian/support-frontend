@@ -36,7 +36,7 @@ class DigitalSubscriptionFormController(
 
   def displayForm(orderIsAGift: Boolean): Action[AnyContent] = {
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    maybeAuthenticatedAction() { implicit request =>
+    MaybeAuthenticatedAction { implicit request =>
       Ok(digitalSubscriptionFormHtml(request.user, orderIsAGift)).withSettingsSurrogateKey
     }
   }

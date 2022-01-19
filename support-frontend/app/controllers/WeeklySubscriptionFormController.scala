@@ -35,7 +35,7 @@ class WeeklySubscriptionFormController(
 
   implicit val a: AssetsResolver = assets
 
-  def displayForm(orderIsAGift: Boolean): Action[AnyContent] = maybeAuthenticatedAction() { implicit request =>
+  def displayForm(orderIsAGift: Boolean): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(weeklySubscriptionFormHtml(request.user, orderIsAGift)).withSettingsSurrogateKey
   }

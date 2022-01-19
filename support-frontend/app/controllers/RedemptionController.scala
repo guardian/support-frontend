@@ -1,7 +1,7 @@
 package controllers
 
+import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.OptionalAuthRequest
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.AssetsResolver
 import cats.data.EitherT
@@ -51,7 +51,7 @@ class RedemptionController(
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
 
-  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = maybeAuthenticatedAction().async {
+  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = MaybeAuthenticatedAction.async {
     implicit request =>
       val isTestUser = testUsers.isTestUser(request)
       val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))

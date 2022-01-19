@@ -68,7 +68,7 @@ class PayPalOneOff(
     }
   }
 
-  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
 
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")

@@ -119,7 +119,7 @@ class Application(
   def contributionsLanding(
     countryCode: String,
     campaignCode: String
-  ): Action[AnyContent] = maybeAuthenticatedAction() { implicit request =>
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
     val geoData = request.geoData
