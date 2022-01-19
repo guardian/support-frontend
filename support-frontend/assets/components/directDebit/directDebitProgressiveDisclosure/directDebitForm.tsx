@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
-import 'redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import type { Action } from 'components/directDebit/directDebitActions';
 import {
 	payDirectDebitClicked,
@@ -18,34 +17,7 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 import Form from './components/form';
 import Playback from './components/playback';
-
-// ---- Types ----- //
-// type PropTypes = {
-// 	buttonText: string;
-// 	submissionErrorHeading: string;
-// 	submissionError: ErrorReason | null;
-// 	allErrors: Array<Record<string, any>>;
-// 	sortCodeString: string;
-// 	accountNumber: string;
-// 	accountHolderName: string;
-// 	accountHolderConfirmation: boolean;
-// 	updateSortCodeString: (event: React.SyntheticEvent<HTMLInputElement>) => void;
-// 	updateAccountNumber: (
-// 		accountNumber: React.SyntheticEvent<HTMLInputElement>,
-// 	) => void;
-// 	updateAccountHolderName: (
-// 		accountHolderName: React.SyntheticEvent<HTMLInputElement>,
-// 	) => void;
-// 	updateAccountHolderConfirmation: (
-// 		accountHolderConfirmation: React.SyntheticEvent<HTMLInputElement>,
-// 	) => void;
-// 	submitForm: (...args: any[]) => any;
-// 	payDirectDebitClicked: () => void;
-// 	editDirectDebitClicked: () => void;
-// 	countryGroupId: CountryGroupId;
-// 	phase: Phase;
-// 	formError: ErrorReason | null;
-// };
+import type { DirectDebitFieldName } from './types';
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: CheckoutState) {
@@ -60,10 +32,12 @@ function mapStateToProps(state: CheckoutState) {
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps(
+	dispatch: ThunkDispatch<CheckoutState, void, Action>,
+) {
 	return {
 		payDirectDebitClicked: () => {
-			dispatch(payDirectDebitClicked());
+			void dispatch(payDirectDebitClicked());
 			return false;
 		},
 		editDirectDebitClicked: () => {
@@ -99,12 +73,6 @@ export type PropTypes = ConnectedProps<typeof connector> & {
 	submitForm: () => void;
 };
 
-type DirectDebitFieldName =
-	| 'accountHolderName'
-	| 'sortCodeString'
-	| 'accountNumber'
-	| 'accountHolderConfirmation';
-
 const fieldErrorMessages: { [key in DirectDebitFieldName]: string } = {
 	accountHolderName: 'Please enter a valid account name',
 	sortCodeString: 'Please enter a valid sort code',
@@ -133,8 +101,9 @@ function DirectDebitForm(props: PropTypes) {
 		accountHolderConfirmation: '',
 	});
 	const [allErrors, setAllErrors] = useState<Array<Record<string, string>>>([]);
+	const [userHasSubmitted, setUserHasSubmitted] = useState<boolean>(false);
 
-	function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+	function onSubmit(event: React.MouseEvent<HTMLButtonElement>) {
 		event.preventDefault();
 		props.submitForm();
 	}
@@ -177,23 +146,28 @@ function DirectDebitForm(props: PropTypes) {
 					: fieldErrorMessages.accountHolderConfirmation,
 		};
 		setFieldErrors(updatedFieldErrors);
+		setUserHasSubmitted(true);
 	}
 
 	useEffect(() => {
 		setAllErrors(
-			Object.entries(fieldErrors)
-				.filter(([, errorMessage]) => errorMessage)
-				.map(([fieldName, errorMessage]) => ({
-					[fieldName]: errorMessage,
+			Object.values(fieldErrors)
+				.filter((errorMessage) => errorMessage)
+				.map((errorMessage) => ({
+					message: errorMessage,
 				})),
 		);
 	}, [fieldErrors]);
 
 	useEffect(() => {
-		if (allErrors.length === 0) {
-			props.payDirectDebitClicked();
+		if (userHasSubmitted) {
+			if (allErrors.length === 0) {
+				props.payDirectDebitClicked();
+			} else {
+				setUserHasSubmitted(false);
+			}
 		}
-	}, [allErrors]);
+	}, [allErrors, userHasSubmitted]);
 
 	return (
 		<span>

@@ -17,6 +17,7 @@ const directDebitForm = css`
 	margin-top: 20px;
 	margin-left: 0;
 `;
+
 const fieldLabel = css`
 	display: block;
 	${textSans.medium({
@@ -24,16 +25,20 @@ const fieldLabel = css`
 	})};
 	margin: 8px 0 6px;
 `;
+
 const fieldData = css`
 	${textSans.medium()};
 `;
+
 const fieldInfo = css`
 	${textSans.small()};
 `;
+
 const fieldInfoWithMargin = css`
 	${textSans.small()};
 	margin: ${space[2]}px 0 ${space[5]}px;
 `;
+
 const ctaContainer = css`
 	display: inline-flex;
 	justify-content: space-between;
@@ -41,14 +46,14 @@ const ctaContainer = css`
 `;
 
 function Playback(props: {
-	editDirectDebitClicked: (...args: any[]) => any;
-	onSubmit: (...args: any[]) => any;
+	editDirectDebitClicked: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	onSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	accountHolderName: string;
 	accountNumber: string;
 	sortCodeString: string;
 	buttonText: string;
-	allErrors: Array<Record<string, any>>;
-}) {
+	allErrors: Array<Record<string, string>>;
+}): JSX.Element {
 	return (
 		<div css={directDebitForm}>
 			<label htmlFor="account-holder-name-input" css={fieldLabel}>

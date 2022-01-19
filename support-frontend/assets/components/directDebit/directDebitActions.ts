@@ -1,7 +1,10 @@
+import type { Dispatch } from 'redux';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import * as storage from 'helpers/storage/storage';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { checkAccount } from './helpers/ajax';
+
 // ----- Types ----- //
 export type SortCodeIndex = 0 | 1 | 2;
 export type Phase = 'entry' | 'confirmation';
@@ -116,11 +119,23 @@ const setDirectDebitFormPhase = (phase: Phase): Action => ({
 	phase,
 });
 
-function payDirectDebitClicked(): (...args: any[]) => any {
-	return (
-		dispatch: (...args: any[]) => any,
-		getState: (...args: any[]) => any,
-	) => {
+const directDebitErrorMessages = {
+	invalidInput:
+		'Your bank details are invalid. Please check them and try again',
+	incorrectInput:
+		'Your bank details are not correct. Please check them and try again',
+	default: 'Oops, something went wrong, please try again later',
+};
+
+type DirectDebitConfirmationResponse = {
+	accountValid: boolean;
+};
+
+function payDirectDebitClicked(): (
+	dispatch: Dispatch<Action>,
+	getState: () => CheckoutState,
+) => Promise<Action> {
+	return async (dispatch, getState) => {
 		const {
 			sortCodeString,
 			sortCodeArray,
@@ -128,64 +143,52 @@ function payDirectDebitClicked(): (...args: any[]) => any {
 			accountHolderConfirmation,
 		} = getState().page.directDebit;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
-		const isTestUser: boolean = getState().page.user.isTestUser || false;
+		const isTestUser = getState().page.checkout.isTestUser;
 		const { csrf } = getState().page;
 		dispatch(resetDirectDebitFormError());
 
 		if (!accountHolderConfirmation) {
-			dispatch(
+			return dispatch(
 				setDirectDebitFormError(
 					'You need to confirm that you are the account holder.',
 				),
 			);
-			return;
 		}
 
-		checkAccount(sortCode, accountNumber, isTestUser, csrf)
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error('invalid_input');
-				}
+		try {
+			const response = await checkAccount(
+				sortCode,
+				accountNumber,
+				isTestUser,
+				csrf,
+			);
+			if (!response.ok) {
+				return dispatch(
+					setDirectDebitFormError(directDebitErrorMessages.invalidInput),
+				);
+			}
+			const checkAccountStatus =
+				(await response.json()) as DirectDebitConfirmationResponse;
 
-				return response.json();
-			})
-			.then((response) => {
-				if (!response.accountValid) {
-					throw new Error('incorrect_input');
-				}
+			if (!checkAccountStatus.accountValid) {
+				return dispatch(
+					setDirectDebitFormError(directDebitErrorMessages.incorrectInput),
+				);
+			}
 
-				dispatch(setDirectDebitFormPhase('confirmation'));
-			})
-			.catch((e) => {
-				let msg = '';
-
-				switch (e.message) {
-					case 'invalid_input':
-						msg =
-							'Your bank details are invalid. Please check them and try again';
-						break;
-
-					case 'incorrect_input':
-						msg =
-							'Your bank details are not correct. Please check them and try again';
-						break;
-
-					default:
-						msg = 'Oops, something went wrong, please try again later';
-				}
-
-				dispatch(setDirectDebitFormError(msg));
-			});
+			return dispatch(setDirectDebitFormPhase('confirmation'));
+		} catch (error) {
+			return dispatch(
+				setDirectDebitFormError(directDebitErrorMessages.default),
+			);
+		}
 	};
 }
 
 function confirmDirectDebitClicked(
-	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void,
-): (...args: any[]) => any {
-	return (
-		dispatch: (...args: any[]) => any,
-		getState: (...args: any[]) => any,
-	) => {
+	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void,
+): (dispatch: Dispatch<Action>, getState: () => CheckoutState) => Action {
+	return (dispatch, getState) => {
 		const { sortCodeString, sortCodeArray, accountNumber, accountHolderName } =
 			getState().page.directDebit;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
@@ -195,7 +198,7 @@ function confirmDirectDebitClicked(
 			sortCode,
 			accountNumber,
 		});
-		dispatch(closeDirectDebitPopUp());
+		return dispatch(closeDirectDebitPopUp());
 	};
 }
 

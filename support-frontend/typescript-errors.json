@@ -3,10 +3,10 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 48,
-            "TS2322": 157,
+            "TS2322": 155,
             "TS2578": 8,
             "TS2339": 27,
-            "TS2345": 102,
+            "TS2345": 101,
             "TS7006": 60,
             "TS6133": 9,
             "TS7031": 18,
@@ -89,8 +89,6 @@
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
-            "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 1,
-            "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 2,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
@@ -473,14 +471,6 @@
             "message": "Type 'string' is not assignable to type 'number | undefined'."
         },
         {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type 'string' is not assignable to type 'boolean | undefined'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Type '(fieldName: DirectDebitFieldName, dispatchUpdate: (event: ChangeEvent<HTMLInputElement>) => void, event: ChangeEvent<HTMLInputElement>) => void' is not assignable to type '(field: string, dispatchUpdate: (...args: any[]) => any, event: ChangeEvent<HTMLInputElement>) => void'."
-        },
-        {
             "path": "assets/components/forms/label.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
@@ -602,7 +592,7 @@
         },
         {
             "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/components/svgs/amazonPayLogoDs.tsx",
@@ -986,11 +976,11 @@
         },
         {
             "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/hero.tsx",
@@ -1002,7 +992,7 @@
         },
         {
             "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
@@ -1216,15 +1206,11 @@
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => Promise<Action>' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => Action' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/directDebit/helpers/ajax.ts",
