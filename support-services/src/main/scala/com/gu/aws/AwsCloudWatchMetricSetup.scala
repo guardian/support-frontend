@@ -25,15 +25,17 @@ object AwsCloudWatchMetricSetup {
       )
     )
 
-  def paymentSuccessRequest(stage: Stage, paymentProvider: PaymentProvider, productType: ProductType): MetricRequest =
+  def paymentSuccessRequest(stage: Stage, isTestUser: Boolean, paymentProvider: PaymentProvider, productType: ProductType): MetricRequest = {
+    val qualifiedStage = stage.toString + (if (isTestUser) "-UAT" else "")
     getMetricRequest(
       MetricName("PaymentSuccess"),
       Map(
         MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.name),
         MetricDimensionName("ProductType") -> MetricDimensionValue(productType.toString),
-        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
+        MetricDimensionName("Stage") -> MetricDimensionValue(qualifiedStage)
       )
     )
+  }
 
   def createSetupIntentRequest(stage: Stage, mode: String): MetricRequest =
     getMetricRequest(
