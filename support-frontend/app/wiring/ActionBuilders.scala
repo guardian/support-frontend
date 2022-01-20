@@ -9,8 +9,6 @@ trait ActionBuilders {
 
   implicit lazy val actionRefiners = new CustomActionBuilders(
     asyncAuthenticationService = asyncAuthenticationService,
-    idWebAppUrl = appConfig.identity.webappUrl,
-    supportUrl = appConfig.supportUrl,
     cc = controllerComponents,
     addToken = csrfAddToken,
     checkToken = csrfCheck,

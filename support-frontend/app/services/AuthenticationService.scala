@@ -1,7 +1,7 @@
 package services
 
-import cats.implicits._
-import com.gu.identity.auth.UserCredentials
+import com.gu.identity.auth.IdentityClient
+import com.gu.identity.auth.IdentityClient.Error
 import com.gu.identity.model.User
 import com.gu.identity.play.IdentityPlayAuthService
 import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
@@ -27,29 +27,35 @@ object AccessCredentials {
   }
   case class Token(tokenText: String) extends AccessCredentials
 }
-case class IdMinimalUser(id: String, displayName: Option[String])
-case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMinimalUser)
 
 class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthService)(implicit ec: ExecutionContext) {
 
-  import AsyncAuthenticationService._
-
-  def authenticateUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
+  def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
     identityPlayAuthService.getUserFromRequest(requestHeader)
-      .map { case (credentials, user) => buildAuthenticatedUser(credentials, user) }
+      .map { case (_, user) => user }
       .unsafeToFuture()
-
-  def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
-    authenticateUser(requestHeader)
-      .map(user => Option(user))
-      .handleError { err =>
-        logUserAuthenticationError(err)
-        None
+      .map(user => Some(user))
+      .recover {
+        case _: UserCredentialsMissingError =>
+          // user not signed in https://github.com/guardian/identity/pull/1578
+          None
+        case IdentityClient.Errors(List(Error("Access Denied"))) =>
+          // scalastyle:off
+          // invalid SC_GU_U cookie?
+          // https://github.com/guardian/identity/blob/424b5170f1b892778fe94f9b3d9a540fb5181e9d/identity-model/src/main/scala/com/gu/identity/model/Errors.scala#L60
+          // scalastyle:on
+          None
+        case err =>
+          // something else went wrong - we should alert on this
+          SafeLogger.error(scrub"unable to authorize user", err)
+          None
       }
 
 }
 
 object AsyncAuthenticationService {
+
+  case class IdentityIdAndEmail(id: String, primaryEmailAddress: String)
 
   def apply(config: Identity, testUserService: TestUserService)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
@@ -58,22 +64,4 @@ object AsyncAuthenticationService {
     new AsyncAuthenticationService(identityPlayAuthService)
   }
 
-  def buildAuthenticatedUser(credentials: UserCredentials, user: User): AuthenticatedIdUser = {
-    val accessCredentials = credentials match {
-      case UserCredentials.SCGUUCookie(value) => AccessCredentials.Cookies(scGuU = value)
-      case UserCredentials.CryptoAccessToken(value, _) => AccessCredentials.Token(tokenText = value)
-    }
-    AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
-  }
-
-  // Logs failure to authenticate a user.
-  // User shouldn't necessarily be signed in,
-  // in which case, don't log failure to authenticate as an error.
-  // All other failures are considered errors.
-  def logUserAuthenticationError(error: Throwable): Unit =
-    error match {
-      // Utilises the custom error introduced in: https://github.com/guardian/identity/pull/1578
-      case _: UserCredentialsMissingError => // user not signed in
-      case _ => SafeLogger.error(scrub"unable to authorize user", error)
-    }
 }

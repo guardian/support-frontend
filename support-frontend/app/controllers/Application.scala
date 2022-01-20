@@ -5,7 +5,6 @@ import admin.ServersideAbTest.generateParticipations
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
-import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
@@ -13,12 +12,11 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
-import config.Configuration.GuardianDomain
 import config.{RecaptchaConfigProvider, StringsConfig}
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.mvc._
-import services.{IdentityService, MembersDataService, PaymentAPIService, TestUserService}
+import services.{PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +35,6 @@ case class ContributionsPaymentMethodConfigs(
 class Application(
   actionRefiners: CustomActionBuilders,
   val assets: AssetsResolver,
-  identityService: IdentityService,
   testUsers: TestUserService,
   components: ControllerComponents,
   oneOffStripeConfigProvider: StripeConfigProvider,
@@ -46,10 +43,9 @@ class Application(
   amazonPayConfigProvider: AmazonPayConfigProvider,
   recaptchaConfigProvider: RecaptchaConfigProvider,
   paymentAPIService: PaymentAPIService,
-  membersDataService: MembersDataService,
+  membersDataApiUrl: String,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  guardianDomain: GuardianDomain,
   stage: Stage,
   val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
@@ -121,7 +117,7 @@ class Application(
   def contributionsLanding(
     countryCode: String,
     campaignCode: String
-  ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
     val geoData = request.geoData
@@ -132,10 +128,7 @@ class Application(
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    request.user.traverse[Attempt, IdUser](user => identityService.getUser(user.minimalUser)).fold(
-        _ => Ok(contributionsHtml(countryCode, geoData, None, campaignCodeOption, guestAccountCreationToken)),
-        user => Ok(contributionsHtml(countryCode, geoData, user, campaignCodeOption, guestAccountCreationToken))
-      ).map(_.withSettingsSurrogateKey)
+    Ok(contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken)).withSettingsSurrogateKey
   }
 
   def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
@@ -193,7 +186,7 @@ class Application(
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      mdapiUrl = membersDataService.apiUrl,
+      membersDataApiUrl = membersDataApiUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
       geoData = geoData,

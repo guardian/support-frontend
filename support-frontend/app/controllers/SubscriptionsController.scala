@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath, StyleContent}
+import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
@@ -10,26 +10,24 @@ import com.gu.support.catalog._
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider}
 import com.gu.support.promotions.DefaultPromotions
-import com.gu.support.workers.{Monthly, Quarterly}
+import com.gu.support.workers.Monthly
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
 import play.twirl.api.Html
-import services.IdentityService
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
 
 class SubscriptionsController(
-    val actionRefiners: CustomActionBuilders,
-    identityService: IdentityService,
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    val assets: AssetsResolver,
-    components: ControllerComponents,
-    stringsConfig: StringsConfig,
-    settingsProvider: AllSettingsProvider,
-    val supportUrl: String
+  val actionRefiners: CustomActionBuilders,
+  priceSummaryServiceProvider: PriceSummaryServiceProvider,
+  val assets: AssetsResolver,
+  components: ControllerComponents,
+  stringsConfig: StringsConfig,
+  settingsProvider: AllSettingsProvider,
+  val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._

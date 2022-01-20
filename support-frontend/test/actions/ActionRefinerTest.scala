@@ -1,5 +1,6 @@
 package actions
 
+import com.gu.identity.model.User
 import com.gu.support.config.{Stage, Stages}
 import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
@@ -19,8 +20,6 @@ import org.scalatest.matchers.must.Matchers
 
 class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponents with MockitoSugar {
 
-  val idApiUrl = "https://id-api-url.local"
-  val supportUrl = "https://support-url.local"
   val path = "/test-path"
   val fakeRequest = FakeRequest("GET", path)
   val stage = Stages.DEV
@@ -33,7 +32,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     "include Cache-control: no-cache, private" in new Mocks {
       val actionRefiner =
-        new CustomActionBuilders(asyncAuthenticationService,IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage)
+        new CustomActionBuilders(asyncAuthenticationService, stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage)
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
@@ -44,72 +43,70 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     "respond to request if provider authenticates user" in new Mocks {
 
-      when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(mock[AuthenticatedIdUser]))
+      private val passedInUser: User = mock[User]
+      when(asyncAuthenticationService.tryAuthenticateUser(any()))
+        .thenReturn(Future.successful(Some(passedInUser)))
 
       val actionRefiner = new CustomActionBuilders(
-        asyncAuthenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage
+        asyncAuthenticationService, stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage
       )
-      val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
+
+      val result = actionRefiner.MaybeAuthenticatedAction(_.user match {
+        case Some(user) if (user == passedInUser) => Ok("authentication-test")
+        case u => InternalServerError(s"didn't get (right) user $u")
+      }).apply(fakeRequest)
+
       status(result) mustEqual Status.OK
       contentAsString(result) mustEqual "authentication-test"
     }
 
-    "redirect to identity if provider does not authenticate" in new Mocks {
+    "don't pass in a user if they does not authenticate" in new Mocks {
       val path = "/test-path"
-      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.failed(new RuntimeException))
+      when(asyncAuthenticationService.tryAuthenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
-        idWebAppUrl = IdentityUrl(idApiUrl),
-        supportUrl = supportUrl,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage
       )
-      val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
 
-      status(result) mustEqual Status.SEE_OTHER
-      redirectLocation(result) mustBe defined
-      redirectLocation(result) foreach { location =>
-        location must startWith(idApiUrl)
-        location must include(s"returnUrl=$supportUrl$path")
-        location must include("skipConfirmation=true")
-        location must include("clientId=members")
-      }
+      val result = actionRefiner.MaybeAuthenticatedAction(_.user match {
+        case Some(user) => InternalServerError("got a user")
+        case None => Ok("no-user")
+      }).apply(fakeRequest)
+
+      status(result) mustEqual Status.OK
+      contentAsString(result) mustEqual "no-user"
     }
 
     "return a private cache header if user is authenticated" in new Mocks {
-      when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(mock[AuthenticatedIdUser]))
+      when(asyncAuthenticationService.tryAuthenticateUser(any()))
+        .thenReturn(Future.successful(Some(mock[User])))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
-        idWebAppUrl = IdentityUrl(""),
-        supportUrl = "",
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage
       )
-      val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
     "return a private cache header if user is not authenticated" in new Mocks {
-      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.failed(new RuntimeException))
+      when(asyncAuthenticationService.tryAuthenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
-        idWebAppUrl = IdentityUrl(idApiUrl),
-        supportUrl = supportUrl,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage
       )
-      val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
+      val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 

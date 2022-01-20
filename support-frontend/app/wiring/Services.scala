@@ -22,8 +22,6 @@ trait Services {
   implicit private val implicitWs = wsClient
   implicit private val s3Client: AwsS3Client = AwsS3Client
 
-  lazy val membersDataService = MembersDataService(appConfig.membersDataServiceApiUrl)
-
   lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
 
   lazy val identityService = IdentityService(appConfig.identity)

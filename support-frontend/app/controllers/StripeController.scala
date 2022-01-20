@@ -6,12 +6,12 @@ import com.gu.aws.AwsCloudWatchMetricPut.client
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.support.config.{Stage, StripeConfig}
 import com.typesafe.scalalogging.StrictLogging
+import config.RecaptchaConfigProvider
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import services.{IdentityService, RecaptchaService, StripeSetupIntentService}
-import config.RecaptchaConfigProvider
+import services.{RecaptchaService, StripeSetupIntentService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,7 +31,6 @@ class StripeController(
   actionRefiners: CustomActionBuilders,
   recaptchaService: RecaptchaService,
   stripeService: StripeSetupIntentService,
-  identityService: IdentityService,
   recaptchaConfigProvider: RecaptchaConfigProvider,
   testStripeConfig: StripeConfig,
   settingsProvider: AllSettingsProvider,

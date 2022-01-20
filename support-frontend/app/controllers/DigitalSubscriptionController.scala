@@ -39,7 +39,7 @@ class DigitalSubscriptionController(
   )
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
-    maybeAuthenticatedAction() {
+    MaybeAuthenticatedAction {
       implicit request =>
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
 

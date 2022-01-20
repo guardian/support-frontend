@@ -1,27 +1,26 @@
 package controllers
 
 import actions.CustomActionBuilders
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.syntax._
+import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import play.api.mvc._
+import config.Configuration.IdentityUrl
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
 import play.api.libs.circe.Circe
-import services.{IdentityService}
-import cats.implicits._
-import config.Configuration.{GuardianDomain, IdentityUrl}
+import play.api.mvc._
+import services.IdentityService
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
 class IdentityController(
-    identityService: IdentityService,
-    components: ControllerComponents,
-    actionRefiners: CustomActionBuilders,
-    guardianDomain: GuardianDomain,
-    identityUrl: IdentityUrl,
-    warn: () => Try[Unit]
+  identityService: IdentityService,
+  components: ControllerComponents,
+  actionRefiners: CustomActionBuilders,
+  identityUrl: IdentityUrl,
+  warn: () => Try[Unit]
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 

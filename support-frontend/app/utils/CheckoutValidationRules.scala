@@ -24,11 +24,14 @@ object CheckoutValidationRules {
   case object Valid extends Result
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
-    createSupportWorkersRequest.product match {
+    (createSupportWorkersRequest.product match {
       case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d.readerType)
       case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
       case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
       case _: Contribution => Valid // this wasn't getting called anyway - TODO put it back later - PaidProductValidation.passes(createSupportWorkersRequest)
+    }) match {
+      case Invalid(message) => Invalid(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
+      case Valid => Valid
     }
 
   implicit class WithMessage(isSuccess: Boolean) {
@@ -75,6 +78,10 @@ object PaidProductValidation {
     case stripeDetails: StripeSourcePaymentFields => stripeDetails.stripeToken.nonEmpty.otherwise("stripe token missing")
     case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
     case existingDetails: ExistingPaymentFields => existingDetails.billingAccountId.nonEmpty.otherwise("existing billing account id missing")
+    case AmazonPayPaymentFields(amazonPayBillingAgreementId) => amazonPayBillingAgreementId.nonEmpty.otherwise("amazonPayBillingAgreementId missing")
+    case SepaPaymentFields(accountHolderName, iban) =>
+      accountHolderName.nonEmpty.otherwise("sepa account holder name missing") and
+        iban.nonEmpty.otherwise("sepa iban empty")
   }
 
 }

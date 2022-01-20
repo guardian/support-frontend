@@ -1,43 +1,37 @@
 package controllers
 
-import java.util.Locale
-
+import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.{AuthRequest, OptionalAuthRequest}
 import admin.settings.{AllSettings, AllSettingsProvider}
-import assets.{AssetsResolver, RefPath, StyleContent}
-import cats.data.{EitherT, OptionT}
+import assets.AssetsResolver
+import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.redemption._
 import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoTableAsync, DynamoTableAsyncProvider}
 import com.gu.support.redemption.gifting.GiftCodeValidator
-import com.gu.support.redemption._
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.zuora.{ZuoraGiftLookupService, ZuoraGiftLookupServiceProvider}
-import controllers.UserDigitalSubscription.{redirectToExistingThankYouPage, userHasDigitalSubscription}
 import io.circe.syntax._
 import lib.RedirectWithEncodedQueryString
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import play.twirl.api.Html
-import services.{IdentityService, MembersDataService, TestUserService}
+import services.TestUserService
 import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionRedemptionForm
 
+import java.util.Locale
 import scala.concurrent.{ExecutionContext, Future}
 
 class RedemptionController(
   val actionRefiners: CustomActionBuilders,
   val assets: AssetsResolver,
   settingsProvider: AllSettingsProvider,
-  identityService: IdentityService,
-  membersDataService: MembersDataService,
   testUsers: TestUserService,
   components: ControllerComponents,
   dynamoTableProvider: DynamoTableAsyncProvider,
@@ -57,18 +51,12 @@ class RedemptionController(
   val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
 
 
-  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = maybeAuthenticatedAction().async {
+  def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = MaybeAuthenticatedAction.async {
     implicit request =>
-      val futureMaybeUser = (for {
-        minimalUser <- OptionT.fromOption[Future](request.user.map(_.minimalUser))
-        fullUser <- identityService.getUser(minimalUser).toOption
-      } yield fullUser).value
-
       val isTestUser = testUsers.isTestUser(request)
       val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
       val normalisedCode = redemptionCode.toLowerCase(Locale.UK)
       for {
-        maybeUser <- futureMaybeUser
         form <- codeValidator.validate(redemptionCode).value.map(
           validationResult =>
             Ok(subscriptionRedemptionForm(
@@ -82,7 +70,7 @@ class RedemptionController(
               redemptionCode = normalisedCode,
               maybeReaderType = validationResult.toOption,
               maybeRedemptionError = validationResult.left.toOption,
-              user = maybeUser,
+              user = request.user,
               submitted = false
             ))
         )
