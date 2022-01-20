@@ -33,7 +33,7 @@ object CreateSupportWorkersRequest {
 
   implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
 
-  implicit val codec: Decoder[CreateSupportWorkersRequest] = deriveDecoder[CreateSupportWorkersRequest]
+  implicit val decoder: Decoder[CreateSupportWorkersRequest] = deriveDecoder[CreateSupportWorkersRequest]
 
   case class GiftRecipientRequest(
     title: Option[Title],
