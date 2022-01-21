@@ -19,11 +19,9 @@ object DefaultPromotions {
       )
     }
     def all: List[PromoCode] = Monthly.all ++ Annual.all
-    val landing: PromoCode = "DIGI_SUB_LANDING_PAGE"
   }
 
   object Paper {
-    val landing: PromoCode = "PAPER_LANDING_PAGE"
     val june21Promotion = "JUNE21SALE"
   }
 
@@ -40,7 +38,6 @@ object DefaultPromotions {
     }
 
     def all = Gift.all ++ NonGift.all
-    val landing: PromoCode = "WEEKLY_LANDING_PAGE"
   }
 
 }

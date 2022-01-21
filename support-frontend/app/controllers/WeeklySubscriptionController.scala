@@ -39,7 +39,7 @@ class WeeklySubscriptionController(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, GuardianWeekly, countryCode, DefaultPromotions.GuardianWeekly.landing)
+    val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, GuardianWeekly, countryCode)
 
     Ok(views.html.main(
       title = if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian" else "The Guardian Weekly Subscriptions | The Guardian",
