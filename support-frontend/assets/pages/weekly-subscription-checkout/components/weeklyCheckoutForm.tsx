@@ -229,7 +229,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						image={
 							<GridImage
 								gridId="checkoutPackshotWeekly"
-								srcSizes={[548, 500]}
+								srcSizes={[500]}
 								sizes="(max-width: 740px) 50vw, 548"
 								imgType="png"
 								altText=""

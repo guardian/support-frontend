@@ -63,7 +63,7 @@ class DigitalSubscriptionController(
             shareUrl = canonicalLink,
             csrf = Some(CSRF.getToken.value)
           ) {
-            val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, DigitalPack, countryCode, DefaultPromotions.DigitalSubscription.landing)
+            val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, DigitalPack, countryCode)
             Html(
               s"""<script type="text/javascript">
           window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}

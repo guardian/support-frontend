@@ -65,7 +65,10 @@ class SubscriptionsController(
 
     val fulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
     val weekly =
-      service.getPrices(GuardianWeekly, Nil)(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(countryGroup.currency)
+      service.getPrices(
+        GuardianWeekly,
+        List(DefaultPromotions.GuardianWeekly.NonGift.jan21Promotion)
+      )(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(countryGroup.currency)
 
     val digitalSubscription = service
       .getPrices(
