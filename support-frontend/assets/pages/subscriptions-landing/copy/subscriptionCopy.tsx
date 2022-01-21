@@ -311,10 +311,10 @@ const getSubscriptionCopy = (
 			guardianWeekly(
 				countryGroupId,
 				pricingCopy[GuardianWeekly],
-				false,
+				true,
 				participations,
 			),
-			digital(countryGroupId, pricingCopy[DigitalPack], true),
+			digital(countryGroupId, pricingCopy[DigitalPack], false),
 			paper(countryGroupId, pricingCopy[Paper], false), // Removing the link to the old paper+digital page during the June 21 Sale
 			// paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
 			premiumApp(countryGroupId),
