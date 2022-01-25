@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 49,
+            "TS2305": 48,
             "TS2322": 160,
             "TS2578": 8,
             "TS2339": 31,
@@ -39,7 +39,6 @@
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
             "assets/components/asyncronously/asyncronously.ts": 2,
-            "assets/components/base/rows.tsx": 1,
             "assets/components/button/_sharedButton.tsx": 1,
             "assets/components/checkoutExpander/checkoutExpander.tsx": 1,
             "assets/components/containers/centredContainer.tsx": 1,
@@ -237,10 +236,6 @@
     "TS2305": [
         {
             "path": "assets/components/asyncronously/asyncronously.ts",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/base/rows.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {

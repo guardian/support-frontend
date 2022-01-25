@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
-import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
@@ -89,14 +88,12 @@ async function fillOutForm(
 				},
 			}),
 	);
-	console.log('Confirm is', confirm);
 	if (confirm) {
 		await act(async () => void fireEvent.click(confirmationField));
 	}
 }
 
 describe('Direct debit form', () => {
-	let form: RenderResult;
 	console.warn = jest.fn();
 	console.error = jest.fn();
 	let initialState;
@@ -154,10 +151,19 @@ describe('Direct debit form', () => {
 					}),
 			});
 
-		form = renderWithStore(<DirectDebitForm allErrors={[]} />, {
-			//  @ts-expect-error Unused common state properties
-			initialState,
-		});
+		renderWithStore(
+			<DirectDebitForm
+				allErrors={[]}
+				buttonText={'Confirm'}
+				submissionErrorHeading={'Errors'}
+				submissionError={null}
+				submitForm={jest.fn()}
+			/>,
+			{
+				//  @ts-expect-error Unused common state properties
+				initialState,
+			},
+		);
 	});
 
 	describe('Form submission - valid form data', () => {
@@ -169,6 +175,11 @@ describe('Direct debit form', () => {
 			});
 			const submitButton = await screen.findByText('Confirm');
 			await act(async () => void fireEvent.click(submitButton));
+			expect(
+				screen.queryByText(
+					'If the details above are correct, press confirm to set up your direct debit, otherwise press back to make changes',
+				),
+			).toBeInTheDocument();
 			expect(screen.queryByText('Zaphod Beeblebrox')).toBeInTheDocument();
 			expect(screen.queryByText('200000')).toBeInTheDocument();
 			expect(screen.queryByText('11223344')).toBeInTheDocument();
@@ -207,8 +218,13 @@ describe('Direct debit form', () => {
 			const submitButton = await screen.findByText('Confirm');
 			await act(async () => void fireEvent.click(submitButton));
 			expect(
-				screen.queryByText('Please confirm you are the account holder'),
-			).toBeInTheDocument();
+				await screen.findByLabelText(
+					'I confirm that I am the account holder and I am solely able to authorise debit from the account',
+				),
+			).toHaveAttribute(
+				'aria-invalid',
+				'Please confirm you are the account holder',
+			);
 		});
 	});
 });
