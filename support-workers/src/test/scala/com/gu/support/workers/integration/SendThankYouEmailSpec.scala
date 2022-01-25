@@ -76,7 +76,7 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
         .validate("sort code", "20-20-20")
         .validate("first payment date", "Monday, 10 January 2000")
         .validate("payment method", "Direct Debit")
-        .validate("currency", "£")
+        .validate("currency", "GBP")
         .validate("IdentityUserId", "1234")
       succeed
     }

@@ -149,7 +149,7 @@ function createRedemptionCheckoutReducer() {
 			case 'SET_TELEPHONE':
 				return {
 					...previousState,
-					confirmEmail: action.telephone,
+					telephone: action.telephone,
 				};
 
 			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
