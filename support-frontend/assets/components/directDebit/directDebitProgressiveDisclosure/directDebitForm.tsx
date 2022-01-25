@@ -18,8 +18,9 @@ import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 import Form from './components/form';
 import Playback from './components/playback';
 import 'helpers/forms/errorReasons';
+
 // ---- Types ----- //
-type PropTypes = {
+export type PropTypes = {
 	buttonText: string;
 	submissionErrorHeading: string;
 	submissionError: ErrorReason | null;
