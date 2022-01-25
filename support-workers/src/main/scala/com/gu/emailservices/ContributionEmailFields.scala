@@ -23,7 +23,7 @@ class ContributionEmailFields(
         "EmailAddress" -> contributionProcessedInfo.user.primaryEmailAddress,
         "created" -> created.toString,
         "amount" -> contributionProcessedInfo.product.amount.toString,
-        "currency" -> contributionProcessedInfo.product.currency.identifier,
+        "currency" -> contributionProcessedInfo.product.currency.iso,
         "edition" -> contributionProcessedInfo.user.billingAddress.country.alpha2,
         "name" -> contributionProcessedInfo.user.firstName,
         "product" -> s"${contributionProcessedInfo.product.billingPeriod.toString.toLowerCase}-contribution"
