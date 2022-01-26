@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
@@ -8,11 +8,12 @@ import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import SvgExclamationAlternate from '../svgs/exclamationAlternate';
 import 'helpers/types/option';
 import './generalErrorMessage.scss';
+
 // ---- Types ----- //
 type PropTypes = {
 	errorReason: Option<ErrorReason> | string;
 	errorHeading: string;
-	svg: Node;
+	svg: ReactNode;
 	classModifiers: Array<string | null | undefined>;
 }; // ----- Component ----- //
 
