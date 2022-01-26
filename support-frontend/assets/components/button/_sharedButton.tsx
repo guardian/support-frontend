@@ -1,10 +1,11 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React, { createElement } from 'react';
 import type { $Keys } from 'utility-types';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './button.scss';
+
 // ----- PropTypes ----- //
 export const Appearances = {
 	primary: 'primary',
@@ -31,7 +32,7 @@ we are using ID for anything other than QA testing.
 ************************************************************************ */
 type SharedButtonPropTypes = {
 	children: string;
-	icon?: Node;
+	icon?: ReactNode;
 	appearance: Appearance;
 	iconSide: IconSide;
 	getRef?: (arg0: Element | null | undefined) => void;
