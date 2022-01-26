@@ -4,6 +4,7 @@ import {
 	formError,
 	nonEmptyString,
 	nonSillyCharacters,
+	notLongerThan,
 	notNull,
 	validate,
 } from '../validation';
@@ -51,6 +52,16 @@ describe('validation', () => {
 			expect(notNull(undefined)).toBe(true);
 			expect(notNull({})).toBe(true);
 			expect(notNull([])).toBe(true);
+		});
+	});
+
+	describe('notLongerThan', () => {
+		it('should return false if the value is longer than the number', () => {
+			expect(notLongerThan('this is a very long string', 5)).toBe(false);
+		});
+
+		it('should return true if the value is shorter than the number', () => {
+			expect(notLongerThan('short string', 100)).toBe(true);
 		});
 	});
 
