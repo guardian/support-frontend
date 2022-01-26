@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import React, { Children } from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import type { Appearance } from 'components/content/content';
 import Content from 'components/content/content';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
@@ -10,12 +10,13 @@ import { copyrightNotice, privacyLink } from 'helpers/legal';
 import './footer.scss';
 import Rows from '../base/rows';
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
+
 // ----- Props ----- //
 type PropTypes = {
 	privacyPolicy: boolean;
 	disclaimer: boolean;
 	countryGroupId: CountryGroupId;
-	children: Node;
+	children: ReactNode;
 	appearance: Appearance;
 };
 
