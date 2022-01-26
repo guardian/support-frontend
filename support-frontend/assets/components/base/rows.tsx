@@ -1,17 +1,18 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './rows.scss';
+
 // ----- Types ----- //
 type PropTypes = {
 	gap: 'small' | 'normal' | 'large';
-	children: Node;
+	children: ReactNode;
 	className: string | null | undefined;
 };
 
 // ----- Component ----- //
-function Rows({ children, className, gap, ...props }: PropTypes) {
+function Rows({ children, className, gap, ...props }: PropTypes): JSX.Element {
 	return (
 		<div
 			className={[
