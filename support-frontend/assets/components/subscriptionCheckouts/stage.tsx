@@ -1,14 +1,15 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { connect } from 'react-redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Stage } from 'helpers/subscriptionsForms/formFields';
 import 'helpers/subscriptionsForms/formFields';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import 'helpers/productPrice/subscriptions';
-import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import ReturnSection from './thankYou/returnSection';
+
 // ----- Types ----- //
 type PropTypes = {
 	stage: Stage;
@@ -17,9 +18,9 @@ type PropTypes = {
 type StagePropTypes = {
 	stage: Stage;
 	formSubmitted: boolean;
-	checkoutForm: Node;
-	thankYouContentPending: Node;
-	thankYouContent: Node;
+	checkoutForm: ReactNode;
+	thankYouContentPending: ReactNode;
+	thankYouContent: ReactNode;
 	subscriptionProduct: SubscriptionProduct;
 };
 

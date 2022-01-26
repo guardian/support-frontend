@@ -21,6 +21,7 @@ export type CountryGroupId =
 	| typeof International
 	| typeof NZDCountries
 	| typeof Canada;
+
 export type CountryGroupName =
 	| 'United Kingdom'
 	| 'United States'

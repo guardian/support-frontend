@@ -1,32 +1,40 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { HeadingSize } from 'components/heading/heading';
 import Heading from 'components/heading/heading';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './text.scss';
+
 // ---- Types ----- //
 type PropTypes = {
 	title?: string | null;
 	className: string | null | undefined;
-	children?: Node | null | undefined;
+	children?: ReactNode | null | undefined;
 	headingSize: HeadingSize;
 };
 
 // ----- Render ----- //
-const Text = ({ title, children, headingSize, className }: PropTypes) => (
-	<div
-		className={[
-			className,
-			classNameWithModifiers('component-text', [
-				!children ? 'heading-only' : null,
-			]),
-		].join(' ')}
-	>
-		{title && <Title size={headingSize}>{title}</Title>}
-		{children}
-	</div>
-);
+function Text({
+	title,
+	children,
+	headingSize,
+	className,
+}: PropTypes): JSX.Element {
+	return (
+		<div
+			className={[
+				className,
+				classNameWithModifiers('component-text', [
+					!children ? 'heading-only' : null,
+				]),
+			].join(' ')}
+		>
+			{title && <Title size={headingSize}>{title}</Title>}
+			{children}
+		</div>
+	);
+}
 
 Text.defaultProps = {
 	headingSize: 2,
@@ -35,27 +43,40 @@ Text.defaultProps = {
 	className: null,
 };
 // ----- Children ----- //
-export const Title = ({
+export function Title({
 	children,
 	size,
 }: {
-	children: Node;
+	children: ReactNode;
 	size: HeadingSize;
-}) => (
-	<Heading size={size} className="component-text__heading">
-		{children}
-	</Heading>
-);
-export const Callout = ({ children }: { children: Node }) => (
-	<p className="component-text__callout">
-		<strong>{children}</strong>
-	</p>
-);
-export const LargeParagraph = ({ children }: { children: Node }) => (
-	<p className="component-text__large">{children}</p>
-);
-export const SansParagraph = ({ children }: { children: Node }) => (
-	<p className="component-text__sans">{children}</p>
-); // ----- Exports ----- //
+}): JSX.Element {
+	return (
+		<Heading size={size} className="component-text__heading">
+			{children}
+		</Heading>
+	);
+}
+export function Callout({ children }: { children: ReactNode }): JSX.Element {
+	return (
+		<p className="component-text__callout">
+			<strong>{children}</strong>
+		</p>
+	);
+}
+export function LargeParagraph({
+	children,
+}: {
+	children: ReactNode;
+}): JSX.Element {
+	return <p className="component-text__large">{children}</p>;
+}
+export function SansParagraph({
+	children,
+}: {
+	children: ReactNode;
+}): JSX.Element {
+	return <p className="component-text__sans">{children}</p>;
+}
 
+// ----- Exports ----- //
 export default Text;
