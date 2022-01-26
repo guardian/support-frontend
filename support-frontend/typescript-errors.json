@@ -2,8 +2,8 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 27,
-            "TS2322": 159,
+            "TS2305": 26,
+            "TS2322": 158,
             "TS2578": 8,
             "TS2339": 31,
             "TS2345": 101,
@@ -62,7 +62,6 @@
             "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
             "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
             "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
@@ -307,10 +306,6 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/appsSection.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -826,10 +821,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
             "message": "Type 'string | SerializedStyles' is not assignable to type 'SerializedStyles'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/appsSection.tsx",
-            "message": "Type '\"normal\"' is not assignable to type 'LineHeight | undefined'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",

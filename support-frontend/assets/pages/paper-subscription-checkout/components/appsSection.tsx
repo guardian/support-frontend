@@ -7,9 +7,10 @@ import { headline, textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from 'emotion-theming';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
 	androidAppUrl,
 	androidDailyUrl,
@@ -17,7 +18,7 @@ import {
 	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
 import 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+
 // ----- Types ----- //
 type PropTypes = {
 	countryGroupId: CountryGroupId;
@@ -45,7 +46,7 @@ const mainHeading = css`
 	${from.phablet} {
 		${headline.medium({
 			fontWeight: 'bold',
-			lineHeight: 'normal',
+			lineHeight: 'regular',
 		})};
 	}
 `;
@@ -109,131 +110,137 @@ const tinyMobileOnly = css`
 	}
 `;
 
-const AppStoreImage = (props: { store: string }) => (
-	<div css={imageContainer}>
-		<GridImage
-			classModifiers={['']}
-			gridId={props.store}
-			srcSizes={[140, 500]}
-			sizes="(max-width: 480px) 100px,
+function AppStoreImage(props: { store: string }): JSX.Element {
+	return (
+		<div css={imageContainer}>
+			<GridImage
+				classModifiers={['']}
+				gridId={props.store}
+				srcSizes={[140, 500]}
+				sizes="(max-width: 480px) 100px,
                 (max-width: 740px) 100%,
                 (max-width: 1067px) 100%,
                 800px"
-			imgType="png"
-		/>
-	</div>
-);
+				imgType="png"
+			/>
+		</div>
+	);
+}
 
 type AppStoreLinkPropTypes = {
 	ariaLabel: string;
 	storeLink: string;
-	children: Node;
+	children: ReactNode;
 	onClick: (...args: any[]) => any;
 };
 
-const AppStoreLink = ({
+function AppStoreLink({
 	ariaLabel,
 	storeLink,
 	children,
 	onClick,
-}: AppStoreLinkPropTypes) => (
-	<a href={storeLink} onClick={onClick} aria-label={ariaLabel}>
-		{children}
-	</a>
-);
+}: AppStoreLinkPropTypes): JSX.Element {
+	return (
+		<a href={storeLink} onClick={onClick} aria-label={ariaLabel}>
+			{children}
+		</a>
+	);
+}
 
 // ----- Component ----- //
-const AppsSection = ({ countryGroupId }: PropTypes) => (
-	<>
-		<h2 css={mainHeading}>Make the most of your digital subscription</h2>
-		<div css={maxWidth}>
-			<h3 css={subHeading}>
-				Download the Guardian
-				<br css={tinyMobileOnly} /> Editions App
-			</h3>
-			<p css={sansText}>
-				Each day&apos;s edition in one simple, elegant app. Contains the UK
-				Daily, Australian Weekend and other special editions.
-			</p>
-			<AppStoreLink
-				storeLink={getDailyEditionUrl(countryGroupId)}
-				onClick={sendTrackingEventsOnClick({
-					id: 'checkout_thankyou_daily_edition_apple',
-					product: 'DigitalPack',
-					componentType: 'ACQUISITIONS_BUTTON',
-				})}
-				ariaLabel="Click to download the Guardian Daily app on the Apple App Store"
-			>
-				<AppStoreImage store="appleStore" />
-			</AppStoreLink>
-			<AppStoreLink
-				storeLink={androidDailyUrl}
-				onClick={sendTrackingEventsOnClick({
-					id: 'checkout_thankyou_daily_edition_android',
-					product: 'DigitalPack',
-					componentType: 'ACQUISITIONS_BUTTON',
-				})}
-				ariaLabel="Click to download the Guardian Daily app on Google Play"
-			>
-				<AppStoreImage store="googlePlay" />
-			</AppStoreLink>
-			<h3 css={subHeading}>
-				Download the Guardian
-				<br css={tinyMobileOnly} /> Live app
-			</h3>
-			<p css={sansText}>
-				With premium access to the Guardian Live app, get breaking news, as it
-				happens.
-			</p>
-			<AppStoreLink
-				storeLink={getIosAppUrl(countryGroupId)}
-				onClick={sendTrackingEventsOnClick({
-					id: 'checkout_thankyou_live_app_apple',
-					product: 'DigitalPack',
-					componentType: 'ACQUISITIONS_BUTTON',
-				})}
-				ariaLabel="Click to download the Guardian Live app on the Apple App Store"
-			>
-				<AppStoreImage store="appleStore" />
-			</AppStoreLink>
-			<AppStoreLink
-				storeLink={androidAppUrl}
-				onClick={sendTrackingEventsOnClick({
-					id: 'checkout_thankyou_live_app_android',
-					product: 'DigitalPack',
-					componentType: 'ACQUISITIONS_BUTTON',
-				})}
-				ariaLabel="Click to download the Guardian Live app on Google Play"
-			>
-				<AppStoreImage store="googlePlay" />
-			</AppStoreLink>
-			<h3 css={subHeading}>Sign into theguardian.com</h3>
-			<p css={sansText}>
-				Never be interrupted or distracted by ads again by signing in. Just use
-				your subscriber email and password when you next visit.
-			</p>
-			<ThemeProvider theme={buttonReaderRevenue}>
-				<LinkButton
-					css={marginForButton}
-					priority="tertiary"
-					size="default"
-					icon={<SvgArrowRightStraight />}
-					iconSide="right"
-					nudgeIcon
-					aria-label="Click to sign in to the website"
-					href="https://www.theguardian.com/"
+function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
+	return (
+		<>
+			<h2 css={mainHeading}>Make the most of your digital subscription</h2>
+			<div css={maxWidth}>
+				<h3 css={subHeading}>
+					Download the Guardian
+					<br css={tinyMobileOnly} /> Editions App
+				</h3>
+				<p css={sansText}>
+					Each day&apos;s edition in one simple, elegant app. Contains the UK
+					Daily, Australian Weekend and other special editions.
+				</p>
+				<AppStoreLink
+					storeLink={getDailyEditionUrl(countryGroupId)}
 					onClick={sendTrackingEventsOnClick({
-						id: 'checkout_thankyou_sign_in',
+						id: 'checkout_thankyou_daily_edition_apple',
 						product: 'DigitalPack',
 						componentType: 'ACQUISITIONS_BUTTON',
 					})}
+					ariaLabel="Click to download the Guardian Daily app on the Apple App Store"
 				>
-					<span css={largerFormatText}>Sign into the website</span>
-					<span css={smallFormatText}>Sign in</span>
-				</LinkButton>
-			</ThemeProvider>
-		</div>
-	</>
-); // ----- Export ----- //
+					<AppStoreImage store="appleStore" />
+				</AppStoreLink>
+				<AppStoreLink
+					storeLink={androidDailyUrl}
+					onClick={sendTrackingEventsOnClick({
+						id: 'checkout_thankyou_daily_edition_android',
+						product: 'DigitalPack',
+						componentType: 'ACQUISITIONS_BUTTON',
+					})}
+					ariaLabel="Click to download the Guardian Daily app on Google Play"
+				>
+					<AppStoreImage store="googlePlay" />
+				</AppStoreLink>
+				<h3 css={subHeading}>
+					Download the Guardian
+					<br css={tinyMobileOnly} /> Live app
+				</h3>
+				<p css={sansText}>
+					With premium access to the Guardian Live app, get breaking news, as it
+					happens.
+				</p>
+				<AppStoreLink
+					storeLink={getIosAppUrl(countryGroupId)}
+					onClick={sendTrackingEventsOnClick({
+						id: 'checkout_thankyou_live_app_apple',
+						product: 'DigitalPack',
+						componentType: 'ACQUISITIONS_BUTTON',
+					})}
+					ariaLabel="Click to download the Guardian Live app on the Apple App Store"
+				>
+					<AppStoreImage store="appleStore" />
+				</AppStoreLink>
+				<AppStoreLink
+					storeLink={androidAppUrl}
+					onClick={sendTrackingEventsOnClick({
+						id: 'checkout_thankyou_live_app_android',
+						product: 'DigitalPack',
+						componentType: 'ACQUISITIONS_BUTTON',
+					})}
+					ariaLabel="Click to download the Guardian Live app on Google Play"
+				>
+					<AppStoreImage store="googlePlay" />
+				</AppStoreLink>
+				<h3 css={subHeading}>Sign into theguardian.com</h3>
+				<p css={sansText}>
+					Never be interrupted or distracted by ads again by signing in. Just
+					use your subscriber email and password when you next visit.
+				</p>
+				<ThemeProvider theme={buttonReaderRevenue}>
+					<LinkButton
+						css={marginForButton}
+						priority="tertiary"
+						size="default"
+						icon={<SvgArrowRightStraight />}
+						iconSide="right"
+						nudgeIcon
+						aria-label="Click to sign in to the website"
+						href="https://www.theguardian.com/"
+						onClick={sendTrackingEventsOnClick({
+							id: 'checkout_thankyou_sign_in',
+							product: 'DigitalPack',
+							componentType: 'ACQUISITIONS_BUTTON',
+						})}
+					>
+						<span css={largerFormatText}>Sign into the website</span>
+						<span css={smallFormatText}>Sign in</span>
+					</LinkButton>
+				</ThemeProvider>
+			</div>
+		</>
+	);
+} // ----- Export ----- //
 
 export default AppsSection;
