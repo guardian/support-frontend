@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
+import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
@@ -94,6 +95,7 @@ async function fillOutForm(
 }
 
 describe('Direct debit form', () => {
+	let form: RenderResult;
 	console.warn = jest.fn();
 	console.error = jest.fn();
 	let initialState;
@@ -151,7 +153,7 @@ describe('Direct debit form', () => {
 					}),
 			});
 
-		renderWithStore(
+		form = renderWithStore(
 			<DirectDebitForm
 				allErrors={[]}
 				buttonText={'Confirm'}
@@ -196,14 +198,14 @@ describe('Direct debit form', () => {
 			const submitButton = await screen.findByText('Confirm');
 			await act(async () => void fireEvent.click(submitButton));
 			expect(
-				screen.queryByText('Please enter a valid account name'),
-			).toBeInTheDocument();
+				screen.queryAllByText('Please enter a valid account name'),
+			).toHaveLength(2);
 			expect(
-				screen.queryByText('Please enter a valid sort code'),
-			).toBeInTheDocument();
+				screen.queryAllByText('Please enter a valid sort code'),
+			).toHaveLength(2);
 			expect(
-				screen.queryByText('Please enter a valid account number'),
-			).toBeInTheDocument();
+				screen.queryAllByText('Please enter a valid account number'),
+			).toHaveLength(2);
 		});
 
 		it('requires the user to confirm', async () => {
@@ -217,14 +219,15 @@ describe('Direct debit form', () => {
 			);
 			const submitButton = await screen.findByText('Confirm');
 			await act(async () => void fireEvent.click(submitButton));
+			// form.debug();
 			expect(
 				await screen.findByLabelText(
 					'I confirm that I am the account holder and I am solely able to authorise debit from the account',
 				),
-			).toHaveAttribute(
-				'aria-invalid',
-				'Please confirm you are the account holder',
-			);
+			).toHaveAttribute('aria-invalid', 'true');
+			expect(
+				screen.queryByText('Please confirm you are the account holder'),
+			).toBeInTheDocument();
 		});
 	});
 });

@@ -146,18 +146,15 @@ function DirectDebitForm(props: PropTypes) {
 					: fieldErrorMessages.accountHolderConfirmation,
 		};
 		setFieldErrors(updatedFieldErrors);
-		setUserHasSubmitted(true);
-	}
-
-	useEffect(() => {
 		setAllErrors(
-			Object.values(fieldErrors)
+			Object.values(updatedFieldErrors)
 				.filter((errorMessage) => errorMessage)
 				.map((errorMessage) => ({
 					message: errorMessage,
 				})),
 		);
-	}, [fieldErrors]);
+		setUserHasSubmitted(true);
+	}
 
 	useEffect(() => {
 		if (userHasSubmitted) {
