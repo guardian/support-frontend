@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import SvgExclamation from 'components/svgs/exclamation';
 // ---- Types ----- //
 type PropTypes = {
 	showError?: boolean;
 	message: string | null | undefined;
-	svg?: Node;
+	svg?: ReactNode;
 }; // ----- Component ----- //
 
 export default function ErrorMessage(props: PropTypes) {
