@@ -2,8 +2,8 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 35,
             "TS2322": 164,
+            "TS2305": 31,
             "TS2578": 8,
             "TS2339": 31,
             "TS2345": 103,
@@ -38,52 +38,28 @@
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
-            "assets/components/asyncronously/asyncronously.ts": 2,
+            "assets/components/asyncronously/asyncronously.ts": 1,
             "assets/components/content/content.tsx": 2,
             "assets/components/content/contentSimple.tsx": 2,
-            "assets/components/dialog/dialog.tsx": 8,
-            "assets/components/footerCompliant/Footer.tsx": 4,
-            "assets/components/forms/label.tsx": 2,
-            "assets/components/headers/header/header.tsx": 6,
-            "assets/components/headers/header/mobileMenuToggler.tsx": 1,
-            "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
-            "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
-            "assets/components/interactiveTable/interactiveTable.tsx": 1,
-            "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
-            "assets/components/menu/menu.tsx": 2,
-            "assets/components/page/pageTitle.tsx": 5,
-            "assets/components/pageSection/pageSection.tsx": 1,
-            "assets/components/product/productInfoChip.tsx": 1,
-            "assets/components/product/productOption.tsx": 1,
-            "assets/components/product/productOptionSmall.tsx": 1,
-            "assets/components/productPage/productPageHero/productPageHero.tsx": 1,
-            "assets/components/quote/quote.tsx": 1,
-            "assets/components/subscriptionCheckouts/layout.tsx": 1,
-            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
-            "assets/components/subscriptionCheckouts/stage.tsx": 1,
-            "assets/components/text/text.tsx": 1,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
-            "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
-            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
-            "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
-            "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
-            "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx": 1,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
+            "assets/components/dialog/dialog.tsx": 8,
             "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
             "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
+            "assets/components/forms/label.tsx": 2,
             "assets/components/headers/links/links.tsx": 1,
+            "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
+            "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
+            "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
+            "assets/components/menu/menu.tsx": 1,
             "assets/components/page/page.tsx": 1,
+            "assets/components/page/pageTitle.tsx": 4,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
+            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/components/subscriptionCheckouts/summary.tsx": 6,
             "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
@@ -117,11 +93,13 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
+            "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
             "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
             "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
+            "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 2,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 13,
@@ -132,12 +110,33 @@
             "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
             "assets/pages/showcase/components/hero.tsx": 3,
             "assets/pages/showcase/components/otherProduct.tsx": 1,
+            "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 8,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 2,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
+            "assets/components/footerCompliant/Footer.tsx": 4,
+            "assets/components/headers/header/header.tsx": 6,
+            "assets/components/headers/header/mobileMenuToggler.tsx": 1,
+            "assets/components/interactiveTable/interactiveTable.tsx": 1,
+            "assets/components/list/orderedList.tsx": 1,
+            "assets/components/pageSection/pageSection.tsx": 1,
+            "assets/components/product/productInfoChip.tsx": 1,
+            "assets/components/product/productOption.tsx": 1,
+            "assets/components/product/productOptionSmall.tsx": 1,
+            "assets/components/productPage/productPageHero/productPageHero.tsx": 1,
+            "assets/components/subscriptionCheckouts/layout.tsx": 1,
+            "assets/components/subscriptionCheckouts/stage.tsx": 1,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
+            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
+            "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 3,
+            "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
@@ -221,148 +220,6 @@
             "message": "'imageMock.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module."
         }
     ],
-    "TS2305": [
-        {
-            "path": "assets/components/asyncronously/asyncronously.ts",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/content/content.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/content/contentSimple.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/forms/label.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTable.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/menu/menu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/pageSection/pageSection.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/product/productInfoChip.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/product/productOption.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/product/productOptionSmall.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/productPage/productPageHero/productPageHero.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/quote/quote.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/layout.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stage.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/text/text.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/events/eventCard.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/appsSection.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        }
-    ],
     "TS2322": [
         {
             "path": "assets/components/asyncronously/asyncronously.ts",
@@ -378,7 +235,7 @@
         },
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
-            "message": "Type '{ children: (Element | Element[])[]; style: { top: number; left: number; position: string; }; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
+            "message": "Type '{ children: (Element | Element[])[]; style: { top: number; left: number; position: string; }; }' is not assignable to type 'IntrinsicAttributes & { children: ReactNode; }'."
         },
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
@@ -454,7 +311,7 @@
         },
         {
             "path": "assets/components/menu/menu.tsx",
-            "message": "Type '{ children: any[]; className: any; \"data-is-selected\": boolean; }' is not assignable to type 'IntrinsicAttributes'."
+            "message": "Type '{ children: (ReactNode | Element[])[]; className: any; \"data-is-selected\": boolean; }' is not assignable to type 'IntrinsicAttributes'."
         },
         {
             "path": "assets/components/page/page.tsx",
@@ -1019,6 +876,132 @@
         {
             "path": "assets/pages/weekly-subscription-landing/components/content/prices.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        }
+    ],
+    "TS2305": [
+        {
+            "path": "assets/components/content/content.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/content/contentSimple.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/dialog/dialog.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/footerCompliant/Footer.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/forms/label.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/header/header.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/interactiveTable/interactiveTable.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/list/orderedList.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/pageSection/pageSection.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/product/productInfoChip.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/product/productOption.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/product/productOptionSmall.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/productPage/productPageHero/productPageHero.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/layout.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/stage.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/events/eventCard.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/appsSection.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
         }
     ],
     "TS2578": [
