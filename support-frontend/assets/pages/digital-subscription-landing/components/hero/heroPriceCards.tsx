@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import ProductOptionSmall from 'components/product/productOptionSmall';
 
@@ -58,10 +58,10 @@ const fitAroundAbove = css`
 	}
 `;
 type PropTypes = {
-	roundel: Node;
+	roundel: ReactNode;
 	priceList: any[];
 };
-export function HeroPriceCards(props: PropTypes) {
+export function HeroPriceCards(props: PropTypes): JSX.Element {
 	return (
 		<div css={priceCardContainer}>
 			<div css={priceCardTopBorder}>
