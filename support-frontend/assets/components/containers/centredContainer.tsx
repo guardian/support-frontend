@@ -1,11 +1,11 @@
 import { css } from '@emotion/core';
 import { from } from '@guardian/src-foundations/mq';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 type PropTypes = {
 	cssOverrides?: string;
-	children: Node;
+	children: ReactNode;
 };
 const centredContainer = css`
 	position: relative;
