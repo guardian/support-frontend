@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { Content } from './Content';
 
@@ -9,10 +9,10 @@ type PropTypes = {
 		border?: boolean;
 		paddingTop?: boolean;
 	};
-	children: Node;
+	children: ReactNode;
 };
 
-function FooterContent({ appearance, children }: PropTypes) {
+function FooterContent({ appearance, children }: PropTypes): JSX.Element {
 	return (
 		<div className="component-left-margin-section">
 			<div className="component-left-margin-section__content">

@@ -1,19 +1,22 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import './list.scss';
+
 // ---- Types ----- //
 type PropTypes = {
-	items: Node[];
+	items: ReactNode[];
 };
 
 // ----- Render ----- //
-const OrderedList = ({ items }: PropTypes) => (
-	<ol className="component-list-ol">
-		{items.map((item) => (
-			<li className="component-list-ol__li">{item}</li>
-		))}
-	</ol>
-);
+function OrderedList({ items }: PropTypes): JSX.Element {
+	return (
+		<ol className="component-list-ol">
+			{items.map((item) => (
+				<li className="component-list-ol__li">{item}</li>
+			))}
+		</ol>
+	);
+}
 
 export default OrderedList;

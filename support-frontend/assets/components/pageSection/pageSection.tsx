@@ -1,18 +1,19 @@
 // ----- Imports ----- //
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './pageSection.scss';
+
 // ----- Props ----- //
 type PropTypes = {
 	modifierClass?: string;
 	heading?: string;
-	headingChildren?: Node;
-	children?: Node;
+	headingChildren?: ReactNode;
+	children?: ReactNode;
 };
 
 // ----- Component ----- //
-function PageSection(props: PropTypes) {
+function PageSection(props: PropTypes): JSX.Element {
 	return (
 		<section
 			className={classNameWithModifiers('component-page-section', [

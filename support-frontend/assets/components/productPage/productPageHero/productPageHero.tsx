@@ -1,53 +1,55 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
-// ----- Component Imports ----- //
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import type { Option } from 'helpers/types/option';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import 'helpers/types/option';
 import './productPageHero.scss';
+
 // ---- Types ----- //
 type WrapperPropTypes = {
-	children: Node;
+	children: ReactNode;
 	modifierClasses: Array<string | null | undefined>;
 	className: string | null | undefined;
 	appearance: 'grey' | 'feature' | 'custom' | 'campaign';
 };
 type PropTypes = WrapperPropTypes & {
 	overheading: string;
-	heading: string | Node;
-	content?: Option<Node>;
+	heading: string | ReactNode;
+	content?: Option<ReactNode>;
 	hasCampaign: boolean;
 	showProductPageHeroHeader?: boolean;
 	orderIsAGift?: boolean;
-	giftImage?: Node;
+	giftImage?: ReactNode;
 };
 type ProductPageHeroHeaderTypes = {
 	overheading: string;
 	hasCampaign: boolean;
-	heading: string | Node;
+	heading: string | ReactNode;
 	orderIsAGift?: boolean;
-	giftImage?: Node;
+	giftImage?: ReactNode;
 };
 
 // ----- Render ----- //
-const HeroWrapper = ({
+function HeroWrapper({
 	modifierClasses,
 	children,
 	appearance,
 	className,
-}: WrapperPropTypes) => (
-	<div
-		className={`${className || ''} ${classNameWithModifiers(
-			'component-product-page-hero',
-			[...modifierClasses, appearance],
-		)}`}
-	>
-		<LeftMarginSection>{children}</LeftMarginSection>
-	</div>
-);
+}: WrapperPropTypes): JSX.Element {
+	return (
+		<div
+			className={`${className ?? ''} ${classNameWithModifiers(
+				'component-product-page-hero',
+				[...modifierClasses, appearance],
+			)}`}
+		>
+			<LeftMarginSection>{children}</LeftMarginSection>
+		</div>
+	);
+}
 
 HeroWrapper.defaultProps = {
 	modifierClasses: [],
@@ -55,80 +57,86 @@ HeroWrapper.defaultProps = {
 	className: null,
 };
 
-const HeroHeading = ({
+function HeroHeading({
 	children,
 	hasCampaign,
 	orderIsAGift,
 	giftImage,
 }: {
-	children: Node;
+	children: ReactNode;
 	hasCampaign: boolean;
 	orderIsAGift?: boolean;
-	giftImage?: Node;
-}) => (
-	<div
-		className={classNameWithModifiers('component-product-page-hero-heading', [
-			hasCampaign ? 'campaign' : null,
-		])}
-	>
-		<LeftMarginSection>
-			{orderIsAGift && giftImage}
-			{children}
-		</LeftMarginSection>
-	</div>
-);
+	giftImage?: ReactNode;
+}): JSX.Element {
+	return (
+		<div
+			className={classNameWithModifiers('component-product-page-hero-heading', [
+				hasCampaign ? 'campaign' : null,
+			])}
+		>
+			<LeftMarginSection>
+				{orderIsAGift && giftImage}
+				{children}
+			</LeftMarginSection>
+		</div>
+	);
+}
 
 HeroHeading.defaultProps = {
 	orderIsAGift: false,
 	giftImage: null,
 };
 
-const ProductPageHero = ({
+function ProductPageHero({
 	modifierClasses,
 	children,
 	appearance,
 	showProductPageHeroHeader,
 	...props
-}: PropTypes) => (
-	<header>
-		<HeroWrapper
-			{...{
-				modifierClasses,
-				appearance,
-			}}
-		>
-			{children}
-		</HeroWrapper>
-		{showProductPageHeroHeader && <ProductPageHeroHeader {...props} />}
-	</header>
-);
+}: PropTypes): JSX.Element {
+	return (
+		<header>
+			<HeroWrapper
+				{...{
+					modifierClasses,
+					appearance,
+				}}
+			>
+				{children}
+			</HeroWrapper>
+			{showProductPageHeroHeader && <ProductPageHeroHeader {...props} />}
+		</header>
+	);
+}
 
-const ProductPageHeroHeader = ({
+function ProductPageHeroHeader({
 	overheading,
 	heading,
 	hasCampaign,
 	orderIsAGift,
 	giftImage,
-}: ProductPageHeroHeaderTypes) => (
-	<div>
-		<HeroHeading
-			{...{
-				hasCampaign,
-				orderIsAGift,
-				giftImage,
-			}}
-		>
-			<HeadingBlock
-				overheading={
-					orderIsAGift ? 'The Guardian Weekly gift subscription' : overheading
-				}
-				orderIsAGift={orderIsAGift}
+}: ProductPageHeroHeaderTypes): JSX.Element {
+	return (
+		<div>
+			<HeroHeading
+				{...{
+					hasCampaign,
+					orderIsAGift,
+					giftImage,
+				}}
 			>
-				{heading}
-			</HeadingBlock>
-		</HeroHeading>
-	</div>
-);
+				<HeadingBlock
+					overheading={
+						orderIsAGift ? 'The Guardian Weekly gift subscription' : overheading
+					}
+					orderIsAGift={orderIsAGift}
+				>
+					{heading}
+				</HeadingBlock>
+			</HeroHeading>
+		</div>
+	);
+}
 
 ProductPageHero.defaultProps = {
 	children: null,
