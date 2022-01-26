@@ -1,19 +1,20 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import './headingBlock.scss';
+
 // ----- Types ----- //
 type PropTypes = {
-	overheading: Option<string> | Node;
-	children?: Node;
+	overheading: Option<string> | ReactNode;
+	children?: ReactNode;
 	orderIsAGift?: boolean;
 	overheadingClass?: string;
 };
 
 // ----- Component ----- //
-function HeadingBlock(props: PropTypes) {
+function HeadingBlock(props: PropTypes): JSX.Element {
 	const giftOrder = props.orderIsAGift ? '__gift' : '';
 	const overheadingClass = props.overheadingClass ? props.overheadingClass : '';
 	return (

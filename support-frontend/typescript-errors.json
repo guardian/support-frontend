@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 38,
+            "TS2305": 35,
             "TS2322": 164,
             "TS2578": 8,
             "TS2339": 31,
@@ -45,14 +45,11 @@
             "assets/components/footerCompliant/Footer.tsx": 4,
             "assets/components/forms/label.tsx": 2,
             "assets/components/headers/header/header.tsx": 6,
+            "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
-            "assets/components/heading/heading.tsx": 1,
-            "assets/components/headingBlock/headingBlock.tsx": 1,
             "assets/components/interactiveTable/interactiveTable.tsx": 1,
             "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
-            "assets/components/leftMarginSection/leftMarginSection.tsx": 1,
-            "assets/components/list/orderedList.tsx": 1,
             "assets/components/menu/menu.tsx": 2,
             "assets/components/page/pageTitle.tsx": 5,
             "assets/components/pageSection/pageSection.tsx": 1,
@@ -254,6 +251,10 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
+            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
             "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -262,27 +263,11 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/heading/heading.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/headingBlock/headingBlock.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/interactiveTable/interactiveTable.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
             "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/leftMarginSection/leftMarginSection.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/list/orderedList.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
