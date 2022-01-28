@@ -4,14 +4,14 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
+
 // ---- Types ----- //
 type PropTypes = {
-	id?: Option<string>;
-	children: Node;
+	id?: string | undefined;
+	children: ReactNode;
 	divider?: boolean;
 };
 const container = css`
@@ -48,26 +48,30 @@ const dividerContainer = css`
 `;
 
 // ----- Render ----- //
-const Content = ({ children, id, divider }: PropTypes) => (
-	<div id={id}>
-		<LeftMarginSection>
-			<div css={container}>
-				{divider && <Divider />}
-				<div css={contentContainer}>{children}</div>
-			</div>
-		</LeftMarginSection>
-	</div>
-);
+function Content({ children, id, divider }: PropTypes): JSX.Element {
+	return (
+		<div id={id}>
+			<LeftMarginSection>
+				<div css={container}>
+					{divider && <Divider />}
+					<div css={contentContainer}>{children}</div>
+				</div>
+			</LeftMarginSection>
+		</div>
+	);
+}
 
 Content.defaultProps = {
 	id: null,
 	divider: false,
 };
 
-const Divider = () => (
-	<div css={dividerContainer}>
-		<hr css={dividerLine} />
-	</div>
-);
+function Divider() {
+	return (
+		<div css={dividerContainer}>
+			<hr css={dividerLine} />
+		</div>
+	);
+}
 
 export default Content;

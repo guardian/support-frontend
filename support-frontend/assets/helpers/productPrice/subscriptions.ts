@@ -10,13 +10,14 @@ import type {
 	OphanComponentEvent,
 	OphanComponentType,
 } from '../tracking/ophan';
+
 // ----- Types ------ //
-const DigitalPack: 'DigitalPack' = 'DigitalPack';
-const PremiumTier: 'PremiumTier' = 'PremiumTier';
-const DailyEdition: 'DailyEdition' = 'DailyEdition';
-const GuardianWeekly: 'GuardianWeekly' = 'GuardianWeekly';
-const Paper: 'Paper' = 'Paper';
-const PaperAndDigital: 'PaperAndDigital' = 'PaperAndDigital';
+const DigitalPack = 'DigitalPack' as const;
+const PremiumTier = 'PremiumTier' as const;
+const DailyEdition = 'DailyEdition' as const;
+const GuardianWeekly = 'GuardianWeekly' as const;
+const Paper = 'Paper' as const;
+const PaperAndDigital = 'PaperAndDigital' as const;
 export type SubscriptionProduct =
 	| typeof DigitalPack
 	| typeof PremiumTier
@@ -29,12 +30,13 @@ export type ComponentAbTest = {
 	name: string;
 	variant: string;
 };
-type TrackingProperties = {
+export type TrackingProperties = {
 	id: string;
 	product?: SubscriptionProduct;
 	abTest?: ComponentAbTest;
 	componentType: OphanComponentType;
 };
+
 // ----- Config ----- //
 const dailyNewsstandPrice = 2.2;
 const weekendNewsstandPrice = 3.2;
@@ -63,7 +65,7 @@ const defaultBillingPeriods: Record<SubscriptionProduct, BillingPeriod> = {
 };
 
 // ----- Functions ----- //
-const isPhysicalProduct = (product: SubscriptionProduct) => {
+const isPhysicalProduct = (product: SubscriptionProduct): boolean => {
 	switch (product) {
 		case Paper:
 		case PaperAndDigital:
@@ -160,7 +162,7 @@ const getMonthlyNewsStandPrice = (newsstand: number) => (newsstand * 52) / 12;
 const getNewsstandSaving = (
 	subscriptionMonthlyCost: number,
 	newsstandWeeklyCost: number,
-) =>
+): string =>
 	fixDecimals(
 		getMonthlyNewsStandPrice(newsstandWeeklyCost) - subscriptionMonthlyCost,
 	);
@@ -168,7 +170,7 @@ const getNewsstandSaving = (
 const getNewsstandSavingPercentage = (
 	subscriptionMonthlyCost: number,
 	newsstandWeeklyCost: number,
-) =>
+): number =>
 	Math.floor(
 		100 -
 			(subscriptionMonthlyCost /
@@ -176,7 +178,7 @@ const getNewsstandSavingPercentage = (
 				100,
 	);
 
-const getNewsstandPrice = (productOption: PaperProductOptions) =>
+const getNewsstandPrice = (productOption: PaperProductOptions): number =>
 	newsstandPrices[productOption];
 
 // ----- Exports ----- //
