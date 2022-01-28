@@ -2,11 +2,11 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { body } from '@guardian/src-foundations/typography';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 
 type PropTypes = {
-	children: Node;
-	icon?: Node;
+	children: ReactNode;
+	icon?: ReactNode;
 };
 const infoChip = css`
 	display: flex;
@@ -38,7 +38,7 @@ const infoChipIcon = css`
 	}
 `;
 
-function ProductInfoChip({ children, icon }: PropTypes) {
+function ProductInfoChip({ children, icon }: PropTypes): JSX.Element {
 	return (
 		<div css={infoChip}>
 			{icon && <span css={infoChipIcon}>{icon}</span>}

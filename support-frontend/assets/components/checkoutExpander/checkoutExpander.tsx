@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 
 const expander = css`
 	summary::-webkit-details-marker {
@@ -24,20 +24,24 @@ const copyStyleLabel = css`
 const copyStyle = css`
 	${textSans.medium()};
 `;
+
 // ----- Types ----- //
 type ExpanderPropTypes = {
 	copy: string;
-	children: Node;
+	children: ReactNode;
 };
 
 // ----- Component ----- //
-const CheckoutExpander = ({ copy, children }: ExpanderPropTypes) => (
-	<details css={expander}>
-		<summary css={summary}>
-			<strong css={copyStyleLabel}>{copy}</strong>
-		</summary>
-		<div css={copyStyle}>{children}</div>
-	</details>
-); // ----- Exports ----- //
+function CheckoutExpander({ copy, children }: ExpanderPropTypes): JSX.Element {
+	return (
+		<details css={expander}>
+			<summary css={summary}>
+				<strong css={copyStyleLabel}>{copy}</strong>
+			</summary>
+			<div css={copyStyle}>{children}</div>
+		</details>
+	);
+}
 
+// ----- Exports ----- //
 export default CheckoutExpander;
