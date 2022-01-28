@@ -2,8 +2,8 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 25,
-            "TS2322": 158,
+            "TS2305": 24,
+            "TS2322": 157,
             "TS2578": 8,
             "TS2339": 31,
             "TS2345": 101,
@@ -39,7 +39,6 @@
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
             "assets/components/asyncronously/asyncronously.ts": 2,
-            "assets/components/content/content.tsx": 2,
             "assets/components/dialog/dialog.tsx": 8,
             "assets/components/footerCompliant/Footer.tsx": 4,
             "assets/components/forms/customFields/options.tsx": 1,
@@ -216,10 +215,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/content/content.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/dialog/dialog.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -316,10 +311,6 @@
         {
             "path": "assets/components/asyncronously/asyncronously.ts",
             "message": "Type 'ComponentType<any>' is not assignable to type 'null'."
-        },
-        {
-            "path": "assets/components/content/content.tsx",
-            "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
