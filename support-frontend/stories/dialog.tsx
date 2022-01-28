@@ -95,7 +95,7 @@ stories.add('Unstyled dialog', () => <div style={{
             });
           }
         }} />
-            <Dialog aria-label="Modal dialog" onStatusChange={open => {
+            {/* <Dialog aria-label="Modal dialog" onStatusChange={open => {
           setState({
             open
           });
@@ -115,7 +115,7 @@ stories.add('Unstyled dialog', () => <div style={{
                   Close
                 </ButtonItem>
               </Menu>
-            </Dialog>
+            </Dialog> */}
           </div>}
       </WithState>
     </Text>

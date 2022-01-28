@@ -1,81 +1,50 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React, { useRef } from 'react';
-import type { Option } from 'helpers/types/option';
+import React from 'react';
 import 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './dialog.scss';
 
 // ----- Props ----- //
 export type PropTypes = {
-	onStatusChange: (arg0: boolean) => void;
+	closeDialog: () => void;
 	styled?: boolean;
 	open?: boolean;
 	blocking?: boolean;
 	children: ReactNode;
-}; // ----- Component ----- //
+};
 
+// ----- Component ----- //
 function Dialog({
-	onStatusChange,
+	closeDialog,
 	styled = true,
 	open = false,
 	blocking = true,
 	children,
-	...otherProps
 }: PropTypes): JSX.Element {
-	const ref = useRef<HTMLDialogElement>(null);
-
-	// const openDialog = () => {};
-
-	// const closeDialog = () => {};
-
 	return (
-		<dialog
+		<div
 			className={classNameWithModifiers('component-dialog', [
 				open ? 'open' : null,
 				styled ? 'styled' : null,
 			])}
-			aria-modal
-			aria-hidden={!open}
-			/**
-			 * GH: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog
-			 * Warning: The tabindex attribute must not be used on the <dialog> element.
-			 * TODO: Remove?
-			 */
-			// tabIndex="-1"
 			role="dialog"
-			onOpen={() => {
-				onStatusChange(true);
-			}}
-			onCancel={() => {
-				onStatusChange(false);
-			}}
-			ref={ref}
+			aria-modal={true}
+			aria-hidden={!open}
+			tabIndex={-1}
 			onKeyUp={(ev) => {
 				if (ev.key === 'Escape') {
-					onStatusChange(false);
+					closeDialog();
 				}
 			}}
-			{...otherProps}
 		>
-			<div className="component-dialog__contents">
-				{children}
-				<div
-					tabIndex="0"
-					onFocus={() => {
-						/* this acts as a cheap focus trap */
-						if (ref.current) {
-							ref.current.focus();
-						}
-					}}
-				/>
-			</div>
+			<div className="component-dialog__contents">{children}</div>
 			<div
 				className="component-dialog__backdrop"
 				aria-hidden
-				onClick={() => !blocking && onStatusChange(false)}
+				onClick={() => !blocking && closeDialog()}
 			/>
-		</dialog>
+		</div>
 	);
 }
 
