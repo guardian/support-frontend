@@ -241,6 +241,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 			</div>
 		</>
 	);
-} // ----- Export ----- //
+}
 
+// ----- Export ----- //
 export default AppsSection;
