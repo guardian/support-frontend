@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 24,
+            "TS2305": 23,
             "TS2322": 157,
             "TS2578": 8,
             "TS2339": 31,
@@ -42,7 +42,6 @@
             "assets/components/dialog/dialog.tsx": 8,
             "assets/components/footerCompliant/Footer.tsx": 4,
             "assets/components/forms/customFields/options.tsx": 1,
-            "assets/components/forms/label.tsx": 2,
             "assets/components/headers/header/header.tsx": 6,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
@@ -92,7 +91,7 @@
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
-            "assets/hocs/withLabel.tsx": 1,
+            "assets/hocs/withLabel.tsx": 2,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionState.tsx": 2,
@@ -224,10 +223,6 @@
         },
         {
             "path": "assets/components/forms/customFields/options.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/forms/label.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -363,10 +358,6 @@
         {
             "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
             "message": "Type 'EventHandler' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'."
-        },
-        {
-            "path": "assets/components/forms/label.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/headers/links/links.tsx",
@@ -555,6 +546,10 @@
         {
             "path": "assets/hocs/withError.tsx",
             "message": "Type 'Omit<AugmentedProps<Props>, \"error\">' is not assignable to type 'IntrinsicAttributes & Props & { children?: ReactNode; }'."
+        },
+        {
+            "path": "assets/hocs/withLabel.tsx",
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/hocs/withLabel.tsx",
