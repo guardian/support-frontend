@@ -41,6 +41,7 @@ function CheckoutExpander({ copy, children }: ExpanderPropTypes): JSX.Element {
 			<div css={copyStyle}>{children}</div>
 		</details>
 	);
-} // ----- Exports ----- //
+}
 
+// ----- Exports ----- //
 export default CheckoutExpander;
