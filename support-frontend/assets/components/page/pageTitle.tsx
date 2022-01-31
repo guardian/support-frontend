@@ -4,7 +4,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { titlepiece } from '@guardian/src-foundations/typography';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import {
 	digitalSubscriptionsBlue,
 	guardianWeeklyBlue,
@@ -17,7 +17,7 @@ type PropTypes = {
 	title: string;
 	theme: ThemeType;
 	cssOverrides?: string;
-	children: Node;
+	children: ReactNode;
 };
 const themeColors: Record<ThemeType, string> = {
 	weekly: guardianWeeklyBlue,
@@ -100,7 +100,12 @@ export const pageTitle = css`
 	}
 `;
 
-function PageTitle({ title, theme, cssOverrides, children }: PropTypes) {
+function PageTitle({
+	title,
+	theme,
+	cssOverrides,
+	children,
+}: PropTypes): JSX.Element {
 	return (
 		<div css={[header, headerThemes[theme], cssOverrides]}>
 			<CentredContainer>
