@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 23,
-            "TS2322": 157,
+            "TS2322": 156,
             "TS2578": 8,
             "TS2339": 31,
             "TS2345": 101,
@@ -67,7 +67,6 @@
             "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
-            "assets/components/page/page.tsx": 1,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
@@ -382,10 +381,6 @@
         {
             "path": "assets/components/menu/menu.tsx",
             "message": "Type '{ children: any[]; className: any; \"data-is-selected\": boolean; }' is not assignable to type 'IntrinsicAttributes'."
-        },
-        {
-            "path": "assets/components/page/page.tsx",
-            "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/page/pageTitle.tsx",
