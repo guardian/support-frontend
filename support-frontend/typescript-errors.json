@@ -2,12 +2,12 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 24,
-            "TS2322": 150,
+            "TS2305": 25,
+            "TS2322": 131,
             "TS2578": 8,
             "TS2339": 31,
-            "TS2345": 101,
-            "TS7006": 65,
+            "TS2345": 99,
+            "TS7006": 61,
             "TS7053": 12,
             "TS7034": 5,
             "TS7005": 10,
@@ -87,8 +87,6 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
-            "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
-            "assets/pages/contributions-landing/components/ContributionState.tsx": 2,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 9,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
@@ -164,7 +162,6 @@
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
-            "assets/components/signout/signout.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
@@ -526,54 +523,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLInputElement>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '{ isSignedIn: true; }' is not assignable to type 'IntrinsicAttributes & Omit<Pick<PropTypes, \"isSignedIn\"> & Partial<Pick<PropTypes, \"returnUrl\">> & Partial<...>, \"isSignedIn\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLInputElement>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLInputElement>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'boolean' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'boolean' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Type 'false | ((arg0: Event) => void)' is not assignable to type 'ChangeEventHandler<HTMLSelectElement> | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
@@ -1342,14 +1291,6 @@
             "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ firstName: string | null; lastName: string | null; email: string | null; checkoutFormHasBeenSubmitted: boolean; billingState: string | null; isSignedIn: boolean; contributionType: keyof RegularContributionTypeMap<...> | \"ONE_OFF\"; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Argument of type 'typeof ContributionState' is not assignable to parameter of type 'ComponentType<never>'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: PaymentMethod; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
         },
@@ -1492,10 +1433,6 @@
             "message": "Parameter 'product' implicitly has an 'any' type."
         },
         {
-            "path": "assets/components/signout/signout.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
             "message": "Parameter 'e' implicitly has an 'any' type."
         },
@@ -1566,22 +1503,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Parameter 'response' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
