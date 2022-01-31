@@ -1,36 +1,39 @@
 // ----- Imports ----- //
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
+
 // ---- Types ----- //
-type PropTypes = {
-	returnUrl?: string;
+
+interface SignoutProps {
 	isSignedIn: boolean;
-};
+	returnUrl?: string;
+}
 
 // ----- Component ----- //
-const Signout = (props: PropTypes) => {
-	if (!props.isSignedIn) {
+
+function Signout({ isSignedIn, returnUrl }: SignoutProps) {
+	if (!isSignedIn) {
 		return null;
 	}
 
 	return (
-		<a className="component-signout" href={getSignoutUrl(props.returnUrl)}>
+		<a className="component-signout" href={getSignoutUrl(returnUrl)}>
 			Not you? Sign out
 		</a>
 	);
-};
+}
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state) {
+
+function mapStateToProps(state: State) {
 	return {
 		isSignedIn: state.page.user.isSignedIn,
 	};
 }
 
-// ----- Default Props ----- //
-Signout.defaultProps = {
-	returnUrl: '',
-}; // ----- Exports ----- //
+// ----- Exports ----- //
 
 export default connect(mapStateToProps)(Signout);
