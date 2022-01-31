@@ -55,19 +55,19 @@ import {
 import type { State } from '../contributionsLandingReducer';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
 
-// ----- Types ----- //
+// ----- Component ----- //
 
-type PropTypes = {
+interface PaymentMethodSelectorProps {
 	countryId: IsoCountry;
 	countryGroupId: CountryGroupId;
 	contributionType: ContributionType;
 	currency: IsoCurrency;
-	existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined;
+	existingPaymentMethods?: ExistingPaymentMethod[];
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	updatePaymentMethod: (paymentMethod: PaymentMethod) => void;
 	updateSelectedExistingPaymentMethod: (
-		existingPaymentMethod: RecentlySignedInExistingPaymentMethod | undefined,
+		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => Action;
 	isTestUser: boolean;
 	switches: Switches;
@@ -79,7 +79,7 @@ type PropTypes = {
 		isTestUser: boolean,
 	) => void;
 	checkoutFormHasBeenSubmitted: boolean;
-};
+}
 
 const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
@@ -104,114 +104,7 @@ const mapDispatchToProps = {
 	loadAmazonPaySdk,
 };
 
-// ----- Render ----- //
-const getPaymentMethodLogo = (paymentMethod: PaymentMethod) => {
-	switch (paymentMethod) {
-		case PayPal:
-			return <SvgPayPalDs />;
-
-		case DirectDebit:
-		case ExistingDirectDebit:
-			return <SvgDirectDebitSymbolDs />;
-
-		case AmazonPay:
-			return <SvgAmazonPayLogoDs />;
-
-		case Sepa:
-			return <SvgSepa />;
-
-		case Stripe:
-		case ExistingCard:
-		default:
-			return <SvgNewCreditCardDs />;
-	}
-};
-
-const legend = (
-	<div className="secure-transaction">
-		<legend id="payment_method">
-			<ContributionChoicesHeader>Payment Method</ContributionChoicesHeader>
-		</legend>
-		<SecureTransactionIndicator modifierClasses={['middle']} />
-	</div>
-);
-
-const renderLabelAndLogo = (paymentMethod: PaymentMethod) => (
-	<>
-		<div>{getPaymentLabel(paymentMethod)}</div>
-		{getPaymentMethodLogo(paymentMethod)}
-	</>
-);
-
-const renderExistingLabelAndLogo = (
-	existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-) => (
-	<>
-		<div>{getExistingPaymentMethodLabel(existingPaymentMethod)}</div>
-		{getPaymentMethodLogo(
-			mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod),
-		)}
-	</>
-);
-
-const getFullExistingPaymentMethods = (
-	existingPaymentMethods?: ExistingPaymentMethod[],
-): RecentlySignedInExistingPaymentMethod[] =>
-	(existingPaymentMethods ?? []).filter(isUsableExistingPaymentMethod);
-
-const noPaymentMethodsErrorMessage = (
-	<GeneralErrorMessage
-		classModifiers={['no-valid-payments']}
-		errorHeading="Payment methods are unavailable"
-		errorReason="all_payment_methods_unavailable"
-	/>
-);
-
-const radioCss = css`
-	& + div {
-		display: flex;
-		width: 100%;
-		margin: 0;
-		justify-content: space-between;
-	}
-
-	& + div svg {
-		width: 36px;
-		height: 24px;
-	}
-
-	&:not(:checked) + div svg {
-		filter: grayscale(100%);
-	}
-}`;
-
-const onPaymentMethodUpdate = (
-	paymentMethod: PaymentMethod,
-	props: PropTypes,
-) => {
-	switch (paymentMethod) {
-		case PayPal:
-			if (!props.payPalHasBegunLoading) {
-				props.loadPayPalExpressSdk(props.contributionType);
-			}
-
-			break;
-
-		case AmazonPay:
-			if (!props.amazonPayHasBegunLoading) {
-				props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
-			}
-
-			break;
-
-		default:
-	}
-
-	props.updatePaymentMethod(paymentMethod);
-	props.updateSelectedExistingPaymentMethod(undefined);
-};
-
-function PaymentMethodSelector(props: PropTypes) {
+function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 	const paymentMethods: PaymentMethod[] = getValidPaymentMethods(
 		props.contributionType,
 		props.switches,
@@ -230,7 +123,8 @@ function PaymentMethodSelector(props: PropTypes) {
 				'contribution-pay',
 			])}
 		>
-			{legend}
+			<Legend />
+
 			{paymentMethods.length ? (
 				<RadioGroup
 					name="payment-method-selector"
@@ -276,7 +170,11 @@ function PaymentMethodSelector(props: PropTypes) {
 												props.existingPaymentMethod === existingPaymentMethod
 											}
 											arial-labelledby="payment_method"
-											label={renderExistingLabelAndLogo(existingPaymentMethod)}
+											label={
+												<ExistingPaymentMethodLabel
+													existingPaymentMethod={existingPaymentMethod}
+												/>
+											}
 											cssOverrides={radioCss}
 										/>
 
@@ -310,7 +208,7 @@ function PaymentMethodSelector(props: PropTypes) {
 									onPaymentMethodUpdate(paymentMethod, props);
 								}}
 								checked={props.paymentMethod === paymentMethod}
-								label={renderLabelAndLogo(paymentMethod)}
+								label={<PaymentMethodLabel paymentMethod={paymentMethod} />}
 								cssOverrides={radioCss}
 							/>
 						))}
@@ -332,11 +230,142 @@ function PaymentMethodSelector(props: PropTypes) {
 					</>
 				</RadioGroup>
 			) : (
-				noPaymentMethodsErrorMessage
+				<GeneralErrorMessage
+					classModifiers={['no-valid-payments']}
+					errorHeading="Payment methods are unavailable"
+					errorReason="all_payment_methods_unavailable"
+				/>
 			)}
 		</div>
 	);
 }
+
+// ---- Styles ---- //
+
+const radioCss = css`
+	& + div {
+		display: flex;
+		width: 100%;
+		margin: 0;
+		justify-content: space-between;
+	}
+
+	& + div svg {
+		width: 36px;
+		height: 24px;
+	}
+
+	&:not(:checked) + div svg {
+		filter: grayscale(100%);
+	}
+}`;
+
+// ----- Helper components ----- //
+
+interface PaymentMethodLogoProps {
+	paymentMethod: PaymentMethod;
+}
+
+function PaymentMethodLogo({ paymentMethod }: PaymentMethodLogoProps) {
+	switch (paymentMethod) {
+		case PayPal:
+			return <SvgPayPalDs />;
+
+		case DirectDebit:
+		case ExistingDirectDebit:
+			return <SvgDirectDebitSymbolDs />;
+
+		case AmazonPay:
+			return <SvgAmazonPayLogoDs />;
+
+		case Sepa:
+			return <SvgSepa />;
+
+		case Stripe:
+		case ExistingCard:
+		default:
+			return <SvgNewCreditCardDs />;
+	}
+}
+
+function Legend() {
+	return (
+		<div className="secure-transaction">
+			<legend id="payment_method">
+				<ContributionChoicesHeader>Payment Method</ContributionChoicesHeader>
+			</legend>
+			<SecureTransactionIndicator modifierClasses={['middle']} />
+		</div>
+	);
+}
+
+interface PaymentMethodLabelProps {
+	paymentMethod: PaymentMethod;
+}
+
+function PaymentMethodLabel({ paymentMethod }: PaymentMethodLabelProps) {
+	return (
+		<>
+			<div>{getPaymentLabel(paymentMethod)}</div>
+			<PaymentMethodLogo paymentMethod={paymentMethod} />
+		</>
+	);
+}
+
+interface ExistingPaymentMethodLabelProps {
+	existingPaymentMethod: RecentlySignedInExistingPaymentMethod;
+}
+
+function ExistingPaymentMethodLabel({
+	existingPaymentMethod,
+}: ExistingPaymentMethodLabelProps) {
+	return (
+		<>
+			<div>{getExistingPaymentMethodLabel(existingPaymentMethod)}</div>
+
+			<PaymentMethodLogo
+				paymentMethod={mapExistingPaymentMethodToPaymentMethod(
+					existingPaymentMethod,
+				)}
+			/>
+		</>
+	);
+}
+
+// ----- Helper functions ----- //
+
+const getFullExistingPaymentMethods = (
+	existingPaymentMethods?: ExistingPaymentMethod[],
+): RecentlySignedInExistingPaymentMethod[] =>
+	(existingPaymentMethods ?? []).filter(isUsableExistingPaymentMethod);
+
+const onPaymentMethodUpdate = (
+	paymentMethod: PaymentMethod,
+	props: PaymentMethodSelectorProps,
+) => {
+	switch (paymentMethod) {
+		case PayPal:
+			if (!props.payPalHasBegunLoading) {
+				props.loadPayPalExpressSdk(props.contributionType);
+			}
+
+			break;
+
+		case AmazonPay:
+			if (!props.amazonPayHasBegunLoading) {
+				props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
+			}
+
+			break;
+
+		default:
+	}
+
+	props.updatePaymentMethod(paymentMethod);
+	props.updateSelectedExistingPaymentMethod(undefined);
+};
+
+// ----- Exports ----- //
 
 export default connect(
 	mapStateToProps,
