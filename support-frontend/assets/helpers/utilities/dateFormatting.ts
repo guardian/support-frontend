@@ -1,10 +1,10 @@
-export function getLongMonth(date: Date) {
+export function getLongMonth(date: Date): string {
 	return date.toLocaleDateString('default', {
 		month: 'long',
 	});
 }
 
-function nth(d) {
+function nth(d: number) {
 	if (d >= 11 && d <= 13) {
 		return 'th';
 	}
@@ -24,7 +24,7 @@ function nth(d) {
 	}
 }
 
-export function getDateWithOrdinal(date: Date) {
+export function getDateWithOrdinal(date: Date): string {
 	const dayOfMonth = date.getDate();
 	return `${dayOfMonth}${nth(dayOfMonth)}`;
 }

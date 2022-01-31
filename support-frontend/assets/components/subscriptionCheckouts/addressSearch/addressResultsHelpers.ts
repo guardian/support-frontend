@@ -16,7 +16,7 @@ const parseHighlights = (highlightString: string): number[][] =>
 				// so 0-3 actually means chars 0, 1 & 2
 				.map((highlight) => [highlight[0], highlight[1] - 1]);
 
-const lastItem = (arr: any[]) => arr[arr.length - 1];
+const lastItem = (arr: number[][]) => arr[arr.length - 1];
 
 const parseNormal = (text: string, highlightString: string): number[][] => {
 	const lastChar = text.length - 1;

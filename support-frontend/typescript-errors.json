@@ -51,7 +51,6 @@
             "assets/components/interactiveTable/interactiveTable.tsx": 1,
             "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
             "assets/components/menu/menu.tsx": 2,
-            "assets/components/page/pageTitle.tsx": 5,
             "assets/components/product/productOption.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
@@ -70,6 +69,7 @@
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
+            "assets/components/page/pageTitle.tsx": 4,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
@@ -77,7 +77,6 @@
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/components/subscriptionCheckouts/summary.tsx": 6,
             "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
-            "assets/components/svgs/gift.tsx": 1,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
@@ -164,7 +163,6 @@
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
-            "assets/helpers/utilities/dateFormatting.ts": 1,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
@@ -250,10 +248,6 @@
         },
         {
             "path": "assets/components/menu/menu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -485,10 +479,6 @@
         {
             "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
             "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/svgs/gift.tsx",
-            "message": "Type '{ children: Element; width: string; height: string; className: string; version: string; viewbox: string; \"aria-hidden\": \"true\"; focusable: \"false\"; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
@@ -1509,10 +1499,6 @@
         {
             "path": "assets/helpers/rendering/ssrPages.ts",
             "message": "Parameter 'content' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/utilities/dateFormatting.ts",
-            "message": "Parameter 'd' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
