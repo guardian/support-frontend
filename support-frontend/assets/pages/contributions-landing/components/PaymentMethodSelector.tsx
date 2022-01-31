@@ -171,11 +171,23 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 											}
 											arial-labelledby="payment_method"
 											label={
-												<ExistingPaymentMethodLabel
-													existingPaymentMethod={existingPaymentMethod}
+												<PaymentMethodLabel
+													label={getExistingPaymentMethodLabel(
+														existingPaymentMethod,
+													)}
+													logo={
+														<PaymentMethodLogo
+															paymentMethod={mapExistingPaymentMethodToPaymentMethod(
+																existingPaymentMethod,
+															)}
+														/>
+													}
+													isChecked={
+														props.existingPaymentMethod ===
+														existingPaymentMethod
+													}
 												/>
 											}
-											cssOverrides={radioCss}
 										/>
 
 										<div
@@ -198,6 +210,7 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 									</>
 								),
 							)}
+
 						{paymentMethods.map((paymentMethod) => (
 							<Radio
 								id={`paymentMethodSelector-${paymentMethod}`}
@@ -208,10 +221,16 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 									onPaymentMethodUpdate(paymentMethod, props);
 								}}
 								checked={props.paymentMethod === paymentMethod}
-								label={<PaymentMethodLabel paymentMethod={paymentMethod} />}
-								cssOverrides={radioCss}
+								label={
+									<PaymentMethodLabel
+										label={getPaymentLabel(paymentMethod)}
+										logo={<PaymentMethodLogo paymentMethod={paymentMethod} />}
+										isChecked={props.paymentMethod === paymentMethod}
+									/>
+								}
 							/>
 						))}
+
 						{contributionTypeIsRecurring(props.contributionType) &&
 							props.existingPaymentMethods &&
 							props.existingPaymentMethods.length > 0 &&
@@ -240,27 +259,37 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 	);
 }
 
-// ---- Styles ---- //
-
-const radioCss = css`
-	& + div {
-		display: flex;
-		width: 100%;
-		margin: 0;
-		justify-content: space-between;
-	}
-
-	& + div svg {
-		width: 36px;
-		height: 24px;
-	}
-
-	&:not(:checked) + div svg {
-		filter: grayscale(100%);
-	}
-}`;
-
 // ----- Helper components ----- //
+
+function Legend() {
+	return (
+		<div className="secure-transaction">
+			<legend id="payment_method">
+				<ContributionChoicesHeader>Payment Method</ContributionChoicesHeader>
+			</legend>
+			<SecureTransactionIndicator modifierClasses={['middle']} />
+		</div>
+	);
+}
+
+interface PaymentMethodLabelProps {
+	label: string;
+	logo: JSX.Element;
+	isChecked: boolean;
+}
+
+function PaymentMethodLabel({
+	label,
+	logo,
+	isChecked,
+}: PaymentMethodLabelProps) {
+	return (
+		<div css={styles.labelContainer} data-checked={isChecked.toString()}>
+			<div>{label}</div>
+			{logo}
+		</div>
+	);
+}
 
 interface PaymentMethodLogoProps {
 	paymentMethod: PaymentMethod;
@@ -288,49 +317,29 @@ function PaymentMethodLogo({ paymentMethod }: PaymentMethodLogoProps) {
 	}
 }
 
-function Legend() {
-	return (
-		<div className="secure-transaction">
-			<legend id="payment_method">
-				<ContributionChoicesHeader>Payment Method</ContributionChoicesHeader>
-			</legend>
-			<SecureTransactionIndicator modifierClasses={['middle']} />
-		</div>
-	);
-}
+// ---- Styles ---- //
 
-interface PaymentMethodLabelProps {
-	paymentMethod: PaymentMethod;
-}
+const styles = {
+	labelContainer: css`
+		display: flex;
+		width: 100%;
+		margin: 0;
+		justify-content: space-between;
+		align-items: center;
 
-function PaymentMethodLabel({ paymentMethod }: PaymentMethodLabelProps) {
-	return (
-		<>
-			<div>{getPaymentLabel(paymentMethod)}</div>
-			<PaymentMethodLogo paymentMethod={paymentMethod} />
-		</>
-	);
-}
+		svg {
+			width: 36px;
+			height: 24px;
+			display: block;
+		}
 
-interface ExistingPaymentMethodLabelProps {
-	existingPaymentMethod: RecentlySignedInExistingPaymentMethod;
-}
-
-function ExistingPaymentMethodLabel({
-	existingPaymentMethod,
-}: ExistingPaymentMethodLabelProps) {
-	return (
-		<>
-			<div>{getExistingPaymentMethodLabel(existingPaymentMethod)}</div>
-
-			<PaymentMethodLogo
-				paymentMethod={mapExistingPaymentMethodToPaymentMethod(
-					existingPaymentMethod,
-				)}
-			/>
-		</>
-	);
-}
+		&[data-checked='false'] {
+			svg {
+				filter: grayscale(100%);
+			}
+		}
+	`,
+};
 
 // ----- Helper functions ----- //
 
