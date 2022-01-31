@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 25,
-            "TS2322": 158,
+            "TS2322": 151,
             "TS2578": 8,
             "TS2339": 31,
             "TS2345": 101,
@@ -77,14 +77,7 @@
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/components/subscriptionCheckouts/summary.tsx": 6,
             "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
-            "assets/components/svgs/amazonPayLogoDs.tsx": 1,
-            "assets/components/svgs/directDebitSymbolDs.tsx": 1,
-            "assets/components/svgs/downChevronDs.tsx": 1,
             "assets/components/svgs/gift.tsx": 1,
-            "assets/components/svgs/newCreditCardDs.tsx": 1,
-            "assets/components/svgs/paypalDs.tsx": 1,
-            "assets/components/svgs/questionMarkHintIcon.tsx": 1,
-            "assets/components/svgs/sepa.tsx": 1,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
@@ -498,36 +491,8 @@
             "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
         },
         {
-            "path": "assets/components/svgs/amazonPayLogoDs.tsx",
-            "message": "Type '{ children: Element[]; width: string; height: string; viewBox: string; fill: string; xmlns: string; className: string; preserveAspectRatio: string; \"aria-hidden\": \"true\"; focusable: \"false\"; title: string; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
-            "path": "assets/components/svgs/directDebitSymbolDs.tsx",
-            "message": "Type '{ children: Element[]; width: string; height: string; viewBox: string; fill: string; xmlns: string; className: string; preserveAspectRatio: string; \"aria-hidden\": \"true\"; focusable: \"false\"; title: string; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
-            "path": "assets/components/svgs/downChevronDs.tsx",
-            "message": "Type '{ children: Element; width: string; height: string; viewBox: string; fill: string; xmlns: string; \"aria-hidden\": \"true\"; focusable: \"false\"; title: string; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
             "path": "assets/components/svgs/gift.tsx",
             "message": "Type '{ children: Element; width: string; height: string; className: string; version: string; viewbox: string; \"aria-hidden\": \"true\"; focusable: \"false\"; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
-            "path": "assets/components/svgs/newCreditCardDs.tsx",
-            "message": "Type '{ children: Element; width: string; height: string; viewBox: string; fill: string; xmlns: string; className: string; preserveAspectRatio: string; title: string; \"aria-hidden\": \"true\"; focusable: \"false\"; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
-            "path": "assets/components/svgs/paypalDs.tsx",
-            "message": "Type '{ children: Element[]; width: string; height: string; viewBox: string; fill: string; xmlns: string; className: string; title: string; \"aria-hidden\": \"true\"; focusable: \"false\"; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
-            "path": "assets/components/svgs/questionMarkHintIcon.tsx",
-            "message": "Type '{ children: Element[]; width: string; height: string; viewBox: string; fill: string; xmlns: string; preserveAspectRatio: string; \"aria-hidden\": \"true\"; focusable: \"false\"; title: string; description: string; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
-            "path": "assets/components/svgs/sepa.tsx",
-            "message": "Type '{ children: Element[]; width: string; height: string; viewBox: string; xmlns: string; className: string; title: string; \"aria-hidden\": \"true\"; focusable: \"false\"; fill: string; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",

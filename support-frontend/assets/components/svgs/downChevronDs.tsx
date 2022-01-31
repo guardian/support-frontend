@@ -1,6 +1,6 @@
 import React from 'react'; // the down chevron used on DS <select>
 
-export default function DownChevronDs() {
+export default function DownChevronDs(): JSX.Element {
 	return (
 		<svg
 			width="22"
@@ -10,8 +10,10 @@ export default function DownChevronDs() {
 			xmlns="http://www.w3.org/2000/svg"
 			aria-hidden="true"
 			focusable="false"
-			title="Down arrow symbol"
+			aria-labelledby="svgDescription"
+			role="img"
 		>
+			<desc id="svgDescription">Down arrow symbol</desc>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
