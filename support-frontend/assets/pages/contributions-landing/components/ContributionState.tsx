@@ -23,16 +23,17 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
+
 // ----- Types ----- //
-type PropTypes = {
+
+interface ContributionStateProps {
 	countryGroupId: CountryGroupId;
 	selectedState: StateProvince | null;
-	onChange: ((arg0: Event) => void) | false;
+	onChange: (state: string) => void;
 	isValid: boolean;
 	formHasBeenSubmitted: boolean;
 	contributionType: string;
-};
+}
 
 const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
@@ -40,6 +41,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 // ----- Render ----- //
+
 const selectCss = css`
 	appearance: none !important;
 	background: transparent;
@@ -62,11 +64,13 @@ const selectCss = css`
 		${focusHalo};
 	}
 `;
+
 const errorBorderCss = css`
 	border: 4px solid #c70000;
 	height: 52px;
 	width: calc(100% + 3px);
 `;
+
 const chevronCss = css`
 	float: right;
 	z-index: 0;
@@ -75,16 +79,16 @@ const chevronCss = css`
 	right: 16px;
 	pointer-events: none;
 `;
+
 const chevronErrorCss = css`
 	path {
 		fill: #c70000;
 	}
 `;
 
-const renderState =
-	(selectedState: StateProvince | null) =>
-	(state: { abbreviation: string; name: string }) =>
-		(
+const renderState = (selectedState: StateProvince | null) =>
+	function (state: { abbreviation: string; name: string }) {
+		return (
 			<option
 				value={state.abbreviation}
 				selected={selectedState === state.abbreviation}
@@ -92,11 +96,12 @@ const renderState =
 				&nbsp;&nbsp;{state.name}
 			</option>
 		);
+	};
 
 const renderStatesField = (
 	states: Record<string, string>,
 	selectedState: StateProvince | null,
-	onChange: ((arg0: Event) => void) | false,
+	onChange: (state: string) => void,
 	showError: boolean,
 	label: string,
 ) => (
@@ -144,7 +149,7 @@ const renderStatesField = (
 			<select
 				css={showError ? [selectCss, errorBorderCss] : selectCss}
 				id="contributionState"
-				onChange={onChange}
+				onChange={(e) => onChange(e.target.value)}
 				required
 			>
 				<option value="">&nbsp;</option>
@@ -162,16 +167,23 @@ const renderStatesField = (
 	</div>
 );
 
-function ContributionState(props: PropTypes) {
-	const showError = !props.isValid && props.formHasBeenSubmitted;
+function ContributionState({
+	selectedState,
+	countryGroupId,
+	onChange,
+	isValid,
+	formHasBeenSubmitted,
+	contributionType,
+}: ContributionStateProps) {
+	const showError = !isValid && formHasBeenSubmitted;
 
-	if (props.contributionType !== 'ONE_OFF') {
-		switch (props.countryGroupId) {
+	if (contributionType !== 'ONE_OFF') {
+		switch (countryGroupId) {
 			case UnitedStates:
 				return renderStatesField(
 					usStates,
-					props.selectedState,
-					props.onChange,
+					selectedState,
+					onChange,
 					showError,
 					'State',
 				);
@@ -179,15 +191,15 @@ function ContributionState(props: PropTypes) {
 			case Canada:
 				return renderStatesField(
 					caStates,
-					props.selectedState,
-					props.onChange,
+					selectedState,
+					onChange,
 					showError,
 					'Province',
 				);
 
 			case AUDCountries: {
 				// Don't show states if the user is GEO-IP'd to one of the non AU countries that use AUD.
-				if (window.guardian && window.guardian.geoip) {
+				if (window.guardian.geoip) {
 					const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
 					const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(
 						(c) => c !== 'AU',
@@ -202,8 +214,8 @@ function ContributionState(props: PropTypes) {
 
 				return renderStatesField(
 					auStates,
-					props.selectedState,
-					props.onChange,
+					selectedState,
+					onChange,
 					showError,
 					'State / Territory',
 				);
@@ -217,7 +229,4 @@ function ContributionState(props: PropTypes) {
 	return null;
 }
 
-ContributionState.defaultProps = {
-	onChange: false,
-};
 export default connect(mapStateToProps)(ContributionState);
