@@ -2,12 +2,12 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 23,
+            "TS2305": 22,
             "TS2322": 155,
             "TS2578": 8,
             "TS2339": 31,
             "TS2345": 101,
-            "TS7006": 66,
+            "TS7006": 64,
             "TS7053": 12,
             "TS7034": 5,
             "TS7005": 10,
@@ -49,7 +49,6 @@
             "assets/components/interactiveTable/interactiveTable.tsx": 1,
             "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
             "assets/components/menu/menu.tsx": 2,
-            "assets/components/page/pageTitle.tsx": 5,
             "assets/components/product/productOption.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
@@ -67,6 +66,7 @@
             "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
+            "assets/components/page/pageTitle.tsx": 4,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
@@ -171,8 +171,6 @@
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/signout/signout.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
-            "assets/helpers/utilities/dateFormatting.ts": 1,
-            "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
@@ -249,10 +247,6 @@
         },
         {
             "path": "assets/components/menu/menu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -1618,10 +1612,6 @@
             "message": "Parameter 'content' implicitly has an 'any' type."
         },
         {
-            "path": "assets/helpers/utilities/dateFormatting.ts",
-            "message": "Parameter 'd' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Parameter 'response' implicitly has an 'any' type."
         },
@@ -1639,10 +1629,6 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
             "message": "Parameter 'event' implicitly has an 'any' type."
         },
         {
