@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 23,
-            "TS2322": 156,
+            "TS2322": 155,
             "TS2578": 8,
             "TS2339": 31,
             "TS2345": 101,
@@ -77,7 +77,6 @@
             "assets/components/svgs/amazonPayLogoDs.tsx": 1,
             "assets/components/svgs/directDebitSymbolDs.tsx": 1,
             "assets/components/svgs/downChevronDs.tsx": 1,
-            "assets/components/svgs/gift.tsx": 1,
             "assets/components/svgs/newCreditCardDs.tsx": 1,
             "assets/components/svgs/paypalDs.tsx": 1,
             "assets/components/svgs/questionMarkHintIcon.tsx": 1,
@@ -485,10 +484,6 @@
         {
             "path": "assets/components/svgs/downChevronDs.tsx",
             "message": "Type '{ children: Element; width: string; height: string; viewBox: string; fill: string; xmlns: string; \"aria-hidden\": \"true\"; focusable: \"false\"; title: string; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
-        },
-        {
-            "path": "assets/components/svgs/gift.tsx",
-            "message": "Type '{ children: Element; width: string; height: string; className: string; version: string; viewbox: string; \"aria-hidden\": \"true\"; focusable: \"false\"; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
         },
         {
             "path": "assets/components/svgs/newCreditCardDs.tsx",
