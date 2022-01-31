@@ -1,5 +1,7 @@
 // ----- Imports ----- //
+
 import { css } from '@emotion/core';
+import { Radio, RadioGroup } from '@guardian/src-radio';
 import React from 'react';
 import { connect } from 'react-redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -9,38 +11,13 @@ import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
 import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
 import SvgPayPalDs from 'components/svgs/paypalDs';
+import SvgSepa from 'components/svgs/sepa';
 import { contributionTypeIsRecurring } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	getPaymentLabel,
 	getValidPaymentMethods,
 } from 'helpers/forms/checkouts';
-import type { Switches } from 'helpers/globalsAndSwitches/settings';
-import 'helpers/globalsAndSwitches/settings';
-import type { ContributionType } from 'helpers/contributions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import 'helpers/internationalisation/currency';
-import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import {
-	AmazonPay,
-	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
-	PayPal,
-	Sepa,
-	Stripe,
-} from 'helpers/forms/paymentMethods';
-import type { Action } from '../contributionsLandingActions';
-import {
-	loadAmazonPaySdk,
-	loadPayPalExpressSdk,
-	updatePaymentMethod,
-	updateSelectedExistingPaymentMethod,
-} from '../contributionsLandingActions';
 import {
 	getExistingPaymentMethodLabel,
 	isUsableExistingPaymentMethod,
@@ -52,14 +29,34 @@ import type {
 	ExistingPaymentMethod,
 	RecentlySignedInExistingPaymentMethod,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
-import { Radio, RadioGroup } from '@guardian/src-radio';
-import SvgSepa from 'components/svgs/sepa';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import {
+	AmazonPay,
+	DirectDebit,
+	ExistingCard,
+	ExistingDirectDebit,
+	PayPal,
+	Sepa,
+	Stripe,
+} from 'helpers/forms/paymentMethods';
+import type { Switches } from 'helpers/globalsAndSwitches/settings';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import type { Action } from '../contributionsLandingActions';
+import {
+	loadAmazonPaySdk,
+	loadPayPalExpressSdk,
+	updatePaymentMethod,
+	updateSelectedExistingPaymentMethod,
+} from '../contributionsLandingActions';
+import type { State } from '../contributionsLandingReducer';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
+
 // ----- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
 	countryId: IsoCountry;
 	countryGroupId: CountryGroupId;
@@ -67,28 +64,23 @@ type PropTypes = {
 	currency: IsoCurrency;
 	existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined;
 	paymentMethod: PaymentMethod;
-	existingPaymentMethod: RecentlySignedInExistingPaymentMethod;
-	updatePaymentMethod: (
-		arg0: PaymentMethod,
-	) => (arg0: (...args: any[]) => any) => void;
+	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
+	updatePaymentMethod: (paymentMethod: PaymentMethod) => void;
 	updateSelectedExistingPaymentMethod: (
-		arg0: RecentlySignedInExistingPaymentMethod | typeof undefined,
+		existingPaymentMethod: RecentlySignedInExistingPaymentMethod | undefined,
 	) => Action;
 	isTestUser: boolean;
 	switches: Switches;
 	payPalHasBegunLoading: boolean;
 	amazonPayHasBegunLoading: boolean;
-	loadPayPalExpressSdk: (
-		contributionType: ContributionType,
-	) => (dispatch: (...args: any[]) => any) => void;
+	loadPayPalExpressSdk: (contributionType: ContributionType) => void;
 	loadAmazonPaySdk: (
 		countryGroupId: CountryGroupId,
 		isTestUser: boolean,
-	) => (dispatch: (...args: any[]) => any) => void;
+	) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 };
 
-/* eslint-enable react/no-unused-prop-types */
 const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
@@ -97,7 +89,7 @@ const mapStateToProps = (state: State) => ({
 	existingPaymentMethods: state.common.existingPaymentMethods,
 	paymentMethod: state.page.form.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
-	isTestUser: state.page.user.isTestUser || false,
+	isTestUser: state.page.user.isTestUser ?? false,
 	switches: state.common.settings.switches,
 	payPalHasBegunLoading: state.page.form.payPalData.hasBegunLoading,
 	amazonPayHasBegunLoading: state.page.form.amazonPayData.hasBegunLoading,
@@ -162,13 +154,10 @@ const renderExistingLabelAndLogo = (
 	</>
 );
 
-// having to do this nasty cast because Flow sucks and type guards don't work through .filter
 const getFullExistingPaymentMethods = (
-	props: PropTypes,
+	existingPaymentMethods?: ExistingPaymentMethod[],
 ): RecentlySignedInExistingPaymentMethod[] =>
-	(props.existingPaymentMethods || []).filter(
-		isUsableExistingPaymentMethod,
-	) as any;
+	(existingPaymentMethods ?? []).filter(isUsableExistingPaymentMethod);
 
 const noPaymentMethodsErrorMessage = (
 	<GeneralErrorMessage
@@ -177,21 +166,24 @@ const noPaymentMethodsErrorMessage = (
 		errorReason="all_payment_methods_unavailable"
 	/>
 );
-const radioCss = {
-	'& + div': {
-		display: 'flex',
-		width: '100%',
-		margin: 0,
-		justifyContent: 'space-between',
-	},
-	'& + div svg': {
-		width: '36px',
-		height: '24px',
-	},
-	'&:not(:checked) + div svg': {
-		filter: 'grayscale(100%)',
-	},
-};
+
+const radioCss = css`
+	& + div {
+		display: flex;
+		width: 100%;
+		margin: 0;
+		justify-content: space-between;
+	}
+
+	& + div svg {
+		width: 36px;
+		height: 24px;
+	}
+
+	&:not(:checked) + div svg {
+		filter: grayscale(100%);
+	}
+}`;
 
 const onPaymentMethodUpdate = (
 	paymentMethod: PaymentMethod,
@@ -226,7 +218,9 @@ function PaymentMethodSelector(props: PropTypes) {
 		props.countryId,
 		props.countryGroupId,
 	);
-	const fullExistingPaymentMethods = getFullExistingPaymentMethods(props);
+	const fullExistingPaymentMethods = getFullExistingPaymentMethods(
+		props.existingPaymentMethods,
+	);
 	const showErrorMessage =
 		props.checkoutFormHasBeenSubmitted && props.paymentMethod === 'None';
 	return (
@@ -239,96 +233,103 @@ function PaymentMethodSelector(props: PropTypes) {
 			{legend}
 			{paymentMethods.length ? (
 				<RadioGroup
+					name="payment-method-selector"
 					className="form__radio-group-list"
-					error={showErrorMessage && 'Please select a payment method'}
+					error={
+						showErrorMessage ? 'Please select a payment method' : undefined
+					}
 				>
-					{contributionTypeIsRecurring(props.contributionType) &&
-						!props.existingPaymentMethods && (
-							<div className="awaiting-existing-payment-options">
-								<AnimatedDots appearance="medium" />
-							</div>
-						)}
-					{contributionTypeIsRecurring(props.contributionType) &&
-						fullExistingPaymentMethods.map(
-							(
-								existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-							) => (
-								<>
-									<Radio
-										id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
-										name="paymentMethodSelector"
-										type="radio"
-										value={existingPaymentMethod}
-										onChange={() => {
-											props.updatePaymentMethod(
-												mapExistingPaymentMethodToPaymentMethod(
+					<>
+						{contributionTypeIsRecurring(props.contributionType) &&
+							!props.existingPaymentMethods && (
+								<div className="awaiting-existing-payment-options">
+									<AnimatedDots appearance="medium" />
+								</div>
+							)}
+
+						{contributionTypeIsRecurring(props.contributionType) &&
+							fullExistingPaymentMethods.map(
+								(
+									existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
+								) => (
+									<>
+										<Radio
+											id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
+											name="paymentMethodSelector"
+											type="radio"
+											value={existingPaymentMethod.paymentType}
+											onChange={() => {
+												props.updatePaymentMethod(
+													mapExistingPaymentMethodToPaymentMethod(
+														existingPaymentMethod,
+													),
+												);
+												props.updateSelectedExistingPaymentMethod(
 													existingPaymentMethod,
+												);
+											}}
+											checked={
+												props.paymentMethod ===
+													mapExistingPaymentMethodToPaymentMethod(
+														existingPaymentMethod,
+													) &&
+												props.existingPaymentMethod === existingPaymentMethod
+											}
+											arial-labelledby="payment_method"
+											label={renderExistingLabelAndLogo(existingPaymentMethod)}
+											cssOverrides={radioCss}
+										/>
+
+										<div
+											css={css`
+												font-size: small;
+												font-style: italic;
+												margin-left: 40px;
+												padding-bottom: 6px;
+												color: #767676;
+												padding-right: 40px;
+											`}
+										>
+											Used for your{' '}
+											{subscriptionsToExplainerList(
+												existingPaymentMethod.subscriptions.map(
+													subscriptionToExplainerPart,
 												),
-											);
-											props.updateSelectedExistingPaymentMethod(
-												existingPaymentMethod,
-											);
-										}}
-										checked={
-											props.paymentMethod ===
-												mapExistingPaymentMethodToPaymentMethod(
-													existingPaymentMethod,
-												) &&
-											props.existingPaymentMethod === existingPaymentMethod
-										}
-										arial-labelledby="payment_method"
-										label={renderExistingLabelAndLogo(existingPaymentMethod)}
-										cssOverrides={radioCss}
-									/>
-									<div
-										css={css`
-											font-size: small;
-											font-style: italic;
-											margin-left: 40px;
-											padding-bottom: 6px;
-											color: #767676;
-											padding-right: 40px;
-										`}
+											)}
+										</div>
+									</>
+								),
+							)}
+						{paymentMethods.map((paymentMethod) => (
+							<Radio
+								id={`paymentMethodSelector-${paymentMethod}`}
+								name="paymentMethodSelector"
+								type="radio"
+								value={paymentMethod}
+								onChange={() => {
+									onPaymentMethodUpdate(paymentMethod, props);
+								}}
+								checked={props.paymentMethod === paymentMethod}
+								label={renderLabelAndLogo(paymentMethod)}
+								cssOverrides={radioCss}
+							/>
+						))}
+						{contributionTypeIsRecurring(props.contributionType) &&
+							props.existingPaymentMethods &&
+							props.existingPaymentMethods.length > 0 &&
+							fullExistingPaymentMethods.length === 0 && (
+								<li className="form__radio-group-item">
+									...or{' '}
+									<a
+										className="reauthenticate-link"
+										href={getReauthenticateUrl()}
 									>
-										Used for your{' '}
-										{subscriptionsToExplainerList(
-											existingPaymentMethod.subscriptions.map(
-												subscriptionToExplainerPart,
-											),
-										)}
-									</div>
-								</>
-							),
-						)}
-					{paymentMethods.map((paymentMethod) => (
-						<Radio
-							id={`paymentMethodSelector-${paymentMethod}`}
-							name="paymentMethodSelector"
-							type="radio"
-							value={paymentMethod}
-							onChange={() => {
-								onPaymentMethodUpdate(paymentMethod, props);
-							}}
-							checked={props.paymentMethod === paymentMethod}
-							label={renderLabelAndLogo(paymentMethod)}
-							cssOverrides={radioCss}
-						/>
-					))}
-					{contributionTypeIsRecurring(props.contributionType) &&
-						props.existingPaymentMethods &&
-						props.existingPaymentMethods.length > 0 &&
-						fullExistingPaymentMethods.length === 0 && (
-							<li className="form__radio-group-item">
-								...or{' '}
-								<a
-									className="reauthenticate-link"
-									href={getReauthenticateUrl()}
-								>
-									re-enter your password
-								</a>{' '}
-								to use one of your existing payment methods.
-							</li>
-						)}
+										re-enter your password
+									</a>{' '}
+									to use one of your existing payment methods.
+								</li>
+							)}
+					</>
 				</RadioGroup>
 			) : (
 				noPaymentMethodsErrorMessage

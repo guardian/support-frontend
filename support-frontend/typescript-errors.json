@@ -3,10 +3,10 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 25,
-            "TS2322": 151,
+            "TS2322": 144,
             "TS2578": 8,
             "TS2339": 31,
-            "TS2345": 101,
+            "TS2345": 100,
             "TS7006": 66,
             "TS7053": 12,
             "TS7034": 5,
@@ -18,7 +18,7 @@
             "TS2314": 5,
             "TS2304": 5,
             "TS2741": 5,
-            "TS2739": 14,
+            "TS2739": 13,
             "TS2532": 4,
             "TS2556": 3,
             "TS2554": 31,
@@ -91,7 +91,6 @@
             "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
             "assets/pages/contributions-landing/components/ContributionState.tsx": 2,
             "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
-            "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 9,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 5,
@@ -617,34 +616,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
             "message": "Type 'number | void' is not assignable to type 'string | number | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'false | \"Please select a payment method\"' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'false | Element' is not assignable to type 'Element'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'false | Element[]' is not assignable to type 'Element'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'RecentlySignedInExistingPaymentMethod' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type '{ '& + div': { display: string; width: string; margin: number; justifyContent: string; }; '& + div svg': { width: string; height: string; }; '&:not(:checked) + div svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type '{ '& + div': { display: string; width: string; margin: number; justifyContent: string; }; '& + div svg': { width: string; height: string; }; '&:not(:checked) + div svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'false | Element | undefined' is not assignable to type 'Element'."
         },
         {
             "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
@@ -1401,10 +1372,6 @@
             "message": "Argument of type 'string' is not assignable to parameter of type 'PaymentMethod'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ countryId: string; countryGroupId: CountryGroupId; currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; ... 7 more ...; checkoutFormHasBeenSubmitted: boolean; } & { ...; }, PropTypes>>'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Argument of type '(clientSecret: string) => Promise<Stripe3DSResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<PaymentIntentResult>'."
         },
@@ -2147,10 +2114,6 @@
         {
             "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
             "message": "Type '{ ONE_OFF: { min: number; minInWords: string; max: number; maxInWords: string; default: number; }; }' is missing the following properties from type 'Config': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'Element[]' is missing the following properties from type 'ReactElement<any, any>': type, props, key"
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingReducer.ts",
