@@ -9,8 +9,7 @@ import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from 'emotion-theming';
-import { useEffect, useRef } from 'preact/hooks';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 
 const directDebitForm = css`
@@ -61,7 +60,7 @@ function Playback(props: {
 	// after we switch to this component, and means the user can more easily edit or confirm
 	useEffect(() => {
 		subscribeButtonRef.current?.focus();
-	}, []);
+	}, [subscribeButtonRef]);
 
 	return (
 		<div css={directDebitForm}>
