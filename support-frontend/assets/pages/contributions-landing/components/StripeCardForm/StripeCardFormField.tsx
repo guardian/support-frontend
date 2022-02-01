@@ -24,7 +24,7 @@ export function StripeCardFormField(props: PropTypes): JSX.Element {
 	return (
 		<>
 			<div className="ds-stripe-card-form-field">{props.label}</div>
-			{props.hint ?? null}
+			{props.hint}
 			<div className={`ds-stripe-card-input ${getClass(props)}`}>
 				{props.input}
 			</div>
