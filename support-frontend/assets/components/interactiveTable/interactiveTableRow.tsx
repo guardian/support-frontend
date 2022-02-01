@@ -1,4 +1,3 @@
-// @ts-expect-error
 import { css } from '@emotion/core';
 import { Button } from '@guardian/src-button';
 import { space, transitions } from '@guardian/src-foundations';
@@ -13,7 +12,7 @@ import {
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgChevronDownSingle } from '@guardian/src-icons';
 import React, { useState } from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 
 const borderStyle = `${border.secondary} 1px solid`;
 const visuallyHidden = css`
@@ -77,6 +76,7 @@ const headingCell = css`
 `;
 const primaryTableCell = css`
 	-ms-grid-column: 1;
+	grid-column: 1;
 	justify-content: flex-start;
 	padding-left: ${space[3]}px;
 
@@ -86,10 +86,12 @@ const primaryTableCell = css`
 `;
 const iconCell = css`
 	-ms-grid-column: 3;
+	grid-column: 3;
 	max-width: 48px;
 `;
 const expandableButtonCell = css`
 	-ms-grid-column: 4;
+	grid-column: 4;
 	max-height: 72px;
 	display: flex;
 	align-items: center;
@@ -103,6 +105,7 @@ const detailsCell = css`
 	-ms-grid-column: 1;
 	-ms-grid-column-span: 4;
 	-ms-grid-row: 2;
+	grid-row: 2;
 	grid-column: 1 / span 4;
 	background-color: ${sport[800]};
 	border-top: ${borderStyle};
@@ -160,7 +163,7 @@ const yellowBackground = css`
 	background: ${brandAltBackground.primary};
 `;
 export type CellData = {
-	content: Node;
+	content: ReactNode;
 	isPrimary?: boolean;
 	isIcon?: boolean;
 	isHidden?: boolean;
@@ -169,14 +172,14 @@ export type CellData = {
 export type RowData = {
 	rowId: string;
 	columns: CellData[];
-	details: Node;
+	details: ReactNode;
 	onClick?: (showDetails: boolean) => void;
 };
 export function InteractiveTableHeaderRow({
 	columns,
 }: {
 	columns: CellData[];
-}) {
+}): JSX.Element {
 	return (
 		<tr role="row" css={[tableRow, tableHeaderRow]}>
 			{columns.map((col, index) => (
@@ -194,6 +197,7 @@ export function InteractiveTableHeaderRow({
 												iconCell,
 												css`
 													-ms-grid-column: ${index + 1};
+													grid-column: ${index + 1};
 												`,
 										  ]
 										: ['']),
@@ -206,13 +210,17 @@ export function InteractiveTableHeaderRow({
 		</tr>
 	);
 }
-export function InteractiveTableFooterRow({ children }: { children: Node }) {
+export function InteractiveTableFooterRow({
+	children,
+}: {
+	children: ReactNode;
+}): JSX.Element {
 	return (
 		<tr role="row" css={[finalRow, yellowBackground]}>
 			<td
 				role="cell"
-				colSpan="5"
-				aria-colspan="5"
+				colSpan={5}
+				aria-colspan={5}
 				css={[tableCell, primaryTableCell]}
 			>
 				{children}
@@ -225,7 +233,7 @@ export function InteractiveTableRow({
 	columns,
 	details,
 	onClick = () => undefined,
-}: RowData) {
+}: RowData): JSX.Element {
 	const [showDetails, setShowDetails] = useState<boolean>(false);
 
 	function onRowClick() {
@@ -259,6 +267,7 @@ export function InteractiveTableRow({
 							iconCell,
 							css`
 								-ms-grid-column: ${index + 1};
+								grid-column: ${index + 1};
 							`,
 						]}
 					>

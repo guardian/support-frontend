@@ -2,9 +2,9 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 21,
-            "TS2322": 128,
-            "TS2578": 8,
+            "TS2305": 18,
+            "TS2322": 127,
+            "TS2578": 7,
             "TS2339": 26,
             "TS2345": 99,
             "TS7006": 60,
@@ -47,8 +47,6 @@
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
-            "assets/components/interactiveTable/interactiveTable.tsx": 1,
-            "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
             "assets/components/menu/menu.tsx": 2,
             "assets/components/product/productOption.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
@@ -56,7 +54,6 @@
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
             "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
-            "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
@@ -232,14 +229,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/interactiveTable/interactiveTable.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/menu/menu.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -265,10 +254,6 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -348,10 +333,6 @@
         {
             "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
             "message": "Type '{ children: any[]; 'aria-haspopup': Option<string>; onClick: Option<(...args: any[]) => any>; style: Option<{}>; className: string; ref: Option<(...args: any[]) => any>; }' is not assignable to type 'DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>'."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
         },
         {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
@@ -801,10 +782,6 @@
         },
         {
             "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
