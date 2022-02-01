@@ -216,16 +216,7 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 											}
 										/>
 
-										<div
-											css={css`
-												font-size: small;
-												font-style: italic;
-												margin-left: 40px;
-												padding-bottom: 6px;
-												color: #767676;
-												padding-right: 40px;
-											`}
-										>
+										<div css={styles.explainerListContainer}>
 											Used for your{' '}
 											{subscriptionsToExplainerList(
 												existingPaymentMethod.subscriptions.map(
@@ -364,6 +355,14 @@ const styles = {
 				filter: grayscale(100%);
 			}
 		}
+	`,
+	explainerListContainer: css`
+		font-size: small;
+		font-style: italic;
+		margin-left: 40px;
+		padding-bottom: 6px;
+		color: #767676;
+		padding-right: 40px;
 	`,
 };
 
