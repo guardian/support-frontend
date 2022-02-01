@@ -1,11 +1,11 @@
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import './stripeCardForm.scss';
 
 type PropTypes = {
-	label: Node;
-	hint?: Node;
-	input: Node;
+	label: ReactNode;
+	hint?: ReactNode;
+	input: ReactNode;
 	error: boolean;
 	focus: boolean;
 };
@@ -20,11 +20,11 @@ const getClass = (props: PropTypes) => {
 	return '';
 };
 
-export function StripeCardFormField(props: PropTypes) {
+export function StripeCardFormField(props: PropTypes): JSX.Element {
 	return (
 		<>
 			<div className="ds-stripe-card-form-field">{props.label}</div>
-			{props.hint || null}
+			{props.hint ?? null}
 			<div className={`ds-stripe-card-input ${getClass(props)}`}>
 				{props.input}
 			</div>

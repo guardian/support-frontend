@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 23,
+            "TS2305": 21,
             "TS2322": 128,
             "TS2578": 8,
             "TS2339": 26,
@@ -54,11 +54,9 @@
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
             "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
@@ -262,10 +260,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -275,10 +269,6 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/events/eventCard.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
