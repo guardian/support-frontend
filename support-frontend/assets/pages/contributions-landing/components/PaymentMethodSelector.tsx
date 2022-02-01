@@ -111,11 +111,37 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 		props.countryId,
 		props.countryGroupId,
 	);
+
 	const fullExistingPaymentMethods = getFullExistingPaymentMethods(
 		props.existingPaymentMethods,
 	);
+
+	const onPaymentMethodUpdate = (paymentMethod: PaymentMethod) => {
+		switch (paymentMethod) {
+			case PayPal:
+				if (!props.payPalHasBegunLoading) {
+					props.loadPayPalExpressSdk(props.contributionType);
+				}
+
+				break;
+
+			case AmazonPay:
+				if (!props.amazonPayHasBegunLoading) {
+					props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
+				}
+
+				break;
+
+			default:
+		}
+
+		props.updatePaymentMethod(paymentMethod);
+		props.updateSelectedExistingPaymentMethod(undefined);
+	};
+
 	const showErrorMessage =
 		props.checkoutFormHasBeenSubmitted && props.paymentMethod === 'None';
+
 	return (
 		<div
 			className={classNameWithModifiers('form__radio-group', [
@@ -218,7 +244,7 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 								type="radio"
 								value={paymentMethod}
 								onChange={() => {
-									onPaymentMethodUpdate(paymentMethod, props);
+									onPaymentMethodUpdate(paymentMethod);
 								}}
 								checked={props.paymentMethod === paymentMethod}
 								label={
@@ -347,32 +373,6 @@ const getFullExistingPaymentMethods = (
 	existingPaymentMethods?: ExistingPaymentMethod[],
 ): RecentlySignedInExistingPaymentMethod[] =>
 	(existingPaymentMethods ?? []).filter(isUsableExistingPaymentMethod);
-
-const onPaymentMethodUpdate = (
-	paymentMethod: PaymentMethod,
-	props: PaymentMethodSelectorProps,
-) => {
-	switch (paymentMethod) {
-		case PayPal:
-			if (!props.payPalHasBegunLoading) {
-				props.loadPayPalExpressSdk(props.contributionType);
-			}
-
-			break;
-
-		case AmazonPay:
-			if (!props.amazonPayHasBegunLoading) {
-				props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
-			}
-
-			break;
-
-		default:
-	}
-
-	props.updatePaymentMethod(paymentMethod);
-	props.updateSelectedExistingPaymentMethod(undefined);
-};
 
 // ----- Exports ----- //
 
