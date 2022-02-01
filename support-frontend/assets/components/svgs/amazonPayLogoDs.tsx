@@ -1,6 +1,6 @@
 import React from 'react'; // The AmazonPay logo used on checkouts.
 
-export default function SvgAmazonPayLogoDs() {
+export default function SvgAmazonPayLogoDs(): JSX.Element {
 	return (
 		<svg
 			width="30"
@@ -12,8 +12,10 @@ export default function SvgAmazonPayLogoDs() {
 			preserveAspectRatio="xMinYMid"
 			aria-hidden="true"
 			focusable="false"
-			title="Amazon Pay badge"
+			aria-labelledby="svgDescription"
+			role="img"
 		>
+			<desc id="svgDescription">Amazon Pay badge</desc>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"

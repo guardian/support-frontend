@@ -1,15 +1,17 @@
 // ----- Imports ----- //
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import SvgExclamation from 'components/svgs/exclamation';
+
 // ---- Types ----- //
 type PropTypes = {
 	showError?: boolean;
 	message: string | null | undefined;
-	svg?: Node;
-}; // ----- Component ----- //
+	svg?: ReactNode;
+};
 
-export default function ErrorMessage(props: PropTypes) {
+// ----- Component ----- //
+export default function ErrorMessage(props: PropTypes): JSX.Element | null {
 	if (props.showError && props.message) {
 		return (
 			<div className="component-error-message">
@@ -22,8 +24,9 @@ export default function ErrorMessage(props: PropTypes) {
 	}
 
 	return null;
-} // ----- Default Props ----- //
+}
 
+// ----- Default Props ----- //
 ErrorMessage.defaultProps = {
 	showError: true,
 	svg: <SvgExclamation />,

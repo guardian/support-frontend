@@ -75,15 +75,8 @@ function CountryGroupSwitcher({
 				open={menuOpen}
 				blocking={false}
 				styled={false}
-				onStatusChange={(status) => {
-					setMenuOpen(status);
-
-					if (status) {
-						sendTrackingEventsOnClick({
-							id: 'toggle_country',
-							componentType: 'ACQUISITIONS_BUTTON',
-						})();
-					}
+				closeDialog={() => {
+					setMenuOpen(false);
 				}}
 			>
 				<Menu
@@ -96,7 +89,14 @@ function CountryGroupSwitcher({
 					{countryGroupIds.map((countryGroupId: CountryGroupId) => (
 						<LinkItem
 							href={`/${countryGroups[countryGroupId].supportInternationalisationId}${subPath}`}
-							onClick={() => onCountryGroupSelect(countryGroupId)}
+							onClick={() => {
+								sendTrackingEventsOnClick({
+									id: `toggle_country: ${countryGroupId}`,
+									componentType: 'ACQUISITIONS_BUTTON',
+								})();
+
+								onCountryGroupSelect(countryGroupId);
+							}}
 							isSelected={countryGroupId === selectedCountryGroup}
 						>
 							{countryGroups[countryGroupId].name}{' '}

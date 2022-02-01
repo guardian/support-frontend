@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function SvgDirectDebitSymbolDs() {
+export default function SvgDirectDebitSymbolDs(): JSX.Element {
 	return (
 		<svg
 			width="30"
@@ -12,8 +12,10 @@ export default function SvgDirectDebitSymbolDs() {
 			preserveAspectRatio="xMinYMid"
 			aria-hidden="true"
 			focusable="false"
-			title="Direct Debit symbol"
+			aria-labelledby="svgDescription"
+			role="img"
 		>
+			<desc id="svgDescription">Direct Debit symbol</desc>
 			<path
 				d="M21.7332 9.79047C21.738 5.35714 19.0713 3.45238 16.0428 2.75238V2.52381C21.5428 2.80952 25.5904 6.1619 25.5904 10C25.5904 14.3809 20.8285 17.5048 14.9809 17.5C9.13323 17.4952 4.3999 14.1333 4.3999 9.98571C4.3999 5.63333 8.52847 2.5 15.5618 2.5V7.90476L13.8999 7.87143C10.338 7.99047 6.21419 9.54285 6.20943 11.6286C6.20466 13.9286 10.1142 16.6905 14.8237 16.6905C18.6332 16.6905 21.7332 13.9381 21.7332 9.79047Z"
 				fill="#052962"

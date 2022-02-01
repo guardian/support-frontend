@@ -16,6 +16,14 @@ function notNull<A>(value: A): boolean {
 	return value !== null;
 }
 
+function notLongerThan(
+	value: string | null | undefined,
+	maxLength: number,
+): boolean {
+	if (!value) return true;
+	return value.length < maxLength;
+}
+
 function nonSillyCharacters(s: string | null | undefined): boolean {
 	// This is a unicode property escape
 	// cf. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes
@@ -67,6 +75,7 @@ function validate<Err>(rules: Array<Rule<Err>>): Err[] {
 export {
 	nonEmptyString,
 	notNull,
+	notLongerThan,
 	firstError,
 	formError,
 	removeError,

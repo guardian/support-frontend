@@ -1,16 +1,18 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './leftMarginSection.scss';
+
 // ----- Props ----- //
 type PropTypes = {
 	modifierClasses: Array<string | null | undefined>;
 	className: string | null | undefined;
-	children: Node;
-}; // ----- Component ----- //
+	children: ReactNode;
+};
 
-export default function LeftMarginSection(props: PropTypes) {
+// ----- Component ----- //
+export default function LeftMarginSection(props: PropTypes): JSX.Element {
 	return (
 		<section
 			className={[

@@ -1,15 +1,17 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
+
 // ----- Types ----- //
 export type HeadingSize = 1 | 2 | 3 | 4 | 5 | 6;
 type PropTypes = {
 	size: HeadingSize;
 	className: string;
-	children: Node;
-}; // ----- Component ----- //
+	children: ReactNode;
+};
 
-export default function Heading(props: PropTypes) {
+// ----- Component ----- //
+export default function Heading(props: PropTypes): JSX.Element {
 	switch (props.size) {
 		case 1:
 			return <h1 className={props.className}>{props.children}</h1>;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function SvgSepa() {
+export default function SvgSepa(): JSX.Element {
 	return (
 		<svg
 			width="97"
@@ -8,11 +8,13 @@ export default function SvgSepa() {
 			viewBox="0 0 97 28"
 			xmlns="http://www.w3.org/2000/svg"
 			className="svg-sepa"
-			title="SEPA logo"
 			aria-hidden="true"
 			focusable="false"
 			fill="#052962"
+			aria-labelledby="svgDescription"
+			role="img"
 		>
+			<desc id="svgDescription">SEPA logo</desc>
 			<path
 				d="M0.8,18.8c2.2,0,4.3,0,6.5,0c0,0.3,0,0.6,0,0.8c0,1.4,0.7,2.3,2.1,2.3c1.6,0.1,3.2,0,4.8-0.1
   c0.9,0,1.6-0.7,1.7-1.7c0.1-0.6,0.1-1.2,0-1.8c-0.1-0.8-0.7-1.3-1.5-1.4c-1.4-0.1-2.9-0.2-4.3-0.4c-1.6-0.2-3.2-0.3-4.7-0.6

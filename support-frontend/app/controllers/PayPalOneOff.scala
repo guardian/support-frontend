@@ -3,26 +3,25 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath, StyleContent}
+import assets.{AssetsResolver, RefPath}
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
-import services.{IdentityService, PaymentAPIService, TestUserService, _}
+import services._
 import views.EmptyDiv
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try
 
 class PayPalOneOff(
-    actionBuilders: CustomActionBuilders,
-    assets: AssetsResolver,
-    testUsers: TestUserService,
-    components: ControllerComponents,
-    paymentAPIService: PaymentAPIService,
-    identityService: IdentityService,
-    settingsProvider: AllSettingsProvider
+  actionBuilders: CustomActionBuilders,
+  assets: AssetsResolver,
+  testUsers: TestUserService,
+  components: ControllerComponents,
+  paymentAPIService: PaymentAPIService,
+  settingsProvider: AllSettingsProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -69,7 +68,7 @@ class PayPalOneOff(
     }
   }
 
-  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
 
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")

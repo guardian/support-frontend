@@ -1,10 +1,11 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import React, { createElement } from 'react';
 import type { $Keys } from 'utility-types';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './button.scss';
+
 // ----- PropTypes ----- //
 export const Appearances = {
 	primary: 'primary',
@@ -31,7 +32,7 @@ we are using ID for anything other than QA testing.
 ************************************************************************ */
 type SharedButtonPropTypes = {
 	children: string;
-	icon?: Node;
+	icon?: ReactNode;
 	appearance: Appearance;
 	iconSide: IconSide;
 	getRef?: (arg0: Element | null | undefined) => void;
@@ -43,7 +44,7 @@ type PropTypes = SharedButtonPropTypes & {
 };
 
 // ----- Render ----- //
-const SharedButton = ({
+function SharedButton({
 	element,
 	appearance,
 	iconSide,
@@ -53,7 +54,7 @@ const SharedButton = ({
 	getRef,
 	postDeploymentTestID,
 	...otherProps
-}: PropTypes) => {
+}: PropTypes): ReactElement {
 	const className = classNameWithModifiers('component-button', [
 		appearance,
 		`hasicon-${iconSide}`,
@@ -73,7 +74,7 @@ const SharedButton = ({
 		},
 		contents,
 	);
-};
+}
 
 export const defaultProps = {
 	icon: <SvgArrowRightStraight />,

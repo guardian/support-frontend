@@ -23,8 +23,6 @@ class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
   val actionRefiner = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
-    idWebAppUrl = IdentityUrl(""),
-    supportUrl = "",
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,

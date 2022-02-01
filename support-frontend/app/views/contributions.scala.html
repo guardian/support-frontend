@@ -19,7 +19,7 @@
   paymentMethodConfigs: ContributionsPaymentMethodConfigs,
   paymentApiUrl: String,
   paymentApiPayPalEndpoint: String,
-  mdapiUrl: String,
+  membersDataApiUrl: String,
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
   geoData: GeoData,
@@ -103,7 +103,7 @@
   };
   window.guardian.paymentApiUrl = "@paymentApiUrl";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
-  window.guardian.mdapiUrl = "@mdapiUrl";
+  window.guardian.mdapiUrl = "@membersDataApiUrl";
   window.guardian.csrf = { token: "@CSRF.getToken.value" };
 
   @guestAccountCreationToken.map { guestAccountCreationToken =>

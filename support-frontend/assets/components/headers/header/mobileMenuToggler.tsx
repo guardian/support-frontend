@@ -60,17 +60,14 @@ export default class MobileMenuToggler extends Component<
 				<Dialog
 					aria-label="Menu"
 					open={menuOpen}
-					onStatusChange={(status) => {
+					closeDialog={() => {
 						this.setState({
-							menuOpen: status,
+							menuOpen: false,
 						});
-
-						if (!status) {
-							sendTrackingEventsOnClick({
-								id: 'dismiss_mobile_menu',
-								componentType: 'ACQUISITIONS_BUTTON',
-							})();
-						}
+						sendTrackingEventsOnClick({
+							id: 'dismiss_mobile_menu',
+							componentType: 'ACQUISITIONS_BUTTON',
+						})();
 					}}
 				>
 					<MobileMenu

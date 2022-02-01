@@ -143,7 +143,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid corporate sub" in {
     val corporateSub = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Corporate),
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get))
     )
 
     DigitalPackValidation.passes(corporateSub, Corporate) shouldBe Valid
@@ -161,7 +161,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid gift sub redemption" in {
     val giftRedemption = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Gift),
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get))
     )
 
     DigitalPackValidation.passes(giftRedemption, Gift) shouldBe Valid
@@ -230,7 +230,7 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get)))
+    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
     PaperValidation.passes(requestWithCorporateRedemption, Collection) shouldBe an[Invalid]
   }
 
@@ -287,7 +287,7 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption = validWeeklyRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").right.get)))
+    val requestWithCorporateRedemption = validWeeklyRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
     GuardianWeeklyValidation.passes(requestWithCorporateRedemption) shouldBe an[Invalid]
   }
 

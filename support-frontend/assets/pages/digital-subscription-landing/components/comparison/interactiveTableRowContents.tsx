@@ -9,7 +9,7 @@ import {
 import { headline } from '@guardian/src-foundations/typography';
 import { SvgCheckmark } from '@guardian/src-icons';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
 import GridPicture from 'components/gridPicture/gridPicture';
@@ -240,31 +240,34 @@ const appFeatureHeadline = css`
 	color: ${brand[400]};
 `;
 
-const Padlock = () => (
-	<div aria-label="Not included" css={[indicators, greyBackground]}>
-		<SvgPadlock />
-	</div>
-);
+function Padlock(): JSX.Element {
+	return (
+		<div aria-label="Not included" css={[indicators, greyBackground]}>
+			<SvgPadlock />
+		</div>
+	);
+}
 
-const Checkmark = () => (
-	<div aria-label="Included" css={[indicators, checkmark, yellowBackground]}>
-		<SvgCheckmark />
-	</div>
-);
+function Checkmark(): JSX.Element {
+	return (
+		<div aria-label="Included" css={[indicators, checkmark, yellowBackground]}>
+			<SvgCheckmark />
+		</div>
+	);
+}
 
 type AppName = 'Guardian' | 'Editions';
 type AppFeatureWithIconPropTypes = {
 	appName: AppName;
-	children: Node;
-	// eslint-disable-next-line react/require-default-props
+	children: ReactNode;
 	heading?: string;
 };
 
-const AppFeatureWithIcon = ({
+function AppFeatureWithIcon({
 	appName,
 	heading = `The ${appName} App`,
 	children,
-}: AppFeatureWithIconPropTypes) => {
+}: AppFeatureWithIconPropTypes): JSX.Element {
 	const icon =
 		appName === 'Editions' ? <SvgEditionsIcon /> : <SvgLiveAppIcon />;
 	return (
@@ -274,7 +277,7 @@ const AppFeatureWithIcon = ({
 			{children}
 		</section>
 	);
-};
+}
 
 function trackRowClick(rowId: string) {
 	const trackingId = `Comparison_table-${rowId}_row`;

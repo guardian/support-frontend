@@ -1,4 +1,4 @@
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -16,6 +16,7 @@ import {
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
+import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
 import Prices from './content/prices';
@@ -23,11 +24,11 @@ import Prices from './content/prices';
 // ---- Helpers ----- //
 const getPriceCopyString = (
 	price: ProductPrice,
-	productCopy: Node = null,
-): Node => {
+	productCopy: ReactNode = null,
+): ReactNode => {
 	const promotion = getAppliedPromo(price.promotions);
 
-	if (promotion && promotion.numberOfDiscountedPeriods) {
+	if (promotion?.numberOfDiscountedPeriods) {
 		return (
 			<>
 				per month for {promotion.numberOfDiscountedPeriods} months{productCopy},
@@ -129,7 +130,7 @@ const getPlans = (
 		);
 		const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
 		const promoCode = promotion ? promotion.promoCode : null;
-		const trackingProperties = {
+		const trackingProperties: TrackingProperties = {
 			id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
 			product: 'Paper',
 			componentType: 'ACQUISITIONS_BUTTON',
@@ -166,7 +167,7 @@ function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
-}: PaperProductPricesProps) {
+}: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}

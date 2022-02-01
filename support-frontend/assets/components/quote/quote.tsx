@@ -11,7 +11,7 @@ import {
 import { headline } from '@guardian/src-foundations/typography';
 import { SvgQuote } from '@guardian/src-icons';
 import React from 'react';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 
 const headshotSize = 68;
 const quoteFigure = css`
@@ -109,13 +109,13 @@ const quoteTail = css`
 	background-color: inherit;
 `;
 type PropTypes = {
-	children: Node;
+	children: ReactNode;
 	name: string;
 	jobTitle: string;
-	headshot?: Node;
+	headshot?: ReactNode;
 };
 
-function Quote({ children, name, jobTitle, headshot }: PropTypes) {
+function Quote({ children, name, jobTitle, headshot }: PropTypes): JSX.Element {
 	return (
 		<figure css={quoteFigure}>
 			<blockquote css={quoteText}>

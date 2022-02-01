@@ -22,6 +22,7 @@ import {
 	formError,
 	nonEmptyString,
 	nonSillyCharacters,
+	notLongerThan,
 	notNull,
 	removeError,
 	validate,
@@ -117,6 +118,13 @@ const applyBillingAddressRules = (
 			error: formError('lineOne', `Please enter a ${addressType} address.`),
 		},
 		{
+			rule: notLongerThan(fields.lineOne, 100),
+			error: formError(
+				'lineOne',
+				'Value cannot be longer than 100 characters.',
+			),
+		},
+		{
 			rule: nonSillyCharacters(fields.lineOne),
 			error: formError(
 				'lineOne',
@@ -128,6 +136,13 @@ const applyBillingAddressRules = (
 			error: formError(
 				'lineTwo',
 				'Please use only letters, numbers and punctuation.',
+			),
+		},
+		{
+			rule: notLongerThan(fields.lineTwo, 100),
+			error: formError(
+				'lineTwo',
+				'Value cannot be longer than 100 characters.',
 			),
 		},
 		{

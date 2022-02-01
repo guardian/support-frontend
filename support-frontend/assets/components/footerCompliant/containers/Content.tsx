@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 type PropTypes = {
@@ -13,7 +13,7 @@ type PropTypes = {
 		paddingTop?: boolean;
 		border?: boolean;
 	};
-	children: Node;
+	children: ReactNode;
 };
 const paddingStyle = css`
 	padding-top: ${space[2]}px;
@@ -41,7 +41,11 @@ function getBorderStyling(centred = false) {
 	`;
 }
 
-export function Content({ className, appearance, children }: PropTypes) {
+export function Content({
+	className,
+	appearance,
+	children,
+}: PropTypes): JSX.Element {
 	const { centred, border, paddingTop } = appearance;
 	return (
 		<div

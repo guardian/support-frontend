@@ -3,7 +3,7 @@ import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/acc
 import { from, until } from '@guardian/src-foundations/mq';
 import { background } from '@guardian/src-foundations/palette';
 import { body } from '@guardian/src-foundations/typography';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { CellData, RowData } from './interactiveTableRow';
 import {
@@ -35,10 +35,10 @@ const stickyHeader = css`
 	background-color: ${background.ctaPrimary};
 `;
 type InteractiveTablePropTypes = {
-	caption: Node;
+	caption: ReactNode;
 	headers: CellData[];
 	rows: RowData[];
-	footer: Node;
+	footer: ReactNode;
 };
 
 function InteractiveTable({
@@ -46,7 +46,7 @@ function InteractiveTable({
 	headers,
 	rows,
 	footer,
-}: InteractiveTablePropTypes) {
+}: InteractiveTablePropTypes): JSX.Element {
 	return (
 		<table css={table}>
 			<caption css={visuallyHidden}>{caption}</caption>

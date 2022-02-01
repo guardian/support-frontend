@@ -6,6 +6,7 @@ import com.gu.acquisitions.AcquisitionDataRowBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
+import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.acquisitions.ga.models.GAData
@@ -66,7 +67,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   }
 
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
-    sendPaymentSuccessMetric(state)
+    sendPaymentSuccessMetric(state).toEither.left.foreach(SafeLogger.error(scrub"failed to send PaymentSuccess metric", _))
 
     val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
 
@@ -78,9 +79,9 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     } yield result
 
     val result = for {
-      streamResult <- streamFuture
-      bigQueryResult <- biqQueryFuture
-      gaResult <- gaFuture
+      _ <- streamFuture
+      _ <- biqQueryFuture
+      _ <- gaFuture
     } yield ()
 
     result.value.map {
@@ -93,7 +94,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     // scalastyle:off line.size.limit
     // Used for Cloudwatch alarms: https://github.com/guardian/support-frontend/blob/920e638c35430cc260acdb1878f37bffa1d12fae/support-workers/cloud-formation/src/templates/cfn-template.yaml#L210
     // scalastyle:on line.size.limit
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.analyticsInfo.paymentProvider, state.sendThankYouEmailState.product)
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.user.isTestUser, state.analyticsInfo.paymentProvider, state.sendThankYouEmailState.product)
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
   }
 
