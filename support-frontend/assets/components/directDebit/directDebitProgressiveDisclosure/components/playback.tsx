@@ -9,6 +9,7 @@ import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from 'emotion-theming';
+import { useEffect, useRef } from 'preact/hooks';
 import React from 'react';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 
@@ -54,36 +55,46 @@ function Playback(props: {
 	buttonText: string;
 	allErrors: Array<Record<string, string>>;
 }): JSX.Element {
+	const subscribeButtonRef = useRef<HTMLDivElement>(null);
+
+	// Actively moving focus to the buttons prevents a screenreader 'losing its place' in the document
+	// after we switch to this component, and means the user can more easily edit or confirm
+	useEffect(() => {
+		subscribeButtonRef.current?.focus();
+	}, []);
+
 	return (
 		<div css={directDebitForm}>
-			<label htmlFor="account-holder-name-input" css={fieldLabel}>
-				Account name
-			</label>
-			<span css={fieldData}>{props.accountHolderName}</span>
+			<div aria-live="polite">
+				<label htmlFor="account-holder-name-input" css={fieldLabel}>
+					Account name
+				</label>
+				<span css={fieldData}>{props.accountHolderName}</span>
 
-			<label htmlFor="sort-code-input" css={fieldLabel}>
-				Sort Code
-			</label>
-			<span css={fieldData}>{props.sortCodeString}</span>
+				<label htmlFor="sort-code-input" css={fieldLabel}>
+					Sort Code
+				</label>
+				<span css={fieldData}>{props.sortCodeString}</span>
 
-			<label htmlFor="account-number-input" css={fieldLabel}>
-				Account number
-			</label>
-			<span css={fieldData}>{props.accountNumber}</span>
+				<label htmlFor="account-number-input" css={fieldLabel}>
+					Account number
+				</label>
+				<span css={fieldData}>{props.accountNumber}</span>
 
-			<label htmlFor="confirmation-text__locked" css={fieldLabel}>
-				Declaration
-			</label>
-			<p id="confirmation-text__locked" css={fieldInfo}>
-				I have confirmed that I am the account holder and that I am solely able
-				to authorise debit from the account
-			</p>
-			<p css={fieldInfoWithMargin}>
-				If the details above are correct, press confirm to set up your direct
-				debit, otherwise press back to make changes
-			</p>
+				<label htmlFor="confirmation-text__locked" css={fieldLabel}>
+					Declaration
+				</label>
+				<p id="confirmation-text__locked" css={fieldInfo}>
+					I have confirmed that I am the account holder and that I am solely
+					able to authorise debit from the account
+				</p>
+				<p css={fieldInfoWithMargin}>
+					If the details above are correct, press confirm to set up your direct
+					debit, otherwise press back to make changes
+				</p>
+			</div>
 
-			<div css={ctaContainer}>
+			<div css={ctaContainer} ref={subscribeButtonRef} tabIndex={-1}>
 				<ThemeProvider theme={buttonReaderRevenueBrandAlt}>
 					<Button onClick={props.editDirectDebitClicked}>Edit</Button>
 				</ThemeProvider>
