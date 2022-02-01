@@ -3,13 +3,13 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
 import { body, textSans } from '@guardian/src-foundations/typography';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import { SvgCalendar } from 'components/icons/calendar';
 
 type PropTypes = {
 	eventType: string;
-	eventImage: Node;
+	eventImage: ReactNode;
 	eventDate: string;
 	eventColour: string;
 	eventSectionText: string;
@@ -82,7 +82,7 @@ const infoLine = css`
 	}
 `;
 
-const EventCard = (props: PropTypes) => {
+function EventCard(props: PropTypes): JSX.Element {
 	const borderColour = css`
 		border-top: 2px solid ${props.eventColour};
 	`;
@@ -120,6 +120,6 @@ const EventCard = (props: PropTypes) => {
 			</div>
 		</section>
 	);
-};
+}
 
 export default EventCard;
