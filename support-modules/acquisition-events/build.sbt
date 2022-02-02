@@ -5,7 +5,7 @@ name := "module-acquisition-events"
 description := "Module for sending acquisition events"
 
 libraryDependencies ++= Seq(
-  "com.google.cloud" % "google-cloud-bigquery" % "1.126.0",
+  "com.google.cloud" % "google-cloud-bigquery" % "1.137.2",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "com.amazonaws" % "aws-java-sdk-kinesis" % "1.12.10",
