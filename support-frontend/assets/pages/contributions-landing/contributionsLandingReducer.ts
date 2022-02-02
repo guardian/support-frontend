@@ -137,9 +137,16 @@ export interface PayPalData {
 	hasLoaded: boolean;
 	buttonReady: boolean;
 }
+// TODO: correctly implement address fields for SepaData type
 export interface SepaData {
 	iban: string | null;
 	accountHolderName: string | null;
+	addressLineOne: string | null;
+	addressLineTwo: string | null;
+	city: string | null;
+	state: string | null;
+	postcode: string | null;
+	country: string | null;
 }
 interface FormState {
 	contributionType: ContributionType;

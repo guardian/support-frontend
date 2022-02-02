@@ -1,7 +1,10 @@
-import { css } from '@emotion/react';
-import { headline, space } from '@guardian/source-foundations';
-import { TextInput } from '@guardian/source-react-components';
+import { css } from '@emotion/core';
+import { space } from '@guardian/src-foundations';
+import { headline } from '@guardian/src-foundations/typography';
+import { TextInput } from '@guardian/src-text-input';
+import React, { useState } from 'react';
 import { isValidIban } from 'helpers/forms/formValidation';
+
 // -- Styles -- //
 const containerStyles = css`
 	padding-top: ${space[5]}px;
@@ -17,6 +20,7 @@ const fieldsContainerStyles = css`
 		margin-top: ${space[3]}px;
 	}
 `;
+
 // -- Component -- //
 type SepaFormProps = {
 	iban: string | null;
@@ -32,6 +36,35 @@ export function SepaForm({
 	updateAccountHolderName,
 	checkoutFormHasBeenSubmitted,
 }: SepaFormProps) {
+	const [requireAddress, setRequireAddress] = useState(false);
+
+	const isAddressRequired = (iban: string): boolean => {
+		const requiredAddressPrefixes = [
+			'AD',
+			'PF',
+			'TF',
+			'GI',
+			'GB',
+			'GG',
+			'IM',
+			'JE',
+			'MC',
+			'NC',
+			'BL',
+			'PM',
+			'SM',
+			'CH',
+			'WF',
+		];
+
+		return requiredAddressPrefixes.includes(iban.substring(0, 2).toUpperCase());
+	};
+
+	const ibanOnChange = (iban: string): void => {
+		setRequireAddress(isAddressRequired(iban));
+		updateIban(iban);
+	};
+
 	return (
 		<div css={containerStyles}>
 			<h3 css={headerStyles}>Your account details</h3>
@@ -39,14 +72,16 @@ export function SepaForm({
 			<div css={fieldsContainerStyles}>
 				<div>
 					<TextInput
+						optional={false}
+						hideLabel={false}
 						label="Bank account holder name"
-						maxLength="40"
-						value={accountHolderName}
+						maxLength={40}
+						value={accountHolderName ?? undefined}
 						onChange={(e) => updateAccountHolderName(e.target.value)}
 						error={
 							checkoutFormHasBeenSubmitted && !accountHolderName
 								? 'Please provide your account holder name'
-								: null
+								: undefined
 						}
 					/>
 				</div>
@@ -55,20 +90,24 @@ export function SepaForm({
 
 				<div>
 					<TextInput
+						optional={false}
+						hideLabel={false}
 						label="IBAN"
 						pattern="[0-9A-Z ]*"
-						minLength="6"
-						maxLength="34"
-						value={iban}
-						onChange={(e) => updateIban(e.target.value)}
+						minLength={6}
+						maxLength={34}
+						value={iban ?? undefined}
+						onChange={(e) => ibanOnChange(e.target.value)}
 						error={
 							checkoutFormHasBeenSubmitted && !isValidIban(iban)
 								? 'Please provide a valid IBAN'
-								: null
+								: undefined
 						}
 					/>
 				</div>
 			</div>
+
+			{requireAddress ? 'Address required' : 'No address required'}
 		</div>
 	);
 }
