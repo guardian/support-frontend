@@ -65,7 +65,7 @@ const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
 const cookieDaysToLive = 365;
 
-const setOneOffContributionCookie = () => {
+export const setOneOffContributionCookie = (): void => {
 	setCookie(
 		ONE_OFF_CONTRIBUTION_COOKIE,
 		currentTimeInEpochMilliseconds.toString(),
