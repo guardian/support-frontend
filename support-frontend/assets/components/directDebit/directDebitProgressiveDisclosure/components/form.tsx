@@ -12,15 +12,18 @@ import type { ErrorReason } from 'helpers/forms/errorReasons';
 import 'helpers/forms/errorReasons';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
+import type { DirectDebitFieldName } from '../types';
 
 const directDebitForm = css`
 	clear: left;
 	margin-top: 20px;
 	margin-left: 0;
 `;
+
 const spaceBetween = css`
 	margin-bottom: 20px;
 `;
+
 // Quick & dirty fix for the <span> that overlays the checkbox for animation purposes intercepting click
 // events and thus breaking our Selenium tests
 // TODO: Remove this once a PR to Source has been made to fix this on the component itself
@@ -29,7 +32,9 @@ const passThroughClicksToInput = css`
 		pointer-events: none;
 	}
 `;
-type EventHandler = (e: React.SyntheticEvent<HTMLInputElement>) => void;
+
+type EventHandler = (e: React.ChangeEvent<HTMLInputElement>) => void;
+
 type PropTypes = {
 	accountHolderName: string;
 	sortCodeString: string;
@@ -41,7 +46,7 @@ type PropTypes = {
 	accountHolderConfirmationError: string;
 	showGeneralError: boolean;
 	accountErrorsLength: number;
-	accountErrors: Array<Record<string, any>>;
+	accountErrors: Array<Record<string, string>>;
 	submissionError: ErrorReason | null;
 	submissionErrorHeading: string;
 	formError: Option<string>;
@@ -50,14 +55,14 @@ type PropTypes = {
 	updateAccountNumber: EventHandler;
 	updateAccountHolderConfirmation: EventHandler;
 	onChange: (
-		field: string,
-		dispatchUpdate: (...args: any[]) => any,
-		event: React.SyntheticEvent<HTMLInputElement>,
+		field: DirectDebitFieldName,
+		dispatchUpdate: (event: React.ChangeEvent<HTMLInputElement>) => void,
+		event: React.ChangeEvent<HTMLInputElement>,
 	) => void;
-	onSubmit: EventHandler;
+	onSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-function Form(props: PropTypes) {
+function Form(props: PropTypes): JSX.Element {
 	return (
 		<div css={directDebitForm}>
 			<div css={spaceBetween}>
@@ -72,7 +77,7 @@ function Form(props: PropTypes) {
 							e,
 						)
 					}
-					maxLength="40"
+					maxLength={40}
 					label="Bank account holder name"
 					error={props.accountHolderNameError}
 				/>
@@ -84,7 +89,7 @@ function Form(props: PropTypes) {
 					label="Sort code"
 					autoComplete="off"
 					type="text"
-					inputmode="numeric"
+					inputMode="numeric"
 					pattern="[0-9]*"
 					value={props.sortCodeString}
 					onChange={(e) =>
@@ -108,7 +113,7 @@ function Form(props: PropTypes) {
 					minLength={6}
 					maxLength={8}
 					type="text"
-					inputmode="numeric"
+					inputMode="numeric"
 					pattern="[0-9]*"
 					label="Account number"
 					error={props.accountNumberError}
@@ -117,6 +122,7 @@ function Form(props: PropTypes) {
 
 			<div css={[spaceBetween, passThroughClicksToInput]}>
 				<Checkbox
+					value="account-holder-confirmation"
 					id="account-holder-confirmation"
 					onChange={(e) =>
 						props.onChange(
@@ -128,7 +134,7 @@ function Form(props: PropTypes) {
 					checked={props.accountHolderConfirmation}
 					supporting="I confirm that I am the account holder and I am solely able to authorise debit from
           the account"
-					error={props.accountHolderConfirmationError}
+					error={!!props.accountHolderConfirmationError}
 				/>
 			</div>
 			<ThemeProvider theme={buttonReaderRevenueBrand}>
@@ -147,7 +153,7 @@ function Form(props: PropTypes) {
 			)}
 			{props.showGeneralError && (
 				<GeneralErrorMessage
-					errorReason={props.submissionError || props.formError}
+					errorReason={props.submissionError ?? props.formError}
 					errorHeading={props.submissionErrorHeading}
 				/>
 			)}
