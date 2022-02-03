@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import { combineReducers } from 'redux';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
@@ -137,16 +138,11 @@ export interface PayPalData {
 	hasLoaded: boolean;
 	buttonReady: boolean;
 }
-// TODO: correctly implement address fields for SepaData type
 export interface SepaData {
 	iban: string | null;
 	accountHolderName: string | null;
-	addressLineOne: string | null;
-	addressLineTwo: string | null;
-	city: string | null;
-	state: string | null;
-	postcode: string | null;
-	country: string | null;
+	lineOne: string | null;
+	country: Country | null;
 }
 interface FormState {
 	contributionType: ContributionType;
@@ -463,6 +459,24 @@ function createFormReducer() {
 					sepaData: {
 						...state.sepaData,
 						accountHolderName: action.accountHolderName,
+					},
+				};
+
+			case 'SET_SEPA_ADDRESS_LINE_ONE':
+				return {
+					...state,
+					sepaData: {
+						...state.sepaData,
+						lineOne: action.addressLineOne,
+					},
+				};
+
+			case 'SET_SEPA_ADDRESS_COUNTRY':
+				return {
+					...state,
+					sepaData: {
+						...state.sepaData,
+						country: action.addressCountry,
 					},
 				};
 

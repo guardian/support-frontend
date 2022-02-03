@@ -1,9 +1,13 @@
 import { css } from '@emotion/core';
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import { space } from '@guardian/src-foundations';
 import { headline } from '@guardian/src-foundations/typography';
+import { Option as OptionForSelect, Select } from '@guardian/src-select/index';
 import { TextInput } from '@guardian/src-text-input';
 import React, { useState } from 'react';
 import { isValidIban } from 'helpers/forms/formValidation';
+import { countries } from 'helpers/internationalisation/country';
+import { sortedOptions } from '../../../components/forms/customFields/sortedOptions';
 
 // -- Styles -- //
 const containerStyles = css`
@@ -25,6 +29,10 @@ const fieldsContainerStyles = css`
 type SepaFormProps = {
 	iban: string | null;
 	accountHolderName: string | null;
+	addressLineOne: string | null;
+	addressCountry: Country | null;
+	updateAddressLineOne: (addressLineOne: string) => void;
+	updateAddressCountry: (addressCountry: Country) => void;
 	updateIban: (iban: string) => void;
 	updateAccountHolderName: (accountHolderName: string) => void;
 	checkoutFormHasBeenSubmitted: boolean;
@@ -32,6 +40,10 @@ type SepaFormProps = {
 export function SepaForm({
 	iban,
 	accountHolderName,
+	addressLineOne,
+	addressCountry,
+	updateAddressLineOne,
+	updateAddressCountry,
 	updateIban,
 	updateAccountHolderName,
 	checkoutFormHasBeenSubmitted,
@@ -105,9 +117,46 @@ export function SepaForm({
 						}
 					/>
 				</div>
-			</div>
 
-			{requireAddress ? 'Address required' : 'No address required'}
+				{requireAddress && (
+					<>
+						<div>
+							<TextInput
+								optional={false}
+								hideLabel={false}
+								label="Address Line 1"
+								value={addressLineOne ?? undefined}
+								onChange={(e) => updateAddressLineOne(e.target.value)}
+								error={
+									checkoutFormHasBeenSubmitted && !addressLineOne
+										? 'Please enter a billing address'
+										: undefined
+								}
+							/>
+						</div>
+
+						<div />
+
+						<div>
+							<Select
+								optional={false}
+								hideLabel={false}
+								label="Country"
+								value={addressCountry ?? undefined}
+								onChange={(e) => updateAddressCountry(e.target.value)}
+								error={
+									checkoutFormHasBeenSubmitted && !addressCountry
+										? 'Please select a billing country'
+										: undefined
+								}
+							>
+								<OptionForSelect value="">Select a country</OptionForSelect>
+								{sortedOptions(countries)}
+							</Select>
+						</div>
+					</>
+				)}
+			</div>
 		</div>
 	);
 }

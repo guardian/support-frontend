@@ -1,7 +1,8 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
-import * as React from 'react';
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
+import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
+import React from 'react';
 import { connect } from 'react-redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
@@ -45,6 +46,8 @@ import {
 	selectAmount,
 	setCheckoutFormHasBeenSubmitted,
 	setSepaAccountHolderName,
+	setSepaAddressCountry,
+	setSepaAddressLineOne,
 	setSepaIban,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type {
@@ -109,6 +112,8 @@ type PropTypes = {
 	sepaData: SepaData;
 	setSepaIban: (iban: string) => void;
 	setSepaAccountHolderName: (accountHolderName: string) => void;
+	setSepaAddressLineOne: (addressLineOne: string) => void;
+	setSepaAddressCountry: (addressCountry: Country) => void;
 	productSetAbTestVariant: boolean;
 };
 
@@ -195,6 +200,12 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	},
 	setSepaAccountHolderName: (name: string) => {
 		dispatch(setSepaAccountHolderName(name));
+	},
+	setSepaAddressLineOne: (addressLineOne: string) => {
+		dispatch(setSepaAddressLineOne(addressLineOne));
+	},
+	setSepaAddressCountry: (addressCountry: Country) => {
+		dispatch(setSepaAddressCountry(addressCountry));
 	},
 });
 
@@ -382,8 +393,12 @@ function ContributionForm(props: PropTypes): JSX.Element {
 						<SepaForm
 							iban={props.sepaData.iban}
 							accountHolderName={props.sepaData.accountHolderName}
+							addressLineOne={props.sepaData.lineOne}
+							addressCountry={props.sepaData.country}
 							updateIban={props.setSepaIban}
 							updateAccountHolderName={props.setSepaAccountHolderName}
+							updateAddressLineOne={props.setSepaAddressLineOne}
+							updateAddressCountry={props.setSepaAddressCountry}
 							checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
 						/>
 						<SepaTerms />
