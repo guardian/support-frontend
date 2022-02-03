@@ -888,11 +888,11 @@
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => Promise<Action>' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => Action' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/directDebit/helpers/ajax.ts",

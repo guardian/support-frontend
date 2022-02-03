@@ -134,7 +134,7 @@ type DirectDebitConfirmationResponse = {
 function payDirectDebitClicked(): (
 	dispatch: Dispatch<Action>,
 	getState: () => CheckoutState,
-) => Promise<Action> {
+) => void {
 	return async (dispatch, getState) => {
 		const {
 			sortCodeString,
@@ -187,7 +187,7 @@ function payDirectDebitClicked(): (
 
 function confirmDirectDebitClicked(
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void,
-): (dispatch: Dispatch<Action>, getState: () => CheckoutState) => Action {
+): (dispatch: Dispatch<Action>, getState: () => CheckoutState) => void {
 	return (dispatch, getState) => {
 		const { sortCodeString, sortCodeArray, accountNumber, accountHolderName } =
 			getState().page.directDebit;
