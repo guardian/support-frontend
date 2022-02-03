@@ -6,11 +6,11 @@ import com.gu.acquisitions.AcquisitionDataRowBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
+import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
-import com.gu.monitoring.{LambdaExecutionResult, SafeLogger, Success}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.acquisitions.ga.models.GAData
-import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
+import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.RetryNone
@@ -36,8 +36,6 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   ): FutureHandlerResult = {
 
     SafeLogger.info(s"Sending acquisition event to BigQuery: ${state.toString}")
-
-    logToElasticSearch(state)
 
     state.sendThankYouEmailState match {
       case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
@@ -108,26 +106,5 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     case s: SendThankYouEmailGuardianWeeklyState => s.promoCode
   }
 
-  private def logToElasticSearch(state: SendAcquisitionEventState) =
-    LambdaExecutionResult.logResult(
-      LambdaExecutionResult(
-        state.requestId,
-        Success,
-        state.user.isTestUser,
-        state.sendThankYouEmailState.product,
-        state.analyticsInfo.paymentProvider,
-        state.sendThankYouEmailState match {
-          case p: SendThankYouEmailPaperState => Some(p.firstDeliveryDate)
-          case p: SendThankYouEmailGuardianWeeklyState => Some(p.firstDeliveryDate)
-          case _ => None
-        },
-        state.analyticsInfo.isGiftPurchase,
-        maybePromoCode(state.sendThankYouEmailState),
-        state.user.billingAddress.country,
-        state.user.deliveryAddress.map(_.country),
-        None,
-        None
-      )
-    )
 }
 
