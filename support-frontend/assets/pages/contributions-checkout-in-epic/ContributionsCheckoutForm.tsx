@@ -35,6 +35,7 @@ interface ContributionsCheckoutFormProps {
 	setSelectedAmount: (amount: number | 'other') => void;
 	setOtherAmount: (amount: string) => void;
 	secondaryCta: SecondaryCta;
+	isTestUser: boolean;
 }
 
 export function ContributionsCheckoutForm({
@@ -49,6 +50,7 @@ export function ContributionsCheckoutForm({
 	setSelectedAmount,
 	setOtherAmount,
 	secondaryCta,
+	isTestUser,
 }: ContributionsCheckoutFormProps): JSX.Element {
 	const [shouldShowErrorMessage, setShouldShowErrorMessage] = useState(false);
 
@@ -100,7 +102,7 @@ export function ContributionsCheckoutForm({
 				<StripePaymentRequestButtonContainer
 					country={country}
 					contributionType={contributionType}
-					isTestUser={false}
+					isTestUser={isTestUser}
 					amount={amount}
 					renderPaymentRequestButton={({
 						paymentRequest,
