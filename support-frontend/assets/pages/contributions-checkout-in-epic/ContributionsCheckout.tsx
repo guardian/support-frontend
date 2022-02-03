@@ -62,6 +62,7 @@ const mapStateToProps = (state: State) => ({
 	amounts: getAmounts(state),
 	selectedAmounts: state.page.form.selectedAmounts,
 	otherAmounts: state.page.form.formData.otherAmounts,
+	isTestUser: state.page.user.isTestUser ?? false,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => {
@@ -99,6 +100,7 @@ function ContributionsCheckout({
 	setSelectedContributionType,
 	setSelectedAmount,
 	setOtherAmount,
+	isTestUser,
 }: ContributionsCheckoutProps): JSX.Element {
 	const observe = useOnHeightChangeEffect((height) => {
 		window.parent.postMessage({ type: 'IFRAME_HEIGHT', height }, '*');
@@ -123,6 +125,7 @@ function ContributionsCheckout({
 					}
 					setOtherAmount={(amount) => setOtherAmount(amount, contributionType)}
 					secondaryCta={secondaryCta}
+					isTestUser={isTestUser}
 				/>
 			)}
 
