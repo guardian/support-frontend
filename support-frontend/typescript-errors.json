@@ -5,8 +5,8 @@
             "TS2305": 18,
             "TS2322": 122,
             "TS2578": 7,
-            "TS2339": 22,
-            "TS2345": 97,
+            "TS2339": 19,
+            "TS2345": 96,
             "TS7006": 54,
             "TS6133": 9,
             "TS7031": 18,
@@ -18,9 +18,10 @@
             "TS2739": 14,
             "TS2532": 4,
             "TS2556": 3,
-            "TS2554": 31,
+            "TS2554": 30,
             "TS2569": 2,
             "TS7053": 4,
+            "TS2307": 3,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
@@ -118,7 +119,6 @@
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/rendering/render.ts": 8,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
@@ -171,6 +171,8 @@
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
+            "assets/helpers/customHooks/useOnHeightChangeEffect.ts": 2,
+            "assets/pages/contributions-checkout-in-epic/useSecondaryCta.ts": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
@@ -818,11 +820,11 @@
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -834,27 +836,15 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
             "message": "Property 'showPrivacyManager' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -1197,10 +1187,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Argument of type 'unknown' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'AnyAction'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
@@ -1935,10 +1921,6 @@
             "message": "Expected 6 arguments, but got 1."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
             "path": "assets/pages/showcase/components/otherProducts.tsx",
             "message": "Expected 1 arguments, but got 0."
         }
@@ -1960,7 +1942,7 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -1969,6 +1951,20 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
             "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<FulfilmentOptions, string[]>'."
+        }
+    ],
+    "TS2307": [
+        {
+            "path": "assets/helpers/customHooks/useOnHeightChangeEffect.ts",
+            "message": "Cannot find module '@juggle/resize-observer' or its corresponding type declarations."
+        },
+        {
+            "path": "assets/helpers/customHooks/useOnHeightChangeEffect.ts",
+            "message": "Cannot find module 'react-cool-dimensions' or its corresponding type declarations."
+        },
+        {
+            "path": "assets/pages/contributions-checkout-in-epic/useSecondaryCta.ts",
+            "message": "Cannot find module 'zod' or its corresponding type declarations."
         }
     ],
     "TS2411": [

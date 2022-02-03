@@ -1,7 +1,9 @@
 // ----- Imports ----- //
+import { FocusStyleManager } from '@guardian/src-utilities';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import type { ThunkDispatch } from 'redux-thunk';
 import ContributionsFooter from 'components/footerCompliant/ContributionsFooter';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import Page from 'components/page/page';
@@ -21,19 +23,22 @@ import * as user from 'helpers/user/user';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
 import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
+import type { Action } from './contributionsLandingActions';
 import { init as formInit } from './contributionsLandingInit';
+import type { State } from './contributionsLandingReducer';
 import { initReducer } from './contributionsLandingReducer';
 import { setUserStateActions } from './setUserStateActions';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
-import { FocusStyleManager } from '@guardian/src-utilities';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
 }
 
 setUpTrackingAndConsents();
+
 // ----- Redux Store ----- //
+
 const countryGroupId: CountryGroupId = detect();
 const store = initRedux(() => initReducer(), true);
 
@@ -41,7 +46,7 @@ if (!window.guardian.polyfillScriptLoaded) {
 	gaEvent({
 		category: 'polyfill',
 		action: 'not loaded',
-		label: window.guardian.polyfillVersion || '',
+		label: window.guardian.polyfillVersion ?? '',
 	});
 }
 
@@ -49,7 +54,7 @@ if (typeof Object.values !== 'function') {
 	gaEvent({
 		category: 'polyfill',
 		action: 'Object.values not available after polyfill',
-		label: window.guardian.polyfillVersion || '',
+		label: window.guardian.polyfillVersion ?? '',
 	});
 }
 
@@ -58,14 +63,18 @@ if (typeof Object.values !== 'function') {
 user.init(store.dispatch, setUserStateActions(countryGroupId));
 formInit(store);
 const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
+
 // ----- Internationalisation ----- //
+
 const selectedCountryGroup = countryGroups[countryGroupId];
+
 // ----- Render ----- //
+
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
 const cookieDaysToLive = 365;
 
-const setOneOffContributionCookie = () => {
+export const setOneOffContributionCookie = (): void => {
 	setCookie(
 		ONE_OFF_CONTRIBUTION_COOKIE,
 		currentTimeInEpochMilliseconds.toString(),
@@ -74,19 +83,11 @@ const setOneOffContributionCookie = () => {
 };
 
 const campaignSettings = getCampaignSettings();
-const cssModifiers =
-	campaignSettings && campaignSettings.cssModifiers
-		? campaignSettings.cssModifiers
-		: [];
-const backgroundImageSrc =
-	campaignSettings && campaignSettings.backgroundImage
-		? campaignSettings.backgroundImage
-		: null;
+const cssModifiers = campaignSettings?.cssModifiers ?? [];
+const backgroundImageSrc = campaignSettings?.backgroundImage;
 FocusStyleManager.onlyShowFocusOnTabs(); // https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility
 
-const contributionsLandingPage = (
-	campaignCodeParameter: string | null | undefined,
-) => (
+const contributionsLandingPage = (campaignCodeParameter?: string) => (
 	<Page
 		classModifiers={['new-template', 'contribution-form', ...cssModifiers]}
 		header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
@@ -144,4 +145,7 @@ const router = (
 		</Provider>
 	</BrowserRouter>
 );
-renderPage(router, reactElementId, () => store.dispatch(enableOrDisableForm()));
+
+const dispatch = store.dispatch as ThunkDispatch<State, void, Action>;
+
+renderPage(router, reactElementId, () => dispatch(enableOrDisableForm()));

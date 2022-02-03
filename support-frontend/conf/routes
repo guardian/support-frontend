@@ -59,6 +59,9 @@ GET  /contribute/:campaignCode                                     controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
+GET  /contribute-in-epic                                           controllers.Application.contributeInEpicGeoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute-in-epic         controllers.Application.contributionsCheckoutInEpic(country: String)
+
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
 GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()
