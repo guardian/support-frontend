@@ -21,6 +21,7 @@
             "TS2554": 30,
             "TS2569": 2,
             "TS7053": 4,
+            "TS2307": 3,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
@@ -170,6 +171,8 @@
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
+            "assets/helpers/customHooks/useOnHeightChangeEffect.ts": 2,
+            "assets/pages/contributions-checkout-in-epic/useSecondaryCta.ts": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
@@ -1948,6 +1951,20 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
             "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<FulfilmentOptions, string[]>'."
+        }
+    ],
+    "TS2307": [
+        {
+            "path": "assets/helpers/customHooks/useOnHeightChangeEffect.ts",
+            "message": "Cannot find module '@juggle/resize-observer' or its corresponding type declarations."
+        },
+        {
+            "path": "assets/helpers/customHooks/useOnHeightChangeEffect.ts",
+            "message": "Cannot find module 'react-cool-dimensions' or its corresponding type declarations."
+        },
+        {
+            "path": "assets/pages/contributions-checkout-in-epic/useSecondaryCta.ts",
+            "message": "Cannot find module 'zod' or its corresponding type declarations."
         }
     ],
     "TS2411": [
