@@ -20,10 +20,12 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { Option } from 'helpers/types/option';
+import type { User } from 'helpers/user/userReducer';
 import { createUserReducer } from 'helpers/user/userReducer';
 
 export type CheckoutState = ReduxState<{
 	checkout: FormState;
+	user: User;
 	csrf: CsrfState;
 	marketingConsent: MarketingConsentState;
 	billingAddress: AddressState;
