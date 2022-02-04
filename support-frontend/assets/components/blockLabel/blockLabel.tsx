@@ -6,6 +6,7 @@ import {
 	space,
 	text,
 } from '@guardian/source-foundations';
+import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
 
 const blockLabel = css`
@@ -30,10 +31,11 @@ const blockLabel = css`
 		})};
 	}
 `;
+
 type BlockLabelPropTypes = {
 	children: ReactNode;
 	tag?: keyof JSX.IntrinsicElements;
-	cssOverrides?: string | string[];
+	cssOverrides?: SerializedStyles | SerializedStyles[];
 };
 
 function BlockLabel({
@@ -49,4 +51,5 @@ BlockLabel.defaultProps = {
 	tag: 'div',
 	cssOverrides: '',
 };
+
 export default BlockLabel;

@@ -18,9 +18,11 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 const borderStyle = `${border.secondary} 1px solid`;
+
 const visuallyHidden = css`
 	${_visuallyHidden}
 `;
+
 const tableRow = css`
 	position: relative;
 	width: 100%;
@@ -45,20 +47,24 @@ const tableRow = css`
 		grid-template-columns: 1fr 72px 72px 60px;
 	}
 `;
+
 const tableContentRow = css`
 	:hover {
 		background-color: ${sport[800]};
 	}
 `;
+
 const tableHeaderRow = css`
 	background-color: transparent;
 	color: ${neutral[100]};
 	-ms-grid-rows: 1fr;
 	grid-template-rows: 1fr;
 `;
+
 const tableRowOpen = css`
 	max-height: 800px;
 `;
+
 const tableCell = css`
 	display: flex;
 	flex: 0 1 auto;
@@ -68,6 +74,7 @@ const tableCell = css`
 	padding: ${space[4]}px 0;
 	padding-right: ${space[3]}px;
 `;
+
 const headingCell = css`
 	-ms-grid-row-align: end;
 	align-self: end;
@@ -77,6 +84,7 @@ const headingCell = css`
 	padding-bottom: 0;
 	height: unset;
 `;
+
 const primaryTableCell = css`
 	-ms-grid-column: 1;
 	grid-column: 1;
@@ -87,11 +95,13 @@ const primaryTableCell = css`
 		padding-left: 80px;
 	}
 `;
+
 const iconCell = css`
 	-ms-grid-column: 3;
 	grid-column: 3;
 	max-width: 48px;
 `;
+
 const expandableButtonCell = css`
 	-ms-grid-column: 4;
 	grid-column: 4;
@@ -102,6 +112,7 @@ const expandableButtonCell = css`
 	padding: 5px;
 	background-color: ${sport[800]};
 `;
+
 const detailsCell = css`
 	max-height: 800px;
 	min-height: 72px;
@@ -119,12 +130,15 @@ const detailsCell = css`
 		padding-right: ${space[9]}px;
 	}
 `;
+
 const detailsHidden = css`
 	display: none;
 `;
+
 const detailsVisible = css`
 	display: block;
 `;
+
 const toggleButton = css`
 	position: absolute;
 	/* Allows space for the 5px focus box shadow */
@@ -153,18 +167,22 @@ const toggleButton = css`
 		transition: transform ${transitions.short};
 	}
 `;
+
 const toggleButtonOpen = css`
 	svg {
 		transform: rotate(180deg);
 	}
 `;
+
 const finalRow = css`
 	display: block;
 	margin-top: ${space[2]}px;
 `;
+
 const yellowBackground = css`
 	background: ${brandAltBackground.primary};
 `;
+
 export type CellData = {
 	content: ReactNode;
 	isPrimary?: boolean;
@@ -172,12 +190,14 @@ export type CellData = {
 	isHidden?: boolean;
 	isStyleless?: boolean;
 };
+
 export type RowData = {
 	rowId: string;
 	columns: CellData[];
-	details: ReactNode;
+	details: JSX.Element;
 	onClick?: (showDetails: boolean) => void;
 };
+
 export function InteractiveTableHeaderRow({
 	columns,
 }: {
@@ -306,6 +326,7 @@ export function InteractiveTableRow({
 		</tr>
 	);
 }
+
 InteractiveTableRow.defaultProps = {
 	onClick: () => undefined,
 };
