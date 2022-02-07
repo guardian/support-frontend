@@ -28,7 +28,7 @@ object IdentityErrorResponse {
 
   case class IdentityError(
     message: String,
-    description: String,
+    description: String
   )
 
   object IdentityError {
@@ -38,7 +38,7 @@ object IdentityErrorResponse {
       val errorReasonCode = "invalid_email_address"
     }
 
-    def isDisallowedEmailError(identityError: IdentityError) =
+    def isDisallowedEmailError(identityError: IdentityError): Boolean =
       identityError.message == InvalidEmailAddress.message &&
       identityError.description == InvalidEmailAddress.description
 
