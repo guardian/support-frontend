@@ -150,7 +150,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .asEither
         .leftMap(err =>
           IdentityError(
-            message = "Error deserialising json to UserResponse",
+            message = "Error deserialising json to GuestRegistrationResponse",
             description = err.mkString(",")
           ))
         .map(response => response.guestRegistrationRequest.userId)
