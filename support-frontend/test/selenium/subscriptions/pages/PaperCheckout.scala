@@ -17,7 +17,7 @@ class PaperCheckout(implicit val webDriver: WebDriver) extends CheckoutPage {
 
   private val billingAddressIsDifferent = id("qa-billing-address-different")
 
-  def fillForm {
+  def fillForm(): Unit = {
     setValue(deliveryLineOne, "Kings Place")
     setValue(deliveryCity, "London")
     setValue(deliveryPostcode, "N19GU")
