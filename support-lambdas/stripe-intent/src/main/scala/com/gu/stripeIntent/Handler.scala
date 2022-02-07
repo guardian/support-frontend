@@ -15,7 +15,7 @@ import com.typesafe.config.{ConfigFactory, ConfigValue}
 import io.circe._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._

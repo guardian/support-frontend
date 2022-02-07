@@ -5,7 +5,7 @@ import java.net.URL
 import com.paypal.api.payments.Payment
 import io.circe.generic.JsonCodec
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.Try
 
 @JsonCodec case class PaypalPaymentSuccess(approvalUrl: String, paymentId: String)

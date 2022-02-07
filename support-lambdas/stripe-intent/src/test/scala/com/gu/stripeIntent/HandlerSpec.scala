@@ -9,7 +9,7 @@ import okio.{Buffer, BufferedSource}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 
 class HandlerSpec extends AsyncFlatSpec with Matchers {

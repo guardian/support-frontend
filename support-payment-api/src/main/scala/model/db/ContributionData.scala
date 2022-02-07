@@ -63,7 +63,7 @@ object ContributionData extends StrictLogging {
       countrySubdivisionCode = countrySubdivisionCode,
     )
 
-  import scala.collection.JavaConverters._
+  import scala.jdk.CollectionConverters._
 
   // Couple of notes:
   // - using (deprecated) shipping address as unable to get state from billing address

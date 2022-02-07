@@ -1,6 +1,6 @@
 package services
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Cancellable}
 import cats.data.EitherT
 import com.amazonaws.services.s3.AmazonS3
 import com.github.blemale.scaffeine.{AsyncLoadingCache, Scaffeine}
@@ -79,7 +79,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
     } yield switches
   }
 
-  def startPoller() = {
+  def startPoller(): Cancellable = {
     import scala.concurrent.duration._
 
     system.scheduler.schedule(0.seconds, 1.minute) {
