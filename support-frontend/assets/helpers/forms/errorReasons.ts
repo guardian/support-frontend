@@ -18,6 +18,7 @@ export type ErrorReason =
 	| 'amazon_pay_try_other_card'
 	| 'amazon_pay_try_again'
 	| 'amazon_pay_fatal'
+	| 'invalid_email_address'
 	| 'unknown';
 
 // ----- Functions ----- //
@@ -65,6 +66,9 @@ function appropriateErrorMessage(errorReason: ErrorReason | string): string {
 
 		case 'incomplete_payment_request_details':
 			return 'Please complete all relevant fields for your saved cards and billing addresses within your browser settings and try your payment again. Alternatively, you can use the form below.';
+
+		case 'invalid_email_address':
+			return 'Please use an email address from a different provider';
 
 		default:
 			return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
