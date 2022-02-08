@@ -6,7 +6,6 @@ import {
 	neutral,
 } from '@guardian/src-foundations/palette';
 import type { ReactNode } from 'react';
-import React from 'react';
 
 type Theme = 'light' | 'dark' | 'white' | 'brand';
 

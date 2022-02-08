@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { brandAlt } from '@guardian/src-foundations/palette';
-import React from 'react';
 import type { OneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
 import { glyph } from 'helpers/internationalisation/currency';
 import {

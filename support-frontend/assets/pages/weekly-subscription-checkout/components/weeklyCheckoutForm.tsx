@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { Radio, RadioGroup } from '@guardian/src-radio';
 import { Option as OptionForSelect, Select } from '@guardian/src-select';
-import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import Rows from 'components/base/rows';

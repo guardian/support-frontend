@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	trackComponentClick,
 	trackComponentLoad,

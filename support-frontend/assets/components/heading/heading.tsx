@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 
 // ----- Types ----- //
 export type HeadingSize = 1 | 2 | 3 | 4 | 5 | 6;

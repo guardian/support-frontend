@@ -1,4 +1,3 @@
-import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
 import Heading from 'components/heading/heading';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';

@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { from } from '@guardian/src-foundations/mq';
 import { brandBackground } from '@guardian/src-foundations/palette';
-import React from 'react';
 import Footer from './Footer';
 
 const containerStyles = css`

@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { body } from '@guardian/src-foundations/typography';
-import React from 'react';
 import type { ReactNode } from 'react';
 
 type PropTypes = {

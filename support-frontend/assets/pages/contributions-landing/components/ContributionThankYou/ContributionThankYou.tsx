@@ -8,7 +8,7 @@ import {
 	until,
 } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';

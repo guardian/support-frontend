@@ -10,7 +10,6 @@ import {
 } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
 import { SvgQuote } from '@guardian/src-icons';
-import React from 'react';
 import type { ReactNode } from 'react';
 
 const headshotSize = 68;

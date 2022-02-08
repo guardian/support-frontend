@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactElement } from 'react';
-import React from 'react';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';

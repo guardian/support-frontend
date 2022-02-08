@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import React from 'react';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';

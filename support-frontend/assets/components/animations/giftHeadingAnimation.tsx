@@ -1,13 +1,12 @@
 // ----- Imports ----- //
-import React from 'react';
 import {
-	fromMeCursor,
-	fromMeTyping,
-	giftTag,
-	heroHeading,
-	toFromLines,
-	toYouCursor,
-	toYouTyping,
+    fromMeCursor,
+    fromMeTyping,
+    giftTag,
+    heroHeading,
+    toFromLines,
+    toYouCursor,
+    toYouTyping,
 } from './giftHeadingAnimationStyles';
 
 function GiftHeadingAnimation() {

@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
 import { until } from '@guardian/src-foundations/mq';
-import React from 'react';
+import * as React from 'react';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

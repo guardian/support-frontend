@@ -9,7 +9,6 @@ import {
 	news,
 } from '@guardian/src-foundations/palette';
 import { body, headline, textSans } from '@guardian/src-foundations/typography';
-import React from 'react';
 import BlockLabel from 'components/blockLabel/blockLabel';
 import { SvgTicket } from 'components/icons/ticket';
 import { detect as detectCountry } from 'helpers/internationalisation/country';

@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { brand } from '@guardian/src-foundations/palette';
-import * as React from 'react';
 
 const listItem = css`
 	display: flex;

@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 import type { HeadingSize } from 'components/heading/heading';
 import Heading from 'components/heading/heading';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';

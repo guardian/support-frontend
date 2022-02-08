@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import { LinkButton } from '@guardian/src-button';
-import React from 'react';
 import Footer from 'components/footer/footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';

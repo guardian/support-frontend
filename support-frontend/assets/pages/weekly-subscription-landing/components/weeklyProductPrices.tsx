@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { Product } from 'components/product/productOption';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';

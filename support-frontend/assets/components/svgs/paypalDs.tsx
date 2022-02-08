@@ -1,5 +1,3 @@
-import React from 'react'; // The generic PayPal logo used on checkouts.
-
 export default function SvgPayPalDs(): JSX.Element {
 	return (
 		<svg
@@ -29,4 +27,4 @@ export default function SvgPayPalDs(): JSX.Element {
 			/>
 		</svg>
 	);
-}
+} // The generic PayPal logo used on checkouts.

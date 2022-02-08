@@ -6,7 +6,7 @@ import { until } from '@guardian/src-foundations/mq';
 import { neutral, news } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
 import { SvgEnvelope, SvgFacebook, SvgTwitter } from '@guardian/src-icons';
-import React from 'react';
+import * as React from 'react';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,

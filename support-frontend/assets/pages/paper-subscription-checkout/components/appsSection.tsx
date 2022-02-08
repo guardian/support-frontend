@@ -6,7 +6,6 @@ import { from } from '@guardian/src-foundations/mq';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
 import type { ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

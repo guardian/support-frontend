@@ -6,7 +6,7 @@ import { textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { Link } from '@guardian/src-link';
 import { Radio, RadioGroup } from '@guardian/src-radio';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { privacyLink } from 'helpers/legal';
 import {
 	trackComponentClick,

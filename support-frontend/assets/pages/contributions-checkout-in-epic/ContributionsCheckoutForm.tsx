@@ -4,7 +4,8 @@ import { Button, buttonReaderRevenue, LinkButton } from '@guardian/src-button';
 import { neutral, space } from '@guardian/src-foundations';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import { ThemeProvider } from '@emotion/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import StripePaymentRequestButtonContainer from 'components/StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import type {

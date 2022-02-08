@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
-import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';

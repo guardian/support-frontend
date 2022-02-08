@@ -4,7 +4,6 @@ import { between, from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
 import { SvgInfo } from '@guardian/src-icons';
-import React from 'react';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';

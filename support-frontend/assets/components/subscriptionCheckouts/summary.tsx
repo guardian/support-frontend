@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import type { $Call } from 'utility-types';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import 'helpers/productPrice/productPrices';

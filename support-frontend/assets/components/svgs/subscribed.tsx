@@ -1,5 +1,3 @@
-import React from 'react'; // Subscribe button icon
-
 export default function SvgSubscribed() {
 	return (
 		<svg
@@ -18,4 +16,4 @@ export default function SvgSubscribed() {
 			/>
 		</svg>
 	);
-}
+} // Subscribe button icon

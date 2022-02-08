@@ -1,4 +1,3 @@
-import React from 'react';
 import Content from 'components/content/content';
 import BreakingTheHeadlines from 'components/svgs/breakingTheHeadlines';
 import Text from 'components/text/text';

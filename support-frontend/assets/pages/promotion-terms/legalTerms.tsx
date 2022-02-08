@@ -1,4 +1,3 @@
-import React from 'react';
 import Content, { Divider } from 'components/content/content';
 import { Title } from 'components/text/text';
 import {

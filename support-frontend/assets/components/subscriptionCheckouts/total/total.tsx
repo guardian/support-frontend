@@ -1,4 +1,3 @@
-import React from 'react';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { displayPrice } from 'helpers/productPrice/priceDescriptions';

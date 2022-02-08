@@ -1,5 +1,4 @@
 import cx from 'classnames';
-import React from 'react';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

@@ -6,7 +6,6 @@ import { line } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography/obj';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { TextInput } from '@guardian/src-text-input';
-import React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';

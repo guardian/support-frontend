@@ -5,7 +5,6 @@ import { from } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import { body } from '@guardian/src-foundations/typography';
 import { Link } from '@guardian/src-link';
-import React from 'react';
 import type { Node } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { paperSubsUrl } from 'helpers/urls/routes';

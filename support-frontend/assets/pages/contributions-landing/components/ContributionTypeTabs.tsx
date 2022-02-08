@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import React from 'react';
 import { connect } from 'react-redux';
 import type {
 	ContributionType,

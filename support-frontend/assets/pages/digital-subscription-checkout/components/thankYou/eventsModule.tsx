@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import React from 'react';
 import { SvgTicket } from 'components/icons/ticket';
 import Text from 'components/text/text';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';

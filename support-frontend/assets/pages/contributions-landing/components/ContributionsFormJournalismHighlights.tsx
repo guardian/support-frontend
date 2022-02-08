@@ -6,7 +6,6 @@ import { from } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
 import { body, headline, textSans } from '@guardian/src-foundations/typography';
 import { Hide } from '@guardian/src-layout';
-import React from 'react';
 
 // ----- Types ----- //
 

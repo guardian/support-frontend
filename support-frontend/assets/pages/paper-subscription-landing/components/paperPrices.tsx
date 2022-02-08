@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import React from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	finalPrice,

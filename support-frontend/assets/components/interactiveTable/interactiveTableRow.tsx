@@ -11,7 +11,7 @@ import {
 } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgChevronDownSingle } from '@guardian/src-icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 const borderStyle = `${border.secondary} 1px solid`;

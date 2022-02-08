@@ -1,7 +1,6 @@
 import { LinkButton } from '@guardian/src-button';
 import { brand } from '@guardian/src-foundations/themes';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
 import { contributeUrl } from '../utils';
 
 function GuardianLogoSvg(): JSX.Element {

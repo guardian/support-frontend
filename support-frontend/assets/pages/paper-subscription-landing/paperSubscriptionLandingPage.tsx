@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 // @ts-expect-error
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Footer from 'components/footerCompliant/Footer';

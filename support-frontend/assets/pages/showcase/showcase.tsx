@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import Content from 'components/content/content';
 import Footer from 'components/footerCompliant/Footer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';

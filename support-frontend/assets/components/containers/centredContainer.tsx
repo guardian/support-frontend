@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { from } from '@guardian/src-foundations/mq';
 import type { ReactNode } from 'react';
-import React from 'react';
 
 type PropTypes = {
 	cssOverrides?: string;

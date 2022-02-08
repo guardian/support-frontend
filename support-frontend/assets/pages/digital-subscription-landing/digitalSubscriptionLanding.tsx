@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 import { Provider } from 'react-redux';

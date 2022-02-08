@@ -6,7 +6,6 @@ import { from } from '@guardian/src-foundations/mq';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
 import Content from 'components/content/contentSimple';
 
 const subHeading = css`

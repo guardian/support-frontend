@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { headline, textSans } from '@guardian/src-foundations/typography';
-import React from 'react';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';

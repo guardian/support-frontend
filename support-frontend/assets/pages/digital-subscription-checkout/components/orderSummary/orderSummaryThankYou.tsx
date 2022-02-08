@@ -3,7 +3,6 @@ import { space } from '@guardian/src-foundations';
 import { between, from, until } from '@guardian/src-foundations/mq';
 import { background, neutral, text } from '@guardian/src-foundations/palette';
 import { headline, textSans } from '@guardian/src-foundations/typography/obj';
-import React from 'react';
 import type { $Call } from 'utility-types';
 import type { GridImg } from 'components/gridImage/gridImage';
 import 'components/gridImage/gridImage';

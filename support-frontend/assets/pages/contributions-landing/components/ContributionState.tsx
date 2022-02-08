@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { focusHalo } from '@guardian/src-foundations/accessibility';
 import { InlineError } from '@guardian/src-user-feedback';
-import React from 'react';
 import { connect } from 'react-redux';
 import DownChevronDs from 'components/svgs/downChevronDs';
 import type { StateProvince } from 'helpers/internationalisation/country';
@@ -87,7 +86,7 @@ const chevronErrorCss = css`
 `;
 
 const renderState = (selectedState: StateProvince | null) =>
-	function (state: { abbreviation: string; name: string }) {
+	(function(state: { abbreviation: string; name: string }) {
 		return (
 			<option
 				value={state.abbreviation}
@@ -96,7 +95,7 @@ const renderState = (selectedState: StateProvince | null) =>
 				&nbsp;&nbsp;{state.name}
 			</option>
 		);
-	};
+	});
 
 const renderStatesField = (
 	states: Record<string, string>,

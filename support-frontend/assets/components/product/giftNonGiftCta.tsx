@@ -3,7 +3,6 @@ import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import React from 'react';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type GiftableProduct = 'digital' | 'Guardian Weekly';

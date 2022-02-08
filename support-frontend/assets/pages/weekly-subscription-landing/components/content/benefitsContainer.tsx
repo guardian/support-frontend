@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { neutral } from '@guardian/src-foundations/palette';
-import React from 'react';
 import type { ReactNode } from 'react';
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';

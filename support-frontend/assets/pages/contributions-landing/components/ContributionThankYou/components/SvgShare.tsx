@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SvgShare = () => (
 	<svg
 		width="39"

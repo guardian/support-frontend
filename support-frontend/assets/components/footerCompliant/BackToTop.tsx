@@ -5,7 +5,6 @@ import {
 	brandText,
 } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
-import React from 'react';
 
 const iconHeight = '42px';
 const iconContainer = css`

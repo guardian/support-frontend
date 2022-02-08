@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { headline } from '@guardian/src-foundations/typography';
 import { useEffect } from 'preact/hooks';
-import React from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { setOneOffContributionCookie } from 'pages/contributions-landing/contributionsLanding';

@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import Page from 'components/page/page';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';

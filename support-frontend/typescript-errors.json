@@ -2,13 +2,13 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS6133": 288,
             "TS2305": 18,
             "TS2322": 118,
+            "TS2578": 7,
             "TS2339": 19,
             "TS2345": 96,
             "TS7006": 54,
-            "TS2578": 5,
+            "TS6133": 9,
             "TS7031": 18,
             "TS2564": 2,
             "TS2769": 14,
@@ -38,296 +38,38 @@
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
-            "assets/__mocks__/stripeMock.tsx": 1,
-            "assets/components/adFreeSection/adFreeSection.tsx": 1,
-            "assets/components/animations/giftHeadingAnimation.tsx": 1,
-            "assets/components/base/rows.tsx": 1,
-            "assets/components/blockLabel/blockLabel.tsx": 1,
-            "assets/components/button/_sharedButton.tsx": 1,
-            "assets/components/button/anchorButton.tsx": 1,
-            "assets/components/button/button.tsx": 1,
-            "assets/components/button/nonInteractiveButton.tsx": 1,
-            "assets/components/button/trackableButton.tsx": 1,
-            "assets/components/checkoutExpander/checkoutExpander.tsx": 1,
-            "assets/components/checkoutForm/checkoutForm.tsx": 1,
-            "assets/components/containers/centredContainer.tsx": 1,
-            "assets/components/containers/flexContainer.tsx": 1,
-            "assets/components/containers/fullWidthContainer.tsx": 1,
-            "assets/components/content/content.tsx": 3,
-            "assets/components/content/contentSimple.tsx": 1,
-            "assets/components/csr/csrBanner.tsx": 1,
-            "assets/components/datePicker/datePicker.tsx": 3,
-            "assets/components/dialog/dialog.tsx": 1,
-            "assets/components/directDebit/directDebitForm/directDebitGuarantee.tsx": 1,
-            "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 2,
-            "assets/components/directDebit/helpers/ajax.ts": 2,
-            "assets/components/errorMessage/errorMessage.tsx": 1,
-            "assets/components/footer/footer.tsx": 1,
-            "assets/components/footerCompliant/BackToTop.tsx": 1,
-            "assets/components/footerCompliant/containers/Content.tsx": 1,
-            "assets/components/footerCompliant/containers/FooterContent.tsx": 1,
-            "assets/components/footerCompliant/ContributionsFooter.tsx": 1,
-            "assets/components/footerCompliant/DigitalFooter.tsx": 1,
-            "assets/components/footerCompliant/Footer.tsx": 5,
-            "assets/components/footerCompliant/WeeklyFooter.tsx": 1,
-            "assets/components/forms/customFields/error.tsx": 1,
-            "assets/components/forms/customFields/options.tsx": 2,
-            "assets/components/forms/label.tsx": 3,
-            "assets/components/generalErrorMessage/generalErrorMessage.tsx": 1,
-            "assets/components/gridImage/gridImage.tsx": 1,
-            "assets/components/gridPicture/gridPicture.tsx": 1,
-            "assets/components/headers/header/header.tsx": 7,
-            "assets/components/headers/header/headerWithCountrySwitcher.tsx": 1,
-            "assets/components/headers/header/mobileMenuToggler.tsx": 2,
-            "assets/components/headers/links/links.tsx": 2,
-            "assets/components/headers/mobileMenu/mobileMenu.tsx": 3,
-            "assets/components/headers/roundelHeader/header.tsx": 1,
-            "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 3,
-            "assets/components/heading/heading.tsx": 1,
-            "assets/components/headingBlock/headingBlock.tsx": 1,
-            "assets/components/highlights/highlights.tsx": 1,
-            "assets/components/interactiveTable/interactiveTable.tsx": 1,
-            "assets/components/interactiveTable/interactiveTableRow.tsx": 1,
-            "assets/components/introduction/squaresIntroduction.tsx": 1,
-            "assets/components/leftMarginSection/leftMarginSection.tsx": 1,
-            "assets/components/legal/contribLegal/contribLegal.tsx": 1,
-            "assets/components/legal/termsPrivacy/sepaTerms.tsx": 1,
-            "assets/components/legal/termsPrivacy/termsPrivacy.tsx": 1,
-            "assets/components/list/orderedList.tsx": 1,
-            "assets/components/marketingConsent/marketingConsent.tsx": 2,
-            "assets/components/marketingConsent/marketingConsentGift.tsx": 1,
-            "assets/components/marketingConsent/marketingConsentPaper.tsx": 3,
-            "assets/components/menu/menu.tsx": 3,
-            "assets/components/orderSummary/orderSummary.tsx": 1,
-            "assets/components/orderSummary/orderSummaryProduct.tsx": 1,
-            "assets/components/packshots/digital-packshot-hero.tsx": 1,
-            "assets/components/packshots/digital-packshot.tsx": 1,
-            "assets/components/packshots/guardian-weekly-packshot-hero.tsx": 1,
-            "assets/components/packshots/guardian-weekly-packshot.tsx": 1,
-            "assets/components/packshots/paper-and-digital-packshot.tsx": 1,
-            "assets/components/packshots/paper-packshot.tsx": 1,
-            "assets/components/packshots/premium-app-packshot.tsx": 1,
-            "assets/components/packshots/print-feature-packshot.tsx": 1,
-            "assets/components/page/block.tsx": 1,
-            "assets/components/page/hero.tsx": 1,
-            "assets/components/page/heroRoundel.tsx": 1,
-            "assets/components/page/page.tsx": 2,
-            "assets/components/page/pageTitle.tsx": 5,
-            "assets/components/pageSection/pageSection.tsx": 1,
-            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 14,
-            "assets/components/priceLabel/priceLabel.tsx": 2,
-            "assets/components/product/giftNonGiftCta.tsx": 1,
-            "assets/components/product/productInfoChip.tsx": 1,
-            "assets/components/product/productOption.tsx": 2,
-            "assets/components/product/productOptionSmall.tsx": 2,
-            "assets/components/productPage/productPageHero/productPageHero.tsx": 1,
-            "assets/components/productPage/productPageList/productPageList.tsx": 1,
-            "assets/components/progressMessage/progressMessage.tsx": 1,
-            "assets/components/questionsContact/questionsContact.tsx": 1,
-            "assets/components/quote/quote.tsx": 1,
-            "assets/components/recaptcha/recaptcha.tsx": 1,
-            "assets/components/secureTransactionIndicator/secureTransactionIndicator.tsx": 1,
-            "assets/components/signout/signout.tsx": 1,
-            "assets/components/spinners/animatedDots.tsx": 1,
-            "assets/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx": 1,
-            "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
-            "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 13,
-            "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 3,
-            "assets/components/subscriptionCheckouts/cancellationPolicy.tsx": 1,
-            "assets/components/subscriptionCheckouts/directDebit/directDebitPaymentTerms.tsx": 1,
-            "assets/components/subscriptionCheckouts/directDebit/directDebitTerms.tsx": 1,
-            "assets/components/subscriptionCheckouts/headerWrapper.tsx": 1,
-            "assets/components/subscriptionCheckouts/layout.tsx": 2,
-            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 5,
-            "assets/components/subscriptionCheckouts/paymentTerms.tsx": 1,
-            "assets/components/subscriptionCheckouts/payPalSubmitButton.tsx": 1,
-            "assets/components/subscriptionCheckouts/personalDetails.tsx": 8,
-            "assets/components/subscriptionCheckouts/personalDetailsGift.tsx": 1,
-            "assets/components/subscriptionCheckouts/stage.tsx": 1,
-            "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
-            "assets/components/subscriptionCheckouts/submitFormErrorSummary.tsx": 1,
-            "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx": 1,
-            "assets/components/subscriptionCheckouts/summary.tsx": 7,
-            "assets/components/subscriptionCheckouts/thankYou/returnSection.tsx": 1,
-            "assets/components/subscriptionCheckouts/total/total.tsx": 1,
-            "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 5,
-            "assets/components/svgs/amazonPayLogoDs.tsx": 1,
-            "assets/components/svgs/arrowRightStraight.tsx": 1,
-            "assets/components/svgs/breakingTheHeadlines.tsx": 1,
-            "assets/components/svgs/checkmark.tsx": 1,
-            "assets/components/svgs/chevron.tsx": 1,
-            "assets/components/svgs/close.tsx": 1,
-            "assets/components/svgs/cross.tsx": 1,
-            "assets/components/svgs/directDebitSymbol.tsx": 1,
-            "assets/components/svgs/directDebitSymbolAndText.tsx": 1,
-            "assets/components/svgs/directDebitSymbolDs.tsx": 1,
-            "assets/components/svgs/downChevronDs.tsx": 1,
-            "assets/components/svgs/dropdownArrow.tsx": 1,
-            "assets/components/svgs/envelope.tsx": 1,
-            "assets/components/svgs/exclamation.tsx": 1,
-            "assets/components/svgs/exclamationAlternate.tsx": 1,
-            "assets/components/svgs/gift.tsx": 1,
-            "assets/components/svgs/globe.tsx": 1,
-            "assets/components/svgs/guardianLogo.tsx": 1,
-            "assets/components/svgs/menu.tsx": 1,
-            "assets/components/svgs/newCreditCardDs.tsx": 1,
-            "assets/components/svgs/noOne.tsx": 1,
-            "assets/components/svgs/oneMillionCircles.tsx": 1,
-            "assets/components/svgs/passwordKey.tsx": 1,
-            "assets/components/svgs/paypalDs.tsx": 1,
-            "assets/components/svgs/questionMarkHintIcon.tsx": 1,
-            "assets/components/svgs/sepa.tsx": 1,
-            "assets/components/svgs/squaresHeroDesktop.tsx": 1,
-            "assets/components/svgs/squaresHeroMobile.tsx": 1,
-            "assets/components/svgs/squaresHeroTablet.tsx": 1,
-            "assets/components/svgs/subscribe.tsx": 1,
-            "assets/components/svgs/subscribed.tsx": 1,
-            "assets/components/svgs/user.tsx": 1,
-            "assets/components/svgs/withSupport.tsx": 1,
-            "assets/components/tabs/tabs.tsx": 1,
-            "assets/components/text/text.tsx": 1,
-            "assets/components/ticker/contributionTicker.tsx": 1,
-            "assets/helpers/forms/checkouts.ts": 1,
-            "assets/helpers/productPrice/promotions.tsx": 1,
-            "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx": 1,
-            "assets/helpers/urls/externalLinks.ts": 3,
-            "assets/helpers/utilities/dotcomContactPage.tsx": 1,
-            "assets/pages/aus-moment-map/components/closeButton.tsx": 1,
-            "assets/pages/aus-moment-map/components/header.tsx": 1,
-            "assets/pages/aus-moment-map/components/socialLinks.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/actSvg.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/newSouthWalesSvg.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/northernTerritorySvg.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/queenslandSvg.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/southAustraliaSvg.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/tasmaniaSvg.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/victoriaSvg.tsx": 1,
-            "assets/pages/aus-moment-map/components/territories/westernAustraliaSvg.tsx": 1,
-            "assets/pages/contributions-checkout-in-epic/ContributionAmountSelector.tsx": 1,
-            "assets/pages/contributions-checkout-in-epic/ContributionsCheckout.tsx": 1,
-            "assets/pages/contributions-checkout-in-epic/ContributionsCheckoutSubmitting.tsx": 1,
-            "assets/pages/contributions-checkout-in-epic/ContributionsCheckoutThankYou.tsx": 1,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 2,
-            "assets/pages/contributions-landing/components/AustraliaMapLink.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionAmount.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionAmountChoicesChoiceLabel.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionErrorMessage.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionsFormBlurbPreviousGiving.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionState.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 2,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/BulletPointedList.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgAusMap.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgClock.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgLinkedIn.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgNotification.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgPersonWithTick.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgShare.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgSpeechBubbleWithPlus.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSupportReminder.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSurvey.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 3,
-            "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 2,
-            "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 6,
-            "assets/pages/contributions-landing/components/SepaForm.tsx": 8,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 2,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
-            "assets/pages/contributions-landing/components/StripePaymentRequestButton.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLandingInit.ts": 2,
-            "assets/pages/contributions-landing/EmptyContributionsLandingPage.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 10,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 5,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 9,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummary.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 2,
-            "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 2,
-            "assets/pages/digital-subscription-checkout/components/thankYou/appsSection.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/thankYou/hero.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 2,
-            "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 1,
-            "assets/pages/digital-subscription-checkout/thankYouExisting.tsx": 1,
-            "assets/pages/digital-subscription-checkout/thankYouExistingContent.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 4,
-            "assets/pages/digital-subscription-landing/components/comparison/interactiveTableContents.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 8,
-            "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/events/eventsImages.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 2,
-            "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 5,
-            "assets/pages/digital-subscription-landing/components/hero/defaultRoundel.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroWithImage.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 2,
-            "assets/pages/digital-subscription-landing/components/prices.tsx": 1,
-            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 1,
-            "assets/pages/error/components/errorPage.tsx": 1,
-            "assets/pages/error/error404.tsx": 1,
-            "assets/pages/error/error500.tsx": 1,
-            "assets/pages/error/maintenance.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/appsSection.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/heroPicture.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 17,
-            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 3,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 9,
-            "assets/pages/paper-subscription-checkout/components/subscriptionSurvey.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 6,
-            "assets/pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx": 1,
-            "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 2,
-            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 5,
-            "assets/pages/paper-subscription-landing/components/content/prices.tsx": 2,
-            "assets/pages/paper-subscription-landing/components/content/subsCardTab.tsx": 1,
-            "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 2,
-            "assets/pages/paper-subscription-landing/components/paperPrices.tsx": 1,
-            "assets/pages/paypal-error/payPalError.tsx": 1,
-            "assets/pages/promotion-terms/DigitalPackTerms.tsx": 1,
-            "assets/pages/promotion-terms/legalTerms.tsx": 1,
-            "assets/pages/promotion-terms/PaperTerms.tsx": 1,
-            "assets/pages/promotion-terms/promoDetails.tsx": 1,
-            "assets/pages/promotion-terms/promotionTerms.tsx": 2,
-            "assets/pages/promotion-terms/weeklyTerms.tsx": 2,
-            "assets/pages/showcase/components/breakingHeadlines.tsx": 1,
-            "assets/pages/showcase/components/ctaContribute.tsx": 2,
-            "assets/pages/showcase/components/ctaSubscribe.tsx": 2,
-            "assets/pages/showcase/components/hero.tsx": 4,
-            "assets/pages/showcase/components/noOneEdits.tsx": 1,
-            "assets/pages/showcase/components/otherProduct.tsx": 2,
-            "assets/pages/showcase/components/otherProducts.tsx": 2,
-            "assets/pages/showcase/components/regionalContent.tsx": 1,
-            "assets/pages/showcase/components/whySupportMatters.tsx": 1,
-            "assets/pages/showcase/showcase.tsx": 1,
-            "assets/pages/subscriptions-landing/components/featureHeader.tsx": 1,
-            "assets/pages/subscriptions-landing/subscriptionsLanding.tsx": 1,
-            "assets/pages/subscriptions-redemption/components/productSummary/productSummary.tsx": 1,
-            "assets/pages/subscriptions-redemption/components/redemptionForm.tsx": 1,
-            "assets/pages/subscriptions-redemption/components/stage.tsx": 1,
-            "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 7,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 8,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 3,
-            "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx": 1,
-            "assets/pages/weekly-subscription-landing/components/content/benefitsHeading.tsx": 1,
-            "assets/pages/weekly-subscription-landing/components/content/giftBenefits.tsx": 1,
-            "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 2,
-            "assets/pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx": 1,
             "assets/components/asyncronously/asyncronously.ts": 2,
+            "assets/components/content/content.tsx": 2,
+            "assets/components/footerCompliant/Footer.tsx": 4,
+            "assets/components/forms/customFields/options.tsx": 1,
+            "assets/components/forms/label.tsx": 2,
+            "assets/components/headers/header/header.tsx": 6,
+            "assets/components/headers/header/mobileMenuToggler.tsx": 1,
+            "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
+            "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
+            "assets/components/menu/menu.tsx": 2,
+            "assets/components/product/productOption.tsx": 1,
+            "assets/components/product/productOptionSmall.tsx": 1,
+            "assets/components/subscriptionCheckouts/layout.tsx": 1,
+            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
+            "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
+            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
-            "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 3,
+            "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
+            "assets/components/headers/links/links.tsx": 1,
+            "assets/components/marketingConsent/marketingConsent.tsx": 1,
+            "assets/components/page/page.tsx": 1,
+            "assets/components/page/pageTitle.tsx": 4,
+            "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
+            "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
+            "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
+            "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
+            "assets/components/subscriptionCheckouts/summary.tsx": 6,
+            "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
@@ -338,24 +80,51 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
+            "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 5,
+            "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 5,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 4,
+            "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
+            "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
+            "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
+            "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
+            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 12,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
+            "assets/pages/paper-subscription-landing/components/content/prices.tsx": 1,
+            "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
+            "assets/pages/showcase/components/ctaContribute.tsx": 1,
+            "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
+            "assets/pages/showcase/components/hero.tsx": 3,
+            "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
+            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
+            "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
+            "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
+            "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
+            "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/rendering/render.ts": 8,
-            "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
+            "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
+            "assets/components/directDebit/helpers/ajax.ts": 2,
             "assets/components/marketingConsent/helpers.ts": 1,
+            "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
+            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx": 1,
@@ -372,27 +141,44 @@
             "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
             "assets/helpers/productPrice/paperProductPrices.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
+            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
+            "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
+            "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
-            "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 1,
+            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
+            "assets/pages/promotion-terms/promotionTerms.tsx": 1,
+            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
+            "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
+            "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
+            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
-            "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
+            "assets/helpers/forms/checkouts.ts": 1,
+            "assets/helpers/urls/externalLinks.ts": 3,
+            "assets/pages/contributions-landing/contributionsLandingInit.ts": 2,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
+            "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
+            "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
+            "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
             "assets/helpers/productPrice/subscriptions.ts": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
+            "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 1,
             "assets/pages/promotion-terms/promotionTermsReducer.ts": 4
         }
     },
@@ -400,1160 +186,6 @@
         {
             "path": "assets/__mocks__/imageMock.ts",
             "message": "'imageMock.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module."
-        }
-    ],
-    "TS6133": [
-        {
-            "path": "assets/__mocks__/stripeMock.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/adFreeSection/adFreeSection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/animations/giftHeadingAnimation.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/base/rows.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/blockLabel/blockLabel.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/button/_sharedButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/button/anchorButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/button/button.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/button/nonInteractiveButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/button/trackableButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/checkoutExpander/checkoutExpander.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/checkoutForm/checkoutForm.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/containers/centredContainer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/containers/flexContainer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/containers/fullWidthContainer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/content/content.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/content/contentSimple.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/csr/csrBanner.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitGuarantee.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/directDebit/helpers/ajax.ts",
-            "message": "'isTestUser' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/errorMessage/errorMessage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footer/footer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footerCompliant/BackToTop.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footerCompliant/containers/Content.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footerCompliant/containers/FooterContent.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footerCompliant/ContributionsFooter.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footerCompliant/DigitalFooter.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/footerCompliant/WeeklyFooter.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/forms/customFields/error.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/forms/customFields/options.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/forms/label.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/generalErrorMessage/generalErrorMessage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/gridImage/gridImage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/gridPicture/gridPicture.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headers/header/headerWithCountrySwitcher.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headers/links/links.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headers/roundelHeader/header.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/heading/heading.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/headingBlock/headingBlock.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/highlights/highlights.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTable.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/introduction/squaresIntroduction.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/leftMarginSection/leftMarginSection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/legal/contribLegal/contribLegal.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/legal/termsPrivacy/sepaTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/legal/termsPrivacy/termsPrivacy.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/list/orderedList.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/marketingConsent/marketingConsent.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/marketingConsent/marketingConsentGift.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/menu/menu.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/orderSummary/orderSummary.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/orderSummary/orderSummaryProduct.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/digital-packshot-hero.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/digital-packshot.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/guardian-weekly-packshot-hero.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/guardian-weekly-packshot.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/paper-and-digital-packshot.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/paper-packshot.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/premium-app-packshot.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/packshots/print-feature-packshot.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/page/block.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/page/hero.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/page/heroRoundel.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/page/page.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/pageSection/pageSection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/priceLabel/priceLabel.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/product/giftNonGiftCta.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/product/productInfoChip.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/product/productOption.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/product/productOptionSmall.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/productPage/productPageHero/productPageHero.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/productPage/productPageList/productPageList.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/progressMessage/progressMessage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/questionsContact/questionsContact.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/quote/quote.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/recaptcha/recaptcha.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/secureTransactionIndicator/secureTransactionIndicator.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/signout/signout.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/spinners/animatedDots.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/StripePaymentRequestButton/StripePaymentRequestButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/cancellationPolicy.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/directDebit/directDebitPaymentTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/directDebit/directDebitTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/headerWrapper.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/layout.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/payPalSubmitButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetailsGift.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/submitFormErrorSummary.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/thankYou/returnSection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/total/total.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/amazonPayLogoDs.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/arrowRightStraight.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/breakingTheHeadlines.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/checkmark.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/chevron.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/close.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/cross.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/directDebitSymbol.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/directDebitSymbolAndText.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/directDebitSymbolDs.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/downChevronDs.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/dropdownArrow.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/envelope.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/exclamation.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/exclamationAlternate.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/gift.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/globe.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/guardianLogo.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/menu.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/newCreditCardDs.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/noOne.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/oneMillionCircles.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/passwordKey.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/paypalDs.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/questionMarkHintIcon.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/sepa.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/squaresHeroDesktop.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/squaresHeroMobile.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/squaresHeroTablet.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/subscribe.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/subscribed.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/user.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/svgs/withSupport.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/tabs/tabs.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/text/text.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/ticker/contributionTicker.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/forms/checkouts.ts",
-            "message": "'allSwitches' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/productPrice/promotions.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/urls/externalLinks.ts",
-            "message": "'product' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/urls/externalLinks.ts",
-            "message": "'countryGroupId' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/urls/externalLinks.ts",
-            "message": "'countryGroupId' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/utilities/dotcomContactPage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/closeButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/header.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/socialLinks.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/actSvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/newSouthWalesSvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/northernTerritorySvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/queenslandSvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/southAustraliaSvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/tasmaniaSvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/victoriaSvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/aus-moment-map/components/territories/westernAustraliaSvg.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-checkout-in-epic/ContributionAmountSelector.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-checkout-in-epic/ContributionsCheckout.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-checkout-in-epic/ContributionsCheckoutSubmitting.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-checkout-in-epic/ContributionsCheckoutThankYou.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AustraliaMapLink.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmount.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionAmountChoicesChoiceLabel.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionErrorMessage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionsFormBlurbPreviousGiving.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionsFormJournalismHighlights.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/BulletPointedList.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgAusMap.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgClock.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgLinkedIn.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgNotification.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgPersonWithTick.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgShare.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/components/SvgSpeechBubbleWithPlus.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYou.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSupportReminder.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouSurvey.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
-            "message": "'renderControl' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripePaymentRequestButton.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "'selectAmount' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/contributions-landing/EmptyContributionsLandingPage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "'dispatch' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummary.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/thankYou/appsSection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/thankYou/eventsModule.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/thankYou/hero.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouExisting.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouExistingContent.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/interactiveTableContents.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/events/eventCard.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/events/eventsImages.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/defaultRoundel.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroPriceCards.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithImage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/hero/heroWithPriceCards.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/prices.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/error/components/errorPage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/error/error404.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/error/error500.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/error/maintenance.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/appsSection.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/heroPicture.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "'content' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/subscriptionSurvey.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/prices.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/subsCardTab.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/paperPrices.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paypal-error/payPalError.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/promotion-terms/DigitalPackTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/promotion-terms/legalTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/promotion-terms/PaperTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promoDetails.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/breakingHeadlines.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/noOneEdits.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProducts.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/regionalContent.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/components/whySupportMatters.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/showcase/showcase.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/components/featureHeader.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/subscriptionsLanding.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/components/productSummary/productSummary.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/components/stage.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/benefitsContainer.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/benefitsHeading.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/giftBenefits.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/prices.tsx",
-            "message": "'React' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx",
-            "message": "'React' is declared but its value is never read."
         }
     ],
     "TS2305": [
@@ -2102,6 +734,36 @@
         {
             "path": "assets/pages/weekly-subscription-landing/components/content/prices.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
+        }
+    ],
+    "TS2578": [
+        {
+            "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/components/footerCompliant/Footer.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
+            "message": "Unused '@ts-expect-error' directive."
         }
     ],
     "TS2339": [
@@ -2786,26 +1448,42 @@
             "message": "Parameter 'component' implicitly has an 'any' type."
         }
     ],
-    "TS2578": [
+    "TS6133": [
         {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Unused '@ts-expect-error' directive."
+            "path": "assets/components/directDebit/helpers/ajax.ts",
+            "message": "'isTestUser' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
-            "message": "Unused '@ts-expect-error' directive."
+            "path": "assets/helpers/forms/checkouts.ts",
+            "message": "'allSwitches' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Unused '@ts-expect-error' directive."
+            "path": "assets/helpers/urls/externalLinks.ts",
+            "message": "'product' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
-            "message": "Unused '@ts-expect-error' directive."
+            "path": "assets/helpers/urls/externalLinks.ts",
+            "message": "'countryGroupId' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx",
-            "message": "Unused '@ts-expect-error' directive."
+            "path": "assets/helpers/urls/externalLinks.ts",
+            "message": "'countryGroupId' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
+            "message": "'renderControl' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "'selectAmount' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
+            "message": "'dispatch' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "'content' is declared but its value is never read."
         }
     ],
     "TS7031": [

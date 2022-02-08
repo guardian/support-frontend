@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { InlineError } from '@guardian/src-user-feedback';
 import type { ReactNode } from 'react';
-import React from 'react';
 import type { Option } from 'helpers/types/option';
 import './error.scss';
 // ----- Types ----- //

@@ -8,7 +8,6 @@ import {
 } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgCheckmark } from '@guardian/src-icons';
-import React from 'react';
 import './comparisonTable';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';

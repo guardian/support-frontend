@@ -1,4 +1,3 @@
-import React from 'react';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 
 const ContactPageLink = (props: { linkText: string }) => (

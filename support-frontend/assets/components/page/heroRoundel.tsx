@@ -5,7 +5,6 @@ import { from } from '@guardian/src-foundations/mq';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
 import type { ReactElement, ReactNode } from 'react';
-import React from 'react';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const roundelSizeMob = 100;

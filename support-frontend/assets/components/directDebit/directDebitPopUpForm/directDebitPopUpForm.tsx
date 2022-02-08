@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import type { Action, Phase } from 'components/directDebit/directDebitActions';

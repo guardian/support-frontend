@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { Node } from 'react';
-import React from 'react';
 import type { $Keys } from 'utility-types';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import type { Option } from 'helpers/types/option';

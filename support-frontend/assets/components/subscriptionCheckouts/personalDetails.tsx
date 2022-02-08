@@ -4,7 +4,6 @@ import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import { TextInput } from '@guardian/src-text-input';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';

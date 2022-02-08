@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';

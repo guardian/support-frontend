@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { Provider } from 'react-redux';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import Page from 'components/page/page';

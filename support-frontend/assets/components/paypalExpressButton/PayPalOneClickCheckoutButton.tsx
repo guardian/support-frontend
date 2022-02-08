@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
-import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';

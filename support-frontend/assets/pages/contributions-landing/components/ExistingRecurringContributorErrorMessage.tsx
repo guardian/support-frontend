@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';

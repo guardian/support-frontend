@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import { FocusStyleManager } from '@guardian/src-utilities';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import type { ThunkDispatch } from 'redux-thunk';

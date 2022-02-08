@@ -5,7 +5,6 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';

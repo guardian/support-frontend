@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import './headingBlock.scss';

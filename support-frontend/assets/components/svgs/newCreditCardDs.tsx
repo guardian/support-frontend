@@ -1,5 +1,3 @@
-import React from 'react'; // The generic credit card logo used on checkouts.
-
 export default function SvgNewCreditCardDs(): JSX.Element {
 	return (
 		<svg
@@ -24,4 +22,4 @@ export default function SvgNewCreditCardDs(): JSX.Element {
 			/>
 		</svg>
 	);
-}
+} // The generic credit card logo used on checkouts.

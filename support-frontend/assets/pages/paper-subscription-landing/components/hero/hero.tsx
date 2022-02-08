@@ -7,7 +7,6 @@ import { brandAlt } from '@guardian/src-foundations/palette';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';

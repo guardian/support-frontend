@@ -4,7 +4,7 @@ import { space } from '@guardian/src-foundations';
 import { Option, Select } from '@guardian/src-select';
 import { TextInput } from '@guardian/src-text-input';
 import { ThemeProvider } from '@emotion/react';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import type {
 	PostcodeFinderActionCreators,

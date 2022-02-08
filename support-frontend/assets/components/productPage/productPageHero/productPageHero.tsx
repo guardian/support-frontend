@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import type { Option } from 'helpers/types/option';

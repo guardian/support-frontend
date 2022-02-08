@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import React from 'react';
 import { connect } from 'react-redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';

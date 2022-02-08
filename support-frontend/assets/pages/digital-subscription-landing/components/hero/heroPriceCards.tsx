@@ -4,7 +4,6 @@ import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
 import type { ReactNode } from 'react';
-import React from 'react';
 import ProductOptionSmall from 'components/product/productOptionSmall';
 
 const priceCardContainer = css`

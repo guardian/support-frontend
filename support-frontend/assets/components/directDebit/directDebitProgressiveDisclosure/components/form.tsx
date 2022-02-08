@@ -5,7 +5,7 @@ import { Checkbox } from '@guardian/src-checkbox';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { TextInput } from '@guardian/src-text-input';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
+import * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';

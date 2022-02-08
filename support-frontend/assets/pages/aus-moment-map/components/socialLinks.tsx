@@ -1,5 +1,3 @@
-import React from 'react';
-
 const twitterCopy =
 	'Hear%20from%20supporters%20across%20Australia%3A%20as%20the%20Guardian%20grows%20its%20community%20and%20reaches%20more%20people%2C%20many%20readers%20have%20shared%20their%20reason%20for%20supporting%20them%20financially.%20Read%20their%20messages%20here';
 

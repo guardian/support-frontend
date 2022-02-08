@@ -3,7 +3,7 @@
 import { ButtonLink, Link, linkBrand } from '@guardian/src-link';
 import { ThemeProvider } from '@emotion/react';
 import type { Node } from 'react';
-import React, { Children, useEffect, useState } from 'react';
+import { Children, useEffect, useState } from 'react';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { copyrightNotice } from 'helpers/legal';
 import Rows from '../base/rows';

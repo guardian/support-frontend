@@ -1,5 +1,5 @@
 import { InlineError } from '@guardian/src-user-feedback';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { ContributionType } from 'helpers/contributions';

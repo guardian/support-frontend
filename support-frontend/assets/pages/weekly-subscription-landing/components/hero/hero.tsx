@@ -6,7 +6,7 @@ import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
 import { ThemeProvider } from '@emotion/react';
-import React from 'react';
+import * as React from 'react';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';

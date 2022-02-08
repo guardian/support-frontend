@@ -6,7 +6,6 @@ import { brand } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { ThemeProvider } from '@emotion/react';
 import type { Node } from 'react';
-import React from 'react';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 export type ProductSmall = {

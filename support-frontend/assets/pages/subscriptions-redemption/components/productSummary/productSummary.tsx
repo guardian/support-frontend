@@ -1,4 +1,3 @@
-import React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import * as styles from 'pages/subscriptions-redemption/components/productSummary/productSummaryStyles';
 

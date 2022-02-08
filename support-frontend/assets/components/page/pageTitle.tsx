@@ -3,7 +3,6 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { titlepiece } from '@guardian/src-foundations/typography';
-import React from 'react';
 import type { ReactNode } from 'react';
 import {
 	digitalSubscriptionsBlue,

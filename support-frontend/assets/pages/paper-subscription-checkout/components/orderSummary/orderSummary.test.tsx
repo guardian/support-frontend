@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { paperProducts } from '__mocks__/productInfoMocks';

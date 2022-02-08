@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FeatureHeader = () => (
 	<div className="subscriptions__feature">
 		<div className="subscriptions__feature-container">

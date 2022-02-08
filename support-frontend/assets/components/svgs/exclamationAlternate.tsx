@@ -1,5 +1,3 @@
-import React from 'react'; // Alternate error exclamation mark, used on Direct Debit pop up and Payment Failure messages
-
 export default function SvgExclamationAlternate() {
 	return (
 		<svg
@@ -22,4 +20,4 @@ export default function SvgExclamationAlternate() {
 			</g>
 		</svg>
 	);
-}
+} // Alternate error exclamation mark, used on Direct Debit pop up and Payment Failure messages

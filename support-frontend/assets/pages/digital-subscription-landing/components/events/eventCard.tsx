@@ -4,7 +4,6 @@ import { from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
 import { body, textSans } from '@guardian/src-foundations/typography';
 import type { ReactNode } from 'react';
-import React from 'react';
 import { SvgCalendar } from 'components/icons/calendar';
 
 type PropTypes = {

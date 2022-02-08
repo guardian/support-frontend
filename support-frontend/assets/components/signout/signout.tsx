@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';

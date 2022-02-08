@@ -8,7 +8,6 @@ import {
 } from '@guardian/src-foundations/palette';
 import { headline } from '@guardian/src-foundations/typography';
 import { SvgCheckmark } from '@guardian/src-icons';
-import React from 'react';
 import type { ReactNode } from 'react';
 import 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';

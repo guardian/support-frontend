@@ -1,5 +1,3 @@
-import React from 'react'; // The main guardian logo.
-
 export default function SvgGuardianLogo() {
 	return (
 		<svg
@@ -18,4 +16,4 @@ export default function SvgGuardianLogo() {
 			/>
 		</svg>
 	);
-}
+} // The main guardian logo.

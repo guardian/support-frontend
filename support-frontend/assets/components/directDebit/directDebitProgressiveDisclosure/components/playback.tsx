@@ -9,7 +9,8 @@ import { space } from '@guardian/src-foundations';
 import { textSans } from '@guardian/src-foundations/typography';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { ThemeProvider } from '@emotion/react';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import * as React from 'react';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 
 const directDebitForm = css`

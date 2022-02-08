@@ -9,7 +9,8 @@ import { brand, palette, space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { ButtonLink } from '@guardian/src-link';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import * as React from 'react';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 // --- Styles --- //
 const topContainerMobile = css`

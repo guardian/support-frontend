@@ -3,7 +3,6 @@ import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
 import { body } from '@guardian/src-foundations/typography';
-import React from 'react';
 import type { Node } from 'react';
 import BlockLabel from 'components/blockLabel/blockLabel';
 import type { Option } from 'helpers/types/option';

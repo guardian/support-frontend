@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { Node } from 'react';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import 'helpers/types/option';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

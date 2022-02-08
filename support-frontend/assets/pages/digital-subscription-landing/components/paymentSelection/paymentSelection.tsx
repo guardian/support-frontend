@@ -1,5 +1,3 @@
-import React from 'react';
-// components
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
 import type { PaymentSelectionPropTypes } from './helpers/paymentSelection';

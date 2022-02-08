@@ -6,7 +6,7 @@ import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { ThemeProvider } from '@emotion/react';
 import type { Node } from 'react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';

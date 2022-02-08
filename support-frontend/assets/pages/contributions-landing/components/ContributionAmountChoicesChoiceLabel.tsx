@@ -1,4 +1,3 @@
-import React from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import 'helpers/contributions';
 import { css } from '@emotion/react';

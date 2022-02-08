@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { Provider } from 'react-redux';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import Page from 'components/page/page';

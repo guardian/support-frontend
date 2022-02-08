@@ -1,6 +1,5 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { FormHTMLAttributes, ReactNode } from 'react';
-import React from 'react';
 import Heading from 'components/heading/heading';
 import type { HeadingSize } from 'components/heading/heading';
 import type { Option } from 'helpers/types/option';

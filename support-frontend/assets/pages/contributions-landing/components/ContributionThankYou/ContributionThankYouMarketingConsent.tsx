@@ -4,7 +4,7 @@ import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';

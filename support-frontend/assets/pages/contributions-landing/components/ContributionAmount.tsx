@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import { TextInput } from '@guardian/src-text-input';
-import React from 'react';
 import { connect } from 'react-redux';
 import type {
 	ContributionAmounts,
