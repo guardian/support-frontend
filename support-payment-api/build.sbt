@@ -5,7 +5,7 @@ name := "payment-api"
 version := "0.1"
 scalacOptions ++= Seq(
   "-Ywarn-unused:imports",
-  "-Ymacro-annotations",
+  "-Ymacro-annotations"
 )
 
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.2")
@@ -57,7 +57,7 @@ dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacks
 resolvers += Resolver.sonatypeRepo("releases")
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
-packageName in Debian := name.value
+Debian / packageName := name.value
 packageSummary := "Payment API Play App"
 packageDescription := """API for reader revenue payments"""
 maintainer := "Reader Revenue <reader.revenue.dev@theguardian.com>"
@@ -65,5 +65,5 @@ maintainer := "Reader Revenue <reader.revenue.dev@theguardian.com>"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := "support:payment-api-mono"
-riffRaffPackageType := (packageBin in Debian).value
+riffRaffPackageType := (Debian / packageBin).value
 riffRaffArtifactResources += (file("support-payment-api/src/main/resources/cloud-formation.yaml"), "cfn/cfn.yaml")

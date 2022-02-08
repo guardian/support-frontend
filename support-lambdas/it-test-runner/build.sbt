@@ -26,9 +26,9 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-lambdas/it-test-runner/cfn.yaml"), "cfn/cfn.yaml")
 assemblyJarName := s"${name.value}.jar"
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case y =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
 }
