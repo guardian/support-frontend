@@ -368,11 +368,15 @@ function postRegularPaymentRequest(
 					error: 'internal_error',
 				} as PaymentResult;
 			} else if (response.status === 400) {
-				logException(`Bad request error while trying to post to ${uri}`);
-				return {
-					paymentStatus: 'failure',
-					error: 'personal_details_incorrect',
-				} as PaymentResult;
+				return response.text().then((text: string) => {
+					logException(
+						`Bad request error while trying to post to ${uri} - ${text}`,
+					);
+					return {
+						paymentStatus: 'failure',
+						error: text,
+					} as PaymentResult;
+				});
 			}
 
 			return response.json().then(checkRegularStatus(participations, csrf));
