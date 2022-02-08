@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/core';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
@@ -25,7 +26,7 @@ const themeColors: Record<ThemeType, string> = {
 	showcase: brandAlt[400],
 	paper: paperSubscriptionsBlue,
 };
-const headerThemes: Record<ThemeType, string> = {
+const headerThemes: Record<ThemeType, SerializedStyles> = {
 	weekly: css`
 		:before {
 			background-color: ${themeColors.weekly};
