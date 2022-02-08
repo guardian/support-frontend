@@ -44,7 +44,7 @@ riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-workers/cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml")
 riffRaffArtifactResources += (file("support-workers/target/scala-2.13/support-workers-it.jar"), "it-tests/support-workers-it.jar")
 assemblyJarName := s"${name.value}.jar"
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
   case PathList("models", xs@_*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
@@ -53,13 +53,13 @@ assemblyMergeStrategy in assembly := {
   case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
   case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
   case y =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
 }
 
 Project.inConfig(IntegrationTest)(baseAssemblySettings)
-assemblyJarName in (IntegrationTest, assembly) := s"${name.value}-it.jar"
-assemblyMergeStrategy in (IntegrationTest, assembly) := {
+IntegrationTest / assembly / assemblyJarName := s"${name.value}-it.jar"
+IntegrationTest / assembly / assemblyMergeStrategy := {
   case PathList("models", xs@_*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case x if x.endsWith("logback.xml") => MergeStrategy.first
@@ -68,7 +68,7 @@ assemblyMergeStrategy in (IntegrationTest, assembly) := {
   case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
   case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
   case y =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
 }
 IntegrationTest / assembly / test := {}
@@ -89,7 +89,7 @@ deployToCode := {
     "-UpdateSupporterProductDataLambda-",
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
-    "-PreparePaymentMethodForReuseLambda-",
+    "-PreparePaymentMethodForReuseLambda-"
   ).foreach(functionPartial =>
     s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
   )
