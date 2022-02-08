@@ -47,7 +47,6 @@
       "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
       "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
       "assets/components/menu/menu.tsx": 2,
-      "assets/components/product/productOption.tsx": 1,
       "assets/components/product/productOptionSmall.tsx": 1,
       "assets/components/subscriptionCheckouts/layout.tsx": 1,
       "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
@@ -222,10 +221,6 @@
     },
     {
       "path": "assets/components/menu/menu.tsx",
-      "message": "Module '\"react\"' has no exported member 'Node'."
-    },
-    {
-      "path": "assets/components/product/productOption.tsx",
       "message": "Module '\"react\"' has no exported member 'Node'."
     },
     {
