@@ -1,5 +1,5 @@
 // @ts-expect-error - required for hooks
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Accordion, AccordionRow } from '@guardian/src-accordion';
 import { Checkbox } from '@guardian/src-checkbox';
 import { space } from '@guardian/src-foundations';

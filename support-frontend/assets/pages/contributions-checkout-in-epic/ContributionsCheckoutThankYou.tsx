@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { headline } from '@guardian/src-foundations/typography';
 import { useEffect } from 'preact/hooks';
 import React from 'react';

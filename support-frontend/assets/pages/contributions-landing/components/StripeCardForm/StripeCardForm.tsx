@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { TextInput } from '@guardian/src-text-input';
 import { InlineError } from '@guardian/src-user-feedback';
 import {

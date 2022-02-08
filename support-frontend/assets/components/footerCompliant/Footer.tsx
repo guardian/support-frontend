@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 // @ts-expect-error - required for hooks
 import { ButtonLink, Link, linkBrand } from '@guardian/src-link';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import type { Node } from 'react';
 import React, { Children, useEffect, useState } from 'react';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';

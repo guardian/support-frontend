@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { from, until } from '@guardian/src-foundations/mq';
 import React from 'react';
 import GridImage from 'components/gridImage/gridImage';

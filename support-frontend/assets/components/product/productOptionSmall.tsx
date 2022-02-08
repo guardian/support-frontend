@@ -1,10 +1,10 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import type { Node } from 'react';
 import React from 'react';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';

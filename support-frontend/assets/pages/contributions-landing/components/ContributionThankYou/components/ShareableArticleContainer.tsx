@@ -1,5 +1,5 @@
-import type { SerializedStyles } from '@emotion/core';
-import { css } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/react';
+import { css } from '@emotion/react';
 import { LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { until } from '@guardian/src-foundations/mq';

@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
 import Content from 'components/content/content';

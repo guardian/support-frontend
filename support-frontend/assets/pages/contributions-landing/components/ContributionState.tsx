@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { focusHalo } from '@guardian/src-foundations/accessibility';
 import { InlineError } from '@guardian/src-user-feedback';

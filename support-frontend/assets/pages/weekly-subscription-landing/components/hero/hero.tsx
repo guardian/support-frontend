@@ -1,11 +1,11 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { buttonBrand, LinkButton } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { body, headline } from '@guardian/src-foundations/typography';
 import { SvgArrowDownStraight } from '@guardian/src-icons';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import React from 'react';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';

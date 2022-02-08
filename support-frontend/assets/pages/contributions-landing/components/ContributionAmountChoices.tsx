@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
 import { until } from '@guardian/src-foundations/mq';
 import React from 'react';

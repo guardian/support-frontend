@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { brand, space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { background, success, text } from '@guardian/src-foundations/palette';

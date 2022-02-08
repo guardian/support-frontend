@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { breakpoints, from } from '@guardian/src-foundations/mq';
 import { border } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography/obj';

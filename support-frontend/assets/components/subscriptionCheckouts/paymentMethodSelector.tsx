@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { SvgCreditCard, SvgDirectDebit, SvgPayPal } from '@guardian/src-icons';
 import { Radio, RadioGroup } from '@guardian/src-radio';
 import React from 'react';

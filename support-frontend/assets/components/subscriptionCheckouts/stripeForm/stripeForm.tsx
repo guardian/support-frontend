@@ -1,11 +1,11 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Button, buttonReaderRevenue } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { CardNumberElement } from '@stripe/react-stripe-js';
 import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
 import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';

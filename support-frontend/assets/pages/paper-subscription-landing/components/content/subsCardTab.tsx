@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Accordion } from '@guardian/src-accordion';
 import { space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';

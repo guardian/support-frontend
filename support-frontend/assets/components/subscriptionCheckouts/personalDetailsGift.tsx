@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { TextInput } from '@guardian/src-text-input';
 import React from 'react';

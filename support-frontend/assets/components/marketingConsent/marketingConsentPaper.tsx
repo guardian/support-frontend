@@ -1,11 +1,11 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Button, buttonBrandAlt } from '@guardian/src-button';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { SvgEnvelope } from '@guardian/src-icons';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';

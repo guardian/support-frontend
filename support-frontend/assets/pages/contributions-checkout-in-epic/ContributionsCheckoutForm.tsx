@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { Button, buttonReaderRevenue, LinkButton } from '@guardian/src-button';
 import { neutral, space } from '@guardian/src-foundations';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import React, { useState } from 'react';
 import StripePaymentRequestButtonContainer from 'components/StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';

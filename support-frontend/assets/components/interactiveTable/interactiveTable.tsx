@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/accessibility';
 import { from, until } from '@guardian/src-foundations/mq';
 import { background } from '@guardian/src-foundations/palette';

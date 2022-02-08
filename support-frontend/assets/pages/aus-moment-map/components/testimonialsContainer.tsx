@@ -1,6 +1,6 @@
 import { Button, LinkButton } from '@guardian/src-button';
 import { buttonDefault } from '@guardian/src-foundations/themes';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import type { RefObject } from 'preact';
 import * as React from 'preact/compat';
 import type { ReactNode } from 'react';

@@ -3,7 +3,7 @@
 /* eslint-disable react/require-default-props */
 // --- Imports --- //
 // @ts-expect-error - required for hooks
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Button } from '@guardian/src-button';
 import { brand, palette, space } from '@guardian/src-foundations';
 import { from, until } from '@guardian/src-foundations/mq';

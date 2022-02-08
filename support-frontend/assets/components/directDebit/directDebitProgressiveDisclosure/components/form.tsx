@@ -1,10 +1,10 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Button, buttonReaderRevenueBrand } from '@guardian/src-button';
 import { Checkbox } from '@guardian/src-checkbox';
 import { SvgArrowRightStraight } from '@guardian/src-icons';
 import { TextInput } from '@guardian/src-text-input';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';

@@ -2,14 +2,14 @@ import { border } from '@guardian/src-foundations/palette';
 import React, { Component } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { space } from '@guardian/src-foundations';
 import { Error } from 'components/forms/customFields/error';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import CalendarIcon from './calendarIcon.svg';
 import { TextInput } from '@guardian/src-text-input';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import { Button, buttonBrandAlt } from '@guardian/src-button';
 import {
 	dateIsOutsideRange,
