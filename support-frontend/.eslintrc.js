@@ -7,6 +7,7 @@ module.exports = {
       "namedComponents": "function-declaration",
       "unnamedComponents": "function-expression",
     }],
+    "@emotion/pkg-renaming": "error",
   },
   settings: {
     'import/resolver': {
@@ -16,6 +17,7 @@ module.exports = {
     }
   },
   plugins: [
-    "react"
+    "react",
+    "@emotion",
   ]
 }
