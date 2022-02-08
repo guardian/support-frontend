@@ -2,8 +2,8 @@
   "errorCounts": {
     "byCode": {
       "TS1208": 1,
-      "TS2305": 13,
-      "TS2322": 125,
+      "TS2305": 12,
+      "TS2322": 122,
       "TS2578": 7,
       "TS2339": 19,
       "TS2345": 96,
@@ -50,7 +50,6 @@
       "assets/components/product/productOptionSmall.tsx": 1,
       "assets/components/subscriptionCheckouts/layout.tsx": 1,
       "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
-      "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
       "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
       "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
       "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
@@ -87,7 +86,6 @@
       "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
       "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
       "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
-      "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
       "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
       "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
       "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
@@ -232,10 +230,6 @@
     },
     {
       "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-      "message": "Module '\"react\"' has no exported member 'Node'."
-    },
-    {
-      "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
       "message": "Module '\"react\"' has no exported member 'Node'."
     },
     {
@@ -553,14 +547,6 @@
       "message": "Type '\"normal\"' is not assignable to type 'FontWeight | undefined'."
     },
     {
-      "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-      "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-    },
-    {
-      "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-      "message": "Type 'string' is not assignable to type 'number | undefined'."
-    },
-    {
       "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
       "message": "Type '{ icon: JSX.Element; description: string; ariaLabel: string; free: JSX.Element; paid: JSX.Element; }' is not assignable to type 'TableRow'."
     },
@@ -587,10 +573,6 @@
     {
       "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
       "message": "Type 'SerializedStyles' is not assignable to type 'string[] | Option<string> | undefined'."
-    },
-    {
-      "path": "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx",
-      "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
     },
     {
       "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",

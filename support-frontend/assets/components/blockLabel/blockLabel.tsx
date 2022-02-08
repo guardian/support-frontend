@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/core';
 import { css } from '@emotion/core';
 import { space } from '@guardian/src-foundations';
 import { from } from '@guardian/src-foundations/mq';
@@ -31,7 +32,7 @@ const blockLabel = css`
 type BlockLabelPropTypes = {
 	children: ReactNode;
 	tag?: keyof JSX.IntrinsicElements;
-	cssOverrides?: string | string[];
+	cssOverrides?: SerializedStyles | SerializedStyles[];
 };
 
 function BlockLabel({
