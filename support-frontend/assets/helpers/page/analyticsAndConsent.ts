@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+
 import ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
@@ -22,7 +23,7 @@ function analyticsInitialisation(
 	acquisitionData: ReferrerAcquisitionData,
 ): void {
 	setReferrerDataInLocalStorage(acquisitionData);
-	googleTagManager.init(participations);
+	void googleTagManager.init(participations);
 	ophan.init();
 	initQuantumMetric();
 	trackAbTests(participations);
@@ -33,17 +34,30 @@ function analyticsInitialisation(
 }
 
 async function consentInitialisation(country: IsoCountry): Promise<void> {
-	/**
-	 * Dynamically load @guardian/consent-management-platform
-	 * on condition we're not server side rendering (ssr) the page.
-	 * @guardian/consent-management-platform breaks ssr otherwise.
-	 */
-	if (!getGlobal('ssr') && !isPostDeployUser()) {
+	if (shouldInitCmp()) {
 		const { cmp } = await import('@guardian/consent-management-platform');
 		cmp.init({
 			country,
 		});
 	}
 }
+
+// ----- Helpers ----- //
+
+function shouldInitCmp(): boolean {
+	/**
+	 * We only init the CMP on condition we're not:
+	 *   - server side rendering (ssr) the page (@guardian/consent-management-platform breaks ssr)
+	 *   - a post deploy user
+	 *   - on the in-Epic checkout page (this page is iframed into dotcom, so doesn't need its own CMP)
+	 */
+	return !getGlobal('ssr') && !isPostDeployUser() && !isInEpicCheckoutPage();
+}
+
+function isInEpicCheckoutPage(): boolean {
+	return window.location.pathname.includes('contribute-in-epic');
+}
+
+// ----- Exports ----- //
 
 export { analyticsInitialisation, consentInitialisation };
