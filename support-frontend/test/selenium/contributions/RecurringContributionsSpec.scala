@@ -87,6 +87,7 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       Given("that the user selects to pay with direct debit")
       When("they press the direct debit payment button")
       landingPage.selectDirectDebit()
+			landingPage.clickContribute
 
       And("enter direct debit details")
       landingPage.fillInDirectDebitDetails()
