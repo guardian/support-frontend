@@ -21,6 +21,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   private val otherAmount = id("contributionOther")
 
   private val stripeSelector = id("paymentMethodSelector-Stripe")
+  private val directDebitSelector = id("paymentMethodSelector-DirectDebit")
   private val payPalSelector = id("paymentMethodSelector-PayPal")
   private val stateSelector = id("contributionState")
 
@@ -80,6 +81,29 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
       }
     }
   }
+  
+  private object DirectDebitFields {
+    val accountHolderName = cssSelector("#account-holder-name-input")
+    val accountNumber = cssSelector("#account-number-input")
+    val sortCode1 = cssSelector("#qa-sort-code-1")
+    val sortCode2 = cssSelector("#qa-sort-code-2")
+    val sortCode3 = cssSelector("#qa-sort-code-3")
+    val confirmation = cssSelector("#qa-confirmation-input")
+    val submitButton = cssSelector("#qa-submit-button-1")
+    val payButton =  cssSelector("#qa-submit-button-2")
+
+    def fillIn(): Unit = {
+      setValue(accountHolderName, "CP Scott")
+      setValue(accountNumber, "55779911")
+      setValue(sortCode1, "20")
+      setValue(sortCode2, "00")
+      setValue(sortCode3, "00")
+      clickOn(confirmation)
+      clickOn(submitButton)
+    }
+    
+    def pay(): Unit = clickOn(payButton)
+  }
 
   def fillInPersonalDetails(hasNameFields: Boolean) { RegisterFields.fillIn(hasNameFields) }
 
@@ -88,8 +112,14 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   def selectState: Unit = setSingleSelectionValue(stateSelector, "NY")
 
   def selectStripePayment(): Unit = clickOn(stripeSelector)
+  
+  def selectDirectDebit(): Unit = clickOn(directDebitSelector)
 
   def fillInCardDetails(hasZipCodeField: Boolean): Unit = CardDetailsFields.fillIn(hasZipCodeField)
+  
+  def fillInDirectDebitDetails(): Unit = DirectDebitFields.fillIn()
+  
+  def payDirectDebit(): Unit = DirectDebitFields.pay()
 
   def selectPayPalPayment(): Unit = clickOn(payPalSelector)
 
