@@ -24,5 +24,5 @@ module.exports = {
 			},
 		},
 	},
-	plugins: ['react'],
+	plugins: ['react', 'jsx-a11y'],
 };
