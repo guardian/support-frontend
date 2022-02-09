@@ -5,7 +5,7 @@ import { between, from, until } from '@guardian/src-foundations/mq';
 import { brandAlt, neutral } from '@guardian/src-foundations/palette';
 import { headline, textSans } from '@guardian/src-foundations/typography';
 import { ThemeProvider } from 'emotion-theming';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -14,9 +14,9 @@ import { Monthly } from 'helpers/productPrice/billingPeriods';
 export type Product = {
 	title: string;
 	price: string;
-	children?: Node;
-	offerCopy?: Node;
-	priceCopy: Node;
+	children?: ReactNode;
+	offerCopy?: ReactNode;
+	priceCopy: ReactNode;
 	buttonCopy: string;
 	href: string;
 	onClick: (...args: any[]) => any;
@@ -162,7 +162,7 @@ const priceCopyGridPlacement = css`
 	}
 `;
 
-function ProductOption(props: Product) {
+function ProductOption(props: Product): JSX.Element {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
@@ -198,11 +198,7 @@ function ProductOption(props: Product) {
 	return (
 		<div
 			ref={setElementToObserve}
-			css={[
-				productOption,
-				props.cssOverrides,
-				productOptionMargin,
-			]}
+			css={[productOption, props.cssOverrides, productOptionMargin]}
 		>
 			<div css={productOptionVerticalLine}>
 				<h3 css={[productOptionTitle, productOptionUnderline]}>
@@ -217,8 +213,6 @@ function ProductOption(props: Product) {
 				</p>
 			</div>
 			<div css={priceCopyGridPlacement}>
-				{/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
-				{/* eslint-disable-next-line jsx-a11y/aria-role */}
 				<p role="text" css={productOptionPriceCopy}>
 					<span css={productOptionPrice}>{props.price}</span>
 					{props.priceCopy}

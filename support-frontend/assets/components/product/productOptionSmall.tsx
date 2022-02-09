@@ -5,13 +5,13 @@ import { from } from '@guardian/src-foundations/mq';
 import { brand } from '@guardian/src-foundations/palette';
 import { textSans } from '@guardian/src-foundations/typography';
 import { ThemeProvider } from 'emotion-theming';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 export type ProductSmall = {
 	offerCopy: string;
-	priceCopy: Node;
+	priceCopy: ReactNode;
 	buttonCopy: string;
 	href: string;
 	onClick: (...args: any[]) => any;
@@ -49,7 +49,7 @@ const buttonStyles = css`
 	justify-content: center;
 `;
 
-function ProductOptionSmall(props: ProductSmall) {
+function ProductOptionSmall(props: ProductSmall): JSX.Element {
 	return (
 		<span css={[productOptionSmallStyles, props.cssOverrides]}>
 			<p css={offerCopyStyles}>{props.offerCopy}</p>
