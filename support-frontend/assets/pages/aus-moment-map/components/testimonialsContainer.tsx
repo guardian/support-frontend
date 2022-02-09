@@ -1,6 +1,9 @@
-import { Button, LinkButton } from '@guardian/src-button';
-import { buttonDefault } from '@guardian/src-foundations/themes';
 import { ThemeProvider } from '@emotion/react';
+import {
+	Button,
+	buttonThemeDefault,
+	LinkButton,
+} from '@guardian/source-react-components';
 import type { RefObject } from 'preact';
 import * as React from 'preact/compat';
 import type { ReactNode } from 'react';
@@ -21,7 +24,7 @@ function TestimonialCtaPrimary() {
 				If you’re a contributor or subscriber, we would love to hear from you
 			</p>
 
-			<ThemeProvider theme={buttonDefault}>
+			<ThemeProvider theme={buttonThemeDefault}>
 				<LinkButton
 					className="testimonial-cta-primary-link-button"
 					priority="primary"

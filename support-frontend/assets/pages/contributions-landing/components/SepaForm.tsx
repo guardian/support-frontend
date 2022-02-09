@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { headline } from '@guardian/src-foundations/typography';
-import { TextInput } from '@guardian/src-text-input';
+import { headline, space } from '@guardian/source-foundations';
+import { TextInput } from '@guardian/source-react-components';
 import { isValidIban } from 'helpers/forms/formValidation';
 // -- Styles -- //
 const containerStyles = css`

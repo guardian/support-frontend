@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
+import { from, space } from '@guardian/source-foundations';
 import { useEffect } from 'react';
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';

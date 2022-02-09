@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { TextArea } from '@guardian/src-text-area';
+import { TextArea } from '@guardian/source-react-components';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';

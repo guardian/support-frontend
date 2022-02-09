@@ -1,5 +1,5 @@
 // @ts-expect-error - required for hooks
-import { AccordionRow } from '@guardian/src-accordion';
+import { AccordionRow } from '@guardian/source-react-components';
 import * as React from 'react';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 

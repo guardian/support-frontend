@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { background, border } from '@guardian/src-foundations/palette';
+import { background, border, from, space } from '@guardian/source-foundations';
 import type { Option } from 'helpers/types/option';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import 'helpers/types/option';

@@ -1,5 +1,9 @@
 // ----- Imports ----- //
-import type { GridImage, GridSlot, Source as GridSource } from 'components/gridPicture/gridPicture';
+import type {
+	GridImage,
+	GridSlot,
+	Source as GridSource,
+} from 'components/gridPicture/gridPicture';
 import GridPicture from 'components/gridPicture/gridPicture';
 import type { ImageId as GridId } from 'helpers/images/theGrid';
 import 'helpers/images/theGrid';

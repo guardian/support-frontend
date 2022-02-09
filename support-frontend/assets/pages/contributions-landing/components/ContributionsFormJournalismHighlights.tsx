@@ -1,11 +1,15 @@
 // ----- Imports ----- //
 
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { neutral } from '@guardian/src-foundations/palette';
-import { body, headline, textSans } from '@guardian/src-foundations/typography';
-import { Hide } from '@guardian/src-layout';
+import {
+	body,
+	from,
+	headline,
+	neutral,
+	space,
+	textSans,
+} from '@guardian/source-foundations';
+import { Hide } from '@guardian/source-react-components';
 
 // ----- Types ----- //
 

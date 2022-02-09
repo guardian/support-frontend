@@ -1,5 +1,9 @@
 module.exports = {
-  extends: '@guardian/eslint-config-typescript',
+  extends: [
+    '@guardian/eslint-config-typescript',
+    "plugin:@guardian/source-foundations/recommended",
+    "plugin:@guardian/source-react-components/recommended",
+  ],
   rules: {
     // TODO: update this to 'warn' or delete once the post-migration fixing process is done
     "import/no-default-export": "off",

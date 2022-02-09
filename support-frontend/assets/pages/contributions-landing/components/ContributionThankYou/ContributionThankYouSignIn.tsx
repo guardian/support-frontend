@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
-import { LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { body } from '@guardian/src-foundations/typography';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { ButtonLink } from '@guardian/src-link';
+import { body, space } from '@guardian/source-foundations';
+import {
+	ButtonLink,
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import type { Csrf } from 'helpers/csrf/csrfReducer';

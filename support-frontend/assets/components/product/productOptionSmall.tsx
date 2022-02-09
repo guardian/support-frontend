@@ -1,10 +1,9 @@
-import { css } from '@emotion/react';
-import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { brand } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
-import { ThemeProvider } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
+import { brand, from, space, textSans } from '@guardian/source-foundations';
+import {
+	buttonThemeReaderRevenue,
+	LinkButton,
+} from '@guardian/source-react-components';
 import type { Node } from 'react';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
@@ -52,7 +51,7 @@ function ProductOptionSmall(props: ProductSmall) {
 	return (
 		<span css={[productOptionSmallStyles, props.cssOverrides]}>
 			<p css={offerCopyStyles}>{props.offerCopy}</p>
-			<ThemeProvider theme={buttonReaderRevenue}>
+			<ThemeProvider theme={buttonThemeReaderRevenue}>
 				<LinkButton
 					css={buttonStyles}
 					href={props.href}

@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { body, titlepiece } from '@guardian/src-foundations/typography';
+import { body, from, space, titlepiece } from '@guardian/source-foundations';
 import * as React from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';

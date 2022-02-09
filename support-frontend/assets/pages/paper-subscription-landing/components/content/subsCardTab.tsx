@@ -1,10 +1,13 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { Accordion } from '@guardian/src-accordion';
-import { space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
-import { neutral } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
+import {
+	from,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
+import { Accordion } from '@guardian/source-react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';

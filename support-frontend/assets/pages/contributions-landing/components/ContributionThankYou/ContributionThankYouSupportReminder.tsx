@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
-import { Button } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { Link } from '@guardian/src-link';
-import { Radio, RadioGroup } from '@guardian/src-radio';
+import { neutral, space, textSans } from '@guardian/source-foundations';
+import {
+	Button,
+	Link,
+	Radio,
+	RadioGroup,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
 import { privacyLink } from 'helpers/legal';
 import {

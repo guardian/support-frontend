@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { Option } from '@guardian/src-select';
+import { Option } from '@guardian/source-react-components';
 import * as React from 'react';
 
 // ----- Functions ----- //

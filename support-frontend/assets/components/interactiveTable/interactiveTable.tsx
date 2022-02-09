@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
-import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/accessibility';
-import { from, until } from '@guardian/src-foundations/mq';
-import { background } from '@guardian/src-foundations/palette';
-import { body } from '@guardian/src-foundations/typography';
+import {
+	visuallyHidden as _visuallyHidden,
+	background,
+	body,
+	from,
+	until,
+} from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import type { CellData, RowData } from './interactiveTableRow';
 import {

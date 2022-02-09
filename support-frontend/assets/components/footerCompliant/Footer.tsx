@@ -1,7 +1,11 @@
 // ----- Imports ----- //
 // @ts-expect-error - required for hooks
-import { ButtonLink, Link, linkBrand } from '@guardian/src-link';
 import { ThemeProvider } from '@emotion/react';
+import {
+	ButtonLink,
+	Link,
+	linkThemeBrand,
+} from '@guardian/source-react-components';
 import type { Node } from 'react';
 import { Children, useEffect, useState } from 'react';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
@@ -44,7 +48,7 @@ function Footer({ centred, children, termsConditionsLink }: PropTypes) {
 	}, []);
 	return (
 		<footer css={componentFooter} role="contentinfo">
-			<ThemeProvider theme={linkBrand}>
+			<ThemeProvider theme={linkThemeBrand}>
 				{Children.count(children) > 0 && (
 					<FooterContent
 						appearance={{

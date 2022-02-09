@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
 import {
 	background,
 	border,
 	brandAltBackground,
-} from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
-import { SvgCheckmark } from '@guardian/src-icons';
+	from,
+	space,
+	textSans,
+} from '@guardian/source-foundations';
+import { SvgCheckmark } from '@guardian/source-react-components';
 import './comparisonTable';
 import { SvgAdFree } from 'components/icons/adFree';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
@@ -109,13 +109,15 @@ const borderLeft = css`
 	border-left: ${borderStyle};
 `;
 
-const Padlock = () => (
-	<div aria-label="Not included" css={[indicators, padlock, greyBackground]}>
-		<SvgPadlock />
-	</div>
-);
+function Padlock() {
+	return (
+		<div aria-label="Not included" css={[indicators, padlock, greyBackground]}>
+			<SvgPadlock />
+		</div>
+	);
+}
 
-const Checkmark = (props: { borderLeft?: Option<string> }) => {
+function Checkmark(props: { borderLeft?: Option<string> }) {
 	const checkMarkStyles = props.borderLeft
 		? [indicators, checkmark, yellowBackground, props.borderLeft]
 		: [indicators, checkmark, yellowBackground];
@@ -124,7 +126,7 @@ const Checkmark = (props: { borderLeft?: Option<string> }) => {
 			<SvgCheckmark />
 		</div>
 	);
-};
+}
 
 Checkmark.defaultProps = {
 	borderLeft: null,

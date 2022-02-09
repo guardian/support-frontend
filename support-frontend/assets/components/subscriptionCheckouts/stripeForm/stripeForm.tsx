@@ -1,11 +1,13 @@
-import { css } from '@emotion/react';
-import { Button, buttonReaderRevenue } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { css, ThemeProvider } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import {
+	Button,
+	buttonThemeReaderRevenue,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { CardNumberElement } from '@stripe/react-stripe-js';
 import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
-import { ThemeProvider } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import './stripeForm.scss';
@@ -443,7 +445,7 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 						/>
 					) : null}
 					<div className="component-stripe-submit-button">
-						<ThemeProvider theme={buttonReaderRevenue}>
+						<ThemeProvider theme={buttonThemeReaderRevenue}>
 							<Button
 								id="qa-stripe-submit-button"
 								onClick={requestSCAPaymentMethod}

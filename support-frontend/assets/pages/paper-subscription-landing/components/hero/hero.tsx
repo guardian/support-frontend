@@ -1,20 +1,27 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
-import { buttonBrand, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { between, from, until } from '@guardian/src-foundations/mq';
-import { brandAlt } from '@guardian/src-foundations/palette';
-import { body, headline } from '@guardian/src-foundations/typography';
-import { SvgArrowDownStraight } from '@guardian/src-icons';
-import { ThemeProvider } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
+import {
+	between,
+	body,
+	brandAlt,
+	from,
+	headline,
+	space,
+	until,
+} from '@guardian/source-foundations';
+import {
+	buttonThemeBrand,
+	LinkButton,
+	SvgArrowDownStraight,
+} from '@guardian/source-react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import HeroRoundel, { roundelSizeMob } from 'components/page/heroRoundel';
 import PageTitle from 'components/page/pageTitle';
+import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import 'helpers/productPrice/productPrices';
-import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -183,7 +190,7 @@ function PaperHero({ productPrices, promotionCopy }: PropTypes) {
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
 						<p css={heroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonBrand}>
+						<ThemeProvider theme={buttonThemeBrand}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',

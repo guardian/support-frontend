@@ -8,6 +8,7 @@ import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgDirectDebitSymbolDs from 'components/svgs/directDebitSymbolDs';
 import SvgNewCreditCardDs from 'components/svgs/newCreditCardDs';
 import SvgPayPalDs from 'components/svgs/paypalDs';
+import SvgSepa from 'components/svgs/sepa';
 import { contributionTypeIsRecurring } from 'helpers/contributions';
 import {
 	getPaymentLabel,
@@ -52,8 +53,7 @@ import type {
 	RecentlySignedInExistingPaymentMethod,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
-import { Radio, RadioGroup } from '@guardian/src-radio';
-import SvgSepa from 'components/svgs/sepa';
+import { Radio, RadioGroup } from '@guardian/source-react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
 // ----- Types ----- //

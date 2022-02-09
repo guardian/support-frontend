@@ -1,11 +1,11 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
-import { buttonBrand, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { body, headline } from '@guardian/src-foundations/typography';
-import { SvgArrowDownStraight } from '@guardian/src-icons';
-import { ThemeProvider } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
+import { body, from, headline, space } from '@guardian/source-foundations';
+import {
+	buttonThemeBrand,
+	LinkButton,
+	SvgArrowDownStraight,
+} from '@guardian/source-react-components';
 import * as React from 'react';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';
@@ -195,7 +195,7 @@ const WeeklyHero: React.FC<PropTypes> = ({
 							<h2 css={weeklyHeroTitle}>{title}</h2>
 						)}
 						<p css={weeklyHeroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonBrand}>
+						<ThemeProvider theme={buttonThemeBrand}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',

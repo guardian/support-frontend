@@ -3,8 +3,8 @@ import {
 	brandAlt,
 	brandBackground,
 	brandText,
-} from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
+	textSans,
+} from '@guardian/source-foundations';
 
 const iconHeight = '42px';
 const iconContainer = css`

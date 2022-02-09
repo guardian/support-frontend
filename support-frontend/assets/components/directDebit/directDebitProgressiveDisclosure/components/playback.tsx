@@ -1,14 +1,12 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
+import { space, textSans } from '@guardian/source-foundations';
 import {
 	Button,
-	buttonReaderRevenueBrand,
-	buttonReaderRevenueBrandAlt,
-} from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { textSans } from '@guardian/src-foundations/typography';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { ThemeProvider } from '@emotion/react';
+	buttonThemeReaderRevenueBrand,
+	buttonThemeReaderRevenueBrandAlt,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import { useEffect, useRef } from 'react';
 import * as React from 'react';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
@@ -95,10 +93,10 @@ function Playback(props: {
 			</div>
 
 			<div css={ctaContainer} ref={subscribeButtonRef} tabIndex={-1}>
-				<ThemeProvider theme={buttonReaderRevenueBrandAlt}>
+				<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
 					<Button onClick={props.editDirectDebitClicked}>Edit</Button>
 				</ThemeProvider>
-				<ThemeProvider theme={buttonReaderRevenueBrand}>
+				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 					<Button
 						id="qa-submit-button-2"
 						onClick={props.onSubmit}

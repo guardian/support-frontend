@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { TextInput } from '@guardian/src-text-input';
+import { TextInput } from '@guardian/source-react-components';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import Signout from 'components/signout/signout';

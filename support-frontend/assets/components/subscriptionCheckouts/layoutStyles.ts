@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
-import { from } from '@guardian/src-foundations/mq';
-import { neutral } from '@guardian/src-foundations/palette';
+import { from, neutral } from '@guardian/source-foundations';
 
 export const mainCss = css`
 	max-width: 1120px;

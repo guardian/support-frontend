@@ -1,10 +1,15 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import type { Breakpoint } from '@guardian/src-foundations/mq';
-import { from, until } from '@guardian/src-foundations/mq';
-import { brand, neutral } from '@guardian/src-foundations/palette';
-import { body, headline } from '@guardian/src-foundations/typography';
+import {
+	body,
+	brand,
+	from,
+	headline,
+	neutral,
+	space,
+	until,
+} from '@guardian/source-foundations';
+import type { Breakpoint } from '@guardian/source-foundations';
 
 export const hero = css`
 	position: relative;

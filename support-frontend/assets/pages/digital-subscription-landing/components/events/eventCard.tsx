@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { border } from '@guardian/src-foundations/palette';
-import { body, textSans } from '@guardian/src-foundations/typography';
+import {
+	body,
+	border,
+	from,
+	space,
+	textSans,
+} from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import { SvgCalendar } from 'components/icons/calendar';
 

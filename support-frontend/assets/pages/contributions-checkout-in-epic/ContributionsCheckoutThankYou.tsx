@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { headline } from '@guardian/src-foundations/typography';
+import { headline } from '@guardian/source-foundations';
 import { useEffect } from 'preact/hooks';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';

@@ -1,11 +1,11 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
-import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { ThemeProvider } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
+import { from, headline, space, textSans } from '@guardian/source-foundations';
+import {
+	buttonThemeReaderRevenue,
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import type { ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -217,7 +217,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 					Never be interrupted or distracted by ads again by signing in. Just
 					use your subscriber email and password when you next visit.
 				</p>
-				<ThemeProvider theme={buttonReaderRevenue}>
+				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
 						css={marginForButton}
 						priority="tertiary"

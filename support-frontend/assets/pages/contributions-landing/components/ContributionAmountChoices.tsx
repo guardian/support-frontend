@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
-import { until } from '@guardian/src-foundations/mq';
+import { until } from '@guardian/source-foundations';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import * as React from 'react';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';

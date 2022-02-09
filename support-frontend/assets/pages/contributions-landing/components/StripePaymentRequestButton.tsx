@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { Button } from '@guardian/src-button';
-import { neutral, space } from '@guardian/src-foundations';
+import { neutral, space } from '@guardian/source-foundations';
+import { Button } from '@guardian/source-react-components';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { RenderPaymentRequestButtonInput } from 'components/StripePaymentRequestButton/StripePaymentRequestButton';

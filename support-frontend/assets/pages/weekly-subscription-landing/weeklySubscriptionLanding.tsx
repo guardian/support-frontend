@@ -95,13 +95,7 @@ const WeeklyLandingPage = ({
 			/>
 			<FullWidthContainer>
 				<CentredContainer>
-					<Block>
-						{orderIsAGift ? (
-							<GiftBenefits />
-						) : (
-							<Benefits/>
-						)}
-					</Block>
+					<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
 				</CentredContainer>
 			</FullWidthContainer>
 			<FullWidthContainer theme="dark" hasOverlap>

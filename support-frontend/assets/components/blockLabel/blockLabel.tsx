@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { neutral, text } from '@guardian/src-foundations/palette';
-import { headline } from '@guardian/src-foundations/typography';
+import {
+	from,
+	headline,
+	neutral,
+	space,
+	text,
+} from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 
 const blockLabel = css`

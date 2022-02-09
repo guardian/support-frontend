@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
 import Page from 'components/page/page';
@@ -8,9 +9,12 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { postIntroductorySixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
-import 'stylesheets/skeleton/skeleton.scss';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { promotionTermsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -19,11 +23,7 @@ import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/delive
 import ThankYouContent from './components/thankYou';
 import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
-import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import { FocusStyleManager } from '@guardian/src-utilities';
+import 'stylesheets/skeleton/skeleton.scss';
 
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //

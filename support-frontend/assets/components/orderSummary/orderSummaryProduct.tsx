@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { neutral } from '@guardian/src-foundations/palette';
-import { headline, textSans } from '@guardian/src-foundations/typography';
+import {
+	headline,
+	neutral,
+	space,
+	textSans,
+} from '@guardian/source-foundations';
 import type { ListItemText } from 'components/list/list';
 import { ListWithSubText } from 'components/list/list';
 

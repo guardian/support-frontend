@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { border } from '@guardian/src-foundations/palette';
+import { border, from, space } from '@guardian/source-foundations';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';

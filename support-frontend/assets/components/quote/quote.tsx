@@ -1,15 +1,16 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
 import {
 	border,
 	brandAlt,
+	from,
+	headline,
 	neutral,
+	space,
 	sport,
-} from '@guardian/src-foundations/palette';
-import { headline } from '@guardian/src-foundations/typography';
-import { SvgQuote } from '@guardian/src-icons';
+	until,
+} from '@guardian/source-foundations';
+import { SvgQuote } from '@guardian/source-react-components';
 import type { ReactNode } from 'react';
 
 const headshotSize = 68;

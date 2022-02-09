@@ -20,7 +20,7 @@ import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,

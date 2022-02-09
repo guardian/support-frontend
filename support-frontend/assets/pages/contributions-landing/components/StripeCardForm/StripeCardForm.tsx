@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { TextInput } from '@guardian/src-text-input';
-import { InlineError } from '@guardian/src-user-feedback';
+import { InlineError, TextInput } from '@guardian/source-react-components';
 import {
 	CardCvcElement,
 	CardExpiryElement,

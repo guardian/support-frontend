@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
+import { space } from '@guardian/source-foundations';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -7,6 +7,10 @@ import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressBut
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPaymentWithShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type {
+	PayPalCheckoutDetails,
+	PayPalUserDetails,
+} from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import { finalPrice } from 'helpers/productPrice/productPrices';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
@@ -16,10 +20,6 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import 'redux';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type {
-	PayPalCheckoutDetails,
-	PayPalUserDetails,
-} from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 

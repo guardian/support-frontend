@@ -1,10 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import {
-	brand,
-	brandBackground,
-	neutral,
-} from '@guardian/src-foundations/palette';
+import { brand, brandBackground, neutral } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 
 type Theme = 'light' | 'dark' | 'white' | 'brand';

@@ -1,10 +1,18 @@
-import { css } from '@emotion/react';
-import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { between, from, until } from '@guardian/src-foundations/mq';
-import { brandAlt, neutral } from '@guardian/src-foundations/palette';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { ThemeProvider } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
+import {
+	between,
+	brandAlt,
+	from,
+	headline,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
+import {
+	buttonThemeReaderRevenue,
+	LinkButton,
+} from '@guardian/source-react-components';
 import type { Node } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
@@ -198,11 +206,7 @@ function ProductOption(props: Product) {
 	return (
 		<div
 			ref={setElementToObserve}
-			css={[
-				productOption,
-				props.cssOverrides,
-				productOptionMargin,
-			]}
+			css={[productOption, props.cssOverrides, productOptionMargin]}
 		>
 			<div css={productOptionVerticalLine}>
 				<h3 css={[productOptionTitle, productOptionUnderline]}>
@@ -225,7 +229,7 @@ function ProductOption(props: Product) {
 				</p>
 			</div>
 			<div css={buttonDiv}>
-				<ThemeProvider theme={buttonReaderRevenue}>
+				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
 						css={button}
 						href={props.href}

@@ -4,11 +4,16 @@
 // --- Imports --- //
 // @ts-expect-error - required for hooks
 import { css } from '@emotion/react';
-import { Button } from '@guardian/src-button';
-import { brand, palette, space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { ButtonLink } from '@guardian/src-link';
+import {
+	brand,
+	from,
+	headline,
+	palette,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
+import { Button, ButtonLink } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { trackComponentClick } from 'helpers/tracking/behaviour';

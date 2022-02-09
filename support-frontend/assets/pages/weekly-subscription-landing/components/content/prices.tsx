@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { body, headline } from '@guardian/src-foundations/typography';
-import { SvgInfo } from '@guardian/src-icons';
+import { body, from, headline, space } from '@guardian/source-foundations';
+import { SvgInfo } from '@guardian/source-react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';

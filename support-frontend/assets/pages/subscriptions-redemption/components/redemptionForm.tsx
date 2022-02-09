@@ -1,11 +1,10 @@
 import { css } from '@emotion/react';
-import { Button } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { line } from '@guardian/src-foundations/palette';
-import { headline } from '@guardian/src-foundations/typography/obj';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { TextInput } from '@guardian/src-text-input';
+import { from, headline, line, space } from '@guardian/source-foundations';
+import {
+	Button,
+	SvgArrowRightStraight,
+	TextInput,
+} from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';

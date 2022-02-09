@@ -1,14 +1,16 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
 import {
 	background,
+	body,
 	border,
 	culture,
+	from,
+	headline,
 	lifestyle,
 	news,
-} from '@guardian/src-foundations/palette';
-import { body, headline, textSans } from '@guardian/src-foundations/typography';
+	space,
+	textSans,
+} from '@guardian/source-foundations';
 import BlockLabel from 'components/blockLabel/blockLabel';
 import { SvgTicket } from 'components/icons/ticket';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -196,43 +198,45 @@ const FeaturedEventCardUS = (
 const featuredEvent =
 	countryId === 'US' ? FeaturedEventCardUS : FeaturedEventCardUK;
 
-const EventsModule = () => (
-	<>
-		<BlockLabel tag="h2" cssOverrides={label}>
-			Special offer
-		</BlockLabel>
-		<section css={container}>
-			<div css={contentContainer}>
-				<div css={textContentContainer}>
-					<SvgTicket />
-					<h3 css={cardTitle}>
-						Enjoy 6 free tickets to digital Guardian events
-					</h3>
-					<p css={para}>
-						In the <span css={bold}>first 6 months</span> of your subscription
-					</p>
-					<p css={paraSecond}>
-						Join interactive Live conversations with journalists, political
-						leaders and cultural icons. Or get inspired to learn a new skill in
-						selected Masterclasses. With events launching weekly and available
-						on-demand.
-					</p>
+function EventsModule() {
+	return (
+		<>
+			<BlockLabel tag="h2" cssOverrides={label}>
+				Special offer
+			</BlockLabel>
+			<section css={container}>
+				<div css={contentContainer}>
+					<div css={textContentContainer}>
+						<SvgTicket />
+						<h3 css={cardTitle}>
+							Enjoy 6 free tickets to digital Guardian events
+						</h3>
+						<p css={para}>
+							In the <span css={bold}>first 6 months</span> of your subscription
+						</p>
+						<p css={paraSecond}>
+							Join interactive Live conversations with journalists, political
+							leaders and cultural icons. Or get inspired to learn a new skill
+							in selected Masterclasses. With events launching weekly and
+							available on-demand.
+						</p>
+					</div>
+					<div css={eventCardContainer}>
+						{featuredEvent}
+						<EventCard
+							eventType="Featured masterclass"
+							eventImage={felicityCloakeImage}
+							eventDate="22 Sept 2021"
+							eventColour={lifestyle[400]}
+							eventSectionText="Lifestyle"
+							eventDescription="How to write about food with Felicity Cloake"
+						/>
+					</div>
+					<p css={paraTiny}>See full Terms &amp; Conditions below</p>
 				</div>
-				<div css={eventCardContainer}>
-					{featuredEvent}
-					<EventCard
-						eventType="Featured masterclass"
-						eventImage={felicityCloakeImage}
-						eventDate="22 Sept 2021"
-						eventColour={lifestyle[400]}
-						eventSectionText="Lifestyle"
-						eventDescription="How to write about food with Felicity Cloake"
-					/>
-				</div>
-				<p css={paraTiny}>See full Terms &amp; Conditions below</p>
-			</div>
-		</section>
-	</>
-);
+			</section>
+		</>
+	);
+}
 
 export default EventsModule;

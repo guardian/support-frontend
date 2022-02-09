@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { between } from '@guardian/src-foundations/mq';
+import { between, space } from '@guardian/source-foundations';
 
 export const tabsTabletSpacing = css`
 	${between.tablet.and.leftCol} {

@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
-import { LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { body, headline } from '@guardian/src-foundations/typography';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
+import { body, headline, space } from '@guardian/source-foundations';
+import {
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type GiftableProduct = 'digital' | 'Guardian Weekly';

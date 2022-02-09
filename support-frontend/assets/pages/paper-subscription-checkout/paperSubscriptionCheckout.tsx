@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
 import Footer from 'components/footerCompliant/Footer';
 import Page from 'components/page/page';
@@ -9,17 +10,16 @@ import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
-import 'stylesheets/skeleton/skeleton.scss';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import CheckoutForm from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
-import ThankYouContent from './components/thankYou';
-import './_legacyImports.scss';
 import {
 	getFulfilmentOption,
 	getProductOption,
 	getStartDate,
 } from 'pages/paper-subscription-checkout/helpers/options';
-import { FocusStyleManager } from '@guardian/src-utilities';
+import ThankYouContent from './components/thankYou';
+import 'stylesheets/skeleton/skeleton.scss';
+import './_legacyImports.scss';
 
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //
