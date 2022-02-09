@@ -1,3 +1,5 @@
+// The Globe
+
 export default function SvgGlobe() {
 	return (
 		<svg
@@ -24,4 +26,4 @@ export default function SvgGlobe() {
 			<path d="M21.1,50.7 C21.2,56.6 21.7,62.4 22.6,68.2 L45.7,68.2 L45.7,50.7 L21.1,50.7 Z" />
 		</svg>
 	);
-} // The Globe
+}

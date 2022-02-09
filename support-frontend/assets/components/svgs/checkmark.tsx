@@ -1,3 +1,5 @@
+// A checkmark ✓
+
 export default function SvgCheckmark() {
 	return (
 		<svg
@@ -9,4 +11,4 @@ export default function SvgCheckmark() {
 			<path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z" />
 		</svg>
 	);
-} // A checkmark ✓
+}

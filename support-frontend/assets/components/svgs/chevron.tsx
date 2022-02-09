@@ -1,3 +1,5 @@
+// A chevron symbol.
+
 export default function SvgChevron() {
 	return (
 		<svg
@@ -11,4 +13,4 @@ export default function SvgChevron() {
 			<path d="M1.25.5l-.75.75L9 9.5h.95l8.55-8.25-.75-.75L9.5 7.25z" />
 		</svg>
 	);
-} // A chevron symbol.
+}

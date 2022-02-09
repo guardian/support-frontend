@@ -1,3 +1,5 @@
+// Generic question mark icon used on checkouts.
+
 export default function QuestionMarkHintIcon(): JSX.Element {
 	return (
 		<svg
@@ -22,4 +24,4 @@ export default function QuestionMarkHintIcon(): JSX.Element {
 			/>
 		</svg>
 	);
-} // Generic question mark icon used on checkouts.
+}

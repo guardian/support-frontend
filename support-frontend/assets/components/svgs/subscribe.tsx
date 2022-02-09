@@ -1,3 +1,5 @@
+// Subscribe button icon
+
 export default function SvgSubscribe() {
 	return (
 		<svg
@@ -13,4 +15,4 @@ export default function SvgSubscribe() {
 			</svg>
 		</svg>
 	);
-} // Subscribe button icon
+}

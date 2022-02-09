@@ -1,3 +1,5 @@
+// the down chevron used on DS <select>
+
 export default function DownChevronDs(): JSX.Element {
 	return (
 		<svg
@@ -20,4 +22,4 @@ export default function DownChevronDs(): JSX.Element {
 			/>
 		</svg>
 	);
-} // the down chevron used on DS <select>
+}
