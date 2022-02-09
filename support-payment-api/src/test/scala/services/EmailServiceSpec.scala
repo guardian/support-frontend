@@ -56,7 +56,7 @@ class EmailServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
     val emailResult = emailService.sendThankYouEmail(
-      ContributorRow("email@email.com", "GBP", 1L, PaymentProvider.Paypal, None, BigDecimal(2))
+      ContributorRow("email@email.com", "GBP", 1L, PaymentProvider.Paypal, None, BigDecimal(2)),
     )
     whenReady(emailResult.value) { result =>
       result mustBe Right(new SendMessageResult)
@@ -89,13 +89,17 @@ class EmailServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with 
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    whenReady(emailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1L, PaymentProvider.Paypal, None, BigDecimal(2))).value) { result =>
+    whenReady(
+      emailService
+        .sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1L, PaymentProvider.Paypal, None, BigDecimal(2)))
+        .value,
+    ) { result =>
       result.fold(
         error => {
           // TODO: understand how this java.lang.Exception bit gets added
           error.getMessage mustBe s"java.lang.Exception: $errorString"
         },
-        success => fail
+        success => fail,
       )
     }
   }

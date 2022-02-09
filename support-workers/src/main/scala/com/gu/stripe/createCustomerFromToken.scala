@@ -12,7 +12,6 @@ object createCustomerFromToken {
   object Customer {
     implicit val decoder: Decoder[Customer] = deriveDecoder
 
-
     object StripeCard {
 
       implicit val brandDecoder = StripeBrand.decoder(_.customerValue)
@@ -34,7 +33,10 @@ object createCustomerFromToken {
   }
 
   def apply(stripeService: StripeServiceForCurrency)(token: String): Future[Customer] =
-    stripeService.postForm[Customer]("customers", Map(
-      "source" -> Seq(token)
-    ))
+    stripeService.postForm[Customer](
+      "customers",
+      Map(
+        "source" -> Seq(token),
+      ),
+    )
 }

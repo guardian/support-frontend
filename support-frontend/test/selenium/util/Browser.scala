@@ -43,8 +43,8 @@ trait Browser extends WebBrowser with LazyLogging {
     waitUntil(
       ExpectedConditions.or(
         ExpectedConditions.urlContains(urlFraction),
-        ExpectedConditions.visibilityOfElementLocated(q.by)
-      )
+        ExpectedConditions.visibilityOfElementLocated(q.by),
+      ),
     )
 
   def clickOn(q: Query) {
@@ -117,5 +117,5 @@ trait Browser extends WebBrowser with LazyLogging {
     Try(new WebDriverWait(webDriver, Config.waitTimeout).until(pred)).isSuccess
 
   private case class MissingPageElementException(q: Query)
-    extends Exception(s"Could not find WebElement with locator: ${q.queryString}")
+      extends Exception(s"Could not find WebElement with locator: ${q.queryString}")
 }

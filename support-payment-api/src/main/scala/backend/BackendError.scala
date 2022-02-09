@@ -43,13 +43,13 @@ object BackendError {
   final case class MultipleErrors(errors: List[BackendError]) extends BackendError
 
   implicit val backendSemiGroup: Semigroup[BackendError] =
-  Semigroup.instance((x,y) => MultipleErrors(List(x,y)))
+    Semigroup.instance((x, y) => MultipleErrors(List(x, y)))
 
   def combineResults(
-    result1: EitherT[Future, BackendError, Unit],
-    result2:  EitherT[Future, BackendError, Unit],
-    result3:  EitherT[Future, BackendError, Unit]
-  )(implicit pool: DefaultThreadPool):  EitherT[Future, BackendError, Unit] = {
+      result1: EitherT[Future, BackendError, Unit],
+      result2: EitherT[Future, BackendError, Unit],
+      result3: EitherT[Future, BackendError, Unit],
+  )(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit] = {
     EitherT(for {
       r1 <- result1.toValidated
       r2 <- result2.toValidated

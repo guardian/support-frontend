@@ -9,7 +9,8 @@ import scala.collection.JavaConverters._
 //
 // errorName is the name of the error as defined by Paypal.
 // See: https://developer.paypal.com/docs/api/payments/v1/#errors for a list of these names and their meanings.
-@JsonCodec case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String) extends Exception {
+@JsonCodec case class PaypalApiError(responseCode: Option[Int], errorName: Option[String], message: String)
+    extends Exception {
   override val getMessage: String = message
 }
 

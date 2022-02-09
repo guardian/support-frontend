@@ -22,7 +22,7 @@ sealed trait AccessCredentials
 object AccessCredentials {
   case class Cookies(scGuU: String, guU: Option[String] = None) extends AccessCredentials {
     val cookies: Seq[Cookie] = Seq(
-      Cookie(name = "SC_GU_U", scGuU)
+      Cookie(name = "SC_GU_U", scGuU),
     ) ++ guU.map(c => Cookie(name = "GU_U", c))
   }
   case class Token(tokenText: String) extends AccessCredentials
@@ -31,7 +31,8 @@ object AccessCredentials {
 class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthService)(implicit ec: ExecutionContext) {
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
-    identityPlayAuthService.getUserFromRequest(requestHeader)
+    identityPlayAuthService
+      .getUserFromRequest(requestHeader)
       .map { case (_, user) => user }
       .unsafeToFuture()
       .map(user => Some(user))
@@ -57,10 +58,13 @@ object AsyncAuthenticationService {
 
   case class IdentityIdAndEmail(id: String, primaryEmailAddress: String)
 
-  def apply(config: Identity, testUserService: TestUserService)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
+  def apply(config: Identity, testUserService: TestUserService)(implicit
+      ec: ExecutionContext,
+  ): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
     // TOOD: targetClient could probably be None - check and release in subsequent PR.
-    val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = Some("membership"))
+    val identityPlayAuthService =
+      IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = Some("membership"))
     new AsyncAuthenticationService(identityPlayAuthService)
   }
 

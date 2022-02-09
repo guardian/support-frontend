@@ -27,13 +27,14 @@ class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
-    stage = stage
+    stage = stage,
   )
 
   "GET /sitemap.xml" should {
     "not return an error" in {
       val result = new SiteMap(
-        actionRefiner, stubControllerComponents()
+        actionRefiner,
+        stubControllerComponents(),
       )(mock[ExecutionContext]).sitemap.apply(FakeRequest())
       status(result) mustBe 200
     }

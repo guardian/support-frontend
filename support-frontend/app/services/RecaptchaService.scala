@@ -19,7 +19,8 @@ class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
   val recaptchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
 
   def verify(token: String, secretKey: String): EitherT[Future, String, RecaptchaResponse] =
-    wsClient.url(recaptchaEndpoint)
+    wsClient
+      .url(recaptchaEndpoint)
       .withQueryStringParameters("secret" -> secretKey, "response" -> token)
       .withHttpHeaders("Content-length" -> 0.toString)
       .withMethod("POST")
@@ -28,5 +29,3 @@ class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
       .leftMap(_.toString)
       .subflatMap(resp => (resp.json).validate[RecaptchaResponse].asEither.leftMap(_.mkString(",")))
 }
-
-

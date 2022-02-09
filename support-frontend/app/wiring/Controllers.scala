@@ -8,12 +8,18 @@ import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
 
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with wiring.Assets with GoogleAuth =>
+  self: AssetsComponents
+    with Services
+    with BuiltInComponentsFromContext
+    with ApplicationConfiguration
+    with ActionBuilders
+    with wiring.Assets
+    with GoogleAuth =>
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
   lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
-  lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage)_
+  lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage) _
 
   lazy val applicationController = new Application(
     actionRefiners,
@@ -30,17 +36,17 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.stage,
-    appConfig.supportUrl
+    appConfig.supportUrl,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(
-    actionRefiners
+    actionRefiners,
   )
 
   lazy val articleShareController = new ArticleShare(
     actionRefiners,
     controllerComponents,
-    capiService
+    capiService,
   )
 
   lazy val subscriptionsController = new SubscriptionsController(
@@ -50,7 +56,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
   )
 
   lazy val redemptionController = new RedemptionController(
@@ -60,12 +66,12 @@ trait Controllers {
     testUsers,
     controllerComponents,
     dynamoTableAsyncProvider,
-    zuoraGiftLookupServiceProvider
+    zuoraGiftLookupServiceProvider,
   )
 
   private lazy val landingCopyProvider = new LandingCopyProvider(
     promotionServiceProvider,
-    appConfig.stage
+    appConfig.stage,
   )
 
   lazy val digitalPackController = new DigitalSubscriptionController(
@@ -77,7 +83,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
   )
 
   lazy val paperController = new PaperSubscriptionController(
@@ -88,7 +94,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
   )
 
   lazy val weeklyController = new WeeklySubscriptionController(
@@ -99,7 +105,7 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
   )
 
   lazy val digitalPackFormController = new DigitalSubscriptionFormController(
@@ -111,7 +117,7 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     allSettingsProvider,
-    appConfig.recaptchaConfigProvider
+    appConfig.recaptchaConfigProvider,
   )
 
   lazy val paperFormController = new PaperSubscriptionFormController(
@@ -123,7 +129,7 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     allSettingsProvider,
-    appConfig.recaptchaConfigProvider
+    appConfig.recaptchaConfigProvider,
   )
 
   lazy val weeklyFormController = new WeeklySubscriptionFormController(
@@ -135,7 +141,7 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     allSettingsProvider,
-    appConfig.recaptchaConfigProvider
+    appConfig.recaptchaConfigProvider,
   )
 
   lazy val createSubscriptionController = new CreateSubscriptionController(
@@ -144,13 +150,13 @@ trait Controllers {
     identityService,
     testUsers,
     controllerComponents,
-    appConfig.guardianDomain
+    appConfig.guardianDomain,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
     supportWorkersClient,
     controllerComponents,
-    actionRefiners
+    actionRefiners,
   )
 
   lazy val stripeController = new StripeController(
@@ -161,7 +167,7 @@ trait Controllers {
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
     testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
     allSettingsProvider,
-    appConfig.stage
+    appConfig.stage,
   )
 
   lazy val payPalRegularController = new PayPalRegular(
@@ -170,7 +176,7 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    allSettingsProvider
+    allSettingsProvider,
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
@@ -179,7 +185,7 @@ trait Controllers {
     testUsers,
     controllerComponents,
     paymentAPIService,
-    allSettingsProvider
+    allSettingsProvider,
   )
 
   lazy val testUsersController = new TestUsersManagement(
@@ -187,12 +193,12 @@ trait Controllers {
     controllerComponents,
     testUsers,
     appConfig.supportUrl,
-    appConfig.guardianDomain
+    appConfig.guardianDomain,
   )
 
   lazy val siteMapController = new SiteMap(
     actionRefiners,
-    controllerComponents
+    controllerComponents,
   )
 
   lazy val identityController = new IdentityController(
@@ -200,20 +206,20 @@ trait Controllers {
     controllerComponents,
     actionRefiners,
     appConfig.identity.webappUrl,
-    () => AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(setupWarningRequest(appConfig.stage))
+    () => AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(setupWarningRequest(appConfig.stage)),
   )
 
   lazy val directDebitController = new DirectDebit(
     actionRefiners,
     controllerComponents,
     goCardlessServiceProvider,
-    testUsers
+    testUsers,
   )
 
   lazy val getAddressController = new GetAddress(
     controllerComponents,
     getAddressIOService,
-    actionRefiners
+    actionRefiners,
   )
 
   lazy val promotionsController = new Promotions(
@@ -224,7 +230,7 @@ trait Controllers {
     testUsers,
     controllerComponents,
     allSettingsProvider,
-    appConfig.stage
+    appConfig.stage,
   )
 
 }

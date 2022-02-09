@@ -1,8 +1,16 @@
 package com.gu.services
 
 import com.amazonaws.regions.Regions
-import com.amazonaws.services.simplesystemsmanagement.model.{GetParameterRequest, GetParametersByPathRequest, ParameterType, PutParameterRequest}
-import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagementAsync, AWSSimpleSystemsManagementAsyncClientBuilder}
+import com.amazonaws.services.simplesystemsmanagement.model.{
+  GetParameterRequest,
+  GetParametersByPathRequest,
+  ParameterType,
+  PutParameterRequest,
+}
+import com.amazonaws.services.simplesystemsmanagement.{
+  AWSSimpleSystemsManagementAsync,
+  AWSSimpleSystemsManagementAsyncClientBuilder,
+}
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.supporterdata.model.Stage
 
@@ -43,7 +51,8 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
 }
 
 object ParameterStoreService {
-  lazy val client = AWSSimpleSystemsManagementAsyncClientBuilder.standard()
+  lazy val client = AWSSimpleSystemsManagementAsyncClientBuilder
+    .standard()
     .withRegion(Regions.EU_WEST_1)
     .withCredentials(CredentialsProvider)
     .build()

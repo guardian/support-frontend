@@ -19,21 +19,22 @@ import views.html.subscriptionCheckout
 import scala.concurrent.ExecutionContext
 
 class PaperSubscriptionFormController(
-  priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  val assets: AssetsResolver,
-  val actionRefiners: CustomActionBuilders,
-  testUsers: TestUserService,
-  stripeConfigProvider: StripeConfigProvider,
-  payPalConfigProvider: PayPalConfigProvider,
-  components: ControllerComponents,
-  settingsProvider: AllSettingsProvider,
-  recaptchaConfigProvider: RecaptchaConfigProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    val assets: AssetsResolver,
+    val actionRefiners: CustomActionBuilders,
+    testUsers: TestUserService,
+    stripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
+    components: ControllerComponents,
+    settingsProvider: AllSettingsProvider,
+    recaptchaConfigProvider: RecaptchaConfigProvider,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-
 
   def displayForm(): Action[AnyContent] = {
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -42,7 +43,9 @@ class PaperSubscriptionFormController(
     }
   }
 
-  private def paperSubscriptionFormHtml(maybeIdUser: Option[IdUser])(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def paperSubscriptionFormHtml(
+      maybeIdUser: Option[IdUser],
+  )(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Newspaper Subscription"
     val id = EmptyDiv("paper-subscription-checkout-page")
     val js = "paperSubscriptionCheckoutPage.js"
@@ -68,9 +71,8 @@ class PaperSubscriptionFormController(
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
       orderIsAGift = false,
-      Some(PaperValidation.M25_POSTCODE_PREFIXES)
+      Some(PaperValidation.M25_POSTCODE_PREFIXES),
     )
   }
-
 
 }

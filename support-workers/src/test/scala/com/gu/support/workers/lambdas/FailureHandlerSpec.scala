@@ -6,7 +6,12 @@ import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, AmazonPayTryAnotherCard, PaymentMethodUnacceptable, Unknown}
+import com.gu.support.workers.CheckoutFailureReasons.{
+  AccountMismatch,
+  AmazonPayTryAnotherCard,
+  PaymentMethodUnacceptable,
+  Unknown,
+}
 import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
@@ -30,7 +35,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequestFuture(failureJson.asInputStream, outStream, context).map { _ =>
-
       val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
@@ -47,7 +51,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequestFuture(cardDeclinedJsonZuora.asInputStream, outStream, context).map { _ =>
-
       val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
@@ -66,7 +69,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequestFuture(cardDeclinedJsonStripe.asInputStream, outStream, context).map { _ =>
-
       val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
@@ -85,7 +87,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequestFuture(digipackCardDeclinedStripeJson.asInputStream, outStream, context).map { _ =>
-
       val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
@@ -104,7 +105,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequestFuture(testTokenInProdJsonStripe.asInputStream, outStream, context).map { _ =>
-
       val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
@@ -130,7 +130,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     failureHandler.handleRequestFuture(digipackCardDeclinedStripeJson.asInputStream, outStream, context).map { _ =>
-
       verify(emailService, times(1)).send(testFields)
 
       val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
@@ -147,7 +146,8 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
 class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
 
   it should "match a transaction declined error" in {
-    val errorResponse = Some(ZuoraErrorResponse(success = false, decode[List[ZuoraError]](JsonFixtures.zuoraErrorResponse).toOption.get))
+    val errorResponse =
+      Some(ZuoraErrorResponse(success = false, decode[List[ZuoraError]](JsonFixtures.zuoraErrorResponse).toOption.get))
 
     errorResponse match {
       case Some(ZuoraErrorResponse(_, List(ZuoraError("TRANSACTION_FAILED", _)))) => succeed
@@ -158,7 +158,7 @@ class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
   it should "convert a transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
     val reason = FailureHandler.toCheckoutFailureReason(
       ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."),
-      Stripe
+      Stripe,
     )
     reason should be(PaymentMethodUnacceptable)
   }
@@ -166,7 +166,7 @@ class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
   it should "convert an Amazon Pay transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
     val reason = FailureHandler.toCheckoutFailureReason(
       ZuoraError("TRANSACTION_FAILED", "Transaction declined.InvalidPaymentMethod - Declined"),
-      AmazonPay
+      AmazonPay,
     )
     reason should be(AmazonPayTryAnotherCard)
   }
@@ -182,7 +182,7 @@ object FailureHandlerManualTest extends Matchers {
   }
 
   def sendFailureEmail(): Unit = {
-    //This test will send a failure email to the address below - useful for quickly testing changes
+    // This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "rupert.bates@theguardian.com"
     service
@@ -201,7 +201,7 @@ object DigiPackFailureHandlerManualTest extends Matchers {
   }
 
   def sendFailureEmail(): Unit = {
-    //This test will send a failure email to the address below - useful for quickly testing changes
+    // This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
@@ -222,7 +222,7 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
   }
 
   def sendFailureEmail(): Unit = {
-    //This test will send a failure email to the address below - useful for quickly testing changes
+    // This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
@@ -234,7 +234,6 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
   }
 }
 
-
 object PrintFailureHandlerTest extends Matchers {
 
   implicit val ex: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
@@ -244,7 +243,7 @@ object PrintFailureHandlerTest extends Matchers {
   }
 
   def sendFailureEmail(): Unit = {
-    //This test will send a failure email to the address below - useful for quickly testing changes
+    // This test will send a failure email to the address below - useful for quickly testing changes
     val service = new EmailService(Configuration.load().contributionThanksQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
@@ -255,5 +254,3 @@ object PrintFailureHandlerTest extends Matchers {
       }
   }
 }
-
-

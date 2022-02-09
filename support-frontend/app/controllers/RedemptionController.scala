@@ -29,16 +29,17 @@ import java.util.Locale
 import scala.concurrent.{ExecutionContext, Future}
 
 class RedemptionController(
-  val actionRefiners: CustomActionBuilders,
-  val assets: AssetsResolver,
-  settingsProvider: AllSettingsProvider,
-  testUsers: TestUserService,
-  components: ControllerComponents,
-  dynamoTableProvider: DynamoTableAsyncProvider,
-  zuoraLookupServiceProvider: ZuoraGiftLookupServiceProvider
-)(
-  implicit val ec: ExecutionContext
-) extends AbstractController(components) with Circe {
+    val actionRefiners: CustomActionBuilders,
+    val assets: AssetsResolver,
+    settingsProvider: AllSettingsProvider,
+    testUsers: TestUserService,
+    components: ControllerComponents,
+    dynamoTableProvider: DynamoTableAsyncProvider,
+    zuoraLookupServiceProvider: ZuoraGiftLookupServiceProvider,
+)(implicit
+    val ec: ExecutionContext,
+) extends AbstractController(components)
+    with Circe {
 
   import actionRefiners._
 
@@ -48,69 +49,86 @@ class RedemptionController(
   val title = "Support the Guardian | Redeem your code"
   val id = EmptyDiv("subscriptions-redemption-page")
   val js = "subscriptionsRedemptionPage.js"
-  val css = "digitalSubscriptionCheckoutPage.css" //TODO: Don't need this?
-
+  val css = "digitalSubscriptionCheckoutPage.css" // TODO: Don't need this?
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = MaybeAuthenticatedAction.async {
     implicit request =>
       val isTestUser = testUsers.isTestUser(request)
-      val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
+      val codeValidator =
+        new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
       val normalisedCode = redemptionCode.toLowerCase(Locale.UK)
       for {
-        form <- codeValidator.validate(redemptionCode).value.map(
-          validationResult =>
-            Ok(subscriptionRedemptionForm(
-              title = title,
-              mainElement = id,
-              js = js,
-              css = css,
-              csrf = Some(CSRF.getToken.value),
-              isTestUser = isTestUser,
-              stage = "checkout",
-              redemptionCode = normalisedCode,
-              maybeReaderType = validationResult.toOption,
-              maybeRedemptionError = validationResult.left.toOption,
-              user = request.user,
-              submitted = false
-            ))
-        )
+        form <- codeValidator
+          .validate(redemptionCode)
+          .value
+          .map(validationResult =>
+            Ok(
+              subscriptionRedemptionForm(
+                title = title,
+                mainElement = id,
+                js = js,
+                css = css,
+                csrf = Some(CSRF.getToken.value),
+                isTestUser = isTestUser,
+                stage = "checkout",
+                redemptionCode = normalisedCode,
+                maybeReaderType = validationResult.toOption,
+                maybeRedemptionError = validationResult.left.toOption,
+                user = request.user,
+                submitted = false,
+              ),
+            ),
+          )
       } yield form
   }
 
-  def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit request: OptionalAuthRequest[Any]): Result = {
-    SafeLogger.error(scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}")
-    Ok(subscriptionRedemptionForm(
-      title = title,
-      mainElement = id,
-      js = js,
-      css = css,
-      csrf = None,
-      isTestUser = isTestUser,
-      stage = "checkout",
-      redemptionCode = redemptionCode,
-      maybeReaderType = None,
-      Some(s"Unfortunately we were unable to process your code. ${error}"),
-      user = None,
-      submitted = false
-    ))
+  def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit
+      request: OptionalAuthRequest[Any],
+  ): Result = {
+    SafeLogger.error(
+      scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}",
+    )
+    Ok(
+      subscriptionRedemptionForm(
+        title = title,
+        mainElement = id,
+        js = js,
+        css = css,
+        csrf = None,
+        isTestUser = isTestUser,
+        stage = "checkout",
+        redemptionCode = redemptionCode,
+        maybeReaderType = None,
+        Some(s"Unfortunately we were unable to process your code. ${error}"),
+        user = None,
+        submitted = false,
+      ),
+    )
   }
 
-  def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] = CachedAction().async {
-    val testUser = isTestUser.getOrElse(false)
-    val codeValidator = new CodeValidator(zuoraLookupServiceProvider.forUser(testUser), dynamoTableProvider.forUser(testUser))
-    codeValidator.validate(redemptionCode).value.map {
-      validationResult =>
-      SafeLogger.info(s"Validating code ${redemptionCode}: ${validationResult}")
-      Ok(RedemptionValidationResult(
-        valid = validationResult.isRight,
-        readerType = validationResult.toOption,
-        errorMessage = validationResult.left.toOption).asJson
-      )
+  def validateCode(redemptionCode: RawRedemptionCode, isTestUser: Option[Boolean]): Action[AnyContent] =
+    CachedAction().async {
+      val testUser = isTestUser.getOrElse(false)
+      val codeValidator =
+        new CodeValidator(zuoraLookupServiceProvider.forUser(testUser), dynamoTableProvider.forUser(testUser))
+      codeValidator.validate(redemptionCode).value.map { validationResult =>
+        SafeLogger.info(s"Validating code ${redemptionCode}: ${validationResult}")
+        Ok(
+          RedemptionValidationResult(
+            valid = validationResult.isRight,
+            readerType = validationResult.toOption,
+            errorMessage = validationResult.left.toOption,
+          ).asJson,
+        )
+      }
     }
-  }
 
   def redirect(redemptionCode: RawRedemptionCode): Action[AnyContent] = CachedAction() { implicit request =>
-    RedirectWithEncodedQueryString(routes.RedemptionController.displayForm(redemptionCode).url, request.queryString, status = MOVED_PERMANENTLY)
+    RedirectWithEncodedQueryString(
+      routes.RedemptionController.displayForm(redemptionCode).url,
+      request.queryString,
+      status = MOVED_PERMANENTLY,
+    )
   }
 }
 
@@ -131,16 +149,17 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoTableAsync
 
     RedemptionCode(inputCode)
       .leftMap(_ => Future.successful(CodeMalformed))
-      .map {
-        redemptionCode =>
-          for {
-            giftValidationResult <- giftValidator.getStatus(redemptionCode, None)
-            mergedResult <- if (giftValidationResult == CodeNotFound)
+      .map { redemptionCode =>
+        for {
+          giftValidationResult <- giftValidator.getStatus(redemptionCode, None)
+          mergedResult <-
+            if (giftValidationResult == CodeNotFound)
               corporateValidator.getStatus(redemptionCode)
             else
               Future.successful(giftValidationResult)
-          } yield mergedResult
-      }.merge
+        } yield mergedResult
+      }
+      .merge
   }
 
 }

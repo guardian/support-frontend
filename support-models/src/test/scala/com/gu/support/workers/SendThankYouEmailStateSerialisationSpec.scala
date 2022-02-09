@@ -34,7 +34,7 @@ object ProductTypeCreatedTestData {
     Contribution(1, GBP, Monthly),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     "acno",
-    "subno"
+    "subno",
   )
 
   val digitalSubscriptionDirectPurchaseCreated = SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
@@ -51,20 +51,21 @@ object ProductTypeCreatedTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     recipientSFContactId = SfContactId("sfrecip"),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
-    GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
+    GiftRecipient
+      .DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
     GeneratedGiftCode("gd12-23456789").get,
     new LocalDate(2020, 10, 14),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,
     "acno",
-    "subno"
+    "subno",
   )
   val digitalSubscriptionCorporateRedemptionCreated = SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(GBP, Monthly, ReaderType.Corporate),
     "acno",
-    "subno"
+    "subno",
   )
   val digitalSubscriptionGiftRedemptionCreated = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
@@ -74,7 +75,7 @@ object ProductTypeCreatedTestData {
       new LocalDate(2020, 10, 24),
       new LocalDate(2021, 1, 24),
       3,
-    )
+    ),
   )
   val paperCreated = SendThankYouEmailPaperState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
@@ -84,7 +85,7 @@ object ProductTypeCreatedTestData {
     None,
     "acno",
     "subno",
-    new LocalDate(2020, 10, 22)
+    new LocalDate(2020, 10, 22),
   )
 
   val guardianWeeklyCreated = SendThankYouEmailGuardianWeeklyState(

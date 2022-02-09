@@ -10,7 +10,7 @@ class CachedActionBuilder(
     val parser: BodyParser[AnyContent],
     val executionContext: ExecutionContext,
     val maxAge: FiniteDuration,
-    val headers: List[(String, String)]
+    val headers: List[(String, String)],
 ) extends ActionBuilder[Request, AnyContent] {
 
   implicit private val ec = executionContext

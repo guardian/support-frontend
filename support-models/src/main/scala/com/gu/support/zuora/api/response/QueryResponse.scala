@@ -31,10 +31,14 @@ object PaymentMethodRecord {
 
 object SubscriptionRedemptionFields {
   implicit val decoder: Decoder[SubscriptionRedemptionFields] = decapitalizingDecoder[SubscriptionRedemptionFields]
-    .prepare(_.withFocus(_.mapObject(_
-      .renameField("CreatedRequestId__c", "CreatedRequestId")
-      .renameField("GifteeIdentityId__c", "GifteeIdentityId")
-    )))
+    .prepare(
+      _.withFocus(
+        _.mapObject(
+          _.renameField("CreatedRequestId__c", "CreatedRequestId")
+            .renameField("GifteeIdentityId__c", "GifteeIdentityId"),
+        ),
+      ),
+    )
 }
 
 case class AccountQueryResponse(records: List[AccountRecord])
@@ -48,8 +52,8 @@ case class PaymentMethodRecord(DefaultPaymentMethodId: String)
 case class SubscriptionRedemptionQueryResponse(records: List[SubscriptionRedemptionFields])
 
 case class SubscriptionRedemptionFields(
-  id: String,
-  contractEffectiveDate: LocalDate,
-  createdRequestId: String,
-  gifteeIdentityId: Option[String]
+    id: String,
+    contractEffectiveDate: LocalDate,
+    createdRequestId: String,
+    gifteeIdentityId: Option[String],
 )

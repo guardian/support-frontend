@@ -1,7 +1,13 @@
 package com.gu.services
 
 import com.gu.aws.AwsCloudWatchMetricPut
-import com.gu.aws.AwsCloudWatchMetricPut.{MetricDimensionName, MetricDimensionValue, MetricName, MetricNamespace, MetricRequest}
+import com.gu.aws.AwsCloudWatchMetricPut.{
+  MetricDimensionName,
+  MetricDimensionValue,
+  MetricName,
+  MetricNamespace,
+  MetricRequest,
+}
 import com.gu.supporterdata.model.Stage
 
 class AlarmService(stage: Stage) {
@@ -11,8 +17,8 @@ class AlarmService(stage: Stage) {
       MetricRequest(
         MetricNamespace("supporter-product-data"),
         MetricName("CsvReadFailure"),
-        Map(MetricDimensionName("Stage") -> MetricDimensionValue(stage.value))
-      )
+        Map(MetricDimensionName("Stage") -> MetricDimensionValue(stage.value)),
+      ),
     )
   }
 
@@ -21,12 +27,12 @@ class AlarmService(stage: Stage) {
       MetricRequest(
         MetricNamespace("supporter-product-data"),
         MetricName("DynamoWriteFailure"),
-        Map(MetricDimensionName("Stage") -> MetricDimensionValue(stage.value))
-      )
+        Map(MetricDimensionName("Stage") -> MetricDimensionValue(stage.value)),
+      ),
     )
   }
 }
 
-object AlarmService{
+object AlarmService {
   def apply(stage: Stage) = new AlarmService(stage)
 }

@@ -3,7 +3,6 @@ package model.paypal
 import io.circe.Decoder
 import play.api.mvc.Request
 
-
 // rawBody used by Paypal SDK to validate web hook event
 case class PaypalRefundWebHookBody(parentPaymentId: String, rawBody: String)
 
@@ -11,7 +10,7 @@ object PaypalRefundWebHookBody {
 
   private sealed trait RefundEvent
 
-  private case object RefundEvent extends RefundEvent  {
+  private case object RefundEvent extends RefundEvent {
 
     // https://developer.paypal.com/docs/integration/direct/webhooks/event-names/
     def validateEventType(eventType: String): Either[String, RefundEvent] = {

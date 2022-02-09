@@ -1,6 +1,14 @@
 package com.gu.model.dynamo
 
-import com.gu.model.ZuoraFieldNames.{contractEffectiveDate, gifteeIdentityId, identityId, productRatePlanId, productRatePlanName, subscriptionName, termEndDate}
+import com.gu.model.ZuoraFieldNames.{
+  contractEffectiveDate,
+  gifteeIdentityId,
+  identityId,
+  productRatePlanId,
+  productRatePlanName,
+  subscriptionName,
+  termEndDate,
+}
 import com.gu.supporterdata.model.SupporterRatePlanItem
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
@@ -16,7 +24,7 @@ object SupporterRatePlanItemCodecs {
       productRatePlanId,
       productRatePlanName,
       termEndDate,
-      contractEffectiveDate
+      contractEffectiveDate,
     )(SupporterRatePlanItem.apply)
 
   implicit val circeEncoder: Encoder[SupporterRatePlanItem] = deriveEncoder

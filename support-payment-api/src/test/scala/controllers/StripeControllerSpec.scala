@@ -31,7 +31,8 @@ import util.RequestBasedProvider
 import scala.concurrent.{ExecutionContext, Future}
 
 class StripeControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
-  extends BuiltInComponentsFromContext(context) with MockitoSugar {
+    extends BuiltInComponentsFromContext(context)
+    with MockitoSugar {
 
   val mockCharge: Charge =
     mock[Charge]
@@ -52,12 +53,18 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
   val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     EitherT.leftT[Future, StripeCreateChargeResponse](
-      StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable), None)
+      StripeApiError.fromThrowable(
+        new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable),
+        None,
+      ),
     )
 
   val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     EitherT.leftT[Future, StripeCreateChargeResponse](
-      StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable), None)
+      StripeApiError.fromStripeException(
+        new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable),
+        None,
+      ),
     )
 
   val mockEvent: Event = mock[Event]
@@ -71,10 +78,10 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
   val stripeController: StripeController =
-    new StripeController(
-      controllerComponents,
-      mockStripeRequestBasedProvider,
-      mockCloudWatchService)(DefaultThreadPool(ec), List("https://cors.com"))
+    new StripeController(controllerComponents, mockStripeRequestBasedProvider, mockCloudWatchService)(
+      DefaultThreadPool(ec),
+      List("https://cors.com"),
+    )
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
@@ -88,7 +95,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     stripeController,
     new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
     new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
-    mock[AmazonPayController]
+    mock[AmazonPayController],
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
@@ -114,8 +121,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": 1,
@@ -179,8 +185,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": 1,
@@ -203,8 +208,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -252,8 +256,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -301,8 +304,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -349,8 +351,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -363,7 +364,8 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "publicKey": "pk_test_FOO"
               |}
-            """.stripMargin)).withHeaders("origin" -> "https://cors.com")
+            """.stripMargin))
+          .withHeaders("origin" -> "https://cors.com")
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
           Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
@@ -382,8 +384,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -409,8 +410,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
             {
               "paymentData": {
                 "currency": "GBP",
@@ -429,7 +429,11 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
 
         status(stripeControllerResult).mustBe(400)
 
-        val expectedBody = Json.obj("type" -> "error", "error" -> "Empty string is not permitted for this field: DownField(token),DownField(paymentData)")
+        val expectedBody =
+          Json.obj(
+            "type" -> "error",
+            "error" -> "Empty string is not permitted for this field: DownField(token),DownField(paymentData)",
+          )
         contentAsJson(stripeControllerResult).mustBe(expectedBody)
 
       }
@@ -442,8 +446,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": 1,
@@ -458,7 +461,8 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
 
         status(stripeControllerResult).mustBe(402)
 
-        val expectedBody = Json.obj("type" -> "error", "error" -> Json.obj("failureReason" -> "payment_method_unacceptable"))
+        val expectedBody =
+          Json.obj("type" -> "error", "error" -> Json.obj("failureReason" -> "payment_method_unacceptable"))
         contentAsJson(stripeControllerResult).mustBe(expectedBody)
 
       }
@@ -471,8 +475,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockStripeBackend)
         }
         val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": 1,
@@ -505,8 +508,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
 
         // TODO: seems like the route in FakeRequest can be anything and test will pass. Find out why!
         val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/refund")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "id": "evt_1C5u5ECbpG0cQtlbRqzhzght",
               |  "object": "event",
@@ -640,8 +642,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/hook")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "object": "event",
               |  "api_version": "2016-03-07",
@@ -670,8 +671,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val stripeHookRequest = FakeRequest("POST", "/contribute/one-off/stripe/hook")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "id": "evt_1C5u5ECbpG0cQtlbRqzhzght",
               |  "object": "event",

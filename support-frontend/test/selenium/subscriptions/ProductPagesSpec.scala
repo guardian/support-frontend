@@ -8,12 +8,13 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen}
 import selenium.subscriptions.pages._
 import selenium.util._
 
-class ProductPagesSpec extends AnyFeatureSpec
-  with GivenWhenThen
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Browser
-  with Eventually {
+class ProductPagesSpec
+    extends AnyFeatureSpec
+    with GivenWhenThen
+    with BeforeAndAfter
+    with BeforeAndAfterAll
+    with Browser
+    with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver: WebDriver = driverConfig.webDriver
@@ -65,13 +66,11 @@ class ProductPagesSpec extends AnyFeatureSpec
     }
   }
 
-
-  def testPageLoads(page: ProductPage): Unit ={
+  def testPageLoads(page: ProductPage): Unit = {
     Given("that a user goes to the page")
     goTo(page)
     Then("it should display")
     assert(page.pageHasLoaded)
   }
-
 
 }

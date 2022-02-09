@@ -14,12 +14,12 @@ import org.joda.time.format.ISODateTimeFormat
 case class EmailPayloadContactAttributes(SubscriberAttributes: Map[String, String])
 case class EmailPayloadTo(Address: String, ContactAttributes: EmailPayloadContactAttributes)
 case class EmailPayload(
-  To: EmailPayloadTo,
-  DataExtensionName: String,
-  SfContactId: Option[String], // this should only be used where no identity account exists e.g. giftee notification
-  IdentityUserId: Option[String],
-  ScheduledTime: Option[DateTime], // None means immediate
-  UserAttributes: Option[JsonObject],
+    To: EmailPayloadTo,
+    DataExtensionName: String,
+    SfContactId: Option[String], // this should only be used where no identity account exists e.g. giftee notification
+    IdentityUserId: Option[String],
+    ScheduledTime: Option[DateTime], // None means immediate
+    UserAttributes: Option[JsonObject],
 )
 
 object EmailPayload {
@@ -33,30 +33,42 @@ object EmailPayload {
 case class IdentityUserId(id: String)
 
 case class EmailFields(
-  fields: List[(String, String)],
-  userId: Either[SfContactId, IdentityUserId],
-  email: String,
-  dataExtensionName: String,
-  deliveryDate: Option[LocalDate],
-  userAttributes: Option[JsonObject],
+    fields: List[(String, String)],
+    userId: Either[SfContactId, IdentityUserId],
+    email: String,
+    dataExtensionName: String,
+    deliveryDate: Option[LocalDate],
+    userAttributes: Option[JsonObject],
 ) {
 
   def payload: String =
     EmailPayload(
       To = EmailPayloadTo(
         Address = email,
-        ContactAttributes = EmailPayloadContactAttributes(SubscriberAttributes = fields.toMap)
+        ContactAttributes = EmailPayloadContactAttributes(SubscriberAttributes = fields.toMap),
       ),
       DataExtensionName = dataExtensionName,
       SfContactId = userId.left.toOption.map(_.id),
       IdentityUserId = userId.toOption.map(_.id),
       deliveryDate.map(_.toDateTime(new LocalTime(8, 0), DateTimeZone.UTC)),
-      userAttributes
+      userAttributes,
     ).asJson.printWith(Printer.spaces2.copy(dropNullValues = true))
 
 }
 
 object EmailFields {
-  def apply(fields: List[(String, String)], user: User, dataExtensionName: String, userAttributes: Option[JsonObject] = None): EmailFields =
-    new EmailFields(fields, Right(IdentityUserId(user.id)), user.primaryEmailAddress, dataExtensionName, None, userAttributes = userAttributes)
+  def apply(
+      fields: List[(String, String)],
+      user: User,
+      dataExtensionName: String,
+      userAttributes: Option[JsonObject] = None,
+  ): EmailFields =
+    new EmailFields(
+      fields,
+      Right(IdentityUserId(user.id)),
+      user.primaryEmailAddress,
+      dataExtensionName,
+      None,
+      userAttributes = userAttributes,
+    )
 }

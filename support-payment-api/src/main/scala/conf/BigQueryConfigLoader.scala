@@ -8,7 +8,8 @@ import conf.ConfigLoader._
 import model.{Environment, InitializationError}
 
 object BigQueryConfigLoader {
-  implicit val bigQueryConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, BigQueryConfig] = new ParameterStoreLoadable[Environment, BigQueryConfig] {
+  implicit val bigQueryConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, BigQueryConfig] =
+    new ParameterStoreLoadable[Environment, BigQueryConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
         new GetParametersByPathRequest()
@@ -16,7 +17,10 @@ object BigQueryConfigLoader {
           .withWithDecryption(true)
           .withRecursive(false)
 
-      override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, BigQueryConfig] = {
+      override def decode(
+          environment: Environment,
+          data: Map[String, String],
+      ): Validated[InitializationError, BigQueryConfig] = {
         val validator = new ParameterStoreValidator[BigQueryConfig, Environment](environment, data)
         import validator._
         (
@@ -25,7 +29,7 @@ object BigQueryConfigLoader {
           validate("clientEmail"),
           validate("privateKey"),
           validate("privateKeyId"),
-          ).mapN(BigQueryConfig.apply)
+        ).mapN(BigQueryConfig.apply)
       }
     }
 

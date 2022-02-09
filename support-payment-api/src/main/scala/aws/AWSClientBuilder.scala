@@ -5,14 +5,17 @@ import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentia
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatchAsyncClientBuilder}
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
-import com.amazonaws.services.simplesystemsmanagement.{AWSSimpleSystemsManagement, AWSSimpleSystemsManagementClientBuilder}
+import com.amazonaws.services.simplesystemsmanagement.{
+  AWSSimpleSystemsManagement,
+  AWSSimpleSystemsManagementClientBuilder,
+}
 import com.amazonaws.services.sqs.{AmazonSQSAsync, AmazonSQSAsyncClientBuilder}
 
 object AWSClientBuilder {
 
   private val credentialsProvider = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider("membership"),
-    new InstanceProfileCredentialsProvider(false)
+    new InstanceProfileCredentialsProvider(false),
   )
 
   def buildAWSSimpleSystemsManagementClient(): AWSSimpleSystemsManagement =

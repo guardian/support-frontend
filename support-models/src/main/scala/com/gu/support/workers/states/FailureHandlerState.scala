@@ -10,12 +10,12 @@ import org.joda.time.LocalDate
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 case class FailureHandlerStateImpl(
-  requestId: UUID,
-  user: User,
-  product: ProductType,
-  analyticsInfo: AnalyticsInfo,
-  firstDeliveryDate: Option[LocalDate],
-  promoCode: Option[PromoCode]
+    requestId: UUID,
+    user: User,
+    product: ProductType,
+    analyticsInfo: AnalyticsInfo,
+    firstDeliveryDate: Option[LocalDate],
+    promoCode: Option[PromoCode],
 ) extends FailureHandlerState
 
 trait FailureHandlerState extends MinimalFailureHandlerState {
@@ -35,8 +35,8 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs._
 
 case class AnalyticsInfo(
-  isGiftPurchase: Boolean,
-  paymentProvider: PaymentProvider,
+    isGiftPurchase: Boolean,
+    paymentProvider: PaymentProvider,
 )
 object AnalyticsInfo {
   implicit val codec: Codec[AnalyticsInfo] = deriveCodec[AnalyticsInfo]
@@ -46,4 +46,3 @@ object FailureHandlerState {
   import com.gu.support.encoding.CustomCodecs._
   implicit val decoder: Decoder[FailureHandlerState] = deriveDecoder[FailureHandlerStateImpl].map(identity)
 }
-

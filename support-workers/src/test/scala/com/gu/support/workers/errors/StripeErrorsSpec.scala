@@ -23,8 +23,12 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
     val outStream = new ByteArrayOutputStream()
 
-    recoverToSucceededIf[RetryUnlimited]  {
-      createPaymentMethod.handleRequestFuture(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+    recoverToSucceededIf[RetryUnlimited] {
+      createPaymentMethod.handleRequestFuture(
+        wrapFixture(createStripeSourcePaymentMethodContributionJson()),
+        outStream,
+        context,
+      )
     }
   }
 
@@ -38,7 +42,11 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
     val outStream = new ByteArrayOutputStream()
 
     val assertion = recoverToSucceededIf[RetryUnlimited] {
-      createPaymentMethod.handleRequestFuture(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+      createPaymentMethod.handleRequestFuture(
+        wrapFixture(createStripeSourcePaymentMethodContributionJson()),
+        outStream,
+        context,
+      )
     }
     assertion.onComplete { _ =>
       // Shut down the server. Instances cannot be reused.
@@ -62,7 +70,11 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
     val outStream = new ByteArrayOutputStream()
 
     val assertion = recoverToSucceededIf[RetryNone] {
-      createPaymentMethod.handleRequestFuture(wrapFixture(createStripeSourcePaymentMethodContributionJson()), outStream, context)
+      createPaymentMethod.handleRequestFuture(
+        wrapFixture(createStripeSourcePaymentMethodContributionJson()),
+        outStream,
+        context,
+      )
     }
     assertion.onComplete { _ =>
       server.shutdown()
@@ -81,7 +93,7 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
             "decline_code": "generic_decline"
           }
         }
-      """
+      """,
     )
     err.isRight should be(true)
     err.toOption.get.code should be(Some("card_declined"))
@@ -100,14 +112,14 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
   private lazy val timeoutServices = mockService(
     s => s.stripeService,
-    //Create a stripe service which will timeout after 1 millisecond
-    new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(1.milliseconds))
+    // Create a stripe service which will timeout after 1 millisecond
+    new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(1.milliseconds)),
   )
 
   def errorServices(baseUrl: String): ServiceProvider = {
     mockService(
       s => s.stripeService,
-      new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(10.seconds), baseUrl)
+      new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(10.seconds), baseUrl),
     )
   }
 

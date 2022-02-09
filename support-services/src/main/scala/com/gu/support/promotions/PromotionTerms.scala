@@ -8,13 +8,13 @@ import io.circe.Encoder
 import org.joda.time.DateTime
 
 case class PromotionTerms(
-  promoCode: PromoCode,
-  description: String,
-  starts: DateTime,
-  expires: Option[DateTime],
-  product: Product,
-  productRatePlans: List[String],
-  isGift: Boolean
+    promoCode: PromoCode,
+    description: String,
+    starts: DateTime,
+    expires: Option[DateTime],
+    product: Product,
+    productRatePlans: List[String],
+    isGift: Boolean,
 )
 
 object PromotionTerms {
@@ -26,16 +26,17 @@ object PromotionTerms {
   def fromPromoCode(promotionService: PromotionService, stage: Stage, promoCode: PromoCode): Option[PromotionTerms] =
     promotionService.findPromotion(promoCode).toOption.map(promotionTermsFromPromotion(stage))
 
-
   def promotionTermsFromPromotion(stage: Stage)(promotion: PromotionWithCode): PromotionTerms = {
     val environment = TouchPointEnvironments.fromStage(stage)
     val includedProductRatePlanIds = promotion.promotion.appliesTo.productRatePlanIds
 
-    val product = Product.allProducts.find(_
-      .getProductRatePlanIds(environment).toSet
-      .intersect(includedProductRatePlanIds)
-      .nonEmpty
-    ).getOrElse(DigitalPack)
+    val product = Product.allProducts
+      .find(
+        _.getProductRatePlanIds(environment).toSet
+          .intersect(includedProductRatePlanIds)
+          .nonEmpty,
+      )
+      .getOrElse(DigitalPack)
 
     val productRatePlans = product
       .getProductRatePlans(environment)
@@ -54,7 +55,7 @@ object PromotionTerms {
       promotion.promotion.expires,
       product,
       productRatePlans,
-      isGift
+      isGift,
     )
   }
 }

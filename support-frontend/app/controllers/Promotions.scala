@@ -16,15 +16,15 @@ import views.EmptyDiv
 import views.ViewHelpers.outputJson
 
 class Promotions(
-  promotionServiceProvider: PromotionServiceProvider,
-  priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  val assets: AssetsResolver,
-  val actionRefiners: CustomActionBuilders,
-  testUsers: TestUserService,  //Remove?
-  components: ControllerComponents,
-  settingsProvider: AllSettingsProvider,
-  stage: Stage
-) extends AbstractController(components){
+    promotionServiceProvider: PromotionServiceProvider,
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    val assets: AssetsResolver,
+    val actionRefiners: CustomActionBuilders,
+    testUsers: TestUserService, // Remove?
+    components: ControllerComponents,
+    settingsProvider: AllSettingsProvider,
+    stage: Stage,
+) extends AbstractController(components) {
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
@@ -33,8 +33,7 @@ class Promotions(
     val promotionService = promotionServiceProvider.forUser(false)
     val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
-    maybePromotionTerms.fold(NotFound("Invalid promo code")
-    ) { promotionTerms =>
+    maybePromotionTerms.fold(NotFound("Invalid promo code")) { promotionTerms =>
       val productLandingPage = promotionTerms.product match {
         case GuardianWeekly => routes.WeeklySubscriptionController.weeklyGeoRedirect(promotionTerms.isGift).url
         case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect(false).url
@@ -55,21 +54,24 @@ class Promotions(
     val promotionService = promotionServiceProvider.forUser(false)
     val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
-    maybePromotionTerms.fold(NotFound("Invalid promo code")
-    ) { promotionTerms =>
-      val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(promotionTerms.product, List.empty[PromoCode])
+    maybePromotionTerms.fold(NotFound("Invalid promo code")) { promotionTerms =>
+      val productPrices =
+        priceSummaryServiceProvider.forUser(false).getPrices(promotionTerms.product, List.empty[PromoCode])
 
-      Ok(views.html.main(
-        title, mainElement, js, css
-      ) {
-        Html(
-          s"""<script type="text/javascript">
+      Ok(
+        views.html.main(
+          title,
+          mainElement,
+          js,
+          css,
+        ) {
+          Html(s"""<script type="text/javascript">
                 window.guardian.productPrices = ${outputJson(productPrices)}
                 window.guardian.promotionTerms = ${outputJson(promotionTerms)}
               </script>""")
-      })
+        },
+      )
     }
   }
-
 
 }

@@ -18,7 +18,7 @@ case object CodeExpired extends InvalidCode("code_expired")
 
 case object InvalidReaderType extends InvalidCode("invalid_reader_type")
 
-object ValidGiftCode { val clientCode = "valid_gift_code"}
+object ValidGiftCode { val clientCode = "valid_gift_code" }
 object CodeRedeemedInThisRequest { val clientCode = "redeemed_in_this_request" }
 
 case class ValidGiftCode(subscriptionId: String) extends ValidCode(ValidGiftCode.clientCode)

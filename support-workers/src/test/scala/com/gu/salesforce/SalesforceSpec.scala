@@ -36,7 +36,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     Phone = None,
     Allow_Membership_Mail__c = allowMail,
     Allow_3rd_Party_Mail__c = allowMail,
-    Allow_Guardian_Related_Mail__c = allowMail
+    Allow_Guardian_Related_Mail__c = allowMail,
   )
 
   "AuthService" should "be able to retrieve an authtoken" in {
@@ -75,7 +75,8 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   "SalesforceService" should "be able to upsert a customer" in {
-    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+    val service =
+      new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
     service.upsert(customer).map { response: SalesforceContactResponse =>
       response.Success shouldBe true
@@ -85,7 +86,8 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be able to upsert a customer that has optional fields" in {
-    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+    val service =
+      new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
     val upsertData = customer.copy(
       OtherStreet = Some(street),
@@ -96,7 +98,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       MailingCity = Some(city),
       MailingPostalCode = Some(postCode),
       MailingCountry = Some(uk),
-      Phone = Some(telephoneNumber)
+      Phone = Some(telephoneNumber),
     )
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>
@@ -107,7 +109,8 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be able to add a related contact record" in {
-    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+    val service =
+      new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
     val name = "integration-test-recipient"
     val upsertData = DeliveryContact(
@@ -120,7 +123,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       MailingCity = Some(city),
       MailingState = None,
       MailingPostalCode = Some(postCode),
-      MailingCountry = Some(uk)
+      MailingCountry = Some(uk),
     )
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>

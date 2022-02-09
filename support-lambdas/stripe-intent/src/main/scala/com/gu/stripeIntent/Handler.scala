@@ -37,9 +37,9 @@ object ErrorBody {
 
 // simplest possible data structure to minimise external dependencies/side effects and be easy to mock
 case class StripeIntentEnv(
-  stage: Stage,
-  mappings: Map[StripePublicKey, StripePrivateKey],
-  futureHttpClient: FutureHttpClient // would be easier to mock a function that didn't use OKHttp types
+    stage: Stage,
+    mappings: Map[StripePublicKey, StripePrivateKey],
+    futureHttpClient: FutureHttpClient, // would be easier to mock a function that didn't use OKHttp types
 )
 
 case class StripePublicKey(value: String)
@@ -62,8 +62,10 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
     result.value.map(_.fold(identity, identity))
   }
 
-  def okSetupIntent(client_secret: String, stage: Stage): ApiGatewayResponse = ApiGatewayResponse(200, ResponseBody(client_secret), stage)
-  def badRequestPublicKey(stage: Stage): ApiGatewayResponse = ApiGatewayResponse(400, ErrorBody("public key not known"), stage)
+  def okSetupIntent(client_secret: String, stage: Stage): ApiGatewayResponse =
+    ApiGatewayResponse(200, ResponseBody(client_secret), stage)
+  def badRequestPublicKey(stage: Stage): ApiGatewayResponse =
+    ApiGatewayResponse(400, ErrorBody("public key not known"), stage)
 
   override def minimalEnvironment(): StripeIntentEnv = {
     val stage = Stage.fromString(Option(System.getenv("Stage")).filter(_ != "").getOrElse("DEV")).getOrElse(Stages.DEV)
@@ -75,9 +77,15 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
   def getRealConfig(stage: Stage): Map[StripePublicKey, StripePrivateKey] = {
     val config = S3Loader
       .load(StripeConfigPath.apply(stage))
-    val stripeKeys = config.getObject("mappings").entrySet().asScala.toSet.map { entry: JavaMap.Entry[String, ConfigValue] =>
-      (StripePublicKey(entry.getKey), StripePrivateKey(entry.getValue.unwrapped().asInstanceOf[String]))
-    }.toMap
+    val stripeKeys = config
+      .getObject("mappings")
+      .entrySet()
+      .asScala
+      .toSet
+      .map { entry: JavaMap.Entry[String, ConfigValue] =>
+        (StripePublicKey(entry.getKey), StripePrivateKey(entry.getValue.unwrapped().asInstanceOf[String]))
+      }
+      .toMap
 
     stripeKeys
   }

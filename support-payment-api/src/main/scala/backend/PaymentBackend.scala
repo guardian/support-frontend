@@ -20,28 +20,40 @@ trait PaymentBackend extends StrictLogging {
   val acquisitionsStreamService: AcquisitionsStreamService
   val databaseService: ContributionsStoreService
 
-  private def insertContributionDataIntoDatabase(contributionData: ContributionData)(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit] = {
+  private def insertContributionDataIntoDatabase(
+      contributionData: ContributionData,
+  )(implicit pool: DefaultThreadPool): EitherT[Future, BackendError, Unit] = {
     // log so that if something goes wrong we can reconstruct the missing data from the logs
     logger.info(s"about to insert contribution into database: $contributionData")
-    databaseService.insertContributionData(contributionData)
+    databaseService
+      .insertContributionData(contributionData)
       .leftMap(BackendError.fromDatabaseError)
   }
 
-  def track(acquisition: AcquisitionDataRow, contributionData: ContributionData, gaData: GAData)(implicit pool: DefaultThreadPool): Future[List[BackendError]] = {
-    val gaFuture = gaService.submit(acquisition, gaData, maxRetries = 5)
+  def track(acquisition: AcquisitionDataRow, contributionData: ContributionData, gaData: GAData)(implicit
+      pool: DefaultThreadPool,
+  ): Future[List[BackendError]] = {
+    val gaFuture = gaService
+      .submit(acquisition, gaData, maxRetries = 5)
       .leftMap(errors => BackendError.GoogleAnalyticsError(errors.mkString(" & ")))
 
-    val bigQueryFuture = bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5).leftMap(errors => BackendError.BigQueryError(errors.mkString(" & ")))
-    val streamFuture = acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5).leftMap(errors => BackendError.AcquisitionsStreamError(errors.mkString(" & ")))
+    val bigQueryFuture =
+      bigQueryService
+        .tableInsertRowWithRetry(acquisition, maxRetries = 5)
+        .leftMap(errors => BackendError.BigQueryError(errors.mkString(" & ")))
+    val streamFuture = acquisitionsStreamService
+      .putAcquisitionWithRetry(acquisition, maxRetries = 5)
+      .leftMap(errors => BackendError.AcquisitionsStreamError(errors.mkString(" & ")))
 
     val dbFuture = insertContributionDataIntoDatabase(contributionData)
 
-    Future.sequence(List(gaFuture.value, bigQueryFuture.value, streamFuture.value, dbFuture.value))
+    Future
+      .sequence(List(gaFuture.value, bigQueryFuture.value, streamFuture.value, dbFuture.value))
       .map { results =>
         results.collect { case Left(err) => err }
       }
-      .recover {
-        case NonFatal(err) => List(BackendError.TrackingError(err))
+      .recover { case NonFatal(err) =>
+        List(BackendError.TrackingError(err))
       }
   }
 }

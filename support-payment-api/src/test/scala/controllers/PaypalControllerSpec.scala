@@ -28,7 +28,8 @@ import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaypalControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
-  extends BuiltInComponentsFromContext(context) with MockitoSugar {
+    extends BuiltInComponentsFromContext(context)
+    with MockitoSugar {
 
   val mockPaypalBackend: PaypalBackend =
     mock[PaypalBackend]
@@ -59,7 +60,10 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     EitherT.left(Future.successful(BackendError.fromPaypalAPIError(PaypalApiError.fromString("Error response"))))
 
   val payPalController: PaypalController =
-    new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
+    new PaypalController(controllerComponents, mockPaypalRequestBasedProvider)(
+      DefaultThreadPool(ec),
+      List("https://cors.com"),
+    )
 
   val mockAmazonPayController: AmazonPayController = mock[AmazonPayController]
 
@@ -74,10 +78,13 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
-    new StripeController(controllerComponents, stripeBackendProvider, mockCloudWatchService)(DefaultThreadPool(ec), List.empty),
+    new StripeController(controllerComponents, stripeBackendProvider, mockCloudWatchService)(
+      DefaultThreadPool(ec),
+      List.empty,
+    ),
     payPalController,
     new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
-    mockAmazonPayController
+    mockAmazonPayController,
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
@@ -99,7 +106,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         val link = new Links("http://return-url.com", "approval_url")
         val links: java.util.List[Links] = List(link).asJava
         when(enrichedPaymentMock.payment)
-            .thenReturn(paymentMock)
+          .thenReturn(paymentMock)
         when(paymentMock.getLinks)
           .thenReturn(links)
         when(paymentMock.getId)
@@ -112,8 +119,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
 
       "return a 200 response if the request is valid and the amount is an integer" in {
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": 1,
@@ -130,8 +136,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
 
       "return a 200 response if the request is valid and the amount has a decimal point" in {
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": 1.23,
@@ -149,8 +154,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
       "return a 400 response if the request contains an invalid amount" in {
         val fixture = new PaypalControllerFixture()(executionContext, context)
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": "InValidAmount",
@@ -168,8 +172,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
       "return a 400 response if the request contains an invalid currency" in {
         val fixture = new PaypalControllerFixture()(executionContext, context)
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "AAA",
               |  "amount": 1,
@@ -197,16 +200,17 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(links)
           when(paymentMock.getId)
             .thenReturn("paymentID")
-          when(mockPaypalRequestBasedProvider
-            .getInstanceFor(any())(any()))
+          when(
+            mockPaypalRequestBasedProvider
+              .getInstanceFor(any())(any()),
+          )
             .thenReturn(mockPaypalBackend)
           when(mockPaypalBackend.createPayment(any()))
-          .thenReturn(paymentServiceResponseError)
+            .thenReturn(paymentServiceResponseError)
         }
 
         val createPaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "currency": "GBP",
               |  "amount": 1,
@@ -222,7 +226,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
       }
     }
 
-
     "a request is made to capture a payment" should {
 
       "return a 200 response if the request is valid using the old format - full request" in {
@@ -233,8 +236,8 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(enrichedPaymentServiceResponse)
         }
 
-        val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(parse(
-          """
+        val capturePaymentRequest =
+          FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(parse("""
             |{
             |  "paymentId": "PAY-4JG67395EA359543HLKKVTFI",
             |  "ophanVisitId": "ophanVisitId",
@@ -294,8 +297,8 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(enrichedPaymentServiceResponse)
         }
 
-        val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(parse(
-          """
+        val capturePaymentRequest =
+          FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(parse("""
             |{
             |  "platform": "android",
             |  "paymentId": "PAY-3VD06708HT420762SLKFQGNQ",
@@ -320,8 +323,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
-          .withJsonBody(parse(
-          """
+          .withJsonBody(parse("""
             |{
             |  "paymentData": {
             |    "paymentId": "PAY-4JG67395EA359543HLKKVTFI"
@@ -366,8 +368,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
-          .withJsonBody(parse(
-          """
+          .withJsonBody(parse("""
             |{
             |  "platform": "android",
             |  "ophanBrowserId": "6971b20d-d8e0-4bf3-b5cb-37b5be1c0e83",
@@ -391,8 +392,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "intCmp": "intCmp",
               |  "refererPageviewId": "refererPageviewId",
@@ -430,8 +430,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val capturePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/capture-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentId": "PAY-4JG67395EA359543HLKKVTFI",
               |  "platform": "android",
@@ -463,7 +462,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
       }
     }
 
-
     "a request is made to execute a payment" should {
 
       "return a 200 response if the request is valid - full request" in {
@@ -477,8 +475,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
-          .withJsonBody(parse(
-          """
+          .withJsonBody(parse("""
             |{
             |  "paymentData": {
             |    "paymentId": "PAY-3JE44966X7714540ELKLL2YY",
@@ -525,8 +522,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "paymentId": "PAY-3JE44966X7714540ELKLL2YY"
@@ -549,8 +545,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "paymentId": "PAY-3JE44966X7714540ELKLL2YY",
@@ -576,7 +571,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         status(paypalControllerResult).mustBe(500)
       }
 
-
       "return cors headers if origin matches existing config definition" in {
         val fixture = new PaypalControllerFixture()(executionContext, context) {
           when(mockPaypalRequestBasedProvider.getInstanceFor(any())(any()))
@@ -588,8 +582,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "paymentId": "PAY-3JE44966X7714540ELKLL2YY",
@@ -607,7 +600,8 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "email": "a@b.com"
               |}
-            """.stripMargin)).withHeaders("origin" -> "https://cors.com")
+            """.stripMargin))
+          .withHeaders("origin" -> "https://cors.com")
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
           Helpers.call(fixture.payPalController.executePayment, executePaymentRequest)
@@ -631,8 +625,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/refund")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "id": "WH-234356782L664583L-6EC47963K52069449",
               |  "event_version": "1.0",
@@ -709,8 +702,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/refund")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "transmission_id":"69cd13f0-d67a-11e5-baa3-778b53f4ae55",
               |  "transmission_time":"2016-02-18T20:01:35Z",
@@ -743,8 +735,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
         }
 
         val paypalHookRequest = FakeRequest("POST", "/contribute/one-off/paypal/refund")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "id": "WH-4P785769VC1099306-60P87680RE683692M",
               |  "event_version": "1.0",

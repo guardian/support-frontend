@@ -20,7 +20,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceErrorResponse] {
+    extends WebServiceHelper[SalesforceErrorResponse] {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
@@ -28,30 +28,35 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
 
   override def wsPreExecute(req: Request.Builder): Future[Request.Builder] = {
     SafeLogger.info(s"Issuing request to wsPreExecute: $config")
-    AuthService.getAuth(config).map(
-        auth => addAuthenticationToRequest(auth, req)
-    )
+    AuthService.getAuth(config).map(auth => addAuthenticationToRequest(auth, req))
   }
 
   def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder = {
-    req.url(s"${auth.instance_url}/$upsertEndpoint") //We need to set the base url to the instance_url value returned in the authentication response
-    req.addHeader("Authorization", s"Bearer ${auth.access_token}") //And also add an Authorization header
+    req.url(
+      s"${auth.instance_url}/$upsertEndpoint",
+    ) // We need to set the base url to the instance_url value returned in the authentication response
+    req.addHeader("Authorization", s"Bearer ${auth.access_token}") // And also add an Authorization header
   }
 
-  override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[SalesforceErrorResponse]): Either[circe.Error, SalesforceErrorResponse] =
-    decode[List[SalesforceErrorResponse]](responseBody).map(_.head) //Salesforce returns a list of error responses
+  override def decodeError(responseBody: String)(implicit
+      errorDecoder: Decoder[SalesforceErrorResponse],
+  ): Either[circe.Error, SalesforceErrorResponse] =
+    decode[List[SalesforceErrorResponse]](responseBody).map(_.head) // Salesforce returns a list of error responses
 
   def upsert(data: UpsertData): Future[SalesforceContactResponse] = {
     postJson[SalesforceContactResponse](upsertEndpoint, data.asJson)
   }
 
-  def createContactRecords(user: User, giftRecipient: Option[GiftRecipient]): Future[SalesforceContactRecordsResponse] = {
+  def createContactRecords(
+      user: User,
+      giftRecipient: Option[GiftRecipient],
+  ): Future[SalesforceContactRecordsResponse] = {
     for {
       contactRecord <- upsert(getNewContact(user, giftRecipient))
       recipientContactRecord <- maybeAddGiftRecipient(
         contactRecord.ContactRecord,
         giftRecipient,
-        user
+        user,
       )
     } yield SalesforceContactRecordsResponse(contactRecord, recipientContactRecord)
   }
@@ -59,68 +64,77 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   private def deliveryAddressForGiftRecipientType(giftRecipient: GiftRecipient, user: User) =
     giftRecipient match {
       case _: GiftRecipient.WeeklyGiftRecipient => user.deliveryAddress
-      case _: GiftRecipient.DigitalSubscriptionGiftRecipient  => None
+      case _: GiftRecipient.DigitalSubscriptionGiftRecipient => None
     }
 
-  private def maybeAddGiftRecipient(contactRecord: SalesforceContactRecord, maybeGiftRecipient: Option[GiftRecipient], user: User) =
+  private def maybeAddGiftRecipient(
+      contactRecord: SalesforceContactRecord,
+      maybeGiftRecipient: Option[GiftRecipient],
+      user: User,
+  ) =
     maybeGiftRecipient
       .filter(recipient => recipient.firstName != "" && recipient.lastName != "")
-      .map{ giftRecipient =>
-          val deliveryAddress = deliveryAddressForGiftRecipientType(giftRecipient, user)
-          upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_))
+      .map { giftRecipient =>
+        val deliveryAddress = deliveryAddressForGiftRecipientType(giftRecipient, user)
+        upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_))
       }
       .getOrElse(Future.successful(None))
 
-
   private def getNewContact(user: User, giftRecipient: Option[GiftRecipient]) =
-    giftRecipient.map(_ =>
-      // If we have a gift recipient then don't update the delivery address
-      NewContact(
-        IdentityID__c = user.id,
-        Email = user.primaryEmailAddress,
-        Salutation = user.title,
-        FirstName = user.firstName,
-        LastName = user.lastName,
-        OtherStreet = getAddressLine(user.billingAddress),
-        OtherCity = user.billingAddress.city,
-        OtherState = user.billingAddress.state,
-        OtherPostalCode = user.billingAddress.postCode,
-        OtherCountry = user.billingAddress.country.name,
-        MailingStreet = None,
-        MailingCity = None,
-        MailingState = None,
-        MailingPostalCode = None,
-        MailingCountry = None,
-        Phone = user.telephoneNumber,
-        Allow_Membership_Mail__c = user.allowMembershipMail,
-        Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-        Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
+    giftRecipient
+      .map(_ =>
+        // If we have a gift recipient then don't update the delivery address
+        NewContact(
+          IdentityID__c = user.id,
+          Email = user.primaryEmailAddress,
+          Salutation = user.title,
+          FirstName = user.firstName,
+          LastName = user.lastName,
+          OtherStreet = getAddressLine(user.billingAddress),
+          OtherCity = user.billingAddress.city,
+          OtherState = user.billingAddress.state,
+          OtherPostalCode = user.billingAddress.postCode,
+          OtherCountry = user.billingAddress.country.name,
+          MailingStreet = None,
+          MailingCity = None,
+          MailingState = None,
+          MailingPostalCode = None,
+          MailingCountry = None,
+          Phone = user.telephoneNumber,
+          Allow_Membership_Mail__c = user.allowMembershipMail,
+          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
+        ),
       )
-    ).getOrElse(
-      NewContact(
-        IdentityID__c = user.id,
-        Email = user.primaryEmailAddress,
-        Salutation = user.title,
-        FirstName = user.firstName,
-        LastName = user.lastName,
-        OtherStreet = getAddressLine(user.billingAddress),
-        OtherCity = user.billingAddress.city,
-        OtherState = user.billingAddress.state,
-        OtherPostalCode = user.billingAddress.postCode,
-        OtherCountry = user.billingAddress.country.name,
-        MailingStreet = user.deliveryAddress.flatMap(getAddressLine),
-        MailingCity = user.deliveryAddress.flatMap(_.city),
-        MailingState = user.deliveryAddress.flatMap(_.state),
-        MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
-        MailingCountry = user.deliveryAddress.map(_.country.name),
-        Phone = user.telephoneNumber,
-        Allow_Membership_Mail__c = user.allowMembershipMail,
-        Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-        Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
+      .getOrElse(
+        NewContact(
+          IdentityID__c = user.id,
+          Email = user.primaryEmailAddress,
+          Salutation = user.title,
+          FirstName = user.firstName,
+          LastName = user.lastName,
+          OtherStreet = getAddressLine(user.billingAddress),
+          OtherCity = user.billingAddress.city,
+          OtherState = user.billingAddress.state,
+          OtherPostalCode = user.billingAddress.postCode,
+          OtherCountry = user.billingAddress.country.name,
+          MailingStreet = user.deliveryAddress.flatMap(getAddressLine),
+          MailingCity = user.deliveryAddress.flatMap(_.city),
+          MailingState = user.deliveryAddress.flatMap(_.state),
+          MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
+          MailingCountry = user.deliveryAddress.map(_.country.name),
+          Phone = user.telephoneNumber,
+          Allow_Membership_Mail__c = user.allowMembershipMail,
+          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
+        ),
       )
-    )
 
-  private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Option[Address], giftRecipient: GiftRecipient) = {
+  private def getGiftRecipient(
+      buyerAccountId: String,
+      deliveryAddress: Option[Address],
+      giftRecipient: GiftRecipient,
+  ) = {
     val (email, title) = giftRecipient match {
       case w: GiftRecipient.WeeklyGiftRecipient => (w.email, w.title)
       case ds: GiftRecipient.DigitalSubscriptionGiftRecipient => (Some(ds.email), None)
@@ -135,19 +149,17 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       MailingCity = deliveryAddress.flatMap(_.city),
       MailingState = deliveryAddress.flatMap(_.state),
       MailingPostalCode = deliveryAddress.flatMap(_.postCode),
-      MailingCountry = deliveryAddress.map(_.country.name)
+      MailingCountry = deliveryAddress.map(_.country.name),
     )
   }
 }
 
-/**
- * The AuthService object is responsible for ensuring that we have a valid authentication token for Salesforce.
- * The first time it is asked for an authentication token it will go off and fetch one and then store the result
- * in authRef (one auth token per stage).
- * It also checks the token every time it is used to see whether it has become stale - a problem we
- * have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If the token
- * is stale a new one is fetched
- */
+/** The AuthService object is responsible for ensuring that we have a valid authentication token for Salesforce. The
+  * first time it is asked for an authentication token it will go off and fetch one and then store the result in authRef
+  * (one auth token per stage). It also checks the token every time it is used to see whether it has become stale - a
+  * problem we have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If
+  * the token is stale a new one is fetched
+  */
 object AuthService {
 
   import scala.concurrent.ExecutionContext.Implicits.global
@@ -174,7 +186,7 @@ object AuthService {
 }
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[SalesforceAuthenticationErrorResponse] {
+    extends WebServiceHelper[SalesforceAuthenticationErrorResponse] {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)
@@ -183,15 +195,17 @@ class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
     SafeLogger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
 
     def postAuthRequest: Future[Authentication] =
-      postForm[Authentication]("services/oauth2/token", Map(
-        "client_id" -> Seq(sfConfig.key),
-        "client_secret" -> Seq(sfConfig.secret),
-        "username" -> Seq(sfConfig.username),
-        "password" -> Seq(sfConfig.password + sfConfig.token),
-        "grant_type" -> Seq("password")
-      ))
+      postForm[Authentication](
+        "services/oauth2/token",
+        Map(
+          "client_id" -> Seq(sfConfig.key),
+          "client_secret" -> Seq(sfConfig.secret),
+          "username" -> Seq(sfConfig.username),
+          "password" -> Seq(sfConfig.password + sfConfig.token),
+          "grant_type" -> Seq("password"),
+        ),
+      )
 
     postAuthRequest
   }
 }
-

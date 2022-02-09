@@ -6,11 +6,11 @@ import io.circe.{Decoder, Encoder}
 import java.time.ZonedDateTime
 
 case class FetchResultsState(
-  jobId: String,
-  attemptedQueryTime: ZonedDateTime
+    jobId: String,
+    attemptedQueryTime: ZonedDateTime,
 )
 
 object FetchResultsState {
-  implicit val encoder : Encoder[FetchResultsState] = deriveEncoder
-  implicit val decoder : Decoder[FetchResultsState] = deriveDecoder
+  implicit val encoder: Encoder[FetchResultsState] = deriveEncoder
+  implicit val decoder: Decoder[FetchResultsState] = deriveDecoder
 }

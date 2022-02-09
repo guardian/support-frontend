@@ -13,64 +13,67 @@ import org.joda.time.{DateTimeZone, LocalDate}
 import java.util.UUID
 
 class SubscribeItemBuilder(
-  requestId: UUID,
-  user: User,
-  currency: Currency,
+    requestId: UUID,
+    user: User,
+    currency: Currency,
 ) {
 
   def build(
-    subscriptionData: SubscriptionData,
-    salesForceContact: SalesforceContactRecord,
-    maybePaymentMethod: Option[PaymentMethod],
-    soldToContact: Option[ContactDetails]
+      subscriptionData: SubscriptionData,
+      salesForceContact: SalesforceContactRecord,
+      maybePaymentMethod: Option[PaymentMethod],
+      soldToContact: Option[ContactDetails],
   ): SubscribeItem = {
     val billingEnabled = maybePaymentMethod.isDefined
     SubscribeItem(
       account = buildAccount(salesForceContact, maybePaymentMethod),
       billToContact = buildContactDetails(
-        Some(user.primaryEmailAddress), user.firstName, user.lastName, user.billingAddress
+        Some(user.primaryEmailAddress),
+        user.firstName,
+        user.lastName,
+        user.billingAddress,
       ),
       soldToContact = soldToContact,
       paymentMethod = maybePaymentMethod,
       subscriptionData = subscriptionData,
-      subscribeOptions = SubscribeOptions(generateInvoice = billingEnabled, processPayments = billingEnabled)
+      subscribeOptions = SubscribeOptions(generateInvoice = billingEnabled, processPayments = billingEnabled),
     )
   }
 
   private def buildAccount(salesForceContact: SalesforceContactRecord, maybePaymentMethod: Option[PaymentMethod]) = {
     Account(
-      name = salesForceContact.AccountId, //We store the Salesforce Account id in the name field
+      name = salesForceContact.AccountId, // We store the Salesforce Account id in the name field
       currency = currency,
-      crmId = salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
+      crmId = salesForceContact.AccountId, // Somewhere else we store the Salesforce Account id
       sfContactId__c = salesForceContact.Id,
       identityId__c = user.id,
       paymentGateway = maybePaymentMethod.map(_.PaymentGateway),
       createdRequestId__c = requestId.toString,
-      autoPay = maybePaymentMethod.isDefined
+      autoPay = maybePaymentMethod.isDefined,
     )
   }
 
   def buildProductSubscription(
-    productRatePlanId: ProductRatePlanId,
-    ratePlanCharges: List[RatePlanChargeData] = Nil,
-    contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    readerType: ReaderType,
-    autoRenew: Boolean = true,
-    initialTerm: Int = 12,
-    initialTermPeriodType: PeriodType = Month,
-    redemptionCode: Option[RawRedemptionCode] = None,
-    giftNotificationEmailDate: Option[LocalDate] = None,
-    csrUsername: Option[String] = None,
-    salesforceCaseId: Option[String] = None,
+      productRatePlanId: ProductRatePlanId,
+      ratePlanCharges: List[RatePlanChargeData] = Nil,
+      contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
+      contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
+      readerType: ReaderType,
+      autoRenew: Boolean = true,
+      initialTerm: Int = 12,
+      initialTermPeriodType: PeriodType = Month,
+      redemptionCode: Option[RawRedemptionCode] = None,
+      giftNotificationEmailDate: Option[LocalDate] = None,
+      csrUsername: Option[String] = None,
+      salesforceCaseId: Option[String] = None,
   ): SubscriptionData =
     SubscriptionData(
       List(
         RatePlanData(
           RatePlan(productRatePlanId),
           ratePlanCharges,
-          Nil
-        )
+          Nil,
+        ),
       ),
       Subscription(
         contractEffectiveDate = contractEffectiveDate,
@@ -86,7 +89,7 @@ class SubscribeItemBuilder(
         createdByCsr = csrUsername,
         acquisitionSource = csrUsername.map(_ => CSR),
         acquisitionCase = salesforceCaseId,
-      )
+      ),
     )
 
 }
@@ -94,11 +97,11 @@ class SubscribeItemBuilder(
 object SubscribeItemBuilder {
 
   def buildContactDetails(
-    email: Option[String],
-    firstName: String,
-    lastName: String,
-    address: Address,
-    maybeDeliveryInstructions: Option[String] = None
+      email: Option[String],
+      firstName: String,
+      lastName: String,
+      address: Address,
+      maybeDeliveryInstructions: Option[String] = None,
   ): ContactDetails = new ContactDetails(
     firstName = firstName,
     lastName = lastName,
@@ -109,7 +112,7 @@ object SubscribeItemBuilder {
     postalCode = address.postCode,
     country = address.country,
     state = address.state,
-    deliveryInstructions = maybeDeliveryInstructions
+    deliveryInstructions = maybeDeliveryInstructions,
   )
 
 }

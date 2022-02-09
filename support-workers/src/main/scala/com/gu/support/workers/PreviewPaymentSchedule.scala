@@ -11,10 +11,10 @@ import scala.concurrent.Future
 object PreviewPaymentSchedule {
 
   def preview(
-    subscribeItem: SubscribeItem,
-    billingPeriod: BillingPeriod,
-    zuoraService: ZuoraSubscribeService,
-    singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse]
+      subscribeItem: SubscribeItem,
+      billingPeriod: BillingPeriod,
+      zuoraService: ZuoraSubscribeService,
+      singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse],
   ): Future[PaymentSchedule] = {
     val numberOfInvoicesToPreview: Int = billingPeriod match {
       case Monthly => 13
@@ -23,7 +23,7 @@ object PreviewPaymentSchedule {
       case SixWeekly => 2
     }
     singleResponseCheck(
-      zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview))
+      zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview)),
     ).map(response => paymentSchedule(response.invoiceData.flatMap(_.invoiceItem)))
   }
 

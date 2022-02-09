@@ -36,7 +36,7 @@ package object stepfunctions {
       output: String,
       startDate: DateTime,
       stopDate: Option[DateTime],
-      status: String
+      status: String,
   )
 
 }

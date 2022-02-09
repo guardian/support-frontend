@@ -23,7 +23,7 @@ trait IdentityService extends StrictLogging {
 }
 
 // Default implementation of the IdentityService trait using the client to the Guardian identity API.
-class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThreadPool) extends IdentityService {
+class GuardianIdentityService(client: IdentityClient)(implicit pool: DefaultThreadPool) extends IdentityService {
 
   override def getIdentityIdFromEmail(email: String): IdentityClient.Result[Option[Long]] =
     client.getUser(email).map(response => Option(response.user.id)).recover {
@@ -43,7 +43,9 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
     for {
       preExistingIdentityId <- getIdentityIdFromEmail(email)
       // pure lifts the identity id into the monadic context.
-      userIdWithGuestAccountCreationToken <- preExistingIdentityId.fold(createGuestAccount(email))(id => Monad[IdentityClient.Result].pure(id))
+      userIdWithGuestAccountCreationToken <- preExistingIdentityId.fold(createGuestAccount(email))(id =>
+        Monad[IdentityClient.Result].pure(id),
+      )
     } yield userIdWithGuestAccountCreationToken
 }
 

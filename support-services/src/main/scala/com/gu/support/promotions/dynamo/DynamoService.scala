@@ -16,9 +16,9 @@ class DynamoService[T](table: Table)(implicit decoder: Decoder[T]) extends LazyL
   def all: Iterator[T] = {
     val items: Iterator[Item] = table.scan().iterator().asScala
     items.flatMap { item =>
-        val result = decode[T](item.toJSON)
-        result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body ${item.toJSON}. Error was: $err"))
-        result.toOption
+      val result = decode[T](item.toJSON)
+      result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body ${item.toJSON}. Error was: $err"))
+      result.toOption
     }
   }
 }
@@ -28,7 +28,7 @@ object DynamoService {
 
   lazy val CredentialsProvider = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
-    new InstanceProfileCredentialsProvider(false)
+    new InstanceProfileCredentialsProvider(false),
   )
 
   def forTable[T](table: String)(implicit decoder: Decoder[T]): DynamoService[T] = {
@@ -39,4 +39,3 @@ object DynamoService {
     new DynamoService(new DynamoDB(dynamoDBClient).getTable(table))
   }
 }
-

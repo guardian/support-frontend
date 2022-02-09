@@ -18,7 +18,7 @@ import scala.io.Source
 @IntegrationTest
 class EndToEndSpec extends AsyncLambdaSpec with MockContext {
 
-  //This takes a long time to run so we probably don't want to run it on every test run
+  // This takes a long time to run so we probably don't want to run it on every test run
 
   ignore should "chain successfully" in runSignupWithCurrency(GBP)
 
@@ -27,13 +27,16 @@ class EndToEndSpec extends AsyncLambdaSpec with MockContext {
   def runSignupWithCurrency(currency: Currency): Future[Assertion] = {
     val json = createStripeSourcePaymentMethodContributionJson(currency = currency)
     SafeLogger.info(json)
-    val output = Future.successful(wrapFixture(json))
+    val output = Future
+      .successful(wrapFixture(json))
       .chain(new CreatePaymentMethod())
       .chain(new CreateSalesforceContact())
       .chain(new CreateZuoraSubscription())
       .parallel(
         new SendThankYouEmail(),
-        new SendAcquisitionEvent(MockAcquisitionHelper.mockServices) //We have to mock the acquisition service - there doesn't seem to be a test mode
+        new SendAcquisitionEvent(
+          MockAcquisitionHelper.mockServices,
+        ), // We have to mock the acquisition service - there doesn't seem to be a test mode
       )
       .last()
 
@@ -57,14 +60,13 @@ class EndToEndSpec extends AsyncLambdaSpec with MockContext {
       output.write(listStartMarker)
 
       stream.flatMap { stream =>
-        val parallelTasks = handlers.zipWithIndex.foldLeft(Future.successful(())) {
-          case (future, (handler, index)) =>
-            future.flatMap { _ =>
-              if (index != 0) output.write(listSeparator)
-              handler.handleRequestFuture(stream, output, context).map { _ =>
-                stream.reset()
-              }
+        val parallelTasks = handlers.zipWithIndex.foldLeft(Future.successful(())) { case (future, (handler, index)) =>
+          future.flatMap { _ =>
+            if (index != 0) output.write(listSeparator)
+            handler.handleRequestFuture(stream, output, context).map { _ =>
+              stream.reset()
             }
+          }
         }
 
         parallelTasks.map { _ =>

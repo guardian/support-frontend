@@ -7,7 +7,7 @@ import scala.concurrent.ExecutionContext
 class NoCacheAction(
     parser: BodyParser[AnyContent],
     executionContext: ExecutionContext,
-    headers: List[(String, String)] = List.empty
+    headers: List[(String, String)] = List.empty,
 )(implicit val ec: ExecutionContext) {
   def apply(): ActionBuilder[Request, AnyContent] = new NoCacheActionBuilder(parser, executionContext, headers)
 }

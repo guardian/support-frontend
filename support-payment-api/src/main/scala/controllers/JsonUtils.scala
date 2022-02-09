@@ -28,7 +28,7 @@ trait JsonUtils { self: Circe with StrictLogging =>
 
   import JsonWriteableOps._
 
-  protected implicit def jsonWriteable[A : Encoder]: Writeable[A] =
+  protected implicit def jsonWriteable[A: Encoder]: Writeable[A] =
     Writeable(_.asByteString, Some(MimeTypes.JSON))
 
   override protected def onCirceError(err: io.circe.Error): Result = {

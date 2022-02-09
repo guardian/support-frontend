@@ -25,17 +25,16 @@ import util.FutureEitherValues
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
-
-  //-- entities
-  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
+  // -- entities
+  val acquisitionData =
+    AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
   val countrySubdivisionCode = Some("NY")
   val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
   val identityError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
-    IdentityClient.GetUser("test@theguardian.com")
+    IdentityClient.GetUser("test@theguardian.com"),
   )
   val expectedGuestToken = Some("guest-token")
 
@@ -63,7 +62,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
       </RefundDetails>
     </RefundNotification>
 
-
   val paymentServiceResponseError: Either[AmazonPayApiError, OrderReferenceDetails] =
     Either.left(paymentError)
   val mockOrderRef = mock[OrderReferenceDetails]
@@ -71,7 +69,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockConfirmOrderResponse = mock[ConfirmOrderReferenceResponse]
   val mockOrderTotal = mock[OrderTotal]
   val responseData = new ResponseData(200, responseXml.toString)
-  val confirmOrderData = new ConfirmOrderReferenceResponseData(mockConfirmOrderResponse, responseData )
+  val confirmOrderData = new ConfirmOrderReferenceResponseData(mockConfirmOrderResponse, responseData)
   val mockAuthorizationDetails = mock[AuthorizationDetails]
   val mockCloseResponseDetails = mock[CloseOrderReferenceResponse]
   val mockOrderReferenceStatus = mock[OrderReferenceStatus]
@@ -80,8 +78,8 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val setOrderRefRes: Either[AmazonPayApiError, OrderReferenceDetails] = Either.right(mockOrderRef)
   val getOrderRefRes: Either[AmazonPayApiError, OrderReferenceDetails] = Either.right(mockOrderRef)
   val mockConfirmRes: Either[AmazonPayApiError, ConfirmOrderReferenceResponseData] = Either.right(confirmOrderData)
-  val mockAuthResponse:  Either[AmazonPayApiError, AuthorizationDetails] = Either.right(mockAuthorizationDetails)
-  val mockCloseResponse:  Either[AmazonPayApiError, CloseOrderReferenceResponseData] =
+  val mockAuthResponse: Either[AmazonPayApiError, AuthorizationDetails] = Either.right(mockAuthorizationDetails)
+  val mockCloseResponse: Either[AmazonPayApiError, CloseOrderReferenceResponseData] =
     Either.right(new CloseOrderReferenceResponseData(mockCloseResponseDetails, responseData))
 
   val unitPaymentResponse: EitherT[Future, AmazonPayApiError, Unit] =
@@ -105,8 +103,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
 
-
-  //-- service mocks
+  // -- service mocks
   val mockAmazonPayService: AmazonPayService = mock[AmazonPayService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
@@ -116,7 +113,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
 
-  //-- test obj
+  // -- test obj
   val amazonPayBackend = new AmazonPayBackend(
     mockCloudWatchService,
     mockAmazonPayService,
@@ -125,18 +122,15 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockGaService,
     mockBigQueryService,
     mockAcquisitionsStreamService,
-    mockDatabaseService
+    mockDatabaseService,
   )(new DefaultThreadPool(ec))
 
-  val paymentdata= AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@gu.com")
+  val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@gu.com")
   val amazonPayRequest = AmazonPayRequest(paymentdata, Some(acquisitionData))
 
 }
 
-class AmazonPayBackendSpec extends AnyWordSpec
-  with Matchers
-  with FutureEitherValues
-  with IntegrationPatience {
+class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherValues with IntegrationPatience {
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
@@ -147,7 +141,6 @@ class AmazonPayBackendSpec extends AnyWordSpec
       "convert refundId to OrderRef" in new AmazonPayBackendFixture {
         amazonPayBackend.refundIdToOrderRef("S23-1234567-1234567-0000003") mustBe "S23-1234567-1234567"
       }
-
 
       "a request is made to create a charge/payment" should {
         "return error if amazonPay service fails" in new AmazonPayBackendFixture {
@@ -163,28 +156,31 @@ class AmazonPayBackendSpec extends AnyWordSpec
     "request" should {
       "return successful payment response even if identityService, " +
         "databaseService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
-        when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
-        when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
-        when(mockOrderReferenceStatus.getState).thenReturn("Open")
-        when(mockAmazonPayService.setOrderReference(any())).thenReturn(setOrderRefRes)
-        when(mockAmazonPayService.confirmOrderReference(any())).thenReturn(mockConfirmRes)
-        when(mockAmazonPayService.authorize(any(), any())).thenReturn(mockAuthResponse)
-        when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
-        when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
-        when(mockAuthStatus.getState).thenReturn("Closed")
-        when(mockAmazonPayService.close(any())).thenReturn(mockCloseResponse)
-        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
+          when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
+          when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
+          when(mockOrderReferenceStatus.getState).thenReturn("Open")
+          when(mockAmazonPayService.setOrderReference(any())).thenReturn(setOrderRefRes)
+          when(mockAmazonPayService.confirmOrderReference(any())).thenReturn(mockConfirmRes)
+          when(mockAmazonPayService.authorize(any(), any())).thenReturn(mockAuthResponse)
+          when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
+          when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
+          when(mockAuthStatus.getState).thenReturn("Closed")
+          when(mockAmazonPayService.close(any())).thenReturn(mockCloseResponse)
+          when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(
+            DatatypeFactory.newInstance().newXMLGregorianCalendar(),
+          )
 
-        when(mockOrderRef.getOrderTotal).thenReturn(mockOrderTotal)
-        when(mockOrderTotal.getCurrencyCode).thenReturn("USD")
-        when(mockOrderTotal.getAmount).thenReturn("25")
+          when(mockOrderRef.getOrderTotal).thenReturn(mockOrderTotal)
+          when(mockOrderTotal.getCurrencyCode).thenReturn("USD")
+          when(mockOrderTotal.getAmount).thenReturn("25")
 
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
-        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
-      }
+          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+          when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+          when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+            .thenReturn(streamResponseError)
+          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
+          amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
+        }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new AmazonPayBackendFixture {
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
@@ -195,11 +191,14 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAmazonPayService.authorize(any(), any())).thenReturn(mockAuthResponse)
         when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
         when(mockAuthStatus.getState).thenReturn("Closed")
-        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
+        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(
+          DatatypeFactory.newInstance().newXMLGregorianCalendar(),
+        )
         when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+          .thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
@@ -215,7 +214,9 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAmazonPayService.authorize(any(), any())).thenReturn(mockAuthResponse)
         when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
         when(mockAuthStatus.getState).thenReturn("Closed")
-        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
+        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(
+          DatatypeFactory.newInstance().newXMLGregorianCalendar(),
+        )
 
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
@@ -235,7 +236,9 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
         when(mockAuthStatus.getState).thenReturn("Declined")
         when(mockAuthStatus.getReasonCode).thenReturn(expectedReason)
-        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
+        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(
+          DatatypeFactory.newInstance().newXMLGregorianCalendar(),
+        )
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
@@ -257,7 +260,9 @@ class AmazonPayBackendSpec extends AnyWordSpec
         when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
         when(mockAuthStatus.getState).thenReturn("Declined")
         when(mockAuthStatus.getReasonCode).thenReturn("TransactionTimedOut")
-        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(DatatypeFactory.newInstance().newXMLGregorianCalendar())
+        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(
+          DatatypeFactory.newInstance().newXMLGregorianCalendar(),
+        )
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
@@ -279,4 +284,3 @@ class AmazonPayBackendSpec extends AnyWordSpec
     }
   }
 }
-

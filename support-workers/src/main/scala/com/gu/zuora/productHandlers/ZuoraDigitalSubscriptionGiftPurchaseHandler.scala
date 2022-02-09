@@ -16,21 +16,32 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ZuoraDigitalSubscriptionGiftPurchaseHandler(
-  zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
-  dateGenerator: DateGenerator,
-  digitalSubscriptionGiftPurchaseBuilder: DigitalSubscriptionGiftPurchaseBuilder,
-  user: User,
+    zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
+    dateGenerator: DateGenerator,
+    digitalSubscriptionGiftPurchaseBuilder: DigitalSubscriptionGiftPurchaseBuilder,
+    user: User,
 ) {
 
-  def subscribe(state: DigitalSubscriptionGiftPurchaseState, csrUsername: Option[String], salesforceCaseId: Option[String]): Future[SendThankYouEmailState] =
+  def subscribe(
+      state: DigitalSubscriptionGiftPurchaseState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+  ): Future[SendThankYouEmailState] =
     for {
-      subscriptionBuildResult <- Future.fromTry(digitalSubscriptionGiftPurchaseBuilder.build(state, csrUsername, salesforceCaseId).leftMap(BuildSubscribePromoError).toTry)
+      subscriptionBuildResult <- Future
+        .fromTry(
+          digitalSubscriptionGiftPurchaseBuilder
+            .build(state, csrUsername, salesforceCaseId)
+            .leftMap(BuildSubscribePromoError)
+            .toTry,
+        )
         .withEventualLogging("subscription data")
       (subscribeItem, giftCode) = subscriptionBuildResult
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield {
-      val lastRedemptionDate = (() => dateGenerator.today) ().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
+      val lastRedemptionDate =
+        (() => dateGenerator.today)().plusMonths(GiftCodeValidator.expirationTimeInMonths).minusDays(1)
       SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
         user,
         SfContactId(state.salesforceContacts.giftRecipient.get.Id),

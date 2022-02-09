@@ -5,7 +5,7 @@ import org.joda.time.{DateTime, Minutes}
 
 import scala.concurrent.stm.{Ref, atomic}
 
-case class PromotionCache(fetched: DateTime, promotions: Iterable[Promotion]){
+case class PromotionCache(fetched: DateTime, promotions: Iterable[Promotion]) {
   def isFresh: Boolean = DateTime.now.getMillis - fetched.getMillis < PromotionCache.maxAge
 }
 

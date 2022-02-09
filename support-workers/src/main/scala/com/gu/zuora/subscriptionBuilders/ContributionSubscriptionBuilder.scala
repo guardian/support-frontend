@@ -8,8 +8,8 @@ import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 
 class ContributionSubscriptionBuilder(
-  config: BillingPeriod => ZuoraContributionConfig,
-  subscribeItemBuilder: SubscribeItemBuilder,
+    config: BillingPeriod => ZuoraContributionConfig,
+    subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(state: ContributionState): SubscribeItem = {
@@ -18,8 +18,11 @@ class ContributionSubscriptionBuilder(
       contributionConfig.productRatePlanId,
       List(
         RatePlanChargeData(
-          ContributionRatePlanCharge(contributionConfig.productRatePlanChargeId, price = state.product.amount) //Pass the amount the user selected into Zuora
-        )
+          ContributionRatePlanCharge(
+            contributionConfig.productRatePlanChargeId,
+            price = state.product.amount,
+          ), // Pass the amount the user selected into Zuora
+        ),
       ),
       readerType = Direct,
     )

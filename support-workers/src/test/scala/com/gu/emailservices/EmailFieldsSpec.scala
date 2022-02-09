@@ -20,7 +20,9 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
 
   "EmailPayload" should "serialize to json with scheduled time" in {
     val dateToUse = new DateTime(2020, 10, 27, 16, 5, 7, 123, DateTimeZone.UTC)
-    actualSerialisedJson(Some(dateToUse)) shouldBe expectedQueueJson(""", "ScheduledTime": "2020-10-27T16:05:07.123Z"""")
+    actualSerialisedJson(Some(dateToUse)) shouldBe expectedQueueJson(
+      """, "ScheduledTime": "2020-10-27T16:05:07.123Z"""",
+    )
   }
 
   private def actualSerialisedJson(scheduledTime: Option[DateTime]) = {
@@ -28,8 +30,8 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
       EmailPayloadTo(
         "email@email.com",
         EmailPayloadContactAttributes(
-          Map("attribute1" -> "value1", "attribute2" -> "value2")
-        )
+          Map("attribute1" -> "value1", "attribute2" -> "value2"),
+        ),
       ),
       "dataExtensionName",
       Some("sfContactId"),
@@ -60,8 +62,7 @@ class EmailFieldsSpec extends AnyFlatSpec with Matchers {
 class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside {
 
   it should "generate the right json for direct subs" in {
-    val expectedJson = parse(
-      """{
+    val expectedJson = parse("""{
         |"To" : {
         |  "Address" : "test@gu.com",
         |  "ContactAttributes" : {
@@ -99,18 +100,15 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         None,
         "acno",
         "A-S00045678",
-      )
+      ),
     ).map(_.map(ef => parse(ef.payload)))
-    actual.map(inside(_) {
-      case actualJson :: Nil =>
-        actualJson should be(expectedJson)
+    actual.map(inside(_) { case actualJson :: Nil =>
+      actualJson should be(expectedJson)
     })
   }
 
-
   it should "generate the right json for corporate subs" in {
-    val expectedJson = parse(
-      """{
+    val expectedJson = parse("""{
         |"To" : {
         |  "Address" : "test@gu.com",
         |  "ContactAttributes" : {
@@ -136,18 +134,16 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
         "A-S00045678",
-        "subscription number"
-      )
+        "subscription number",
+      ),
     ).map(_.map(ef => parse(ef.payload)))
-    actual.map(inside(_) {
-      case actualJson :: Nil =>
-        actualJson should be(expectedJson)
+    actual.map(inside(_) { case actualJson :: Nil =>
+      actualJson should be(expectedJson)
     })
   }
 
   it should "generate the right json for gift redemption subs" in {
-    val expectedJson = parse(
-      """{
+    val expectedJson = parse("""{
         |  "To" : {
         |    "Address" : "test@gu.com",
         |    "ContactAttributes" : {
@@ -181,13 +177,12 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         TermDates(
           new LocalDate(2020, 11, 18),
           new LocalDate(2021, 2, 18),
-          3
+          3,
         ),
-      )
+      ),
     ).map(_.map(ef => parse(ef.payload)))
-    actual.map(inside(_) {
-      case actualJson :: Nil =>
-        actualJson should be(expectedJson)
+    actual.map(inside(_) { case actualJson :: Nil =>
+      actualJson should be(expectedJson)
     })
   }
 

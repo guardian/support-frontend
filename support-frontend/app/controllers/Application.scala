@@ -23,34 +23,37 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.twirl.api.Html
 
 case class ContributionsPaymentMethodConfigs(
-  oneOffDefaultStripeConfig: StripeConfig,
-  oneOffUatStripeConfig: StripeConfig,
-  regularDefaultStripeConfig: StripeConfig,
-  regularUatStripeConfig: StripeConfig,
-  regularDefaultPayPalConfig: PayPalConfig,
-  regularUatPayPalConfig: PayPalConfig,
-  defaultAmazonPayConfig: AmazonPayConfig,
-  uatAmazonPayConfig: AmazonPayConfig
+    oneOffDefaultStripeConfig: StripeConfig,
+    oneOffUatStripeConfig: StripeConfig,
+    regularDefaultStripeConfig: StripeConfig,
+    regularUatStripeConfig: StripeConfig,
+    regularDefaultPayPalConfig: PayPalConfig,
+    regularUatPayPalConfig: PayPalConfig,
+    defaultAmazonPayConfig: AmazonPayConfig,
+    uatAmazonPayConfig: AmazonPayConfig,
 )
 
 class Application(
-  actionRefiners: CustomActionBuilders,
-  val assets: AssetsResolver,
-  testUsers: TestUserService,
-  components: ControllerComponents,
-  oneOffStripeConfigProvider: StripeConfigProvider,
-  regularStripeConfigProvider: StripeConfigProvider,
-  payPalConfigProvider: PayPalConfigProvider,
-  amazonPayConfigProvider: AmazonPayConfigProvider,
-  recaptchaConfigProvider: RecaptchaConfigProvider,
-  paymentAPIService: PaymentAPIService,
-  membersDataApiUrl: String,
-  stringsConfig: StringsConfig,
-  settingsProvider: AllSettingsProvider,
-  stage: Stage,
-  val supportUrl: String
-)(implicit val ec: ExecutionContext) extends AbstractController(components)
-  with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging {
+    actionRefiners: CustomActionBuilders,
+    val assets: AssetsResolver,
+    testUsers: TestUserService,
+    components: ControllerComponents,
+    oneOffStripeConfigProvider: StripeConfigProvider,
+    regularStripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
+    amazonPayConfigProvider: AmazonPayConfigProvider,
+    recaptchaConfigProvider: RecaptchaConfigProvider,
+    paymentAPIService: PaymentAPIService,
+    membersDataApiUrl: String,
+    stringsConfig: StringsConfig,
+    settingsProvider: AllSettingsProvider,
+    stage: Stage,
+    val supportUrl: String,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with SettingsSurrogateKeySyntax
+    with CanonicalLinks
+    with StrictLogging {
 
   import actionRefiners._
 
@@ -94,9 +97,12 @@ class Application(
   }
 
   def contributeInEpicGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    RedirectWithEncodedQueryString(getGeoRedirectUrl(request.geoData.countryGroup, "contribute-in-epic"), request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString(
+      getGeoRedirectUrl(request.geoData.countryGroup, "contribute-in-epic"),
+      request.queryString,
+      status = FOUND,
+    )
   }
-
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     RedirectWithEncodedQueryString(location, request.queryString, status = FOUND)
@@ -107,8 +113,9 @@ class Application(
   }
 
   // Country code is required here because it's a parameter in the route.
-  def permanentRedirectWithCountry(country: String, location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    RedirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
+  def permanentRedirectWithCountry(country: String, location: String): Action[AnyContent] = CachedAction() {
+    implicit request =>
+      RedirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
   }
 
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -120,8 +127,8 @@ class Application(
   }
 
   def contributionsLanding(
-    countryCode: String,
-    campaignCode: String
+      countryCode: String,
+      campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
@@ -133,17 +140,20 @@ class Application(
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken)).withSettingsSurrogateKey
+    Ok(
+      contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken),
+    ).withSettingsSurrogateKey
   }
 
   def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.main(
-      "Support the Guardian | Down for essential maintenance",
-      views.EmptyDiv("down-for-maintenance-page"),
-      Left(RefPath("downForMaintenancePage.js")),
-      Left(RefPath("downForMaintenancePage.css"))
-    )()(assets, request, settingsProvider.getAllSettings()))
-      .withSettingsSurrogateKey
+    Ok(
+      views.html.main(
+        "Support the Guardian | Down for essential maintenance",
+        views.EmptyDiv("down-for-maintenance-page"),
+        Left(RefPath("downForMaintenancePage.js")),
+        Left(RefPath("downForMaintenancePage.css")),
+      )()(assets, request, settingsProvider.getAllSettings()),
+    ).withSettingsSurrogateKey
   }
 
   private def shareImageUrl(settings: AllSettings): String = {
@@ -151,9 +161,13 @@ class Application(
     "https://i.guim.co.uk/img/media/5366cacfd2081e5a4af259318238b3f82610d32e/0_0_1000_525/1000.png?quality=85&s=966978166c0983aef68828559ede40d8"
   }
 
-  private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
-                                campaignCode: Option[String], guestAccountCreationToken: Option[String])
-                               (implicit request: RequestHeader, settings: AllSettings) = {
+  private def contributionsHtml(
+      countryCode: String,
+      geoData: GeoData,
+      idUser: Option[IdUser],
+      campaignCode: Option[String],
+      guestAccountCreationToken: Option[String],
+  )(implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
     val css = elementForStage(RefPath("contributionsLandingPage.css"))
@@ -166,7 +180,7 @@ class Application(
     val mainElement = assets.getSsrCacheContentsAsHtml(
       divId = s"contributions-landing-page-$countryCode",
       file = "contributions-landing.html",
-      classes = Some(classes)
+      classes = Some(classes),
     )
 
     val serversideTests = generateParticipations(Nil)
@@ -187,7 +201,7 @@ class Application(
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularUatPayPalConfig = payPalConfigProvider.get(true),
         defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-        uatAmazonPayConfig = amazonPayConfigProvider.get(true)
+        uatAmazonPayConfig = amazonPayConfigProvider.get(true),
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
@@ -198,20 +212,22 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
-      serversideTests = serversideTests
+      serversideTests = serversideTests,
     )
   }
 
   def showcase(country: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.main(
-      title = "Support the Guardian",
-      mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page", "showcase.html"),
-      mainJsBundle = Left(RefPath("showcasePage.js")),
-      mainStyleBundle = Left(RefPath("showcasePage.css")),
-      description = stringsConfig.showcaseLandingDescription,
-      canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
-    )()).withSettingsSurrogateKey
+    Ok(
+      views.html.main(
+        title = "Support the Guardian",
+        mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page", "showcase.html"),
+        mainJsBundle = Left(RefPath("showcasePage.js")),
+        mainStyleBundle = Left(RefPath("showcasePage.css")),
+        description = stringsConfig.showcaseLandingDescription,
+        canonicalLink = Some(buildCanonicalShowcaseLink("uk")),
+      )(),
+    ).withSettingsSurrogateKey
   }
 
   val ausMomentMapSocialImageUrl =
@@ -219,17 +235,19 @@ class Application(
 
   def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.main(
-      title = "Guardian Supporters Map",
-      mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
-      mainJsBundle = Left(RefPath("ausMomentMap.js")),
-      mainStyleBundle = Left(RefPath("ausMomentMap.css")),
-      description = stringsConfig.contributionsLandingDescription,
-      canonicalLink = Some("https://support.theguardian.com/aus-map"),
-      shareImageUrl = Some(
-        ausMomentMapSocialImageUrl
-      )
-    )()).withSettingsSurrogateKey
+    Ok(
+      views.html.main(
+        title = "Guardian Supporters Map",
+        mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
+        mainJsBundle = Left(RefPath("ausMomentMap.js")),
+        mainStyleBundle = Left(RefPath("ausMomentMap.css")),
+        description = stringsConfig.contributionsLandingDescription,
+        canonicalLink = Some("https://support.theguardian.com/aus-map"),
+        shareImageUrl = Some(
+          ausMomentMapSocialImageUrl,
+        ),
+      )(),
+    ).withSettingsSurrogateKey
   }
 
   def contributionsCheckoutInEpic(countryCode: String): Action[AnyContent] = PrivateAction { implicit request =>
@@ -241,45 +259,45 @@ class Application(
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     Ok(
-    views.html.contributions(
-      title = "Contributions checkout in Epic",
-      id = s"contributions-landing-page-in-epic-$countryCode",
-      mainElement = assets.getSsrCacheContentsAsHtml("contributions-checkout-in-epic", "contributions-checkout-in-epic.html"),
-      js = Left(RefPath("contributionsCheckoutInEpic.js")),
-      css = Right(StyleContent(Html("body { margin: 0; }"))),
-      description = stringsConfig.contributionsLandingDescription,
-      paymentMethodConfigs = ContributionsPaymentMethodConfigs(
-        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-        oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
-        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-        regularUatStripeConfig = regularStripeConfigProvider.get(true),
-        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularUatPayPalConfig = payPalConfigProvider.get(true),
-        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-        uatAmazonPayConfig = amazonPayConfigProvider.get(true)
+      views.html.contributions(
+        title = "Contributions checkout in Epic",
+        id = s"contributions-landing-page-in-epic-$countryCode",
+        mainElement =
+          assets.getSsrCacheContentsAsHtml("contributions-checkout-in-epic", "contributions-checkout-in-epic.html"),
+        js = Left(RefPath("contributionsCheckoutInEpic.js")),
+        css = Right(StyleContent(Html("body { margin: 0; }"))),
+        description = stringsConfig.contributionsLandingDescription,
+        paymentMethodConfigs = ContributionsPaymentMethodConfigs(
+          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+          oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+          regularUatStripeConfig = regularStripeConfigProvider.get(true),
+          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+          regularUatPayPalConfig = payPalConfigProvider.get(true),
+          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+          uatAmazonPayConfig = amazonPayConfigProvider.get(true),
+        ),
+        paymentApiUrl = paymentAPIService.paymentAPIUrl,
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+        membersDataApiUrl = membersDataApiUrl,
+        idUser = None,
+        guestAccountCreationToken = guestAccountCreationToken,
+        geoData = geoData,
+        shareImageUrl = shareImageUrl(settings),
+        shareUrl = "https://support.theguardian.com/contribute",
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
+        serversideTests = serversideTests,
       ),
-      paymentApiUrl = paymentAPIService.paymentAPIUrl,
-      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      membersDataApiUrl = membersDataApiUrl,
-      idUser = None,
-      guestAccountCreationToken = guestAccountCreationToken,
-      geoData = geoData,
-      shareImageUrl = shareImageUrl(settings),
-      shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
-      serversideTests = serversideTests
-    )).withSettingsSurrogateKey
+    ).withSettingsSurrogateKey
   }
-
 
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
   }
 
   // Remove trailing slashes so that /uk/ redirects to /uk
-  def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() {
-    request =>
-      RedirectWithEncodedQueryString("/" + path, request.queryString, MOVED_PERMANENTLY)
+  def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() { request =>
+    RedirectWithEncodedQueryString("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
 
   private def getGeoRedirectUrl(fastlyCountry: Option[CountryGroup], path: String): String = {
@@ -298,12 +316,16 @@ class Application(
 
 object CSSElementForStage {
 
-  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(cssPath: RefPath): Either[RefPath, StyleContent] = {
+  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(
+      cssPath: RefPath,
+  ): Either[RefPath, StyleContent] = {
     if (stage == Stages.DEV) {
       Left(cssPath)
     } else {
       getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-        SafeLogger.error(scrub"Inline CSS failed to load for $cssPath") // in future add email perf alert instead (cloudwatch alarm perhaps)
+        SafeLogger.error(
+          scrub"Inline CSS failed to load for $cssPath",
+        ) // in future add email perf alert instead (cloudwatch alarm perhaps)
         Left(cssPath)
       } { inlineCss =>
         Right(inlineCss)

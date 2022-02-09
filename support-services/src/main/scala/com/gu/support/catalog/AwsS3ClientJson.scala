@@ -8,7 +8,7 @@ import io.circe.parser._
 
 import scala.util.{Failure, Success}
 
-object AwsS3ClientJson extends LazyLogging{
+object AwsS3ClientJson extends LazyLogging {
 
   def fetchJson(s3Client: AwsS3Client, request: AmazonS3URI): Option[Json] = {
     val attempt = for {

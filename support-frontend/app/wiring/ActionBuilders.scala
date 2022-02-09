@@ -13,6 +13,6 @@ trait ActionBuilders {
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
-    stage = appConfig.stage
+    stage = appConfig.stage,
   )
 }

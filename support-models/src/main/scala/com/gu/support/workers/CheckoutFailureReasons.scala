@@ -17,7 +17,7 @@ object CheckoutFailureReasons {
     AmazonPayTryAnotherCard,
     AmazonPayTryAgain,
     AmazonPayFatal,
-    Unknown
+    Unknown,
   )
 
   def fromString(string: String): Option[CheckoutFailureReason] = all.find(_.asString == string)
@@ -121,10 +121,11 @@ object CheckoutFailureReasons {
     case _ => AmazonPayFatal
   }
 
-  implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
+  implicit val encodeFailureReason: Encoder[CheckoutFailureReason] =
+    Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
 
-  implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {
-    identifier => CheckoutFailureReasons.fromString(identifier).toRight(s"Unrecognised failure reason '$identifier'")
+  implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap { identifier =>
+    CheckoutFailureReasons.fromString(identifier).toRight(s"Unrecognised failure reason '$identifier'")
   }
 
 }

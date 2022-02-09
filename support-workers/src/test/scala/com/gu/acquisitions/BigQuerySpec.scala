@@ -25,17 +25,21 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
     BigQueryOptions
       .newBuilder()
       .setProjectId(config.projectId)
-      .setCredentials(ServiceAccountCredentials.fromPkcs8(
-        config.clientId,
-        config.clientEmail,
-        config.privateKey,
-        config.privateKeyId,
-        Nil.asJavaCollection
-      ))
-      .build().getService
+      .setCredentials(
+        ServiceAccountCredentials.fromPkcs8(
+          config.clientId,
+          config.clientEmail,
+          config.privateKey,
+          config.privateKeyId,
+          Nil.asJavaCollection,
+        ),
+      )
+      .build()
+      .getService
 
   "BigQuery" should "be able to run a query" in {
-    val query = s"""select * from ${AcquisitionEventTable.datasetName}.${AcquisitionEventTable.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("2020-12-14 00:20:00");"""
+    val query =
+      s"""select * from ${AcquisitionEventTable.datasetName}.${AcquisitionEventTable.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("2020-12-14 00:20:00");"""
     val queryConfig = QueryJobConfiguration.newBuilder(query).build
 
     val tableResult = bigQuery.query(queryConfig)
@@ -57,23 +61,33 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       Some(9999),
       Country.UK,
       Currency.GBP,
-      Some("componentId"), Some("componentType"), Some("campaignCode"), Some("source"), Some("referrerUrl"),
+      Some("componentId"),
+      Some("componentType"),
+      Some("campaignCode"),
+      Some("source"),
+      Some("referrerUrl"),
       List(
         AbTest("test_test", "Hello"),
-        AbTest("payment_method_test", "variant1")
+        AbTest("payment_method_test", "variant1"),
       ),
       Monthly,
       Some(PayPal),
       Some(PrintOptions(PrintProduct.HomeDeliveryEveryday, Country.UK)),
       Some("browserId"),
       Some("9999"),
-      Some("pageViewId"), Some("referrerPageViewId"), List("TEST_LABEL"), Some("test_promocode"),
+      Some("pageViewId"),
+      Some("referrerPageViewId"),
+      List("TEST_LABEL"),
+      Some("test_promocode"),
       reusedExistingPaymentMethod = false,
       Direct,
       Purchase,
-      Some("subscription number"), Some("account number"), Some("contributionId"), Some("paymentId1234"),
+      Some("subscription number"),
+      Some("account number"),
+      Some("contributionId"),
+      Some("paymentId1234"),
       List(QueryParameter("foo", "bar")),
-      None
+      None,
     )
 
     service.tableInsertRow(dataRow).value.map(_ shouldBe Right(()))

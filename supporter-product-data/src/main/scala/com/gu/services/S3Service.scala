@@ -38,7 +38,7 @@ object S3Service {
 
 }
 
-class TransferProgressListener(filename: String) extends ProgressListener{
+class TransferProgressListener(filename: String) extends ProgressListener {
 
   private val promise = Promise[Unit]()
   def future = promise.future
@@ -46,8 +46,10 @@ class TransferProgressListener(filename: String) extends ProgressListener{
   override def progressChanged(progressEvent: ProgressEvent): Unit =
     progressEvent.getEventType match {
       case TRANSFER_COMPLETED_EVENT => promise.success(())
-      case TRANSFER_PART_FAILED_EVENT => promise.failure(new RuntimeException(s"There was a partial failure while transferring $filename"))
-      case TRANSFER_FAILED_EVENT | TRANSFER_CANCELED_EVENT => promise.failure(new RuntimeException(s"Transfer failed for $filename"))
+      case TRANSFER_PART_FAILED_EVENT =>
+        promise.failure(new RuntimeException(s"There was a partial failure while transferring $filename"))
+      case TRANSFER_FAILED_EVENT | TRANSFER_CANCELED_EVENT =>
+        promise.failure(new RuntimeException(s"Transfer failed for $filename"))
       case _ => ()
     }
 }

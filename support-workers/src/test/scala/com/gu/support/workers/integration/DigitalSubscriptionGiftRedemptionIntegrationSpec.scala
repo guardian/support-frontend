@@ -28,7 +28,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     val nonExistentCode = giftCode.value // We haven't created a sub with this
 
     recoverToExceptionIf[RuntimeException](
-      redeemSubscription(createZuoraHelper, nonExistentCode, requestId)
+      redeemSubscription(createZuoraHelper, nonExistentCode, requestId),
     ).map(_.getMessage shouldBe CodeNotFound.clientCode)
   }
 
@@ -43,7 +43,8 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
 
     for {
-      _ <- createZuoraHelper.createSubscriptionError(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
+      _ <- createZuoraHelper
+        .createSubscriptionError(createDigiPackGiftSubscriptionJson(createSubRequestId), mockCodeGenerator)
         .map { _ shouldBe None }
 
       _ <- redeemSubscription(createZuoraHelper, giftCode.value, redeemSubRequestId)
@@ -54,18 +55,19 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
 
       subsequentRequestId = UUID.randomUUID()
       assertion <- recoverToExceptionIf[RuntimeException](
-        redeemSubscription(createZuoraHelper, giftCode.value, subsequentRequestId)
+        redeemSubscription(createZuoraHelper, giftCode.value, subsequentRequestId),
       ).map(_.getMessage shouldBe CodeAlreadyUsed.clientCode)
     } yield assertion
   }
 
   def redeemSubscription(
-    createZuoraHelper: CreateZuoraSubscriptionHelper,
-    codeValue: String,
-    requestId: UUID
+      createZuoraHelper: CreateZuoraSubscriptionHelper,
+      codeValue: String,
+      requestId: UUID,
   ): Future[SendThankYouEmailState] = {
     val jsonState = createDigiPackGiftRedemptionJson(codeValue)
-    val state = decode[CreateZuoraSubscriptionProductState](jsonState).toOption.get.asInstanceOf[DigitalSubscriptionGiftRedemptionState]
+    val state = decode[CreateZuoraSubscriptionProductState](jsonState).toOption.get
+      .asInstanceOf[DigitalSubscriptionGiftRedemptionState]
 
     new ZuoraDigitalSubscriptionGiftRedemptionHandler(
       createZuoraHelper.realZuoraGiftService,

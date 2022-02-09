@@ -9,7 +9,13 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
-import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{
+  AcquisitionsStreamEc2OrLocalConfig,
+  AcquisitionsStreamService,
+  AcquisitionsStreamServiceImpl,
+  BigQueryConfig,
+  BigQueryService,
+}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -32,18 +38,20 @@ import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 
 class StripeBackend(
-  stripeService: StripeService,
-  val databaseService: ContributionsStoreService,
-  identityService: IdentityService,
-  val gaService: GoogleAnalyticsService,
-  val bigQueryService: BigQueryService,
-  val acquisitionsStreamService: AcquisitionsStreamService,
-  emailService: EmailService,
-  recaptchaService: RecaptchaService,
-  cloudWatchService: CloudWatchService,
-  switchService: SwitchService,
-  environment: Environment
-)(implicit pool: DefaultThreadPool, WSClient: WSClient) extends StrictLogging with PaymentBackend {
+    stripeService: StripeService,
+    val databaseService: ContributionsStoreService,
+    identityService: IdentityService,
+    val gaService: GoogleAnalyticsService,
+    val bigQueryService: BigQueryService,
+    val acquisitionsStreamService: AcquisitionsStreamService,
+    emailService: EmailService,
+    recaptchaService: RecaptchaService,
+    cloudWatchService: CloudWatchService,
+    switchService: SwitchService,
+    environment: Environment,
+)(implicit pool: DefaultThreadPool, WSClient: WSClient)
+    extends StrictLogging
+    with PaymentBackend {
 
   switchService.startPoller()
 
@@ -54,15 +62,18 @@ class StripeBackend(
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   // Legacy handler for the Stripe Charges API. Still required for mobile apps payments
-  def createCharge(chargeData: LegacyStripeChargeRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    stripeService.createCharge(chargeData)
+  def createCharge(
+      chargeData: LegacyStripeChargeRequest,
+      clientBrowserInfo: ClientBrowserInfo,
+  ): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
+    stripeService
+      .createCharge(chargeData)
       .leftMap(err => {
         logger.info(s"unable to create Stripe charge ($chargeData)")
         cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
         err
       })
       .semiflatMap { charge =>
-
         cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
         getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityId =>
@@ -80,8 +91,9 @@ class StripeBackend(
   }
 
   def createPaymentIntent(
-    request: StripePaymentIntentRequest.CreatePaymentIntent,
-    clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
+      request: StripePaymentIntentRequest.CreatePaymentIntent,
+      clientBrowserInfo: ClientBrowserInfo,
+  ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
 
     def isApplePay = request.paymentData.stripePaymentMethod match {
       case Some(StripeApplePay) | Some(StripePaymentRequestButton) => true
@@ -106,40 +118,44 @@ class StripeBackend(
       }
 
     def createIntent(): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
-      stripeService.createPaymentIntent(request)
+      stripeService
+        .createPaymentIntent(request)
         .leftMap(err => {
-          logger.info(s"Unable to create Stripe Payment Intent ($request). User-Agent was: ${clientBrowserInfo.userAgent}")
+          logger.info(
+            s"Unable to create Stripe Payment Intent ($request). User-Agent was: ${clientBrowserInfo.userAgent}",
+          )
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
           err
         })
         .flatMap { paymentIntent =>
-
-          //https://stripe.com/docs/payments/intents#intent-statuses
+          // https://stripe.com/docs/payments/intents#intent-statuses
           paymentIntent.getStatus match {
             case "requires_action" =>
-              //3DS required, return the clientSecret to the client
+              // 3DS required, return the clientSecret to the client
               EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
 
             case "succeeded" =>
-              //Payment complete without the need for 3DS - do post-payment tasks and return success to client
+              // Payment complete without the need for 3DS - do post-payment tasks and return success to client
               EitherT.liftF[Future, StripeApiError, StripePaymentIntentsApiResponse](
-                paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo)
+                paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo),
               )
 
             case otherStatus =>
               logger.info(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
-              val error = StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None)
+              val error =
+                StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None)
               cloudWatchService.recordFailedPayment(error, PaymentProvider.Stripe)
               EitherT.fromEither(Left(error))
           }
         }
 
-   recaptchaRequired().flatMap {
+    recaptchaRequired().flatMap {
       case true =>
         recaptchaService
           .verify(request.recaptchaToken)
           .flatMap { resp =>
-            if (resp.success) createIntent() else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
+            if (resp.success) createIntent()
+            else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
           }
       case false =>
         createIntent()
@@ -147,23 +163,26 @@ class StripeBackend(
   }
 
   def confirmPaymentIntent(
-    request: StripePaymentIntentRequest.ConfirmPaymentIntent,
-    clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse.Success] = {
+      request: StripePaymentIntentRequest.ConfirmPaymentIntent,
+      clientBrowserInfo: ClientBrowserInfo,
+  ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse.Success] = {
 
-    stripeService.confirmPaymentIntent(request)
+    stripeService
+      .confirmPaymentIntent(request)
       .leftMap(err => {
         logger.info(s"Unable to confirm Stripe Payment Intent ($request)")
         cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
         err
       })
       .flatMap { paymentIntent =>
-        //At this point we expect the PaymentIntent to have been ready for confirmation. Status should be 'succeeded'
+        // At this point we expect the PaymentIntent to have been ready for confirmation. Status should be 'succeeded'
         paymentIntent.getStatus match {
           case "succeeded" => EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo))
 
           case otherStatus =>
             logger.info(s"Unexpected status on Stripe Payment Intent: $otherStatus. Request was $request")
-            val error = StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None)
+            val error =
+              StripeApiError.fromString(s"Unexpected status on Stripe Payment Intent: $otherStatus", publicKey = None)
             cloudWatchService.recordFailedPayment(error, PaymentProvider.Stripe)
             EitherT.fromEither(Left(error))
         }
@@ -171,9 +190,10 @@ class StripeBackend(
   }
 
   private def paymentIntentSucceeded(
-    request: StripeRequest,
-    paymentIntent: PaymentIntent,
-    clientBrowserInfo: ClientBrowserInfo): Future[StripePaymentIntentsApiResponse.Success] = {
+      request: StripeRequest,
+      paymentIntent: PaymentIntent,
+      clientBrowserInfo: ClientBrowserInfo,
+  ): Future[StripePaymentIntentsApiResponse.Success] = {
 
     cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
@@ -182,14 +202,13 @@ class StripeBackend(
         case Some(charge) =>
           postPaymentTasks(request.paymentData.email.value, request, charge, clientBrowserInfo, identityId)
         case None =>
-          /**
-            * This should never happen, but in case it does we still return success to the client because the payment
+          /** This should never happen, but in case it does we still return success to the client because the payment
             * was reported as successful by Stripe. It does however prevent us from executing post-payment tasks and so
             * would need investigation.
             */
           cloudWatchService.recordPostPaymentTasksError(
             PaymentProvider.Stripe,
-            s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request"
+            s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request",
           )
       }
 
@@ -197,29 +216,42 @@ class StripeBackend(
     }
   }
 
-  private def postPaymentTasks(email: String, chargeData: StripeRequest, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long]): Unit = {
+  private def postPaymentTasks(
+      email: String,
+      chargeData: StripeRequest,
+      charge: Charge,
+      clientBrowserInfo: ClientBrowserInfo,
+      identityId: Option[Long],
+  ): Unit = {
     trackContribution(charge, chargeData, identityId, clientBrowserInfo)
-      .map(errors => cloudWatchService.recordPostPaymentTasksErrors(
-        PaymentProvider.Stripe,
-        errors
-      ))
+      .map(errors =>
+        cloudWatchService.recordPostPaymentTasksErrors(
+          PaymentProvider.Stripe,
+          errors,
+        ),
+      )
 
     identityId.foreach { id =>
       sendThankYouEmail(email, chargeData, id).leftMap { err =>
         cloudWatchService.recordPostPaymentTasksError(
           PaymentProvider.Stripe,
-          s"unable to send thank you email: ${err.getMessage}"
+          s"unable to send thank you email: ${err.getMessage}",
         )
       }
     }
   }
 
-  private def trackContribution(charge: Charge, data: StripeRequest, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): Future[List[BackendError]] = {
+  private def trackContribution(
+      charge: Charge,
+      data: StripeRequest,
+      identityId: Option[Long],
+      clientBrowserInfo: ClientBrowserInfo,
+  ): Future[List[BackendError]] = {
     val contributionData = ContributionData.fromStripeCharge(
       identityId,
       charge,
       clientBrowserInfo.countrySubdivisionCode,
-      PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod)
+      PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod),
     )
 
     val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
@@ -228,35 +260,44 @@ class StripeBackend(
     track(
       acquisition = AcquisitionDataRowBuilder.buildFromStripe(stripeAcquisition, contributionData),
       contributionData,
-      gaData
+      gaData,
     )
   }
 
   private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[Long]] =
-    identityService.getOrCreateIdentityIdFromEmail(email).fold(
-      err => {
-        logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
-        None
-      },
-      identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
-    )
+    identityService
+      .getOrCreateIdentityIdFromEmail(email)
+      .fold(
+        err => {
+          logger
+            .warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
+          None
+        },
+        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken),
+      )
 
   private def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
-    stripeService.validateRefundHook(refundHook)
+    stripeService
+      .validateRefundHook(refundHook)
       .leftMap(BackendError.fromStripeApiError)
 
   private def flagContributionAsRefunded(stripePaymentId: String): EitherT[Future, BackendError, Unit] =
-    databaseService.flagContributionAsRefunded(stripePaymentId)
+    databaseService
+      .flagContributionAsRefunded(stripePaymentId)
       .leftMap(BackendError.fromDatabaseError)
 
-  private def sendThankYouEmail(email: String, data: StripeRequest, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
+  private def sendThankYouEmail(
+      email: String,
+      data: StripeRequest,
+      identityId: Long,
+  ): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow = ContributorRow(
       email,
       data.paymentData.currency.toString,
       identityId,
       PaymentProvider.Stripe,
       None,
-      data.paymentData.amount
+      data.paymentData.amount,
     )
 
     emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
@@ -266,20 +307,18 @@ class StripeBackend(
 object StripeBackend {
 
   private def apply(
-    stripeService: StripeService,
-    databaseService: ContributionsStoreService,
-    identityService: IdentityService,
-    gaService: GoogleAnalyticsService,
-    bigQueryService: BigQueryService,
-    acquisitionsStreamService: AcquisitionsStreamService,
-    emailService: EmailService,
-    recaptchaService: RecaptchaService,
-    cloudWatchService: CloudWatchService,
-    switchService: SwitchService,
-    environment: Environment
-  )(implicit pool: DefaultThreadPool,
-    WSClient: WSClient,
-    awsClient: AmazonS3): StripeBackend = {
+      stripeService: StripeService,
+      databaseService: ContributionsStoreService,
+      identityService: IdentityService,
+      gaService: GoogleAnalyticsService,
+      bigQueryService: BigQueryService,
+      acquisitionsStreamService: AcquisitionsStreamService,
+      emailService: EmailService,
+      recaptchaService: RecaptchaService,
+      cloudWatchService: CloudWatchService,
+      switchService: SwitchService,
+      environment: Environment,
+  )(implicit pool: DefaultThreadPool, WSClient: WSClient, awsClient: AmazonS3): StripeBackend = {
     new StripeBackend(
       stripeService,
       databaseService,
@@ -291,16 +330,17 @@ object StripeBackend {
       recaptchaService,
       cloudWatchService,
       switchService,
-      environment)
+      environment,
+    )
   }
 
-  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
-    implicit defaultThreadPool: DefaultThreadPool,
-    stripeThreadPool: StripeThreadPool,
-    sqsThreadPool: SQSThreadPool,
-    wsClient: WSClient,
-    awsClient: AmazonS3,
-    system: ActorSystem
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(implicit
+      defaultThreadPool: DefaultThreadPool,
+      stripeThreadPool: StripeThreadPool,
+      sqsThreadPool: SQSThreadPool,
+      wsClient: WSClient,
+      awsClient: AmazonS3,
+      system: ActorSystem,
   ) extends EnvironmentBasedBuilder[StripeBackend] {
 
     override def build(env: Environment): InitializationResult[StripeBackend] = (
@@ -309,7 +349,9 @@ object StripeBackend {
         .map(StripeService.fromStripeConfig): InitializationResult[StripeService],
       configLoader
         .loadConfig[Environment, ContributionsStoreQueueConfig](env)
-        .andThen(ContributionsStoreQueueService.fromContributionsStoreQueueConfig): InitializationResult[ContributionsStoreQueueService],
+        .andThen(ContributionsStoreQueueService.fromContributionsStoreQueueConfig): InitializationResult[
+        ContributionsStoreQueueService,
+      ],
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
@@ -328,8 +370,7 @@ object StripeBackend {
         .andThen(RecaptchaService.fromRecaptchaConfig): InitializationResult[RecaptchaService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SwitchService(env)(awsClient, system, stripeThreadPool).valid: InitializationResult[SwitchService],
-      env.valid: InitializationResult[Environment]
+      env.valid: InitializationResult[Environment],
     ).mapN(StripeBackend.apply)
   }
 }
-

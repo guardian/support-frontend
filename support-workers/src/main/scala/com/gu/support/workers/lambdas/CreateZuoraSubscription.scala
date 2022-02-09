@@ -16,15 +16,15 @@ import com.gu.zuora.subscriptionBuilders._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[CreateZuoraSubscriptionState, SendAcquisitionEventState](servicesProvider) {
+    extends ServicesHandler[CreateZuoraSubscriptionState, SendAcquisitionEventState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
-    zuoraSubscriptionState: CreateZuoraSubscriptionState,
-    requestInfo: RequestInfo,
-    context: Context,
-    services: Services
+      zuoraSubscriptionState: CreateZuoraSubscriptionState,
+      requestInfo: RequestInfo,
+      context: Context,
+      services: Services,
   ): FutureHandlerResult = {
 
     val zuoraProductHandlers = new ZuoraProductHandlers(services, zuoraSubscriptionState)
@@ -34,9 +34,17 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
       case state: DigitalSubscriptionDirectPurchaseState =>
-        zuoraDigitalSubscriptionDirectHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
+        zuoraDigitalSubscriptionDirectHandler.subscribe(
+          state,
+          zuoraSubscriptionState.csrUsername,
+          zuoraSubscriptionState.salesforceCaseId,
+        )
       case state: DigitalSubscriptionGiftPurchaseState =>
-        zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
+        zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(
+          state,
+          zuoraSubscriptionState.csrUsername,
+          zuoraSubscriptionState.salesforceCaseId,
+        )
       case state: DigitalSubscriptionCorporateRedemptionState =>
         zuoraDigitalSubscriptionCorporateRedemptionHandler.subscribe(state)
       case state: ContributionState =>
@@ -44,7 +52,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case state: PaperState =>
         zuoraPaperHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
       case state: GuardianWeeklyState =>
-        zuoraGuardianWeeklyHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
+        zuoraGuardianWeeklyHandler.subscribe(
+          state,
+          zuoraSubscriptionState.csrUsername,
+          zuoraSubscriptionState.salesforceCaseId,
+        )
     }
 
     eventualSendThankYouEmailState.map { nextState =>
@@ -134,6 +146,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
   private lazy val isTestUser = state.user.isTestUser
   private lazy val dateGenerator = new DateGenerator()
   private lazy val touchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage, isTestUser)
-  private lazy val zuoraSubscriptionCreator = new ZuoraSubscriptionCreator(services.zuoraService, dateGenerator, state.user.id, state.requestId)
+  private lazy val zuoraSubscriptionCreator =
+    new ZuoraSubscriptionCreator(services.zuoraService, dateGenerator, state.user.id, state.requestId)
 
 }

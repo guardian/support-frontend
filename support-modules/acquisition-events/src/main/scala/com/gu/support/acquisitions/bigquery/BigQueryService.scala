@@ -17,23 +17,34 @@ class BigQueryService(config: BigQueryConfig) {
     BigQueryOptions
       .newBuilder()
       .setProjectId(config.projectId)
-      .setCredentials(ServiceAccountCredentials.fromPkcs8(
-        config.clientId,
-        config.clientEmail,
-        config.privateKey,
-        config.privateKeyId,
-        Nil.asJavaCollection
-      ))
-      .build().getService
+      .setCredentials(
+        ServiceAccountCredentials.fromPkcs8(
+          config.clientId,
+          config.clientEmail,
+          config.privateKey,
+          config.privateKeyId,
+          Nil.asJavaCollection,
+        ),
+      )
+      .build()
+      .getService
 
-  def tableInsertRow(acquisitionDataRow: AcquisitionDataRow)(implicit executionContext: ExecutionContext): EitherT[Future, String, Unit] =
-    EitherT(Future(blocking(
-      // The BigQuery sdk isn't asynchronous so wrap it in a blocking future as documented here:
-      // https://docs.scala-lang.org/overviews/core/futures.html#blocking-inside-a-future
-      blockingInsert(acquisitionDataRow)
-    )))
+  def tableInsertRow(acquisitionDataRow: AcquisitionDataRow)(implicit
+      executionContext: ExecutionContext,
+  ): EitherT[Future, String, Unit] =
+    EitherT(
+      Future(
+        blocking(
+          // The BigQuery sdk isn't asynchronous so wrap it in a blocking future as documented here:
+          // https://docs.scala-lang.org/overviews/core/futures.html#blocking-inside-a-future
+          blockingInsert(acquisitionDataRow),
+        ),
+      ),
+    )
 
-  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit executionContext: ExecutionContext): EitherT[Future, List[String], Unit] = Retry(maxRetries)(tableInsertRow(acquisitionDataRow))
+  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit
+      executionContext: ExecutionContext,
+  ): EitherT[Future, List[String], Unit] = Retry(maxRetries)(tableInsertRow(acquisitionDataRow))
 
   private def blockingInsert(acquisitionDataRow: AcquisitionDataRow): Either[String, Unit] =
     try {

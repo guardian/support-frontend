@@ -4,7 +4,9 @@ import org.openqa.selenium.WebDriver
 import org.scalatestplus.selenium.Page
 import selenium.util.{Browser, Config, TestUser}
 
-case class ContributionsLanding(region: String, testUser: TestUser)(implicit val webDriver: WebDriver) extends Page with Browser {
+case class ContributionsLanding(region: String, testUser: TestUser)(implicit val webDriver: WebDriver)
+    extends Page
+    with Browser {
 
   val url = s"${Config.supportFrontendUrl}/$region/contribute"
 
@@ -16,7 +18,9 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   private val monthlyButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-MONTHLY']")
   private val annualButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-ANNUAL']")
 
-  private val otherAmountButton = cssSelector(".form__radio-group--contribution-amount label[for='contributionAmount-other']")
+  private val otherAmountButton = cssSelector(
+    ".form__radio-group--contribution-amount label[for='contributionAmount-other']",
+  )
 
   private val otherAmount = id("contributionOther")
 

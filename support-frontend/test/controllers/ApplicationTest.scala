@@ -30,7 +30,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
-    stage = stage
+    stage = stage,
   )
 
   "/healthcheck" should {
@@ -50,7 +50,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[Stage],
-        "support.thegulocal.com"
+        "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
@@ -71,7 +71,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[Stage],
-        "support.thegulocal.com"
+        "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

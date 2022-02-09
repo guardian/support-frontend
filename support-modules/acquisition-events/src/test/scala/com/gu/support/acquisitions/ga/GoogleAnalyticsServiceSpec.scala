@@ -5,7 +5,14 @@ import com.gu.support.acquisitions.AbTest
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData}
 import com.gu.support.acquisitions.models.AcquisitionProduct.{DigitalSubscription, Paper, RecurringContribution}
 import com.gu.support.acquisitions.models.PrintProduct.GuardianWeekly
-import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider, PrintOptions}
+import com.gu.support.acquisitions.models.{
+  AcquisitionDataRow,
+  AcquisitionProduct,
+  AcquisitionType,
+  PaymentFrequency,
+  PaymentProvider,
+  PrintOptions,
+}
 import com.gu.support.zuora.api.ReaderType
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3.OkHttpClient
@@ -18,15 +25,15 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
   val service = new GoogleAnalyticsServiceLive(new OkHttpClient())
 
   def buildAcquisition(
-    product: AcquisitionProduct,
-    paymentFrequency: PaymentFrequency,
-    currency: Currency,
-    amount: BigDecimal,
-    paymentProvider: PaymentProvider,
-    campaignCode: String,
-    abTests: List[AbTest],
-    country: Country,
-    printOptions: Option[PrintOptions] = None
+      product: AcquisitionProduct,
+      paymentFrequency: PaymentFrequency,
+      currency: Currency,
+      amount: BigDecimal,
+      paymentProvider: PaymentProvider,
+      campaignCode: String,
+      abTests: List[AbTest],
+      country: Country,
+      printOptions: Option[PrintOptions] = None,
   ) = AcquisitionDataRow(
     eventTimeStamp = new DateTime(1544710504165L),
     product = product,
@@ -56,7 +63,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     contributionId = None,
     paymentId = None,
     queryParameters = Nil,
-    platform = None
+    platform = None,
   )
 
   private val digiPack = buildAcquisition(
@@ -67,7 +74,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     paymentProvider = PaymentProvider.Stripe,
     campaignCode = "FAKE_ACQUISITION_EVENT",
     abTests = List(AbTest("test_name", "variant_name"), AbTest("second_test", "control")),
-    country = Country.US
+    country = Country.US,
   )
   private val weekly = buildAcquisition(
     product = Paper,
@@ -78,7 +85,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     campaignCode = "FAKE_ACQUISITION_EVENT1,FAKE_ACQUISITION_EVENT2",
     abTests = List(AbTest("test_name", "variant_name"), AbTest("second_test", "control")),
     country = Country.US,
-    printOptions = Some(PrintOptions(GuardianWeekly, Country.US))
+    printOptions = Some(PrintOptions(GuardianWeekly, Country.US)),
   )
   private val contribution = buildAcquisition(
     product = RecurringContribution,
@@ -88,9 +95,10 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     paymentProvider = PaymentProvider.Stripe,
     campaignCode = "FAKE_ACQUISITION_EVENT",
     abTests = List(AbTest("test_name", "variant_name"), AbTest("second_test", "control")),
-    country = Country.US
+    country = Country.US,
   )
-  val gaData = GAData("support.code.dev-theguardian.com", "GA1.1.1633795050.1537436107", Some("192.168.0.1"), Some("Mozilla/5.0"))
+  val gaData =
+    GAData("support.code.dev-theguardian.com", "GA1.1.1633795050.1537436107", Some("192.168.0.1"), Some("Mozilla/5.0"))
 
   "A GAService" should {
     "get the correct Client ID" in {
@@ -99,7 +107,7 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       GoogleAnalyticsService.sanitiseClientId("1633795050.1537436107") shouldEqual Right("1633795050.1537436107")
     }
     "build a correct payload" in {
-      val maybePayload = GoogleAnalyticsService.buildPayload(weekly, 0D, gaData)
+      val maybePayload = GoogleAnalyticsService.buildPayload(weekly, 0d, gaData)
       maybePayload.isRight shouldBe true
 
       logger.info(maybePayload.right.get)
@@ -132,7 +140,8 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       val contributionPayload = payloadAsMap(
         GoogleAnalyticsService
           .buildPayload(contribution, 25, gaData)
-          .right.get
+          .right
+          .get,
       )
 
       contributionPayload.get("cm10") shouldEqual None
@@ -140,7 +149,8 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       val digiPackPayload = payloadAsMap(
         GoogleAnalyticsService
           .buildPayload(digiPack, 25, gaData)
-          .right.get
+          .right
+          .get,
       )
 
       digiPackPayload.get("cm10") shouldEqual Some("1")
@@ -148,11 +158,11 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       val weeklyPayload = payloadAsMap(
         GoogleAnalyticsService
           .buildPayload(weekly, 25, gaData)
-          .right.get
+          .right
+          .get,
       )
 
       weeklyPayload.get("cm10") shouldEqual Some("1")
-
 
     }
 
@@ -178,15 +188,17 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       GoogleAnalyticsService.camelCase("GUARDIAN_WEEKLY") shouldEqual "GuardianWeekly"
     }
 
-    //You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
+    // You can use this test to submit a request and the watch it in the Real-Time reports in the 'Support CODE' GA view.
     "submit a request" ignore {
-      service.submit(weekly, gaData, 5).fold(
-        serviceError => {
-          logger.error(s"$serviceError")
-          fail()
-        },
-        _ => succeed
-      )
+      service
+        .submit(weekly, gaData, 5)
+        .fold(
+          serviceError => {
+            logger.error(s"$serviceError")
+            fail()
+          },
+          _ => succeed,
+        )
     }
   }
 

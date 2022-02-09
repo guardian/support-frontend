@@ -1,22 +1,24 @@
 package com.gu.support.config
 
-
 import com.gu.support.catalog.{ProductRatePlanChargeId, ProductRatePlanId}
 import com.gu.support.workers._
 import com.typesafe.config.Config
 
-case class ZuoraContributionConfig(productRatePlanId: ProductRatePlanId, productRatePlanChargeId: ProductRatePlanChargeId)
+case class ZuoraContributionConfig(
+    productRatePlanId: ProductRatePlanId,
+    productRatePlanChargeId: ProductRatePlanChargeId,
+)
 
 case class ZuoraDigitalPackConfig(defaultFreeTrialPeriod: Int, paymentGracePeriod: Int)
 
 case class ZuoraConfig(
-  url: String,
-  username: String,
-  password: String,
-  monthlyContribution: ZuoraContributionConfig,
-  annualContribution: ZuoraContributionConfig,
-  digitalPack: ZuoraDigitalPackConfig
-){
+    url: String,
+    username: String,
+    password: String,
+    monthlyContribution: ZuoraContributionConfig,
+    annualContribution: ZuoraContributionConfig,
+    digitalPack: ZuoraDigitalPackConfig,
+) {
 
   def contributionConfig(billingPeriod: BillingPeriod): ZuoraContributionConfig =
     billingPeriod match {
@@ -25,7 +27,8 @@ case class ZuoraConfig(
     }
 }
 
-class ZuoraConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[ZuoraConfig](config, defaultStage) {
+class ZuoraConfigProvider(config: Config, defaultStage: Stage)
+    extends TouchpointConfigProvider[ZuoraConfig](config, defaultStage) {
 
   def fromConfig(config: Config): ZuoraConfig = ZuoraConfig(
     url = config.getString(s"zuora.api.url"),
@@ -38,11 +41,11 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage) extends Touchpoin
 
   private def contributionFromConfig(config: Config): ZuoraContributionConfig = ZuoraContributionConfig(
     productRatePlanId = config.getString("productRatePlanId"),
-    productRatePlanChargeId = config.getString("productRatePlanChargeId")
+    productRatePlanChargeId = config.getString("productRatePlanChargeId"),
   )
 
   private def digitalPackFromConfig(config: Config) = ZuoraDigitalPackConfig(
     defaultFreeTrialPeriod = config.getInt("defaultFreeTrialPeriodDays"),
-    paymentGracePeriod = config.getInt("paymentGracePeriod")
+    paymentGracePeriod = config.getInt("paymentGracePeriod"),
   )
 }

@@ -6,7 +6,6 @@ import org.scalatest.EitherValues
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-
 class PaypalRefundWebHookBodySpec extends AnyWordSpec with Matchers with EitherValues {
 
   def compressEvent(event: String): String =

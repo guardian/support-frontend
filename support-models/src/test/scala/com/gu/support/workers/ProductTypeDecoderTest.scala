@@ -33,12 +33,11 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
           |  "productOptions": "Sixday",
           |  "productType": "Paper"
           |}
-        """
-          .stripMargin
+        """.stripMargin
 
       testDecoding[Paper](
         json,
-        _ shouldBe Paper(GBP, Monthly, Collection, Sixday)
+        _ shouldBe Paper(GBP, Monthly, Collection, Sixday),
       )
     }
 
@@ -51,29 +50,31 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
           |  "fulfilmentOptions": "RestOfWorld",
           |  "productType": "GuardianWeekly"
           |}
-        """
-          .stripMargin
+        """.stripMargin
 
       testDecoding[GuardianWeekly](
         json,
-        _ shouldBe GuardianWeekly(GBP, Quarterly, RestOfWorld)
+        _ shouldBe GuardianWeekly(GBP, Quarterly, RestOfWorld),
       )
     }
 
     "decode a digital pack" in {
-      val json = """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Direct"}"""
+      val json =
+        """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Direct"}"""
       val expected = DigitalPack(GBP, Monthly)
       testDecoding[DigitalPack](json, _ shouldBe expected)
     }
 
     "decode a digital pack - gift purchase or redemption" in {
-      val json = """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Gift"}"""
+      val json =
+        """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Gift"}"""
       val expected = DigitalPack(GBP, Monthly, ReaderType.Gift)
       testDecoding[DigitalPack](json, _ shouldBe expected)
     }
 
     "decode a digital pack - corporate redemption" in {
-      val json = """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Corporate"}"""
+      val json =
+        """{"productType": "DigitalPack", "currency": "GBP", "billingPeriod": "Monthly", "readerType": "Corporate"}"""
       val expected = DigitalPack(GBP, Monthly, ReaderType.Corporate)
       testDecoding[DigitalPack](json, _ shouldBe expected)
     }
@@ -81,5 +82,3 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
   }
 
 }
-
-

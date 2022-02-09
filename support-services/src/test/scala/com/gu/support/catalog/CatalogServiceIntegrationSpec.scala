@@ -7,7 +7,6 @@ import org.scalatest.Inspectors
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
 @IntegrationTest
 class CatalogServiceIntegrationSpec extends AsyncFlatSpec with Matchers with Inspectors {
 
@@ -28,11 +27,14 @@ class CatalogServiceIntegrationSpec extends AsyncFlatSpec with Matchers with Ins
   }
 
   private def testProductAndEnvironment(service: CatalogService, product: Product, environment: TouchPointEnvironment) =
-    forAll(product.ratePlans(environment))(
-      ratePlan =>
-        service.getPriceList(ratePlan).fold {
-          Console.println(s"Failed to find a catalog price list for $environment > $product > ${ratePlan.billingPeriod} > ${ratePlan.id}")
+    forAll(product.ratePlans(environment))(ratePlan =>
+      service
+        .getPriceList(ratePlan)
+        .fold {
+          Console.println(
+            s"Failed to find a catalog price list for $environment > $product > ${ratePlan.billingPeriod} > ${ratePlan.id}",
+          )
           fail()
-        }(_ => succeed)
+        }(_ => succeed),
     )
 }

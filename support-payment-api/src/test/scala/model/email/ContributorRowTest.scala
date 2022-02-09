@@ -32,13 +32,18 @@ class ContributorRowTest extends AnyFlatSpec with Matchers {
         |  },
         |  "DataExtensionName" : "contribution-thank-you",
         |  "IdentityUserId" : "123"
-        |}""".stripMargin
+        |}""".stripMargin,
     )
 
     val Right(result) = parse(
       ContributorRow(
-        "email@email.email", "GBP", 123L, PaymentProvider.Paypal, Some("Peter"),
-        BigDecimal(5.1)).toJsonContributorRowSqsMessage
+        "email@email.email",
+        "GBP",
+        123L,
+        PaymentProvider.Paypal,
+        Some("Peter"),
+        BigDecimal(5.1),
+      ).toJsonContributorRowSqsMessage,
     )
     result mustBe expected
   }

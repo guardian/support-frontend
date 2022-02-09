@@ -7,6 +7,7 @@ import com.gu.monitoring.SafeLogger
 
 // This filter is referenced in logback.xml
 class PiiFilter extends Filter[ILoggingEvent] {
-  override def decide(event: ILoggingEvent): FilterReply = if (event.getMarker.contains(SafeLogger.sanitizedLogMessage)) FilterReply.ACCEPT
+  override def decide(event: ILoggingEvent): FilterReply = if (event.getMarker.contains(SafeLogger.sanitizedLogMessage))
+    FilterReply.ACCEPT
   else FilterReply.DENY
 }

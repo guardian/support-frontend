@@ -19,10 +19,9 @@ class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
       result <- service.postQuery(Full)
     } yield result
 
-    futureResult.map {
-      response =>
-        response.id shouldNot be("")
-        response.status shouldBe Submitted
+    futureResult.map { response =>
+      response.id shouldNot be("")
+      response.status shouldBe Submitted
     }
   }
 

@@ -2,8 +2,6 @@ package com.gu.support.workers
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
-
 class PaymentMethodIdTest extends AsyncFlatSpec with Matchers {
 
   it should "accept a valid id" in {

@@ -7,11 +7,11 @@ package object domain {
   case class ZuoraIsActive(value: Boolean) extends AnyVal
 
   case class DomainSubscription(
-    accountNumber: ZuoraAccountNumber,
-    subscriptionNumber: ZuoraSubscriptionNumber,
-    isActive: ZuoraIsActive,
-    existingSubscriptionRequestId: Option[CreatedRequestId],
-    ratePlans: List[RatePlan]
+      accountNumber: ZuoraAccountNumber,
+      subscriptionNumber: ZuoraSubscriptionNumber,
+      isActive: ZuoraIsActive,
+      existingSubscriptionRequestId: Option[CreatedRequestId],
+      ratePlans: List[RatePlan],
   )
 
   object DomainSubscription {
@@ -21,7 +21,7 @@ package object domain {
         ZuoraSubscriptionNumber(subscription.subscriptionNumber),
         ZuoraIsActive(subscription.status == "Active"),
         subscription.CreatedRequestId__c.filter(_.length > 0).map(CreatedRequestId.apply),
-        subscription.ratePlans //this can be changed to map to a DomainRatePlan if necessary
+        subscription.ratePlans, // this can be changed to map to a DomainRatePlan if necessary
       )
   }
 
@@ -34,7 +34,7 @@ package object domain {
     def fromAccountRecord(accountRecord: AccountRecord): DomainAccount =
       DomainAccount(
         ZuoraAccountNumber(accountRecord.AccountNumber),
-        accountRecord.CreatedRequestId__c.filter(_.length > 0).map(CreatedRequestId.apply)
+        accountRecord.CreatedRequestId__c.filter(_.length > 0).map(CreatedRequestId.apply),
       )
 
   }

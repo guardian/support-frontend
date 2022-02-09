@@ -21,7 +21,8 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
   "PriceSummaryService" should "return prices" in {
 
-    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+    val service =
+      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
     val paper = service.getPrices(Paper, List(discountPromoCode))
     paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 57.99
@@ -31,13 +32,18 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
     val digitalPack = service.getPrices(DigitalPack, List(discountPromoCode))
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 11.99
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(8.39)
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(
+      8.39,
+    )
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(110.07)
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(
+      110.07,
+    )
   }
 
   it should "find the correct plans for the ReaderType" in {
-    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+    val service =
+      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
     val dsGifts = service.getPrices(DigitalPack, Nil, Gift)
     dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Quarterly)(GBP).price shouldBe 36
@@ -54,32 +60,44 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "return correct prices for Guardian Weekly" in {
-    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+    val service =
+      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
-    val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, NonGift.tenAnnual, NonGift.sixForSix))
+    val guardianWeekly =
+      service.getPrices(GuardianWeekly, List(discountPromoCode, NonGift.tenAnnual, NonGift.sixForSix))
 
     // Quarterly should have the discount promotion only
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 1
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
-      .find(_.promoCode == discountPromoCode).value.discountedPrice shouldBe Some(26.25)
+      .find(_.promoCode == discountPromoCode)
+      .value
+      .discountedPrice shouldBe Some(26.25)
 
-    //Annual should have the discount promotion and the annual 10% discount applied,
+    // Annual should have the discount promotion and the annual 10% discount applied,
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions.size shouldBe 2
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).price shouldBe 150
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
-      .find(_.promoCode == discountPromoCode).value.discountedPrice shouldBe Some(138.75)
+      .find(_.promoCode == discountPromoCode)
+      .value
+      .discountedPrice shouldBe Some(138.75)
     guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
-      .find(_.promoCode == NonGift.tenAnnual).value.discountedPrice shouldBe Some(135.00)
+      .find(_.promoCode == NonGift.tenAnnual)
+      .value
+      .discountedPrice shouldBe Some(135.00)
 
     // SixWeekly should have the 6 for 6 promotion and the discount
     guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions.size shouldBe 2
     guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions
-      .find(_.promoCode == NonGift.sixForSix).value.introductoryPrice.value.price shouldBe 6
+      .find(_.promoCode == NonGift.sixForSix)
+      .value
+      .introductoryPrice
+      .value
+      .price shouldBe 6
 
   }
 
@@ -90,25 +108,24 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     // original price but different discounted values - £35.71 & £35.72.
     // We need to work out what they will actually value charged by Zuora
 
-    checkPrice(discountBenefit, 47.62, 35.71, Monthly) //Everyday
-    checkPrice(discountBenefit, 51.96, 38.97, Monthly) //Everyday+
-    checkPrice(discountBenefit, 41.12, 30.84, Monthly) //Sixday
-    //checkPrice(discountBenefit, 47.62, 35.72) //Sixday+
-    checkPrice(discountBenefit, 20.76, 15.57, Monthly) //Weekend
-    //checkPrice(discountBenefit, 29.42, 22.07) //Weekend+
-    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
-    //checkPrice(discountBenefit, 22.06, 16.55) //Sunday+
-    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
+    checkPrice(discountBenefit, 47.62, 35.71, Monthly) // Everyday
+    checkPrice(discountBenefit, 51.96, 38.97, Monthly) // Everyday+
+    checkPrice(discountBenefit, 41.12, 30.84, Monthly) // Sixday
+    // checkPrice(discountBenefit, 47.62, 35.72) //Sixday+
+    checkPrice(discountBenefit, 20.76, 15.57, Monthly) // Weekend
+    // checkPrice(discountBenefit, 29.42, 22.07) //Weekend+
+    checkPrice(discountBenefit, 10.79, 8.09, Monthly) // Sunday
+    // checkPrice(discountBenefit, 22.06, 16.55) //Sunday+
+    checkPrice(discountBenefit, 10.79, 8.09, Monthly) // Sunday
 
-    //Digital Pack
+    // Digital Pack
     checkPrice(discountBenefit, 11.99, 8.99, Monthly)
     checkPrice(discountBenefit, 119.90, 112.41, Annual)
     checkPrice(DiscountBenefit(25, Some(Months.FIVE)), 35.95, 28.46, Quarterly)
     checkPrice(DiscountBenefit(36.975, Some(Months.TWELVE)), 119, 75, Annual)
 
-    //Guardian Weekly domestic
+    // Guardian Weekly domestic
     checkPrice(DiscountBenefit(25, Some(Months.TWO)), 37.50, 31.25, Quarterly)
-
 
   }
 
@@ -135,12 +152,18 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "find the retail saving for print products" in {
-    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+    val service =
+      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
     val prices = service.getPricesForCountryGroup(Paper, UK, Nil)
     prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe Some(41)
     succeed
   }
 
-  def checkPrice(discount: DiscountBenefit, original: BigDecimal, expected: BigDecimal, billingPeriod: BillingPeriod): Assertion =
+  def checkPrice(
+      discount: DiscountBenefit,
+      original: BigDecimal,
+      expected: BigDecimal,
+      billingPeriod: BillingPeriod,
+  ): Assertion =
     PriceSummaryService.getDiscountedPrice(Price(original, GBP), discount, billingPeriod).value shouldBe expected
 }

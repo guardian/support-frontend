@@ -20,4 +20,3 @@ object Stripe {
   case class BalanceTransaction(id: String, source: String, amount: Int)
 
 }
-

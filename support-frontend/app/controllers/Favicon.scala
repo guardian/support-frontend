@@ -10,8 +10,8 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
 class Favicon(
-  actionRefiners: CustomActionBuilders,
-  stage: Stage
+    actionRefiners: CustomActionBuilders,
+    stage: Stage,
 )(implicit fileMimeTypes: FileMimeTypes, ec: ExecutionContext) {
 
   import actionRefiners._

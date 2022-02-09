@@ -16,7 +16,7 @@ object StripeCharge extends StrictLogging {
         logger.warn(s"Unable to get country from Charge object: ${error.getMessage}", error)
         None
       },
-      Some(_)
+      Some(_),
     )
   }
 }

@@ -4,7 +4,10 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
+  DigitalSubscriptionCorporateRedemptionState,
+  DigitalSubscriptionDirectPurchaseState,
+}
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.EitherValues
@@ -13,7 +16,6 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 import java.util.UUID
 
-
 class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with LazyLogging with EitherValues {
 
   "CreatePaymentMethodState" should "deserialise correctly (comes from the support-frontend backend side)" in {
@@ -21,14 +23,17 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     testDecoding[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
     testDecoding[CreatePaymentMethodState](createPayPalPaymentMethodContributionJson(Currency.USD))
     testDecoding[CreatePaymentMethodState](createPayPalPaymentMethodDigitalPackJson)
-    testDecoding[CreatePaymentMethodState](createDirectDebitDigitalPackJson,
-      _.acquisitionData.get.ophanIds.pageviewId shouldBe Some("jkcg440imu1c0m8pxpxe")
+    testDecoding[CreatePaymentMethodState](
+      createDirectDebitDigitalPackJson,
+      _.acquisitionData.get.ophanIds.pageviewId shouldBe Some("jkcg440imu1c0m8pxpxe"),
     )
-    testDecoding[CreatePaymentMethodState](createDirectDebitGuardianWeeklyJson,
-      state => state.product match {
-        case g: GuardianWeekly => g.fulfilmentOptions shouldBe RestOfWorld
-        case _ => fail()
-      }
+    testDecoding[CreatePaymentMethodState](
+      createDirectDebitGuardianWeeklyJson,
+      state =>
+        state.product match {
+          case g: GuardianWeekly => g.fulfilmentOptions shouldBe RestOfWorld
+          case _ => fail()
+        },
     )
   }
 
@@ -40,11 +45,11 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson())
     testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson(Annual))
     testDecoding[CreateZuoraSubscriptionProductState](createDigiPackZuoraSubscriptionJson)
-    testDecoding[CreateZuoraSubscriptionProductState](createCorporateDigiPackZuoraSubscriptionJson,
-      inside(_) {
-        case state: DigitalSubscriptionCorporateRedemptionState =>
-          state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
-      }
+    testDecoding[CreateZuoraSubscriptionProductState](
+      createCorporateDigiPackZuoraSubscriptionJson,
+      inside(_) { case state: DigitalSubscriptionCorporateRedemptionState =>
+        state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
+      },
     )
   }
 
@@ -67,7 +72,7 @@ object StatesTestData {
     product = DigitalPack(Currency.GBP, Monthly),
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     firstDeliveryDate = None,
-    promoCode = None
+    promoCode = None,
   )
 
   val createPaymentMethodState = CreatePaymentMethodState(
@@ -83,7 +88,7 @@ object StatesTestData {
     salesforceCaseId = None,
     acquisitionData = None,
     ipAddress = "127.0.0.1",
-    userAgent = "TestAgent"
+    userAgent = "TestAgent",
   )
 
   val createSalesforceContactState = CreateSalesforceContactState(
@@ -97,7 +102,7 @@ object StatesTestData {
     promoCode = None,
     csrUsername = None,
     salesforceCaseId = None,
-    acquisitionData = None
+    acquisitionData = None,
   )
 
   val createZuoraSubscriptionState: CreateZuoraSubscriptionState = CreateZuoraSubscriptionState(
@@ -106,7 +111,7 @@ object StatesTestData {
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = None,
-      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid")
+      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     ),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
@@ -116,10 +121,11 @@ object StatesTestData {
     None,
     csrUsername = None,
     salesforceCaseId = None,
-    None
+    None,
   )
 
-  val thankYouEmailProductTypeState: SendThankYouEmailState = ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated
+  val thankYouEmailProductTypeState: SendThankYouEmailState =
+    ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated
 
   val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
@@ -135,6 +141,6 @@ object StatesTestData {
     product = DigitalPack(Currency.GBP, Monthly),
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = ExistingPaymentFields("existingBillingAcId"),
-    acquisitionData = None
+    acquisitionData = None,
   )
 }

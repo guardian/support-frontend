@@ -4,10 +4,10 @@ import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 
 case class BatchQueryErrorResponse(
-  errorCode: String,
-  message: String
+    errorCode: String,
+    message: String,
 ) extends Throwable
 
-case object BatchQueryErrorResponse{
+case object BatchQueryErrorResponse {
   implicit val decoder: Decoder[BatchQueryErrorResponse] = deriveDecoder
 }

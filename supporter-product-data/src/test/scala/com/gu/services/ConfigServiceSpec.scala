@@ -10,13 +10,12 @@ class ConfigServiceSpec extends AsyncFlatSpec with Matchers {
 
   ConfigService.getClass.getSimpleName should "load config from SSM" in {
     ConfigService(DEV).load
-      .map {
-        config =>
-          config.url shouldBe "https://rest.apisandbox.zuora.com/v1/"
-          config.username shouldNot be("")
-          config.password shouldNot be("")
-          config.discountProductRatePlanIds shouldBe List("2c92c0f852f2ebb20152f9269f067819")
-          config.lastSuccessfulQueryTime shouldBe defined
+      .map { config =>
+        config.url shouldBe "https://rest.apisandbox.zuora.com/v1/"
+        config.username shouldNot be("")
+        config.password shouldNot be("")
+        config.discountProductRatePlanIds shouldBe List("2c92c0f852f2ebb20152f9269f067819")
+        config.lastSuccessfulQueryTime shouldBe defined
       }
   }
 

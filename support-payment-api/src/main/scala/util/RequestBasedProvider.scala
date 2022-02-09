@@ -31,7 +31,7 @@ trait RequestBasedProvider[A] {
 
   def getInstanceForRequestType(requestType: RequestType): A
 
-  def getInstanceFor[B : RequestTypeDecoder](data: B): A =
+  def getInstanceFor[B: RequestTypeDecoder](data: B): A =
     getInstanceForRequestType(data.requestType)
 
 }

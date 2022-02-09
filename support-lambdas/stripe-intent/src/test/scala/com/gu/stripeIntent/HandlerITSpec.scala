@@ -13,7 +13,9 @@ class HandlerITSpec extends AsyncFlatSpec with Matchers {
 
     val result = Handler.lambdaApiGateway(
       Handler.minimalEnvironment(),
-      ApiGatewayRequest("""{"publicKey": "pk_test_Qm3CGRdrV4WfGYCpm0sftR0f"}""")// even the live one is in the public html
+      ApiGatewayRequest(
+        """{"publicKey": "pk_test_Qm3CGRdrV4WfGYCpm0sftR0f"}""",
+      ), // even the live one is in the public html
     )
 
     result.map { resp =>

@@ -19,7 +19,9 @@ trait GoCardless {
 
 }
 
-class GoCardlessService(config: GoCardlessConfig)(implicit pool: GoCardlessThreadPool) extends GoCardless with StrictLogging {
+class GoCardlessService(config: GoCardlessConfig)(implicit pool: GoCardlessThreadPool)
+    extends GoCardless
+    with StrictLogging {
 
   private lazy val client = GoCardlessClient.create(config.token, config.gcEnvironment)
 
@@ -27,33 +29,33 @@ class GoCardlessService(config: GoCardlessConfig)(implicit pool: GoCardlessThrea
     val logLinePrefix = s"checked bank details (bank account ends '${bankAccountData.accountNumber takeRight 3}') ->"
     EitherT(
       Future {
-        client.bankDetailsLookups().create()
+        client
+          .bankDetailsLookups()
+          .create()
           .withAccountNumber(bankAccountData.accountNumber)
           .withBranchCode(bankAccountData.sortCode)
           .withCountryCode("GB")
           .execute()
-      } map {
-        bdl => {
+      } map { bdl =>
+        {
           val valid = bdl.getAvailableDebitSchemes.contains(AvailableDebitScheme.BACS)
           logger.info(s"$logLinePrefix ${if (valid) "valid" else "invalid"}")
           Right(valid)
         }
-      } recover {
-        case error =>
-          error match {
-            case gcErr: GoCardlessApiException if gcErr.getCode == 422 =>
-              logger.info(s"$logLinePrefix invalid (GoCardless Status Code : ${gcErr.getCode})")
-            case gcErr: GoCardlessApiException =>
-              logger.warn(s"$logLinePrefix invalid (GoCardless Status Code : ${gcErr.getCode})", gcErr)
-            case unexpectedErr =>
-              logger.error(s"$logLinePrefix error", unexpectedErr)
-          }
-          Left(error)
-      }
+      } recover { case error =>
+        error match {
+          case gcErr: GoCardlessApiException if gcErr.getCode == 422 =>
+            logger.info(s"$logLinePrefix invalid (GoCardless Status Code : ${gcErr.getCode})")
+          case gcErr: GoCardlessApiException =>
+            logger.warn(s"$logLinePrefix invalid (GoCardless Status Code : ${gcErr.getCode})", gcErr)
+          case unexpectedErr =>
+            logger.error(s"$logLinePrefix error", unexpectedErr)
+        }
+        Left(error)
+      },
     )
   }
 }
-
 
 object GoCardlessService {
 

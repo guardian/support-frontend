@@ -12,7 +12,8 @@ import StripeApiError.recaptchaErrorText
 case class CheckoutError(failureReason: CheckoutFailureReason)
 
 object CheckoutError {
-  implicit val failureReasonEncoder: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
+  implicit val failureReasonEncoder: Encoder[CheckoutFailureReason] =
+    Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
   implicit val checkoutErrorEncoder: Encoder[CheckoutError] = deriveEncoder[CheckoutError]
 }
 
@@ -31,10 +32,10 @@ object CheckoutErrorResponse extends StrictLogging {
         BAD_REQUEST
       case Unknown =>
         logger.error(s"Stripe API error: Unknown checkoutFailureReason for decline code: ${stripeApiError.declineCode}")
-        //Something unexpected went wrong when calling Stripe, so we return a 500
+        // Something unexpected went wrong when calling Stripe, so we return a 500
         INTERNAL_SERVER_ERROR
       case _ =>
-        PAYMENT_REQUIRED //Stripe returned a card exception and we were able to convert the decline code into something meaningful, so we return a 402
+        PAYMENT_REQUIRED // Stripe returned a card exception and we were able to convert the decline code into something meaningful, so we return a 402
     }
 
     CheckoutErrorResponse(responseCode, CheckoutError(checkoutFailureReason))

@@ -7,14 +7,16 @@ import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
 @IntegrationTest
 class PromotionServiceIntegrationSpec extends AsyncFlatSpec with Matchers {
   "PromotionService" should "apply a real promo code" in {
     val realPromoCode = "DJP8L27FY"
     val digipackMonthlyProductRatePlanId = "2c92c0f84bbfec8b014bc655f4852d9d"
     val promotionWithCode = serviceWithDynamo.findPromotion(realPromoCode).right.get
-    val result = serviceWithDynamo.applyPromotion(promotionWithCode, UK, digipackMonthlyProductRatePlanId, subscriptionData, isRenewal = false).right.get
+    val result = serviceWithDynamo
+      .applyPromotion(promotionWithCode, UK, digipackMonthlyProductRatePlanId, subscriptionData, isRenewal = false)
+      .right
+      .get
     result.ratePlanData.length shouldBe 2
   }
 

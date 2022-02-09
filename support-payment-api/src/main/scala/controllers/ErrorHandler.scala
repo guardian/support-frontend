@@ -12,18 +12,19 @@ import play.core.SourceMapper
 import scala.concurrent._
 
 class ErrorHandler(
-  env: play.api.Environment,
-  config: Configuration,
-  sourceMapper: Option[SourceMapper],
-  router: Option[Router]
-) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with StrictLogging {
+    env: play.api.Environment,
+    config: Configuration,
+    sourceMapper: Option[SourceMapper],
+    router: Option[Router],
+) extends DefaultHttpErrorHandler(env, config, sourceMapper, router)
+    with StrictLogging {
 
   import JsonWriteableOps._
 
   protected implicit def jsonWriteable[A: Encoder]: Writeable[A] =
     Writeable(_.asByteString, Some(MimeTypes.JSON))
 
-  //-- play is sending empty message for most of their errors
+  // -- play is sending empty message for most of their errors
   def fillInEmptyMessage(message: String, result: Results.Status): Future[Result] = {
     if (message.isEmpty) {
       val statusMessage: String = result match {
@@ -45,12 +46,18 @@ class ErrorHandler(
   override def onNotFound(request: RequestHeader, message: String = "NotFound"): Future[Result] =
     fillInEmptyMessage(message, NotFound)
 
-  override def onOtherClientError(request: RequestHeader,
-    statusCode: Int, message: String = "UnknownError"): Future[Result] =
+  override def onOtherClientError(
+      request: RequestHeader,
+      statusCode: Int,
+      message: String = "UnknownError",
+  ): Future[Result] =
     fillInEmptyMessage(message, InternalServerError)
 
   override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
-    logger.error(s"Internal server error, for request: ${request.id}, method: ${request.method}, path: ${request.path}", exception)
+    logger.error(
+      s"Internal server error, for request: ${request.id}, method: ${request.method}, path: ${request.path}",
+      exception,
+    )
     fillInEmptyMessage(exception.getMessage, InternalServerError)
   }
 }

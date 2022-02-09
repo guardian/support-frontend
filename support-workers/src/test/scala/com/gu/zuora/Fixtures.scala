@@ -26,8 +26,8 @@ object Fixtures {
   val date = new LocalDate(2017, 5, 4)
 
   def account(
-    currency: Currency = GBP,
-    paymentGateway: PaymentGateway = StripeGatewayDefault
+      currency: Currency = GBP,
+      paymentGateway: PaymentGateway = StripeGatewayDefault,
   ): Account = Account(
     salesforceAccountId,
     currency,
@@ -35,7 +35,7 @@ object Fixtures {
     salesforceId,
     identityId,
     Some(paymentGateway),
-    "createdreqid_hi"
+    "createdreqid_hi",
   )
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@gu.com"), Country.UK)
@@ -49,105 +49,144 @@ object Fixtures {
     Some("london"),
     Some("n1 9gu"),
     None,
-    Some("Leave with neighbour")
+    Some("Leave with neighbour"),
   )
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,
     cardNumber,
     Some(Country.UK),
-    12, 22,
+    12,
+    22,
     Some("AmericanExpress"),
     _: PaymentGateway,
-    StripePaymentType = Some(StripePaymentType.StripeCheckout)
+    StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
-  val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911",
-    City = Some("Edited city"), PostalCode = Some("n19gu"), State = Some("blah"), StreetName = Some("easy street"), StreetNumber = Some("123"))
+  val directDebitPaymentMethod = DirectDebitPaymentMethod(
+    "Barry",
+    "Humphreys",
+    "Barry Humphreys",
+    "200000",
+    "55779911",
+    City = Some("Edited city"),
+    PostalCode = Some("n19gu"),
+    State = Some("blah"),
+    StreetName = Some("easy street"),
+    StreetNumber = Some("123"),
+  )
 
   val config = Configuration.load().zuoraConfigProvider.get()
   val monthlySubscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(config.monthlyContribution.productRatePlanId), //Contribution product
-        List(RatePlanChargeData(
-          ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 25)
-        )),
-        Nil
-      )
+        RatePlan(config.monthlyContribution.productRatePlanId), // Contribution product
+        List(
+          RatePlanChargeData(
+            ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 25),
+          ),
+        ),
+        Nil,
+      ),
     ),
-    Subscription(date, date, date, "id123")
+    Subscription(date, date, date, "id123"),
   )
 
   val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
-  val everydayHDProductRatePlanId = catalog.Paper.getProductRatePlan(touchpointEnvironment, Monthly, HomeDelivery, Everyday) map (_.id)
+  val everydayHDProductRatePlanId =
+    catalog.Paper.getProductRatePlan(touchpointEnvironment, Monthly, HomeDelivery, Everyday) map (_.id)
 
   val everydayPaperSubscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(everydayHDProductRatePlanId.get), //Everyday HD product
+        RatePlan(everydayHDProductRatePlanId.get), // Everyday HD product
         Nil,
-        Nil
-      )
+        Nil,
+      ),
     ),
-    Subscription(date, date, date, "id123")
+    Subscription(date, date, date, "id123"),
   )
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
-    SubscribeRequest(List(
-      SubscribeItem(
-        account(currency),
-        contactDetails,
-        None,
-        Some(creditCardPaymentMethod(StripeServiceForCurrency.paymentIntentGateway(currency))),
-        monthlySubscriptionData,
-        SubscribeOptions()
-      )
-    ))
+    SubscribeRequest(
+      List(
+        SubscribeItem(
+          account(currency),
+          contactDetails,
+          None,
+          Some(creditCardPaymentMethod(StripeServiceForCurrency.paymentIntentGateway(currency))),
+          monthlySubscriptionData,
+          SubscribeOptions(),
+        ),
+      ),
+    )
 
   def directDebitSubscriptionRequest: SubscribeRequest =
-    SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, Some(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
-    ))
+    SubscribeRequest(
+      List(
+        SubscribeItem(
+          account(paymentGateway = DirectDebitGateway),
+          contactDetails,
+          None,
+          Some(directDebitPaymentMethod),
+          monthlySubscriptionData,
+          SubscribeOptions(),
+        ),
+      ),
+    )
 
   def directDebitSubscriptionRequestPaper: SubscribeRequest =
-    SubscribeRequest(List(
-      SubscribeItem(
-        account(paymentGateway = DirectDebitGateway),
-        contactDetails,
-        Some(differentContactDetails),
-        Some(directDebitPaymentMethod),
-        everydayPaperSubscriptionData,
-        SubscribeOptions()
-      )
-    ))
+    SubscribeRequest(
+      List(
+        SubscribeItem(
+          account(paymentGateway = DirectDebitGateway),
+          contactDetails,
+          Some(differentContactDetails),
+          Some(directDebitPaymentMethod),
+          everydayPaperSubscriptionData,
+          SubscribeOptions(),
+        ),
+      ),
+    )
 
   val invalidMonthlySubsData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(config.monthlyContribution.productRatePlanId),
-        List(RatePlanChargeData(
-          ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 5)
-        )),
-        Nil
-      )
+        List(
+          RatePlanChargeData(
+            ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 5),
+          ),
+        ),
+        Nil,
+      ),
     ),
-    Subscription(date, date, date, "id123", termType = "Invalid term type")
+    Subscription(date, date, date, "id123", termType = "Invalid term type"),
   )
-  val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, None, Some(creditCardPaymentMethod(StripeGatewayDefault)), invalidMonthlySubsData, SubscribeOptions())
-  ))
+  val invalidSubscriptionRequest = SubscribeRequest(
+    List(
+      SubscribeItem(
+        account(),
+        contactDetails,
+        None,
+        Some(creditCardPaymentMethod(StripeGatewayDefault)),
+        invalidMonthlySubsData,
+        SubscribeOptions(),
+      ),
+    ),
+  )
 
   val incorrectPaymentMethod = SubscribeRequest(
     List(
-      SubscribeItem(account(),
+      SubscribeItem(
+        account(),
         contactDetails,
         None,
         Some(payPalPaymentMethod),
         invalidMonthlySubsData,
-        SubscribeOptions()
-      )
-    )
+        SubscribeOptions(),
+      ),
+    ),
   )
 
 }

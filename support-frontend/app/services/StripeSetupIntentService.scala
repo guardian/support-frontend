@@ -27,7 +27,7 @@ object SetupIntent {
   implicit val encoder = Encoder[SetupIntent]
 }
 
-class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  extends StrictLogging {
+class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext) extends StrictLogging {
 
   import SetupIntent.decoder
 
@@ -47,18 +47,19 @@ class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext)  ext
       .withFunctionName(functionName)
       .withPayload(
         // The lambda expects the input to have the format used by API Gateway
-        Json.fromFields(
-          List("body" -> Json.fromString(s"""{"publicKey":"$publicKey"}"""))
-        ).noSpaces
+        Json
+          .fromFields(
+            List("body" -> Json.fromString(s"""{"publicKey":"$publicKey"}""")),
+          )
+          .noSpaces,
       )
 
-    Future(lambdaClient.invoke(request))
-      .attemptT
+    Future(lambdaClient.invoke(request)).attemptT
       .leftMap(_.toString)
       .subflatMap { resp =>
         val responseString = new String(resp.getPayload.array())
         decode[LambdaResponse](responseString)
-          .flatMap { lambdaResponse => decode[SetupIntent](lambdaResponse.body)}
+          .flatMap { lambdaResponse => decode[SetupIntent](lambdaResponse.body) }
           .leftMap(_.toString)
       }
   }

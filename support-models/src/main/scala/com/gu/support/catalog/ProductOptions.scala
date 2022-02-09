@@ -33,10 +33,13 @@ case object Everyday extends PaperProductOptions(false)
 object ProductOptions {
   val allProductOptions = NoProductOptions :: PaperProductOptions.productOptions
 
-  def fromString[T](code: String, productOptions: List[T]): Option[T] = productOptions.find(_.getClass.getSimpleName == s"$code$$")
+  def fromString[T](code: String, productOptions: List[T]): Option[T] =
+    productOptions.find(_.getClass.getSimpleName == s"$code$$")
 
   implicit val decode: Decoder[ProductOptions] =
-    Decoder.decodeString.emap(code => fromString(code, allProductOptions).toRight(s"unrecognised product options '$code'"))
+    Decoder.decodeString.emap(code =>
+      fromString(code, allProductOptions).toRight(s"unrecognised product options '$code'"),
+    )
 
   implicit val encode: Encoder[ProductOptions] = Encoder.encodeString.contramap[ProductOptions](_.toString)
 
@@ -54,7 +57,3 @@ object PaperProductOptions {
 
   implicit val encode: Encoder[PaperProductOptions] = Encoder.encodeString.contramap[PaperProductOptions](_.toString)
 }
-
-
-
-
