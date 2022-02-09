@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import type { $Keys } from 'utility-types';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import type { Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import 'helpers/types/option';
 import './content.scss';
@@ -23,13 +22,13 @@ export const Sides = {
 export type Appearance = $Keys<typeof Appearances>;
 type PropTypes = {
 	appearance: Appearance;
-	id?: string | undefined;
+	id?: string;
 	children: ReactNode;
-	image: Option<ReactNode>;
+	image: ReactNode | null;
 	modifierClasses: string[];
-	innerBackground?: Option<string>;
+	innerBackground?: string | null;
 	needsHigherZindex: boolean;
-	border: Option<boolean>;
+	border: boolean | null;
 };
 
 // ----- Render ----- //
