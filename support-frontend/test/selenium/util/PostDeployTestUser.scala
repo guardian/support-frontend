@@ -18,7 +18,7 @@ class PostDeployTestUser(driverConfig: DriverConfig, bypassRecaptchaCookies: Opt
 
   private def addTestUserCookies(testUsername: String) = {
     driverConfig.addCookie(name = "pre-signin-test-user", value = testUsername)
-    driverConfig.addCookie(name = "_test_username", value = testUsername, domain = Some(Config.guardianDomain))
+    driverConfig.addCookie(name = "_test_username", value = testUsername)
     driverConfig.addCookie(
       name = "_post_deploy_user",
       value = "true",
