@@ -11,8 +11,6 @@ object Config {
 
   private val conf = ConfigFactory.load()
 
-  val guardianDomain = conf.getString("guardianDomain")
-
   val supportFrontendUrl = conf.getString("support.url")
 
   val waitTimeout = 45
