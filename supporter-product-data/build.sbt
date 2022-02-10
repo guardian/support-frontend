@@ -30,14 +30,14 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("supporter-product-data/cloudformation/cfn.yaml"), "cfn/cfn.yaml")
 assemblyJarName := s"${name.value}.jar"
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
   case PathList("models", xs@_*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case "mime.types" => MergeStrategy.first
   case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
   case y =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
 }
 

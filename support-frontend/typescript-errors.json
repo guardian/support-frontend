@@ -2,15 +2,12 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 25,
-            "TS2322": 144,
-            "TS2578": 8,
-            "TS2339": 31,
-            "TS2345": 100,
-            "TS7006": 66,
-            "TS7053": 12,
-            "TS7034": 5,
-            "TS7005": 10,
+            "TS2305": 17,
+            "TS2322": 114,
+            "TS2578": 7,
+            "TS2339": 19,
+            "TS2345": 95,
+            "TS7006": 54,
             "TS6133": 9,
             "TS7031": 18,
             "TS2564": 2,
@@ -21,14 +18,17 @@
             "TS2739": 13,
             "TS2532": 4,
             "TS2556": 3,
-            "TS2554": 31,
+            "TS2554": 30,
             "TS2569": 2,
+            "TS7053": 4,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
             "TS2740": 5,
             "TS2531": 2,
             "TS7016": 1,
+            "TS7034": 4,
+            "TS7005": 9,
             "TS2707": 1,
             "TS2525": 5,
             "TS2745": 2,
@@ -39,8 +39,6 @@
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
             "assets/components/asyncronously/asyncronously.ts": 2,
-            "assets/components/content/content.tsx": 2,
-            "assets/components/dialog/dialog.tsx": 8,
             "assets/components/footerCompliant/Footer.tsx": 4,
             "assets/components/forms/customFields/options.tsx": 1,
             "assets/components/forms/label.tsx": 2,
@@ -48,28 +46,22 @@
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
-            "assets/components/interactiveTable/interactiveTable.tsx": 1,
-            "assets/components/interactiveTable/interactiveTableRow.tsx": 3,
             "assets/components/menu/menu.tsx": 2,
-            "assets/components/page/pageTitle.tsx": 5,
             "assets/components/product/productOption.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 6,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
             "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
-            "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/events/eventCard.tsx": 1,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
-            "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx": 5,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
+            "assets/components/page/pageTitle.tsx": 4,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
@@ -77,7 +69,6 @@
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/components/subscriptionCheckouts/summary.tsx": 6,
             "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
-            "assets/components/svgs/gift.tsx": 1,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
@@ -88,9 +79,6 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
-            "assets/pages/contributions-landing/components/ContributionFormFields.tsx": 16,
-            "assets/pages/contributions-landing/components/ContributionState.tsx": 2,
-            "assets/pages/contributions-landing/components/ContributionTextInput.tsx": 8,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 5,
@@ -122,14 +110,12 @@
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx": 22,
             "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/rendering/render.ts": 8,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
@@ -165,15 +151,11 @@
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
-            "assets/components/signout/signout.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
-            "assets/helpers/utilities/dateFormatting.ts": 1,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
-            "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/helpers/forms/checkouts.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/contributionsLandingInit.ts": 2,
@@ -192,6 +174,8 @@
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/productPrice/productOptions.ts": 2,
             "assets/helpers/productPrice/subscriptions.ts": 1,
+            "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
+            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 1,
             "assets/pages/promotion-terms/promotionTermsReducer.ts": 4
         }
@@ -205,14 +189,6 @@
     "TS2305": [
         {
             "path": "assets/components/asyncronously/asyncronously.ts",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/content/content.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -244,19 +220,7 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/interactiveTable/interactiveTable.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/menu/menu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -276,23 +240,11 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormField.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/interactiveTableRowContents.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/events/eventCard.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -310,10 +262,6 @@
             "message": "Type 'ComponentType<any>' is not assignable to type 'null'."
         },
         {
-            "path": "assets/components/content/content.tsx",
-            "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
-        },
-        {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
             "message": "Type '{ children: (Element | Element[])[]; style: { top: number; left: number; position: string; }; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
         },
@@ -326,14 +274,6 @@
             "message": "Type 'typeof MockDate' is not assignable to type 'DateConstructor'."
         },
         {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
-        },
-        {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
             "message": "Type 'string' is not assignable to type 'number | undefined'."
         },
@@ -344,26 +284,6 @@
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
             "message": "Type 'string' is not assignable to type 'number | undefined'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; label: string; autoComplete: string; type: \"text\"; inputmode: string; pattern: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; error: string; minLength: number; maxLength: number; width: 10; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type '{ id: string; value: string; autoComplete: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; minLength: number; maxLength: number; type: \"text\"; inputmode: string; pattern: string; label: string; error: string; }' is not assignable to type 'IntrinsicAttributes & Pick<TextInputProps, \"form\" | \"label\" | \"slot\" | \"style\" | \"title\" | \"pattern\" | \"children\" | \"color\" | \"hidden\" | ... 280 more ... | \"enterKeyHint\"> & Partial<...> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type 'string' is not assignable to type 'boolean | undefined'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/components/form.tsx",
-            "message": "Type 'EventHandler' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'."
         },
         {
             "path": "assets/components/forms/label.tsx",
@@ -380,10 +300,6 @@
         {
             "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
             "message": "Type '{ children: any[]; 'aria-haspopup': Option<string>; onClick: Option<(...args: any[]) => any>; style: Option<{}>; className: string; ref: Option<(...args: any[]) => any>; }' is not assignable to type 'DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>'."
-        },
-        {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
         },
         {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
@@ -487,11 +403,7 @@
         },
         {
             "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/svgs/gift.tsx",
-            "message": "Type '{ children: Element; width: string; height: string; className: string; version: string; viewbox: string; \"aria-hidden\": \"true\"; focusable: \"false\"; }' is not assignable to type 'SVGProps<SVGSVGElement>'."
+            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
@@ -536,86 +448,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"aria-label\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLInputElement>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '{ isSignedIn: true; }' is not assignable to type 'IntrinsicAttributes & Omit<Pick<PropTypes, \"isSignedIn\"> & Partial<Pick<PropTypes, \"returnUrl\">> & Partial<...>, \"isSignedIn\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLInputElement>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'FormEventHandler<HTMLInputElement>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type '(arg0: Event) => void' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'string | null' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'boolean' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Type 'boolean' is not assignable to type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Type 'false | ((arg0: Event) => void)' is not assignable to type 'ChangeEventHandler<HTMLSelectElement> | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type 'void | ((arg0: Event) => void)' is not assignable to type 'FormEventHandler<HTMLInputElement> | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type '((arg0: Event) => void) | undefined' is not assignable to type 'ChangeEventHandler<HTMLInputElement> | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type 'string | null' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type 'number | void' is not assignable to type 'string | number | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type 'number | void' is not assignable to type 'string | number | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type 'string | void' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionTextInput.tsx",
-            "message": "Type 'number | void' is not assignable to type 'string | number | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
@@ -811,11 +643,11 @@
         },
         {
             "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/hero.tsx",
@@ -827,7 +659,7 @@
         },
         {
             "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\" | \"aria-label\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\" | \"href\"> & Partial<Pick<PropTypes, \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\" | \"aria-label\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
@@ -892,10 +724,6 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/components/interactiveTable/interactiveTableRow.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -922,26 +750,6 @@
             "message": "Property 'getBoundingClientRect' does not exist on type 'never'."
         },
         {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Property 'showModal' does not exist on type 'HTMLDialogElement & { focus: (...args: any[]) => any; }'."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Property 'showModal' does not exist on type 'HTMLDialogElement & { focus: (...args: any[]) => any; }'."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Property 'showModal' does not exist on type 'HTMLDialogElement & { focus: (...args: any[]) => any; }'."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Property 'close' does not exist on type 'HTMLDialogElement & { focus: (...args: any[]) => any; }'."
-        },
-        {
-            "path": "assets/components/dialog/dialog.tsx",
-            "message": "Property 'close' does not exist on type 'HTMLDialogElement & { focus: (...args: any[]) => any; }'."
-        },
-        {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
             "message": "Property 'value' does not exist on type 'EventTarget'."
         },
@@ -955,22 +763,6 @@
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Property 'checked' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Property 'value' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Property 'value' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Property 'value' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
             "message": "Property 'checked' does not exist on type 'EventTarget'."
         },
         {
@@ -987,11 +779,11 @@
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -1003,27 +795,15 @@
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
             "message": "Property 'showPrivacyManager' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillScriptLoaded' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'polyfillVersion' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -1057,19 +837,11 @@
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Argument of type '{ [x: number]: any; }' is not assignable to parameter of type 'StateTypes | Pick<StateTypes, keyof StateTypes> | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | ... 1 more ... | null) | null'."
+            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/directDebit/helpers/ajax.ts",
@@ -1356,14 +1128,6 @@
             "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ firstName: string | null; lastName: string | null; email: string | null; checkoutFormHasBeenSubmitted: boolean; billingState: string | null; isSignedIn: boolean; contributionType: keyof RegularContributionTypeMap<...> | \"ONE_OFF\"; } & { ...; }, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionState.tsx",
-            "message": "Argument of type 'typeof ContributionState' is not assignable to parameter of type 'ComponentType<never>'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: PaymentMethod; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
         },
@@ -1378,10 +1142,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Argument of type 'unknown' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'AnyAction'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
@@ -1458,30 +1218,6 @@
             "message": "Parameter 'state' implicitly has an 'any' type."
         },
         {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'field' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'dispatchUpdate' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
             "message": "Parameter 'state' implicitly has an 'any' type."
         },
@@ -1500,10 +1236,6 @@
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
             "message": "Parameter 'product' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/signout/signout.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
@@ -1574,28 +1306,8 @@
             "message": "Parameter 'content' implicitly has an 'any' type."
         },
         {
-            "path": "assets/helpers/utilities/dateFormatting.ts",
-            "message": "Parameter 'd' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Parameter 'response' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormFields.tsx",
-            "message": "Parameter 'event' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx",
@@ -1708,120 +1420,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        }
-    ],
-    "TS7053": [
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<PropTypes> & Readonly<{ children?: ReactNode; }>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Readonly<StateTypes>'."
-        },
-        {
-            "path": "assets/helpers/contributions.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{ '1': string; '2': string; '5': string; '6': string; '7': string; '10': string; '15': string; '20': string; '25': string; '30': string; '35': string; '40': string; '50': string; '75': string; '100': string; '125': string; '166': string; '200': string; ... 7 more ...; '16000': string; }'."
-        },
-        {
-            "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 15 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ... 7 more ...; EverydayPlus: { ...; ...'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<FulfilmentOptions, string[]>'."
-        }
-    ],
-    "TS7034": [
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Variable 'cardErrors' implicitly has type 'any[]' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
-            "message": "Variable 'productPrices' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
-            "message": "Variable 'productOptions' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Variable 'props' implicitly has type 'any' in some locations where its type cannot be determined."
-        }
-    ],
-    "TS7005": [
-        {
-            "path": "assets/components/directDebit/directDebitProgressiveDisclosure/directDebitForm.tsx",
-            "message": "Variable 'cardErrors' implicitly has an 'any[]' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
-            "message": "Variable 'productOptions' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
-            "message": "Variable 'productPrices' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
-            "message": "Variable 'productOptions' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Variable 'props' implicitly has an 'any' type."
         }
     ],
     "TS6133": [
@@ -2274,10 +1872,6 @@
             "message": "Expected 6 arguments, but got 1."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
             "path": "assets/pages/showcase/components/otherProducts.tsx",
             "message": "Expected 1 arguments, but got 0."
         }
@@ -2290,6 +1884,24 @@
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'HTMLFormControlsCollection' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators."
+        }
+    ],
+    "TS7053": [
+        {
+            "path": "assets/helpers/contributions.ts",
+            "message": "Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{ '1': string; '2': string; '5': string; '6': string; '7': string; '10': string; '15': string; '20': string; '25': string; '30': string; '35': string; '40': string; '50': string; '75': string; '100': string; '125': string; '166': string; '200': string; ... 7 more ...; '16000': string; }'."
+        },
+        {
+            "path": "assets/helpers/globalsAndSwitches/globals.ts",
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ... 7 more ...; EverydayPlus: { ...; ...'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<FulfilmentOptions, string[]>'."
         }
     ],
     "TS2411": [
@@ -2370,6 +1982,62 @@
         {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+        }
+    ],
+    "TS7034": [
+        {
+            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
+            "message": "Variable 'testCopy' implicitly has type 'any' in some locations where its type cannot be determined."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
+            "message": "Variable 'productPrices' implicitly has type 'any' in some locations where its type cannot be determined."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
+            "message": "Variable 'productOptions' implicitly has type 'any' in some locations where its type cannot be determined."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Variable 'props' implicitly has type 'any' in some locations where its type cannot be determined."
+        }
+    ],
+    "TS7005": [
+        {
+            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
+            "message": "Variable 'testCopy' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
+            "message": "Variable 'testCopy' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
+            "message": "Variable 'testCopy' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
+            "message": "Variable 'testCopy' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
+            "message": "Variable 'testCopy' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
+            "message": "Variable 'productOptions' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
+            "message": "Variable 'productPrices' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
+            "message": "Variable 'productOptions' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Variable 'props' implicitly has an 'any' type."
         }
     ],
     "TS2707": [

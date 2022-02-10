@@ -8,10 +8,10 @@ import scala.sys.process._
 val scalatest = "org.scalatest" %% "scalatest" % "3.2.2"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
-  scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
-  javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
-  resourceDirectory in IntegrationTest := baseDirectory.value / "src" / "test" / "resources",
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oI"),
+  IntegrationTest / scalaSource := baseDirectory.value / "src" / "test" / "scala",
+  IntegrationTest / javaSource := baseDirectory.value / "src" / "test" / "java",
+  IntegrationTest / resourceDirectory := baseDirectory.value / "src" / "test" / "resources",
+  Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oI"),
   libraryDependencies += scalatest % "it",
 )
 
@@ -101,10 +101,10 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalastyleFailOnError := true,
-    testScalastyle := scalastyle.in(Compile).toTask("").value,
-    (test in Test) := ((test in Test) dependsOn testScalastyle).value,
-    (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
-    (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
+    testScalastyle := (Compile / scalastyle).toTask("").value,
+    (Test / test) := ((Test / test) dependsOn testScalastyle).value,
+    (Test / testOnly) := ((Test / testOnly) dependsOn testScalastyle).evaluated,
+    (Test / testQuick) := ((Test / testQuick) dependsOn testScalastyle).evaluated,
   ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 

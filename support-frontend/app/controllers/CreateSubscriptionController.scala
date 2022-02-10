@@ -11,6 +11,8 @@ import config.Configuration.GuardianDomain
 import controllers.CreateSubscriptionController._
 import io.circe.syntax._
 import lib.PlayImplicits._
+import models.identity.responses.IdentityErrorResponse.IdentityError
+import models.identity.responses.IdentityErrorResponse.IdentityError.InvalidEmailAddress
 import org.joda.time.DateTime
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -54,7 +56,7 @@ class CreateSubscriptionController(
         val errorOrStatusResponse = for {
           userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
             case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
-            case None => getOrCreateIdentityUser(request.body).leftMap(ServerError)
+            case None => getOrCreateIdentityUser(request.body).leftMap(mapIdentityErrorToCreateSubscriptionError)
           }
           _ <- validate(request)
           supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
@@ -66,6 +68,12 @@ class CreateSubscriptionController(
       }
     }
 
+  private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
+    if (IdentityError.isDisallowedEmailError(identityError))
+      RequestValidationError(InvalidEmailAddress.errorReasonCode)
+    else
+      ServerError(identityError.description)
+
   private def logIncomingRequest(request: OptionalAuthRequest[CreateSupportWorkersRequest], maybeLoggedInIdentityIdAndEmail: Option[IdentityIdAndEmail]) = {
     val userDesc = maybeLoggedInIdentityIdAndEmail match {
       case None => s"Guest User ${request.body.email}"
@@ -74,7 +82,7 @@ class CreateSubscriptionController(
     SafeLogger.info(s"$userDesc is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
   }
 
-  private def getOrCreateIdentityUser(body: CreateSupportWorkersRequest): EitherT[Future, String, IdentityIdAndEmail] = {
+  private def getOrCreateIdentityUser(body: CreateSupportWorkersRequest): EitherT[Future, IdentityError, IdentityIdAndEmail] = {
     val existingIdentityId = identityService.getUserIdFromEmail(body.email)
     val identityId = existingIdentityId.leftFlatMap(_ => identityService.createUserIdFromEmailUser(body.email, body.firstName, body.lastName))
     identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
@@ -94,7 +102,7 @@ class CreateSubscriptionController(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
         error match {
-          case _: RequestValidationError => BadRequest
+          case err: RequestValidationError => BadRequest(err.message)
           case _: ServerError => InternalServerError
         }
       },

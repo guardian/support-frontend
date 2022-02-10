@@ -1,7 +1,6 @@
 package services
 
 import java.net.URI
-
 import cats.data.EitherT
 import cats.implicits._
 import com.google.common.net.InetAddresses
@@ -12,7 +11,8 @@ import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.requests.CreateGuestAccountRequestBody
-import models.identity.responses.{GuestRegistrationResponse, SetGuestPasswordResponseCookies, UserResponse}
+import models.identity.responses.IdentityErrorResponse.IdentityError
+import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, SetGuestPasswordResponseCookies, UserResponse}
 import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
@@ -105,7 +105,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getUserIdFromEmail(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, String] =
+  def getUserIdFromEmail(email: String)(implicit ec: ExecutionContext): EitherT[Future, IdentityError, String] =
     execute(
       wsClient.url(s"$apiUrl/user")
         .withHttpHeaders(List("X-GU-ID-Client-Access-Token" -> s"Bearer $apiClientToken"): _*)
@@ -115,7 +115,11 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     ) { resp =>
       resp.json.validate[UserResponse]
         .asEither
-        .leftMap(_.mkString(","))
+        .leftMap(err =>
+          IdentityError(
+            message = "Error deserialising json to UserResponse",
+            description = err.mkString(",")
+        ))
         .map(userResponse => userResponse.user.id)
     }
 
@@ -123,7 +127,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     email: String,
     firstName: String,
     lastName: String
-  )(implicit ec: ExecutionContext): EitherT[Future, String, String] = {
+  )(implicit ec: ExecutionContext): EitherT[Future, IdentityError, String] = {
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
@@ -144,19 +148,31 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     ) { resp =>
       resp.json.validate[GuestRegistrationResponse]
         .asEither
-        .leftMap(_.mkString(","))
+        .leftMap(err =>
+          IdentityError(
+            message = "Error deserialising json to GuestRegistrationResponse",
+            description = err.mkString(",")
+          ))
         .map(response => response.guestRegistrationRequest.userId)
     }
   }
 
   private def uriWithoutQuery(uri: URI) = uri.toString.takeWhile(_ != '?')
 
-  private def execute[A](requestHolder: WSRequest)(func: (WSResponse) => Either[String, A])(implicit ec: ExecutionContext) = {
+  private def execute[A](requestHolder: WSRequest)(func: (WSResponse) => Either[IdentityError, A])(implicit ec: ExecutionContext) = {
     EitherT.right(requestHolder.execute()).subflatMap {
       case r if r.success =>
         func(r)
       case r =>
-        Left(s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}, BODY: ${r.body}")
+        r.json.validate[IdentityErrorResponse]
+          .asEither
+          .leftMap( _ =>
+              IdentityError(
+                message = s"${r.body}",
+                description = s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}, BODY: ${r.body}"
+              )
+          )
+          .flatMap(error => Left(error.errors.head))
     }
   }
 }

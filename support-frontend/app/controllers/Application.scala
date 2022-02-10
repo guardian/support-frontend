@@ -20,6 +20,7 @@ import services.{PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
+import play.twirl.api.Html
 
 case class ContributionsPaymentMethodConfigs(
   oneOffDefaultStripeConfig: StripeConfig,
@@ -85,11 +86,15 @@ class Application(
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getContributeRedirectUrl(request.geoData.countryGroup), campaignCode)
+    val url = List(getGeoRedirectUrl(request.geoData.countryGroup, "contribute"), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
 
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  def contributeInEpicGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    RedirectWithEncodedQueryString(getGeoRedirectUrl(request.geoData.countryGroup, "contribute-in-epic"), request.queryString, status = FOUND)
   }
 
 
@@ -227,6 +232,45 @@ class Application(
     )()).withSettingsSurrogateKey
   }
 
+  def contributionsCheckoutInEpic(countryCode: String): Action[AnyContent] = PrivateAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    val geoData = request.geoData
+    val serversideTests = generateParticipations(Nil)
+    val uatMode = testUsers.isTestUser(request)
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+
+    Ok(
+    views.html.contributions(
+      title = "Contributions checkout in Epic",
+      id = s"contributions-landing-page-in-epic-$countryCode",
+      mainElement = assets.getSsrCacheContentsAsHtml("contributions-checkout-in-epic", "contributions-checkout-in-epic.html"),
+      js = Left(RefPath("contributionsCheckoutInEpic.js")),
+      css = Right(StyleContent(Html("body { margin: 0; }"))),
+      description = stringsConfig.contributionsLandingDescription,
+      paymentMethodConfigs = ContributionsPaymentMethodConfigs(
+        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+        oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+        regularUatStripeConfig = regularStripeConfigProvider.get(true),
+        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+        regularUatPayPalConfig = payPalConfigProvider.get(true),
+        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+        uatAmazonPayConfig = amazonPayConfigProvider.get(true)
+      ),
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      membersDataApiUrl = membersDataApiUrl,
+      idUser = None,
+      guestAccountCreationToken = guestAccountCreationToken,
+      geoData = geoData,
+      shareImageUrl = shareImageUrl(settings),
+      shareUrl = "https://support.theguardian.com/contribute",
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
+      serversideTests = serversideTests
+    )).withSettingsSurrogateKey
+  }
+
 
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
@@ -238,17 +282,16 @@ class Application(
       RedirectWithEncodedQueryString("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
 
-
-  private def getContributeRedirectUrl(fastlyCountry: Option[CountryGroup]): String = {
+  private def getGeoRedirectUrl(fastlyCountry: Option[CountryGroup], path: String): String = {
     fastlyCountry match {
-      case Some(UK) => "/uk/contribute"
-      case Some(US) => "/us/contribute"
-      case Some(Australia) => "/au/contribute"
-      case Some(Europe) => "/eu/contribute"
-      case Some(Canada) => "/ca/contribute"
-      case Some(NewZealand) => "/nz/contribute"
-      case Some(RestOfTheWorld) => "/int/contribute"
-      case _ => "/uk/contribute"
+      case Some(UK) => s"/uk/$path"
+      case Some(US) => s"/us/$path"
+      case Some(Australia) => s"/au/$path"
+      case Some(Europe) => s"/eu/$path"
+      case Some(Canada) => s"/ca/$path"
+      case Some(NewZealand) => s"/nz/$path"
+      case Some(RestOfTheWorld) => s"/int/$path"
+      case _ => s"/uk/$path"
     }
   }
 }

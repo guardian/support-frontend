@@ -33,6 +33,8 @@ declare global {
 				default: string;
 				uat: string;
 			};
+			polyfillScriptLoaded?: boolean;
+			polyfillVersion?: string;
 			productPrices: ProductPrices;
 			recaptchaEnabled?: boolean;
 			serversideTests?: Participations | null;

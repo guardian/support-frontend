@@ -13,12 +13,12 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
 )
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case str if str.contains("simulacrum") => MergeStrategy.first
   case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
   case y =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
 }
 

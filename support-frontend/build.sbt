@@ -47,9 +47,9 @@ libraryDependencies ++= Seq(
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
-sources in(Compile, doc) := Seq.empty
+Compile / doc / sources := Seq.empty
 
-publishArtifact in(Compile, packageDoc) := false
+Compile / packageDoc / publishArtifact  := false
 
 enablePlugins(SystemdPlugin)
 
@@ -59,7 +59,7 @@ packageSummary := "Support Frontend Play App"
 packageDescription := """Frontend for the new supporter platform"""
 maintainer := "Membership <membership.dev@theguardian.com>"
 
-riffRaffPackageType := (packageBin in Debian).value
+riffRaffPackageType := (Debian / packageBin).value
 riffRaffManifestProjectName := "support:frontend-mono"
 riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
@@ -79,7 +79,7 @@ def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
 
 riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static"), "storybook-static")
 
-javaOptions in Universal ++= Seq(
+Universal / javaOptions ++= Seq(
   "-Dpidfile.path=/dev/null",
   "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
@@ -87,6 +87,6 @@ javaOptions in Universal ++= Seq(
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
-javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
+Test / javaOptions += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
