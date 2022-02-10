@@ -10,7 +10,7 @@ package object aws {
 
   lazy val CredentialsProvider = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
-    new InstanceProfileCredentialsProvider(false)
+    new InstanceProfileCredentialsProvider(false),
   )
 
   lazy val AccountId: String = {

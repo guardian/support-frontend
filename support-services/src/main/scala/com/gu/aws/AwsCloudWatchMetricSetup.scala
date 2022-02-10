@@ -9,31 +9,40 @@ object AwsCloudWatchMetricSetup {
     getMetricRequest(
       MetricName("WarningCount"),
       Map(
-        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
-      ))
-
-  def catalogFailureRequest(environment: TouchPointEnvironment): MetricRequest =
-    getMetricRequest(MetricName("CatalogLoadingFailure"),
-      Map(
-        MetricDimensionName("Environment") -> MetricDimensionValue(environment.envValue)
-      ))
-
-  def revenueDistributionFailureRequest(stage: Stage): MetricRequest =
-    getMetricRequest(MetricName("RevenueDistributionFailure"),
-      Map(
-        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
-      )
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
     )
 
-  def paymentSuccessRequest(stage: Stage, isTestUser: Boolean, paymentProvider: PaymentProvider, productType: ProductType): MetricRequest = {
+  def catalogFailureRequest(environment: TouchPointEnvironment): MetricRequest =
+    getMetricRequest(
+      MetricName("CatalogLoadingFailure"),
+      Map(
+        MetricDimensionName("Environment") -> MetricDimensionValue(environment.envValue),
+      ),
+    )
+
+  def revenueDistributionFailureRequest(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("RevenueDistributionFailure"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
+  def paymentSuccessRequest(
+      stage: Stage,
+      isTestUser: Boolean,
+      paymentProvider: PaymentProvider,
+      productType: ProductType,
+  ): MetricRequest = {
     val qualifiedStage = stage.toString + (if (isTestUser) "-UAT" else "")
     getMetricRequest(
       MetricName("PaymentSuccess"),
       Map(
         MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.name),
         MetricDimensionName("ProductType") -> MetricDimensionValue(productType.toString),
-        MetricDimensionName("Stage") -> MetricDimensionValue(qualifiedStage)
-      )
+        MetricDimensionName("Stage") -> MetricDimensionValue(qualifiedStage),
+      ),
     )
   }
 
@@ -42,22 +51,25 @@ object AwsCloudWatchMetricSetup {
       MetricName("CreateSetupIntent"),
       Map(
         MetricDimensionName("Mode") -> MetricDimensionValue(mode),
-        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
-      )
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
     )
 
   def serverSideCreateFailure(stage: Stage): MetricRequest =
     getMetricRequest(
       MetricName("ServerSideCreateFailure"),
       Map(
-        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
-      )
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
     )
 
-  private def getMetricRequest(name: MetricName, dimensions: Map[MetricDimensionName, MetricDimensionValue]) : MetricRequest =
+  private def getMetricRequest(
+      name: MetricName,
+      dimensions: Map[MetricDimensionName, MetricDimensionValue],
+  ): MetricRequest =
     MetricRequest(
       MetricNamespace(s"support-frontend"),
       name,
-      dimensions
+      dimensions,
     )
 }

@@ -30,7 +30,7 @@ object ArticleImage {
       .filter(asset => asset.typeData.width.toInt >= 1000)
       .sortBy(asset => asset.typeData.width.toInt)
       .headOption
-      .map {asset =>
+      .map { asset =>
         ArticleImage(imageUrl = asset.file, altText = asset.typeData.altText)
       }
   }
@@ -49,7 +49,7 @@ object Article {
       Article(
         articleUrl = capiResult.response.content.webUrl,
         headline = capiResult.response.content.webTitle,
-        image = image
+        image = image,
       )
     }
   }
@@ -60,12 +60,13 @@ class CapiService(wsClient: WSClient, capiKey: String)(implicit ec: ExecutionCon
   def getArticle(articleId: String): EitherT[Future, String, Article] = {
     val url = s"https://content.guardianapis.com/$articleId?show-fields=headline&show-elements=image&api-key=$capiKey"
 
-    wsClient.url(url)
+    wsClient
+      .url(url)
       .execute()
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => (resp.json).validate[CapiResult].asEither.leftMap(_.mkString(",")))
-      .subflatMap {result =>
+      .subflatMap { result =>
         Article.fromCapiResult(result) match {
           case Some(article) => Right(article)
           case None => Left("Failed to create article")

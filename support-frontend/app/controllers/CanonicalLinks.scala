@@ -19,5 +19,4 @@ trait CanonicalLinks {
   def buildCanonicalShowcaseLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/support"
 
-
 }

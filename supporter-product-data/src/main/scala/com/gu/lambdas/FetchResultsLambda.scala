@@ -20,7 +20,7 @@ class FetchResultsLambda extends Handler[FetchResultsState, UpdateDynamoState] {
     fetchResults(StageConstructors.fromEnvironment, input.jobId, input.attemptedQueryTime)
 }
 
-object FetchResultsLambda extends StrictLogging{
+object FetchResultsLambda extends StrictLogging {
   def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime) = {
     logger.info(s"Attempting to fetch results for jobId $jobId")
     for {
@@ -28,11 +28,17 @@ object FetchResultsLambda extends StrictLogging{
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.getResults(jobId)
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
-      batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response for jobId $jobId")
+      batch = getValueOrThrow(
+        result.batches.headOption,
+        s"No batches were returned in the batch query response for jobId $jobId",
+      )
       fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in jobId $jobId")
       filename = s"select-active-rate-plans-${attemptedQueryTime.withZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}.csv"
       fileResponse <- service.getResultFileResponse(fileId)
-      _ = assert(fileResponse.isSuccessful, s"File download for job with id $jobId failed with http code ${fileResponse.code}")
+      _ = assert(
+        fileResponse.isSuccessful,
+        s"File download for job with id $jobId failed with http code ${fileResponse.code}",
+      )
       _ <- S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
     } yield {
       logger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
@@ -43,7 +49,7 @@ object FetchResultsLambda extends StrictLogging{
         filename,
         batch.recordCount,
         processedCount = 0,
-        attemptedQueryTime
+        attemptedQueryTime,
       )
     }
   }

@@ -11,7 +11,10 @@ class CreateGuestAccountRequestBodyTest extends AnyWordSpec with Matchers {
 
     "be serialised as JSON" in {
 
-      val body = CreateGuestAccountRequestBody("test.user@theguardian.com", privateFields = PrivateFields(firstName = Some("moo")))
+      val body = CreateGuestAccountRequestBody(
+        "test.user@theguardian.com",
+        privateFields = PrivateFields(firstName = Some("moo")),
+      )
 
       Json.toJson(body).toString shouldEqual
         """{"primaryEmailAddress":"test.user@theguardian.com","privateFields":{"firstName":"moo"}}"""

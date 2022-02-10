@@ -22,34 +22,51 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: CreatePaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services): FutureHandlerResult = {
+  override protected def servicesHandler(
+      state: CreatePaymentMethodState,
+      requestInfo: RequestInfo,
+      context: Context,
+      services: Services,
+  ): FutureHandlerResult = {
     SafeLogger.debug(s"CreatePaymentMethod state: $state")
 
     state.paymentFields fold (
-      paymentFields => createPaymentMethod(paymentFields, state.user, state.product.currency, services, state.ipAddress, state.userAgent)
-        .map(paymentMethod =>
+      paymentFields =>
+        createPaymentMethod(
+          paymentFields,
+          state.user,
+          state.product.currency,
+          services,
+          state.ipAddress,
+          state.userAgent,
+        )
+          .map(paymentMethod =>
+            HandlerResult(
+              getCreateSalesforceContactState(state, Left(paymentMethod)),
+              requestInfo
+                .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+                .appendMessage(s"Product is ${state.product.describe}"),
+            ),
+          ),
+      redemptionData =>
+        Future.successful(
           HandlerResult(
-            getCreateSalesforceContactState(state, Left(paymentMethod)),
+            getCreateSalesforceContactState(state, Right(redemptionData)),
             requestInfo
-              .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
-              .appendMessage(s"Product is ${state.product.describe}")
-          )),
-      redemptionData => Future.successful(HandlerResult(
-        getCreateSalesforceContactState(state, Right(redemptionData)),
-        requestInfo
-          .appendMessage(s"Product redemption has no payment method")
-          .appendMessage(s"Product is ${state.product.describe}")
-      ))
+              .appendMessage(s"Product redemption has no payment method")
+              .appendMessage(s"Product is ${state.product.describe}"),
+          ),
+        )
     )
   }
 
   private def createPaymentMethod(
-    paymentFields: PaymentFields,
-    user:User,
-    currency: Currency,
-    services: Services,
-    ipAddress: String,
-    userAgent: String
+      paymentFields: PaymentFields,
+      user: User,
+      currency: Currency,
+      services: Services,
+      ipAddress: String,
+      userAgent: String,
   ): Future[PaymentMethod] =
     paymentFields match {
       case stripe: StripePaymentFields =>
@@ -66,7 +83,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         createAmazonPayPaymentMethod(amazonPay, user)
     }
 
-  private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: Either[PaymentMethod, RedemptionData]) =
+  private def getCreateSalesforceContactState(
+      state: CreatePaymentMethodState,
+      paymentMethod: Either[PaymentMethod, RedemptionData],
+  ) =
     CreateSalesforceContactState(
       state.requestId,
       state.user,
@@ -78,13 +98,13 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.promoCode,
       state.csrUsername,
       state.salesforceCaseId,
-      state.acquisitionData
+      state.acquisitionData,
     )
 
   def createStripePaymentMethod(
-    stripe: StripePaymentFields,
-    stripeService: StripeService,
-    currency: Currency
+      stripe: StripePaymentFields,
+      stripeService: StripeService,
+      currency: Currency,
   ): Future[CreditCardReferenceTransaction] = {
     val stripeServiceForCurrency = stripeService.withCurrency(currency)
     stripe match {
@@ -100,7 +120,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             card.exp_year,
             card.brand.zuoraCreditCardType,
             PaymentGateway = chargeGateway(currency),
-            StripePaymentType = stripePaymentType
+            StripePaymentType = stripePaymentType,
           )
         }
       case StripePaymentMethodPaymentFields(paymentMethod, stripePaymentType) =>
@@ -118,60 +138,76 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
             card.exp_year,
             card.brand.zuoraCreditCardType,
             PaymentGateway = paymentIntentGateway(currency),
-            StripePaymentType = stripePaymentType
+            StripePaymentType = stripePaymentType,
           )
         }
     }
   }
 
-  def createPayPalPaymentMethod(payPal: PayPalPaymentFields, payPalService: PayPalService): Future[PayPalReferenceTransaction] =
+  def createPayPalPaymentMethod(
+      payPal: PayPalPaymentFields,
+      payPalService: PayPalService,
+  ): Future[PayPalReferenceTransaction] =
     payPalService
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
 
   def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] = {
-    val addressLine = AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
+    val addressLine =
+      AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
 
-    Future.successful(DirectDebitPaymentMethod(
-      FirstName = user.firstName,
-      LastName = user.lastName,
-      BankTransferAccountName = dd.accountHolderName,
-      BankCode = dd.sortCode,
-      BankTransferAccountNumber = dd.accountNumber,
-      Country = user.billingAddress.country,
-      City = user.billingAddress.city,
-      PostalCode = user.billingAddress.postCode,
-      State = user.billingAddress.state,
-      StreetName = addressLine.map(_.streetName),
-      StreetNumber = addressLine.flatMap(_.streetNumber)
-    ))
+    Future.successful(
+      DirectDebitPaymentMethod(
+        FirstName = user.firstName,
+        LastName = user.lastName,
+        BankTransferAccountName = dd.accountHolderName,
+        BankCode = dd.sortCode,
+        BankTransferAccountNumber = dd.accountNumber,
+        Country = user.billingAddress.country,
+        City = user.billingAddress.city,
+        PostalCode = user.billingAddress.postCode,
+        State = user.billingAddress.state,
+        StreetName = addressLine.map(_.streetName),
+        StreetNumber = addressLine.flatMap(_.streetNumber),
+      ),
+    )
   }
 
-  def createSepaPaymentMethod(sepa: SepaPaymentFields, user: User, ipAddress: String, userAgent: String): Future[SepaPaymentMethod] = {
+  def createSepaPaymentMethod(
+      sepa: SepaPaymentFields,
+      user: User,
+      ipAddress: String,
+      userAgent: String,
+  ): Future[SepaPaymentMethod] = {
     if (ipAddress.length() > 15) {
       SafeLogger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
     }
     if (userAgent.length() > 255) {
       SafeLogger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
     }
-    Future.successful(SepaPaymentMethod(
-      BankTransferAccountName = sepa.accountHolderName,
-      BankTransferAccountNumber = sepa.iban,
-      Email = user.primaryEmailAddress,
-      IPAddress = ipAddress,
-      GatewayOptionData = GatewayOptionData(List(
-        GatewayOption(
-          "UserAgent",
-          userAgent.take(255) // zuora's max length for GatewayOption values
-        )))
-    ))
+    Future.successful(
+      SepaPaymentMethod(
+        BankTransferAccountName = sepa.accountHolderName,
+        BankTransferAccountNumber = sepa.iban,
+        Email = user.primaryEmailAddress,
+        IPAddress = ipAddress,
+        GatewayOptionData = GatewayOptionData(
+          List(
+            GatewayOption(
+              "UserAgent",
+              userAgent.take(255), // zuora's max length for GatewayOption values
+            ),
+          ),
+        ),
+      ),
+    )
   }
 
   def createAmazonPayPaymentMethod(amazonPay: AmazonPayPaymentFields, user: User): Future[AmazonPayPaymentMethod] =
     Future.successful(
       AmazonPayPaymentMethod(
         TokenId = amazonPay.amazonPayBillingAgreementId,
-        PaymentGateway = AmazonPayGatewayUSA
-      )
+        PaymentGateway = AmazonPayGatewayUSA,
+      ),
     )
 }

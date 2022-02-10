@@ -20,7 +20,10 @@ class CorporateCodeStatusUpdaterITSpec extends AsyncFlatSpec with Matchers {
   "corporateCodeStatusUpdater" should "set a code available and used" in {
     val mutableCode: RedemptionCode = RedemptionCode("it-mutable123").right.get
     for {
-      _ <- corporateCodeStatusUpdater.setStatus(mutableCode, RedemptionTable.AvailableField.CodeIsUsed) // get in known state
+      _ <- corporateCodeStatusUpdater.setStatus(
+        mutableCode,
+        RedemptionTable.AvailableField.CodeIsUsed,
+      ) // get in known state
       _ <- corporateCodeStatusUpdater.setStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable).map {
         _ should be(())
       }

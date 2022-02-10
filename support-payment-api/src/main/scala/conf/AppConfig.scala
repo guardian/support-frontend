@@ -11,19 +11,20 @@ case class AppConfig(secret: String)
 
 object AppConfig {
 
-  implicit val appConfigParameterStoreLoadable: ParameterStoreLoadable[Mode, AppConfig] = new ParameterStoreLoadable[Mode, AppConfig] {
+  implicit val appConfigParameterStoreLoadable: ParameterStoreLoadable[Mode, AppConfig] =
+    new ParameterStoreLoadable[Mode, AppConfig] {
 
-    override def parametersByPathRequest(mode: Mode): GetParametersByPathRequest =
-      new GetParametersByPathRequest()
-        .withPath(s"/payment-api/app-config/${mode.asJava.toString.toLowerCase}/")
-        .withRecursive(false)
-        .withWithDecryption(true)
+      override def parametersByPathRequest(mode: Mode): GetParametersByPathRequest =
+        new GetParametersByPathRequest()
+          .withPath(s"/payment-api/app-config/${mode.asJava.toString.toLowerCase}/")
+          .withRecursive(false)
+          .withWithDecryption(true)
 
-    override def decode(mode: Mode, data: Map[String, String]): Validated[InitializationError, AppConfig] = {
-      val validator = new ParameterStoreValidator[AppConfig, Mode](mode, data); import validator._
-      validate("secret").map(AppConfig.apply)
+      override def decode(mode: Mode, data: Map[String, String]): Validated[InitializationError, AppConfig] = {
+        val validator = new ParameterStoreValidator[AppConfig, Mode](mode, data); import validator._
+        validate("secret").map(AppConfig.apply)
+      }
     }
-  }
 
   implicit val appConfigConvertibleToPlayConfig: PlayConfigEncoder[AppConfig] = new PlayConfigEncoder[AppConfig] {
     override def asPlayConfig(conf: AppConfig): Configuration = {
@@ -32,10 +33,10 @@ object AppConfig {
         "play" -> Map(
           "http" -> Map(
             "secret" -> Map(
-              "key" -> conf.secret
-            )
-          )
-        )
+              "key" -> conf.secret,
+            ),
+          ),
+        ),
       )
     }
   }

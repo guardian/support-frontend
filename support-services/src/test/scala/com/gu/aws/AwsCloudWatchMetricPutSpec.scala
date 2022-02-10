@@ -13,7 +13,7 @@ class AwsCloudWatchMetricPutSpec extends AsyncFlatSpec with Matchers {
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(catalogFailureRequest(TouchPointEnvironments.SANDBOX))
       .fold(
         err => fail(err),
-        _ => succeed
+        _ => succeed,
       )
   }
 }

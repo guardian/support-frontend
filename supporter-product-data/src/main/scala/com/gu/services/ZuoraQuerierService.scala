@@ -15,31 +15,34 @@ import scala.collection.immutable.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
 
 class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[BatchQueryErrorResponse] {
+    extends WebServiceHelper[BatchQueryErrorResponse] {
 
   override val wsUrl = config.url
   override val httpClient: FutureHttpClient = client
   val authHeaders = Map(
     "apiSecretAccessKey" -> config.password,
-    "apiAccessKeyId" -> config.username
+    "apiAccessKeyId" -> config.username,
   )
 
   def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {
     val (queries, incrementalTime) = queryType match {
       case Full =>
-        (List(
-        ZoqlExportQuery(
-          s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
-          SelectActiveRatePlansQuery.query(config.discountProductRatePlanIds)
-        )
-      ), Some(ZonedDateTime.now.minusYears(20))) // Because we are using a stateful query with incrementalTime, we use a date in the far past to get all records
+        (
+          List(
+            ZoqlExportQuery(
+              s"${SelectActiveRatePlansQuery.name}-${LocalDateTime.now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}",
+              SelectActiveRatePlansQuery.query(config.discountProductRatePlanIds),
+            ),
+          ),
+          Some(ZonedDateTime.now.minusYears(20)),
+        ) // Because we are using a stateful query with incrementalTime, we use a date in the far past to get all records
       case Incremental => (List(), config.lastSuccessfulQueryTime)
     }
     val request = BatchQueryRequest(
       partner = config.partnerId,
       name = "supporter-product-data",
       queries = queries,
-      incrementalTime = incrementalTime
+      incrementalTime = incrementalTime,
     )
     postJson[BatchQueryResponse](s"batch-query/", request.asJson, authHeaders)
   }

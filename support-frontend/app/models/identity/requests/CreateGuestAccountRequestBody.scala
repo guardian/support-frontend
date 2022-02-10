@@ -25,7 +25,7 @@ object CreateGuestAccountRequestBody {
   }
   implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](
     transform = body => InMemoryBody(ByteString.fromString(Json.toJson(body).toString)),
-    contentType = "application/json"
+    contentType = "application/json",
   )
 
 }

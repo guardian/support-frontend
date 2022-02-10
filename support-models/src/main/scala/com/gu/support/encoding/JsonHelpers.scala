@@ -56,9 +56,8 @@ object JsonHelpers {
     def wrapObject(key: String): JsonObject =
       JsonObject.empty.add(key, Json.fromJsonObject(jsonObject))
 
-
     def mapKeys(f: String => String): JsonObject = {
-      //ignore intelliJ, this is needed!
+      // ignore intelliJ, this is needed!
       import cats.implicits._
 
       val newFields = jsonObject.keys.map(str => f(str)).zip(jsonObject.values)
@@ -103,10 +102,9 @@ object JsonHelpers {
   }
 
   implicit class JsonListExtensions(jsonList: List[Json]) {
-    def flattenJsonArrays: Seq[Json] = jsonList.foldLeft(List[Json]()) {
-      (acc: List[Json], element: Json) =>
-        val expanded = element.asArray.getOrElse(Nil)
-        acc ++ expanded.toList
+    def flattenJsonArrays: Seq[Json] = jsonList.foldLeft(List[Json]()) { (acc: List[Json], element: Json) =>
+      val expanded = element.asArray.getOrElse(Nil)
+      acc ++ expanded.toList
     }
   }
 
@@ -114,8 +112,8 @@ object JsonHelpers {
     def getField(key: String): Option[Json] = json.hcursor.downField(key).focus
   }
 
-  //Decodes an expected json string to T if the given partial function is defined for the string value
-  def decodeStringAndCollect[T](pf: PartialFunction[String,T]): Decoder[T] = Decoder.decodeString.emap { s =>
+  // Decodes an expected json string to T if the given partial function is defined for the string value
+  def decodeStringAndCollect[T](pf: PartialFunction[String, T]): Decoder[T] = Decoder.decodeString.emap { s =>
     pf.lift(s)
       .map(Right.apply)
       .getOrElse(Left(s"Unexpected value: $s"))

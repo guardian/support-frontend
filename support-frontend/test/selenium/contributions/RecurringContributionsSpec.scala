@@ -7,7 +7,13 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
 
-class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
+class RecurringContributionsSpec
+    extends AnyFeatureSpec
+    with GivenWhenThen
+    with BeforeAndAfter
+    with BeforeAndAfterAll
+    with Browser
+    with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
@@ -46,7 +52,6 @@ class RecurringContributionsSpec extends AnyFeatureSpec with GivenWhenThen with 
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
       landingPage.selectStripePayment()
-
 
       And("enter card details")
       landingPage.fillInCardDetails(hasZipCodeField = false)

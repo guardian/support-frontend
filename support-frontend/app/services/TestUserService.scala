@@ -14,7 +14,7 @@ class TestUserService(secret: String) {
 
   lazy val testUsers = TestUsernames(
     com.gu.identity.testing.usernames.Encoder.withSecret(secret),
-    recency = ValidityPeriod
+    recency = ValidityPeriod,
   )
 
   def isTestUser[A](request: RequestHeader): Boolean = {

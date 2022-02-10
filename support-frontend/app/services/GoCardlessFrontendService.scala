@@ -17,28 +17,28 @@ class GoCardlessFrontendService(config: GoCardlessConfig) extends GoCardlessServ
 
   lazy val client = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
 
-  /**
-   *
-   * @return true if either the bank details are correct, or the rate limit for this endpoint is reached.
-   *         In the latter case an error is logged.
-   */
+  /** @return
+    *   true if either the bank details are correct, or the rate limit for this endpoint is reached. In the latter case
+    *   an error is logged.
+    */
   def checkBankDetails(bankAccountData: CheckBankAccountDetails): Future[Boolean] = {
     Future {
-      client.bankDetailsLookups().create()
+      client
+        .bankDetailsLookups()
+        .create()
         .withAccountNumber(bankAccountData.accountNumber.value)
         .withBranchCode(bankAccountData.sortCode.value)
         .withCountryCode("GB")
         .execute()
     } map { bdl =>
       bdl.getAvailableDebitSchemes.contains(AvailableDebitScheme.BACS)
-    } recover {
-      case e: GoCardlessApiException =>
-        if (e.getCode == 429) {
-          SafeLogger.error(scrub"Bypassing preliminary bank account check - GoCardless rate limit has been exceeded")
-          true
-        } else {
-          false
-        }
+    } recover { case e: GoCardlessApiException =>
+      if (e.getCode == 429) {
+        SafeLogger.error(scrub"Bypassing preliminary bank account check - GoCardless rate limit has been exceeded")
+        true
+      } else {
+        false
+      }
     }
   }
 }

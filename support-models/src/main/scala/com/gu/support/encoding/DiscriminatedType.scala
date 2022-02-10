@@ -33,14 +33,16 @@ class DiscriminatedType[TOPLEVEL](discriminatorFieldName: String) {
     new Codec[TOPLEVEL](encoder(allCodecs), decoder(allCodecs))
   }
 
-  def variant[A: ClassTag](discriminatorValue: String)(
-    implicit
-    decoder: Lazy[DerivedDecoder[A]],
-    encoder: Lazy[DerivedAsObjectEncoder[A]]
+  def variant[A: ClassTag](discriminatorValue: String)(implicit
+      decoder: Lazy[DerivedDecoder[A]],
+      encoder: Lazy[DerivedAsObjectEncoder[A]],
   ): VariantCodec[A] = new VariantCodec[A](discriminatorValue)
 
-  class VariantCodec[A: ClassTag](discriminatorValue: String)(implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedAsObjectEncoder[A]])
-    extends Decoder[A] with Encoder[A] {
+  class VariantCodec[A: ClassTag](discriminatorValue: String)(implicit
+      decode: Lazy[DerivedDecoder[A]],
+      encode: Lazy[DerivedAsObjectEncoder[A]],
+  ) extends Decoder[A]
+      with Encoder[A] {
 
     private val encoder = deriveEncoder[A]
     private val decoder = deriveDecoder[A]
@@ -54,11 +56,14 @@ class DiscriminatedType[TOPLEVEL](discriminatorFieldName: String) {
     def maybeEncode(t: TOPLEVEL): Option[Json] =
       implicitly[ClassTag[A]].unapply(t).map(apply)
 
-    override def apply(c: HCursor): Result[A] = maybeDecode(c).flatMap(_.toRight(
-      DecodingFailure("discriminator value did not match", List(CursorOp.DownField(discriminatorFieldName)))
-    ))
+    override def apply(c: HCursor): Result[A] = maybeDecode(c).flatMap(
+      _.toRight(
+        DecodingFailure("discriminator value did not match", List(CursorOp.DownField(discriminatorFieldName))),
+      ),
+    )
 
-    override def apply(a: A): Json = encoder(a).asObject.map(_.add(discriminatorFieldName, Json.fromString(discriminatorValue))).asJson
+    override def apply(a: A): Json =
+      encoder(a).asObject.map(_.add(discriminatorFieldName, Json.fromString(discriminatorValue))).asJson
 
   }
 

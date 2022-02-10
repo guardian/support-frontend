@@ -14,7 +14,7 @@ trait IdentityClientErrorMatchers {
           case _ => false
         },
         s"Error returned was not an API error of type: $errorType",
-        s"Error returned was an API error of type: $errorType"
+        s"Error returned was an API error of type: $errorType",
       )
     }
   }

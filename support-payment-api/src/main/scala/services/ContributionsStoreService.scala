@@ -17,7 +17,6 @@ import scala.collection.JavaConverters._
 import scala.concurrent.Future
 import scala.util.control.NonFatal
 
-
 trait ContributionsStoreService {
 
   // If an insert is unsuccessful then an error should be logged, however,
@@ -35,12 +34,18 @@ object ContributionsStoreService {
 }
 
 object ContributionsStoreQueueService {
-  def fromContributionsStoreQueueConfig(config: ContributionsStoreQueueConfig)(implicit pool: SQSThreadPool): InitializationResult[ContributionsStoreQueueService] = {
-    Validated.catchNonFatal {
-      new ContributionsStoreQueueService(config.queueUrl, config.keyId)
-    }.leftMap { err =>
-      InitializationError(s"unable to instantiate ContributionsStoreQueueService for config: $config. Error trace: ${err.getMessage}")
-    }
+  def fromContributionsStoreQueueConfig(
+      config: ContributionsStoreQueueConfig,
+  )(implicit pool: SQSThreadPool): InitializationResult[ContributionsStoreQueueService] = {
+    Validated
+      .catchNonFatal {
+        new ContributionsStoreQueueService(config.queueUrl, config.keyId)
+      }
+      .leftMap { err =>
+        InitializationError(
+          s"unable to instantiate ContributionsStoreQueueService for config: $config. Error trace: ${err.getMessage}",
+        )
+      }
   }
 
   sealed trait Message
@@ -66,7 +71,6 @@ object ContributionsStoreQueueService {
       }
     }
 
-
     def toJson(message: Message): Json = message.asJson
   }
 
@@ -77,13 +81,15 @@ object ContributionsStoreQueueService {
           subdivisionCode
             .filter(c => c.isLetterOrDigit || c.isWhitespace)
             .replaceAll("[\n\r]", "")
-            .trim
-        )
+            .trim,
+        ),
     )
 }
 
-class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: String = "eu-west-1")(implicit pool: SQSThreadPool)
-  extends ContributionsStoreService with StrictLogging {
+class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: String = "eu-west-1")(implicit
+    pool: SQSThreadPool,
+) extends ContributionsStoreService
+    with StrictLogging {
 
   private object SqsService {
 
@@ -91,7 +97,7 @@ class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: St
       .buildAmazonSQSAsyncClient()
 
     private val messageAttributes = Map(
-      "keyId" -> new MessageAttributeValue().withStringValue(keyId).withDataType("String")
+      "keyId" -> new MessageAttributeValue().withStringValue(keyId).withDataType("String"),
     )
 
     def publish(message: String): EitherT[Future, ContributionsStoreService.Error, Unit] = EitherT {
@@ -101,14 +107,13 @@ class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: St
           .withMessageBody(message)
           .withMessageAttributes(messageAttributes.asJava)
 
-        sqsClient.sendMessage(request) //Sync API of Async client
+        sqsClient.sendMessage(request) // Sync API of Async client
       }
         .map(_ => Right.apply(()))
-        .recover {
-          case NonFatal(e) =>
-            // The tabs make CloudWatch group the log lines together
-            logger.error(s"Failed to publish to contributions-store-queue.\n\tError was $e.\n\tMessage was: $message")
-            Left(ContributionsStoreService.Error(e))
+        .recover { case NonFatal(e) =>
+          // The tabs make CloudWatch group the log lines together
+          logger.error(s"Failed to publish to contributions-store-queue.\n\tError was $e.\n\tMessage was: $message")
+          Left(ContributionsStoreService.Error(e))
         }
     }
   }

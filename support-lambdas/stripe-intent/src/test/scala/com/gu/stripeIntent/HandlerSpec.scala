@@ -21,45 +21,47 @@ class HandlerSpec extends AsyncFlatSpec with Matchers {
 
     var requests: List[(String, String)] = Nil
     // this is a bit over complicated because we are using okhttp objects which are much more flexible than we need
-    val httpOp = {
-      req: Request =>
-        val reqBuf = new Buffer()
-        req.body().writeTo(reqBuf)
-        val authHeaderBodyString = req.headers("Authorization").asScala.mkString(",") -> reqBuf.readString(Charset.forName("UTF-8"))
-        requests =  authHeaderBodyString :: requests // !
-        println(s"GOT CALL! $authHeaderBodyString")
-        Future.successful(
-          new Response.Builder()
-            .request(req)
-            .protocol(Protocol.HTTP_1_1)
-            .code(200)
-            .message("msg")
-            .body(new okhttp3.ResponseBody() {
-              val bodyString = stripeResponse.getBytes("UTF-8")
-              override def contentType(): MediaType = MediaType.parse("application/json")
+    val httpOp = { req: Request =>
+      val reqBuf = new Buffer()
+      req.body().writeTo(reqBuf)
+      val authHeaderBodyString =
+        req.headers("Authorization").asScala.mkString(",") -> reqBuf.readString(Charset.forName("UTF-8"))
+      requests = authHeaderBodyString :: requests // !
+      println(s"GOT CALL! $authHeaderBodyString")
+      Future.successful(
+        new Response.Builder()
+          .request(req)
+          .protocol(Protocol.HTTP_1_1)
+          .code(200)
+          .message("msg")
+          .body(new okhttp3.ResponseBody() {
+            val bodyString = stripeResponse.getBytes("UTF-8")
+            override def contentType(): MediaType = MediaType.parse("application/json")
 
-              override def contentLength(): Long = bodyString.length
+            override def contentLength(): Long = bodyString.length
 
-              override def source(): BufferedSource = {
-                val buf = new Buffer()
-                buf.write(bodyString)
-                buf
-              }
-            })
-            .build()
-        )
+            override def source(): BufferedSource = {
+              val buf = new Buffer()
+              buf.write(bodyString)
+              buf
+            }
+          })
+          .build(),
+      )
     }
 
     val result = Handler.lambdaBody(
       StripeIntentEnv(Stages.DEV, publicKeyToPrivateKey, httpOp),
-      RequestBody("pub")
+      RequestBody("pub"),
     )
 
-    result.map{ resp =>
-      (requests, resp) should be((
-        List(("Bearer priv","usage=off_session")),
-        ApiGatewayResponse(200, ResponseBody("theSecret"), Stages.DEV)
-      ))
+    result.map { resp =>
+      (requests, resp) should be(
+        (
+          List(("Bearer priv", "usage=off_session")),
+          ApiGatewayResponse(200, ResponseBody("theSecret"), Stages.DEV),
+        ),
+      )
     }
   }
 

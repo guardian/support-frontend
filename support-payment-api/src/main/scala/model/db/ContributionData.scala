@@ -29,22 +29,22 @@ case class ContributionData private (
     countrySubdivisionCode: Option[String],
     // Used as primary key on current contribution_metadata and payment_hooks table
     // https://github.com/guardian/contributions-platform/blob/master/Postgres/schema.sql
-    contributionId: UUID = UUID.randomUUID
+    contributionId: UUID = UUID.randomUUID,
 )
 
 object ContributionData extends StrictLogging {
 
   private def paypalDateToLocalDateTime(dateTime: String): LocalDateTime = {
-    //-- paypal date example 2018-02-22T11:51:00Z -> DateTimeFormatter.ISO_INSTANT
+    // -- paypal date example 2018-02-22T11:51:00Z -> DateTimeFormatter.ISO_INSTANT
     val formatter = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.systemDefault())
     LocalDateTime.parse(dateTime, formatter)
   }
 
   def fromStripeCharge(
-    identityId: Option[Long],
-    charge: Charge,
-    countrySubdivisionCode: Option[String],
-    paymentProvider: PaymentProvider,
+      identityId: Option[Long],
+      charge: Charge,
+      countrySubdivisionCode: Option[String],
+      paymentProvider: PaymentProvider,
   ): ContributionData =
     // TODO: error handling
     ContributionData(
@@ -60,7 +60,7 @@ object ContributionData extends StrictLogging {
       currency = Currency.withNameInsensitive(charge.getCurrency),
       amount = BigDecimal(charge.getAmount, 2),
       countryCode = StripeCharge.getCountryCode(charge),
-      countrySubdivisionCode = countrySubdivisionCode
+      countrySubdivisionCode = countrySubdivisionCode,
     )
 
   import scala.collection.JavaConverters._
@@ -75,14 +75,30 @@ object ContributionData extends StrictLogging {
   private def getPaypalCountrySubdivisionCode(payment: Payment): Option[String] =
     Try(payment.getPayer.getPayerInfo.getShippingAddress.getState).toOption.flatMap(Option(_))
 
-  def fromPaypalCharge(payment: Payment, email: String, identityId: Option[Long], countrySubdivisionCode: Option[String]): Either[PaypalApiError, ContributionData] = {
+  def fromPaypalCharge(
+      payment: Payment,
+      email: String,
+      identityId: Option[Long],
+      countrySubdivisionCode: Option[String],
+  ): Either[PaypalApiError, ContributionData] = {
     for {
-      transactions <- Either.fromOption(payment.getTransactions.asScala.headOption, PaypalApiError
-        .fromString(s"Invalid Paypal transactions content."))
-      currency <- Either.catchNonFatal(Currency.withNameInsensitive(transactions.getAmount.getCurrency)).leftMap(PaypalApiError.fromThrowable)
-      amount <- Either.catchNonFatal(BigDecimal(payment.getTransactions.asScala.head.getAmount.getTotal)).leftMap(PaypalApiError.fromThrowable)
-      created <- Either.catchNonFatal(paypalDateToLocalDateTime(payment.getCreateTime)).leftMap(PaypalApiError.fromThrowable)
-      countryCode <- Either.catchNonFatal(payment.getPayer.getPayerInfo.getCountryCode).leftMap(PaypalApiError.fromThrowable)
+      transactions <- Either.fromOption(
+        payment.getTransactions.asScala.headOption,
+        PaypalApiError
+          .fromString(s"Invalid Paypal transactions content."),
+      )
+      currency <- Either
+        .catchNonFatal(Currency.withNameInsensitive(transactions.getAmount.getCurrency))
+        .leftMap(PaypalApiError.fromThrowable)
+      amount <- Either
+        .catchNonFatal(BigDecimal(payment.getTransactions.asScala.head.getAmount.getTotal))
+        .leftMap(PaypalApiError.fromThrowable)
+      created <- Either
+        .catchNonFatal(paypalDateToLocalDateTime(payment.getCreateTime))
+        .leftMap(PaypalApiError.fromThrowable)
+      countryCode <- Either
+        .catchNonFatal(payment.getPayer.getPayerInfo.getCountryCode)
+        .leftMap(PaypalApiError.fromThrowable)
     } yield ContributionData(
       paymentProvider = PaymentProvider.Paypal,
       paymentStatus = PaymentStatus.Paid,
@@ -93,11 +109,18 @@ object ContributionData extends StrictLogging {
       currency = currency,
       amount = amount,
       countryCode = Some(countryCode),
-      countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment)
+      countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment),
     )
   }
 
-  def fromAmazonPay(amazonPayment: AuthorizationDetails, identity: Option[Long], email: String, countryCode: Option[String], countrySubdivisionCode: Option[String], orderRef: String): ContributionData = {
+  def fromAmazonPay(
+      amazonPayment: AuthorizationDetails,
+      identity: Option[Long],
+      email: String,
+      countryCode: Option[String],
+      countrySubdivisionCode: Option[String],
+      orderRef: String,
+  ): ContributionData = {
     ContributionData(
       paymentProvider = AmazonPay,
       paymentStatus = PaymentStatus.Paid,
@@ -105,11 +128,15 @@ object ContributionData extends StrictLogging {
       identityId = identity,
       email = email,
       // Time at which the object was created. Measured in seconds since the Unix epoch.
-      created = LocalDateTime.ofInstant(Instant.ofEpochMilli(amazonPayment.getCreationTimestamp.toGregorianCalendar.getTimeInMillis), ZoneOffset.UTC),
+      created = LocalDateTime
+        .ofInstant(
+          Instant.ofEpochMilli(amazonPayment.getCreationTimestamp.toGregorianCalendar.getTimeInMillis),
+          ZoneOffset.UTC,
+        ),
       currency = Currency.withNameInsensitive(amazonPayment.getAuthorizationAmount.getCurrencyCode),
       amount = BigDecimal(amazonPayment.getAuthorizationAmount.getAmount),
       countryCode = countryCode,
-      countrySubdivisionCode = countrySubdivisionCode
+      countrySubdivisionCode = countrySubdivisionCode,
     )
   }
 }

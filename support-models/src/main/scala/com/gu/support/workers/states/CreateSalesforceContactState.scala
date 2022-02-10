@@ -10,17 +10,17 @@ import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.redemptions.RedemptionData
 
 case class CreateSalesforceContactState(
-  requestId: UUID,
-  user: User,
-  giftRecipient: Option[GiftRecipient],
-  product: ProductType,
-  analyticsInfo: AnalyticsInfo,
-  paymentMethod: Either[PaymentMethod, RedemptionData],
-  firstDeliveryDate: Option[LocalDate],
-  promoCode: Option[PromoCode],
-  csrUsername: Option[String],
-  salesforceCaseId: Option[String],
-  acquisitionData: Option[AcquisitionData]
+    requestId: UUID,
+    user: User,
+    giftRecipient: Option[GiftRecipient],
+    product: ProductType,
+    analyticsInfo: AnalyticsInfo,
+    paymentMethod: Either[PaymentMethod, RedemptionData],
+    firstDeliveryDate: Option[LocalDate],
+    promoCode: Option[PromoCode],
+    csrUsername: Option[String],
+    salesforceCaseId: Option[String],
+    acquisitionData: Option[AcquisitionData],
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec

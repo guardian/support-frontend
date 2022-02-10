@@ -29,38 +29,38 @@ import model.PaymentProvider._
  *
  */
 @JsonCodec case class ContributorRowSqsMessage(
-  To: ToSqsMessage,
-  DataExtensionName: String,
-  IdentityUserId: String
+    To: ToSqsMessage,
+    DataExtensionName: String,
+    IdentityUserId: String,
 )
 
 @JsonCodec case class ToSqsMessage(
-  Address: String,
-  SubscriberKey: String,
-  ContactAttributes: ContactAttributesSqsMessage
+    Address: String,
+    SubscriberKey: String,
+    ContactAttributes: ContactAttributesSqsMessage,
 )
 
 @JsonCodec case class ContactAttributesSqsMessage(
-  SubscriberAttributes: SubscriberAttributesSqsMessage
+    SubscriberAttributes: SubscriberAttributesSqsMessage,
 )
 
 @JsonCodec case class SubscriberAttributesSqsMessage(
-  EmailAddress: String,
-  edition: String,
-  `payment method`: String,
-  currency: String,
-  amount: String,
-  first_name: Option[String],
-  date_of_payment: String
+    EmailAddress: String,
+    edition: String,
+    `payment method`: String,
+    currency: String,
+    amount: String,
+    first_name: Option[String],
+    date_of_payment: String,
 )
 
 case class ContributorRow(
-  email: String,
-  currency: String,
-  identityId: Long,
-  paymentMethod: PaymentProvider,
-  firstName: Option[String],
-  amount: BigDecimal
+    email: String,
+    currency: String,
+    identityId: Long,
+    paymentMethod: PaymentProvider,
+    firstName: Option[String],
+    amount: BigDecimal,
 ) {
   private def edition: String = currency match {
     case "GBP" => "uk"
@@ -103,12 +103,12 @@ case class ContributorRow(
             currency = currencyGlyph,
             amount = amount.setScale(2).toString,
             first_name = firstName,
-            date_of_payment = formattedDate
-          )
-        )
+            date_of_payment = formattedDate,
+          ),
+        ),
       ),
       DataExtensionName = "contribution-thank-you",
-      IdentityUserId = identityId.toString
+      IdentityUserId = identityId.toString,
     ).asJson.toString()
   }
 }

@@ -2,7 +2,6 @@ package com.gu.support.workers
 
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
-
 sealed trait BillingPeriod {
   val noun: String
   val monthsInPeriod: Int
@@ -20,7 +19,7 @@ object BillingPeriod {
 
   implicit val keyEncoder: KeyEncoder[BillingPeriod] = (billingPeriod: BillingPeriod) => billingPeriod.toString
 
-  implicit val keyDecoder: KeyDecoder[BillingPeriod]  = (key: String) => fromString(key)
+  implicit val keyDecoder: KeyDecoder[BillingPeriod] = (key: String) => fromString(key)
 }
 
 case object Monthly extends BillingPeriod {

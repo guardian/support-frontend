@@ -34,7 +34,9 @@ object Client {
 
 class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) {
 
-  private def startExecution(arn: String, input: String)(implicit ec: ExecutionContext): Response[StartExecutionResult] = convertErrors {
+  private def startExecution(arn: String, input: String)(implicit
+      ec: ExecutionContext,
+  ): Response[StartExecutionResult] = convertErrors {
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
       .transform { theTry =>
         SafeLogger.info(s"state machine result: $theTry")
@@ -42,11 +44,10 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) {
       }
   }
 
-  def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean = false)(
-    implicit
-    ec: ExecutionContext,
-    encoder: Encoder[T],
-    stateWrapper: StateWrapper
+  def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean = false)(implicit
+      ec: ExecutionContext,
+      encoder: Encoder[T],
+      stateWrapper: StateWrapper,
   ): Response[StateMachineExecution] = {
     startExecution(arn.asString, stateWrapper.wrap(input, isTestUser, isExistingAccount))
       .map(StateMachineExecution.fromStartExecution)
@@ -74,15 +75,20 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) {
   def statusFromEvents(events: List[HistoryEvent]): Option[ExecutionStatus] =
     events.view.map(_.getType).collectFirst(ExecutionStatus.all)
 
-  def history(jobId: String)(implicit ec: ExecutionContext, stateWrapper: StateWrapper): Response[List[HistoryEvent]] = {
+  def history(
+      jobId: String,
+  )(implicit ec: ExecutionContext, stateWrapper: StateWrapper): Response[List[HistoryEvent]] = {
     toEither(
-      AwsAsync(client.getExecutionHistoryAsync, new GetExecutionHistoryRequest().withExecutionArn(arnFromJobId(jobId)).withReverseOrder(true))
+      AwsAsync(
+        client.getExecutionHistoryAsync,
+        new GetExecutionHistoryRequest().withExecutionArn(arnFromJobId(jobId)).withReverseOrder(true),
+      ),
     ).map(_.getEvents.asScala.toList)
   }
 
   private def toEither[T](result: Future[T])(implicit ec: ExecutionContext): Response[T] = EitherT {
-    result.map(_.asRight[StateMachineError]).recover {
-      case _: AWSStepFunctionsException => Fail.asLeft
+    result.map(_.asRight[StateMachineError]).recover { case _: AWSStepFunctionsException =>
+      Fail.asLeft
     }
   }
 

@@ -5,7 +5,13 @@ import com.gu.i18n.Title
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
-import com.gu.salesforce.Salesforce.{Authentication, NewContact, SalesforceAuthenticationErrorResponse, SalesforceErrorResponse, UpsertData}
+import com.gu.salesforce.Salesforce.{
+  Authentication,
+  NewContact,
+  SalesforceAuthenticationErrorResponse,
+  SalesforceErrorResponse,
+  UpsertData,
+}
 import com.gu.salesforce.{AuthService, SalesforceConfig, SalesforceService}
 import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.test.tags.annotations.IntegrationTest
@@ -44,7 +50,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     Phone = None,
     Allow_Membership_Mail__c = allowMail,
     Allow_3rd_Party_Mail__c = allowMail,
-    Allow_Guardian_Related_Mail__c = allowMail
+    Allow_Guardian_Related_Mail__c = allowMail,
   )
 
   it should "throw a SalesforceAuthenticationErrorResponse if the authentication fails" in {
@@ -58,11 +64,12 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
   }
 
   "SalesforceService" should "throw a SalesforceErrorResponse if authentication has expired" in {
-    val service = new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds)) {
-      //Don't add the authentication headers to simulate an expired auth token
-      override def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder =
-        req.url(s"${auth.instance_url}/$upsertEndpoint") //We still need to set the base url
-    }
+    val service =
+      new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds)) {
+        // Don't add the authentication headers to simulate an expired auth token
+        override def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder =
+          req.url(s"${auth.instance_url}/$upsertEndpoint") // We still need to set the base url
+      }
 
     service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
 

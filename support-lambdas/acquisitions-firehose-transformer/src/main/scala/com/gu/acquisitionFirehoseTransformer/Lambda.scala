@@ -15,7 +15,6 @@ import com.gu.acquisitionsValueCalculatorClient.model.AcquisitionModel
 import com.gu.i18n.Currency
 import org.joda.time.DateTime
 
-
 case class AcquisitionWithRecordId(val acquisition: AcquisitionDataRow, recordId: String)
 
 object Lambda extends LazyLogging {
@@ -25,9 +24,9 @@ object Lambda extends LazyLogging {
   }
 
   def processEvent(
-    event: KinesisFirehoseEvent,
-    avService: AnnualisedValueServiceWrapper,
-    gbpService: GBPConversionService
+      event: KinesisFirehoseEvent,
+      avService: AnnualisedValueServiceWrapper,
+      gbpService: GBPConversionService,
   ): KinesisAnalyticsInputPreprocessingResponse = {
     val records = event.getRecords.asScala
 
@@ -40,11 +39,13 @@ object Lambda extends LazyLogging {
         .leftMap(_.getMessage)
     }.sequence
 
-    def getAcquisitionsWithAmounts(acquisitions: List[AcquisitionWithRecordId]): List[(BigDecimal, AcquisitionWithRecordId)] =
+    def getAcquisitionsWithAmounts(
+        acquisitions: List[AcquisitionWithRecordId],
+    ): List[(BigDecimal, AcquisitionWithRecordId)] =
       acquisitions.flatMap { acquisitionWithRecordId =>
-          acquisitionWithRecordId.acquisition.amount.map { amount =>
-            (amount, acquisitionWithRecordId)
-          }
+        acquisitionWithRecordId.acquisition.amount.map { amount =>
+          (amount, acquisitionWithRecordId)
+        }
       }
 
     def getAnnualisedValue(amount: BigDecimal, acquisition: AcquisitionDataRow): Either[String, Double] = {
@@ -54,24 +55,24 @@ object Lambda extends LazyLogging {
         currency = acquisition.currency.iso,
         paymentFrequency = acquisition.paymentFrequency.value,
         paymentProvider = acquisition.paymentProvider.map(_.value),
-        printOptions = None)
+        printOptions = None,
+      )
 
       avService.getAV(acqModel, "ophan")
     }
 
     def buildRecords(acquisitions: List[(BigDecimal, AcquisitionWithRecordId)]): Either[String, List[Record]] =
-      acquisitions.map {
-        case (amount, AcquisitionWithRecordId(acquisition, recordId)) =>
-          val conversionDate = DateTime.now().minusDays(1)
-          for {
-            av <- getAnnualisedValue(amount, acquisition)
-            avGBP <-
-              if (acquisition.currency == Currency.GBP) Right(av)
-              else gbpService.convert(acquisition.currency, av, conversionDate)
-          } yield {
-            val outputJson = AcquisitionToJson(amount, av, avGBP, acquisition).noSpaces +"\n"
-            new Record(recordId, Result.Ok, ByteBuffer.wrap(outputJson.getBytes))
-          }
+      acquisitions.map { case (amount, AcquisitionWithRecordId(acquisition, recordId)) =>
+        val conversionDate = DateTime.now().minusDays(1)
+        for {
+          av <- getAnnualisedValue(amount, acquisition)
+          avGBP <-
+            if (acquisition.currency == Currency.GBP) Right(av)
+            else gbpService.convert(acquisition.currency, av, conversionDate)
+        } yield {
+          val outputJson = AcquisitionToJson(amount, av, avGBP, acquisition).noSpaces + "\n"
+          new Record(recordId, Result.Ok, ByteBuffer.wrap(outputJson.getBytes))
+        }
       }.sequence
 
     val maybeRecords = for {

@@ -19,16 +19,18 @@ import views.html.subscriptionCheckout
 import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionFormController(
-  priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  val assets: AssetsResolver,
-  val actionRefiners: CustomActionBuilders,
-  testUsers: TestUserService,
-  stripeConfigProvider: StripeConfigProvider,
-  payPalConfigProvider: PayPalConfigProvider,
-  components: ControllerComponents,
-  settingsProvider: AllSettingsProvider,
-  recaptchaConfigProvider: RecaptchaConfigProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    val assets: AssetsResolver,
+    val actionRefiners: CustomActionBuilders,
+    testUsers: TestUserService,
+    stripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
+    components: ControllerComponents,
+    settingsProvider: AllSettingsProvider,
+    recaptchaConfigProvider: RecaptchaConfigProvider,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
@@ -41,7 +43,10 @@ class DigitalSubscriptionFormController(
     }
   }
 
-  private def digitalSubscriptionFormHtml(maybeIdUser: Option[IdUser], orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def digitalSubscriptionFormHtml(maybeIdUser: Option[IdUser], orderIsAGift: Boolean)(implicit
+      request: RequestHeader,
+      settings: AllSettings,
+  ): Html = {
     val title = if (orderIsAGift) {
       "Support the Guardian | The Guardian Digital Gift Subscription"
     } else {
@@ -71,24 +76,24 @@ class DigitalSubscriptionFormController(
       payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
-      orderIsAGift
+      orderIsAGift,
     )
   }
 
   def displayThankYouExisting(): Action[AnyContent] = CachedAction() { implicit request =>
-
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | The Guardian Digital Subscription"
     val mainElement = EmptyDiv("digital-subscription-checkout-page")
     val js = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.js"))
     val css = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.css"))
 
-    Ok(views.html.main(
-      title,
-      mainElement,
-      js,
-      css
-    )()
+    Ok(
+      views.html.main(
+        title,
+        mainElement,
+        js,
+        css,
+      )(),
     )
   }
 

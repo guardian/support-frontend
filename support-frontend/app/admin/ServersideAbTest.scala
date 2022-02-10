@@ -25,7 +25,7 @@ object ServersideAbTest {
   }
 
   import io.circe.syntax._
-  implicit val encoder = Encoder[Map[String,Participation]]
+  implicit val encoder = Encoder[Map[String, Participation]]
 
-  val asJsonString: Map[String,Participation] => String = _.asJson.noSpaces
+  val asJsonString: Map[String, Participation] => String = _.asJson.noSpaces
 }

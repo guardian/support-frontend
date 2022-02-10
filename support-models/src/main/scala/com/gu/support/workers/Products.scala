@@ -13,7 +13,6 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 
-
 sealed trait ProductType {
   def currency: Currency
   def billingPeriod: BillingPeriod
@@ -23,34 +22,34 @@ sealed trait ProductType {
 }
 
 case class Contribution(
-  amount: BigDecimal,
-  currency: Currency,
-  billingPeriod: BillingPeriod
+    amount: BigDecimal,
+    currency: Currency,
+    billingPeriod: BillingPeriod,
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-Contribution-$currency-$amount"
 }
 
 case class DigitalPack(
-  currency: Currency,
-  billingPeriod: BillingPeriod,
-  readerType: ReaderType = Direct
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+    readerType: ReaderType = Direct,
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-DigitalPack-$currency-$readerType"
 }
 
 case class Paper(
-  currency: Currency = GBP,
-  billingPeriod: BillingPeriod = Monthly,
-  fulfilmentOptions: FulfilmentOptions,
-  productOptions: PaperProductOptions
+    currency: Currency = GBP,
+    billingPeriod: BillingPeriod = Monthly,
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: PaperProductOptions,
 ) extends ProductType {
   override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
 }
 
 case class GuardianWeekly(
-  currency: Currency,
-  billingPeriod: BillingPeriod,
-  fulfilmentOptions: FulfilmentOptions,
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+    fulfilmentOptions: FulfilmentOptions,
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-GuardianWeekly-$fulfilmentOptions-$currency"
 }

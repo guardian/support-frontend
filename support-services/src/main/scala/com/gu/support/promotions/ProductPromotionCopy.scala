@@ -9,8 +9,7 @@ class ProductPromotionCopy(promotionService: PromotionService, touchPointEnviron
   def getCopyForPromoCode(promoCode: PromoCode, product: Product, country: Country): Option[PromotionCopy] = {
     val productRatePlanIds = product.getProductRatePlanIds(touchPointEnvironment)
     val promotion = promotionService.findPromotion(promoCode)
-    promotion
-      .toOption // if promo code not valid, just ignore
+    promotion.toOption // if promo code not valid, just ignore
       .find(_.promotion.validForAnyProductRatePlan(productRatePlanIds, country, isRenewal = false).nonEmpty)
       .flatMap(_.promotion.landingPage)
   }

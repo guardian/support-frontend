@@ -34,14 +34,14 @@ object PaymentAPIResponseError {
 }
 
 case class ExecutePaymentBody(
-  // TODO: remove this field once the Payment API switches over to use mandatory email field
-  signedInUserEmail: Option[String],
-  // TODO: question: should we put the email in the paymentData for consistency with Stripe?
-  // downside is it breaks the model of "paymentData contains exactly what we need to send to the third-party"
-  // since we don't need to send email to PayPal but we do to Stripe
-  email: String,
-  acquisitionData: JsValue,
-  paymentData: JsObject
+    // TODO: remove this field once the Payment API switches over to use mandatory email field
+    signedInUserEmail: Option[String],
+    // TODO: question: should we put the email in the paymentData for consistency with Stripe?
+    // downside is it breaks the model of "paymentData contains exactly what we need to send to the third-party"
+    // since we don't need to send email to PayPal but we do to Stripe
+    email: String,
+    acquisitionData: JsValue,
+    paymentData: JsObject,
 )
 
 object ExecutePaymentBody {
@@ -57,15 +57,16 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
 
   private def postPaypalData[A](
-    data: ExecutePaymentBody,
-    isTestUser: Boolean,
-    userAgent: Option[String]
+      data: ExecutePaymentBody,
+      isTestUser: Boolean,
+      userAgent: Option[String],
   ): EitherT[Future, PaymentAPIResponseError[A], WSResponse] = {
 
     val headers = Seq("Accept" -> "application/json") ++ userAgent.map("User-Agent" -> _)
     val queryStringParameters = if (isTestUser) Seq("mode" -> "test") else Seq()
 
-    wsClient.url(payPalExecutePaymentEndpoint)
+    wsClient
+      .url(payPalExecutePaymentEndpoint)
       .withQueryStringParameters(queryStringParameters: _*)
       .withHttpHeaders(headers: _*)
       .withBody(Json.toJson(data))
@@ -79,7 +80,7 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
     implicit def paymentAPIResponseDecoder: Decoder[Either[A, B]] = Decoder.decodeEither[A, B]("error", "data")
     decode[Either[A, B]](response.body).fold(
       err => Left(PaymentAPIResponseError.DecodingError(err)),
-      response => response.leftMap(err => PaymentAPIResponseError.APIError(err))
+      response => response.leftMap(err => PaymentAPIResponseError.APIError(err)),
     )
   }
 
@@ -92,11 +93,11 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
   }
 
   def executePaypalPayment(
-    paymentJSON: JsObject,
-    acquisitionData: JsValue,
-    email: String,
-    isTestUser: Boolean,
-    userAgent: Option[String]
+      paymentJSON: JsObject,
+      acquisitionData: JsValue,
+      email: String,
+      isTestUser: Boolean,
+      userAgent: Option[String],
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
     val data = ExecutePaymentBody(Some(email), email, acquisitionData, paymentJSON)
     postPaypalData(data, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])

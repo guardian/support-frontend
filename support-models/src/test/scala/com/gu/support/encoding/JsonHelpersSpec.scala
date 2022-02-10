@@ -12,7 +12,6 @@ class JsonHelpersSpec extends AsyncFlatSpec with Matchers {
   "JsonHelper" should "be able to wrap a JsonObject" in {
     val initialObject = JsonObject(("name", Json.fromString("Bill")))
 
-
     val result = initialObject.wrapObject("user")
 
     val json = Json.fromJsonObject(result)

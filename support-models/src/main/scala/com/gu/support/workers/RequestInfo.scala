@@ -1,6 +1,6 @@
 package com.gu.support.workers
 
-case class RequestInfo(testUser: Boolean, failed: Boolean, messages: List[String], accountExists: Boolean){
+case class RequestInfo(testUser: Boolean, failed: Boolean, messages: List[String], accountExists: Boolean) {
   def appendMessage(message: String): RequestInfo = copy(messages = messages :+ message)
 }
 

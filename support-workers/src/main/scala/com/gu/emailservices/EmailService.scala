@@ -11,8 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EmailService(contributionThanksQueueName: String)(implicit val executionContext: ExecutionContext) {
 
-  private val sqsClient = AmazonSQSAsyncClientBuilder
-    .standard
+  private val sqsClient = AmazonSQSAsyncClientBuilder.standard
     .withCredentials(CredentialsProvider)
     .withRegion(Regions.EU_WEST_1)
     .build()
@@ -24,15 +23,15 @@ class EmailService(contributionThanksQueueName: String)(implicit val executionCo
     val payload = fields.payload
     SafeLogger.info(s"message content is: $payload")
     val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, payload))
-    messageResult.recover {
-      case throwable =>
+    messageResult
+      .recover { case throwable =>
         SafeLogger.error(scrub"Failed to send message due to $queueUrl due to:", throwable)
         throw throwable
-    }.map { result =>
-      SafeLogger.info(s"Successfully sent message to $queueUrl: $result")
-      result
-    }
+      }
+      .map { result =>
+        SafeLogger.info(s"Successfully sent message to $queueUrl: $result")
+        result
+      }
   }
 
 }
-

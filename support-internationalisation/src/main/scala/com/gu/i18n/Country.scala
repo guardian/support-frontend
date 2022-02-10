@@ -71,8 +71,8 @@ object Country {
       "WY" -> "Wyoming",
       "AA" -> "Armed Forces America",
       "AE" -> "Armed Forces",
-      "AP" -> "Armed Forces Pacific"
-    ).toMap
+      "AP" -> "Armed Forces Pacific",
+    ).toMap,
   )
 
   val Canada = Country(
@@ -91,8 +91,8 @@ object Country {
       "PE" -> "Prince Edward Island",
       "QC" -> "Quebec",
       "SK" -> "Saskatchewan",
-      "YT" -> "Yukon"
-    ).toMap
+      "YT" -> "Yukon",
+    ).toMap,
   )
 
   val UK = Country("GB", "United Kingdom")
@@ -109,7 +109,7 @@ object Country {
       "QLD" -> "Queensland",
       "ACT" -> "Australian Capital Territory",
       "NT" -> "Northern Territory",
-    ).toMap
+    ).toMap,
   )
 
   val NewZealand = Country("NZ", "New Zealand")

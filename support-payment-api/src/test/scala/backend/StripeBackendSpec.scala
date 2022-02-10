@@ -29,23 +29,24 @@ import util.FutureEitherValues
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
-  //-- entities
+  // -- entities
   val email = Json.fromString("email@email.com").as[NonEmptyString].right.get
   val token = Json.fromString("token").as[NonEmptyString].right.get
   val recaptchaToken = "recaptchaToken"
-  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
+  val acquisitionData =
+    AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
   val stripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
   val legacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
   val stripeChargeRequest = LegacyStripeChargeRequest(legacyStripePaymentData, acquisitionData, Some(stripePublicKey))
-  val createPaymentIntent = CreatePaymentIntent("payment-method-id", stripePaymentData, acquisitionData, Some(stripePublicKey), recaptchaToken)
+  val createPaymentIntent =
+    CreatePaymentIntent("payment-method-id", stripePaymentData, acquisitionData, Some(stripePublicKey), recaptchaToken)
   val confirmPaymentIntent = ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
 
   val countrySubdivisionCode = Some("NY")
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,countrySubdivisionCode)
+  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
   val stripeHookObject = StripeHookObject("id", "GBP")
   val stripeHookData = StripeHookData(stripeHookObject)
   val stripeHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
@@ -53,7 +54,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   val identityError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
-    IdentityClient.GetUser("test@theguardian.com")
+    IdentityClient.GetUser("test@theguardian.com"),
   )
 
   val paymentError = PaypalApiError.fromString("Error response")
@@ -61,13 +62,12 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val backendError = BackendError.fromStripeApiError(stripeApiError)
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
 
-
-  //-- mocks
+  // -- mocks
   val chargeMock: Charge = mock[Charge]
   val eventMock = mock[Event]
   val paymentIntentMock = mock[PaymentIntent]
 
-  //-- service responses
+  // -- service responses
   val paymentServiceResponse: EitherT[Future, StripeApiError, Charge] =
     EitherT.right(Future.successful(chargeMock))
   val paymentServiceResponseError: EitherT[Future, StripeApiError, Charge] =
@@ -108,7 +108,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val switchServiceOnResponse: EitherT[Future, Nothing, Switches] =
     EitherT.right(Future.successful(Switches(Some(On), Some(On))))
 
-  //-- service mocks
+  // -- service mocks
   val mockStripeService: StripeService = mock[StripeService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
@@ -126,7 +126,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   // happens on instantiation of StripeBackend
   when(mockSwitchService.recaptchaSwitches).thenReturn(switchServiceOnResponse)
 
-  //-- test obj
+  // -- test obj
   val stripeBackend = new StripeBackend(
     mockStripeService,
     mockDatabaseService,
@@ -138,9 +138,8 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockRecaptchaService,
     mockCloudWatchService,
     mockSwitchService,
-    Live
-    )(new DefaultThreadPool(ec), mockWsClient)
-
+    Live,
+  )(new DefaultThreadPool(ec), mockWsClient)
 
   def populateChargeMock(): Unit = {
     when(chargeMock.getId).thenReturn("id")
@@ -171,17 +170,16 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   }
 }
 
-
 class StripeBackendSpec
-  extends AnyWordSpec
+    extends AnyWordSpec
     with Matchers
     with FutureEitherValues
     with IntegrationPatience
-with WSClientProvider {
+    with WSClientProvider {
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,None)
+  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
 
   "Stripe Backend" when {
 
@@ -194,14 +192,19 @@ with WSClientProvider {
 
       "return successful payment response even if identityService, " +
         "databaseService, bigQueryService and emailService all fail" in new StripeBackendFixture {
-        populateChargeMock()
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock)
-      }
+          populateChargeMock()
+          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+          when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
+          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
+          when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+          when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+            .thenReturn(streamResponseError)
+          stripeBackend
+            .createCharge(stripeChargeRequest, clientBrowserInfo)
+            .futureRight mustBe StripeCreateChargeResponse.fromCharge(
+            chargeMock,
+          )
+        }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
         populateChargeMock()
@@ -211,7 +214,10 @@ with WSClientProvider {
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse.fromCharge(chargeMock)
+        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse
+          .fromCharge(
+            chargeMock,
+          )
       }
     }
 
@@ -232,7 +238,7 @@ with WSClientProvider {
       "return success if refund hook is valid and databaseService succeeds" in new StripeBackendFixture {
         when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponse)
-        stripeBackend.processRefundHook(stripeHook).futureRight mustBe(())
+        stripeBackend.processRefundHook(stripeHook).futureRight mustBe (())
       }
 
     }
@@ -246,7 +252,8 @@ with WSClientProvider {
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
-        val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
+        val result =
+          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         result.futureValue mustBe List(BackendError.Database(dbError))
       }
 
@@ -257,10 +264,11 @@ with WSClientProvider {
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
-        val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
+        val result =
+          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         val error = List(
           BackendError.BigQueryError(bigQueryErrorMessage),
-          BackendError.Database(dbError)
+          BackendError.Database(dbError),
         )
         result.futureValue mustBe error
       }

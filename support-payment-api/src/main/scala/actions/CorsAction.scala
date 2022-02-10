@@ -6,9 +6,9 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 
 class CorsAction(
-  val parser: BodyParser[AnyContent],
-  val executionContext: ExecutionContext,
-  corsUrls: List[String]
+    val parser: BodyParser[AnyContent],
+    val executionContext: ExecutionContext,
+    corsUrls: List[String],
 ) extends ActionBuilder[Request, AnyContent] {
 
   implicit def ec: ExecutionContext = executionContext
@@ -19,7 +19,7 @@ class CorsAction(
       List(
         "Access-Control-Allow-Origin" -> origin,
         "Access-Control-Allow-Headers" -> "Origin, Content-Type, Accept",
-        "Access-Control-Allow-Credentials" -> "true"
+        "Access-Control-Allow-Credentials" -> "true",
       )
     }
   }
@@ -37,6 +37,6 @@ trait CorsActionProvider {
   lazy val CorsAction: CorsAction = new CorsAction(
     controllerComponents.parsers.defaultBodyParser,
     controllerComponents.executionContext,
-    corsUrls
+    corsUrls,
   )
 }

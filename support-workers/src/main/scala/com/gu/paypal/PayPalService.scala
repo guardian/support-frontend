@@ -22,7 +22,7 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
     "USER" -> config.user,
     "PWD" -> config.password,
     "SIGNATURE" -> config.signature,
-    "VERSION" -> config.NVPVersion
+    "VERSION" -> config.NVPVersion,
   )
 
   // Logs the result of the PayPal NVP request.
@@ -78,13 +78,13 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
     } catch {
       case _: NoSuchElementException =>
         val errorMessage = Try(response.paramMap("L_LONGMESSAGE0").head).getOrElse(response.toString)
-        throw PayPalError(200, errorMessage) //If we got to here the original response was successful
+        throw PayPalError(200, errorMessage) // If we got to here the original response was successful
     }
 
   def retrieveEmail(baid: String): Future[String] = {
     val params = Map(
       "METHOD" -> "BillAgreementUpdate",
-      "REFERENCEID" -> baid
+      "REFERENCEID" -> baid,
     )
 
     nvpRequest(params).map(retrieveNVPParam(_, "EMAIL"))
@@ -103,7 +103,7 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
       "RETURNURL" -> returnUrl,
       "CANCELURL" -> cancelUrl,
       "BILLINGTYPE" -> "MerchantInitiatedBilling",
-      "NOSHIPPING" -> "1"
+      "NOSHIPPING" -> "1",
     )
 
     nvpRequest(paymentParams).map(retrieveNVPParam(_, "TOKEN"))
@@ -113,7 +113,7 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
   def retrieveBaid(token: Token): Future[String] = {
     val agreementParams = Map(
       "METHOD" -> "CreateBillingAgreement",
-      "TOKEN" -> token.token
+      "TOKEN" -> token.token,
     )
 
     nvpRequest(agreementParams).map(retrieveNVPParam(_, "BILLINGAGREEMENTID"))

@@ -15,15 +15,20 @@ import scala.jdk.CollectionConverters._
 import com.gu.acquisitionsValueCalculatorClient.model.AcquisitionModel
 import scala.concurrent.ExecutionContext
 
-
 class LambdaSpec extends AnyFlatSpec with Matchers {
 
   val mockAVService = new AnnualisedValueServiceWrapper {
-    def getAV(acquisitionModel: AcquisitionModel, accountName: String)(implicit executionContext: ExecutionContext): Either[String,Double] = Right(acquisitionModel.amount*12)
+    def getAV(acquisitionModel: AcquisitionModel, accountName: String)(implicit
+        executionContext: ExecutionContext,
+    ): Either[String, Double] = Right(
+      acquisitionModel.amount * 12,
+    )
   }
 
   val mockGBPService = new GBPConversionService {
-    override def convert(currency: Currency, amount: Double, dateTime: DateTime): Either[String, Double] = Right(amount * 1.2)
+    override def convert(currency: Currency, amount: Double, dateTime: DateTime): Either[String, Double] = Right(
+      amount * 1.2,
+    )
   }
 
   it should "successfully process a valid batch of acquisitions, filtering out ones without an amount" in {
@@ -54,7 +59,6 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
 
     assertThrows[Exception] { Lambda.processEvent(event, mockAVService, mockGBPService) }
   }
-
 
   def buildEvent(records: List[KinesisFirehoseEvent.Record]): KinesisFirehoseEvent = {
     val event = new KinesisFirehoseEvent()
@@ -93,7 +97,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       contributionId = None,
       paymentId = None,
       queryParameters = Nil,
-      platform = None
+      platform = None,
     )
 
     val record = new KinesisFirehoseEvent.Record()

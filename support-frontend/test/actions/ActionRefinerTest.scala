@@ -32,7 +32,14 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     "include Cache-control: no-cache, private" in new Mocks {
       val actionRefiner =
-        new CustomActionBuilders(asyncAuthenticationService, stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage)
+        new CustomActionBuilders(
+          asyncAuthenticationService,
+          stubControllerComponents(),
+          csrfAddToken,
+          csrfCheck,
+          csrfConfig,
+          stage,
+        )
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
@@ -48,13 +55,20 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         .thenReturn(Future.successful(Some(passedInUser)))
 
       val actionRefiner = new CustomActionBuilders(
-        asyncAuthenticationService, stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig, stage
+        asyncAuthenticationService,
+        stubControllerComponents(),
+        csrfAddToken,
+        csrfCheck,
+        csrfConfig,
+        stage,
       )
 
-      val result = actionRefiner.MaybeAuthenticatedAction(_.user match {
-        case Some(user) if (user == passedInUser) => Ok("authentication-test")
-        case u => InternalServerError(s"didn't get (right) user $u")
-      }).apply(fakeRequest)
+      val result = actionRefiner
+        .MaybeAuthenticatedAction(_.user match {
+          case Some(user) if (user == passedInUser) => Ok("authentication-test")
+          case u => InternalServerError(s"didn't get (right) user $u")
+        })
+        .apply(fakeRequest)
 
       status(result) mustEqual Status.OK
       contentAsString(result) mustEqual "authentication-test"
@@ -69,13 +83,15 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
-        stage = stage
+        stage = stage,
       )
 
-      val result = actionRefiner.MaybeAuthenticatedAction(_.user match {
-        case Some(user) => InternalServerError("got a user")
-        case None => Ok("no-user")
-      }).apply(fakeRequest)
+      val result = actionRefiner
+        .MaybeAuthenticatedAction(_.user match {
+          case Some(user) => InternalServerError("got a user")
+          case None => Ok("no-user")
+        })
+        .apply(fakeRequest)
 
       status(result) mustEqual Status.OK
       contentAsString(result) mustEqual "no-user"
@@ -90,7 +106,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
-        stage = stage
+        stage = stage,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
@@ -104,7 +120,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
-        stage = stage
+        stage = stage,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")

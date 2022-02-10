@@ -11,10 +11,10 @@ import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
 @IntegrationTest
-class PriceSummaryServiceIntegrationSpec  extends AsyncFlatSpec with Matchers with LazyLogging {
-  val service = new PriceSummaryService(PromotionServiceSpec.serviceWithDynamo, CatalogService(TouchPointEnvironments.SANDBOX))
+class PriceSummaryServiceIntegrationSpec extends AsyncFlatSpec with Matchers with LazyLogging {
+  val service =
+    new PriceSummaryService(PromotionServiceSpec.serviceWithDynamo, CatalogService(TouchPointEnvironments.SANDBOX))
 
   "PriceSummaryService" should "return prices" in {
     val result = service.getPrices(GuardianWeekly, List("WJW7OAJ3A"))

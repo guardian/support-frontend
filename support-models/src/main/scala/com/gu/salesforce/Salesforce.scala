@@ -20,54 +20,56 @@ object Salesforce {
 
   object NewContact {
     def forUser(user: User, giftRecipient: Option[GiftRecipient]): NewContact =
-      giftRecipient.map(_ =>
-        // If we have a gift recipient then don't update the delivery address
-        NewContact(
-          IdentityID__c = user.id,
-          Email = user.primaryEmailAddress,
-          Salutation = user.title,
-          FirstName = user.firstName,
-          LastName = user.lastName,
-          // 'Other' address fields = billing address
-          OtherStreet = getAddressLine(user.billingAddress),
-          OtherCity = user.billingAddress.city,
-          OtherState = user.billingAddress.state,
-          OtherPostalCode = user.billingAddress.postCode,
-          OtherCountry = user.billingAddress.country.name,
-          // 'Mailing' address fields = delivery address
-          MailingStreet = None,
-          MailingCity = None,
-          MailingState = None,
-          MailingPostalCode = None,
-          MailingCountry = None,
-          Phone = user.telephoneNumber,
-          Allow_Membership_Mail__c = user.allowMembershipMail,
-          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
+      giftRecipient
+        .map(_ =>
+          // If we have a gift recipient then don't update the delivery address
+          NewContact(
+            IdentityID__c = user.id,
+            Email = user.primaryEmailAddress,
+            Salutation = user.title,
+            FirstName = user.firstName,
+            LastName = user.lastName,
+            // 'Other' address fields = billing address
+            OtherStreet = getAddressLine(user.billingAddress),
+            OtherCity = user.billingAddress.city,
+            OtherState = user.billingAddress.state,
+            OtherPostalCode = user.billingAddress.postCode,
+            OtherCountry = user.billingAddress.country.name,
+            // 'Mailing' address fields = delivery address
+            MailingStreet = None,
+            MailingCity = None,
+            MailingState = None,
+            MailingPostalCode = None,
+            MailingCountry = None,
+            Phone = user.telephoneNumber,
+            Allow_Membership_Mail__c = user.allowMembershipMail,
+            Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+            Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
+          ),
         )
-      ).getOrElse(
-        NewContact(
-          IdentityID__c = user.id,
-          Email = user.primaryEmailAddress,
-          Salutation = user.title,
-          FirstName = user.firstName,
-          LastName = user.lastName,
-          OtherStreet = getAddressLine(user.billingAddress),
-          OtherCity = user.billingAddress.city,
-          OtherState = user.billingAddress.state,
-          OtherPostalCode = user.billingAddress.postCode,
-          OtherCountry = user.billingAddress.country.name,
-          MailingStreet = getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
-          MailingCity = user.deliveryAddress.flatMap(_.city),
-          MailingState = user.deliveryAddress.flatMap(_.state),
-          MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
-          MailingCountry = user.deliveryAddress.map(_.country.name),
-          Phone = user.telephoneNumber,
-          Allow_Membership_Mail__c = user.allowMembershipMail,
-          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
+        .getOrElse(
+          NewContact(
+            IdentityID__c = user.id,
+            Email = user.primaryEmailAddress,
+            Salutation = user.title,
+            FirstName = user.firstName,
+            LastName = user.lastName,
+            OtherStreet = getAddressLine(user.billingAddress),
+            OtherCity = user.billingAddress.city,
+            OtherState = user.billingAddress.state,
+            OtherPostalCode = user.billingAddress.postCode,
+            OtherCountry = user.billingAddress.country.name,
+            MailingStreet = getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
+            MailingCity = user.deliveryAddress.flatMap(_.city),
+            MailingState = user.deliveryAddress.flatMap(_.state),
+            MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
+            MailingCountry = user.deliveryAddress.map(_.country.name),
+            Phone = user.telephoneNumber,
+            Allow_Membership_Mail__c = user.allowMembershipMail,
+            Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+            Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
+          ),
         )
-      )
     implicit val decoder: Decoder[NewContact] = deriveDecoder
     implicit val encoder: Encoder[NewContact] = deriveEncoder[NewContact].mapJsonObject(_.wrapObject("newContact"))
   }
@@ -77,7 +79,7 @@ object Salesforce {
     implicit val encoder: Encoder[DeliveryContact] = deriveEncoder[DeliveryContact]
       .mapJsonObject(
         _.add("RecordTypeId", Json.fromString("01220000000VB50AAG"))
-          .wrapObject("newContact")
+          .wrapObject("newContact"),
       )
   }
 
@@ -92,45 +94,45 @@ object Salesforce {
     implicit val decodeProduct: Decoder[UpsertData] =
       List[Decoder[UpsertData]](
         Decoder[NewContact].widen,
-        Decoder[DeliveryContact].widen
+        Decoder[DeliveryContact].widen,
       ).reduceLeft(_ or _)
   }
 
-  //The odd field names on these class are to match with the Salesforce api and allow us to serialise and deserialise
-  //without a lot of custom mapping code
+  // The odd field names on these class are to match with the Salesforce api and allow us to serialise and deserialise
+  // without a lot of custom mapping code
   case class NewContact(
-    IdentityID__c: String,
-    Email: String,
-    Salutation: Option[Title],
-    FirstName: String,
-    LastName: String,
-    OtherStreet: Option[String],
-    OtherCity: Option[String],
-    OtherState: Option[String],
-    OtherPostalCode: Option[String],
-    OtherCountry: String,
-    MailingStreet: Option[String],
-    MailingCity: Option[String],
-    MailingState: Option[String],
-    MailingPostalCode: Option[String],
-    MailingCountry: Option[String],
-    Phone: Option[String],
-    Allow_Membership_Mail__c: Boolean,
-    Allow_3rd_Party_Mail__c: Boolean,
-    Allow_Guardian_Related_Mail__c: Boolean
+      IdentityID__c: String,
+      Email: String,
+      Salutation: Option[Title],
+      FirstName: String,
+      LastName: String,
+      OtherStreet: Option[String],
+      OtherCity: Option[String],
+      OtherState: Option[String],
+      OtherPostalCode: Option[String],
+      OtherCountry: String,
+      MailingStreet: Option[String],
+      MailingCity: Option[String],
+      MailingState: Option[String],
+      MailingPostalCode: Option[String],
+      MailingCountry: Option[String],
+      Phone: Option[String],
+      Allow_Membership_Mail__c: Boolean,
+      Allow_3rd_Party_Mail__c: Boolean,
+      Allow_Guardian_Related_Mail__c: Boolean,
   ) extends UpsertData
 
   case class DeliveryContact(
-    AccountId: String,
-    Email: Option[String],
-    Salutation: Option[Title],
-    FirstName: String,
-    LastName: String,
-    MailingStreet: Option[String],
-    MailingCity: Option[String],
-    MailingState: Option[String],
-    MailingPostalCode: Option[String],
-    MailingCountry: Option[String],
+      AccountId: String,
+      Email: Option[String],
+      Salutation: Option[Title],
+      FirstName: String,
+      LastName: String,
+      MailingStreet: Option[String],
+      MailingCity: Option[String],
+      MailingState: Option[String],
+      MailingPostalCode: Option[String],
+      MailingCountry: Option[String],
   ) extends UpsertData
 
   trait SalesforceResponse {
@@ -146,22 +148,24 @@ object Salesforce {
   }
 
   case class SalesforceContactResponse(
-    Success: Boolean,
-    ErrorString: Option[String],
-    ContactRecord: SalesforceContactRecord
+      Success: Boolean,
+      ErrorString: Option[String],
+      ContactRecord: SalesforceContactRecord,
   ) extends SalesforceResponse
 
-
   case class SalesforceContactError(
-    Success: Boolean,
-    ErrorString: Option[String]
+      Success: Boolean,
+      ErrorString: Option[String],
   )
 
-  case class SalesforceContactRecords(buyer: SalesforceContactRecord, giftRecipient: Option[SalesforceContactRecord]){
+  case class SalesforceContactRecords(buyer: SalesforceContactRecord, giftRecipient: Option[SalesforceContactRecord]) {
     def recipient: SalesforceContactRecord = giftRecipient.getOrElse(buyer)
   }
 
-  case class SalesforceContactRecordsResponse(buyer: SalesforceContactResponse, giftRecipient: Option[SalesforceContactResponse]) {
+  case class SalesforceContactRecordsResponse(
+      buyer: SalesforceContactResponse,
+      giftRecipient: Option[SalesforceContactResponse],
+  ) {
     def successful: Boolean = buyer.Success && giftRecipient.forall(_.Success)
 
     def errorMessage: Option[String] = List(buyer.ErrorString, giftRecipient.flatMap(_.ErrorString)).flatten.headOption
@@ -177,14 +181,14 @@ object Salesforce {
   }
 
   case class SalesforceErrorResponse(
-    message: String,
-    errorCode: String
+      message: String,
+      errorCode: String,
   ) extends Throwable {
 
     val errorsToRetryUnlimited = List(
       SalesforceErrorResponse.expiredAuthenticationCode,
       SalesforceErrorResponse.rateLimitExceeded,
-      SalesforceErrorResponse.readOnlyMaintenance
+      SalesforceErrorResponse.readOnlyMaintenance,
     )
 
     def asRetryException: RetryException = if (errorsToRetryUnlimited.contains(errorCode))

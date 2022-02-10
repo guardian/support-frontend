@@ -40,7 +40,6 @@ class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     sendThankYouEmail.handleRequestFuture(wrapFixture(sendAcquisitionEventJson), outStream, context).map { _ =>
-
       val result = Encoding.in[List[SendMessageResult]](outStream.toInputStream)
       result.isSuccess should be(true)
     }
@@ -62,8 +61,8 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
         Contribution(20, GBP, Monthly),
         directDebitPaymentMethod,
         "acno",
-        "subno"
-      )
+        "subno",
+      ),
     ).map { ef =>
       val resultJson = parse(ef.payload)
 
@@ -93,7 +92,7 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
 
 object SendThankYouEmailManualTest {
 
-  //This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
+  // This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
   val addressToSendTo = "john.duffell@guardian.co.uk"
   val identityIdToSendTo = "200004242"
   val giftRecipientSFContactIdToSendTo = SfContactId("0039E000018EoTHQA0")
@@ -133,128 +132,146 @@ object SendContributionEmail extends App {
       Contribution(20, GBP, Monthly),
       directDebitPaymentMethod,
       acno,
-      subno
-    )
+      subno,
+    ),
   )
   sendSingle(ef)
 
 }
 object SendDigitalPackEmail extends App {
 
-  send(digitalPackEmailFields.build(
-    SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
-      billingOnlyUser,
-      DigitalPack(GBP, Annual),
-      directDebitPaymentMethod,
-      paymentSchedule,
-      None,
-      acno,
-      subno,
-    )
-  ))
+  send(
+    digitalPackEmailFields.build(
+      SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+        billingOnlyUser,
+        DigitalPack(GBP, Annual),
+        directDebitPaymentMethod,
+        paymentSchedule,
+        None,
+        acno,
+        subno,
+      ),
+    ),
+  )
 
 }
 object SendDigitalPackCorpEmail extends App {
 
-  send(digitalPackEmailFields.build(
-    SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-      billingOnlyUser,
-      DigitalPack(GBP, Annual, ReaderType.Corporate),
-      acno,
-      subno
-    )
-  ))
+  send(
+    digitalPackEmailFields.build(
+      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
+        billingOnlyUser,
+        DigitalPack(GBP, Annual, ReaderType.Corporate),
+        acno,
+        subno,
+      ),
+    ),
+  )
 
 }
 object SendDigitalPackGiftPurchaseEmails extends App {
 
-  send(digitalPackEmailFields.build(
-    SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
-      billingOnlyUser,
-      giftRecipientSFContactIdToSendTo, // recipient
-      DigitalPack(GBP, Annual, ReaderType.Gift),
-      DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), LocalDate.now()),
-      GeneratedGiftCode("gd12-02345678").get,
-      new LocalDate(2020, 10, 14),
-      directDebitPaymentMethod,
-      paymentSchedule,
-      None,
-      acno,
-      subno
-    )
-  ))
+  send(
+    digitalPackEmailFields.build(
+      SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
+        billingOnlyUser,
+        giftRecipientSFContactIdToSendTo, // recipient
+        DigitalPack(GBP, Annual, ReaderType.Gift),
+        DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), LocalDate.now()),
+        GeneratedGiftCode("gd12-02345678").get,
+        new LocalDate(2020, 10, 14),
+        directDebitPaymentMethod,
+        paymentSchedule,
+        None,
+        acno,
+        subno,
+      ),
+    ),
+  )
 
 }
 object SendDigitalPackGiftRedemptionEmail extends App {
 
-  send(digitalPackEmailFields.build(
-    SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-      billingOnlyUser,
-      DigitalPack(GBP, Annual, ReaderType.Gift),
-      "subno",
-      TermDates(
-        new LocalDate(2020, 10, 24),
-        new LocalDate(2021, 1, 24),
-        3,
-      )
-    )
-  ))
+  send(
+    digitalPackEmailFields.build(
+      SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
+        billingOnlyUser,
+        DigitalPack(GBP, Annual, ReaderType.Gift),
+        "subno",
+        TermDates(
+          new LocalDate(2020, 10, 24),
+          new LocalDate(2021, 1, 24),
+          3,
+        ),
+      ),
+    ),
+  )
 
 }
 object SendPaperSubscriptionEmail extends App {
 
-  sendSingle(new PaperEmailFields(paperFieldsGenerator, SANDBOX).build(
-    SendThankYouEmailPaperState(
-      officeUser,
-      Paper(GBP, Monthly, Collection, Saturday),
-      directDebitPaymentMethod,
-      PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
-      None,
-      acno,
-      subno,
-      firstDeliveryDate = new LocalDate(2019, 3, 26)
-    )
-  ))
+  sendSingle(
+    new PaperEmailFields(paperFieldsGenerator, SANDBOX).build(
+      SendThankYouEmailPaperState(
+        officeUser,
+        Paper(GBP, Monthly, Collection, Saturday),
+        directDebitPaymentMethod,
+        PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
+        None,
+        acno,
+        subno,
+        firstDeliveryDate = new LocalDate(2019, 3, 26),
+      ),
+    ),
+  )
 
 }
 object SendWeeklySubscriptionEmail extends App {
 
-  sendSingle(new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
-    SendThankYouEmailGuardianWeeklyState(
-      officeUser,
-      GuardianWeekly(GBP, Quarterly, Domestic),
-      None,
-      directDebitPaymentMethod,
-      PaymentSchedule(List(
-        Payment(new LocalDate(2019, 3, 25), 37.50),
-        Payment(new LocalDate(2019, 6, 25), 37.50)
-      )),
-       None,
-      acno,
-      subno,
-      new LocalDate(2019, 3, 26),
-    )
-  ))
+  sendSingle(
+    new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
+      SendThankYouEmailGuardianWeeklyState(
+        officeUser,
+        GuardianWeekly(GBP, Quarterly, Domestic),
+        None,
+        directDebitPaymentMethod,
+        PaymentSchedule(
+          List(
+            Payment(new LocalDate(2019, 3, 25), 37.50),
+            Payment(new LocalDate(2019, 6, 25), 37.50),
+          ),
+        ),
+        None,
+        acno,
+        subno,
+        new LocalDate(2019, 3, 26),
+      ),
+    ),
+  )
 
 }
 object SendWeeklySubscriptionGiftEmail extends App {
 
-  sendSingle(new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
-    SendThankYouEmailGuardianWeeklyState(
-      officeUser,
-      GuardianWeekly(GBP, Quarterly, Domestic),
-      Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None)),
-      directDebitPaymentMethod,
-      PaymentSchedule(List(
-        Payment(new LocalDate(2019, 3, 25), 37.50),
-        Payment(new LocalDate(2019, 6, 25), 37.50)
-      )),
-      None,
-      acno,
-      subno,
-      new LocalDate(2019, 3, 26),
-    )
-  ))
+  sendSingle(
+    new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
+      SendThankYouEmailGuardianWeeklyState(
+        officeUser,
+        GuardianWeekly(GBP, Quarterly, Domestic),
+        Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None)),
+        directDebitPaymentMethod,
+        PaymentSchedule(
+          List(
+            Payment(new LocalDate(2019, 3, 25), 37.50),
+            Payment(new LocalDate(2019, 6, 25), 37.50),
+          ),
+        ),
+        None,
+        acno,
+        subno,
+        new LocalDate(2019, 3, 26),
+      ),
+    ),
+  )
 
 }
 
@@ -264,9 +281,11 @@ object TestData {
   val subno = "A-S00045678"
   val acno = "A123456"
 
-  val countryOnlyAddress = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
+  val countryOnlyAddress =
+    Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
 
-  val billingOnlyUser = User(identityIdToSendTo, addressToSendTo, None, "Mickey", "Mouse", billingAddress = countryOnlyAddress)
+  val billingOnlyUser =
+    User(identityIdToSendTo, addressToSendTo, None, "Mickey", "Mouse", billingAddress = countryOnlyAddress)
 
   val officeAddress = Address(
     lineOne = Some("90 York Way"),
@@ -274,7 +293,7 @@ object TestData {
     city = Some("London"),
     state = None,
     postCode = Some("N1 9AG"),
-    country = UK
+    country = UK,
   )
 
   val officeUser = User(
@@ -284,14 +303,14 @@ object TestData {
     "Mickey",
     "Mouse",
     billingAddress = officeAddress,
-    deliveryAddress = Some(officeAddress)
+    deliveryAddress = Some(officeAddress),
   )
 
   val getMandate = (_: String) => Future.successful(Some("65HK26E"))
 
   val promotionService = new PromotionService(
     PromotionsConfig(PromotionsDiscountConfig("", ""), PromotionsTablesConfig("", "")),
-    Some(new SimplePromotionCollection(Nil))
+    Some(new SimplePromotionCollection(Nil)),
   )
 
   val paperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
@@ -307,7 +326,7 @@ object TestData {
     PostalCode = Some("post code"),
     State = None,
     StreetName = Some("streetname"),
-    StreetNumber = Some("123")
+    StreetNumber = Some("123"),
   )
 
   val digitalPackEmailFields = new DigitalPackEmailFields(

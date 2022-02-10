@@ -5,22 +5,39 @@ import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.{Contribution, DigitalPack, GuardianWeekly, Paper, PaymentMethod, RequestInfo, SalesforceContactRecord}
+import com.gu.support.workers.{
+  Contribution,
+  DigitalPack,
+  GuardianWeekly,
+  Paper,
+  PaymentMethod,
+  RequestInfo,
+  SalesforceContactRecord,
+}
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState, DigitalSubscriptionGiftRedemptionState, GuardianWeeklyState, PaperState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
+  ContributionState,
+  DigitalSubscriptionCorporateRedemptionState,
+  DigitalSubscriptionDirectPurchaseState,
+  DigitalSubscriptionGiftPurchaseState,
+  DigitalSubscriptionGiftRedemptionState,
+  GuardianWeeklyState,
+  PaperState,
+}
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.ReaderType
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState](ServiceProvider) {
+class CreateSalesforceContact
+    extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState](ServiceProvider) {
 
   override protected def servicesHandler(
-    state: CreateSalesforceContactState,
-    requestInfo: RequestInfo,
-    context: Context,
-    services: Services
+      state: CreateSalesforceContactState,
+      requestInfo: RequestInfo,
+      context: Context,
+      services: Services,
   ): Future[HandlerResult[CreateZuoraSubscriptionState]] = {
     SafeLogger.debug(s"CreateSalesforceContact state: $state")
 
@@ -45,7 +62,7 @@ class NextState(state: CreateSalesforceContactState) {
 
   // scalastyle:off cyclomatic.complexity
   def build(
-    salesforceContactRecords: SalesforceContactRecords,
+      salesforceContactRecords: SalesforceContactRecords,
   ): CreateZuoraSubscriptionState =
     (product, paymentMethod) match {
       case (product: Contribution, Purchase(purchase)) =>
@@ -67,91 +84,168 @@ class NextState(state: CreateSalesforceContactState) {
   // scalastyle:on cyclomatic.complexity
 
   def toNextContribution(
-    salesforceContactRecords: SalesforceContactRecords,
-    product: Contribution,
-    purchase: PaymentMethod
+      salesforceContactRecords: SalesforceContactRecords,
+      product: Contribution,
+      purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(ContributionState(
+    CreateZuoraSubscriptionState(
+      ContributionState(
+        product,
+        purchase,
+        salesforceContactRecords.buyer,
+      ),
+      requestId,
+      user,
       product,
-      purchase,
-      salesforceContactRecords.buyer,
-    ), requestId, user, product, analyticsInfo, None, None, state.csrUsername, state.salesforceCaseId, acquisitionData)
+      analyticsInfo,
+      None,
+      None,
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
 
   def toNextDSRedemption(
-    product: DigitalPack,
-    redemptionData: RedemptionData
+      product: DigitalPack,
+      redemptionData: RedemptionData,
   ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(DigitalSubscriptionGiftRedemptionState(
-      user.id,
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionGiftRedemptionState(
+        user.id,
+        product,
+        redemptionData,
+      ),
+      requestId,
+      user,
       product,
-      redemptionData,
-    ), requestId, user, product, analyticsInfo, None, None, state.csrUsername, state.salesforceCaseId, acquisitionData)
+      analyticsInfo,
+      None,
+      None,
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
 
   def toNextDSCorporate(
-    salesforceContactRecord: SalesforceContactRecord,
-    product: DigitalPack,
-    redemptionData: RedemptionData
+      salesforceContactRecord: SalesforceContactRecord,
+      product: DigitalPack,
+      redemptionData: RedemptionData,
   ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(DigitalSubscriptionCorporateRedemptionState(
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionCorporateRedemptionState(
+        product,
+        redemptionData,
+        salesforceContactRecord,
+      ),
+      requestId,
+      user,
       product,
-      redemptionData,
-      salesforceContactRecord,
-    ), requestId, user, product, analyticsInfo, None, None, state.csrUsername, state.salesforceCaseId, acquisitionData)
+      analyticsInfo,
+      None,
+      None,
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
 
   def toNextWeekly(
-    salesforceContactRecords: SalesforceContactRecords,
-    product: GuardianWeekly,
-    purchase: PaymentMethod
+      salesforceContactRecords: SalesforceContactRecords,
+      product: GuardianWeekly,
+      purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(GuardianWeeklyState(
+    CreateZuoraSubscriptionState(
+      GuardianWeeklyState(
+        user,
+        giftRecipient.map(_.asWeekly.get),
+        product,
+        purchase,
+        firstDeliveryDate.get,
+        promoCode,
+        salesforceContactRecords,
+      ),
+      requestId,
       user,
-      giftRecipient.map(_.asWeekly.get),
       product,
-      purchase,
-      firstDeliveryDate.get,
+      analyticsInfo,
+      firstDeliveryDate,
       promoCode,
-      salesforceContactRecords,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
 
   def toNextPaper(
-    salesforceContactRecord: SalesforceContactRecord,
-    product: Paper,
-    purchase: PaymentMethod
+      salesforceContactRecord: SalesforceContactRecord,
+      product: Paper,
+      purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(PaperState(
+    CreateZuoraSubscriptionState(
+      PaperState(
+        user,
+        product,
+        purchase,
+        firstDeliveryDate.get,
+        promoCode,
+        salesforceContactRecord,
+      ),
+      requestId,
       user,
       product,
-      purchase,
-      firstDeliveryDate.get,
+      analyticsInfo,
+      firstDeliveryDate,
       promoCode,
-      salesforceContactRecord,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
 
   def toNextDSGift(
-    salesforceContactRecords: SalesforceContactRecords,
-    product: DigitalPack,
-    purchase: PaymentMethod
+      salesforceContactRecords: SalesforceContactRecords,
+      product: DigitalPack,
+      purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(DigitalSubscriptionGiftPurchaseState(
-      user.billingAddress.country,
-      giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionGiftPurchaseState(
+        user.billingAddress.country,
+        giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
+        product,
+        purchase,
+        promoCode,
+        salesforceContactRecords,
+      ),
+      requestId,
+      user,
       product,
-      purchase,
+      analyticsInfo,
+      firstDeliveryDate,
       promoCode,
-      salesforceContactRecords,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
 
   def toNextDSDirect(
-    salesforceContactRecord: SalesforceContactRecord,
-    product: DigitalPack,
-    purchase: PaymentMethod
+      salesforceContactRecord: SalesforceContactRecord,
+      product: DigitalPack,
+      purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(DigitalSubscriptionDirectPurchaseState(
-      user.billingAddress.country,
+    CreateZuoraSubscriptionState(
+      DigitalSubscriptionDirectPurchaseState(
+        user.billingAddress.country,
+        product,
+        purchase,
+        promoCode,
+        salesforceContactRecord,
+      ),
+      requestId,
+      user,
       product,
-      purchase,
+      analyticsInfo,
+      firstDeliveryDate,
       promoCode,
-      salesforceContactRecord,
-    ), requestId, user, product, analyticsInfo, firstDeliveryDate, promoCode, state.csrUsername, state.salesforceCaseId, acquisitionData)
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
 
 }

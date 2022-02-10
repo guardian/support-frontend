@@ -14,19 +14,24 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ZuoraDigitalSubscriptionCorporateRedemptionHandler(
-  zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
-  corporateCodeStatusUpdater: CorporateCodeStatusUpdater,
-  digitalSubscriptionCorporateRedemptionBuilder: DigitalSubscriptionCorporateRedemptionBuilder,
-  user: User,
+    zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
+    corporateCodeStatusUpdater: CorporateCodeStatusUpdater,
+    digitalSubscriptionCorporateRedemptionBuilder: DigitalSubscriptionCorporateRedemptionBuilder,
+    user: User,
 ) {
 
   def subscribe(state: DigitalSubscriptionCorporateRedemptionState): Future[SendThankYouEmailState] =
     for {
-      subscribeItem <- digitalSubscriptionCorporateRedemptionBuilder.build(state)
-        .leftMap(BuildSubscribeRedemptionError).value.map(_.toTry).flatMap(Future.fromTry)
+      subscribeItem <- digitalSubscriptionCorporateRedemptionBuilder
+        .build(state)
+        .leftMap(BuildSubscribeRedemptionError)
+        .value
+        .map(_.toTry)
+        .flatMap(Future.fromTry)
         .withEventualLogging("subscription data")
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
-      _ <- corporateCodeStatusUpdater.setStatus(state.redemptionData.redemptionCode, RedemptionTable.AvailableField.CodeIsUsed)
+      _ <- corporateCodeStatusUpdater
+        .setStatus(state.redemptionData.redemptionCode, RedemptionTable.AvailableField.CodeIsUsed)
         .withEventualLogging("update redemption code")
     } yield SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, state.product, account.value, sub.value)
 

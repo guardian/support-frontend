@@ -14,10 +14,12 @@ object AcquisitionDataRowMapper {
     val optionalFields = List(
       acquisition.promoCode.map("promo_code" -> _),
       acquisition.paymentProvider.map("payment_provider" -> _.value),
-      acquisition.printOptions.map(p => "print_options" -> Map(
-        "product" -> p.product.value,
-        "delivery_country_code" -> p.deliveryCountry.alpha2
-      ).asJava),
+      acquisition.printOptions.map(p =>
+        "print_options" -> Map(
+          "product" -> p.product.value,
+          "delivery_country_code" -> p.deliveryCountry.alpha2,
+        ).asJava,
+      ),
       acquisition.amount.map("amount" -> _),
       acquisition.identityId.map("identity_id" -> _),
       acquisition.pageViewId.map("page_view_id" -> _),
@@ -31,7 +33,7 @@ object AcquisitionDataRowMapper {
       acquisition.zuoraAccountNumber.map("zuora_account_number" -> _),
       acquisition.zuoraSubscriptionNumber.map("zuora_subscription_number" -> _),
       acquisition.contributionId.map("contribution_id" -> _),
-      acquisition.paymentId.map("payment_id" -> _)
+      acquisition.paymentId.map("payment_id" -> _),
     ).flatten.toMap
 
     (Map(
@@ -60,17 +62,23 @@ object AcquisitionDataRowMapper {
     }
 
   private def mapAbTests(abtests: List[AbTest]) =
-    abtests.map(abTest =>
-      Map(
-        "name" -> abTest.name,
-        "variant" -> abTest.variant
-      ).asJava).asJava
+    abtests
+      .map(abTest =>
+        Map(
+          "name" -> abTest.name,
+          "variant" -> abTest.variant,
+        ).asJava,
+      )
+      .asJava
 
   private def mapQueryParameters(queryParameters: List[QueryParameter]) =
-    queryParameters.map(queryParam =>
-      Map(
-        "key" -> queryParam.name,
-        "value" -> queryParam.value
-      ).asJava).asJava
+    queryParameters
+      .map(queryParam =>
+        Map(
+          "key" -> queryParam.name,
+          "value" -> queryParam.value,
+        ).asJava,
+      )
+      .asJava
 
 }

@@ -39,7 +39,7 @@ object PaypalJsonDecoder {
     } yield {
       CapturePaypalPaymentData(
         paymentData = CapturePaymentData(
-          paymentId = paymentId
+          paymentId = paymentId,
         ),
         acquisitionData = AcquisitionData(
           platform = platform,
@@ -52,14 +52,16 @@ object PaypalJsonDecoder {
           campaignCodes = Option(Set(cmp, intcmp).flatten).filter(_.nonEmpty),
           componentType = componentType,
           source = source,
-          abTests = Option(Set(abTest, refererAbTest).flatten ++ nativeAbTests
-            .getOrElse(Set[AbTest]()))
+          abTests = Option(
+            Set(abTest, refererAbTest).flatten ++ nativeAbTests
+              .getOrElse(Set[AbTest]()),
+          )
             .filter(_.nonEmpty),
           queryParameters = queryParameters,
           gaId = gaId,
-          labels = labels
+          labels = labels,
         ),
-        signedInUserEmail = None
+        signedInUserEmail = None,
       )
     }
   }
@@ -76,29 +78,29 @@ object PaypalJsonDecoder {
  * App: create paypal payment (auth directly form mobile app) -> capture
  */
 @JsonCodec case class CreatePaypalPaymentData(
-  currency: Currency,
-  amount: BigDecimal,
-  returnURL: String,
-  cancelURL: String
+    currency: Currency,
+    amount: BigDecimal,
+    returnURL: String,
+    cancelURL: String,
 )
 
 @JsonCodec case class CapturePaymentData(
-  paymentId: String
+    paymentId: String,
 )
 
 case class CapturePaypalPaymentData(
-  paymentData: CapturePaymentData,
-  acquisitionData: AcquisitionData,
-  signedInUserEmail: Option[String]
+    paymentData: CapturePaymentData,
+    acquisitionData: AcquisitionData,
+    signedInUserEmail: Option[String],
 )
 
 @JsonCodec case class ExecutePaymentData(
-  paymentId: String,
-  payerId: String
+    paymentId: String,
+    payerId: String,
 )
 
 case class ExecutePaypalPaymentData(
-  paymentData: ExecutePaymentData,
-  acquisitionData: AcquisitionData,
-  email: String
+    paymentData: ExecutePaymentData,
+    acquisitionData: AcquisitionData,
+    email: String,
 )

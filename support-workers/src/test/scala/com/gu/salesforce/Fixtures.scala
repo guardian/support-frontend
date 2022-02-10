@@ -22,7 +22,7 @@ object Fixtures {
   val newContactUK = NewContact(
     IdentityID__c = idId,
     Email = emailAddress,
-    Salutation= Some(Title.Mrs),
+    Salutation = Some(Title.Mrs),
     FirstName = name,
     LastName = name,
     OtherStreet = None,
@@ -38,14 +38,14 @@ object Fixtures {
     Phone = None,
     Allow_Membership_Mail__c = allowMail,
     Allow_3rd_Party_Mail__c = allowMail,
-    Allow_Guardian_Related_Mail__c = allowMail
+    Allow_Guardian_Related_Mail__c = allowMail,
   )
   val newContactUKWithBillingAddress = newContactUK.copy(
     OtherStreet = Some("123 trash alley"),
     OtherCity = Some("London"),
     OtherState = None,
     OtherPostalCode = Some("n1 9gu"),
-    OtherCountry = uk
+    OtherCountry = uk,
   )
   val newContactUKWithBothAddressesAndTelephone = newContactUKWithBillingAddress.copy(
     MailingStreet = Some("123 trash alley"),
@@ -53,7 +53,7 @@ object Fixtures {
     MailingState = None,
     MailingPostalCode = Some("n1 9gu"),
     MailingCountry = Some(uk),
-    Phone = Some(telephoneNumber)
+    Phone = Some(telephoneNumber),
   )
   val newContactUS = newContactUK.copy(OtherCountry = us, OtherState = Some(state))
 
@@ -67,9 +67,8 @@ object Fixtures {
     MailingCity = Some(city),
     MailingState = None,
     MailingPostalCode = Some(postCode),
-    MailingCountry = Some(uk)
+    MailingCountry = Some(uk),
   )
-
 
   val upsertJson =
     s"""{

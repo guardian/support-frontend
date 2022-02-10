@@ -22,7 +22,8 @@ object StripePaymentType {
   case object StripePaymentRequestButton extends StripePaymentType
 
   implicit val stripePaymentTypeDecoder: Decoder[StripePaymentType] = Decoder.decodeString.map(code => fromString(code))
-  implicit val stripePaymentTypeEncoder: Encoder[StripePaymentType] = Encoder.encodeString.contramap[StripePaymentType](_.toString)
+  implicit val stripePaymentTypeEncoder: Encoder[StripePaymentType] =
+    Encoder.encodeString.contramap[StripePaymentType](_.toString)
 
   private def fromString(s: String) = {
     s match {
@@ -34,75 +35,75 @@ object StripePaymentType {
 }
 
 case class CreditCardReferenceTransaction(
-  TokenId: String, //Stripe Card id
-  SecondTokenId: String, //Stripe Customer Id
-  CreditCardNumber: String,
-  CreditCardCountry: Option[Country],
-  CreditCardExpirationMonth: Int,
-  CreditCardExpirationYear: Int,
-  CreditCardType: Option[String] /*TODO: strip spaces?*/ ,
-  PaymentGateway: PaymentGateway,
-  Type: String = "CreditCardReferenceTransaction",
-  StripePaymentType: Option[StripePaymentType]
+    TokenId: String, // Stripe Card id
+    SecondTokenId: String, // Stripe Customer Id
+    CreditCardNumber: String,
+    CreditCardCountry: Option[Country],
+    CreditCardExpirationMonth: Int,
+    CreditCardExpirationYear: Int,
+    CreditCardType: Option[String] /*TODO: strip spaces?*/,
+    PaymentGateway: PaymentGateway,
+    Type: String = "CreditCardReferenceTransaction",
+    StripePaymentType: Option[StripePaymentType],
 ) extends PaymentMethod
 
 case class PayPalReferenceTransaction(
-  PaypalBaid: String,
-  PaypalEmail: String,
-  PaypalType: String = "ExpressCheckout",
-  Type: String = "PayPal",
-  PaymentGateway: PaymentGateway = PayPalGateway
+    PaypalBaid: String,
+    PaypalEmail: String,
+    PaypalType: String = "ExpressCheckout",
+    Type: String = "PayPal",
+    PaymentGateway: PaymentGateway = PayPalGateway,
 ) extends PaymentMethod
 
 case class DirectDebitPaymentMethod(
-  FirstName: String,
-  LastName: String,
-  BankTransferAccountName: String,
-  BankCode: String,
-  BankTransferAccountNumber: String,
-  Country: Country = UK,
-  City: Option[String],
-  PostalCode: Option[String],
-  State: Option[String],
-  StreetName: Option[String],
-  StreetNumber: Option[String],
-  BankTransferType: String = "DirectDebitUK",
-  Type: String = "BankTransfer",
-  PaymentGateway: PaymentGateway = DirectDebitGateway
+    FirstName: String,
+    LastName: String,
+    BankTransferAccountName: String,
+    BankCode: String,
+    BankTransferAccountNumber: String,
+    Country: Country = UK,
+    City: Option[String],
+    PostalCode: Option[String],
+    State: Option[String],
+    StreetName: Option[String],
+    StreetNumber: Option[String],
+    BankTransferType: String = "DirectDebitUK",
+    Type: String = "BankTransfer",
+    PaymentGateway: PaymentGateway = DirectDebitGateway,
 ) extends PaymentMethod
 
 case class ClonedDirectDebitPaymentMethod(
-  ExistingMandate: String = "Yes",
-  TokenId: String,
-  MandateId: String,
-  FirstName: String,
-  LastName: String,
-  BankTransferAccountName: String,
-  BankCode: String,
-  BankTransferAccountNumber: String,
-  Country: Country = UK,
-  BankTransferType: String = "DirectDebitUK",
-  Type: String = "BankTransfer",
-  PaymentGateway: PaymentGateway = DirectDebitGateway
+    ExistingMandate: String = "Yes",
+    TokenId: String,
+    MandateId: String,
+    FirstName: String,
+    LastName: String,
+    BankTransferAccountName: String,
+    BankCode: String,
+    BankTransferAccountNumber: String,
+    Country: Country = UK,
+    BankTransferType: String = "DirectDebitUK",
+    Type: String = "BankTransfer",
+    PaymentGateway: PaymentGateway = DirectDebitGateway,
 ) extends PaymentMethod
 
 case class GatewayOption(name: String, value: String)
 case class GatewayOptionData(GatewayOption: List[GatewayOption])
 case class SepaPaymentMethod(
-  BankTransferAccountName: String,
-  BankTransferAccountNumber: String,
-  Email: String,
-  IPAddress: String,
-  GatewayOptionData: GatewayOptionData,
-  BankTransferType: String = "SEPA",
-  `Type`: String = "BankTransfer",
-  PaymentGateway: PaymentGateway = SepaGateway
+    BankTransferAccountName: String,
+    BankTransferAccountNumber: String,
+    Email: String,
+    IPAddress: String,
+    GatewayOptionData: GatewayOptionData,
+    BankTransferType: String = "SEPA",
+    `Type`: String = "BankTransfer",
+    PaymentGateway: PaymentGateway = SepaGateway,
 ) extends PaymentMethod
 
 case class AmazonPayPaymentMethod(
-  TokenId: String,
-  Type: String = "CreditCardReferenceTransaction",  // This is how amazon pay works in zuora - as a credit card
-  PaymentGateway: PaymentGateway
+    TokenId: String,
+    Type: String = "CreditCardReferenceTransaction", // This is how amazon pay works in zuora - as a credit card
+    PaymentGateway: PaymentGateway,
 ) extends PaymentMethod
 
 object PaymentMethod {
@@ -115,7 +116,7 @@ object PaymentMethod {
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = deriveCodec
   implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = deriveCodec
 
-  //Payment Methods are details from the payment provider
+  // Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
     case pp: PayPalReferenceTransaction => pp.asJson
     case card: CreditCardReferenceTransaction => card.asJson
@@ -132,6 +133,6 @@ object PaymentMethod {
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)
       Decoder[DirectDebitPaymentMethod].widen,
       Decoder[SepaPaymentMethod].widen,
-      Decoder[AmazonPayPaymentMethod].widen
+      Decoder[AmazonPayPaymentMethod].widen,
     ).reduceLeft(_ or _)
 }

@@ -9,6 +9,6 @@ object StripeCreateChargeResponse {
   def fromCharge(charge: Charge): StripeCreateChargeResponse =
     StripeCreateChargeResponse(
       charge.getCurrency,
-      BigDecimal(charge.getAmount) / 100
+      BigDecimal(charge.getAmount) / 100,
     )
 }

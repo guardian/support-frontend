@@ -1,11 +1,9 @@
 package com.gu.i18n
 
-
 import com.gu.i18n.Currency._
 import org.scalatest.Inspectors
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
-
 
 class CountryGroupTest extends AsyncFlatSpec with Matchers with Inspectors {
 
@@ -36,13 +34,13 @@ class CountryGroupTest extends AsyncFlatSpec with Matchers with Inspectors {
 
   it should "identify countries correctly" in {
     forAll(CountryGroup.countries) { c =>
-        CountryGroup.byOptimisticCountryNameOrCode(c.name) shouldBe Some(c)
-        CountryGroup.byOptimisticCountryNameOrCode(c.alpha2) shouldBe Some(c)
+      CountryGroup.byOptimisticCountryNameOrCode(c.name) shouldBe Some(c)
+      CountryGroup.byOptimisticCountryNameOrCode(c.alpha2) shouldBe Some(c)
     }
   }
 
   it should "handle null and return None" in {
-    //noinspection ScalaStyle
+    // noinspection ScalaStyle
     CountryGroup.byOptimisticCountryNameOrCode(null) shouldBe None
   }
 
@@ -59,13 +57,11 @@ class CountryGroupTest extends AsyncFlatSpec with Matchers with Inspectors {
       "UK" -> Country.UK,
       "GB" -> Country.UK,
       "united states of america" -> Country.US,
-      "trinidad and tobago" -> CountryGroup.countryByCode("TT").get
+      "trinidad and tobago" -> CountryGroup.countryByCode("TT").get,
     )
-    forAll(tests){
-      case (name: String, country: Country) =>
-        CountryGroup.byOptimisticCountryNameOrCode(name) shouldBe Some(country)
+    forAll(tests) { case (name: String, country: Country) =>
+      CountryGroup.byOptimisticCountryNameOrCode(name) shouldBe Some(country)
     }
   }
-
 
 }

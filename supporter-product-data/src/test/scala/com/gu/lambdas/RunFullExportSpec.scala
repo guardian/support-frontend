@@ -30,11 +30,14 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   val updateLastSuccessfulQueryTime = false
 
   "This test is just an easy way to run an aqua query. It" should "save the results to a csv in supporter-product-data/data-extracts" ignore {
-    val attemptedQueryTime = LocalDateTime.parse("2021-03-15T16:27:02.429").atZone(ZoneId.of("America/Los_Angeles")).minusMinutes(1)
+    val attemptedQueryTime =
+      LocalDateTime.parse("2021-03-15T16:27:02.429").atZone(ZoneId.of("America/Los_Angeles")).minusMinutes(1)
     for {
       fetchResultsState <- QueryZuoraLambda.queryZuora(stage, queryType)
       updateDynamoState <- fetchResults(stage, fetchResultsState.jobId, fetchResultsState.attemptedQueryTime)
-      _ <- if (updateLastSuccessfulQueryTime) ConfigService(stage).putLastSuccessfulQueryTime(attemptedQueryTime) else Future.successful(())
+      _ <-
+        if (updateLastSuccessfulQueryTime) ConfigService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
+        else Future.successful(())
     } yield updateDynamoState.filename should endWith(".csv")
   }
 
@@ -45,10 +48,11 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       config <- ConfigService(stage).load
       service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.getResults(jobId)
-      finalState <- if (result.status == Completed)
-        downloadResults(result, service)
-      else
-        fetchResults(stage, jobId, attemptedQueryTime)
+      finalState <-
+        if (result.status == Completed)
+          downloadResults(result, service)
+        else
+          fetchResults(stage, jobId, attemptedQueryTime)
     } yield {
       finalState
     }
@@ -58,24 +62,34 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     val batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response")
     val fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in the job")
     for {
-         fileResponse <- service.getResultFileResponse(fileId)
-       _ = assert(fileResponse.isSuccessful, s"File download for job failed with http code ${fileResponse.code}")
-       filePath = FileSystems.getDefault.getPath(System.getProperty("user.dir"), "supporter-product-data", "data-extracts", s"last-$queryType-$stage.csv")
-       _ = Files.copy(fileResponse.body.byteStream, filePath, StandardCopyOption.REPLACE_EXISTING)
-       _ = if(sanitizeFieldNamesAfterDownload) sanitizeFieldNames(filePath.toString)
+      fileResponse <- service.getResultFileResponse(fileId)
+      _ = assert(fileResponse.isSuccessful, s"File download for job failed with http code ${fileResponse.code}")
+      filePath = FileSystems.getDefault.getPath(
+        System.getProperty("user.dir"),
+        "supporter-product-data",
+        "data-extracts",
+        s"last-$queryType-$stage.csv",
+      )
+      _ = Files.copy(fileResponse.body.byteStream, filePath, StandardCopyOption.REPLACE_EXISTING)
+      _ = if (sanitizeFieldNamesAfterDownload) sanitizeFieldNames(filePath.toString)
     } yield {
       logger.info(s"Successfully wrote file $filePath with ${batch.recordCount} records")
       UpdateDynamoState(
         filePath.toString,
         batch.recordCount,
         processedCount = 0,
-        ZonedDateTime.now
+        ZonedDateTime.now,
       )
     }
   }
 
   def sanitizeFieldNames(filename: String) = {
-    val tempPath = FileSystems.getDefault.getPath(System.getProperty("user.dir"), "supporter-product-data", "data-extracts", "temp.csv")
+    val tempPath = FileSystems.getDefault.getPath(
+      System.getProperty("user.dir"),
+      "supporter-product-data",
+      "data-extracts",
+      "temp.csv",
+    )
     val tempFile = new File(tempPath.toString)
     val writer = new PrintWriter(tempFile)
 

@@ -39,7 +39,8 @@ object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
 }
 
-class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext) extends StrictLogging {
+class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext)
+    extends StrictLogging {
 
   import cats.implicits._
 
@@ -51,7 +52,6 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       .expireAfterWrite(1.minutes)
       .maximumSize(10)
       .buildAsync(s => fromS3().getOrElse(Switches(None, None)))
-
 
   def recaptchaSwitches: EitherT[Future, Nothing, Switches] =
     EitherT.right(cache.get(cacheKey))
@@ -87,7 +87,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
         err => logger.error(s"Error udpating cache for recaptchaSwitch:", err),
         update => {
           cache.put(cacheKey, Future(update))
-        }
+        },
       )
     }
   }

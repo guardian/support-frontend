@@ -12,24 +12,31 @@ import util.RequestBasedProvider
 import ActionOps.Extension
 
 class GoCardlessController(
-  cc: ControllerComponents,
-  goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend],
+    cc: ControllerComponents,
+    goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend],
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-    extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
+    extends AbstractController(cc)
+    with Circe
+    with JsonUtils
+    with StrictLogging
+    with CorsActionProvider {
 
   import cats.implicits._
   import util.RequestTypeDecoder.instances._
 
-  def checkBankAccount: Action[CheckDirectDebitDetailsData] = CorsAction.async(circe.json[CheckDirectDebitDetailsData]) { request => {
-      goCardlessBackendProvider
-        .getInstanceFor(request)
-        .checkBankAccount(request.body)
-        .fold(
-          checkBankAccountErrorToResponse,
-          accountValidation => Ok(ResultBody.Success(accountValidation))
-        )
+  def checkBankAccount: Action[CheckDirectDebitDetailsData] = CorsAction
+    .async(circe.json[CheckDirectDebitDetailsData]) { request =>
+      {
+        goCardlessBackendProvider
+          .getInstanceFor(request)
+          .checkBankAccount(request.body)
+          .fold(
+            checkBankAccountErrorToResponse,
+            accountValidation => Ok(ResultBody.Success(accountValidation)),
+          )
+      }
     }
-  }.withLogging(this.getClass.getCanonicalName, "checkBankAccount")
+    .withLogging(this.getClass.getCanonicalName, "checkBankAccount")
 
   private def checkBankAccountErrorToResponse(error: Throwable) = error match {
     case goCardlessApiException: GoCardlessApiException =>

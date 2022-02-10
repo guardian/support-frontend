@@ -17,7 +17,8 @@ class CacheHeadersCheck(implicit val mat: Materializer, ec: ExecutionContext) ex
       if (suitableForCaching(result)) {
         assert(
           assertion = result.header.headers.contains("Cache-Control"),
-          message = s"Cache-Control not set. Ensure controller response has Cache-Control header set for ${requestHeader.path}"
+          message =
+            s"Cache-Control not set. Ensure controller response has Cache-Control header set for ${requestHeader.path}",
         )
       }
       result

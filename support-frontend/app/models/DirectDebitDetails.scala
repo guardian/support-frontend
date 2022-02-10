@@ -14,7 +14,9 @@ object AccountNumber {
   }
 
   implicit val decodeAccountNumber: Decoder[AccountNumber] =
-    Decoder.decodeString.emap(accountNumber => fromString(accountNumber).toRight(s"Invalid account number '$accountNumber'"))
+    Decoder.decodeString.emap(accountNumber =>
+      fromString(accountNumber).toRight(s"Invalid account number '$accountNumber'"),
+    )
   implicit val encodeAccountNumber: Encoder[AccountNumber] = Encoder.encodeString.contramap[AccountNumber](_.value)
 }
 

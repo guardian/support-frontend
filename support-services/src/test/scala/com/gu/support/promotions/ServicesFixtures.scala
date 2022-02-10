@@ -9,10 +9,8 @@ import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
-/**
- * Promotions are quite laborious to construct
- * So these are helper methods for unit tests
- */
+/** Promotions are quite laborious to construct So these are helper methods for unit tests
+  */
 object ServicesFixtures {
 
   val freeTrialPromoCode = "FREE_TRIAL_CODE"
@@ -31,28 +29,34 @@ object ServicesFixtures {
   val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
   val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))
 
-  val freeTrial =  promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
+  val freeTrial = promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
   val freeTrialWithCode = PromotionWithCode(freeTrialPromoCode, freeTrial)
   val discount = promotion(validProductRatePlanIds, discountPromoCode, discountBenefit)
   val discountWithCode = PromotionWithCode(discountPromoCode, discount)
   val double = promotion(validProductRatePlanIds, doublePromoCode, discountBenefit, freeTrialBenefit)
   val doubleWithCode = PromotionWithCode(doublePromoCode, double)
-  val tracking = PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
-  val renewal = PromotionWithCode(renewalPromoCode, promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true))
+  val tracking =
+    PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
+  val renewal = PromotionWithCode(
+    renewalPromoCode,
+    promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true),
+  )
   val guardianWeeklyAnnual = promotion(
     GuardianWeekly
       .getProductRatePlans(TouchPointEnvironments.PROD)
       .filter(ratePlan => ratePlan.billingPeriod == Annual && ratePlan.readerType == Direct)
       .map(_.id),
     NonGift.tenAnnual,
-    Some(DiscountBenefit(10, Some(Months.TWELVE)))
+    Some(DiscountBenefit(10, Some(Months.TWELVE))),
   )
   val guardianWeeklyAnnualGift = guardianWeeklyAnnual.copy(
     appliesTo = AppliesTo.ukOnly(
-      GuardianWeekly.getProductRatePlans(TouchPointEnvironments.PROD)
+      GuardianWeekly
+        .getProductRatePlans(TouchPointEnvironments.PROD)
         .filter(ratePlan => ratePlan.billingPeriod == Annual && ratePlan.readerType == Gift)
-        .map(_.id).toSet
-    )
+        .map(_.id)
+        .toSet,
+    ),
   )
   val guardianWeeklyWithCode = PromotionWithCode(NonGift.tenAnnual, guardianWeeklyAnnual)
   val duplicate1 = promotion(validProductRatePlanIds, duplicatedPromoCode, discountBenefit)
@@ -61,20 +65,20 @@ object ServicesFixtures {
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
     List(
-      RatePlanData(RatePlan(validProductRatePlanId), Nil, Nil)
+      RatePlanData(RatePlan(validProductRatePlanId), Nil, Nil),
     ),
-    Subscription(now, now, now, "id123")
+    Subscription(now, now, now, "id123"),
   )
 
   def promotion(
-    ids: List[ProductRatePlanId] = validProductRatePlanIds,
-    code: PromoCode = freeTrialPromoCode,
-    discount: Option[DiscountBenefit] = None,
-    freeTrial: Option[FreeTrialBenefit] = None,
-    renewal: Boolean = false,
-    tracking: Boolean = false,
-    starts: DateTime = DateTime.now().withTimeAtStartOfDay().minusDays(1),
-    expires: DateTime = DateTime.now().withTimeAtStartOfDay().plusDays(1)
+      ids: List[ProductRatePlanId] = validProductRatePlanIds,
+      code: PromoCode = freeTrialPromoCode,
+      discount: Option[DiscountBenefit] = None,
+      freeTrial: Option[FreeTrialBenefit] = None,
+      renewal: Boolean = false,
+      tracking: Boolean = false,
+      starts: DateTime = DateTime.now().withTimeAtStartOfDay().minusDays(1),
+      expires: DateTime = DateTime.now().withTimeAtStartOfDay().plusDays(1),
   ): Promotion = {
     Promotion(
       name = "Test promotion",
@@ -87,8 +91,7 @@ object ServicesFixtures {
       discount = discount,
       freeTrial = freeTrial,
       tracking = tracking,
-      renewalOnly = renewal
+      renewalOnly = renewal,
     )
   }
 }
-

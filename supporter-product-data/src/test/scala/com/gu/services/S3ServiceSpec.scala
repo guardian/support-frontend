@@ -19,7 +19,7 @@ class S3ServiceSpec extends AsyncFlatSpec with Matchers {
     S3Service
       .streamToS3(DEV, filename, stream, initialString.length)
       .map(_ =>
-        Source.fromInputStream(S3Service.streamFromS3(DEV, filename).getObjectContent).mkString shouldBe initialString
+        Source.fromInputStream(S3Service.streamFromS3(DEV, filename).getObjectContent).mkString shouldBe initialString,
       )
   }
 }

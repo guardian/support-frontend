@@ -20,37 +20,45 @@ object StripeAccountConfig {
   case class UnitedStates(publicKey: String, secretKey: String) extends StripeAccountConfig
 }
 
-case class StripeConfig(default: StripeAccountConfig.Default, au: StripeAccountConfig.Australia, us: StripeAccountConfig.UnitedStates)
+case class StripeConfig(
+    default: StripeAccountConfig.Default,
+    au: StripeAccountConfig.Australia,
+    us: StripeAccountConfig.UnitedStates,
+)
 
 object StripeConfig {
 
-  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, StripeConfig] = new ParameterStoreLoadable[Environment, StripeConfig] {
+  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, StripeConfig] =
+    new ParameterStoreLoadable[Environment, StripeConfig] {
 
-    override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-      new GetParametersByPathRequest()
-        .withPath(s"/payment-api/stripe-config/${environment.entryName}/")
-        .withWithDecryption(true)
-        .withRecursive(false)
+      override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
+        new GetParametersByPathRequest()
+          .withPath(s"/payment-api/stripe-config/${environment.entryName}/")
+          .withWithDecryption(true)
+          .withRecursive(false)
 
-    override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, StripeConfig] = {
-      val validator = new ParameterStoreValidator[StripeConfig, Environment](environment, data); import validator._
+      override def decode(
+          environment: Environment,
+          data: Map[String, String],
+      ): Validated[InitializationError, StripeConfig] = {
+        val validator = new ParameterStoreValidator[StripeConfig, Environment](environment, data); import validator._
 
-      val defaultAccount = (
-        validate("default-public-key"),
-        validate("default-private-key")
-      ).mapN(StripeAccountConfig.Default.apply)
+        val defaultAccount = (
+          validate("default-public-key"),
+          validate("default-private-key"),
+        ).mapN(StripeAccountConfig.Default.apply)
 
-      val auAccount = (
-        validate("au-public-key"),
-        validate("au-private-key")
-      ).mapN(StripeAccountConfig.Australia.apply)
+        val auAccount = (
+          validate("au-public-key"),
+          validate("au-private-key"),
+        ).mapN(StripeAccountConfig.Australia.apply)
 
-      val usAccount = (
-        validate("us-public-key"),
-        validate("us-private-key")
+        val usAccount = (
+          validate("us-public-key"),
+          validate("us-private-key"),
         ).mapN(StripeAccountConfig.UnitedStates.apply)
 
-      (defaultAccount, auAccount, usAccount).mapN(StripeConfig.apply)
+        (defaultAccount, auAccount, usAccount).mapN(StripeConfig.apply)
+      }
     }
-  }
 }

@@ -2,7 +2,13 @@ package model.acquisition
 
 import com.gu.i18n.Currency._
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.acquisitions.models.PaymentProvider.{AmazonPay, PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
+import com.gu.support.acquisitions.models.PaymentProvider.{
+  AmazonPay,
+  PayPal,
+  Stripe,
+  StripeApplePay,
+  StripePaymentRequestButton,
+}
 import com.gu.support.acquisitions.models._
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
@@ -32,7 +38,8 @@ object AcquisitionDataRowBuilder {
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
       amount = Some(paymentData.amount),
-      country = StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
+      country =
+        StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.componentId,
       componentType = acquisitionData.componentType,
@@ -57,7 +64,7 @@ object AcquisitionDataRowBuilder {
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
-      platform = acquisitionData.platform
+      platform = acquisitionData.platform,
     )
   }
 
@@ -94,14 +101,15 @@ object AcquisitionDataRowBuilder {
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.flatMap(_.queryParameters.map(_.toList)).getOrElse(Nil),
-      platform = acquisitionData.flatMap(_.platform)
+      platform = acquisitionData.flatMap(_.platform),
     )
   }
 
   def buildFromPayPal(acquisition: PaypalAcquisition, contributionData: ContributionData): AcquisitionDataRow = {
     val acquisitionData = acquisition.acquisitionData
     val transaction = acquisition.payment.getTransactions.get(0)
-    val country = CountryGroup.countryByCode(acquisition.payment.getPayer.getPayerInfo.getCountryCode).getOrElse(Country.UK)
+    val country =
+      CountryGroup.countryByCode(acquisition.payment.getPayer.getPayerInfo.getCountryCode).getOrElse(Country.UK)
 
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
@@ -132,7 +140,7 @@ object AcquisitionDataRowBuilder {
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
-      platform = acquisitionData.platform
+      platform = acquisitionData.platform,
     )
   }
 

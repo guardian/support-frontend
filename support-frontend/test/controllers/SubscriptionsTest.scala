@@ -39,7 +39,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     val contributionAmounts = ContributionAmounts(
       ONE_OFF = selection,
       MONTHLY = selection,
-      ANNUAL = selection
+      ANNUAL = selection,
     )
     val configuredRegionAmounts = ConfiguredRegionAmounts(
       control = contributionAmounts,
@@ -52,14 +52,14 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       AUDCountries = configuredRegionAmounts,
       International = configuredRegionAmounts,
       NZDCountries = configuredRegionAmounts,
-      Canada = configuredRegionAmounts
+      Canada = configuredRegionAmounts,
     )
 
     val contributionTypesSettings = List(
       ContributionTypeSetting(
         contributionType = ONE_OFF,
-        isDefault = Some(true)
-      )
+        isDefault = Some(true),
+      ),
     )
     val contributionTypes = ContributionTypes(
       GBPCountries = contributionTypesSettings,
@@ -68,47 +68,55 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       AUDCountries = contributionTypesSettings,
       International = contributionTypesSettings,
       NZDCountries = contributionTypesSettings,
-      Canada = contributionTypesSettings
+      Canada = contributionTypesSettings,
     )
 
     val allSettings = AllSettings(
       Switches(
-        oneOffPaymentMethods = OneOffPaymentMethodSwitches(On,On,On,On,On),
-        recurringPaymentMethods = RecurringPaymentMethodSwitches(On,On,On,On,Off,On,On,On,Off),
-        subscriptionsSwitches = SubscriptionsSwitches(On,On,On),
+        oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On),
+        recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, Off),
+        subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
         featureSwitches = FeatureSwitches(On, On),
         campaignSwitches = CampaignSwitches(On, On),
-        recaptchaSwitches = RecaptchaSwitches(On, On)
+        recaptchaSwitches = RecaptchaSwitches(On, On),
       ),
       configuredAmounts,
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
-      MetricUrl("http://localhost")
+      MetricUrl("http://localhost"),
     )
 
     def fakeDigitalPack(
-      actionRefiner: CustomActionBuilders = loggedInActionRefiner
+        actionRefiner: CustomActionBuilders = loggedInActionRefiner,
     ): DigitalSubscriptionFormController = {
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
       val testUserService = mock[TestUserService]
       val stripe = mock[StripeConfigProvider]
       val stripeAccountConfig = StripeAccountConfig("", "")
-      when(stripe.get(any[Boolean])).thenReturn(
-        StripeConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig, None))
+      when(stripe.get(any[Boolean]))
+        .thenReturn(StripeConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig, None))
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
       val recaptchaConfigProvider = mock[RecaptchaConfigProvider]
-      when(recaptchaConfigProvider.get(any[Boolean])).thenReturn(RecaptchaConfig("",""))
+      when(recaptchaConfigProvider.get(any[Boolean])).thenReturn(RecaptchaConfig("", ""))
 
       val prices: ProductPrices = Map(
         CountryGroup.UK ->
-          Map(NoFulfilmentOptions ->
-            Map(NoProductOptions ->
-              Map(Monthly ->
-                Map(GBP -> PriceSummary(10, None, GBP, fixedTerm = false, Nil))))))
+          Map(
+            NoFulfilmentOptions ->
+              Map(
+                NoProductOptions ->
+                  Map(
+                    Monthly ->
+                      Map(GBP -> PriceSummary(10, None, GBP, fixedTerm = false, Nil)),
+                  ),
+              ),
+          ),
+      )
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
-      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[ReaderType])).thenReturn(prices)
+      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[ReaderType]))
+        .thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
 
       new DigitalSubscriptionFormController(
@@ -120,12 +128,12 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         payPalConfigProvider = payPal,
         components = stubControllerComponents(),
         settingsProvider = settingsProvider,
-        recaptchaConfigProvider
+        recaptchaConfigProvider,
       )
     }
 
     def fakeRequestAuthenticatedWith(
-      actionRefiner: CustomActionBuilders = loggedInActionRefiner
+        actionRefiner: CustomActionBuilders = loggedInActionRefiner,
     ): Future[Result] = {
       fakeDigitalPack(actionRefiner).displayForm(false)(FakeRequest())
     }

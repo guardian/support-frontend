@@ -18,7 +18,7 @@ import conf.IdentityConfig
 import model.DefaultThreadPool
 
 class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, pool: DefaultThreadPool)
-  extends StrictLogging {
+    extends StrictLogging {
 
   import IdentityClient._
 
@@ -27,7 +27,7 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
       .url(s"${config.endpoint}$path")
       .withHttpHeaders("x-gu-id-client-access-token" -> s"Bearer ${config.accessToken}")
 
-  private def decodeIdentityClientResponse[A : Decoder](response: WSResponse): Either[Error, A] =
+  private def decodeIdentityClientResponse[A: Decoder](response: WSResponse): Either[Error, A] =
     // Attempt to decode the response as an instance of A
     decode[A](response.body).leftMap { _ =>
       // If decoding A fails, it might be that the result was an API error instead.
@@ -35,16 +35,17 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
       decode[ApiError](response.body).fold(Error.fromCirceError(response.body, _), identity)
     }
 
-  private def executeRequest[A : Decoder](request: WSRequest): EitherT[Future, Error, A] = {
+  private def executeRequest[A: Decoder](request: WSRequest): EitherT[Future, Error, A] = {
     logger.info(s"Identity request: $request")
-    request.execute()
+    request
+      .execute()
       .attemptT
       .bimap(
         Error.fromThrowable,
         resp => {
           logger.info(s"Identity response: $resp")
           resp
-        }
+        },
       )
       .subflatMap(decodeIdentityClientResponse[A])
   }
@@ -55,10 +56,10 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
         .withMethod("GET")
         .withQueryStringParameters("emailAddress" -> email)
     }
-    // Would be DRYER to have a generic execute action method, which given an action, builds the request, executes it,
-    // and then left maps the error into a contextual error (able to do this last step as the action is known).
-    // However, this would require additional re-factorisation which is getting deferred to another PR.
-    .leftMap(error => ContextualError(error, GetUser(email)))
+      // Would be DRYER to have a generic execute action method, which given an action, builds the request, executes it,
+      // and then left maps the error into a contextual error (able to do this last step as the action is known).
+      // However, this would require additional re-factorisation which is getting deferred to another PR.
+      .leftMap(error => ContextualError(error, GetUser(email)))
 
   def createGuestAccount(email: String): Result[GuestRegistrationResponse] =
     executeRequest[GuestRegistrationResponse] {
@@ -67,10 +68,9 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
         .withBody(CreateGuestAccountRequestBody.fromEmail(email))
         .withQueryStringParameters(("accountVerificationEmail", "true"))
     }
-    // See comment on getUser() method.
-    .leftMap(error => ContextualError(error, CreateGuestAccount(email)))
+      // See comment on getUser() method.
+      .leftMap(error => ContextualError(error, CreateGuestAccount(email)))
 }
-
 
 object IdentityClient extends StrictLogging {
   def fromIdentityConfig(config: IdentityConfig)(implicit ws: WSClient, pool: DefaultThreadPool): IdentityClient =
@@ -84,12 +84,14 @@ object IdentityClient extends StrictLogging {
 
     def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
 
-    def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(guestDisplayName(email)))
+    def fromEmail(email: String): CreateGuestAccountRequestBody =
+      CreateGuestAccountRequestBody(email, PublicFields(guestDisplayName(email)))
 
-    implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](
-      transform = body => InMemoryBody(ByteString.fromString(body.asJson.noSpaces)),
-      contentType = "application/json"
-    )
+    implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] =
+      BodyWritable[CreateGuestAccountRequestBody](
+        transform = body => InMemoryBody(ByteString.fromString(body.asJson.noSpaces)),
+        contentType = "application/json",
+      )
   }
 
   // Models the response of successfully creating a guest account.
@@ -104,7 +106,7 @@ object IdentityClient extends StrictLogging {
   //   }
   // }
   @JsonCodec case class GuestRegistrationResponse(
-    guestRegistrationRequest: GuestRegistrationResponse.GuestRegistrationRequest
+      guestRegistrationRequest: GuestRegistrationResponse.GuestRegistrationRequest,
   )
 
   object GuestRegistrationResponse {

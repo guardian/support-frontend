@@ -14,25 +14,33 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
   "The full Catalog" should "decode successfully" in {
     val digitalPackId = "2c92a0fb4edd70c8014edeaa4eae220a"
     val guardianWeeklyAnnualDomesticId = "2c92a0fe6619b4b901661aa8e66c1692"
-    val numberOfPriceLists = DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly.ratePlans(PROD).length
+    val numberOfPriceLists =
+      DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly.ratePlans(PROD).length
 
-    testDecoding[Catalog](Fixtures.loadCatalog,
+    testDecoding[Catalog](
+      Fixtures.loadCatalog,
       catalog => {
         catalog.prices.length shouldBe numberOfPriceLists
         checkPrice(catalog, digitalPackId, GBP, 11.99)
         checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 150)
-      })
+      },
+    )
   }
 
-  def checkPrice(catalog: Catalog, productRatePlanId: ProductRatePlanId, currency: Currency, value: BigDecimal): Assertion ={
+  def checkPrice(
+      catalog: Catalog,
+      productRatePlanId: ProductRatePlanId,
+      currency: Currency,
+      value: BigDecimal,
+  ): Assertion = {
     catalog.prices
       .find(_.productRatePlanId == productRatePlanId)
       .getOrElse(fail())
-      .prices.find(_.currency == currency)
+      .prices
+      .find(_.currency == currency)
       .getOrElse(fail())
       .value shouldBe value
   }
-
 
   "Products" should "roundtrip successfully" in {
     testRoundTripSerialisation[Product](DigitalPack)
@@ -44,6 +52,3 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     testRoundTripSerialisation[FulfilmentOptions](Domestic)
   }
 }
-
-
-

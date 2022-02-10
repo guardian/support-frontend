@@ -9,20 +9,24 @@ case class RecaptchaConfig(secretKey: String)
 
 object RecaptchaConfig {
 
-  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, RecaptchaConfig] = new ParameterStoreLoadable[Environment, RecaptchaConfig] {
+  implicit val stripeConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, RecaptchaConfig] =
+    new ParameterStoreLoadable[Environment, RecaptchaConfig] {
 
-    override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-      new GetParametersByPathRequest()
-        .withPath(s"/payment-api/recaptcha-config/${environment.entryName}/")
-        .withWithDecryption(true)
-        .withRecursive(false)
+      override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
+        new GetParametersByPathRequest()
+          .withPath(s"/payment-api/recaptcha-config/${environment.entryName}/")
+          .withWithDecryption(true)
+          .withRecursive(false)
 
-    override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, RecaptchaConfig] = {
-      val validator = new ParameterStoreValidator[StripeConfig, Environment](environment, data)
-      import validator._
+      override def decode(
+          environment: Environment,
+          data: Map[String, String],
+      ): Validated[InitializationError, RecaptchaConfig] = {
+        val validator = new ParameterStoreValidator[StripeConfig, Environment](environment, data)
+        import validator._
 
-      validate("secret-key").map(RecaptchaConfig.apply)
+        validate("secret-key").map(RecaptchaConfig.apply)
+      }
+
     }
-
-  }
 }

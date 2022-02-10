@@ -7,7 +7,7 @@ import HttpHeaders.mergeHeader
 class NoCacheActionBuilder(
     val parser: BodyParser[AnyContent],
     val executionContext: ExecutionContext,
-    val headers: List[(String, String)]
+    val headers: List[(String, String)],
 ) extends ActionBuilder[Request, AnyContent] {
   implicit private val ec = executionContext
 

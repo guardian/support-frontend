@@ -9,5 +9,6 @@ class GiftCodeGeneratorService {
     case _ => Gift3Month
   }
 
-  def generateCode(billingPeriod: BillingPeriod): GeneratedGiftCode = GiftCodeGenerator.randomGiftCodes.next().withDuration(toDuration(billingPeriod))
+  def generateCode(billingPeriod: BillingPeriod): GeneratedGiftCode =
+    GiftCodeGenerator.randomGiftCodes.next().withDuration(toDuration(billingPeriod))
 }

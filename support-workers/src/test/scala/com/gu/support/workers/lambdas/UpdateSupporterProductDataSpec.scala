@@ -2,7 +2,11 @@ package com.gu.support.workers.lambdas
 
 import com.gu.support.catalog.{CatalogService, SimpleJsonProvider}
 import com.gu.support.config.TouchPointEnvironments.PROD
-import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{digitalSubscriptionGiftRedemptionState, digitalSusbcriptionGiftPurchaseState, serviceWithFixtures}
+import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
+  digitalSubscriptionGiftRedemptionState,
+  digitalSusbcriptionGiftPurchaseState,
+  serviceWithFixtures,
+}
 import com.gu.support.workers.states.SendThankYouEmailState
 import io.circe.parser._
 import org.scalatest.Inside.inside
@@ -17,20 +21,20 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
   "UpdateSupporterProductData" should "not insert an item into Dynamo for a digisub gift purchase" in {
     val state = decode[SendThankYouEmailState](digitalSusbcriptionGiftPurchaseState)
     state.isRight shouldBe true
-    val supporterRatePlanItem =  UpdateSupporterProductData
+    val supporterRatePlanItem = UpdateSupporterProductData
       .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) {
-      case Right(value) => value shouldBe None
+    inside(supporterRatePlanItem) { case Right(value) =>
+      value shouldBe None
     }
   }
 
   "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a digisub gift redemption" in {
     val state = decode[SendThankYouEmailState](digitalSubscriptionGiftRedemptionState)
     state.isRight shouldBe true
-    val supporterRatePlanItem =  UpdateSupporterProductData
+    val supporterRatePlanItem = UpdateSupporterProductData
       .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) {
-      case Right(item) => item.value.identityId shouldBe "102803446"
+    inside(supporterRatePlanItem) { case Right(item) =>
+      item.value.identityId shouldBe "102803446"
     }
   }
 }

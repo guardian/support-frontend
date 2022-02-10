@@ -9,7 +9,6 @@ import io.circe.syntax._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
 class EncoderSpec extends AsyncFlatSpec with Matchers with LazyLogging with SerialisationTestHelpers {
   implicit val encoder: Encoder[TestClass] = capitalizingEncoder[TestClass]
   implicit val decoderTestClass: Decoder[TestClass] = decapitalizingDecoder[TestClass]
