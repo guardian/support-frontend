@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import PageSection from 'components/pageSection/pageSection';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';

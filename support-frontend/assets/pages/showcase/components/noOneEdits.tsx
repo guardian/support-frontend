@@ -1,4 +1,3 @@
-import React from 'react';
 import Content from 'components/content/content';
 import NoOne from 'components/svgs/noOne';
 import Text from 'components/text/text';

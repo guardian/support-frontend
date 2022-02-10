@@ -1,11 +1,13 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { Button, buttonReaderRevenueBrand } from '@guardian/src-button';
-import { Checkbox } from '@guardian/src-checkbox';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { TextInput } from '@guardian/src-text-input';
-import { ThemeProvider } from 'emotion-theming';
-import React from 'react';
+import { css, ThemeProvider } from '@emotion/react';
+import {
+	Button,
+	buttonThemeReaderRevenueBrand,
+	Checkbox,
+	SvgArrowRightStraight,
+	TextInput,
+} from '@guardian/source-react-components';
+import * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -137,7 +139,7 @@ function Form(props: PropTypes): JSX.Element {
 					error={!!props.accountHolderConfirmationError}
 				/>
 			</div>
-			<ThemeProvider theme={buttonReaderRevenueBrand}>
+			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<Button
 					id="qa-direct-debit-submit"
 					onClick={props.onSubmit}

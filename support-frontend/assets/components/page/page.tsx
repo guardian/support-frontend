@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 // @ts-expect-error - required for hooks
 import type { Node } from 'react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 // ----- Types ----- //

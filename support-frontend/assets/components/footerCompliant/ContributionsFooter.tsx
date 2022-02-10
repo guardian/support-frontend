@@ -1,7 +1,5 @@
-import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
-import { brandBackground } from '@guardian/src-foundations/palette';
-import React from 'react';
+import { css } from '@emotion/react';
+import { brandBackground, from } from '@guardian/source-foundations';
 import Footer from './Footer';
 
 const containerStyles = css`

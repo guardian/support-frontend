@@ -1,5 +1,3 @@
-import React from 'react';
-// styles
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {

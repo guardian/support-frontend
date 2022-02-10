@@ -1,4 +1,3 @@
-import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
 import Content, { NarrowContent } from 'components/content/content';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';

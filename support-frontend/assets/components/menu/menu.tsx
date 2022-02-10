@@ -1,5 +1,4 @@
 import type { Node } from 'react';
-import React from 'react';
 import SvgCheckmark from 'components/svgs/checkmark';
 import styles from './menu.module.scss';
 

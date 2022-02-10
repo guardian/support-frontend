@@ -1,12 +1,11 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { Button, buttonBrandAlt } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { SvgEnvelope } from '@guardian/src-icons';
-import { ThemeProvider } from 'emotion-theming';
-import React from 'react';
+import { css, ThemeProvider } from '@emotion/react';
+import { from, headline, space, textSans } from '@guardian/source-foundations';
+import {
+	Button,
+	buttonThemeBrandAlt,
+	SvgEnvelope,
+} from '@guardian/source-react-components';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -100,7 +99,7 @@ function MarketingButton(props: ButtonPropTypes) {
 
 	if (confirmedOrPending) {
 		return (
-			<ThemeProvider theme={buttonBrandAlt}>
+			<ThemeProvider theme={buttonThemeBrandAlt}>
 				<Button
 					css={marginForButton}
 					iconSide="right"
@@ -114,7 +113,7 @@ function MarketingButton(props: ButtonPropTypes) {
 	}
 
 	return (
-		<ThemeProvider theme={buttonBrandAlt}>
+		<ThemeProvider theme={buttonThemeBrandAlt}>
 			<Button
 				css={marginForButton}
 				iconSide="right"

@@ -1,8 +1,13 @@
-import { css } from '@emotion/core';
-import { LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { SvgEnvelope, SvgFacebook, SvgTwitter } from '@guardian/src-icons';
-import React, { useEffect } from 'react';
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import {
+	LinkButton,
+	SvgEnvelope,
+	SvgFacebook,
+	SvgTwitter,
+} from '@guardian/source-react-components';
+import { useEffect } from 'react';
+import * as React from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	trackComponentClick,

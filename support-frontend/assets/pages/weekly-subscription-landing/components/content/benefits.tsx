@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { List } from 'components/list/list';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';

@@ -1,4 +1,3 @@
-import React from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 
 // ---- Component ---- //

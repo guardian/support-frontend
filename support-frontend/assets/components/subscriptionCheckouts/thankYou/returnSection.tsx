@@ -1,11 +1,11 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { ThemeProvider } from 'emotion-theming';
-import React from 'react';
+import { css, ThemeProvider } from '@emotion/react';
+import { from, space } from '@guardian/source-foundations';
+import {
+	buttonThemeReaderRevenue,
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -26,7 +26,7 @@ function ReturnSection(props: PropTypes) {
 			<Divider />
 			<NarrowContent>
 				<div className="thank-you-stage__ctas">
-					<ThemeProvider theme={buttonReaderRevenue}>
+					<ThemeProvider theme={buttonThemeReaderRevenue}>
 						<LinkButton
 							css={buttonStyles}
 							priority="tertiary"

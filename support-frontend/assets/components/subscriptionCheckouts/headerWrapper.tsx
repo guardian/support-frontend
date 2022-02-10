@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { connect } from 'react-redux';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Stage } from 'helpers/subscriptionsForms/formFields';

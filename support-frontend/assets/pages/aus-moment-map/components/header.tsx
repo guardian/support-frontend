@@ -1,7 +1,8 @@
-import { LinkButton } from '@guardian/src-button';
-import { brand } from '@guardian/src-foundations/themes';
-import { ThemeProvider } from 'emotion-theming';
-import React from 'react';
+import { ThemeProvider } from '@emotion/react';
+import {
+	buttonThemeBrand,
+	LinkButton,
+} from '@guardian/source-react-components';
 import { contributeUrl } from '../utils';
 
 function GuardianLogoSvg(): JSX.Element {
@@ -60,7 +61,7 @@ export function Header(): JSX.Element {
 		<div id="header-wrapper">
 			<div>
 				<div id="header">Do something powerful today</div>
-				<ThemeProvider theme={brand}>
+				<ThemeProvider theme={buttonThemeBrand}>
 					<LinkButton
 						priority="tertiary"
 						size="small"

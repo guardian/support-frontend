@@ -1,4 +1,4 @@
-import React from 'react'; // A chevron symbol.
+// A chevron symbol.
 
 export default function SvgChevron() {
 	return (

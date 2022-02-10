@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SvgSpeechBubbleWithPlus = () => (
 	<svg
 		width="39"

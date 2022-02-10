@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React from 'react';
+import * as React from 'react';
 import type { PropsForHoc } from 'components/forms/label';
 import { Label } from 'components/forms/label';
 import type { Option } from 'helpers/types/option';

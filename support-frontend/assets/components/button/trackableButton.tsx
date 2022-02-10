@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React, { Component } from 'react';
+import { Component } from 'react';
 import type { SharedButtonPropTypes } from './_sharedButton';
 import SharedButton, { defaultProps } from './_sharedButton';
 import './button.scss';

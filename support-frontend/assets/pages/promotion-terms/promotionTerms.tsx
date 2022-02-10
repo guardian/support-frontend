@@ -1,4 +1,3 @@
-import React from 'react';
 import { renderPage } from 'helpers/rendering/render';
 import './promotionTerms.scss';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';

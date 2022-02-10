@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SvgPersonWithTick = () => (
 	<svg
 		width="39"

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import Page from 'components/page/page';

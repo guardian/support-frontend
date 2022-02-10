@@ -1,8 +1,6 @@
 // ----- Imports ----- //
-
-import { css } from '@emotion/core';
-import { Radio, RadioGroup } from '@guardian/src-radio';
-import React from 'react';
+import { css } from '@emotion/react';
+import { Radio, RadioGroup } from '@guardian/source-react-components';
 import { connect } from 'react-redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';

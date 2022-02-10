@@ -1,5 +1,9 @@
 module.exports = {
-  extends: '@guardian/eslint-config-typescript',
+  extends: [
+    '@guardian/eslint-config-typescript',
+    "plugin:@guardian/source-foundations/recommended",
+    "plugin:@guardian/source-react-components/recommended",
+  ],
   rules: {
     // TODO: update this to 'warn' or delete once the post-migration fixing process is done
     "import/no-default-export": "off",
@@ -7,6 +11,7 @@ module.exports = {
       "namedComponents": "function-declaration",
       "unnamedComponents": "function-expression",
     }],
+    "@emotion/pkg-renaming": "error",
   },
   settings: {
     'import/resolver': {
@@ -16,6 +21,7 @@ module.exports = {
     }
   },
   plugins: [
-    "react"
+    "react",
+    "@emotion",
   ]
 }

@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { Node } from 'react';
-import React from 'react';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import SvgClose from 'components/svgs/close';

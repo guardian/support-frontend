@@ -1,5 +1,3 @@
-import React from 'react';
-// styles
 import 'components/adFreeSection/adFreeSection.scss';
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 

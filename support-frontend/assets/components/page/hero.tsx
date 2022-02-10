@@ -1,7 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
-import type { Breakpoint } from '@guardian/src-foundations/mq';
+import type { Breakpoint } from '@guardian/source-foundations';
 import type { ReactElement, ReactNode } from 'react';
-import React from 'react';
 import type { RoundelTheme } from './heroRoundel';
 import HeroRoundel from './heroRoundel';
 import {

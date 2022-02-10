@@ -1,4 +1,4 @@
-import React from 'react'; // A user icon, with a head and body.
+// A user icon, with a head and body.
 
 export default function SvgUser() {
 	return (

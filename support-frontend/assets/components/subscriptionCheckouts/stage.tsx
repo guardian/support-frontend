@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 import { connect } from 'react-redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';

@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
-import React from 'react';
+import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';

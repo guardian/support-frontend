@@ -1,4 +1,3 @@
-import React from 'react';
 import OrderedList from 'components/list/orderedList';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';

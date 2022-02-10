@@ -1,4 +1,4 @@
-import React from 'react'; // The main guardian logo.
+// The main guardian logo.
 
 export default function SvgGuardianLogo() {
 	return (

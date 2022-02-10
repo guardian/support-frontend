@@ -1,9 +1,7 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { focusHalo } from '@guardian/src-foundations/accessibility';
-import { InlineError } from '@guardian/src-user-feedback';
-import React from 'react';
+import { css } from '@emotion/react';
+import { focusHalo, space } from '@guardian/source-foundations';
+import { InlineError } from '@guardian/source-react-components';
 import { connect } from 'react-redux';
 import DownChevronDs from 'components/svgs/downChevronDs';
 import type { StateProvince } from 'helpers/internationalisation/country';

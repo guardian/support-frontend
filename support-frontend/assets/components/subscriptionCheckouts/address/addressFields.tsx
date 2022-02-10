@@ -1,8 +1,12 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { Option as OptionForSelect, Select } from '@guardian/src-select';
-import { TextInput } from '@guardian/src-text-input';
-import React, { Component } from 'react';
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import {
+	Option as OptionForSelect,
+	Select,
+	TextInput,
+} from '@guardian/source-react-components';
+import { Component } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import type { $Call } from 'utility-types';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';

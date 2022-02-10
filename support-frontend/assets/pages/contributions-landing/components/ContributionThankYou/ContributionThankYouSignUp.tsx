@@ -1,6 +1,7 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import React, { useEffect } from 'react';
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import { useEffect } from 'react';
+import * as React from 'react';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import ActionBody from './components/ActionBody';
 import ActionContainer from './components/ActionContainer';

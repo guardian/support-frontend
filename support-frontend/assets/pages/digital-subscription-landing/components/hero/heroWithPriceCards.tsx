@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import Hero from 'components/page/hero';
 import HeroRoundel from 'components/page/heroRoundel';

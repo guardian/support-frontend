@@ -1,5 +1,4 @@
 import DOMPurify from 'dompurify';
-import React from 'react';
 import snarkdown from 'snarkdown';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';

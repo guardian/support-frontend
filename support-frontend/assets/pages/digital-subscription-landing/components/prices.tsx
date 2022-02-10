@@ -1,8 +1,5 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { body, headline } from '@guardian/src-foundations/typography';
-import React from 'react';
+import { css } from '@emotion/react';
+import { body, from, headline, space } from '@guardian/source-foundations';
 import FlexContainer from 'components/containers/flexContainer';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';

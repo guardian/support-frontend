@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 import './progressMessage.scss';
 // ---- Types ----- //

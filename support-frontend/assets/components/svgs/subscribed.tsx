@@ -1,4 +1,4 @@
-import React from 'react'; // Subscribe button icon
+// Subscribe button icon
 
 export default function SvgSubscribed() {
 	return (

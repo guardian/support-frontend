@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';

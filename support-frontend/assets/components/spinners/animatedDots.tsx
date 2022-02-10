@@ -1,7 +1,6 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { neutral } from '@guardian/src-foundations';
-import React from 'react';
+import { css } from '@emotion/react';
+import { neutral } from '@guardian/source-foundations';
 
 // ----- Component ----- //
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import type { ReactNode } from 'react';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Quarterly } from 'helpers/productPrice/billingPeriods';

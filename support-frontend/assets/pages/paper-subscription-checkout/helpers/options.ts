@@ -29,9 +29,7 @@ function getProductOption(): PaperProductOptions {
 
 function getFulfilmentOption(): PaperFulfilmentOptions {
 	const fulfilmentInUrl = getQueryParameter('fulfilment');
-	return fulfilmentInUrl === 'HomeDelivery'
-		? HomeDelivery
-		: Collection;
+	return fulfilmentInUrl === 'HomeDelivery' ? HomeDelivery : Collection;
 }
 
 function getDays(

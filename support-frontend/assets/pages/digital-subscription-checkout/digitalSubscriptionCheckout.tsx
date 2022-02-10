@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React from 'react';
+import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
 import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import Page from 'components/page/page';
@@ -9,15 +9,6 @@ import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketin
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
-import { renderPage } from 'helpers/rendering/render';
-import { getQueryParameter } from 'helpers/urls/url';
-import CheckoutForm from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
-import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
-import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
-import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
-import ThankYouPendingContent from './thankYouPendingContent';
-import 'stylesheets/skeleton/skeleton.scss';
-import './digitalSubscriptionCheckout.scss';
 import type {
 	DigitalBillingPeriod,
 	DigitalGiftBillingPeriod,
@@ -27,9 +18,17 @@ import {
 	Monthly,
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import { FocusStyleManager } from '@guardian/src-utilities';
+import { renderPage } from 'helpers/rendering/render';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getQueryParameter } from 'helpers/urls/url';
+import CheckoutForm from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
+import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
+import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
+import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
+import ThankYouPendingContent from './thankYouPendingContent';
+import 'stylesheets/skeleton/skeleton.scss';
+import './digitalSubscriptionCheckout.scss';
 
 // ----- Redux Store ----- //
 function getInitialBillingPeriod(

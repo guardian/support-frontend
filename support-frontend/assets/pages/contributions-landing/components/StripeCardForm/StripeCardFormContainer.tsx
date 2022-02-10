@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import { Elements } from '@stripe/react-stripe-js';
-import * as React from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';

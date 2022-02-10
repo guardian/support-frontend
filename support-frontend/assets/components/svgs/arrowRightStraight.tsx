@@ -1,4 +1,4 @@
-import React from 'react'; // The right-pointing arrow commonly used on CTAs.
+// The right-pointing arrow commonly used on CTAs.
 
 export default function SvgArrowRightStraight() {
 	return (

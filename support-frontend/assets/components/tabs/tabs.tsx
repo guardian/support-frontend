@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import React from 'react';
 import { tabButton, tabList, tabPanel } from './tabsStyles';
 
 type TabElement = 'a' | 'button';

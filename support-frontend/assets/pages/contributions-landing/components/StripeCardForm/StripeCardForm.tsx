@@ -1,7 +1,6 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { TextInput } from '@guardian/src-text-input';
-import { InlineError } from '@guardian/src-user-feedback';
+import { css } from '@emotion/react';
+import { InlineError, TextInput } from '@guardian/source-react-components';
 import {
 	CardCvcElement,
 	CardExpiryElement,
@@ -9,7 +8,8 @@ import {
 } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
 import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';

@@ -1,8 +1,12 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { background, border, text } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography/obj';
+import { css } from '@emotion/react';
+import {
+	background,
+	border,
+	from,
+	space,
+	text,
+	textSans,
+} from '@guardian/source-foundations';
 
 export const list = css`
 	${from.desktop} {

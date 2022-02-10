@@ -13,7 +13,8 @@
     "isolatedModules": true, // Unconditionally emit imports for unresolved files
     "resolveJsonModule": true, // Include modules imported with .json extension
     "noEmit": true, // Do not emit output (meaning do not compile code, only perform type checking)
-    "jsx": "preserve", // Support JSX in .tsx files (https://github.com/emotion-js/emotion/issues/1748)
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "noUnusedLocals": true, // Report errors on unused locals
     "noUnusedParameters": true, // Report errors on unused parameters
     "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement

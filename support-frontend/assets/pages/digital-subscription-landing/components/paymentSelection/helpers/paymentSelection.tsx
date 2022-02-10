@@ -1,4 +1,3 @@
-import React from 'react';
 import 'components/product/productOption';
 import 'components/product/productOptionSmall';
 import 'helpers/types/option';

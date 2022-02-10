@@ -1,4 +1,3 @@
-import React from 'react';
 import { SansParagraph } from 'components/text/text';
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import {

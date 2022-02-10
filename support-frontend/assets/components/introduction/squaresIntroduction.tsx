@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import type { HeadingSize } from 'components/heading/heading';
 import Highlights from 'components/highlights/highlights';
 import SvgSquaresHeroDesktop from 'components/svgs/squaresHeroDesktop';

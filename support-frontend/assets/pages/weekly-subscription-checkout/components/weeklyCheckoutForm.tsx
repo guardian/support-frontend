@@ -1,9 +1,12 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { Radio, RadioGroup } from '@guardian/src-radio';
-import { Option as OptionForSelect, Select } from '@guardian/src-select';
-import React from 'react';
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import {
+	Option as OptionForSelect,
+	Radio,
+	RadioGroup,
+	Select,
+} from '@guardian/source-react-components';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import Rows from 'components/base/rows';

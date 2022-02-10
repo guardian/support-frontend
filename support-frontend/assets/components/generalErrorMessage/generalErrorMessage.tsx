@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type { Option } from 'helpers/types/option';

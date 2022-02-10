@@ -1,11 +1,17 @@
 // @ts-expect-error - required for hooks
-import { css } from '@emotion/core';
-import { Accordion, AccordionRow } from '@guardian/src-accordion';
-import { Checkbox } from '@guardian/src-checkbox';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { brandAlt, neutral } from '@guardian/src-foundations/palette';
-import { headline } from '@guardian/src-foundations/typography';
+import { css } from '@emotion/react';
+import {
+	brandAlt,
+	from,
+	headline,
+	neutral,
+	space,
+} from '@guardian/source-foundations';
+import {
+	Accordion,
+	AccordionRow,
+	Checkbox,
+} from '@guardian/source-react-components';
 import * as React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import { ListWithSubText } from 'components/list/list';

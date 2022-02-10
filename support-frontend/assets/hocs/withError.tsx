@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React from 'react';
+import * as React from 'react';
 import type { PropsForHoc } from 'components/forms/customFields/error';
 import { Error } from 'components/forms/customFields/error';
 // ----- Types ----- //

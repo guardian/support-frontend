@@ -1,4 +1,4 @@
-import React from 'react'; // Exclamation mark, used on error messages.
+// Exclamation mark, used on error messages.
 
 export default function SvgExclamation() {
 	return (

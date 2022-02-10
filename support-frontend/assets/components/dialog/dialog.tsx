@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 import 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './dialog.scss';

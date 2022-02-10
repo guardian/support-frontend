@@ -1,9 +1,7 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { Button } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import React from 'react';
+import { css } from '@emotion/react';
+import { headline, space, textSans } from '@guardian/source-foundations';
+import { Button } from '@guardian/source-react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';

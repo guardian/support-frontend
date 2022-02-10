@@ -1,8 +1,5 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { headline } from '@guardian/src-foundations/typography';
-import React from 'react';
+import { css } from '@emotion/react';
+import { from, headline, space } from '@guardian/source-foundations';
 
 export const circleTextTop = css`
 	${headline.xsmall({

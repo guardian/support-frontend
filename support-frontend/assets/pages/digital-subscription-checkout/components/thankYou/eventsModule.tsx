@@ -1,8 +1,9 @@
-import { css } from '@emotion/core';
-import { LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import React from 'react';
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import {
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import { SvgTicket } from 'components/icons/ticket';
 import Text from 'components/text/text';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';

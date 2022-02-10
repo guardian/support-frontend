@@ -1,5 +1,4 @@
 import type { Node } from 'react';
-import React from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import {
 	asideBottomCss,

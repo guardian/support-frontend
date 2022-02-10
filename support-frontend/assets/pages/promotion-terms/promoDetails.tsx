@@ -1,5 +1,4 @@
-import { css } from '@emotion/core';
-import React from 'react';
+import { css } from '@emotion/react';
 import AnchorButton from 'components/button/anchorButton';
 import Content from 'components/content/content';
 import { List } from 'components/list/list';

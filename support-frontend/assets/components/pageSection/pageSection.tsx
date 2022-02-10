@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import type { ReactNode } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './pageSection.scss';

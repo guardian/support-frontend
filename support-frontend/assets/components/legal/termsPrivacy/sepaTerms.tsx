@@ -1,7 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
-
-// ----- Component ----- //
 function SepaTerms() {
 	return (
 		<>
@@ -18,6 +15,6 @@ function SepaTerms() {
 			</div>
 		</>
 	);
-} // ----- Exports ----- //
+}
 
 export default SepaTerms;

@@ -1,7 +1,6 @@
-import React from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import 'helpers/contributions';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 type ContributionAmountLabelProps = {
 	formattedAmount: string;

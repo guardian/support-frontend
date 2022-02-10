@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function SvgGift(): JSX.Element {
 	return (
 		<svg
