@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 114,
+            "TS2322": 113,
             "TS2578": 7,
             "TS2339": 19,
             "TS2345": 96,
@@ -71,7 +71,7 @@
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
-            "assets/hocs/withLabel.tsx": 2,
+            "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 9,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
@@ -397,10 +397,6 @@
         },
         {
             "path": "assets/hocs/withLabel.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/hocs/withLabel.tsx",
             "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & Props & { children?: ReactNode; }'."
         },
         {
@@ -541,7 +537,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string[] | Option<string> | undefined'."
+            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",

@@ -6,16 +6,15 @@ import { body } from '@guardian/src-foundations/typography';
 import React from 'react';
 import type { ReactNode } from 'react';
 import BlockLabel from 'components/blockLabel/blockLabel';
-import type { Option } from 'helpers/types/option';
 import { finalRow, tableContent, titleRow } from './tableContents';
 import 'helpers/types/option';
 
 export type TableRow = {
-	icon: Option<ReactNode>;
+	icon: ReactNode | null;
 	description: string | ReactNode;
-	free: Option<ReactNode>;
-	paid: Option<ReactNode>;
-	cssOverrides?: Option<string> | string[];
+	free: ReactNode | null;
+	paid: ReactNode | null;
+	cssOverrides?: string | string[];
 };
 const borderStyle = `${border.primary} 1px solid`;
 const container = css`
@@ -151,7 +150,4 @@ function ComparisonTable(): JSX.Element {
 	);
 }
 
-ComparisonTableRow.defaultProps = {
-	cssOverrides: null,
-};
 export default ComparisonTable;

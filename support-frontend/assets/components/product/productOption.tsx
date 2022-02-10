@@ -19,8 +19,8 @@ export type Product = {
 	priceCopy: ReactNode;
 	buttonCopy: string;
 	href: string;
-	onClick: (...args: unknown[]) => unknown;
-	onView: (...args: unknown[]) => unknown;
+	onClick: () => void;
+	onView: () => void;
 	label?: string;
 	cssOverrides?: string;
 	billingPeriod?: BillingPeriod;
