@@ -22,17 +22,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
-  extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
+    extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
 
   import cats.instances.future._
 
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
-    state: SendAcquisitionEventState,
-    requestInfo: RequestInfo,
-    context: Context,
-    services: Services
+      state: SendAcquisitionEventState,
+      requestInfo: RequestInfo,
+      context: Context,
+      services: Services,
   ): FutureHandlerResult = {
 
     SafeLogger.info(s"Sending acquisition event to BigQuery: ${state.toString}")
@@ -60,12 +60,13 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       hostname = hostname,
       clientId = gaClientId,
       clientIpAddress = ipAddress,
-      clientUserAgent = userAgent
+      clientUserAgent = userAgent,
     )
   }
 
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
-    sendPaymentSuccessMetric(state).toEither.left.foreach(SafeLogger.error(scrub"failed to send PaymentSuccess metric", _))
+    sendPaymentSuccessMetric(state).toEither.left
+      .foreach(SafeLogger.error(scrub"failed to send PaymentSuccess metric", _))
 
     val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
 
@@ -73,7 +74,9 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
     val gaFuture = for {
       gaData <- EitherT.fromEither(buildGaData(state, requestInfo)).leftMap(err => List(err))
-      result <- services.gaService.submit(acquisition, gaData, maxRetries = 5).leftMap(gaErrors => gaErrors.map(_.getMessage))
+      result <- services.gaService
+        .submit(acquisition, gaData, maxRetries = 5)
+        .leftMap(gaErrors => gaErrors.map(_.getMessage))
     } yield result
 
     val result = for {
@@ -92,7 +95,13 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     // scalastyle:off line.size.limit
     // Used for Cloudwatch alarms: https://github.com/guardian/support-frontend/blob/920e638c35430cc260acdb1878f37bffa1d12fae/support-workers/cloud-formation/src/templates/cfn-template.yaml#L210
     // scalastyle:on line.size.limit
-    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, state.user.isTestUser, state.analyticsInfo.paymentProvider, state.sendThankYouEmailState.product)
+    val cloudwatchEvent =
+      paymentSuccessRequest(
+        Configuration.stage,
+        state.user.isTestUser,
+        state.analyticsInfo.paymentProvider,
+        state.sendThankYouEmailState.product,
+      )
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
   }
 
@@ -107,4 +116,3 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   }
 
 }
-

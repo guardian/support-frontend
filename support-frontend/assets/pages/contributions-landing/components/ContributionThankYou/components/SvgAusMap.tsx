@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SvgAusMap = () => (
 	<svg
 		width="39"

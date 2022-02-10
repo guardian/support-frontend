@@ -1,4 +1,4 @@
-import React from 'react'; // The generic credit card logo used on checkouts.
+// The generic credit card logo used on checkouts.
 
 export default function SvgNewCreditCardDs(): JSX.Element {
 	return (

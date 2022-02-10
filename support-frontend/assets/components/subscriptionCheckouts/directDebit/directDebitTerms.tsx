@@ -1,7 +1,5 @@
-import { css } from '@emotion/core';
-import { text } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography/obj';
-import React from 'react';
+import { css } from '@emotion/react';
+import { text, textSans } from '@guardian/source-foundations';
 
 const directDebitTerms = css`
 	${textSans.xsmall()};

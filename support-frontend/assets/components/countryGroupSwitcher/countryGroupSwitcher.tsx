@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 // @ts-expect-error
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';

@@ -11,7 +11,6 @@ case class InitializationError(message: String, underlying: Throwable = null) ex
 
 object InitializationError {
 
-
   // Allows InitializationError to used as the left type parameter of Validated[A, B]
   // Means initialization errors can be accumulated.
   implicit val initializationErrorSemiGroup: Semigroup[InitializationError] =

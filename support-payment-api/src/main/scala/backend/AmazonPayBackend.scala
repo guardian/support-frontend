@@ -7,7 +7,13 @@ import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetail
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
-import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{
+  AcquisitionsStreamEc2OrLocalConfig,
+  AcquisitionsStreamService,
+  AcquisitionsStreamServiceImpl,
+  BigQueryConfig,
+  BigQueryService,
+}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
@@ -33,16 +39,22 @@ class AmazonPayBackend(
     val gaService: GoogleAnalyticsService,
     val bigQueryService: BigQueryService,
     val acquisitionsStreamService: AcquisitionsStreamService,
-    val databaseService: ContributionsStoreService
-  )(implicit pool: DefaultThreadPool) extends StrictLogging with PaymentBackend {
+    val databaseService: ContributionsStoreService,
+)(implicit pool: DefaultThreadPool)
+    extends StrictLogging
+    with PaymentBackend {
 
-  def makePayment(amazonPayRequest: AmazonPayRequest, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, AmazonPayApiError, Unit] = {
+  def makePayment(
+      amazonPayRequest: AmazonPayRequest,
+      clientBrowserInfo: ClientBrowserInfo,
+  ): EitherT[Future, AmazonPayApiError, Unit] = {
 
-    def isNotSuspended(details: OrderReferenceDetails) =  details.getOrderReferenceStatus.getState.toUpperCase != "SUSPENDED"
+    def isNotSuspended(details: OrderReferenceDetails) =
+      details.getOrderReferenceStatus.getState.toUpperCase != "SUSPENDED"
 
     def handleDeclinedResponse(orderRef: OrderReferenceDetails, authStatus: Status) = {
       val isDeclined = authStatus.getState.toUpperCase == "DECLINED"
-      if (isDeclined && authStatus.getReasonCode ==  "TransactionTimedOut") {
+      if (isDeclined && authStatus.getReasonCode == "TransactionTimedOut") {
         logger.warn(s"Cancelling ${orderRef.getAmazonOrderReferenceId} due to TransactionTimedOut")
         service.cancelOrderReference(orderRef)
       }
@@ -50,7 +62,7 @@ class AmazonPayBackend(
         test = !isDeclined,
         right = orderRef,
         left = AmazonPayApiError
-          .withReason(200, s"Declined with reason ${authStatus.getReasonCode}", authStatus.getReasonCode)
+          .withReason(200, s"Declined with reason ${authStatus.getReasonCode}", authStatus.getReasonCode),
       )
     }
 
@@ -60,19 +72,22 @@ class AmazonPayBackend(
       _ <- service.confirmOrderReference(orderRef)
       authRes <- service.authorize(orderRef, amazonPayRequest.paymentData)
       _ <- handleDeclinedResponse(orderRef, authRes.getAuthorizationStatus)
-    } yield  authRes
+    } yield authRes
 
     handleResponse(response, amazonPayRequest, clientBrowserInfo)
   }
 
   private def handleResponse(
-    response: Either[AmazonPayApiError, AuthorizationDetails],
-    amazonPayRequest: AmazonPayRequest,
-    clientBrowserInfo: ClientBrowserInfo
+      response: Either[AmazonPayApiError, AuthorizationDetails],
+      amazonPayRequest: AmazonPayRequest,
+      clientBrowserInfo: ClientBrowserInfo,
   ): EitherT[Future, AmazonPayApiError, Unit] =
-    response.toEitherT[Future]
+    response
+      .toEitherT[Future]
       .leftMap { error =>
-        logger.info(s"Something went wrong with AmazonPay orderReferenceId: ${amazonPayRequest.paymentData.orderReferenceId}")
+        logger.info(
+          s"Something went wrong with AmazonPay orderReferenceId: ${amazonPayRequest.paymentData.orderReferenceId}",
+        )
         cloudWatchService.recordFailedPayment(error, PaymentProvider.AmazonPay)
         error
       }
@@ -84,60 +99,86 @@ class AmazonPayBackend(
 
         getOrCreateIdentityIdFromEmail(email).map { id =>
           val acquisition =
-            AmazonPayAcquisition(amazonPayRequest.paymentData, amazonPayRequest.acquisitionData, id, Some(countryCode), clientBrowserInfo)
+            AmazonPayAcquisition(
+              amazonPayRequest.paymentData,
+              amazonPayRequest.acquisitionData,
+              id,
+              Some(countryCode),
+              clientBrowserInfo,
+            )
           postPaymentTasks(authDetails, email, acquisition)
           ()
         }
       }
 
   private def getOrCreateIdentityIdFromEmail(email: String) =
-    identityService.getOrCreateIdentityIdFromEmail(email)
+    identityService
+      .getOrCreateIdentityIdFromEmail(email)
       .fold(
         err => {
-          logger.warn(s"Unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
+          logger
+            .warn(s"Unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
           None
         },
-        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
+        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken),
       )
 
-  private def postPaymentTasks(authDetails: AuthorizationDetails, email: String, acquisitionData: AmazonPayAcquisition): Unit = {
+  private def postPaymentTasks(
+      authDetails: AuthorizationDetails,
+      email: String,
+      acquisitionData: AmazonPayAcquisition,
+  ): Unit = {
     val clientBrowserInfo = acquisitionData.clientBrowserInfo
     val identityId = acquisitionData.identityId
     trackContribution(authDetails, acquisitionData, email, identityId, clientBrowserInfo)
-      .map(errors => cloudWatchService.recordPostPaymentTasksErrors(
-        PaymentProvider.AmazonPay,
-        errors
-      ))
+      .map(errors =>
+        cloudWatchService.recordPostPaymentTasksErrors(
+          PaymentProvider.AmazonPay,
+          errors,
+        ),
+      )
 
     identityId.foreach { id =>
       sendThankYouEmail(email, acquisitionData.amazonPayment, id).leftMap { err =>
         cloudWatchService.recordPostPaymentTasksError(
           PaymentProvider.AmazonPay,
-          s"unable to send thank you email: ${err.getMessage}"
+          s"unable to send thank you email: ${err.getMessage}",
         )
       }
     }
   }
 
-  private def trackContribution(payment: AuthorizationDetails, acquisitionData: AmazonPayAcquisition, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): Future[List[BackendError]] = {
-    val contributionData = ContributionData.fromAmazonPay(payment, identityId, email, acquisitionData.countryCode, clientBrowserInfo.countrySubdivisionCode, acquisitionData.amazonPayment.orderReferenceId)
+  private def trackContribution(
+      payment: AuthorizationDetails,
+      acquisitionData: AmazonPayAcquisition,
+      email: String,
+      identityId: Option[Long],
+      clientBrowserInfo: ClientBrowserInfo,
+  ): Future[List[BackendError]] = {
+    val contributionData = ContributionData.fromAmazonPay(
+      payment,
+      identityId,
+      email,
+      acquisitionData.countryCode,
+      clientBrowserInfo.countrySubdivisionCode,
+      acquisitionData.amazonPayment.orderReferenceId,
+    )
     val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
     track(
       acquisition = AcquisitionDataRowBuilder.buildFromAmazonPay(acquisitionData, contributionData),
       contributionData,
-      gaData
+      gaData,
     )
   }
 
-  private def sendThankYouEmail(email: String, payment: AmazonPaymentData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
-    val contributorRow = ContributorRow(
-      email,
-      payment.currency.toString,
-      identityId,
-      PaymentProvider.AmazonPay,
-      None,
-      payment.amount)
+  private def sendThankYouEmail(
+      email: String,
+      payment: AmazonPaymentData,
+      identityId: Long,
+  ): EitherT[Future, BackendError, SendMessageResult] = {
+    val contributorRow =
+      ContributorRow(email, payment.currency.toString, identityId, PaymentProvider.AmazonPay, None, payment.amount)
 
     emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
   }
@@ -150,39 +191,52 @@ class AmazonPayBackend(
         logger.info(s"Processing refund $refundId ")
         val orderRef = refundIdToOrderRef(refundId)
         logger.info(s"Derived order ref $orderRef ")
-        flagContributionAsRefunded(orderRef).leftWiden //This allows BackendError (a subtype of Throwable) to be widened to satisfy eitherTs invariance
+        flagContributionAsRefunded(
+          orderRef,
+        ).leftWiden // This allows BackendError (a subtype of Throwable) to be widened to satisfy eitherTs invariance
       case _ =>
         // Ignore any other notifications
         EitherT.rightT(())
     }
   }
 
-  def refundIdToOrderRef(refundId: String): String = refundId.take(19) //The orderReference is the first 19 chars of the refundReference
+  def refundIdToOrderRef(refundId: String): String =
+    refundId.take(19) // The orderReference is the first 19 chars of the refundReference
 
   private def flagContributionAsRefunded(id: String): EitherT[Future, BackendError, Unit] =
-    databaseService.flagContributionAsRefunded(id)
+    databaseService
+      .flagContributionAsRefunded(id)
       .leftMap(BackendError.fromDatabaseError)
 }
 
 object AmazonPayBackend {
 
   private def apply(
-    amazonPayService: AmazonPayService,
-    databaseService: ContributionsStoreService,
-    identityService: IdentityService,
-    gaService: GoogleAnalyticsService,
-    bigQueryService: BigQueryService,
-    acquisitionsStreamService: AcquisitionsStreamService,
-    emailService: EmailService,
-    cloudWatchService: CloudWatchService
+      amazonPayService: AmazonPayService,
+      databaseService: ContributionsStoreService,
+      identityService: IdentityService,
+      gaService: GoogleAnalyticsService,
+      bigQueryService: BigQueryService,
+      acquisitionsStreamService: AcquisitionsStreamService,
+      emailService: EmailService,
+      cloudWatchService: CloudWatchService,
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
-    new AmazonPayBackend(cloudWatchService, amazonPayService, identityService, emailService, gaService, bigQueryService, acquisitionsStreamService, databaseService)
+    new AmazonPayBackend(
+      cloudWatchService,
+      amazonPayService,
+      identityService,
+      emailService,
+      gaService,
+      bigQueryService,
+      acquisitionsStreamService,
+      databaseService,
+    )
   }
 
-  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
-    implicit defaultThreadPool: DefaultThreadPool,
-    wsClient: WSClient,
-    sqsThreadPool: SQSThreadPool
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(implicit
+      defaultThreadPool: DefaultThreadPool,
+      wsClient: WSClient,
+      sqsThreadPool: SQSThreadPool,
   ) extends EnvironmentBasedBuilder[AmazonPayBackend] {
 
     override def build(env: Environment): InitializationResult[AmazonPayBackend] = (
@@ -191,7 +245,9 @@ object AmazonPayBackend {
         .map(AmazonPayService.fromAmazonPayConfig): InitializationResult[AmazonPayService],
       configLoader
         .loadConfig[Environment, ContributionsStoreQueueConfig](env)
-        .andThen(ContributionsStoreQueueService.fromContributionsStoreQueueConfig): InitializationResult[ContributionsStoreQueueService],
+        .andThen(ContributionsStoreQueueService.fromContributionsStoreQueueConfig): InitializationResult[
+        ContributionsStoreQueueService,
+      ],
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
@@ -206,6 +262,6 @@ object AmazonPayBackend {
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
-      ).mapN(AmazonPayBackend.apply)
+    ).mapN(AmazonPayBackend.apply)
   }
 }

@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
-import { space } from '@guardian/src-foundations';
-import { TextInput } from '@guardian/src-text-input';
-import React from 'react';
+import { space } from '@guardian/source-foundations';
+import {
+	ChoiceCard,
+	ChoiceCardGroup,
+	TextInput,
+} from '@guardian/source-react-components';
 import type {
 	ContributionAmounts,
 	ContributionType,

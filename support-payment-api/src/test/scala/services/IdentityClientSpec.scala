@@ -13,13 +13,14 @@ import services.IdentityClient.{GuestRegistrationResponse, UserResponse}
 import services.IdentityClient.UserResponse.User
 
 @Ignore
-class IdentityClientSpec extends AnyWordSpec
-  with Matchers
-  with ConfigLoaderProvider
-  with TestThreadPoolsProvider
-  with WSClientProvider
-  with FutureEitherValues
-  with IdentityClientErrorMatchers {
+class IdentityClientSpec
+    extends AnyWordSpec
+    with Matchers
+    with ConfigLoaderProvider
+    with TestThreadPoolsProvider
+    with WSClientProvider
+    with FutureEitherValues
+    with IdentityClientErrorMatchers {
 
   import IdentityClientSpec._
 
@@ -76,7 +77,7 @@ object IdentityClientSpec {
   // An account for this email address has been created on the identity CODE environment.
   val preExistingIdentityAccount = PreExistingIdentityAccount(
     emailAddress = "test.user@payment-api.gu.com",
-    identityId = 100000253L
+    identityId = 100000253L,
   )
 
   def generateEmailAddressWithNoIdentityAccount(): String =

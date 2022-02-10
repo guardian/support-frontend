@@ -1,4 +1,3 @@
-
 package utils
 
 import com.gu.i18n.Currency.{GBP, USD}
@@ -34,7 +33,10 @@ class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "reject a last name which is too long" in {
-    val requestWithLongLastName = validDigitalPackRequest.copy(lastName = "TooLongToBeLastNameAccordingToSalesforceTooLongToBeLastNameAccordingToSalesforce1")
+    val requestWithLongLastName =
+      validDigitalPackRequest.copy(lastName =
+        "TooLongToBeLastNameAccordingToSalesforceTooLongToBeLastNameAccordingToSalesforce1",
+      )
     SimpleCheckoutFormValidation.passes(requestWithLongLastName) shouldBe an[Invalid]
   }
 
@@ -61,7 +63,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "also fail if the country is Australia and there is no state selected" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, state = None),
-      product = DigitalPack(Currency.AUD, Monthly)
+      product = DigitalPack(Currency.AUD, Monthly),
     )
     DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
   }
@@ -69,7 +71,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "also fail if the country is Australia and there is no postcode" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
-      product = DigitalPack(Currency.AUD, Monthly)
+      product = DigitalPack(Currency.AUD, Monthly),
     )
     DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
@@ -77,7 +79,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "also fail if the country is United Kingdom and there is no postcode" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
-      product = DigitalPack(Currency.GBP, Monthly)
+      product = DigitalPack(Currency.GBP, Monthly),
     )
     DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
@@ -85,7 +87,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "also fail if the country is United States and there is no postcode" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
-      product = DigitalPack(Currency.USD, Monthly)
+      product = DigitalPack(Currency.USD, Monthly),
     )
     DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
@@ -93,7 +95,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "also fail if the country is Canada and there is no postcode" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
-      product = DigitalPack(Currency.CAD, Monthly)
+      product = DigitalPack(Currency.CAD, Monthly),
     )
     DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
   }
@@ -101,7 +103,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "also allow a missing postcode in other countries" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Ireland, postCode = None),
-      product = DigitalPack(Currency.EUR, Monthly)
+      product = DigitalPack(Currency.EUR, Monthly),
     )
     DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe Valid
   }
@@ -122,7 +124,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "fail if the country and currency combination is unsupported" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = Some("VA")),
-      product = DigitalPack(Currency.GBP, Annual)
+      product = DigitalPack(Currency.GBP, Annual),
     )
     DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
   }
@@ -134,7 +136,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       city = None,
       state = None,
       postCode = None,
-      country = Country.UK
+      country = Country.UK,
     )
     val requestMissingAddressLineAndCity = validDigitalPackRequest.copy(billingAddress = badBillingAddress)
     DigitalPackValidation.passes(requestMissingAddressLineAndCity, Direct) shouldBe an[Invalid]
@@ -143,7 +145,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid corporate sub" in {
     val corporateSub = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Corporate),
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)),
     )
 
     DigitalPackValidation.passes(corporateSub, Corporate) shouldBe Valid
@@ -152,7 +154,16 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid gift sub purchase" in {
     val giftPurchase = validDigitalPackRequest.copy(
       product = DigitalPack(USD, Monthly, Gift),
-      giftRecipient = Some(GiftRecipientRequest(None, "bob", "builder", Some("bob@gu.com"), Some("have a nice sub"), Some(new LocalDate(2020, 10, 2))))
+      giftRecipient = Some(
+        GiftRecipientRequest(
+          None,
+          "bob",
+          "builder",
+          Some("bob@gu.com"),
+          Some("have a nice sub"),
+          Some(new LocalDate(2020, 10, 2)),
+        ),
+      ),
     )
 
     DigitalPackValidation.passes(giftPurchase, Gift) shouldBe Valid
@@ -161,7 +172,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed when there is a valid gift sub redemption" in {
     val giftRedemption = validDigitalPackRequest.copy(
       product = DigitalPack(GBP, Monthly, Gift),
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get))
+      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)),
     )
 
     DigitalPackValidation.passes(giftRedemption, Gift) shouldBe Valid
@@ -174,7 +185,8 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   import TestData.validPaperRequest
 
   "PaperValidation.passes" should "fail if the delivery country is US" in {
-    val requestDeliveredToUs = validPaperRequest.copy(deliveryAddress = validPaperRequest.deliveryAddress map(_.copy(country = Country.US)))
+    val requestDeliveredToUs =
+      validPaperRequest.copy(deliveryAddress = validPaperRequest.deliveryAddress map (_.copy(country = Country.US)))
     PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe an[Invalid]
   }
 
@@ -189,7 +201,10 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "fail HD if outside the M25" in {
-    val requestDeliveredToUs = validPaperRequest.copy(deliveryAddress = validPaperRequest.deliveryAddress.map(_.copy(postCode = Some("TS1 1AA"))))
+    val requestDeliveredToUs =
+      validPaperRequest.copy(deliveryAddress =
+        validPaperRequest.deliveryAddress.map(_.copy(postCode = Some("TS1 1AA"))),
+      )
     PaperValidation.passes(requestDeliveredToUs, HomeDelivery) shouldBe an[Invalid]
   }
 
@@ -204,16 +219,16 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "fail when missing an address data for billing address" in {
-      val emptyAddress = Address(
-        lineOne = None,
-        lineTwo = None,
-        city = None,
-        state = None,
-        postCode = None,
-        country = Country.UK
-      )
-      val requestMissingAddressLineAndCity = validPaperRequest.copy(billingAddress = emptyAddress)
-      PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe an[Invalid]
+    val emptyAddress = Address(
+      lineOne = None,
+      lineTwo = None,
+      city = None,
+      state = None,
+      postCode = None,
+      country = Country.UK,
+    )
+    val requestMissingAddressLineAndCity = validPaperRequest.copy(billingAddress = emptyAddress)
+    PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address data for delivery address" in {
@@ -223,14 +238,15 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
       city = None,
       state = None,
       postCode = None,
-      country = Country.UK
+      country = Country.UK,
     )
     val requestMissingAddressLineAndCity = validPaperRequest.copy(deliveryAddress = Some(emptyAddress))
     PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe an[Invalid]
   }
 
   it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption = validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
+    val requestWithCorporateRedemption =
+      validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
     PaperValidation.passes(requestWithCorporateRedemption, Collection) shouldBe an[Invalid]
   }
 
@@ -241,7 +257,8 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
   import TestData.validWeeklyRequest
 
   it should "succeed if the delivery country is US" in {
-    val requestDeliveredToUs = validWeeklyRequest.copy(deliveryAddress = validWeeklyRequest.deliveryAddress map(_.copy(country = Country.US)))
+    val requestDeliveredToUs =
+      validWeeklyRequest.copy(deliveryAddress = validWeeklyRequest.deliveryAddress map (_.copy(country = Country.US)))
     GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe Valid
   }
 
@@ -267,7 +284,7 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
       city = None,
       state = None,
       postCode = None,
-      country = Country.UK
+      country = Country.UK,
     )
     val requestMissingAddressLineAndCity = validWeeklyRequest.copy(billingAddress = emptyAddress)
     GuardianWeeklyValidation.passes(requestMissingAddressLineAndCity) shouldBe an[Invalid]
@@ -280,14 +297,15 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
       city = None,
       state = None,
       postCode = None,
-      country = Country.UK
+      country = Country.UK,
     )
     val requestMissingAddressLineAndCity = validWeeklyRequest.copy(deliveryAddress = Some(emptyAddress))
     GuardianWeeklyValidation.passes(requestMissingAddressLineAndCity) shouldBe an[Invalid]
   }
 
   it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption = validWeeklyRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
+    val requestWithCorporateRedemption =
+      validWeeklyRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
     GuardianWeeklyValidation.passes(requestWithCorporateRedemption) shouldBe an[Invalid]
   }
 
@@ -301,9 +319,11 @@ object TestData {
     lastName = "hopper",
     product = DigitalPack(Currency.USD, Monthly),
     firstDeliveryDate = None,
-    paymentFields = Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields =
+      Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
     ophanIds = OphanIds(None, None, None),
-    referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
+    referrerAcquisitionData =
+      ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
     email = "grace@gracehopper.com",
     telephoneNumber = None,
@@ -321,7 +341,7 @@ object TestData {
     deliveryAddress = None,
     giftRecipient = None,
     deliveryInstructions = None,
-    debugInfo = None
+    debugInfo = None,
   )
 
   val someDateNextMonth = new LocalDate().plusMonths(1)
@@ -331,7 +351,7 @@ object TestData {
     city = Some("Address Town"),
     state = None,
     postCode = Some("N1 9AG"),
-    country = Country.UK
+    country = Country.UK,
   )
   val validPaperRequest = CreateSupportWorkersRequest(
     title = None,
@@ -339,9 +359,11 @@ object TestData {
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields =
+      Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
     ophanIds = OphanIds(None, None, None),
-    referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
+    referrerAcquisitionData =
+      ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
     email = "grace@gracehopper.com",
     telephoneNumber = None,
@@ -361,9 +383,11 @@ object TestData {
     lastName = "hopper",
     product = GuardianWeekly(Currency.GBP, Monthly, Domestic),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields =
+      Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
     ophanIds = OphanIds(None, None, None),
-    referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
+    referrerAcquisitionData =
+      ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
     email = "grace@gracehopper.com",
     telephoneNumber = None,
@@ -374,7 +398,7 @@ object TestData {
     deliveryAddress = Some(paperAddress),
     giftRecipient = None,
     deliveryInstructions = None,
-    debugInfo = None
+    debugInfo = None,
   )
 
 }

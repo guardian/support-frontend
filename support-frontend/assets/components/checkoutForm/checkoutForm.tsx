@@ -1,10 +1,8 @@
-import type { SerializedStyles } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/react';
 import type { FormHTMLAttributes, ReactNode } from 'react';
-import React from 'react';
 import Heading from 'components/heading/heading';
 import type { HeadingSize } from 'components/heading/heading';
 import type { Option } from 'helpers/types/option';
-import '@emotion/core';
 import './checkoutForm.scss';
 
 /*
@@ -20,30 +18,32 @@ type FormSectionPropTypes = {
 	cssOverrides?: Option<SerializedStyles>;
 };
 
-const FormSection = ({
+function FormSection({
 	children,
 	title,
 	headingSize,
 	border,
 	id,
 	cssOverrides,
-}: FormSectionPropTypes): JSX.Element => (
-	<div
-		id={id}
-		className={`component-checkout-form-section component-checkout-form-section--${border} component-checkout-form-section__wrap`}
-		css={cssOverrides}
-	>
-		{title && (
-			<Heading
-				className="component-checkout-form-section__heading"
-				size={headingSize}
-			>
-				{title}
-			</Heading>
-		)}
-		{children}
-	</div>
-);
+}: FormSectionPropTypes): JSX.Element {
+	return (
+		<div
+			id={id}
+			className={`component-checkout-form-section component-checkout-form-section--${border} component-checkout-form-section__wrap`}
+			css={cssOverrides}
+		>
+			{title && (
+				<Heading
+					className="component-checkout-form-section__heading"
+					size={headingSize}
+				>
+					{title}
+				</Heading>
+			)}
+			{children}
+		</div>
+	);
+}
 
 FormSection.defaultProps = {
 	headingSize: 2,
@@ -61,36 +61,38 @@ type FormSectionHiddenPropTypes = {
 	id?: string;
 };
 
-const FormSectionHiddenUntilSelected = ({
+function FormSectionHiddenUntilSelected({
 	children,
 	title,
 	headingSize,
 	show,
 	id,
-}: FormSectionHiddenPropTypes): JSX.Element => (
-	<div
-		id={id}
-		className={
-			show
-				? 'component-checkout-form-section'
-				: 'component-checkout-form-section is-hidden'
-		}
-	>
-		{show && (
-			<div className="component-checkout-form-section__wrap">
-				{title && (
-					<Heading
-						className="component-checkout-form-section__heading"
-						size={headingSize}
-					>
-						{title}
-					</Heading>
-				)}
-				{children}
-			</div>
-		)}
-	</div>
-);
+}: FormSectionHiddenPropTypes): JSX.Element {
+	return (
+		<div
+			id={id}
+			className={
+				show
+					? 'component-checkout-form-section'
+					: 'component-checkout-form-section is-hidden'
+			}
+		>
+			{show && (
+				<div className="component-checkout-form-section__wrap">
+					{title && (
+						<Heading
+							className="component-checkout-form-section__heading"
+							size={headingSize}
+						>
+							{title}
+						</Heading>
+					)}
+					{children}
+				</div>
+			)}
+		</div>
+	);
+}
 
 FormSectionHiddenUntilSelected.defaultProps = {
 	headingSize: 2,
@@ -107,11 +109,13 @@ type FormPropTypes = FormHTMLAttributes<HTMLFormElement> & {
 	children: ReactNode;
 };
 
-const Form = ({ children, ...otherProps }: FormPropTypes): JSX.Element => (
-	<form {...otherProps} className="component-checkout-form">
-		{children}
-	</form>
-);
+function Form({ children, ...otherProps }: FormPropTypes): JSX.Element {
+	return (
+		<form {...otherProps} className="component-checkout-form">
+			{children}
+		</form>
+	);
+}
 
 export default Form;
 export { FormSection, FormSectionHiddenUntilSelected };

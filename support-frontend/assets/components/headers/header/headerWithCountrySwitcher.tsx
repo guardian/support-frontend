@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';

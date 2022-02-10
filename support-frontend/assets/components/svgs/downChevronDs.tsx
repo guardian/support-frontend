@@ -1,4 +1,4 @@
-import React from 'react'; // the down chevron used on DS <select>
+// the down chevron used on DS <select>
 
 export default function DownChevronDs(): JSX.Element {
 	return (

@@ -25,7 +25,7 @@ object Status {
 
   implicit val encodeStatus: Encoder[Status] = Encoder.encodeString.contramap[Status](_.asString)
 
-  implicit val decodeStatus: Decoder[Status] = Decoder.decodeString.emap {
-    identifier => Status.fromString(identifier).toRight(s"Unrecognised status '$identifier'")
+  implicit val decodeStatus: Decoder[Status] = Decoder.decodeString.emap { identifier =>
+    Status.fromString(identifier).toRight(s"Unrecognised status '$identifier'")
   }
 }

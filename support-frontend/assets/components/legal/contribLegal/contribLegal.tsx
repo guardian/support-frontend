@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import {

@@ -5,7 +5,12 @@ import com.gu.support.encoding.Codec._
 
 import com.gu.i18n.Currency
 
-case class PayPalBillingDetails(amount: Float, billingPeriod: String, currency: Currency, requireShippingAddress: Boolean)
+case class PayPalBillingDetails(
+    amount: Float,
+    billingPeriod: String,
+    currency: Currency,
+    requireShippingAddress: Boolean,
+)
 
 object PayPalBillingDetails {
   import com.gu.support.encoding.CustomCodecs.{encodeCurrency, decodeCurrency}

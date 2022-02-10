@@ -11,36 +11,46 @@ import scala.collection.immutable
 import scala.concurrent.{ExecutionContext, Future}
 
 class GuardianWeeklyEmailFields(
-  paperFieldsGenerator: PaperFieldsGenerator,
-  touchPointEnvironment: TouchPointEnvironment,
+    paperFieldsGenerator: PaperFieldsGenerator,
+    touchPointEnvironment: TouchPointEnvironment,
 ) {
   def build(gw: SendThankYouEmailGuardianWeeklyState)(implicit ec: ExecutionContext): Future[EmailFields] = {
 
-    val additionalFields: immutable.Seq[(String, String)] = gw.paymentSchedule.payments.lift(1).map(
-      payment => List("date_of_second_payment" -> formatDate(payment.date))
-    ).getOrElse(Nil)
+    val additionalFields: immutable.Seq[(String, String)] =
+      gw.paymentSchedule.payments
+        .lift(1)
+        .map(payment => List("date_of_second_payment" -> formatDate(payment.date)))
+        .getOrElse(Nil)
 
-    val giftRecipientFields = gw.giftRecipient.toList.flatMap(
-      recipient =>
-        List(
-          "giftee_first_name" -> recipient.firstName,
-          "giftee_last_name" -> recipient.lastName,
-        )
+    val giftRecipientFields = gw.giftRecipient.toList.flatMap(recipient =>
+      List(
+        "giftee_first_name" -> recipient.firstName,
+        "giftee_last_name" -> recipient.lastName,
+      ),
     )
 
-    paperFieldsGenerator.fieldsFor(
-      gw.paymentMethod, gw.paymentSchedule, gw.promoCode, gw.accountNumber, gw.subscriptionNumber,
-      gw.product,
-      gw.user,
-      ProductTypeRatePlans.weeklyRatePlan(gw.product, touchPointEnvironment, if(gw.giftRecipient.isDefined) Gift else Direct).map(_.id),
-      fixedTerm = gw.giftRecipient.isDefined,
-      gw.firstDeliveryDate,
-    ).map(fields =>
-      EmailFields(
-        fields ++ additionalFields ++ giftRecipientFields,
+    paperFieldsGenerator
+      .fieldsFor(
+        gw.paymentMethod,
+        gw.paymentSchedule,
+        gw.promoCode,
+        gw.accountNumber,
+        gw.subscriptionNumber,
+        gw.product,
         gw.user,
-        "guardian-weekly"
-      ))
+        ProductTypeRatePlans
+          .weeklyRatePlan(gw.product, touchPointEnvironment, if (gw.giftRecipient.isDefined) Gift else Direct)
+          .map(_.id),
+        fixedTerm = gw.giftRecipient.isDefined,
+        gw.firstDeliveryDate,
+      )
+      .map(fields =>
+        EmailFields(
+          fields ++ additionalFields ++ giftRecipientFields,
+          gw.user,
+          "guardian-weekly",
+        ),
+      )
   }
 
 }

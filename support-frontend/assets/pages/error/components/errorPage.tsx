@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import Rows from 'components/base/rows';
 import AnchorButton from 'components/button/anchorButton';
 import Footer from 'components/footerCompliant/Footer';

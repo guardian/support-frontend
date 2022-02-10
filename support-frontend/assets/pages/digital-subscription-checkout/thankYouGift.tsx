@@ -1,11 +1,15 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { neutral, sport, text } from '@guardian/src-foundations/palette';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { SvgCheckmark } from '@guardian/src-icons';
+import { css } from '@emotion/react';
+import {
+	from,
+	headline,
+	neutral,
+	space,
+	sport,
+	text,
+	textSans,
+} from '@guardian/source-foundations';
+import { LinkButton, SvgCheckmark } from '@guardian/source-react-components';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import GridImage from 'components/gridImage/gridImage';

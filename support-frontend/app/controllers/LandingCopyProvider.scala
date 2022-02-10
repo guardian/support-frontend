@@ -7,8 +7,8 @@ import com.gu.support.config.Stage
 import com.gu.support.promotions.{ProductPromotionCopy, PromoCode, PromotionCopy, PromotionServiceProvider}
 
 class LandingCopyProvider(
-  promotionServiceProvider: PromotionServiceProvider,
-  stage: Stage
+    promotionServiceProvider: PromotionServiceProvider,
+    stage: Stage,
 ) {
 
   // To see if there is any promotional copy in place for this page we need to get a country in the current region (country group)
@@ -22,10 +22,13 @@ class LandingCopyProvider(
     promotionCopyForPrimaryCountry(queryPromos, product1, country)
   }
 
-  def promotionCopyForPrimaryCountry(queryPromos: List[String], product1: Product, country: Country): Option[PromotionCopy] =
-    queryPromos.headOption.flatMap(
-      promoCode =>
-        ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
-          .getCopyForPromoCode(promoCode, product1, country)
+  def promotionCopyForPrimaryCountry(
+      queryPromos: List[String],
+      product1: Product,
+      country: Country,
+  ): Option[PromotionCopy] =
+    queryPromos.headOption.flatMap(promoCode =>
+      ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
+        .getCopyForPromoCode(promoCode, product1, country),
     )
 }

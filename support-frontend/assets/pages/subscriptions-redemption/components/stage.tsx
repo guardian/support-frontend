@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';

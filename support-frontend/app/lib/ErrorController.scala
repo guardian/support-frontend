@@ -5,8 +5,8 @@ import play.api.UsefulException
 import play.api.mvc._
 
 class ErrorController(
- actionRefiners: CustomActionBuilders,
- customHttpErrorHandler: CustomHttpErrorHandler
+    actionRefiners: CustomActionBuilders,
+    customHttpErrorHandler: CustomHttpErrorHandler,
 ) {
 
   import actionRefiners._

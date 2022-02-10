@@ -1,4 +1,3 @@
-import React from 'react';
 import OrderedList from 'components/list/orderedList';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { paperSubsUrl } from 'helpers/urls/routes';

@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import * as React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
@@ -96,13 +95,7 @@ const WeeklyLandingPage = ({
 			/>
 			<FullWidthContainer>
 				<CentredContainer>
-					<Block>
-						{orderIsAGift ? (
-							<GiftBenefits />
-						) : (
-							<Benefits/>
-						)}
-					</Block>
+					<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
 				</CentredContainer>
 			</FullWidthContainer>
 			<FullWidthContainer theme="dark" hasOverlap>

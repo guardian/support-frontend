@@ -20,7 +20,7 @@ class CachedActionTest extends AnyWordSpec with Matchers {
   val geoCachedAction = new CachedAction(
     cc.parsers.defaultBodyParser,
     cc.executionContext,
-    List("Vary" -> FastlyGEOIP.fastlyCountryHeader)
+    List("Vary" -> FastlyGEOIP.fastlyCountryHeader),
   )
 
   "with no arguments" should {
@@ -63,7 +63,9 @@ class CachedActionTest extends AnyWordSpec with Matchers {
 
     "cdn cache control max-age of 3600 seconds with 10% time for revalidation and 10 days stale on error" in {
       val result = cachedAction(1.hour)(Ok("")).apply(FakeRequest())
-      header("Surrogate-Control", result) mustEqual Some("max-age=3600, stale-while-revalidate=360, stale-if-error=864000")
+      header("Surrogate-Control", result) mustEqual Some(
+        "max-age=3600, stale-while-revalidate=360, stale-if-error=864000",
+      )
     }
   }
 

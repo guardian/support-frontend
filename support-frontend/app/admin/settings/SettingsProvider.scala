@@ -28,10 +28,10 @@ abstract class SettingsProvider[T] {
 }
 
 class AllSettingsProvider private (
-  switchesProvider: SettingsProvider[Switches],
-  amountsProvider: SettingsProvider[ConfiguredAmounts],
-  contributionTypesProvider: SettingsProvider[ContributionTypes],
-  metricUrl: MetricUrl
+    switchesProvider: SettingsProvider[Switches],
+    amountsProvider: SettingsProvider[ConfiguredAmounts],
+    contributionTypesProvider: SettingsProvider[ContributionTypes],
+    metricUrl: MetricUrl,
 ) {
 
   def getAllSettings(): AllSettings = {
@@ -39,7 +39,7 @@ class AllSettingsProvider private (
       switchesProvider.settings(),
       amountsProvider.settings(),
       contributionTypesProvider.settings(),
-      metricUrl
+      metricUrl,
     )
   }
 }
@@ -48,16 +48,19 @@ object AllSettingsProvider {
   import admin.settings.Amounts.amountsDecoder
   import admin.settings.ContributionTypes.contributionTypesDecoder
 
-  def fromConfig(config: Configuration)(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
+  def fromConfig(
+      config: Configuration,
+  )(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
       amountsProvider <- SettingsProvider.fromAppConfig[ConfiguredAmounts](config.settingsSources.amounts, config)
-      contributionTypesProvider <- SettingsProvider.fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
+      contributionTypesProvider <- SettingsProvider
+        .fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
     } yield new AllSettingsProvider(
       switchesProvider,
       amountsProvider,
       contributionTypesProvider,
-      config.metricUrl
+      config.metricUrl,
     )
   }
 }
@@ -76,13 +79,15 @@ object LocalFileSettingsProvider {
 class S3SettingsProvider[T: Decoder] private (
     initialSettings: T,
     source: SettingsSource.S3,
-    fastlyService: Option[FastlyService]
-)(implicit ec: ExecutionContext, s3Client: AwsS3Client, system: ActorSystem) extends SettingsProvider[T] {
+    fastlyService: Option[FastlyService],
+)(implicit ec: ExecutionContext, s3Client: AwsS3Client, system: ActorSystem)
+    extends SettingsProvider[T] {
 
   private val cachedSettings = new AtomicReference[T](initialSettings)
 
   def getAndSetSettings(): EitherT[Future, Throwable, SettingsUpdate[T]] =
-    EitherT.fromEither(Settings.fromS3[T](source))
+    EitherT
+      .fromEither(Settings.fromS3[T](source))
       .map(settings => SettingsUpdate(cachedSettings.getAndSet(settings), settings))
 
   def purgeIfChanged(diff: SettingsUpdate[T]): EitherT[Future, Throwable, SettingsUpdate[T]] =
@@ -92,9 +97,10 @@ class S3SettingsProvider[T: Decoder] private (
       .fold(EitherT.pure[Future, Throwable](diff)) { service =>
         SafeLogger.info(
           s"settings update detected, purging Fastly by surrogate key ${SettingsSurrogateKey.settingsSurrogateKey} " +
-            "so that new settings propagate to the user"
+            "so that new settings propagate to the user",
         )
-        service.purgeSurrogateKey(SettingsSurrogateKey.settingsSurrogateKey)
+        service
+          .purgeSurrogateKey(SettingsSurrogateKey.settingsSurrogateKey)
           // If there is a purge response, but it's not ok,
           // propagate the error so that it will be logged at the end of the flow.
           .ensureOr(response => new RuntimeException(s"failed to purge support frontend: $response"))(_.isOk)
@@ -113,7 +119,7 @@ class S3SettingsProvider[T: Decoder] private (
           update =>
             if (update.isChange) {
               SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
-            }
+            },
         )
     }
 
@@ -122,11 +128,10 @@ class S3SettingsProvider[T: Decoder] private (
 
 object S3SettingsProvider {
 
-  def fromS3[T: Decoder](s3: SettingsSource.S3, fastlyConfig: Option[FastlyConfig])(
-    implicit
-    client: AwsS3Client,
-    system: ActorSystem,
-    wsClient: WSClient
+  def fromS3[T: Decoder](s3: SettingsSource.S3, fastlyConfig: Option[FastlyConfig])(implicit
+      client: AwsS3Client,
+      system: ActorSystem,
+      wsClient: WSClient,
   ): Either[Throwable, SettingsProvider[T]] = {
     // Ok using a single threaded execution context,
     // since the only one task is getting executed periodically (pollS3())
@@ -147,8 +152,11 @@ object S3SettingsProvider {
 
 object SettingsProvider {
 
-  def fromAppConfig[T: Decoder](settingsSource: SettingsSource, config: Configuration)
-                               (implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, SettingsProvider[T]] = {
+  def fromAppConfig[T: Decoder](settingsSource: SettingsSource, config: Configuration)(implicit
+      client: AwsS3Client,
+      system: ActorSystem,
+      wsClient: WSClient,
+  ): Either[Throwable, SettingsProvider[T]] = {
     SafeLogger.info(s"loading settings from $settingsSource")
     settingsSource match {
       case s3: SettingsSource.S3 => S3SettingsProvider.fromS3[T](s3, config.fastlyConfig)

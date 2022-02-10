@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import type { $Call } from 'utility-types';
 import type { GridImg } from 'components/gridImage/gridImage';

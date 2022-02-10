@@ -4,7 +4,8 @@ import com.gu.support.workers.CheckoutFailureReasons
 import io.circe.generic.JsonCodec
 
 @JsonCodec
-case class AmazonPayApiError(responseCode: Option[Int], message: String, failureReason: Option[String] = None) extends Exception {
+case class AmazonPayApiError(responseCode: Option[Int], message: String, failureReason: Option[String] = None)
+    extends Exception {
   override val getMessage: String = message
 }
 

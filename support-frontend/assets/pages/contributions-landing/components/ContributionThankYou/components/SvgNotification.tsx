@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SvgNotification = () => (
 	<svg
 		width="39"

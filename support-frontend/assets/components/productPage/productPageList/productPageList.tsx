@@ -1,5 +1,3 @@
-import React from 'react';
-// styles
 import './productPageList.scss';
 
 type ListPropTypes = {

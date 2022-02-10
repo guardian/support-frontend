@@ -1,12 +1,11 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import { ThemeProvider } from 'emotion-theming';
-import React from 'react';
+import { css, ThemeProvider } from '@emotion/react';
+import { from, headline, space, textSans } from '@guardian/source-foundations';
+import {
+	buttonThemeReaderRevenue,
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
 import Content from 'components/content/contentSimple';
 
 const subHeading = css`
@@ -39,7 +38,7 @@ const marginForButton = css`
 	margin: ${space[5]}px 0 0;
 `;
 
-const SubscriptionsSurvey = () => {
+function SubscriptionsSurvey() {
 	const surveyLink = 'https://www.surveymonkey.co.uk/r/Q37XNTV';
 	const title = 'Tell us about your subscription';
 	const message =
@@ -49,7 +48,7 @@ const SubscriptionsSurvey = () => {
 			<section css={maxWidth}>
 				<h3 css={subHeading}>{title}</h3>
 				<p css={sansText}>{message}</p>
-				<ThemeProvider theme={buttonReaderRevenue}>
+				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
 						css={marginForButton}
 						href={surveyLink}
@@ -67,6 +66,6 @@ const SubscriptionsSurvey = () => {
 			</section>
 		</Content>
 	) : null;
-};
+}
 
 export default SubscriptionsSurvey;

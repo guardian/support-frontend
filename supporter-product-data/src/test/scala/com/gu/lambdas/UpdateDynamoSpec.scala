@@ -31,7 +31,7 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
     // - items 0 - 4 can all run concurrently and so are allocated to the same batch (up to max batch size of 5)
     // - items 5 & 6 are unrelated and so go in a batch
     // - then we get to index 7 which cannot go into the same batch as 6 so a new batch is started with this and the final 2 items
-    batchedItems.map(_.map(_._2)) shouldBe List(List(0,1,2,3,4), List(5,6), List(7,8,9))
+    batchedItems.map(_.map(_._2)) shouldBe List(List(0, 1, 2, 3, 4), List(5, 6), List(7, 8, 9))
   }
 
 }

@@ -1,6 +1,5 @@
-import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
-import { body } from '@guardian/src-foundations/typography';
+import { css } from '@emotion/react';
+import { body, from } from '@guardian/source-foundations';
 import * as React from 'react';
 
 const bodyContainer = css`

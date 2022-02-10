@@ -13,12 +13,18 @@ import PartialFunction.condOpt
 //
 // requestID: This field contains an identifying key for the request which can be used for debugging and investigating any failures
 
-case class StripeApiError(exceptionType: Option[String], responseCode: Option[Int], declineCode: Option[String], message: String, publicKey: Option[String]) extends Exception {
+case class StripeApiError(
+    exceptionType: Option[String],
+    responseCode: Option[Int],
+    declineCode: Option[String],
+    message: String,
+    publicKey: Option[String],
+) extends Exception {
   override val getMessage: String =
     List(
       message,
       declineCode.map(dc => s"Stripe decline code: $dc"),
-      publicKey.map(pk => s"Public key was $pk.")
+      publicKey.map(pk => s"Public key was $pk."),
     ).mkString(". ")
 }
 
@@ -26,7 +32,8 @@ object StripeApiError {
 
   val recaptchaErrorText = "Recaptcha failed"
 
-  def fromString(message: String, publicKey: Option[String]): StripeApiError = StripeApiError(None, None, None, message, publicKey)
+  def fromString(message: String, publicKey: Option[String]): StripeApiError =
+    StripeApiError(None, None, None, message, publicKey)
 
   def fromThrowable(err: Throwable, publicKey: Option[String]): StripeApiError = {
     err match {
@@ -46,12 +53,14 @@ object StripeApiError {
       }
     }
 
-    val declineCode: Option[String] = condOpt(err) { case e: CardException => {
-      // If the decline_code is present then use that (happens for e.g. 'insufficient_funds')
-      // If decline_code is not present then just use the code (happens for e.g. 'incorrect_cvc').
-      // Despite this inconsistency, these are all valid decline codes: // https://stripe.com/docs/declines/codes
-      Option(e.getDeclineCode).getOrElse(e.getCode)
-    } }
+    val declineCode: Option[String] = condOpt(err) {
+      case e: CardException => {
+        // If the decline_code is present then use that (happens for e.g. 'insufficient_funds')
+        // If decline_code is not present then just use the code (happens for e.g. 'incorrect_cvc').
+        // Despite this inconsistency, these are all valid decline codes: // https://stripe.com/docs/declines/codes
+        Option(e.getDeclineCode).getOrElse(e.getCode)
+      }
+    }
 
     StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage, publicKey)
 

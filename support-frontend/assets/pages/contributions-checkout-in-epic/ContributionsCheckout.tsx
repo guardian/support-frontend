@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';

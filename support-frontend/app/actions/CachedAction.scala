@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 class CachedAction(
     parser: BodyParser[AnyContent],
     executionContext: ExecutionContext,
-    headers: List[(String, String)] = List.empty
+    headers: List[(String, String)] = List.empty,
 )(implicit val ec: ExecutionContext) {
 
   private val defaultMaxAge = 1.minute

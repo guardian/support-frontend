@@ -10,12 +10,16 @@ import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromo
 import org.joda.time.{DateTimeZone, LocalDate}
 
 class PaperSubscriptionBuilder(
-  promotionService: PromotionService,
-  environment: TouchPointEnvironment,
-  subscribeItemBuilder: SubscribeItemBuilder,
+    promotionService: PromotionService,
+    environment: TouchPointEnvironment,
+    subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: PaperState, csrUsername: Option[String], salesforceCaseId: Option[String]): Either[PromoError, SubscribeItem] = {
+  def build(
+      state: PaperState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+  ): Either[PromoError, SubscribeItem] = {
 
     import state._
 
@@ -32,15 +36,26 @@ class PaperSubscriptionBuilder(
       salesforceCaseId = salesforceCaseId,
     )
 
-    applyPromoCodeIfPresent(promotionService, promoCode, user.billingAddress.country, productRatePlanId, subscriptionData).map { subscriptionData =>
+    applyPromoCodeIfPresent(
+      promotionService,
+      promoCode,
+      user.billingAddress.country,
+      productRatePlanId,
+      subscriptionData,
+    ).map { subscriptionData =>
       val soldToContact = SubscribeItemBuilder.buildContactDetails(
         Some(user.primaryEmailAddress),
         user.firstName,
         user.lastName,
         user.deliveryAddress.get,
-        user.deliveryInstructions
+        user.deliveryInstructions,
       )
-      subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), Some(soldToContact))
+      subscribeItemBuilder.build(
+        subscriptionData,
+        state.salesForceContact,
+        Some(state.paymentMethod),
+        Some(soldToContact),
+      )
     }
   }
 

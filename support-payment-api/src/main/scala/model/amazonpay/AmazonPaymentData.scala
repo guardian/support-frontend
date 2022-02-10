@@ -6,7 +6,6 @@ import model.{AcquisitionData, Currency}
 
 @JsonCodec case class AmazonPaymentData(orderReferenceId: String, amount: BigDecimal, currency: Currency, email: String)
 
-
 object BundledAmazonPayRequest {
   case class AmazonPayRequest(paymentData: AmazonPaymentData, acquisitionData: Option[AcquisitionData])
 

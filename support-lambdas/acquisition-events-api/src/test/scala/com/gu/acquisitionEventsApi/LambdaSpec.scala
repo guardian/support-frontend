@@ -2,7 +2,13 @@ package com.gu.acquisitionEventsApi
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, AcquisitionType, PaymentFrequency, PaymentProvider}
+import com.gu.support.acquisitions.models.{
+  AcquisitionDataRow,
+  AcquisitionProduct,
+  AcquisitionType,
+  PaymentFrequency,
+  PaymentProvider,
+}
 import com.gu.support.zuora.api.ReaderType
 import org.joda.time.DateTime
 import org.scalatest.matchers.should.Matchers
@@ -41,7 +47,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     contributionId = None,
     paymentId = None,
     queryParameters = Nil,
-    platform = None
+    platform = None,
   )
 
   it should "run locally" in {

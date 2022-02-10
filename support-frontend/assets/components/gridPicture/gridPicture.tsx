@@ -2,7 +2,6 @@
 // This code is designed to work with multiple image sources and crops (different pictures)
 // If you want to work with a single image at different crops, maybe consider gridImage instead
 // ----- Imports ----- //
-import React from 'react';
 import { gridSrcset, gridUrl } from 'helpers/images/theGrid';
 import type { ImageId, ImageType } from 'helpers/images/theGrid';
 // ----- Types ----- //

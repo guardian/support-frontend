@@ -1,4 +1,3 @@
-
 package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
@@ -23,26 +22,30 @@ class PayPalRegular(
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    settingsProvider: AllSettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
+    settingsProvider: AllSettingsProvider,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with Circe
+    with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
   implicit val a: AssetsResolver = assets
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
-  def setupPayment: Action[PayPalBillingDetails] = MaybeAuthenticatedAction.async(circe.json[PayPalBillingDetails]) { implicit request =>
-    val paypalBillingDetails = request.body
-    withPaypalServiceForRequest(request) { service =>
-      service.retrieveToken(
-        returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
-        cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
-      )(paypalBillingDetails)
-    }.map { maybeString =>
-      maybeString
-        .map(s => Ok(Token(s).asJson))
-        .getOrElse(BadRequest("We were unable to set up a payment for this request (missing PayPal token)"))
-    }
+  def setupPayment: Action[PayPalBillingDetails] = MaybeAuthenticatedAction.async(circe.json[PayPalBillingDetails]) {
+    implicit request =>
+      val paypalBillingDetails = request.body
+      withPaypalServiceForRequest(request) { service =>
+        service.retrieveToken(
+          returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
+          cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true),
+        )(paypalBillingDetails)
+      }.map { maybeString =>
+        maybeString
+          .map(s => Ok(Token(s).asJson))
+          .getOrElse(BadRequest("We were unable to set up a payment for this request (missing PayPal token)"))
+      }
   }
 
   def createAgreement: Action[Token] = MaybeAuthenticatedAction.async(circe.json[Token]) { implicit request =>
@@ -55,14 +58,17 @@ class PayPalRegular(
     }
   }
 
-  def createAgreementAndRetrieveUser: Action[Token] = MaybeAuthenticatedAction.async(circe.json[Token]) { implicit request =>
-    withPaypalServiceForRequest(request) { service =>
-      service.createAgreementAndRetrieveUser(request.body)
-    }.map { maybePayPalCheckoutDetails =>
-      maybePayPalCheckoutDetails
-        .map(details => Ok(details.asJson))
-        .getOrElse(BadRequest("We were unable to create an agreement for this request (missing user details or baid)"))
-    }
+  def createAgreementAndRetrieveUser: Action[Token] = MaybeAuthenticatedAction.async(circe.json[Token]) {
+    implicit request =>
+      withPaypalServiceForRequest(request) { service =>
+        service.createAgreementAndRetrieveUser(request.body)
+      }.map { maybePayPalCheckoutDetails =>
+        maybePayPalCheckoutDetails
+          .map(details => Ok(details.asJson))
+          .getOrElse(
+            BadRequest("We were unable to create an agreement for this request (missing user details or baid)"),
+          )
+      }
   }
 
   private def withPaypalServiceForRequest[T](request: OptionalAuthRequest[_])(fn: PayPalNvpService => T): T = {
@@ -76,12 +82,14 @@ class PayPalRegular(
   def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
-    Ok(views.html.main(
-      "Support the Guardian | PayPal Error",
-      EmptyDiv("paypal-error-page"),
-      Left(RefPath("payPalErrorPage.js")),
-      Left(RefPath("payPalErrorPageStyles.css"))
-    )()).withSettingsSurrogateKey
+    Ok(
+      views.html.main(
+        "Support the Guardian | PayPal Error",
+        EmptyDiv("paypal-error-page"),
+        Left(RefPath("payPalErrorPage.js")),
+        Left(RefPath("payPalErrorPageStyles.css")),
+      )(),
+    ).withSettingsSurrogateKey
   }
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
@@ -89,11 +97,13 @@ class PayPalRegular(
   def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.main(
-      "Support the Guardian | PayPal Error",
-      EmptyDiv("paypal-error-page"),
-      Left(RefPath("payPalErrorPage.js")),
-      Left(RefPath("payPalErrorPageStyles.css"))
-    )()).withSettingsSurrogateKey
+    Ok(
+      views.html.main(
+        "Support the Guardian | PayPal Error",
+        EmptyDiv("paypal-error-page"),
+        Left(RefPath("payPalErrorPage.js")),
+        Left(RefPath("payPalErrorPageStyles.css")),
+      )(),
+    ).withSettingsSurrogateKey
   }
 }

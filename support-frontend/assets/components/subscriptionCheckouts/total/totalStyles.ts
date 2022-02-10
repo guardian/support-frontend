@@ -1,7 +1,10 @@
-import { css } from '@emotion/core';
-import { breakpoints, from } from '@guardian/src-foundations/mq';
-import { border } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography/obj';
+import { css } from '@emotion/react';
+import {
+	border,
+	breakpoints,
+	from,
+	textSans,
+} from '@guardian/source-foundations';
 
 export const container = css`
 	padding: 10px;

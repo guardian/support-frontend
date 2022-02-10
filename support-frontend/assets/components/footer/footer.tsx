@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React, { Children } from 'react';
+import { Children } from 'react';
 import type { ReactNode } from 'react';
 import type { Appearance } from 'components/content/content';
 import Content from 'components/content/content';

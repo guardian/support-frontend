@@ -8,7 +8,7 @@ import type {
 	Stripe as StripeJs,
 	StripePaymentRequestButtonElementClickEvent,
 } from '@stripe/stripe-js';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';

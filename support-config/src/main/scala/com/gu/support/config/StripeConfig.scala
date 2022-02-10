@@ -5,12 +5,12 @@ import com.gu.i18n.Currency.AUD
 import com.gu.monitoring.SafeLogger
 import com.typesafe.config.Config
 
-
-case class StripeConfig(defaultAccount: StripeAccountConfig,
-                        australiaAccount: StripeAccountConfig,
-                        unitedStatesAccount: StripeAccountConfig,
-                        version: Option[String])
- {
+case class StripeConfig(
+    defaultAccount: StripeAccountConfig,
+    australiaAccount: StripeAccountConfig,
+    unitedStatesAccount: StripeAccountConfig,
+    version: Option[String],
+) {
 
   // Still needed for SupportWorkers (recurring products) which don't support a US Stripe account yet.
   def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
@@ -40,18 +40,18 @@ case class StripeConfig(defaultAccount: StripeAccountConfig,
 case class StripeAccountConfig(secretKey: String, publicKey: String)
 
 class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String = "stripe")
-  extends TouchpointConfigProvider[StripeConfig](config, defaultStage) {
+    extends TouchpointConfigProvider[StripeConfig](config, defaultStage) {
   def fromConfig(config: Config): StripeConfig = StripeConfig(
     accountFromConfig(config, prefix, "default"),
     accountFromConfig(config, prefix, Country.Australia.alpha2),
     accountFromConfig(config, prefix, Country.US.alpha2),
-    version = stripeVersion(config)
+    version = stripeVersion(config),
   )
 
   private def accountFromConfig(config: Config, prefix: String, country: String) =
     StripeAccountConfig(
       secretKey = config.getString(s"$prefix.$country.api.key.secret"),
-      publicKey = config.getString(s"$prefix.$country.api.key.public")
+      publicKey = config.getString(s"$prefix.$country.api.key.public"),
     )
 
   private def stripeVersion(config: Config): Option[String] = {

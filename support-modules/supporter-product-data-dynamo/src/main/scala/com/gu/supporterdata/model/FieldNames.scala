@@ -15,5 +15,4 @@ object FieldNames {
 
   val subscriptionStatus = "subscriptionStatus"
 
-
 }

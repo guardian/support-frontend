@@ -8,7 +8,8 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 class ZuoraGiftLookupServiceProvider(configProvider: ZuoraConfigProvider, stage: Stage)(implicit ec: ExecutionContext)
-  extends TouchpointServiceProvider[ZuoraGiftLookupService, ZuoraConfig](configProvider){
+    extends TouchpointServiceProvider[ZuoraGiftLookupService, ZuoraConfig](configProvider) {
 
-  override protected def createService(config: ZuoraConfig) = new ZuoraGiftService(config, stage, configurableFutureRunner(60.seconds))
+  override protected def createService(config: ZuoraConfig) =
+    new ZuoraGiftService(config, stage, configurableFutureRunner(60.seconds))
 }

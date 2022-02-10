@@ -4,7 +4,6 @@ import com.gu.support.workers.CheckoutFailureReasons.{AmazonPayFatal, AmazonPayT
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-
 class AmazonPayApiErrorSpec extends AnyWordSpec with Matchers {
 
   "AmazonPayApiError" when {

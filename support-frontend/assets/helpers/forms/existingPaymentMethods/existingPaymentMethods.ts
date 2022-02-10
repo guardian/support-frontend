@@ -39,7 +39,7 @@ export type ExistingPaymentMethod =
 // ----- Functions ----- //
 function isUsableExistingPaymentMethod(
 	existingPaymentMethod: ExistingPaymentMethod,
-): boolean {
+): existingPaymentMethod is RecentlySignedInExistingPaymentMethod {
 	if ('billingAccountId' in existingPaymentMethod) {
 		return !!existingPaymentMethod.billingAccountId;
 	}

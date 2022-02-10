@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { connect } from 'react-redux';
 import Button from 'components/button/button';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';

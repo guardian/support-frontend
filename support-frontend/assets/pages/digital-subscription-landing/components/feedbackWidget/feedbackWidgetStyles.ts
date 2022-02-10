@@ -1,9 +1,14 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { brand, space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { background, success, text } from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
+import { css } from '@emotion/react';
+import {
+	background,
+	brand,
+	from,
+	space,
+	success,
+	text,
+	textSans,
+} from '@guardian/source-foundations';
 // ----- Constants ----- //
 export const hideWidget = css`
 	visibility: hidden;

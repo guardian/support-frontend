@@ -22,7 +22,7 @@ object Lambda extends LazyLogging {
     SSMService.getConfig() match {
       case Right(config) =>
         val bigQuery = new BigQueryService(config)
-        processEvent(event,bigQuery)
+        processEvent(event, bigQuery)
       case Left(error) =>
         logger.error(s"failed to get big query config from SSM: $error")
         buildResponse(500)
@@ -35,14 +35,15 @@ object Lambda extends LazyLogging {
 
   def processEvent(event: APIGatewayProxyRequestEvent, bigQuery: BigQueryService): APIGatewayProxyResponseEvent = {
     val rawBody = event.getBody()
-    val result = EitherT.fromEither[Future](decode[AcquisitionDataRow](rawBody))
+    val result = EitherT
+      .fromEither[Future](decode[AcquisitionDataRow](rawBody))
       .leftMap[Error](error => ParseError(error.getMessage))
       .flatMap { acq =>
         bigQuery
           .tableInsertRowWithRetry(acq, 5)
           .leftMap[Error](error => BigQueryError(error))
       }
-    Try (Await.result(result.value, 20.seconds)) match {
+    Try(Await.result(result.value, 20.seconds)) match {
       case Success(Right(_)) =>
         logger.info(s"successfully processed the event: $rawBody")
         buildResponse(200)
@@ -58,4 +59,3 @@ object Lambda extends LazyLogging {
     }
   }
 }
-

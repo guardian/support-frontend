@@ -2,12 +2,18 @@ package com.gu.support.encoding
 
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.encoding.Codec._
-import com.gu.support.workers.{ClonedDirectDebitPaymentMethod, DirectDebitPaymentMethod, GatewayOption, GatewayOptionData, PaymentMethod, SepaPaymentMethod}
+import com.gu.support.workers.{
+  ClonedDirectDebitPaymentMethod,
+  DirectDebitPaymentMethod,
+  GatewayOption,
+  GatewayOptionData,
+  PaymentMethod,
+  SepaPaymentMethod,
+}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
-
 
 class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogging with SerialisationTestHelpers {
 
@@ -29,10 +35,13 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "PaymentGateway": "GoCardless"
     }"""
 
-    testDecoding[PaymentMethod](json, {
-      case _ : DirectDebitPaymentMethod => succeed
-      case x => fail(s"Expected DirectDebitPaymentMethod, got $x")
-    })
+    testDecoding[PaymentMethod](
+      json,
+      {
+        case _: DirectDebitPaymentMethod => succeed
+        case x => fail(s"Expected DirectDebitPaymentMethod, got $x")
+      },
+    )
   }
 
   it should "decode ClonedDirectDebitPaymentMethod" in {
@@ -51,10 +60,13 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
       "PaymentGateway": "GoCardless"
     }"""
 
-    testDecoding[PaymentMethod](json, {
-      case _ : ClonedDirectDebitPaymentMethod => succeed
-      case x => fail(s"Expected ClonedDirectDebitPaymentMethod, got $x")
-    })
+    testDecoding[PaymentMethod](
+      json,
+      {
+        case _: ClonedDirectDebitPaymentMethod => succeed
+        case x => fail(s"Expected ClonedDirectDebitPaymentMethod, got $x")
+      },
+    )
   }
 
   it should "encode SepaPaymentMethod" in {

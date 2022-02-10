@@ -1,4 +1,4 @@
-import React from 'react'; // The Globe
+// The Globe
 
 export default function SvgGlobe() {
 	return (

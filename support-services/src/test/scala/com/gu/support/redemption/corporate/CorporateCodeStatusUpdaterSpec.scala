@@ -16,9 +16,11 @@ class CorporateCodeStatusUpdaterSpec extends AsyncFlatSpec with Matchers {
       case (`testCode`, DynamoFieldUpdate("available", false)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    corporateCodeStatusUpdater.setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsUsed).map {
-      _ should be(())
-    }
+    corporateCodeStatusUpdater
+      .setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsUsed)
+      .map {
+        _ should be(())
+      }
   }
 
   it should "mark a code as available" in {
@@ -26,9 +28,11 @@ class CorporateCodeStatusUpdaterSpec extends AsyncFlatSpec with Matchers {
       case (`testCode`, DynamoFieldUpdate("available", true)) => Future.successful(())
       case _ => Future.failed(new Throwable)
     }
-    corporateCodeStatusUpdater.setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsAvailable).map {
-      _ should be(())
-    }
+    corporateCodeStatusUpdater
+      .setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsAvailable)
+      .map {
+        _ should be(())
+      }
   }
 
   it should "be sure to fail if there is an overall dynamo failure" in {
@@ -37,7 +41,10 @@ class CorporateCodeStatusUpdaterSpec extends AsyncFlatSpec with Matchers {
       case _ => Future.failed(new Throwable)
     }
     recoverToSucceededIf[RuntimeException] {
-      corporateCodeStatusUpdater.setStatus(RedemptionCode(testCode).right.get, RedemptionTable.AvailableField.CodeIsUsed)
+      corporateCodeStatusUpdater.setStatus(
+        RedemptionCode(testCode).right.get,
+        RedemptionTable.AvailableField.CodeIsUsed,
+      )
     }
   }
 

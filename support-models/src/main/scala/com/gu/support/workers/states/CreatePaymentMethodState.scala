@@ -10,19 +10,19 @@ import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.redemptions.RedemptionData
 
 case class CreatePaymentMethodState(
-  requestId: UUID,
-  user: User,
-  giftRecipient: Option[GiftRecipient],
-  product: ProductType,
-  analyticsInfo: AnalyticsInfo,
-  paymentFields: Either[PaymentFields, RedemptionData],
-  firstDeliveryDate: Option[LocalDate],
-  promoCode: Option[PromoCode],
-  csrUsername: Option[String],
-  salesforceCaseId: Option[String],
-  acquisitionData: Option[AcquisitionData],
-  ipAddress: String,
-  userAgent: String
+    requestId: UUID,
+    user: User,
+    giftRecipient: Option[GiftRecipient],
+    product: ProductType,
+    analyticsInfo: AnalyticsInfo,
+    paymentFields: Either[PaymentFields, RedemptionData],
+    firstDeliveryDate: Option[LocalDate],
+    promoCode: Option[PromoCode],
+    csrUsername: Option[String],
+    salesforceCaseId: Option[String],
+    acquisitionData: Option[AcquisitionData],
+    ipAddress: String,
+    userAgent: String,
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec
@@ -33,4 +33,3 @@ object CreatePaymentMethodState {
   import com.gu.support.encoding.CustomCodecs.encodeEither
   implicit val codec: Codec[CreatePaymentMethodState] = deriveCodec
 }
-

@@ -16,30 +16,34 @@ class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
         emailaddress = "2",
         first_name = "3",
         last_name = "4",
-        subscription_details = "5"
+        subscription_details = "5",
       ),
       country = "8",
       date_of_first_payment = "9",
       trial_period = "a",
-      paymentFieldsAttributes = PPAttributes()
+      paymentFieldsAttributes = PPAttributes(),
     ).asJsonObject
     val actual = JsonToAttributes.asFlattenedPairs(data)
-    actual.map(_.toMap) should be(Right(Map(
-      "zuorasubscriberid" -> "1",
-      "emailaddress" -> "2",
-      "first_name" -> "3",
-      "last_name" -> "4",
-      "subscription_details" -> "5",
-      "country" -> "8",
-      "date_of_first_payment" -> "9",
-      "trial_period" -> "a",
-      "default_payment_method" -> "PayPal",
-    )))
+    actual.map(_.toMap) should be(
+      Right(
+        Map(
+          "zuorasubscriberid" -> "1",
+          "emailaddress" -> "2",
+          "first_name" -> "3",
+          "last_name" -> "4",
+          "subscription_details" -> "5",
+          "country" -> "8",
+          "date_of_first_payment" -> "9",
+          "trial_period" -> "a",
+          "default_payment_method" -> "PayPal",
+        ),
+      ),
+    )
   }
 
   it should "fail if there are any top level non string" in {
     val data = JsonObject(
-      "test" -> Json.arr()
+      "test" -> Json.arr(),
     )
     val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should matchPattern { case Left(_) => }
@@ -48,8 +52,8 @@ class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
   it should "fail if there are any non string lower down" in {
     val data = JsonObject(
       "test1" -> Json.obj(
-      "test2" -> Json.arr()
-      )
+        "test2" -> Json.arr(),
+      ),
     )
     val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should matchPattern { case Left(_) => }
@@ -59,22 +63,26 @@ class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
     val data = JsonObject(
       ("shouldExist1" -> Json.fromString("value1")),
       "test" -> Json.obj(
-        ("shouldExist2" -> Json.fromString("value2"))
-      )
+        ("shouldExist2" -> Json.fromString("value2")),
+      ),
     )
     val actual = JsonToAttributes.asFlattenedPairs(data)
-    actual.map(_.toMap) should be(Right(Map(
-      "shouldExist1" -> "value1",
-      "shouldExist2" -> "value2",
-    )))
+    actual.map(_.toMap) should be(
+      Right(
+        Map(
+          "shouldExist1" -> "value1",
+          "shouldExist2" -> "value2",
+        ),
+      ),
+    )
   }
 
   it should "complain about a key clash" in {
     val data = JsonObject(
       ("clash" -> Json.fromString("value1")),
       "test" -> Json.obj(
-        ("clash" -> Json.fromString("value2"))
-      )
+        ("clash" -> Json.fromString("value2")),
+      ),
     )
     val actual = JsonToAttributes.asFlattenedPairs(data)
     actual.map(_.toMap) should matchPattern { case Left(_) => }
@@ -83,12 +91,16 @@ class JsonToAttributesSpec extends AnyFlatSpec with Matchers {
   it should "handle a null ok" in {
     val data = JsonObject(
       ("shouldExist1" -> Json.fromString("value1")),
-      "test" -> Json.Null
+      "test" -> Json.Null,
     )
     val actual = JsonToAttributes.asFlattenedPairs(data)
-    actual.map(_.toMap) should be(Right(Map(
-      "shouldExist1" -> "value1"
-    )))
+    actual.map(_.toMap) should be(
+      Right(
+        Map(
+          "shouldExist1" -> "value1",
+        ),
+      ),
+    )
   }
 
 }

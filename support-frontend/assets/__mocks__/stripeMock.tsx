@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React from 'react';
-
 const mockElement = () => ({
 	mount: jest.fn(),
 	destroy: jest.fn(),

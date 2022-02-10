@@ -11,19 +11,17 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.io.Source
 import scala.util.Try
 
-abstract class Handler[IN, OUT](
-  implicit
-  decoder: Decoder[IN],
-  encoder: Encoder[OUT],
-  ec: ExecutionContext
+abstract class Handler[IN, OUT](implicit
+    decoder: Decoder[IN],
+    encoder: Encoder[OUT],
+    ec: ExecutionContext,
 ) extends RequestStreamHandler {
 
   override def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
     Await.result(
       handleRequestFuture(is, os, context),
-      Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS)
+      Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS),
     )
-
 
   private def handleRequestFuture(is: InputStream, os: OutputStream, context: Context): Future[Unit] = {
     for {
@@ -34,8 +32,8 @@ abstract class Handler[IN, OUT](
   }
 
   protected def handlerFuture(
-    input: IN,
-    context: Context
+      input: IN,
+      context: Context,
   ): Future[OUT]
 
 }

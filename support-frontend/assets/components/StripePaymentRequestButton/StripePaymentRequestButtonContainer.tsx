@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { Elements } from '@stripe/react-stripe-js';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import {
 	getStripeKey,

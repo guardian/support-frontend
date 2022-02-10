@@ -14,13 +14,12 @@ object FastlyConfig {
   // Typically this should be the case if and only if the app is running in CODE or PROD mode.
   def fromConfig(config: Config): Either[Throwable, Option[FastlyConfig]] = {
     type Result[A] = Either[Throwable, A]
-    Try(config.getConfig("fastly"))
-      .toOption
+    Try(config.getConfig("fastly")).toOption
       .traverse[Result, FastlyConfig] { raw =>
         Either.catchNonFatal {
           FastlyConfig(
             raw.getString("serviceId"),
-            raw.getString("apiToken")
+            raw.getString("apiToken"),
           )
         }
       }

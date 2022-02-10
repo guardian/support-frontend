@@ -12,13 +12,13 @@ class AddressLineTransformerTest extends AnyFlatSpec with Matchers with MockitoS
 
   val digitalPackProduct = DigitalPack(
     currency = Currency.USD,
-    billingPeriod = Monthly
+    billingPeriod = Monthly,
   )
 
   val directDebitPaymentFieldsFromClient = DirectDebitPaymentFields(
     accountHolderName = "oscar the grouch",
     sortCode = "200000",
-    accountNumber = "55779911"
+    accountNumber = "55779911",
   )
 
   "combinedAddressLine" should "return an AddressLine when there is only a lineOne" in {
@@ -77,7 +77,8 @@ class AddressLineTransformerTest extends AnyFlatSpec with Matchers with MockitoS
 
     val expected = AddressLine(
       streetNumber = Some("123"),
-      streetName = "trash alley, bin 5, you know how to find that particular bin because it is the one with the fairy li"
+      streetName =
+        "trash alley, bin 5, you know how to find that particular bin because it is the one with the fairy li",
     )
 
     clipped shouldBe expected

@@ -1,11 +1,7 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { neutral } from '@guardian/src-foundations/palette';
-import { body } from '@guardian/src-foundations/typography';
-import { Link } from '@guardian/src-link';
-import React from 'react';
+import { css } from '@emotion/react';
+import { body, from, neutral, space } from '@guardian/source-foundations';
+import { Link } from '@guardian/source-react-components';
 import type { Node } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { paperSubsUrl } from 'helpers/urls/routes';

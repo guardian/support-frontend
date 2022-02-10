@@ -48,7 +48,7 @@ object CodeBuilder {
 
 object CodeSuffixGenerator {
 
-  case class CodeSuffix private(value: String) extends AnyVal
+  case class CodeSuffix private (value: String) extends AnyVal
   object CodeSuffix {
     def apply(value: String): Option[CodeSuffix] =
       Some(value)

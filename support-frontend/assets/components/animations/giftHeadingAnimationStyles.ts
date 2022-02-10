@@ -1,8 +1,10 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { brandAltBackground } from '@guardian/src-foundations/palette';
-import { headline } from '@guardian/src-foundations/typography';
+import { css } from '@emotion/react';
+import {
+	brandAltBackground,
+	from,
+	headline,
+	space,
+} from '@guardian/source-foundations';
 
 const allowsAnimation = '@media (prefers-reduced-motion: no-preference)';
 export const giftTag = css`

@@ -1,5 +1,5 @@
-import { css } from '@emotion/core';
-import React, { useState } from 'react';
+import { css } from '@emotion/react';
+import { useState } from 'react';
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName, useCsrCustomerData } from 'components/csr/csrMode';
 

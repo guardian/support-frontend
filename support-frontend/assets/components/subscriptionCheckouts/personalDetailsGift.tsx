@@ -1,7 +1,6 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { TextInput } from '@guardian/src-text-input';
-import React from 'react';
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import { TextInput } from '@guardian/source-react-components';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';

@@ -36,12 +36,13 @@ sealed trait CustomThreadPoolLoader[A <: AppThreadPool] {
   // For this method to return a valid result, the configuration for the thread pool
   // should be specified at the path: thread-pools.<threadPoolId> in application.conf
   def load()(implicit system: ActorSystem, ct: ClassTag[A]): InitializationResult[A] =
-    Validated.catchNonFatal(system.dispatchers.lookup(s"thread-pools.$threadPoolId"))
+    Validated
+      .catchNonFatal(system.dispatchers.lookup(s"thread-pools.$threadPoolId"))
       .bimap(
         err =>
           InitializationError(
             s"unable to load thread pool of type ${classTag[A].runtimeClass} with id: $threadPoolId",
-            err
+            err,
           ),
         this.apply,
       )
@@ -69,7 +70,7 @@ object GoCardlessThreadPool extends CustomThreadPoolLoader[GoCardlessThreadPool]
 }
 
 // Should be used as the execution context for database queue.
-case class SQSThreadPool private(underlying: ExecutionContext) extends AppThreadPool
+case class SQSThreadPool private (underlying: ExecutionContext) extends AppThreadPool
 
 object SQSThreadPool extends CustomThreadPoolLoader[SQSThreadPool] {
   override val threadPoolId: String = "sqs"
@@ -77,22 +78,23 @@ object SQSThreadPool extends CustomThreadPoolLoader[SQSThreadPool] {
 
 // Models all thread pools required by the application
 case class AppThreadPools private (
-  default: DefaultThreadPool,
-  stripe: StripeThreadPool,
-  paypal: PaypalThreadPool,
-  goCardless: GoCardlessThreadPool,
-  sqs: SQSThreadPool
+    default: DefaultThreadPool,
+    stripe: StripeThreadPool,
+    paypal: PaypalThreadPool,
+    goCardless: GoCardlessThreadPool,
+    sqs: SQSThreadPool,
 )
 
 object AppThreadPools {
 
-  def load(implicit playExecutionContext: ExecutionContext, system: ActorSystem): InitializationResult[AppThreadPools] = (
-    DefaultThreadPool(playExecutionContext).valid: InitializationResult[DefaultThreadPool],
-    StripeThreadPool.load(),
-    PaypalThreadPool.load(),
-    GoCardlessThreadPool.load(),
-    SQSThreadPool.load()
-  ).mapN(AppThreadPools.apply)
+  def load(implicit playExecutionContext: ExecutionContext, system: ActorSystem): InitializationResult[AppThreadPools] =
+    (
+      DefaultThreadPool(playExecutionContext).valid: InitializationResult[DefaultThreadPool],
+      StripeThreadPool.load(),
+      PaypalThreadPool.load(),
+      GoCardlessThreadPool.load(),
+      SQSThreadPool.load(),
+    ).mapN(AppThreadPools.apply)
 }
 
 // Mixin to BuiltInComponents when injecting app dependencies at compile time.

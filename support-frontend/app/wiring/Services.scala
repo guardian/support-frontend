@@ -34,7 +34,7 @@ trait Services {
       appConfig.stepFunctionArn,
       stateWrapper,
       appConfig.supportUrl,
-      controllers.routes.SupportWorkersStatus.status
+      controllers.routes.SupportWorkersStatus.status,
     )
   }
 
@@ -55,7 +55,8 @@ trait Services {
   lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
     new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider)
 
-  lazy val getAddressIOService: GetAddressIOService = new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
+  lazy val getAddressIOService: GetAddressIOService =
+    new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
 
   lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 
@@ -63,6 +64,7 @@ trait Services {
     RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(appConfig.stage, isTestUser))
   }
 
-  lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider = new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)
+  lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider =
+    new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)
 
 }

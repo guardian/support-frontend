@@ -16,10 +16,13 @@ class StateMachineMonitor(client: SupportWorkersClient, actorSystem: ActorSystem
     actorSystem.scheduler.schedule(5.seconds, 60.seconds) {
       client.healthy().onComplete {
         case Success(true) => SafeLogger.debug("Regular contributions state machine is healthy")
-        case Success(false) => SafeLogger.error(scrub"Regular contributions state machine is not available [$cloudwatchMetricsPattern]")
-        case Failure(exception) => SafeLogger.error(
-          scrub"Exception while fetching regular contributions state machine status [$cloudwatchMetricsPattern]", exception
-        )
+        case Success(false) =>
+          SafeLogger.error(scrub"Regular contributions state machine is not available [$cloudwatchMetricsPattern]")
+        case Failure(exception) =>
+          SafeLogger.error(
+            scrub"Exception while fetching regular contributions state machine status [$cloudwatchMetricsPattern]",
+            exception,
+          )
       }
     }
   }

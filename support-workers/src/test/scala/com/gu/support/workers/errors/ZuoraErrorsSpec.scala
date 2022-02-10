@@ -21,24 +21,29 @@ import org.scalatest.RecoverMethods
 import scala.concurrent.duration._
 
 @IntegrationTest
-class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with MockServicesCreator with RecoverMethods with MockContext {
+class ZuoraErrorsITSpec
+    extends AsyncLambdaSpec
+    with MockWebServerCreator
+    with MockServicesCreator
+    with RecoverMethods
+    with MockContext {
 
   "Subscribe request with invalid term type" should "fail with a ZuoraErrorResponse" in {
-    val zuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
+    val zuoraService =
+      new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
-      zuoraService.subscribe(invalidSubscriptionRequest).map {
-        response =>
-          SafeLogger.info(s"response: $response")
+      zuoraService.subscribe(invalidSubscriptionRequest).map { response =>
+        SafeLogger.info(s"response: $response")
       }
     }
   }
 
   "Subscribe request with incorrect PaymentMethod" should "fail with a ZuoraErrorResponse" in {
-    val zuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
+    val zuoraService =
+      new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
-      zuoraService.subscribe(incorrectPaymentMethod).map {
-        response =>
-          SafeLogger.info(s"response: $response")
+      zuoraService.subscribe(incorrectPaymentMethod).map { response =>
+        SafeLogger.info(s"response: $response")
       }
     }
   }
@@ -47,7 +52,11 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
     val createZuoraSubscription = new CreateZuoraSubscription(timeoutServices)
     val outputStream = new ByteArrayOutputStream()
     recoverToSucceededIf[RetryUnlimited] {
-      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outputStream, context)
+      createZuoraSubscription.handleRequestFuture(
+        wrapFixture(createContributionZuoraSubscriptionJson()),
+        outputStream,
+        context,
+      )
     }
   }
 
@@ -61,7 +70,11 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
     val outStream = new ByteArrayOutputStream()
 
     val assertion = recoverToSucceededIf[RetryUnlimited] {
-      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+      createZuoraSubscription.handleRequestFuture(
+        wrapFixture(createContributionZuoraSubscriptionJson()),
+        outStream,
+        context,
+      )
     }
     assertion.onComplete { _ =>
       server.shutdown()
@@ -91,7 +104,11 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
     val outStream = new ByteArrayOutputStream()
 
     val assertion = recoverToSucceededIf[RetryUnlimited] {
-      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+      createZuoraSubscription.handleRequestFuture(
+        wrapFixture(createContributionZuoraSubscriptionJson()),
+        outStream,
+        context,
+      )
     }
     assertion.onComplete { _ =>
       server.shutdown()
@@ -121,7 +138,11 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
     val outStream = new ByteArrayOutputStream()
 
     val assertion = recoverToSucceededIf[RetryNone] {
-      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+      createZuoraSubscription.handleRequestFuture(
+        wrapFixture(createContributionZuoraSubscriptionJson()),
+        outStream,
+        context,
+      )
     }
     assertion.onComplete { _ =>
       server.shutdown()
@@ -151,7 +172,11 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
     val outStream = new ByteArrayOutputStream()
 
     val assertion = recoverToSucceededIf[RetryUnlimited] {
-      createZuoraSubscription.handleRequestFuture(wrapFixture(createContributionZuoraSubscriptionJson()), outStream, context)
+      createZuoraSubscription.handleRequestFuture(
+        wrapFixture(createContributionZuoraSubscriptionJson()),
+        outStream,
+        context,
+      )
     }
     assertion.onComplete { _ =>
       server.shutdown()
@@ -164,10 +189,11 @@ class ZuoraErrorsITSpec extends AsyncLambdaSpec with MockWebServerCreator with M
   private val timeoutServices = errorServices(None, 1.milliseconds)
 
   def errorServices(baseUrl: Option[String], timeout: Duration = 10.seconds): ServiceProvider = mockServices[Any](
-    (s => s.zuoraService,
-      new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(timeout), baseUrl)),
-    (s => s.config,
-      realConfig)
+    (
+      s => s.zuoraService,
+      new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(timeout), baseUrl),
+    ),
+    (s => s.config, realConfig),
   )
 
 }

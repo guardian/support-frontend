@@ -1,5 +1,3 @@
-import React from 'react'; // The AmazonPay logo used on checkouts.
-
 export default function SvgAmazonPayLogoDs(): JSX.Element {
 	return (
 		<svg
@@ -44,4 +42,4 @@ export default function SvgAmazonPayLogoDs(): JSX.Element {
 			</defs>
 		</svg>
 	);
-}
+} // The AmazonPay logo used on checkouts.

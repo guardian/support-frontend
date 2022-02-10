@@ -29,7 +29,8 @@ import util.RequestBasedProvider
 import scala.concurrent.{ExecutionContext, Future}
 
 class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
-  extends BuiltInComponentsFromContext(context) with MockitoSugar {
+    extends BuiltInComponentsFromContext(context)
+    with MockitoSugar {
 
   val goCardlessValidResponse: EitherT[Future, Throwable, CheckDirectDebitDetailsResponse] =
     EitherT.rightT[Future, Throwable](CheckDirectDebitDetailsResponse(true))
@@ -53,7 +54,10 @@ class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: Applic
     mock[RequestBasedProvider[GoCardlessBackend]]
 
   val goCardlessController: GoCardlessController =
-    new GoCardlessController(controllerComponents, mockGoCardlessRequestBasedProvider)(DefaultThreadPool(ec), List("https://cors.com"))
+    new GoCardlessController(controllerComponents, mockGoCardlessRequestBasedProvider)(
+      DefaultThreadPool(ec),
+      List("https://cors.com"),
+    )
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
@@ -68,10 +72,13 @@ class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: Applic
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
-    new StripeController(controllerComponents, stripeBackendProvider, mockCloudWatchService)(DefaultThreadPool(ec), List.empty),
+    new StripeController(controllerComponents, stripeBackendProvider, mockCloudWatchService)(
+      DefaultThreadPool(ec),
+      List.empty,
+    ),
     new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
     goCardlessController,
-    mockAmazonPayController
+    mockAmazonPayController,
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
@@ -98,8 +105,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
       "return a 200 response if the account details are valid with accountValid:true in the payload" in {
         val checkAccountRequest = FakeRequest("POST", "/direct-debit/check-account")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "accountNumber": "55779911",
               |  "sortCode": "200000"
@@ -111,7 +117,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
         status(goCardlessControllerResult).mustBe(200)
         contentAsString(goCardlessControllerResult).mustBe(
-          """{"data":{"accountValid":true,"goCardlessStatusCode":null},"type":"success"}"""
+          """{"data":{"accountValid":true,"goCardlessStatusCode":null},"type":"success"}""",
         )
       }
 
@@ -128,8 +134,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
       "return a 200 response if the account details are invalid with accountValid:false in the payload" in {
         val checkAccountRequest = FakeRequest("POST", "/direct-debit/check-account")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "accountNumber": "12345678",
               |  "sortCode": "123456"
@@ -141,7 +146,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
         status(goCardlessControllerResult).mustBe(200)
         contentAsString(goCardlessControllerResult).mustBe(
-          """{"data":{"accountValid":false,"goCardlessStatusCode":null},"type":"success"}"""
+          """{"data":{"accountValid":false,"goCardlessStatusCode":null},"type":"success"}""",
         )
       }
 
@@ -160,8 +165,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
       "return a 200 response if the account details are incomplete with accountValid:false and the GoCardless status code in the payload" in {
         val checkAccountRequest = FakeRequest("POST", "/direct-debit/check-account")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "accountNumber": "123",
               |  "sortCode": "123"
@@ -173,7 +177,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
         status(goCardlessControllerResult).mustBe(200)
         contentAsString(goCardlessControllerResult).mustBe(
-          """{"data":{"accountValid":false,"goCardlessStatusCode":123},"type":"success"}"""
+          """{"data":{"accountValid":false,"goCardlessStatusCode":123},"type":"success"}""",
         )
       }
 
@@ -190,8 +194,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
 
       "return a 500 response if something blows up when validating" in {
         val checkAccountRequest = FakeRequest("POST", "/direct-debit/check-account")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "accountNumber": "123",
               |  "sortCode": "123"

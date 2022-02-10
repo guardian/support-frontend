@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { connect } from 'react-redux';
 import type { ContributionType } from 'helpers/contributions';
 import 'helpers/contributions';

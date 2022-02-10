@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import type { Store } from 'redux';

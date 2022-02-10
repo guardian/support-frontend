@@ -1,4 +1,3 @@
-
 import _root_.controllers._
 import akka.actor.ActorSystem
 import aws.AWSClientBuilder
@@ -39,12 +38,13 @@ class MyApplicationLoader extends ApplicationLoader with StrictLogging {
   }
 }
 
-class MyComponents(context: Context) extends BuiltInComponentsFromContext(context)
-  with DBComponents
-  with NoHttpFiltersComponents
-  with HikariCPComponents
-  with AhcWSComponents
-  with AppThreadPoolsProvider {
+class MyComponents(context: Context)
+    extends BuiltInComponentsFromContext(context)
+    with DBComponents
+    with NoHttpFiltersComponents
+    with HikariCPComponents
+    with AhcWSComponents
+    with AppThreadPoolsProvider {
 
   // At this point, the app either gets two request environments that differ
   // (Live and Test), or two that are the same (Test and Test).
@@ -108,6 +108,6 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       new StripeController(controllerComponents, stripeBackendProvider, liveCloudWatchService),
       new PaypalController(controllerComponents, paypalBackendProvider),
       new GoCardlessController(controllerComponents, goCardlessBackendProvider),
-      new AmazonPayController(controllerComponents, amazonPayBackendProvider, parseNotification)
+      new AmazonPayController(controllerComponents, amazonPayBackendProvider, parseNotification),
     )
 }

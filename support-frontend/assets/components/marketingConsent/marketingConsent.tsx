@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import Button from 'components/button/button';
 import NonInteractiveButton from 'components/button/nonInteractiveButton';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';

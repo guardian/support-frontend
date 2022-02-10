@@ -1,4 +1,3 @@
-import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { AUDCountries } from 'helpers/internationalisation/countryGroup';

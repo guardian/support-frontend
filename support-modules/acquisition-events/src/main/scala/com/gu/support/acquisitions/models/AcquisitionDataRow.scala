@@ -11,35 +11,35 @@ import io.circe.{Decoder, Encoder}
 import scala.util.{Failure, Success, Try}
 
 case class AcquisitionDataRow(
-  eventTimeStamp: DateTime,
-  product: AcquisitionProduct,
-  amount: Option[BigDecimal],
-  country: Country,
-  currency: Currency,
-  componentId: Option[String],
-  componentType: Option[String],
-  campaignCode: Option[String],
-  source: Option[String],
-  referrerUrl: Option[String],
-  abTests: List[AbTest],
-  paymentFrequency: PaymentFrequency,
-  paymentProvider: Option[PaymentProvider],
-  printOptions: Option[PrintOptions],
-  browserId: Option[String],
-  identityId: Option[String],
-  pageViewId: Option[String],
-  referrerPageViewId: Option[String],
-  labels: List[String],
-  promoCode: Option[String],
-  reusedExistingPaymentMethod: Boolean,
-  readerType: ReaderType,
-  acquisitionType: AcquisitionType,
-  zuoraSubscriptionNumber: Option[String],
-  zuoraAccountNumber: Option[String],
-  contributionId: Option[String],
-  paymentId: Option[String],
-  queryParameters: List[QueryParameter],
-  platform: Option[String]
+    eventTimeStamp: DateTime,
+    product: AcquisitionProduct,
+    amount: Option[BigDecimal],
+    country: Country,
+    currency: Currency,
+    componentId: Option[String],
+    componentType: Option[String],
+    campaignCode: Option[String],
+    source: Option[String],
+    referrerUrl: Option[String],
+    abTests: List[AbTest],
+    paymentFrequency: PaymentFrequency,
+    paymentProvider: Option[PaymentProvider],
+    printOptions: Option[PrintOptions],
+    browserId: Option[String],
+    identityId: Option[String],
+    pageViewId: Option[String],
+    referrerPageViewId: Option[String],
+    labels: List[String],
+    promoCode: Option[String],
+    reusedExistingPaymentMethod: Boolean,
+    readerType: ReaderType,
+    acquisitionType: AcquisitionType,
+    zuoraSubscriptionNumber: Option[String],
+    zuoraAccountNumber: Option[String],
+    contributionId: Option[String],
+    paymentId: Option[String],
+    queryParameters: List[QueryParameter],
+    platform: Option[String],
 )
 
 object AcquisitionDataRow {
@@ -49,15 +49,16 @@ object AcquisitionDataRow {
       case Failure(e) => Left(e.getMessage)
     }
   }
-  implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap[DateTime](dt => ISODateTimeFormat.dateTime().print(dt))
+  implicit val encodeDateTime: Encoder[DateTime] =
+    Encoder.encodeString.contramap[DateTime](dt => ISODateTimeFormat.dateTime().print(dt))
 
   implicit val decoder = Decoder[AcquisitionDataRow]
   implicit val encoder = Encoder[AcquisitionDataRow]
 }
 
 case class PrintOptions(
-  product: PrintProduct,
-  deliveryCountry: Country
+    product: PrintProduct,
+    deliveryCountry: Country,
 )
 
 sealed abstract class PaymentFrequency(val value: String)
@@ -137,7 +138,7 @@ object PrintProduct {
 
 sealed abstract class PaymentProvider(val value: String)
 
-object PaymentProvider{
+object PaymentProvider {
   case object Stripe extends PaymentProvider("STRIPE")
 
   case object StripeApplePay extends PaymentProvider("STRIPE_APPLE_PAY")

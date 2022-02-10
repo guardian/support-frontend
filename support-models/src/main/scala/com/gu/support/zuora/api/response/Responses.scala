@@ -12,7 +12,6 @@ import io.circe.syntax._
 import io.circe.{Decoder, Encoder, HCursor, Json}
 import org.joda.time.LocalDate
 
-
 sealed trait ZuoraResponse {
   def success: Boolean
 }
@@ -27,7 +26,7 @@ object ZuoraErrorResponse {
   implicit val codec: Codec[ZuoraErrorResponse] = capitalizingCodec
 
   def fromErrorJson(error: ErrorJson): Option[ZuoraErrorResponse] = {
-    if (error.errorType ==  ZuoraErrorResponse.getClass.getCanonicalName) {
+    if (error.errorType == ZuoraErrorResponse.getClass.getCanonicalName) {
       decode[List[ZuoraError]](error.errorMessage).map { errors =>
         ZuoraErrorResponse(success = false, errors)
       }.toOption
@@ -38,7 +37,8 @@ object ZuoraErrorResponse {
 }
 
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
-    extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
+    extends Throwable(errors.asJson.spaces2)
+    with ZuoraResponse {
 
   override def toString: String = this.errors.toString
 
@@ -63,15 +63,15 @@ object BasicInfo {
 }
 
 case class BasicInfo(
-  id: String,
-  name: String,
-  accountNumber: String,
-  notes: Option[String],
-  status: String,
-  crmId: String,
-  batch: String,
-  invoiceTemplateId: String,
-  communicationProfileId: Option[String]
+    id: String,
+    name: String,
+    accountNumber: String,
+    notes: Option[String],
+    status: String,
+    crmId: String,
+    batch: String,
+    invoiceTemplateId: String,
+    communicationProfileId: Option[String],
 )
 
 object GetAccountResponse {
@@ -82,14 +82,14 @@ case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends Zu
 
 //this response cannot extend ZuoraResponse because this endpoint doesn't return a 'success' boolean field
 case class GetObjectAccountResponse(
-  IdentityId__c: Option[String],
-  sfContactId__c: Option[String],
-  CrmId: Option[String],
-  DefaultPaymentMethodId: Option[String],
-  AutoPay: Boolean,
-  Balance: Double,
-  Currency: String,
-  PaymentGateway: PaymentGateway
+    IdentityId__c: Option[String],
+    sfContactId__c: Option[String],
+    CrmId: Option[String],
+    DefaultPaymentMethodId: Option[String],
+    AutoPay: Boolean,
+    Balance: Double,
+    Currency: String,
+    PaymentGateway: PaymentGateway,
 )
 
 object GetObjectAccountResponse {
@@ -102,36 +102,35 @@ sealed trait GetPaymentMethodResponse {
 }
 
 case class GetPaymentMethodDirectDebitResponse(
-  `type`: String,
-  paymentMethodStatus: String,
-  mandateID: String,
-  bankTransferAccountName: String,
-  bankTransferAccountNumberMask: String,
-  bankCode: String,
-  firstName: String,
-  lastName: String,
-  tokenId: String
+    `type`: String,
+    paymentMethodStatus: String,
+    mandateID: String,
+    bankTransferAccountName: String,
+    bankTransferAccountNumberMask: String,
+    bankCode: String,
+    firstName: String,
+    lastName: String,
+    tokenId: String,
 ) extends GetPaymentMethodResponse
 
 case class GetPaymentMethodCardReferenceResponse(
-  `type`: String,
-  paymentMethodStatus: String,
-  creditCardType: Option[String],
-  tokenId: String,
-  secondTokenId: String,
-  creditCardCountry: Option[String] = None,
-  creditCardMaskNumber: String,
-  creditCardExpirationYear: Int,
-  creditCardExpirationMonth: Int
+    `type`: String,
+    paymentMethodStatus: String,
+    creditCardType: Option[String],
+    tokenId: String,
+    secondTokenId: String,
+    creditCardCountry: Option[String] = None,
+    creditCardMaskNumber: String,
+    creditCardExpirationYear: Int,
+    creditCardExpirationMonth: Int,
 ) extends GetPaymentMethodResponse
 
 case class GetPaymentMethodPaypalResponse(
-  `type`: String,
-  paymentMethodStatus: String,
-  paypalEmail: String,
-  paypalBaid: String
+    `type`: String,
+    paymentMethodStatus: String,
+    paypalEmail: String,
+    paypalBaid: String,
 ) extends GetPaymentMethodResponse
-
 
 object GetPaymentMethodResponse {
   implicit val ddCodec: Codec[GetPaymentMethodDirectDebitResponse] = capitalizingCodec
@@ -140,10 +139,10 @@ object GetPaymentMethodResponse {
 
   implicit val decode: Decoder[GetPaymentMethodResponse] = new Decoder[GetPaymentMethodResponse] {
     override def apply(c: HCursor): Result[GetPaymentMethodResponse] = {
-      c.downField("Type").as[String].flatMap{
-                case "BankTransfer" => ddCodec(c)
-                case "CreditCardReferenceTransaction" => cardCodec(c)
-                case "PayPal" => payPalCodec(c)
+      c.downField("Type").as[String].flatMap {
+        case "BankTransfer" => ddCodec(c)
+        case "CreditCardReferenceTransaction" => cardCodec(c)
+        case "PayPal" => payPalCodec(c)
       }
     }
   }
@@ -163,7 +162,7 @@ case class SubscribeResponseAccount(
     subscriptionId: String,
     totalMrr: Float,
     accountId: String,
-    success: Boolean
+    success: Boolean,
 ) extends ZuoraResponse {
   def domainAccountNumber: ZuoraAccountNumber = ZuoraAccountNumber(accountNumber)
   def domainSubscriptionNumber: ZuoraSubscriptionNumber = ZuoraSubscriptionNumber(subscriptionNumber)
@@ -194,9 +193,11 @@ object Charge {
 case class Charge(serviceStartDate: LocalDate, serviceEndDate: LocalDate, taxAmount: Double, chargeAmount: Double)
 
 object PreviewSubscribeResponse {
-  implicit val decoder: Decoder[PreviewSubscribeResponse] = decapitalizingDecoder[PreviewSubscribeResponse].prepare(_.withFocus(
-    _.mapObject(_.checkKeyExists("InvoiceData", Json.fromValues(Vector[Json]())))
-  ))
+  implicit val decoder: Decoder[PreviewSubscribeResponse] = decapitalizingDecoder[PreviewSubscribeResponse].prepare(
+    _.withFocus(
+      _.mapObject(_.checkKeyExists("InvoiceData", Json.fromValues(Vector[Json]()))),
+    ),
+  )
   implicit val encoder: Encoder[PreviewSubscribeResponse] = capitalizingEncoder
 }
 
@@ -206,7 +207,7 @@ object ZuoraSuccessOrFailureResponse {
   implicit val codec: Codec[ZuoraSuccessOrFailureResponse] = deriveCodec
 }
 
-case class ZuoraSuccessOrFailureResponse(success: Boolean, reasons: Option[List[ZuoraErrorReason]]){
+case class ZuoraSuccessOrFailureResponse(success: Boolean, reasons: Option[List[ZuoraErrorReason]]) {
   def errorMessage = reasons.flatMap(_.headOption).map(_.message)
 }
 

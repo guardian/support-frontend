@@ -1,4 +1,3 @@
-import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
 
 const HeroPicture = () => (

@@ -11,9 +11,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ZuoraContributionHandler(
-  zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
-  contributionSubscriptionBuilder: ContributionSubscriptionBuilder,
-  user: User,
+    zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
+    contributionSubscriptionBuilder: ContributionSubscriptionBuilder,
+    user: User,
 ) {
 
   def subscribe(state: ContributionState): Future[SendThankYouEmailState] =

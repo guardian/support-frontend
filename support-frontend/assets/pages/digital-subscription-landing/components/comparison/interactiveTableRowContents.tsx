@@ -1,14 +1,15 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { breakpoints, from, until } from '@guardian/src-foundations/mq';
+import { css } from '@emotion/react';
 import {
 	background,
 	brand,
 	brandAltBackground,
-} from '@guardian/src-foundations/palette';
-import { headline } from '@guardian/src-foundations/typography';
-import { SvgCheckmark } from '@guardian/src-icons';
-import React from 'react';
+	breakpoints,
+	from,
+	headline,
+	space,
+	until,
+} from '@guardian/source-foundations';
+import { SvgCheckmark } from '@guardian/source-react-components';
 import type { ReactNode } from 'react';
 import 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';

@@ -1,4 +1,3 @@
-import React from 'react';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
 import { getMemLink, getPatronsLink } from 'helpers/urls/externalLinks';

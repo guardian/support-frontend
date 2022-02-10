@@ -13,13 +13,18 @@ object Configuration {
 
   def load(): Configuration = new Configuration(loadConfig)
 
-  val loadFromS3: Boolean = Try(Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
-    .getOrElse("TRUE").toBoolean)
-    .getOrElse(true) //Should we load config from S3
+  val loadFromS3: Boolean = Try(
+    Option(System.getenv("GU_SUPPORT_WORKERS_LOAD_S3_CONFIG"))
+      .getOrElse("TRUE")
+      .toBoolean,
+  )
+    .getOrElse(true) // Should we load config from S3
 
-
-  val stage = Stage.fromString(Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
-    .getOrElse("DEV"))
+  val stage = Stage
+    .fromString(
+      Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
+        .getOrElse("DEV"),
+    )
     .getOrElse(Stages.DEV)
 
   SafeLogger.info(s"Load from S3: $loadFromS3, Stage: $stage")

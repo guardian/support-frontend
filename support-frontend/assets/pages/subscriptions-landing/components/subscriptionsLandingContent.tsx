@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 // components
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';

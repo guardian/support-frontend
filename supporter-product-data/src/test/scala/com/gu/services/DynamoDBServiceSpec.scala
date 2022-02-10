@@ -11,7 +11,7 @@ import org.scalatest.matchers.should.Matchers
 import java.time.LocalDate
 
 @IntegrationTest
-class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
+class DynamoDBServiceSpec extends AsyncFlatSpec with Matchers {
 
   SupporterDataDynamoService.getClass.getSimpleName should "be able to insert an item" in {
     val service = SupporterDataDynamoService(DEV)
@@ -22,7 +22,7 @@ class DynamoDBServiceSpec  extends AsyncFlatSpec with Matchers {
       productRatePlanId = "2c92a0fb4edd70c8014edeaa4e972204",
       productRatePlanName = "Digital Pack Annual",
       termEndDate = LocalDate.parse("2021-03-20"),
-      contractEffectiveDate = LocalDate.parse("2020-03-20")
+      contractEffectiveDate = LocalDate.parse("2020-03-20"),
     )
     service
       .writeItem(item)

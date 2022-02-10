@@ -1,10 +1,12 @@
-import { css } from '@emotion/core';
-import { Button } from '@guardian/src-button';
-import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import React, { useEffect, useState } from 'react';
+import { css } from '@emotion/react';
+import { from, space } from '@guardian/source-foundations';
+import {
+	Button,
+	Checkbox,
+	CheckboxGroup,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';

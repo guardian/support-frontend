@@ -19,16 +19,16 @@ import play.api.libs.json.{Json, Reads}
 //}
 
 case class IdentityErrorResponse(
-  status: String,
-  errors: List[IdentityError]
+    status: String,
+    errors: List[IdentityError],
 )
 
 object IdentityErrorResponse {
   implicit val reads: Reads[IdentityErrorResponse] = Json.reads[IdentityErrorResponse]
 
   case class IdentityError(
-    message: String,
-    description: String
+      message: String,
+      description: String,
   )
 
   object IdentityError {
@@ -40,7 +40,7 @@ object IdentityErrorResponse {
 
     def isDisallowedEmailError(identityError: IdentityError): Boolean =
       identityError.message == InvalidEmailAddress.message &&
-      identityError.description == InvalidEmailAddress.description
+        identityError.description == InvalidEmailAddress.description
 
     implicit val reads: Reads[IdentityError] = Json.reads[IdentityError]
   }

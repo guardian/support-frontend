@@ -11,82 +11,67 @@ case object On extends SwitchState(true)
 case object Off extends SwitchState(false)
 
 object SwitchState {
-  import io.circe.generic.extras.semiauto.{ deriveEnumerationDecoder, deriveEnumerationEncoder }
+  import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
   implicit val stateDecoder: Decoder[SwitchState] = deriveEnumerationDecoder[SwitchState]
   implicit val stateEncoder: Encoder[SwitchState] = deriveEnumerationEncoder[SwitchState]
 }
 
 case class FeatureSwitches(
-  enableQuantumMetric: SwitchState,
-  usStripeAccountForSingle: SwitchState
+    enableQuantumMetric: SwitchState,
+    usStripeAccountForSingle: SwitchState,
 )
 
 case class CampaignSwitches(
-  enableContributionsCampaign: SwitchState,
-  forceContributionsCampaign: SwitchState
+    enableContributionsCampaign: SwitchState,
+    forceContributionsCampaign: SwitchState,
 )
 
 case class SubscriptionsSwitches(
-  enableDigitalSubGifting: SwitchState,
-  useDotcomContactPage: SwitchState,
-  checkoutPostcodeLookup: SwitchState
+    enableDigitalSubGifting: SwitchState,
+    useDotcomContactPage: SwitchState,
+    checkoutPostcodeLookup: SwitchState,
 )
 
 case class RecaptchaSwitches(
-  enableRecaptchaBackend: SwitchState,
-  enableRecaptchaFrontend: SwitchState
+    enableRecaptchaBackend: SwitchState,
+    enableRecaptchaFrontend: SwitchState,
 )
 
 case class OneOffPaymentMethodSwitches(
-  stripe: SwitchState,
-  stripeApplePay: SwitchState,
-  stripePaymentRequestButton: SwitchState,
-  payPal: SwitchState,
-  amazonPay: SwitchState
+    stripe: SwitchState,
+    stripeApplePay: SwitchState,
+    stripePaymentRequestButton: SwitchState,
+    payPal: SwitchState,
+    amazonPay: SwitchState,
 )
 
 case class RecurringPaymentMethodSwitches(
-  stripe: SwitchState,
-  stripeApplePay: SwitchState,
-  stripePaymentRequestButton: SwitchState,
-  payPal: SwitchState,
-  directDebit: SwitchState,
-  existingCard: SwitchState,
-  existingDirectDebit: SwitchState,
-  amazonPay: SwitchState,
-  sepa: SwitchState
+    stripe: SwitchState,
+    stripeApplePay: SwitchState,
+    stripePaymentRequestButton: SwitchState,
+    payPal: SwitchState,
+    directDebit: SwitchState,
+    existingCard: SwitchState,
+    existingDirectDebit: SwitchState,
+    amazonPay: SwitchState,
+    sepa: SwitchState,
 )
 
 case class Switches(
-  oneOffPaymentMethods: OneOffPaymentMethodSwitches,
-  recurringPaymentMethods: RecurringPaymentMethodSwitches,
-  subscriptionsSwitches: SubscriptionsSwitches,
-  featureSwitches: FeatureSwitches,
-  campaignSwitches: CampaignSwitches,
-  recaptchaSwitches: RecaptchaSwitches
+    oneOffPaymentMethods: OneOffPaymentMethodSwitches,
+    recurringPaymentMethods: RecurringPaymentMethodSwitches,
+    subscriptionsSwitches: SubscriptionsSwitches,
+    featureSwitches: FeatureSwitches,
+    campaignSwitches: CampaignSwitches,
+    recaptchaSwitches: RecaptchaSwitches,
 )
 
 object Switches {
-  /**
-   * Transforms from e.g:
-   *  {
-   *    "oneOffPaymentMethods" : {
-   *      "description" : "Payment methods - one-off contributions",
-   *      "switches" : {
-   *        "stripe" : {
-   *          "description" : "Stripe - Credit/Debit card",
-   *          "state" : "On"
-   *        }
-   *      }
-   *    }
-   *  }
-   *  To:
-   *  {
-   *    "oneOffPaymentMethods" : {
-   *      "stripe": "On"
-   *    }
-   *  }
-   */
+
+  /** Transforms from e.g: { "oneOffPaymentMethods" : { "description" : "Payment methods - one-off contributions",
+    * "switches" : { "stripe" : { "description" : "Stripe - Credit/Debit card", "state" : "On" } } } } To: {
+    * "oneOffPaymentMethods" : { "stripe": "On" } }
+    */
   private def flattenSwitchState(json: Json): Json =
     root.state.string
       .getOption(json)

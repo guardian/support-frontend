@@ -1,4 +1,4 @@
-import React from 'react'; // A checkmark ✓
+// A checkmark ✓
 
 export default function SvgCheckmark() {
 	return (

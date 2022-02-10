@@ -24,7 +24,7 @@ case class GoCardlessWorkersService(config: GoCardlessConfig) extends GoCardless
   def createNewMandateOnExistingCustomerAccount(customerAccountId: String): Future[MandateRefs] =
     Future {
       client.mandates().create().withScheme("bacs").withLinksCustomerBankAccount(customerAccountId).execute()
-    } map {
-      newMandateDetails => MandateRefs(newMandateDetails.getId, newMandateDetails.getReference)
+    } map { newMandateDetails =>
+      MandateRefs(newMandateDetails.getId, newMandateDetails.getReference)
     }
 }

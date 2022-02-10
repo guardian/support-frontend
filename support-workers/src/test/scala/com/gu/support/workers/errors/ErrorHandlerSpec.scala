@@ -57,34 +57,46 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
   }
 
   "asRetryException method" should "allow us to work out retries" in {
-    //General
+    // General
     ErrorHandler.toRetryException(new SocketTimeoutException()) shouldBe a[RetryUnlimited]
     ErrorHandler.toRetryException(new ParsingFailure("Invalid Json", new Throwable())) shouldBe a[RetryNone]
 
-    //Salesforce
+    // Salesforce
     new SalesforceErrorResponse("test", expiredAuthenticationCode).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("test", rateLimitExceeded).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("test", readOnlyMaintenance).asRetryException shouldBe a[RetryUnlimited]
     new SalesforceErrorResponse("", "").asRetryException shouldBe a[RetryNone]
 
-    //Stripe
+    // Stripe
     ErrorHandler.fromStripeError(new StripeError("card_error", "")) shouldBe a[RetryNone]
     ErrorHandler.fromStripeError(new StripeError("invalid_request_error", "")) shouldBe a[RetryNone]
     ErrorHandler.fromStripeError(new StripeError("api_error", "")) shouldBe a[RetryUnlimited]
     ErrorHandler.fromStripeError(new StripeError("rate_limit_error", "")) shouldBe a[RetryUnlimited]
 
-    //PayPal
+    // PayPal
     PayPalError(500, "").asRetryException shouldBe a[RetryUnlimited]
     PayPalError(400, "").asRetryException shouldBe a[RetryNone]
 
-    //Zuora
+    // Zuora
     ZuoraErrorResponse(false, List(ZuoraError("API_DISABLED", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
     ZuoraErrorResponse(false, List(ZuoraError("LOCK_COMPETITION", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
-    ZuoraErrorResponse(false, List(ZuoraError("REQUEST_EXCEEDED_LIMIT", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
-    ZuoraErrorResponse(false, List(ZuoraError("REQUEST_EXCEEDED_RATE", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
+    ZuoraErrorResponse(false, List(ZuoraError("REQUEST_EXCEEDED_LIMIT", "tbc"))).asRetryException shouldBe a[
+      RetryUnlimited,
+    ]
+    ZuoraErrorResponse(false, List(ZuoraError("REQUEST_EXCEEDED_RATE", "tbc"))).asRetryException shouldBe a[
+      RetryUnlimited,
+    ]
     ZuoraErrorResponse(false, List(ZuoraError("SERVER_UNAVAILABLE", "tbc"))).asRetryException shouldBe a[RetryUnlimited]
-    ZuoraErrorResponse(false, List(ZuoraError("UNKNOWN_ERROR", "Operation failed due to an unknown error."))).asRetryException shouldBe a[RetryUnlimited]
-    ZuoraErrorResponse(false, List(ZuoraError("TRANSACTION_FAILED", "Your card was declined"))).asRetryException shouldBe a[RetryNone]
+    ZuoraErrorResponse(
+      false,
+      List(ZuoraError("UNKNOWN_ERROR", "Operation failed due to an unknown error.")),
+    ).asRetryException shouldBe a[
+      RetryUnlimited,
+    ]
+    ZuoraErrorResponse(
+      false,
+      List(ZuoraError("TRANSACTION_FAILED", "Your card was declined")),
+    ).asRetryException shouldBe a[RetryNone]
 
   }
 }

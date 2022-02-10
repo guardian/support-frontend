@@ -16,8 +16,9 @@ import scala.concurrent.Future
 // Provides methods required by the GoCardless controller
 class GoCardlessBackend(
     goCardlessService: GoCardlessService,
-    cloudWatchService: CloudWatchService
-)(implicit pool: DefaultThreadPool) extends StrictLogging {
+    cloudWatchService: CloudWatchService,
+)(implicit pool: DefaultThreadPool)
+    extends StrictLogging {
 
   def checkBankAccount(data: CheckDirectDebitDetailsData): EitherT[Future, Throwable, CheckDirectDebitDetailsResponse] =
     goCardlessService
@@ -28,23 +29,22 @@ class GoCardlessBackend(
 object GoCardlessBackend {
 
   private def apply(
-    goCardlessService: GoCardlessService,
-    cloudWatchService: CloudWatchService
+      goCardlessService: GoCardlessService,
+      cloudWatchService: CloudWatchService,
   )(implicit pool: DefaultThreadPool): GoCardlessBackend = {
     new GoCardlessBackend(goCardlessService, cloudWatchService)
   }
 
-  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
-    implicit defaultThreadPool: DefaultThreadPool,
-    goCardlessThreadPool: GoCardlessThreadPool
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(implicit
+      defaultThreadPool: DefaultThreadPool,
+      goCardlessThreadPool: GoCardlessThreadPool,
   ) extends EnvironmentBasedBuilder[GoCardlessBackend] {
 
     override def build(env: Environment): InitializationResult[GoCardlessBackend] = (
       configLoader
         .loadConfig[Environment, GoCardlessConfig](env)
         .map(GoCardlessService.fromGoCardlessConfig): InitializationResult[GoCardlessService],
-      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService]
+      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
     ).mapN(GoCardlessBackend.apply)
   }
 }
-

@@ -96,7 +96,7 @@ export type Action =
 	  }
 	| {
 			type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD';
-			existingPaymentMethod: RecentlySignedInExistingPaymentMethod;
+			existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	  }
 	| {
 			type: 'UPDATE_FIRST_NAME';
@@ -310,7 +310,7 @@ const updatePaymentMethod =
 	};
 
 const updateSelectedExistingPaymentMethod = (
-	existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
+	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 ): Action => ({
 	type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD',
 	existingPaymentMethod,

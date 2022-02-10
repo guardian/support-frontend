@@ -1,12 +1,20 @@
-import { css } from '@emotion/core';
-import { buttonReaderRevenue, LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { between, from, until } from '@guardian/src-foundations/mq';
-import { brandAlt, neutral } from '@guardian/src-foundations/palette';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import { ThemeProvider } from 'emotion-theming';
+import { css, ThemeProvider } from '@emotion/react';
+import {
+  between,
+	brandAlt,
+	from,
+	headline,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
+import {
+  buttonThemeReaderRevenue,
+	LinkButton,
+} from '@guardian/source-react-components';
 import type { ReactNode } from 'react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
@@ -232,7 +240,7 @@ function ProductOption(props: Product): JSX.Element {
 				</p>
 			</div>
 			<div css={buttonDiv}>
-				<ThemeProvider theme={buttonReaderRevenue}>
+				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
 						css={button}
 						href={props.href}

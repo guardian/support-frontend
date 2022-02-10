@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React from 'react';
+import * as React from 'react';
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';

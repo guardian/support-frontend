@@ -8,12 +8,13 @@ import selenium.contributions.pages.{ContributionThankYou, ContributionsLanding}
 import selenium.util._
 
 import org.scalatest.featurespec.AnyFeatureSpec
-class OneOffContributionsSpec extends AnyFeatureSpec
-  with GivenWhenThen
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Browser
-  with Eventually {
+class OneOffContributionsSpec
+    extends AnyFeatureSpec
+    with GivenWhenThen
+    with BeforeAndAfter
+    with BeforeAndAfterAll
+    with Browser
+    with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
@@ -79,7 +80,10 @@ class OneOffContributionsSpec extends AnyFeatureSpec
     Scenario("Check browser navigates to paypal") {
       val testUser = new TestUser {
         val username = "test-stripe-pop-up"
-        driverConfig.addCookie(name = "_post_deploy_user", value = "true") //To avoid consent banner, which messes with selenium
+        driverConfig.addCookie(
+          name = "_post_deploy_user",
+          value = "true",
+        ) // To avoid consent banner, which messes with selenium
       }
 
       val landingPage = ContributionsLanding("au", testUser)

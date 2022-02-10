@@ -1,6 +1,5 @@
 // ----- Imports ----- //
-import { Option } from '@guardian/src-select';
-import React from 'react';
+import { Option } from '@guardian/source-react-components';
 
 // ----- Functions ----- //
 const options = (optionsForMapping: Record<string, string>): JSX.Element => {

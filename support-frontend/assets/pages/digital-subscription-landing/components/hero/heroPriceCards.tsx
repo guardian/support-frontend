@@ -1,10 +1,7 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from, until } from '@guardian/src-foundations/mq';
-import { brand } from '@guardian/src-foundations/palette';
+import { css } from '@emotion/react';
+import { brand, from, space, until } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
-import React from 'react';
 import ProductOptionSmall from 'components/product/productOptionSmall';
 
 const priceCardContainer = css`

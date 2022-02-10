@@ -17,10 +17,9 @@ trait MockServicesCreator {
   def mockServices[T](services: (Services => T, T)*): ServiceProvider = {
     val serviceProvider = mock[ServiceProvider]
     val mockServices = mock[Services]
-    services.foreach {
-      case (serviceCall, service) =>
-        when(serviceCall(mockServices)).thenReturn(service)
-        when(serviceProvider.forUser(any[Boolean])).thenReturn(mockServices)
+    services.foreach { case (serviceCall, service) =>
+      when(serviceCall(mockServices)).thenReturn(service)
+      when(serviceProvider.forUser(any[Boolean])).thenReturn(mockServices)
     }
     serviceProvider
   }

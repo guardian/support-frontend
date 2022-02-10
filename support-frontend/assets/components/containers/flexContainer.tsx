@@ -1,7 +1,6 @@
-import { css } from '@emotion/core';
-import { from } from '@guardian/src-foundations/mq';
+import { css } from '@emotion/react';
+import { from } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
-import React from 'react';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 type PropTypes = {

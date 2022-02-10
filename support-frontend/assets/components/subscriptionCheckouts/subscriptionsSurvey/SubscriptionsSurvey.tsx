@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
 import Content from 'components/content/content';
 import Text from 'components/text/text';

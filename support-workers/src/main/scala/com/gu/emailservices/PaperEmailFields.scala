@@ -10,8 +10,8 @@ import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailPap
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaperEmailFields(
-  paperFieldsGenerator: PaperFieldsGenerator,
-  touchPointEnvironment: TouchPointEnvironment,
+    paperFieldsGenerator: PaperFieldsGenerator,
+    touchPointEnvironment: TouchPointEnvironment,
 ) {
 
   def build(paper: SendThankYouEmailPaperState)(implicit ec: ExecutionContext): Future[EmailFields] = {
@@ -23,15 +23,19 @@ class PaperEmailFields(
       case _ => "paper-subscription-card"
     }
 
-    paperFieldsGenerator.fieldsFor(
-      paper.paymentMethod, paper.paymentSchedule, paper.promoCode, paper.accountNumber, paper.subscriptionNumber,
-      paper.product,
-      paper.user,
-      paperRatePlan(paper.product, touchPointEnvironment).map(_.id),
-      fixedTerm = false,
-      paper.firstDeliveryDate,
-    ).map(fields =>
-      EmailFields(fields ++ additionalFields, paper.user, dataExtension)
-    )
+    paperFieldsGenerator
+      .fieldsFor(
+        paper.paymentMethod,
+        paper.paymentSchedule,
+        paper.promoCode,
+        paper.accountNumber,
+        paper.subscriptionNumber,
+        paper.product,
+        paper.user,
+        paperRatePlan(paper.product, touchPointEnvironment).map(_.id),
+        fixedTerm = false,
+        paper.firstDeliveryDate,
+      )
+      .map(fields => EmailFields(fields ++ additionalFields, paper.user, dataExtension))
   }
 }

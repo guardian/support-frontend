@@ -19,10 +19,11 @@ class FastlyService(config: FastlyConfig)(implicit client: WSClient) {
   // since we are only handling the error by logging it (c.f. S3SettingsProvider)
   // https://docs.fastly.com/api/purge#purge_d8b8e8be84c350dd92492453a3df3230
   def purgeSurrogateKey(key: String)(implicit ec: ExecutionContext): EitherT[Future, Throwable, PurgeResponse] =
-    client.url(s"https://api.fastly.com/service/${config.serviceId}/purge/$key")
+    client
+      .url(s"https://api.fastly.com/service/${config.serviceId}/purge/$key")
       .withHttpHeaders(
         "Fastly-Key" -> config.apiToken,
-        "Accept" -> "application/json"
+        "Accept" -> "application/json",
       )
       .execute("POST")
       .attemptT

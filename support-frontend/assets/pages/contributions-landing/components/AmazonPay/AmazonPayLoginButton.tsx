@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from 'components/button/button';
 import AnimatedDots from 'components/spinners/animatedDots';
@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setAmazonPayHasAccessToken: () => dispatch(setAmazonPayHasAccessToken),
 });
 
-class AmazonPayLoginButtonComponent extends React.Component<PropTypes> {
+class AmazonPayLoginButtonComponent extends Component<PropTypes> {
 	loginPopup = (amazonLoginObject: Record<string, any>) => (): void => {
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {

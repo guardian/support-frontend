@@ -24,7 +24,6 @@ trait CheckoutPage extends Page with Browser {
   private val directDebitSubmitButton = id("qa-direct-debit-submit")
   private val directDebitPlaybackSubmit = id("qa-submit-button-2")
 
-
   def selectStripePaymentMethod(): Unit = clickOn(stripeRadioButton)
 
   def selectDirectDebitPaymentMethod(): Unit = clickOn(directDebitButton)

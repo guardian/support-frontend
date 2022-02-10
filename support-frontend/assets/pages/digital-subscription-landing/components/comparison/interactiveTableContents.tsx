@@ -1,7 +1,5 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import React from 'react';
+import { css } from '@emotion/react';
+import { from, space } from '@guardian/source-foundations';
 import { SvgFreeTrial } from 'components/icons/freeTrial';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';

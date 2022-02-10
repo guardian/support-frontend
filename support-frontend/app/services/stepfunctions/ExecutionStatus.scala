@@ -16,6 +16,6 @@ object ExecutionStatus {
     "ExecutionFailed" -> Failed,
     "ExecutionStarted" -> Started,
     "ExecutionSucceeded" -> Succeeded,
-    "ExecutionTimedOut" -> TimedOut
+    "ExecutionTimedOut" -> TimedOut,
   )
 }

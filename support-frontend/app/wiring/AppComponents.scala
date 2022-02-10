@@ -14,18 +14,19 @@ import play.filters.cors.{CORSComponents, CORSConfig}
 import play.filters.csp.CSPComponents
 import play.filters.gzip.GzipFilter
 
-trait AppComponents extends PlayComponents
-  with AhcWSComponents
-  with AssetsComponents
-  with Controllers
-  with Services
-  with ApplicationConfiguration
-  with ActionBuilders
-  with Assets
-  with GoogleAuth
-  with CORSComponents
-  with CSPComponents
-  with HttpFiltersComponents {
+trait AppComponents
+    extends PlayComponents
+    with AhcWSComponents
+    with AssetsComponents
+    with Controllers
+    with Services
+    with ApplicationConfiguration
+    with ActionBuilders
+    with Assets
+    with GoogleAuth
+    with CORSComponents
+    with CSPComponents
+    with HttpFiltersComponents {
   self: BuiltInComponentsFromContext =>
 
   private lazy val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
@@ -35,7 +36,7 @@ trait AppComponents extends PlayComponents
     Some(router),
     assetsResolver,
     allSettingsProvider,
-    appConfig.stage
+    appConfig.stage,
   )
   override lazy val httpErrorHandler = customHandler
   override lazy val errorController = new ErrorController(actionRefiners, customHandler)
@@ -48,7 +49,7 @@ trait AppComponents extends PlayComponents
     new SetCookiesCheck(),
     securityHeadersFilter,
     new CacheHeadersCheck(),
-    new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images"))
+    new GzipFilter(shouldGzip = (req, _) => !req.path.startsWith("/assets/images")),
   )
 
   override lazy val router: Router = new _root_.router.Routes(
@@ -78,7 +79,7 @@ trait AppComponents extends PlayComponents
     directDebitController,
     promotionsController,
     assetController,
-    faviconController
+    faviconController,
   )
 
   SentryLogging.init(appConfig)

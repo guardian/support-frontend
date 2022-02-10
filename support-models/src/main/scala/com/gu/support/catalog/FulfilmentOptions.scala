@@ -17,14 +17,16 @@ case object NoFulfilmentOptions extends FulfilmentOptions
 object FulfilmentOptions {
   lazy val allFulfilmentOptions = List(HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions)
 
-  def fromString(code: String): Option[FulfilmentOptions] = allFulfilmentOptions.find(_.getClass.getSimpleName == s"$code$$")
+  def fromString(code: String): Option[FulfilmentOptions] =
+    allFulfilmentOptions.find(_.getClass.getSimpleName == s"$code$$")
 
   implicit val decoder: Decoder[FulfilmentOptions] =
     Decoder.decodeString.emap(code => fromString(code).toRight(s"unrecognised fulfilment options '$code'"))
 
   implicit val encoder: Encoder[FulfilmentOptions] = Encoder.encodeString.contramap[FulfilmentOptions](_.toString)
 
-  implicit val keyEncoder: KeyEncoder[FulfilmentOptions] = (fulfilmentOptions: FulfilmentOptions) => fulfilmentOptions.toString
+  implicit val keyEncoder: KeyEncoder[FulfilmentOptions] = (fulfilmentOptions: FulfilmentOptions) =>
+    fulfilmentOptions.toString
 
-  implicit val keyDecoder: KeyDecoder[FulfilmentOptions]  = (key: String) => fromString(key)
+  implicit val keyDecoder: KeyDecoder[FulfilmentOptions] = (key: String) => fromString(key)
 }

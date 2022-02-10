@@ -1,7 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { text, withKnobs } from "@storybook/addon-knobs";
-import { SvgInfo } from "@guardian/src-icons";
+import { SvgInfo } from "@guardian/source-react-components";
 import ProductOption from "components/product/productOption";
 import ProductOptionSmall from "components/product/productOptionSmall";
 import ProductInfoChip from "components/product/productInfoChip";

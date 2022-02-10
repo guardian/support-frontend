@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { Node } from 'react';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';

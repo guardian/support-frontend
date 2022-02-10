@@ -8,24 +8,24 @@ object PromotionValidator {
 
   implicit class PromotionExtensions(promotion: Promotion) {
     def validateFor(
-      productRatePlanId: ProductRatePlanId,
-      country: Country,
-      isRenewal: Boolean,
-      now: DateTime = DateTime.now()
+        productRatePlanId: ProductRatePlanId,
+        country: Country,
+        isRenewal: Boolean,
+        now: DateTime = DateTime.now(),
     ): Seq[PromoError] =
       validateAll(Some(productRatePlanId), country, isRenewal, now)
 
     private def validateAll(
-      maybeProductRatePlanId: Option[ProductRatePlanId] = None,
-      country: Country,
-      isRenewal: Boolean,
-      now: DateTime = DateTime.now()
+        maybeProductRatePlanId: Option[ProductRatePlanId] = None,
+        country: Country,
+        isRenewal: Boolean,
+        now: DateTime = DateTime.now(),
     ): List[PromoError] = {
       val errors = List(
         maybeProductRatePlanId.flatMap(validateProductRatePlan),
         validateRenewal(isRenewal),
         validateCountry(country),
-        validateDate(now)
+        validateDate(now),
       )
       errors.flatten
     }
@@ -57,10 +57,10 @@ object PromotionValidator {
         None
 
     def validForAnyProductRatePlan(
-      productRatePlanIds: List[ProductRatePlanId],
-      country: Country,
-      isRenewal: Boolean,
-      now: DateTime = DateTime.now()
+        productRatePlanIds: List[ProductRatePlanId],
+        country: Country,
+        isRenewal: Boolean,
+        now: DateTime = DateTime.now(),
     ): List[ProductRatePlanId] = {
       val errors = productRatePlanIds.map(productRatePlanId => validateAll(Some(productRatePlanId), country, isRenewal))
 
@@ -72,5 +72,3 @@ object PromotionValidator {
   }
 
 }
-
-

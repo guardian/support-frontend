@@ -8,34 +8,35 @@ import io.circe.{Encoder, _}
 
 sealed trait PaymentFields
 
-
 case class PayPalPaymentFields(baid: String) extends PaymentFields
-
 
 sealed trait StripePaymentFields extends PaymentFields {
   val stripePaymentType: Option[StripePaymentType]
 }
 
 case class StripeSourcePaymentFields(
-  stripeToken: String,
-  stripePaymentType: Option[StripePaymentType]
+    stripeToken: String,
+    stripePaymentType: Option[StripePaymentType],
 ) extends StripePaymentFields // pre SCA compatibility
 
 case class StripePaymentMethodPaymentFields(
-  paymentMethod: PaymentMethodId,
-  stripePaymentType: Option[StripePaymentType]
+    paymentMethod: PaymentMethodId,
+    stripePaymentType: Option[StripePaymentType],
 ) extends StripePaymentFields
 
 object PaymentMethodId {
 
   def apply(value: String): Option[PaymentMethodId] =
-    if (value.nonEmpty &&
+    if (
+      value.nonEmpty &&
       value.forall { char =>
         (char >= 'a' && char <= 'z') ||
-          (char >= 'A' && char <= 'Z') ||
-          (char >= '0' && char <= '9') ||
-          char == '_'
-      }) Some(new PaymentMethodId(value)) else None
+        (char >= 'A' && char <= 'Z') ||
+        (char >= '0' && char <= '9') ||
+        char == '_'
+      }
+    ) Some(new PaymentMethodId(value))
+    else None
 
   implicit val decoder: Decoder[PaymentMethodId] = Decoder.decodeString.emap { str =>
     apply(str).toRight(s"PaymentMethodId $str had invalid characters")
@@ -45,16 +46,15 @@ object PaymentMethodId {
 }
 case class PaymentMethodId private (value: String) extends AnyVal
 
-
 case class DirectDebitPaymentFields(
-  accountHolderName: String,
-  sortCode: String,
-  accountNumber: String
+    accountHolderName: String,
+    sortCode: String,
+    accountNumber: String,
 ) extends PaymentFields
 
 case class SepaPaymentFields(
-  accountHolderName: String,
-  iban: String
+    accountHolderName: String,
+    iban: String,
 ) extends PaymentFields
 
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
@@ -62,7 +62,7 @@ case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
 case class AmazonPayPaymentFields(amazonPayBillingAgreementId: String) extends PaymentFields
 
 object PaymentFields {
-  //Payment fields are input from support-frontend
+  // Payment fields are input from support-frontend
   implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
   implicit val stripeSourcePaymentFieldsCodec: Codec[StripeSourcePaymentFields] = deriveCodec
   implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentMethodPaymentFields] = deriveCodec
@@ -89,15 +89,16 @@ object PaymentFields {
       Decoder[DirectDebitPaymentFields].widen,
       Decoder[SepaPaymentFields].widen,
       Decoder[ExistingPaymentFields].widen,
-      Decoder[AmazonPayPaymentFields].widen
-    ).reduceLeft(or(_,_))
+      Decoder[AmazonPayPaymentFields].widen,
+    ).reduceLeft(or(_, _))
 
   final def or[A, AA >: A](a: Decoder[A], d: => Decoder[AA]): Decoder[AA] = new Decoder[AA] {
     final def apply(c: HCursor): Decoder.Result[AA] = a(c) match {
       case r @ Right(_) => r
-      case Left(err)      => d(c).left.map { decodingFailure: DecodingFailure =>
-        DecodingFailure(err.message + " OR " + decodingFailure.message, err.history ++ decodingFailure.history)
-      }
+      case Left(err) =>
+        d(c).left.map { decodingFailure: DecodingFailure =>
+          DecodingFailure(err.message + " OR " + decodingFailure.message, err.history ++ decodingFailure.history)
+        }
     }
   }
 

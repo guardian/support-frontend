@@ -1,4 +1,4 @@
-import React from 'react'; // Generic question mark icon used on checkouts.
+// Generic question mark icon used on checkouts.
 
 export default function QuestionMarkHintIcon(): JSX.Element {
 	return (

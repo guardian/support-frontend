@@ -1,4 +1,3 @@
-import React from 'react';
 import AnchorButton from 'components/button/anchorButton';
 // types
 import type { Option } from 'helpers/types/option';

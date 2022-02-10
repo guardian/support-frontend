@@ -1,8 +1,11 @@
-import { css } from '@emotion/core';
-import { LinkButton } from '@guardian/src-button';
-import { space } from '@guardian/src-foundations';
-import { SvgArrowRightStraight } from '@guardian/src-icons';
-import React, { useEffect } from 'react';
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
+import {
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source-react-components';
+import { useEffect } from 'react';
+import * as React from 'react';
 import {
 	trackComponentClick,
 	trackComponentLoad,

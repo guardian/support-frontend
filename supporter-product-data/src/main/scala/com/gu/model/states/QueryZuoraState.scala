@@ -16,7 +16,7 @@ object QueryType {
 }
 
 case class QueryZuoraState(
-  queryType: QueryType
+    queryType: QueryType,
 )
 
 object QueryZuoraState {

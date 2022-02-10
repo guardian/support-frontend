@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { ReactElement, ReactNode } from 'react';
-import React, { createElement } from 'react';
+import { createElement } from 'react';
 import type { $Keys } from 'utility-types';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';

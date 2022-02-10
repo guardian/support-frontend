@@ -23,23 +23,27 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
-  //-- entities
-  val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
-  val capturePaypalPaymentData = CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, Some("email@email.com"))
+  // -- entities
+  val acquisitionData =
+    AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None, None)
+  val capturePaypalPaymentData =
+    CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, Some("email@email.com"))
   val countrySubdivisionCode = Some("NY")
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,countrySubdivisionCode)
+  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
   val executePaypalPaymentData = ExecutePaypalPaymentData(
-    ExecutePaymentData("paymentId", "payerId"), acquisitionData, "email@email.com"
+    ExecutePaymentData("paymentId", "payerId"),
+    acquisitionData,
+    "email@email.com",
   )
   val paypalRefundWebHookData = PaypalRefundWebHookData(
     body = PaypalRefundWebHookBody("parent_payment_id", "{}"),
-    headers = Map.empty
+    headers = Map.empty,
   )
   val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
 
   val identityError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
-    IdentityClient.GetUser("test@theguardian.com")
+    IdentityClient.GetUser("test@theguardian.com"),
   )
 
   val paymentError = PaypalApiError.fromString("Error response")
@@ -47,8 +51,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val backendDbError = BackendError.fromDatabaseError(dbError)
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
 
-
-  //-- mocks
+  // -- mocks
   val paymentMock: Payment = mock[Payment]
   val enrichedPaymentMock: EnrichedPaypalPayment = mock[EnrichedPaypalPayment]
   val amount = mock[Amount]
@@ -57,7 +60,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val transaction = mock[com.paypal.api.payments.Transaction]
   val transactions = List(transaction).asJava
 
-  //-- service responses
+  // -- service responses
   val paymentServiceResponse: EitherT[Future, PaypalApiError, Payment] =
     EitherT.right(Future.successful(paymentMock))
   val enrichedPaymentServiceResponse: EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
@@ -89,7 +92,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
 
-  //-- service mocks
+  // -- service mocks
   val mockPaypalService: PaypalService = mock[PaypalService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
@@ -99,7 +102,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
 
-  //-- test obj
+  // -- test obj
   val paypalBackend = new PaypalBackend(
     mockPaypalService,
     mockDatabaseService,
@@ -108,7 +111,8 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockBigQueryService,
     mockAcquisitionsStreamService,
     mockEmailService,
-    mockCloudWatchService)(new DefaultThreadPool(ec))
+    mockCloudWatchService,
+  )(new DefaultThreadPool(ec))
 
   // This is only needed if testing code which depends on extracting data from Payment object
   def populatePaymentMock(): Unit = {
@@ -128,16 +132,11 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   }
 }
 
-
-class PaypalBackendSpec
-  extends AnyWordSpec
-    with Matchers
-    with FutureEitherValues
-    with IntegrationPatience {
+class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValues with IntegrationPatience {
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val clientBrowserInfo =  ClientBrowserInfo("","",None,None,None)
+  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
 
   "Paypal Backend" when {
 
@@ -169,51 +168,60 @@ class PaypalBackendSpec
 
       "return successful payment response even if identityService, " +
         "databaseService and emailService fail" in new PaypalBackendFixture {
-        populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
-        when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        paypalBackend
-          .capturePayment(capturePaypalPaymentData, clientBrowserInfo)
-          .futureRight mustBe enrichedPaypalPaymentMock
-      }
+          populatePaymentMock()
+          val enrichedPaypalPaymentMock =
+            EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+          when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+          when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+            .thenReturn(streamResponseError)
+          when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
+          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
+          paypalBackend
+            .capturePayment(capturePaypalPaymentData, clientBrowserInfo)
+            .futureRight mustBe enrichedPaypalPaymentMock
+        }
     }
 
     "a request is made to execute a payment" should {
 
       "return error if paypal service fails" in new PaypalBackendFixture {
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponseError)
-        paypalBackend.executePayment(executePaypalPaymentData, clientBrowserInfo)
-          .futureLeft mustBe paymentError
+        paypalBackend.executePayment(executePaypalPaymentData, clientBrowserInfo).futureLeft mustBe paymentError
 
       }
 
       "return successful payment response even if identityService, " +
         "databaseService and emailService fail" in new PaypalBackendFixture {
-        populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
-        when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
+          populatePaymentMock()
+          val enrichedPaypalPaymentMock =
+            EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+          when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+          when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+            .thenReturn(streamResponseError)
+          when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
+          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
 
-        paypalBackend.executePayment(executePaypalPaymentData, clientBrowserInfo).futureRight mustBe enrichedPaypalPaymentMock
-      }
+          paypalBackend
+            .executePayment(executePaypalPaymentData, clientBrowserInfo)
+            .futureRight mustBe enrichedPaypalPaymentMock
+        }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new PaypalBackendFixture {
         populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+        val enrichedPaypalPaymentMock =
+          EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+          .thenReturn(streamResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
 
-        paypalBackend.executePayment(executePaypalPaymentData, clientBrowserInfo).futureRight mustBe enrichedPaypalPaymentMock
+        paypalBackend
+          .executePayment(executePaypalPaymentData, clientBrowserInfo)
+          .futureRight mustBe enrichedPaypalPaymentMock
       }
     }
 
@@ -234,7 +242,7 @@ class PaypalBackendSpec
       "return success if refund hook is valid and databaseService succeeds" in new PaypalBackendFixture {
         when(mockPaypalService.validateWebhookEvent(any(), any())).thenReturn(unitPaymentResponse)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponse)
-        paypalBackend.processRefundHook(paypalRefundWebHookData).futureRight mustBe(())
+        paypalBackend.processRefundHook(paypalRefundWebHookData).futureRight mustBe (())
       }
     }
 
@@ -247,9 +255,14 @@ class PaypalBackendSpec
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
-
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
-        val result = paypalBackend invokePrivate trackContribution(paymentMock, acquisitionData, "a@b.com", None, clientBrowserInfo)
+        val result = paypalBackend invokePrivate trackContribution(
+          paymentMock,
+          acquisitionData,
+          "a@b.com",
+          None,
+          clientBrowserInfo,
+        )
 
         result.futureValue mustBe List(BackendError.Database(dbError))
       }
@@ -259,14 +272,21 @@ class PaypalBackendSpec
 
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponseError)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+          .thenReturn(streamResponseError)
 
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val errors = List(
           BackendError.BigQueryError(bigQueryErrorMessage),
-          BackendError.AcquisitionsStreamError(streamResponseErrorMessage)
+          BackendError.AcquisitionsStreamError(streamResponseErrorMessage),
         )
-        val result = paypalBackend invokePrivate trackContribution(paymentMock, acquisitionData, "a@b.com", None, clientBrowserInfo)
+        val result = paypalBackend invokePrivate trackContribution(
+          paymentMock,
+          acquisitionData,
+          "a@b.com",
+          None,
+          clientBrowserInfo,
+        )
         result.futureValue mustEqual errors
       }
 

@@ -11,7 +11,8 @@ import model.{DefaultThreadPool, InitializationError, InitializationResult}
 
 import scala.concurrent.Future
 
-class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: DefaultThreadPool) extends StrictLogging {
+class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: DefaultThreadPool)
+    extends StrictLogging {
 
   val thankYouQueueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
@@ -22,7 +23,9 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
   def sendThankYouEmail(contributorRow: ContributorRow): EitherT[Future, EmailService.Error, SendMessageResult] = {
 
     EitherT(Future {
-      sqsClient.sendMessageAsync(new SendMessageRequest(thankYouQueueUrl, contributorRow.toJsonContributorRowSqsMessage)).get
+      sqsClient
+        .sendMessageAsync(new SendMessageRequest(thankYouQueueUrl, contributorRow.toJsonContributorRowSqsMessage))
+        .get
     }.map(Right.apply).recover {
       case err: Throwable => Left(EmailService.Error(err))
       case _ => Left(EmailService.Error(new Exception("Unknown error while sending message to SQS.")))
@@ -33,11 +36,13 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
 
 object EmailService {
   def fromEmailConfig(config: EmailConfig)(implicit pool: DefaultThreadPool): InitializationResult[EmailService] = {
-    Validated.catchNonFatal {
-      new EmailService(AWSClientBuilder.buildAmazonSQSAsyncClient(), config.queueName)
-    }.leftMap { err =>
-      InitializationError(s"unable to instantiate EmailService for config: ${config}. Error trace: ${err.getMessage}")
-    }
+    Validated
+      .catchNonFatal {
+        new EmailService(AWSClientBuilder.buildAmazonSQSAsyncClient(), config.queueName)
+      }
+      .leftMap { err =>
+        InitializationError(s"unable to instantiate EmailService for config: ${config}. Error trace: ${err.getMessage}")
+      }
   }
 
   case class Error(err: Throwable) extends Exception {

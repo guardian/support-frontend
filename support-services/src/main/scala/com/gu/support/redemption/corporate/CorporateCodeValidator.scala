@@ -11,9 +11,13 @@ object CorporateCodeValidator {
 
   case class CorporateId(corporateIdString: String) extends AnyVal
 
-  private def statusFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, RedemptionTable.AvailableField] =
+  private def statusFromDynamoAttr(
+      attrs: Map[String, DynamoLookup.DynamoValue],
+  ): Either[String, RedemptionTable.AvailableField] =
     for {
-      attributeValue <- attrs.get(RedemptionTable.AvailableField.name).toRight(s"no field '${RedemptionTable.AvailableField.name}' in: $attrs")
+      attributeValue <- attrs
+        .get(RedemptionTable.AvailableField.name)
+        .toRight(s"no field '${RedemptionTable.AvailableField.name}' in: $attrs")
       available <- attributeValue match {
         case DynamoBoolean(bool) => Right(bool)
         case _ => Left(s"field '${RedemptionTable.AvailableField.name}' wasn't a boolean: $attributeValue")
@@ -22,7 +26,9 @@ object CorporateCodeValidator {
 
   private def corporateFromDynamoAttr(attrs: Map[String, DynamoLookup.DynamoValue]): Either[String, CorporateId] =
     for {
-      attributeValue <- attrs.get(RedemptionTable.CorporateIdField.name).toRight(s"no field '${RedemptionTable.CorporateIdField.name}' in: $attrs")
+      attributeValue <- attrs
+        .get(RedemptionTable.CorporateIdField.name)
+        .toRight(s"no field '${RedemptionTable.CorporateIdField.name}' in: $attrs")
       corporateId <- attributeValue match {
         case DynamoString(corporateIdString) => Right(CorporateId(corporateIdString))
         case _ => Left(s"field '${RedemptionTable.CorporateIdField.name}' wasn't a string: $attributeValue")

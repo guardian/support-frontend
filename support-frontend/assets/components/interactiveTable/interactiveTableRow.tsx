@@ -1,17 +1,20 @@
-import { css } from '@emotion/core';
-import { Button } from '@guardian/src-button';
-import { space, transitions } from '@guardian/src-foundations';
-import { visuallyHidden as _visuallyHidden } from '@guardian/src-foundations/accessibility';
-import { from } from '@guardian/src-foundations/mq';
+import { css } from '@emotion/react';
 import {
+	visuallyHidden as _visuallyHidden,
 	border,
 	brandAltBackground,
+	from,
 	neutral,
+	space,
 	sport,
-} from '@guardian/src-foundations/palette';
-import { textSans } from '@guardian/src-foundations/typography';
-import { SvgChevronDownSingle } from '@guardian/src-icons';
-import React, { useState } from 'react';
+	textSans,
+	transitions,
+} from '@guardian/source-foundations';
+import {
+	Button,
+	SvgChevronDownSingle,
+} from '@guardian/source-react-components';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 const borderStyle = `${border.secondary} 1px solid`;

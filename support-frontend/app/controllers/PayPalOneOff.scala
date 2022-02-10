@@ -1,4 +1,3 @@
-
 package controllers
 
 import actions.CustomActionBuilders
@@ -16,13 +15,16 @@ import scala.concurrent.ExecutionContext
 import scala.util.Try
 
 class PayPalOneOff(
-  actionBuilders: CustomActionBuilders,
-  assets: AssetsResolver,
-  testUsers: TestUserService,
-  components: ControllerComponents,
-  paymentAPIService: PaymentAPIService,
-  settingsProvider: AllSettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
+    actionBuilders: CustomActionBuilders,
+    assets: AssetsResolver,
+    testUsers: TestUserService,
+    components: ControllerComponents,
+    paymentAPIService: PaymentAPIService,
+    settingsProvider: AllSettingsProvider,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with Circe
+    with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
@@ -32,12 +34,14 @@ class PayPalOneOff(
 
   def paypalError: Action[AnyContent] = PrivateAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.main(
-      "Support the Guardian | PayPal Error",
-      EmptyDiv("paypal-error-page"),
-      Left(RefPath("payPalErrorPage.js")),
-      Left(RefPath("payPalErrorPageStyles.css"))
-    )()).withSettingsSurrogateKey
+    Ok(
+      views.html.main(
+        "Support the Guardian | PayPal Error",
+        EmptyDiv("paypal-error-page"),
+        Left(RefPath("payPalErrorPage.js")),
+        Left(RefPath("payPalErrorPageStyles.css")),
+      )(),
+    ).withSettingsSurrogateKey
   }
 
   def processPayPalError(error: PayPalError)(implicit request: RequestHeader): Result = {
@@ -49,7 +53,9 @@ class PayPalOneOff(
     }
   }
 
-  def resultFromPaymentAPIError(error: PaymentAPIResponseError[PayPalError])(implicit request: RequestHeader): Result = {
+  def resultFromPaymentAPIError(
+      error: PaymentAPIResponseError[PayPalError],
+  )(implicit request: RequestHeader): Result = {
     error match {
       case PaymentAPIResponseError.APIError(err: PayPalError) => processPayPalError(err)
       case _ => Redirect(routes.PayPalOneOff.paypalError())
@@ -68,29 +74,30 @@ class PayPalOneOff(
     }
   }
 
-  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
+  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] =
+    MaybeAuthenticatedAction.async { implicit request =>
+      val acquisitionData = (for {
+        cookie <- request.cookies.get("acquisition_data")
+        cookieAcquisitionData <- Try {
+          val parsed = Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
 
-    val acquisitionData = (for {
-      cookie <- request.cookies.get("acquisition_data")
-      cookieAcquisitionData <- Try {
-        val parsed = Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+          request.cookies.get("_ga") match {
+            case Some(gaId) => parsed.as[JsObject] + ("gaId" -> Json.toJson(gaId.value))
+            case None => parsed
+          }
+        }.toOption
+      } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
 
-        request.cookies.get("_ga") match {
-          case Some(gaId) => parsed.as[JsObject] + ("gaId" -> Json.toJson(gaId.value))
-          case None => parsed
-        }
-      }.toOption
-    } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
+      val paymentJSON = Json.obj(
+        "paymentId" -> paymentId,
+        "payerId" -> PayerID,
+      )
 
-    val paymentJSON = Json.obj(
-      "paymentId" -> paymentId,
-      "payerId" -> PayerID
-    )
+      val isTestUser = testUsers.isTestUser(request)
+      val userAgent = request.headers.get("user-agent")
 
-    val isTestUser = testUsers.isTestUser(request)
-    val userAgent = request.headers.get("user-agent")
-
-    paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)
-      .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country))
-  }
+      paymentAPIService
+        .executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)
+        .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country))
+    }
 }

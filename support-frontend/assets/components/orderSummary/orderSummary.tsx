@@ -1,6 +1,5 @@
-import { SvgInfo } from '@guardian/src-icons';
+import { SvgInfo } from '@guardian/source-react-components';
 import type { ReactNode } from 'react';
-import React from 'react';
 import 'components/gridImage/gridImage';
 import * as styles from './orderSummaryStyles';
 

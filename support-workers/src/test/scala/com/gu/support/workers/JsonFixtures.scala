@@ -9,7 +9,15 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState, DigitalSubscriptionGiftRedemptionState, GuardianWeeklyState, PaperState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
+  ContributionState,
+  DigitalSubscriptionCorporateRedemptionState,
+  DigitalSubscriptionDirectPurchaseState,
+  DigitalSubscriptionGiftPurchaseState,
+  DigitalSubscriptionGiftRedemptionState,
+  GuardianWeeklyState,
+  PaperState,
+}
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.StripeGatewayDefault
 import io.circe.parser
@@ -23,8 +31,11 @@ import java.util.UUID
 object JsonFixtures {
 
   def wrapFixture(string: String): ByteArrayInputStream =
-    JsonWrapper(parser.parse(string).toOption.get, None, RequestInfo(testUser = false, failed = false, Nil, accountExists = false))
-      .asJson.noSpaces.asInputStream
+    JsonWrapper(
+      parser.parse(string).toOption.get,
+      None,
+      RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
+    ).asJson.noSpaces.asInputStream
 
   def user(id: String = idId): User =
     User(
@@ -41,7 +52,7 @@ object JsonFixtures {
         Some("n1 9gu"),
         Country.UK,
       ),
-      deliveryInstructions = Some("Leave with neighbour")
+      deliveryInstructions = Some("Leave with neighbour"),
     )
   def userJson(id: String = idId): String =
     s"""
@@ -121,15 +132,17 @@ object JsonFixtures {
         Some("n1 9gu"),
         Country.UK,
       ),
-      deliveryAddress = Some(Address(
-        Some("90 york way"),
-        None,
-        Some("london"),
-        None,
-        Some("n1 9gu"),
-        Country.UK,
-      )),
-      deliveryInstructions = Some("Leave with neighbour")
+      deliveryAddress = Some(
+        Address(
+          Some("90 york way"),
+          None,
+          Some("london"),
+          None,
+          Some("n1 9gu"),
+          Country.UK,
+        ),
+      ),
+      deliveryInstructions = Some("Leave with neighbour"),
     )
 
   def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""
@@ -309,7 +322,11 @@ object JsonFixtures {
           "userAgent": "Test"
         }"""
 
-  def createStripeSourcePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
+  def createStripeSourcePaymentMethodContributionJson(
+      billingPeriod: BillingPeriod = Monthly,
+      amount: BigDecimal = 5,
+      currency: Currency = GBP,
+  ): String =
     s"""{
           $requestIdJson,
           ${userJson()},
@@ -325,7 +342,11 @@ object JsonFixtures {
           "userAgent": "Test"
         }"""
 
-  def createStripePaymentMethodPaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5, currency: Currency = GBP): String =
+  def createStripePaymentMethodPaymentMethodContributionJson(
+      billingPeriod: BillingPeriod = Monthly,
+      amount: BigDecimal = 5,
+      currency: Currency = GBP,
+  ): String =
     s"""{
           $requestIdJson,
           ${userJson()},
@@ -414,10 +435,12 @@ object JsonFixtures {
         "0033E00001Cq8D2QAJ",
         "0013E00001AU6xcQAD",
       ),
-      Some(SalesforceContactRecord(
-        "0033E00001Cq8D2QAJ",
-        "0013E00001AU6xcQAD",
-      ))
+      Some(
+        SalesforceContactRecord(
+          "0033E00001Cq8D2QAJ",
+          "0013E00001AU6xcQAD",
+        ),
+      ),
     )
   }
   val salesforceContactJson =
@@ -447,7 +470,7 @@ object JsonFixtures {
       ContributionState(
         Contribution(5, GBP, billingPeriod),
         stripePaymentMethodObj,
-        salesforceContact
+        salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
@@ -466,7 +489,7 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         None,
-        salesforceContact
+        salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
@@ -484,7 +507,7 @@ object JsonFixtures {
       DigitalSubscriptionCorporateRedemptionState(
         DigitalPack(GBP, Annual),
         RedemptionData(RedemptionCode("it-mutable123").toOption.get),
-        salesforceContact
+        salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
@@ -506,12 +529,12 @@ object JsonFixtures {
           "McRecipent",
           "gift.recipient@gu.com",
           None,
-          new LocalDate(2020, 1, 1)
+          new LocalDate(2020, 1, 1),
         ),
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         None,
-        salesforceContacts
+        salesforceContacts,
       ),
       requestId,
       user(),
@@ -521,7 +544,7 @@ object JsonFixtures {
       None,
       None,
       None,
-      None
+      None,
     ).asJson.spaces2
 
   def createDigiPackGiftRedemptionJson(code: String): String =
@@ -538,7 +561,7 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         Some("DJP8L27FY"),
-        salesforceContact
+        salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
@@ -548,7 +571,7 @@ object JsonFixtures {
       None,
       None,
       None,
-      None
+      None,
     ).asJson.spaces2
 
   val createEverydayPaperSubscriptionJson =
@@ -559,7 +582,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC),
         None,
-        salesforceContact
+        salesforceContact,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
@@ -569,10 +592,13 @@ object JsonFixtures {
       None,
       None,
       None,
-      None
+      None,
     ).asJson.spaces2
 
-  def createGuardianWeeklySubscriptionJson(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode] = None): String =
+  def createGuardianWeeklySubscriptionJson(
+      billingPeriod: BillingPeriod,
+      maybePromoCode: Option[PromoCode] = None,
+  ): String =
     CreateZuoraSubscriptionState(
       GuardianWeeklyState(
         userJsonWithDeliveryAddress,
@@ -581,7 +607,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         maybePromoCode,
-        salesforceContacts
+        salesforceContacts,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
@@ -591,24 +617,26 @@ object JsonFixtures {
       maybePromoCode,
       None,
       None,
-      None
+      None,
     ).asJson.spaces2
 
   val guardianWeeklyGiftJson =
     CreateZuoraSubscriptionState(
       GuardianWeeklyState(
         userJsonWithDeliveryAddress,
-        Some(WeeklyGiftRecipient(
-          Some(Title.Mr),
-          "Harry",
-          "Ramsden",
-          None
-        )),
+        Some(
+          WeeklyGiftRecipient(
+            Some(Title.Mr),
+            "Harry",
+            "Ramsden",
+            None,
+          ),
+        ),
         GuardianWeekly(GBP, Quarterly, RestOfWorld),
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
-        salesforceContacts
+        salesforceContacts,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
@@ -637,7 +665,7 @@ object JsonFixtures {
         }
      """
 
-  //This Json uses a test Stripe token which causes Stripe to return a card_declined response, but the product is a digital pack
+  // This Json uses a test Stripe token which causes Stripe to return a card_declined response, but the product is a digital pack
   val digipackCardDeclinedStripeJson =
     """
     {
@@ -911,7 +939,7 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         Some("DJRHYMDS8"),
-        salesforceContact
+        salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
@@ -921,7 +949,7 @@ object JsonFixtures {
       Some("DJRHYMDS8"),
       None,
       None,
-      None
+      None,
     ).asJson.spaces2
 
   def getPaymentMethodJson(billingAccountId: String, userId: String): String =

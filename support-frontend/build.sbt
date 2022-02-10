@@ -5,9 +5,9 @@ version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
 
-testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
+SeleniumTest / testOptions := Seq(Tests.Filter(seleniumTestFilter))
 
-testOptions in Test := Seq(Tests.Filter(unitTestFilter))
+Test / testOptions := Seq(Tests.Filter(unitTestFilter))
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",

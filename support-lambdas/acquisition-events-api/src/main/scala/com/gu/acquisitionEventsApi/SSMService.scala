@@ -23,11 +23,10 @@ object SSMService {
       .withWithDecryption(true)
       .withRecursive(false)
 
-    Try(client.getParametersByPath(request))
-      .toEither
+    Try(client.getParametersByPath(request)).toEither
       .leftMap(error => error.getMessage)
-      .flatMap {result =>
-        val params = result.getParameters.asScala.toList.map{parameter =>
+      .flatMap { result =>
+        val params = result.getParameters.asScala.toList.map { parameter =>
           parameter.getName -> parameter.getValue
         }.toMap
 
@@ -38,7 +37,11 @@ object SSMService {
           privateKey <- params.get(s"$path/privateKey")
           privateKeyId <- params.get(s"$path/privateKeyId")
         } yield BigQueryConfig(
-          projectId, clientId, clientEmail, privateKey, privateKeyId
+          projectId,
+          clientId,
+          clientEmail,
+          privateKey,
+          privateKeyId,
         )
 
         config match {

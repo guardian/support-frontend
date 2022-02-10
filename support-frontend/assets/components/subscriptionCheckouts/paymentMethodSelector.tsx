@@ -1,7 +1,11 @@
-import { css } from '@emotion/core';
-import { SvgCreditCard, SvgDirectDebit, SvgPayPal } from '@guardian/src-icons';
-import { Radio, RadioGroup } from '@guardian/src-radio';
-import React from 'react';
+import { css } from '@emotion/react';
+import {
+	Radio,
+	RadioGroup,
+	SvgCreditCard,
+	SvgDirectDebit,
+	SvgPayPal,
+} from '@guardian/source-react-components';
 import type { Node } from 'react';
 import Rows from 'components/base/rows';
 import 'helpers/types/option';

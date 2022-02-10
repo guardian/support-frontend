@@ -1,10 +1,13 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { brand, brandAlt } from '@guardian/src-foundations/palette';
-import { body } from '@guardian/src-foundations/typography';
-import React from 'react';
+import {
+	body,
+	brand,
+	brandAlt,
+	from,
+	space,
+} from '@guardian/source-foundations';
+import * as React from 'react';
 
 export type ListItemText = {
 	content: string;

@@ -15,20 +15,22 @@ class Codec[T](enc: Encoder[T], dec: Decoder[T]) extends Encoder[T] with Decoder
   override def apply(c: HCursor): Result[T] = dec.apply(c)
 }
 
-object Codec
-{
+object Codec {
 
   def deriveCodec[A](implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedAsObjectEncoder[A]]): Codec[A] =
     new Codec(deriveEncoder, deriveDecoder)
 
-  def capitalizingCodec[A](implicit decode: Lazy[DerivedDecoder[A]], encode: Lazy[DerivedAsObjectEncoder[A]]): Codec[A] =
+  def capitalizingCodec[A](implicit
+      decode: Lazy[DerivedDecoder[A]],
+      encode: Lazy[DerivedAsObjectEncoder[A]],
+  ): Codec[A] =
     new Codec(capitalizingEncoder, decapitalizingDecoder)
 
   def decapitalizingDecoder[A](implicit decode: Lazy[DerivedDecoder[A]]): Decoder[A] =
     deriveDecoder[A].prepare(
       _.withFocus(
-        _.mapObject(decapitalizeFields)
-      )
+        _.mapObject(decapitalizeFields),
+      ),
     )
 
   def capitalizingEncoder[A](implicit encode: Lazy[DerivedAsObjectEncoder[A]]): Encoder.AsObject[A] =

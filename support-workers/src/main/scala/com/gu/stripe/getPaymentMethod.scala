@@ -9,7 +9,7 @@ import scala.concurrent.Future
 object getPaymentMethod {
 
   case class StripePaymentMethod(
-    card: StripeCard
+      card: StripeCard,
   )
   implicit val decoder = deriveDecoder[StripePaymentMethod]
 

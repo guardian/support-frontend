@@ -9,30 +9,33 @@ import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.typesafe.scalalogging.LazyLogging
 
 object CatalogService {
-  def apply(environment: TouchPointEnvironment): CatalogService = new CatalogService(environment, new S3CatalogProvider(environment))
+  def apply(environment: TouchPointEnvironment): CatalogService =
+    new CatalogService(environment, new S3CatalogProvider(environment))
 }
 
 class CatalogService(val environment: TouchPointEnvironment, jsonProvider: CatalogJsonProvider) extends LazyLogging {
 
   def getProductRatePlan(
-    product: Product,
-    billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions,
-    readerType: ReaderType = Direct,
+      product: Product,
+      billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions,
+      productOptions: ProductOptions,
+      readerType: ReaderType = Direct,
   ) =
     product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions, readerType)
 
-  private[this] def getGWRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions)
-    = getProductRatePlan(GuardianWeekly, billingPeriod, fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
+  private[this] def getGWRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions) =
+    getProductRatePlan(GuardianWeekly, billingPeriod, fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
 
   private[this] def fetchQuarterlyPrice(
-    quarterlyId: ProductRatePlanId,
-    sixWeeklyPriceList: Pricelist,
-    catalogPrices: List[Pricelist]
+      quarterlyId: ProductRatePlanId,
+      sixWeeklyPriceList: Pricelist,
+      catalogPrices: List[Pricelist],
   ) = {
-    Pricelist(sixWeeklyPriceList.productRatePlanId, sixWeeklyPriceList.savingVsRetail,
-      catalogPrices.find(_.productRatePlanId == quarterlyId).map(_.prices).getOrElse(sixWeeklyPriceList.prices)
+    Pricelist(
+      sixWeeklyPriceList.productRatePlanId,
+      sixWeeklyPriceList.savingVsRetail,
+      catalogPrices.find(_.productRatePlanId == quarterlyId).map(_.prices).getOrElse(sixWeeklyPriceList.prices),
     )
   }
 
@@ -42,15 +45,16 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     // price, ie. the quarterly price as the £6 is available through the introductory promotion object
     val ratePlanIdsToSwap = Map(
       getGWRatePlanId(SixWeekly, Domestic) -> getGWRatePlanId(postIntroductorySixForSixBillingPeriod, Domestic),
-      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(postIntroductorySixForSixBillingPeriod, RestOfWorld)
+      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(postIntroductorySixForSixBillingPeriod, RestOfWorld),
     )
 
     Catalog(
       c.prices.map(priceList =>
-        ratePlanIdsToSwap.get(priceList.productRatePlanId)
+        ratePlanIdsToSwap
+          .get(priceList.productRatePlanId)
           .map(fetchQuarterlyPrice(_, priceList, c.prices))
-          .getOrElse(priceList)
-      )
+          .getOrElse(priceList),
+      ),
     )
   }
 
@@ -61,13 +65,15 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
       attempt.fold(
         err => {
           logger.error(s"Failed to load the catalog, error was: $err")
-          AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(AwsCloudWatchMetricSetup.catalogFailureRequest(environment))
+          AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(
+            AwsCloudWatchMetricSetup.catalogFailureRequest(environment),
+          )
           None
         },
         c => {
           logger.info(s"Successfully loaded the catalog")
           Some(adjustSixWeeklyPriceList(c))
-        }
+        },
       )
     }
   }
@@ -75,8 +81,22 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
   def getProductRatePlanFromId[T <: Product](product: T, id: ProductRatePlanId): Option[ProductRatePlan[Product]] = {
     // These can be removed when all gift subs have been switched over from the recurring charge to the one-time charge
     val legacyDigitalGiftRatePlans = List(
-      ProductRatePlan("2c92a0ff73add07f0173b99f14390afc", Quarterly, NoFulfilmentOptions, NoProductOptions, "Digital Subscription Three Month Gift", readerType = Gift),
-      ProductRatePlan("2c92a00773adc09d0173b99e4ded7f45", Annual, NoFulfilmentOptions, NoProductOptions, "Digital Subscription One Year Gift", readerType = Gift)
+      ProductRatePlan(
+        "2c92a0ff73add07f0173b99f14390afc",
+        Quarterly,
+        NoFulfilmentOptions,
+        NoProductOptions,
+        "Digital Subscription Three Month Gift",
+        readerType = Gift,
+      ),
+      ProductRatePlan(
+        "2c92a00773adc09d0173b99e4ded7f45",
+        Annual,
+        NoFulfilmentOptions,
+        NoProductOptions,
+        "Digital Subscription One Year Gift",
+        readerType = Gift,
+      ),
     )
     (product.ratePlans(environment) ++ legacyDigitalGiftRatePlans).find(_.id == id)
   }

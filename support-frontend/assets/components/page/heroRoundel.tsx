@@ -1,11 +1,13 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { brandAlt, neutral } from '@guardian/src-foundations/palette';
-import { headline } from '@guardian/src-foundations/typography';
+import {
+	brandAlt,
+	from,
+	headline,
+	neutral,
+	space,
+} from '@guardian/source-foundations';
 import type { ReactElement, ReactNode } from 'react';
-import React from 'react';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const roundelSizeMob = 100;

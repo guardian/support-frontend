@@ -1,9 +1,12 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { brandAlt } from '@guardian/src-foundations/palette';
-import { body, headline } from '@guardian/src-foundations/typography';
+import { css } from '@emotion/react';
+import {
+	body,
+	brandAlt,
+	from,
+	headline,
+	space,
+} from '@guardian/source-foundations';
 
 export const heroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;

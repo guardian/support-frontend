@@ -13,18 +13,22 @@ import services.stepfunctions.SupportWorkersClient
 import scala.concurrent.ExecutionContext
 
 class SupportWorkersStatus(
-  client: SupportWorkersClient,
-  components: ControllerComponents,
-  actionRefiners: CustomActionBuilders
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
+    client: SupportWorkersClient,
+    components: ControllerComponents,
+    actionRefiners: CustomActionBuilders,
+)(implicit val exec: ExecutionContext)
+    extends AbstractController(components)
+    with Circe {
   import actionRefiners._
   def status(jobId: String): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
-    client.status(jobId, request.uuid).fold(
-      { error =>
-        SafeLogger.error(scrub"Failed to get status of step function execution for job ${jobId} due to $error")
-        InternalServerError
-      },
-      response => Ok(response.asJson)
-    )
+    client
+      .status(jobId, request.uuid)
+      .fold(
+        { error =>
+          SafeLogger.error(scrub"Failed to get status of step function execution for job ${jobId} due to $error")
+          InternalServerError
+        },
+        response => Ok(response.asJson),
+      )
   }
 }

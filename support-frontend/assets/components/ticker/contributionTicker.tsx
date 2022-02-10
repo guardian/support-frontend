@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './contributionTicker.scss';
 // ---- Types ----- //

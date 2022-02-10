@@ -15,7 +15,6 @@ import org.joda.time.Months.months
 import org.scalatest.{Inspectors, Succeeded}
 import org.scalatest.flatspec.AsyncFlatSpec
 
-
 class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging with Inspectors {
 
   "Account" should "serialise to correct json" in {
@@ -102,8 +101,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
   }
 
   "DiscountRatePlanCharge with fixed end date" should "serialise and deserialize correctly" in {
-    val correct = parse(
-      """{
+    val correct = parse("""{
       "ProductRatePlanChargeId" : "12345",
       "DiscountPercentage" : 15.0,
       "UpToPeriods" : 3,
@@ -115,19 +113,20 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
 
     rpc.asJson should be(correct)
 
-    correct.as[DiscountRatePlanCharge].fold(
-      err => fail(err),
-      c => {
-        c.productRatePlanChargeId shouldBe "12345"
-        c.upToPeriods shouldBe Some(months(3))
-        c.discountPercentage shouldBe 15
-      }
-    )
+    correct
+      .as[DiscountRatePlanCharge]
+      .fold(
+        err => fail(err),
+        c => {
+          c.productRatePlanChargeId shouldBe "12345"
+          c.upToPeriods shouldBe Some(months(3))
+          c.discountPercentage shouldBe 15
+        },
+      )
   }
 
   "DiscountRatePlanCharge with no end date" should "serialise and deserialize correctly" in {
-    val correct = parse(
-      """{
+    val correct = parse("""{
       "ProductRatePlanChargeId" : "12345",
       "DiscountPercentage" : 15.0,
       "EndDateCondition" : "SubscriptionEnd"
@@ -137,28 +136,30 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
 
     rpc.asJson should be(correct)
 
-    correct.as[DiscountRatePlanCharge].fold(
-      err => fail(err),
-      c => {
-        c.productRatePlanChargeId shouldBe "12345"
-        c.upToPeriods shouldBe None
-        c.discountPercentage shouldBe 15
-      }
-    )
+    correct
+      .as[DiscountRatePlanCharge]
+      .fold(
+        err => fail(err),
+        c => {
+          c.productRatePlanChargeId shouldBe "12345"
+          c.upToPeriods shouldBe None
+          c.discountPercentage shouldBe 15
+        },
+      )
   }
 
   "ContributionRatePlanCharge" should "serialise and deserialize correctly" in {
-    testDecoding[ContributionRatePlanCharge](Fixtures.contributionRatePlanCharge,
+    testDecoding[ContributionRatePlanCharge](
+      Fixtures.contributionRatePlanCharge,
       c => {
         c.productRatePlanChargeId shouldBe "12345"
         c.price shouldBe 15
-      }
+      },
     )
   }
 
   "IntroductoryPriceRatePlanCharge" should "serialise correctly" in {
-    val correct = parse(
-      s"""{
+    val correct = parse(s"""{
         "ProductRatePlanChargeId" : "123",
         "Price" : 6,
         "TriggerDate" : "${LocalDate.now}",
@@ -192,36 +193,41 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
   }
 
   "PreviewSubscribeResponse" should "deserialise correctly when there is invoice data" in {
-    testDecoding[List[PreviewSubscribeResponse]](previewSubscribeResponseJson, response => {
-      response.headOption.fold(fail()) { previewSubscribeResponse =>
-        previewSubscribeResponse.invoiceData.length shouldBe 1
-      }
-      response.asJson shouldBe parse(previewSubscribeResponseJson).right.get
-    })
+    testDecoding[List[PreviewSubscribeResponse]](
+      previewSubscribeResponseJson,
+      response => {
+        response.headOption.fold(fail()) { previewSubscribeResponse =>
+          previewSubscribeResponse.invoiceData.length shouldBe 1
+        }
+        response.asJson shouldBe parse(previewSubscribeResponseJson).right.get
+      },
+    )
   }
 
   "GetAccountResponse" should "deserialise from json" in {
     testDecoding[GetAccountResponse](
       Fixtures.getAccountResponse,
-      _.basicInfo.accountNumber should be(Fixtures.accountNumber)
+      _.basicInfo.accountNumber should be(Fixtures.accountNumber),
     )
   }
 
   "Error" should "deserialise correctly" in {
     testDecoding[ZuoraError](
       Fixtures.error,
-      _.Code should be("53100320")
+      _.Code should be("53100320"),
     )
   }
 
   "ErrorResponse" should "deserialise correctly" in {
-    //The Zuora api docs say that the subscribe action returns a ZuoraErrorResponse
-    //but actually it returns a list of those.
-    testDecoding[List[ZuoraErrorResponse]](Fixtures.errorResponse,
-    errs => {
-      errs.head.errors.size should be(1)
-      errs.head.errors.head.Code should be("MISSING_REQUIRED_VALUE")
-    })
+    // The Zuora api docs say that the subscribe action returns a ZuoraErrorResponse
+    // but actually it returns a list of those.
+    testDecoding[List[ZuoraErrorResponse]](
+      Fixtures.errorResponse,
+      errs => {
+        errs.head.errors.size should be(1)
+        errs.head.errors.head.Code should be("MISSING_REQUIRED_VALUE")
+      },
+    )
   }
 
   "SubscriptionRedemptionQueryResponse" should "deserialise correctly" in {
@@ -241,7 +247,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
 
     testDecoding[SubscriptionRedemptionQueryResponse](
       jsonResponse,
-      subResponse => subResponse.records.head.contractEffectiveDate.getDayOfMonth shouldBe 9
+      subResponse => subResponse.records.head.contractEffectiveDate.getDayOfMonth shouldBe 9,
     )
   }
 

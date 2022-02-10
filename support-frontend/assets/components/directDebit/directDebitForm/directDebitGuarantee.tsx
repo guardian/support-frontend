@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
 type PropTypes = {

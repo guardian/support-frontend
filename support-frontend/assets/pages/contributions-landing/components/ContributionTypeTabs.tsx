@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import React from 'react';
+import { css } from '@emotion/react';
 import { connect } from 'react-redux';
 import type {
 	ContributionType,
@@ -21,7 +20,7 @@ import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,

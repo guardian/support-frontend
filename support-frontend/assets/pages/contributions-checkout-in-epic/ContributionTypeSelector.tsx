@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/src-choice-card';
-import { until } from '@guardian/src-foundations/mq';
+import { until } from '@guardian/source-foundations';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
 
 // ---- Component ---- //

@@ -1,8 +1,12 @@
 // ----- Imports ----- //
 // @ts-expect-error - required for hooks
-import { Button, buttonBrand, LinkButton } from '@guardian/src-button';
-import { ThemeProvider } from 'emotion-theming';
-import React, { useEffect, useState } from 'react';
+import { ThemeProvider } from '@emotion/react';
+import {
+	Button,
+	buttonThemeBrand,
+	LinkButton,
+} from '@guardian/source-react-components';
+import { useEffect, useState } from 'react';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
 	buttonStyles,
@@ -38,7 +42,7 @@ function FeedbackWidget({ display }: { display: boolean }) {
 							: 'Is this page helpful?'}
 					</p>
 					<span>
-						<ThemeProvider theme={buttonBrand}>
+						<ThemeProvider theme={buttonThemeBrand}>
 							<Button
 								priority="subdued"
 								size="small"
@@ -60,7 +64,7 @@ function FeedbackWidget({ display }: { display: boolean }) {
 								}}
 							/>
 						</ThemeProvider>
-						<ThemeProvider theme={buttonBrand}>
+						<ThemeProvider theme={buttonThemeBrand}>
 							<Button
 								priority="subdued"
 								size="small"

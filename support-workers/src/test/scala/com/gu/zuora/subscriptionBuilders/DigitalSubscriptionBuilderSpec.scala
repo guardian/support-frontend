@@ -14,7 +14,11 @@ import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
+  DigitalSubscriptionCorporateRedemptionState,
+  DigitalSubscriptionDirectPurchaseState,
+  DigitalSubscriptionGiftPurchaseState,
+}
 import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
@@ -46,8 +50,8 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           readerType = ReaderType.Corporate,
           promoCode = None,
           redemptionCode = Some(testCode),
-          corporateAccountId = Some("1")
-        )
+          corporateAccountId = Some("1"),
+        ),
       )
     }
 
@@ -67,13 +71,15 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         readerType = ReaderType.Direct,
         promoCode = None,
         redemptionCode = None,
-        corporateAccountId = None
-      )
+        corporateAccountId = None,
+      ),
     )
   }
 
   "SubscriptionData for a 3 monthly gift subscription purchase" should "be correct" in {
-    threeMonthGiftPurchase._1.subscriptionData.ratePlanData shouldBe List(RatePlanData(RatePlan("2c92c0f8778bf8f60177915b477714aa"), List(), List()))
+    threeMonthGiftPurchase._1.subscriptionData.ratePlanData shouldBe List(
+      RatePlanData(RatePlan("2c92c0f8778bf8f60177915b477714aa"), List(), List()),
+    )
     import threeMonthGiftPurchase._1.subscriptionData.subscription._
     autoRenew shouldBe false
     contractAcceptanceDate shouldBe saleDate
@@ -99,11 +105,15 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   val testCode = "test-code-123"
 
   lazy val corporateRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(
-    new CorporateCodeValidator({
-      case `testCode` => Future.successful(Some(Map(
-        "available" -> DynamoLookup.DynamoBoolean(true),
-        "corporateId" -> DynamoLookup.DynamoString("1")
-      )))
+    new CorporateCodeValidator({ case `testCode` =>
+      Future.successful(
+        Some(
+          Map(
+            "available" -> DynamoLookup.DynamoBoolean(true),
+            "corporateId" -> DynamoLookup.DynamoString("1"),
+          ),
+        ),
+      )
     }),
     DateGenerator(saleDate),
     TouchPointEnvironments.SANDBOX,
@@ -111,17 +121,20 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
-    )
+    ),
   )
 
   lazy val corporate =
-    corporateRedemptionBuilder.build(
-      DigitalSubscriptionCorporateRedemptionState(
-        DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */ , Corporate), // scalastyle:ignore null
-        RedemptionData(RedemptionCode(testCode).toOption.get),
-        SalesforceContactRecord("", ""),
+    corporateRedemptionBuilder
+      .build(
+        DigitalSubscriptionCorporateRedemptionState(
+          DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */, Corporate), // scalastyle:ignore null
+          RedemptionData(RedemptionCode(testCode).toOption.get),
+          SalesforceContactRecord("", ""),
+        ),
       )
-    ).value.map(_.toOption.get)
+      .value
+      .map(_.toOption.get)
 
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2),
@@ -132,7 +145,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
-    )
+    ),
   )
 
   lazy val subscriptionGiftPurchaseBuilder = new DigitalSubscriptionGiftPurchaseBuilder(
@@ -144,40 +157,56 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
-    )
+    ),
   )
 
   lazy val monthly =
-    subscriptionDirectPurchaseBuilder.build(
+    subscriptionDirectPurchaseBuilder
+      .build(
+        DigitalSubscriptionDirectPurchaseState(
+          Country.UK,
+          DigitalPack(GBP, Monthly),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
+          None,
+          SalesforceContactRecord("", ""),
+        ),
+        None,
+        None,
+      )
+      .toOption
+      .get
+
+  lazy val threeMonthGiftPurchase =
+    subscriptionGiftPurchaseBuilder
+      .build(
+        DigitalSubscriptionGiftPurchaseState(
+          Country.UK,
+          DigitalSubscriptionGiftRecipient("bob", "smith", "hi@gu.com", None, new LocalDate(2020, 12, 1)),
+          DigitalPack(GBP, Quarterly, Gift),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
+          None,
+          SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+        ),
+        None,
+        None,
+      )
+      .toOption
+      .get
+
+  lazy val csrSubscription = subscriptionDirectPurchaseBuilder
+    .build(
       DigitalSubscriptionDirectPurchaseState(
         Country.UK,
         DigitalPack(GBP, Monthly),
         PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
         SalesforceContactRecord("", ""),
-      ), None, None
-    ).toOption.get
-
-  lazy val threeMonthGiftPurchase =
-    subscriptionGiftPurchaseBuilder.build(
-      DigitalSubscriptionGiftPurchaseState(
-        Country.UK,
-        DigitalSubscriptionGiftRecipient("bob", "smith", "hi@gu.com", None, new LocalDate(2020, 12, 1)),
-        DigitalPack(GBP, Quarterly, Gift),
-        PayPalReferenceTransaction("baid", "hi@gu.com"),
-        None,
-        SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", "")))
-      ), None, None
-    ).toOption.get
-
-  lazy val csrSubscription = subscriptionDirectPurchaseBuilder.build(
-    DigitalSubscriptionDirectPurchaseState(
-      Country.UK,
-      DigitalPack(GBP, Monthly),
-      PayPalReferenceTransaction("baid", "hi@gu.com"),
-      None,
-      SalesforceContactRecord("", ""),
-    ), Some("Dan Csr"), Some("test_case_id")
-  ).toOption.get.subscriptionData
+      ),
+      Some("Dan Csr"),
+      Some("test_case_id"),
+    )
+    .toOption
+    .get
+    .subscriptionData
 
 }

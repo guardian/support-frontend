@@ -15,7 +15,8 @@ import scala.util.{Failure, Success}
 
 object StatusResults {
   val success = StatusResponse(Status.Success, "tracking123", None)
-  def failure(reason: CheckoutFailureReason): StatusResponse = StatusResponse(Status.Failure, "tracking123", Some(reason))
+  def failure(reason: CheckoutFailureReason): StatusResponse =
+    StatusResponse(Status.Failure, "tracking123", Some(reason))
   val pending = StatusResponse(Status.Pending, "tracking123", None)
 }
 
@@ -30,7 +31,12 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
   "checkoutStatus" should "detect a successful execution correctly" in {
     val checkoutSuccessState = new StateExitedEventDetails
     checkoutSuccessState.setName("CheckoutSuccess")
-    val actual = checkoutStatus(List(failure, Success(fillerState), Success(checkoutSuccessState), failure), mockStateWrapper, "tracking123")
+    val actual =
+      checkoutStatus(
+        List(failure, Success(fillerState), Success(checkoutSuccessState), failure),
+        mockStateWrapper,
+        "tracking123",
+      )
     actual shouldBe StatusResults.success
   }
 
@@ -43,8 +49,14 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
     val failedCheckoutState = new StateExitedEventDetails
     failedCheckoutState.setName("SucceedOrFailChoice")
     failedCheckoutState.setOutput("test")
-    when(mockStateWrapper.unWrap[CheckoutFailureState]("test")).thenReturn(Success(CheckoutFailureState(mock[User], CheckoutFailureReasons.Unknown)))
-    val actual = checkoutStatus(List(Success(fillerState), Success(fillerState), Success(failedCheckoutState)), mockStateWrapper, "tracking123")
+    when(mockStateWrapper.unWrap[CheckoutFailureState]("test"))
+      .thenReturn(Success(CheckoutFailureState(mock[User], CheckoutFailureReasons.Unknown)))
+    val actual =
+      checkoutStatus(
+        List(Success(fillerState), Success(fillerState), Success(failedCheckoutState)),
+        mockStateWrapper,
+        "tracking123",
+      )
     actual shouldBe StatusResults.failure(CheckoutFailureReasons.Unknown)
   }
 

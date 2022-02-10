@@ -19,10 +19,18 @@ object CacheControl {
 
   val noCache: (String, String) = "Cache-Control" -> "no-cache, private"
 
-  private def standardDirectives(maxAge: FiniteDuration, staleWhileRevalidate: FiniteDuration, staleIfErrors: FiniteDuration) =
+  private def standardDirectives(
+      maxAge: FiniteDuration,
+      staleWhileRevalidate: FiniteDuration,
+      staleIfErrors: FiniteDuration,
+  ) =
     s"max-age=${maxAge.toSeconds}, stale-while-revalidate=${staleWhileRevalidate.toSeconds}, stale-if-error=${staleIfErrors.toSeconds}"
 
-  def defaultCacheHeaders(maxAge: FiniteDuration, browserAge: FiniteDuration, now: DateTime = DateTime.now): List[(String, String)] = {
+  def defaultCacheHeaders(
+      maxAge: FiniteDuration,
+      browserAge: FiniteDuration,
+      now: DateTime = DateTime.now,
+  ): List[(String, String)] = {
     val expires = now.plusSeconds(browserAge.toSeconds.toInt)
 
     List(
@@ -30,7 +38,7 @@ object CacheControl {
       CacheControl.browser(browserAge),
       "Expires" -> expires.toHttpDateTimeString,
       "Date" -> now.toHttpDateTimeString,
-      "Vary" -> "DNT"
+      "Vary" -> "DNT",
     )
   }
 }

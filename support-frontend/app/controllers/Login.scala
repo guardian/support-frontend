@@ -10,12 +10,13 @@ import scala.concurrent.ExecutionContext
 class Login(
     val authConfig: GoogleAuthConfig,
     override val wsClient: WSClient,
-    val controllerComponents: ControllerComponents
+    val controllerComponents: ControllerComponents,
 )(implicit executionContext: ExecutionContext)
-  extends LoginSupport with BaseController {
-  /**
-   * Shows UI for login button and logout error feedback
-   */
+    extends LoginSupport
+    with BaseController {
+
+  /** Shows UI for login button and logout error feedback
+    */
   def login: Action[AnyContent] = Action { request =>
     val error = request.flash.get("error")
     Ok(views.html.login(error)).withHeaders(CacheControl.noCache)

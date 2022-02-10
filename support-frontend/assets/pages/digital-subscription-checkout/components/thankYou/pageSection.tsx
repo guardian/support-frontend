@@ -1,8 +1,5 @@
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { until } from '@guardian/src-foundations/mq';
-import { neutral } from '@guardian/src-foundations/palette';
-import React from 'react';
+import { css } from '@emotion/react';
+import { neutral, space, until } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 
 const section = css`

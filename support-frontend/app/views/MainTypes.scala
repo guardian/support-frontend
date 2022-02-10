@@ -12,4 +12,3 @@ case class EmptyDiv(value: String) extends ReactDiv
 case class SSRContent(value: String, content: Html, classes: Option[String] = None) extends ReactDiv
 
 case class Preload(href: String, as: String, typeAttr: String)
-

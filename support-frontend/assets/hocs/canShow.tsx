@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import React from 'react';
+import * as React from 'react';
 // ----- Types ----- //
 type AugmentedProps<Props> = Props & {
 	isShown: boolean;

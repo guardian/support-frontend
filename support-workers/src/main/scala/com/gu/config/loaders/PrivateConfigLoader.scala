@@ -7,9 +7,8 @@ trait PrivateConfigLoader {
   def load(stage: Stage, public: Config): Config
 }
 
-/**
- * Loads private config from either /etc/gu or S3 depending on the environment
- */
+/** Loads private config from either /etc/gu or S3 depending on the environment
+  */
 
 object PrivateConfigLoader {
   def forEnvironment(loadFromS3: Boolean): PrivateConfigLoader =

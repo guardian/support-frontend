@@ -30,9 +30,13 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
     }
 
   private def parseJson(json: String): Option[Map[RefPath, String]] =
-    Json.parse(json).validate[Map[String, String]].asOpt.map(_.map {
-      case (key, value) => RefPath(key) -> value
-    })
+    Json
+      .parse(json)
+      .validate[Map[String, String]]
+      .asOpt
+      .map(_.map { case (key, value) =>
+        RefPath(key) -> value
+      })
 
   def getFileContentsAsHtml(file: RefPath): Option[StyleContent] = {
     lookup.get(file).map(base + _).map(_.replaceFirst("^/assets/", "")) flatMap { resourcePath =>
@@ -40,7 +44,7 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
     }
   }
 
-  protected def loadSsrHtmlCache: Map[String,Html] = {
+  protected def loadSsrHtmlCache: Map[String, Html] = {
     val files = env.getFile("conf/ssr-cache").listFiles.filter(_.getName.endsWith(".html"))
     val loadedHtml = for {
       file <- files
@@ -61,4 +65,4 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
 }
 
 case class AssetNotFoundException(assetPath: RefPath)
-  extends Exception(s"Cannot find asset $assetPath. You should run `yarn run build-dev`.")
+    extends Exception(s"Cannot find asset $assetPath. You should run `yarn run build-dev`.")

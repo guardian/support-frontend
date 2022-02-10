@@ -1,20 +1,12 @@
 // ----- Imports ----- //
-import { css } from '@emotion/core';
-import { space } from '@guardian/src-foundations';
-import { from } from '@guardian/src-foundations/mq';
-import { headline, textSans } from '@guardian/src-foundations/typography';
-import React from 'react';
+import { css } from '@emotion/react';
+import { from, headline, space, textSans } from '@guardian/source-foundations';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { myAccountUrl } from 'helpers/urls/externalLinks';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
-import { formatUserDate } from 'helpers/utilities/dateConversions';
-import SubscriptionsSurvey from './subscriptionSurvey';
-import { HeroPicture } from './heroPicture';
-import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	Collection,
@@ -26,7 +18,12 @@ import 'helpers/internationalisation/countryGroup';
 import type { FormFields } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { myAccountUrl } from 'helpers/urls/externalLinks';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 import AppsSection from './appsSection';
+import { HeroPicture } from './heroPicture';
+import SubscriptionsSurvey from './subscriptionSurvey';
 
 type MarketingConsent =
 	typeof import('components/subscriptionCheckouts/thankYou/marketingConsentContainer').default;

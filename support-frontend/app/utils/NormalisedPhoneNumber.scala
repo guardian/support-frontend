@@ -27,10 +27,10 @@ object NormalisedTelephoneNumber {
     }
     val validated = withError.filterOrElse(
       phoneNumberUtil.isValidNumber,
-      s"We tried to normalise number $phoneNumber, countryCode: $countryCode but it was not a valid number"
+      s"We tried to normalise number $phoneNumber, countryCode: $countryCode but it was not a valid number",
     )
     validated.map(parsed =>
-      NormalisedTelephoneNumber(parsed.getCountryCode.toString, parsed.getNationalNumber.toString)
+      NormalisedTelephoneNumber(parsed.getCountryCode.toString, parsed.getNationalNumber.toString),
     )
   }
 

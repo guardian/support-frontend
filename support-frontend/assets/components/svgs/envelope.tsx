@@ -1,4 +1,4 @@
-import React from 'react'; // An envelope icon
+// An envelope icon
 
 export default function SvgEnvelope() {
 	return (

@@ -1,10 +1,14 @@
 import type { SerializedStyles } from '@emotion/react';
-import { css } from '@emotion/react';
-import { Button, buttonReaderRevenue, LinkButton } from '@guardian/src-button';
-import { neutral, space } from '@guardian/src-foundations';
+import { css, ThemeProvider } from '@emotion/react';
+import { neutral, space } from '@guardian/source-foundations';
+import {
+	Button,
+	buttonThemeReaderRevenue,
+	LinkButton,
+} from '@guardian/source-react-components';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
-import { ThemeProvider } from 'emotion-theming';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import StripePaymentRequestButtonContainer from 'components/StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import type {
@@ -134,7 +138,7 @@ export function ContributionsCheckoutForm({
 							</div>
 
 							<div css={styles.secondaryCtaContainer}>
-								<ThemeProvider theme={buttonReaderRevenue}>
+								<ThemeProvider theme={buttonThemeReaderRevenue}>
 									<LinkButton
 										href={getSupportUrl(contributionType, amount)}
 										onClick={onAlternativePaymentButtonClicked}
@@ -189,7 +193,7 @@ function FallbackCtas({
 	return (
 		<div css={styles.fallbackCtasContainer}>
 			<div>
-				<ThemeProvider theme={buttonReaderRevenue}>
+				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
 						href={getSupportUrl(contributionType, amount)}
 						onClick={onPrimaryCtaClicked}

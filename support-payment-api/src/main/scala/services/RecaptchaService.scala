@@ -22,29 +22,33 @@ class RecaptchaService(wsClient: WSClient, config: RecaptchaConfig)(implicit ec:
   val recaptchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
 
   def verify(token: String): EitherT[Future, StripeApiError, RecaptchaResponse] =
-    wsClient.url(recaptchaEndpoint)
+    wsClient
+      .url(recaptchaEndpoint)
       .withQueryStringParameters("secret" -> config.secretKey, "response" -> token)
       .withHttpHeaders("Content-length" -> 0.toString)
       .withMethod("POST")
       .execute()
       .attemptT
       .leftMap(err => StripeApiError.fromString(err.toString, None))
-      .subflatMap {
-        resp =>
-          resp.json
-            .validate[RecaptchaResponse]
-            .asEither
-            .leftMap {
-              err => StripeApiError.fromString(err.mkString(","), None)
-            }
+      .subflatMap { resp =>
+        resp.json
+          .validate[RecaptchaResponse]
+          .asEither
+          .leftMap { err =>
+            StripeApiError.fromString(err.mkString(","), None)
+          }
       }
 }
 
 object RecaptchaService {
   def fromRecaptchaConfig(config: RecaptchaConfig)(implicit ws: WSClient, pool: DefaultThreadPool) =
-    Validated.catchNonFatal {
-      new RecaptchaService(ws, config)
-    }.leftMap { err =>
-      InitializationError(s"unable to instantiate RecaptchaService for config: $config. Error trace: ${err.getMessage}")
-    }
+    Validated
+      .catchNonFatal {
+        new RecaptchaService(ws, config)
+      }
+      .leftMap { err =>
+        InitializationError(
+          s"unable to instantiate RecaptchaService for config: $config. Error trace: ${err.getMessage}",
+        )
+      }
 }
