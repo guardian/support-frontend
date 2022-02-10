@@ -2,11 +2,11 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 18,
-            "TS2322": 118,
+            "TS2305": 17,
+            "TS2322": 113,
             "TS2578": 7,
             "TS2339": 19,
-            "TS2345": 96,
+            "TS2345": 95,
             "TS7006": 54,
             "TS6133": 9,
             "TS7031": 18,
@@ -39,7 +39,6 @@
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
             "assets/components/asyncronously/asyncronously.ts": 2,
-            "assets/components/content/content.tsx": 2,
             "assets/components/footerCompliant/Footer.tsx": 4,
             "assets/components/forms/customFields/options.tsx": 1,
             "assets/components/forms/label.tsx": 2,
@@ -80,7 +79,6 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
-            "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx": 5,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/contributionsLandingReducer.ts": 5,
@@ -194,10 +192,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/content/content.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/footerCompliant/Footer.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -266,10 +260,6 @@
         {
             "path": "assets/components/asyncronously/asyncronously.ts",
             "message": "Type 'ComponentType<any>' is not assignable to type 'null'."
-        },
-        {
-            "path": "assets/components/content/content.tsx",
-            "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
@@ -454,22 +444,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"disabled\" | ... 5 more ... | \"icon\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'false | \"Please select a payment method\"' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type 'RecentlySignedInExistingPaymentMethod' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type '{ '& + div': { display: string; width: string; margin: number; justifyContent: string; }; '& + div svg': { width: string; height: string; }; '&:not(:checked) + div svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Type '{ '& + div': { display: string; width: string; margin: number; justifyContent: string; }; '& + div svg': { width: string; height: string; }; '&:not(:checked) + div svg': { filter: string; }; }' is not assignable to type 'SerializedStyles | SerializedStyles[] | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
@@ -1156,10 +1130,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
             "message": "Argument of type 'string' is not assignable to parameter of type 'PaymentMethod'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/PaymentMethodSelector.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ countryId: string; countryGroupId: CountryGroupId; currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; ... 7 more ...; checkoutFormHasBeenSubmitted: boolean; } & { ...; }, PropTypes>>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",

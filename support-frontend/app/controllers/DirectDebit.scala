@@ -10,11 +10,13 @@ import services.{GoCardlessFrontendServiceProvider, TestUserService}
 import scala.concurrent.ExecutionContext
 
 class DirectDebit(
-                   actionBuilders: CustomActionBuilders,
-                   components: ControllerComponents,
-                   goCardlessServiceProvider: GoCardlessFrontendServiceProvider,
-                   testUsers: TestUserService
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
+    actionBuilders: CustomActionBuilders,
+    components: ControllerComponents,
+    goCardlessServiceProvider: GoCardlessFrontendServiceProvider,
+    testUsers: TestUserService,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with Circe {
 
   import actionBuilders._
 

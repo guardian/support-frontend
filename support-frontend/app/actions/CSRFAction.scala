@@ -4,7 +4,8 @@ import play.api.mvc.{Action, BodyParser, Request, Result}
 import play.filters.csrf.{CSRFAddToken, CSRFCheck, CSRFConfig}
 import scala.concurrent.{ExecutionContext, Future}
 
-class CSRFAction[A](underlying: Action[A], config: CSRFConfig, addToken: CSRFAddToken, checkToken: CSRFCheck) extends Action[A] {
+class CSRFAction[A](underlying: Action[A], config: CSRFConfig, addToken: CSRFAddToken, checkToken: CSRFCheck)
+    extends Action[A] {
 
   private val wrapped = addToken(underlying)
   private val wrappedWithCheck = checkToken(wrapped)

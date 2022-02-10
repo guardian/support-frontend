@@ -8,9 +8,10 @@ import model.{Environment, InitializationError}
 
 case class AmazonPayConfig(merchantId: String, accessKey: String, secretKey: String, sandboxMode: Boolean)
 
-  object AmazonPayConfig {
+object AmazonPayConfig {
 
-    implicit val amazonPayConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, AmazonPayConfig] = new ParameterStoreLoadable[Environment, AmazonPayConfig] {
+  implicit val amazonPayConfigParameterStoreLoadable: ParameterStoreLoadable[Environment, AmazonPayConfig] =
+    new ParameterStoreLoadable[Environment, AmazonPayConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
         new GetParametersByPathRequest()
@@ -18,10 +19,15 @@ case class AmazonPayConfig(merchantId: String, accessKey: String, secretKey: Str
           .withRecursive(false)
           .withWithDecryption(true)
 
-      override def decode(environment: Environment, data: Map[String, String]): Validated[InitializationError, AmazonPayConfig] = {
+      override def decode(
+          environment: Environment,
+          data: Map[String, String],
+      ): Validated[InitializationError, AmazonPayConfig] = {
         val validator = new ParameterStoreValidator[AmazonPayConfig, Environment](environment, data); import validator._
         val sandboxMode = environment.enumEntry == Environment.Test
-        (validate("us-merchant-id"), validate("us-access-key"), validate("us-secret-key"), validated(sandboxMode)).mapN(AmazonPayConfig.apply)
+        (validate("us-merchant-id"), validate("us-access-key"), validate("us-secret-key"), validated(sandboxMode)).mapN(
+          AmazonPayConfig.apply,
+        )
       }
     }
-  }
+}

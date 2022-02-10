@@ -8,6 +8,6 @@ object GetAddressIOConfig {
   def fromConfig(config: Config): GetAddressIOConfig =
     GetAddressIOConfig(
       config.getString("get-address-io-api.url"),
-      config.getString("get-address-io-api.key")
+      config.getString("get-address-io-api.key"),
     )
 }

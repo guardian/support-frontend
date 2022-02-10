@@ -12,9 +12,8 @@ import java.time.LocalDate
 class QueryZuoraLambdaSpec extends AsyncFlatSpec with Matchers {
 
   QueryZuoraLambda.getClass.getSimpleName should "be able to run a query" in {
-    QueryZuoraLambda.queryZuora(DEV, Incremental).map(
-      resultState =>
-        resultState.attemptedQueryTime.toLocalDate shouldBe LocalDate.now
-    )
+    QueryZuoraLambda
+      .queryZuora(DEV, Incremental)
+      .map(resultState => resultState.attemptedQueryTime.toLocalDate shouldBe LocalDate.now)
   }
 }

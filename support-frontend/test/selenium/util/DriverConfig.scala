@@ -43,7 +43,13 @@ class DriverConfig {
 
   def quit(): Unit = webDriver.quit()
 
-  def addCookie(name: String, value: String, domain: Option[String] = None, path: String = "/", date: Option[Date] = None): Unit = {
+  def addCookie(
+      name: String,
+      value: String,
+      domain: Option[String] = None,
+      path: String = "/",
+      date: Option[Date] = None,
+  ): Unit = {
     webDriver.manage.addCookie(new Cookie(name, value, domain.orNull, path, date.orNull))
   }
 

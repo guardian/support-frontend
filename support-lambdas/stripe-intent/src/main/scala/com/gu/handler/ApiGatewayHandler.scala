@@ -23,7 +23,7 @@ object ApiGatewayResponse {
     "Content-Type" -> "application/json",
     "Access-Control-Allow-Origin" -> (if (stage == Stages.PROD) "https://support.theguardian.com" else "*"),
     "Access-Control-Allow-Headers" -> "*",
-    "Access-Control-Allow-Methods" -> "*"
+    "Access-Control-Allow-Methods" -> "*",
   )
 
   def apply[Response: Encoder](httpResponseCode: Int, response: Response, stage: Stage): ApiGatewayResponse =
@@ -31,8 +31,8 @@ object ApiGatewayResponse {
   implicit val encoder: Encoder[ApiGatewayResponse] = deriveEncoder
 }
 
-abstract class ApiGatewayHandler[Request: Decoder, Environment](
-  implicit executionContext: ExecutionContext
+abstract class ApiGatewayHandler[Request: Decoder, Environment](implicit
+    executionContext: ExecutionContext,
 ) extends JsonLambda[ApiGatewayRequest, Environment] {
 
   // should not change any global state

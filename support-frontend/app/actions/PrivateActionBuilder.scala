@@ -10,7 +10,7 @@ class PrivateActionBuilder(
     checkToken: CSRFCheck,
     csrfConfig: CSRFConfig,
     val parser: BodyParser[AnyContent],
-    val executionContext: ExecutionContext
+    val executionContext: ExecutionContext,
 ) extends ActionBuilder[Request, AnyContent] {
 
   private implicit val ec = executionContext

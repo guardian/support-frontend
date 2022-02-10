@@ -31,14 +31,16 @@ trait ZuoraSubscribeService {
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]]
 }
 
-class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
-  extends WebServiceHelper[ZuoraErrorResponse] with ZuoraSubscribeService {
+class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit
+    ec: ExecutionContext,
+) extends WebServiceHelper[ZuoraErrorResponse]
+    with ZuoraSubscribeService {
 
   override val wsUrl: String = baseUrl.getOrElse(config.url)
   override val httpClient: FutureHttpClient = client
   val authHeaders = Map(
     "apiSecretAccessKey" -> config.password,
-    "apiAccessKeyId" -> config.username
+    "apiAccessKeyId" -> config.username,
   )
 
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
@@ -47,20 +49,26 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   override def getAccountFields(identityId: IdentityId, now: DateTime): Future[List[DomainAccount]] = {
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
     val queryData = QueryData(
-      s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and ${ZuoraService.updatedClause(now)}"
+      s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}' and ${ZuoraService
+          .updatedClause(now)}",
     )
-    postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromAccountRecord))
+    postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(
+      _.records.map(DomainAccount.fromAccountRecord),
+    )
   }
 
-  def getObjectAccount(accountId:String): Future[GetObjectAccountResponse] =
+  def getObjectAccount(accountId: String): Future[GetObjectAccountResponse] =
     get[GetObjectAccountResponse](s"object/account/$accountId", authHeaders)
 
   override def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]] =
-    get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map { subscriptionsResponse =>
-      subscriptionsResponse.subscriptions.map(DomainSubscription.fromSubscription)
+    get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map {
+      subscriptionsResponse =>
+        subscriptionsResponse.subscriptions.map(DomainSubscription.fromSubscription)
     }
 
-  override def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] =
+  override def previewSubscribe(
+      previewSubscribeRequest: PreviewSubscribeRequest,
+  ): Future[List[PreviewSubscribeResponse]] =
     postJson[List[PreviewSubscribeResponse]]("action/subscribe", previewSubscribeRequest.asJson, authHeaders)
 
   override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
@@ -90,9 +98,11 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     } yield ddId).value
   }
 
-  override def decodeError(responseBody: String)(implicit errorDecoder: Decoder[ZuoraErrorResponse]): Either[circe.Error, ZuoraErrorResponse] =
-    //The Zuora api docs say that the subscribe action returns
-    //a ZuoraErrorResponse but actually it returns a list of those.
+  override def decodeError(responseBody: String)(implicit
+      errorDecoder: Decoder[ZuoraErrorResponse],
+  ): Either[circe.Error, ZuoraErrorResponse] =
+    // The Zuora api docs say that the subscribe action returns
+    // a ZuoraErrorResponse but actually it returns a list of those.
     decode[List[ZuoraErrorResponse]](responseBody).map(_.head)
 
 }
@@ -100,7 +110,8 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 object ZuoraService {
 
   def updatedClause(now: DateTime): String = {
-    val recentDays = 28 // the step functions only try for 1 day, so 28 would be ample to find subs already created in this execution
+    val recentDays =
+      28 // the step functions only try for 1 day, so 28 would be ample to find subs already created in this execution
     val recently = now.minusDays(recentDays).toString(ISODateTimeFormat.dateTimeNoMillis())
     s"UpdatedDate > '$recently'"
   }

@@ -21,34 +21,40 @@ import scala.concurrent.duration._
 @IntegrationTest
 class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
-  def uatService: ZuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(true), RequestRunners.configurableFutureRunner(30.seconds))
+  def uatService: ZuoraService =
+    new ZuoraService(
+      Configuration.load().zuoraConfigProvider.get(true),
+      RequestRunners.configurableFutureRunner(30.seconds),
+    )
 
-  def uatGiftService: ZuoraGiftService = new ZuoraGiftService(Configuration.load().zuoraConfigProvider.get(true), Stages.DEV, RequestRunners.configurableFutureRunner(30.seconds))
+  def uatGiftService: ZuoraGiftService =
+    new ZuoraGiftService(
+      Configuration.load().zuoraConfigProvider.get(true),
+      Stages.DEV,
+      RequestRunners.configurableFutureRunner(30.seconds),
+    )
 
   // actual sub "CreatedDate": "2017-12-07T15:47:21.000+00:00",
   val earlyDate = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)
 
   "ZuoraService" should "retrieve an account" in {
-    uatService.getAccount(Fixtures.accountNumber).map {
-      response =>
-        response.success should be(true)
-        response.basicInfo.accountNumber should be(Fixtures.accountNumber)
+    uatService.getAccount(Fixtures.accountNumber).map { response =>
+      response.success should be(true)
+      response.basicInfo.accountNumber should be(Fixtures.accountNumber)
     }
   }
 
   it should "retrieve account ids from an Identity id" in {
-    uatService.getAccountFields(IdentityId("104725102").get, earlyDate).map {
-      response =>
-        response.nonEmpty should be(true)
+    uatService.getAccountFields(IdentityId("104725102").get, earlyDate).map { response =>
+      response.nonEmpty should be(true)
     }
   }
 
   it should "retrieve subscription redemption information from a redemption code" in {
     val redemptionCode = "gd12-it-test1"
-    uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).toOption.get).map {
-      response =>
-        response.records.size shouldBe 1
-        response.records.head.gifteeIdentityId shouldBe None
+    uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).toOption.get).map { response =>
+      response.records.size shouldBe 1
+      response.records.head.gifteeIdentityId shouldBe None
     }
   }
 
@@ -66,10 +72,11 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve subscriptions from an account id" in {
-    uatService.getSubscriptions(ZuoraAccountNumber("A00084679")).map {
-      response =>
-        response.nonEmpty should be(true)
-        response.head.ratePlans.head.productRatePlanId should be(Configuration.load().zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId)
+    uatService.getSubscriptions(ZuoraAccountNumber("A00084679")).map { response =>
+      response.nonEmpty should be(true)
+      response.head.ratePlans.head.productRatePlanId should be(
+        Configuration.load().zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId,
+      )
     }
   }
 
@@ -78,7 +85,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       uatService,
       UUID.fromString("f131bfb4-bcd9-31e6-0000-00000001ac69"),
       IdentityId("104725102").get,
-      DateGenerator(earlyDate)
+      DateGenerator(earlyDate),
     ).map {
       _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
     }
@@ -89,7 +96,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       uatService,
       UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"),
       IdentityId("104725102").get,
-      DateGenerator(earlyDate)
+      DateGenerator(earlyDate),
     ).map {
       _ should be(None)
     }
@@ -98,47 +105,44 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   it should "retrieve a default paymentMethodId from an account number" in {
     val accountNumber = "A00084679"
     val defaultPaymentMethodId = Some("2c92c0f8757974cc01757a3583e54333")
-    uatService.getDefaultPaymentMethodId(accountNumber).map {
-      response =>
-        response should be(defaultPaymentMethodId)
+    uatService.getDefaultPaymentMethodId(accountNumber).map { response =>
+      response should be(defaultPaymentMethodId)
     }
   }
 
   it should "retrieve a Direct Debit mandateId from a valid paymentMethodId" in {
     val defaultPaymentMethodId = "2c92c0f8757974cc01757a3583e54333"
     val mandateId = "Y5MD5CC"
-    uatService.getDirectDebitMandateId(defaultPaymentMethodId).map {
-      response =>
-        response should be(Some(mandateId))
+    uatService.getDirectDebitMandateId(defaultPaymentMethodId).map { response =>
+      response should be(Some(mandateId))
     }
   }
 
   it should "return None when given an invalid paymentMethodId" in {
     val invalidPaymentMethodId = "xxxx"
-    uatService.getDirectDebitMandateId(invalidPaymentMethodId).map {
-      response =>
-        response should be(None)
+    uatService.getDirectDebitMandateId(invalidPaymentMethodId).map { response =>
+      response should be(None)
     }
   }
 
   it should "retrieve a Direct Debit mandateId from a valid account number" in {
     val accountNumber = "A00084679"
     val mandateId = Some("Y5MD5CC")
-    uatService.getMandateIdFromAccountNumber(accountNumber).map {
-      response =>
-        response should be(mandateId)
+    uatService.getMandateIdFromAccountNumber(accountNumber).map { response =>
+      response should be(mandateId)
     }
   }
 
   it should "return None when given an invalid account number" in {
     val invalidAccountNumber = "xxxx"
-    uatService.getMandateIdFromAccountNumber(invalidAccountNumber).map {
-      response =>
-        response should be(None)
+    uatService.getMandateIdFromAccountNumber(invalidAccountNumber).map { response =>
+      response should be(None)
     }
   }
 
-  "Preview request" should "succeed" in doRequest(Left(PreviewSubscribeRequest.fromSubscribe(creditCardSubscriptionRequest(GBP).subscribes.head, 13)))
+  "Preview request" should "succeed" in doRequest(
+    Left(PreviewSubscribeRequest.fromSubscribe(creditCardSubscriptionRequest(GBP).subscribes.head, 13)),
+  )
 
   "Subscribe request" should "succeed" in doRequest(Right(creditCardSubscriptionRequest(GBP)))
 
@@ -153,14 +157,18 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   it should "work for a paper subscription" in doRequest(Right(directDebitSubscriptionRequestPaper))
 
   private def doRequest(request: Either[PreviewSubscribeRequest, SubscribeRequest]) = {
-    //Accounts will be created (or previewed) in Sandbox
-    val zuoraService = new ZuoraService(Configuration.load().zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
+    // Accounts will be created (or previewed) in Sandbox
+    val zuoraService = new ZuoraService(
+      Configuration.load().zuoraConfigProvider.get(),
+      RequestRunners.configurableFutureRunner(30.seconds),
+    )
     val futureResponse = request.fold(zuoraService.previewSubscribe, zuoraService.subscribe)
-    futureResponse.map {
-      response =>
+    futureResponse
+      .map { response =>
         response.head.success should be(true)
-    }.recover {
-      case e: ZuoraErrorResponse => fail(e)
-    }
+      }
+      .recover { case e: ZuoraErrorResponse =>
+        fail(e)
+      }
   }
 }

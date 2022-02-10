@@ -36,25 +36,32 @@ object RunITTests {
     logger = log
     val exists = new File(tempJar).exists()
     val result = for {
-      _ <- if (exists) Success(()) else {
-        val jarUrl = s"s3://support-workers-dist/support/${stage}/it-tests/support-workers-it.jar"
-        log(s"getting s3 file: $jarUrl")
-        copyJar(new AmazonS3URI(jarUrl))
-      }
+      _ <-
+        if (exists) Success(())
+        else {
+          val jarUrl = s"s3://support-workers-dist/support/${stage}/it-tests/support-workers-it.jar"
+          log(s"getting s3 file: $jarUrl")
+          copyJar(new AmazonS3URI(jarUrl))
+        }
       a = Array(
-        "-R", tempJar,
+        "-R",
+        tempJar,
         "-e",
-        "-q", "Spec",//otherwise we get an out of memory metaspace error - the jar is way too big
-        "-C", "com.gu.ITTestReporter"
+        "-q",
+        "Spec", // otherwise we get an out of memory metaspace error - the jar is way too big
+        "-C",
+        "com.gu.ITTestReporter",
       )
       _ <- Try(Runner.main(a)) // unfortunately calls System.exit(1) if any tests fail...
     } yield ()
     result match {
-      case Failure(exception) => log(s"Failed with exception ${exception.toString}")
+      case Failure(exception) =>
+        log(s"Failed with exception ${exception.toString}")
         exception.printStackTrace(System.out)
         System.exit(9)
         "not possible"
-      case _ => log("RAN OK!")
+      case _ =>
+        log("RAN OK!")
         "Finished and RAN OK!" // this won't happen because Runner calls System.exit
     }
   }
@@ -73,8 +80,8 @@ class ITTestReporter extends Reporter {
       MetricNamespace("support-frontend"),
       metricName,
       Map(MetricDimensionName("Stage") -> MetricDimensionValue(RunITTests.stage)),
-      value
-    )
+      value,
+    ),
   )
 
   val log = RunITTests.logger
@@ -89,7 +96,10 @@ class ITTestReporter extends Reporter {
         putMetric(MetricName("it-test-failed"), 999999.0).get
       case runCompleted: RunCompleted =>
         log(s"RUN COMPLETED - sending metric: $event")
-        putMetric(MetricName("it-test-succeeded"), runCompleted.summary.map(_.testsSucceededCount.toDouble).getOrElse(0.0)).get
+        putMetric(
+          MetricName("it-test-succeeded"),
+          runCompleted.summary.map(_.testsSucceededCount.toDouble).getOrElse(0.0),
+        ).get
       case _ =>
         log(s"event: $event")
     }

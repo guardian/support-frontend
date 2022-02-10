@@ -137,13 +137,13 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
 
       decode[Switches](json) mustBe (Right(
         Switches(
-          oneOffPaymentMethods = OneOffPaymentMethodSwitches(On,On,On,On,On),
-          recurringPaymentMethods = RecurringPaymentMethodSwitches(On,On,On,On,On,On,On,Off,Off),
-          subscriptionsSwitches = SubscriptionsSwitches(On,On,On),
+          oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On),
+          recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, Off),
+          subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
           featureSwitches = FeatureSwitches(On, On),
           campaignSwitches = CampaignSwitches(Off, Off),
-          recaptchaSwitches = RecaptchaSwitches(On, On)
-        )
+          recaptchaSwitches = RecaptchaSwitches(On, On),
+        ),
       ))
     }
   }

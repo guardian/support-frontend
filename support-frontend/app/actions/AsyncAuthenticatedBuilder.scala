@@ -16,14 +16,14 @@ import scala.concurrent.{ExecutionContext, Future}
 // TODO: considering porting this to identity-play-auth.
 // scalastyle:on
 final class AsyncAuthenticatedBuilder(
-  userinfo: RequestHeader => Future[Option[User]],
-  override val parser: BodyParser[AnyContent]
+    userinfo: RequestHeader => Future[Option[User]],
+    override val parser: BodyParser[AnyContent],
 )(implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[OptionalAuthRequest, AnyContent] { // scalastyle:ignore
+    extends ActionBuilder[OptionalAuthRequest, AnyContent] { // scalastyle:ignore
 
   override def invokeBlock[BODYTYPE](
-    request: Request[BODYTYPE],
-    block: AuthenticatedRequest[BODYTYPE, Option[User]] => Future[Result]
+      request: Request[BODYTYPE],
+      block: AuthenticatedRequest[BODYTYPE, Option[User]] => Future[Result],
   ): Future[Result] =
     for {
       user <- userinfo(request)

@@ -22,26 +22,29 @@ object RatePlanCharge {
 
   implicit val discountEncoder: Encoder[DiscountRatePlanCharge] = capitalizingEncoder[DiscountRatePlanCharge]
     .mapJsonObject { jo =>
-      jo.toMap.find { case (field, value) => field == upToPeriods && value != Json.Null }
-        .map(_ => jo
-          .add("UpToPeriodsType", Json.fromString("Months"))
-          .add(endDateCondition, Json.fromString(fixedPeriod))
+      jo.toMap
+        .find { case (field, value) => field == upToPeriods && value != Json.Null }
+        .map(_ =>
+          jo
+            .add("UpToPeriodsType", Json.fromString("Months"))
+            .add(endDateCondition, Json.fromString(fixedPeriod)),
         )
-        .getOrElse(jo
-          .add(endDateCondition, Json.fromString(subscriptionEnd))
-          .remove(upToPeriods)
+        .getOrElse(
+          jo
+            .add(endDateCondition, Json.fromString(subscriptionEnd))
+            .remove(upToPeriods),
         )
     }
   implicit val discountDecoder: Decoder[DiscountRatePlanCharge] = decapitalizingDecoder
 
-  implicit val contributionEncoder: Encoder[ContributionRatePlanCharge] = capitalizingEncoder[ContributionRatePlanCharge]
-    .mapJsonObject(_
-      .add(endDateCondition, Json.fromString(subscriptionEnd)))
+  implicit val contributionEncoder: Encoder[ContributionRatePlanCharge] =
+    capitalizingEncoder[ContributionRatePlanCharge]
+      .mapJsonObject(_.add(endDateCondition, Json.fromString(subscriptionEnd)))
   implicit val contributionDecoder: Decoder[ContributionRatePlanCharge] = decapitalizingDecoder
 
-  implicit val introductoryPriceEncoder: Encoder[IntroductoryPriceRatePlanCharge] = capitalizingEncoder[IntroductoryPriceRatePlanCharge]
-    .mapJsonObject(_
-      .add(triggerEvent, Json.fromString(specificEvent)))
+  implicit val introductoryPriceEncoder: Encoder[IntroductoryPriceRatePlanCharge] =
+    capitalizingEncoder[IntroductoryPriceRatePlanCharge]
+      .mapJsonObject(_.add(triggerEvent, Json.fromString(specificEvent)))
   implicit val introductoryPriceDecoder: Decoder[IntroductoryPriceRatePlanCharge] = decapitalizingDecoder
 
   implicit val encodeRatePlanCharge: Encoder[RatePlanCharge] = Encoder.instance {
@@ -63,20 +66,20 @@ sealed trait RatePlanCharge {
 }
 
 case class DiscountRatePlanCharge(
-  productRatePlanChargeId: ProductRatePlanChargeId,
-  discountPercentage: Double,
-  upToPeriods: Option[Months]
+    productRatePlanChargeId: ProductRatePlanChargeId,
+    discountPercentage: Double,
+    upToPeriods: Option[Months],
 ) extends RatePlanCharge
 
 case class ContributionRatePlanCharge(
-  productRatePlanChargeId: ProductRatePlanChargeId,
-  price: BigDecimal
+    productRatePlanChargeId: ProductRatePlanChargeId,
+    price: BigDecimal,
 ) extends RatePlanCharge
 
 case class IntroductoryPriceRatePlanCharge(
-  productRatePlanChargeId: ProductRatePlanChargeId,
-  price: BigDecimal,
-  triggerDate: LocalDate,
+    productRatePlanChargeId: ProductRatePlanChargeId,
+    price: BigDecimal,
+    triggerDate: LocalDate,
 ) extends RatePlanCharge
 
 sealed trait PeriodType
@@ -120,7 +123,6 @@ object ReaderType {
   case object Unknown extends ReaderType {
     val value = "Unknown"
   }
-
 
   def fromString(s: String): ReaderType =
     s match {
@@ -177,38 +179,38 @@ case class SubscriptionProductFeature(featureId: String)
 
 object Subscription {
 
-  implicit val encoder: Encoder[Subscription] = capitalizingEncoder[Subscription].mapJsonObject(_
-    .copyField("PromoCode", "PromotionCode__c")
-    .renameField("PromoCode", "InitialPromotionCode__c")
-    .renameField("ReaderType", "ReaderType__c")
-    .renameField("RedemptionCode", "RedemptionCode__c")
-    .renameField("CorporateAccountId", "CorporateAccountId__c")
-    .renameField("CreatedRequestId", "CreatedRequestId__c")
-    .renameField("GiftNotificationEmailDate", "GiftNotificationEmailDate__c")
-    .renameField("AcquisitionSource", "AcquisitionSource__c")
-    .renameField("CreatedByCsr", "CreatedByCSR__c")
-    .renameField("AcquisitionCase", "AcquisitionCase__c")
+  implicit val encoder: Encoder[Subscription] = capitalizingEncoder[Subscription].mapJsonObject(
+    _.copyField("PromoCode", "PromotionCode__c")
+      .renameField("PromoCode", "InitialPromotionCode__c")
+      .renameField("ReaderType", "ReaderType__c")
+      .renameField("RedemptionCode", "RedemptionCode__c")
+      .renameField("CorporateAccountId", "CorporateAccountId__c")
+      .renameField("CreatedRequestId", "CreatedRequestId__c")
+      .renameField("GiftNotificationEmailDate", "GiftNotificationEmailDate__c")
+      .renameField("AcquisitionSource", "AcquisitionSource__c")
+      .renameField("CreatedByCsr", "CreatedByCSR__c")
+      .renameField("AcquisitionCase", "AcquisitionCase__c"),
   )
 }
 
 case class Subscription(
-  contractEffectiveDate: LocalDate,
-  contractAcceptanceDate: LocalDate,
-  termStartDate: LocalDate,
-  createdRequestId: String,
-  autoRenew: Boolean = true,
-  initialTermPeriodType: PeriodType = Month,
-  initialTerm: Int = 12,
-  renewalTerm: Int = 12,
-  termType: String = "TERMED",
-  readerType: ReaderType = ReaderType.Direct,
-  promoCode: Option[PromoCode] = None,
-  redemptionCode: Option[RawRedemptionCode] = None,
-  corporateAccountId: Option[String] = None,
-  giftNotificationEmailDate: Option[LocalDate] = None,
-  acquisitionSource: Option[AcquisitionSource] = None,
-  createdByCsr: Option[String] = None,
-  acquisitionCase: Option[String] = None,
+    contractEffectiveDate: LocalDate,
+    contractAcceptanceDate: LocalDate,
+    termStartDate: LocalDate,
+    createdRequestId: String,
+    autoRenew: Boolean = true,
+    initialTermPeriodType: PeriodType = Month,
+    initialTerm: Int = 12,
+    renewalTerm: Int = 12,
+    termType: String = "TERMED",
+    readerType: ReaderType = ReaderType.Direct,
+    promoCode: Option[PromoCode] = None,
+    redemptionCode: Option[RawRedemptionCode] = None,
+    corporateAccountId: Option[String] = None,
+    giftNotificationEmailDate: Option[LocalDate] = None,
+    acquisitionSource: Option[AcquisitionSource] = None,
+    createdByCsr: Option[String] = None,
+    acquisitionCase: Option[String] = None,
 )
 
 object RatePlanChargeData {
@@ -222,9 +224,9 @@ object RatePlanData {
 }
 
 case class RatePlanData(
-  ratePlan: RatePlan,
-  ratePlanChargeData: List[RatePlanChargeData],
-  subscriptionProductFeatureList: List[SubscriptionProductFeature]
+    ratePlan: RatePlan,
+    ratePlanChargeData: List[RatePlanChargeData],
+    subscriptionProductFeatureList: List[SubscriptionProductFeature],
 )
 
 object SubscriptionData {

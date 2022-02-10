@@ -21,14 +21,16 @@ object ResultBody {
 
   case class RequiresAction[A](data: A)
 
-  private def typeDiscriminatorEncoder[A : ClassTag](encoder: Encoder.AsObject[A]): Encoder.AsObject[A] =
+  private def typeDiscriminatorEncoder[A: ClassTag](encoder: Encoder.AsObject[A]): Encoder.AsObject[A] =
     encoder.mapJsonObject { obj =>
       obj.add("type", Json.fromString(classTag[A].runtimeClass.getSimpleName.toLowerCase))
     }
 
-  implicit def successEncoder[A : Encoder]: Encoder[Success[A]] = typeDiscriminatorEncoder(deriveEncoder[Success[A]])
+  implicit def successEncoder[A: Encoder]: Encoder[Success[A]] = typeDiscriminatorEncoder(deriveEncoder[Success[A]])
 
-  implicit def errorEncoderEncoder[A : Encoder]: Encoder[Error[A]] = typeDiscriminatorEncoder(deriveEncoder[Error[A]])
+  implicit def errorEncoderEncoder[A: Encoder]: Encoder[Error[A]] = typeDiscriminatorEncoder(deriveEncoder[Error[A]])
 
-  implicit def requiresActionEncoder[A : Encoder]: Encoder[RequiresAction[A]] = typeDiscriminatorEncoder(deriveEncoder[RequiresAction[A]])
+  implicit def requiresActionEncoder[A: Encoder]: Encoder[RequiresAction[A]] = typeDiscriminatorEncoder(
+    deriveEncoder[RequiresAction[A]],
+  )
 }

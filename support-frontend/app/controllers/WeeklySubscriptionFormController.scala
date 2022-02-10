@@ -20,16 +20,18 @@ import views.html.subscriptionCheckout
 import scala.concurrent.ExecutionContext
 
 class WeeklySubscriptionFormController(
-  priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  val assets: AssetsResolver,
-  val actionRefiners: CustomActionBuilders,
-  testUsers: TestUserService,
-  stripeConfigProvider: StripeConfigProvider,
-  payPalConfigProvider: PayPalConfigProvider,
-  components: ControllerComponents,
-  settingsProvider: AllSettingsProvider,
-  recaptchaConfigProvider: RecaptchaConfigProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    val assets: AssetsResolver,
+    val actionRefiners: CustomActionBuilders,
+    testUsers: TestUserService,
+    stripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
+    components: ControllerComponents,
+    settingsProvider: AllSettingsProvider,
+    recaptchaConfigProvider: RecaptchaConfigProvider,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
@@ -40,7 +42,10 @@ class WeeklySubscriptionFormController(
     Ok(weeklySubscriptionFormHtml(request.user, orderIsAGift)).withSettingsSurrogateKey
   }
 
-  private def weeklySubscriptionFormHtml(maybeIdUser: Option[IdUser], orderIsAGift: Boolean)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def weeklySubscriptionFormHtml(maybeIdUser: Option[IdUser], orderIsAGift: Boolean)(implicit
+      request: RequestHeader,
+      settings: AllSettings,
+  ): Html = {
     val title = "Support the Guardian | Guardian Weekly Subscription"
     val id = EmptyDiv("weekly-subscription-checkout-page")
     val js = "weeklySubscriptionCheckoutPage.js"
@@ -48,10 +53,11 @@ class WeeklySubscriptionFormController(
     val csrf = CSRF.getToken.value
 
     val uatMode = testUsers.isTestUser(request)
-    val defaultPromos = if (orderIsAGift)
-      DefaultPromotions.GuardianWeekly.Gift.all
-    else
-      DefaultPromotions.GuardianWeekly.NonGift.all
+    val defaultPromos =
+      if (orderIsAGift)
+        DefaultPromotions.GuardianWeekly.Gift.all
+      else
+        DefaultPromotions.GuardianWeekly.NonGift.all
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
     val readerType = if (orderIsAGift) Gift else Direct
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
@@ -70,9 +76,8 @@ class WeeklySubscriptionFormController(
       payPalConfigProvider.get(),
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
-      orderIsAGift
+      orderIsAGift,
     )
   }
-
 
 }

@@ -21,7 +21,8 @@ object AddressLineTransformer {
     val addressLine1MaybeSplit: Option[AddressLine] = addressLine1.map(singleAddressLine)
     val addressLine2MaybeSplit: Option[AddressLine] = addressLine2.map(singleAddressLine)
 
-    def concatStreetNames(firstStreetName: String, secondStreetName: String): String = s"$firstStreetName, $secondStreetName"
+    def concatStreetNames(firstStreetName: String, secondStreetName: String): String =
+      s"$firstStreetName, $secondStreetName"
 
     val combinedLine = (addressLine1MaybeSplit, addressLine2MaybeSplit) match {
       case (None, None) => None
@@ -42,7 +43,7 @@ object AddressLineTransformer {
 
   def clipForZuoraStreetNameLimit(addressLine: AddressLine): AddressLine = {
     if (addressLine.streetName.length > 100) {
-      //we are sometimes putting extra info into streetName but zuora's character limit is 100
+      // we are sometimes putting extra info into streetName but zuora's character limit is 100
       AddressLine(addressLine.streetNumber, addressLine.streetName.take(100))
     } else addressLine
   }
@@ -54,7 +55,7 @@ object AddressLine {
 
   def getAddressLine(address: Address): Option[String] = combinedAddressLine(
     address.lineOne,
-    address.lineTwo
+    address.lineTwo,
   ).map(asFormattedString)
 
   def asFormattedString(addressLine: AddressLine): String = {

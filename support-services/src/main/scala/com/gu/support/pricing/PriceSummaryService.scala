@@ -12,23 +12,27 @@ import org.joda.time.Months
 
 import scala.math.BigDecimal.RoundingMode
 
-class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
+class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService)
+    extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
-  def getPrices[T <: Product](product: T, promoCodes: List[PromoCode], readerType: ReaderType = Direct): ProductPrices = {
+  def getPrices[T <: Product](
+      product: T,
+      promoCodes: List[PromoCode],
+      readerType: ReaderType = Direct,
+  ): ProductPrices = {
     val promotions = promotionService.findPromotions(promoCodes)
-    product.supportedCountries(catalogService.environment).map(
-      countryGroup =>
-        countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions, readerType)
-    ).toMap
+    product
+      .supportedCountries(catalogService.environment)
+      .map(countryGroup => countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions, readerType))
+      .toMap
   }
 
-
   def getPricesForCountryGroup[T <: Product](
-    product: T,
-    countryGroup: CountryGroup,
-    promotions: List[PromotionWithCode],
-    readerType: ReaderType = Direct
+      product: T,
+      countryGroup: CountryGroup,
+      promotions: List[PromotionWithCode],
+      readerType: ReaderType = Direct,
   ): CountryGroupPrices = {
     val ratePlans = product.ratePlans(catalogService.environment).filter(_.readerType == readerType)
     val grouped = ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
@@ -43,30 +47,36 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     nestPriceLists(grouped)
   }
 
-  private def getSupportedRatePlansForCountryGroup(productRatePlans: List[ProductRatePlan[Product]], countryGroup: CountryGroup) =
+  private def getSupportedRatePlansForCountryGroup(
+      productRatePlans: List[ProductRatePlan[Product]],
+      countryGroup: CountryGroup,
+  ) =
     productRatePlans.filter(p => p.supportedTerritories.contains(countryGroup))
 
   private def filterCurrencies(maybePrices: Option[List[Price]], countryGroup: CountryGroup) =
-  // Filter the prices we return to only include the supported currencies for the current country group
+    // Filter the prices we return to only include the supported currencies for the current country group
     maybePrices
       .getOrElse(Nil)
       .filter(price => countryGroup.supportedCurrencies.contains(price.currency))
 
-  private def getPriceSummary(promotions: List[PromotionWithCode],
-    countryGroup: CountryGroup,
-    productRatePlan: ProductRatePlan[Product],
-    price: Price,
-    saving: Option[Int]
+  private def getPriceSummary(
+      promotions: List[PromotionWithCode],
+      countryGroup: CountryGroup,
+      productRatePlan: ProductRatePlan[Product],
+      price: Price,
+      saving: Option[Int],
   ) = {
     val promotionSummaries: List[PromotionSummary] = for {
       promotion <- promotions
       country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)
-      validPromotion <- promotionService.validatePromotion(
-        promotion,
-        country,
-        productRatePlan.id,
-        isRenewal = false
-      ).toOption //Not dealing with renewals for now
+      validPromotion <- promotionService
+        .validatePromotion(
+          promotion,
+          country,
+          productRatePlan.id,
+          isRenewal = false,
+        )
+        .toOption // Not dealing with renewals for now
     } yield getPromotionSummary(validPromotion, price, productRatePlan.billingPeriod)
 
     price.currency -> PriceSummary(
@@ -74,7 +84,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       saving,
       price.currency,
       productRatePlan.readerType == Gift,
-      promotionSummaries
+      promotionSummaries,
     )
   }
 
@@ -85,12 +95,13 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       description = promotion.description,
       promoCode = promoCode,
       discountedPrice = promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
-      numberOfDiscountedPeriods = promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
+      numberOfDiscountedPeriods =
+        promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
       discount = promotion.discount,
       freeTrialBenefit = promotion.freeTrial,
       incentive = promotion.incentive,
       introductoryPrice = promotion.introductoryPrice,
-      landingPage = promotion.landingPage
+      landingPage = promotion.landingPage,
     )
   }
 
@@ -98,9 +109,10 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     removeInvalidPricingOptions(groupedPriceList)
       .foldLeft(Map.empty[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]]]) {
         case (acc, ((fulfilment, productOptions, billing), list)) =>
-
-          val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]])
-          val existingBillingPeriods = existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, Map[Currency, PriceSummary]])
+          val existingProducts =
+            acc.getOrElse(fulfilment, Map.empty[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]])
+          val existingBillingPeriods =
+            existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, Map[Currency, PriceSummary]])
 
           val newBillingPeriods = existingBillingPeriods ++ Map(billing -> list)
           val newProducts = existingProducts ++ Map(productOptions -> newBillingPeriods)
@@ -113,7 +125,11 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
 }
 
 object PriceSummaryService {
-  def getDiscountedPrice(originalPrice: Price, discountBenefit: DiscountBenefit, billingPeriod: BillingPeriod): Price = {
+  def getDiscountedPrice(
+      originalPrice: Price,
+      discountBenefit: DiscountBenefit,
+      billingPeriod: BillingPeriod,
+  ): Price = {
     val scaledDiscount = getDiscountScaledToPeriod(discountBenefit, billingPeriod)
     val multiplier = (100 - scaledDiscount) / 100
     val newPrice = originalPrice.value * multiplier
@@ -124,11 +140,11 @@ object PriceSummaryService {
     Math.ceil(discountDuration.getMonths.toDouble / billingPeriod.monthsInPeriod.toDouble).toInt
 
   def getDiscountScaledToPeriod(discountBenefit: DiscountBenefit, billingPeriod: BillingPeriod): Double = {
-    //If the discount period doesn't cover the whole of the billing period (often the case for annual billing)
-    //we need to work out the percentage of the period that is covered and adjust the discount accordingly
+    // If the discount period doesn't cover the whole of the billing period (often the case for annual billing)
+    // we need to work out the percentage of the period that is covered and adjust the discount accordingly
 
-    //Also if the discount period isn't an exact multiple of the billing period, eg. a five month discount on
-    //a quarterly rate plan then we need to scale the discount and spread it over any billing periods affected
+    // Also if the discount period isn't an exact multiple of the billing period, eg. a five month discount on
+    // a quarterly rate plan then we need to scale the discount and spread it over any billing periods affected
 
     val percentageOfPeriodDiscounted = discountBenefit.durationMonths.fold(1.toDouble) { durationInMonths =>
       durationInMonths.getMonths.toDouble / billingPeriod.monthsInPeriod.toDouble

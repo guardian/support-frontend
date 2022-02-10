@@ -22,7 +22,7 @@ object Dependencies {
   def dependencyCheck: Unit = {
     assume(
       SupportFrontend.isAvailable,
-      s"${Dependencies.SupportFrontend.url} is unavailable! Please run support-frontend locally before running these tests."
+      s"${Dependencies.SupportFrontend.url} is unavailable! Please run support-frontend locally before running these tests.",
     )
   }
 

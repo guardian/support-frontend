@@ -9,7 +9,12 @@ import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, CorporateCodeValidator, DynamoTableAsync, RedemptionTable}
+import com.gu.support.redemption.corporate.{
+  CorporateCodeStatusUpdater,
+  CorporateCodeValidator,
+  DynamoTableAsync,
+  RedemptionTable,
+}
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
@@ -36,23 +41,24 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   val createZuoraHelper = new CreateZuoraSubscriptionHelper()
 
   "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
-    createZuoraHelper.createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly)
-    ).map(_ should matchPattern {
-          case s: SendThankYouEmailContributionState =>
-        })
+    createZuoraHelper
+      .createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
+      .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
+      })
   }
 
   it should "create an annual Zuora subscription" in {
-    createZuoraHelper.createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual)
-    ).map(_ should matchPattern {
-          case s: SendThankYouEmailContributionState =>
-        })
+    createZuoraHelper
+      .createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
+      .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
+      })
   }
 
   it should "create a Digital Pack subscription" in {
-    createZuoraHelper.createSubscription(createDigiPackZuoraSubscriptionJson).map(_ should matchPattern {
-          case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
-        })
+    createZuoraHelper
+      .createSubscription(createDigiPackZuoraSubscriptionJson)
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      })
   }
 
   it should "create a Digital Pack corporate subscription" in {
@@ -70,56 +76,71 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   it should "create a Digital Pack subscription with a discount" in {
-    createZuoraHelper.createSubscription(createDigiPackSubscriptionWithPromoJson).map(_ should matchPattern {
-          case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
-        })
+    createZuoraHelper
+      .createSubscription(createDigiPackSubscriptionWithPromoJson)
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      })
   }
 
   it should "create a Digital Pack subscription with a discount and free trial" in {
-    createZuoraHelper.createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson).map(_ should matchPattern {
-          case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
-        })
+    createZuoraHelper
+      .createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      })
   }
 
   it should "create an everyday paper subscription" in {
-    createZuoraHelper.createSubscription(createEverydayPaperSubscriptionJson).map(_ should matchPattern {
-          case s: SendThankYouEmailPaperState if s.product.productOptions == Everyday =>
-        })
+    createZuoraHelper
+      .createSubscription(createEverydayPaperSubscriptionJson)
+      .map(_ should matchPattern {
+        case s: SendThankYouEmailPaperState if s.product.productOptions == Everyday =>
+      })
   }
 
   it should "create an Annual Guardian Weekly subscription" in {
-    createZuoraHelper.createSubscription(createGuardianWeeklySubscriptionJson(Annual)).map(_ should matchPattern {
-          case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Annual =>
-        })
+    createZuoraHelper
+      .createSubscription(createGuardianWeeklySubscriptionJson(Annual))
+      .map(_ should matchPattern {
+        case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Annual =>
+      })
   }
 
   it should "create an Quarterly Guardian Weekly subscription" in {
-    createZuoraHelper.createSubscription(createGuardianWeeklySubscriptionJson(Quarterly)).map(_ should matchPattern {
-          case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Quarterly =>
-        })
+    createZuoraHelper
+      .createSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
+      .map(_ should matchPattern {
+        case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Quarterly =>
+      })
   }
 
   it should "create a 6 for 6 Guardian Weekly subscription" in {
-    createZuoraHelper.createSubscription(
-      createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix))
-    ).map(_ should matchPattern {
-          case s: SendThankYouEmailGuardianWeeklyState if s.paymentSchedule.payments.headOption.map(_.amount).contains(6) =>
-        })
+    createZuoraHelper
+      .createSubscription(
+        createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)),
+      )
+      .map(_ should matchPattern {
+        case s: SendThankYouEmailGuardianWeeklyState
+            if s.paymentSchedule.payments.headOption.map(_.amount).contains(6) =>
+      })
   }
 
   it should "create an Guardian Weekly gift subscription" in {
-    createZuoraHelper.createSubscription(guardianWeeklyGiftJson).map(_ should matchPattern {
-      case s: SendThankYouEmailGuardianWeeklyState if s.giftRecipient.isDefined =>
-    })
+    createZuoraHelper
+      .createSubscription(guardianWeeklyGiftJson)
+      .map(_ should matchPattern {
+        case s: SendThankYouEmailGuardianWeeklyState if s.giftRecipient.isDefined =>
+      })
   }
 
 }
 
-class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext) extends MockServicesCreator with MockContext {
+class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
+    extends MockServicesCreator
+    with MockContext {
 
   def createSubscription(
-    json: String,
-    giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService
+      json: String,
+      giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService,
   )(implicit executionContext: ExecutionContext): Future[SendThankYouEmailState] = {
     val createZuora = new CreateZuoraSubscription(mockServiceProvider(giftCodeGenerator))
 
@@ -131,8 +152,8 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
   }
 
   def createSubscriptionError(
-    json: String,
-    giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService
+      json: String,
+      giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService,
   )(implicit executionContext: ExecutionContext): Future[Option[ExecutionError]] = {
     val createZuora = new CreateZuoraSubscription(mockServiceProvider(giftCodeGenerator))
 
@@ -147,7 +168,8 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
 
-  val realZuoraGiftService = new ZuoraGiftService(realConfig.zuoraConfigProvider.get(), Stages.DEV, configurableFutureRunner(60.seconds))
+  val realZuoraGiftService =
+    new ZuoraGiftService(realConfig.zuoraConfigProvider.get(), Stages.DEV, configurableFutureRunner(60.seconds))
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 
@@ -168,10 +190,12 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
       .thenReturn(Future.successful(Nil))
     when(mockZuora.previewSubscribe(any[PreviewSubscribeRequest]))
       .thenAnswer((invocation: InvocationOnMock) =>
-        realZuoraService.previewSubscribe(invocation.getArguments.head.asInstanceOf[PreviewSubscribeRequest]))
+        realZuoraService.previewSubscribe(invocation.getArguments.head.asInstanceOf[PreviewSubscribeRequest]),
+      )
     when(mockZuora.subscribe(any[SubscribeRequest]))
       .thenAnswer((invocation: InvocationOnMock) =>
-        realZuoraService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
+        realZuoraService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]),
+      )
 
     when(mockZuora.config).thenReturn(realZuoraService.config)
     mockZuora
@@ -184,6 +208,6 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     (s => s.redemptionService, realRedemptionService),
     (s => s.config, realConfig),
     (s => s.giftCodeGenerator, giftCodeGenerator),
-    (s => s.catalogService, realCatalogService)
+    (s => s.catalogService, realCatalogService),
   )
 }

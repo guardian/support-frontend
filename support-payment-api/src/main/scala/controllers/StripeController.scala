@@ -16,11 +16,15 @@ import util.RequestBasedProvider
 import scala.concurrent.duration._
 
 class StripeController(
-  cc: ControllerComponents,
-  stripeBackendProvider: RequestBasedProvider[StripeBackend],
-  cloudWatchService: CloudWatchService
+    cc: ControllerComponents,
+    stripeBackendProvider: RequestBasedProvider[StripeBackend],
+    cloudWatchService: CloudWatchService,
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
+    extends AbstractController(cc)
+    with Circe
+    with JsonUtils
+    with StrictLogging
+    with CorsActionProvider {
 
   import model.CheckoutError.checkoutErrorEncoder
   import model.stripe.StripeJsonDecoder._
@@ -32,62 +36,75 @@ class StripeController(
     cloudWatchService,
     RateLimitingSettings(5, 5.hours),
     paymentProvider = PaymentProvider.Stripe,
-    stage = RequestEnvironments.stage
+    stage = RequestEnvironments.stage,
   )
 
   lazy val CorsAndRateLimitAction = CorsAction andThen RateLimitingAction
 
   // Stripe Checkout handler, still required for mobile apps payments
-  def executePayment: Action[LegacyStripeChargeRequest] = CorsAndRateLimitAction.async(circe.json[LegacyStripeChargeRequest]) { request =>
-    stripeBackendProvider.getInstanceFor(request)
-      .createCharge(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
-      .fold(
-        err => {
-          val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
-          new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
-        },
-        charge => Ok(ResultBody.Success(charge))
-      )
-  }.withLogging(this.getClass.getCanonicalName, "executePayment")
+  def executePayment: Action[LegacyStripeChargeRequest] = CorsAndRateLimitAction
+    .async(circe.json[LegacyStripeChargeRequest]) { request =>
+      stripeBackendProvider
+        .getInstanceFor(request)
+        .createCharge(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
+        .fold(
+          err => {
+            val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
+            new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
+          },
+          charge => Ok(ResultBody.Success(charge)),
+        )
+    }
+    .withLogging(this.getClass.getCanonicalName, "executePayment")
 
-  def processRefund: Action[StripeRefundHook] = Action(circe.json[StripeRefundHook]).async { request =>
-    stripeBackendProvider.getInstanceFor(request)
-      .processRefundHook(request.body)
-      .fold(
-        err => {
-          logger.error(s"Error processing stripe refund: ${err.getMessage}")
-          InternalServerError(ResultBody.Error(err.getMessage))
-        },
-        _ => Ok(ResultBody.Success("successfully processed Stripe refund webhook"))
-      )
-  }.withLogging(this.getClass.getCanonicalName, "processRefund")
+  def processRefund: Action[StripeRefundHook] = Action(circe.json[StripeRefundHook])
+    .async { request =>
+      stripeBackendProvider
+        .getInstanceFor(request)
+        .processRefundHook(request.body)
+        .fold(
+          err => {
+            logger.error(s"Error processing stripe refund: ${err.getMessage}")
+            InternalServerError(ResultBody.Error(err.getMessage))
+          },
+          _ => Ok(ResultBody.Success("successfully processed Stripe refund webhook")),
+        )
+    }
+    .withLogging(this.getClass.getCanonicalName, "processRefund")
 
-  def createPayment: Action[StripePaymentIntentRequest.CreatePaymentIntent] = CorsAndRateLimitAction.async(circe.json[StripePaymentIntentRequest.CreatePaymentIntent]) { request =>
-    stripeBackendProvider.getInstanceFor(request)
-      .createPaymentIntent(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
-      .fold(
-        err => {
-          val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
-          new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
-        },
-        {
-          case success: StripePaymentIntentsApiResponse.Success => Ok(ResultBody.Success("ok"))
-          case requiresAction: StripePaymentIntentsApiResponse.RequiresAction => Ok(ResultBody.RequiresAction(requiresAction))
-        }
-      )
-  }.withLogging(this.getClass.getCanonicalName, "createPayment")
+  def createPayment: Action[StripePaymentIntentRequest.CreatePaymentIntent] = CorsAndRateLimitAction
+    .async(circe.json[StripePaymentIntentRequest.CreatePaymentIntent]) { request =>
+      stripeBackendProvider
+        .getInstanceFor(request)
+        .createPaymentIntent(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
+        .fold(
+          err => {
+            val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
+            new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
+          },
+          {
+            case success: StripePaymentIntentsApiResponse.Success => Ok(ResultBody.Success("ok"))
+            case requiresAction: StripePaymentIntentsApiResponse.RequiresAction =>
+              Ok(ResultBody.RequiresAction(requiresAction))
+          },
+        )
+    }
+    .withLogging(this.getClass.getCanonicalName, "createPayment")
 
-  def confirmPayment: Action[StripePaymentIntentRequest.ConfirmPaymentIntent] = CorsAndRateLimitAction.async(circe.json[StripePaymentIntentRequest.ConfirmPaymentIntent]) { request =>
-    stripeBackendProvider.getInstanceFor(request)
-      .confirmPaymentIntent(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
-      .fold(
-        err => {
-          val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
-          new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
-        },
-        response => Ok(ResultBody.Success(response))
-      )
-  }.withLogging(this.getClass.getCanonicalName, "confirmPayment")
+  def confirmPayment: Action[StripePaymentIntentRequest.ConfirmPaymentIntent] = CorsAndRateLimitAction
+    .async(circe.json[StripePaymentIntentRequest.ConfirmPaymentIntent]) { request =>
+      stripeBackendProvider
+        .getInstanceFor(request)
+        .confirmPaymentIntent(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
+        .fold(
+          err => {
+            val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
+            new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
+          },
+          response => Ok(ResultBody.Success(response)),
+        )
+    }
+    .withLogging(this.getClass.getCanonicalName, "confirmPayment")
 
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls

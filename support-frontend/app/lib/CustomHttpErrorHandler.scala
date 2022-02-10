@@ -27,22 +27,29 @@ class CustomHttpErrorHandler(
     router: => Option[Router],
     val assets: AssetsResolver,
     settingsProvider: AllSettingsProvider,
-    stage: Stage
-)(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging with SettingsSurrogateKeySyntax {
+    stage: Stage,
+)(implicit val ec: ExecutionContext)
+    extends DefaultHttpErrorHandler(env, config, sourceMapper, router)
+    with LazyLogging
+    with SettingsSurrogateKeySyntax {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
-    super.onClientError(request, statusCode, message).map(_.withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*))
+    super
+      .onClientError(request, statusCode, message)
+      .map(_.withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*))
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] = {
     Future.successful(
-      NotFound(main(
-        "Error 404",
-        EmptyDiv("error-404-page"),
-        Left(RefPath("error404Page.js")),
-        Left(RefPath("error404Page.css"))
-      )()(assets, request, settingsProvider.getAllSettings()))
+      NotFound(
+        main(
+          "Error 404",
+          EmptyDiv("error-404-page"),
+          Left(RefPath("error404Page.js")),
+          Left(RefPath("error404Page.css")),
+        )()(assets, request, settingsProvider.getAllSettings()),
+      )
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
-        .withSettingsSurrogateKey
+        .withSettingsSurrogateKey,
     )
   }
 
@@ -54,10 +61,11 @@ class CustomHttpErrorHandler(
           "Error 500",
           EmptyDiv("error-500-page"),
           Left(RefPath("error500Page.js")),
-          Left(RefPath("error500Page.css"))
-        )()(assets, request, settingsProvider.getAllSettings()))
+          Left(RefPath("error500Page.css")),
+        )()(assets, request, settingsProvider.getAllSettings()),
+      )
         .withHeaders(CacheControl.noCache)
-        .withSettingsSurrogateKey
+        .withSettingsSurrogateKey,
     )
   }
 
@@ -72,12 +80,19 @@ class CustomHttpErrorHandler(
       case _ => "unknown line number, please check the logs"
     }
     val sanitizedExceptionDetails = s"Caused by: ${usefulException.cause} in $lineInfo"
-    val requestDetails = s"(${request.method}) [${request.path}]" // Use path, not uri, as query strings often contain things like ?api-key=my_secret
+    val requestDetails =
+      s"(${request.method}) [${request.path}]" // Use path, not uri, as query strings often contain things like ?api-key=my_secret
 
     // We are deliberately bypassing the SafeLogger here, because we need to use standard string interpolation to make this exception handling useful.
-    logger.error(SafeLogger.sanitizedLogMessage, s"Internal server error, for $requestDetails. $sanitizedExceptionDetails")
+    logger.error(
+      SafeLogger.sanitizedLogMessage,
+      s"Internal server error, for $requestDetails. $sanitizedExceptionDetails",
+    )
 
-    super.logServerError(request, usefulException) // We still want the full uri and stack trace in our logs, just not in Sentry
+    super.logServerError(
+      request,
+      usefulException,
+    ) // We still want the full uri and stack trace in our logs, just not in Sentry
   }
 
 }

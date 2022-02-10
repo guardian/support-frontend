@@ -20,7 +20,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     "USER" -> apiConfig.user,
     "PWD" -> apiConfig.password,
     "SIGNATURE" -> apiConfig.signature,
-    "VERSION" -> apiConfig.NVPVersion
+    "VERSION" -> apiConfig.NVPVersion,
   )
 
   private def logNVPResponse(response: QueryString) = {
@@ -70,7 +70,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   def retrieveEmail(baid: String): Future[Option[String]] = {
     val params = Map(
       "METHOD" -> "BillAgreementUpdate",
-      "REFERENCEID" -> baid
+      "REFERENCEID" -> baid,
     )
 
     for {
@@ -79,8 +79,10 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   }
 
   // Sets up a payment by contacting PayPal and returns the token.
-  def retrieveToken(returnUrl: String, cancelUrl: String)(billingDetails: PayPalBillingDetails): Future[Option[String]] = {
-    val noShipping = if(billingDetails.requireShippingAddress) "0" else "1"
+  def retrieveToken(returnUrl: String, cancelUrl: String)(
+      billingDetails: PayPalBillingDetails,
+  ): Future[Option[String]] = {
+    val noShipping = if (billingDetails.requireShippingAddress) "0" else "1"
     val paymentParams = Map(
       "METHOD" -> "SetExpressCheckout",
       "PAYMENTREQUEST_0_PAYMENTACTION" -> "SALE",
@@ -92,7 +94,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
       "RETURNURL" -> returnUrl,
       "CANCELURL" -> cancelUrl,
       "BILLINGTYPE" -> "MerchantInitiatedBilling",
-      "NOSHIPPING" -> noShipping
+      "NOSHIPPING" -> noShipping,
     )
 
     nvpRequest(paymentParams).map { resp =>
@@ -110,7 +112,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   def retrieveUserInformation(token: Token): Future[Option[PayPalUserDetails]] = {
     val paymentParams = Map(
       "METHOD" -> "GetExpressCheckoutDetails",
-      "TOKEN" -> token.token
+      "TOKEN" -> token.token,
     )
 
     nvpRequest(paymentParams).map { resp =>
@@ -124,7 +126,14 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
         shipToZip <- retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOZIP")
         shipToCountryCode <- retrieveNVPParam(resp, "PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE")
       } yield PayPalUserDetails(
-        firstName, lastName, email, shipToStreet, shipToCity, shipToState, shipToZip, shipToCountryCode
+        firstName,
+        lastName,
+        email,
+        shipToStreet,
+        shipToCity,
+        shipToState,
+        shipToZip,
+        shipToCountryCode,
       )
     }
   }
@@ -133,7 +142,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   def createBillingAgreement(token: Token): Future[Option[String]] = {
     val agreementParams = Map(
       "METHOD" -> "CreateBillingAgreement",
-      "TOKEN" -> token.token
+      "TOKEN" -> token.token,
     )
 
     nvpRequest(agreementParams).map { resp =>
@@ -141,4 +150,3 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     }
   }
 }
-

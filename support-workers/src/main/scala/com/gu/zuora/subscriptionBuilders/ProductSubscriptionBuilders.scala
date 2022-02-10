@@ -9,23 +9,32 @@ import com.gu.support.zuora.api._
 
 object ProductSubscriptionBuilders {
 
-  def validateRatePlan(maybeProductRatePlan: Option[ProductRatePlan[catalog.Product]], productDescription: String): ProductRatePlanId =
+  def validateRatePlan(
+      maybeProductRatePlan: Option[ProductRatePlan[catalog.Product]],
+      productDescription: String,
+  ): ProductRatePlanId =
     maybeProductRatePlan.map(_.id) match {
       case Some(value) => value
       case None => throw new CatalogDataNotFoundException(s"RatePlanId not found for $productDescription")
     }
 
   def applyPromoCodeIfPresent(
-    promotionService: PromotionService,
-    maybePromoCode: Option[PromoCode],
-    country: Country,
-    productRatePlanId: ProductRatePlanId,
-    subscriptionData: SubscriptionData
+      promotionService: PromotionService,
+      maybePromoCode: Option[PromoCode],
+      country: Country,
+      productRatePlanId: ProductRatePlanId,
+      subscriptionData: SubscriptionData,
   ): Either[PromoError, SubscriptionData] = {
     val withPromotion = maybePromoCode.map { promoCode =>
       for {
         promotionWithCode <- promotionService.findPromotion(promoCode)
-        subscriptionWithPromotion <- promotionService.applyPromotion(promotionWithCode, country, productRatePlanId, subscriptionData, isRenewal = false)
+        subscriptionWithPromotion <- promotionService.applyPromotion(
+          promotionWithCode,
+          country,
+          productRatePlanId,
+          subscriptionData,
+          isRenewal = false,
+        )
       } yield subscriptionWithPromotion
     }
 

@@ -7,7 +7,7 @@ case class AmountsSelection(amounts: List[Int], defaultAmount: Int)
 case class ContributionAmounts(
     ONE_OFF: AmountsSelection,
     MONTHLY: AmountsSelection,
-    ANNUAL: AmountsSelection
+    ANNUAL: AmountsSelection,
 )
 
 case class AmountsTestVariant(name: String, amounts: ContributionAmounts)
@@ -23,7 +23,7 @@ case class ConfiguredAmounts(
     AUDCountries: ConfiguredRegionAmounts,
     International: ConfiguredRegionAmounts,
     NZDCountries: ConfiguredRegionAmounts,
-    Canada: ConfiguredRegionAmounts
+    Canada: ConfiguredRegionAmounts,
 )
 
 object Amounts {

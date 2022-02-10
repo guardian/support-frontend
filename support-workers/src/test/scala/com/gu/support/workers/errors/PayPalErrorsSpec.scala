@@ -36,8 +36,7 @@ class PayPalErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
     val assertion = recoverToSucceededIf[RetryUnlimited] {
       createPaymentMethod.handleRequestFuture(wrapFixture(createPayPalPaymentMethodDigitalPackJson), outStream, context)
     }
-      assertion.onComplete { _ =>
-
+    assertion.onComplete { _ =>
       // Shut down the server. Instances cannot be reused.
       server.shutdown()
     }
@@ -46,16 +45,20 @@ class PayPalErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
   lazy private val timeOutServices = mockService(
     s => s.payPalService,
-    new PayPalService(Configuration.load().payPalConfigProvider.get(), RequestRunners.configurableFutureRunner(1.milliseconds))
+    new PayPalService(
+      Configuration.load().payPalConfigProvider.get(),
+      RequestRunners.configurableFutureRunner(1.milliseconds),
+    ),
   )
 
   private def errorServices(baseUrl: String) = {
     val conf = Configuration.load().payPalConfigProvider.get()
-    val mockConfig = PayPalConfig(conf.payPalEnvironment, conf.NVPVersion, baseUrl, conf.user, conf.password, conf.signature)
+    val mockConfig =
+      PayPalConfig(conf.payPalEnvironment, conf.NVPVersion, baseUrl, conf.user, conf.password, conf.signature)
     val payPal = new PayPalService(mockConfig, RequestRunners.configurableFutureRunner(10.seconds))
     mockService(
       s => s.payPalService,
-      payPal
+      payPal,
     )
   }
 

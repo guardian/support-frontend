@@ -21,34 +21,37 @@ object SubscriptionEmailFieldHelpers {
 
   def firstPayment(paymentSchedule: PaymentSchedule): Payment = paymentSchedule.payments.minBy(_.date)
 
-  def pluralise(num: Int, thing: String): String = if(num > 1) s"$num ${thing}s" else s"$num $thing"
+  def pluralise(num: Int, thing: String): String = if (num > 1) s"$num ${thing}s" else s"$num $thing"
 
   def introductoryPeriod(introductoryBillingPeriods: Int, billingPeriod: BillingPeriod): String =
     s"${pluralise(introductoryBillingPeriods, billingPeriod.noun)}"
 
-
   def describe(
-    paymentSchedule: PaymentSchedule,
-    billingPeriod: BillingPeriod,
-    currency: Currency,
-    promotion: Option[Promotion],
-    fixedTerm: Boolean = false
+      paymentSchedule: PaymentSchedule,
+      billingPeriod: BillingPeriod,
+      currency: Currency,
+      promotion: Option[Promotion],
+      fixedTerm: Boolean = false,
   ): String = {
-    promotion.flatMap(_.introductoryPrice)
-      .map(introductoryPrice => introductoryPriceDescription(paymentSchedule, billingPeriod, currency, introductoryPrice))
+    promotion
+      .flatMap(_.introductoryPrice)
+      .map(introductoryPrice =>
+        introductoryPriceDescription(paymentSchedule, billingPeriod, currency, introductoryPrice),
+      )
       .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency, fixedTerm))
   }
 
   def introductoryPriceDescription(
-    paymentSchedule: PaymentSchedule,
-    billingPeriod: BillingPeriod,
-    currency: Currency,
-    benefit: IntroductoryPriceBenefit
+      paymentSchedule: PaymentSchedule,
+      billingPeriod: BillingPeriod,
+      currency: Currency,
+      benefit: IntroductoryPriceBenefit,
   ): String =
     Try(paymentSchedule.payments.tail.head).fold(
       _ => "",
-      payment => s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(benefit.periodLength, benefit.periodType.toString.toLowerCase)}, " +
-        s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}"
+      payment =>
+        s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(benefit.periodLength, benefit.periodType.toString.toLowerCase)}, " +
+          s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}",
     )
 
   def giftNoun(billingPeriod: BillingPeriod): String = billingPeriod match {
@@ -57,23 +60,28 @@ object SubscriptionEmailFieldHelpers {
     case _ => billingPeriod.noun
   }
 
-  def standardDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, fixedTerm: Boolean): String = {
+  def standardDescription(
+      paymentSchedule: PaymentSchedule,
+      billingPeriod: BillingPeriod,
+      currency: Currency,
+      fixedTerm: Boolean,
+  ): String = {
     val initialPrice = firstPayment(paymentSchedule).amount
-    val (paymentsWithInitialPrice, paymentsWithDifferentPrice) = paymentSchedule.payments.partition(_.amount == initialPrice)
+    val (paymentsWithInitialPrice, paymentsWithDifferentPrice) =
+      paymentSchedule.payments.partition(_.amount == initialPrice)
 
-    if (fixedTerm){
+    if (fixedTerm) {
       s"${priceWithCurrency(currency, initialPrice)} for ${giftNoun(billingPeriod)}"
-    }
-    else if (paymentSchedule.payments.size == 1) {
+    } else if (paymentSchedule.payments.size == 1) {
       s"${priceWithCurrency(currency, initialPrice)} for the first ${billingPeriod.noun}"
-    }
-    else if (paymentsWithDifferentPrice.isEmpty) {
+    } else if (paymentsWithDifferentPrice.isEmpty) {
       s"${priceWithCurrency(currency, initialPrice)} every ${billingPeriod.noun}"
     } else {
       val introductoryTimespan = {
         val firstIntroductoryPayment = paymentsWithInitialPrice.minBy(_.date)
         val firstDifferentPayment = paymentsWithDifferentPrice.minBy(_.date)
-        val monthsAtIntroductoryPrice = Months.monthsBetween(firstIntroductoryPayment.date, firstDifferentPayment.date).getMonths
+        val monthsAtIntroductoryPrice =
+          Months.monthsBetween(firstIntroductoryPayment.date, firstDifferentPayment.date).getMonths
         billingPeriod match {
           case Annual => introductoryPeriod(monthsAtIntroductoryPrice / 12, billingPeriod)
           case Quarterly => introductoryPeriod(monthsAtIntroductoryPrice / 3, billingPeriod)

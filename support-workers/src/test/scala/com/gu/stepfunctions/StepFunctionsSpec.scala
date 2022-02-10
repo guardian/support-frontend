@@ -19,18 +19,16 @@ class StepFunctionsSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "StepFunctionsService" should "be able to find all state machines" in {
     val service = new StepFunctionsService()
-    service.getStateMachines().map {
-      stateMachineListItems =>
-        stateMachineListItems.nonEmpty should be(true)
+    service.getStateMachines().map { stateMachineListItems =>
+      stateMachineListItems.nonEmpty should be(true)
     }
   }
 
   it should "be able to find a user's data" in {
     val userId = "30002031"
-    new StepFunctionsService().findUserData(userId).map {
-      maybeUser =>
-        maybeUser.isDefined should be(true)
-        maybeUser.get.firstName should be("t4S8sP9vQwrElSv0wKc")
+    new StepFunctionsService().findUserData(userId).map { maybeUser =>
+      maybeUser.isDefined should be(true)
+      maybeUser.get.firstName should be("t4S8sP9vQwrElSv0wKc")
     }
   }
 }

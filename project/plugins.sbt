@@ -16,7 +16,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")
 
 libraryDependencies += "org.vafer" % "jdeb" % "1.5" artifacts (Artifact("jdeb", "jar", "jar"))
 
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0" excludeAll ExclusionRule(organization = "com.danieltrinh"))
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.3")
 

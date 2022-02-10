@@ -24,13 +24,13 @@ trait DisplayFormMocks extends TestCSRFComponents {
   val assetResolver = new AssetsResolver("", "", mock[Environment]) {
     override def apply(path: String): String = path
     override def apply(path: RefPath): String = path.value
-    override protected def loadSsrHtmlCache: Map[String,Html] = Map()
+    override protected def loadSsrHtmlCache: Map[String, Html] = Map()
   }
 
   val idUser = User(
     id = "123",
     primaryEmailAddress = "test@gu.com",
-    publicFields = PublicFields(displayName = Some("test-user"))
+    publicFields = PublicFields(displayName = Some("test-user")),
   )
 
   val asyncAuthenticationService = mock[AsyncAuthenticationService]
@@ -43,7 +43,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
-    stage = stage
+    stage = stage,
   )
 
 }

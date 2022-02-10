@@ -14,17 +14,27 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ZuoraDigitalSubscriptionDirectHandler(
-  zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
-  digitalSubscriptionDirectPurchaseBuilder: DigitalSubscriptionDirectPurchaseBuilder,
-  user: User,
+    zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
+    digitalSubscriptionDirectPurchaseBuilder: DigitalSubscriptionDirectPurchaseBuilder,
+    user: User,
 ) {
 
   def isUserInEventsTest(maybeAbTests: Option[Set[AbTest]]) =
     maybeAbTests.exists(_.toList.exists(test => test.name == "emailDigiSubEventsTest" && test.variant == "variant"))
 
-  def subscribe(state: DigitalSubscriptionDirectPurchaseState, csrUsername: Option[String], salesforceCaseId: Option[String]): Future[SendThankYouEmailState] =
+  def subscribe(
+      state: DigitalSubscriptionDirectPurchaseState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+  ): Future[SendThankYouEmailState] =
     for {
-      subscribeItem <- Future.fromTry(digitalSubscriptionDirectPurchaseBuilder.build(state, csrUsername, salesforceCaseId).leftMap(BuildSubscribePromoError).toTry)
+      subscribeItem <- Future
+        .fromTry(
+          digitalSubscriptionDirectPurchaseBuilder
+            .build(state, csrUsername, salesforceCaseId)
+            .leftMap(BuildSubscribePromoError)
+            .toTry,
+        )
         .withEventualLogging("subscription data")
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)

@@ -16,12 +16,12 @@ object Subscription {
 }
 
 case class Subscription(
-  customerAcceptanceDate: LocalDate,
-  accountNumber: String,
-  subscriptionNumber: String,
-  status: String,
-  CreatedRequestId__c: Option[String],
-  ratePlans: List[RatePlan]
+    customerAcceptanceDate: LocalDate,
+    accountNumber: String,
+    subscriptionNumber: String,
+    status: String,
+    CreatedRequestId__c: Option[String],
+    ratePlans: List[RatePlan],
 )
 
 object RatePlan {
@@ -29,10 +29,10 @@ object RatePlan {
 }
 
 case class RatePlan(
-  productId: String,
-  productName: String,
-  productRatePlanId: String,
-  ratePlanCharges: List[RatePlanCharge]
+    productId: String,
+    productName: String,
+    productRatePlanId: String,
+    ratePlanCharges: List[RatePlanCharge],
 )
 
 object RatePlanCharge {
@@ -51,8 +51,7 @@ object RevenueSchedule {
   implicit val codec: Codec[RevenueSchedule] = deriveCodec
 }
 case class RevenueSchedule(
-  number: String,
-  amount: BigDecimal,
-  undistributedUnrecognizedRevenue: BigDecimal
+    number: String,
+    amount: BigDecimal,
+    undistributedUnrecognizedRevenue: BigDecimal,
 )
-

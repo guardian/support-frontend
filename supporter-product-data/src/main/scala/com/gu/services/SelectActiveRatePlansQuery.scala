@@ -21,16 +21,16 @@ object SelectActiveRatePlansQuery {
       .mkString(" AND\n")
 
   /* -------- Notes on this query -----------
-    * Select *
+   * Select *
     Subscription status is not actually written to Dynamo, this are only included for debugging purposes. It could be removed at a later
     stage if we felt it was no longer useful.
 
-    * From *
+   * From *
     We select from rateplan because this gives us the best level of granularity to get all the information we need with the minimum amount
     of records returned. We could have used RatePlanCharge instead but this would have returned multiple records for multi-day print subs
     or print + digital subs
 
-    * Where *
+   * Where *
     - Subscription.Status -    We are only interested in subs which are active or cancelled, cancelled subs will update the previous active
                                version with the new term end date.
 

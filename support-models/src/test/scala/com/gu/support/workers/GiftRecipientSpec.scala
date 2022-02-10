@@ -23,7 +23,11 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
-    actual should be(Right(GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", None, new LocalDate(2020, 10, 2))))
+    actual should be(
+      Right(
+        GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", None, new LocalDate(2020, 10, 2)),
+      ),
+    )
   }
 
   it should "deserialise weekly ok" in {
@@ -54,7 +58,13 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "serialise DS" in {
-    val data = GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2))
+    val data = GiftRecipient.DigitalSubscriptionGiftRecipient(
+      "bob",
+      "builder",
+      "bob@gu.com",
+      Some("message"),
+      new LocalDate(2020, 10, 2),
+    )
     val expected =
       """
         |{
@@ -86,15 +96,23 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
 
   it should "roundtrip ok" in {
     testRoundTripSerialisation(GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com")))
-    testRoundTripSerialisation(GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)))
+    testRoundTripSerialisation(
+      GiftRecipient.DigitalSubscriptionGiftRecipient(
+        "bob",
+        "builder",
+        "bob@gu.com",
+        Some("message"),
+        new LocalDate(2020, 10, 2),
+      ),
+    )
   }
 
   it should "roundtrip ok via parent" in {
     testRoundTripSerialisationViaParent[GiftRecipient, WeeklyGiftRecipient](
-      WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com"))
+      WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com")),
     )
     testRoundTripSerialisationViaParent[GiftRecipient, DigitalSubscriptionGiftRecipient](
-      DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2))
+      DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
     )
   }
 

@@ -17,18 +17,18 @@ sealed trait GiftRecipient {
 object GiftRecipient {
 
   case class WeeklyGiftRecipient(
-    title: Option[Title],
-    firstName: String,
-    lastName: String,
-    email: Option[String],
+      title: Option[Title],
+      firstName: String,
+      lastName: String,
+      email: Option[String],
   ) extends GiftRecipient
 
   case class DigitalSubscriptionGiftRecipient(
-    firstName: String,
-    lastName: String,
-    email: String,
-    message: Option[String],
-    deliveryDate: LocalDate,
+      firstName: String,
+      lastName: String,
+      email: String,
+      message: Option[String],
+      deliveryDate: LocalDate,
   ) extends GiftRecipient
 
   val discriminatedType = new DiscriminatedType[GiftRecipient]("giftRecipientType")
@@ -38,7 +38,7 @@ object GiftRecipient {
 
 }
 
-case class GeneratedGiftCode private(value: String) extends AnyVal
+case class GeneratedGiftCode private (value: String) extends AnyVal
 
 object GeneratedGiftCode {
 
@@ -51,5 +51,3 @@ object GeneratedGiftCode {
   implicit val d1 = Decoder.decodeString.emap(GeneratedGiftCode(_).toRight("invalid gift code"))
 
 }
-
-

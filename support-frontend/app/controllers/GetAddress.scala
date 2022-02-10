@@ -12,10 +12,11 @@ import com.gu.support.getaddressio.FindAddressResultError
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class GetAddress(
-  components: ControllerComponents,
-  getAddressService: GetAddressIOService,
-  actionRefiners: CustomActionBuilders
-) extends AbstractController(components) with Circe {
+    components: ControllerComponents,
+    getAddressService: GetAddressIOService,
+    actionRefiners: CustomActionBuilders,
+) extends AbstractController(components)
+    with Circe {
   import actionRefiners._
 
   def findAddress(postCode: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
@@ -23,7 +24,7 @@ class GetAddress(
       Ok(result.asJson)
     } recover {
       case _: FindAddressResultError =>
-        BadRequest //The postcode was invalid
+        BadRequest // The postcode was invalid
       case error =>
         SafeLogger.error(scrub"Failed to complete postcode lookup via getAddress.io due to: $error")
         InternalServerError

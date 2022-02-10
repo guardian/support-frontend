@@ -85,7 +85,15 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     UUID.randomUUID(),
-    User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+    User(
+      "1234",
+      "hi@gu.com",
+      None,
+      "bob",
+      "smith",
+      Address(None, None, None, None, None, Country.UK),
+      Some(Address(None, None, None, None, None, Country.UK)),
+    ),
     GBP,
   )
 
@@ -96,15 +104,27 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     subscribeItemBuilder,
   ).build(
     GuardianWeeklyState(
-      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+      User(
+        "1234",
+        "hi@gu.com",
+        None,
+        "bob",
+        "smith",
+        Address(None, None, None, None, None, Country.UK),
+        Some(Address(None, None, None, None, None, Country.UK)),
+      ),
       Some(WeeklyGiftRecipient(None, "bob", "smith", None)),
       weekly,
       PayPalReferenceTransaction("baid", "hi@gu.com"),
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ), None, None
-  ).toOption.get.subscriptionData
+    ),
+    None,
+    None,
+  ).toOption
+    .get
+    .subscriptionData
 
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
     promotionService,
@@ -113,15 +133,27 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     subscribeItemBuilder,
   ).build(
     GuardianWeeklyState(
-      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+      User(
+        "1234",
+        "hi@gu.com",
+        None,
+        "bob",
+        "smith",
+        Address(None, None, None, None, None, Country.UK),
+        Some(Address(None, None, None, None, None, Country.UK)),
+      ),
       None,
       weekly,
       PayPalReferenceTransaction("baid", "hi@gu.com"),
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ), None, None
-  ).toOption.get.subscriptionData
+    ),
+    None,
+    None,
+  ).toOption
+    .get
+    .subscriptionData
 
   lazy val csrSubscription = new GuardianWeeklySubscriptionBuilder(
     promotionService,
@@ -130,14 +162,26 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     subscribeItemBuilder,
   ).build(
     GuardianWeeklyState(
-      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK), Some(Address(None, None, None, None, None, Country.UK))),
+      User(
+        "1234",
+        "hi@gu.com",
+        None,
+        "bob",
+        "smith",
+        Address(None, None, None, None, None, Country.UK),
+        Some(Address(None, None, None, None, None, Country.UK)),
+      ),
       None,
       weekly,
       PayPalReferenceTransaction("baid", "hi@gu.com"),
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ), Some("Dan Csr"), Some("test_case_id")
-  ).toOption.get.subscriptionData
+    ),
+    Some("Dan Csr"),
+    Some("test_case_id"),
+  ).toOption
+    .get
+    .subscriptionData
 
 }

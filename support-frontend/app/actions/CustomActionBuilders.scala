@@ -18,18 +18,22 @@ import utils.FastlyGEOIP
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomActionBuilders(
-  val asyncAuthenticationService: AsyncAuthenticationService,
-  cc: ControllerComponents,
-  addToken: CSRFAddToken,
-  checkToken: CSRFCheck,
-  csrfConfig: CSRFConfig,
-  stage: Stage
+    val asyncAuthenticationService: AsyncAuthenticationService,
+    cc: ControllerComponents,
+    addToken: CSRFAddToken,
+    checkToken: CSRFCheck,
+    csrfConfig: CSRFConfig,
+    stage: Stage,
 )(implicit private val ec: ExecutionContext) {
 
-  val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
+  val PrivateAction =
+    new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   val MaybeAuthenticatedAction: ActionBuilder[OptionalAuthRequest, AnyContent] =
-    PrivateAction andThen new AsyncAuthenticatedBuilder(asyncAuthenticationService.tryAuthenticateUser, cc.parsers.defaultBodyParser)
+    PrivateAction andThen new AsyncAuthenticatedBuilder(
+      asyncAuthenticationService.tryAuthenticateUser,
+      cc.parsers.defaultBodyParser,
+    )
 
   case class LoggingAndAlarmOnFailure[A](chainedAction: Action[A]) extends EssentialAction {
 
@@ -39,22 +43,23 @@ class CustomActionBuilders(
         SafeLogger.info("incoming POST: " + byteString.utf8String)
         byteString
       })
-      loggedAccumulator.map { result =>
-        if (result.header.status.toString.head != '2') {
-          SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")
+      loggedAccumulator
+        .map { result =>
+          if (result.header.status.toString.head != '2') {
+            SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")
+            val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
+            AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+            result
+          } else {
+            result
+          }
+        }
+        .recoverWith({ case throwable: Throwable =>
+          SafeLogger.error(scrub"pushing alarm metric - 5xx response caused by ${throwable}")
           val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
           AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
-          result
-        } else {
-          result
-        }
-      }.recoverWith({ case throwable: Throwable =>
-        SafeLogger.error(scrub"pushing alarm metric - 5xx response caused by ${throwable}")
-        val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
-        AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
-        Future.failed(throwable)
-      }
-      )
+          Future.failed(throwable)
+        })
     }
 
   }
@@ -66,7 +71,7 @@ class CustomActionBuilders(
   val GeoTargetedCachedAction = new CachedAction(
     cc.parsers.defaultBodyParser,
     cc.executionContext,
-    List("Vary" -> FastlyGEOIP.fastlyCountryHeader)
+    List("Vary" -> FastlyGEOIP.fastlyCountryHeader),
   )
 
 }

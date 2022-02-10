@@ -9,13 +9,14 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 @Ignore
-class IdentityServiceSpec extends AnyWordSpec
-  with Matchers
-  with ConfigLoaderProvider
-  with TestThreadPoolsProvider
-  with WSClientProvider
-  with FutureEitherValues
-  with IdentityClientErrorMatchers {
+class IdentityServiceSpec
+    extends AnyWordSpec
+    with Matchers
+    with ConfigLoaderProvider
+    with TestThreadPoolsProvider
+    with WSClientProvider
+    with FutureEitherValues
+    with IdentityClientErrorMatchers {
 
   import IdentityClientSpec._
 
@@ -65,10 +66,12 @@ class IdentityServiceSpec extends AnyWordSpec
           preExistingIdentityAccount.identityId
       }
 
-      "create an account and return the identity id if there isn't an existing account" in  {
+      "create an account and return the identity id if there isn't an existing account" in {
         // The fact this fails when you try and assert the type I think is a bug in Scalatest.
         // I will raise the issue on Stackoverflow and/or Github, and amend the test once I get a fix.
-        service.getOrCreateIdentityIdFromEmail(generateEmailAddressWithNoIdentityAccount()).futureRight // shouldBe a[Long]
+        service
+          .getOrCreateIdentityIdFromEmail(generateEmailAddressWithNoIdentityAccount())
+          .futureRight // shouldBe a[Long]
       }
     }
   }

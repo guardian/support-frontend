@@ -6,32 +6,31 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
 case class AbTest(
-  name: String,
-  variant: String
+    name: String,
+    variant: String,
 )
 
 case class QueryParameter(
-  name: String,
-  value: String
+    name: String,
+    value: String,
 )
 
-/**
- * Model for acquisition data passed by the referrer.
- */
+/** Model for acquisition data passed by the referrer.
+  */
 case class ReferrerAcquisitionData(
-  campaignCode: Option[String],
-  referrerPageviewId: Option[String],
-  referrerUrl: Option[String],
-  componentId: Option[String],
-  componentType: Option[String],
-  source: Option[String],
-  abTests: Option[Set[AbTest]],
-  queryParameters: Option[Set[QueryParameter]],
-  hostname: Option[String],
-  gaClientId: Option[String],
-  userAgent: Option[String],
-  ipAddress: Option[String],
-  labels: Option[Set[String]]
+    campaignCode: Option[String],
+    referrerPageviewId: Option[String],
+    referrerUrl: Option[String],
+    componentId: Option[String],
+    componentType: Option[String],
+    source: Option[String],
+    abTests: Option[Set[AbTest]],
+    queryParameters: Option[Set[QueryParameter]],
+    hostname: Option[String],
+    gaClientId: Option[String],
+    userAgent: Option[String],
+    ipAddress: Option[String],
+    labels: Option[Set[String]],
 )
 
 object ReferrerAcquisitionData {
@@ -57,9 +56,9 @@ object OphanIds {
 }
 
 case class AcquisitionData(
-  ophanIds: OphanIds,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  supportAbTests: Set[AbTest]
+    ophanIds: OphanIds,
+    referrerAcquisitionData: ReferrerAcquisitionData,
+    supportAbTests: Set[AbTest],
 )
 
 object AcquisitionData {

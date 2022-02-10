@@ -13,17 +13,24 @@ import scala.concurrent.{ExecutionContext, Future}
 object GetSubscriptionWithCurrentRequestId {
 
   def apply(
-    zuoraService: ZuoraSubscribeService,
-    requestId: UUID,
-    identityId: IdentityId,
-    dateGenerator: DateGenerator
+      zuoraService: ZuoraSubscribeService,
+      requestId: UUID,
+      identityId: IdentityId,
+      dateGenerator: DateGenerator,
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = for {
-    accountNumbers <- zuoraService.getAccountFields(identityId, dateGenerator.now)
+    accountNumbers <- zuoraService
+      .getAccountFields(identityId, dateGenerator.now)
       .withEventualLogging("getAccountFields")
-    subscriptions <- accountNumbers.map(_.accountNumber).map { zuoraAccountNumber =>
-      zuoraService.getSubscriptions(zuoraAccountNumber).withEventualLogging(s"getSubscriptions($zuoraAccountNumber)")
-    }.combineAll.withEventualLogging("combineAll")
-  } yield subscriptions.find(subscription => CreatedBySameRequest(requestId, subscription.existingSubscriptionRequestId))
+    subscriptions <- accountNumbers
+      .map(_.accountNumber)
+      .map { zuoraAccountNumber =>
+        zuoraService.getSubscriptions(zuoraAccountNumber).withEventualLogging(s"getSubscriptions($zuoraAccountNumber)")
+      }
+      .combineAll
+      .withEventualLogging("combineAll")
+  } yield subscriptions.find(subscription =>
+    CreatedBySameRequest(requestId, subscription.existingSubscriptionRequestId),
+  )
 
 }
 

@@ -29,8 +29,8 @@ import util.RequestBasedProvider
 import scala.concurrent.{ExecutionContext, Future}
 
 class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: ApplicationLoader.Context)
-  extends BuiltInComponentsFromContext(context) with MockitoSugar {
-
+    extends BuiltInComponentsFromContext(context)
+    with MockitoSugar {
 
   val mockAmazonPayBackend: AmazonPayBackend = mock[AmazonPayBackend]
 
@@ -40,7 +40,7 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
     mock[RequestBasedProvider[AmazonPayBackend]]
 
   val amazonPayResponse: EitherT[Future, AmazonPayApiError, Unit] =
-    EitherT.right(Future(())).leftMap{ x: String => AmazonPayApiError.fromString("went wrong")}
+    EitherT.right(Future(())).leftMap { x: String => AmazonPayApiError.fromString("went wrong") }
 
   val refundSuccess: EitherT[Future, Throwable, Unit] =
     EitherT.right(Future.successful(()))
@@ -48,13 +48,15 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
   val amazonPayController: AmazonPayController =
-    new AmazonPayController(
-      controllerComponents,
-      mockAmazonPayRequestBasedProvider,
-      mockNotificationFactory)(DefaultThreadPool(ec), List("https://cors.com"))
+    new AmazonPayController(controllerComponents, mockAmazonPayRequestBasedProvider, mockNotificationFactory)(
+      DefaultThreadPool(ec),
+      List("https://cors.com"),
+    )
 
   val refundError: EitherT[Future, Throwable, Unit] =
-    EitherT.left[Unit](Future.successful[Throwable](BackendError.AmazonPayApiError(AmazonPayApiError.fromString("Error response"))))
+    EitherT.left[Unit](
+      Future.successful[Throwable](BackendError.AmazonPayApiError(AmazonPayApiError.fromString("Error response"))),
+    )
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
@@ -70,7 +72,7 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
     mockStripeController,
     new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
     new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
-    amazonPayController
+    amazonPayController,
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
@@ -96,8 +98,7 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockAmazonPayBackend)
         }
         val createAmazonPayRequest = FakeRequest("POST", "/contribute/one-off/amazonpay/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -144,8 +145,7 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockAmazonPayBackend)
         }
         val createAmazonPayRequest = FakeRequest("POST", "/contribute/one-off/amazonpay/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -192,8 +192,7 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockAmazonPayBackend)
         }
         val createAmazonPayRequest = FakeRequest("POST", "/contribute/one-off/amazonpay/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -225,7 +224,8 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "publicKey": "pk_test_FOO"
               |}
-                  """.stripMargin)).withHeaders("origin" -> "https://cors.com")
+                  """.stripMargin))
+          .withHeaders("origin" -> "https://cors.com")
 
         val amazonpayControllerResult: Future[play.api.mvc.Result] =
           Helpers.call(fixture.amazonPayController.executePayment, createAmazonPayRequest)
@@ -244,8 +244,7 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
             .thenReturn(mockAmazonPayBackend)
         }
         val createAmazonPayRequest = FakeRequest("POST", "/contribute/one-off/amazonpay/create-payment")
-          .withJsonBody(parse(
-            """
+          .withJsonBody(parse("""
               |{
               |  "paymentData": {
               |    "currency": "GBP",
@@ -260,7 +259,6 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
 
         status(amazonpayControllerResult).mustBe(400)
       }
-
 
       "a request is made to refund a payment" should {
 

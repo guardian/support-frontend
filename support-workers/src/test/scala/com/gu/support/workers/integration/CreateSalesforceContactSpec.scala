@@ -22,12 +22,10 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     createContact.handleRequestFuture(wrapFixture(createSalesForceContactJson), outStream, context).map { _ =>
-
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)
-      inside(result.get._1.productSpecificState) {
-        case state: ContributionState =>
-          state.salesForceContact.Id should be("0039E000017tZUEQA2")
+      inside(result.get._1.productSpecificState) { case state: ContributionState =>
+        state.salesForceContact.Id should be("0039E000017tZUEQA2")
       }
     }
   }
@@ -38,13 +36,11 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     createContact.handleRequestFuture(wrapFixture(createSalesForceGiftContactJson), outStream, context).map { _ =>
-
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)
-      inside(result.get._1.productSpecificState) {
-        case state: GuardianWeeklyState =>
-          state.salesforceContacts.buyer.Id should be(salesforceId)
-          state.salesforceContacts.giftRecipient shouldBe defined
+      inside(result.get._1.productSpecificState) { case state: GuardianWeeklyState =>
+        state.salesforceContacts.buyer.Id should be(salesforceId)
+        state.salesforceContacts.giftRecipient shouldBe defined
       }
     }
   }

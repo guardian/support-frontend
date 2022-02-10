@@ -14,7 +14,6 @@ import com.gu.support.encoding.StringExtensions._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 case class FindAddressAPIResult(Latitude: Float, Longitude: Float, Addresses: List[String])
 
 object FindAddressAPIResult {
@@ -27,8 +26,10 @@ object FindAddressResultError {
   implicit val codec: Codec[FindAddressResultError] = deriveCodec
 }
 
-class GetAddressIOService(config: GetAddressIOConfig, client: FutureHttpClient)(implicit executionContext: ExecutionContext)
-  extends WebServiceHelper[FindAddressResultError] with LazyLogging {
+class GetAddressIOService(config: GetAddressIOConfig, client: FutureHttpClient)(implicit
+    executionContext: ExecutionContext,
+) extends WebServiceHelper[FindAddressResultError]
+    with LazyLogging {
 
   override val wsUrl: String = config.apiUrl
   override val httpClient: FutureHttpClient = client
@@ -36,7 +37,6 @@ class GetAddressIOService(config: GetAddressIOConfig, client: FutureHttpClient)(
   def find(postalCode: String): Future[List[Address]] =
     get[FindAddressAPIResult](postalCode, Map("api-key" -> config.apiKey))
       .map(_.Addresses.map(s => addressFromString(postalCode, s)))
-
 
   def addressFromString(postalCode: String, addressString: String): Address = {
     val splitAddress = addressString.split(",").map(_.trim)
@@ -46,7 +46,7 @@ class GetAddressIOService(config: GetAddressIOConfig, client: FutureHttpClient)(
       splitAddress(5).toOption,
       splitAddress(6).toOption,
       Some(postalCode),
-      Country.UK
+      Country.UK,
     )
   }
 }

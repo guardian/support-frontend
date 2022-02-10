@@ -6,13 +6,13 @@ import io.circe.{Decoder, Encoder}
 import java.time.ZonedDateTime
 
 case class UpdateDynamoState(
-  filename: String,
-  recordCount: Int,
-  processedCount: Int,
-  attemptedQueryTime: ZonedDateTime
+    filename: String,
+    recordCount: Int,
+    processedCount: Int,
+    attemptedQueryTime: ZonedDateTime,
 )
 
-object UpdateDynamoState{
+object UpdateDynamoState {
   implicit val encoder: Encoder[UpdateDynamoState] = deriveEncoder
   implicit val decoder: Decoder[UpdateDynamoState] = deriveDecoder
 }

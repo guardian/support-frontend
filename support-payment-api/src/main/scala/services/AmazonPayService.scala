@@ -37,90 +37,108 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
 
   val client = new PayClient(clientConfig)
 
-
   def getOrderReference(orderReferenceId: String) = {
-    Either.catchNonFatal {
-      client.getOrderReferenceDetails(new GetOrderReferenceDetailsRequest(orderReferenceId)).getDetails
-    }.leftMap { error =>
-      AmazonPayApiError.fromString(error.getMessage)
-    }
-  }
-
-  def cancelOrderReference(orderRef: OrderReferenceDetails) = {
-    Either.catchNonFatal {
-      client.cancelOrderReference(new CancelOrderReferenceRequest(orderRef.getAmazonOrderReferenceId))
-    }.leftMap { error =>
-      AmazonPayApiError.fromString(error.getMessage)
-    }
-  }
-
-  def setOrderReference(payment: AmazonPaymentData): Either[AmazonPayApiError, OrderReferenceDetails] = {
-    logger.info("Setting order ref: " + payment.orderReferenceId)
-    Either.catchNonFatal {
-
-      val currencyCode = payment.currency match {
-        case Currency.USD => CurrencyCode.USD // todo: This will need to be dynamic -make sure to update clientConfig
-        case _ => throw CurrencyNotFoundException(s"currency ${payment.currency} currently not supported")
+    Either
+      .catchNonFatal {
+        client.getOrderReferenceDetails(new GetOrderReferenceDetailsRequest(orderReferenceId)).getDetails
       }
-
-      val req = new SetOrderReferenceDetailsRequest(payment.orderReferenceId, payment.amount.toString())
-        .setSellerId(config.merchantId)
-        .setOrderCurrencyCode(currencyCode)
-        .setMWSAuthToken(config.accessKey)
-        .setStoreName(storeName)
-        .setSellerOrderId(validUUID)
-
-      client.setOrderReferenceDetails(req).getDetails
-
-    }.leftMap { error =>
-      AmazonPayApiError.fromString(error.getMessage)
-    }
-  }
-
-  def confirmOrderReference(orderRef: OrderReferenceDetails): Either[AmazonPayApiError, ConfirmOrderReferenceResponseData] = {
-    Either.catchNonFatal {
-      client.confirmOrderReference(new ConfirmOrderReferenceRequest(orderRef.getAmazonOrderReferenceId))
-    }.leftMap { error =>
-      AmazonPayApiError.fromString(error.getMessage)
-    }
-  }
-
-  def authorize(orderReference: OrderReferenceDetails, paymentData: AmazonPaymentData): Either[AmazonPayApiError, AuthorizationDetails] = {
-    logger.info("Authorizing order ref: " + paymentData.orderReferenceId)
-
-    Either.catchNonFatal {
-      val authorizeRequest = new AuthorizeRequest(orderReference.getAmazonOrderReferenceId, validUUID, paymentData.amount.toString)
-
-      authorizeRequest
-        .setAuthorizationCurrencyCode(CurrencyCode.USD) //Overrides currency code set in Client
-        .setTransactionTimeout("0") //Set to 0 for synchronous mode
-        .setSellerAuthorizationNote(copyForEmail)
-        .setCaptureNow(true) // Set this to true if you want to capture the amount in the same API call
-
-      logger.info(authorizeRequest.toString)
-
-      val res = client.authorize(authorizeRequest)
-
-      val resState = res.getDetails.getAuthorizationStatus
-      logger.info(s"${orderReference.getAmazonOrderReferenceId} Auth call response: ${resState.getState} ${resState.getReasonCode} ${resState.getReasonDescription}")
-      res.getDetails
-
-    }.leftMap { error =>
-      AmazonPayApiError.fromString(error.getMessage)
-    }
-  }
-
-  def close(payment: AmazonPaymentData): Either[AmazonPayApiError, CloseOrderReferenceResponseData] = {
-    logger.info(s"Closing ${payment.orderReferenceId}")
-    Either.catchNonFatal {
-      client.closeOrderReference(new CloseOrderReferenceRequest(payment.orderReferenceId))
-    }
       .leftMap { error =>
         AmazonPayApiError.fromString(error.getMessage)
       }
   }
 
-  private def validUUID = UUID.randomUUID().toString.filterNot(_ == '-').take(32) //must be 32 or less
+  def cancelOrderReference(orderRef: OrderReferenceDetails) = {
+    Either
+      .catchNonFatal {
+        client.cancelOrderReference(new CancelOrderReferenceRequest(orderRef.getAmazonOrderReferenceId))
+      }
+      .leftMap { error =>
+        AmazonPayApiError.fromString(error.getMessage)
+      }
+  }
+
+  def setOrderReference(payment: AmazonPaymentData): Either[AmazonPayApiError, OrderReferenceDetails] = {
+    logger.info("Setting order ref: " + payment.orderReferenceId)
+    Either
+      .catchNonFatal {
+
+        val currencyCode = payment.currency match {
+          case Currency.USD => CurrencyCode.USD // todo: This will need to be dynamic -make sure to update clientConfig
+          case _ => throw CurrencyNotFoundException(s"currency ${payment.currency} currently not supported")
+        }
+
+        val req = new SetOrderReferenceDetailsRequest(payment.orderReferenceId, payment.amount.toString())
+          .setSellerId(config.merchantId)
+          .setOrderCurrencyCode(currencyCode)
+          .setMWSAuthToken(config.accessKey)
+          .setStoreName(storeName)
+          .setSellerOrderId(validUUID)
+
+        client.setOrderReferenceDetails(req).getDetails
+
+      }
+      .leftMap { error =>
+        AmazonPayApiError.fromString(error.getMessage)
+      }
+  }
+
+  def confirmOrderReference(
+      orderRef: OrderReferenceDetails,
+  ): Either[AmazonPayApiError, ConfirmOrderReferenceResponseData] = {
+    Either
+      .catchNonFatal {
+        client.confirmOrderReference(new ConfirmOrderReferenceRequest(orderRef.getAmazonOrderReferenceId))
+      }
+      .leftMap { error =>
+        AmazonPayApiError.fromString(error.getMessage)
+      }
+  }
+
+  def authorize(
+      orderReference: OrderReferenceDetails,
+      paymentData: AmazonPaymentData,
+  ): Either[AmazonPayApiError, AuthorizationDetails] = {
+    logger.info("Authorizing order ref: " + paymentData.orderReferenceId)
+
+    Either
+      .catchNonFatal {
+        val authorizeRequest =
+          new AuthorizeRequest(orderReference.getAmazonOrderReferenceId, validUUID, paymentData.amount.toString)
+
+        authorizeRequest
+          .setAuthorizationCurrencyCode(CurrencyCode.USD) // Overrides currency code set in Client
+          .setTransactionTimeout("0") // Set to 0 for synchronous mode
+          .setSellerAuthorizationNote(copyForEmail)
+          .setCaptureNow(true) // Set this to true if you want to capture the amount in the same API call
+
+        logger.info(authorizeRequest.toString)
+
+        val res = client.authorize(authorizeRequest)
+
+        val resState = res.getDetails.getAuthorizationStatus
+        logger.info(
+          s"${orderReference.getAmazonOrderReferenceId} Auth call response: ${resState.getState} ${resState.getReasonCode} ${resState.getReasonDescription}",
+        )
+        res.getDetails
+
+      }
+      .leftMap { error =>
+        AmazonPayApiError.fromString(error.getMessage)
+      }
+  }
+
+  def close(payment: AmazonPaymentData): Either[AmazonPayApiError, CloseOrderReferenceResponseData] = {
+    logger.info(s"Closing ${payment.orderReferenceId}")
+    Either
+      .catchNonFatal {
+        client.closeOrderReference(new CloseOrderReferenceRequest(payment.orderReferenceId))
+      }
+      .leftMap { error =>
+        AmazonPayApiError.fromString(error.getMessage)
+      }
+  }
+
+  private def validUUID = UUID.randomUUID().toString.filterNot(_ == '-').take(32) // must be 32 or less
 }
 
 object AmazonPayService {

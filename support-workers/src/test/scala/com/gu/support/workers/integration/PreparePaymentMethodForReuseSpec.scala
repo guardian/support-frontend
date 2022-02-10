@@ -32,9 +32,7 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
     val cardAccount = "2c92c0f87568d98001756b53a3c30b7b"
     val in = wrapFixture(getPaymentMethodJson(billingAccountId = cardAccount, userId = "100004131"))
 
-
     preparePaymentMethodForReuse.handleRequestFuture(in, outStream, context).map { _ =>
-
       val response = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream).get
 
       inside(response._1.productSpecificState) { case state: ContributionState =>
@@ -47,7 +45,7 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
           CreditCardExpirationYear = 2022,
           CreditCardType = Some("Visa"),
           PaymentGateway = StripeGatewayPaymentIntentsDefault,
-          StripePaymentType = None
+          StripePaymentType = None,
         )
       }
     }
@@ -56,7 +54,8 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
 
   val realConfig = Configuration.load()
 
-  val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
+  val realZuoraService =
+    new ZuoraService(realConfig.zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get(false))
 
@@ -66,17 +65,19 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
     // method or the subscribe step gets skipped
     // if these methods weren't coupled into one class then we could pass them separately and avoid reflection
     when(mockZuora.getObjectAccount(any[String]))
-      .thenAnswer((invocation: InvocationOnMock) => realZuoraService.getObjectAccount(invocation.getArguments.head.asInstanceOf[String]))
+      .thenAnswer((invocation: InvocationOnMock) =>
+        realZuoraService.getObjectAccount(invocation.getArguments.head.asInstanceOf[String]),
+      )
     when(mockZuora.getPaymentMethod(any[String]))
-      .thenAnswer((invocation: InvocationOnMock) => realZuoraService.getPaymentMethod(invocation.getArguments.head.asInstanceOf[String]))
+      .thenAnswer((invocation: InvocationOnMock) =>
+        realZuoraService.getPaymentMethod(invocation.getArguments.head.asInstanceOf[String]),
+      )
     when(mockZuora.config).thenReturn(realZuoraService.config)
     mockZuora
   }
 
   lazy val mockServiceProvider = mockServices[Any](
-    (s => s.zuoraService,
-      mockZuoraService),
-    (s => s.promotionService,
-      realPromotionService)
+    (s => s.zuoraService, mockZuoraService),
+    (s => s.promotionService, realPromotionService),
   )
 }

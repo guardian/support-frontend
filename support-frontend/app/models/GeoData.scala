@@ -11,4 +11,3 @@ case class GeoData(countryCode: Option[String], stateCode: Option[String]) {
     stateName <- c.statesByCode.keySet.find(_ == r)
   } yield stateName
 }
-

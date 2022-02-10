@@ -8,18 +8,17 @@ object PaymentMethodDetailResponse {
 }
 
 case class PaymentMethodDetailResponse(
-  Id: String,
-  FirstName: String,
-  UpdatedDate: String,
-  Country: String,
-  MandateID: String,
-  BankTransferType: String,
-  AccountId: String,
-  LastName: String,
-  BankCode: String,
-  PaymentMethodStatus: String,
-  BankTransferAccountName: String,
-  BankTransferAccountNumberMask: String,
-  Type: String
+    Id: String,
+    FirstName: String,
+    UpdatedDate: String,
+    Country: String,
+    MandateID: String,
+    BankTransferType: String,
+    AccountId: String,
+    LastName: String,
+    BankCode: String,
+    PaymentMethodStatus: String,
+    BankTransferAccountName: String,
+    BankTransferAccountNumberMask: String,
+    Type: String,
 )
-

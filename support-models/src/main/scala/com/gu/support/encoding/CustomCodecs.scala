@@ -13,7 +13,8 @@ object CustomCodecs extends InternationalisationCodecs with HelperCodecs with Ei
 
 trait InternationalisationCodecs {
   implicit val encodeTitle: Encoder[Title] = Encoder.encodeString.contramap(_.title)
-  implicit val decodeTitle: Decoder[Title] = Decoder.decodeString.emap(title => Title.fromString(title).toRight(s"Unrecognised title '$title'"))
+  implicit val decodeTitle: Decoder[Title] =
+    Decoder.decodeString.emap(title => Title.fromString(title).toRight(s"Unrecognised title '$title'"))
 
   implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
 
@@ -45,7 +46,8 @@ trait HelperCodecs {
   implicit val monthEncoder: Encoder[Months] = Encoder.encodeInt.contramap(_.getMonths)
   implicit val encodeLocalTime: Encoder[LocalDate] = Encoder.encodeString.contramap(_.toString("yyyy-MM-dd"))
   implicit val decodeLocalTime: Decoder[LocalDate] = Decoder.decodeString.map(LocalDate.parse)
-  implicit val uuidDecoder: Decoder[UUID] = Decoder.decodeString.emap(code => Try(UUID.fromString(code)).toOption.toRight(s"Invalid UUID '$code'"))
+  implicit val uuidDecoder: Decoder[UUID] =
+    Decoder.decodeString.emap(code => Try(UUID.fromString(code)).toOption.toRight(s"Invalid UUID '$code'"))
   implicit val uuidEncoder: Encoder[UUID] = Encoder.encodeString.contramap(_.toString)
   object ISODate {
     implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeString.contramap(ISODateTimeFormat.dateTime().print)
@@ -61,15 +63,14 @@ trait EitherCodecs {
   import io.circe.syntax._
 
   implicit def decodeEither[A, B](implicit
-    decoderA: Decoder[A],
-    decoderB: Decoder[B]
+      decoderA: Decoder[A],
+      decoderB: Decoder[B],
   ): Decoder[Either[A, B]] = decoderA.either(decoderB)
 
   implicit def encodeEither[A, B](implicit
-    encoderA: Encoder[A],
-    encoderB: Encoder[B]
-  ): Encoder[Either[A, B]] = {
-    o: Either[A, B] =>
-      o.fold(_.asJson, _.asJson)
+      encoderA: Encoder[A],
+      encoderB: Encoder[B],
+  ): Encoder[Either[A, B]] = { o: Either[A, B] =>
+    o.fold(_.asJson, _.asJson)
   }
 }

@@ -27,7 +27,7 @@ class RetrySpec extends AnyFlatSpec with Matchers {
   it should "retry if the either is a left" in {
     val failOnce = countTries(tries => {
       EitherT.fromEither[Future](
-        if (tries < 2) Left("error") else Right(())
+        if (tries < 2) Left("error") else Right(()),
       )
     })
 
@@ -48,9 +48,7 @@ class RetrySpec extends AnyFlatSpec with Matchers {
   }
 
   it should "collect all the error messages" in {
-    val alwaysFail = countTries(tries =>
-      EitherT.fromEither[Future](Left[String, Unit](s"error $tries"))
-    )
+    val alwaysFail = countTries(tries => EitherT.fromEither[Future](Left[String, Unit](s"error $tries")))
     val maxRetries = 2
 
     val result = Await.result(Retry(maxRetries)(alwaysFail()).value, atMost = 5.seconds)

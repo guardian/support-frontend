@@ -50,7 +50,7 @@ object StripeJsonDecoder {
           currency = Currency.withName(currency),
           amount = amount,
           token = token,
-          stripePaymentMethod = stripePaymentMethod
+          stripePaymentMethod = stripePaymentMethod,
         ),
         acquisitionData = AcquisitionData(
           platform = platform,
@@ -63,23 +63,26 @@ object StripeJsonDecoder {
           campaignCodes = Option(Set(cmp, intcmp).flatten).filter(_.nonEmpty),
           componentType = componentType,
           source = source,
-          abTests = Option(Set(abTest, refererAbTest).flatten ++ nativeAbTests
-            .getOrElse(Set[AbTest]()))
+          abTests = Option(
+            Set(abTest, refererAbTest).flatten ++ nativeAbTests
+              .getOrElse(Set[AbTest]()),
+          )
             .filter(_.nonEmpty),
           queryParameters = queryParameters,
           gaId = gaId,
-          labels = labels
+          labels = labels,
         ),
-        publicKey = stripePublicKey
+        publicKey = stripePublicKey,
       )
     }
   }
 
-  implicit val stripeChargeDataDecoder: Decoder[LegacyStripeChargeRequest] = legacyStripeChargeDataDecoder.or(deriveDecoder[LegacyStripeChargeRequest])
+  implicit val stripeChargeDataDecoder: Decoder[LegacyStripeChargeRequest] =
+    legacyStripeChargeDataDecoder.or(deriveDecoder[LegacyStripeChargeRequest])
 }
 
 // Private because it should only be constructed using the accompanying Decoder
-class NonEmptyString private(val value: String) extends AnyVal {
+class NonEmptyString private (val value: String) extends AnyVal {
   override def toString(): String = value
 }
 
@@ -99,19 +102,19 @@ trait BaseStripePaymentData {
 }
 
 @JsonCodec case class StripePaymentData(
-  email: NonEmptyString,
-  currency: Currency,
-  amount: BigDecimal,
-  stripePaymentMethod: Option[StripePaymentMethod]
+    email: NonEmptyString,
+    currency: Currency,
+    amount: BigDecimal,
+    stripePaymentMethod: Option[StripePaymentMethod],
 ) extends BaseStripePaymentData
 
 // Supports Stripe Checkout tokens
 @JsonCodec case class LegacyStripePaymentData(
-  email: NonEmptyString,
-  currency: Currency,
-  amount: BigDecimal,
-  stripePaymentMethod: Option[StripePaymentMethod],
-  token: NonEmptyString,
+    email: NonEmptyString,
+    currency: Currency,
+    amount: BigDecimal,
+    stripePaymentMethod: Option[StripePaymentMethod],
+    token: NonEmptyString,
 ) extends BaseStripePaymentData
 
 sealed trait StripePaymentMethod extends EnumEntry
@@ -136,32 +139,35 @@ object StripePublicKey {
 // Trait for modelling client requests for Stripe payments. This file can be simplified once we have moved away from
 // the Stripe Charges API, but it's still required for mobile apps payments.
 sealed trait StripeRequest {
-  val paymentData: BaseStripePaymentData  //data required to create a Stripe payment
-  val acquisitionData: AcquisitionData    //data required to create an acquisition event (used for analytics)
-  val publicKey: Option[StripePublicKey]  //required to determine which Stripe service to use
+  val paymentData: BaseStripePaymentData // data required to create a Stripe payment
+  val acquisitionData: AcquisitionData // data required to create an acquisition event (used for analytics)
+  val publicKey: Option[StripePublicKey] // required to determine which Stripe service to use
 }
 
 // Legacy model for Stripe Charges API
 case class LegacyStripeChargeRequest(
-  paymentData: LegacyStripePaymentData,
-  acquisitionData: AcquisitionData,
-  publicKey: Option[StripePublicKey]) extends StripeRequest
+    paymentData: LegacyStripePaymentData,
+    acquisitionData: AcquisitionData,
+    publicKey: Option[StripePublicKey],
+) extends StripeRequest
 
 // Models for the Stripe Payment Intents API
 object StripePaymentIntentRequest {
 
   case class CreatePaymentIntent(
-    paymentMethodId: String,
-    paymentData: StripePaymentData,
-    acquisitionData: AcquisitionData,
-    publicKey: Option[StripePublicKey],
-    recaptchaToken: String) extends StripeRequest
+      paymentMethodId: String,
+      paymentData: StripePaymentData,
+      acquisitionData: AcquisitionData,
+      publicKey: Option[StripePublicKey],
+      recaptchaToken: String,
+  ) extends StripeRequest
 
   case class ConfirmPaymentIntent(
-    paymentIntentId: String,
-    paymentData: StripePaymentData,
-    acquisitionData: AcquisitionData,
-    publicKey: Option[StripePublicKey]) extends StripeRequest
+      paymentIntentId: String,
+      paymentData: StripePaymentData,
+      acquisitionData: AcquisitionData,
+      publicKey: Option[StripePublicKey],
+  ) extends StripeRequest
 
   import controllers.JsonReadableOps._
   implicit val createPaymentIntentDecoder = deriveDecoder[CreatePaymentIntent]

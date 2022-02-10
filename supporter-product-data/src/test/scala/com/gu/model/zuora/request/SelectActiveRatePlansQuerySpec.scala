@@ -32,7 +32,7 @@ ProductRatePlan.Id != '2c92c0f852f2ebb20152f9269f067818' AND
           ORDER BY Account.IdentityId__c, Subscription.ContractEffectiveDate, Subscription.Name, Subscription.Version
     """
     val actual = SelectActiveRatePlansQuery.query(
-      List("2c92c0f852f2ebb20152f9269f067819", "2c92c0f852f2ebb20152f9269f067818")
+      List("2c92c0f852f2ebb20152f9269f067819", "2c92c0f852f2ebb20152f9269f067818"),
     )
     logger.info(actual)
     actual shouldEqual expected

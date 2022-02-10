@@ -14,12 +14,12 @@ object SubscribeItem {
 }
 
 case class SubscribeItem(
-  account: Account,
-  billToContact: ContactDetails,
-  soldToContact: Option[ContactDetails],
-  paymentMethod: Option[PaymentMethod],
-  subscriptionData: SubscriptionData,
-  subscribeOptions: SubscribeOptions
+    account: Account,
+    billToContact: ContactDetails,
+    soldToContact: Option[ContactDetails],
+    paymentMethod: Option[PaymentMethod],
+    subscriptionData: SubscriptionData,
+    subscribeOptions: SubscribeOptions,
 )
 
 object SubscribeRequest {
@@ -36,27 +36,26 @@ object UpdateRedemptionDataRequest {
   implicit val encoder: Encoder[UpdateRedemptionDataRequest] = deriveEncoder[UpdateRedemptionDataRequest].mapJsonObject(
     _.renameField("gifteeIdentityId", "GifteeIdentityId__c")
       .renameField("requestId", "CreatedRequestId__c")
-      .renameField("giftRedemptionDate", "GiftRedemptionDate__c")
+      .renameField("giftRedemptionDate", "GiftRedemptionDate__c"),
   )
 }
 
 case class UpdateRedemptionDataRequest(
-  requestId: String,
-  gifteeIdentityId: String,
-  giftRedemptionDate: LocalDate,
-  currentTerm: Int,
-  currentTermPeriodType: PeriodType
+    requestId: String,
+    gifteeIdentityId: String,
+    giftRedemptionDate: LocalDate,
+    currentTerm: Int,
+    currentTermPeriodType: PeriodType,
 )
 
 object DistributeRevenueRequest {
   implicit val encoder: Encoder[DistributeRevenueRequest] = deriveEncoder[DistributeRevenueRequest].mapJsonObject(
     _.add("distributionType", Json.fromString("Daily distribution"))
-      .add("eventTypeSystemId", Json.fromString("DigitalSubscriptionGiftRedeemed"))
+      .add("eventTypeSystemId", Json.fromString("DigitalSubscriptionGiftRedeemed")),
   )
 }
 
 case class DistributeRevenueRequest(
-  recognitionStart: LocalDate,
-  recognitionEnd: LocalDate
+    recognitionStart: LocalDate,
+    recognitionEnd: LocalDate,
 )
-

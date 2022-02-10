@@ -36,35 +36,35 @@ object CreateSupportWorkersRequest {
   implicit val decoder: Decoder[CreateSupportWorkersRequest] = deriveDecoder[CreateSupportWorkersRequest]
 
   case class GiftRecipientRequest(
-    title: Option[Title],
-    firstName: String,
-    lastName: String,
-    email: Option[String],
-    message: Option[String],
-    deliveryDate: Option[LocalDate]
+      title: Option[Title],
+      firstName: String,
+      lastName: String,
+      email: Option[String],
+      message: Option[String],
+      deliveryDate: Option[LocalDate],
   )
 }
 
 case class CreateSupportWorkersRequest(
-  title: Option[Title],
-  firstName: String,
-  lastName: String,
-  billingAddress: Address,
-  deliveryAddress: Option[Address],
-  giftRecipient: Option[GiftRecipientRequest],
-  product: ProductType,
-  firstDeliveryDate: Option[LocalDate],
-  paymentFields: Either[PaymentFields, RedemptionData],
-  promoCode: Option[PromoCode],
-  csrUsername: Option[String],
-  salesforceCaseId: Option[String],
-  ophanIds: OphanIds,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  supportAbTests: Set[AbTest],
-  email: String,
-  telephoneNumber: Option[String],
-  deliveryInstructions: Option[String],
-  debugInfo: Option[String]
+    title: Option[Title],
+    firstName: String,
+    lastName: String,
+    billingAddress: Address,
+    deliveryAddress: Option[Address],
+    giftRecipient: Option[GiftRecipientRequest],
+    product: ProductType,
+    firstDeliveryDate: Option[LocalDate],
+    paymentFields: Either[PaymentFields, RedemptionData],
+    promoCode: Option[PromoCode],
+    csrUsername: Option[String],
+    salesforceCaseId: Option[String],
+    ophanIds: OphanIds,
+    referrerAcquisitionData: ReferrerAcquisitionData,
+    supportAbTests: Set[AbTest],
+    email: String,
+    telephoneNumber: Option[String],
+    deliveryInstructions: Option[String],
+    debugInfo: Option[String],
 )
 
 object SupportWorkersClient {
@@ -74,18 +74,18 @@ object SupportWorkersClient {
   case object StateMachineFailure extends SupportWorkersError
 
   def apply(
-    arn: StateMachineArn,
-    stateWrapper: StateWrapper,
-    supportUrl: String,
-    call: String => Call
+      arn: StateMachineArn,
+      stateWrapper: StateWrapper,
+      supportUrl: String,
+      call: String => Call,
   )(implicit system: ActorSystem): SupportWorkersClient =
     new SupportWorkersClient(arn, stateWrapper, supportUrl, call)
 }
 
 case class StatusResponse(
-  status: Status,
-  trackingUri: String,
-  failureReason: Option[CheckoutFailureReason] = None
+    status: Status,
+    trackingUri: String,
+    failureReason: Option[CheckoutFailureReason] = None,
 )
 
 object StatusResponse {
@@ -93,21 +93,28 @@ object StatusResponse {
 }
 
 class SupportWorkersClient(
-  arn: StateMachineArn,
-  stateWrapper: StateWrapper,
-  supportUrl: String,
-  statusCall: String => Call
+    arn: StateMachineArn,
+    stateWrapper: StateWrapper,
+    supportUrl: String,
+    statusCall: String => Call,
 )(implicit system: ActorSystem) {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
-  private def referrerAcquisitionDataWithGAFields(request: Request[CreateSupportWorkersRequest]): ReferrerAcquisitionData = {
+  private def referrerAcquisitionDataWithGAFields(
+      request: Request[CreateSupportWorkersRequest],
+  ): ReferrerAcquisitionData = {
     val hostname = request.host
     val gaClientId = request.cookies.get("_ga").map(_.value)
     val userAgent = request.headers.get("user-agent")
     val ipAddress = request.remoteAddress
-    request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
+    request.body.referrerAcquisitionData.copy(
+      hostname = Some(hostname),
+      gaClientId = gaClientId,
+      userAgent = userAgent,
+      ipAddress = Some(ipAddress),
+    )
   }
 
   private def getGiftRecipient(giftRecipient: GiftRecipientRequest, product: ProductType) =
@@ -118,8 +125,8 @@ class SupportWorkersClient(
             giftRecipient.title,
             giftRecipient.firstName,
             giftRecipient.lastName,
-            giftRecipient.email
-          )
+            giftRecipient.email,
+          ),
         )
       case _: DigitalPack =>
         for {
@@ -130,64 +137,76 @@ class SupportWorkersClient(
           giftRecipient.lastName,
           email,
           giftRecipient.message,
-          deliveryDate
+          deliveryDate,
         )
       case _ =>
         Left(s"gifting is not supported for $product")
     }
 
   def createSubscription(
-    request: Request[CreateSupportWorkersRequest],
-    user: User,
-    requestId: UUID
+      request: Request[CreateSupportWorkersRequest],
+      user: User,
+      requestId: UUID,
   ): EitherT[Future, String, StatusResponse] = {
     SafeLogger.info(s"$requestId: debug info ${request.body.debugInfo}")
 
     for {
-      giftRecipient <- EitherT.fromEither[Future](request.body.giftRecipient.map(getGiftRecipient(_, request.body.product)).sequence)
+      giftRecipient <- EitherT.fromEither[Future](
+        request.body.giftRecipient.map(getGiftRecipient(_, request.body.product)).sequence,
+      )
       createPaymentMethodState = CreatePaymentMethodState(
         requestId = requestId,
         user = user,
         giftRecipient = giftRecipient,
         product = request.body.product,
-        analyticsInfo = AnalyticsInfo(giftRecipient.isDefined, PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption)),
+        analyticsInfo = AnalyticsInfo(
+          giftRecipient.isDefined,
+          PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),
+        ),
         paymentFields = request.body.paymentFields,
-        acquisitionData = Some(AcquisitionData(
-          ophanIds = request.body.ophanIds,
-          referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
-          supportAbTests = request.body.supportAbTests
-        )),
+        acquisitionData = Some(
+          AcquisitionData(
+            ophanIds = request.body.ophanIds,
+            referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
+            supportAbTests = request.body.supportAbTests,
+          ),
+        ),
         promoCode = request.body.promoCode,
         csrUsername = request.body.csrUsername,
         salesforceCaseId = request.body.salesforceCaseId,
         firstDeliveryDate = request.body.firstDeliveryDate,
         userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
-        ipAddress = request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress)
+        ipAddress =
+          request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
       )
       isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
-      executionResult <- underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
-        { error =>
-          SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
-          StateMachineFailure.toString
-        },
-        { success =>
-          SafeLogger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
-          underlying.jobIdFromArn(success.arn).map { jobId =>
-            StatusResponse(
-              status = Status.Pending,
-              trackingUri = supportUrl + statusCall(jobId).url
-            )
-          } getOrElse {
-            SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request")
-            StatusResponse(
-              status = Status.Failure,
-              trackingUri = "",
-              failureReason = Some(CheckoutFailureReasons.Unknown)
-            )
-          }
+      executionResult <- underlying
+        .triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount)
+        .bimap(
+          { error =>
+            SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
+            StateMachineFailure.toString
+          },
+          { success =>
+            SafeLogger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
+            underlying.jobIdFromArn(success.arn).map { jobId =>
+              StatusResponse(
+                status = Status.Pending,
+                trackingUri = supportUrl + statusCall(jobId).url,
+              )
+            } getOrElse {
+              SafeLogger.error(
+                scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request",
+              )
+              StatusResponse(
+                status = Status.Failure,
+                trackingUri = "",
+                failureReason = Some(CheckoutFailureReasons.Unknown),
+              )
+            }
 
-        }
-      )
+          },
+        )
     } yield executionResult
 
   }
@@ -195,21 +214,25 @@ class SupportWorkersClient(
   def status(jobId: String, requestId: UUID): EitherT[Future, SupportWorkersError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
-      SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}")
+      SafeLogger.info(
+        s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}",
+      )
       statusResponse
     }
 
-    underlying.history(jobId).bimap(
-      { error =>
-        SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
-        StateMachineFailure: SupportWorkersError
-      },
-      { events =>
-        val trackingUri = supportUrl + statusCall(jobId).url
-        val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails))
-        respondToClient(StepFunctionExecutionStatus.checkoutStatus(detailedHistory, stateWrapper, trackingUri))
-      }
-    )
+    underlying
+      .history(jobId)
+      .bimap(
+        { error =>
+          SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
+          StateMachineFailure: SupportWorkersError
+        },
+        { events =>
+          val trackingUri = supportUrl + statusCall(jobId).url
+          val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails))
+          respondToClient(StepFunctionExecutionStatus.checkoutStatus(detailedHistory, stateWrapper, trackingUri))
+        },
+      )
 
   }
 
@@ -220,7 +243,11 @@ class SupportWorkersClient(
 
 object StepFunctionExecutionStatus {
 
-  def checkoutStatus(detailedHistory: List[Try[StateExitedEventDetails]], stateWrapper: StateWrapper, trackingUri: String): StatusResponse = {
+  def checkoutStatus(
+      detailedHistory: List[Try[StateExitedEventDetails]],
+      stateWrapper: StateWrapper,
+      trackingUri: String,
+  ): StatusResponse = {
 
     val searchForFinishedCheckout: Option[StatusResponse] = detailedHistory.collectFirst {
       case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutSuccess") =>
@@ -233,7 +260,10 @@ object StepFunctionExecutionStatus {
 
   }
 
-  def getFailureDetails(stateWrapper: StateWrapper, eventDetails: StateExitedEventDetails): Option[CheckoutFailureReason] = {
+  def getFailureDetails(
+      stateWrapper: StateWrapper,
+      eventDetails: StateExitedEventDetails,
+  ): Option[CheckoutFailureReason] = {
     SafeLogger.info(s"Event details are: $eventDetails")
     stateWrapper.unWrap[CheckoutFailureState](eventDetails.getOutput) match {
       case Success(checkoutFailureState) =>
@@ -246,5 +276,3 @@ object StepFunctionExecutionStatus {
   }
 
 }
-
-

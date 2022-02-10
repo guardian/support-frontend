@@ -10,9 +10,13 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 @JsonCodec case class HealthCheckResponse(status: String, gitCommitId: String)
 
 class AppController(
-  cc: ControllerComponents
+    cc: ControllerComponents,
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
+    extends AbstractController(cc)
+    with Circe
+    with JsonUtils
+    with StrictLogging
+    with CorsActionProvider {
 
   def healthcheck: Action[AnyContent] = Action {
     Ok(HealthCheckResponse("Everything is super", app.BuildInfo.gitCommitId))

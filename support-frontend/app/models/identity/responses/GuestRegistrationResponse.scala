@@ -15,7 +15,7 @@ import play.api.libs.json.{Json, Reads}
 //   }
 // }
 case class GuestRegistrationResponse(
-    guestRegistrationRequest: GuestRegistrationResponse.GuestRegistrationRequest
+    guestRegistrationRequest: GuestRegistrationResponse.GuestRegistrationRequest,
 )
 
 object GuestRegistrationResponse {

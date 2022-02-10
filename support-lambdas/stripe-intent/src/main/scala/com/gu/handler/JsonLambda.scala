@@ -14,7 +14,9 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.io.Source
 import scala.util.Try
 
-abstract class JsonLambda[Request: Decoder, Environment](implicit executionContext: ExecutionContext) extends RequestStreamHandler with LogImplicit {
+abstract class JsonLambda[Request: Decoder, Environment](implicit executionContext: ExecutionContext)
+    extends RequestStreamHandler
+    with LogImplicit {
 
   // stuff that makes minimal view of the outside world goes in here
   def minimalEnvironment(): Environment
@@ -33,7 +35,7 @@ abstract class JsonLambda[Request: Decoder, Environment](implicit executionConte
       val environment = minimalEnvironment()
       val outputString = Await.result(
         lambdaString(environment, inputString),
-        Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS)
+        Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS),
       )
       val t = Try(output.write(outputString.getBytes()))
       output.close()

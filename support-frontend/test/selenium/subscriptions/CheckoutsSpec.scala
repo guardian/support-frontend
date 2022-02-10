@@ -8,12 +8,13 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen, Ignore}
 import selenium.subscriptions.pages._
 import selenium.util._
 
-class CheckoutsSpec extends AnyFeatureSpec
-  with GivenWhenThen
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Browser
-  with Eventually {
+class CheckoutsSpec
+    extends AnyFeatureSpec
+    with GivenWhenThen
+    with BeforeAndAfter
+    with BeforeAndAfterAll
+    with Browser
+    with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver: WebDriver = driverConfig.webDriver
@@ -59,11 +60,21 @@ class CheckoutsSpec extends AnyFeatureSpec
 
   Feature("Guardian Weekly gift checkout") {
     Scenario("User already logged in - Direct Debit checkout") {
-      testCheckout("Guardian Weekly gift", new GuardianWeeklyGiftCheckout, new WeeklyGiftProductPage, payWithDirectDebit)
+      testCheckout(
+        "Guardian Weekly gift",
+        new GuardianWeeklyGiftCheckout,
+        new WeeklyGiftProductPage,
+        payWithDirectDebit,
+      )
     }
   }
 
-  def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, productPage: ProductPage, paymentFunction: CheckoutPage => Unit): Unit = {
+  def testCheckout(
+      checkoutName: String,
+      checkoutPage: CheckoutPage,
+      productPage: ProductPage,
+      paymentFunction: CheckoutPage => Unit,
+  ): Unit = {
     val testUserRequest = new IdapiTestUserRequest()
     val testUser = testUserRequest.getCookies match {
       case Left(error) => fail(error)
@@ -85,7 +96,7 @@ class CheckoutsSpec extends AnyFeatureSpec
     paymentFunction(checkoutPage)
   }
 
-  def payWithStripe(checkoutPage: CheckoutPage): Unit ={
+  def payWithStripe(checkoutPage: CheckoutPage): Unit = {
     Given("that the user selects to pay with Stripe")
     When("they press the Stripe payment button")
     checkoutPage.selectStripePaymentMethod()
@@ -103,7 +114,7 @@ class CheckoutsSpec extends AnyFeatureSpec
     thankYouPage(checkoutPage)
   }
 
-  def payWithDirectDebit(checkoutPage: CheckoutPage): Unit ={
+  def payWithDirectDebit(checkoutPage: CheckoutPage): Unit = {
 
     Given("that the user selects to pay with Direct Debit")
     When("they press the Direct Debit payment button")
@@ -127,7 +138,7 @@ class CheckoutsSpec extends AnyFeatureSpec
     thankYouPage(checkoutPage)
   }
 
-  def thankYouPage(checkoutPage: CheckoutPage): Unit ={
+  def thankYouPage(checkoutPage: CheckoutPage): Unit = {
     Then("the thank you page should display")
     eventually {
       assert(checkoutPage.thankYouPageHasLoaded)

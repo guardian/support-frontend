@@ -38,7 +38,8 @@ object SentryLogging {
           LoggerFactory.getLogger(ROOT_LOGGER_NAME).asInstanceOf[Logger].addAppender(sentryAppender)
         } match {
           case Success(_) => SafeLogger.debug("Sentry logging configured.")
-          case Failure(e) => SafeLogger.error(scrub"Something went wrong when setting up Sentry logging ${e.getStackTrace}")
+          case Failure(e) =>
+            SafeLogger.error(scrub"Something went wrong when setting up Sentry logging ${e.getStackTrace}")
         }
     }
   }

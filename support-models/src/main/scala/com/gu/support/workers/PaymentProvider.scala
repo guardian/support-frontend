@@ -32,7 +32,7 @@ object PaymentProvider {
     Sepa,
     Existing,
     RedemptionNoProvider,
-    AmazonPay
+    AmazonPay,
   )
 
   def fromString(code: String): Option[PaymentProvider] = {
@@ -40,15 +40,18 @@ object PaymentProvider {
   }
 
   implicit val decoder: Decoder[PaymentProvider] =
-    Decoder.decodeString.emap(code => PaymentProvider.fromString(code).toRight(s"unrecognised payment provider '$code'"))
+    Decoder.decodeString.emap(code =>
+      PaymentProvider.fromString(code).toRight(s"unrecognised payment provider '$code'"),
+    )
 
   implicit val encoder: Encoder[PaymentProvider] = Encoder.encodeString.contramap[PaymentProvider](_.toString)
 
   def fromPaymentFields(paymentFields: Option[PaymentFields]): PaymentProvider = paymentFields match {
-    case Some(stripe: StripePaymentFields) => stripe.stripePaymentType match {
-      case Some(StripePaymentType.StripeApplePay) => StripeApplePay
-      case _ => Stripe
-    }
+    case Some(stripe: StripePaymentFields) =>
+      stripe.stripePaymentType match {
+        case Some(StripePaymentType.StripeApplePay) => StripeApplePay
+        case _ => Stripe
+      }
     case Some(_: PayPalPaymentFields) => PayPal
     case Some(_: DirectDebitPaymentFields) => DirectDebit
     case Some(_: SepaPaymentFields) => Sepa

@@ -15,14 +15,14 @@ import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRat
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscriptionCorporateRedemptionBuilder(
-  codeValidator: CorporateCodeValidator,
-  dateGenerator: DateGenerator,
-  environment: TouchPointEnvironment,
-  subscribeItemBuilder: SubscribeItemBuilder,
+    codeValidator: CorporateCodeValidator,
+    dateGenerator: DateGenerator,
+    environment: TouchPointEnvironment,
+    subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
   def build(
-    state: DigitalSubscriptionCorporateRedemptionState
+      state: DigitalSubscriptionCorporateRedemptionState,
   )(implicit ec: ExecutionContext): EitherT[Future, InvalidCode, SubscribeItem] = {
     import state._
     val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
@@ -39,11 +39,13 @@ class DigitalSubscriptionCorporateRedemptionBuilder(
       subscription <-
         EitherT(codeValidator.getStatus(redemptionCode).map {
           case ValidCorporateCode(corporateId) =>
-            Right(subscriptionData.subscription.copy(
-              redemptionCode = Some(redemptionCode.value),
-              corporateAccountId = Some(corporateId.corporateIdString),
-              readerType = ReaderType.Corporate
-            ))
+            Right(
+              subscriptionData.subscription.copy(
+                redemptionCode = Some(redemptionCode.value),
+                corporateAccountId = Some(corporateId.corporateIdString),
+                readerType = ReaderType.Corporate,
+              ),
+            )
           case error: InvalidCode => Left(error)
           case _ => Left(InvalidReaderType)
         })

@@ -17,18 +17,20 @@ class SetCookiesCheck(implicit val mat: Materializer, ec: ExecutionContext) exte
       def suitableForCaching = cacheableStatusCodes.contains(result.header.status)
       def setsCookies = result.newCookies.nonEmpty || result.newFlash.nonEmpty || result.newSession.nonEmpty
       def cacheControlPrivate = result.header.headers.get("Cache-Control").exists(_.contains("no-cache, private"))
-      def cookiesAccessed = requestHeader.attrs.get(RequestAttrKey.Cookies).collect {
-        case cell: LazyCell[Cookies] => cell.evaluated
+      def cookiesAccessed = requestHeader.attrs.get(RequestAttrKey.Cookies).collect { case cell: LazyCell[Cookies] =>
+        cell.evaluated
       } getOrElse true
 
       if (suitableForCaching && !cacheControlPrivate) {
         assert(
           assertion = !setsCookies,
-          message = s"Response sets cookies - ensure controller response has correct Cache-Control header set for ${requestHeader.path}"
+          message =
+            s"Response sets cookies - ensure controller response has correct Cache-Control header set for ${requestHeader.path}",
         )
         assert(
           assertion = !cookiesAccessed,
-          message = s"Endpoint accesses cookies - ensure controller response has correct Cache-Control header set for ${requestHeader.path}"
+          message =
+            s"Endpoint accesses cookies - ensure controller response has correct Cache-Control header set for ${requestHeader.path}",
         )
       }
       result

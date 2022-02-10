@@ -26,7 +26,11 @@ object FreeTrialBenefit {
   implicit val freeTrialCodec: Codec[FreeTrialBenefit] = deriveCodec
 }
 
-case class IncentiveBenefit(redemptionInstructions: String, legalTerms: Option[String], termsAndConditions: Option[String]) extends Benefit
+case class IncentiveBenefit(
+    redemptionInstructions: String,
+    legalTerms: Option[String],
+    termsAndConditions: Option[String],
+) extends Benefit
 
 object IncentiveBenefit {
   val jsonName = "incentive"
@@ -40,7 +44,8 @@ case object Issue extends IntroductoryPeriodType
 
 object IntroductoryPeriodType {
   implicit val decodePeriod: Decoder[IntroductoryPeriodType] = Decoder.decodeString.map(code => fromString(code))
-  implicit val encodePeriod: Encoder[IntroductoryPeriodType] = Encoder.encodeString.contramap[IntroductoryPeriodType](_.toString.toLowerCase)
+  implicit val encodePeriod: Encoder[IntroductoryPeriodType] =
+    Encoder.encodeString.contramap[IntroductoryPeriodType](_.toString.toLowerCase)
 
   private def fromString(s: String) = {
     s.toLowerCase match {
@@ -49,7 +54,8 @@ object IntroductoryPeriodType {
   }
 }
 
-case class IntroductoryPriceBenefit(price: Double, periodLength: Int, periodType: IntroductoryPeriodType) extends Benefit
+case class IntroductoryPriceBenefit(price: Double, periodLength: Int, periodType: IntroductoryPeriodType)
+    extends Benefit
 
 object IntroductoryPriceBenefit {
   val jsonName = "introductory_price"
@@ -69,6 +75,6 @@ object Benefit {
     Decoder[DiscountBenefit].widen,
     Decoder[FreeTrialBenefit].widen,
     Decoder[IncentiveBenefit].widen,
-    Decoder[IntroductoryPriceBenefit].widen
+    Decoder[IntroductoryPriceBenefit].widen,
   ).reduceLeft(_ or _)
 }

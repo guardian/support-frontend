@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver
 import org.scalatestplus.selenium.Page
 import selenium.util.{Browser, Config}
 
-class DirectDebitForm (implicit val webDriver: WebDriver) extends Page with Browser {
+class DirectDebitForm(implicit val webDriver: WebDriver) extends Page with Browser {
 
   val url = s"${Config.supportFrontendUrl}/subscribe/digital/checkout"
 

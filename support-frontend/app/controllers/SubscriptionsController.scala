@@ -21,14 +21,18 @@ import views.ViewHelpers.outputJson
 import scala.concurrent.ExecutionContext
 
 class SubscriptionsController(
-  val actionRefiners: CustomActionBuilders,
-  priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  val assets: AssetsResolver,
-  components: ControllerComponents,
-  stringsConfig: StringsConfig,
-  settingsProvider: AllSettingsProvider,
-  val supportUrl: String
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
+    val actionRefiners: CustomActionBuilders,
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    val assets: AssetsResolver,
+    components: ControllerComponents,
+    stringsConfig: StringsConfig,
+    settingsProvider: AllSettingsProvider,
+    val supportUrl: String,
+)(implicit val ec: ExecutionContext)
+    extends AbstractController(components)
+    with GeoRedirect
+    with CanonicalLinks
+    with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
@@ -44,41 +48,44 @@ class SubscriptionsController(
 
   case class PriceCopy(price: BigDecimal, discountCopy: String)
   object PriceCopy {
-    implicit val codec : com.gu.support.encoding.Codec[PriceCopy] = deriveCodec
+    implicit val codec: com.gu.support.encoding.Codec[PriceCopy] = deriveCodec
   }
 
   def pricingCopy(priceSummary: PriceSummary): PriceCopy =
     PriceCopy(
       priceSummary.price,
-      priceSummary.promotions.headOption.map(_.description).getOrElse("")
+      priceSummary.promotions.headOption.map(_.description).getOrElse(""),
     )
 
   def getLandingPrices(countryGroup: CountryGroup): Map[String, PriceCopy] = {
     val service = priceSummaryServiceProvider.forUser(false)
 
     val paperMap = if (countryGroup == CountryGroup.UK) {
-      val paper = service.getPrices(Paper, List(DefaultPromotions.Paper.june21Promotion))(CountryGroup.UK)(Collection)(Sunday)(Monthly)(GBP)
+      val paper = service.getPrices(Paper, List(DefaultPromotions.Paper.june21Promotion))(CountryGroup.UK)(Collection)(
+        Sunday,
+      )(Monthly)(GBP)
       Map(Paper.toString -> pricingCopy(paper))
-    }
-    else
+    } else
       Map.empty
 
     val fulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
     val weekly =
       service.getPrices(
         GuardianWeekly,
-        List(DefaultPromotions.GuardianWeekly.NonGift.jan21Promotion)
-      )(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(countryGroup.currency)
+        List(DefaultPromotions.GuardianWeekly.NonGift.jan21Promotion),
+      )(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(
+        countryGroup.currency,
+      )
 
     val digitalSubscription = service
       .getPrices(
         DigitalPack,
-        List(DefaultPromotions.DigitalSubscription.Monthly.fiftyPercentOff3Months)
+        List(DefaultPromotions.DigitalSubscription.Monthly.fiftyPercentOff3Months),
       )(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
 
     Map(
       GuardianWeekly.toString -> pricingCopy(weekly),
-      DigitalPack.toString -> pricingCopy(digitalSubscription)
+      DigitalPack.toString -> pricingCopy(digitalSubscription),
     ) ++ paperMap
   }
 
@@ -89,18 +96,19 @@ class SubscriptionsController(
     val js = "subscriptionsLandingPage.js"
     val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
 
-    Ok(views.html.main(
-      title,
-      mainElement,
-      Left(RefPath(js)),
-      Left(RefPath("subscriptionsLandingPage.css")),
-      description = stringsConfig.subscriptionsLandingDescription
-    ){
-      Html(
-        s"""<script type="text/javascript">
+    Ok(
+      views.html.main(
+        title,
+        mainElement,
+        Left(RefPath(js)),
+        Left(RefPath("subscriptionsLandingPage.css")),
+        description = stringsConfig.subscriptionsLandingDescription,
+      ) {
+        Html(s"""<script type="text/javascript">
               window.guardian.pricingCopy = ${outputJson(pricingCopy)}
             </script>""")
-    }).withSettingsSurrogateKey
+      },
+    ).withSettingsSurrogateKey
   }
 
 }

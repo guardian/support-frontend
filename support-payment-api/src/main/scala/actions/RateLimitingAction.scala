@@ -11,25 +11,26 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 import play.api.libs.circe.Circe
 
-/**
-  * Simple rate-limiting by IP address.
-  * Note - there is no coordination across instances in an ASG.
+/** Simple rate-limiting by IP address. Note - there is no coordination across instances in an ASG.
   *
-  * This is not currently suitable for PayPal endpoints because requests come
-  * from the backend, not the browser.
+  * This is not currently suitable for PayPal endpoints because requests come from the backend, not the browser.
   */
 
 case class RateLimitingSettings(maxRequests: Int, interval: FiniteDuration)
 
 class RateLimitingAction(
-  val parse: PlayBodyParsers,
-  val executionContext: ExecutionContext,
-  cloudWatchService: CloudWatchService,
-  settings: RateLimitingSettings,
-  paymentProvider: PaymentProvider,
-  stage: String
+    val parse: PlayBodyParsers,
+    val executionContext: ExecutionContext,
+    cloudWatchService: CloudWatchService,
+    settings: RateLimitingSettings,
+    paymentProvider: PaymentProvider,
+    stage: String,
 ) extends ActionBuilder[Request, AnyContent]
-  with ActionFilter[Request] with Results with Circe with StrictLogging with JsonUtils {
+    with ActionFilter[Request]
+    with Results
+    with Circe
+    with StrictLogging
+    with JsonUtils {
 
   override def parser: BodyParser[AnyContent] = parse.defaultBodyParser
 
@@ -44,11 +45,10 @@ class RateLimitingAction(
         // Start timing from when the ip is first cached, and do not restart the timer after updates
         create = (_: IpAddress, _: Int) => settings.interval,
         update = (_: IpAddress, _: Int, currentDuration: FiniteDuration) => currentDuration,
-        read = (_: IpAddress, _: Int, currentDuration: FiniteDuration) => currentDuration
+        read = (_: IpAddress, _: Int, currentDuration: FiniteDuration) => currentDuration,
       )
       .maximumSize(1000)
       .build[IpAddress, Int]()
-
 
   def filter[A](request: Request[A]): Future[Option[Result]] = Future.successful {
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For#Syntax

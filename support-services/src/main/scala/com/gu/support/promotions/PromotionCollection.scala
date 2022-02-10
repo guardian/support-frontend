@@ -11,12 +11,13 @@ class SimplePromotionCollection(promotions: List[Promotion]) extends PromotionCo
   override def all: Iterator[Promotion] = promotions.iterator
 }
 
-class DynamoPromotionCollection(config: PromotionsTablesConfig) extends
-  DynamoService[Promotion](DynamoTables.getTable(config.promotions)) with
-  PromotionCollection
+class DynamoPromotionCollection(config: PromotionsTablesConfig)
+    extends DynamoService[Promotion](DynamoTables.getTable(config.promotions))
+    with PromotionCollection
 
-class CachedDynamoPromotionCollection(config: PromotionsTablesConfig) extends
-  DynamoPromotionCollection(config) with PromotionCollection {
+class CachedDynamoPromotionCollection(config: PromotionsTablesConfig)
+    extends DynamoPromotionCollection(config)
+    with PromotionCollection {
 
   override def all: Iterator[Promotion] = PromotionCache.get.getOrElse(fetchAndCache).toIterator
 
@@ -26,4 +27,3 @@ class CachedDynamoPromotionCollection(config: PromotionsTablesConfig) extends
     promotions
   }
 }
-

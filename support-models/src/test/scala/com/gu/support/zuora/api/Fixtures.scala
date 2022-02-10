@@ -2,7 +2,12 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction, StripePaymentType}
+import com.gu.support.workers.{
+  CreditCardReferenceTransaction,
+  DirectDebitPaymentMethod,
+  PayPalReferenceTransaction,
+  StripePaymentType,
+}
 import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
@@ -105,8 +110,8 @@ object Fixtures {
   val date = new LocalDate(2017, 5, 4)
 
   def account(
-    currency: Currency = GBP,
-    paymentGateway: PaymentGateway = StripeGatewayDefault
+      currency: Currency = GBP,
+      paymentGateway: PaymentGateway = StripeGatewayDefault,
   ): Account = Account(
     salesforceAccountId,
     currency,
@@ -114,31 +119,41 @@ object Fixtures {
     salesforceId,
     identityId,
     Some(paymentGateway),
-    "createdreqid_hi"
+    "createdreqid_hi",
   )
 
   val deliveryInstructions = "Leave behind the dustbin"
-  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@gu.com"), Country.UK, deliveryInstructions = Some(deliveryInstructions))
+  val contactDetails =
+    ContactDetails(
+      "Test-FirstName",
+      "Test-LastName",
+      Some("test@gu.com"),
+      Country.UK,
+      deliveryInstructions = Some(deliveryInstructions),
+    )
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,
     cardNumber,
     Some(Country.UK),
-    12, 22,
+    12,
+    22,
     Some("AmericanExpress"),
     StripeGatewayDefault,
-    StripePaymentType = Some(StripePaymentType.StripeCheckout))
+    StripePaymentType = Some(StripePaymentType.StripeCheckout),
+  )
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
     FirstName = "Barry",
     LastName = "Humphreys",
     BankTransferAccountName = "Barry Humphreys",
-    BankCode = "200000", BankTransferAccountNumber = "55779911",
+    BankCode = "200000",
+    BankTransferAccountNumber = "55779911",
     City = Some("London"),
     PostalCode = Some("abc 123"),
     State = None,
     StreetName = Some("easy street"),
-    StreetNumber = None
+    StreetNumber = None,
   )
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"
@@ -147,14 +162,16 @@ object Fixtures {
   val monthlySubscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(productRatePlanId), //Contribution product
-        List(RatePlanChargeData(
-          ContributionRatePlanCharge(productRatePlanChargeId, 25)
-        )),
-        Nil
-      )
+        RatePlan(productRatePlanId), // Contribution product
+        List(
+          RatePlanChargeData(
+            ContributionRatePlanCharge(productRatePlanChargeId, 25),
+          ),
+        ),
+        Nil,
+      ),
     ),
-    subscription
+    subscription,
   )
 
   val dsSubscriptionData = SubscriptionData(
@@ -170,7 +187,7 @@ object Fixtures {
       initialTermPeriodType = Month,
       redemptionCode = None,
       giftNotificationEmailDate = None,
-    )
+    ),
   )
 
   val dsGiftSubscriptionData = SubscriptionData(
@@ -186,7 +203,7 @@ object Fixtures {
       initialTermPeriodType = Month,
       redemptionCode = Some("gd03-asdfghjq"),
       giftNotificationEmailDate = Some(new LocalDate(2020, 12, 25)),
-    )
+    ),
   )
 
   val accountJson =
@@ -279,40 +296,71 @@ object Fixtures {
     """
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
-    SubscribeRequest(List(
-      SubscribeItem(account(currency), contactDetails, Some(contactDetails), Some(creditCardPaymentMethod), monthlySubscriptionData, SubscribeOptions())
-    ))
+    SubscribeRequest(
+      List(
+        SubscribeItem(
+          account(currency),
+          contactDetails,
+          Some(contactDetails),
+          Some(creditCardPaymentMethod),
+          monthlySubscriptionData,
+          SubscribeOptions(),
+        ),
+      ),
+    )
 
   def directDebitSubscriptionRequest: SubscribeRequest =
-    SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, Some(directDebitPaymentMethod), monthlySubscriptionData, SubscribeOptions())
-    ))
+    SubscribeRequest(
+      List(
+        SubscribeItem(
+          account(paymentGateway = DirectDebitGateway),
+          contactDetails,
+          None,
+          Some(directDebitPaymentMethod),
+          monthlySubscriptionData,
+          SubscribeOptions(),
+        ),
+      ),
+    )
 
   val invalidMonthlySubsData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(productRatePlanId),
-        List(RatePlanChargeData(
-          ContributionRatePlanCharge(productRatePlanChargeId, 5)
-        )),
-        Nil
-      )
+        List(
+          RatePlanChargeData(
+            ContributionRatePlanCharge(productRatePlanChargeId, 5),
+          ),
+        ),
+        Nil,
+      ),
     ),
-    Subscription(date, date, date, "id123", termType = "Invalid term type")
+    Subscription(date, date, date, "id123", termType = "Invalid term type"),
   )
-  val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, None, Some(creditCardPaymentMethod), invalidMonthlySubsData, SubscribeOptions())
-  ))
+  val invalidSubscriptionRequest = SubscribeRequest(
+    List(
+      SubscribeItem(
+        account(),
+        contactDetails,
+        None,
+        Some(creditCardPaymentMethod),
+        invalidMonthlySubsData,
+        SubscribeOptions(),
+      ),
+    ),
+  )
 
   val incorrectPaymentMethod = SubscribeRequest(
     List(
-      SubscribeItem(account(),
-      contactDetails,
-      None,
-      Some(payPalPaymentMethod),
-      invalidMonthlySubsData,
-      SubscribeOptions())
-    )
+      SubscribeItem(
+        account(),
+        contactDetails,
+        None,
+        Some(payPalPaymentMethod),
+        invalidMonthlySubsData,
+        SubscribeOptions(),
+      ),
+    ),
   )
 
   val invoiceResult =

@@ -8,7 +8,8 @@ import com.gu.aws.AwsAsync
 import scala.concurrent.Future
 
 class ClientWrapper(client: AWSStepFunctionsAsync) {
-  private val rateLimiter = RateLimiter.create(2D) //Limit the number of requests we make to avoid throttling exceptions
+  private val rateLimiter =
+    RateLimiter.create(2d) // Limit the number of requests we make to avoid throttling exceptions
 
   def listStateMachines: Future[ListStateMachinesResult] = {
     rateLimiter.acquire

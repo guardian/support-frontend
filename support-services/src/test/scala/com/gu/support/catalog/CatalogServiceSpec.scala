@@ -9,15 +9,14 @@ import com.gu.support.config.TouchPointEnvironments.PROD
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
 class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
 
   def getPrice[T <: Product](
-    product: T,
-    currency: Currency,
-    billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions,
-    productOptions: ProductOptions
+      product: T,
+      currency: Currency,
+      billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions,
+      productOptions: ProductOptions,
   ): Option[Price] = {
     for {
       productRatePlan <- product.getProductRatePlan(PROD, billingPeriod, fulfilmentOptions, productOptions)
@@ -32,7 +31,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       GBP,
       Monthly,
       NoFulfilmentOptions,
-      NoProductOptions
+      NoProductOptions,
     ) shouldBe Some(Price(11.99, GBP))
 
     getPrice(
@@ -40,7 +39,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       GBP,
       Monthly,
       HomeDelivery,
-      Everyday
+      Everyday,
     ) shouldBe Some(Price(67.99, GBP))
 
     getPrice(
@@ -48,7 +47,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       GBP,
       Monthly,
       HomeDelivery,
-      Sixday
+      Sixday,
     ) shouldBe Some(Price(57.99, GBP))
 
     getPrice(
@@ -56,7 +55,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       GBP,
       Quarterly,
       Domestic,
-      NoProductOptions
+      NoProductOptions,
     ) shouldBe Some(Price(37.50, GBP))
 
     getPrice(
@@ -64,7 +63,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       USD,
       Annual,
       RestOfWorld,
-      NoProductOptions
+      NoProductOptions,
     ) shouldBe Some(Price(325.20, USD))
 
     (for {
@@ -75,9 +74,8 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
   }
 }
 
-object CatalogServiceSpec{
+object CatalogServiceSpec {
   private val json = parse(ServiceFixtures.loadCatalog).right.get
   private val jsonProvider = new SimpleJsonProvider(json)
   val serviceWithFixtures = new CatalogService(PROD, jsonProvider)
 }
-

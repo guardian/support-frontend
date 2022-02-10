@@ -9,7 +9,6 @@ import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
 @IntegrationTest
 class DynamoServiceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 

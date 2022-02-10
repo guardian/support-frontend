@@ -14,10 +14,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 
-class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
-  with Matchers
-  with MockitoSugar
-  with LazyLogging {
+class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec with Matchers with MockitoSugar with LazyLogging {
 
   "Monthly Contribution Product" should "be decodable" in {
     val product: ProductType = Contribution(5, GBP, Monthly)
@@ -46,39 +43,42 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
 
   private def assertCodecIsValid(json: Json) = {
     val product2 = decode[ProductType](json.noSpaces)
-    product2.isRight should be(true) //decoding succeeded
+    product2.isRight should be(true) // decoding succeeded
   }
 
   "CreatePaymentMethodStateDecoder" should "be able to decode a contribution with PayPal payment fields" in {
     val maybeState = decode[CreatePaymentMethodState](createPayPalPaymentMethodContributionJson())
 
-    val fieldsToTest = maybeState.map(state =>
-      (state.product, state.paymentFields))
-    fieldsToTest should be(Right(
-      Contribution(5, GBP, Monthly),
-      Left(PayPalPaymentFields(validBaid))
-    ))
+    val fieldsToTest = maybeState.map(state => (state.product, state.paymentFields))
+    fieldsToTest should be(
+      Right(
+        Contribution(5, GBP, Monthly),
+        Left(PayPalPaymentFields(validBaid)),
+      ),
+    )
 
   }
 
   it should "be able to decode a contribution with Stripe source payment fields" in {
     val maybeState = decode[CreatePaymentMethodState](createStripeSourcePaymentMethodContributionJson())
-    val fieldsToTest = maybeState.map(state =>
-      (state.product, state.paymentFields))
-    fieldsToTest should be(Right(
-      Contribution(5, GBP, Monthly),
-      Left(StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout)))
-    ))
+    val fieldsToTest = maybeState.map(state => (state.product, state.paymentFields))
+    fieldsToTest should be(
+      Right(
+        Contribution(5, GBP, Monthly),
+        Left(StripeSourcePaymentFields(stripeToken, Some(StripePaymentType.StripeCheckout))),
+      ),
+    )
   }
 
   it should "be able to decode a contribution with Stripe payment method payment fields" in {
     val maybeState = decode[CreatePaymentMethodState](createStripePaymentMethodPaymentMethodContributionJson())
-    val fieldsToTest = maybeState.map(state =>
-      (state.product, state.paymentFields))
-    fieldsToTest should be(Right(
-      Contribution(5, GBP, Monthly),
-      Left(StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout)))
-    ))
+    val fieldsToTest = maybeState.map(state => (state.product, state.paymentFields))
+    fieldsToTest should be(
+      Right(
+        Contribution(5, GBP, Monthly),
+        Left(StripePaymentMethodPaymentFields(stripePaymentMethodToken, Some(StripePaymentType.StripeCheckout))),
+      ),
+    )
   }
 
   it should "be able to decode a DigtalBundle with PayPal payment fields" in {
@@ -96,16 +96,19 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec
 
   it should "be able to decode a DigitalSubscription with Direct Debit payment fields" in {
     val state = decode[CreatePaymentMethodState](createDirectDebitDigitalPackJson)
-    state.fold(e => logger.error(s"$e"), result => {
-      result.product match {
-        case digitalPack: DigitalPack => digitalPack.billingPeriod should be(Annual)
-        case _ => fail()
-      }
-      result.paymentFields match {
-        case Left(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
-        case _ => fail()
-      }
-    })
+    state.fold(
+      e => logger.error(s"$e"),
+      result => {
+        result.product match {
+          case digitalPack: DigitalPack => digitalPack.billingPeriod should be(Annual)
+          case _ => fail()
+        }
+        result.paymentFields match {
+          case Left(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
+          case _ => fail()
+        }
+      },
+    )
   }
 
 }

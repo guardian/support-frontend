@@ -19,8 +19,8 @@ class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response] extends Asyn
 object AwsAsync {
 
   def apply[Request <: AmazonWebServiceRequest, Response](
-    f: (Request, AsyncHandler[Request, Response]) => JFuture[Response],
-    request: Request
+      f: (Request, AsyncHandler[Request, Response]) => JFuture[Response],
+      request: Request,
   ): Future[Response] = {
     val handler = new AwsAsyncHandler[Request, Response]
     try {

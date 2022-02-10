@@ -9,14 +9,18 @@ import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
 class DigitalSubscriptionDirectPurchaseBuilder(
-  config: ZuoraDigitalPackConfig,
-  promotionService: PromotionService,
-  dateGenerator: DateGenerator,
-  environment: TouchPointEnvironment,
-  subscribeItemBuilder: SubscribeItemBuilder,
+    config: ZuoraDigitalPackConfig,
+    promotionService: PromotionService,
+    dateGenerator: DateGenerator,
+    environment: TouchPointEnvironment,
+    subscribeItemBuilder: SubscribeItemBuilder,
 ) {
 
-  def build(state: DigitalSubscriptionDirectPurchaseState, csrUsername: Option[String], salesforceCaseId: Option[String]): Either[PromoError, SubscribeItem] = {
+  def build(
+      state: DigitalSubscriptionDirectPurchaseState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+  ): Either[PromoError, SubscribeItem] = {
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(state.product, environment), state.product.describe)
 
@@ -34,7 +38,11 @@ class DigitalSubscriptionDirectPurchaseBuilder(
     )
 
     applyPromoCodeIfPresent(
-      promotionService, state.promoCode, state.billingCountry, productRatePlanId, subscriptionData
+      promotionService,
+      state.promoCode,
+      state.billingCountry,
+      productRatePlanId,
+      subscriptionData,
     ).map { subscriptionData =>
       subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
     }

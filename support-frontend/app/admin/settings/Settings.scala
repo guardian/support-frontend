@@ -18,14 +18,14 @@ import scala.io.Source
 import scala.util.Try
 
 case class AllSettings(
-  switches: Switches,
-  amounts: ConfiguredAmounts,
-  contributionTypes: ContributionTypes,
-  metricUrl: MetricUrl
+    switches: Switches,
+    amounts: ConfiguredAmounts,
+    contributionTypes: ContributionTypes,
+    metricUrl: MetricUrl,
 )
 
 object AllSettings {
-  import Amounts._  // intellij doesn't think this is needed, but it is
+  import Amounts._ // intellij doesn't think this is needed, but it is
   import ContributionTypes._
 
   implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
@@ -38,8 +38,9 @@ object Settings {
   def fromS3[T: Decoder](source: SettingsSource.S3)(implicit s3: AwsS3Client): Either[Throwable, T] =
     for {
       buf <-
-        s3.fetchAsString(new AmazonS3URI("s3://" + source.bucket + "/" + source.key)).toEither
-      .leftMap(ex => new RuntimeException(s"couldn't getObject content for source: $source", ex))
+        s3.fetchAsString(new AmazonS3URI("s3://" + source.bucket + "/" + source.key))
+          .toEither
+          .leftMap(ex => new RuntimeException(s"couldn't getObject content for source: $source", ex))
       settings <- decode[T](buf)
     } yield settings
 
@@ -78,7 +79,8 @@ object SettingsSource extends LazyLogging {
   }
 
   def fromConfig(config: Config, name: String, stage: Stage): Either[Throwable, SettingsSource] =
-    fromLocalFile(config, name).orElse(fromS3(config, name, stage))
+    fromLocalFile(config, name)
+      .orElse(fromS3(config, name, stage))
       .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
 
   private def fromLocalFile(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
@@ -97,11 +99,12 @@ object SettingsSource extends LazyLogging {
     path.replaceFirst("~", homeDir)
   }
 
-  private def fromS3(config: Config, name: String, stage: Stage): Either[Throwable, SettingsSource] = Either.catchNonFatal {
-    S3(
-      bucket = config.getString(s"settingsSource.s3.bucket"),
-      key = s"$stage/$name.json"
-    )
-  }
+  private def fromS3(config: Config, name: String, stage: Stage): Either[Throwable, SettingsSource] =
+    Either.catchNonFatal {
+      S3(
+        bucket = config.getString(s"settingsSource.s3.bucket"),
+        key = s"$stage/$name.json",
+      )
+    }
 
 }

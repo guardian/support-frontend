@@ -12,9 +12,9 @@ object ActionOps {
 
   val formatter =
     pprint.copy(
-      additionalHandlers = {
-        case value: ByteString =>  pprint.Tree.Literal(s"""ByteString("${value.utf8String}")""")
-      }
+      additionalHandlers = { case value: ByteString =>
+        pprint.Tree.Literal(s"""ByteString("${value.utf8String}")""")
+      },
     )
 
   case class LogId(value: String) extends AnyVal

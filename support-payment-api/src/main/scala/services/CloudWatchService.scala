@@ -52,12 +52,13 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
     // These are worthy of further investigation and will be used to trigger alerts
     error match {
       case e: StripeApiError => !e.exceptionType.contains("CardException")
-      case e: PaypalApiError => e.errorName.getOrElse("") match {
+      case e: PaypalApiError =>
+        e.errorName.getOrElse("") match {
           case ("CREDIT_CARD_CVV_CHECK_FAILED") => false
           case ("CREDIT_CARD_REFUSED") => false
           case ("INSTRUMENT_DECLINED") => false
           case ("INSUFFICIENT_FUNDS") => false
-          //PAYMENT_ALREADY_DONE is a valid error, but currently alerting too often and possibly masking other errors
+          // PAYMENT_ALREADY_DONE is a valid error, but currently alerting too often and possibly masking other errors
           // Adding this error to the filter list until we can get it fixed.
           case ("PAYMENT_ALREADY_DONE") => false
           case _ => true
@@ -71,7 +72,7 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
     if (errors.nonEmpty) {
       recordPostPaymentTasksError(
         paymentProvider,
-        s"unable to track contribution due to error: ${errors.mkString(" & ")}"
+        s"unable to track contribution due to error: ${errors.mkString(" & ")}",
       )
     }
   }
@@ -81,13 +82,16 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
     put("post-payment-tasks-error", paymentProvider)
   }
 
-  def recordTrackingRefundFailure(paymentProvider: PaymentProvider): Unit = put("tracking-refund-failure", paymentProvider)
+  def recordTrackingRefundFailure(paymentProvider: PaymentProvider): Unit =
+    put("tracking-refund-failure", paymentProvider)
 
 }
 
 object CloudWatchService {
 
-  private object LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult] with StrictLogging {
+  private object LoggingAsyncHandler
+      extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult]
+      with StrictLogging {
 
     def onError(exception: Exception): Unit = {
       logger.error("cloud watch service error", exception)
@@ -96,5 +100,3 @@ object CloudWatchService {
     def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult): Unit = ()
   }
 }
-
-
