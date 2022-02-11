@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import { configureStore } from '@reduxjs/toolkit';
 import type { Action, Reducer, Store } from 'redux';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { combineReducers } from 'redux';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { getAmounts } from 'helpers/abTests/helpers';
@@ -99,20 +99,6 @@ function buildInitialState(
 	};
 }
 
-// Enables redux devtools extension and optional redux-thunk.
-
-function storeEnhancer(thunk: boolean) {
-	if (thunk) {
-		const composeEnhancers =
-			window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?? compose;
-		return composeEnhancers(applyMiddleware(thunkMiddleware));
-	}
-
-	return window.__REDUX_DEVTOOLS_EXTENSION__
-		? window.__REDUX_DEVTOOLS_EXTENSION__()
-		: undefined;
-}
-
 // Initialises the page.
 /*
   A note on the generics here. PageState is an abstract type representing anything we might assign
@@ -123,7 +109,6 @@ function storeEnhancer(thunk: boolean) {
 */
 function initRedux<PageState, PageAction extends Action>(
 	pageReducer?: (commonState: CommonState) => Reducer<PageState, PageAction>,
-	thunk = false,
 ): Store<ReduxState<PageState>> {
 	try {
 		const countryId: IsoCountry = detectCountry();
@@ -147,14 +132,13 @@ function initRedux<PageState, PageAction extends Action>(
 		);
 		const commonReducer = createCommonReducer(initialState);
 
-		const store = createStore(
-			combineReducers<ReduxState<PageState>>({
+		const store = configureStore({
+			reducer: combineReducers<ReduxState<PageState>>({
 				common: commonReducer,
 				page:
 					pageReducer?.(initialState) ?? ({} as Reducer<PageState, PageAction>),
 			}),
-			storeEnhancer(thunk),
-		);
+		});
 		return store;
 	} catch (err) {
 		renderError(err as Error, null);
