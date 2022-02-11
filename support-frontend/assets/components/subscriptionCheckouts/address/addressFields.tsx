@@ -45,11 +45,14 @@ type StatePropTypes<GlobalState> = FormFields & {
 	traverseState: (arg0: GlobalState) => AddressState;
 	formErrors: Array<FormError<FormField>>;
 };
+
 type PropTypes<GlobalState> = AddressActionCreators &
 	StatePropTypes<GlobalState>;
+
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
+
 const MaybeSelect = canShow(Select);
 const MaybeInput = canShow(TextInput);
 

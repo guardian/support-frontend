@@ -12,6 +12,7 @@ export type PostcodeFinderState = {
 	postcode: Option<string>;
 	error: Option<string>;
 };
+
 export type PostcodeFinderActions =
 	| (Scoped<AddressType> & {
 			type: 'FILL_POSTCODE_FINDER_RESULTS';
@@ -72,6 +73,7 @@ export type PostcodeFinderActionCreators = $Call<
 	typeof postcodeFinderActionCreatorsFor,
 	AddressType
 >;
+
 const initialState = {
 	results: [],
 	isLoading: false,
