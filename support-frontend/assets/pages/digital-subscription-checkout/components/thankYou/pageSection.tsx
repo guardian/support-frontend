@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space, until } from '@guardian/source-foundations';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 
 const section = css`
 	max-width: 100%;
@@ -17,14 +17,16 @@ const section = css`
 `;
 type PageSectionPropTypes = {
 	id?: string;
-	children: Node;
+	children: ReactNode;
 };
 
-const PageSection = ({ children, id }: PageSectionPropTypes) => (
-	<section id={id} css={section}>
-		{children}
-	</section>
-);
+function PageSection({ children, id }: PageSectionPropTypes): JSX.Element {
+	return (
+		<section id={id} css={section}>
+			{children}
+		</section>
+	);
+}
 
 PageSection.defaultProps = {
 	id: '',
