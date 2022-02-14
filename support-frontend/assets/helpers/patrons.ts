@@ -11,12 +11,12 @@ import type { ProductPrices } from './productPrice/productPrices';
 import type { Promotion } from './productPrice/promotions';
 
 export function getPromotions(
-	billingPeriod: BillingPeriod,
 	countryGroupId: CountryGroupId,
 	productPrices?: ProductPrices,
 	currencyId?: IsoCurrency,
+	billingPeriod?: BillingPeriod,
 ): Promotion[] | undefined {
-	if (!productPrices || !currencyId) return;
+	if (!productPrices || !currencyId || !billingPeriod) return;
 
 	const countryGroupName: CountryGroupName = countryGroups[countryGroupId].name;
 	const productOptions =

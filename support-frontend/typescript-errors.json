@@ -14,7 +14,7 @@
             "TS2769": 14,
             "TS2314": 5,
             "TS2304": 5,
-            "TS2741": 5,
+            "TS2741": 4,
             "TS2739": 13,
             "TS2532": 4,
             "TS2556": 3,
@@ -158,7 +158,6 @@
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
-            "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
@@ -1571,10 +1570,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
             "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
-            "message": "Property 'billingPeriod' is missing in type '{ countryGroupId: CountryGroupId; marketingConsent: Element; }' but required in type 'Omit<Pick<PropTypes, \"paymentMethod\" | \"productPrices\" | \"billingPeriod\" | \"marketingConsent\" | \"countryGroupId\" | \"currencyId\" | \"includePaymentCopy\"> & Partial<...> & Partial<...>, \"paymentMethod\" | ... 1 more ... | \"includePaymentCopy\">'."
         }
     ],
     "TS2739": [

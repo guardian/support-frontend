@@ -29,7 +29,7 @@ export type PropTypes = {
 	participations?: Option<Participations>;
 	productPrices?: ProductPrices;
 	currencyId?: IsoCurrency;
-	billingPeriod: BillingPeriod;
+	billingPeriod?: BillingPeriod;
 };
 
 // ----- Component ----- //
@@ -56,10 +56,10 @@ function ThankYouContent(props: PropTypes): JSX.Element {
 
 	const isPatron: boolean = userIsPatron(
 		getPromotions(
-			props.billingPeriod,
 			props.countryGroupId,
 			props.productPrices,
 			props.currencyId,
+			props.billingPeriod,
 		),
 	);
 

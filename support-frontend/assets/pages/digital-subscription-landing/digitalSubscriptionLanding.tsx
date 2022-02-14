@@ -202,7 +202,7 @@ function DigitalLandingComponent({
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 	const isPatron: boolean = userIsPatron(
-		getPromotions(billingPeriod, countryGroupId, productPrices, currencyId),
+		getPromotions(countryGroupId, productPrices, currencyId, billingPeriod),
 	);
 
 	// For comparison table
