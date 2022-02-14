@@ -189,6 +189,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       SepaPaymentMethod(
         BankTransferAccountName = sepa.accountHolderName,
         BankTransferAccountNumber = sepa.iban,
+        Country = sepa.country,
+        LineOne = sepa.lineOne,
         Email = user.primaryEmailAddress,
         IPAddress = ipAddress,
         GatewayOptionData = GatewayOptionData(

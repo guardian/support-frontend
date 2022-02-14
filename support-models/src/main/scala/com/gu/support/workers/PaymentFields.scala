@@ -56,7 +56,7 @@ case class DirectDebitPaymentFields(
 case class SepaPaymentFields(
     accountHolderName: String,
     iban: String,
-    country: Option[Country],
+    country: Option[String],
     lineOne: Option[String],
 ) extends PaymentFields
 
