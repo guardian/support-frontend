@@ -3,7 +3,7 @@ import { headline } from '@guardian/source-foundations';
 import { useEffect } from 'preact/hooks';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { setOneOffContributionCookie } from 'pages/contributions-landing/contributionsLanding';
+import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import { formatAmountLabel } from './helpers';
 
 // ---- Component ---- //
