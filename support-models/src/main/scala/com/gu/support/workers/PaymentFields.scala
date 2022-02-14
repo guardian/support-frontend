@@ -1,6 +1,7 @@
 package com.gu.support.workers
 
 import cats.syntax.functor._
+import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax._
@@ -55,6 +56,8 @@ case class DirectDebitPaymentFields(
 case class SepaPaymentFields(
     accountHolderName: String,
     iban: String,
+    country: Option[Country],
+    lineOne: Option[String],
 ) extends PaymentFields
 
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields

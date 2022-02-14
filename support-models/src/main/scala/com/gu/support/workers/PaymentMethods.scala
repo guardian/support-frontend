@@ -92,6 +92,8 @@ case class GatewayOptionData(GatewayOption: List[GatewayOption])
 case class SepaPaymentMethod(
     BankTransferAccountName: String,
     BankTransferAccountNumber: String,
+    Country: Option[Country],
+    LineOne: Option[String],
     Email: String,
     IPAddress: String,
     GatewayOptionData: GatewayOptionData,

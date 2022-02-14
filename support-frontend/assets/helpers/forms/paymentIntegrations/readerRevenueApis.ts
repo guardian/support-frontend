@@ -1,3 +1,4 @@
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { Participations } from 'helpers/abTests/abtest';
 import {
 	fetchJson,
@@ -94,6 +95,7 @@ type RegularDirectDebitPaymentFields = {
 type RegularSepaPaymentFields = {
 	accountHolderName: string;
 	iban: string;
+	country?: Option<Country>;
 };
 type CorporateRedemption = {
 	redemptionCode: string;
@@ -169,6 +171,8 @@ export type SepaAuthorisation = {
 	paymentMethod: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
+	country?: Country;
+	lineOne?: string;
 };
 export type ExistingCardAuthorisation = {
 	paymentMethod: typeof ExistingCard;

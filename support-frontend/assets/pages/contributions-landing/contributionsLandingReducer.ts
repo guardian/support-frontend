@@ -141,8 +141,8 @@ export interface PayPalData {
 export interface SepaData {
 	iban: string | null;
 	accountHolderName: string | null;
-	lineOne: string | null;
-	country: Country | null;
+	lineOne: string | undefined;
+	country: Country | undefined;
 }
 interface FormState {
 	contributionType: ContributionType;
@@ -258,6 +258,8 @@ function createFormReducer() {
 		sepaData: {
 			iban: null,
 			accountHolderName: null,
+			country: undefined,
+			lineOne: undefined,
 		},
 		setPasswordData: {
 			password: '',
