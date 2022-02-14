@@ -11,6 +11,7 @@ import { DirectDebit } from 'helpers/forms/paymentMethods';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getPromotions, userIsPatron } from 'helpers/patrons';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
@@ -28,6 +29,7 @@ export type PropTypes = {
 	participations?: Option<Participations>;
 	productPrices?: ProductPrices;
 	currencyId?: IsoCurrency;
+	billingPeriod: BillingPeriod;
 };
 
 // ----- Component ----- //
@@ -53,7 +55,12 @@ function ThankYouContent(props: PropTypes): JSX.Element {
 		props.participations.emailDigiSubEventsTest === 'variant';
 
 	const isPatron: boolean = userIsPatron(
-		getPromotions(props.countryGroupId, props.productPrices, props.currencyId),
+		getPromotions(
+			props.billingPeriod,
+			props.countryGroupId,
+			props.productPrices,
+			props.currencyId,
+		),
 	);
 
 	return (
