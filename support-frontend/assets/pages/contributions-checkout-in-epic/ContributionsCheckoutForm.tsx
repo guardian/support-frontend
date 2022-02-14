@@ -212,13 +212,15 @@ function FallbackCtas({
 			</div>
 
 			{secondaryCta.type === SecondaryCtaType.Reminder && (
-				<Button
-					onClick={secondaryCta.onReminderCtaClicked}
-					priority="tertiary"
-					cssOverrides={styles.reminderCta}
-				>
-					{secondaryCta.reminderCta}
-				</Button>
+				<div css={styles.reminderCtaContainer}>
+					<Button
+						onClick={secondaryCta.onReminderCtaClicked}
+						priority="tertiary"
+						cssOverrides={styles.reminderCta}
+					>
+						{secondaryCta.reminderCta}
+					</Button>
+				</div>
 			)}
 		</div>
 	);
@@ -313,9 +315,22 @@ export const styles = {
 	`,
 	fallbackCtasContainer: css`
 		display: flex;
+		flex-direction: column;
+
+		@media (min-width: ${CTAS_BREAKPOINT}) {
+			flex-direction: row;
+			align-items: flex-start;
+		}
+	`,
+	reminderCtaContainer: css`
+		margin-top: ${space[2]}px;
+
+		@media (min-width: ${CTAS_BREAKPOINT}) {
+			margin-top: 0;
+			margin-left: ${space[2]}px;
+		}
 	`,
 	reminderCta: css`
-		margin-left: ${space[2]}px;
 		color: ${neutral[7]};
 		border-color: ${neutral[7]};
 	`,
