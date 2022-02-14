@@ -13,7 +13,7 @@ import {
 	buttonThemeReaderRevenue,
 	LinkButton,
 } from '@guardian/source-react-components';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -22,17 +22,18 @@ import { Monthly } from 'helpers/productPrice/billingPeriods';
 export type Product = {
 	title: string;
 	price: string;
-	children?: Node;
-	offerCopy?: Node;
-	priceCopy: Node;
+	children?: ReactNode;
+	offerCopy?: ReactNode;
+	priceCopy: ReactNode;
 	buttonCopy: string;
 	href: string;
-	onClick: (...args: any[]) => any;
-	onView: (...args: any[]) => any;
+	onClick: () => void;
+	onView: () => void;
 	label?: string;
 	cssOverrides?: string;
 	billingPeriod?: BillingPeriod;
 };
+
 const productOption = css`
 	${textSans.medium()}
 	position: relative;
@@ -55,11 +56,13 @@ const productOption = css`
 		grid-template-areas: none;
 	}
 `;
+
 const productOptionUnderline = css`
 	${from.tablet} {
 		border-bottom: 1px solid ${neutral[86]};
 	}
 `;
+
 const productOptionVerticalLine = css`
 	${until.tablet} {
 		border-right: 1px solid ${neutral[86]};
@@ -67,6 +70,7 @@ const productOptionVerticalLine = css`
 		padding-right: ${space[3]}px;
 	}
 `;
+
 const productOptionTitle = css`
 	${headline.xsmall({
 		fontWeight: 'bold',
@@ -81,6 +85,7 @@ const productOptionTitle = css`
 		})};
 	}
 `;
+
 const productOptionOfferCopy = css`
 	${textSans.medium()};
 	${from.tablet} {
@@ -91,6 +96,7 @@ const productOptionOfferCopy = css`
 		${textSans.small()};
 	}
 `;
+
 const productOptionPrice = css`
 	display: block;
 	padding-bottom: ${space[5]}px;
@@ -109,6 +115,7 @@ const productOptionPrice = css`
 		padding-bottom: 0;
 	}
 `;
+
 const productOptionPriceCopy = css`
 	${textSans.xsmall()};
 	${from.tablet} {
@@ -122,6 +129,7 @@ const productOptionPriceCopy = css`
 		${textSans.medium()};
 	}
 `;
+
 const productOptionHighlight = css`
 	background-color: ${brandAlt[400]};
 	color: ${neutral[7]};
@@ -135,6 +143,7 @@ const productOptionHighlight = css`
 		fontWeight: 'bold',
 	})};
 `;
+
 const buttonDiv = css`
 	display: flex;
 	flex-direction: column;
@@ -152,6 +161,7 @@ const buttonDiv = css`
 		padding: 0;
 	}
 `;
+
 const button = css`
 	display: flex;
 	justify-content: center;
@@ -164,13 +174,14 @@ const button = css`
 		display: inline-flex;
 	}
 `;
+
 const priceCopyGridPlacement = css`
 	${until.tablet} {
 		grid-area: priceCopy;
 	}
 `;
 
-function ProductOption(props: Product) {
+function ProductOption(props: Product): JSX.Element {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
@@ -188,6 +199,7 @@ function ProductOption(props: Product) {
 			props.onView();
 		}
 	}, [hasBeenSeen]);
+
 	const productOptionMargin =
 		props.label &&
 		css`
@@ -222,7 +234,6 @@ function ProductOption(props: Product) {
 			</div>
 			<div css={priceCopyGridPlacement}>
 				{/* role="text" is non-standardised but works in Safari. Reads the whole section as one text element */}
-				{/* eslint-disable-next-line jsx-a11y/aria-role */}
 				<p role="text" css={productOptionPriceCopy}>
 					<span css={productOptionPrice}>{props.price}</span>
 					{props.priceCopy}
@@ -251,4 +262,5 @@ ProductOption.defaultProps = {
 	cssOverrides: '',
 	billingPeriod: Monthly,
 };
+
 export default ProductOption;

@@ -1,4 +1,5 @@
-import { css, SerializedStyles } from '@emotion/react';
+import type { SerializedStyles } from '@emotion/react';
+import { css } from '@emotion/react';
 import { body, border, from, space } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import BlockLabel from 'components/blockLabel/blockLabel';
@@ -155,9 +156,5 @@ function ComparisonTable(): JSX.Element {
 		</section>
 	);
 }
-
-ComparisonTableRow.defaultProps = {
-	cssOverrides: null,
-};
 
 export default ComparisonTable;

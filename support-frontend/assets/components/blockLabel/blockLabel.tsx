@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	from,
@@ -6,7 +7,6 @@ import {
 	space,
 	text,
 } from '@guardian/source-foundations';
-import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
 
 const blockLabel = css`
