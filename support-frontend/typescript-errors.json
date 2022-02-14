@@ -18,7 +18,7 @@
             "TS2739": 13,
             "TS2532": 4,
             "TS2556": 3,
-            "TS2554": 38,
+            "TS2554": 30,
             "TS2569": 2,
             "TS7053": 4,
             "TS2411": 1,
@@ -105,7 +105,7 @@
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
-            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 3,
+            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
@@ -147,7 +147,7 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
-            "assets/pages/promotion-terms/promotionTerms.tsx": 2,
+            "assets/pages/promotion-terms/promotionTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
@@ -167,13 +167,7 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
-            "assets/pages/contributions-checkout-in-epic/contributionsCheckoutInEpic.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 1,
-            "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx": 1,
-            "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx": 1,
-            "assets/pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
-            "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
@@ -1870,40 +1864,8 @@
             "message": "Expected 6 arguments, but got 1."
         },
         {
-            "path": "assets/pages/contributions-checkout-in-epic/contributionsCheckoutInEpic.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/digitalSubscriptionLanding.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTerms.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
-        },
-        {
             "path": "assets/pages/showcase/components/otherProducts.tsx",
             "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Expected 0-1 arguments, but got 2."
         }
     ],
     "TS2569": [

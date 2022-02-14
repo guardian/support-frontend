@@ -37,7 +37,7 @@ const reducer = (commonState: CommonState) =>
 		fulfilmentOption,
 	);
 
-const store = initRedux(reducer, true);
+const store = initRedux(reducer);
 const { countryGroupId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();
 // ----- Render ----- //

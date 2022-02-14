@@ -107,7 +107,7 @@ const reducer = (commonState: CommonState) =>
 		null,
 	);
 
-const store = initRedux(reducer, true);
+const store = initRedux(reducer);
 
 // ----- Render ----- //
 function DigitalLandingPage(props: DigitalLandingPropTypes) {

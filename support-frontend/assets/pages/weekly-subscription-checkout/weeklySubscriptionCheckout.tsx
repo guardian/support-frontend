@@ -47,7 +47,7 @@ const reducer = (commonState: CommonState) =>
 		Domestic, // TODO: we need to work this out from the country
 	);
 
-const store = initRedux(reducer, true);
+const store = initRedux(reducer);
 const {
 	orderIsAGift,
 	billingPeriod,

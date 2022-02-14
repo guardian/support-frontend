@@ -69,7 +69,7 @@ const reducer = (commonState: CommonState) =>
 		null,
 	);
 
-const store = initRedux(reducer, true);
+const store = initRedux(reducer);
 const { countryGroupId, countryId } =
 	store.getState().common.internationalisation;
 const { orderIsAGift, productPrices } = store.getState().page.checkout;
