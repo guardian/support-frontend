@@ -57,7 +57,8 @@ case class SepaPaymentFields(
     accountHolderName: String,
     iban: String,
     country: Option[String],
-    lineOne: Option[String],
+    streetNumber: Option[String],
+    streetName: Option[String],
 ) extends PaymentFields
 
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
