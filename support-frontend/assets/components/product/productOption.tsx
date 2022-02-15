@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	between,
@@ -30,7 +31,7 @@ export type Product = {
 	onClick: () => void;
 	onView: () => void;
 	label?: string;
-	cssOverrides?: string;
+	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
 };
 

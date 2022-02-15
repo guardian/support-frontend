@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 98,
+            "TS2322": 95,
             "TS2578": 7,
             "TS2339": 19,
             "TS2345": 95,
@@ -82,13 +82,11 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 12,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
-            "assets/pages/paper-subscription-landing/components/content/prices.tsx": 1,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/showcase/components/ctaContribute.tsx": 1,
             "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
@@ -98,7 +96,6 @@
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
-            "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
@@ -486,10 +483,6 @@
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
             "message": "Type 'string | SerializedStyles' is not assignable to type 'SerializedStyles'."
         },
@@ -540,10 +533,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/helpers/options.ts",
             "message": "Type 'string' is not assignable to type 'PaperProductOptions'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/prices.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
@@ -616,10 +605,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
             "message": "Type 'boolean | undefined' is not assignable to type 'boolean'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/prices.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         }
     ],
     "TS2578": [
