@@ -1,4 +1,4 @@
-import type { SerializedStyles } from '@emotion/core';
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	brandAlt,

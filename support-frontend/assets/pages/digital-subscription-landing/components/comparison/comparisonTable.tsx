@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { body, border, from, space } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
@@ -6,13 +7,15 @@ import { finalRow, tableContent, titleRow } from './tableContents';
 import 'helpers/types/option';
 
 export type TableRow = {
-	icon: ReactNode | null;
+	icon: ReactNode;
 	description: string | ReactNode;
-	free: ReactNode | null;
-	paid: ReactNode | null;
-	cssOverrides?: string | string[];
+	free: ReactNode;
+	paid: ReactNode;
+	cssOverrides?: SerializedStyles | SerializedStyles[];
 };
+
 const borderStyle = `${border.primary} 1px solid`;
+
 const container = css`
 	padding-top: ${space[4]}px;
 
@@ -20,13 +23,16 @@ const container = css`
 		padding: 0;
 	}
 `;
+
 const columnHeading = css`
 	border-left: ${borderStyle};
 	border-top: ${borderStyle};
 `;
+
 const columnHeadingLast = css`
 	border-right: ${borderStyle};
 `;
+
 const table = css`
 	width: 100%;
 `;
@@ -34,6 +40,7 @@ const tableContainer = css`
 	border: ${borderStyle};
 	border-bottom: none;
 `;
+
 const label = css`
 	position: absolute;
 	left: 0;
@@ -47,9 +54,11 @@ const label = css`
 		top: -35px;
 	}
 `;
+
 const rowStyle = css`
 	border-bottom: ${borderStyle};
 `;
+
 const rowIconAndText = css`
 	text-align: left;
 	vertical-align: middle;
@@ -59,6 +68,7 @@ const rowIconAndText = css`
 		padding-right: ${space[3]}px;
 	}
 `;
+
 const descriptionStyle = css`
 	display: flex;
 	align-items: center;
@@ -68,6 +78,7 @@ const descriptionStyle = css`
 		${body.medium()};
 	}
 `;
+
 const visuallyHidden = css`
 	height: 1px;
 	overflow: hidden;
