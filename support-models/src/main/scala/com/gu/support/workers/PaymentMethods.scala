@@ -92,14 +92,14 @@ case class GatewayOptionData(GatewayOption: List[GatewayOption])
 case class SepaPaymentMethod(
     BankTransferAccountName: String,
     BankTransferAccountNumber: String,
-    Country: Option[Country],
-    LineOne: Option[String],
     Email: String,
     IPAddress: String,
     GatewayOptionData: GatewayOptionData,
     BankTransferType: String = "SEPA",
     `Type`: String = "BankTransfer",
     PaymentGateway: PaymentGateway = SepaGateway,
+    Country: Option[String] = None,
+    LineOne: Option[String] = None,
 ) extends PaymentMethod
 
 case class AmazonPayPaymentMethod(
