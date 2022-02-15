@@ -162,7 +162,7 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
 			<MarketingConsent />
 		),
 		productPrices,
-		billingPeriod,
+		billingPeriod: props.orderIsAGift ? billingPeriod : 'Annual',
 		currencyId,
 	};
 
