@@ -10,7 +10,7 @@ import com.typesafe.scalalogging.LazyLogging
 import io.circe.Decoder
 import io.circe.parser._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class DynamoService[T](table: Table)(implicit decoder: Decoder[T]) extends LazyLogging {
   def all: Iterator[T] = {

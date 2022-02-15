@@ -17,7 +17,7 @@ class DirectDebitForm(implicit val webDriver: WebDriver) extends Page with Brows
   private val sortCode3 = id("qa-sort-code-3")
   private val confirmationCheckBox = id("qa-confirmation-input")
 
-  def fillForm {
+  def fillForm(): Unit = {
     setValue(accountName, "Test user")
     setValue(accountNumber, "55779911")
     setValue(sortCode1, "20")

@@ -19,7 +19,7 @@ import router.Routes
 import services.CloudWatchService
 import util.RequestBasedProvider
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class MyApplicationLoader extends ApplicationLoader with StrictLogging {
   def load(context: Context): Application = {
@@ -65,7 +65,7 @@ class MyComponents(context: Context)
   override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
 
   implicit val _wsClient: WSClient = wsClient
-  implicit val s3Client: AmazonS3 = AWSClientBuilder.buildS3Client
+  implicit val s3Client: AmazonS3 = AWSClientBuilder.buildS3Client()
   private implicit val system: ActorSystem = ActorSystem()
 
   override lazy val httpErrorHandler = new ErrorHandler(environment, configuration, sourceMapper, Some(router))

@@ -2,7 +2,7 @@ package model.paypal
 
 import com.paypal.base.rest.PayPalRESTException
 import io.circe.generic.JsonCodec
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 // responseCode is the Http status code returned by the Exception.
 // See: https://developer.paypal.com/docs/api/overview/#api-responses for details
