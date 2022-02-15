@@ -3,7 +3,7 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 105,
+            "TS2322": 98,
             "TS2578": 7,
             "TS2339": 19,
             "TS2345": 95,
@@ -81,7 +81,6 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
-            "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
@@ -272,7 +271,7 @@
         },
         {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
-            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"disabled\" | ... 5 more ... | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"disabled\" | ... 5 more ... | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/components/menu/menu.tsx",
@@ -352,7 +351,7 @@
         },
         {
             "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
@@ -396,7 +395,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
-            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"disabled\" | ... 5 more ... | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"disabled\" | ... 5 more ... | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
@@ -479,34 +478,6 @@
             "message": "Type '\"normal\"' is not assignable to type 'FontWeight | undefined'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: string; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: string; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: EmotionJSX.Element; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: EmotionJSX.Element; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: string; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         },
@@ -580,11 +551,11 @@
         },
         {
             "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/showcase/components/hero.tsx",
@@ -596,7 +567,7 @@
         },
         {
             "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"icon\" | \"iconSide\" | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",

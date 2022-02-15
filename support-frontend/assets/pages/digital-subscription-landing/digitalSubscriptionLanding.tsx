@@ -30,6 +30,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { getPromotions, userIsPatron } from 'helpers/patrons';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
@@ -108,6 +109,8 @@ const reducer = (commonState: CommonState) =>
 	);
 
 const store = initRedux(reducer, true);
+const { currencyId } = store.getState().common.internationalisation;
+const { billingPeriod } = store.getState().page.checkout;
 
 // ----- Render ----- //
 function DigitalLandingPage(props: DigitalLandingPropTypes) {
@@ -158,6 +161,9 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
 		) : (
 			<MarketingConsent />
 		),
+		productPrices,
+		billingPeriod,
+		currencyId,
 	};
 
 	return (
@@ -195,8 +201,12 @@ function DigitalLandingComponent({
 		: routes.digitalSubscriptionLandingGift;
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
+	const isPatron: boolean = userIsPatron(
+		getPromotions(countryGroupId, productPrices, currencyId, billingPeriod),
+	);
+
 	// For comparison table
-	const localisedRows = getRows(countryGroupId);
+	const localisedRows = getRows(countryGroupId, isPatron);
 
 	// For CTAs in hero test
 	const heroPriceList = getHeroCtaProps(
@@ -231,7 +241,7 @@ function DigitalLandingComponent({
 							caption={<>What&apos;s included in a paid digital subscription</>}
 							headers={headers}
 							rows={localisedRows}
-							footer={footer}
+							footer={!isPatron && !orderIsAGift && footer}
 						/>
 					</div>
 				</CentredContainer>
