@@ -17,7 +17,6 @@ object PromotionCache {
   def get: Option[Iterable[Promotion]] = promotionsRef.single().filter(_.isFresh).map(_.promotions)
 
   def set(promotions: Iterable[Promotion], fetched: DateTime = DateTime.now): Unit = atomic { implicit txn =>
-    SafeLogger.info(s"Adding promotions to the cache")
     promotionsRef() = Some(PromotionCache(fetched, promotions))
   }
 }
