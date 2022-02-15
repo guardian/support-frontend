@@ -19,7 +19,10 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
     serviceWithFixtures
       .findPromotion(duplicatedPromoCode)
       .left
-      .map({ case code: DuplicateCode => code.copy(debug = "") }) should be(
+      .map({
+        case code: DuplicateCode => code.copy(debug = "")
+        case _ => fail()
+      }) should be(
       Left(DuplicateCode("")),
     )
   }

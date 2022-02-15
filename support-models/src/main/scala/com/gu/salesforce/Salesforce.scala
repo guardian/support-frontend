@@ -42,9 +42,6 @@ object Salesforce {
             MailingPostalCode = None,
             MailingCountry = None,
             Phone = user.telephoneNumber,
-            Allow_Membership_Mail__c = user.allowMembershipMail,
-            Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-            Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
           ),
         )
         .getOrElse(
@@ -65,9 +62,6 @@ object Salesforce {
             MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
             MailingCountry = user.deliveryAddress.map(_.country.name),
             Phone = user.telephoneNumber,
-            Allow_Membership_Mail__c = user.allowMembershipMail,
-            Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-            Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
           ),
         )
     implicit val decoder: Decoder[NewContact] = deriveDecoder
@@ -117,9 +111,6 @@ object Salesforce {
       MailingPostalCode: Option[String],
       MailingCountry: Option[String],
       Phone: Option[String],
-      Allow_Membership_Mail__c: Boolean,
-      Allow_3rd_Party_Mail__c: Boolean,
-      Allow_Guardian_Related_Mail__c: Boolean,
   ) extends UpsertData
 
   case class DeliveryContact(

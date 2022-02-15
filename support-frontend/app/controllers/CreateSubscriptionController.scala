@@ -184,16 +184,6 @@ class CreateSubscriptionController(
           .tap(_.left.foreach(SafeLogger.warn))
           .toOption
       } yield updatedNo,
-      allowMembershipMail = false,
-      // Previously the values for the fields allowThirdPartyMail and allowGURelatedMail
-      // were derived by looking for the fields: statusFields.receive3rdPartyMarketing and
-      // statusFields.receiveGnmMarketing in the JSON object that models a user.
-      // However, a query of the identity database indicates that these fields aren't defined for any users
-      // (nor are they included in the StatusFields class in identity-model).
-      // Therefore, setting them statically to false is not a regression.
-      // TODO: in a subsequent PR set these values based on the respective user.
-      allowThirdPartyMail = false,
-      allowGURelatedMail = false,
       isTestUser = isTestUser,
       deliveryInstructions = request.deliveryInstructions,
     )

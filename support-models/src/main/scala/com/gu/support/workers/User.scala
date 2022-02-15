@@ -13,9 +13,6 @@ case class User(
     billingAddress: Address,
     deliveryAddress: Option[Address] = None, // TODO should later be moved out of User and into the relevant case class
     telephoneNumber: Option[String] = None,
-    allowMembershipMail: Boolean = false,
-    allowThirdPartyMail: Boolean = false,
-    allowGURelatedMail: Boolean = false,
     isTestUser: Boolean = false,
     deliveryInstructions: Option[String] =
       None, // TODO should later be moved out of User and into the relevant case class
