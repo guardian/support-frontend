@@ -22,6 +22,11 @@ export function getPromotions(
 	const productOptions =
 		productPrices[countryGroupName][NoFulfilmentOptions][NoProductOptions];
 
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- can be undefined on Digi Subs Gifting LP
+	if (!productOptions[billingPeriod]) {
+		return;
+	}
+
 	const productPrice = productOptions[billingPeriod][currencyId];
 
 	if (productPrice.promotions) {
