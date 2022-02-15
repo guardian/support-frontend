@@ -96,6 +96,8 @@ type RegularSepaPaymentFields = {
 	accountHolderName: string;
 	iban: string;
 	country?: Option<Country>;
+	streetNumber?: Option<String>;
+  streetName?: Option<String>;
 };
 type CorporateRedemption = {
 	redemptionCode: string;
@@ -172,7 +174,8 @@ export type SepaAuthorisation = {
 	accountHolderName: string;
 	iban: string;
 	country?: Country;
-	lineOne?: string;
+  streetNumber?: String;
+  streetName?: String;
 };
 export type ExistingCardAuthorisation = {
 	paymentMethod: typeof ExistingCard;
