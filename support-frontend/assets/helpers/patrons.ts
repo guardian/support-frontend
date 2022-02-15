@@ -22,7 +22,11 @@ export function getPromotions(
 	const productOptions =
 		productPrices[countryGroupName][NoFulfilmentOptions][NoProductOptions];
 
-	return productOptions[billingPeriod][currencyId].promotions;
+	const productPrice = productOptions[billingPeriod][currencyId];
+
+	if (productPrice.promotions) {
+		return productPrice.promotions;
+	}
 }
 
 export function userIsPatron(promotions: Promotion[] | undefined): boolean {
