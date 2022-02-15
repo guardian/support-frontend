@@ -12,6 +12,7 @@ import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const roundelSizeMob = 100;
 export const roundelSize = 180;
+
 const heroRoundelStyles = css`
 	display: flex;
 	align-items: center;
