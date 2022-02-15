@@ -29,8 +29,8 @@ const fieldsContainerStyles = css`
 type SepaFormProps = {
 	iban: string | null;
 	accountHolderName: string | null;
-	addressLineOne: string | null;
-	addressCountry: Country | null;
+	addressLineOne?: string;
+	addressCountry?: Country;
 	updateAddressLineOne: (addressLineOne: string) => void;
 	updateAddressCountry: (addressCountry: Country) => void;
 	updateIban: (iban: string) => void;
