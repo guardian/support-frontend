@@ -8,7 +8,7 @@ import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.acquisitions.AcquisitionEventTable.{datasetName, tableName}
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future, blocking}
 import com.gu.support.acquisitions.utils.Retry
 

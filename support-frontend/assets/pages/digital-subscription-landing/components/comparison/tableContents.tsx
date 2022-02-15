@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import type { SerializedStyles } from '@emotion/react';
 import {
 	background,
 	border,
@@ -16,7 +17,6 @@ import { SvgFreeTrial } from 'components/icons/freeTrial';
 import { SvgNews } from 'components/icons/news';
 import { SvgOffline } from 'components/icons/offlineReading';
 import { SvgPadlock } from 'components/icons/padlock';
-import type { Option } from 'helpers/types/option';
 import type { TableRow } from './comparisonTable';
 
 const iconSizeMobile = 28;
@@ -24,6 +24,7 @@ const iconSizeDesktop = 34;
 const titleRowHeight = 30;
 const borderStyle = `${border.primary} 1px solid`;
 const comparisonTableYellow = '#FFFACC';
+
 const iconContainer = css`
 	display: inline-flex;
 	align-self: center;
@@ -45,17 +46,21 @@ const iconContainer = css`
 		}
 	}
 `;
+
 const bold = css`
 	font-weight: bold;
 `;
+
 const borderBottomNone = css`
 	border-bottom: none;
 `;
+
 const finalRowStyle = css`
 	background-color: ${comparisonTableYellow};
 	border: ${borderStyle};
 	padding: ${space[3]}px;
 `;
+
 const indicators = css`
 	padding: ${space[4]}px 0;
 	height: 58px;
@@ -65,14 +70,17 @@ const indicators = css`
 		margin: 0 auto;
 	}
 `;
+
 const checkmark = css`
 	svg {
 		max-width: 25px;
 	}
 `;
+
 const padlock = css`
 	border-left: ${borderStyle};
 `;
+
 const columnTitle = css`
 	display: flex;
 	align-items: flex-start;
@@ -89,15 +97,19 @@ const columnTitle = css`
 		})}
 	}
 `;
+
 const yellowBackground = css`
 	background: ${brandAltBackground.primary};
 `;
+
 const greyBackground = css`
 	background: ${background.secondary};
 `;
+
 const titleRowStyle = css`
 	height: ${titleRowHeight}px;
 `;
+
 const hideOnVerySmall = css`
 	display: none;
 
@@ -105,6 +117,7 @@ const hideOnVerySmall = css`
 		display: inline-block;
 	}
 `;
+
 const borderLeft = css`
 	border-left: ${borderStyle};
 `;
@@ -117,7 +130,9 @@ function Padlock() {
 	);
 }
 
-function Checkmark(props: { borderLeft?: Option<string> }) {
+export function Checkmark(props: {
+	borderLeft?: SerializedStyles;
+}): JSX.Element {
 	const checkMarkStyles = props.borderLeft
 		? [indicators, checkmark, yellowBackground, props.borderLeft]
 		: [indicators, checkmark, yellowBackground];
@@ -131,6 +146,7 @@ function Checkmark(props: { borderLeft?: Option<string> }) {
 Checkmark.defaultProps = {
 	borderLeft: null,
 };
+
 export const tableContent: TableRow[] = [
 	{
 		icon: (
@@ -139,7 +155,6 @@ export const tableContent: TableRow[] = [
 			</div>
 		),
 		description: "Access to the Guardian's quality, open journalism",
-		ariaLabel: "Access to the Guardian's quality, open journalism",
 		free: <Checkmark borderLeft={borderLeft} />,
 		paid: <Checkmark />,
 	},
@@ -150,7 +165,6 @@ export const tableContent: TableRow[] = [
 			</div>
 		),
 		description: 'Ad-free reading on all your devices',
-		ariaLabel: 'Ad-free reading on all your devices',
 		free: <Padlock />,
 		paid: <Checkmark />,
 	},
@@ -166,7 +180,6 @@ export const tableContent: TableRow[] = [
 				supplements
 			</>
 		),
-		ariaLabel: 'The Editions app with unique digital supplements',
 		free: <Padlock />,
 		paid: <Checkmark />,
 	},
@@ -182,7 +195,6 @@ export const tableContent: TableRow[] = [
 				<span css={hideOnVerySmall}>Live and Discover</span>
 			</>
 		),
-		ariaLabel: 'The Guardian app with premium features, Live and Discover',
 		free: <Padlock />,
 		paid: <Checkmark />,
 	},
@@ -193,7 +205,6 @@ export const tableContent: TableRow[] = [
 			</div>
 		),
 		description: 'Offline reading in both your apps',
-		ariaLabel: 'Offline reading in both your apps',
 		free: <Padlock />,
 		paid: <Checkmark />,
 	},
@@ -204,12 +215,12 @@ export const tableContent: TableRow[] = [
 			</div>
 		),
 		description: 'Play interactive crosswords',
-		ariaLabel: 'Play interactive crosswords',
 		free: <Padlock />,
 		paid: <Checkmark />,
 		cssOverrides: borderBottomNone,
 	},
 ];
+
 export const titleRow = {
 	icon: null,
 	description: null,
@@ -217,6 +228,7 @@ export const titleRow = {
 	paid: <div css={[indicators, columnTitle, yellowBackground]}>Paid</div>,
 	cssOverrides: [titleRowStyle, borderBottomNone],
 };
+
 export const finalRow = {
 	icon: (
 		<div css={iconContainer}>

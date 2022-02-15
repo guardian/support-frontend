@@ -8,7 +8,7 @@ import com.stripe.param.PaymentIntentCreateParams
 import com.stripe.param.PaymentIntentCreateParams.ConfirmationMethod
 import com.typesafe.scalalogging.StrictLogging
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 import conf.{StripeAccountConfig, StripeConfig}
 import model._

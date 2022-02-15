@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	brandAlt,
@@ -27,7 +28,7 @@ const themeColors: Record<ThemeType, string> = {
 	showcase: brandAlt[400],
 	paper: paperSubscriptionsBlue,
 };
-const headerThemes: Record<ThemeType, string> = {
+const headerThemes: Record<ThemeType, SerializedStyles> = {
 	weekly: css`
 		:before {
 			background-color: ${themeColors.weekly};

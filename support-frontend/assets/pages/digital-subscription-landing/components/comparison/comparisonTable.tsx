@@ -1,19 +1,21 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { body, border, from, space } from '@guardian/source-foundations';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import BlockLabel from 'components/blockLabel/blockLabel';
-import type { Option } from 'helpers/types/option';
 import { finalRow, tableContent, titleRow } from './tableContents';
 import 'helpers/types/option';
 
 export type TableRow = {
-	icon: Option<Node>;
-	description: string | Node;
-	free: Option<Node>;
-	paid: Option<Node>;
-	cssOverrides?: Option<string> | string[];
+	icon: ReactNode;
+	description: string | ReactNode;
+	free: ReactNode;
+	paid: ReactNode;
+	cssOverrides?: SerializedStyles | SerializedStyles[];
 };
+
 const borderStyle = `${border.primary} 1px solid`;
+
 const container = css`
 	padding-top: ${space[4]}px;
 
@@ -21,13 +23,16 @@ const container = css`
 		padding: 0;
 	}
 `;
+
 const columnHeading = css`
 	border-left: ${borderStyle};
 	border-top: ${borderStyle};
 `;
+
 const columnHeadingLast = css`
 	border-right: ${borderStyle};
 `;
+
 const table = css`
 	width: 100%;
 `;
@@ -35,6 +40,7 @@ const tableContainer = css`
 	border: ${borderStyle};
 	border-bottom: none;
 `;
+
 const label = css`
 	position: absolute;
 	left: 0;
@@ -48,9 +54,11 @@ const label = css`
 		top: -35px;
 	}
 `;
+
 const rowStyle = css`
 	border-bottom: ${borderStyle};
 `;
+
 const rowIconAndText = css`
 	text-align: left;
 	vertical-align: middle;
@@ -60,6 +68,7 @@ const rowIconAndText = css`
 		padding-right: ${space[3]}px;
 	}
 `;
+
 const descriptionStyle = css`
 	display: flex;
 	align-items: center;
@@ -69,6 +78,7 @@ const descriptionStyle = css`
 		${body.medium()};
 	}
 `;
+
 const visuallyHidden = css`
 	height: 1px;
 	overflow: hidden;
@@ -77,73 +87,74 @@ const visuallyHidden = css`
 	width: 1px;
 `;
 
-const ComparisonTableRow = ({
+function ComparisonTableRow({
 	icon,
 	description,
 	free,
 	paid,
 	cssOverrides,
-}: TableRow) => (
-	<tr css={[rowStyle, cssOverrides]}>
-		<th scope="row" css={rowIconAndText}>
-			<div css={descriptionStyle}>
-				{icon}
-				<span>{description}</span>
-			</div>
-		</th>
-		<td>{free}</td>
-		<td>{paid}</td>
-	</tr>
-);
+}: TableRow) {
+	return (
+		<tr css={[rowStyle, cssOverrides]}>
+			<th scope="row" css={rowIconAndText}>
+				<div css={descriptionStyle}>
+					{icon}
+					<span>{description}</span>
+				</div>
+			</th>
+			<td>{free}</td>
+			<td>{paid}</td>
+		</tr>
+	);
+}
 
-const ComparisonTable = () => (
-	<section css={container}>
-		<BlockLabel tag="h2" cssOverrides={label}>
-			Your subscription at a glance
-		</BlockLabel>
-		<table css={table}>
-			<caption css={visuallyHidden}>
-				What&apos;s included in a paid digital subscription
-			</caption>
-			<thead>
-				<tr css={[rowStyle, titleRow.cssOverrides]}>
-					<th scope="col" css={[rowIconAndText]}>
-						<span css={visuallyHidden}>Benefits</span>
-					</th>
-					<th scope="col" css={columnHeading}>
-						{titleRow.free}
-					</th>
-					<th scope="col" css={[columnHeading, columnHeadingLast]}>
-						{titleRow.paid}
-					</th>
-				</tr>
-			</thead>
-			<tbody css={tableContainer}>
-				{tableContent.map((row) => (
-					<ComparisonTableRow
-						cssOverrides={row.cssOverrides}
-						icon={row.icon}
-						description={row.description}
-						free={row.free}
-						paid={row.paid}
-					/>
-				))}
-			</tbody>
-			<tfoot>
-				<tr css={[rowStyle]}>
-					<td colSpan="3" css={[rowIconAndText, finalRow.cssOverrides]}>
-						<div css={descriptionStyle}>
-							{finalRow.icon}
-							<span>{finalRow.description}</span>
-						</div>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
-	</section>
-);
+function ComparisonTable(): JSX.Element {
+	return (
+		<section css={container}>
+			<BlockLabel tag="h2" cssOverrides={label}>
+				Your subscription at a glance
+			</BlockLabel>
+			<table css={table}>
+				<caption css={visuallyHidden}>
+					What&apos;s included in a paid digital subscription
+				</caption>
+				<thead>
+					<tr css={[rowStyle, titleRow.cssOverrides]}>
+						<th scope="col" css={[rowIconAndText]}>
+							<span css={visuallyHidden}>Benefits</span>
+						</th>
+						<th scope="col" css={columnHeading}>
+							{titleRow.free}
+						</th>
+						<th scope="col" css={[columnHeading, columnHeadingLast]}>
+							{titleRow.paid}
+						</th>
+					</tr>
+				</thead>
+				<tbody css={tableContainer}>
+					{tableContent.map((row) => (
+						<ComparisonTableRow
+							cssOverrides={row.cssOverrides}
+							icon={row.icon}
+							description={row.description}
+							free={row.free}
+							paid={row.paid}
+						/>
+					))}
+				</tbody>
+				<tfoot>
+					<tr css={[rowStyle]}>
+						<td colSpan={3} css={[rowIconAndText, finalRow.cssOverrides]}>
+							<div css={descriptionStyle}>
+								{finalRow.icon}
+								<span>{finalRow.description}</span>
+							</div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</section>
+	);
+}
 
-ComparisonTableRow.defaultProps = {
-	cssOverrides: null,
-};
 export default ComparisonTable;
