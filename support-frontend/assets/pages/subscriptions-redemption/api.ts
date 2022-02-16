@@ -7,6 +7,7 @@ import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/rea
 import type {
 	PaymentResult,
 	RegularPaymentRequest,
+	SubscriptionProductFields,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -48,6 +49,7 @@ function validate(userCode: string): Promise<ValidationResult> {
 	const validationUrl = `${getOrigin()}/subscribe/redeem/validate/${userCode}${
 		isTestUser ? '?isTestUser=true' : ''
 	}`;
+
 	return fetchJson(validationUrl, {}) as Promise<ValidationResult>;
 }
 
@@ -94,6 +96,7 @@ function validateUserCode(userCode: string, dispatch: Dispatch<Action>): void {
 		type: 'SET_USER_CODE',
 		userCode,
 	});
+
 	const codeLength = getGlobal('codeLength') || 13;
 
 	if (userCode.length === codeLength) {
@@ -115,6 +118,7 @@ function validateFormFields(
 			errors: formFieldErrors,
 		});
 	}
+
 	return formFieldErrors.length === 0;
 }
 
@@ -166,12 +170,13 @@ function buildRegularPaymentRequest(
 	countryId: IsoCountry,
 	participations: Participations,
 ): RegularPaymentRequest {
-	const product = {
+	const product: SubscriptionProductFields = {
 		productType: DigitalPack,
 		currency: currencyId,
 		billingPeriod: Monthly,
 		readerType,
 	};
+
 	return {
 		title: null,
 		firstName,
@@ -208,6 +213,7 @@ function createSubscription(
 			dispatch,
 			'An error occurred while redeeming this code, please try again later',
 		);
+
 		return;
 	}
 

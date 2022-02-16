@@ -12,22 +12,24 @@ import {
 	getPriceDescription,
 	getSimplifiedPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
-import 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import 'helpers/productPrice/productPrices';
 
-jest.mock('ophan', () => {});
+jest.mock('ophan', () => () => ({}));
+
 const monthlyBillingPeriod: BillingPeriod = 'Monthly';
+
 const productPrice: ProductPrice = {
 	price: 11.99,
 	currency: 'GBP',
 	fixedTerm: false,
 	promotions: [],
 };
+
 // ----- Tests ----- //
 describe('getPriceDescription', () => {
 	it('should return a price based on inputs', () => {
-		const gwAnnual = {
+		const gwAnnual: ProductPrice = {
 			price: 150,
 			currency: 'GBP',
 			promotions: [
@@ -43,25 +45,33 @@ describe('getPriceDescription', () => {
 					},
 				},
 			],
+			fixedTerm: false,
 		};
 		expect(getPriceDescription(gwAnnual, Annual)).toEqual(
 			"You'll pay £135 for 1 year, then £150 per year",
 		);
-		const gwQuarterly = {
+
+		const gwQuarterly: ProductPrice = {
 			price: 37.5,
 			currency: 'GBP',
 			promotions: [],
+			fixedTerm: false,
 		};
+
 		expect(getPriceDescription(gwQuarterly, Quarterly)).toEqual(
 			'£37.50 per quarter',
 		);
-		const gwMonthly = {
+
+		const gwMonthly: ProductPrice = {
 			price: 12.5,
 			currency: 'GBP',
 			promotions: [],
+			fixedTerm: false,
 		};
+
 		expect(getPriceDescription(gwMonthly, Monthly)).toEqual('£12.50 per month');
-		const gwQuarterlyWithPromo = {
+
+		const gwQuarterlyWithPromo: ProductPrice = {
 			price: 37.5,
 			currency: 'GBP',
 			promotions: [
@@ -77,11 +87,14 @@ describe('getPriceDescription', () => {
 					},
 				},
 			],
+			fixedTerm: false,
 		};
+
 		expect(getPriceDescription(gwQuarterlyWithPromo, Quarterly)).toEqual(
 			"You'll pay £31.87 for 1 quarter, then £37.50 per quarter",
 		);
-		const gwSixWeekly = {
+
+		const gwSixWeekly: ProductPrice = {
 			price: 27.5,
 			currency: 'USD',
 			promotions: [
@@ -96,12 +109,15 @@ describe('getPriceDescription', () => {
 					},
 				},
 			],
+			fixedTerm: false,
 		};
+
 		expect(getPriceDescription(gwSixWeekly, SixWeekly)).toEqual(
 			'US$6 for the first 6 issues (then US$27.50 per month)',
 		);
 	});
 });
+
 describe('getAppliedPromoDescription', () => {
 	const productPriceWithLandingPageDiscount: ProductPrice = {
 		price: 11.99,
@@ -126,18 +142,21 @@ describe('getAppliedPromoDescription', () => {
 			},
 		],
 	};
+
 	it('should return a landing page promotion roundel description', () => {
 		expect(
 			getAppliedPromoDescription(productPriceWithLandingPageDiscount),
 		).toBe('Save 50% for 3 months!');
 	});
 });
+
 describe('getSimplifiedPriceDescription', () => {
 	it('should return a price description', () => {
 		expect(
 			getSimplifiedPriceDescription(productPrice, monthlyBillingPeriod),
 		).toEqual('per month');
 	});
+
 	const productPriceWithDiscountedPrice: ProductPrice = {
 		price: 11.99,
 		currency: 'GBP',
@@ -156,6 +175,7 @@ describe('getSimplifiedPriceDescription', () => {
 			},
 		],
 	};
+
 	it('should return a discounted price description', () => {
 		expect(
 			getSimplifiedPriceDescription(
@@ -164,6 +184,7 @@ describe('getSimplifiedPriceDescription', () => {
 			),
 		).toEqual('per month, then £11.99 per month');
 	});
+
 	const productPriceWithIntroductoryPrice: ProductPrice = {
 		price: 11.99,
 		currency: 'GBP',
@@ -186,6 +207,7 @@ describe('getSimplifiedPriceDescription', () => {
 			},
 		],
 	};
+
 	it('should return an introductory price description', () => {
 		expect(
 			getSimplifiedPriceDescription(
@@ -195,6 +217,7 @@ describe('getSimplifiedPriceDescription', () => {
 		).toEqual('for 6 issues (then £11.99 per month)');
 	});
 });
+
 describe('getAdverbialSubscriptionDescription', () => {
 	it('should return an adverbial subscription description', () => {
 		expect(

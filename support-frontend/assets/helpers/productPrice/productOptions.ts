@@ -1,15 +1,16 @@
 // describes options relating to a product itself - only relevant for paper currently
-const NoProductOptions: 'NoProductOptions' = 'NoProductOptions';
-const Saturday: 'Saturday' = 'Saturday';
-const SaturdayPlus: 'SaturdayPlus' = 'SaturdayPlus';
-const Sunday: 'Sunday' = 'Sunday';
-const SundayPlus: 'SundayPlus' = 'SundayPlus';
-const Weekend: 'Weekend' = 'Weekend';
-const WeekendPlus: 'WeekendPlus' = 'WeekendPlus';
-const Sixday: 'Sixday' = 'Sixday';
-const SixdayPlus: 'SixdayPlus' = 'SixdayPlus';
-const Everyday: 'Everyday' = 'Everyday';
-const EverydayPlus: 'EverydayPlus' = 'EverydayPlus';
+const NoProductOptions = 'NoProductOptions';
+const Saturday = 'Saturday';
+const SaturdayPlus = 'SaturdayPlus';
+const Sunday = 'Sunday';
+const SundayPlus = 'SundayPlus';
+const Weekend = 'Weekend';
+const WeekendPlus = 'WeekendPlus';
+const Sixday = 'Sixday';
+const SixdayPlus = 'SixdayPlus';
+const Everyday = 'Everyday';
+const EverydayPlus = 'EverydayPlus';
+
 export type ProductOptions =
 	| typeof NoProductOptions
 	| typeof Saturday
@@ -22,19 +23,29 @@ export type ProductOptions =
 	| typeof SixdayPlus
 	| typeof Everyday
 	| typeof EverydayPlus;
+
 export type PaperProductOptions =
 	| typeof Saturday
 	| typeof Sunday
 	| typeof Weekend
 	| typeof Sixday
 	| typeof Everyday;
+
 export type PaperAndDigitalProductOptions =
 	| typeof SaturdayPlus
 	| typeof SundayPlus
 	| typeof WeekendPlus
 	| typeof SixdayPlus
 	| typeof EverydayPlus;
-const ActivePaperProductTypes = [Everyday, Sixday, Weekend, Saturday, Sunday];
+
+const ActivePaperProductTypes: PaperProductOptions[] = [
+	Everyday,
+	Sixday,
+	Weekend,
+	Saturday,
+	Sunday,
+];
+
 export type ActivePaperProducts =
 	| typeof Sunday
 	| typeof SundayPlus
@@ -44,20 +55,23 @@ export type ActivePaperProducts =
 	| typeof SixdayPlus
 	| typeof Everyday
 	| typeof EverydayPlus;
-const paperProductsWithDigital: Record<ProductOptions, ProductOptions> = {
+
+const paperProductsWithDigital = {
 	Saturday: SaturdayPlus,
 	Sunday: SundayPlus,
 	Weekend: WeekendPlus,
 	Sixday: SixdayPlus,
 	Everyday: EverydayPlus,
-};
-const paperProductsWithoutDigital: Record<ProductOptions, ProductOptions> = {
+} as Record<ProductOptions, ProductOptions>;
+
+const paperProductsWithoutDigital = {
 	SaturdayPlus: Saturday,
 	SundayPlus: Sunday,
 	WeekendPlus: Weekend,
 	SixdayPlus: Sixday,
 	EverydayPlus: Everyday,
-};
+} as Record<ProductOptions, ProductOptions>;
+
 export {
 	NoProductOptions,
 	Saturday,

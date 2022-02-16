@@ -1,9 +1,6 @@
-/* eslint-disable no-unused-expressions */
-
-/* eslint-disable react/require-default-props */
 // --- Imports --- //
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/react';
+import type { CMP } from '@guardian/consent-management-platform/dist/types';
 import {
 	brand,
 	from,
@@ -17,6 +14,7 @@ import { Button, ButtonLink } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+
 // --- Styles --- //
 const topContainerMobile = css`
 	display: flex;
@@ -26,6 +24,7 @@ const topContainerMobile = css`
 		display: none;
 	}
 `;
+
 const topContainerDesktop = css`
 	display: flex;
 	flex-direction: column-reverse;
@@ -33,6 +32,7 @@ const topContainerDesktop = css`
 		display: none;
 	}
 `;
+
 const articleCountAboveContainerStyles = css`
 	${headline.xxsmall({
 		fontWeight: 'bold',
@@ -44,6 +44,7 @@ const articleCountAboveContainerStyles = css`
 		})};
 	}
 `;
+
 const articleCountHeaderContainerStyles = css`
 	display: flex;
 	justify-content: space-between;
@@ -56,6 +57,7 @@ const articleCountHeaderContainerStyles = css`
 		align-items: baseline;
 	}
 `;
+
 const articleCountWrapperStyles = css`
 	display: flex;
 	flex-direction: row;
@@ -68,6 +70,7 @@ const articleCountWrapperStyles = css`
 		justify-content: flex-end;
 	}
 `;
+
 const articleCountTextStyles = css`
 	${textSans.xsmall()};
 	margin-right: ${space[1]}px;
@@ -76,6 +79,7 @@ const articleCountTextStyles = css`
 		${textSans.small()};
 	}
 `;
+
 const articleCountCtaStyles = css`
 	${textSans.xsmall({
 		fontWeight: 'bold',
@@ -87,6 +91,7 @@ const articleCountCtaStyles = css`
 		})};
 	}
 `;
+
 const articleCountDescriptionTopContainerStyles = css`
 	border-bottom: 1px solid ${palette.neutral[46]};
 	position: relative;
@@ -97,6 +102,7 @@ const articleCountDescriptionTopContainerStyles = css`
 		border-bottom: 1px solid ${palette.neutral[0]};
 	}
 `;
+
 const articleCountDescriptionContainer = css`
 	align-items: center;
 	display: flex;
@@ -109,6 +115,7 @@ const articleCountDescriptionContainer = css`
 		margin-top: ${space[1]}px;
 	}
 `;
+
 const articleCountBodyTextStyles = css`
 	${textSans.small()};
 	width: 100%;
@@ -118,6 +125,7 @@ const articleCountBodyTextStyles = css`
 		width: 96%;
 	}
 `;
+
 const articleCountCtasContainerStyles = css`
 	display: flex;
 	align-self: start;
@@ -135,14 +143,17 @@ const articleCountCtasContainerStyles = css`
 		}
 	}
 `;
+
 const articleCountOptInCtaStyles = css`
 	background-color: ${palette.neutral[0]};
 	padding: 0 ${space[4]}px;
 `;
+
 const articleCountDefaultCtaStyles = css`
 	background-color: ${brand[400]};
 	padding: auto ${space[4]}px;
 `;
+
 const articleCountOptOutCtaStyles = css`
 	color: ${palette.neutral[0]};
 	border: 1px solid ${palette.neutral[0]};
@@ -150,6 +161,7 @@ const articleCountOptOutCtaStyles = css`
 		margin: 0;
 	}
 `;
+
 const trackingSettingsContainerStyles = css`
 	margin: ${space[4]}px auto ${space[3]}px;
 	${textSans.xsmall()};
@@ -158,6 +170,7 @@ const trackingSettingsContainerStyles = css`
 		${textSans.xsmall()};
 	}
 `;
+
 const privacySettingsLinkStyles = css`
 	${textSans.xsmall({
 		fontWeight: 'bold',
@@ -169,6 +182,7 @@ const privacySettingsLinkStyles = css`
 		})};
 	}
 `;
+
 const caretStyles = css`
 	&:before {
 		content: '';
@@ -214,13 +228,14 @@ const caretStyles = css`
 		}
 	}
 `;
+
 // ----- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
 type ArticleCountHeaderProps = {
 	numArticles: number;
 	userName: string | null;
 };
+
 type ArticleCountWithToggleProps = {
 	numArticles: number;
 	isArticleCountOn: boolean;
@@ -228,6 +243,7 @@ type ArticleCountWithToggleProps = {
 	userName: string | null;
 	defaultHeaderCopy: string | React.ReactNode;
 };
+
 type ContributionsArticleCountOptOutWithProps = {
 	numArticles: number;
 	isArticleCountOn: boolean;
@@ -237,6 +253,7 @@ type ContributionsArticleCountOptOutWithProps = {
 	userName: string | null;
 	defaultHeaderCopy: string | React.ReactNode;
 };
+
 // -- Functions -- //
 const OPHAN_COMPONENT_ID_ARTICLE_COUNT_OPT_OUT_OPEN =
 	'contributions-epic-article-count-open';
@@ -250,14 +267,15 @@ const OPHAN_COMPONENT_ID_ARTICLE_COUNT_STAY_OUT =
 	'contributions-epic-article-count-stay-out';
 const OPHAN_COMPONENT_ID_ARTICLE_COUNT_OPT_IN =
 	'contributions-epic-article-count-opt-in';
+
 // -- Components -- //
-export const ArticleCountWithToggle = ({
+export function ArticleCountWithToggle({
 	isArticleCountOn,
 	numArticles,
 	onToggleClick,
 	userName,
 	defaultHeaderCopy,
-}: ArticleCountWithToggleProps) => {
+}: ArticleCountWithToggleProps): JSX.Element | null {
 	if (isArticleCountOn && numArticles >= 5) {
 		return (
 			<div css={articleCountHeaderContainerStyles}>
@@ -300,8 +318,9 @@ export const ArticleCountWithToggle = ({
 	}
 
 	return null;
-};
-export const ContributionsArticleCountWithOptOut = ({
+}
+
+export function ContributionsArticleCountWithOptOut({
 	numArticles,
 	isArticleCountOn,
 	isMobileOnly,
@@ -309,10 +328,10 @@ export const ContributionsArticleCountWithOptOut = ({
 	onArticleCountOptIn,
 	userName,
 	defaultHeaderCopy,
-}: ContributionsArticleCountOptOutWithProps) => {
+}: ContributionsArticleCountOptOutWithProps): JSX.Element {
 	const [isOpen, setIsOpen] = useState(false);
 	const [consentManagementPlatform, setConsentManagementPlatform] =
-		useState(null);
+		useState<CMP>();
 
 	function openCmp() {
 		if (consentManagementPlatform) {
@@ -321,7 +340,7 @@ export const ContributionsArticleCountWithOptOut = ({
 	}
 
 	useEffect(() => {
-		import('@guardian/consent-management-platform').then(({ cmp }) => {
+		void import('@guardian/consent-management-platform').then(({ cmp }) => {
 			setConsentManagementPlatform(cmp);
 		});
 	}, []);
@@ -366,7 +385,6 @@ export const ContributionsArticleCountWithOptOut = ({
 				userName={userName}
 				defaultHeaderCopy={defaultHeaderCopy}
 			/>
-
 			{isOpen && (
 				<div css={articleCountDescriptionTopContainerStyles}>
 					<div css={caretStyles} />
@@ -439,11 +457,12 @@ export const ContributionsArticleCountWithOptOut = ({
 			)}
 		</div>
 	);
-};
+}
+
 export function ArticleCountHeaderCopy({
 	userName,
 	numArticles,
-}: ArticleCountHeaderProps) {
+}: ArticleCountHeaderProps): JSX.Element {
 	if (userName) {
 		return (
 			<>

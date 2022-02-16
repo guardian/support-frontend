@@ -1,4 +1,3 @@
-// @ts-expect-error - required for hooks
 import { css } from '@emotion/react';
 import {
 	brandAlt,
@@ -19,10 +18,9 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type PropTypes = {
 	digiSubPrice: string;
-	addDigitalSubscription: (
-		event: React.SyntheticEvent<HTMLInputElement>,
-	) => void;
+	addDigitalSubscription: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
 const rowOverrides = css`
 	border: none;
 	& > div {
@@ -35,6 +33,7 @@ const rowOverrides = css`
 		})}
 	}
 `;
+
 const ctaContainer = css`
 	background-color: ${brandAlt[400]};
 	padding: 0 ${space[6]}px;
@@ -42,31 +41,38 @@ const ctaContainer = css`
 	border-bottom: 1px solid ${neutral[86]};
 	transition: background-color 0.2s ease-out;
 `;
+
 const ctaContainerOpen = css`
 	background-color: ${neutral[97]};
 `;
+
 const lightBorder = css`
 	border-bottom: 1px solid ${neutral[86]};
 `;
+
 const imageContainer = css`
 	display: flex;
 	justify-content: center;
 `;
+
 const heading = css`
 	${headline.xsmall({
 		fontWeight: 'bold',
 	})}
 	margin-bottom: ${space[3]}px;
 `;
+
 const content = css`
 	padding: ${space[6]}px 0;
 `;
+
 const list = css`
 	margin-bottom: 0;
 	${from.desktop} {
 		margin-bottom: 0;
 	}
 `;
+
 const listCopy = [
 	{
 		content: 'The Guardian Editions app',
@@ -84,7 +90,10 @@ const listCopy = [
 	},
 ];
 
-function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
+function AddDigiSubCta({
+	addDigitalSubscription,
+	digiSubPrice,
+}: PropTypes): JSX.Element {
 	const initialRender = React.useRef(true);
 	const [expanded, setExpanded] = React.useState<boolean>(false);
 	React.useEffect(() => {
@@ -103,7 +112,7 @@ function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
 	}, [expanded]);
 	return (
 		<Accordion
-			cssOverrides={[ctaContainer, expanded ? ctaContainerOpen : '']}
+			cssOverrides={[ctaContainer, ...(expanded ? [ctaContainerOpen] : [])]}
 			hideToggleLabel
 		>
 			<AccordionRow
@@ -141,6 +150,14 @@ function AddDigiSubCta({ addDigitalSubscription, digiSubPrice }: PropTypes) {
 					/>
 				</div>
 			</AccordionRow>
+
+			{/* The Accordian expects multiple children so this hack will appease the ts compiler for now */}
+			<AccordionRow
+				label={''}
+				cssOverrides={css`
+					display: none;
+				`}
+			/>
 		</Accordion>
 	);
 }

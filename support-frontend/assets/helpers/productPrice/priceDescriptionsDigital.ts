@@ -12,7 +12,7 @@ import {
 	hasIntroductoryPrice,
 } from 'helpers/productPrice/promotions';
 
-function hasDiscountOrPromotion(productPrice: ProductPrice) {
+function hasDiscountOrPromotion(productPrice: ProductPrice): boolean {
 	const promotion = getAppliedPromo(productPrice.promotions);
 	return hasDiscount(promotion) || hasIntroductoryPrice(promotion);
 }
@@ -20,7 +20,7 @@ function hasDiscountOrPromotion(productPrice: ProductPrice) {
 function getBillingDescription(
 	productPrice: ProductPrice,
 	billingPeriod: DigitalBillingPeriod,
-) {
+): string {
 	const glyph = extendedGlyph(productPrice.currency);
 	const billingPeriodIsMonthly =
 		billingPeriod === Monthly ? 'every month' : 'a year';

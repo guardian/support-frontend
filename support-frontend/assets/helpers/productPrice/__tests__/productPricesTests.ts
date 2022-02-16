@@ -13,16 +13,19 @@ import {
 	isNumeric,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
+
 // ----- Tests ----- //
-jest.mock('ophan', () => {});
+jest.mock('ophan', () => () => ({}));
+
 describe('isNumeric', () => {
 	it('should return true if a number is provided', () => {
 		expect(isNumeric(null)).toEqual(false);
-		expect(isNumeric(undefined)).toEqual(false);
+		expect(isNumeric()).toEqual(false);
 		expect(isNumeric(0)).toEqual(true);
 		expect(isNumeric(50)).toEqual(true);
 	});
 });
+
 describe('getProductPrice', () => {
 	const productPrices = {
 		'United Kingdom': {
@@ -65,10 +68,11 @@ describe('getProductPrice', () => {
 			},
 		},
 	};
+
 	it('should return product price information for a given currency', () => {
 		expect(
 			getProductPrice(
-				productPrices,
+				productPrices as unknown as ProductPrices,
 				'United Kingdom',
 				'Monthly',
 				'Collection',
@@ -81,8 +85,14 @@ describe('getProductPrice', () => {
 			promotions: [],
 			savingVsRetail: 20,
 		});
+
 		expect(
-			getProductPrice(productPrices, 'United Kingdom', 'Monthly', 'Collection'),
+			getProductPrice(
+				productPrices as unknown as ProductPrices,
+				'United Kingdom',
+				'Monthly',
+				'Collection',
+			),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
@@ -90,17 +100,23 @@ describe('getProductPrice', () => {
 			promotions: [],
 			savingVsRetail: 5,
 		});
-		expect(getProductPrice(productPrices, 'United Kingdom', 'Monthly')).toEqual(
-			{
-				currency: 'GBP',
-				fixedTerm: false,
-				price: 15.95,
-				promotions: [],
-				savingVsRetail: 10,
-			},
-		);
+
+		expect(
+			getProductPrice(
+				productPrices as unknown as ProductPrices,
+				'United Kingdom',
+				'Monthly',
+			),
+		).toEqual({
+			currency: 'GBP',
+			fixedTerm: false,
+			price: 15.95,
+			promotions: [],
+			savingVsRetail: 10,
+		});
 	});
 });
+
 describe('finalPrice', () => {
 	const productPrices = {
 		'United Kingdom': {
@@ -129,10 +145,11 @@ describe('finalPrice', () => {
 			},
 		},
 	};
+
 	it('should return the final price with any discounts applied', () => {
 		expect(
 			finalPrice(
-				productPrices,
+				productPrices as unknown as ProductPrices,
 				'United Kingdom',
 				'Monthly',
 				'Collection',
@@ -157,12 +174,14 @@ describe('finalPrice', () => {
 		});
 	});
 });
+
 describe('getFirstValidPrice', () => {
 	it('should return the first valid numeric price', () => {
 		expect(getFirstValidPrice(6.99, 8.99, 11.99)).toEqual(6.99);
-		expect(getFirstValidPrice(null, undefined, '8.99', 11.99)).toEqual('8.99');
+		expect(getFirstValidPrice(null, undefined, 8.99, 11.99)).toEqual(8.99);
 	});
 });
+
 describe('getCurrency', () => {
 	it('should return an ISO currency code', () => {
 		expect(getCurrency('GB')).toEqual('GBP');
@@ -171,6 +190,7 @@ describe('getCurrency', () => {
 		expect(getCurrency('NZ')).toEqual('NZD');
 	});
 });
+
 describe('getCountryGroup', () => {
 	it('should return a country group given a valid ISO country code', () => {
 		expect(getCountryGroup('GB')).toEqual({
@@ -179,6 +199,7 @@ describe('getCountryGroup', () => {
 			name: 'United Kingdom',
 			supportInternationalisationId: 'uk',
 		});
+
 		expect(getCountryGroup('CA')).toEqual({
 			countries: ['CA'],
 			currency: 'CAD',
@@ -187,19 +208,22 @@ describe('getCountryGroup', () => {
 		});
 	});
 });
+
 describe('showPrice', () => {
 	const productPrice: ProductPrice = {
 		currency: 'USD',
 		fixedTerm: true,
 		price: 6.99,
 	};
+
 	it('should return the price prepended with a glyph', () => {
 		expect(showPrice(productPrice)).toEqual('US$6.99');
 		expect(showPrice(productPrice, false)).toEqual('$6.99');
 	});
 });
+
 describe('displayPrice', () => {
-	const productPrices: ProductPrices = {
+	const productPrices = {
 		'United Kingdom': {
 			Collection: {
 				Weekend: {
@@ -216,10 +240,11 @@ describe('displayPrice', () => {
 			},
 		},
 	};
+
 	it('should return the price prepended with a glyph', () => {
 		expect(
 			displayPrice(
-				productPrices,
+				productPrices as unknown as ProductPrices,
 				'United Kingdom',
 				'Monthly',
 				'Collection',

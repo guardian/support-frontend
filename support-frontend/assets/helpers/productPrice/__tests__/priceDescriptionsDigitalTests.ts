@@ -4,9 +4,11 @@ import {
 	getBillingDescription,
 	hasDiscountOrPromotion,
 } from 'helpers/productPrice/priceDescriptionsDigital';
+import type { ProductPrice } from '../productPrices';
 
-jest.mock('ophan', () => {});
-const productPriceMonthlyWithDiscount = {
+jest.mock('ophan', () => () => ({}));
+
+const productPriceMonthlyWithDiscount: ProductPrice = {
 	price: 11.99,
 	currency: 'GBP',
 	fixedTerm: false,
@@ -24,13 +26,15 @@ const productPriceMonthlyWithDiscount = {
 		},
 	],
 };
-const productPriceMonthly = {
+
+const productPriceMonthly: ProductPrice = {
 	price: 11.99,
 	currency: 'GBP',
 	fixedTerm: false,
 	promotions: [],
 };
-const productPriceAnnualWithDiscount = {
+
+const productPriceAnnualWithDiscount: ProductPrice = {
 	price: 199,
 	currency: 'USD',
 	fixedTerm: false,
@@ -48,29 +52,35 @@ const productPriceAnnualWithDiscount = {
 		},
 	],
 };
-const productPriceAnnual = {
+
+const productPriceAnnual: ProductPrice = {
 	price: 199,
 	currency: 'USD',
 	fixedTerm: false,
 	promotions: [],
 };
+
 // ----- Tests ----- //
 describe('getBillingDescription', () => {
 	it('should return a description of the price', () => {
 		expect(
 			getBillingDescription(productPriceMonthlyWithDiscount, Monthly),
 		).toBe("You'll pay £5.99/month for 3 months, then £11.99 per month");
+
 		expect(getBillingDescription(productPriceMonthly, Monthly)).toBe(
 			'A recurring charge of £11.99 every month',
 		);
+
 		expect(getBillingDescription(productPriceAnnualWithDiscount, Annual)).toBe(
 			"You'll pay US$99 for 1 year, then US$199 per year",
 		);
+
 		expect(getBillingDescription(productPriceAnnual, Annual)).toBe(
 			'A recurring charge of US$199 a year',
 		);
 	});
 });
+
 describe('hasDiscountOrPromotion', () => {
 	it('should return a boolean depending on whether there are or are not promotions', () => {
 		expect(hasDiscountOrPromotion(productPriceMonthlyWithDiscount)).toBe(true);

@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
-	finalPrice,
+	getPriceWithDiscount,
 	getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
@@ -48,7 +49,10 @@ const getOfferText = (price: ProductPrice) => {
 };
 
 // ---- Plans ----- //
-const copy = {
+const copy: Record<
+	PaperFulfilmentOptions,
+	Record<PaperProductOptions, JSX.Element>
+> = {
 	HomeDelivery: {
 		Everyday: (
 			<>
@@ -122,7 +126,7 @@ const getPlans = (
 	productPrices: ProductPrices,
 ) =>
 	ActivePaperProductTypes.map((productOption) => {
-		const priceAfterPromosApplied = finalPrice(
+		const priceAfterPromosApplied = getPriceWithDiscount(
 			productPrices,
 			fulfilmentOption,
 			productOption,
@@ -175,6 +179,7 @@ function PaperProductPrices({
 	return (
 		<Prices activeTab={tab} products={products} setTabAction={setTabAction} />
 	);
-} // ----- Exports ----- //
+}
 
+// ----- Exports ----- //
 export default PaperProductPrices;

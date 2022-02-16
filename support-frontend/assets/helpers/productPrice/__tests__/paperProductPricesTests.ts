@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
-	finalPrice,
 	getMaxSavingVsRetail,
 	getPriceWithDiscount,
 	getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrices } from '../productPrices';
 
 const productPrices = {
 	'United Kingdom': {
@@ -240,19 +240,31 @@ const productPrices = {
 		},
 	},
 };
+
 const homeDelivery: FulfilmentOptions = 'HomeDelivery';
 const weekend: ProductOptions = 'Weekend';
 const sunday: ProductOptions = 'Sunday';
+
 // ----- Tests ----- //
-jest.mock('ophan', () => {});
+jest.mock('ophan', () => () => ({}));
+
 describe('getMaxSavingVsRetail', () => {
 	it('should return the maximum savings for a fulfilment option vs retail', () => {
-		expect(getMaxSavingVsRetail(productPrices)).toEqual(29);
+		expect(
+			getMaxSavingVsRetail(productPrices as unknown as ProductPrices),
+		).toEqual(29);
 	});
 });
+
 describe('getProductPrice', () => {
 	it('should return product price details if valid fulfilment and product options are provided', () => {
-		expect(getProductPrice(productPrices, homeDelivery, weekend)).toEqual({
+		expect(
+			getProductPrice(
+				productPrices as unknown as ProductPrices,
+				homeDelivery,
+				weekend,
+			),
+		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
 			price: 25.09,
@@ -261,32 +273,16 @@ describe('getProductPrice', () => {
 		});
 	});
 });
-// as finalPrice and getPriceWithDiscount perform the same action
-// one will be removed and the related code updated in a subsequent PR
-describe('finalPrice', () => {
-	it('should return the final price with any discounts applied', () => {
-		expect(finalPrice(productPrices, homeDelivery, sunday)).toEqual({
-			currency: 'GBP',
-			fixedTerm: false,
-			price: 6.99,
-			promotions: [
-				{
-					description: 'an example promotion',
-					introductoryPrice: {
-						periodLength: 3,
-						periodType: 'issue',
-						price: 6.99,
-					},
-					name: 'examplePromo',
-					promoCode: 1234,
-				},
-			],
-		});
-	});
-});
+
 describe('getPriceWithDiscount', () => {
 	it('should return the final price with any discounts applied', () => {
-		expect(getPriceWithDiscount(productPrices, homeDelivery, sunday)).toEqual({
+		expect(
+			getPriceWithDiscount(
+				productPrices as unknown as ProductPrices,
+				homeDelivery,
+				sunday,
+			),
+		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
 			price: 6.99,
