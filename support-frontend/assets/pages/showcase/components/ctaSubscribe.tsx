@@ -5,7 +5,7 @@ import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 import Text from 'components/text/text';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
-export default function CtaSubscribe() {
+export default function CtaSubscribe(): JSX.Element {
 	return (
 		<Content
 			appearance="feature"

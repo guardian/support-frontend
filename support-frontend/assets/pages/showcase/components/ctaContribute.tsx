@@ -6,7 +6,7 @@ import WithSupport from 'components/svgs/withSupport';
 import Text from 'components/text/text';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
-export default function CtaContribute() {
+export default function CtaContribute(): JSX.Element {
 	return (
 		<Content appearance="highlight" modifierClasses={['contribute']}>
 			<div className="wrapper">
