@@ -1,4 +1,3 @@
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import GridImage from 'components/gridImage/gridImage';
 import {
 	AUDCountries,
@@ -14,10 +13,7 @@ import HeroImg from './hero.svg';
 import { regionalContent } from './regionalContent';
 import './hero.scss';
 
-function Caption(props: {
-	className: string;
-	captionText: EmotionJSX.Element;
-}) {
+function Caption(props: { className: string; captionText: JSX.Element }) {
 	return (
 		<div className={props.className}>
 			<figcaption className="showcase-hero__caption">
@@ -49,7 +45,7 @@ const getCountrySelector = (countryGroupId: CountryGroupId) => {
 
 export default function Hero(props: {
 	countryGroupId: CountryGroupId;
-}): EmotionJSX.Element {
+}): JSX.Element {
 	const countrySelector = getCountrySelector(props.countryGroupId);
 	return (
 		<div className="showcase-hero">

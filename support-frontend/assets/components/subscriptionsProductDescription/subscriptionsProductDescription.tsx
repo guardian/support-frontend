@@ -1,4 +1,3 @@
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import AnchorButton from 'components/button/anchorButton';
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
@@ -39,7 +38,7 @@ function SubscriptionsProductDescription({
 	offer,
 	isFeature,
 	buttons,
-}: PropTypes): EmotionJSX.Element {
+}: PropTypes): JSX.Element {
 	return (
 		<div>
 			<h2 className="subscriptions__product-title">{title}</h2>

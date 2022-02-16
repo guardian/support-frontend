@@ -1,4 +1,3 @@
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import AnchorButton from 'components/button/anchorButton';
 import Content, { NarrowContent } from 'components/content/content';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
@@ -7,7 +6,7 @@ import WithSupport from 'components/svgs/withSupport';
 import Text from 'components/text/text';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
-export default function CtaContribute(): EmotionJSX.Element {
+export default function CtaContribute(): JSX.Element {
 	return (
 		<Content appearance="highlight" modifierClasses={['contribute']}>
 			<div className="wrapper">

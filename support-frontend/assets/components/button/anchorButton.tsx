@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import type { SharedButtonPropTypes } from './_sharedButton';
 import SharedButton, { defaultProps } from './_sharedButton';
 import './button.scss';
@@ -11,7 +10,7 @@ export type PropTypes = SharedButtonPropTypes & {
 	onClick?: () => void;
 };
 
-function AnchorButton(props: PropTypes): EmotionJSX.Element {
+function AnchorButton(props: PropTypes): JSX.Element {
 	return <SharedButton element="a" {...props} />;
 }
 
