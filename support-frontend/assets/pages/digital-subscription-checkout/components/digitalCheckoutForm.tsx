@@ -27,6 +27,7 @@ import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { userIsPatron } from 'helpers/patrons';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -34,7 +35,6 @@ import {
 	finalPrice,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type {
@@ -169,12 +169,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 		props.country,
 	);
 
-	const isPatron =
-		productPrice.promotions?.find(
-			(promotion: Promotion) =>
-				promotion.numberOfDiscountedPeriods &&
-				promotion.numberOfDiscountedPeriods >= 100,
-		) !== undefined;
+	const isPatron = userIsPatron(productPrice.promotions);
 
 	return (
 		<Content>

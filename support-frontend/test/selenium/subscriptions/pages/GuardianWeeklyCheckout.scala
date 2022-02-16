@@ -19,7 +19,7 @@ class GuardianWeeklyCheckout(implicit val webDriver: WebDriver) extends Checkout
   private val billingPostcode = id("billing-postcode")
   private val billingCountry = id("billing-country")
 
-  def fillForm {
+  def fillForm(): Unit = {
     setValue(deliveryCountry, "United Kingdom")
     setValue(deliveryLineOne, "Kings Place")
     setValue(deliveryCity, "London")

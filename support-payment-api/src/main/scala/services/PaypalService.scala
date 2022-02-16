@@ -12,7 +12,7 @@ import model.PaypalThreadPool
 
 import scala.concurrent.Future
 import scala.math.BigDecimal.RoundingMode
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait Paypal {
   type PaypalResult[A] = EitherT[Future, PaypalApiError, A]
@@ -101,7 +101,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   }
 
   private def buildPaypalTransactions(currencyCode: String, amount: BigDecimal): java.util.List[Transaction] = {
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
 
     val description = "Contribution to the guardian"
     val stringAmount = amount.setScale(2, RoundingMode.HALF_UP).toString

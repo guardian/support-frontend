@@ -1,19 +1,20 @@
 import { css } from '@emotion/react';
 import { body, from, headline, space } from '@guardian/source-foundations';
-import { SvgInfo } from '@guardian/source-react-components';
+import { SvgGift, SvgInfo } from '@guardian/source-react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
-import SvgGift from 'components/svgs/gift';
 
 export type PropTypes = {
 	orderIsAGift: boolean;
 	products: Product[];
 };
+
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
 `;
+
 const priceBoxes = css`
 	margin-top: ${space[6]}px;
 	justify-content: flex-start;
@@ -22,6 +23,7 @@ const priceBoxes = css`
 		margin-top: ${space[9]}px;
 	}
 `;
+
 const productOverride = css`
 	&:not(:first-of-type) {
 		margin-top: ${space[4]}px;
@@ -35,6 +37,7 @@ const productOverride = css`
 		}
 	}
 `;
+
 const productOverrideWithLabel = css`
 	&:not(:first-of-type) {
 		margin-top: ${space[12]}px;
@@ -48,20 +51,23 @@ const productOverrideWithLabel = css`
 		}
 	}
 `;
+
 const pricesHeadline = css`
 	${headline.medium({
 		fontWeight: 'bold',
 	})};
 `;
+
 const pricesSubHeadline = css`
 	${body.medium()}
 	padding-bottom: ${space[2]}px;
 `;
+
 const pricesInfo = css`
 	margin-top: ${space[6]}px;
 `;
 
-function Prices({ orderIsAGift, products }: PropTypes) {
+function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 	return (
 		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>

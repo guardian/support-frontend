@@ -2,12 +2,12 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 17,
-            "TS2322": 113,
+            "TS2305": 12,
+            "TS2322": 89,
             "TS2578": 7,
-            "TS2339": 19,
+            "TS2339": 18,
             "TS2345": 95,
-            "TS7006": 54,
+            "TS7006": 51,
             "TS6133": 9,
             "TS7031": 18,
             "TS2564": 2,
@@ -40,19 +40,14 @@
             "assets/__mocks__/imageMock.ts": 1,
             "assets/components/asyncronously/asyncronously.ts": 2,
             "assets/components/footerCompliant/Footer.tsx": 4,
-            "assets/components/forms/customFields/options.tsx": 1,
-            "assets/components/forms/label.tsx": 2,
             "assets/components/headers/header/header.tsx": 6,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
             "assets/components/menu/menu.tsx": 2,
-            "assets/components/product/productOption.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
@@ -61,14 +56,12 @@
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
-            "assets/components/page/pageTitle.tsx": 4,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/components/subscriptionCheckouts/summary.tsx": 6,
-            "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
@@ -87,26 +80,17 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
-            "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx": 7,
-            "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 12,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
-            "assets/pages/paper-subscription-landing/components/content/prices.tsx": 1,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
-            "assets/pages/showcase/components/ctaContribute.tsx": 1,
-            "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
-            "assets/pages/showcase/components/hero.tsx": 3,
-            "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
-            "assets/pages/weekly-subscription-landing/components/content/prices.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
@@ -196,14 +180,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/forms/customFields/options.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/forms/label.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/headers/header/header.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -224,10 +200,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/product/productOption.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/product/productOptionSmall.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -237,14 +209,6 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/thankYou/pageSection.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
@@ -286,10 +250,6 @@
             "message": "Type 'string' is not assignable to type 'number | undefined'."
         },
         {
-            "path": "assets/components/forms/label.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
-        },
-        {
             "path": "assets/components/headers/links/links.tsx",
             "message": "Type '\"_blank\" | null' is not assignable to type 'HTMLAttributeAnchorTarget | undefined'."
         },
@@ -312,22 +272,6 @@
         {
             "path": "assets/components/page/page.tsx",
             "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/components/page/pageTitle.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/components/priceLabel/priceLabel.tsx",
@@ -396,10 +340,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
             "message": "Type '{ className: any; productPrice: ProductPrice; billingPeriod: BillingPeriod; giftStyles: any; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"giftStyles\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/helpers/__tests__/formValidation.ts",
@@ -526,56 +466,12 @@
             "message": "Type '\"normal\"' is not assignable to type 'FontWeight | undefined'."
         },
         {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/comparisonTable.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: string; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: string; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: EmotionJSX.Element; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: EmotionJSX.Element; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type '{ icon: EmotionJSX.Element; description: string; ariaLabel: string; free: EmotionJSX.Element; paid: EmotionJSX.Element; }' is not assignable to type 'TableRow'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/comparison/tableContents.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string[] | Option<string> | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/events/eventsModule.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string | string[] | undefined'."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/paymentSelection.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
@@ -630,32 +526,8 @@
             "message": "Type 'string' is not assignable to type 'PaperProductOptions'."
         },
         {
-            "path": "assets/pages/paper-subscription-landing/components/content/prices.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "Type 'Element' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "Type 'Element' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
@@ -704,10 +576,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
             "message": "Type 'boolean | undefined' is not assignable to type 'boolean'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/content/prices.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         }
     ],
     "TS2578": [
@@ -812,10 +680,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
             "message": "Property 'checked' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "Property 'title' does not exist on type '{ title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { ...; }'."
         }
     ],
     "TS2345": [
@@ -1268,18 +1132,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
             "message": "Parameter 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'isFeature' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'index' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'hierarchy' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",

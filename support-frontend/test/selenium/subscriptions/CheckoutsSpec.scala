@@ -76,7 +76,7 @@ class CheckoutsSpec
       paymentFunction: CheckoutPage => Unit,
   ): Unit = {
     val testUserRequest = new IdapiTestUserRequest()
-    val testUser = testUserRequest.getCookies match {
+    testUserRequest.getCookies() match {
       case Left(error) => fail(error)
       case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
     }

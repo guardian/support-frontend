@@ -38,7 +38,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     private val lastName = id("contributionLastName")
     private val email = id("contributionEmail")
 
-    def fillIn(hasNameFields: Boolean) {
+    def fillIn(hasNameFields: Boolean): Unit = {
 
       setValue(email, s"${testUser.username}@gu.com", clear = true)
       if (hasNameFields) {
@@ -109,7 +109,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     def pay(): Unit = clickOn(payButton)
   }
 
-  def fillInPersonalDetails(hasNameFields: Boolean) { RegisterFields.fillIn(hasNameFields) }
+  def fillInPersonalDetails(hasNameFields: Boolean): Unit = { RegisterFields.fillIn(hasNameFields) }
 
   def clearForm(hasNameFields: Boolean): Unit = RegisterFields.clear(hasNameFields)
 

@@ -1,5 +1,4 @@
 import AnchorButton from 'components/button/anchorButton';
-// types
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
@@ -13,7 +12,11 @@ type PropTypes = {
 	buttons: ProductButton[];
 };
 
-const getButtonAppearance = (isFeature, index, hierarchy) => {
+const getButtonAppearance = (
+	isFeature: boolean | null,
+	index: number,
+	hierarchy: string | undefined,
+) => {
 	if (isFeature && index === 0) {
 		return 'primary';
 	} else if (isFeature && index > 0) {
@@ -28,44 +31,46 @@ const getButtonAppearance = (isFeature, index, hierarchy) => {
 	return 'tertiary';
 };
 
-const SubscriptionsProductDescription = ({
+function SubscriptionsProductDescription({
 	title,
 	subtitle,
 	description,
 	offer,
 	isFeature,
 	buttons,
-}: PropTypes) => (
-	<div>
-		<h2 className="subscriptions__product-title">{title}</h2>
-		{offer && <h3 className="subscriptions__sales">{offer}</h3>}
-		{offer && (
-			<h3 className="subscriptions__product-subtitle--small">{subtitle}</h3>
-		)}
-		{!offer && (
-			<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
-		)}
-		<p className="subscriptions__description">{description}</p>
-		<div
-			className={
-				isFeature
-					? 'subscriptions__button-container--feature'
-					: 'subscriptions__button-container'
-			}
-		>
-			{buttons.map((button, index) => (
-				<AnchorButton
-					href={button.link}
-					onClick={button.analyticsTracking}
-					appearance={getButtonAppearance(isFeature, index, button.hierarchy)}
-					modifierClasses={['subscriptions__product-button']}
-				>
-					{button.ctaButtonText}
-				</AnchorButton>
-			))}
+}: PropTypes): JSX.Element {
+	return (
+		<div>
+			<h2 className="subscriptions__product-title">{title}</h2>
+			{offer && <h3 className="subscriptions__sales">{offer}</h3>}
+			{offer && (
+				<h3 className="subscriptions__product-subtitle--small">{subtitle}</h3>
+			)}
+			{!offer && (
+				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
+			)}
+			<p className="subscriptions__description">{description}</p>
+			<div
+				className={
+					isFeature
+						? 'subscriptions__button-container--feature'
+						: 'subscriptions__button-container'
+				}
+			>
+				{buttons.map((button, index) => (
+					<AnchorButton
+						href={button.link}
+						onClick={button.analyticsTracking}
+						appearance={getButtonAppearance(isFeature, index, button.hierarchy)}
+						modifierClasses={['subscriptions__product-button']}
+					>
+						{button.ctaButtonText}
+					</AnchorButton>
+				))}
+			</div>
 		</div>
-	</div>
-);
+	);
+}
 
 SubscriptionsProductDescription.defaultProps = {
 	offer: null,

@@ -6,9 +6,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
 import org.scalatestplus.selenium.WebBrowser
 
-import scala.collection.JavaConverters.asScalaSetConverter
+import scala.jdk.CollectionConverters._
 import scala.util.Try
-import scala.collection.JavaConverters._
 
 trait Browser extends WebBrowser with LazyLogging {
 
@@ -47,14 +46,14 @@ trait Browser extends WebBrowser with LazyLogging {
       ),
     )
 
-  def clickOn(q: Query) {
+  def clickOn(q: Query): Unit = {
     if (pageHasElement(q))
       click.on(q)
     else
       throw new MissingPageElementException(q)
   }
 
-  def setValue(q: Query, value: String, clear: Boolean = false) {
+  def setValue(q: Query, value: String, clear: Boolean = false): Unit = {
     if (pageHasElement(q)) {
 
       if (clear) q.webElement.clear
@@ -64,7 +63,7 @@ trait Browser extends WebBrowser with LazyLogging {
       throw new MissingPageElementException(q)
   }
 
-  def clearValue(q: Query) {
+  def clearValue(q: Query): Unit = {
     if (pageHasElement(q)) {
 
       q.webElement.clear
@@ -83,7 +82,7 @@ trait Browser extends WebBrowser with LazyLogging {
     }
   }
 
-  def setSingleSelectionValue(q: Query, value: String) {
+  def setSingleSelectionValue(q: Query, value: String): Unit = {
     if (pageHasElement(q))
       singleSel(q).value = value
     else
@@ -91,7 +90,7 @@ trait Browser extends WebBrowser with LazyLogging {
   }
 
   // Switches to a new iframe specified by the Query, q.
-  def switchFrame(q: Query) {
+  def switchFrame(q: Query): Unit = {
     if (pageHasElement(q))
       webDriver.switchTo().frame(q.webElement)
     else

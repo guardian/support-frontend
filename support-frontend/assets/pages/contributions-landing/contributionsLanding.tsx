@@ -15,7 +15,7 @@ import {
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { renderPage } from 'helpers/rendering/render';
-import { set as setCookie } from 'helpers/storage/cookie';
+import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import * as storage from 'helpers/storage/storage';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as user from 'helpers/user/user';
@@ -68,18 +68,6 @@ const reactElementId = `contributions-landing-page-${countryGroups[countryGroupI
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 // ----- Render ----- //
-
-const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
-const currentTimeInEpochMilliseconds: number = Date.now();
-const cookieDaysToLive = 365;
-
-export const setOneOffContributionCookie = (): void => {
-	setCookie(
-		ONE_OFF_CONTRIBUTION_COOKIE,
-		currentTimeInEpochMilliseconds.toString(),
-		cookieDaysToLive,
-	);
-};
 
 const campaignSettings = getCampaignSettings();
 const cssModifiers = campaignSettings?.cssModifiers ?? [];

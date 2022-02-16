@@ -11,7 +11,7 @@ type PropTypes = {
 	modifierClass: string;
 	trackingId: string;
 };
-export default function OtherProduct(props: PropTypes) {
+export default function OtherProduct(props: PropTypes): JSX.Element {
 	return (
 		<div
 			className={classNameWithModifiers('other-product', [props.modifierClass])}

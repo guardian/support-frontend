@@ -17,6 +17,7 @@ import {
 const visuallyHidden = css`
 	${_visuallyHidden}
 `;
+
 const table = css`
 	position: relative;
 	width: 100%;
@@ -30,17 +31,19 @@ const table = css`
 		${body.medium()}
 	}
 `;
+
 const stickyHeader = css`
 	position: sticky;
 	top: 0;
 	z-index: 1;
 	background-color: ${background.ctaPrimary};
 `;
+
 type InteractiveTablePropTypes = {
 	caption: ReactNode;
 	headers: CellData[];
 	rows: RowData[];
-	footer: ReactNode;
+	footer?: ReactNode;
 };
 
 function InteractiveTable({
@@ -65,9 +68,11 @@ function InteractiveTable({
 					/>
 				))}
 			</tbody>
-			<tfoot>
-				<InteractiveTableFooterRow>{footer}</InteractiveTableFooterRow>
-			</tfoot>
+			{footer && (
+				<tfoot>
+					<InteractiveTableFooterRow>{footer}</InteractiveTableFooterRow>
+				</tfoot>
+			)}
 		</table>
 	);
 }

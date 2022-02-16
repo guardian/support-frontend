@@ -70,9 +70,11 @@ const reducer = (commonState: CommonState) =>
 	);
 
 const store = initRedux(reducer);
-const { countryGroupId, countryId } =
+const { countryGroupId, countryId, currencyId } =
 	store.getState().common.internationalisation;
-const { orderIsAGift, productPrices } = store.getState().page.checkout;
+const { orderIsAGift, productPrices, billingPeriod } =
+	store.getState().page.checkout;
+
 const thankyouProps = {
 	countryGroupId,
 	marketingConsent: orderIsAGift ? (
@@ -80,8 +82,13 @@ const thankyouProps = {
 	) : (
 		<MarketingConsent />
 	),
+	productPrices,
+	billingPeriod,
+	currencyId,
 };
+
 FocusStyleManager.onlyShowFocusOnTabs();
+
 // ----- Render ----- //
 const content = orderIsAGift ? (
 	<Provider store={store}>
@@ -126,4 +133,5 @@ const content = orderIsAGift ? (
 		</Page>
 	</Provider>
 );
+
 renderPage(content, 'digital-subscription-checkout-page');

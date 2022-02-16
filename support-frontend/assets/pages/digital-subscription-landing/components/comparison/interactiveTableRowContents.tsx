@@ -25,6 +25,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 const iconSizeMobile = 28;
 const iconSizeDesktop = 34;
+
 const descriptionIcon = css`
 	display: inline-flex;
 	align-self: center;
@@ -46,6 +47,7 @@ const descriptionIcon = css`
 		}
 	}
 `;
+
 const indicators = css`
 	display: flex;
 	justify-content: center;
@@ -60,22 +62,27 @@ const indicators = css`
 		margin: 0 auto;
 	}
 `;
+
 const checkmark = css`
 	svg {
 		max-width: 25px;
 	}
 `;
+
 const yellowBackground = css`
 	background: ${brandAltBackground.primary};
 `;
+
 const greyBackground = css`
 	background: ${background.secondary};
 `;
+
 const hideOnSmall = css`
 	${until.mobileLandscape} {
 		display: none;
 	}
 `;
+
 const detailsCellImageFirst = css`
 	display: flex;
 	align-items: flex-start;
@@ -96,6 +103,7 @@ const detailsCellImageFirst = css`
 		}
 	}
 `;
+
 const detailsCellImageFirstContainer = css`
 	display: flex;
 	align-items: flex-end;
@@ -114,6 +122,7 @@ const detailsCellImageFirstContainer = css`
 		margin: 0 0 -${space[4]}px;
 	}
 `;
+
 const detailsCellImageContainerFullHeight = css`
 	${from.tablet} {
 		margin-top: -${space[4]}px;
@@ -121,6 +130,7 @@ const detailsCellImageContainerFullHeight = css`
 		margin-right: -36px;
 	}
 `;
+
 const detailsCellImageSecond = css`
 	display: flex;
 	align-items: flex-start;
@@ -140,6 +150,7 @@ const detailsCellImageSecond = css`
 		}
 	}
 `;
+
 const detailsCellImageSecondContainer = css`
 	display: flex;
 	align-items: flex-end;
@@ -154,11 +165,13 @@ const detailsCellImageSecondContainer = css`
 		align-items: flex-end;
 	}
 `;
+
 const detailsCellImageContainerBottomSpacing = css`
 	${until.tablet} {
 		margin: 0 -${space[3]}px;
 	}
 `;
+
 const detailsCellOfflineReading = css`
 	display: flex;
 	flex-direction: column;
@@ -168,6 +181,7 @@ const detailsCellOfflineReading = css`
 		justify-content: space-around;
 	}
 `;
+
 const appFeatureImageContainer = css`
 	display: flex;
 	flex-basis: 50%;
@@ -196,6 +210,7 @@ const appFeatureImageContainer = css`
 		}
 	}
 `;
+
 const detailsColumnCrosswords = css`
 	display: flex;
 	flex-direction: row;
@@ -211,6 +226,7 @@ const detailsColumnCrosswords = css`
 		max-width: 500px;
 	}
 `;
+
 const detailsCellImageCrosswords = css`
 	display: flex;
 	margin: 0 -${space[3]}px -${space[4]}px;
@@ -224,6 +240,7 @@ const detailsCellImageCrosswords = css`
 		align-items: flex-end;
 	}
 `;
+
 const appFeatureContent = css`
 	margin-right: ${space[4]}px;
 
@@ -234,6 +251,7 @@ const appFeatureContent = css`
 		margin-right: 0;
 	}
 `;
+
 const appFeatureHeadline = css`
 	${headline.xxxsmall({
 		fontWeight: 'bold',
@@ -258,6 +276,7 @@ function Checkmark(): JSX.Element {
 }
 
 type AppName = 'Guardian' | 'Editions';
+
 type AppFeatureWithIconPropTypes = {
 	appName: AppName;
 	children: ReactNode;
@@ -268,7 +287,7 @@ function AppFeatureWithIcon({
 	appName,
 	heading = `The ${appName} App`,
 	children,
-}: AppFeatureWithIconPropTypes): JSX.Element {
+}: AppFeatureWithIconPropTypes) {
 	const icon =
 		appName === 'Editions' ? <SvgEditionsIcon /> : <SvgLiveAppIcon />;
 	return (
@@ -291,8 +310,29 @@ function trackRowClick(rowId: string) {
 	};
 }
 
-export function getLocalisedRows(countryGroupId: CountryGroupId) {
+type RowName =
+	| 'journalism'
+	| 'adFree'
+	| 'editionsApp'
+	| 'premiumApp'
+	| 'offlineReading'
+	| 'crosswords';
+
+type RowContent = {
+	rowId: string;
+	columns: Array<
+		{ content: JSX.Element; isPrimary: boolean } | { content: JSX.Element }
+	>;
+	details: JSX.Element;
+	onClick: (expanded: boolean) => void;
+};
+
+export function getLocalisedRows(
+	countryGroupId: CountryGroupId,
+	isPatron: boolean,
+): Record<RowName, RowContent> {
 	const isAustralia = countryGroupId === 'AUDCountries';
+
 	return {
 		journalism: {
 			rowId: 'journalism',
@@ -354,7 +394,7 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
 					isPrimary: true,
 				},
 				{
-					content: <Padlock />,
+					content: isPatron ? <Checkmark /> : <Padlock />,
 				},
 				{
 					content: <Checkmark />,
@@ -398,7 +438,7 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
 					isPrimary: true,
 				},
 				{
-					content: <Padlock />,
+					content: isPatron ? <Checkmark /> : <Padlock />,
 				},
 				{
 					content: <Checkmark />,
@@ -467,7 +507,7 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
 					isPrimary: true,
 				},
 				{
-					content: <Padlock />,
+					content: isPatron ? <Checkmark /> : <Padlock />,
 				},
 				{
 					content: <Checkmark />,
@@ -528,7 +568,7 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
 					isPrimary: true,
 				},
 				{
-					content: <Padlock />,
+					content: isPatron ? <Checkmark /> : <Padlock />,
 				},
 				{
 					content: <Checkmark />,
@@ -615,7 +655,7 @@ export function getLocalisedRows(countryGroupId: CountryGroupId) {
 					isPrimary: true,
 				},
 				{
-					content: <Padlock />,
+					content: isPatron ? <Checkmark /> : <Padlock />,
 				},
 				{
 					content: <Checkmark />,
