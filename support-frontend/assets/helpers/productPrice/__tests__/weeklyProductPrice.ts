@@ -610,12 +610,12 @@ const productPrices = {
 			},
 		},
 	},
-};
+} as unknown as ProductPrices;
 
 describe('getPrice', () => {
 	it('should return a price based on inputs', () => {
 		const euroPriceQuarterly = getProductPrice(
-			productPrices as unknown as ProductPrices,
+			productPrices,
 			'FR',
 			Quarterly,
 			Domestic,
@@ -628,7 +628,7 @@ describe('getPrice', () => {
 		});
 
 		const audPriceSixForSix = getProductPrice(
-			productPrices as unknown as ProductPrices,
+			productPrices,
 			'AU',
 			SixWeekly,
 			Domestic,
@@ -652,7 +652,7 @@ describe('getPrice', () => {
 		});
 
 		const gbpPriceAnnual = getProductPrice(
-			productPrices as unknown as ProductPrices,
+			productPrices,
 			'GB',
 			Annual,
 			Domestic,
@@ -677,7 +677,7 @@ describe('getPrice', () => {
 		});
 
 		const intPriceAnnual = getProductPrice(
-			productPrices as unknown as ProductPrices,
+			productPrices,
 			'CG',
 			Annual,
 			RestOfWorld,

@@ -67,12 +67,12 @@ describe('getProductPrice', () => {
 				},
 			},
 		},
-	};
+	} as unknown as ProductPrices;
 
 	it('should return product price information for a given currency', () => {
 		expect(
 			getProductPrice(
-				productPrices as unknown as ProductPrices,
+				productPrices,
 				'United Kingdom',
 				'Monthly',
 				'Collection',
@@ -87,12 +87,7 @@ describe('getProductPrice', () => {
 		});
 
 		expect(
-			getProductPrice(
-				productPrices as unknown as ProductPrices,
-				'United Kingdom',
-				'Monthly',
-				'Collection',
-			),
+			getProductPrice(productPrices, 'United Kingdom', 'Monthly', 'Collection'),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
@@ -101,19 +96,15 @@ describe('getProductPrice', () => {
 			savingVsRetail: 5,
 		});
 
-		expect(
-			getProductPrice(
-				productPrices as unknown as ProductPrices,
-				'United Kingdom',
-				'Monthly',
-			),
-		).toEqual({
-			currency: 'GBP',
-			fixedTerm: false,
-			price: 15.95,
-			promotions: [],
-			savingVsRetail: 10,
-		});
+		expect(getProductPrice(productPrices, 'United Kingdom', 'Monthly')).toEqual(
+			{
+				currency: 'GBP',
+				fixedTerm: false,
+				price: 15.95,
+				promotions: [],
+				savingVsRetail: 10,
+			},
+		);
 	});
 });
 
@@ -144,12 +135,12 @@ describe('finalPrice', () => {
 				},
 			},
 		},
-	};
+	} as unknown as ProductPrices;
 
 	it('should return the final price with any discounts applied', () => {
 		expect(
 			finalPrice(
-				productPrices as unknown as ProductPrices,
+				productPrices,
 				'United Kingdom',
 				'Monthly',
 				'Collection',
@@ -239,12 +230,12 @@ describe('displayPrice', () => {
 				},
 			},
 		},
-	};
+	} as unknown as ProductPrices;
 
 	it('should return the price prepended with a glyph', () => {
 		expect(
 			displayPrice(
-				productPrices as unknown as ProductPrices,
+				productPrices,
 				'United Kingdom',
 				'Monthly',
 				'Collection',

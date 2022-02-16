@@ -58,6 +58,7 @@ describe('hasDiscount', () => {
 		).toEqual(true);
 	});
 });
+
 describe('getAppliedPromo', () => {
 	const promotions = [
 		{
@@ -76,10 +77,10 @@ describe('getAppliedPromo', () => {
 				periodType: 'issue',
 			},
 		},
-	];
+	] as unknown as Promotion[];
 
 	it('should return the applied promotion based on inputs', () => {
-		expect(getAppliedPromo(promotions as unknown as Promotion[])).toEqual({
+		expect(getAppliedPromo(promotions)).toEqual({
 			description: 'example promotion2',
 			introductoryPrice: {
 				periodLength: 3,
@@ -90,7 +91,7 @@ describe('getAppliedPromo', () => {
 			promoCode: 5678,
 		});
 
-		expect(getAppliedPromo() as unknown as Promotion[]).toEqual(undefined);
+		expect(getAppliedPromo()).toEqual(undefined);
 	});
 });
 
@@ -182,18 +183,16 @@ describe('hasIntroductoryPrice', () => {
 			periodLength: 6,
 			periodType: 'issue',
 		},
-	};
+	} as Promotion;
 
 	const promotionWithoutIntroductoryPrice = {
 		name: 'Sept 2019 Discount',
 		description: '50% off for 3 months',
 		promoCode: 'GH86H9J',
-	};
+	} as Promotion;
 
 	it('should return true if there is an introductory price', () => {
-		expect(
-			hasIntroductoryPrice(promotionWithIntroductoryPrice as Promotion),
-		).toEqual(true);
+		expect(hasIntroductoryPrice(promotionWithIntroductoryPrice)).toEqual(true);
 		expect(hasIntroductoryPrice(promotionWithoutIntroductoryPrice)).toEqual(
 			false,
 		);
