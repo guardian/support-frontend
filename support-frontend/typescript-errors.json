@@ -3,11 +3,11 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 93,
+            "TS2322": 89,
             "TS2578": 7,
             "TS2339": 18,
             "TS2345": 95,
-            "TS7006": 54,
+            "TS7006": 51,
             "TS6133": 9,
             "TS7031": 18,
             "TS2564": 2,
@@ -62,7 +62,6 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/components/subscriptionCheckouts/summary.tsx": 6,
-            "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx": 4,
             "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
@@ -88,9 +87,6 @@
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 12,
             "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
-            "assets/pages/showcase/components/ctaContribute.tsx": 1,
-            "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
-            "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
@@ -346,10 +342,6 @@
             "message": "Type '{ className: any; productPrice: ProductPrice; billingPeriod: BillingPeriod; giftStyles: any; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"giftStyles\">> & Partial<...>'."
         },
         {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Type '{ children: string; href: string; onClick: (...args: any[]) => any; appearance: \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryFeature\"; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
-        },
-        {
             "path": "assets/helpers/__tests__/formValidation.ts",
             "message": "Type '{ countryCode: string; stateCode?: string | undefined; } | {}' is not assignable to type '{ countryCode: string; stateCode?: string | undefined; } | undefined'."
         },
@@ -536,18 +528,6 @@
         {
             "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
             "message": "Type 'SerializedStyles' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/showcase/components/ctaContribute.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"secondary\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/showcase/components/ctaSubscribe.tsx",
-            "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProduct.tsx",
-            "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
@@ -1152,18 +1132,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
             "message": "Parameter 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'isFeature' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'index' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionsProductDescription/subscriptionsProductDescription.tsx",
-            "message": "Parameter 'hierarchy' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",

@@ -1,3 +1,4 @@
+import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import AnchorButton from 'components/button/anchorButton';
 import Content, { NarrowContent } from 'components/content/content';
 import GridImage from 'components/gridImage/gridImage';
@@ -5,7 +6,7 @@ import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 import Text from 'components/text/text';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
-export default function CtaSubscribe() {
+export default function CtaSubscribe(): EmotionJSX.Element {
 	return (
 		<Content
 			appearance="feature"

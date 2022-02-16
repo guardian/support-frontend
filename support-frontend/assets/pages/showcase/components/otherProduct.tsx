@@ -1,3 +1,4 @@
+import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import AnchorButton from 'components/button/anchorButton';
 import Heading from 'components/heading/heading';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
@@ -11,7 +12,7 @@ type PropTypes = {
 	modifierClass: string;
 	trackingId: string;
 };
-export default function OtherProduct(props: PropTypes) {
+export default function OtherProduct(props: PropTypes): EmotionJSX.Element {
 	return (
 		<div
 			className={classNameWithModifiers('other-product', [props.modifierClass])}
