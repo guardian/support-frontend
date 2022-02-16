@@ -13,13 +13,15 @@ import HeroImg from './hero.svg';
 import { regionalContent } from './regionalContent';
 import './hero.scss';
 
-const Caption = (props: { className: string; captionText: string }) => (
-	<div className={props.className}>
-		<figcaption className="showcase-hero__caption">
-			<p>{props.captionText}</p>
-		</figcaption>
-	</div>
-);
+function Caption(props: { className: string; captionText: JSX.Element }) {
+	return (
+		<div className={props.className}>
+			<figcaption className="showcase-hero__caption">
+				<p>{props.captionText}</p>
+			</figcaption>
+		</div>
+	);
+}
 
 const getCountrySelector = (countryGroupId: CountryGroupId) => {
 	switch (countryGroupId) {
@@ -41,15 +43,17 @@ const getCountrySelector = (countryGroupId: CountryGroupId) => {
 	}
 };
 
-export default function Hero(props: { countryGroupId: CountryGroupId }) {
+export default function Hero(props: {
+	countryGroupId: CountryGroupId;
+}): JSX.Element {
 	const countrySelector = getCountrySelector(props.countryGroupId);
 	return (
 		<div className="showcase-hero">
 			<figure className="showcase-hero-wrapper">
 				<div className="showcase-hero-heading">
-					<h1 className="visually-hidden">Support the guardian</h1>
+					<h1 className="visually-hidden">Support the Guardian</h1>
 					<h2 className="visually-hidden">
-						Help us support investigative independent journalism
+						Help us deliver independent investigative journalism
 					</h2>
 					<div className="showcase-hero-heading__image-wrapper">
 						<HeroImg />
@@ -99,7 +103,6 @@ export default function Hero(props: { countryGroupId: CountryGroupId }) {
 				</div>
 				<Caption
 					className="showcase-hero__caption--mobile"
-					captionTitle={regionalContent[countrySelector].title}
 					captionText={regionalContent[countrySelector].caption}
 				/>
 			</figure>

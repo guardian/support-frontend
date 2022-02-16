@@ -11,7 +11,7 @@ import { init as formInit } from './init';
 
 // ---- Redux ---- //
 
-const store = initRedux(() => initReducer(), true);
+const store = initRedux(() => initReducer());
 const countryGroupId: CountryGroupId = detect();
 user.init(store.dispatch, setUserStateActions(countryGroupId));
 formInit(store);
