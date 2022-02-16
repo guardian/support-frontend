@@ -39,7 +39,7 @@ setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
-const store = initRedux(() => initReducer(), true);
+const store = initRedux(() => initReducer());
 
 if (!window.guardian.polyfillScriptLoaded) {
 	gaEvent({

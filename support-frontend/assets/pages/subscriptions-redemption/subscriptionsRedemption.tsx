@@ -19,7 +19,7 @@ import reducer from './subscriptionsRedemptionReducer';
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
-const store = initRedux<RedemptionFormState, Action>(reducer, true);
+const store = initRedux<RedemptionFormState, Action>(reducer);
 const state = store.getState();
 const { countryGroupId } = state.common.internationalisation;
 

@@ -18,7 +18,7 @@ import { detect } from 'helpers/internationalisation/countryGroup';
 
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //
-const store = initRedux(() => reducer, true);
+const store = initRedux(() => reducer);
 
 function getTermsConditionsLink({ product }: PromotionTerms) {
 	if (product === DigitalPack) {
