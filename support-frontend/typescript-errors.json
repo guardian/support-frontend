@@ -3,9 +3,9 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 95,
+            "TS2322": 93,
             "TS2578": 7,
-            "TS2339": 19,
+            "TS2339": 18,
             "TS2345": 95,
             "TS7006": 54,
             "TS6133": 9,
@@ -90,7 +90,6 @@
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/showcase/components/ctaContribute.tsx": 1,
             "assets/pages/showcase/components/ctaSubscribe.tsx": 1,
-            "assets/pages/showcase/components/hero.tsx": 3,
             "assets/pages/showcase/components/otherProduct.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/subscriptions-redemption/api.ts": 1,
@@ -547,14 +546,6 @@
             "message": "Type '{ children: string; icon: Element; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
         {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "Type 'Element' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "Type 'Element' is not assignable to type 'string'."
-        },
-        {
             "path": "assets/pages/showcase/components/otherProduct.tsx",
             "message": "Type '{ children: string; icon: Element; appearance: \"greyHollow\"; href: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"href\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"aria-label\" | \"appearance\" | \"iconSide\" | \"modifierClasses\" | \"icon\">> & Partial<...>'."
         },
@@ -709,10 +700,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
             "message": "Property 'checked' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/pages/showcase/components/hero.tsx",
-            "message": "Property 'title' does not exist on type '{ title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { title: string; caption: Element; images: { first: string; second: string; third: string; fourth: string; }; } | { ...; }'."
         }
     ],
     "TS2345": [
