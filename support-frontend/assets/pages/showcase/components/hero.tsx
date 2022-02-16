@@ -57,7 +57,7 @@ export default function Hero(props: {
 				<div className="showcase-hero-heading">
 					<h1 className="visually-hidden">Support the Guardian</h1>
 					<h2 className="visually-hidden">
-						Help us deliver investigative independent journalism
+						Help us deliver independent investigative journalism
 					</h2>
 					<div className="showcase-hero-heading__image-wrapper">
 						<HeroImg />
