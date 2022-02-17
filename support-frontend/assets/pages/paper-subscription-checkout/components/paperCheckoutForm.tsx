@@ -351,7 +351,7 @@ function PaperCheckoutForm(props: PropTypes) {
 							id="title"
 							label="Title"
 							optional
-							value={props.title ? props.title : ''}
+							value={props.title ?? ''}
 							onChange={(e) => props.setTitle(e.target.value)}
 						>
 							<OptionForSelect>Select a title</OptionForSelect>
@@ -385,9 +385,7 @@ function PaperCheckoutForm(props: PropTypes) {
 								autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
 								supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
 								maxLength={250}
-								value={
-									props.deliveryInstructions ? props.deliveryInstructions : ''
-								}
+								value={props.deliveryInstructions ?? ''}
 								onChange={(e) => props.setDeliveryInstructions(e.target.value)}
 								optional
 							/>

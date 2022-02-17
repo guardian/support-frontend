@@ -115,49 +115,43 @@ function AddDigiSubCta({
 			cssOverrides={[ctaContainer, ...(expanded ? [ctaContainerOpen] : [])]}
 			hideToggleLabel
 		>
-			<AccordionRow
-				cssOverrides={rowOverrides}
-				label={`Would you like to add a digital subscription for ${digiSubPrice}?`}
-				onClick={() => {
-					setExpanded(!expanded);
-				}}
-			>
-				<div css={[imageContainer, lightBorder]}>
-					<GridImage
-						gridId="editionsShortPackshot"
-						srcSizes={[500, 140]}
-						sizes="(max-width: 480px) 200px,
+			{[
+				<AccordionRow
+					cssOverrides={rowOverrides}
+					label={`Would you like to add a digital subscription for ${digiSubPrice}?`}
+					onClick={() => {
+						setExpanded(!expanded);
+					}}
+				>
+					<div css={[imageContainer, lightBorder]}>
+						<GridImage
+							gridId="editionsShortPackshot"
+							srcSizes={[500, 140]}
+							sizes="(max-width: 480px) 200px,
             (max-width: 740px) 100%,
             500px"
-						altText="Digital subscriptions"
-						imgType="png"
-					/>
-				</div>
-				<div css={[content, lightBorder]}>
-					<h2 css={heading}>What&apos;s included</h2>
-					<ListWithSubText
-						cssOverrides={list}
-						items={listCopy}
-						bulletSize="small"
-						bulletColour="dark"
-					/>
-				</div>
-				<div css={content}>
-					<Checkbox
-						value="add-digital"
-						label={`Add the digital subscription for ${digiSubPrice}`}
-						onChange={addDigitalSubscription}
-					/>
-				</div>
-			</AccordionRow>
-
-			{/* The Accordian expects multiple children so this hack will appease the ts compiler for now */}
-			<AccordionRow
-				label={''}
-				cssOverrides={css`
-					display: none;
-				`}
-			/>
+							altText="Digital subscriptions"
+							imgType="png"
+						/>
+					</div>
+					<div css={[content, lightBorder]}>
+						<h2 css={heading}>What&apos;s included</h2>
+						<ListWithSubText
+							cssOverrides={list}
+							items={listCopy}
+							bulletSize="small"
+							bulletColour="dark"
+						/>
+					</div>
+					<div css={content}>
+						<Checkbox
+							value="add-digital"
+							label={`Add the digital subscription for ${digiSubPrice}`}
+							onChange={addDigitalSubscription}
+						/>
+					</div>
+				</AccordionRow>,
+			]}
 		</Accordion>
 	);
 }
