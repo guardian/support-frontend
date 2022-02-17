@@ -48,9 +48,6 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     MailingPostalCode = None,
     MailingCountry = None,
     Phone = None,
-    Allow_Membership_Mail__c = allowMail,
-    Allow_3rd_Party_Mail__c = allowMail,
-    Allow_Guardian_Related_Mail__c = allowMail,
   )
 
   it should "throw a SalesforceAuthenticationErrorResponse if the authentication fails" in {

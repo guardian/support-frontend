@@ -18,9 +18,7 @@ object Fixtures {
           "billingAddress": {
             "country": "GB"
           },
-          "allowMembershipMail": false,
-          "allowThirdPartyMail": false,
-          "allowGURelatedMail": false,
+
           "isTestUser": false
         }
     """

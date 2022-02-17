@@ -36,9 +36,6 @@ object Fixtures {
     MailingPostalCode = None,
     MailingCountry = None,
     Phone = None,
-    Allow_Membership_Mail__c = allowMail,
-    Allow_3rd_Party_Mail__c = allowMail,
-    Allow_Guardian_Related_Mail__c = allowMail,
   )
   val newContactUKWithBillingAddress = newContactUK.copy(
     OtherStreet = Some("123 trash alley"),
@@ -78,10 +75,7 @@ object Fixtures {
         "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
-        "OtherCountry": "$uk",
-        "Allow_Membership_Mail__c": $allowMail,
-        "Allow_3rd_Party_Mail__c": $allowMail,
-        "Allow_Guardian_Related_Mail__c": $allowMail
+        "OtherCountry": "$uk"
        }
       }"""
   val upsertJsonWithState =
@@ -93,10 +87,7 @@ object Fixtures {
         "FirstName": "$name",
         "LastName": "$name",
         "OtherState": "$state",
-        "OtherCountry": "$us",
-        "Allow_Membership_Mail__c": $allowMail,
-        "Allow_3rd_Party_Mail__c": $allowMail,
-        "Allow_Guardian_Related_Mail__c": $allowMail
+        "OtherCountry": "$us"
        }
       }"""
 
@@ -109,10 +100,7 @@ object Fixtures {
         "FirstName": "$name",
         "LastName": "$name",
         "OtherCountry": "$uk",
-        "Phone": "$telephoneNumber",
-        "Allow_Membership_Mail__c": $allowMail,
-        "Allow_3rd_Party_Mail__c": $allowMail,
-        "Allow_Guardian_Related_Mail__c": $allowMail
+        "Phone": "$telephoneNumber"
        }
       }"""
 
@@ -127,10 +115,7 @@ object Fixtures {
         "OtherStreet": "$street",
         "OtherCity": "$city",
         "OtherPostalCode": "$postCode",
-        "OtherCountry": "$uk",
-        "Allow_Membership_Mail__c": $allowMail,
-        "Allow_3rd_Party_Mail__c": $allowMail,
-        "Allow_Guardian_Related_Mail__c": $allowMail
+        "OtherCountry": "$uk"
        }
       }"""
 
@@ -150,10 +135,7 @@ object Fixtures {
         "MailingCity": "$city",
         "MailingPostalCode": "$postCode",
         "MailingCountry": "$uk",
-        "Phone": "$telephoneNumber",
-        "Allow_Membership_Mail__c": $allowMail,
-        "Allow_3rd_Party_Mail__c": $allowMail,
-        "Allow_Guardian_Related_Mail__c": $allowMail
+        "Phone": "$telephoneNumber"
        }
       }"""
 

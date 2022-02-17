@@ -34,9 +34,6 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     MailingPostalCode = None,
     MailingCountry = None,
     Phone = None,
-    Allow_Membership_Mail__c = allowMail,
-    Allow_3rd_Party_Mail__c = allowMail,
-    Allow_Guardian_Related_Mail__c = allowMail,
   )
 
   "AuthService" should "be able to retrieve an authtoken" in {

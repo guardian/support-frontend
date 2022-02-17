@@ -101,9 +101,6 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
           MailingPostalCode = None,
           MailingCountry = None,
           Phone = user.telephoneNumber,
-          Allow_Membership_Mail__c = user.allowMembershipMail,
-          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
         ),
       )
       .getOrElse(
@@ -124,9 +121,6 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
           MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
           MailingCountry = user.deliveryAddress.map(_.country.name),
           Phone = user.telephoneNumber,
-          Allow_Membership_Mail__c = user.allowMembershipMail,
-          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
-          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail,
         ),
       )
 

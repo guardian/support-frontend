@@ -59,9 +59,6 @@ object UpdateSupporterProductDataSpec {
         },
         "deliveryAddress": null,
         "telephoneNumber": null,
-        "allowMembershipMail": false,
-        "allowThirdPartyMail": false,
-        "allowGURelatedMail": false,
         "isTestUser": false,
         "deliveryInstructions": null
       },
@@ -99,9 +96,6 @@ object UpdateSupporterProductDataSpec {
         },
         "deliveryAddress": null,
         "telephoneNumber": "+615555555555",
-        "allowMembershipMail": false,
-        "allowThirdPartyMail": false,
-        "allowGURelatedMail": false,
         "isTestUser": false,
         "deliveryInstructions": null
       },

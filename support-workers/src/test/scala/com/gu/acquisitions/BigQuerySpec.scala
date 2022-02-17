@@ -13,6 +13,7 @@ import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -38,17 +39,14 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       .getService
 
   "BigQuery" should "be able to run a query" in {
+
+    val yesterday = ISODateTimeFormat.dateTime().print(DateTime.now().minusDays(1))
     val query =
-      s"""select * from ${AcquisitionEventTable.datasetName}.${AcquisitionEventTable.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("2020-12-14 00:20:00");"""
+      s"""select * from ${AcquisitionEventTable.datasetName}.${AcquisitionEventTable.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("$yesterday");"""
     val queryConfig = QueryJobConfiguration.newBuilder(query).build
 
     val tableResult = bigQuery.query(queryConfig)
-    for (row <- tableResult.iterateAll.asScala) {
-      for (value <- row.asScala) {
-        System.out.printf("%s,", value.toString)
-      }
-      System.out.printf("\n")
-    }
+
     tableResult.getTotalRows should be > 0L
   }
 
