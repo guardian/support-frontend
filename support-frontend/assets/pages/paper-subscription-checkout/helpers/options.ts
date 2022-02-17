@@ -20,11 +20,12 @@ import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/h
 import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 
 function getProductOption(): PaperProductOptions {
-	const productInUrl = getQueryParameter('product') as PaperProductOptions;
+	const productInUrl = getQueryParameter('product');
 
-	return ActivePaperProductTypes.includes(productInUrl)
-		? productInUrl
-		: Everyday;
+	return (
+		ActivePaperProductTypes.find((product) => product === productInUrl) ??
+		Everyday
+	);
 }
 
 function getFulfilmentOption(): PaperFulfilmentOptions {
