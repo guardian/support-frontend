@@ -134,7 +134,7 @@ export type RegularPaymentRequest = {
 	firstName: string;
 	lastName: string;
 	billingAddress: RegularPaymentRequestAddress;
-	deliveryAddress?: RegularPaymentRequestAddress | null;
+	deliveryAddress?: RegularPaymentRequestAddress;
 	email: string;
 	giftRecipient?: GiftRecipientType;
 	product: ProductFields;

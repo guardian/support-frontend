@@ -189,7 +189,6 @@ function buildRegularPaymentRequest(
 			postCode: null,
 			city: null,
 		},
-		deliveryAddress: null,
 		email: email,
 		telephoneNumber: telephone,
 		product,
