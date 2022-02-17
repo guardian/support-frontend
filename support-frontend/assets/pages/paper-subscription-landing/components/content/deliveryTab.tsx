@@ -7,7 +7,7 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { Accordion, AccordionRow } from '@guardian/source-react-components';
+import { Accordion } from '@guardian/source-react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
@@ -79,32 +79,27 @@ export function ContentDeliveryFaqBlock({
 				</p>
 				<div css={accordionContainer}>
 					<Accordion>
-						<TabAccordionRow
-							trackingId={accordionTrackingId}
-							label="Delivery details"
-						>
-							<p>
-								Your newspaper will arrive before 8am from Monday to Saturday
-								and before 8.30am on Sunday.
-							</p>
-							<p>
-								We can’t deliver to individual flats, or apartments within
-								blocks because we need access to your post box to deliver your
-								newspaper.
-							</p>
-							<p>
-								You can pause your subscription for up to 36 days a year. So if
-								you’re going away anywhere, you won’t have to pay for the
-								newspapers that you miss.
-							</p>
-						</TabAccordionRow>
-						{/* The Accordian expects multiple children so this hack will appease the ts compiler */}
-						<AccordionRow
-							label={''}
-							cssOverrides={css`
-								display: none;
-							`}
-						/>
+						{[
+							<TabAccordionRow
+								trackingId={accordionTrackingId}
+								label="Delivery details"
+							>
+								<p>
+									Your newspaper will arrive before 8am from Monday to Saturday
+									and before 8.30am on Sunday.
+								</p>
+								<p>
+									We can’t deliver to individual flats, or apartments within
+									blocks because we need access to your post box to deliver your
+									newspaper.
+								</p>
+								<p>
+									You can pause your subscription for up to 36 days a year. So
+									if you’re going away anywhere, you won’t have to pay for the
+									newspapers that you miss.
+								</p>
+							</TabAccordionRow>,
+						]}
 					</Accordion>
 				</div>
 			</div>
