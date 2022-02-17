@@ -6,7 +6,7 @@
             "TS2322": 76,
             "TS2578": 5,
             "TS2339": 15,
-            "TS2345": 55,
+            "TS2345": 54,
             "TS7006": 51,
             "TS6133": 9,
             "TS7031": 18,
@@ -110,7 +110,6 @@
             "assets/helpers/page/__tests__/pageTest.ts": 4,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionSubmit.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
@@ -748,10 +747,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
             "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionSubmit.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ currency: IsoCurrency; contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; isWaiting: boolean; paymentMethod: PaymentMethod; ... 9 more ...; amazonPayData: AmazonPayData; } & { ...; }, PropTypes>>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
