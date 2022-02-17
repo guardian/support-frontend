@@ -1,4 +1,6 @@
 // ----- Imports ----- //
+
+import type { ThunkDispatch } from '@reduxjs/toolkit';
 import { connect } from 'react-redux';
 import Button from 'components/button/button';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
@@ -9,19 +11,19 @@ import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts'
 import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import 'helpers/internationalisation/currency';
-import 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { hiddenIf } from 'helpers/utilities/utilities';
-import type { AmazonPayData, State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
-import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { hiddenIf } from 'helpers/utilities/utilities';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
+import type { Action } from '../contributionsLandingActions';
+import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
+import type { AmazonPayData, State } from '../contributionsLandingReducer';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
+
 // ----- Types ----- //
+
 type PropTypes = {
 	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
@@ -32,7 +34,12 @@ type PropTypes = {
 	currencyId: IsoCurrency;
 	csrf: CsrfState;
 	sendFormSubmitEventForPayPalRecurring: () => void;
-	setupRecurringPayPalPayment: (...args: any[]) => any;
+	setupRecurringPayPalPayment: (
+		resolve: (token: string) => void,
+		reject: (error: Error) => void,
+		currencyId: IsoCurrency,
+		csrf: CsrfState,
+	) => void;
 	payPalHasLoaded: boolean;
 	isTestUser: boolean;
 	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
@@ -54,7 +61,7 @@ function mapStateToProps(state: State) {
 		currencyId: state.common.internationalisation.currencyId,
 		csrf: state.page.csrf,
 		payPalHasLoaded: state.page.form.payPalData.hasLoaded,
-		isTestUser: state.page.user.isTestUser,
+		isTestUser: !!state.page.user.isTestUser,
 		formIsSubmittable: state.page.form.formIsSubmittable,
 		amount: getAmount(
 			state.page.form.selectedAmounts,
@@ -66,13 +73,13 @@ function mapStateToProps(state: State) {
 	};
 }
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 	sendFormSubmitEventForPayPalRecurring: () => {
 		dispatch(sendFormSubmitEventForPayPalRecurring());
 	},
 	setupRecurringPayPalPayment: (
-		resolve: (...args: any[]) => any,
-		reject: (...args: any[]) => any,
+		resolve: (token: string) => void,
+		reject: (error: Error) => void,
 		currencyId: IsoCurrency,
 		csrf: CsrfState,
 	) => {
@@ -81,6 +88,7 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 });
 
 // ----- Render ----- //
+
 function ContributionSubmit(props: PropTypes) {
 	// if all payment methods are switched off, do not display the button
 	const formClassName = 'form--contribution';
