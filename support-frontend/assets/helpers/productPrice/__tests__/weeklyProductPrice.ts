@@ -9,9 +9,11 @@ import {
 	getWeeklyFulfilmentOption,
 	RestOfWorld,
 } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 
-jest.mock('ophan', () => {});
+jest.mock('ophan', () => () => ({}));
+
 // ----- Tests ----- //
 const productPrices = {
 	'United Kingdom': {
@@ -608,7 +610,8 @@ const productPrices = {
 			},
 		},
 	},
-};
+} as unknown as ProductPrices;
+
 describe('getPrice', () => {
 	it('should return a price based on inputs', () => {
 		const euroPriceQuarterly = getProductPrice(
@@ -617,17 +620,20 @@ describe('getPrice', () => {
 			Quarterly,
 			Domestic,
 		);
+
 		expect(euroPriceQuarterly).toEqual({
 			currency: 'EUR',
 			price: 61.3,
 			promotions: [],
 		});
+
 		const audPriceSixForSix = getProductPrice(
 			productPrices,
 			'AU',
 			SixWeekly,
 			Domestic,
 		);
+
 		expect(audPriceSixForSix).toEqual({
 			currency: 'AUD',
 			price: 97.5,
@@ -644,12 +650,14 @@ describe('getPrice', () => {
 				},
 			],
 		});
+
 		const gbpPriceAnnual = getProductPrice(
 			productPrices,
 			'GB',
 			Annual,
 			Domestic,
 		);
+
 		expect(gbpPriceAnnual).toEqual({
 			price: 150,
 			currency: 'GBP',
@@ -667,12 +675,14 @@ describe('getPrice', () => {
 				},
 			],
 		});
+
 		const intPriceAnnual = getProductPrice(
 			productPrices,
 			'CG',
 			Annual,
 			RestOfWorld,
 		);
+
 		expect(intPriceAnnual).toEqual({
 			currency: 'USD',
 			price: 325.2,
@@ -680,6 +690,7 @@ describe('getPrice', () => {
 		});
 	});
 });
+
 describe('getWeeklyFulfilmentOption', () => {
 	it('should work out the correct fulfilment option for a country', () => {
 		expect(getWeeklyFulfilmentOption('GB')).toEqual(Domestic);

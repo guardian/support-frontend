@@ -3,35 +3,33 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 89,
-            "TS2578": 7,
-            "TS2339": 18,
-            "TS2345": 94,
+            "TS2322": 76,
+            "TS2578": 5,
+            "TS2339": 15,
+            "TS2345": 54,
             "TS7006": 51,
             "TS6133": 9,
             "TS7031": 18,
             "TS2564": 2,
             "TS2769": 14,
-            "TS2314": 5,
+            "TS2314": 4,
             "TS2304": 5,
             "TS2741": 4,
             "TS2739": 13,
             "TS2532": 4,
             "TS2556": 3,
-            "TS2554": 30,
+            "TS2554": 27,
             "TS2569": 2,
             "TS7053": 4,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
-            "TS2740": 5,
-            "TS2531": 2,
+            "TS2740": 1,
             "TS7016": 1,
             "TS7034": 4,
             "TS7005": 9,
             "TS2707": 1,
             "TS2525": 5,
-            "TS2745": 2,
             "TS7022": 1,
             "TS2571": 3,
             "TS2698": 6
@@ -66,7 +64,6 @@
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
-            "assets/helpers/productPrice/__tests__/promotionsTests.ts": 14,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -81,17 +78,12 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
-            "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx": 3,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 12,
-            "assets/pages/paper-subscription-checkout/helpers/options.ts": 2,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
-            "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
-            "assets/pages/contributions-landing/components/ContributionArticleCount.tsx": 3,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
@@ -116,12 +108,6 @@
             "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
             "assets/helpers/page/__tests__/pageTest.ts": 4,
-            "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts": 4,
-            "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts": 8,
-            "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts": 5,
-            "assets/helpers/productPrice/__tests__/productPricesTests.ts": 6,
-            "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts": 4,
-            "assets/helpers/productPrice/paperProductPrices.ts": 2,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
@@ -129,7 +115,6 @@
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 2,
             "assets/pages/promotion-terms/promotionTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
@@ -155,11 +140,8 @@
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
-            "assets/helpers/productPrice/productOptions.ts": 2,
-            "assets/helpers/productPrice/subscriptions.ts": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx": 1,
             "assets/pages/promotion-terms/promotionTermsReducer.ts": 4
         }
     },
@@ -361,10 +343,6 @@
             "message": "Type 'string | null | undefined' is not assignable to type 'string | number | symbol'."
         },
         {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Type 'null' is not assignable to type 'number | undefined'."
-        },
-        {
             "path": "assets/helpers/utilities/utilities.ts",
             "message": "Type 'string | null | undefined' is not assignable to type 'string'."
         },
@@ -473,56 +451,12 @@
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
-            "message": "Type 'string | SerializedStyles' is not assignable to type 'SerializedStyles'."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<ConnectedComponent<ComponentType<Matching<{ fulfilmentOption: FulfilmentOptions; productOption: ProductOptions; billingPeriod: BillingPeriod; productPrices: ProductPrices; } & DispatchProp<...>, PropTypes>>, Omit<...> | Omit<...>>, Omit<...> | Omit<...>>'."
+            "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'Omit<Pick<PropTypes, \"image\" | \"total\" | \"productPrices\" | \"billingPeriod\" | \"fulfilmentOption\" | \"productOption\" | \"digiSubPrice\" | \"includesDigiSub\"> & Partial<...> & Partial<...>, \"productPrices\" | ... 2 more ... | \"productOption\">'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
             "message": "Type 'Promise<{ json: () => Promise<{ client_secret: string; }>; }>' is not assignable to type 'Promise<Response>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ image: Element; total: ProductPrice; digiSubPrice: string; includesDigiSub: boolean; changeSubscription: string; productType: \"Paper\"; paymentStartDate: string; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<ConnectedComponent<ComponentType<Matching<{ fulfilmentOption: FulfilmentOptions; productOption: ProductOptions; billingPeriod: BillingPeriod; productPrices: ProductPrices; } & DispatchProp<...>, PropTypes>>, Omit<...> | Omit<...>>, Omit<...> | Omit<...>>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; name: string; orienntation: string; error: string | undefined; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioGroupProps'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioProps'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; label: string; hideLabel: true; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioGroupProps'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/helpers/options.ts",
-            "message": "Type 'string' is not assignable to type 'PaperProductOptions'."
         },
         {
             "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
@@ -539,10 +473,6 @@
         {
             "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
             "message": "Type '{ ctaButtonText: string; link: string; analyticsTracking: () => void; modifierClasses: string; }' is not assignable to type 'ProductButton'."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/api.ts",
-            "message": "Type 'null' is not assignable to type 'RegularPaymentRequestAddress | undefined'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
@@ -587,15 +517,7 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
         {
@@ -665,20 +587,8 @@
             "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
-            "message": "Property 'showPrivacyManager' does not exist on type 'never'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
             "message": "Property 'common' does not exist on type 'DefaultRootState'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Property 'checked' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Property 'checked' does not exist on type 'EventTarget'."
         }
     ],
     "TS2345": [
@@ -827,150 +737,6 @@
             "message": "Argument of type '{ campaign: string; referrerAcquisitionData: { referrerPageviewId: null; campaignCode: null; componentId: null; componentType: null; source: null; abTests: never[]; queryParameters: never[]; }; internationalisation: { ...; }; abParticipations: {}; otherQueryParams: never[]; settings: { ...; }; }' is not assignable to parameter of type 'CommonState'."
         },
         {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/paperProductPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ......' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { ...; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsDigitalTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { amount: number; durationMonths: number; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: never[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; numberOfDiscountedPeriods: number; discount: { amount: number; durationMonths: number; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/priceDescriptionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Weekend: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; NoProductOptions: { Monthly: { GBP: { ...; }; }; }; }; NoFulfilmentOptions: { ...; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '{ 'United Kingdom': { Collection: { Sunday: { Monthly: { GBP: { price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; }[]; }; }; }; }; }; }' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Argument of type '\"8.99\"' is not assignable to parameter of type 'number | null | undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type 'null' is not assignable to parameter of type 'Promotion | undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{}' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ discountedPrice: number; }' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ discountedPrice: number; }' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '({ name: string; description: string; promoCode: number; discountedPrice: number; introductoryPrice?: undefined; } | { name: string; description: string; promoCode: number; introductoryPrice: { ...; }; discountedPrice?: undefined; })[]' is not assignable to parameter of type 'Promotion[]'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ price: number; currency: string; fixedTerm: boolean; promotions: { name: string; description: string; promoCode: string; discountedPrice: number; }[]; }' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Argument of type '{ name: string; description: string; promoCode: string; introductoryPrice: { price: number; periodLength: number; periodType: string; }; }' is not assignable to parameter of type 'Promotion'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/weeklyProductPrice.ts",
-            "message": "Argument of type '{ 'United Kingdom': { RestOfWorld: { NoProductOptions: { Quarterly: { GBP: { price: number; currency: string; promotions: never[]; }; }; SixWeekly: { GBP: { price: number; currency: string; promotions: { name: string; description: string; promoCode: string; introductoryPrice: { ...; }; }[]; }; }; Annual: { ...; }; }...' is not assignable to parameter of type 'ProductPrices'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Argument of type 'FulfilmentOptions | null | undefined' is not assignable to parameter of type 'FulfilmentOptions | undefined'."
-        },
-        {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Argument of type 'unknown' is not assignable to parameter of type 'Error'."
         },
@@ -981,10 +747,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
             "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionArticleCount.tsx",
-            "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
@@ -1025,18 +787,6 @@
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Argument of type '{ positive: true; negative: false; }' is not assignable to parameter of type 'SetStateAction<{ positive: boolean; negative: boolean; open: boolean; }>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Argument of type 'typeof PaperOrderSummary' is not assignable to parameter of type 'ComponentType<Matching<{ fulfilmentOption: FulfilmentOptions; productOption: ProductOptions; billingPeriod: BillingPeriod; productPrices: ProductPrices; } & DispatchProp<...>, PropTypes>>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; billingAddressErrors: FormErrors; ... 33 more ...; salesforceCaseId?: string | undefined; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/helpers/options.ts",
-            "message": "Argument of type 'string' is not assignable to parameter of type '\"Saturday\" | \"Sunday\" | \"Weekend\" | \"Sixday\" | \"Everyday\"'."
         },
         {
             "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
@@ -1461,10 +1211,6 @@
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx",
             "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
         }
     ],
     "TS2304": [
@@ -1679,18 +1425,6 @@
             "message": "Expected 3 arguments, but got 2."
         },
         {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Expected 1 arguments, but got 0."
-        },
-        {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Expected 3 arguments, but got 1."
         },
@@ -1787,34 +1521,8 @@
     ],
     "TS2740": [
         {
-            "path": "assets/helpers/productPrice/__tests__/productPricesTests.ts",
-            "message": "Type '{ GBP: { price: number; savingVsRetail: number; currency: \"GBP\"; fixedTerm: false; promotions: never[]; }; }' is missing the following properties from type 'Record<IsoCurrency, ProductPrice>': NZD, AUD, CAD, USD, and 5 more."
-        },
-        {
-            "path": "assets/helpers/productPrice/productOptions.ts",
-            "message": "Type '{ Saturday: \"SaturdayPlus\"; Sunday: \"SundayPlus\"; Weekend: \"WeekendPlus\"; Sixday: \"SixdayPlus\"; Everyday: \"EverydayPlus\"; }' is missing the following properties from type 'Record<ProductOptions, ProductOptions>': NoProductOptions, SaturdayPlus, SundayPlus, WeekendPlus, and 2 more."
-        },
-        {
-            "path": "assets/helpers/productPrice/productOptions.ts",
-            "message": "Type '{ SaturdayPlus: \"Saturday\"; SundayPlus: \"Sunday\"; WeekendPlus: \"Weekend\"; SixdayPlus: \"Sixday\"; EverydayPlus: \"Everyday\"; }' is missing the following properties from type 'Record<ProductOptions, ProductOptions>': NoProductOptions, Saturday, Sunday, Weekend, and 2 more."
-        },
-        {
-            "path": "assets/helpers/productPrice/subscriptions.ts",
-            "message": "Type '{ GBPCountries: number; }' is missing the following properties from type 'Record<CountryGroupId, number>': UnitedStates, AUDCountries, EURCountries, International, and 2 more."
-        },
-        {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 109 more."
-        }
-    ],
-    "TS2531": [
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Object is possibly 'null'."
-        },
-        {
-            "path": "assets/helpers/productPrice/__tests__/promotionsTests.ts",
-            "message": "Object is possibly 'null'."
         }
     ],
     "TS7016": [
@@ -1905,16 +1613,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        }
-    ],
-    "TS2745": [
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/addDigiSubCta.tsx",
-            "message": "This JSX tag's 'children' prop expects type 'ReactElement<any, string | JSXElementConstructor<any>>[]' which requires multiple children, but only a single child was provided."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/deliveryTab.tsx",
-            "message": "This JSX tag's 'children' prop expects type 'ReactElement<any, string | JSXElementConstructor<any>>[]' which requires multiple children, but only a single child was provided."
         }
     ],
     "TS7022": [

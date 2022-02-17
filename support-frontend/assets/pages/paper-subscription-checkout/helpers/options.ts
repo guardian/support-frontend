@@ -21,10 +21,11 @@ import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/vouche
 
 function getProductOption(): PaperProductOptions {
 	const productInUrl = getQueryParameter('product');
-	// $FlowIgnore - flow doesn't recognise that we've checked the value of productInUrl
-	return ActivePaperProductTypes.includes(productInUrl)
-		? productInUrl
-		: Everyday;
+
+	return (
+		ActivePaperProductTypes.find((product) => product === productInUrl) ??
+		Everyday
+	);
 }
 
 function getFulfilmentOption(): PaperFulfilmentOptions {
@@ -35,7 +36,7 @@ function getFulfilmentOption(): PaperFulfilmentOptions {
 function getDays(
 	fulfilmentOption: FulfilmentOptions,
 	productOption: ProductOptions,
-) {
+): Date[] {
 	return fulfilmentOption === HomeDelivery
 		? getHomeDeliveryDays(Date.now(), productOption)
 		: getVoucherDays(Date.now(), productOption);
@@ -44,6 +45,7 @@ function getDays(
 const getStartDate = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: ProductOptions,
-) => formatMachineDate(getDays(fulfilmentOption, productOption)[0]) || null;
+): string | null =>
+	formatMachineDate(getDays(fulfilmentOption, productOption)[0]) || null;
 
 export { getProductOption, getFulfilmentOption, getDays, getStartDate };

@@ -18,6 +18,7 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { applyDiscount, getPromotion } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
+
 // ----- Types ----- //
 export type ProductPrice = {
 	price: number;
@@ -26,6 +27,7 @@ export type ProductPrice = {
 	fixedTerm: boolean;
 	promotions?: Promotion[];
 };
+
 export type CountryGroupPrices = Record<
 	FulfilmentOptions,
 	Record<
@@ -33,16 +35,20 @@ export type CountryGroupPrices = Record<
 		Record<BillingPeriod, Record<IsoCurrency, ProductPrice>>
 	>
 >;
+
 export type ProductPrices = Record<CountryGroupName, CountryGroupPrices>;
+
 export type BillingPeriods = Record<
 	BillingPeriod,
 	Record<IsoCurrency, ProductPrice>
 >;
 
-const isNumeric = (num: number | null | undefined): num is number =>
+const isNumeric = (num?: number | null): num is number =>
 	num !== null && num !== undefined && !Number.isNaN(num);
 
-function getFirstValidPrice(...prices: Array<number | null | undefined>) {
+function getFirstValidPrice(
+	...prices: Array<number | null | undefined>
+): number {
 	return prices.find(isNumeric) ?? 0;
 }
 
@@ -99,7 +105,7 @@ const displayPrice = (
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
-) =>
+): string =>
 	showPrice(
 		getProductPrice(
 			productPrices,

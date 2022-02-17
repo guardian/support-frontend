@@ -11,10 +11,7 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import {
-	finalPrice as genericFinalPrice,
-	getProductPrice as genericGetProductPrice,
-} from 'helpers/productPrice/productPrices';
+import { getProductPrice as genericGetProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	applyDiscount,
 	getAppliedPromo,
@@ -25,26 +22,10 @@ const billingPeriod = Monthly;
 
 function getProductPrice(
 	productPrices: ProductPrices,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
+	fulfilmentOption?: FulfilmentOptions,
+	productOption?: ProductOptions,
 ): ProductPrice {
 	return genericGetProductPrice(
-		productPrices,
-		country,
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
-	);
-}
-
-// finalPrice and getPriceWithDiscount perform the same action
-// so one will be removed and the related code updated in a subsequent PR
-function finalPrice(
-	productPrices: ProductPrices,
-	fulfilmentOption: FulfilmentOptions | null | undefined,
-	productOption: ProductOptions | null | undefined,
-): ProductPrice {
-	return genericFinalPrice(
 		productPrices,
 		country,
 		billingPeriod,
@@ -59,7 +40,7 @@ function getSavingsForFulfilmentOption(
 ) {
 	return ActivePaperProductTypes.map((productOption) => {
 		const price = prices[fulfilmentOption][productOption].Monthly.GBP;
-		return price.savingVsRetail || 0;
+		return price.savingVsRetail ?? 0;
 	});
 }
 
@@ -76,18 +57,14 @@ function getPriceWithDiscount(
 	productPrices: ProductPrices,
 	fulfilmentOption: FulfilmentOptions,
 	productOption: ProductOptions,
-) {
+): ProductPrice {
 	const basePrice = getProductPrice(
 		productPrices,
 		fulfilmentOption,
 		productOption,
 	);
+
 	return applyDiscount(basePrice, getAppliedPromo(basePrice.promotions));
 }
 
-export {
-	getProductPrice,
-	finalPrice,
-	getMaxSavingVsRetail,
-	getPriceWithDiscount,
-};
+export { getProductPrice, getMaxSavingVsRetail, getPriceWithDiscount };

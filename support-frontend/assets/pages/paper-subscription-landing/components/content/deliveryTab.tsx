@@ -57,53 +57,58 @@ export const accordionContainer = css`
 `;
 // ----- Content ----- //
 const accordionTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
-export const ContentDeliveryFaqBlock = ({
+export function ContentDeliveryFaqBlock({
 	setTabAction,
 }: {
-	setTabAction: (arg0: PaperFulfilmentOptions) => void;
-}) => (
-	<FlexContainer cssOverrides={flexContainerOverride}>
-		<div css={faqsContainer}>
-			<p css={paragraph}>
-				If you live in Greater London (within the M25), you can use the
-				Guardian’s home delivery service. If not, you can use our{' '}
-				<LinkTo tab={Collection} setTabAction={setTabAction}>
-					subscription cards
-				</LinkTo>
-				.
-			</p>
-			<p css={paragraph}>
-				Select your subscription below and checkout. You&apos;ll receive your
-				first newspaper as quickly as five days from subscribing.
-			</p>
-			<div css={accordionContainer}>
-				<Accordion>
-					<TabAccordionRow
-						trackingId={accordionTrackingId}
-						label="Delivery details"
-					>
-						<p>
-							Your newspaper will arrive before 8am from Monday to Saturday and
-							before 8.30am on Sunday.
-						</p>
-						<p>
-							We can’t deliver to individual flats, or apartments within blocks
-							because we need access to your post box to deliver your newspaper.
-						</p>
-						<p>
-							You can pause your subscription for up to 36 days a year. So if
-							you’re going away anywhere, you won’t have to pay for the
-							newspapers that you miss.
-						</p>
-					</TabAccordionRow>
-				</Accordion>
+	setTabAction: (paperFulfilmentOption: PaperFulfilmentOptions) => void;
+}): JSX.Element {
+	return (
+		<FlexContainer cssOverrides={flexContainerOverride}>
+			<div css={faqsContainer}>
+				<p css={paragraph}>
+					If you live in Greater London (within the M25), you can use the
+					Guardian’s home delivery service. If not, you can use our{' '}
+					<LinkTo tab={Collection} setTabAction={setTabAction}>
+						subscription cards
+					</LinkTo>
+					.
+				</p>
+				<p css={paragraph}>
+					Select your subscription below and checkout. You&apos;ll receive your
+					first newspaper as quickly as five days from subscribing.
+				</p>
+				<div css={accordionContainer}>
+					<Accordion>
+						{[
+							<TabAccordionRow
+								trackingId={accordionTrackingId}
+								label="Delivery details"
+							>
+								<p>
+									Your newspaper will arrive before 8am from Monday to Saturday
+									and before 8.30am on Sunday.
+								</p>
+								<p>
+									We can’t deliver to individual flats, or apartments within
+									blocks because we need access to your post box to deliver your
+									newspaper.
+								</p>
+								<p>
+									You can pause your subscription for up to 36 days a year. So
+									if you’re going away anywhere, you won’t have to pay for the
+									newspapers that you miss.
+								</p>
+							</TabAccordionRow>,
+						]}
+					</Accordion>
+				</div>
 			</div>
-		</div>
-		<GridImage
-			gridId="printCampaignHDdigitalVoucher"
-			srcSizes={[500, 140]}
-			sizes="(max-width: 740px) 100vw, 500px"
-			imgType="png"
-		/>
-	</FlexContainer>
-);
+			<GridImage
+				gridId="printCampaignHDdigitalVoucher"
+				srcSizes={[500, 140]}
+				sizes="(max-width: 740px) 100vw, 500px"
+				imgType="png"
+			/>
+		</FlexContainer>
+	);
+}

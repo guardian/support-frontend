@@ -12,12 +12,13 @@ import type {
 } from '../tracking/ophan';
 
 // ----- Types ------ //
-const DigitalPack = 'DigitalPack' as const;
-const PremiumTier = 'PremiumTier' as const;
-const DailyEdition = 'DailyEdition' as const;
-const GuardianWeekly = 'GuardianWeekly' as const;
-const Paper = 'Paper' as const;
-const PaperAndDigital = 'PaperAndDigital' as const;
+const DigitalPack = 'DigitalPack';
+const PremiumTier = 'PremiumTier';
+const DailyEdition = 'DailyEdition';
+const GuardianWeekly = 'GuardianWeekly';
+const Paper = 'Paper';
+const PaperAndDigital = 'PaperAndDigital';
+
 export type SubscriptionProduct =
 	| typeof DigitalPack
 	| typeof PremiumTier
@@ -25,11 +26,14 @@ export type SubscriptionProduct =
 	| typeof GuardianWeekly
 	| typeof Paper
 	| typeof PaperAndDigital;
+
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
+
 export type ComponentAbTest = {
 	name: string;
 	variant: string;
 };
+
 export type TrackingProperties = {
 	id: string;
 	product?: SubscriptionProduct;
@@ -47,14 +51,13 @@ const newsstandPrices: Record<PaperProductOptions, number> = {
 	Weekend: weekendNewsstandPrice * 2,
 	Sixday: dailyNewsstandPrice * 5 + weekendNewsstandPrice,
 };
-export const subscriptionPricesForDefaultBillingPeriod: Record<
-	SubscriptionProduct,
-	Record<CountryGroupId, number>
-> = {
+
+export const subscriptionPricesForDefaultBillingPeriod = {
 	PaperAndDigital: {
 		GBPCountries: 21.99,
 	},
-};
+} as Record<SubscriptionProduct, Record<CountryGroupId, number>>;
+
 const defaultBillingPeriods: Record<SubscriptionProduct, BillingPeriod> = {
 	PremiumTier: Monthly,
 	DigitalPack: Monthly,
