@@ -10,7 +10,7 @@ import play.api.libs.ws.{BodyWritable, InMemoryBody}
 // Example request:
 // =================
 // {
-//   "email": "a@b.com",
+//   "primaryEmailAddress": "a@b.com",
 //   "privateFields": {
 //     "firstName": "a",
 //     "secondName": "b"

@@ -94,11 +94,8 @@ class CreateSubscriptionController(
       body: CreateSupportWorkersRequest,
   ): EitherT[Future, IdentityError, IdentityIdAndEmail] = {
     implicit val scheduler: Scheduler = system.scheduler
-    val existingIdentityId = identityService.getUserIdFromEmail(body.email)
-    val identityId =
-      existingIdentityId.leftFlatMap(_ =>
-        identityService.createUserIdFromEmailUser(body.email, body.firstName, body.lastName),
-      )
+    val identityId = identityService.getOrCreateUserFromEmail(body.email, body.firstName, body.lastName)
+
     identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }
 

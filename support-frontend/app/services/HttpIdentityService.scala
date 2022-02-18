@@ -16,7 +16,7 @@ import models.identity.responses.{GuestRegistrationResponse, IdentityErrorRespon
 import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-import utils.FutureRetry
+import utils.EitherTRetry
 
 import java.net.URI
 import scala.concurrent.duration._
@@ -107,6 +107,23 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
+  def getOrCreateUserFromEmail(
+      email: String,
+      firstName: String,
+      lastName: String,
+  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] = {
+    // Try to fetch the user's information with their email address and if it does not exist
+    // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
+    // each attempt.
+    // We try to fetch the user information at the start of each attempt in case a previous `createUser`
+    // call succeeded but timed out before returning a valid response
+    EitherTRetry.retry(
+      getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email, firstName, lastName)),
+      delay = 500.milliseconds,
+      retries = 2,
+    )
+  }
+
   def getUserIdFromEmail(
       email: String,
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] =
@@ -174,28 +191,23 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   private def execute[A](
       requestHolder: WSRequest,
   )(func: (WSResponse) => Either[IdentityError, A])(implicit ec: ExecutionContext, scheduler: Scheduler) = {
-    EitherT
-      .right(
-        // Try to execute the request up to 3 times with a 500 millisecond delay between attempts
-        // With a request timeout of 3 seconds this will mean that the worst case time to failure
-        // will be 10 seconds
-        FutureRetry.retry(requestHolder.execute(), 500.milliseconds, 2),
-      )
-      .subflatMap {
-        case r if r.success =>
-          func(r)
-        case r =>
-          r.json
-            .validate[IdentityErrorResponse]
-            .asEither
-            .leftMap(_ =>
-              IdentityError(
-                message = s"${r.body}",
-                description =
-                  s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}, BODY: ${r.body}",
-              ),
-            )
-            .flatMap(error => Left(error.errors.head))
-      }
+
+    EitherT(requestHolder.execute().map(response => Right(response)).recover { case t =>
+      Left(IdentityError("An exception was thrown in HttpIdentityService.execute", t.getMessage))
+    }).subflatMap {
+      case r if r.success => func(r)
+      case r =>
+        r.json
+          .validate[IdentityErrorResponse]
+          .asEither
+          .leftMap(_ =>
+            IdentityError(
+              message = s"${r.body}",
+              description =
+                s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}, BODY: ${r.body}",
+            ),
+          )
+          .flatMap(error => Left(error.errors.head))
+    }
   }
 }
