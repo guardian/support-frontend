@@ -14,6 +14,7 @@ trait Controllers {
     with ApplicationConfiguration
     with ActionBuilders
     with wiring.Assets
+    with PlayComponents
     with GoogleAuth =>
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)

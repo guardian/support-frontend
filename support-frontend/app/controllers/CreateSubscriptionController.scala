@@ -2,6 +2,7 @@ package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
+import akka.actor.{ActorSystem, Scheduler}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
@@ -42,7 +43,7 @@ class CreateSubscriptionController(
     testUsers: TestUserService,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
-)(implicit val ec: ExecutionContext)
+)(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe {
 
@@ -92,11 +93,9 @@ class CreateSubscriptionController(
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
   ): EitherT[Future, IdentityError, IdentityIdAndEmail] = {
-    val existingIdentityId = identityService.getUserIdFromEmail(body.email)
-    val identityId =
-      existingIdentityId.leftFlatMap(_ =>
-        identityService.createUserIdFromEmailUser(body.email, body.firstName, body.lastName),
-      )
+    implicit val scheduler: Scheduler = system.scheduler
+    val identityId = identityService.getOrCreateUserFromEmail(body.email, body.firstName, body.lastName)
+
     identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }
 

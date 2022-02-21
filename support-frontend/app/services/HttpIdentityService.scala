@@ -1,10 +1,10 @@
 package services
 
-import java.net.URI
+import akka.actor.Scheduler
 import cats.data.EitherT
 import cats.implicits._
 import com.google.common.net.InetAddresses
-import com.gu.identity.model.{PrivateFields, User => IdUser}
+import com.gu.identity.model.PrivateFields
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
@@ -12,16 +12,13 @@ import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.IdentityErrorResponse.IdentityError
-import models.identity.responses.{
-  GuestRegistrationResponse,
-  IdentityErrorResponse,
-  SetGuestPasswordResponseCookies,
-  UserResponse,
-}
+import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
 import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
+import utils.EitherTRetry
 
+import java.net.URI
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -110,13 +107,32 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getUserIdFromEmail(email: String)(implicit ec: ExecutionContext): EitherT[Future, IdentityError, String] =
+  def getOrCreateUserFromEmail(
+      email: String,
+      firstName: String,
+      lastName: String,
+  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] = {
+    // Try to fetch the user's information with their email address and if it does not exist
+    // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
+    // each attempt.
+    // We try to fetch the user information at the start of each attempt in case a previous `createUser`
+    // call succeeded but timed out before returning a valid response
+    EitherTRetry.retry(
+      getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email, firstName, lastName)),
+      delay = 500.milliseconds,
+      retries = 2,
+    )
+  }
+
+  def getUserIdFromEmail(
+      email: String,
+  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] =
     execute(
       wsClient
         .url(s"$apiUrl/user")
         .withHttpHeaders(List("X-GU-ID-Client-Access-Token" -> s"Bearer $apiClientToken"): _*)
         .withQueryStringParameters(List("emailAddress" -> email): _*)
-        .withRequestTimeout(5.seconds)
+        .withRequestTimeout(3.seconds)
         .withMethod("GET"),
     ) { resp =>
       resp.json
@@ -135,7 +151,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       email: String,
       firstName: String,
       lastName: String,
-  )(implicit ec: ExecutionContext): EitherT[Future, IdentityError, String] = {
+  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] = {
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
@@ -153,7 +169,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           ).flattenValues: _*,
         )
         .withBody(body)
-        .withRequestTimeout(5.seconds)
+        .withRequestTimeout(3.seconds)
         .withMethod("POST")
         .withQueryStringParameters(("accountVerificationEmail", "true")),
     ) { resp =>
@@ -174,10 +190,12 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
 
   private def execute[A](
       requestHolder: WSRequest,
-  )(func: (WSResponse) => Either[IdentityError, A])(implicit ec: ExecutionContext) = {
-    EitherT.right(requestHolder.execute()).subflatMap {
-      case r if r.success =>
-        func(r)
+  )(func: (WSResponse) => Either[IdentityError, A])(implicit ec: ExecutionContext, scheduler: Scheduler) = {
+
+    EitherT(requestHolder.execute().map(response => Right(response)).recover { case t =>
+      Left(IdentityError("An exception was thrown in HttpIdentityService.execute", t.getMessage))
+    }).subflatMap {
+      case r if r.success => func(r)
       case r =>
         r.json
           .validate[IdentityErrorResponse]
