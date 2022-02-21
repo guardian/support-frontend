@@ -402,7 +402,7 @@ export function ContributionsArticleCountWithOptOut({
 										cssOverrides={articleCountDefaultCtaStyles}
 										onClick={onStayInClick}
 									>
-										Yes, thats OK
+										Yes, that's OK
 									</Button>
 									<Button
 										priority="tertiary"
