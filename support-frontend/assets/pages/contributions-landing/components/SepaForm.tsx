@@ -1,10 +1,12 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import { space } from '@guardian/src-foundations';
-import { headline } from '@guardian/src-foundations/typography';
-import { Option as OptionForSelect, Select } from '@guardian/src-select/index';
-import { TextInput } from '@guardian/src-text-input';
-import React, { useState } from 'react';
+import { headline, space } from '@guardian/source-foundations';
+import {
+	Option as OptionForSelect,
+	Select,
+	TextInput,
+} from '@guardian/source-react-components';
+import { useState } from 'react';
 import { isValidIban } from 'helpers/forms/formValidation';
 import { countries } from 'helpers/internationalisation/country';
 import { sortedOptions } from '../../../components/forms/customFields/sortedOptions';

@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import { Checkbox, CheckboxGroup } from '@guardian/src-checkbox';
-import React from 'react';
+import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
@@ -36,6 +36,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
+import {
+	setCurrencyId,
+	setUseLocalAmounts,
+	setUseLocalCurrencyFlag,
+} from 'helpers/page/commonActions';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -54,11 +59,6 @@ import type {
 	SepaData,
 	State,
 } from 'pages/contributions-landing/contributionsLandingReducer';
-import {
-	setCurrencyId,
-	setUseLocalAmounts,
-	setUseLocalCurrencyFlag,
-} from '../../../helpers/page/commonActions';
 import ContributionAmount from './ContributionAmount';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import ContributionFormFields from './ContributionFormFields';
