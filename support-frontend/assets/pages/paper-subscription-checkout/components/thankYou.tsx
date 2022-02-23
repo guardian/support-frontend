@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { from, headline, space, textSans } from '@guardian/source-foundations';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
@@ -8,14 +9,13 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import 'helpers/internationalisation/countryGroup';
-import type { FormFields } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { myAccountUrl } from 'helpers/urls/externalLinks';
@@ -25,18 +25,17 @@ import AppsSection from './appsSection';
 import { HeroPicture } from './heroPicture';
 import SubscriptionsSurvey from './subscriptionSurvey';
 
-type MarketingConsent =
-	typeof import('components/subscriptionCheckouts/thankYou/marketingConsentContainer').default;
-// ----- Types ----- //
-type PropTypes = FormFields & {
-	isPending: boolean;
-	countryGroupId: CountryGroupId;
-};
-
 // ----- Map State/Props ----- //
 function mapStateToProps(state: WithDeliveryCheckoutState) {
 	return { ...getFormFields(state) };
 }
+
+const connector = connect(mapStateToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & {
+	isPending: boolean;
+	countryGroupId: CountryGroupId;
+};
 
 // ----- Component ----- //
 const subHeading = css`
@@ -48,6 +47,7 @@ const subHeading = css`
 		margin-bottom: ${space[2]}px;
 	}
 `;
+
 const sansText = css`
 	${textSans.medium({
 		lineHeight: 'regular',
@@ -58,6 +58,7 @@ const sansText = css`
 		})};
 	}
 `;
+
 const maxWidth = css`
 	${from.tablet} {
 		max-width: 70%;
@@ -67,6 +68,7 @@ const maxWidth = css`
 		max-width: 60%;
 	}
 `;
+
 const listStyle = css`
 	position: relative;
 	list-style: none;
@@ -89,12 +91,14 @@ const listStyle = css`
 		})}
 	}
 `;
+
 const heroPictureHack = css`
 	.component-grid-picture {
 		left: 0;
 	}
 `;
-const whatNextText: Record<FulfilmentOptions, string[]> = {
+
+const whatNextText: Partial<Record<FulfilmentOptions, string[]>> = {
 	[HomeDelivery]: [
 		'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how  to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.',
 		'Your newspaper will be delivered to your door.',
@@ -109,14 +113,14 @@ const whatNextText: Record<FulfilmentOptions, string[]> = {
 	],
 };
 
-function WhatNext(fulfilmentOption) {
+function WhatNext(fulfilmentOption: FulfilmentOptions) {
 	const textItems = whatNextText[fulfilmentOption];
 	return (
 		<div css={space}>
 			<h3 css={subHeading}>What happens next?</h3>
 			<p css={maxWidth}>
 				<ol>
-					{textItems.map((item) => (
+					{textItems?.map((item) => (
 						<li css={listStyle}>{item}</li>
 					))}
 				</ol>
@@ -125,18 +129,20 @@ function WhatNext(fulfilmentOption) {
 	);
 }
 
-const MyAccountLink = () => (
-	<a
-		href={myAccountUrl}
-		onClick={sendTrackingEventsOnClick({
-			id: 'checkout_my_account',
-			product: 'Paper',
-			componentType: 'ACQUISITIONS_BUTTON',
-		})}
-	>
-		MyAccount
-	</a>
-);
+function MyAccountLink() {
+	return (
+		<a
+			href={myAccountUrl}
+			onClick={sendTrackingEventsOnClick({
+				id: 'checkout_my_account',
+				product: 'Paper',
+				componentType: 'ACQUISITIONS_BUTTON',
+			})}
+		>
+			MyAccount
+		</a>
+	);
+}
 
 function ThankYouContent({
 	fulfilmentOption,
@@ -198,12 +204,12 @@ function ThankYouContent({
 			<Content>
 				<Asyncronously
 					loader={import('components/marketingConsent/marketingConsentPaper')}
-				>
-					{(MktConsent: MarketingConsent) => <MktConsent />}
-				</Asyncronously>
+					render={(MktConsent) => <>{MktConsent}</>}
+				/>
 			</Content>
 		</div>
 	);
-} // ----- Export ----- //
+}
 
-export default connect(mapStateToProps)(ThankYouContent);
+// ----- Export ----- //
+export default connector(ThankYouContent);

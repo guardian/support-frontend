@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/content';
@@ -9,9 +10,10 @@ import { HeroWrapper } from 'components/productPage/productPageHero/productPageH
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import type { FormFields } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Option } from 'helpers/types/option';
 import {
 	helpCentreUrl,
@@ -20,16 +22,20 @@ import {
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
-type MarketingConsent =
-	typeof import('components/subscriptionCheckouts/thankYou/marketingConsentContainer').default;
-// ----- Types ----- //
-type PropTypes = FormFields & {
+// ----- Map State/Props ----- //
+function mapStateToProps(state: WithDeliveryCheckoutState) {
+	return { ...getFormFields(state) };
+}
+
+const connector = connect(mapStateToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & {
 	isPending: boolean;
 	orderIsGift: boolean;
 };
 
 // ----- Helper ----- //
-const getPackageTitle = (billingPeriod) => {
+const getPackageTitle = (billingPeriod: BillingPeriod) => {
 	switch (billingPeriod) {
 		case 'Quarterly':
 			return ' / quarterly package ';
@@ -45,7 +51,11 @@ const getPackageTitle = (billingPeriod) => {
 	}
 };
 
-const getHeading = (billingPeriod, isPending, orderIsGift) => {
+const getHeading = (
+	billingPeriod: BillingPeriod,
+	isPending: boolean,
+	orderIsGift: boolean,
+) => {
 	if (orderIsGift) {
 		return isPending
 			? 'Your Guardian Weekly gift subscription is being processed'
@@ -58,13 +68,13 @@ const getHeading = (billingPeriod, isPending, orderIsGift) => {
 		: `You have now subscribed to the Guardian Weekly ${packageTitle}`;
 };
 
-const StartDateCopy = ({
+function StartDateCopy({
 	startDate,
 	orderIsGift,
 }: {
 	startDate: Option<string>;
 	orderIsGift: boolean;
-}) => {
+}) {
 	if (startDate) {
 		const title = orderIsGift
 			? "The gift recipient's first issue will be published on"
@@ -77,32 +87,34 @@ const StartDateCopy = ({
 	}
 
 	return null;
-};
+}
 
-const HeroImage = ({ orderIsGift }: { orderIsGift: boolean }) => (
-	<GridPicture
-		sources={[
-			{
-				gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
-				srcSizes: [500, 1000],
-				imgType: 'png',
-				sizes: '100vw',
-				media: '(max-width: 739px)',
-			},
-			{
-				gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
-				srcSizes: [1000, 2000],
-				imgType: 'png',
-				sizes: '(min-width: 1000px) 2000px, 1000px',
-				media: '(min-width: 740px)',
-			},
-		]}
-		fallback={orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero'}
-		fallbackSize={1000}
-		altText="A collection of Guardian Weekly magazines"
-		fallbackImgType="png"
-	/>
-);
+function HeroImage({ orderIsGift }: { orderIsGift: boolean }) {
+	return (
+		<GridPicture
+			sources={[
+				{
+					gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
+					srcSizes: [500, 1000],
+					imgType: 'png',
+					sizes: '100vw',
+					media: '(max-width: 739px)',
+				},
+				{
+					gridId: orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero',
+					srcSizes: [1000, 2000],
+					imgType: 'png',
+					sizes: '(min-width: 1000px) 2000px, 1000px',
+					media: '(min-width: 740px)',
+				},
+			]}
+			fallback={orderIsGift ? 'gwGiftingPackshot' : 'weeklyLandingHero'}
+			fallbackSize={1000}
+			altText="A collection of Guardian Weekly magazines"
+			fallbackImgType="png"
+		/>
+	);
+}
 
 function ThankYouContent({
 	billingPeriod,
@@ -208,14 +220,12 @@ function ThankYouContent({
 							'components/subscriptionCheckouts/thankYou/marketingConsentContainer'
 						)
 					}
-				>
-					{(MktConsent: MarketingConsent) => <MktConsent />}
-				</Asyncronously>
+					render={(MktConsent) => <>{MktConsent}</>}
+				/>
 			</Content>
 		</div>
 	);
-} // ----- Export ----- //
+}
 
-export default connect((state) => ({ ...getFormFields(state) }))(
-	ThankYouContent,
-);
+// ----- Export ----- //
+export default connector(ThankYouContent);
