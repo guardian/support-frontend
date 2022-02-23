@@ -21,8 +21,8 @@ class ContributionSubscriptionBuilder(
         RatePlanChargeData(
           ContributionRatePlanCharge(
             contributionConfig.productRatePlanChargeId,
-            price = state.product.amount,
-          ), // Pass the amount the user selected into Zuora
+            price = state.product.amount, // Pass the amount the user selected into Zuora
+          ),
         ),
       ),
       readerType = Direct,

@@ -55,11 +55,7 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     )
   }
 
-  "AcquisitionMetadata" should "serialise to a string" in {
-    testEncoding(AcquisitionMetadata(true), "{\"shouldGetDigitalSubBenefits\":true}")
-  }
-
-  "AcquisitionMetadata" should "deserialise from a string" in {
+  "AcquisitionMetadata" should "serialise and deserialise correctly" in {
     testRoundTripSerialisation(AcquisitionMetadata(true))
   }
 

@@ -22,11 +22,11 @@ object SupporterRatePlanItemCodecs {
       subscriptionName,
       identityId,
       gifteeIdentityId,
-      acquisitionMetadata,
       productRatePlanId,
       productRatePlanName,
       termEndDate,
       contractEffectiveDate,
+      acquisitionMetadata,
     )(SupporterRatePlanItem.apply)
 
   implicit val circeEncoder: Encoder[SupporterRatePlanItem] = deriveEncoder

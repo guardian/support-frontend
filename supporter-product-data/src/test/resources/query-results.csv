@@ -1,11 +1,11 @@
-Subscription.Name,Subscription.Version,Account.IdentityId__c,Subscription.GifteeIdentityId__c,ProductRatePlan.Id,ProductRatePlan.Name,Subscription.ContractEffectiveDate,Subscription.TermEndDate,Subscription.Status
-A-SXXXXX759,4,test-id-999,,2c92a00e6dd988e2016df85387417498,GW Oct 18 - 3 Month - Domestic,2020-04-17,2020-10-17,Active
-A-SXXXXX066,4,test-id-0001,,2c92a0fc5aacfadd015ad24db4ff5e97,Monthly Contribution,2018-02-13,2022-02-13,Active
-A-SXXXXX430,1,test-id-0007,,2c92a0fb4edd70c8014edeaa4e972204,Digital Pack Annual,2021-01-07,2022-01-07,Active
-A-SXXXXX397,2,test-id-0011,,2c92a0fb4edd70c8014edeaa4eae220a,Digital Pack Monthly,2020-03-22,2022-03-22,Active
-A-SXXXXX069,4,test-id-0016,,2c92a0fc5aacfadd015ad24db4ff5e97,Monthly Contribution,2018-02-13,2022-02-13,Active
-A-SXXXXX618,2,test-id-0028,,2c92a0fc5e1dc084015e37f58c200eea,Annual Contribution,2019-10-02,2021-10-02,Active
-A-SXXXXX070,4,test-id-0032,,2c92a0fc5aacfadd015ad24db4ff5e97,Monthly Contribution,2018-02-13,2022-02-13,Active
-A-SXXXXX070,4,test-id-0039,,2c92a0fb4ce4b8e7014ce711d3c37e60,Friends,2018-02-13,2022-02-13,Active
-A-SXXXXX073,36,test-id-0046,,2c92a0fc56fe26ba0157040c5ea17f6a,Sixday+,2018-02-13,2022-02-13,Active
-A-SXXXXX075,6,test-id-0048,,2c92a0fd56fe270b0157040dd79b35da,Everyday,2018-02-13,2022-02-13,Active
+Subscription.Name,Subscription.Version,Account.IdentityId__c,Subscription.GifteeIdentityId__c,ProductRatePlan.Id,ProductRatePlan.Name,Subscription.ContractEffectiveDate,Subscription.TermEndDate,Subscription.Status,Subscription.AcquisitionMetadata__c
+A-SXXXXX759,1,100001314,,2c92c0f86fa49142016fa49ea56a2938,Everyday,2021-07-15,2022-07-15,Active,
+A-SXXXXX066,1,100001314,,2c92c0f86fa49142016fa49eb0a42a01,Sunday,2021-07-15,2022-07-15,Active,
+A-SXXXXX430,2,100001314,,2c92c0f86fa49142016fa49ea442291b,Saturday,2021-09-20,2023-09-20,Active,
+A-SXXXXX397,3,100001314,,2c92c0f961f9cf300161fc4d2e3e3664,Saturday,2021-11-17,2022-11-17,Active,
+A-SXXXXX069,2,100003000,,2c92c0f85a6b134e015a7fcd9f0c7855,Monthly Contribution,2020-11-17,2022-11-17,Active,
+A-SXXXXX618,2,100003000,,2c92c0f85e2d19af015e3896e824092c,Annual Contribution,2020-11-17,2022-11-17,Active,
+A-SXXXXX070,2,100003000,,2c92c0f85a6b134e015a7fcd9f0c7855,Monthly Contribution,2020-11-18,2022-11-18,Active,
+A-SXXXXX070,2,100003000,,2c92c0f85a6b134e015a7fcd9f0c7855,Monthly Contribution,2020-11-18,2022-11-18,Active,
+A-SXXXXX073,2,100003000,,2c92c0f85a6b134e015a7fcd9f0c7855,Monthly Contribution,2020-11-19,2022-11-19,Active,
+A-SXXXXX075,2,9999999,,2c92c0f85e2d19af015e3896e824092c,Annual Contribution,2022-02-22,2022-02-23,Cancelled,"{""shouldGetDigitalSubBenefits"":true}"

@@ -169,5 +169,7 @@ object UpdateSupporterProductData {
       productRatePlanName = productRatePlanName,
       termEndDate = LocalDate.now.plusWeeks(1),
       contractEffectiveDate = LocalDate.now,
+      acquisitionMetadata =
+        None, // TODO: getting hold of this here is going to involve a lot of refactoring unfortunately
     )
 }
