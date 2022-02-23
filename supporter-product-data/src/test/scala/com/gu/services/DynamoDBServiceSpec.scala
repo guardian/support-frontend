@@ -16,13 +16,14 @@ class DynamoDBServiceSpec extends AsyncFlatSpec with Matchers {
   SupporterDataDynamoService.getClass.getSimpleName should "be able to insert an item" in {
     val service = SupporterDataDynamoService(DEV)
     val item = supporterdata.model.SupporterRatePlanItem(
-      identityId = "999999",
+      identityId = "999995",
       gifteeIdentityId = None,
       subscriptionName = "test-sub-name",
       productRatePlanId = "2c92a0fb4edd70c8014edeaa4e972204",
       productRatePlanName = "Digital Pack Annual",
-      termEndDate = LocalDate.parse("2021-03-20"),
+      termEndDate = LocalDate.parse("2022-03-20"),
       contractEffectiveDate = LocalDate.parse("2020-03-20"),
+      acquisitionMetadata = Some("{\"shouldGetDigitalSubBenefits\":true}"),
     )
     service
       .writeItem(item)

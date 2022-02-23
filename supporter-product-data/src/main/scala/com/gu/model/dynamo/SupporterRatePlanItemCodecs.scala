@@ -1,6 +1,7 @@
 package com.gu.model.dynamo
 
 import com.gu.model.ZuoraFieldNames.{
+  acquisitionMetadata,
   contractEffectiveDate,
   gifteeIdentityId,
   identityId,
@@ -21,6 +22,7 @@ object SupporterRatePlanItemCodecs {
       subscriptionName,
       identityId,
       gifteeIdentityId,
+      acquisitionMetadata,
       productRatePlanId,
       productRatePlanName,
       termEndDate,

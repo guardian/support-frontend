@@ -15,4 +15,5 @@ object FieldNames {
 
   val subscriptionStatus = "subscriptionStatus"
 
+  val acquisitionMetadata = "acquisitionMetadata"
 }

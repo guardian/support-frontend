@@ -10,4 +10,7 @@ case class SupporterRatePlanItem(
     productRatePlanName: String, // Name of the product in this rate plan
     termEndDate: LocalDate, // Date that this subscription term ends
     contractEffectiveDate: LocalDate, // Date that this subscription started
+    acquisitionMetadata: Option[
+      String,
+    ], // A json string saved to a custom field in Zuora contains additional information about the acquisition
 )

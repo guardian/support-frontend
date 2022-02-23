@@ -18,4 +18,6 @@ object ZuoraFieldNames {
 
   val subscriptionStatus = "Subscription.Status"
 
+  val acquisitionMetadata = "Subscription.AcquisitionMetadata__c"
+
 }

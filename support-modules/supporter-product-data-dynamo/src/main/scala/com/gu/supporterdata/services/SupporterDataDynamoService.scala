@@ -44,21 +44,30 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
           $productRatePlanName = :$productRatePlanName,
           $termEndDate = :$termEndDate,
           $contractEffectiveDate = :$contractEffectiveDate,
+          ${item.acquisitionMetadata.map(_ => s"$acquisitionMetadata = :$acquisitionMetadata,").getOrElse("")}
           $expiryDateName = :$expiryDateName
           """
-    val attributeValues = Map(
+    val mandatoryAttributeValues = Map(
       ":" + productRatePlanId -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName -> AttributeValue.builder.s(item.productRatePlanName).build,
       ":" + termEndDate -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
       ":" + contractEffectiveDate -> AttributeValue.builder.s(asIso(item.contractEffectiveDate)).build,
       ":" + expiryDateName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
-    ).asJava
+    )
+
+    val allAttributeValues = item.acquisitionMetadata
+      .map(data =>
+        Map(":" + acquisitionMetadata -> AttributeValue.builder.s(data).build)
+          ++ mandatoryAttributeValues,
+      )
+      .getOrElse(mandatoryAttributeValues)
+      .asJava
 
     val updateItemRequest = UpdateItemRequest.builder
       .tableName(tableName)
       .key(key)
       .updateExpression(updateExpression)
-      .expressionAttributeValues(attributeValues)
+      .expressionAttributeValues(allAttributeValues)
       .build
 
     client.updateItem(updateItemRequest).toScala

@@ -62,7 +62,8 @@ object SelectActiveRatePlansQuery {
           $productRatePlanName,
           $contractEffectiveDate,
           $termEndDate,
-          $subscriptionStatus
+          $subscriptionStatus,
+          $acquisitionMetadata
             FROM
             rateplan
             WHERE
