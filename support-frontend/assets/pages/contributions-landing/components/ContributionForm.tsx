@@ -52,7 +52,7 @@ import {
 	setCheckoutFormHasBeenSubmitted,
 	setSepaAccountHolderName,
 	setSepaAddressCountry,
-	setSepaAddressLineOne,
+	setSepaAddressStreetName,
 	setSepaIban,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type {
@@ -112,7 +112,7 @@ type PropTypes = {
 	sepaData: SepaData;
 	setSepaIban: (iban: string) => void;
 	setSepaAccountHolderName: (accountHolderName: string) => void;
-	setSepaAddressLineOne: (addressLineOne: string) => void;
+	setSepaAddressStreetName: (streetName: string) => void;
 	setSepaAddressCountry: (addressCountry: Country) => void;
 	productSetAbTestVariant: boolean;
 };
@@ -201,8 +201,8 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setSepaAccountHolderName: (name: string) => {
 		dispatch(setSepaAccountHolderName(name));
 	},
-	setSepaAddressLineOne: (addressLineOne: string) => {
-		dispatch(setSepaAddressLineOne(addressLineOne));
+	setSepaAddressStreetName: (addressStreetName: string) => {
+		dispatch(setSepaAddressStreetName(addressStreetName));
 	},
 	setSepaAddressCountry: (addressCountry: Country) => {
 		dispatch(setSepaAddressCountry(addressCountry));
@@ -226,7 +226,7 @@ const formHandlersForRecurring = {
 		props.openDirectDebitPopUp();
 	},
 	Sepa: (props: PropTypes) => {
-		const { accountHolderName, iban, country, lineOne } = props.sepaData;
+		const { accountHolderName, iban, country, streetName } = props.sepaData;
 
 		if (accountHolderName && iban) {
 			props.onPaymentAuthorisation({
@@ -234,7 +234,7 @@ const formHandlersForRecurring = {
 				accountHolderName,
 				iban,
 				country,
-				lineOne,
+				streetName,
 			});
 		}
 	},
@@ -395,11 +395,11 @@ function ContributionForm(props: PropTypes): JSX.Element {
 						<SepaForm
 							iban={props.sepaData.iban}
 							accountHolderName={props.sepaData.accountHolderName}
-							addressLineOne={props.sepaData.lineOne}
+							addressStreetName={props.sepaData.streetName}
 							addressCountry={props.sepaData.country}
 							updateIban={props.setSepaIban}
 							updateAccountHolderName={props.setSepaAccountHolderName}
-							updateAddressLineOne={props.setSepaAddressLineOne}
+							updateAddressStreetName={props.setSepaAddressStreetName}
 							updateAddressCountry={props.setSepaAddressCountry}
 							checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
 						/>

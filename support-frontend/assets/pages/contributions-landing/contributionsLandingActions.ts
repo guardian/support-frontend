@@ -271,12 +271,12 @@ export type Action =
 			accountHolderName: string | null;
 	  }
 	| {
-			type: 'SET_SEPA_ADDRESS_LINE_ONE';
-			addressLineOne: string | null;
+			type: 'SET_SEPA_ADDRESS_STREET_NAME';
+			addressStreetName?: string;
 	  }
 	| {
 			type: 'SET_SEPA_ADDRESS_COUNTRY';
-			addressCountry: Country | null;
+			addressCountry?: Country;
 	  };
 
 const setFormIsValid = (isValid: boolean): Action => ({
@@ -639,12 +639,12 @@ const setSepaAccountHolderName =
 		}))(dispatch, getState);
 	};
 
-const setSepaAddressLineOne =
-	(addressLineOne: string | null) =>
+const setSepaAddressStreetName =
+	(addressStreetName?: string) =>
 	(dispatch: Dispatch, getState: () => State): void => {
 		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_ADDRESS_LINE_ONE',
-			addressLineOne,
+			type: 'SET_SEPA_ADDRESS_STREET_NAME',
+			addressStreetName,
 		}))(dispatch, getState);
 	};
 
@@ -1183,6 +1183,6 @@ export {
 	loadAmazonPaySdk,
 	setSepaIban,
 	setSepaAccountHolderName,
-	setSepaAddressLineOne,
+	setSepaAddressStreetName,
 	setSepaAddressCountry,
 };

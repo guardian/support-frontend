@@ -98,9 +98,8 @@ case class SepaPaymentMethod(
     BankTransferType: String = "SEPA",
     `Type`: String = "BankTransfer",
     PaymentGateway: PaymentGateway = SepaGateway,
-    Country: Option[String] = Some("GB"),
-    StreetNumber: Option[String] = Some("221b"),
-    StreetName: Option[String] = Some("Baker Street"),
+    Country: Option[String] = None,
+    StreetName: Option[String] = None,
 ) extends PaymentMethod
 
 case class AmazonPayPaymentMethod(

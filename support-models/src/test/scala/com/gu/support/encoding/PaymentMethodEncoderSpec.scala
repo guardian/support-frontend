@@ -95,9 +95,6 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
          |"BankTransferType": "SEPA",
          |"Type": "BankTransfer",
          |"PaymentGateway": "Stripe Bank Transfer - GNM Membership",
-         |"Country": "GB",
-         |"StreetNumber": "221b",
-         |"StreetName": "Baker Street"
          |}""".stripMargin
 
     testEncoding[PaymentMethod](pm, expected)

@@ -31,9 +31,9 @@ const fieldsContainerStyles = css`
 type SepaFormProps = {
 	iban: string | null;
 	accountHolderName: string | null;
-	addressLineOne?: string;
+	addressStreetName?: string;
 	addressCountry?: Country;
-	updateAddressLineOne: (addressLineOne: string) => void;
+	updateAddressStreetName: (addressStreetName: string) => void;
 	updateAddressCountry: (addressCountry: Country) => void;
 	updateIban: (iban: string) => void;
 	updateAccountHolderName: (accountHolderName: string) => void;
@@ -42,9 +42,9 @@ type SepaFormProps = {
 export function SepaForm({
 	iban,
 	accountHolderName,
-	addressLineOne,
+	addressStreetName,
 	addressCountry,
-	updateAddressLineOne,
+	updateAddressStreetName,
 	updateAddressCountry,
 	updateIban,
 	updateAccountHolderName,
@@ -127,10 +127,10 @@ export function SepaForm({
 								optional={false}
 								hideLabel={false}
 								label="Address Line 1"
-								value={addressLineOne ?? undefined}
-								onChange={(e) => updateAddressLineOne(e.target.value)}
+								value={addressStreetName ?? undefined}
+								onChange={(e) => updateAddressStreetName(e.target.value)}
 								error={
-									checkoutFormHasBeenSubmitted && !addressLineOne
+									checkoutFormHasBeenSubmitted && !addressStreetName
 										? 'Please enter a billing address'
 										: undefined
 								}

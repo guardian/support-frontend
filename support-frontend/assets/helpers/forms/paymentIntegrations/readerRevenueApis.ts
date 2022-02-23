@@ -96,7 +96,6 @@ type RegularSepaPaymentFields = {
 	accountHolderName: string;
 	iban: string;
 	country?: Option<Country>;
-	streetNumber?: Option<string>;
 	streetName?: Option<string>;
 };
 type CorporateRedemption = {
@@ -174,7 +173,7 @@ export type SepaAuthorisation = {
 	accountHolderName: string;
 	iban: string;
 	country?: Country;
-	lineOne?: string;
+  streetName?: string;
 };
 export type ExistingCardAuthorisation = {
 	paymentMethod: typeof ExistingCard;
@@ -261,6 +260,8 @@ function regularPaymentFieldsFromAuthorisation(
 			return {
 				accountHolderName: authorisation.accountHolderName,
 				iban: authorisation.iban.replace(/ /g, ''),
+        country: authorisation.country,
+        streetName: authorisation.streetName,
 			};
 
 		case ExistingCard:
