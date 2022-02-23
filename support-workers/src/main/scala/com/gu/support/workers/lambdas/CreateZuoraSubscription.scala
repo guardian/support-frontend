@@ -126,6 +126,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     zuoraSubscriptionCreator,
     new ContributionSubscriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).contributionConfig,
+      state.acquisitionData,
       subscribeItemBuilder,
     ),
     state.user,

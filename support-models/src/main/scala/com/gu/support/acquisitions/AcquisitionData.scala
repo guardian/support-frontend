@@ -18,19 +18,19 @@ case class QueryParameter(
 /** Model for acquisition data passed by the referrer.
   */
 case class ReferrerAcquisitionData(
-    campaignCode: Option[String],
-    referrerPageviewId: Option[String],
-    referrerUrl: Option[String],
-    componentId: Option[String],
-    componentType: Option[String],
-    source: Option[String],
-    abTests: Option[Set[AbTest]],
-    queryParameters: Option[Set[QueryParameter]],
-    hostname: Option[String],
-    gaClientId: Option[String],
-    userAgent: Option[String],
-    ipAddress: Option[String],
-    labels: Option[Set[String]],
+    campaignCode: Option[String] = None,
+    referrerPageviewId: Option[String] = None,
+    referrerUrl: Option[String] = None,
+    componentId: Option[String] = None,
+    componentType: Option[String] = None,
+    source: Option[String] = None,
+    abTests: Option[Set[AbTest]] = None,
+    queryParameters: Option[Set[QueryParameter]] = None,
+    hostname: Option[String] = None,
+    gaClientId: Option[String] = None,
+    userAgent: Option[String] = None,
+    ipAddress: Option[String] = None,
+    labels: Option[Set[String]] = None,
 )
 
 object ReferrerAcquisitionData {

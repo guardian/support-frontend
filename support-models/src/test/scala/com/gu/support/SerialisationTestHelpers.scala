@@ -31,6 +31,7 @@ trait SerialisationTestHelpers extends Matchers {
 
   def testRoundTripSerialisation[T](t: T)(implicit decoder: Decoder[T], encoder: Encoder[T]): Assertion = {
     val json = t.asJson
+    System.out.println(json.noSpaces)
     assertDecodingSucceeded(json.as[T], (decoded: T) => decoded shouldEqual t)
   }
 

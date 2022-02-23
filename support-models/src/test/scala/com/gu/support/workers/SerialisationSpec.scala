@@ -7,8 +7,10 @@ import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   DigitalSubscriptionCorporateRedemptionState,
   DigitalSubscriptionDirectPurchaseState,
+  codec,
 }
 import com.gu.support.workers.states._
+import com.gu.support.zuora.api.AcquisitionMetadata
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.EitherValues
 import org.scalatest.Inside.inside
@@ -51,6 +53,14 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
         state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
       },
     )
+  }
+
+  "AcquisitionMetadata" should "serialise to a string" in {
+    testEncoding(AcquisitionMetadata(true), "{\"shouldGetDigitalSubBenefits\":true}")
+  }
+
+  "AcquisitionMetadata" should "deserialise from a string" in {
+    testRoundTripSerialisation(AcquisitionMetadata(true))
   }
 
   "FailureHandlerState" should "deserialise correctly from any lambda" in {

@@ -8,8 +8,10 @@ import com.gu.support.encoding.CustomCodecs.{monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
+import io.circe.Json.JString
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{Decoder, Encoder, Json, JsonObject, parser}
 import org.joda.time.{LocalDate, Months}
 
 object RatePlanCharge {
@@ -189,7 +191,8 @@ object Subscription {
       .renameField("GiftNotificationEmailDate", "GiftNotificationEmailDate__c")
       .renameField("AcquisitionSource", "AcquisitionSource__c")
       .renameField("CreatedByCsr", "CreatedByCSR__c")
-      .renameField("AcquisitionCase", "AcquisitionCase__c"),
+      .renameField("AcquisitionCase", "AcquisitionCase__c")
+      .renameField("AcquisitionMetadata", "AcquisitionMetadata__c"),
   )
 }
 
@@ -211,6 +214,7 @@ case class Subscription(
     acquisitionSource: Option[AcquisitionSource] = None,
     createdByCsr: Option[String] = None,
     acquisitionCase: Option[String] = None,
+    acquisitionMetadata: Option[AcquisitionMetadata] = None,
 )
 
 object RatePlanChargeData {
@@ -234,3 +238,22 @@ object SubscriptionData {
 }
 
 case class SubscriptionData(ratePlanData: List[RatePlanData], subscription: Subscription)
+
+case class AcquisitionMetadata(shouldGetDigitalSubBenefits: Boolean)
+
+object AcquisitionMetadata {
+  // AcquisitionMetadata will be written into a custom field in Zuora as an escaped Json string.
+  // This means that the encoder needs to do that escaping and the decoder needs to convert
+  // back to unescaped json before decoding to an actual object
+  implicit val encoder: Encoder[AcquisitionMetadata] =
+    deriveEncoder[AcquisitionMetadata].mapJson(json => Json.fromString(json.noSpaces))
+
+  implicit val decoder: Decoder[AcquisitionMetadata] = deriveDecoder[AcquisitionMetadata].prepare(cursor =>
+    cursor.withFocus(json =>
+      (for {
+        jsonString <- json.asString
+        parsedJson <- parser.parse(jsonString).toOption
+      } yield parsedJson).getOrElse(json), // If we can't parse the escaped json then just return whatever's there
+    ),
+  )
+}

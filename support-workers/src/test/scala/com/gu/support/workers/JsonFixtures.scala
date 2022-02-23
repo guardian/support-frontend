@@ -4,6 +4,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency, Title}
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
+import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, RestOfWorld}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
@@ -19,7 +20,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   PaperState,
 }
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
-import com.gu.support.zuora.api.StripeGatewayDefault
+import com.gu.support.zuora.api.{AcquisitionMetadata, StripeGatewayDefault}
 import io.circe.parser
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -456,22 +457,25 @@ object JsonFixtures {
         }
       """
 
-  def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
+  def createContributionZuoraSubscriptionJson(
+      billingPeriod: BillingPeriod = Monthly,
+      acquisitionData: Option[AcquisitionData] = None,
+  ): String =
     CreateZuoraSubscriptionState(
       ContributionState(
-        Contribution(5, GBP, billingPeriod),
+        Contribution(50, GBP, billingPeriod),
         stripePaymentMethodObj,
         salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
-      Contribution(5, GBP, billingPeriod),
+      Contribution(50, GBP, billingPeriod),
       AnalyticsInfo(false, Stripe),
       None,
       None,
       None,
       None,
-      None,
+      acquisitionData,
     ).asJson.spaces2
   val createDigiPackZuoraSubscriptionJson =
     CreateZuoraSubscriptionState(

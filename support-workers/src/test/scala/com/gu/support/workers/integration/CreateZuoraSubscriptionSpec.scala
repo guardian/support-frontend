@@ -1,9 +1,9 @@
 package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
-
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
+import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{CatalogService, Everyday, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
@@ -50,6 +50,24 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create an annual Zuora subscription" in {
     createZuoraHelper
       .createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
+      .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
+      })
+  }
+
+  it should "write acquisitionMetadata to Zuora" in {
+    createZuoraHelper
+      .createSubscription(
+        createContributionZuoraSubscriptionJson(
+          billingPeriod = Annual,
+          Some(
+            AcquisitionData(
+              OphanIds(None, None, None),
+              ReferrerAcquisitionData(),
+              Set(AbTest("digisubBenefits", "variant")),
+            ),
+          ),
+        ),
+      )
       .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
       })
   }

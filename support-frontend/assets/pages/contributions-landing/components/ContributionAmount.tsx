@@ -182,6 +182,10 @@ function ContributionAmount(props: PropTypes) {
 					/>
 				</div>
 			)}
+			<div>
+				Contribute {otherLabelSymbol}15 a month or more and get a free digital
+				subscription as a thank you
+			</div>
 		</fieldset>
 	);
 }
