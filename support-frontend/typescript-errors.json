@@ -8,7 +8,7 @@
             "TS2339": 15,
             "TS2345": 53,
             "TS7006": 51,
-            "TS6133": 9,
+            "TS6133": 8,
             "TS7031": 18,
             "TS2564": 2,
             "TS2769": 14,
@@ -28,7 +28,6 @@
             "TS7016": 1,
             "TS7034": 4,
             "TS7005": 9,
-            "TS2707": 1,
             "TS2525": 5,
             "TS7022": 1,
             "TS2571": 3,
@@ -124,7 +123,6 @@
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
             "assets/helpers/forms/checkouts.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
-            "assets/pages/contributions-landing/contributionsLandingInit.ts": 2,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -1023,10 +1021,6 @@
             "message": "'renderControl' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "'selectAmount' is declared but its value is never read."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
             "message": "'dispatch' is declared but its value is never read."
         },
@@ -1559,12 +1553,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Variable 'props' implicitly has an 'any' type."
-        }
-    ],
-    "TS2707": [
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Generic type 'Store<S, A>' requires between 0 and 2 type arguments."
         }
     ],
     "TS2525": [

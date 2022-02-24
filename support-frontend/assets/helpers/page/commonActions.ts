@@ -68,7 +68,7 @@ function setExistingPaymentMethods(
 	};
 }
 
-function setContributionTypes(contributionTypes: ContributionTypes) {
+function setContributionTypes(contributionTypes: ContributionTypes): Action {
 	return {
 		type: 'SET_CONTRIBUTION_TYPES',
 		contributionTypes,
