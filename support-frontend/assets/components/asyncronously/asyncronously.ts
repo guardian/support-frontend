@@ -1,5 +1,5 @@
 import type { ComponentType } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 type PropTypes<T> = {
 	loader: Promise<{
@@ -10,19 +10,22 @@ type PropTypes<T> = {
 };
 
 function Asyncronously<T>(props: PropTypes<T>): JSX.Element | null {
-	const [component, setComponent] = useState<ComponentType<T>>();
+	const [loaded, setLoaded] = useState(false);
+
+	const componentRef = useRef<ComponentType<T>>();
 
 	useEffect(() => {
 		const { loader } = props;
 		void loader.then((imported) => {
-			setComponent(imported.default);
+			componentRef.current = imported.default;
+			setLoaded(true);
 		});
 	}, []);
 
 	const { loading, render } = props;
 
-	if (component) {
-		return render(component);
+	if (loaded && componentRef.current) {
+		return render(componentRef.current);
 	}
 
 	return loading;
