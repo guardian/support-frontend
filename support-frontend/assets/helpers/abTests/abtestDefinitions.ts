@@ -133,4 +133,27 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
+	SFD_v2: {
+		variants: [
+			{
+				id: 'CONTROL',
+			},
+			{
+				id: 'SFD_WITHOUT_BENEFITS',
+			},
+			{
+				id: 'SFD_WITH_BENEFITS',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: true,
+		seed: 11,
+		optimizeId: 'tbc',
+	},
 };
