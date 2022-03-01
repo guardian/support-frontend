@@ -3,6 +3,12 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { ContributionType } from 'helpers/contributions';
+import type {
+	AmazonPayData,
+	AmazonPaymentsObject,
+	BaseWalletConfig,
+	ConsentConfig,
+} from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
@@ -13,13 +19,7 @@ import {
 	setAmazonPayPaymentSelected,
 	setAmazonPayWalletIsStale,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type {
-	AmazonPayData,
-	AmazonPaymentsObject,
-	BaseWalletConfig,
-	ConsentConfig,
-	State,
-} from 'pages/contributions-landing/contributionsLandingReducer';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import './AmazonPay.scss';
 
 type PropTypes = {

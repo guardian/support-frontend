@@ -13,7 +13,11 @@ import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay';
+import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay/setup';
+import type {
+	AmazonLoginObject,
+	AmazonPaymentsObject,
+} from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type {
 	AmazonPayData,
 	CreatePaypalPaymentData,
@@ -134,11 +138,11 @@ export type Action =
 	  }
 	| {
 			type: 'SET_AMAZON_PAY_LOGIN_OBJECT';
-			amazonLoginObject: Record<string, any>;
+			amazonLoginObject: AmazonLoginObject;
 	  }
 	| {
 			type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT';
-			amazonPaymentsObject: Record<string, any>;
+			amazonPaymentsObject: AmazonPaymentsObject;
 	  }
 	| {
 			type: 'SET_AMAZON_PAY_WALLET_IS_STALE';
@@ -447,14 +451,14 @@ const setAmazonPayHasBegunLoading = (): Action => ({
 });
 
 const setAmazonPayLoginObject = (
-	amazonLoginObject: Record<string, any>,
+	amazonLoginObject: AmazonLoginObject,
 ): Action => ({
 	type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
 	amazonLoginObject,
 });
 
 const setAmazonPayPaymentsObject = (
-	amazonPaymentsObject: Record<string, any>,
+	amazonPaymentsObject: AmazonPaymentsObject,
 ): Action => ({
 	type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
 	amazonPaymentsObject,
