@@ -71,7 +71,7 @@ object UpdateSupporterProductDataSpec {
       "subscriptionNumber": "A-S0XXXXXXXX",
       "termDates": {
         "giftStartDate": "2021-04-29",
-        "giftEndDate": "2022-04-29",
+        "giftEndDate": "2029-04-29",
         "months": 12
       },
       "productType": "DigitalSubscriptionGiftRedemption"
@@ -115,7 +115,7 @@ object UpdateSupporterProductDataSpec {
         "giftRecipientType": "DigitalSubscription"
       },
       "giftCode": "gd12-xxxxxxxx",
-      "lastRedemptionDate": "2022-04-28",
+      "lastRedemptionDate": "2029-04-28",
       "paymentMethod": {
         "TokenId": "xxxxxxxxxxxxxxx",
         "SecondTokenId": "xxxxxxxxxxxx",

@@ -44,7 +44,7 @@ object Fixtures {
            "CreditCardNumber": "4242",
            "CreditCardCountry": "US",
            "CreditCardExpirationMonth": 2,
-           "CreditCardExpirationYear": 2022,
+           "CreditCardExpirationYear": 2029,
            "CreditCardType": "Visa",
            "Type": "CreditCardReferenceTransaction",
            "PaymentGateway": "Stripe Gateway 1"
