@@ -1,7 +1,6 @@
 package controllers
 
 import actions.CustomActionBuilders
-import cats.implicits._
 import scala.concurrent.duration._
 import com.typesafe.scalalogging.StrictLogging
 import controllers.ArticleShare.articleIds

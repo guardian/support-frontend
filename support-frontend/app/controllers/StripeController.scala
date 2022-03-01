@@ -41,7 +41,6 @@ class StripeController(
 
   import actionRefiners._
   import cats.data.EitherT
-  import cats.implicits._
   import io.circe.syntax._
   import services.SetupIntent.encoder
 

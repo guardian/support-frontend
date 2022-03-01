@@ -1,6 +1,6 @@
 package com.gu.emailservices
 
-import cats.implicits._
+import cats.syntax.all._
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.{
   APAttributes,

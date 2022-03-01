@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import backend.{GoCardlessBackend, PaypalBackend, StripeBackend}
 import cats.data.EitherT
-import cats.implicits._
 import com.gocardless.errors.GoCardlessApiException
 import model.DefaultThreadPool
 import model.directdebit.CheckDirectDebitDetailsResponse

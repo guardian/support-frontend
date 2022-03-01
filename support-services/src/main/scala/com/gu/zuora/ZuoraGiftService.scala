@@ -1,7 +1,6 @@
 package com.gu.zuora
 
 import cats.data.OptionT
-import cats.implicits.catsStdInstancesForFuture
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer

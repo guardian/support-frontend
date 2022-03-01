@@ -1,7 +1,7 @@
 package services
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.stripe.model.{Charge, Event, PaymentIntent}
 import com.stripe.net.RequestOptions
 import com.stripe.param.PaymentIntentCreateParams

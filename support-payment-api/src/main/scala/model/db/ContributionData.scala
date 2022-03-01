@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import java.util.UUID
 
-import cats.implicits._
+import cats.syntax.all._
 import com.amazon.pay.response.model.AuthorizationDetails
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge

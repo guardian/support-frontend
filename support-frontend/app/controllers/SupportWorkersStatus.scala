@@ -1,7 +1,6 @@
 package controllers
 
 import actions.CustomActionBuilders
-import cats.instances.future._
 import io.circe.syntax._
 import lib.PlayImplicits._
 import com.gu.monitoring.SafeLogger

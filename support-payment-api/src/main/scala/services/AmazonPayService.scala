@@ -2,7 +2,7 @@ package services
 
 import java.util.UUID
 
-import cats.implicits._
+import cats.syntax.all._
 import com.amazon.pay.impl.PayConfig
 import com.amazon.pay.request._
 import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails}

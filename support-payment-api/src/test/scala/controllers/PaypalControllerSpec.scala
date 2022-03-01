@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import backend._
 import cats.data.EitherT
-import cats.implicits._
 import com.paypal.api.payments.{Links, Payment}
 import model.DefaultThreadPool
 import model.paypal.{EnrichedPaypalPayment, PaypalApiError}

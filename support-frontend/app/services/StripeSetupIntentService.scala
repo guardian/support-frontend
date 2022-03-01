@@ -3,7 +3,7 @@ package services
 import java.nio.charset.StandardCharsets
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder
 import com.amazonaws.services.lambda.model.InvokeRequest

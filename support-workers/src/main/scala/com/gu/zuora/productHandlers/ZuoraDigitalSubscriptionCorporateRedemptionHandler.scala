@@ -1,6 +1,4 @@
 package com.gu.zuora.productHandlers
-
-import cats.implicits._
 import com.gu.WithLoggingSugar._
 import com.gu.support.redemption.corporate.{CorporateCodeStatusUpdater, RedemptionTable}
 import com.gu.support.workers.User

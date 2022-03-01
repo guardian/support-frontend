@@ -1,7 +1,7 @@
 package services
 
 import cats.data.{EitherT, Validated}
-import cats.implicits._
+import cats.syntax.all._
 import conf.RecaptchaConfig
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder

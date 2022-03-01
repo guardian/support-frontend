@@ -1,7 +1,6 @@
 package controllers
 
 import actions.CustomActionBuilders
-import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Configuration.IdentityUrl

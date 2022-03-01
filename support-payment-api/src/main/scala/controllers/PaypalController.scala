@@ -1,7 +1,6 @@
 package controllers
 
 import actions.CorsActionProvider
-import cats.implicits._
 import backend.{BackendError, PaypalBackend}
 import com.typesafe.scalalogging.StrictLogging
 import model.{ClientBrowserInfo, DefaultThreadPool, ResultBody}

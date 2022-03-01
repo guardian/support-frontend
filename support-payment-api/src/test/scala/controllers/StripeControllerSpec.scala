@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import backend._
 import cats.data.EitherT
-import cats.implicits._
 import com.stripe.exception.{CardException, InvalidRequestException}
 import com.stripe.model.{Charge, Event}
 import model.DefaultThreadPool

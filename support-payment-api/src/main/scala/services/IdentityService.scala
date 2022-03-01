@@ -1,7 +1,6 @@
 package services
 
 import cats.Monad
-import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 import conf.IdentityConfig

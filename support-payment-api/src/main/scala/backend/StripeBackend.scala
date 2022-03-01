@@ -2,7 +2,6 @@ package backend
 
 import akka.actor.ActorSystem
 import cats.data.EitherT
-import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
