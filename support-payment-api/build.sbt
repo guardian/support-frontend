@@ -5,7 +5,7 @@ name := "payment-api"
 version := "0.1"
 scalacOptions ++= Seq(
   "-Ywarn-unused:imports",
-  "-Ymacro-annotations"
+  "-Ymacro-annotations",
 )
 
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.2")
@@ -19,8 +19,8 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
-  "com.beachape" %% "enumeratum" % "1.6.1",
-  "com.beachape" %% "enumeratum-circe" % "1.6.1",
+  "com.beachape" %% "enumeratum" % "1.7.0",
+  "com.beachape" %% "enumeratum-circe" % "1.7.0",
   "com.dripower" %% "play-circe" % playCirceVersion,
   "com.github.mpilquist" %% "simulacrum" % "0.19.0",
   "com.stripe" % "stripe-java" % stripeVersion,
@@ -41,15 +41,15 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
-  "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
-  "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
+  "com.google.guava" % "guava" % "25.0-jre", // -- added explicitly - snyk report avoid logback vulnerability
+  "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude ("org.apache.logging.log4j", "log4j-slf4j-impl"),
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,
   ws,
   "com.lihaoyi" %% "pprint" % "0.6.0",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
-  "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+  "org.scala-lang.modules" %% "scala-xml" % "1.2.0",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
