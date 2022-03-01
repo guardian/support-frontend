@@ -16,7 +16,7 @@ object BuildInfoSettings {
     name,
     BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
     BuildInfoKey.constant("buildTime", System.currentTimeMillis),
-    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId())
+    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId()),
   )
 
 }

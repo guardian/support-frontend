@@ -1,4 +1,3 @@
-
 object LibraryVersions {
   val circeVersion = "0.14.1"
 

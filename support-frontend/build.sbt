@@ -43,13 +43,13 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   filters,
-  ws
+  ws,
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 Compile / doc / sources := Seq.empty
 
-Compile / packageDoc / publishArtifact  := false
+Compile / packageDoc / publishArtifact := false
 
 enablePlugins(SystemdPlugin)
 
@@ -84,9 +84,12 @@ Universal / javaOptions ++= Seq(
   "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
   "-J-XX:+PrintGCDateStamps",
-  s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
+  s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
 )
 
 Test / javaOptions += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
-addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
+addCommandAlias(
+  "devrun",
+  "run 9210",
+) // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!

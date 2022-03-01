@@ -1,6 +1,5 @@
-
 name := "support-redemptiondb"
-description:= "packages the database cfn for the redemption code db"
+description := "packages the database cfn for the redemption code db"
 
 assemblyJarName := "dummy.jar"
 riffRaffPackageType := new File("dummy.jar")
