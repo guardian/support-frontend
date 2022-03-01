@@ -36,20 +36,20 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
-  "com.squareup.okhttp3" % "okhttp" % "3.10.0",
+  "com.squareup.okhttp3" % "okhttp" % "3.14.9",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   filters,
-  ws
+  ws,
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 Compile / doc / sources := Seq.empty
 
-Compile / packageDoc / publishArtifact  := false
+Compile / packageDoc / publishArtifact := false
 
 enablePlugins(SystemdPlugin)
 
@@ -84,9 +84,12 @@ Universal / javaOptions ++= Seq(
   "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
   "-J-XX:+PrintGCDateStamps",
-  s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
+  s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
 )
 
 Test / javaOptions += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
-addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
+addCommandAlias(
+  "devrun",
+  "run 9210",
+) // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
