@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.sentry" % "sentry-logback" % "1.7.4",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
-  "com.gocardless" % "gocardless-pro" % "2.8.0"
+  "com.gocardless" % "gocardless-pro" % "2.10.0",
 )
 
 riffRaffPackageType := assembly.value
@@ -42,16 +42,18 @@ riffRaffManifestVcsUrl := "git@github.com/guardian/support-frontend.git"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-workers/cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml")
-riffRaffArtifactResources += (file("support-workers/target/scala-2.13/support-workers-it.jar"), "it-tests/support-workers-it.jar")
+riffRaffArtifactResources += (file(
+  "support-workers/target/scala-2.13/support-workers-it.jar",
+), "it-tests/support-workers-it.jar")
 assemblyJarName := s"${name.value}.jar"
 assembly / assemblyMergeStrategy := {
-  case PathList("models", xs@_*) => MergeStrategy.discard
+  case PathList("models", xs @ _*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case "mime.types" => MergeStrategy.first
   case str if str.contains("simulacrum") => MergeStrategy.first
   case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
-  case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
+  case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
   case y =>
     val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
@@ -60,13 +62,13 @@ assembly / assemblyMergeStrategy := {
 Project.inConfig(IntegrationTest)(baseAssemblySettings)
 IntegrationTest / assembly / assemblyJarName := s"${name.value}-it.jar"
 IntegrationTest / assembly / assemblyMergeStrategy := {
-  case PathList("models", xs@_*) => MergeStrategy.discard
+  case PathList("models", xs @ _*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case x if x.endsWith("logback.xml") => MergeStrategy.first
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case "mime.types" => MergeStrategy.first
   case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
-  case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
+  case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
   case y =>
     val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
@@ -74,7 +76,8 @@ IntegrationTest / assembly / assemblyMergeStrategy := {
 IntegrationTest / assembly / test := {}
 assembly / aggregate := false
 
-lazy val deployToCode = inputKey[Unit]("Directly update AWS lambda code from DEV instead of via RiffRaff for faster feedback loop")
+lazy val deployToCode =
+  inputKey[Unit]("Directly update AWS lambda code from DEV instead of via RiffRaff for faster feedback loop")
 
 deployToCode := {
   import scala.sys.process._
@@ -89,9 +92,9 @@ deployToCode := {
     "-UpdateSupporterProductDataLambda-",
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
-    "-PreparePaymentMethodForReuseLambda-"
+    "-PreparePaymentMethodForReuseLambda-",
   ).foreach(functionPartial =>
-    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
+    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
   )
 
 }
