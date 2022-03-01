@@ -2,11 +2,11 @@ import LibraryVersions.circeVersion
 import LibraryVersions._
 
 name := "acquisition-events-api"
-description:= "A lambda for acquisitions events api"
+description := "A lambda for acquisitions events api"
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
-  "com.amazonaws" % "aws-lambda-java-events" % "2.2.4",
+  "com.amazonaws" % "aws-lambda-java-events" % "2.2.9",
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "ch.qos.logback" % "logback-classic" % "1.1.7",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
@@ -16,7 +16,7 @@ libraryDependencies ++= Seq(
 assembly / assemblyMergeStrategy := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
   case str if str.contains("simulacrum") => MergeStrategy.first
-  case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
+  case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
   case y =>
     val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
