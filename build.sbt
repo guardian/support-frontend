@@ -11,7 +11,8 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
   IntegrationTest / scalaSource := baseDirectory.value / "src" / "test" / "scala",
   IntegrationTest / javaSource := baseDirectory.value / "src" / "test" / "java",
   IntegrationTest / resourceDirectory := baseDirectory.value / "src" / "test" / "resources",
-  Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oI"),
+  Test / testOptions += Tests
+    .Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oI"),
   libraryDependencies += scalatest % "it",
 )
 
@@ -33,16 +34,18 @@ lazy val release = Seq[ReleaseStep](
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = false),
   setNextVersion,
   commitNextVersion,
-  pushChanges
+  pushChanges,
 )
 
-inThisBuild(Seq(
-  organization := "com.gu",
-  scalaVersion := "2.13.6",
-  // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
-  updateOptions := updateOptions.value.withCachedResolution(true),
-  resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central
-))
+inThisBuild(
+  Seq(
+    organization := "com.gu",
+    scalaVersion := "2.13.6",
+    // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
+    updateOptions := updateOptions.value.withCachedResolution(true),
+    resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central
+  ),
+)
 
 lazy val releaseSettings = Seq(
   isSnapshot := false,
@@ -57,16 +60,18 @@ lazy val releaseSettings = Seq(
   releaseProcess := release,
   releaseUseGlobalVersion := false,
   releaseVersionFile := file(name.value + "/version.sbt"),
-  scmInfo := Some(ScmInfo(
-    url("https://github.com/guardian/support-frontend"),
-    "scm:git:git@github.com:guardian/support-frontend.git"
-  )),
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/guardian/support-frontend"),
+      "scm:git:git@github.com:guardian/support-frontend.git",
+    ),
+  ),
 )
 
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
   scalatest % "test",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
 )
 
 lazy val root = (project in file("."))
@@ -93,11 +98,12 @@ lazy val root = (project in file("."))
     `module-rest`,
     `support-payment-api`,
     `acquisitions-firehose-transformer`,
-    `support-lambdas`
+    `support-lambdas`,
   )
 
 lazy val `support-frontend` = (project in file("support-frontend"))
-  .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(SeleniumTest)
   .settings(
     inConfig(SeleniumTest)(Defaults.testTasks),
@@ -105,33 +111,45 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalafmtSettings,
-  ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
+  )
+  .dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 lazy val `support-workers` = (project in file("support-workers"))
-  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
     integrationTestSettings,
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
-  ).dependsOn(
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(
     `support-services`,
     `support-models` % "test->test;it->test;compile->compile",
     `support-config`,
     `support-internationalisation`,
     `module-acquisition-events`,
-    `supporter-product-data-dynamo`
-  ).aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`, `supporter-product-data-dynamo`)
+    `supporter-product-data-dynamo`,
+  )
+  .aggregate(
+    `support-services`,
+    `support-models`,
+    `support-config`,
+    `support-internationalisation`,
+    `supporter-product-data-dynamo`,
+  )
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
-  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
     integrationTestSettings,
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
-  ).dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
   .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
@@ -139,7 +157,8 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
   .settings(
     libraryDependencies ++= commonDependencies,
     scalafmtSettings,
-  ).dependsOn(`module-aws`)
+  )
+  .dependsOn(`module-aws`)
   .aggregate(`module-aws`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
@@ -151,7 +170,8 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     buildInfoOptions += BuildInfoOption.ToMap,
     libraryDependencies ++= commonDependencies,
     scalafmtSettings,
-  ).dependsOn(`support-models`, `support-internationalisation`, `module-acquisition-events`)
+  )
+  .dependsOn(`support-models`, `support-internationalisation`, `module-acquisition-events`)
   .aggregate(`support-models`, `support-internationalisation`, `module-acquisition-events`)
 
 lazy val `support-models` = (project in file("support-models"))
@@ -160,8 +180,9 @@ lazy val `support-models` = (project in file("support-models"))
     releaseSettings,
     integrationTestSettings,
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-internationalisation`)
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`support-internationalisation`)
   .aggregate(`support-internationalisation`)
 
 lazy val `support-config` = (project in file("support-config"))
@@ -170,8 +191,9 @@ lazy val `support-config` = (project in file("support-config"))
     releaseSettings,
     integrationTestSettings,
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-models`, `support-internationalisation`)
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`support-models`, `support-internationalisation`)
   .aggregate(`support-models`, `support-internationalisation`)
 
 lazy val `support-services` = (project in file("support-services"))
@@ -180,22 +202,23 @@ lazy val `support-services` = (project in file("support-services"))
     releaseSettings,
     integrationTestSettings,
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-internationalisation`, `support-models`, `support-config`, `module-rest`, `module-aws`)
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`support-internationalisation`, `support-models`, `support-config`, `module-rest`, `module-aws`)
   .aggregate(`support-internationalisation`, `support-models`, `support-config`, `module-rest`, `module-aws`)
 
 lazy val `module-rest` = (project in file("support-modules/rest"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
+    libraryDependencies ++= commonDependencies,
   )
 
 lazy val `module-aws` = (project in file("support-modules/aws"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
+    libraryDependencies ++= commonDependencies,
   )
 
 lazy val `module-acquisition-events` = (project in file("support-modules/acquisition-events"))
@@ -212,28 +235,33 @@ lazy val `support-internationalisation` = (project in file("support-internationa
     releaseSettings,
     integrationTestSettings,
     scalafmtSettings,
-    libraryDependencies ++= commonDependencies
+    libraryDependencies ++= commonDependencies,
   )
 
 lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
-  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
     integrationTestSettings,
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
-  ).dependsOn(`module-rest`, `support-config`, `module-aws`)
+  )
+  .dependsOn(`module-rest`, `support-config`, `module-aws`)
   .aggregate(`module-rest`, `support-config`, `module-aws`)
 
 lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
-  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
 
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
-  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .dependsOn(`module-aws`)
 
 lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas/acquisitions-firehose-transformer"))
-  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
@@ -242,7 +270,8 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
   .aggregate(`module-acquisition-events`)
 
 lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisition-events-api"))
-  .enablePlugins(RiffRaffArtifact).disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
