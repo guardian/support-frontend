@@ -5,13 +5,13 @@ name := "payment-api"
 version := "0.1"
 scalacOptions ++= Seq(
   "-Ywarn-unused:imports",
-  "-Ymacro-annotations"
+  "-Ymacro-annotations",
 )
 
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.2")
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.10",
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -41,15 +41,15 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
-  "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
-  "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
+  "com.google.guava" % "guava" % "25.0-jre", // -- added explicitly - snyk report avoid logback vulnerability
+  "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude ("org.apache.logging.log4j", "log4j-slf4j-impl"),
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,
   ws,
   "com.lihaoyi" %% "pprint" % "0.6.0",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
-  "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+  "org.scala-lang.modules" %% "scala-xml" % "1.2.0",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion

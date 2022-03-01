@@ -12,9 +12,9 @@ libraryDependencies ++= Seq(
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.10",
   "io.symphonia" % "lambda-logging" % "1.0.3",
-  "org.scalatest" %% "scalatest" % "3.2.2" // not a "Test" dependency, it's an actual one
+  "org.scalatest" %% "scalatest" % "3.2.2", // not a "Test" dependency, it's an actual one
 )
 
 riffRaffPackageType := assembly.value
