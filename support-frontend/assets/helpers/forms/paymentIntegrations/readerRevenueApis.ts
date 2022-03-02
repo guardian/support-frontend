@@ -257,12 +257,19 @@ function regularPaymentFieldsFromAuthorisation(
 			};
 
 		case Sepa:
-			return {
-				accountHolderName: authorisation.accountHolderName,
-				iban: authorisation.iban.replace(/ /g, ''),
-        country: authorisation.country,
-        streetName: authorisation.streetName,
-			};
+		  if (authorisation.country && authorisation.streetName) {
+        return {
+          accountHolderName: authorisation.accountHolderName,
+          iban: authorisation.iban.replace(/ /g, ''),
+          country: authorisation.country,
+          streetName: authorisation.streetName,
+        }
+      } else {
+		    return  {
+          accountHolderName: authorisation.accountHolderName,
+          iban: authorisation.iban.replace(/ /g, ''),
+        }
+      }
 
 		case ExistingCard:
 		case ExistingDirectDebit:
