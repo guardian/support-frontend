@@ -56,6 +56,7 @@ import {
 	setUseLocalAmounts,
 	setUseLocalCurrencyFlag,
 } from '../../../helpers/page/commonActions';
+import BenefitsMessage from './BenefitsMessage';
 import ContributionAmount from './ContributionAmount';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import ContributionFormFields from './ContributionFormFields';
@@ -110,6 +111,8 @@ type PropTypes = {
 	setSepaIban: (iban: string) => void;
 	setSepaAccountHolderName: (accountHolderName: string) => void;
 	productSetAbTestVariant: boolean;
+	showBenefitsMessage: boolean;
+	isNotOneOffContrib: boolean;
 };
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -363,6 +366,9 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					</CheckboxGroup>
 				)}
 			</div>
+			{props.showBenefitsMessage && props.isNotOneOffContrib && (
+				<BenefitsMessage countryGroupId={props.countryGroupId} />
+			)}
 			<StripePaymentRequestButton
 				contributionType={props.contributionType}
 				isTestUser={props.isTestUser}

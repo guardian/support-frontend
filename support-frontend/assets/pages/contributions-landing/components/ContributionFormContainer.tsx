@@ -9,6 +9,7 @@ import SecureTransactionIndicator from 'components/secureTransactionIndicator/se
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type { ContributionType } from 'helpers/contributions';
 import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -50,6 +51,8 @@ type PropTypes = {
 	currency: IsoCurrency;
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
+	sfdv2AbTest: string;
+	contributionType: ContributionType;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -63,6 +66,8 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
+	sfdv2AbTest: state.common.abParticipations.SFD_v2,
+	contributionType: state.page.form.contributionType,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
@@ -222,6 +227,9 @@ function withProps(props: PropTypes) {
 	);
 	const lastOneOffContribution = useLastOneOffContribution(props.isSignedIn);
 
+	const showBenefitsMessage = props.sfdv2AbTest === 'SFD_WITH_BENEFITS';
+	const isNotOneOffContrib = props.contributionType !== 'ONE_OFF';
+
 	return (
 		<div
 			css={[
@@ -268,6 +276,8 @@ function withProps(props: PropTypes) {
 							<ContributionForm
 								onPaymentAuthorisation={onPaymentAuthorisation}
 								campaignSettings={campaignSettings}
+								showBenefitsMessage={showBenefitsMessage}
+								isNotOneOffContrib={isNotOneOffContrib}
 							/>
 						</div>
 					)}
@@ -285,15 +295,23 @@ function withProps(props: PropTypes) {
 									<PreviousGivingHeaderCopy userName={props.userName} />
 								}
 								bodyCopy={
-									<PreviousGivingBodyCopy
-										lastOneOffContribution={lastOneOffContribution}
-									/>
+									showBenefitsMessage && isNotOneOffContrib ? (
+										''
+									) : (
+										<PreviousGivingBodyCopy
+											lastOneOffContribution={lastOneOffContribution}
+										/>
+									)
 								}
 							/>
 						) : (
 							<ContributionFormBlurb
 								headerCopy={countryGroupDetails.headerCopy}
-								bodyCopy={countryGroupDetails.contributeCopy}
+								bodyCopy={
+									showBenefitsMessage && isNotOneOffContrib
+										? ''
+										: countryGroupDetails.contributeCopy
+								}
 							/>
 						)}
 					</div>
