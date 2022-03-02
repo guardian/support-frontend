@@ -79,7 +79,7 @@ object PaymentFields {
     case s: StripeSourcePaymentFields => s.asJson
     case s: StripePaymentMethodPaymentFields => s.asJson
     case d: DirectDebitPaymentFields => d.asJson
-    case s: SepaPaymentFields => s.asJson
+    case s: SepaPaymentFields => s.asJson.deepDropNullValues
     case e: ExistingPaymentFields => e.asJson
     case a: AmazonPayPaymentFields => a.asJson
   }
