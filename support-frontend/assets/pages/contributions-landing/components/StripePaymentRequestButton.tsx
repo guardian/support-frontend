@@ -84,13 +84,15 @@ function PaymentRequestButton({
 	return (
 		<>
 			{shouldRenderStripeElement ? (
-				<PaymentRequestButtonElement
-					options={{
-						paymentRequest,
-						style: styles.stripeButton,
-					}}
-					onClick={onStripeButtonClick}
-				/>
+				<div css={styles.paymentRequestButtonContainer}>
+					<PaymentRequestButtonElement
+						options={{
+							paymentRequest,
+							style: styles.stripeButton,
+						}}
+						onClick={onStripeButtonClick}
+					/>
+				</div>
 			) : (
 				<div>
 					<Button onClick={onCustomButtonClick} css={styles.customButton}>
@@ -117,6 +119,9 @@ const styles = {
 			height: '42px',
 		},
 	} as const,
+	paymentRequestButtonContainer: css`
+		margin: ${space[6]}px 0;
+	`,
 	customButton: css`
 		width: 100%;
 		justify-content: center;
