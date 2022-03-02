@@ -123,7 +123,7 @@ object PaymentMethod {
     case pp: PayPalReferenceTransaction => pp.asJson
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
-    case sepa: SepaPaymentMethod => sepa.asJson
+    case sepa: SepaPaymentMethod => sepa.asJson.deepDropNullValues
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
     case amazonPayPaymentMethod: AmazonPayPaymentMethod => amazonPayPaymentMethod.asJson
   }
