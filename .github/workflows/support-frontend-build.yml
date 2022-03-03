@@ -1,46 +1,59 @@
 name: Build support-frontend
+
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    branches: [ main ]
+
 env:
   GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
 
 jobs:
-    build_typescript:
-      name: Build the Typescript part of the application
-      defaults:
-        run:
+  support_frontend_build:
+    if: github.actor != 'scala-steward'
+
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
+    name: support-frontend build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: guardian/actions-setup-node@main
+
+      # Cache npm dependencies using https://github.com/bahmutov/npm-install
+      - name: Cache dependencies
+        uses: bahmutov/npm-install@v1
+        with:
           working-directory: support-frontend
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
 
-        - name: Install Node
-          uses: guardian/actions-setup-node@main
+      - name: Install
+        run: yarn
+        working-directory: support-frontend
 
-        # Cache npm dependencies using https://github.com/bahmutov/npm-install
-        - name: Cache dependencies
-          uses: bahmutov/npm-install@v1
-          with:
-            working-directory: support-frontend
+      - name: Build the html used for SSR pages
+        run: yarn run build-ssr
+        working-directory: support-frontend
 
-        - name: Install
-          run: yarn
+      - name: Build assets
+        run: yarn run build-prod
+        working-directory: support-frontend
 
-        - name: Generate production build for github action
-          run: yarn build-github-action
+      # Required by sbt riffRaffUpload
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
 
-        - name: Build the html used for SSR pages
-          run: yarn run build-ssr
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
-        - name: Build assets
-          run: yarn run build-prod
-
-        - name: Set up Java
-          uses: actions/setup-java@v1
-          with:
-            java-version: 11
-        - name: Build and upload to RiffRaff
-          run: sbt "project support-frontend" clean test riffRaffUpload
+      - name: Build and upload to RiffRaff
+        run: sbt "project support-frontend" riffRaffUpload
