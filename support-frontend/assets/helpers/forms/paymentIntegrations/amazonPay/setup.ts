@@ -7,30 +7,27 @@ import {
 	setAmazonPayPaymentsObject,
 } from 'pages/contributions-landing/contributionsLandingActions';
 
-const amazonPaySupportedCountryGroups = ['UnitedStates'];
+// ---- Setup ---- //
 
-const getAmazonRegion = (
+export const setupAmazonPay = (
 	countryGroupId: CountryGroupId,
-	amazonLoginObject: {
-		setClientId?: (clientId: string) => void;
-		setSandboxMode?: (sandboxMode: boolean) => void;
-		Region?: { NorthAmerica?: string };
-	},
-): string | null | undefined => {
-	switch (countryGroupId) {
-		case 'UnitedStates':
-			return amazonLoginObject.Region?.NorthAmerica;
+	dispatch: Dispatch,
+	isTestUser: boolean,
+): void => {
+	const isSandbox = isTestUser || !isProd();
 
-		default:
-			// Currently only US is supported
-			return undefined;
+	if (isSupportedCountryGroup(countryGroupId)) {
+		setupAmazonPayCallbacks(countryGroupId, dispatch, isSandbox);
+		loadAmazonPayScript(isSandbox);
 	}
 };
 
-const getAmazonPayClientId = (isSandbox: boolean): string =>
-	isSandbox
-		? window.guardian.amazonPayClientId.uat
-		: window.guardian.amazonPayClientId.default;
+// ---- Helpers ---- //
+
+const amazonPaySupportedCountryGroups = ['UnitedStates'];
+
+const isSupportedCountryGroup = (countryGroupId: CountryGroupId) =>
+	amazonPaySupportedCountryGroups.includes(countryGroupId);
 
 // Amazon Pay callbacks - called after Widgets.js has loaded
 const setupAmazonPayCallbacks = (
@@ -79,17 +76,25 @@ const loadAmazonPayScript = (isSandbox: boolean): void => {
 	});
 };
 
-const setupAmazonPay = (
+const getAmazonRegion = (
 	countryGroupId: CountryGroupId,
-	dispatch: Dispatch,
-	isTestUser: boolean,
-): void => {
-	const isSandbox = isTestUser || !isProd();
+	amazonLoginObject: {
+		setClientId?: (clientId: string) => void;
+		setSandboxMode?: (sandboxMode: boolean) => void;
+		Region?: { NorthAmerica?: string };
+	},
+): string | null | undefined => {
+	switch (countryGroupId) {
+		case 'UnitedStates':
+			return amazonLoginObject.Region?.NorthAmerica;
 
-	if (amazonPaySupportedCountryGroups.includes(countryGroupId)) {
-		setupAmazonPayCallbacks(countryGroupId, dispatch, isSandbox);
-		loadAmazonPayScript(isSandbox);
+		default:
+			// Currently only US is supported
+			return undefined;
 	}
 };
 
-export { setupAmazonPay };
+const getAmazonPayClientId = (isSandbox: boolean): string =>
+	isSandbox
+		? window.guardian.amazonPayClientId.uat
+		: window.guardian.amazonPayClientId.default;
