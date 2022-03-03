@@ -4,6 +4,7 @@ on: [pull_request]
 
 jobs:
     compressed_size:
+        if: github.actor != 'scala-steward'
         name: Compressed Size
         defaults:
           run:

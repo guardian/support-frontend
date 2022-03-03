@@ -4,6 +4,7 @@ on: [pull_request]
 
 jobs:
     typescript_monitor:
+        if: github.actor == 'scala-steward'
         name: Typescript Monitor
         defaults:
           run:

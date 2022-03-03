@@ -1,19 +1,19 @@
-name: Bundle Analyser
+name: Build support-frontend
 on:
   push:
     branches:
       - main
+env:
+  GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
 
 jobs:
-    build_check:
-      if: github.actor != 'scala-steward'
-      name: Bundle Analyser
+    build_typescript:
+      name: Build the Typescript part of the application
       defaults:
         run:
           working-directory: support-frontend
       runs-on: ubuntu-latest
       steps:
-
         - name: Checkout code
           uses: actions/checkout@v2
 
@@ -32,8 +32,15 @@ jobs:
         - name: Generate production build for github action
           run: yarn build-github-action
 
-        - name: Run Bundle Analyser
-          uses: actions/upload-artifact@v2
+        - name: Build the html used for SSR pages
+          run: yarn run build-ssr
+
+        - name: Build assets
+          run: yarn run build-prod
+
+        - name: Set up Java
+          uses: actions/setup-java@v1
           with:
-            name: bundle-analyser-report
-            path: support-frontend/public/compiled-assets/webpack-stats.html
+            java-version: 11
+        - name: Build and upload to RiffRaff
+          run: sbt "project support-frontend" clean test riffRaffUpload
