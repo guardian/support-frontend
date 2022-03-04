@@ -6,7 +6,7 @@
             "TS2322": 73,
             "TS2578": 5,
             "TS2339": 15,
-            "TS2345": 54,
+            "TS2345": 53,
             "TS7006": 51,
             "TS6133": 9,
             "TS7031": 18,
@@ -100,7 +100,6 @@
             "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
-            "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx": 1,
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/contributions.ts": 2,
@@ -662,10 +661,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts",
             "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx",
-            "message": "Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<Option<string>>'."
         },
         {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
