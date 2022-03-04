@@ -1,5 +1,5 @@
-import type { ComponentType } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
+import type { ComponentType } from 'react';
 
 type PropTypes<T> = {
 	loader: Promise<{
