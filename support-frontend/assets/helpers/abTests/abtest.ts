@@ -204,7 +204,15 @@ function userInTest(
 	}
 
 	if (referrerControlled) {
-		return acquisitionDataTest && acquisitionDataTest.name === testId;
+		if (acquisitionDataTest?.name === testId) {
+			return acquisitionDataTest.name === testId;
+		}
+
+		if (acquisitionDataTest?.name.startsWith(testId)) {
+			return acquisitionDataTest.name.startsWith(testId);
+		}
+
+		return false;
 	}
 
 	const testMin: number = MVT_MAX * audience.offset;
