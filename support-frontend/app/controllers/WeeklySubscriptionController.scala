@@ -67,7 +67,7 @@ class WeeklySubscriptionController(
         shareUrl = canonicalLink,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
+              window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift, countryCode))}
               window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
               window.guardian.orderIsAGift = $orderIsAGift
             </script>""")
@@ -85,12 +85,12 @@ class WeeklySubscriptionController(
     "en" -> buildCanonicalWeeklySubscriptionLink("eu", orderIsAGift),
   )
 
-  private def productPrices(queryPromos: List[String], orderIsAGift: Boolean) = {
+  private def productPrices(queryPromos: List[String], orderIsAGift: Boolean, countryCode: String) = {
     val defaultPromos =
       if (orderIsAGift)
         DefaultPromotions.GuardianWeekly.Gift.all
       else
-        DefaultPromotions.GuardianWeekly.NonGift.all
+        DefaultPromotions.GuardianWeekly.NonGift.all(countryCode)
     val promoCodes = defaultPromos ++ queryPromos
     val readerType = if (orderIsAGift) Gift else Direct
     priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, readerType)

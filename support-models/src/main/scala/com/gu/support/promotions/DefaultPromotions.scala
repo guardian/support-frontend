@@ -33,11 +33,14 @@ object DefaultPromotions {
     object NonGift {
       val sixForSix = "6FOR6"
       val tenAnnual = "10ANNUAL"
+      val ausAnnual = "GW25OZ"
       val jan21Promotion = "GWJAN22SALE"
-      def all = List(sixForSix, tenAnnual, jan21Promotion)
+      def all(countryCode: String): List[String] = List(
+        sixForSix,
+        if (countryCode.toLowerCase == "au") ausAnnual else tenAnnual,
+        jan21Promotion
+      )
     }
-
-    def all = Gift.all ++ NonGift.all
   }
 
 }

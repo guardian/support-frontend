@@ -51,13 +51,14 @@ class WeeklySubscriptionFormController(
     val js = "weeklySubscriptionCheckoutPage.js"
     val css = "weeklySubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
+    val countryCode = request.cookies.get("GU_country").map(_.value).getOrElse("GB")
 
     val uatMode = testUsers.isTestUser(request)
     val defaultPromos =
       if (orderIsAGift)
         DefaultPromotions.GuardianWeekly.Gift.all
       else
-        DefaultPromotions.GuardianWeekly.NonGift.all
+        DefaultPromotions.GuardianWeekly.NonGift.all(countryCode)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
     val readerType = if (orderIsAGift) Gift else Direct
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
