@@ -66,7 +66,7 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
-	sfdv2AbTest: state.common.abParticipations.SFD_v2,
+	sfdv2AbTest: state.common.abParticipations.SFD_V2,
 	contributionType: state.page.form.contributionType,
 });
 

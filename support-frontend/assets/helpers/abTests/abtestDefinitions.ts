@@ -133,7 +133,7 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
-	SFD_v2: {
+	SFD_V2: {
 		variants: [
 			{
 				id: 'CONTROL',
