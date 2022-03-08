@@ -3,10 +3,10 @@
         "byCode": {
             "TS1208": 1,
             "TS2578": 5,
-            "TS2339": 15,
-            "TS2322": 72,
-            "TS2345": 52,
-            "TS7006": 45,
+            "TS2339": 14,
+            "TS2322": 70,
+            "TS2345": 40,
+            "TS7006": 41,
             "TS6133": 8,
             "TS2305": 11,
             "TS7031": 18,
@@ -16,9 +16,8 @@
             "TS2304": 5,
             "TS2741": 3,
             "TS2739": 11,
-            "TS2532": 4,
+            "TS2532": 1,
             "TS2556": 3,
-            "TS2554": 27,
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
@@ -26,6 +25,7 @@
             "TS2367": 4,
             "TS2740": 1,
             "TS7016": 1,
+            "TS2554": 6,
             "TS7034": 4,
             "TS7005": 9,
             "TS2525": 5,
@@ -41,7 +41,6 @@
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
-            "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
@@ -61,7 +60,6 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/components/subscriptionCheckouts/summary.tsx": 6,
-            "assets/helpers/__tests__/formValidation.ts": 29,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
@@ -89,7 +87,6 @@
             "assets/components/directDebit/helpers/ajax.ts": 2,
             "assets/components/marketingConsent/helpers.ts": 1,
             "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
-            "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx": 13,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
@@ -128,11 +125,11 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
-            "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
+            "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
             "assets/pages/promotion-terms/promotionTermsReducer.ts": 4
@@ -190,10 +187,6 @@
         {
             "path": "assets/components/footerCompliant/Footer.tsx",
             "message": "Property 'showPrivacyManager' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalExpressButton.tsx",
-            "message": "Property 'Button' does not exist on type '{ FUNDING: { CREDIT: unknown; }; }'."
         },
         {
             "path": "assets/helpers/__tests__/urlTest.ts",
@@ -344,14 +337,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
             "message": "Type '{ className: any; productPrice: ProductPrice; billingPeriod: BillingPeriod; giftStyles: any; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"giftStyles\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Type '{ countryCode: string; stateCode?: string | undefined; } | {}' is not assignable to type '{ countryCode: string; stateCode?: string | undefined; } | undefined'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Type 'null' is not assignable to type 'string'."
         },
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -556,42 +541,6 @@
             "message": "Argument of type 'typeof MarketingConsent' is not assignable to parameter of type 'ComponentType<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { error: boolean; }>>'."
         },
         {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<Action>, getState: () => CheckoutState) => void' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(...args: any[]) => any' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ hasLoaded: boolean; csrf: Csrf; productPrices: ProductPrices; currencyId: IsoCurrency; isTestUser: boolean; amount: number; submissionError: Option<...>; wasClicked: boolean; } & { ...; }, PropTypes>>'."
-        },
-        {
             "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
             "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
         },
@@ -626,18 +575,6 @@
         {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
             "message": "Argument of type 'true' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Argument of type '{ ONE_OFF: string; MONTHLY: string; ANNUAL: string; }' is not assignable to parameter of type 'SelectedAmounts'."
         },
         {
             "path": "assets/helpers/__tests__/promiseTest.ts",
@@ -744,22 +681,6 @@
         {
             "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
             "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'ownProps' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'trackingId' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Parameter 'product' implicitly has an 'any' type."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
@@ -1228,18 +1149,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/summary.tsx",
             "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Object is possibly 'undefined'."
         }
     ],
     "TS2556": [
@@ -1254,116 +1163,6 @@
         {
             "path": "assets/helpers/__tests__/contributionsTests.ts",
             "message": "A spread argument must either have a tuple type or be passed to a rest parameter."
-        }
-    ],
-    "TS2554": [
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/__tests__/formValidation.ts",
-            "message": "Expected 3 arguments, but got 2."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProducts.tsx",
-            "message": "Expected 1 arguments, but got 0."
         }
     ],
     "TS2569": [
@@ -1442,6 +1241,32 @@
         {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+        }
+    ],
+    "TS2554": [
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 3 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Expected 6 arguments, but got 1."
+        },
+        {
+            "path": "assets/pages/showcase/components/otherProducts.tsx",
+            "message": "Expected 1 arguments, but got 0."
         }
     ],
     "TS7034": [
