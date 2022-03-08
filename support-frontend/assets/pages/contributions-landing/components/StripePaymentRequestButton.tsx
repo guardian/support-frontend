@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, space } from '@guardian/source-foundations';
+import { from, neutral, space } from '@guardian/source-foundations';
 import { Button } from '@guardian/source-react-components';
 import { PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -120,16 +120,24 @@ const styles = {
 		},
 	} as const,
 	paymentRequestButtonContainer: css`
-		margin: ${space[6]}px 0;
+		margin: ${space[5]}px 0;
+
+		${from.desktop} {
+			margin: ${space[6]}px 0;
+		}
 	`,
 	customButton: css`
 		width: 100%;
 		justify-content: center;
-		margin: ${space[6]}px 0;
+		margin: ${space[5]}px 0;
 		background: #323457;
 
 		&:hover {
 			background: #1c1d31;
+		}
+
+		${from.desktop} {
+			margin: ${space[6]}px 0;
 		}
 	`,
 	dividerContainer: css`
