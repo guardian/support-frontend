@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
 
 type PropTypes<T> = {
@@ -10,21 +10,18 @@ type PropTypes<T> = {
 };
 
 function Asyncronously<T>(props: PropTypes<T>): JSX.Element | null {
-	const [loaded, setLoaded] = useState(false);
-
-	const componentRef = useRef<ComponentType<T>>();
+	const [component, setComponent] = useState<ComponentType<T>>();
 
 	const { loading, render, loader } = props;
 
 	useEffect(() => {
 		void loader.then((imported) => {
-			componentRef.current = imported.default;
-			setLoaded(true);
+			setComponent(imported.default);
 		});
 	}, []);
 
-	if (loaded && componentRef.current) {
-		return render(componentRef.current);
+	if (component) {
+		return render(component);
 	}
 
 	return loading;
