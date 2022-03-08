@@ -29,7 +29,7 @@ type PropTypes = {
 	amount: number;
 	billingPeriod: BillingPeriod;
 	setupRecurringPayPalPayment: SetupPayPalRequestType;
-	updatePayPalButtonReady: (ready: boolean) => void;
+	updatePayPalButtonReady: (ready: boolean) => void; // created in mapDispatchToProps should not be passed into the component
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
