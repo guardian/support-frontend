@@ -227,7 +227,7 @@ function withProps(props: PropTypes) {
 	);
 	const lastOneOffContribution = useLastOneOffContribution(props.isSignedIn);
 
-	const showBenefitsMessage = props.sfdv2AbTest === 'SFD_WITH_BENEFITS';
+	const showBenefitsMessage = props.sfdv2AbTest === 'SINGLE_FRONT_DOOR_V2';
 	const isNotOneOffContrib = props.contributionType !== 'ONE_OFF';
 
 	return (
