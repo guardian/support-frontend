@@ -139,10 +139,10 @@ export const tests: Tests = {
 				id: 'CONTROL',
 			},
 			{
-				id: 'SFD_WITHOUT_BENEFITS',
+				id: 'SINGLE_FRONT_DOOR',
 			},
 			{
-				id: 'SFD_WITH_BENEFITS',
+				id: 'SINGLE_FRONT_DOOR_V2',
 			},
 		],
 		audiences: {
