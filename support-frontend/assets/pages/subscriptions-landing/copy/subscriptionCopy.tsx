@@ -59,20 +59,7 @@ export type ProductCopy = {
 	classModifier?: string[];
 	participations?: Participations;
 };
-const abTest = null;
 
-// const getPrice = (countryGroupId: CountryGroupId, product: SubscriptionProduct) => {
-//
-//   if (flashSaleIsActive(product, countryGroupId)) {
-//     return getDisplayFlashSalePrice(product, countryGroupId, Monthly);
-//   }
-//
-//   if (subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]) {
-//     return `${displayPrice(product, countryGroupId)}`;
-//   }
-//
-//   return '';
-// };
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
 	price: number,
@@ -127,9 +114,6 @@ const digital = (
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'digipack_cta',
 				product: 'DigitalPack',
-				...(abTest && {
-					abTest,
-				}),
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 		},
@@ -139,9 +123,6 @@ const digital = (
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'digipack_cta_gift',
 				product: 'DigitalPack',
-				...(abTest && {
-					abTest,
-				}),
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 			modifierClasses: '',
@@ -183,9 +164,6 @@ const guardianWeekly = (
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'weekly_cta',
 				product: 'GuardianWeekly',
-				...(abTest && {
-					abTest,
-				}),
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 		},
@@ -195,9 +173,6 @@ const guardianWeekly = (
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'weekly_cta_gift',
 				product: 'GuardianWeekly',
-				...(abTest && {
-					abTest,
-				}),
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 			modifierClasses: '',
@@ -231,9 +206,6 @@ const paper = (
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'paper_cta',
 				product: Paper,
-				...(abTest && {
-					abTest,
-				}),
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 		},
@@ -242,36 +214,6 @@ const paper = (
 	offer: priceCopy.discountCopy,
 });
 
-// const paperAndDigital = (
-//   countryGroupId: CountryGroupId,
-//   referrerAcquisitionData: ReferrerAcquisitionData,
-//   abParticipations: Participations,
-// ): ProductCopy => {
-//   const link = getLegacyPaperAndDigitalLink(
-//     countryGroupId,
-//     referrerAcquisitionData.campaignCode,
-//     getCampaign(referrerAcquisitionData),
-//     referrerAcquisitionData,
-//     abParticipations,
-//   );
-//   return {
-//     title: 'Paper+Digital',
-//     subtitle: `from ${getPrice(countryGroupId, PaperAndDigital)}`,
-//     description: 'All the benefits of a paper subscription, plus access to the digital subscription',
-//     buttons: [{
-//       ctaButtonText: 'Find out more',
-//       link,
-//       analyticsTracking: sendTrackingEventsOnClick({
-//         id: 'paper_digital_cta',
-//         product: PaperAndDigital,
-//         ...(abTest && { abTest }),
-//         componentType: 'ACQUISITIONS_BUTTON',
-//       }),
-//     }],
-//     productImage: <PaperAndDigitalPackshot />,
-//     offer: '',
-//   };
-// };
 const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
 	title: 'Premium access to the Guardian Live app',
 	subtitle: '7-day free Trial',
@@ -283,7 +225,6 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
 			analyticsTracking: trackAppStoreLink(
 				'premium_tier_ios_cta',
 				'PremiumTier',
-				abTest,
 			),
 		},
 		{
@@ -292,7 +233,6 @@ const premiumApp = (countryGroupId: CountryGroupId): ProductCopy => ({
 			analyticsTracking: trackAppStoreLink(
 				'premium_tier_android_cta',
 				'PremiumTier',
-				abTest,
 			),
 			hierarchy: 'first',
 		},
