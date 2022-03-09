@@ -2,6 +2,7 @@
 import * as stripeJs from '@stripe/react-stripe-js';
 import type {
 	PaymentIntentResult,
+	PaymentMethod,
 	PaymentRequest,
 	PaymentRequestCompleteStatus,
 	PaymentRequestPaymentMethodEvent,
@@ -26,7 +27,10 @@ import type {
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
-import type { StripeAccount } from 'helpers/forms/stripe';
+import type {
+	StripeAccount,
+	StripePaymentIntentResult,
+} from 'helpers/forms/stripe';
 import type {
 	IsoCountry,
 	StateProvince,
@@ -234,8 +238,8 @@ function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
 }
 
 // Requests a new SetupIntent and returns the associated clientSecret
-function fetchClientSecret(props: PropTypes): Promise<string> {
-	return fetchJson(
+async function fetchClientSecret(props: PropTypes): Promise<string> {
+	const setupIntentResult: StripePaymentIntentResult = await fetchJson(
 		'/stripe/create-setup-intent/prb',
 		requestOptions(
 			{
@@ -245,15 +249,11 @@ function fetchClientSecret(props: PropTypes): Promise<string> {
 			'POST',
 			props.csrf,
 		),
-	).then((result) => {
-		if (result.client_secret) {
-			return Promise.resolve(result.client_secret as string);
-		}
-
-		return Promise.reject(
-			new Error('Missing client_secret field in response for PRB'),
-		);
-	});
+	);
+	if (setupIntentResult.client_secret) {
+		return setupIntentResult.client_secret;
+	}
+	throw new Error('Missing client_secret field in response for PRB');
 }
 
 // General handler for tasks common to both SCA and non-SCA payments.
@@ -313,18 +313,67 @@ function onPayment(
 	}
 
 	if (nameValueOk && countryAndStateValueOk) {
-		if (paymentMethodEvent.methodName) {
+		if (paymentMethodEvent.walletName) {
 			// https://stripe.com/docs/stripe-js/reference#payment-response-object
-			// methodName:
-			// "The unique name of the payment handler the customer
-			// chose to authorize payment. For example, 'basic-card'."
-			trackComponentClick(`${paymentMethodEvent.methodName}-paymentAuthorised`);
+			// walletName:
+			// The unique name of the wallet the customer chose to authorize payment. For example, browserCard.
+			trackComponentClick(`${paymentMethodEvent.walletName}-paymentAuthorised`);
 		}
 
 		props.setPaymentWaiting(true);
 		processPayment();
 	} else {
 		props.setError('incomplete_payment_request_details', props.stripeAccount);
+	}
+}
+
+function handlePaymentRequestError(props: PropTypes, errorType: ErrorReason) {
+	props.setError(errorType, props.stripeAccount);
+	props.setPaymentWaiting(false);
+}
+
+async function handlePaymentRequest(
+	props: PropTypes,
+	paymentMethod: PaymentMethod,
+	stripePaymentMethod: StripePaymentMethod,
+) {
+	const authResult = await props.onPaymentAuthorised({
+		paymentMethod: Stripe,
+		paymentMethodId: paymentMethod.id,
+		stripePaymentMethod,
+	});
+	onComplete(authResult);
+}
+
+async function handleRecurringPaymentRequest(
+	props: PropTypes,
+	stripe: StripeJs,
+	paymentMethod: PaymentMethod,
+	stripePaymentMethod: StripePaymentMethod,
+) {
+	try {
+		// For recurring we need to request a new SetupIntent,
+		// and then provide the associated clientSecret for confirmation
+		const clientSecret = await fetchClientSecret(props);
+		const confirmResult = await stripe.confirmCardSetup(clientSecret, {
+			payment_method: paymentMethod.id,
+		});
+		if (confirmResult.error) {
+			handlePaymentRequestError(props, 'card_authentication_error');
+		} else {
+			void handlePaymentRequest(props, paymentMethod, stripePaymentMethod);
+		}
+	} catch (error) {
+		if (error instanceof Error) {
+			logException(
+				`Error confirming recurring contribution from Payment Request Button: - message: ${error.message}`,
+			);
+		} else {
+			logException(
+				'Error confirming recurring contribution from Payment Request Button',
+			);
+		}
+		handlePaymentRequestError(props, 'internal_error');
 	}
 }
 
@@ -351,53 +400,14 @@ function setUpPaymentListenerSca(
 			});
 
 			if (props.contributionType === 'ONE_OFF') {
-				void props
-					.onPaymentAuthorised({
-						paymentMethod: Stripe,
-						paymentMethodId: paymentMethod.id,
-						stripePaymentMethod,
-					})
-					.then(onComplete);
+				void handlePaymentRequest(props, paymentMethod, stripePaymentMethod);
 			} else {
-				// For recurring we need to request a new SetupIntent,
-				// and then provide the associated clientSecret for confirmation
-				fetchClientSecret(props)
-					.then((clientSecret: string) => {
-						void stripe
-							.confirmCardSetup(clientSecret, {
-								payment_method: paymentMethod.id,
-							})
-							.then((confirmResult) => {
-								if (confirmResult.error) {
-									props.setError(
-										'card_authentication_error',
-										props.stripeAccount,
-									);
-									props.setPaymentWaiting(false);
-								} else {
-									void props
-										.onPaymentAuthorised({
-											paymentMethod: Stripe,
-											paymentMethodId: paymentMethod.id,
-											stripePaymentMethod,
-										})
-										.then(onComplete);
-								}
-							});
-					})
-					.catch((error) => {
-						if (error instanceof Error) {
-							logException(
-								`Error confirming recurring contribution from Payment Request Button: - message: ${error.message}`,
-							);
-						} else {
-							logException(
-								'Error confirming recurring contribution from Payment Request Button',
-							);
-						}
-						props.setError('internal_error', props.stripeAccount);
-						props.setPaymentWaiting(false);
-					});
+				void handleRecurringPaymentRequest(
+					props,
+					stripe,
+					paymentMethod,
+					stripePaymentMethod,
+				);
 			}
 		};
 

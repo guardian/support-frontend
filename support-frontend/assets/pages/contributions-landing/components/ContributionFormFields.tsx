@@ -149,7 +149,7 @@ function ContributionFormFields({
 							onChange={(e) => updateFirstName(e.target.value)}
 							error={
 								checkoutFormHasBeenSubmitted && !checkFirstName(firstName)
-									? 'Please provide your first name'
+									? 'Please provide a valid first name'
 									: undefined
 							}
 							required
@@ -170,7 +170,7 @@ function ContributionFormFields({
 							onChange={(e) => updateLastName(e.target.value)}
 							error={
 								checkoutFormHasBeenSubmitted && !checkLastName(lastName)
-									? 'Please provide your last name'
+									? 'Please provide a valid last name'
 									: undefined
 							}
 							required
