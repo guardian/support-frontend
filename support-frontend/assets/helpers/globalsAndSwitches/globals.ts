@@ -9,8 +9,11 @@ function getGlobal<T>(path = ''): Option<T> {
 	const value = path
 		.replace(/\[(.+?)\]/g, '.$1')
 		.split('.')
+		// @ts-expect-error -- see comment on next line
+		// eslint-disable-next-line -- TODO: safely typing this magic path traversal is a headache!!
 		.reduce((o, key: any) => o && o[key], window.guardian);
 
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TODO: fix when path traversal above is
 	if (value) {
 		return value as any as T;
 	}
@@ -36,9 +39,9 @@ const emptyConfiguredRegionAmounts: ConfiguredRegionAmounts = {
 };
 
 const getSettings = (): Settings => {
-	const globalSettings = getGlobal('settings');
+	const globalSettings: Settings | null = getGlobal('settings');
 	return (
-		globalSettings || {
+		globalSettings ?? {
 			switches: {
 				experiments: {},
 			},
