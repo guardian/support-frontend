@@ -210,7 +210,7 @@ function userInTest(
 			return isSfdV2Test;
 		}
 
-		return acquisitionDataTest && acquisitionDataTest.name === testId;
+		return !!acquisitionDataTest && acquisitionDataTest.name === testId;
 	}
 
 	const testMin: number = MVT_MAX * audience.offset;
