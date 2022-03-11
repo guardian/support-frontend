@@ -34,7 +34,8 @@ object DefaultPromotions {
       val sixForSix = "6FOR6"
       val tenAnnual = "10ANNUAL"
       val jan21Promotion = "GWJAN22SALE"
-      def all = List(sixForSix, tenAnnual, jan21Promotion)
+      val ausPromotion = "GW25OZ"
+      def all = List(sixForSix, tenAnnual, ausPromotion, jan21Promotion)
     }
 
     def all = Gift.all ++ NonGift.all

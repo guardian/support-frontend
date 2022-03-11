@@ -31,7 +31,7 @@
             "TS2525": 5,
             "TS7022": 1,
             "TS2571": 3,
-            "TS2698": 6
+            "TS2698": 1
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
@@ -79,7 +79,7 @@
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
-            "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
+            "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/components/datePicker/datePicker.tsx": 2,
@@ -1370,26 +1370,6 @@
     "TS2698": [
         {
             "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Spread types may only be created from object types."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
-            "message": "Spread types may only be created from object types."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
-            "message": "Spread types may only be created from object types."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
-            "message": "Spread types may only be created from object types."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
-            "message": "Spread types may only be created from object types."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
             "message": "Spread types may only be created from object types."
         }
     ]
