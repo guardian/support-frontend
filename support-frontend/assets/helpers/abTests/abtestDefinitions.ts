@@ -154,6 +154,5 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: true,
 		seed: 11,
-		optimizeId: 'tbc',
 	},
 };
