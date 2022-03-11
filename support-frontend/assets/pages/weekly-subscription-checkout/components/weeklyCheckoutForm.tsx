@@ -7,6 +7,8 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source-react-components';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import Rows from 'components/base/rows';
@@ -43,7 +45,6 @@ import { countries } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
-import type { SetCountryAction } from 'helpers/page/commonActions';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -93,29 +94,29 @@ const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
 // ----- Types ----- //
-type PropTypes = FormFields &
-	FormActionCreators & {
-		billingCountry: IsoCountry;
-		deliveryCountry: IsoCountry;
-		signOut: typeof signOut;
-		formErrors: Array<FormError<FormField>>;
-		submissionError: ErrorReason | null;
-		productPrices: ProductPrices;
-		fetchAndStoreUserType: (...args: any[]) => any;
-		submitForm: (...args: any[]) => any;
-		setBillingCountry: (...args: any[]) => any;
-		billingAddressErrors: Array<Record<string, any>>;
-		deliveryAddressErrors: Array<Record<string, any>>;
-		isTestUser: boolean;
-		validateForm: () => (...args: any[]) => any;
-		csrf: Csrf;
-		currencyId: IsoCurrency;
-		payPalHasLoaded: boolean;
-		formIsValid: (...args: any[]) => any;
-		setupRecurringPayPalPayment: (...args: any[]) => any;
-		participations: Participations;
-		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
-	};
+// type PropTypes = FormFields &
+// 	FormActionCreators & {
+// 		billingCountry: IsoCountry;
+// 		deliveryCountry: IsoCountry;
+// 		signOut: typeof signOut;
+// 		formErrors: Array<FormError<FormField>>;
+// 		submissionError: ErrorReason | null;
+// 		productPrices: ProductPrices;
+// 		fetchAndStoreUserType: (...args: any[]) => any;
+// 		submitForm: (...args: any[]) => any;
+// 		setBillingCountry: (...args: any[]) => any;
+// 		billingAddressErrors: Array<Record<string, any>>;
+// 		deliveryAddressErrors: Array<Record<string, any>>;
+// 		isTestUser: boolean;
+// 		validateForm: () => (...args: any[]) => any;
+// 		csrf: Csrf;
+// 		currencyId: IsoCurrency;
+// 		payPalHasLoaded: boolean;
+// 		formIsValid: (...args: any[]) => any;
+// 		setupRecurringPayPalPayment: (...args: any[]) => any;
+// 		participations: Participations;
+// 		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
+// 	};
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: WithDeliveryCheckoutState) {
@@ -134,7 +135,8 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		billingAddressErrors: state.page.billingAddress.fields.formErrors,
 		isTestUser: state.page.checkout.isTestUser,
 		csrf: state.page.csrf,
-		currencyId: currencyFromCountryCode(deliveryAddress.fields.country),
+		currencyId:
+			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		participations: state.common.abParticipations,
 	};
@@ -166,7 +168,7 @@ function mapDispatchToProps() {
 		signOut,
 		setBillingCountry:
 			(country: string) =>
-			(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
+			(dispatch: Dispatch<SetCountryChangedAction | PayloadAction<string>>) =>
 				setCountry(country)(dispatch),
 		validateForm:
 			() =>
@@ -189,6 +191,10 @@ function mapDispatchToProps() {
 			setCsrCustomerData('delivery', customerData),
 	};
 }
+
+const connector = connect(mapStateToProps, mapDispatchToProps());
+
+type PropTypes = ConnectedProps<typeof connector>;
 
 // ----- Form Fields ----- //
 const DeliveryAddress = withStore(
@@ -225,7 +231,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingCountry,
 	);
 	return (
-		<Content modifierClasses={['your-details']}>
+		<Content>
 			<Layout
 				aside={
 					<Summary
@@ -259,7 +265,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							id="title"
 							label="Title"
 							optional
-							value={props.title}
+							value={props.title ?? ''}
 							onChange={(e) => props.setTitle(e.target.value)}
 						>
 							<OptionForSelect>Select a title</OptionForSelect>
@@ -296,7 +302,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								error={firstError('billingAddressIsSame', props.formErrors)}
 							>
 								<Radio
-									inputId="qa-billing-address-same"
+									id="qa-billing-address-same"
 									value="yes"
 									label="Yes"
 									name="billingAddressIsSame"
@@ -325,7 +331,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							<RadioGroup
 								id="startDate"
 								error={firstError('startDate', props.formErrors)}
-								legend="Please select the first publication you’d like to receive"
+								label="Please select the first publication you’d like to receive"
+								hideLabel={true}
 							>
 								{days
 									// Don't render input if Christmas day or Christmas eve
@@ -389,6 +396,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							country={props.deliveryCountry}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
+							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
 								...props.billingAddressErrors,
 								...props.deliveryAddressErrors,
@@ -431,6 +439,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
 							amount={price.price}
 							billingPeriod={props.billingPeriod}
+							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
 								...props.billingAddressErrors,
 								...props.deliveryAddressErrors,

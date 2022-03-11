@@ -5,7 +5,7 @@ import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
-import type { Internationalisation } from './state';
+import type { CommonStateSetupData, Internationalisation } from './state';
 import { initialCommonState } from './state';
 
 function getInternationalisationFromCountry(
@@ -23,37 +23,17 @@ function getInternationalisationFromCountry(
 	};
 }
 
-// export type SetCountryAction = {
-// 	type: 'SET_COUNTRY_INTERNATIONALISATION';
-// 	country: IsoCountry;
-// };
-// export type Action =
-// 	| SetCountryAction
-// 	| {
-// 			type: 'SET_EXISTING_PAYMENT_METHODS';
-// 			existingPaymentMethods: ExistingPaymentMethod[];
-// 	  }
-// 	| {
-// 			type: 'SET_CONTRIBUTION_TYPES';
-// 			contributionTypes: ContributionTypes;
-// 	  }
-// 	| {
-// 			type: 'SET_CURRENCY_ID';
-// 			useLocalCurrency: boolean;
-// 	  }
-// 	| {
-// 			type: 'SET_USE_LOCAL_CURRENCY_FLAG';
-// 			useLocalCurrency: boolean;
-// 	  }
-// 	| {
-// 			type: 'SET_USE_LOCAL_AMOUNTS';
-// 			useLocalAmounts: boolean;
-// 	  };
-
 const commonSlice = createSlice({
 	name: 'common',
 	initialState: initialCommonState,
 	reducers: {
+		setInitialState(state, action: PayloadAction<CommonStateSetupData>) {
+			const { payload } = action;
+			state = {
+				...state,
+				...payload,
+			};
+		},
 		setCountryInternationalisation(state, action: PayloadAction<IsoCountry>) {
 			state.internationalisation = {
 				...state.internationalisation,

@@ -2,6 +2,7 @@
 import type { ContributionTypes } from 'helpers/contributions';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+
 // ----- Types ----- //
 export type SetCountryAction = {
 	type: 'SET_COUNTRY_INTERNATIONALISATION';

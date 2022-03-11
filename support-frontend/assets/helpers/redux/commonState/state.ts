@@ -34,6 +34,17 @@ export type CommonState = {
 	existingPaymentMethods?: ExistingPaymentMethod[];
 };
 
+export type CommonStateSetupData = {
+	campaign: Campaign | null | undefined;
+	referrerAcquisitionData: ReferrerAcquisitionData;
+	otherQueryParams: Array<[string, string]>;
+	internationalisation: Internationalisation;
+	abParticipations: Participations;
+	settings: Settings;
+	amounts: ContributionAmounts;
+	defaultAmounts: ContributionAmounts;
+};
+
 export const initialCommonState: CommonState = {
 	campaign: null,
 	referrerAcquisitionData: {},

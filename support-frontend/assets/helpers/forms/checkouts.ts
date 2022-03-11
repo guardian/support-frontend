@@ -204,7 +204,7 @@ function getPaymentMethodToSelect(
 	allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-): string {
+): PaymentMethod {
 	const validPaymentMethods = getValidPaymentMethods(
 		contributionType,
 		allSwitches,

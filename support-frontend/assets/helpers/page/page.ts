@@ -22,6 +22,10 @@ import type {
 	Internationalisation,
 } from 'helpers/page/commonReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
+import {
+	commonActions,
+	commonReducer,
+} from 'helpers/redux/commonState/reducer';
 import { renderError } from 'helpers/rendering/render';
 import {
 	getCampaign,
@@ -130,7 +134,6 @@ function initRedux<PageState, PageAction extends Action>(
 			settings,
 			acquisitionData,
 		);
-		const commonReducer = createCommonReducer(initialState);
 
 		const store = configureStore({
 			reducer: combineReducers<ReduxState<PageState>>({
@@ -139,6 +142,9 @@ function initRedux<PageState, PageAction extends Action>(
 					pageReducer?.(initialState) ?? ({} as Reducer<PageState, PageAction>),
 			}),
 		});
+
+		store.dispatch(commonActions.setInitialState(initialState));
+
 		return store;
 	} catch (err) {
 		renderError(err as Error, null);
