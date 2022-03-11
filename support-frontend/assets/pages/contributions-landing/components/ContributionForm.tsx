@@ -112,7 +112,6 @@ type PropTypes = {
 	setSepaAccountHolderName: (accountHolderName: string) => void;
 	productSetAbTestVariant: boolean;
 	showBenefitsMessage: boolean;
-	isNotOneOffContrib: boolean;
 };
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -366,7 +365,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					</CheckboxGroup>
 				)}
 			</div>
-			{props.showBenefitsMessage && props.isNotOneOffContrib && (
+			{props.showBenefitsMessage && (
 				<BenefitsMessage countryGroupId={props.countryGroupId} />
 			)}
 			<StripePaymentRequestButton

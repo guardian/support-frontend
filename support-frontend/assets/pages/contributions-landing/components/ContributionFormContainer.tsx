@@ -9,7 +9,6 @@ import SecureTransactionIndicator from 'components/secureTransactionIndicator/se
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import type { ContributionType } from 'helpers/contributions';
 import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -51,8 +50,7 @@ type PropTypes = {
 	currency: IsoCurrency;
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
-	sfdv2AbTest: string;
-	contributionType: ContributionType;
+	showBenefitsMessage: boolean;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -66,8 +64,9 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
-	sfdv2AbTest: state.common.abParticipations.SFD_V2,
-	contributionType: state.page.form.contributionType,
+	showBenefitsMessage:
+		state.common.abParticipations.SFD_V2 === 'SINGLE_FRONT_DOOR_V2' &&
+		state.page.form.contributionType !== 'ONE_OFF',
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
@@ -227,9 +226,6 @@ function withProps(props: PropTypes) {
 	);
 	const lastOneOffContribution = useLastOneOffContribution(props.isSignedIn);
 
-	const showBenefitsMessage = props.sfdv2AbTest === 'SINGLE_FRONT_DOOR_V2';
-	const isNotOneOffContrib = props.contributionType !== 'ONE_OFF';
-
 	return (
 		<div
 			css={[
@@ -276,8 +272,7 @@ function withProps(props: PropTypes) {
 							<ContributionForm
 								onPaymentAuthorisation={onPaymentAuthorisation}
 								campaignSettings={campaignSettings}
-								showBenefitsMessage={showBenefitsMessage}
-								isNotOneOffContrib={isNotOneOffContrib}
+								showBenefitsMessage={props.showBenefitsMessage}
 							/>
 						</div>
 					)}
@@ -295,7 +290,7 @@ function withProps(props: PropTypes) {
 									<PreviousGivingHeaderCopy userName={props.userName} />
 								}
 								bodyCopy={
-									showBenefitsMessage && isNotOneOffContrib ? (
+									props.showBenefitsMessage ? (
 										''
 									) : (
 										<PreviousGivingBodyCopy
@@ -308,7 +303,7 @@ function withProps(props: PropTypes) {
 							<ContributionFormBlurb
 								headerCopy={countryGroupDetails.headerCopy}
 								bodyCopy={
-									showBenefitsMessage && isNotOneOffContrib
+									props.showBenefitsMessage
 										? ''
 										: countryGroupDetails.contributeCopy
 								}
