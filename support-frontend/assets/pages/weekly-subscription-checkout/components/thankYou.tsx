@@ -220,7 +220,9 @@ function ThankYouContent({
 							'components/subscriptionCheckouts/thankYou/marketingConsentContainer'
 						)
 					}
-					render={(MktConsent) => <>{MktConsent}</>}
+					render={(MktConsent) => (
+						<MktConsent requestPending={false} error={false} />
+					)}
 				/>
 			</Content>
 		</div>

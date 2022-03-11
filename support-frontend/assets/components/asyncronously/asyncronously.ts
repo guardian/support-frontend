@@ -16,7 +16,10 @@ function Asyncronously<T>(props: PropTypes<T>): JSX.Element | null {
 
 	useEffect(() => {
 		void loader.then((imported) => {
-			setComponent(imported.default);
+			// We wrap `imported.default` in a function. If we didn't when `imported.default`
+			// is a function component React would interpret it as a callback being passed
+			// to `setComponent` and invoke it.
+			setComponent(() => imported.default);
 		});
 	}, []);
 

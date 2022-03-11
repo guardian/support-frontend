@@ -204,7 +204,9 @@ function ThankYouContent({
 			<Content>
 				<Asyncronously
 					loader={import('components/marketingConsent/marketingConsentPaper')}
-					render={(MktConsent) => <>{MktConsent}</>}
+					render={(MktConsent) => (
+						<MktConsent requestPending={false} error={false} />
+					)}
 				/>
 			</Content>
 		</div>
