@@ -97,7 +97,10 @@ function createCommonReducer(initialState: CommonState) {
 					amounts:
 						action.useLocalAmounts &&
 						state.internationalisation.localCurrencyCountry
-							? state.internationalisation.localCurrencyCountry.amounts
+							? {
+									...state.defaultAmounts,
+									...state.internationalisation.localCurrencyCountry.amounts,
+							  }
 							: state.defaultAmounts,
 				};
 
