@@ -23,6 +23,7 @@ import type {
 	CommonState,
 	Internationalisation,
 } from 'helpers/redux/commonState/state';
+import { addPageReducer, store } from 'helpers/redux/store';
 import { renderError } from 'helpers/rendering/render';
 import {
 	getCampaign,
@@ -108,8 +109,8 @@ function buildInitialState(
   This allows us to construct a Redux store with state and action types for `common` determined by this function,
   but state and action types for `page` determined when this function is called
 */
-function initRedux<PageState, PageAction extends Action>(
-	pageReducer?: (commonState: CommonState) => Reducer<PageState, PageAction>,
+function initRedux<PageState>(
+	pageReducer?: (commonState: CommonState) => Reducer<PageState>,
 ): Store<ReduxState<PageState>> {
 	try {
 		const countryId: IsoCountry = detectCountry();
@@ -132,13 +133,7 @@ function initRedux<PageState, PageAction extends Action>(
 			acquisitionData,
 		);
 
-		const store = configureStore({
-			reducer: combineReducers<ReduxState<PageState>>({
-				common: commonReducer,
-				page:
-					pageReducer?.(initialState) ?? ({} as Reducer<PageState, PageAction>),
-			}),
-		});
+		addPageReducer(pageReducer?.(initialState));
 
 		store.dispatch(setInitialCommonState(initialState));
 

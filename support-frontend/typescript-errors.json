@@ -7,7 +7,7 @@
             "TS2322": 60,
             "TS2345": 35,
             "TS7006": 29,
-            "TS6133": 8,
+            "TS6133": 11,
             "TS2305": 11,
             "TS7031": 10,
             "TS2564": 2,
@@ -21,6 +21,7 @@
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
+            "TS6196": 1,
             "TS2367": 4,
             "TS2740": 1,
             "TS7016": 1,
@@ -29,7 +30,8 @@
             "TS7034": 4,
             "TS7005": 9,
             "TS2525": 1,
-            "TS7022": 1
+            "TS7022": 1,
+            "TS2558": 1
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
@@ -101,6 +103,7 @@
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/helpers/forms/checkouts.ts": 1,
+            "assets/helpers/page/page.ts": 4,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
@@ -122,7 +125,8 @@
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5
+            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
+            "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1
         }
     },
     "TS1208": [
@@ -723,6 +727,18 @@
             "message": "'allSwitches' is declared but its value is never read."
         },
         {
+            "path": "assets/helpers/page/page.ts",
+            "message": "'configureStore' is declared but its value is never read."
+        },
+        {
+            "path": "assets/helpers/page/page.ts",
+            "message": "'combineReducers' is declared but its value is never read."
+        },
+        {
+            "path": "assets/helpers/page/page.ts",
+            "message": "'commonReducer' is declared but its value is never read."
+        },
+        {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "'product' is declared but its value is never read."
         },
@@ -1029,6 +1045,12 @@
             "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
         }
     ],
+    "TS6196": [
+        {
+            "path": "assets/helpers/page/page.ts",
+            "message": "'Action' is declared but never used."
+        }
+    ],
     "TS2367": [
         {
             "path": "assets/helpers/polyfills/details.ts",
@@ -1157,6 +1179,12 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
+        }
+    ],
+    "TS2558": [
+        {
+            "path": "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
+            "message": "Expected 1 type arguments, but got 2."
         }
     ]
 }
