@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	AmazonObject,
@@ -64,6 +65,12 @@ declare global {
 		paypal: {
 			FUNDING: {
 				CREDIT: unknown;
+			};
+			Button: {
+				driver: (
+					name: 'react',
+					{ React, ReactDOM }: { React: unknown; ReactDOM: unknown },
+				) => ComponentType;
 			};
 		};
 		QuantumMetricAPI: unknown;

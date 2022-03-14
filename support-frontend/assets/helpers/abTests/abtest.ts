@@ -204,7 +204,13 @@ function userInTest(
 	}
 
 	if (referrerControlled) {
-		return acquisitionDataTest && acquisitionDataTest.name === testId;
+		const isSfdV2Test = acquisitionDataTest?.name.startsWith('SFD_V2');
+
+		if (isSfdV2Test) {
+			return isSfdV2Test;
+		}
+
+		return !!acquisitionDataTest && acquisitionDataTest.name === testId;
 	}
 
 	const testMin: number = MVT_MAX * audience.offset;
