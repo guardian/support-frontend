@@ -140,9 +140,12 @@ function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	try {
 		const acquisitionData = JSON.parse(acquisitionDataParam) as {
 			abTests?: AcquisitionABTest[];
+			abTest?: AcquisitionABTest;
 		};
 
-		return acquisitionData.abTests;
+		return acquisitionData.abTest
+			? [acquisitionData.abTest]
+			: acquisitionData.abTests;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
 		return undefined;
