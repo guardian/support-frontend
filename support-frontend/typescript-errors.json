@@ -3,12 +3,12 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 72,
+            "TS2322": 64,
             "TS2578": 5,
             "TS2339": 15,
-            "TS2345": 53,
+            "TS2345": 54,
             "TS7006": 51,
-            "TS6133": 10,
+            "TS6133": 16,
             "TS7031": 18,
             "TS2564": 2,
             "TS2769": 14,
@@ -28,11 +28,11 @@
             "TS7016": 1,
             "TS7034": 4,
             "TS7005": 9,
-            "TS2707": 1,
             "TS2525": 5,
             "TS7022": 1,
-            "TS2571": 3,
-            "TS2698": 6
+            "TS2698": 5,
+            "TS6196": 1,
+            "TS6192": 1
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
@@ -80,8 +80,6 @@
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
-            "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/components/paypalExpressButton/PayPalExpressButton.tsx": 1,
@@ -107,9 +105,9 @@
             "assets/helpers/page/__tests__/pageTest.ts": 4,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 2,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
+            "assets/pages/contributions-landing/contributionsLandingInit.ts": 4,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/promotion-terms/promotionTerms.tsx": 1,
@@ -122,10 +120,10 @@
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
             "assets/helpers/forms/checkouts.ts": 1,
-            "assets/helpers/page/page.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
-            "assets/pages/contributions-landing/contributionsLandingInit.ts": 2,
+            "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 9,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
@@ -140,8 +138,7 @@
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/promotion-terms/promotionTermsReducer.ts": 4
+            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5
         }
     },
     "TS1208": [
@@ -456,38 +453,6 @@
         {
             "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
             "message": "Type '{ ctaButtonText: string; link: string; analyticsTracking: () => void; modifierClasses: string; }' is not assignable to type 'ProductButton'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element; modifierClasses: string[]; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | number | readonly string[] | undefined'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ inputId: string; value: string; label: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioProps'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{ children: Element[]; id: string; error: string | undefined; legend: string; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioGroupProps'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type 'Record<string, any>[]' is not assignable to type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Type 'boolean | undefined' is not assignable to type 'boolean'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-            "message": "Type 'boolean | undefined' is not assignable to type 'boolean'."
         }
     ],
     "TS2578": [
@@ -613,7 +578,7 @@
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
-            "message": "Argument of type '(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => void' is not assignable to parameter of type 'Action'."
+            "message": "Argument of type '(dispatch: Dispatch<SetCountryChangedAction | PayloadAction<IsoCountry>>) => void' is not assignable to parameter of type 'Action'."
         },
         {
             "path": "assets/components/paypalExpressButton/PayPalOneClickCheckoutButton.tsx",
@@ -728,10 +693,6 @@
             "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
-            "message": "Argument of type 'string' is not assignable to parameter of type 'PaymentMethod'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Argument of type '(clientSecret: string) => Promise<Stripe3DSResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<PaymentIntentResult>'."
         },
@@ -742,6 +703,18 @@
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
             "message": "Argument of type '(clientSecret: string) => Promise<PaymentIntentResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<Stripe3DSResult>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'Action | { payload: ContributionTypes; type: string; }'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'Action | { payload: ContributionTypes; type: string; }'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
+            "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'Action | { payload: ContributionTypes; type: string; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
@@ -773,15 +746,11 @@
         },
         {
             "path": "assets/pages/promotion-terms/promotionTerms.tsx",
-            "message": "Argument of type 'ReduxState<{ productPrices: ProductPrices | null | undefined; promotionTerms: any; countryGroupId: CountryGroupId; }>' is not assignable to parameter of type 'State'."
+            "message": "Argument of type 'ReduxState<{ productPrices: ProductPrices | null | undefined; promotionTerms: { starts: Date | null; expires: Date | null; description?: string | undefined; product?: SubscriptionProduct | undefined; productRatePlans?: string[] | undefined; promoCode?: string | undefined; isGift?: boolean | undefined; }; countryGrou...' is not assignable to parameter of type 'State'."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
             "message": "Argument of type 'DefaultRootState' is not assignable to parameter of type 'AnyCheckoutState'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 31 more ...; salesforceCaseId?: string | undefined; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
@@ -1004,10 +973,6 @@
             "message": "'allSwitches' is declared but its value is never read."
         },
         {
-            "path": "assets/helpers/page/page.ts",
-            "message": "'createCommonReducer' is declared but its value is never read."
-        },
-        {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "'product' is declared but its value is never read."
         },
@@ -1034,6 +999,34 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'Participations' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'Csrf' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'ErrorReason' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'IsoCountry' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'IsoCurrency' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'ProductPrices' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'FormError' is declared but its value is never read."
         }
     ],
     "TS7031": [
@@ -1562,12 +1555,6 @@
             "message": "Variable 'props' implicitly has an 'any' type."
         }
     ],
-    "TS2707": [
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Generic type 'Store<S, A>' requires between 0 and 2 type arguments."
-        }
-    ],
     "TS2525": [
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
@@ -1596,26 +1583,8 @@
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
         }
     ],
-    "TS2571": [
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Object is of type 'unknown'."
-        }
-    ],
     "TS2698": [
         {
-            "path": "assets/pages/promotion-terms/promotionTermsReducer.ts",
-            "message": "Spread types may only be created from object types."
-        },
-        {
             "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
             "message": "Spread types may only be created from object types."
         },
@@ -1634,6 +1603,18 @@
         {
             "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
             "message": "Spread types may only be created from object types."
+        }
+    ],
+    "TS6196": [
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "'FormActionCreators' is declared but never used."
+        }
+    ],
+    "TS6192": [
+        {
+            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
+            "message": "All imports in import declaration are unused."
         }
     ]
 }

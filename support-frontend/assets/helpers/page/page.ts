@@ -17,15 +17,14 @@ import {
 	analyticsInitialisation,
 	consentInitialisation,
 } from 'helpers/page/analyticsAndConsent';
-import type {
-	CommonState,
-	Internationalisation,
-} from 'helpers/page/commonReducer';
-import { createCommonReducer } from 'helpers/page/commonReducer';
 import {
 	commonActions,
 	commonReducer,
 } from 'helpers/redux/commonState/reducer';
+import type {
+	CommonState,
+	Internationalisation,
+} from 'helpers/redux/commonState/state';
 import { renderError } from 'helpers/rendering/render';
 import {
 	getCampaign,

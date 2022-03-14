@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { connect } from 'react-redux';
-import type { CommonState } from 'helpers/page/commonReducer';
+import type { CommonState } from 'helpers/redux/commonState/state';
 import Footer from './Footer';
 
 // ----- State Maps ----- //
