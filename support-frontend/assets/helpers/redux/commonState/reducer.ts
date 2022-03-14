@@ -23,7 +23,7 @@ function getInternationalisationFromCountry(
 	};
 }
 
-const commonSlice = createSlice({
+export const commonSlice = createSlice({
 	name: 'common',
 	initialState: initialCommonState,
 	reducers: {
@@ -69,7 +69,5 @@ const commonSlice = createSlice({
 		},
 	},
 });
-
-export const commonActions = commonSlice.actions;
 
 export const commonReducer = commonSlice.reducer;

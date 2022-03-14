@@ -15,7 +15,10 @@ import {
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { commonActions } from 'helpers/redux/commonState/reducer';
+import {
+	setCurrencyId,
+	setUseLocalAmounts,
+} from 'helpers/redux/commonState/actions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
@@ -72,11 +75,11 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 		);
 
 		if (contributionType !== 'ONE_OFF') {
-			dispatch(commonActions.setCurrencyId(false));
-			dispatch(commonActions.setUseLocalAmounts(false));
+			dispatch(setCurrencyId(false));
+			dispatch(setUseLocalAmounts(false));
 		} else {
-			dispatch(commonActions.setCurrencyId(useLocalCurrency));
-			dispatch(commonActions.setUseLocalAmounts(useLocalCurrency));
+			dispatch(setCurrencyId(useLocalCurrency));
+			dispatch(setUseLocalAmounts(useLocalCurrency));
 		}
 	},
 });

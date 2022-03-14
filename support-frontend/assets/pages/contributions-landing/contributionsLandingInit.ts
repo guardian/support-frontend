@@ -26,7 +26,10 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { commonActions } from 'helpers/redux/commonState/reducer';
+import {
+	setContributionTypes,
+	setExistingPaymentMethods,
+} from 'helpers/redux/commonState/actions';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
@@ -127,11 +130,7 @@ function initialisePaymentMethods(
 							(existingPaymentMethod.paymentType === 'DirectDebit' &&
 								existingDirectDebitON),
 					);
-				dispatch(
-					commonActions.setExistingPaymentMethods(
-						switchedOnExistingPaymentMethods,
-					),
-				);
+				dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
 				const firstExistingPaymentMethod = switchedOnExistingPaymentMethods[0];
 				const allowDefaultSelectedPaymentMethod =
 					state.common.abParticipations.defaultPaymentMethodTest === 'control';
@@ -154,7 +153,7 @@ function initialisePaymentMethods(
 			},
 		);
 	} else {
-		dispatch(commonActions.setExistingPaymentMethods([]));
+		dispatch(setExistingPaymentMethods([]));
 	}
 }
 
@@ -268,8 +267,7 @@ const init = (
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
 	const contributionTypes = getContributionTypes(state);
-	dispatch(commonActions.setContributionTypes(contributionTypes));
-	// dispatch(setContributionTypes(contributionTypes));
+	dispatch(setContributionTypes(contributionTypes));
 	initialisePaymentMethods(state, dispatch);
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,

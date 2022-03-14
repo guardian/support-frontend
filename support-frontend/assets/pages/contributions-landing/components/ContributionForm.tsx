@@ -35,7 +35,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
-import { commonActions } from 'helpers/redux/commonState/reducer';
+import {
+	setCurrencyId,
+	setUseLocalAmounts,
+	setUseLocalCurrencyFlag,
+} from 'helpers/redux/commonState/actions';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -174,9 +178,9 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 		localCurrencyCountry: LocalCurrencyCountry | null | undefined,
 		defaultOneOffAmount: number,
 	) => {
-		dispatch(commonActions.setUseLocalCurrencyFlag(useLocalCurrency));
-		dispatch(commonActions.setCurrencyId(useLocalCurrency));
-		dispatch(commonActions.setUseLocalAmounts(useLocalCurrency));
+		dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
+		dispatch(setCurrencyId(useLocalCurrency));
+		dispatch(setUseLocalAmounts(useLocalCurrency));
 		dispatch(
 			selectAmount(
 				useLocalCurrency && localCurrencyCountry

@@ -17,10 +17,8 @@ import {
 	analyticsInitialisation,
 	consentInitialisation,
 } from 'helpers/page/analyticsAndConsent';
-import {
-	commonActions,
-	commonReducer,
-} from 'helpers/redux/commonState/reducer';
+import { setInitialState } from 'helpers/redux/commonState/actions';
+import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type {
 	CommonState,
 	Internationalisation,
@@ -142,7 +140,7 @@ function initRedux<PageState, PageAction extends Action>(
 			}),
 		});
 
-		store.dispatch(commonActions.setInitialState(initialState));
+		store.dispatch(setInitialState(initialState));
 
 		return store;
 	} catch (err) {

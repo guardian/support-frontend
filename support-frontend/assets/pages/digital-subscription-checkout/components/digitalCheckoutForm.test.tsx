@@ -6,10 +6,8 @@ import { Provider } from 'react-redux';
 import { mockFetch } from '__mocks__/fetchMock';
 import { digitalProducts } from '__mocks__/productInfoMocks';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import {
-	commonActions,
-	commonReducer,
-} from 'helpers/redux/commonState/reducer';
+import { setInitialState } from 'helpers/redux/commonState/actions';
+import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -34,7 +32,7 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
 	});
-	store.dispatch(commonActions.setInitialState(initialState.common));
+	store.dispatch(setInitialState(initialState.common));
 	return store;
 }
 

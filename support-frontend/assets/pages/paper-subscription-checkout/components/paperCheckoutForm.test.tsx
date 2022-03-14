@@ -7,10 +7,8 @@ import { mockFetch } from '__mocks__/fetchMock';
 import { paperProducts } from '__mocks__/productInfoMocks';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { Paper } from 'helpers/productPrice/subscriptions';
-import {
-	commonActions,
-	commonReducer,
-} from 'helpers/redux/commonState/reducer';
+import { setInitialState } from 'helpers/redux/commonState/actions';
+import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
@@ -36,7 +34,7 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
 	});
-	store.dispatch(commonActions.setInitialState(initialState.common));
+	store.dispatch(setInitialState(initialState.common));
 	return store;
 }
 

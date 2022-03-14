@@ -13,7 +13,7 @@ import type { RegularPaymentRequestAddress } from 'helpers/forms/paymentIntegrat
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromString } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { commonActions } from 'helpers/redux/commonState/reducer';
+import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { Scoped } from 'helpers/subscriptionsForms/scoped';
@@ -242,7 +242,7 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
 			const country = fromString(countryRaw);
 
 			if (country) {
-				dispatch(commonActions.setCountryInternationalisation(country));
+				dispatch(setCountryInternationalisation(country));
 				dispatch({
 					type: 'SET_COUNTRY_CHANGED',
 					country,

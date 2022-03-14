@@ -6,7 +6,7 @@
             "TS2322": 62,
             "TS2578": 5,
             "TS2339": 15,
-            "TS2345": 52,
+            "TS2345": 51,
             "TS7006": 39,
             "TS6133": 16,
             "TS7031": 10,
@@ -22,10 +22,10 @@
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
-            "TS7017": 4,
             "TS2367": 4,
             "TS2740": 1,
             "TS7016": 1,
+            "TS7017": 1,
             "TS7034": 4,
             "TS7005": 9,
             "TS2525": 1,
@@ -100,7 +100,6 @@
             "assets/helpers/contributions.ts": 2,
             "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
-            "assets/helpers/page/__tests__/pageTest.ts": 4,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
@@ -663,10 +662,6 @@
         {
             "path": "assets/helpers/internationalisation/__tests__/currencyTest.ts",
             "message": "Argument of type '\"ZZ\"' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/page/__tests__/pageTest.ts",
-            "message": "Argument of type '{ campaign: string; referrerAcquisitionData: { referrerPageviewId: null; campaignCode: null; componentId: null; componentType: null; source: null; abTests: never[]; queryParameters: never[]; }; internationalisation: { ...; }; abParticipations: {}; otherQueryParams: never[]; settings: { ...; }; }' is not assignable to parameter of type 'CommonState'."
         },
         {
             "path": "assets/helpers/rendering/render.ts",
@@ -1335,24 +1330,6 @@
             "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
         }
     ],
-    "TS7017": [
-        {
-            "path": "assets/helpers/page/__tests__/pageTest.ts",
-            "message": "Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature."
-        },
-        {
-            "path": "assets/helpers/page/__tests__/pageTest.ts",
-            "message": "Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature."
-        },
-        {
-            "path": "assets/helpers/page/__tests__/pageTest.ts",
-            "message": "Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature."
-        }
-    ],
     "TS2367": [
         {
             "path": "assets/helpers/polyfills/details.ts",
@@ -1381,6 +1358,12 @@
         {
             "path": "assets/helpers/rendering/render.ts",
             "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
+        }
+    ],
+    "TS7017": [
+        {
+            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
+            "message": "Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature."
         }
     ],
     "TS7034": [
