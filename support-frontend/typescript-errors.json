@@ -3,15 +3,15 @@
         "byCode": {
             "TS1208": 1,
             "TS2305": 12,
-            "TS2322": 64,
+            "TS2322": 62,
             "TS2578": 5,
             "TS2339": 15,
-            "TS2345": 54,
-            "TS7006": 51,
+            "TS2345": 52,
+            "TS7006": 39,
             "TS6133": 16,
-            "TS7031": 18,
+            "TS7031": 10,
             "TS2564": 2,
-            "TS2769": 14,
+            "TS2769": 10,
             "TS2314": 4,
             "TS2304": 5,
             "TS2741": 3,
@@ -28,7 +28,7 @@
             "TS7016": 1,
             "TS7034": 4,
             "TS7005": 9,
-            "TS2525": 5,
+            "TS2525": 1,
             "TS7022": 1,
             "TS2698": 5,
             "TS6196": 1,
@@ -71,13 +71,11 @@
             "assets/pages/contributions-landing/components/SepaForm.tsx": 7,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 9,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 7,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
@@ -108,7 +106,6 @@
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
             "assets/pages/contributions-landing/contributionsLandingInit.ts": 4,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/promotion-terms/promotionTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
@@ -118,7 +115,6 @@
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
             "assets/helpers/forms/checkouts.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
@@ -240,7 +236,7 @@
         },
         {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
-            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"disabled\" | ... 5 more ... | \"icon\">> & Partial<...>'."
+            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/components/menu/menu.tsx",
@@ -352,7 +348,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
-            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"disabled\" | ... 5 more ... | \"icon\">> & Partial<...>'."
+            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
@@ -399,10 +395,6 @@
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Type 'Promise<{ json: () => Promise<{ client_secret: string; }>; }>' is not assignable to type 'Promise<Response>'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
             "message": "Type '{ image: Element; title: string; description: string; productPrice: ProductPrice; billingPeriod: \"Annual\" | \"Monthly\"; changeSubscription: string; isPatron: boolean; }' is not assignable to type 'IntrinsicAttributes & Pick<OrderSummaryPropTypes, \"title\" | \"image\" | \"billingPeriod\" | \"productPrice\" | \"isPatron\"> & Partial<...> & Partial<...>'."
         },
@@ -433,10 +425,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'Omit<Pick<PropTypes, \"image\" | \"total\" | \"productPrices\" | \"billingPeriod\" | \"fulfilmentOption\" | \"productOption\" | \"digiSubPrice\" | \"includesDigiSub\"> & Partial<...> & Partial<...>, \"productPrices\" | ... 2 more ... | \"productOption\">'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Type 'Promise<{ json: () => Promise<{ client_secret: string; }>; }>' is not assignable to type 'Promise<Response>'."
         },
         {
             "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
@@ -717,16 +705,8 @@
             "message": "Argument of type '(dispatch: Dispatch, getState: () => State) => void' is not assignable to parameter of type 'Action | { payload: ContributionTypes; type: string; }'."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ country: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 31 more ...; salesforceCaseId?: string | undefined; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Argument of type '\"\"' is not assignable to parameter of type 'BillingPeriod'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -855,30 +835,6 @@
             "message": "Parameter 'event' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Parameter 'commonState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Parameter 'commonState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Parameter 'searchText' implicitly has an 'any' type."
         },
@@ -900,18 +856,6 @@
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
         },
         {
@@ -949,18 +893,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
             "message": "Parameter 'orderIsGift' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Parameter 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
         }
     ],
     "TS6133": [
@@ -1063,43 +995,11 @@
             "message": "Binding element 'isLoading' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Binding element 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Binding element 'children' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Binding element 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Binding element 'children' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Binding element 'initialState' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Binding element 'children' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Binding element 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Binding element 'children' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Binding element 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Binding element 'children' implicitly has an 'any' type."
         }
     ],
@@ -1143,19 +1043,7 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
             "message": "No overload matches this call."
         },
         {
@@ -1164,10 +1052,6 @@
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "No overload matches this call."
         }
     ],
@@ -1557,23 +1441,7 @@
     ],
     "TS2525": [
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Initializer provides no value for this binding element and the binding element has no default value."
         }
     ],
