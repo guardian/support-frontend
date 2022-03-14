@@ -130,26 +130,22 @@ function getIsRemoteFromAcquisitionData(): boolean {
 	}
 }
 
-function getTestFromAcquisitionData(): AcquisitionABTest | null | undefined {
+function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
 	if (!acquisitionDataParam) {
-		return null;
+		return undefined;
 	}
 
 	try {
 		const acquisitionData = JSON.parse(acquisitionDataParam) as {
-			abTest?: AcquisitionABTest;
+			abTests?: AcquisitionABTest[];
 		};
 
-		if (acquisitionData.abTest?.variant) {
-			return acquisitionData.abTest;
-		}
-
-		return null;
+		return acquisitionData.abTests;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
-		return null;
+		return undefined;
 	}
 }
 
@@ -188,7 +184,7 @@ function userInTest(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
-	acquisitionDataTest: AcquisitionABTest | null | undefined,
+	acquisitionDataTests: AcquisitionABTest[] | undefined,
 ) {
 	const { audiences, referrerControlled } = test;
 
@@ -204,13 +200,20 @@ function userInTest(
 	}
 
 	if (referrerControlled) {
-		const isSfdV2Test = acquisitionDataTest?.name.startsWith('SFD_V2');
+		const isSfdV2Test = acquisitionDataTests?.find((acquisitionDataTest) =>
+			acquisitionDataTest.name.startsWith('SFD_V2'),
+		);
 
 		if (isSfdV2Test) {
 			return isSfdV2Test;
 		}
 
-		return !!acquisitionDataTest && acquisitionDataTest.name === testId;
+		return (
+			!!acquisitionDataTests &&
+			acquisitionDataTests.find(
+				(acquisitionDataTest) => acquisitionDataTest.name === testId,
+			)
+		);
 	}
 
 	const testMin: number = MVT_MAX * audience.offset;
@@ -245,12 +248,17 @@ const trackOptimizeExperiment = (
 function assignUserToVariant(
 	mvtId: number,
 	test: Test,
-	acquisitionDataTest: AcquisitionABTest | null | undefined,
+	testId: string,
+	acquisitionDataTests: AcquisitionABTest[] | undefined,
 ): number {
 	const { referrerControlled, seed } = test;
 
-	if (referrerControlled && acquisitionDataTest != null) {
-		const acquisitionVariant = acquisitionDataTest.variant;
+	if (referrerControlled && acquisitionDataTests != null) {
+		const acquisitionTest = acquisitionDataTests.find((acquisitionDataTest) =>
+			acquisitionDataTest.name.startsWith(testId),
+		) as AcquisitionABTest;
+
+		const acquisitionVariant = acquisitionTest.variant;
 		const index = test.variants.findIndex(
 			(variant) => variant.id === acquisitionVariant,
 		);
@@ -261,7 +269,7 @@ function assignUserToVariant(
 		}
 
 		return index;
-	} else if (referrerControlled && acquisitionDataTest === null) {
+	} else if (referrerControlled && acquisitionDataTests === undefined) {
 		console.error('A/B test expects acquistion data but none was provided');
 	}
 
@@ -286,7 +294,7 @@ function getParticipations(
 	countryGroupId: CountryGroupId,
 ): Participations {
 	const participations: Participations = {};
-	const acquisitionDataTest: AcquisitionABTest | null | undefined =
+	const acquisitionDataTests: AcquisitionABTest[] | undefined =
 		getTestFromAcquisitionData();
 	const isRemote = getIsRemoteFromAcquisitionData();
 
@@ -320,13 +328,14 @@ function getParticipations(
 				mvtId,
 				country,
 				countryGroupId,
-				acquisitionDataTest,
+				acquisitionDataTests,
 			)
 		) {
 			const variantIndex = assignUserToVariant(
 				mvtId,
 				test,
-				acquisitionDataTest,
+				testId,
+				acquisitionDataTests,
 			);
 			participations[testId] = test.variants[variantIndex].id;
 
