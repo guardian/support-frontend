@@ -35,35 +35,22 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import Summary from 'components/subscriptionCheckouts/summary';
 import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
-import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
 	setCsrCustomerData,
 } from 'helpers/subscriptionsForms/formActions';
-import type {
-	FormField,
-	FormFields,
-} from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	validateWithDeliveryForm,
@@ -80,7 +67,6 @@ import {
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
@@ -93,30 +79,6 @@ import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/delive
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
-// ----- Types ----- //
-// type PropTypes = FormFields &
-// 	FormActionCreators & {
-// 		billingCountry: IsoCountry;
-// 		deliveryCountry: IsoCountry;
-// 		signOut: typeof signOut;
-// 		formErrors: Array<FormError<FormField>>;
-// 		submissionError: ErrorReason | null;
-// 		productPrices: ProductPrices;
-// 		fetchAndStoreUserType: (...args: any[]) => any;
-// 		submitForm: (...args: any[]) => any;
-// 		setBillingCountry: (...args: any[]) => any;
-// 		billingAddressErrors: Array<Record<string, any>>;
-// 		deliveryAddressErrors: Array<Record<string, any>>;
-// 		isTestUser: boolean;
-// 		validateForm: () => (...args: any[]) => any;
-// 		csrf: Csrf;
-// 		currencyId: IsoCurrency;
-// 		payPalHasLoaded: boolean;
-// 		formIsValid: (...args: any[]) => any;
-// 		setupRecurringPayPalPayment: (...args: any[]) => any;
-// 		participations: Participations;
-// 		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
-// 	};
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: WithDeliveryCheckoutState) {

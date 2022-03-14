@@ -353,7 +353,7 @@ function getAmountsTestParticipations(
 		return null;
 	}
 
-	const { test } = settings.amounts[countryGroupId];
+	const { test } = settings.amounts?.[countryGroupId] ?? {};
 
 	if (!test || !test.isLive) {
 		return null;
