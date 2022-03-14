@@ -133,4 +133,26 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
+	SFD_V2: {
+		variants: [
+			{
+				id: 'CONTROL',
+			},
+			{
+				id: 'SINGLE_FRONT_DOOR',
+			},
+			{
+				id: 'SINGLE_FRONT_DOOR_V2',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: true,
+		seed: 11,
+	},
 };
