@@ -2,24 +2,24 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2305": 12,
-            "TS2322": 71,
             "TS2578": 5,
             "TS2339": 14,
-            "TS2345": 41,
-            "TS7006": 47,
+            "TS2322": 70,
+            "TS2345": 40,
+            "TS7006": 41,
             "TS6133": 8,
+            "TS2305": 11,
             "TS7031": 18,
             "TS2564": 2,
-            "TS2769": 14,
+            "TS2769": 12,
             "TS2314": 4,
             "TS2304": 5,
             "TS2741": 3,
-            "TS2739": 12,
+            "TS2739": 11,
             "TS2532": 1,
             "TS2556": 3,
             "TS2569": 2,
-            "TS7053": 4,
+            "TS7053": 3,
             "TS2411": 1,
             "TS7017": 4,
             "TS2367": 4,
@@ -35,23 +35,24 @@
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
-            "assets/components/asyncronously/asyncronously.ts": 2,
+            "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
             "assets/components/footerCompliant/Footer.tsx": 4,
-            "assets/components/headers/header/header.tsx": 6,
-            "assets/components/headers/header/mobileMenuToggler.tsx": 1,
+            "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
+            "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
+            "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
+            "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
+            "assets/helpers/__tests__/urlTest.ts": 1,
+            "assets/helpers/csrf/csrfReducer.ts": 2,
+            "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
+            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
+            "assets/helpers/rendering/render.ts": 8,
+            "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
+            "assets/components/datePicker/datePickerHelpers.test.ts": 2,
+            "assets/components/headers/links/links.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
-            "assets/components/menu/menu.tsx": 2,
-            "assets/components/product/productOptionSmall.tsx": 1,
-            "assets/components/subscriptionCheckouts/layout.tsx": 1,
-            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
-            "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
-            "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx": 4,
-            "assets/components/datePicker/datePickerHelpers.test.ts": 2,
-            "assets/components/directDebit/directDebitForm/directDebitForm.tsx": 10,
-            "assets/components/headers/links/links.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
+            "assets/components/menu/menu.tsx": 2,
             "assets/components/page/page.tsx": 1,
             "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
@@ -74,21 +75,13 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 4,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
-            "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 8,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
+            "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 7,
             "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx": 2,
-            "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
-            "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/helpers/__tests__/urlTest.ts": 1,
-            "assets/helpers/csrf/csrfReducer.ts": 2,
-            "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
-            "assets/helpers/rendering/render.ts": 8,
-            "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
@@ -110,17 +103,21 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 8,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/promotion-terms/promotionTerms.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/thankYou.tsx": 6,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/thankYou.tsx": 5,
+            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 7,
             "assets/helpers/forms/checkouts.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
+            "assets/components/headers/header/header.tsx": 6,
+            "assets/components/headers/header/mobileMenuToggler.tsx": 1,
+            "assets/components/product/productOptionSmall.tsx": 1,
+            "assets/components/subscriptionCheckouts/layout.tsx": 1,
+            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
@@ -144,61 +141,87 @@
             "message": "'imageMock.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module."
         }
     ],
-    "TS2305": [
+    "TS2578": [
         {
-            "path": "assets/components/asyncronously/asyncronously.ts",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
+            "message": "Unused '@ts-expect-error' directive."
         },
         {
             "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
+            "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx",
+            "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        }
+    ],
+    "TS2339": [
+        {
+            "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
+            "message": "Property 'getBoundingClientRect' does not exist on type 'never'."
         },
         {
-            "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
+            "message": "Property 'value' does not exist on type 'EventTarget'."
         },
         {
-            "path": "assets/components/menu/menu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
+            "message": "Property 'value' does not exist on type 'EventTarget'."
         },
         {
-            "path": "assets/components/product/productOptionSmall.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
+            "message": "Property 'value' does not exist on type 'EventTarget'."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/layout.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
+            "message": "Property 'checked' does not exist on type 'EventTarget'."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/components/footerCompliant/Footer.tsx",
+            "message": "Property 'showPrivacyManager' does not exist on type 'never'."
         },
         {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/helpers/__tests__/urlTest.ts",
+            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
         },
         {
-            "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
+            "path": "assets/helpers/csrf/csrfReducer.ts",
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/helpers/csrf/csrfReducer.ts",
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
+            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
+        },
+        {
+            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
+            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
+            "message": "Property 'common' does not exist on type 'DefaultRootState'."
         }
     ],
     "TS2322": [
-        {
-            "path": "assets/components/asyncronously/asyncronously.ts",
-            "message": "Type 'ComponentType<any>' is not assignable to type 'null'."
-        },
         {
             "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
             "message": "Type '{ children: (Element | Element[])[]; style: { top: number; left: number; position: string; }; }' is not assignable to type 'IntrinsicAttributes & { children: any; }'."
@@ -480,86 +503,6 @@
             "message": "Type 'boolean | undefined' is not assignable to type 'boolean'."
         }
     ],
-    "TS2578": [
-        {
-            "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        }
-    ],
-    "TS2339": [
-        {
-            "path": "assets/components/countryGroupSwitcher/countryGroupSwitcher.tsx",
-            "message": "Property 'getBoundingClientRect' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Property 'value' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Property 'value' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Property 'value' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Property 'checked' does not exist on type 'EventTarget'."
-        },
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Property 'showPrivacyManager' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/helpers/__tests__/urlTest.ts",
-            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
-            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
-            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
-            "message": "Property 'common' does not exist on type 'DefaultRootState'."
-        }
-    ],
     "TS2345": [
         {
             "path": "assets/components/datePicker/datePicker.tsx",
@@ -714,10 +657,6 @@
             "message": "Argument of type 'ReduxState<{ productPrices: ProductPrices | null | undefined; promotionTerms: any; countryGroupId: CountryGroupId; }>' is not assignable to parameter of type 'State'."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Argument of type 'DefaultRootState' is not assignable to parameter of type 'AnyCheckoutState'."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
             "message": "Argument of type '(props: PropTypes) => Element' is not assignable to parameter of type 'ComponentType<Matching<{ billingCountry: string; deliveryCountry: string; formErrors: FormError<FormField>[]; submissionError: Option<ErrorReason>; productPrices: ProductPrices; ... 31 more ...; salesforceCaseId?: string | undefined; } & { ...; }, FormFields & ... 1 more ... & { ...; }>>'."
         },
@@ -868,14 +807,6 @@
             "message": "Parameter 'component' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'fulfilmentOption' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'item' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
             "message": "Parameter 'tab' implicitly has an 'any' type."
         },
@@ -886,22 +817,6 @@
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx",
             "message": "Parameter 'index' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'billingPeriod' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'isPending' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "Parameter 'orderIsGift' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
@@ -948,6 +863,52 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
+        }
+    ],
+    "TS2305": [
+        {
+            "path": "assets/components/footerCompliant/Footer.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/header/header.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/menu/menu.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/product/productOptionSmall.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/layout.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
+        },
+        {
+            "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
         }
     ],
     "TS7031": [
@@ -1080,14 +1041,6 @@
             "message": "No overload matches this call."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/thankYou.tsx",
-            "message": "No overload matches this call."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "No overload matches this call."
         }
@@ -1190,10 +1143,6 @@
         {
             "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
             "message": "Type '{ ONE_OFF: { min: number; minInWords: string; max: number; maxInWords: string; default: number; }; }' is missing the following properties from type 'Config': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Type '{ HomeDelivery: string[]; Collection: string[]; }' is missing the following properties from type 'Record<FulfilmentOptions, string[]>': Domestic, RestOfWorld, NoFulfilmentOptions"
         }
     ],
     "TS2532": [
@@ -1238,10 +1187,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ... 7 more ...; EverydayPlus: { ...; ...'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/thankYou.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<FulfilmentOptions, string[]>'."
         }
     ],
     "TS2411": [

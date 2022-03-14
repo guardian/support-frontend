@@ -1,47 +1,37 @@
-import type { ComponentType, Node } from 'react';
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
+import type { ComponentType } from 'react';
 
-type PropTypes = {
+type PropTypes<T> = {
 	loader: Promise<{
-		default: ComponentType<any>;
+		default: ComponentType<T>;
 	}>;
-	loading: Node;
-	children: (arg0: ComponentType<any>) => Node;
-};
-type State = {
-	loaded: boolean;
+	loading: JSX.Element;
+	render: (Component: ComponentType<T>) => JSX.Element;
 };
 
-class Asyncronously extends Component<PropTypes, State> {
-	static defaultProps = {
-		loading: null,
-	};
-	state = {
-		loaded: false,
-	};
+function Asyncronously<T>(props: PropTypes<T>): JSX.Element | null {
+	const [component, setComponent] = useState<ComponentType<T>>();
 
-	componentDidMount() {
-		const { loader } = this.props;
-		loader.then((imported) => {
-			this.component = imported.default;
-			this.setState({
-				loaded: true,
-			});
+	const { loading, render, loader } = props;
+
+	useEffect(() => {
+		void loader.then((imported) => {
+			// We wrap `imported.default` in a function. If we didn't when `imported.default`
+			// is a function component React would interpret it as a callback being passed
+			// to `setComponent` and invoke it.
+			setComponent(() => imported.default);
 		});
+	}, []);
+
+	if (component) {
+		return render(component);
 	}
 
-	component = null;
-
-	render() {
-		const { loading, children } = this.props;
-		const { loaded } = this.state;
-
-		if (loaded && this.component) {
-			return children(this.component);
-		}
-
-		return loading;
-	}
+	return loading;
 }
+
+Asyncronously.defaultProps = {
+	loading: null,
+};
 
 export default Asyncronously;
