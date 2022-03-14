@@ -257,11 +257,15 @@ function assignUserToVariant(
 	const { referrerControlled, seed } = test;
 
 	if (referrerControlled && acquisitionDataTests != null) {
-		const acquisitionTest = acquisitionDataTests.find((acquisitionDataTest) =>
-			acquisitionDataTest.name.startsWith(testId),
-		) as AcquisitionABTest;
+		const acquisitionDataTest = acquisitionDataTests.find((t) =>
+			t.name.startsWith(testId),
+		);
 
-		const acquisitionVariant = acquisitionTest.variant;
+		if (!acquisitionDataTest) {
+			return -1;
+		}
+
+		const acquisitionVariant = acquisitionDataTest.variant;
 		const index = test.variants.findIndex(
 			(variant) => variant.id === acquisitionVariant,
 		);
@@ -274,6 +278,8 @@ function assignUserToVariant(
 		return index;
 	} else if (referrerControlled && acquisitionDataTests === undefined) {
 		console.error('A/B test expects acquistion data but none was provided');
+
+		return -1;
 	}
 
 	return randomNumber(mvtId, seed) % test.variants.length;
@@ -340,7 +346,12 @@ function getParticipations(
 				testId,
 				acquisitionDataTests,
 			);
-			participations[testId] = test.variants[variantIndex].id;
+
+			if (variantIndex === -1) {
+				participations[testId] = notintest;
+			} else {
+				participations[testId] = test.variants[variantIndex].id;
+			}
 
 			if (test.optimizeId) {
 				trackOptimizeExperiment(test.optimizeId, test.variants, variantIndex);
