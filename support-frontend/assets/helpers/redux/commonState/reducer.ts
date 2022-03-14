@@ -28,11 +28,24 @@ export const commonSlice = createSlice({
 	initialState: initialCommonState,
 	reducers: {
 		setInitialState(state, action: PayloadAction<CommonStateSetupData>) {
-			const { payload } = action;
-			state = {
-				...state,
-				...payload,
-			};
+			const {
+				campaign,
+				referrerAcquisitionData,
+				otherQueryParams,
+				internationalisation,
+				abParticipations,
+				settings,
+				amounts,
+				defaultAmounts,
+			} = action.payload;
+			state.campaign = campaign;
+			state.referrerAcquisitionData = referrerAcquisitionData;
+			state.otherQueryParams = otherQueryParams;
+			state.internationalisation = internationalisation;
+			state.abParticipations = abParticipations;
+			state.settings = settings;
+			state.amounts = amounts;
+			state.defaultAmounts = defaultAmounts;
 		},
 		setCountryInternationalisation(state, action: PayloadAction<IsoCountry>) {
 			state.internationalisation = {

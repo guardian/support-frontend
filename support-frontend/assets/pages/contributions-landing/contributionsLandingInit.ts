@@ -27,7 +27,6 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Action as CommonAction } from 'helpers/page/commonActions';
 import {
 	setContributionTypes,
 	setExistingPaymentMethods,
@@ -53,7 +52,6 @@ import type { State } from './contributionsLandingReducer';
 
 type Action =
 	| ContribAction
-	| CommonAction
 	| PayloadAction<ContributionTypes>
 	| PayloadAction<ExistingPaymentMethod[]>;
 

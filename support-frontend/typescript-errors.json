@@ -28,7 +28,6 @@
             "TS2554": 6,
             "TS7034": 4,
             "TS7005": 9,
-            "TS2307": 1,
             "TS2525": 1,
             "TS7022": 1
         },
@@ -123,8 +122,7 @@
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/contributions-landing/contributionsLandingInit.ts": 1
+            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5
         }
     },
     "TS1208": [
@@ -1147,12 +1145,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Variable 'props' implicitly has an 'any' type."
-        }
-    ],
-    "TS2307": [
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingInit.ts",
-            "message": "Cannot find module 'helpers/page/commonActions' or its corresponding type declarations."
         }
     ],
     "TS2525": [

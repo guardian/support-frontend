@@ -115,6 +115,9 @@ function initRedux<PageState, PageAction extends Action>(
 		const countryId: IsoCountry = detectCountry();
 		const countryGroupId: CountryGroupId = detectCountryGroup();
 		const currencyId: IsoCurrency = detectCurrency(countryGroupId);
+
+		console.log(countryId, countryGroupId, currencyId);
+
 		const settings = getSettings();
 		const participations: Participations = abTest.init(
 			countryId,
@@ -139,6 +142,8 @@ function initRedux<PageState, PageAction extends Action>(
 					pageReducer?.(initialState) ?? ({} as Reducer<PageState, PageAction>),
 			}),
 		});
+
+		console.log(store.getState().common);
 
 		store.dispatch(setInitialState(initialState));
 
