@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { digitalProducts } from '__mocks__/productInfoMocks';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import { setInitialState } from 'helpers/redux/commonState/actions';
+import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -30,7 +30,7 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
 	});
-	store.dispatch(setInitialState(initialState.common));
+	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
 }
 

@@ -17,7 +17,7 @@ import {
 	analyticsInitialisation,
 	consentInitialisation,
 } from 'helpers/page/analyticsAndConsent';
-import { setInitialState } from 'helpers/redux/commonState/actions';
+import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type {
 	CommonState,
@@ -115,9 +115,6 @@ function initRedux<PageState, PageAction extends Action>(
 		const countryId: IsoCountry = detectCountry();
 		const countryGroupId: CountryGroupId = detectCountryGroup();
 		const currencyId: IsoCurrency = detectCurrency(countryGroupId);
-
-		console.log(countryId, countryGroupId, currencyId);
-
 		const settings = getSettings();
 		const participations: Participations = abTest.init(
 			countryId,
@@ -143,9 +140,7 @@ function initRedux<PageState, PageAction extends Action>(
 			}),
 		});
 
-		console.log(store.getState().common);
-
-		store.dispatch(setInitialState(initialState));
+		store.dispatch(setInitialCommonState(initialState));
 
 		return store;
 	} catch (err) {

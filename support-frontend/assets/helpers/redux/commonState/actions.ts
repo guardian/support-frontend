@@ -1,7 +1,7 @@
 import { commonSlice } from './reducer';
 
 export const {
-	setInitialState,
+	setInitialCommonState,
 	setCountryInternationalisation,
 	setExistingPaymentMethods,
 	setContributionTypes,

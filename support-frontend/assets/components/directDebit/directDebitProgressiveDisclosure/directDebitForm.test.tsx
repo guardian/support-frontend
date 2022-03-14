@@ -8,7 +8,7 @@ import type { Store } from 'redux';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
-import { setInitialState } from 'helpers/redux/commonState/actions';
+import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -32,7 +32,7 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 			common: commonReducer,
 		}),
 	});
-	store.dispatch(setInitialState(initialState.common));
+	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
 }
 

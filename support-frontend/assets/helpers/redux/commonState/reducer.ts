@@ -27,7 +27,7 @@ export const commonSlice = createSlice({
 	name: 'common',
 	initialState: initialCommonState,
 	reducers: {
-		setInitialState(state, action: PayloadAction<CommonStateSetupData>) {
+		setInitialCommonState(state, action: PayloadAction<CommonStateSetupData>) {
 			const {
 				campaign,
 				referrerAcquisitionData,
