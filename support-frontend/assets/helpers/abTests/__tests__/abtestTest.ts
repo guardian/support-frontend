@@ -276,10 +276,8 @@ describe('basic behaviour of init', () => {
 			emptySettings as Settings,
 			tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
+
+		expect(participations).toEqual({});
 	});
 
 	it('The ab test framework should check for both (min and max) breakpoints if they are provided', () => {
@@ -318,12 +316,9 @@ describe('basic behaviour of init', () => {
 			emptySettings as Settings,
 			tests as Tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
 		const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
 	it('The ab test framework should check for min breakpoints if only min is provided', () => {
@@ -361,12 +356,9 @@ describe('basic behaviour of init', () => {
 			emptySettings as Settings,
 			tests as Tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
 		const expectedMediaQuery = '(min-width:740px)';
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
 	it('The ab test framework should check for min breakpoints if only min is provided and max is undefined', () => {
@@ -405,12 +397,9 @@ describe('basic behaviour of init', () => {
 			emptySettings as Settings,
 			tests as Tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
 		const expectedMediaQuery = '(min-width:740px)';
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
 	it('The ab test framework should check for max breakpoints if only max is provided', () => {
@@ -448,12 +437,9 @@ describe('basic behaviour of init', () => {
 			emptySettings as Settings,
 			tests as Tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
 		const expectedMediaQuery = '(max-width:740px)';
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
 	it('The ab test framework should be able to differentiate country groups', () => {
@@ -531,12 +517,9 @@ describe('basic behaviour of init', () => {
 			emptySettings as Settings,
 			tests as Tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
 		const expectedMediaQuery = '(min-width:740px)';
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
 	it('A post-deployment test user should not be allocated into a test', () => {
@@ -578,41 +561,8 @@ describe('basic behaviour of init', () => {
 			emptySettings as Settings,
 			tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 		deleteCookie();
-	});
-
-	it('Does not allocate a locally rendered epic user into the RemoteEpicVariants AB test', () => {
-		const url = `/test.html?acquisitionData=${encodeURI(
-			JSON.stringify(acquisitionDataMockTestControl),
-		)}`;
-		window.history.pushState({}, 'Test Title', url);
-		const participations: Participations = abInit(
-			'GB',
-			GBPCountries,
-			emptySettings as Settings,
-			{},
-		);
-		expect(participations.RemoteEpicVariants).toBe(undefined);
-	});
-
-	it('Allocates a remotely rendered epic user into the RemoteEpicVariants AB test', () => {
-		const data = {
-			isRemote: true,
-			...acquisitionDataMockTestControl,
-		};
-		const url = `/test.html?acquisitionData=${encodeURI(JSON.stringify(data))}`;
-		window.history.pushState({}, 'Test Title', url);
-		const participations: Participations = abInit(
-			'GB',
-			GBPCountries,
-			emptySettings as Settings,
-			{},
-		);
-		expect(participations.RemoteEpicVariants).toBe('remote');
 	});
 });
 
@@ -650,7 +600,7 @@ describe('Correct allocation in a multi test environment', () => {
 				},
 			},
 			isActive: true,
-			referrerControlled: true,
+			referrerControlled: false,
 			seed: 0,
 		},
 		mockTest2: {
@@ -670,7 +620,7 @@ describe('Correct allocation in a multi test environment', () => {
 				},
 			},
 			isActive: true,
-			referrerControlled: true,
+			referrerControlled: false,
 			seed: 0,
 		},
 		mockTest3: {
@@ -691,12 +641,12 @@ describe('Correct allocation in a multi test environment', () => {
 			},
 			isActive: true,
 			canRun: () => false,
-			referrerControlled: true,
+			referrerControlled: false,
 			seed: 0,
 		},
 	};
 	it('It correctly segments a user who has a cookie in the top 80% in GB', () => {
-		document.cookie = 'GU_mvt_id=810000';
+		document.cookie = 'GU_mvt_id=810001';
 		window.history.pushState({}, 'Test Title', mockTestControl);
 		const country = 'GB';
 		const countryGroupId = GBPCountries;
@@ -708,7 +658,6 @@ describe('Correct allocation in a multi test environment', () => {
 		);
 		const expectedParticipations: Participations = {
 			mockTest: 'control',
-			mockTest2: 'notintest',
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
@@ -723,14 +672,10 @@ describe('Correct allocation in a multi test environment', () => {
 			emptySettings as Settings,
 			tests,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 	it('It correctly segments a user who has a cookie between 20% and 80% in GB', () => {
-		document.cookie = 'GU_mvt_id=510000';
+		document.cookie = 'GU_mvt_id=510001';
 		window.history.pushState({}, 'Test Title', mockTestControl);
 		const country = 'GB';
 		const countryGroupId = GBPCountries;
@@ -742,11 +687,10 @@ describe('Correct allocation in a multi test environment', () => {
 		);
 		let expectedParticipations: Participations = {
 			mockTest: 'control',
-			mockTest2: 'notintest',
 		};
 		expect(participations).toEqual(expectedParticipations);
 		window.localStorage.clear();
-		document.cookie = 'GU_mvt_id=510001';
+		document.cookie = 'GU_mvt_id=510002';
 		window.history.pushState({}, 'Test Title', mockTestVariant);
 		participations = abInit(
 			country,
@@ -756,7 +700,6 @@ describe('Correct allocation in a multi test environment', () => {
 		);
 		expectedParticipations = {
 			mockTest: 'variant',
-			mockTest2: 'notintest',
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
@@ -772,7 +715,6 @@ describe('Correct allocation in a multi test environment', () => {
 			tests,
 		);
 		let expectedParticipations: Participations = {
-			mockTest: 'notintest',
 			mockTest2: 'control',
 		};
 		expect(participations).toEqual(expectedParticipations);
@@ -786,42 +728,24 @@ describe('Correct allocation in a multi test environment', () => {
 			tests,
 		);
 		expectedParticipations = {
-			mockTest: 'notintest',
-			mockTest2: 'variant',
+			mockTest2: 'control',
 		};
 		expect(participations).toEqual(expectedParticipations);
-		expect(getVariantsAsString(participations)).toEqual(
-			'mockTest=notintest; mockTest2=variant',
-		);
+		expect(getVariantsAsString(participations)).toEqual('mockTest2=control');
 	});
 	it('It correctly segments a user who has a cookie between 0 and 20% in GB', () => {
-		document.cookie = 'GU_mvt_id=150000';
+		document.cookie = 'GU_mvt_id=150001';
 		window.history.pushState({}, 'Test Title', mockTestControl);
 		const country = 'GB';
 		const countryGroupId = GBPCountries;
-		let participations: Participations = abInit(
+		const participations: Participations = abInit(
 			country,
 			countryGroupId,
 			emptySettings as Settings,
 			tests,
 		);
-		let expectedParticipations: Participations = {
+		const expectedParticipations: Participations = {
 			mockTest: 'control',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-		window.localStorage.clear();
-		document.cookie = 'GU_mvt_id=150001';
-		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		expectedParticipations = {
-			mockTest: 'variant',
-			mockTest2: 'notintest',
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
@@ -830,29 +754,14 @@ describe('Correct allocation in a multi test environment', () => {
 		window.history.pushState({}, 'Test Title', mockTestControl);
 		const country = 'US';
 		const countryGroupId = UnitedStates;
-		let participations: Participations = abInit(
+		const participations: Participations = abInit(
 			country,
 			countryGroupId,
 			emptySettings as Settings,
 			tests,
 		);
-		let expectedParticipations: Participations = {
+		const expectedParticipations: Participations = {
 			mockTest: 'control',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-		window.localStorage.clear();
-		document.cookie = 'GU_mvt_id=150001';
-		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(
-			country,
-			GBPCountries,
-			emptySettings as Settings,
-			tests,
-		);
-		expectedParticipations = {
-			mockTest: 'variant',
-			mockTest2: 'notintest',
 		};
 		expect(participations).toEqual(expectedParticipations);
 	});
