@@ -37,7 +37,9 @@ type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
-type Audiences = { [key in IsoCountry | CountryGroupId | 'ALL']?: Audience };
+export type Audiences = {
+	[key in IsoCountry | CountryGroupId | 'ALL']?: Audience;
+};
 
 type AcquisitionABTest = {
 	name: string;
@@ -76,14 +78,16 @@ export function init(
 	countryGroupId: CountryGroupId,
 	settings: Settings,
 	abTests: Tests = tests,
+	mvt: number = getMvtId(),
+	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
+		[],
 ): Participations {
-	const mvt: number = getMvtId();
-
 	const participations = getParticipations(
 		abTests,
 		mvt,
 		country,
 		countryGroupId,
+		acquisitionDataTests,
 	);
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
@@ -103,7 +107,7 @@ export function init(
 // ----- Helpers ----- //
 
 const MVT_COOKIE = 'GU_mvt_id';
-const MVT_MAX = 1000000;
+const MVT_MAX = 1_000_000;
 
 // Attempts to retrieve the MVT id from a cookie, or sets it.
 function getMvtId(): number {
@@ -128,10 +132,8 @@ function getParticipations(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
+	acquisitionDataTests?: AcquisitionABTest[],
 ): Participations {
-	const acquisitionDataTests: AcquisitionABTest[] | undefined =
-		getTestFromAcquisitionData();
-
 	const participations: Participations = {};
 
 	Object.entries(abTests).forEach(([testId, test]) => {
