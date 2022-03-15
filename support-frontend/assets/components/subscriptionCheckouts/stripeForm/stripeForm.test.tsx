@@ -3,6 +3,7 @@ import '__mocks__/stripeMock';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
+import { mockFetch } from '__mocks__/fetchMock';
 import type { Option } from 'helpers/types/option';
 import type { PropTypes } from './stripeProviderForCountry';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
@@ -61,11 +62,8 @@ describe('Stripe Form', () => {
 			},
 		};
 
-		// @ts-expect-error This doesn't precisely match the fetch API type but that's OK
-		window.fetch = async () => ({
-			json: async () => ({
-				client_secret: 'super secret',
-			}),
+		mockFetch({
+			client_secret: 'super secret',
 		});
 
 		// Async render as StripeForm does a bunch of internal async set up

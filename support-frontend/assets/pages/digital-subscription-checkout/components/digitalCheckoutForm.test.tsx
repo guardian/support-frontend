@@ -1,42 +1,51 @@
-/* eslint-disable react/prop-types */
 import '__mocks__/stripeMock';
+import type { Store } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import { mockFetch } from '__mocks__/fetchMock';
 import { digitalProducts } from '__mocks__/productInfoMocks';
-import { createCommonReducer } from 'helpers/page/commonReducer';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { setInitialCommonState } from 'helpers/redux/commonState/actions';
+import { commonReducer } from 'helpers/redux/commonState/reducer';
+import type { CommonState } from 'helpers/redux/commonState/state';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DigitalCheckoutForm from './digitalCheckoutForm';
 
-const pageReducer = (commonState) =>
+const pageReducer = (commonState: CommonState) =>
 	createCheckoutReducer(
 		commonState.internationalisation.countryId,
 		DigitalPack,
-		'',
+		'Monthly',
 		null,
 		null,
 		null,
 	);
 
-function setUpStore(initialState) {
-	return createStore(
-		combineReducers({
+function setUpStore(initialState: WithDeliveryCheckoutState) {
+	const store = configureStore({
+		reducer: combineReducers({
 			page: pageReducer(initialState.common),
-			common: createCommonReducer(initialState.common),
+			common: commonReducer,
 		}),
-		initialState,
-		compose(applyMiddleware(thunk)),
-	);
+		// @ts-expect-error - some state properties ignored for testing
+		preloadedState: initialState,
+	});
+	store.dispatch(setInitialCommonState(initialState.common));
+	return store;
 }
 
 function renderWithStore(
-	component,
-	{ initialState, store = setUpStore(initialState), ...renderOptions } = {},
+	component: React.ReactElement,
+	{
+		initialState,
+		store = initialState ? setUpStore(initialState) : undefined,
+		...renderOptions
+	}: { initialState?: WithDeliveryCheckoutState; store?: Store } = {},
 ) {
-	function Wrapper({ children }) {
-		return <Provider store={store}>{children}</Provider>;
+	function Wrapper({ children }: { children?: React.ReactNode }) {
+		return <>{store && <Provider store={store}>{children}</Provider>}</>;
 	}
 
 	return render(component, {
@@ -78,19 +87,18 @@ describe('Digital checkout form', () => {
 			},
 		};
 
-		window.fetch = async () => ({
-			json: async () => ({
-				client_secret: 'super secret',
-			}),
+		mockFetch({
+			client_secret: 'super secret',
 		});
 
 		renderWithStore(<DigitalCheckoutForm />, {
+			// @ts-expect-error -- Type mismatch is unimportant for tests
 			initialState,
 		});
 	});
 	describe('Payment methods', () => {
-		it('shows the direct debit option when the currency is GBP and the billing address is in the UK', async () => {
-			expect(await screen.queryByText('Direct debit')).toBeInTheDocument();
+		it('shows the direct debit option when the currency is GBP and the billing address is in the UK', () => {
+			expect(screen.queryByText('Direct debit')).toBeInTheDocument();
 		});
 		it('does not show the direct debit option when the currency is not GBP', async () => {
 			const countrySelect = await screen.findByLabelText('Country');
@@ -99,7 +107,7 @@ describe('Digital checkout form', () => {
 					value: 'US',
 				},
 			});
-			expect(await screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
 		});
 	});
 	describe('Validation', () => {
@@ -123,7 +131,7 @@ describe('Digital checkout form', () => {
 			);
 			fireEvent.click(freeTrialButton);
 			expect(
-				await screen.queryAllByText(
+				screen.queryAllByText(
 					'Please use only letters, numbers and punctuation.',
 				),
 			).toBeTruthy();

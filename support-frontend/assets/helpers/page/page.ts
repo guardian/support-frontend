@@ -17,11 +17,12 @@ import {
 	analyticsInitialisation,
 	consentInitialisation,
 } from 'helpers/page/analyticsAndConsent';
+import { setInitialCommonState } from 'helpers/redux/commonState/actions';
+import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type {
 	CommonState,
 	Internationalisation,
-} from 'helpers/page/commonReducer';
-import { createCommonReducer } from 'helpers/page/commonReducer';
+} from 'helpers/redux/commonState/state';
 import { renderError } from 'helpers/rendering/render';
 import {
 	getCampaign,
@@ -130,7 +131,6 @@ function initRedux<PageState, PageAction extends Action>(
 			settings,
 			acquisitionData,
 		);
-		const commonReducer = createCommonReducer(initialState);
 
 		const store = configureStore({
 			reducer: combineReducers<ReduxState<PageState>>({
@@ -139,6 +139,9 @@ function initRedux<PageState, PageAction extends Action>(
 					pageReducer?.(initialState) ?? ({} as Reducer<PageState, PageAction>),
 			}),
 		});
+
+		store.dispatch(setInitialCommonState(initialState));
+
 		return store;
 	} catch (err) {
 		renderError(err as Error, null);
