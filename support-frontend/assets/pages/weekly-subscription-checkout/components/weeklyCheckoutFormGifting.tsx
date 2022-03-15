@@ -7,6 +7,7 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source-react-components';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
@@ -36,10 +37,10 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
-import type { SetCountryAction } from 'helpers/page/commonActions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
@@ -71,7 +72,6 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import 'helpers/page/commonActions';
 import './weeklyCheckout.scss';
 
 // ----- Styles ----- //
@@ -129,7 +129,9 @@ function mapDispatchToProps() {
 		signOut,
 		setBillingCountry:
 			(country: string) =>
-			(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
+			(
+				dispatch: Dispatch<SetCountryChangedAction | PayloadAction<IsoCountry>>,
+			) =>
 				setCountry(country)(dispatch),
 		validateForm:
 			() =>

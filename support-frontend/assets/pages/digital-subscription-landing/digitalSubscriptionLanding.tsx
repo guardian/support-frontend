@@ -28,12 +28,12 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import type { CommonState } from 'helpers/page/commonReducer';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import { getPromotions, userIsPatron } from 'helpers/patrons';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import type { CommonState } from 'helpers/redux/commonState/state';
 import { renderPage } from 'helpers/rendering/render';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { routes } from 'helpers/urls/routes';

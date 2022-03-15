@@ -5,7 +5,9 @@ import type {
 import 'helpers/contributions';
 
 export type Status = 'On' | 'Off';
+
 export type SwitchObject = Record<string, Status>;
+
 export type Switches = {
 	experiments: Record<
 		string,
@@ -17,9 +19,10 @@ export type Switches = {
 	>;
 	[key: string]: SwitchObject;
 };
+
 export type Settings = {
 	switches: Switches;
-	amounts: ConfiguredAmounts;
+	amounts?: ConfiguredAmounts;
 	contributionTypes: ContributionTypes;
 	metricUrl: string;
 };

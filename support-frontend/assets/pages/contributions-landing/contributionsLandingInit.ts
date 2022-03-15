@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type { Store } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
@@ -26,11 +27,10 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Action as CommonAction } from 'helpers/page/commonActions';
 import {
 	setContributionTypes,
 	setExistingPaymentMethods,
-} from 'helpers/page/commonActions';
+} from 'helpers/redux/commonState/actions';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
@@ -50,7 +50,10 @@ import {
 } from './contributionsLandingActions';
 import type { State } from './contributionsLandingReducer';
 
-type Action = ContribAction | CommonAction;
+type Action =
+	| ContribAction
+	| PayloadAction<ContributionTypes>
+	| PayloadAction<ExistingPaymentMethod[]>;
 
 // ----- Functions ----- //
 function getInitialPaymentMethod(
@@ -133,16 +136,12 @@ function initialisePaymentMethods(
 								existingDirectDebitON),
 					);
 				dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
-				const firstExistingPaymentMethod =
-					switchedOnExistingPaymentMethods[0] as
-						| ExistingPaymentMethod
-						| undefined;
+				const firstExistingPaymentMethod = switchedOnExistingPaymentMethods[0];
 				const allowDefaultSelectedPaymentMethod =
 					state.common.abParticipations.defaultPaymentMethodTest === 'control';
 
 				if (
 					allowDefaultSelectedPaymentMethod &&
-					firstExistingPaymentMethod &&
 					isUsableExistingPaymentMethod(firstExistingPaymentMethod)
 				) {
 					dispatch(
