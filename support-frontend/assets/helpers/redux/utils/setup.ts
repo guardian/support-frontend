@@ -1,5 +1,3 @@
-// ----- Imports ----- //
-import type { Reducer, Store } from 'redux';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { getAmounts } from 'helpers/abTests/helpers';
@@ -11,40 +9,19 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-import {
-	analyticsInitialisation,
-	consentInitialisation,
-} from 'helpers/page/analyticsAndConsent';
-import { setInitialCommonState } from 'helpers/redux/commonState/actions';
-import type {
-	CommonState,
-	Internationalisation,
-} from 'helpers/redux/commonState/state';
-import type { SubscriptionsReducer } from 'helpers/redux/subscriptionsStore';
-import {
-	addPageReducer,
-	subscriptionsStore,
-} from 'helpers/redux/subscriptionsStore';
-import { renderError } from 'helpers/rendering/render';
+import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
+import { localCurrencyCountries } from 'helpers/internationalisation/localCurrencyCountry';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	getCampaign,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	getAllQueryParamsWithExclusions,
 	getQueryParameter,
 } from 'helpers/urls/url';
-import { localCurrencyCountries } from '../internationalisation/localCurrencyCountry';
-import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
+import type { CommonState, Internationalisation } from '../commonState/state';
 
-// ----- Types ----- //
-export type ReduxState<PageState> = {
-	common: CommonState;
-	page: PageState;
-};
-
-// ----- Functions ----- //
 function getLocalCurrencyCountry(
 	countryId: IsoCountry,
 	abParticipations: Participations,
@@ -102,62 +79,23 @@ function buildInitialState(
 	};
 }
 
-// Initialises the page.
-/*
-  A note on the generics here. PageState is an abstract type representing anything we might assign
-  to the `page` key in Redux state (see ReduxState type above), and PageAction is its corresponding
-  abstract type representing any Redux action associated with whatever we pass as PageState.
-  This allows us to construct a Redux store with state and action types for `common` determined by this function,
-  but state and action types for `page` determined when this function is called
-*/
-function initRedux(
-	pageReducer?: (commonState: CommonState) => SubscriptionsReducer,
-): typeof subscriptionsStore {
-	try {
-		const countryId: IsoCountry = detectCountry();
-		const countryGroupId: CountryGroupId = detectCountryGroup();
-		const currencyId: IsoCurrency = detectCurrency(countryGroupId);
-		const settings = getSettings();
-		const participations: Participations = abTest.init(
-			countryId,
-			countryGroupId,
-			settings,
-		);
-		const acquisitionData: ReferrerAcquisitionData =
-			getReferrerAcquisitionData();
-		const initialState: CommonState = buildInitialState(
-			participations,
-			countryGroupId,
-			countryId,
-			currencyId,
-			settings,
-			acquisitionData,
-		);
-
-		addPageReducer(pageReducer?.(initialState));
-
-		subscriptionsStore.dispatch(setInitialCommonState(initialState));
-
-		return subscriptionsStore;
-	} catch (err) {
-		renderError(err as Error, null);
-		throw err;
-	}
-}
-
-function setUpTrackingAndConsents(): void {
+export function getInitialState(): CommonState {
 	const countryId: IsoCountry = detectCountry();
 	const countryGroupId: CountryGroupId = detectCountryGroup();
+	const currencyId: IsoCurrency = detectCurrency(countryGroupId);
 	const settings = getSettings();
 	const participations: Participations = abTest.init(
 		countryId,
 		countryGroupId,
 		settings,
 	);
-	const acquisitionData = getReferrerAcquisitionData();
-	void consentInitialisation(countryId);
-	analyticsInitialisation(participations, acquisitionData);
+	const acquisitionData: ReferrerAcquisitionData = getReferrerAcquisitionData();
+	return buildInitialState(
+		participations,
+		countryGroupId,
+		countryId,
+		currencyId,
+		settings,
+		acquisitionData,
+	);
 }
-
-// ----- Exports ----- //
-export { initRedux, setUpTrackingAndConsents };

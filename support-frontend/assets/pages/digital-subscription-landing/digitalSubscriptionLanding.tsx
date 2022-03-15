@@ -28,12 +28,13 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { getPromotions, userIsPatron } from 'helpers/patrons';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { CommonState } from 'helpers/redux/commonState/state';
+import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { routes } from 'helpers/urls/routes';
@@ -108,7 +109,7 @@ const reducer = (commonState: CommonState) =>
 		null,
 	);
 
-const store = initRedux(reducer);
+const store = initReduxForSubscriptions(reducer);
 const { currencyId } = store.getState().common.internationalisation;
 const { billingPeriod } = store.getState().page.checkout;
 

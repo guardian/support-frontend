@@ -5,9 +5,9 @@
             "TS2578": 5,
             "TS2339": 14,
             "TS2322": 60,
-            "TS2345": 35,
+            "TS2345": 38,
             "TS7006": 29,
-            "TS6133": 11,
+            "TS6133": 8,
             "TS2305": 11,
             "TS7031": 10,
             "TS2564": 2,
@@ -21,7 +21,7 @@
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
-            "TS6196": 1,
+            "TS6192": 1,
             "TS2367": 4,
             "TS2740": 1,
             "TS7016": 1,
@@ -91,11 +91,12 @@
             "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
+            "assets/pages/contributions-checkout-in-epic/contributionsCheckoutInEpic.tsx": 2,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
             "assets/pages/contributions-landing/contributionsLandingActions.ts": 1,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
-            "assets/pages/promotion-terms/promotionTerms.tsx": 1,
+            "assets/pages/promotion-terms/promotionTerms.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/helpers/rendering/ssrPages.ts": 1,
@@ -103,7 +104,6 @@
             "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/helpers/forms/checkouts.ts": 1,
-            "assets/helpers/page/page.ts": 4,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
@@ -120,6 +120,7 @@
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
+            "assets/helpers/page/page.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
@@ -555,6 +556,14 @@
             "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
         },
         {
+            "path": "assets/pages/contributions-checkout-in-epic/contributionsCheckoutInEpic.tsx",
+            "message": "Argument of type '() => Reducer<PageState, AnyAction>' is not assignable to parameter of type '(commonState: CommonState) => Reducer<CombinedState<{ csrf: Csrf; marketingConsent: State; billingAddress: CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>; deliveryAddress?: undefined; checkout: FormState; user: User; directDebit: DirectDebitState; }>, Action | ... 67 more ... | { ...; }>'."
+        },
+        {
+            "path": "assets/pages/contributions-checkout-in-epic/contributionsCheckoutInEpic.tsx",
+            "message": "Argument of type 'EnhancedStore<{ common: CommonState; page: CombinedState<{ csrf: Csrf; marketingConsent: State; billingAddress: CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>; deliveryAddress?: undefined; checkout: FormState; user: User; directDebit: DirectDebitState; }>; }, AnyAction, [...]>' is not assignable to parameter of type 'Store<State, Action>'."
+        },
+        {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
             "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
         },
@@ -592,7 +601,11 @@
         },
         {
             "path": "assets/pages/promotion-terms/promotionTerms.tsx",
-            "message": "Argument of type 'ReduxState<{ productPrices: ProductPrices | null | undefined; promotionTerms: { starts: Date | null; expires: Date | null; description?: string | undefined; product?: SubscriptionProduct | undefined; productRatePlans?: string[] | undefined; promoCode?: string | undefined; isGift?: boolean | undefined; }; countryGrou...' is not assignable to parameter of type 'State'."
+            "message": "Argument of type '() => () => { productPrices: ProductPrices | null | undefined; promotionTerms: { starts: Date | null; expires: Date | null; description?: string | undefined; product?: SubscriptionProduct | undefined; productRatePlans?: string[] | undefined; promoCode?: string | undefined; isGift?: boolean | undefined; }; countryGro...' is not assignable to parameter of type '(commonState: CommonState) => Reducer<CombinedState<{ csrf: Csrf; marketingConsent: State; billingAddress: CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>; deliveryAddress?: undefined; checkout: FormState; user: User; directDebit: DirectDebitState; }>, Action | ... 67 more ... | { ...; }>'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/promotionTerms.tsx",
+            "message": "Argument of type '{ common: CommonState; page: CombinedState<{ csrf: Csrf; marketingConsent: State; billingAddress: CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>; deliveryAddress?: undefined; checkout: FormState; user: User; directDebit: DirectDebitState; }>; }' is not assignable to parameter of type 'State'."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
@@ -725,18 +738,6 @@
         {
             "path": "assets/helpers/forms/checkouts.ts",
             "message": "'allSwitches' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/page/page.ts",
-            "message": "'configureStore' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/page/page.ts",
-            "message": "'combineReducers' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/page/page.ts",
-            "message": "'commonReducer' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",
@@ -1045,10 +1046,10 @@
             "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
         }
     ],
-    "TS6196": [
+    "TS6192": [
         {
             "path": "assets/helpers/page/page.ts",
-            "message": "'Action' is declared but never used."
+            "message": "All imports in import declaration are unused."
         }
     ],
     "TS2367": [
@@ -1184,7 +1185,7 @@
     "TS2558": [
         {
             "path": "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
-            "message": "Expected 1 type arguments, but got 2."
+            "message": "Expected 0 type arguments, but got 2."
         }
     ]
 }
