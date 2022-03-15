@@ -188,7 +188,7 @@ function userInTest(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	acquisitionDataTests: AcquisitionABTest[] | undefined,
-) {
+): boolean {
 	const { audiences, referrerControlled } = test;
 
 	if (cookie.get('_post_deploy_user')) {
@@ -203,9 +203,12 @@ function userInTest(
 	}
 
 	if (referrerControlled) {
-		const isSfdV2Test = acquisitionDataTests?.find((acquisitionDataTest) =>
-			acquisitionDataTest.name.startsWith('SFD_V2'),
-		);
+		const isSfdV2Test =
+			testId === 'SFD_V2' &&
+			!!acquisitionDataTests &&
+			acquisitionDataTests.some((acquisitionDataTest) =>
+				acquisitionDataTest.name.startsWith('SFD_V2'),
+			);
 
 		if (isSfdV2Test) {
 			return isSfdV2Test;
@@ -213,7 +216,7 @@ function userInTest(
 
 		return (
 			!!acquisitionDataTests &&
-			acquisitionDataTests.find(
+			acquisitionDataTests.some(
 				(acquisitionDataTest) => acquisitionDataTest.name === testId,
 			)
 		);
