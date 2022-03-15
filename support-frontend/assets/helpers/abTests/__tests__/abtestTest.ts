@@ -108,6 +108,41 @@ describe('init', () => {
 		expect(participations).toEqual(expectedParticipations);
 	});
 
+	it('uses the variant assignment in the acquisitionData for referrerControlled tests belonging to a campaign', () => {
+		const mvt = 123456;
+
+		const tests = {
+			t: buildTest({
+				variants: [
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
+				],
+				referrerControlled: true,
+			}),
+		};
+
+		const acquisitionAbTests = [
+			buildAcquisitionAbTest({ name: 't__HEADER', variant: 'control' }),
+		];
+
+		const country = 'GB';
+		const countryGroupId = GBPCountries;
+		const participations: Participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings as Settings,
+			tests,
+			mvt,
+			acquisitionAbTests,
+		);
+
+		const expectedParticipations: Participations = {
+			t: 'control',
+		};
+
+		expect(participations).toEqual(expectedParticipations);
+	});
+
 	it('does not assign a user to a test in another country', () => {
 		const mvt = 123456;
 
