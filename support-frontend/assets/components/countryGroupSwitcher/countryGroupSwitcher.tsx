@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-// @ts-expect-error
 import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
@@ -12,7 +11,10 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import './countryGroupSwitcher.scss';
-import styles from './countryGroupSwitcher.module.scss';
+import moduleStyles from './countryGroupSwitcher.module.scss';
+
+const styles = moduleStyles as { button: string };
+
 // ----- Props ----- //
 export type PropTypes = {
 	countryGroupIds: CountryGroupId[];
@@ -27,8 +29,8 @@ function CountryGroupSwitcher({
 	selectedCountryGroup,
 	countryGroupIds,
 	trackProduct,
-}: PropTypes) {
-	const buttonRef = useRef(null);
+}: PropTypes): JSX.Element {
+	const buttonRef = useRef<HTMLButtonElement>(null);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [bounds, setBounds] = useState({
 		top: 0,
@@ -119,6 +121,8 @@ function CountryGroupSwitcher({
 
 CountryGroupSwitcher.defaultProps = {
 	trackProduct: null,
-}; // ----- Exports ----- //
+};
+
+// ----- Exports ----- //
 
 export default CountryGroupSwitcher;
