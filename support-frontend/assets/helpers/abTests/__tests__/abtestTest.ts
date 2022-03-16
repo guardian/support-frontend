@@ -7,7 +7,7 @@ import {
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
 import { init as abInit, targetPageMatches } from '../abtest';
-import type { Audiences, Participations, Test, Variant } from '../abtest';
+import type { Audience, Participations, Test, Variant } from '../abtest';
 
 const { subsShowcaseAndDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
@@ -26,7 +26,7 @@ describe('init', () => {
 		}),
 	});
 
-	// Common arguments to abInit
+	// Common arguments to init
 	const mvt = 123456;
 	const country = 'GB';
 	const countryGroupId = GBPCountries;
@@ -105,8 +105,10 @@ describe('init', () => {
 	});
 
 	it('uses the variant assignment in the acquisitionData for referrerControlled tests belonging to a campaign', () => {
+		const campaignPrefix = 't';
+
 		const tests = {
-			t: buildTest({
+			[campaignPrefix]: buildTest({
 				variants: [
 					buildVariant({ id: 'control' }),
 					buildVariant({ id: 'variant' }),
@@ -116,7 +118,10 @@ describe('init', () => {
 		};
 
 		const acquisitionAbTests = [
-			buildAcquisitionAbTest({ name: 't__HEADER', variant: 'control' }),
+			buildAcquisitionAbTest({
+				name: `${campaignPrefix}__HEADER`,
+				variant: 'control',
+			}),
 		];
 
 		const participations: Participations = abInit(
@@ -137,7 +142,7 @@ describe('init', () => {
 
 	it('does not assign a user to a test in another country', () => {
 		const tests = {
-			t: buildTest({ audiences: { GB: { offset: 0, size: 1 } } }),
+			t: buildTest({ audiences: { GB: buildAudience({}) } }),
 		};
 
 		const country = 'US';
@@ -155,7 +160,7 @@ describe('init', () => {
 
 	it('does not assign a user to a test in another country group', () => {
 		const tests = {
-			t: buildTest({ audiences: { GBPCountries: { offset: 0, size: 1 } } }),
+			t: buildTest({ audiences: { GBPCountries: buildAudience({}) } }),
 		};
 
 		const country = 'US';
@@ -175,7 +180,9 @@ describe('init', () => {
 		const tests = {
 			t: buildTest({
 				audiences: {
-					GB: { offset: 0, size: 1, breakpoint: { minWidth: 'tablet' } },
+					GB: buildAudience({
+						breakpoint: { minWidth: 'tablet' },
+					}),
 				},
 			}),
 		};
@@ -198,7 +205,9 @@ describe('init', () => {
 		const tests = {
 			t: buildTest({
 				audiences: {
-					GB: { offset: 0, size: 1, breakpoint: { maxWidth: 'tablet' } },
+					GB: buildAudience({
+						breakpoint: { maxWidth: 'tablet' },
+					}),
 				},
 			}),
 		};
@@ -221,11 +230,9 @@ describe('init', () => {
 		const tests = {
 			t: buildTest({
 				audiences: {
-					GB: {
-						offset: 0,
-						size: 1,
+					GB: buildAudience({
 						breakpoint: { minWidth: 'tablet', maxWidth: 'desktop' },
-					},
+					}),
 				},
 			}),
 		};
@@ -274,7 +281,9 @@ describe('init', () => {
 		const mvt = 100_000; // This is 10% of the max mvt
 
 		const tests = {
-			t1: buildTest({ audiences: { GB: { offset: 0.2, size: 0.8 } } }),
+			t1: buildTest({
+				audiences: { GB: buildAudience({ offset: 0.2, size: 0.8 }) },
+			}),
 		};
 
 		const participations: Participations = abInit(
@@ -292,7 +301,9 @@ describe('init', () => {
 		const mvt = 900_000; // This is 90% of the max mvt
 
 		const tests = {
-			t1: buildTest({ audiences: { GB: { offset: 0.1, size: 0.8 } } }),
+			t1: buildTest({
+				audiences: { GB: buildAudience({ offset: 0.1, size: 0.8 }) },
+			}),
 		};
 
 		const participations: Participations = abInit(
@@ -379,43 +390,38 @@ it('targetPage matching', () => {
 
 // ----- Helpers ----- //
 
-interface BuildVariantOptions {
-	id?: string;
-}
-
-function buildVariant({ id = 'control' }: BuildVariantOptions): Variant {
+function buildVariant({ id = 'control' }: Partial<Variant>): Variant {
 	return { id };
 }
 
-interface BuildTestOptions {
-	variants?: Variant[];
-	referrerControlled?: boolean;
-	audiences?: Audiences;
+function buildAudience({
+	offset = 0,
+	size = 1,
+	breakpoint,
+}: Partial<Audience>): Audience {
+	return { offset, size, breakpoint };
 }
 
 function buildTest({
 	variants = [buildVariant({})],
 	referrerControlled = false,
-	audiences = { ALL: { offset: 0, size: 1 } },
-}: BuildTestOptions): Test {
+	audiences = { ALL: buildAudience({}) },
+	isActive = true,
+	seed = 0,
+}: Partial<Test>): Test {
 	return {
 		variants,
 		audiences,
-		isActive: true,
+		isActive,
 		referrerControlled,
-		seed: 0,
+		seed,
 	};
-}
-
-interface BuildAcquisitionAbTestOptions {
-	name?: string;
-	variant?: string;
 }
 
 function buildAcquisitionAbTest({
 	name = 't',
 	variant = 'control',
-}: BuildAcquisitionAbTestOptions): AcquisitionABTest {
+}: Partial<AcquisitionABTest>): AcquisitionABTest {
 	return {
 		name,
 		variant,

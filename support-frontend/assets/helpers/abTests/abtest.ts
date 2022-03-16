@@ -31,7 +31,7 @@ type BreakpointRange = {
 
 export type Participations = Record<string, string>;
 
-type Audience = {
+export type Audience = {
 	offset: number;
 	size: number;
 	breakpoint?: BreakpointRange;
