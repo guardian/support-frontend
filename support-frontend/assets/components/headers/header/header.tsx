@@ -1,14 +1,10 @@
 // ----- Imports ----- //
-import type { Node } from 'react';
 import { Component } from 'react';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
-import 'helpers/types/option';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import 'helpers/internationalisation/countryGroup';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ElementResizer } from 'helpers/polyfills/layout';
 import { onElementResize } from 'helpers/polyfills/layout';
-import type { Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import MobileMenuToggler from './mobileMenuToggler';
@@ -16,7 +12,7 @@ import Padlock from './padlock.svg';
 import './header.scss';
 
 export type PropTypes = {
-	utility: Option<Node>;
+	utility: JSX.Element | null;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
@@ -27,7 +23,15 @@ export type State = {
 };
 
 // ----- Metrics ----- //
-const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
+const getMenuStateMetrics = ({
+	menuRef,
+	logoRef,
+	containerRef,
+}: {
+	menuRef: Element;
+	logoRef: Element;
+	containerRef: Element;
+}): State => {
 	const [logoLeft, menuWidth, containerLeft, containerWidth] = [
 		logoRef.getBoundingClientRect().left,
 		menuRef.getBoundingClientRect().width,
@@ -47,36 +51,38 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 
 // ----- Component ----- //
 type TopNavPropTypes = {
-	utility: Node;
+	utility: JSX.Element | null;
 	getLogoRef: (arg0: Element | null | undefined) => void;
 	display: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
 
-const TopNav = ({ display, getLogoRef, utility }: TopNavPropTypes) => (
-	<div className="component-header-topnav">
-		<div className="component-header-topnav__utility">{utility}</div>
-		{display === 'checkout' && (
-			<div className="component-header-topnav__checkout">
-				<div />
-				<div className="component-header-topnav--checkout-text">
-					<div className="component-header--padlock">
-						<Padlock />
+function TopNav({ display, getLogoRef, utility }: TopNavPropTypes) {
+	return (
+		<div className="component-header-topnav">
+			<div className="component-header-topnav__utility">{utility}</div>
+			{display === 'checkout' && (
+				<div className="component-header-topnav__checkout">
+					<div />
+					<div className="component-header-topnav--checkout-text">
+						<div className="component-header--padlock">
+							<Padlock />
+						</div>
+						<h1>Checkout</h1>
 					</div>
-					<h1>Checkout</h1>
 				</div>
+			)}
+			<div className="component-header-topnav-logo" ref={getLogoRef}>
+				<a
+					className="component-header-topnav-logo__graun"
+					href="https://www.theguardian.com"
+				>
+					<div className="visually-hidden">Return to the Guardian</div>
+					<SvgGuardianLogo />
+				</a>
 			</div>
-		)}
-		<div className="component-header-topnav-logo" ref={getLogoRef}>
-			<a
-				className="component-header-topnav-logo__graun"
-				href="https://www.theguardian.com"
-			>
-				<div className="visually-hidden">Return to the Guardian</div>
-				<SvgGuardianLogo />
-			</a>
 		</div>
-	</div>
-);
+	);
+}
 
 export default class Header extends Component<PropTypes, State> {
 	static defaultProps = {
@@ -89,7 +95,7 @@ export default class Header extends Component<PropTypes, State> {
 		isTestUser: getGlobal<boolean>('isTestUser'),
 	};
 
-	componentDidMount() {
+	componentDidMount(): void {
 		if (
 			this.props.display === 'navigation' &&
 			this.menuRef &&
@@ -111,7 +117,7 @@ export default class Header extends Component<PropTypes, State> {
 		}
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount(): void {
 		if (this.observer) {
 			this.observer.stopListening();
 		}
@@ -120,9 +126,9 @@ export default class Header extends Component<PropTypes, State> {
 	logoRef: Element | null | undefined;
 	menuRef: Element | null | undefined;
 	containerRef: Element | null | undefined;
-	observer: ElementResizer;
+	observer: ElementResizer | null | undefined;
 
-	render() {
+	render(): JSX.Element {
 		const { utility, display, countryGroupId } = this.props;
 		const { fitsLinksInOneRow, fitsLinksAtAll, isTestUser } = this.state;
 		return (
@@ -160,7 +166,6 @@ export default class Header extends Component<PropTypes, State> {
 								links={
 									<Links countryGroupId={countryGroupId} location="mobile" />
 								}
-								countryGroupId={countryGroupId}
 								utility={utility}
 							/>
 						)}
