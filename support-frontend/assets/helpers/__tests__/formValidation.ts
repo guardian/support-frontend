@@ -1,7 +1,7 @@
 // ----- Imports ----- //
-import { checkStateIfApplicable } from 'helpers/forms/formValidation';
 import {
 	amountOrOtherAmountIsValid,
+	checkStateIfApplicable,
 	maxTwoDecimals,
 } from '../forms/formValidation';
 import {
@@ -13,7 +13,9 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '../internationalisation/countryGroup';
+
 // ----- Tests ----- //
+
 describe('formValidation', () => {
 	describe('maxTwoDecimals', () => {
 		it('should return true for an int', () => {
@@ -42,34 +44,49 @@ describe('formValidation', () => {
 		});
 	});
 	describe('checkStateIfApplicable', () => {
+		const contributionType = 'MONTHLY';
+
 		it('should return false if state is null', () => {
 			const state = null;
 			const countryGroupId = UnitedStates;
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(false);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(false);
 		});
 		it('should return true if countryGroupId is UnitedStates and state is a string', () => {
 			const state = 'CA';
 			const countryGroupId = UnitedStates;
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(true);
 		});
 		it('should return true if countryGroupId is Canada and state is a string', () => {
 			const state = 'AL';
 			const countryGroupId = Canada;
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(true);
 		});
 		it('should return true if countryGroupId is AUDCountries and state is a string', () => {
 			const state = 'NSW';
 			const countryGroupId = AUDCountries;
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(true);
 		});
 		it('should return true if countryGroupId is AUDCountries and country uses AUD but is not AU, false otherwise', () => {
 			const countryGroupId = AUDCountries;
 			const state = 'NSW';
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- disable for test
 			window.guardian = window.guardian || {};
-			window.guardian.geoip = window.guardian.geoip || {};
+			window.guardian.geoip = window.guardian.geoip ?? { countryCode: 'TV' };
 			window.guardian.geoip.countryCode = 'TV';
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
-			expect(checkStateIfApplicable(null, countryGroupId)).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(null, countryGroupId, contributionType),
+			).toEqual(true);
 			expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(
 				true,
 			);
@@ -77,41 +94,71 @@ describe('formValidation', () => {
 				true,
 			);
 			window.guardian.geoip.countryCode = 'AU';
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
-			expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(null, countryGroupId, contributionType),
+			).toEqual(false);
 			expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(
 				true,
 			);
 			window.guardian.geoip.countryCode = 'GB';
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
-			expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(null, countryGroupId, contributionType),
+			).toEqual(false);
 			expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(
 				true,
 			);
 			// This function tests for presence, it does not validate state and country
-			expect(checkStateIfApplicable('NY', countryGroupId)).toEqual(true);
+			expect(
+				checkStateIfApplicable('NY', countryGroupId, contributionType),
+			).toEqual(true);
 			expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(
 				true,
 			);
 			// Function supports no geoip
 			delete window.guardian.geoip;
-			expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
-			expect(checkStateIfApplicable(null, countryGroupId)).toEqual(false);
+			expect(
+				checkStateIfApplicable(state, countryGroupId, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(null, countryGroupId, contributionType),
+			).toEqual(false);
 			expect(checkStateIfApplicable(null, countryGroupId, 'ONE_OFF')).toEqual(
 				true,
 			);
 		});
 		it('should return true if countryGroupId is not Canada, AUDCountries or United States regardless of the state', () => {
-			let state = 'AL';
-			expect(checkStateIfApplicable(state, GBPCountries)).toEqual(true);
-			expect(checkStateIfApplicable(state, EURCountries)).toEqual(true);
-			expect(checkStateIfApplicable(state, International)).toEqual(true);
-			expect(checkStateIfApplicable(state, NZDCountries)).toEqual(true);
+			let state: string | null = 'AL';
+			expect(
+				checkStateIfApplicable(state, GBPCountries, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, EURCountries, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, International, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, NZDCountries, contributionType),
+			).toEqual(true);
 			state = null;
-			expect(checkStateIfApplicable(state, GBPCountries)).toEqual(true);
-			expect(checkStateIfApplicable(state, EURCountries)).toEqual(true);
-			expect(checkStateIfApplicable(state, International)).toEqual(true);
-			expect(checkStateIfApplicable(state, NZDCountries)).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, GBPCountries, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, EURCountries, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, International, contributionType),
+			).toEqual(true);
+			expect(
+				checkStateIfApplicable(state, NZDCountries, contributionType),
+			).toEqual(true);
 		});
 	});
 	describe('amountOrOtherAmountIsValid', () => {
@@ -124,7 +171,7 @@ describe('formValidation', () => {
 			ONE_OFF: 'other',
 			MONTHLY: 'other',
 			ANNUAL: 'other',
-		};
+		} as const;
 		const defaultOtherAmounts = {
 			ONE_OFF: {
 				amount: null,

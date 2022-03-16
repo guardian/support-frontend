@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from 'components/button/button';
 import AnimatedDots from 'components/spinners/animatedDots';
+import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -9,10 +10,7 @@ import {
 import { logException } from 'helpers/utilities/logger';
 import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
-import type {
-	AmazonPayData,
-	State,
-} from 'pages/contributions-landing/contributionsLandingReducer';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 type PropTypes = {
 	amazonPayData: AmazonPayData;

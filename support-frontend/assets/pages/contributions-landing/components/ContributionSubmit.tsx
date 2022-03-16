@@ -8,6 +8,7 @@ import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
+import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -19,7 +20,7 @@ import { hiddenIf } from 'helpers/utilities/utilities';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import type { Action } from '../contributionsLandingActions';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
-import type { AmazonPayData, State } from '../contributionsLandingReducer';
+import type { State } from '../contributionsLandingReducer';
 import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
 
 // ----- Types ----- //

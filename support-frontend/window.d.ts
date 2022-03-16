@@ -1,4 +1,9 @@
+import type { ComponentType } from 'react';
 import type { Participations } from 'helpers/abTests/abtest';
+import type {
+	AmazonObject,
+	AmazonPaymentsObject,
+} from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { StripeKey } from 'helpers/forms/stripe';
 import type { User } from 'helpers/user/userReducer';
 import type { ProductPrices } from './assets/helpers/productPrice/productPrices';
@@ -46,12 +51,7 @@ declare global {
 			v2recaptchaPublicKey: string;
 		};
 
-		amazon?: {
-			Login: {
-				setClientId: (clientId: string) => void;
-				setSandboxMode: (sandboxMode: boolean) => void;
-			};
-		};
+		amazon?: AmazonObject;
 		disablePayPalButton?: () => void;
 		enablePayPalButton?: () => void;
 		googleTagManagerDataLayer?: Array<Record<string, unknown>>;
@@ -59,12 +59,18 @@ declare global {
 			render: (arg0: string, arg1: Record<string, unknown>) => void;
 		};
 		gtag_enable_tcf_support?: boolean;
-		OffAmazonPayments?: Record<string, unknown>;
+		OffAmazonPayments?: AmazonPaymentsObject;
 		onAmazonLoginReady: unknown;
 		onAmazonPaymentsReady: () => void;
 		paypal: {
 			FUNDING: {
 				CREDIT: unknown;
+			};
+			Button: {
+				driver: (
+					name: 'react',
+					{ React, ReactDOM }: { React: unknown; ReactDOM: unknown },
+				) => ComponentType;
 			};
 		};
 		QuantumMetricAPI: unknown;

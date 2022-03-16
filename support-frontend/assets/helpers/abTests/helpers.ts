@@ -4,7 +4,7 @@ import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type FallbackAmounts = Record<CountryGroupId, ContributionAmounts>;
-const FALLBACK_AMOUNTS: FallbackAmounts = {
+export const FALLBACK_AMOUNTS: FallbackAmounts = {
 	GBPCountries: {
 		ONE_OFF: {
 			amounts: [30, 60, 120, 240],

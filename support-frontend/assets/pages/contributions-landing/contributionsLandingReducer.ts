@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
+import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
@@ -14,13 +15,14 @@ import csrf from 'helpers/csrf/csrfReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
-import type { CommonState } from 'helpers/page/commonReducer';
+import type { CommonState } from 'helpers/redux/commonState/state';
 import * as storage from 'helpers/storage/storage';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
@@ -30,28 +32,33 @@ import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/forms/
 import type { Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
+
 export interface UserFormData {
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null;
 	billingState: string | null;
 }
+
 interface FormData extends UserFormData {
 	otherAmounts: OtherAmounts;
 	billingState: StateProvince | null;
 	billingCountry: IsoCountry | null;
 	checkoutFormHasBeenSubmitted: boolean;
 }
+
 export interface StripePaymentRequestButtonData {
 	stripePaymentRequestButtonClicked: boolean;
 	paymentError: ErrorReason | null;
 }
+
 export interface Stripe3DSResult {
 	error?: Record<string, any>;
 	paymentIntent: {
 		id: string;
 	};
 }
+
 export interface StripeCardFormData {
 	formComplete: boolean;
 	setupIntentClientSecret: string | null;
@@ -60,90 +67,20 @@ export interface StripeCardFormData {
 	createPaymentMethod: ((clientSecret: string | null) => void) | null;
 	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only
 }
-interface Wallet {
-	bind: (ID: string) => void;
-}
-interface Consent {
-	bind: (ID: string) => void;
-}
-export interface BaseWalletConfig {
-	sellerId: string;
-	design: {
-		designMode: string;
-	};
-	onPaymentSelect: () => void;
-	onError: (error: { getErrorMessage: () => string }) => void;
-}
-interface WalletConfig extends BaseWalletConfig {
-	onReady?: (billingAgreement: {
-		getAmazonBillingAgreementId: () => string;
-	}) => void;
-	agreementType: string;
-	amazonOrderReferenceId?: string | null;
-	onOrderReferenceCreate?: (orderReference: {
-		getAmazonOrderReferenceId: () => string;
-	}) => void;
-}
-interface WalletConstructor {
-	new (baseWalletConfig: WalletConfig): Wallet;
-}
-export interface ConsentConfig {
-	sellerId: string;
-	amazonBillingAgreementId: string;
-	onReady: (billingAgreementConsentStatus: {
-		getConsentStatus: () => 'true' | 'false';
-	}) => void;
-	onConsent: (billingAgreementConsentStatus: {
-		getConsentStatus: () => 'true' | 'false';
-	}) => void;
-	design: {
-		designMode: string;
-	};
-	onError: (error: { getErrorMessage: () => string }) => void;
-}
-interface ConsentConstructor {
-	new (baseConsentConfig: ConsentConfig): Consent;
-}
-export interface AmazonPaymentsObject {
-	Widgets: {
-		Wallet: WalletConstructor;
-		Consent: ConsentConstructor;
-	};
-}
-export interface AmazonPayLibrary {
-	amazonLoginObject: Record<string, any> | null;
-	amazonPaymentsObject: AmazonPaymentsObject | null;
-}
-export interface AmazonPayData {
-	hasBegunLoading: boolean;
-	// to avoid loading the sdk more than once
-	amazonPayLibrary: AmazonPayLibrary;
-	// sdk objects
-	walletIsStale: boolean;
-	// for re-rendering the wallet widget when an error needs to be displayed
-	hasAccessToken: boolean;
-	// set when user logs in
-	paymentSelected: boolean;
-	// indicates if user has selected a payment method from their wallet
-	fatalError: boolean;
-	// for when we cannot use amazon pay
-	orderReferenceId: string | null;
-	// for one-off contributions
-	amazonBillingAgreementId?: string;
-	// for recurring contributions
-	amazonBillingAgreementConsentStatus: boolean; // for recurring contributions
-}
+
 export interface PayPalData {
 	hasBegunLoading: boolean;
 	hasLoaded: boolean;
 	buttonReady: boolean;
 }
+
 export interface SepaData {
 	iban: string | null;
 	accountHolderName: string | null;
 	streetName?: string;
 	country?: Country;
 }
+
 interface FormState {
 	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
@@ -170,6 +107,7 @@ interface FormState {
 	tickerGoalReached: boolean;
 	oneOffRecaptchaToken: string | null;
 }
+
 interface PageState {
 	form: FormState;
 	user: UserState;
@@ -177,12 +115,14 @@ interface PageState {
 	directDebit: DirectDebitState;
 	marketingConsent: MarketingConsentState;
 }
+
 export interface State {
 	common: CommonState;
 	page: PageState;
 }
 
 // ----- Functions ----- //
+
 function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
@@ -191,7 +131,6 @@ function createFormReducer() {
 		thirdPartyPaymentLibraries: {
 			ONE_OFF: {
 				Stripe: null,
-				AmazonPay: null,
 			},
 			MONTHLY: {
 				Stripe: null,
@@ -206,7 +145,6 @@ function createFormReducer() {
 				amazonLoginObject: null,
 				amazonPaymentsObject: null,
 			},
-			loginButtonReady: false,
 			walletIsStale: false,
 			orderReferenceId: null,
 			paymentSelected: false,
@@ -261,13 +199,11 @@ function createFormReducer() {
 			country: undefined,
 			streetName: undefined,
 		},
-		setPasswordData: {
-			password: '',
-			passwordHasBeenSubmitted: false,
-			passwordError: false,
+		selectedAmounts: {
+			ONE_OFF: 0,
+			MONTHLY: 0,
+			ANNUAL: 0,
 		},
-		showOtherAmount: false,
-		selectedAmounts: {},
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
@@ -287,7 +223,6 @@ function createFormReducer() {
 				return {
 					...state,
 					contributionType: action.contributionType,
-					showOtherAmount: false,
 					formData: { ...state.formData },
 				};
 
@@ -644,7 +579,7 @@ function createFormReducer() {
 	};
 }
 
-function initReducer() {
+function initReducer(): Reducer<PageState> {
 	return combineReducers({
 		form: createFormReducer(),
 		user: createUserReducer(),

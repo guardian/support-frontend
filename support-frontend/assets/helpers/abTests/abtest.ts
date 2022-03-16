@@ -130,26 +130,25 @@ function getIsRemoteFromAcquisitionData(): boolean {
 	}
 }
 
-function getTestFromAcquisitionData(): AcquisitionABTest | null | undefined {
+function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
 	if (!acquisitionDataParam) {
-		return null;
+		return undefined;
 	}
 
 	try {
 		const acquisitionData = JSON.parse(acquisitionDataParam) as {
+			abTests?: AcquisitionABTest[];
 			abTest?: AcquisitionABTest;
 		};
 
-		if (acquisitionData.abTest?.variant) {
-			return acquisitionData.abTest;
-		}
-
-		return null;
+		return acquisitionData.abTest
+			? [acquisitionData.abTest]
+			: acquisitionData.abTests;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
-		return null;
+		return undefined;
 	}
 }
 
@@ -188,8 +187,8 @@ function userInTest(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
-	acquisitionDataTest: AcquisitionABTest | null | undefined,
-) {
+	acquisitionDataTests: AcquisitionABTest[] | undefined,
+): boolean {
 	const { audiences, referrerControlled } = test;
 
 	if (cookie.get('_post_deploy_user')) {
@@ -204,7 +203,23 @@ function userInTest(
 	}
 
 	if (referrerControlled) {
-		return acquisitionDataTest && acquisitionDataTest.name === testId;
+		const isSfdV2Test =
+			testId === 'SFD_V2' &&
+			!!acquisitionDataTests &&
+			acquisitionDataTests.some((acquisitionDataTest) =>
+				acquisitionDataTest.name.startsWith('SFD_V2'),
+			);
+
+		if (isSfdV2Test) {
+			return isSfdV2Test;
+		}
+
+		return (
+			!!acquisitionDataTests &&
+			acquisitionDataTests.some(
+				(acquisitionDataTest) => acquisitionDataTest.name === testId,
+			)
+		);
 	}
 
 	const testMin: number = MVT_MAX * audience.offset;
@@ -239,11 +254,20 @@ const trackOptimizeExperiment = (
 function assignUserToVariant(
 	mvtId: number,
 	test: Test,
-	acquisitionDataTest: AcquisitionABTest | null | undefined,
+	testId: string,
+	acquisitionDataTests: AcquisitionABTest[] | undefined,
 ): number {
 	const { referrerControlled, seed } = test;
 
-	if (referrerControlled && acquisitionDataTest != null) {
+	if (referrerControlled && acquisitionDataTests != null) {
+		const acquisitionDataTest = acquisitionDataTests.find((t) =>
+			t.name.startsWith(testId),
+		);
+
+		if (!acquisitionDataTest) {
+			return -1;
+		}
+
 		const acquisitionVariant = acquisitionDataTest.variant;
 		const index = test.variants.findIndex(
 			(variant) => variant.id === acquisitionVariant,
@@ -255,8 +279,10 @@ function assignUserToVariant(
 		}
 
 		return index;
-	} else if (referrerControlled && acquisitionDataTest === null) {
+	} else if (referrerControlled && acquisitionDataTests === undefined) {
 		console.error('A/B test expects acquistion data but none was provided');
+
+		return -1;
 	}
 
 	return randomNumber(mvtId, seed) % test.variants.length;
@@ -280,7 +306,7 @@ function getParticipations(
 	countryGroupId: CountryGroupId,
 ): Participations {
 	const participations: Participations = {};
-	const acquisitionDataTest: AcquisitionABTest | null | undefined =
+	const acquisitionDataTests: AcquisitionABTest[] | undefined =
 		getTestFromAcquisitionData();
 	const isRemote = getIsRemoteFromAcquisitionData();
 
@@ -314,15 +340,21 @@ function getParticipations(
 				mvtId,
 				country,
 				countryGroupId,
-				acquisitionDataTest,
+				acquisitionDataTests,
 			)
 		) {
 			const variantIndex = assignUserToVariant(
 				mvtId,
 				test,
-				acquisitionDataTest,
+				testId,
+				acquisitionDataTests,
 			);
-			participations[testId] = test.variants[variantIndex].id;
+
+			if (variantIndex === -1) {
+				participations[testId] = notintest;
+			} else {
+				participations[testId] = test.variants[variantIndex].id;
+			}
 
 			if (test.optimizeId) {
 				trackOptimizeExperiment(test.optimizeId, test.variants, variantIndex);
@@ -347,7 +379,7 @@ function getAmountsTestParticipations(
 		return null;
 	}
 
-	const { test } = settings.amounts[countryGroupId];
+	const { test } = settings.amounts?.[countryGroupId] ?? {};
 
 	if (!test || !test.isLive) {
 		return null;

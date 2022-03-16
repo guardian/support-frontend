@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { CanMakePaymentResult } from '@stripe/stripe-js';
 import {
 	generateContributionTypes,
 	getFrequency,
@@ -37,6 +38,7 @@ import type {
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
+
 // ----- Types ----- //
 export type PaymentMethodSwitch =
 	| 'directDebit'
@@ -202,7 +204,7 @@ function getPaymentMethodToSelect(
 	allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-): string {
+): PaymentMethod {
 	const validPaymentMethods = getValidPaymentMethods(
 		contributionType,
 		allSwitches,
@@ -216,16 +218,16 @@ function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
 	const pm: string | null | undefined = storage.getSession(
 		'selectedPaymentMethod',
 	);
+	const paymentMethodNames = [
+		'DirectDebit',
+		'Stripe',
+		'PayPal',
+		'ExistingCard',
+		'ExistingDirectDebit',
+		'AmazonPay',
+	];
 
-	// can't use Flow types for these comparisons for some strange reason
-	if (
-		pm === 'DirectDebit' ||
-		pm === 'Stripe' ||
-		pm === 'PayPal' ||
-		pm === 'ExistingCard' ||
-		pm === 'ExistingDirectDebit' ||
-		pm === 'AmazonPay'
-	) {
+	if (pm && paymentMethodNames.includes(pm)) {
 		return pm as PaymentMethod;
 	}
 
@@ -341,20 +343,16 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 // . {applePay: true} - applePay is available
 // . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
 function getAvailablePaymentRequestButtonPaymentMethod(
-	result: Record<string, unknown> | null,
+	result: CanMakePaymentResult | null,
 	contributionType: ContributionType,
 ): StripePaymentMethod | null {
 	const switchKey = switchKeyForContributionType(contributionType);
 
-	if (
-		result &&
-		result.applePay === true &&
-		isSwitchOn(`${switchKey}.stripeApplePay`)
-	) {
+	if (result?.applePay && isSwitchOn(`${switchKey}.stripeApplePay`)) {
 		return 'StripeApplePay';
 	} else if (
 		result &&
-		result.applePay === false &&
+		!result.applePay &&
 		isSwitchOn(`${switchKey}.stripePaymentRequestButton`)
 	) {
 		return 'StripePaymentRequestButton';

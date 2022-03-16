@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import type { Store } from 'redux';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
-import { createCommonReducer } from 'helpers/page/commonReducer';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { setInitialCommonState } from 'helpers/redux/commonState/actions';
+import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
@@ -25,15 +26,14 @@ const pageReducer = (initialState: WithDeliveryCheckoutState) =>
 	);
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
-	return createStore(
-		combineReducers({
+	const store = configureStore({
+		reducer: combineReducers({
 			page: pageReducer(initialState),
-			common: createCommonReducer(initialState.common),
+			common: commonReducer,
 		}),
-		// @ts-expect-error The type mismatch here really doesn't matter in the context of tests
-		initialState,
-		compose(applyMiddleware(thunk)),
-	);
+	});
+	store.dispatch(setInitialCommonState(initialState.common));
+	return store;
 }
 
 function renderWithStore(
@@ -141,15 +141,9 @@ describe('Direct debit form', () => {
 			},
 		};
 
-		window.fetch = () =>
-			// @ts-expect-error Simple fetch mock
-			Promise.resolve({
-				ok: true,
-				json: () =>
-					Promise.resolve({
-						accountValid: true,
-					}),
-			});
+		mockFetch({
+			accountValid: true,
+		});
 
 		renderWithStore(
 			<DirectDebitForm
