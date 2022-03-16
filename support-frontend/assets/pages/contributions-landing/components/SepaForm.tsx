@@ -50,28 +50,30 @@ export function SepaForm({
 	updateAccountHolderName,
 	checkoutFormHasBeenSubmitted,
 }: SepaFormProps) {
-	const [requireAddress, setRequireAddress] = useState(false);
+	const [requireAddress, setRequireAddress] = useState(true);
 
-	const isAddressRequired = (iban: string): boolean => {
-		const requiredAddressPrefixes = [
-			'AD',
-			'PF',
-			'TF',
-			'GI',
-			'GB',
-			'GG',
-			'IM',
-			'JE',
-			'MC',
-			'NC',
-			'BL',
-			'PM',
-			'SM',
-			'CH',
-			'WF',
-		];
+	const isAddressRequired = (_iban: string): boolean => {
+		// const requiredAddressPrefixes = [
+		// 	'AD',
+		// 	'PF',
+		// 	'TF',
+		// 	'GI',
+		// 	'GB',
+		// 	'GG',
+		// 	'IM',
+		// 	'JE',
+		// 	'MC',
+		// 	'NC',
+		// 	'BL',
+		// 	'PM',
+		// 	'SM',
+		// 	'CH',
+		// 	'WF',
+		// ];
+    //
+		// return requiredAddressPrefixes.includes(iban.substring(0, 2).toUpperCase());
 
-		return requiredAddressPrefixes.includes(iban.substring(0, 2).toUpperCase());
+    return true
 	};
 
 	const ibanOnChange = (iban: string): void => {
