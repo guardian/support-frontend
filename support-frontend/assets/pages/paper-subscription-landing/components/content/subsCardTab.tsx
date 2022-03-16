@@ -51,7 +51,7 @@ export const accordionContainer = css`
 `;
 
 // ----- Content ----- //
-const LinkToInfo = ({
+function LinkToInfo({
 	trackingId,
 	url,
 	copy,
@@ -59,7 +59,7 @@ const LinkToInfo = ({
 	trackingId: string;
 	url: string;
 	copy: string;
-}) => {
+}) {
 	const trackClick = sendTrackingEventsOnClick({
 		id: `${trackingId}_retailer-link`,
 		product: 'Paper',
@@ -75,70 +75,72 @@ const LinkToInfo = ({
 			{copy}
 		</a>
 	);
-};
+}
 
 const collectonAccordionTrackingId =
 	'Paper_Collection-tab_Collection-accordion';
 const deliveryAccordionTrackingId = 'Paper_Collection-tab_Delivery-accordion';
-export const SubsCardFaqBlock = () => (
-	<FlexContainer cssOverrides={flexContainerOverride}>
-		<div css={faqsContainer}>
-			<p css={paragraphSpacing}>
-				The Guardian subscription card can be used at any of the 40,000 shops
-				and supermarkets with news kiosks in the UK such as McColl&apos;s,
-				Co-op, One Stop and selected SPAR stores.
-			</p>
-			<p css={paragraphSpacing}>
-				You can collect the newspaper from your local store or have your copies
-				delivered by your newsagent.
-			</p>
-			<div css={accordionContainer}>
-				<Accordion>
-					<TabAccordionRow
-						trackingId={collectonAccordionTrackingId}
-						label="Collecting from multiple newsagents"
-					>
-						<>
-							<p>
-								Present your card to a newsagent each time you collect the
-								newspaper. The newsagent will scan your card and will be
-								reimbursed for each transaction automatically.
-							</p>
-							<p>
-								<LinkToInfo
-									trackingId={collectonAccordionTrackingId}
-									url="https://imovo.org/guardianstorefinder"
-									copy="Find your nearest participating retailer"
-								/>
-							</p>
-						</>
-					</TabAccordionRow>
-					<TabAccordionRow
-						trackingId={deliveryAccordionTrackingId}
-						label="Delivery from your retailer"
-					>
-						<>
-							<p>
-								Simply give your preferred store / retailer the barcode printed
-								on your Home Delivery Letter.
-							</p>
-							<p>
-								<LinkToInfo
-									trackingId={deliveryAccordionTrackingId}
-									url="https://www.delivermynewspaper.co.uk"
-									copy="Find your nearest delivery retailer"
-								/>
-							</p>
-						</>
-					</TabAccordionRow>
-				</Accordion>
+export function SubsCardFaqBlock() {
+	return (
+		<FlexContainer cssOverrides={flexContainerOverride}>
+			<div css={faqsContainer}>
+				<p css={paragraphSpacing}>
+					The Guardian subscription card can be used at any of the 40,000 shops
+					and supermarkets with news kiosks in the UK such as McColl&apos;s,
+					Co-op, One Stop and selected SPAR stores.
+				</p>
+				<p css={paragraphSpacing}>
+					You can collect the newspaper from your local store or have your
+					copies delivered by your newsagent.
+				</p>
+				<div css={accordionContainer}>
+					<Accordion>
+						<TabAccordionRow
+							trackingId={collectonAccordionTrackingId}
+							label="Collecting from multiple newsagents"
+						>
+							<>
+								<p>
+									Present your card to a newsagent each time you collect the
+									newspaper. The newsagent will scan your card and will be
+									reimbursed for each transaction automatically.
+								</p>
+								<p>
+									<LinkToInfo
+										trackingId={collectonAccordionTrackingId}
+										url="https://imovo.org/guardianstorefinder"
+										copy="Find your nearest participating retailer"
+									/>
+								</p>
+							</>
+						</TabAccordionRow>
+						<TabAccordionRow
+							trackingId={deliveryAccordionTrackingId}
+							label="Delivery from your retailer"
+						>
+							<>
+								<p>
+									Simply give your preferred store / retailer the barcode
+									printed on your Home Delivery Letter.
+								</p>
+								<p>
+									<LinkToInfo
+										trackingId={deliveryAccordionTrackingId}
+										url="https://www.delivermynewspaper.co.uk"
+										copy="Find your nearest delivery retailer"
+									/>
+								</p>
+							</>
+						</TabAccordionRow>
+					</Accordion>
+				</div>
 			</div>
-		</div>
-		<GridImage
-			gridId="printCampaignDigitalVoucher"
-			srcSizes={[500, 140]}
-			sizes="(max-width: 740px) 100vw, 500px"
-			imgType="png"
-		/>
-	</FlexContainer>
-);
+			<GridImage
+				gridId="printCampaignDigitalVoucher"
+				srcSizes={[500, 140]}
+				sizes="(max-width: 740px) 100vw, 500px"
+				imgType="png"
+			/>
+		</FlexContainer>
+	);
+}

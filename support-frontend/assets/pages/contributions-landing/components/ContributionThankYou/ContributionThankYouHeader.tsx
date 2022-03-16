@@ -53,7 +53,7 @@ type ContributionThankYouHeaderProps = {
 };
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
-const ContributionThankYouHeader = ({
+function ContributionThankYouHeader({
 	name,
 	showDirectDebitMessage,
 	paymentMethod,
@@ -61,7 +61,7 @@ const ContributionThankYouHeader = ({
 	amount,
 	currency,
 	shouldShowLargeDonationMessage,
-}: ContributionThankYouHeaderProps): JSX.Element => {
+}: ContributionThankYouHeaderProps): JSX.Element {
 	const title = (): React.ReactNode => {
 		const nameAndTrailingSpace: string =
 			name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
@@ -121,20 +121,22 @@ const ContributionThankYouHeader = ({
 		}
 	};
 
-	const AdditionalCopy = () => {
+	function AdditionalCopy() {
 		const mainText = shouldShowLargeDonationMessage
 			? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best. '
 			: 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. ';
 
-		const MarketingCopy = () => (
-			<span>
-				{shouldShowLargeDonationMessage
-					? 'We’ll be in touch to bring you closer to our journalism. Please select the extra add-ons that suit you best. '
-					: 'As you’re now a valued supporter, we’ll be in touch to bring you closer to our journalism. '}
-				You can amend your email preferences at any time via{' '}
-				<a href="https://manage.theguardian.com">your account</a>.
-			</span>
-		);
+		function MarketingCopy() {
+			return (
+				<span>
+					{shouldShowLargeDonationMessage
+						? 'We’ll be in touch to bring you closer to our journalism. Please select the extra add-ons that suit you best. '
+						: 'As you’re now a valued supporter, we’ll be in touch to bring you closer to our journalism. '}
+					You can amend your email preferences at any time via{' '}
+					<a href="https://manage.theguardian.com">your account</a>.
+				</span>
+			);
+		}
 
 		return (
 			<>
@@ -142,7 +144,7 @@ const ContributionThankYouHeader = ({
 				{contributionType !== 'ONE_OFF' && <MarketingCopy />}
 			</>
 		);
-	};
+	}
 
 	return (
 		<header css={header}>
@@ -164,6 +166,6 @@ const ContributionThankYouHeader = ({
 			</p>
 		</header>
 	);
-};
+}
 
 export default ContributionThankYouHeader;

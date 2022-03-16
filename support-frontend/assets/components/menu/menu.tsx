@@ -7,45 +7,53 @@ type itemProps = {
 	isSelected: boolean;
 };
 
-const Item = ({
+function Item({
 	isSelected,
 	children,
 	el: El,
 	...props
 }: itemProps & {
 	el: string;
-}) => (
-	<El {...props} className={styles.item} data-is-selected={isSelected}>
-		{children}{' '}
-		{isSelected && [
-			<SvgCheckmark />,
-			<span className="visually-hidden">Selected</span>,
-		]}
-	</El>
-);
+}) {
+	return (
+		<El {...props} className={styles.item} data-is-selected={isSelected}>
+			{children}{' '}
+			{isSelected && [
+				<SvgCheckmark />,
+				<span className="visually-hidden">Selected</span>,
+			]}
+		</El>
+	);
+}
 
-const LinkItem = ({
+function LinkItem({
 	children,
 	...props
 }: itemProps & {
 	href: string;
-}) => (
-	<Item el="a" {...props}>
-		{children}
-	</Item>
-);
+}) {
+	return (
+		<Item el="a" {...props}>
+			{children}
+		</Item>
+	);
+}
 
-const ButtonItem = ({ children, ...props }: itemProps) => (
-	<Item el="button" {...props}>
-		{children}
-	</Item>
-);
+function ButtonItem({ children, ...props }: itemProps) {
+	return (
+		<Item el="button" {...props}>
+			{children}
+		</Item>
+	);
+}
 
-const Menu = ({ children, ...props }: { children: Node }) => (
-	<div {...props} className={styles.root}>
-		{children}
-	</div>
-);
+function Menu({ children, ...props }: { children: Node }) {
+	return (
+		<div {...props} className={styles.root}>
+			{children}
+		</div>
+	);
+}
 
 export default Menu;
 export { LinkItem, ButtonItem };

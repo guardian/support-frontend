@@ -52,31 +52,33 @@ type TopNavPropTypes = {
 	display: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
 
-const TopNav = ({ display, getLogoRef, utility }: TopNavPropTypes) => (
-	<div className="component-header-topnav">
-		<div className="component-header-topnav__utility">{utility}</div>
-		{display === 'checkout' && (
-			<div className="component-header-topnav__checkout">
-				<div />
-				<div className="component-header-topnav--checkout-text">
-					<div className="component-header--padlock">
-						<Padlock />
+function TopNav({ display, getLogoRef, utility }: TopNavPropTypes) {
+	return (
+		<div className="component-header-topnav">
+			<div className="component-header-topnav__utility">{utility}</div>
+			{display === 'checkout' && (
+				<div className="component-header-topnav__checkout">
+					<div />
+					<div className="component-header-topnav--checkout-text">
+						<div className="component-header--padlock">
+							<Padlock />
+						</div>
+						<h1>Checkout</h1>
 					</div>
-					<h1>Checkout</h1>
 				</div>
+			)}
+			<div className="component-header-topnav-logo" ref={getLogoRef}>
+				<a
+					className="component-header-topnav-logo__graun"
+					href="https://www.theguardian.com"
+				>
+					<div className="visually-hidden">Return to the Guardian</div>
+					<SvgGuardianLogo />
+				</a>
 			</div>
-		)}
-		<div className="component-header-topnav-logo" ref={getLogoRef}>
-			<a
-				className="component-header-topnav-logo__graun"
-				href="https://www.theguardian.com"
-			>
-				<div className="visually-hidden">Return to the Guardian</div>
-				<SvgGuardianLogo />
-			</a>
 		</div>
-	</div>
-);
+	);
+}
 
 export default class Header extends Component<PropTypes, State> {
 	static defaultProps = {

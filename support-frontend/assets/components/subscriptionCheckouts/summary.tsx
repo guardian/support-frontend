@@ -36,59 +36,65 @@ type StateTypes = {
 };
 
 // Helpers
-const DataList = (props: { dataList: DataListItem[] }) => (
-	<div className={styles.dataList}>
-		{props.dataList.length > 0 && (
-			<dl className={styles.data}>
-				{props.dataList.map((item) => [
-					<dt>{item.title}</dt>,
-					<dd>{item.value}</dd>,
-				])}
-			</dl>
-		)}
-	</div>
-);
+function DataList(props: { dataList: DataListItem[] }) {
+	return (
+		<div className={styles.dataList}>
+			{props.dataList.length > 0 && (
+				<dl className={styles.data}>
+					{props.dataList.map((item) => [
+						<dt>{item.title}</dt>,
+						<dd>{item.value}</dd>,
+					])}
+				</dl>
+			)}
+		</div>
+	);
+}
 
-const PromotionDiscount = (props: {
-	promotion: Promotion | null | undefined;
-}) => (
-	<span>
-		{props.promotion && hasDiscount(props.promotion) && (
-			<div className={styles.promo}>
-				<strong className={styles.promoTitle}>
-					{props.promotion.description}
-				</strong>{' '}
-				({props.promotion.promoCode})
-			</div>
-		)}
-	</span>
-);
+function PromotionDiscount(props: { promotion: Promotion | null | undefined }) {
+	return (
+		<span>
+			{props.promotion && hasDiscount(props.promotion) && (
+				<div className={styles.promo}>
+					<strong className={styles.promoTitle}>
+						{props.promotion.description}
+					</strong>{' '}
+					({props.promotion.promoCode})
+				</div>
+			)}
+		</span>
+	);
+}
 
-const ChangeSubscription = (props: { route: string }) => (
-	<a className={styles.changeSub} href={props.route}>
-		Change Subscription
-	</a>
-);
+function ChangeSubscription(props: { route: string }) {
+	return (
+		<a className={styles.changeSub} href={props.route}>
+			Change Subscription
+		</a>
+	);
+}
 
-const DropDownButton = (props: {
+function DropDownButton(props: {
 	onClick: (...args: any[]) => any;
 	showDropDown: boolean;
-}) => (
-	<button
-		aria-hidden="true"
-		className={styles.dropDown}
-		onClick={props.onClick}
-	>
-		<span className={styles.spaceRight}>
-			{props.showDropDown ? 'Hide details' : 'Show all details'}
-		</span>
-		<SvgDropdownArrowUp
-			className={props.showDropDown ? styles.openState : styles.defaultState}
-		/>
-	</button>
-);
+}) {
+	return (
+		<button
+			aria-hidden="true"
+			className={styles.dropDown}
+			onClick={props.onClick}
+		>
+			<span className={styles.spaceRight}>
+				{props.showDropDown ? 'Hide details' : 'Show all details'}
+			</span>
+			<SvgDropdownArrowUp
+				className={props.showDropDown ? styles.openState : styles.defaultState}
+			/>
+		</button>
+	);
+}
 
-const TabletAndDesktop = (props: PropTypes) => {
+function TabletAndDesktop(props: PropTypes) {
 	const isGuardianWeeklyGift =
 		props.product === GuardianWeekly && !props.orderIsAGift;
 	return (
@@ -134,7 +140,7 @@ const TabletAndDesktop = (props: PropTypes) => {
 			</div>
 		</span>
 	);
-};
+}
 
 TabletAndDesktop.defaultProps = {
 	changeSubscription: null,
@@ -142,34 +148,42 @@ TabletAndDesktop.defaultProps = {
 	orderIsAGift: false,
 };
 
-const HideDropDown = (props: {
+function HideDropDown(props: {
 	billingPeriod: BillingPeriod;
 	onClick: (...args: any[]) => any;
 	productPrice: ProductPrice;
 	showDropDown: boolean;
 	title: string;
 	paper: boolean;
-}) => (
-	<div className={styles.content}>
-		<h3 className={styles.header}>Order summary</h3>
-		<h4 className={styles.title} title={`your subscription is ${props.title}`}>
-			{props.title}
-		</h4>
-		<DropDownButton showDropDown={props.showDropDown} onClick={props.onClick} />
-		<div>
-			<PriceLabel
-				className={styles.pricing}
-				productPrice={props.productPrice}
-				billingPeriod={props.billingPeriod}
+}) {
+	return (
+		<div className={styles.content}>
+			<h3 className={styles.header}>Order summary</h3>
+			<h4
+				className={styles.title}
+				title={`your subscription is ${props.title}`}
+			>
+				{props.title}
+			</h4>
+			<DropDownButton
+				showDropDown={props.showDropDown}
+				onClick={props.onClick}
 			/>
-			{props.paper ? (
-				<span className={styles.pricing}>&nbsp;&ndash; Voucher booklet</span>
-			) : null}
+			<div>
+				<PriceLabel
+					className={styles.pricing}
+					productPrice={props.productPrice}
+					billingPeriod={props.billingPeriod}
+				/>
+				{props.paper ? (
+					<span className={styles.pricing}>&nbsp;&ndash; Voucher booklet</span>
+				) : null}
+			</div>
 		</div>
-	</div>
-);
+	);
+}
 
-const ShowDropDown = (
+function ShowDropDown(
 	props: PropTypes & {
 		deliveryMethod: string | null;
 		onClick: (...args: any[]) => any;
@@ -179,57 +193,61 @@ const ShowDropDown = (
 		orderIsAGift: boolean;
 		title: string;
 	},
-) => (
-	<div className={styles.contentWrapper}>
-		<h3 className={styles.headerShowDetails}>Order summary</h3>
-		<div
-			className={
-				props.description
-					? styles.contentShowDetails
-					: styles.contentShowDetailsNoDecription
-			}
-		>
-			<h4
-				className={styles.titleLeftAlign}
-				title={`your subscription is ${props.title}`}
+) {
+	return (
+		<div className={styles.contentWrapper}>
+			<h3 className={styles.headerShowDetails}>Order summary</h3>
+			<div
+				className={
+					props.description
+						? styles.contentShowDetails
+						: styles.contentShowDetailsNoDecription
+				}
 			>
-				{props.title}
-			</h4>
-			<h3 className={styles.titleDescription}>{props.description}</h3>
-		</div>
-		<div className={styles.contentShowDetails}>
-			<div className={styles.dataBold}>Payment plan</div>
-			<PriceLabel
-				className={styles.data}
-				productPrice={props.productPrice}
-				billingPeriod={props.billingPeriod}
-				giftStyles={styles.gift}
-			/>
-		</div>
-		{props.deliveryMethod ? (
-			<div className={styles.contentShowDetails}>
-				<div className={styles.dataBold}>Delivery method</div>
-				<div className={styles.data}>{props.deliveryMethod}</div>
+				<h4
+					className={styles.titleLeftAlign}
+					title={`your subscription is ${props.title}`}
+				>
+					{props.title}
+				</h4>
+				<h3 className={styles.titleDescription}>{props.description}</h3>
 			</div>
-		) : null}
-		<div className={styles.contentShowDetailsLast}>
-			<DropDownButton
-				showDropDown={props.showDropDown}
-				onClick={props.onClick}
-			/>
-			{props.changeSubscription ? (
-				<ChangeSubscription route={props.changeSubscription} />
+			<div className={styles.contentShowDetails}>
+				<div className={styles.dataBold}>Payment plan</div>
+				<PriceLabel
+					className={styles.data}
+					productPrice={props.productPrice}
+					billingPeriod={props.billingPeriod}
+					giftStyles={styles.gift}
+				/>
+			</div>
+			{props.deliveryMethod ? (
+				<div className={styles.contentShowDetails}>
+					<div className={styles.dataBold}>Delivery method</div>
+					<div className={styles.data}>{props.deliveryMethod}</div>
+				</div>
 			) : null}
+			<div className={styles.contentShowDetailsLast}>
+				<DropDownButton
+					showDropDown={props.showDropDown}
+					onClick={props.onClick}
+				/>
+				{props.changeSubscription ? (
+					<ChangeSubscription route={props.changeSubscription} />
+				) : null}
+			</div>
 		</div>
-	</div>
-);
+	);
+}
 
-const Mobile = (props) => (
-	<span className={styles.mobileOnly}>
-		{!props.showDropDown && <HideDropDown {...props} />}
-		{props.showDropDown && <ShowDropDown {...props} />}
-	</span>
-); // Main class
+function Mobile(props) {
+	return (
+		<span className={styles.mobileOnly}>
+			{!props.showDropDown && <HideDropDown {...props} />}
+			{props.showDropDown && <ShowDropDown {...props} />}
+		</span>
+	);
+} // Main class
 
 export default class Summary extends Component<PropTypes, StateTypes> {
 	static defaultProps = {

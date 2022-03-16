@@ -4,16 +4,18 @@ import SharedButton, { defaultProps } from './_sharedButton';
 import './button.scss';
 
 // ----- Render ----- //
-const NonInteractiveButton = ({
+function NonInteractiveButton({
 	modifierClasses,
 	...props
-}: SharedButtonPropTypes) => (
-	<SharedButton
-		element="div"
-		modifierClasses={['non-interactive', ...modifierClasses]}
-		{...props}
-	/>
-);
+}: SharedButtonPropTypes) {
+	return (
+		<SharedButton
+			element="div"
+			modifierClasses={['non-interactive', ...modifierClasses]}
+			{...props}
+		/>
+	);
+}
 
 NonInteractiveButton.defaultProps = { ...defaultProps };
 export default NonInteractiveButton;

@@ -70,10 +70,10 @@ export function SepaForm({
 		// 	'CH',
 		// 	'WF',
 		// ];
-    //
+		//
 		// return requiredAddressPrefixes.includes(iban.substring(0, 2).toUpperCase());
 
-    return true
+		return true;
 	};
 
 	const ibanOnChange = (iban: string): void => {

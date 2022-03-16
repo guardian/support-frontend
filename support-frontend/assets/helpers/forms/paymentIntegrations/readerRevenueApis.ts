@@ -173,7 +173,7 @@ export type SepaAuthorisation = {
 	accountHolderName: string;
 	iban: string;
 	country?: Country;
-  streetName?: string;
+	streetName?: string;
 };
 export type ExistingCardAuthorisation = {
 	paymentMethod: typeof ExistingCard;
@@ -257,19 +257,19 @@ function regularPaymentFieldsFromAuthorisation(
 			};
 
 		case Sepa:
-		  if (authorisation.country && authorisation.streetName) {
-        return {
-          accountHolderName: authorisation.accountHolderName,
-          iban: authorisation.iban.replace(/ /g, ''),
-          country: authorisation.country,
-          streetName: authorisation.streetName,
-        }
-      } else {
-		    return  {
-          accountHolderName: authorisation.accountHolderName,
-          iban: authorisation.iban.replace(/ /g, ''),
-        }
-      }
+			if (authorisation.country && authorisation.streetName) {
+				return {
+					accountHolderName: authorisation.accountHolderName,
+					iban: authorisation.iban.replace(/ /g, ''),
+					country: authorisation.country,
+					streetName: authorisation.streetName,
+				};
+			} else {
+				return {
+					accountHolderName: authorisation.accountHolderName,
+					iban: authorisation.iban.replace(/ /g, ''),
+				};
+			}
 
 		case ExistingCard:
 		case ExistingDirectDebit:
