@@ -1,16 +1,13 @@
 // ----- Imports ----- //
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
-import {
-	init as abInit,
-	getVariantsAsString,
-	targetPageMatches,
-} from '../abtest';
-import type { Participations, Tests } from '../abtest';
+import { init as abInit, targetPageMatches } from '../abtest';
+import type { Audience, Participations, Test, Variant } from '../abtest';
 
 const { subsShowcaseAndDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
@@ -21,525 +18,240 @@ jest.mock('ophan', () => ({
 }));
 
 // ----- Tests ----- //
-const emptySettings = {
-	switches: {
-		experiments: {},
-	},
-	amounts: {
-		GBPCountries: {},
-		UnitedStates: {},
-	},
-};
 
-const acquisitionDataMockTestControl = {
-	componentId: 'acquisitions-subscription-banner',
-	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
-	abTest: {
-		name: 'mockTest',
-		variant: 'control',
-	},
-};
-
-const acquisitionDataMockTestVariant = {
-	componentId: 'acquisitions-subscription-banner',
-	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
-	abTest: {
-		name: 'mockTest',
-		variant: 'variant',
-	},
-};
-
-const acquisitionDataMockTest2Control = {
-	componentId: 'acquisitions-subscription-banner',
-	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
-	abTest: {
-		name: 'mockTest2',
-		variant: 'control',
-	},
-};
-
-const acquisitionDataMockTest2Variant = {
-	componentId: 'acquisitions-subscription-banner',
-	componentType: 'ACQUISITIONS_SUBSCRIPTIONS_BANNER',
-	abTest: {
-		name: 'mockTest2',
-		variant: 'variant',
-	},
-};
-
-const mockTestControl = `/test.html?acquisitionData=${encodeURI(
-	JSON.stringify(acquisitionDataMockTestControl),
-)}`;
-
-const mockTestVariant = `/test.html?acquisitionData=${encodeURI(
-	JSON.stringify(acquisitionDataMockTestVariant),
-)}`;
-
-const mockTest2Control = `/test.html?acquisitionData=${encodeURI(
-	JSON.stringify(acquisitionDataMockTest2Control),
-)}`;
-
-const mockTest2Variant = `/test.html?acquisitionData=${encodeURI(
-	JSON.stringify(acquisitionDataMockTest2Variant),
-)}`;
-
-describe('basic behaviour of init', () => {
+describe('init', () => {
 	Object.defineProperty(window, 'matchMedia', {
-		value: jest.fn().mockImplementation(() => ({
+		value: jest.fn().mockReturnValue({
 			matches: false,
-		})),
+		}),
 	});
+
+	// Common arguments to init
+	const mvt = 123456;
+	const country = 'GB';
+	const countryGroupId = GBPCountries;
+	const emptySettings = {
+		switches: {
+			experiments: {},
+		},
+		amounts: {
+			GBPCountries: {},
+			UnitedStates: {},
+		},
+	} as Settings;
+
 	afterEach(() => {
 		window.localStorage.clear();
 	});
-	it('The referrerControlled user should be allocated to the control bucket', () => {
-		document.cookie = 'GU_mvt_id=12346';
-		window.history.pushState({}, 'Test Title', mockTestControl);
+
+	it('assigns a user to a variant', () => {
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
+			t: buildTest({ variants: [buildVariant({ id: 'control' })] }),
+		};
+
+		const participations: Participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings,
+			tests,
+			mvt,
+		);
+
+		const expectedParticipations: Participations = {
+			t: 'control',
+		};
+
+		expect(participations).toEqual(expectedParticipations);
+	});
+
+	it('uses the variant assignment in the acquisitionData for referrerControlled tests', () => {
+		const tests = {
+			t1: buildTest({
 				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
 				],
-				audiences: {
-					GB: {
-						offset: 0,
-						size: 1,
-					},
-				},
-				isActive: true,
 				referrerControlled: true,
-				seed: 0,
-			},
-		};
-		const country = 'GB';
-		const participations: Participations = abInit(
-			country,
-			GBPCountries,
-			emptySettings as Settings,
-			tests,
-		);
-		const expectedParticipations: Participations = {
-			mockTest: 'control',
-		};
-		expect(participations).toEqual(expectedParticipations);
-	});
-
-	it('The referrerControlled user should be allocated to the variant bucket', () => {
-		document.cookie = 'GU_mvt_id=12345';
-		window.history.pushState({}, 'Test Title', mockTestVariant);
-		const tests = {
-			mockTest: {
-				type: 'OTHER',
+			}),
+			t2: buildTest({
 				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
 				],
-				audiences: {
-					GB: {
-						offset: 0,
-						size: 1,
-					},
-				},
-				isActive: true,
 				referrerControlled: true,
-				seed: 0,
-			},
+			}),
 		};
-		const country = 'GB';
-		const participations: Participations = abInit(
-			country,
-			GBPCountries,
-			emptySettings as Settings,
-			tests,
-		);
-		const expectedParticipations: Participations = {
-			mockTest: 'variant',
-		};
-		expect(participations).toEqual(expectedParticipations);
-	});
 
-	it('The user should be allocated to the variant bucket', () => {
-		document.cookie = 'GU_mvt_id=12346';
-		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
-				audiences: {
-					GB: {
-						offset: 0,
-						size: 1,
-					},
-				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 6,
-			},
-		};
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
+		const acquisitionAbTests = [
+			buildAcquisitionAbTest({ name: 't1', variant: 'control' }),
+			buildAcquisitionAbTest({ name: 't2', variant: 'variant' }),
+		];
+
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
+			mvt,
+			acquisitionAbTests,
 		);
+
 		const expectedParticipations: Participations = {
-			mockTest: 'variant',
+			t1: 'control',
+			t2: 'variant',
 		};
+
 		expect(participations).toEqual(expectedParticipations);
 	});
 
-	it('The user should be allocated to the control bucket', () => {
-		document.cookie = 'GU_mvt_id=12346';
+	it('uses the variant assignment in the acquisitionData for referrerControlled tests belonging to a campaign', () => {
+		const campaignPrefix = 't';
+
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
+			[campaignPrefix]: buildTest({
 				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
 				],
-				audiences: {
-					GB: {
-						offset: 0,
-						size: 1,
-					},
-				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 5,
-			},
+				referrerControlled: true,
+			}),
 		};
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
+
+		const acquisitionAbTests = [
+			buildAcquisitionAbTest({
+				name: `${campaignPrefix}__HEADER`,
+				variant: 'control',
+			}),
+		];
+
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
+			mvt,
+			acquisitionAbTests,
 		);
+
 		const expectedParticipations: Participations = {
-			mockTest: 'control',
+			[campaignPrefix]: 'control',
 		};
+
 		expect(participations).toEqual(expectedParticipations);
 	});
 
-	it('The user should not be allocated in a test for a different country', () => {
-		document.cookie = 'GU_mvt_id=12346';
+	it('does not assign a user to a test in another country', () => {
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
-				audiences: {
-					GB: {
-						offset: 0,
-						size: 1,
-					},
-				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 0,
-			},
+			t: buildTest({ audiences: { GB: buildAudience({}) } }),
 		};
+
 		const country = 'US';
 		const countryGroupId = UnitedStates;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
+			mvt,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
+
+		expect(participations).toEqual({});
 	});
 
-	it('The ab test framework should check for both (min and max) breakpoints if they are provided', () => {
-		document.cookie = 'GU_mvt_id=12346';
+	it('does not assign a user to a test in another country group', () => {
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
-				audiences: {
-					US: {
-						offset: 0,
-						size: 1,
-						breakpoint: {
-							minWidth: 'tablet',
-							maxWidth: 'desktop',
-						},
-					},
-				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 0,
-			},
+			t: buildTest({ audiences: { GBPCountries: buildAudience({}) } }),
 		};
+
 		const country = 'US';
 		const countryGroupId = UnitedStates;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
-			tests as Tests,
+			emptySettings,
+			tests,
+			mvt,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
-		const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
-		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+
+		expect(participations).toEqual({});
 	});
 
-	it('The ab test framework should check for min breakpoints if only min is provided', () => {
-		document.cookie = 'GU_mvt_id=12346';
+	it('does not assign a user to a test if they are below the min breakpoint', () => {
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
+			t: buildTest({
 				audiences: {
-					US: {
-						offset: 0,
-						size: 1,
-						breakpoint: {
-							minWidth: 'tablet',
-						},
-					},
+					GB: buildAudience({
+						breakpoint: { minWidth: 'tablet' },
+					}),
 				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 0,
-			},
+			}),
 		};
-		const country = 'US';
-		const countryGroupId = UnitedStates;
+
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
-			tests as Tests,
+			emptySettings,
+			tests,
+			mvt,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
+
 		const expectedMediaQuery = '(min-width:740px)';
+
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
-	it('The ab test framework should check for min breakpoints if only min is provided and max is undefined', () => {
-		document.cookie = 'GU_mvt_id=12346';
+	it('does not assign a user to a test if they are above the max breakpoint', () => {
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
+			t: buildTest({
 				audiences: {
-					US: {
-						offset: 0,
-						size: 1,
-						breakpoint: {
-							minWidth: 'tablet',
-							maxWidth: undefined,
-						},
-					},
+					GB: buildAudience({
+						breakpoint: { maxWidth: 'tablet' },
+					}),
 				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 0,
-			},
+			}),
 		};
-		const country = 'US';
-		const countryGroupId = UnitedStates;
+
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
-			tests as Tests,
+			emptySettings,
+			tests,
+			mvt,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
-		const expectedMediaQuery = '(min-width:740px)';
-		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
-	});
 
-	it('The ab test framework should check for max breakpoints if only max is provided', () => {
-		document.cookie = 'GU_mvt_id=12346';
-		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
-				audiences: {
-					US: {
-						offset: 0,
-						size: 1,
-						breakpoint: {
-							maxWidth: 'tablet',
-						},
-					},
-				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 0,
-			},
-		};
-		const country = 'US';
-		const countryGroupId = UnitedStates;
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests as Tests,
-		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
 		const expectedMediaQuery = '(max-width:740px)';
+
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
-	it('The ab test framework should be able to differentiate country groups', () => {
-		document.cookie = 'GU_mvt_id=12346';
-		window.history.pushState({}, 'Test Title', mockTestControl);
+	it('does not assign a user to a test if they are outside of the min and max breakpoints', () => {
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
+			t: buildTest({
 				audiences: {
-					GBPCountries: {
-						offset: 0,
-						size: 1,
-					},
+					GB: buildAudience({
+						breakpoint: { minWidth: 'tablet', maxWidth: 'desktop' },
+					}),
 				},
-				isActive: true,
-				referrerControlled: true,
-				seed: 0,
-			},
+			}),
 		};
-		const country = 'GI';
-		const countryGroupId = GBPCountries;
+
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
-			tests as Tests,
+			emptySettings,
+			tests,
+			mvt,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'control',
-		};
-		expect(participations).toEqual(expectedParticipations);
-	});
 
-	it('The ab test framework should check for min breakpoints if only max is provided and min is undefined', () => {
-		document.cookie = 'GU_mvt_id=12346';
-		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
-				audiences: {
-					US: {
-						offset: 0,
-						size: 1,
-						breakpoint: {
-							minWidth: undefined,
-							maxWidth: 'tablet',
-						},
-					},
-				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 0,
-			},
-		};
-		const country = 'US';
-		const countryGroupId = UnitedStates;
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests as Tests,
-		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
-		const expectedMediaQuery = '(min-width:740px)';
+		const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
+
 		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
-		expect(participations).toEqual(expectedParticipations);
+		expect(participations).toEqual({});
 	});
 
-	it('A post-deployment test user should not be allocated into a test', () => {
+	it('does not assign a post-deployment test user to a test', () => {
 		const postDeploymentTestCookie = '_post_deploy_user=true; path=/;';
 
 		function deleteCookie() {
@@ -547,314 +259,62 @@ describe('basic behaviour of init', () => {
 		}
 
 		document.cookie = postDeploymentTestCookie;
-		document.cookie = 'GU_mvt_id=12346';
+
 		const tests = {
-			mockTest: {
-				type: 'OTHER',
-				variants: [
-					{
-						id: 'control',
-					},
-					{
-						id: 'variant',
-					},
-				],
-				audiences: {
-					GB: {
-						offset: 0,
-						size: 1,
-					},
-				},
-				isActive: true,
-				referrerControlled: false,
-				seed: 2,
-			},
+			t: buildTest({}),
 		};
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
+
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
+			mvt,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
+
+		expect(participations).toEqual({});
+
 		deleteCookie();
 	});
 
-	it('Does not allocate a locally rendered epic user into the RemoteEpicVariants AB test', () => {
-		const url = `/test.html?acquisitionData=${encodeURI(
-			JSON.stringify(acquisitionDataMockTestControl),
-		)}`;
-		window.history.pushState({}, 'Test Title', url);
+	it('does not assign a user to a test if their mvt is below the offset', () => {
+		const mvt = 100_000; // This is 10% of the max mvt
+
+		const tests = {
+			t1: buildTest({
+				audiences: { GB: buildAudience({ offset: 0.2, size: 0.8 }) },
+			}),
+		};
+
 		const participations: Participations = abInit(
-			'GB',
-			GBPCountries,
-			emptySettings as Settings,
-			{},
+			country,
+			countryGroupId,
+			emptySettings,
+			tests,
+			mvt,
 		);
-		expect(participations.RemoteEpicVariants).toBe(undefined);
+
+		expect(participations).toEqual({});
 	});
 
-	it('Allocates a remotely rendered epic user into the RemoteEpicVariants AB test', () => {
-		const data = {
-			isRemote: true,
-			...acquisitionDataMockTestControl,
-		};
-		const url = `/test.html?acquisitionData=${encodeURI(JSON.stringify(data))}`;
-		window.history.pushState({}, 'Test Title', url);
-		const participations: Participations = abInit(
-			'GB',
-			GBPCountries,
-			emptySettings as Settings,
-			{},
-		);
-		expect(participations.RemoteEpicVariants).toBe('remote');
-	});
-});
+	it('does not assign a user to a test if their mvt is above the offset plus size', () => {
+		const mvt = 900_000; // This is 90% of the max mvt
 
-describe('Correct allocation in a multi test environment', () => {
-	afterEach(() => {
-		window.localStorage.clear();
-	});
+		const tests = {
+			t1: buildTest({
+				audiences: { GB: buildAudience({ offset: 0.1, size: 0.8 }) },
+			}),
+		};
 
-	/*
-  GB: |                    100%                      |
-                           Test1
-   US: |  20%   |        60%                |   20%   |
-        Test 1         Test 2              Not in Test
-   Test 3 is 100% GB, but canRun is false
-   */
-	const tests = {
-		mockTest: {
-			type: 'OTHER',
-			variants: [
-				{
-					id: 'control',
-				},
-				{
-					id: 'variant',
-				},
-			],
-			audiences: {
-				GB: {
-					offset: 0,
-					size: 1,
-				},
-				US: {
-					offset: 0,
-					size: 0.2,
-				},
-			},
-			isActive: true,
-			referrerControlled: true,
-			seed: 0,
-		},
-		mockTest2: {
-			type: 'OTHER',
-			variants: [
-				{
-					id: 'control',
-				},
-				{
-					id: 'variant',
-				},
-			],
-			audiences: {
-				US: {
-					offset: 0.2,
-					size: 0.6,
-				},
-			},
-			isActive: true,
-			referrerControlled: true,
-			seed: 0,
-		},
-		mockTest3: {
-			type: 'OTHER',
-			variants: [
-				{
-					id: 'control',
-				},
-				{
-					id: 'variant',
-				},
-			],
-			audiences: {
-				GB: {
-					offset: 0,
-					size: 1,
-				},
-			},
-			isActive: true,
-			canRun: () => false,
-			referrerControlled: true,
-			seed: 0,
-		},
-	};
-	it('It correctly segments a user who has a cookie in the top 80% in GB', () => {
-		document.cookie = 'GU_mvt_id=810000';
-		window.history.pushState({}, 'Test Title', mockTestControl);
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
+			mvt,
 		);
-		const expectedParticipations: Participations = {
-			mockTest: 'control',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-	});
-	it('It correctly segments a user who has a cookie above 80% in US', () => {
-		document.cookie = 'GU_mvt_id=810000';
-		window.history.pushState({}, 'Test Title', '/test.html');
-		const country = 'US';
-		const countryGroupId = GBPCountries;
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		const expectedParticipations: Participations = {
-			mockTest: 'notintest',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-	});
-	it('It correctly segments a user who has a cookie between 20% and 80% in GB', () => {
-		document.cookie = 'GU_mvt_id=510000';
-		window.history.pushState({}, 'Test Title', mockTestControl);
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
-		let participations: Participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		let expectedParticipations: Participations = {
-			mockTest: 'control',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-		window.localStorage.clear();
-		document.cookie = 'GU_mvt_id=510001';
-		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		expectedParticipations = {
-			mockTest: 'variant',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-	});
-	it('It correctly segments a user who has a cookie between 20% and 80% in US', () => {
-		document.cookie = 'GU_mvt_id=510000';
-		window.history.pushState({}, 'Test Title', mockTest2Control);
-		const country = 'US';
-		const countryGroupId = UnitedStates;
-		let participations: Participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		let expectedParticipations: Participations = {
-			mockTest: 'notintest',
-			mockTest2: 'control',
-		};
-		expect(participations).toEqual(expectedParticipations);
-		window.localStorage.clear();
-		document.cookie = 'GU_mvt_id=510001';
-		window.history.pushState({}, 'Test Title', mockTest2Variant);
-		participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		expectedParticipations = {
-			mockTest: 'notintest',
-			mockTest2: 'variant',
-		};
-		expect(participations).toEqual(expectedParticipations);
-		expect(getVariantsAsString(participations)).toEqual(
-			'mockTest=notintest; mockTest2=variant',
-		);
-	});
-	it('It correctly segments a user who has a cookie between 0 and 20% in GB', () => {
-		document.cookie = 'GU_mvt_id=150000';
-		window.history.pushState({}, 'Test Title', mockTestControl);
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
-		let participations: Participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		let expectedParticipations: Participations = {
-			mockTest: 'control',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-		window.localStorage.clear();
-		document.cookie = 'GU_mvt_id=150001';
-		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		expectedParticipations = {
-			mockTest: 'variant',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-	});
-	it('It correctly segments the user a user who has a cookie between 0 and 20% in US', () => {
-		document.cookie = 'GU_mvt_id=150000';
-		window.history.pushState({}, 'Test Title', mockTestControl);
-		const country = 'US';
-		const countryGroupId = UnitedStates;
-		let participations: Participations = abInit(
-			country,
-			countryGroupId,
-			emptySettings as Settings,
-			tests,
-		);
-		let expectedParticipations: Participations = {
-			mockTest: 'control',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
-		window.localStorage.clear();
-		document.cookie = 'GU_mvt_id=150001';
-		window.history.pushState({}, 'Test Title', mockTestVariant);
-		participations = abInit(
-			country,
-			GBPCountries,
-			emptySettings as Settings,
-			tests,
-		);
-		expectedParticipations = {
-			mockTest: 'variant',
-			mockTest2: 'notintest',
-		};
-		expect(participations).toEqual(expectedParticipations);
+
+		expect(participations).toEqual({});
 	});
 });
 
@@ -927,3 +387,43 @@ it('targetPage matching', () => {
 		targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingNotAusNotUS),
 	).toEqual(false);
 });
+
+// ----- Helpers ----- //
+
+function buildVariant({ id = 'control' }: Partial<Variant>): Variant {
+	return { id };
+}
+
+function buildAudience({
+	offset = 0,
+	size = 1,
+	breakpoint,
+}: Partial<Audience>): Audience {
+	return { offset, size, breakpoint };
+}
+
+function buildTest({
+	variants = [buildVariant({})],
+	referrerControlled = false,
+	audiences = { ALL: buildAudience({}) },
+	isActive = true,
+	seed = 0,
+}: Partial<Test>): Test {
+	return {
+		variants,
+		audiences,
+		isActive,
+		referrerControlled,
+		seed,
+	};
+}
+
+function buildAcquisitionAbTest({
+	name = 't',
+	variant = 'control',
+}: Partial<AcquisitionABTest>): AcquisitionABTest {
+	return {
+		name,
+		variant,
+	};
+}
