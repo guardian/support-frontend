@@ -134,7 +134,7 @@ describe('init', () => {
 		);
 
 		const expectedParticipations: Participations = {
-			t: 'control',
+			[campaignPrefix]: 'control',
 		};
 
 		expect(participations).toEqual(expectedParticipations);
