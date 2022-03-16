@@ -26,6 +26,10 @@ describe('init', () => {
 		}),
 	});
 
+	// Common arguments to abInit
+	const mvt = 123456;
+	const country = 'GB';
+	const countryGroupId = GBPCountries;
 	const emptySettings = {
 		switches: {
 			experiments: {},
@@ -34,25 +38,21 @@ describe('init', () => {
 			GBPCountries: {},
 			UnitedStates: {},
 		},
-	};
+	} as Settings;
 
 	afterEach(() => {
 		window.localStorage.clear();
 	});
 
 	it('assigns a user to a variant', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({ variants: [buildVariant({ id: 'control' })] }),
 		};
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
@@ -65,8 +65,6 @@ describe('init', () => {
 	});
 
 	it('uses the variant assignment in the acquisitionData for referrerControlled tests', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t1: buildTest({
 				variants: [
@@ -89,12 +87,10 @@ describe('init', () => {
 			buildAcquisitionAbTest({ name: 't2', variant: 'variant' }),
 		];
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 			acquisitionAbTests,
@@ -109,8 +105,6 @@ describe('init', () => {
 	});
 
 	it('uses the variant assignment in the acquisitionData for referrerControlled tests belonging to a campaign', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({
 				variants: [
@@ -125,12 +119,10 @@ describe('init', () => {
 			buildAcquisitionAbTest({ name: 't__HEADER', variant: 'control' }),
 		];
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 			acquisitionAbTests,
@@ -144,8 +136,6 @@ describe('init', () => {
 	});
 
 	it('does not assign a user to a test in another country', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({ audiences: { GB: { offset: 0, size: 1 } } }),
 		};
@@ -155,7 +145,7 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
@@ -164,17 +154,16 @@ describe('init', () => {
 	});
 
 	it('does not assign a user to a test in another country group', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({ audiences: { GBPCountries: { offset: 0, size: 1 } } }),
 		};
+
 		const country = 'US';
 		const countryGroupId = UnitedStates;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
@@ -183,8 +172,6 @@ describe('init', () => {
 	});
 
 	it('does not assign a user to a test if they are below the min breakpoint', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({
 				audiences: {
@@ -193,25 +180,21 @@ describe('init', () => {
 			}),
 		};
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
 
 		const expectedMediaQuery = '(min-width:740px)';
-		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 
+		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual({});
 	});
 
 	it('does not assign a user to a test if they are above the max breakpoint', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({
 				audiences: {
@@ -220,25 +203,21 @@ describe('init', () => {
 			}),
 		};
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
 
 		const expectedMediaQuery = '(max-width:740px)';
-		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 
+		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual({});
 	});
 
 	it('does not assign a user to a test if they are outside of the min and max breakpoints', () => {
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({
 				audiences: {
@@ -251,19 +230,17 @@ describe('init', () => {
 			}),
 		};
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
 
 		const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
-		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 
+		expect(window.matchMedia).toHaveBeenCalledWith(expectedMediaQuery);
 		expect(participations).toEqual({});
 	});
 
@@ -276,18 +253,14 @@ describe('init', () => {
 
 		document.cookie = postDeploymentTestCookie;
 
-		const mvt = 123456;
-
 		const tests = {
 			t: buildTest({}),
 		};
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
@@ -304,12 +277,10 @@ describe('init', () => {
 			t1: buildTest({ audiences: { GB: { offset: 0.2, size: 0.8 } } }),
 		};
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
@@ -324,12 +295,10 @@ describe('init', () => {
 			t1: buildTest({ audiences: { GB: { offset: 0.1, size: 0.8 } } }),
 		};
 
-		const country = 'GB';
-		const countryGroupId = GBPCountries;
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings as Settings,
+			emptySettings,
 			tests,
 			mvt,
 		);
