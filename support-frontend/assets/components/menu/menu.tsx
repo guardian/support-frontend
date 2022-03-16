@@ -1,9 +1,11 @@
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import SvgCheckmark from 'components/svgs/checkmark';
-import styles from './menu.module.scss';
+import moduleStyles from './menu.module.scss';
 
-type itemProps = {
-	children: Node;
+const styles = moduleStyles as { item: string; root: string };
+
+type ItemProps = {
+	children: ReactNode;
 	isSelected: boolean;
 };
 
@@ -12,8 +14,8 @@ function Item({
 	children,
 	el: El,
 	...props
-}: itemProps & {
-	el: string;
+}: ItemProps & {
+	el: keyof JSX.IntrinsicElements;
 }) {
 	return (
 		<El {...props} className={styles.item} data-is-selected={isSelected}>
@@ -29,9 +31,10 @@ function Item({
 function LinkItem({
 	children,
 	...props
-}: itemProps & {
+}: ItemProps & {
 	href: string;
-}) {
+	onClick: () => void;
+}): JSX.Element {
 	return (
 		<Item el="a" {...props}>
 			{children}
@@ -39,7 +42,7 @@ function LinkItem({
 	);
 }
 
-function ButtonItem({ children, ...props }: itemProps) {
+function ButtonItem({ children, ...props }: ItemProps): JSX.Element {
 	return (
 		<Item el="button" {...props}>
 			{children}
@@ -47,7 +50,13 @@ function ButtonItem({ children, ...props }: itemProps) {
 	);
 }
 
-function Menu({ children, ...props }: { children: Node }) {
+function Menu({
+	children,
+	...props
+}: {
+	children: ReactNode;
+	style: Record<string, string | number>;
+}): JSX.Element {
 	return (
 		<div {...props} className={styles.root}>
 			{children}
