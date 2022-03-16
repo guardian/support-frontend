@@ -1,18 +1,15 @@
 // ----- Imports ----- //
+
 import seedrandom from 'seedrandom';
-import type { $Keys } from 'utility-types';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { getQueryParameter } from 'helpers/urls/url';
 import { tests } from './abtestDefinitions';
 
 // ----- Types ----- //
-export type TestId = $Keys<typeof tests>;
 
 const breakpoints = {
 	mobile: 320,
@@ -25,22 +22,24 @@ const breakpoints = {
 	wide: 1300,
 };
 
-type Breakpoint = $Keys<typeof breakpoints>;
+type Breakpoint = keyof typeof breakpoints;
 
 type BreakpointRange = {
 	minWidth?: Breakpoint;
 	maxWidth?: Breakpoint;
 };
 
-export type Participations = Record<TestId, string>;
+export type Participations = Record<string, string>;
 
-type Audience = {
+export type Audience = {
 	offset: number;
 	size: number;
 	breakpoint?: BreakpointRange;
 };
 
-type Audiences = { [key in IsoCountry | CountryGroupId | 'ALL']?: Audience };
+export type Audiences = {
+	[key in IsoCountry | CountryGroupId | 'ALL']?: Audience;
+};
 
 type AcquisitionABTest = {
 	name: string;
@@ -72,11 +71,44 @@ export type Test = {
 
 export type Tests = Record<string, Test>;
 
-// ----- Setup ----- //
-const MVT_COOKIE = 'GU_mvt_id';
-const MVT_MAX = 1000000;
+// ----- Init ----- //
 
-// ----- Functions ----- //
+export function init(
+	country: IsoCountry,
+	countryGroupId: CountryGroupId,
+	settings: Settings,
+	abTests: Tests = tests,
+	mvt: number = getMvtId(),
+	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
+		[],
+): Participations {
+	const participations = getParticipations(
+		abTests,
+		mvt,
+		country,
+		countryGroupId,
+		acquisitionDataTests,
+	);
+	const urlParticipations = getParticipationsFromUrl();
+	const serverSideParticipations = getServerSideParticipations();
+	const amountsTestParticipations = getAmountsTestParticipations(
+		countryGroupId,
+		settings,
+	);
+
+	return {
+		...participations,
+		...serverSideParticipations,
+		...amountsTestParticipations,
+		...urlParticipations,
+	};
+}
+
+// ----- Helpers ----- //
+
+const MVT_COOKIE = 'GU_mvt_id';
+const MVT_MAX = 1_000_000;
+
 // Attempts to retrieve the MVT id from a cookie, or sets it.
 function getMvtId(): number {
 	const mvtIdCookieValue = cookie.get(MVT_COOKIE);
@@ -93,6 +125,60 @@ function getMvtId(): number {
 	}
 
 	return mvtId;
+}
+
+function getParticipations(
+	abTests: Tests,
+	mvtId: number,
+	country: IsoCountry,
+	countryGroupId: CountryGroupId,
+	acquisitionDataTests?: AcquisitionABTest[],
+): Participations {
+	const participations: Participations = {};
+
+	Object.entries(abTests).forEach(([testId, test]) => {
+		if (!test.isActive) {
+			return;
+		}
+
+		if (test.canRun && !test.canRun()) {
+			return;
+		}
+
+		if (!targetPageMatches(window.location.pathname, test.targetPage)) {
+			return;
+		}
+
+		const participation = getUserParticipation(
+			test,
+			testId,
+			mvtId,
+			country,
+			countryGroupId,
+			acquisitionDataTests,
+		);
+
+		if (participation.type === 'NO_PARTICIPATION') {
+			return;
+		}
+
+		const variantAssignment = assignUserToVariant(mvtId, test, participation);
+
+		if (variantAssignment.type === 'NOT_ASSIGNED') {
+			return;
+		}
+
+		participations[testId] = test.variants[variantAssignment.variantIndex].id;
+
+		if (test.optimizeId) {
+			trackOptimizeExperiment(
+				test.optimizeId,
+				test.variants,
+				variantAssignment.variantIndex,
+			);
+		}
+	});
+	return participations;
 }
 
 function getParticipationsFromUrl(): Participations | null | undefined {
@@ -114,20 +200,30 @@ function getServerSideParticipations(): Participations | null | undefined {
 	return null;
 }
 
-function getIsRemoteFromAcquisitionData(): boolean {
-	const queryString = getQueryParameter('acquisitionData');
-
-	if (!queryString) {
-		return false;
+function getAmountsTestParticipations(
+	countryGroupId: CountryGroupId,
+	settings: Settings,
+): Participations | null | undefined {
+	if (
+		!targetPageMatches(
+			window.location.pathname,
+			'/??/contribute|contribute-in-epic|thankyou(/.*)?$',
+		)
+	) {
+		return null;
 	}
 
-	try {
-		const data = JSON.parse(queryString) as { isRemote?: boolean };
-		return !!data.isRemote;
-	} catch {
-		console.error('Cannot parse acquisition data from query string');
-		return false;
+	const { test } = settings.amounts?.[countryGroupId] ?? {};
+
+	if (!test || !test.isLive) {
+		return null;
 	}
+
+	const variants = ['CONTROL', ...test.variants.map((variant) => variant.name)];
+	const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
+	return {
+		[test.name]: variants[assignmentIndex],
+	};
 }
 
 function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
@@ -181,51 +277,70 @@ function userInBreakpoint(audience: Audience): boolean {
 	return false;
 }
 
-function userInTest(
+type NoParticipation = { type: 'NO_PARTICIPATION' };
+
+type ActiveParticipation =
+	| { type: 'ACTIVE_PARTICIPATION' }
+	| {
+			type: 'REFERRER_CONTROLLED_ACTIVE_PARTICIPATION';
+			acquisitionDataTest: AcquisitionABTest;
+	  };
+
+type UserParticipation = NoParticipation | ActiveParticipation;
+
+function getUserParticipation(
 	test: Test,
 	testId: string,
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	acquisitionDataTests: AcquisitionABTest[] | undefined,
-): boolean {
+): UserParticipation {
 	const { audiences, referrerControlled } = test;
 
 	if (cookie.get('_post_deploy_user')) {
-		return false;
+		return NO_PARTICIPATION;
 	}
 
 	const audience =
 		audiences[country] ?? audiences[countryGroupId] ?? audiences.ALL;
 
 	if (!audience) {
-		return false;
+		return NO_PARTICIPATION;
 	}
 
 	if (referrerControlled) {
-		const isSfdV2Test =
-			testId === 'SFD_V2' &&
-			!!acquisitionDataTests &&
-			acquisitionDataTests.some((acquisitionDataTest) =>
-				acquisitionDataTest.name.startsWith('SFD_V2'),
-			);
+		// For referrer controlled tests we have to search through the tests in the acquisition
+		// data to find a match. We use the `startsWith` method to support test campaigns all
+		// with a common prefix.
+		const acquisitionDataTest = acquisitionDataTests?.find(
+			(acquisitionDataTest) => acquisitionDataTest.name.startsWith(testId),
+		);
 
-		if (isSfdV2Test) {
-			return isSfdV2Test;
+		if (!acquisitionDataTest) {
+			return NO_PARTICIPATION;
 		}
 
-		return (
-			!!acquisitionDataTests &&
-			acquisitionDataTests.some(
-				(acquisitionDataTest) => acquisitionDataTest.name === testId,
-			)
-		);
+		return referrerControlledActiveParticipation(acquisitionDataTest);
 	}
 
 	const testMin: number = MVT_MAX * audience.offset;
 	const testMax: number = testMin + MVT_MAX * audience.size;
-	return mvtId >= testMin && mvtId < testMax && userInBreakpoint(audience);
+	return mvtId >= testMin && mvtId < testMax && userInBreakpoint(audience)
+		? PARTICIPATING
+		: NO_PARTICIPATION;
 }
+
+const NO_PARTICIPATION: UserParticipation = { type: 'NO_PARTICIPATION' };
+
+const PARTICIPATING: UserParticipation = { type: 'ACTIVE_PARTICIPATION' };
+
+const referrerControlledActiveParticipation = (
+	acquisitionDataTest: AcquisitionABTest,
+): UserParticipation => ({
+	type: 'REFERRER_CONTROLLED_ACTIVE_PARTICIPATION',
+	acquisitionDataTest,
+});
 
 function randomNumber(mvtId: number, seed: number): number {
 	const rng = seedrandom(`${mvtId + seed}`);
@@ -251,44 +366,45 @@ const trackOptimizeExperiment = (
 	);
 };
 
+type VariantAssignment =
+	| { type: 'NOT_ASSIGNED' }
+	| { type: 'ASSIGNED'; variantIndex: number };
+
 function assignUserToVariant(
 	mvtId: number,
 	test: Test,
-	testId: string,
-	acquisitionDataTests: AcquisitionABTest[] | undefined,
-): number {
-	const { referrerControlled, seed } = test;
-
-	if (referrerControlled && acquisitionDataTests != null) {
-		const acquisitionDataTest = acquisitionDataTests.find((t) =>
-			t.name.startsWith(testId),
-		);
-
-		if (!acquisitionDataTest) {
-			return -1;
-		}
-
-		const acquisitionVariant = acquisitionDataTest.variant;
-		const index = test.variants.findIndex(
-			(variant) => variant.id === acquisitionVariant,
-		);
-		const variantFound = index > -1;
-
-		if (!variantFound) {
-			console.error('Variant not found for A/B test in acquistion data');
-		}
-
-		return index;
-	} else if (referrerControlled && acquisitionDataTests === undefined) {
-		console.error('A/B test expects acquistion data but none was provided');
-
-		return -1;
+	participation: ActiveParticipation,
+): VariantAssignment {
+	// For non-referrrer controlled tests we assign the user randomly
+	if (participation.type === 'ACTIVE_PARTICIPATION') {
+		return assigned(randomNumber(mvtId, test.seed) % test.variants.length);
 	}
 
-	return randomNumber(mvtId, seed) % test.variants.length;
+	// For referrrer controlled tests the assignment comes from the acquisition data.
+	// If the variant in the acquisition data doesn't match up with any defined in
+	// the test, we log an error and don't assign the user to the test.
+	const acquisitionVariant = participation.acquisitionDataTest.variant;
+
+	const index = test.variants.findIndex(
+		(variant) => variant.id === acquisitionVariant,
+	);
+
+	if (index === -1) {
+		console.error('Variant not found for A/B test in acquistion data');
+
+		return NOT_ASSIGNED;
+	}
+
+	return assigned(index);
 }
 
-function targetPageMatches(
+const NOT_ASSIGNED: VariantAssignment = { type: 'NOT_ASSIGNED' };
+
+function assigned(variantIndex: number): VariantAssignment {
+	return { type: 'ASSIGNED', variantIndex };
+}
+
+export function targetPageMatches(
 	locationPath: string,
 	targetPage: (string | null | undefined) | RegExp,
 ): boolean {
@@ -299,133 +415,10 @@ function targetPageMatches(
 	return locationPath.match(targetPage) != null;
 }
 
-function getParticipations(
-	abTests: Tests,
-	mvtId: number,
-	country: IsoCountry,
-	countryGroupId: CountryGroupId,
-): Participations {
-	const participations: Participations = {};
-	const acquisitionDataTests: AcquisitionABTest[] | undefined =
-		getTestFromAcquisitionData();
-	const isRemote = getIsRemoteFromAcquisitionData();
-
-	// This is a temporary addition to help us compare remote and locally rendered
-	// epics on Frontend (as part of testing out the new Contributions Service).
-	// It will be removed once the new service is shown to be working correctly.
-	if (isRemote) {
-		participations.RemoteEpicVariants = 'remote';
-	}
-
-	Object.keys(abTests).forEach((testId) => {
-		const test = abTests[testId];
-		const notintest = 'notintest';
-
-		if (!test.isActive) {
-			return;
-		}
-
-		if (test.canRun && !test.canRun()) {
-			return;
-		}
-
-		if (!targetPageMatches(window.location.pathname, test.targetPage)) {
-			return;
-		}
-
-		if (
-			userInTest(
-				test,
-				testId,
-				mvtId,
-				country,
-				countryGroupId,
-				acquisitionDataTests,
-			)
-		) {
-			const variantIndex = assignUserToVariant(
-				mvtId,
-				test,
-				testId,
-				acquisitionDataTests,
-			);
-
-			if (variantIndex === -1) {
-				participations[testId] = notintest;
-			} else {
-				participations[testId] = test.variants[variantIndex].id;
-			}
-
-			if (test.optimizeId) {
-				trackOptimizeExperiment(test.optimizeId, test.variants, variantIndex);
-			}
-		} else {
-			participations[testId] = notintest;
-		}
-	});
-	return participations;
-}
-
-function getAmountsTestParticipations(
-	countryGroupId: CountryGroupId,
-	settings: Settings,
-): Participations | null | undefined {
-	if (
-		!targetPageMatches(
-			window.location.pathname,
-			'/??/contribute|contribute-in-epic|thankyou(/.*)?$',
-		)
-	) {
-		return null;
-	}
-
-	const { test } = settings.amounts?.[countryGroupId] ?? {};
-
-	if (!test || !test.isLive) {
-		return null;
-	}
-
-	const variants = ['CONTROL', ...test.variants.map((variant) => variant.name)];
-	const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
-	return {
-		[test.name]: variants[assignmentIndex],
-	};
-}
-
-const init = (
-	country: IsoCountry,
-	countryGroupId: CountryGroupId,
-	settings: Settings,
-	abTests: Tests = tests,
-): Participations => {
-	const mvt: number = getMvtId();
-	const participations: Participations = getParticipations(
-		abTests,
-		mvt,
-		country,
-		countryGroupId,
-	);
-	const urlParticipations: Participations | null | undefined =
-		getParticipationsFromUrl();
-	const serverSideParticipations: Participations | null | undefined =
-		getServerSideParticipations();
-	const amountsTestParticipations: Participations | null | undefined =
-		getAmountsTestParticipations(countryGroupId, settings);
-	return {
-		...participations,
-		...serverSideParticipations,
-		...amountsTestParticipations,
-		...urlParticipations,
-	};
-};
-
-const getVariantsAsString = (participation: Participations): string => {
+export const getVariantsAsString = (participation: Participations): string => {
 	const variants: string[] = [];
 	Object.keys(participation).forEach((testId) => {
 		variants.push(`${testId}=${participation[testId]}`);
 	});
 	return variants.join('; ');
 };
-
-// ----- Exports ----- //
-export { init, getVariantsAsString, targetPageMatches };
