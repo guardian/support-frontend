@@ -168,8 +168,7 @@ function getPaymentMethods(
 		return [Stripe, PayPal];
 	} else if (
 		contributionType !== 'ONE_OFF' &&
-		countryGroupId === 'EURCountries' &&
-		getQueryParameter('sepa') === 'true'
+		countryGroupId === 'EURCountries'
 	) {
 		return [Sepa, Stripe, PayPal];
 	}
