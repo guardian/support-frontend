@@ -21,7 +21,7 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
-import type { CommonState } from 'helpers/page/commonReducer';
+import type { CommonState } from 'helpers/redux/commonState/state';
 import * as storage from 'helpers/storage/storage';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';

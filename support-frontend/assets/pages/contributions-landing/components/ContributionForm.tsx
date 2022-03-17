@@ -35,6 +35,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
+import {
+	setCurrencyId,
+	setUseLocalAmounts,
+	setUseLocalCurrencyFlag,
+} from 'helpers/redux/commonState/actions';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -51,11 +56,7 @@ import type {
 	SepaData,
 	State,
 } from 'pages/contributions-landing/contributionsLandingReducer';
-import {
-	setCurrencyId,
-	setUseLocalAmounts,
-	setUseLocalCurrencyFlag,
-} from '../../../helpers/page/commonActions';
+import BenefitsMessage from './BenefitsMessage';
 import ContributionAmount from './ContributionAmount';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import ContributionFormFields from './ContributionFormFields';
@@ -110,6 +111,7 @@ type PropTypes = {
 	setSepaIban: (iban: string) => void;
 	setSepaAccountHolderName: (accountHolderName: string) => void;
 	productSetAbTestVariant: boolean;
+	showBenefitsMessage: boolean;
 };
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -363,6 +365,9 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					</CheckboxGroup>
 				)}
 			</div>
+			{props.showBenefitsMessage && (
+				<BenefitsMessage countryGroupId={props.countryGroupId} />
+			)}
 			<StripePaymentRequestButton
 				contributionType={props.contributionType}
 				isTestUser={props.isTestUser}

@@ -1,6 +1,6 @@
-/* eslint-disable react/no-unused-prop-types */
 // ----- Imports ----- //
 import { css } from '@emotion/react';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import { connect } from 'react-redux';
 import type {
 	ContributionType,
@@ -15,16 +15,15 @@ import {
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
-import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,
-} from '../../../helpers/page/commonActions';
+} from 'helpers/redux/commonState/actions';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
+import type { State } from '../contributionsLandingReducer';
+
 // ----- Types ----- //
 type PropTypes = {
 	contributionType: ContributionType;
@@ -134,7 +133,6 @@ function ContributionTypeTabs(props: PropTypes) {
 		</ChoiceCardGroup>
 	);
 
-	/* eslint-disable no-unused-vars */
 	// leaving in place as this is still in active development:
 	const renderControl = () => (
 		<ul className="form__radio-group-list form__radio-group-list--border">
@@ -173,7 +171,6 @@ function ContributionTypeTabs(props: PropTypes) {
 		</ul>
 	);
 
-	/* eslint-enable no-unused-vars */
 	if (
 		contributionTypes.length === 1 &&
 		contributionTypes[0].contributionType === 'ONE_OFF'

@@ -50,6 +50,7 @@ type PropTypes = {
 	currency: IsoCurrency;
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
+	showBenefitsMessage: boolean;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -63,6 +64,9 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
+	showBenefitsMessage:
+		state.common.abParticipations.SFD_V2 === 'SINGLE_FRONT_DOOR_V2' &&
+		state.page.form.contributionType !== 'ONE_OFF',
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
@@ -268,6 +272,7 @@ function withProps(props: PropTypes) {
 							<ContributionForm
 								onPaymentAuthorisation={onPaymentAuthorisation}
 								campaignSettings={campaignSettings}
+								showBenefitsMessage={props.showBenefitsMessage}
 							/>
 						</div>
 					)}
@@ -285,15 +290,23 @@ function withProps(props: PropTypes) {
 									<PreviousGivingHeaderCopy userName={props.userName} />
 								}
 								bodyCopy={
-									<PreviousGivingBodyCopy
-										lastOneOffContribution={lastOneOffContribution}
-									/>
+									props.showBenefitsMessage ? (
+										''
+									) : (
+										<PreviousGivingBodyCopy
+											lastOneOffContribution={lastOneOffContribution}
+										/>
+									)
 								}
 							/>
 						) : (
 							<ContributionFormBlurb
 								headerCopy={countryGroupDetails.headerCopy}
-								bodyCopy={countryGroupDetails.contributeCopy}
+								bodyCopy={
+									props.showBenefitsMessage
+										? ''
+										: countryGroupDetails.contributeCopy
+								}
 							/>
 						)}
 					</div>

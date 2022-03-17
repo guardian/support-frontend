@@ -5,7 +5,6 @@ import WeeklyFooter from 'components/footerCompliant/WeeklyFooter';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
-import type { CommonState } from 'helpers/page/commonReducer';
 import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { postIntroductorySixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -14,6 +13,7 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import type { CommonState } from 'helpers/redux/commonState/state';
 import { renderPage } from 'helpers/rendering/render';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { promotionTermsUrl } from 'helpers/urls/routes';
@@ -81,10 +81,13 @@ const content = (
 					orderIsAGift ? <WeeklyCheckoutFormGifting /> : <WeeklyCheckoutForm />
 				}
 				thankYouContentPending={
-					<ThankYouContent isPending orderIsGift={orderIsAGift} />
+					<ThankYouContent isPending orderIsGift={orderIsAGift ?? false} />
 				}
 				thankYouContent={
-					<ThankYouContent isPending={false} orderIsGift={orderIsAGift} />
+					<ThankYouContent
+						isPending={false}
+						orderIsGift={orderIsAGift ?? false}
+					/>
 				}
 				subscriptionProduct="GuardianWeekly"
 			/>
