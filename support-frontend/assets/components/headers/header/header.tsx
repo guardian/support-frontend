@@ -12,7 +12,7 @@ import Padlock from './padlock.svg';
 import './header.scss';
 
 export type PropTypes = {
-	utility: JSX.Element | null;
+	utility?: JSX.Element;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
@@ -50,8 +50,9 @@ const getMenuStateMetrics = ({
 };
 
 // ----- Component ----- //
+
 type TopNavPropTypes = {
-	utility: JSX.Element | null;
+	utility?: JSX.Element;
 	getLogoRef: (arg0: Element | null | undefined) => void;
 	display: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
@@ -155,7 +156,7 @@ export default class Header extends Component<PropTypes, State> {
 						<TopNav
 							display={display}
 							utility={
-								display === 'navigation' && fitsLinksAtAll ? utility : null
+								display === 'navigation' && fitsLinksAtAll ? utility : undefined
 							}
 							getLogoRef={(el) => {
 								this.logoRef = el;
