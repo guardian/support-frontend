@@ -6,7 +6,6 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-import { useState } from 'react';
 import { isValidIban } from 'helpers/forms/formValidation';
 import { countries } from 'helpers/internationalisation/country';
 import { sortedOptions } from '../../../components/forms/customFields/sortedOptions';
@@ -50,37 +49,6 @@ export function SepaForm({
 	updateAccountHolderName,
 	checkoutFormHasBeenSubmitted,
 }: SepaFormProps) {
-	const [requireAddress, setRequireAddress] = useState(true);
-
-	const isAddressRequired = (_iban: string): boolean => {
-		// const requiredAddressPrefixes = [
-		// 	'AD',
-		// 	'PF',
-		// 	'TF',
-		// 	'GI',
-		// 	'GB',
-		// 	'GG',
-		// 	'IM',
-		// 	'JE',
-		// 	'MC',
-		// 	'NC',
-		// 	'BL',
-		// 	'PM',
-		// 	'SM',
-		// 	'CH',
-		// 	'WF',
-		// ];
-		//
-		// return requiredAddressPrefixes.includes(iban.substring(0, 2).toUpperCase());
-
-		return true;
-	};
-
-	const ibanOnChange = (iban: string): void => {
-		setRequireAddress(isAddressRequired(iban));
-		updateIban(iban);
-	};
-
 	return (
 		<div css={containerStyles}>
 			<h3 css={headerStyles}>Your account details</h3>
@@ -113,7 +81,7 @@ export function SepaForm({
 						minLength={6}
 						maxLength={34}
 						value={iban ?? undefined}
-						onChange={(e) => ibanOnChange(e.target.value)}
+						onChange={(e) => updateIban(e.target.value)}
 						error={
 							checkoutFormHasBeenSubmitted && !isValidIban(iban)
 								? 'Please provide a valid IBAN'
@@ -122,44 +90,40 @@ export function SepaForm({
 					/>
 				</div>
 
-				{requireAddress && (
-					<>
-						<div>
-							<TextInput
-								optional={false}
-								hideLabel={false}
-								label="Address Line 1"
-								value={addressStreetName ?? undefined}
-								onChange={(e) => updateAddressStreetName(e.target.value)}
-								error={
-									checkoutFormHasBeenSubmitted && !addressStreetName
-										? 'Please enter a billing address'
-										: undefined
-								}
-							/>
-						</div>
+				<div>
+					<TextInput
+						optional={false}
+						hideLabel={false}
+						label="Address Line 1"
+						value={addressStreetName ?? undefined}
+						onChange={(e) => updateAddressStreetName(e.target.value)}
+						error={
+							checkoutFormHasBeenSubmitted && !addressStreetName
+								? 'Please enter a billing address'
+								: undefined
+						}
+					/>
+				</div>
 
-						<div />
+				<div />
 
-						<div>
-							<Select
-								optional={false}
-								hideLabel={false}
-								label="Country"
-								value={addressCountry ?? undefined}
-								onChange={(e) => updateAddressCountry(e.target.value)}
-								error={
-									checkoutFormHasBeenSubmitted && !addressCountry
-										? 'Please select a billing country'
-										: undefined
-								}
-							>
-								<OptionForSelect value="">Select a country</OptionForSelect>
-								{sortedOptions(countries)}
-							</Select>
-						</div>
-					</>
-				)}
+				<div>
+					<Select
+						optional={false}
+						hideLabel={false}
+						label="Country"
+						value={addressCountry ?? undefined}
+						onChange={(e) => updateAddressCountry(e.target.value)}
+						error={
+							checkoutFormHasBeenSubmitted && !addressCountry
+								? 'Please select a billing country'
+								: undefined
+						}
+					>
+						<OptionForSelect value="">Select a country</OptionForSelect>
+						{sortedOptions(countries)}
+					</Select>
+				</div>
 			</div>
 		</div>
 	);
