@@ -5,13 +5,15 @@ export const cancellationCopy = {
 	body: 'There is no set time on your agreement with us so you can end your subscription whenever you wish',
 };
 
-const CancellationPolicy = () => (
-	<Text>
-		<p>
-			<strong>{cancellationCopy.title}</strong> {cancellationCopy.body}
-		</p>
-	</Text>
-);
+function CancellationPolicy() {
+	return (
+		<Text>
+			<p>
+				<strong>{cancellationCopy.title}</strong> {cancellationCopy.body}
+			</p>
+		</Text>
+	);
+}
 
 CancellationPolicy.defaultProps = {
 	orderIsAGift: false,
