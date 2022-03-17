@@ -105,11 +105,11 @@ export const amountIsValid = (
 	useLocalCurrency?: boolean | null,
 ): boolean => {
 	const min =
-		useLocalCurrency && localCurrencyCountry
+		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType].min
 			: config[countryGroupId][contributionType].min;
 	const max =
-		useLocalCurrency && localCurrencyCountry
+		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType].max
 			: config[countryGroupId][contributionType].max;
 	return (

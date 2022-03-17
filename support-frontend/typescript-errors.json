@@ -4,18 +4,18 @@
             "TS1208": 1,
             "TS2345": 35,
             "TS7006": 29,
-            "TS2322": 57,
+            "TS2322": 56,
             "TS2339": 13,
             "TS6133": 8,
             "TS2578": 4,
-            "TS2305": 10,
-            "TS7031": 10,
-            "TS2564": 2,
-            "TS2769": 8,
+            "TS2305": 9,
             "TS2314": 4,
+            "TS7031": 7,
+            "TS2769": 7,
             "TS2304": 5,
             "TS2741": 3,
-            "TS2739": 11,
+            "TS2564": 1,
+            "TS2739": 3,
             "TS2532": 1,
             "TS2556": 3,
             "TS2569": 2,
@@ -80,7 +80,6 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
-            "assets/helpers/internationalisation/localCurrencyCountry.ts": 9,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -102,15 +101,14 @@
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
-            "assets/components/headers/header/header.tsx": 6,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
-            "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
+            "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
+            "assets/helpers/polyfills/layout.ts": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
@@ -503,10 +501,6 @@
             "message": "Type 'unknown' is not assignable to type 'Settings'."
         },
         {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type 'string | null | undefined' is not assignable to type 'string | number | symbol'."
-        },
-        {
             "path": "assets/helpers/utilities/utilities.ts",
             "message": "Type 'string | null | undefined' is not assignable to type 'string'."
         },
@@ -731,10 +725,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/headers/header/mobileMenuToggler.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -767,19 +757,25 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         }
     ],
+    "TS2314": [
+        {
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Generic type '$Call' requires 1 type argument(s)."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts",
+            "message": "Generic type '$Call' requires 1 type argument(s)."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/summary.tsx",
+            "message": "Generic type '$Call' requires 1 type argument(s)."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx",
+            "message": "Generic type '$Call' requires 1 type argument(s)."
+        }
+    ],
     "TS7031": [
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Binding element 'menuRef' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Binding element 'logoRef' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Binding element 'containerRef' implicitly has an 'any' type."
-        },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Binding element 'lineOne' implicitly has an 'any' type."
@@ -809,21 +805,7 @@
             "message": "Binding element 'children' implicitly has an 'any' type."
         }
     ],
-    "TS2564": [
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "Property 'observer' has no initializer and is not definitely assigned in the constructor."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Property 'selectRef' has no initializer and is not definitely assigned in the constructor."
-        }
-    ],
     "TS2769": [
-        {
-            "path": "assets/components/headers/header/header.tsx",
-            "message": "No overload matches this call."
-        },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "No overload matches this call."
@@ -851,24 +833,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "No overload matches this call."
-        }
-    ],
-    "TS2314": [
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
         }
     ],
     "TS2304": [
@@ -907,6 +871,12 @@
             "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
         }
     ],
+    "TS2564": [
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Property 'selectRef' has no initializer and is not definitely assigned in the constructor."
+        }
+    ],
     "TS2739": [
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
@@ -919,38 +889,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
             "message": "Type '{ Stripe: string; PayPal: string; DirectDebit: string; }' is missing the following properties from type 'Record<PaymentMethod, string>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { amounts: number[]; defaultAmount: number; }; }' is missing the following properties from type 'ContributionAmounts': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { min: number; minInWords: string; max: number; maxInWords: string; default: number; }; }' is missing the following properties from type 'Config': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { amounts: number[]; defaultAmount: number; }; }' is missing the following properties from type 'ContributionAmounts': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { min: number; minInWords: string; max: number; maxInWords: string; default: number; }; }' is missing the following properties from type 'Config': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { amounts: number[]; defaultAmount: number; }; }' is missing the following properties from type 'ContributionAmounts': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { min: number; minInWords: string; max: number; maxInWords: string; default: number; }; }' is missing the following properties from type 'Config': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { amounts: number[]; defaultAmount: number; }; }' is missing the following properties from type 'ContributionAmounts': MONTHLY, ANNUAL"
-        },
-        {
-            "path": "assets/helpers/internationalisation/localCurrencyCountry.ts",
-            "message": "Type '{ ONE_OFF: { min: number; minInWords: string; max: number; maxInWords: string; default: number; }; }' is missing the following properties from type 'Config': MONTHLY, ANNUAL"
         }
     ],
     "TS2532": [

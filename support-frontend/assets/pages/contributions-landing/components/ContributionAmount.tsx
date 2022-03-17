@@ -93,7 +93,9 @@ function ContributionAmount(props: PropTypes) {
 	const showOther: boolean =
 		props.selectedAmounts[props.contributionType] === 'other';
 	const { min, max } =
-		props.useLocalCurrency && props.localCurrencyCountry
+		props.useLocalCurrency &&
+		props.localCurrencyCountry &&
+		props.contributionType === 'ONE_OFF'
 			? props.localCurrencyCountry.config[props.contributionType]
 			: config[props.countryGroupId][props.contributionType];
 	const minAmount: string = formatAmount(

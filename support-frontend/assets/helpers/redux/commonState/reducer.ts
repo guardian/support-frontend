@@ -77,7 +77,10 @@ export const commonSlice = createSlice({
 		setUseLocalAmounts(state, action: PayloadAction<boolean>) {
 			state.amounts =
 				action.payload && state.internationalisation.localCurrencyCountry
-					? state.internationalisation.localCurrencyCountry.amounts
+					? {
+							...state.defaultAmounts,
+							...state.internationalisation.localCurrencyCountry.amounts,
+					  }
 					: state.defaultAmounts;
 		},
 	},
