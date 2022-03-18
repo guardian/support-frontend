@@ -34,6 +34,7 @@ object DefaultPromotions {
       val sixForSix = "6FOR6"
       val tenAnnual = "10ANNUAL"
       val jan21Promotion = "GWJAN22SALE"
+      // Note - hardcoded in client as well - assets/pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx
       val ausPromotion = "GW25OZ"
       def all = List(sixForSix, tenAnnual, ausPromotion, jan21Promotion)
     }
