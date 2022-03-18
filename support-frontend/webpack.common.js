@@ -63,6 +63,10 @@ class CleanUpStatsPlugin {
 
 module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 	plugins: [
+		new WebpackManifestPlugin({
+			fileName: '../../conf/assets.map',
+			writeToFileEmit: true,
+		}),
 		...(process.env.CI_ENV === 'github'
 			? [
 					new BundleAnalyzerPlugin({
