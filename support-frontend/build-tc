@@ -11,7 +11,7 @@ nvm use
 
 # Installing yarn
 YARN_VERSION="1.22.5"
-YARN_LOCATION="tools/${YARN_VERSION}"
+YARN_LOCATION="$(pwd)/tools/${YARN_VERSION}"
 
 if [ ! -d "$YARN_LOCATION" ]; then
 	mkdir -p ${YARN_LOCATION}
@@ -20,13 +20,23 @@ if [ ! -d "$YARN_LOCATION" ]; then
 	cd ../..
 fi
 
+export PATH=$PATH:${YARN_LOCATION}/yarn-v$YARN_VERSION/bin
+
 # Installing packages via yarn
 
-${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn install
+yarn install
 
 # Building the html files used for Server Side Rendering
-${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn run build-ssr
+yarn run build-ssr
 
 # Building the client-side assets
-${YARN_LOCATION}/yarn-v$YARN_VERSION/bin/yarn run build-prod
+yarn run build-prod
 
+(
+  cd ../cdk
+  nvm install
+  nvm use
+  # nvm alters PATH so we need to ensure the ci script uses the correct version of node
+  export PATH
+  ./script/ci
+)

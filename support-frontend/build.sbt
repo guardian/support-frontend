@@ -64,7 +64,7 @@ riffRaffManifestProjectName := "support:frontend-mono"
 riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (file("cdk/cdk.out/Frontend.template.json"), "cfn/cfn.json")
 riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"), "assets-static")
 
 def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
