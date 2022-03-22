@@ -14,20 +14,23 @@ export type PromotionTermsPropTypes = {
 	promotionTerms: PromotionTerms;
 	countryGroupId: CountryGroupId;
 };
+
 export type State = {
 	common: CommonState;
 	page: PromotionTermsPropTypes;
-}; // ----- Export ----- //
+};
 
-export default () => {
-	const productPrices = getProductPrices();
+// ----- Export ----- //
+
+export default function getPromotionTermsProps(): PromotionTermsPropTypes {
+	const productPrices = getProductPrices() as ProductPrices;
 	const terms = getGlobal<PromotionTerms>('promotionTerms');
 	const expires = terms?.expires ? new Date(terms.expires) : null;
-	const starts = terms ? new Date(terms.starts) : null;
+	const starts = terms ? new Date(terms.starts) : new Date();
 	const countryGroupId = detect();
 	return {
 		productPrices,
-		promotionTerms: { ...terms, starts, expires },
+		promotionTerms: { ...terms, starts, expires } as PromotionTerms,
 		countryGroupId,
 	};
-};
+}

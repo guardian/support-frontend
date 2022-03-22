@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 35,
+            "TS2345": 33,
             "TS7006": 29,
             "TS2322": 55,
             "TS2339": 13,
@@ -59,7 +59,6 @@
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/pages/promotion-terms/promotionTerms.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
@@ -264,14 +263,6 @@
         {
             "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
             "message": "Argument of type 'null' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTerms.tsx",
-            "message": "Argument of type '() => () => { productPrices: ProductPrices | null | undefined; promotionTerms: { starts: Date | null; expires: Date | null; description?: string | undefined; product?: SubscriptionProduct | undefined; productRatePlans?: string[] | undefined; promoCode?: string | undefined; isGift?: boolean | undefined; }; countryGro...' is not assignable to parameter of type '(commonState: CommonState) => Reducer<CombinedState<{ csrf: Csrf; marketingConsent: State; billingAddress: CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>; deliveryAddress?: undefined; checkout: FormState; user: User; directDebit: DirectDebitState; }>, Action | ... 67 more ... | { ...; }>'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/promotionTerms.tsx",
-            "message": "Argument of type '{ common: CommonState; page: CombinedState<{ csrf: Csrf; marketingConsent: State; billingAddress: CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>; deliveryAddress?: undefined; checkout: FormState; user: User; directDebit: DirectDebitState; }>; }' is not assignable to parameter of type 'State'."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
