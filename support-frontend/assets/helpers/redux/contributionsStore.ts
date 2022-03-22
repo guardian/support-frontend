@@ -16,7 +16,9 @@ export type ContributionsState = ReturnType<typeof contributionsStore.getState>;
 
 export type ContributionsDispatch = typeof contributionsStore.dispatch;
 
-export function initReduxForContributions(): typeof contributionsStore {
+export type ContributionsStore = typeof contributionsStore;
+
+export function initReduxForContributions(): ContributionsStore {
 	try {
 		const initialState = getInitialState();
 		contributionsStore.dispatch(setInitialCommonState(initialState));

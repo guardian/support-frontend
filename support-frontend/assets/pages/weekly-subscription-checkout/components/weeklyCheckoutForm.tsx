@@ -7,10 +7,8 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source-react-components';
-import type { PayloadAction } from '@reduxjs/toolkit';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import Rows from 'components/base/rows';
 import Form, {
 	FormSection,
@@ -23,7 +21,6 @@ import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
@@ -45,8 +42,8 @@ import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOption
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
 	setCsrCustomerData,
@@ -111,7 +108,7 @@ function mapDispatchToProps() {
 		fetchAndStoreUserType:
 			(email: string) =>
 			(
-				dispatch: Dispatch<Action>,
+				dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) => {
 				fetchAndStoreUserType(email)(dispatch, getState);
@@ -119,23 +116,24 @@ function mapDispatchToProps() {
 		formIsValid:
 			() =>
 			(
-				_dispatch: Dispatch<Action>,
+				_dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() =>
-			(dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			(
+				dispatch: SubscriptionsDispatch,
+				getState: () => WithDeliveryCheckoutState,
+			) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
-		setBillingCountry:
-			(country: string) =>
-			(dispatch: Dispatch<SetCountryChangedAction | PayloadAction<string>>) =>
-				setCountry(country)(dispatch),
+		setBillingCountry: (country: string) => (dispatch: SubscriptionsDispatch) =>
+			setCountry(country)(dispatch),
 		validateForm:
 			() =>
 			(
-				dispatch: Dispatch<Action>,
+				dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) => {
 				const state = getState();

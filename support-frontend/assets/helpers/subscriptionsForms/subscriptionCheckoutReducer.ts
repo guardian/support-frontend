@@ -12,16 +12,21 @@ import { addressReducerFor } from 'components/subscriptionCheckouts/address/addr
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { ReduxState } from 'helpers/page/page';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { CommonState } from 'helpers/redux/commonState/state';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { Option } from 'helpers/types/option';
 import type { User } from 'helpers/user/userReducer';
 import { createUserReducer } from 'helpers/user/userReducer';
+
+export type ReduxState<PageState> = {
+	common: CommonState;
+	page: PageState;
+};
 
 export type CheckoutState = ReduxState<{
 	checkout: FormState;

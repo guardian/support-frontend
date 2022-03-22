@@ -408,7 +408,7 @@
         },
         {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
-            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/components/page/page.tsx",
@@ -508,7 +508,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
-            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"modifierClasses\">> & Partial<...>'."
+            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/SepaForm.tsx",

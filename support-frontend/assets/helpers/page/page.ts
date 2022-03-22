@@ -10,14 +10,7 @@ import {
 	analyticsInitialisation,
 	consentInitialisation,
 } from 'helpers/page/analyticsAndConsent';
-import type { CommonState } from 'helpers/redux/commonState/state';
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-
-// ----- Types ----- //
-export type ReduxState<PageState> = {
-	common: CommonState;
-	page: PageState;
-};
 
 function setUpTrackingAndConsents(): void {
 	const countryId: IsoCountry = detectCountry();
