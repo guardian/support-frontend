@@ -29,16 +29,16 @@ export type CheckoutState = ReduxState<{
 	csrf: CsrfState;
 	marketingConsent: MarketingConsentState;
 	billingAddress: AddressState;
-	hasDeliveryAddress: false;
+	deliveryAddress?: AddressState;
 	directDebit: DirectDebitState;
 }>;
+
 export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	csrf: CsrfState;
 	marketingConsent: MarketingConsentState;
 	billingAddress: AddressState;
-	deliveryAddress: AddressState;
-	hasDeliveryAddress: true;
+	deliveryAddress?: AddressState;
 	fulfilmentOption: Option<FulfilmentOptions>;
 	directDebit: DirectDebitState;
 }>;

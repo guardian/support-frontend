@@ -1,13 +1,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { renderError } from 'helpers/rendering/render';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';
 import { initialCommonState } from './commonState/state';
 import { getInitialState } from './utils/setup';
 
-const subscriptionsPageReducer = createCheckoutReducer(
+const subscriptionsPageReducer = createWithDeliveryCheckoutReducer(
 	initialCommonState.internationalisation.countryId,
 	'DigitalPack',
 	'Monthly',
@@ -27,9 +27,14 @@ export const subscriptionsStore = configureStore({
 	reducer: baseReducer,
 });
 
-export function addPageReducer(newReducer?: SubscriptionsReducer): void {
+export type SubscriptionsStore = typeof subscriptionsStore;
+
+export function addPageReducer(
+	store: SubscriptionsStore,
+	newReducer?: SubscriptionsReducer,
+): void {
 	if (!newReducer) return;
-	subscriptionsStore.replaceReducer(
+	store.replaceReducer(
 		combineReducers({
 			...baseReducer,
 			page: newReducer,
@@ -39,11 +44,11 @@ export function addPageReducer(newReducer?: SubscriptionsReducer): void {
 
 export function initReduxForSubscriptions(
 	pageReducer?: (initialState: CommonState) => SubscriptionsReducer,
-): typeof subscriptionsStore {
+): SubscriptionsStore {
 	try {
 		const initialState = getInitialState();
 
-		addPageReducer(pageReducer?.(initialState));
+		addPageReducer(subscriptionsStore, pageReducer?.(initialState));
 
 		subscriptionsStore.dispatch(setInitialCommonState(initialState));
 

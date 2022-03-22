@@ -134,7 +134,7 @@ function initRedux(
 			acquisitionData,
 		);
 
-		addPageReducer(pageReducer?.(initialState));
+		addPageReducer(subscriptionsStore, pageReducer?.(initialState));
 
 		subscriptionsStore.dispatch(setInitialCommonState(initialState));
 
