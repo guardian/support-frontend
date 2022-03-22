@@ -46,14 +46,14 @@ const reactElementId: Record<CountryGroupId, string> = {
 };
 
 // ----- Render ----- //
-const WeeklyLandingPage = ({
+function WeeklyLandingPage({
 	countryId,
 	productPrices,
 	promotionCopy,
 	orderIsAGift,
 	countryGroupId,
 	participations,
-}: WeeklyLandingPropTypes) => {
+}: WeeklyLandingPropTypes) {
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;
@@ -61,9 +61,14 @@ const WeeklyLandingPage = ({
 		? routes.guardianWeeklySubscriptionLanding
 		: routes.guardianWeeklySubscriptionLandingGift;
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-	const defaultPromo = orderIsAGift ? 'GW20GIFT1Y' : '10ANNUAL';
+	const defaultPromo = (): string => {
+		if (orderIsAGift) return 'GW20GIFT1Y';
+		if (countryGroupId === 'AUDCountries' || countryGroupId === 'NZDCountries')
+			return 'GW25OZ';
+		return '10ANNUAL';
+	};
 	const promoTermsLink = promotionTermsUrl(
-		getQueryParameter(promoQueryParam, defaultPromo),
+		getQueryParameter(promoQueryParam, defaultPromo()),
 	);
 	// ID for Selenium tests
 	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
@@ -119,7 +124,7 @@ const WeeklyLandingPage = ({
 			</FullWidthContainer>
 		</Page>
 	);
-};
+}
 
 setUpTrackingAndConsents();
 renderPage(

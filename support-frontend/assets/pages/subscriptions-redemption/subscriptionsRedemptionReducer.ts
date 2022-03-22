@@ -61,10 +61,6 @@ export type Action =
 			error: Option<string>;
 	  }
 	| {
-			type: 'SET_STAGE';
-			stage: Stage;
-	  }
-	| {
 			type: 'SET_FIRST_NAME';
 			firstName: string;
 	  }

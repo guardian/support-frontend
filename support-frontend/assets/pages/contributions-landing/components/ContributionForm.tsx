@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -50,6 +51,8 @@ import {
 	selectAmount,
 	setCheckoutFormHasBeenSubmitted,
 	setSepaAccountHolderName,
+	setSepaAddressCountry,
+	setSepaAddressStreetName,
 	setSepaIban,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type {
@@ -110,6 +113,8 @@ type PropTypes = {
 	sepaData: SepaData;
 	setSepaIban: (iban: string) => void;
 	setSepaAccountHolderName: (accountHolderName: string) => void;
+	setSepaAddressStreetName: (streetName: string) => void;
+	setSepaAddressCountry: (addressCountry: Country) => void;
 	productSetAbTestVariant: boolean;
 	showBenefitsMessage: boolean;
 };
@@ -198,6 +203,12 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	setSepaAccountHolderName: (name: string) => {
 		dispatch(setSepaAccountHolderName(name));
 	},
+	setSepaAddressStreetName: (addressStreetName: string) => {
+		dispatch(setSepaAddressStreetName(addressStreetName));
+	},
+	setSepaAddressCountry: (addressCountry: Country) => {
+		dispatch(setSepaAddressCountry(addressCountry));
+	},
 });
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -217,13 +228,15 @@ const formHandlersForRecurring = {
 		props.openDirectDebitPopUp();
 	},
 	Sepa: (props: PropTypes) => {
-		const { accountHolderName, iban } = props.sepaData;
+		const { accountHolderName, iban, country, streetName } = props.sepaData;
 
 		if (accountHolderName && iban) {
 			props.onPaymentAuthorisation({
 				paymentMethod: 'Sepa',
 				accountHolderName,
 				iban,
+				country,
+				streetName,
 			});
 		}
 	},
@@ -387,8 +400,12 @@ function ContributionForm(props: PropTypes): JSX.Element {
 						<SepaForm
 							iban={props.sepaData.iban}
 							accountHolderName={props.sepaData.accountHolderName}
+							addressStreetName={props.sepaData.streetName}
+							addressCountry={props.sepaData.country}
 							updateIban={props.setSepaIban}
 							updateAccountHolderName={props.setSepaAccountHolderName}
+							updateAddressStreetName={props.setSepaAddressStreetName}
+							updateAddressCountry={props.setSepaAddressCountry}
 							checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
 						/>
 						<SepaTerms />

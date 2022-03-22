@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
@@ -77,6 +78,8 @@ export interface PayPalData {
 export interface SepaData {
 	iban: string | null;
 	accountHolderName: string | null;
+	streetName?: string;
+	country?: Country;
 }
 
 interface FormState {
@@ -194,6 +197,8 @@ function createFormReducer() {
 		sepaData: {
 			iban: null,
 			accountHolderName: null,
+			country: undefined,
+			streetName: undefined,
 		},
 		selectedAmounts: {
 			ONE_OFF: 0,
@@ -392,6 +397,24 @@ function createFormReducer() {
 					sepaData: {
 						...state.sepaData,
 						accountHolderName: action.accountHolderName,
+					},
+				};
+
+			case 'SET_SEPA_ADDRESS_STREET_NAME':
+				return {
+					...state,
+					sepaData: {
+						...state.sepaData,
+						streetName: action.addressStreetName,
+					},
+				};
+
+			case 'SET_SEPA_ADDRESS_COUNTRY':
+				return {
+					...state,
+					sepaData: {
+						...state.sepaData,
+						country: action.addressCountry,
 					},
 				};
 

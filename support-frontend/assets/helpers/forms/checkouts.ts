@@ -168,7 +168,8 @@ function getPaymentMethods(
 		return [Stripe, PayPal];
 	} else if (
 		contributionType !== 'ONE_OFF' &&
-		countryGroupId === 'EURCountries'
+		countryGroupId === 'EURCountries' &&
+		getQueryParameter('sepa') === 'true'
 	) {
 		return [Sepa, Stripe, PayPal];
 	}
@@ -186,7 +187,7 @@ function switchKeyForContributionType(
 
 function getValidPaymentMethods(
 	contributionType: ContributionType,
-	allSwitches: Switches,
+	_allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
