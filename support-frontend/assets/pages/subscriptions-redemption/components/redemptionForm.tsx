@@ -13,6 +13,10 @@ import CheckoutLayout, {
 } from 'components/subscriptionCheckouts/layout';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import type {
+	RedemptionDispatch,
+	RedemptionPageState,
+} from 'helpers/redux/redemptionsStore';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { signOut } from 'helpers/user/user';
 import {
@@ -20,10 +24,6 @@ import {
 	validateUserCode,
 } from 'pages/subscriptions-redemption/api';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
-import type {
-	RedemptionDispatch,
-	RedemptionPageState,
-} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 function mapStateToProps(state: RedemptionPageState) {
 	return {

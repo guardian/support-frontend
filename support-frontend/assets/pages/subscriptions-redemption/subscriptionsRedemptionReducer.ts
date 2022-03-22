@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -7,10 +7,6 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { ReaderType } from 'helpers/productPrice/readerType';
-import { setInitialCommonState } from 'helpers/redux/commonState/actions';
-import { commonReducer } from 'helpers/redux/commonState/reducer';
-import { getInitialState } from 'helpers/redux/utils/setup';
-import { renderError } from 'helpers/rendering/render';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
@@ -205,7 +201,7 @@ const error = (
 
 const marketingConsent = marketingConsentReducerFor('MARKETING_CONSENT');
 
-const redemptionPageReducer = combineReducers({
+export const redemptionPageReducer = combineReducers({
 	userCode,
 	readerType,
 	error,
@@ -214,30 +210,3 @@ const redemptionPageReducer = combineReducers({
 	marketingConsent,
 	checkout: createRedemptionCheckoutReducer(),
 });
-
-const baseReducer = {
-	common: commonReducer,
-	page: redemptionPageReducer,
-};
-
-export const redemptionStore = configureStore({
-	reducer: baseReducer,
-});
-
-export type RedemptionStore = typeof redemptionStore;
-
-export function initReduxForRedemption(): RedemptionStore {
-	try {
-		const initialState = getInitialState();
-		redemptionStore.dispatch(setInitialCommonState(initialState));
-
-		return redemptionStore;
-	} catch (err) {
-		renderError(err as Error, null);
-		throw err;
-	}
-}
-
-export type RedemptionPageState = ReturnType<typeof redemptionStore.getState>;
-
-export type RedemptionDispatch = typeof redemptionStore.dispatch;

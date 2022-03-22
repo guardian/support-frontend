@@ -6,7 +6,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type {
 	RedemptionDispatch,
 	RedemptionPageState,
-} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+} from 'helpers/redux/redemptionsStore';
 
 const mapStateToProps = (state: RedemptionPageState) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,

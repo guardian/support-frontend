@@ -13,6 +13,10 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import type {
+	RedemptionDispatch,
+	RedemptionPageState,
+} from 'helpers/redux/redemptionsStore';
 import { applyRedemptionRules } from 'helpers/subscriptionsForms/rules';
 import {
 	getOphanIds,
@@ -22,11 +26,7 @@ import {
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { getOrigin } from 'helpers/urls/url';
-import type {
-	RedemptionDispatch,
-	RedemptionPageState,
-	Stage,
-} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type { Stage } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 type ValidationResult = {
 	valid: boolean;

@@ -3,6 +3,7 @@ import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
+import { initReduxForRedemption } from 'helpers/redux/redemptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import 'stylesheets/skeleton/skeleton.scss';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
@@ -10,7 +11,6 @@ import RedemptionForm from 'pages/subscriptions-redemption/components/redemption
 import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
 import CheckoutStage from './components/stage';
 import MarketingConsent from './marketingConsentContainer';
-import { initReduxForRedemption } from './subscriptionsRedemptionReducer';
 
 setUpTrackingAndConsents();
 
