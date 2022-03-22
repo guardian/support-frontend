@@ -7,7 +7,6 @@ import {
 } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, {
 	Content,
@@ -22,9 +21,7 @@ import {
 } from 'pages/subscriptions-redemption/api';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
 import type {
-	Action,
 	RedemptionDispatch,
-	RedemptionPageState,
 	RedemptionPageState,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
