@@ -6,7 +6,7 @@
             "TS7006": 29,
             "TS2322": 55,
             "TS2339": 13,
-            "TS6133": 8,
+            "TS6133": 9,
             "TS2578": 4,
             "TS2305": 10,
             "TS7031": 10,
@@ -21,7 +21,6 @@
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
-            "TS6192": 1,
             "TS2367": 4,
             "TS2740": 1,
             "TS7016": 1,
@@ -31,7 +30,8 @@
             "TS7005": 9,
             "TS2525": 1,
             "TS7022": 1,
-            "TS2558": 1
+            "TS6196": 1,
+            "TS2300": 2
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
@@ -102,6 +102,7 @@
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
+            "assets/pages/subscriptions-redemption/components/redemptionForm.tsx": 4,
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/components/headers/header/header.tsx": 6,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
@@ -119,14 +120,12 @@
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 4,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
-            "assets/helpers/page/page.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5,
-            "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx": 1
+            "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5
         }
     },
     "TS1208": [
@@ -695,6 +694,10 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
+            "message": "'Dispatch' is declared but its value is never read."
         }
     ],
     "TS2578": [
@@ -1029,12 +1032,6 @@
             "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
         }
     ],
-    "TS6192": [
-        {
-            "path": "assets/helpers/page/page.ts",
-            "message": "All imports in import declaration are unused."
-        }
-    ],
     "TS2367": [
         {
             "path": "assets/helpers/polyfills/details.ts",
@@ -1165,10 +1162,20 @@
             "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
         }
     ],
-    "TS2558": [
+    "TS6196": [
         {
-            "path": "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
-            "message": "Expected 0 type arguments, but got 2."
+            "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
+            "message": "'Action' is declared but never used."
+        }
+    ],
+    "TS2300": [
+        {
+            "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
+            "message": "Duplicate identifier 'RedemptionPageState'."
+        },
+        {
+            "path": "assets/pages/subscriptions-redemption/components/redemptionForm.tsx",
+            "message": "Duplicate identifier 'RedemptionPageState'."
         }
     ]
 }

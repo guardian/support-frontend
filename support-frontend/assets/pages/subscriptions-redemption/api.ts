@@ -1,5 +1,3 @@
-import type { Dispatch } from 'redux';
-import 'redux';
 import type { Participations } from 'helpers/abTests/abtest';
 import { fetchJson } from 'helpers/async/fetch';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
@@ -25,7 +23,7 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { getOrigin } from 'helpers/urls/url';
 import type {
-	Action,
+	RedemptionDispatch,
 	RedemptionPageState,
 	Stage,
 } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
@@ -53,7 +51,7 @@ function validate(userCode: string): Promise<ValidationResult> {
 	return fetchJson(validationUrl, {}) as Promise<ValidationResult>;
 }
 
-function dispatchError(dispatch: Dispatch<Action>, error: Option<string>) {
+function dispatchError(dispatch: RedemptionDispatch, error: Option<string>) {
 	dispatch({
 		type: 'SET_ERROR',
 		error,
@@ -61,7 +59,7 @@ function dispatchError(dispatch: Dispatch<Action>, error: Option<string>) {
 }
 
 function dispatchReaderType(
-	dispatch: Dispatch<Action>,
+	dispatch: RedemptionDispatch,
 	readerType: Option<ReaderType>,
 ) {
 	dispatch({
@@ -70,14 +68,14 @@ function dispatchReaderType(
 	});
 }
 
-function dispatchStage(dispatch: Dispatch<Action>, stage: Stage) {
+function dispatchStage(dispatch: RedemptionDispatch, stage: Stage) {
 	dispatch({
 		type: 'SET_STAGE',
 		stage,
 	});
 }
 
-function validateWithServer(userCode: string, dispatch: Dispatch<Action>) {
+function validateWithServer(userCode: string, dispatch: RedemptionDispatch) {
 	validate(userCode)
 		.then((result: ValidationResult) => {
 			dispatchError(dispatch, result.errorMessage);
@@ -91,7 +89,10 @@ function validateWithServer(userCode: string, dispatch: Dispatch<Action>) {
 		});
 }
 
-function validateUserCode(userCode: string, dispatch: Dispatch<Action>): void {
+function validateUserCode(
+	userCode: string,
+	dispatch: RedemptionDispatch,
+): void {
 	dispatch({
 		type: 'SET_USER_CODE',
 		userCode,
@@ -107,7 +108,7 @@ function validateUserCode(userCode: string, dispatch: Dispatch<Action>): void {
 }
 
 function validateFormFields(
-	dispatch: Dispatch<Action>,
+	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
 ) {
 	const formFieldErrors = applyRedemptionRules(state.page.checkout);
@@ -123,7 +124,7 @@ function validateFormFields(
 }
 
 function handleCodeValidationResult(
-	dispatch: Dispatch<Action>,
+	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
 ) {
 	return function handleResult(result: ValidationResult) {
@@ -136,7 +137,7 @@ function handleCodeValidationResult(
 	};
 }
 
-function handleCodeValidationError(dispatch: Dispatch<Action>) {
+function handleCodeValidationError(dispatch: RedemptionDispatch) {
 	return function handleError(error: Error) {
 		dispatchError(
 			dispatch,
@@ -147,7 +148,7 @@ function handleCodeValidationError(dispatch: Dispatch<Action>) {
 }
 
 function submitCode(
-	dispatch: Dispatch<Action>,
+	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
 ): void {
 	const userCode = state.page.userCode ?? '';
@@ -204,7 +205,7 @@ function buildRegularPaymentRequest(
 }
 
 function createSubscription(
-	dispatch: Dispatch<Action>,
+	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
 ): void {
 	if (state.page.readerType == null) {

@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import type { Action } from 'helpers/user/userActions';
-import type { RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type {
+	RedemptionDispatch,
+	RedemptionPageState,
+} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 const mapStateToProps = (state: RedemptionPageState) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,
@@ -15,7 +16,7 @@ const mapStateToProps = (state: RedemptionPageState) => ({
 	requestPending: state.page.marketingConsent.requestPending,
 });
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps(dispatch: RedemptionDispatch) {
 	return {
 		onClick: (email: string, csrf: CsrfState) => {
 			sendTrackingEventsOnClick({

@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import 'stylesheets/skeleton/skeleton.scss';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
@@ -10,16 +10,12 @@ import RedemptionForm from 'pages/subscriptions-redemption/components/redemption
 import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
 import CheckoutStage from './components/stage';
 import MarketingConsent from './marketingConsentContainer';
-import type {
-	Action,
-	RedemptionFormState,
-} from './subscriptionsRedemptionReducer';
-import reducer from './subscriptionsRedemptionReducer';
+import { initReduxForRedemption } from './subscriptionsRedemptionReducer';
 
 setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
-const store = initRedux<RedemptionFormState, Action>(reducer);
+const store = initReduxForRedemption();
 const state = store.getState();
 const { countryGroupId } = state.common.internationalisation;
 
