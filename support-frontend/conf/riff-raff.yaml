@@ -13,7 +13,7 @@ deployments:
     type: cloud-formation
     app: frontend
     parameters:
-      templatePath: cfn.yaml
+      templatePath: cfn.json
       amiTags:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
