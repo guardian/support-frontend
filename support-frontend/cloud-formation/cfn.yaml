@@ -334,18 +334,6 @@ Resources:
         ToPort: 1515
         CidrIp: 0.0.0.0/0
 
-  WazuhSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow outbound traffic from wazuh agent to manager
-      VpcId:
-        Ref: CfnVpcId
-      SecurityGroupEgress:
-      - IpProtocol: tcp
-        FromPort: 1514
-        ToPort: 1515
-        CidrIp: 0.0.0.0/0
-
   NoHealthyInstancesAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
