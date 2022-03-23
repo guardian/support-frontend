@@ -5,8 +5,11 @@ import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import type {
 	Campaign,
 	ReferrerAcquisitionData,
@@ -45,18 +48,20 @@ export type CommonStateSetupData = {
 	defaultAmounts: ContributionAmounts;
 };
 
+const countryGroupId = detectCountryGroup();
+
 export const initialCommonState: CommonState = {
 	campaign: null,
 	referrerAcquisitionData: {},
 	otherQueryParams: [],
 	abParticipations: {},
 	settings: getSettings(),
-	amounts: FALLBACK_AMOUNTS.International,
-	defaultAmounts: FALLBACK_AMOUNTS.International,
+	amounts: FALLBACK_AMOUNTS[countryGroupId],
+	defaultAmounts: FALLBACK_AMOUNTS[countryGroupId],
 	internationalisation: {
-		currencyId: 'USD',
-		countryGroupId: 'International',
-		countryId: '',
+		currencyId: detectCurrency(countryGroupId),
+		countryGroupId,
+		countryId: detectCountry(),
 		useLocalCurrency: false,
 		defaultCurrency: 'USD',
 	},

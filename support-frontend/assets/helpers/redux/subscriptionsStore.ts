@@ -23,23 +23,21 @@ const baseReducer = {
 	page: subscriptionsPageReducer,
 };
 
-export const subscriptionsStore = configureStore({
+const subscriptionsStore = configureStore({
 	reducer: baseReducer,
 });
 
 export type SubscriptionsStore = typeof subscriptionsStore;
 
 export function addPageReducer(
-	store: SubscriptionsStore,
 	newReducer?: SubscriptionsReducer,
-): void {
-	if (!newReducer) return;
-	store.replaceReducer(
-		combineReducers({
-			...baseReducer,
-			page: newReducer,
-		}),
-	);
+): SubscriptionsStore {
+	return configureStore({
+		reducer: {
+			common: commonReducer,
+			page: newReducer ?? subscriptionsPageReducer,
+		},
+	});
 }
 
 export function initReduxForSubscriptions(
@@ -47,12 +45,10 @@ export function initReduxForSubscriptions(
 ): SubscriptionsStore {
 	try {
 		const initialState = getInitialState();
+		const newStore = addPageReducer(pageReducer?.(initialState));
+		newStore.dispatch(setInitialCommonState(initialState));
 
-		addPageReducer(subscriptionsStore, pageReducer?.(initialState));
-
-		subscriptionsStore.dispatch(setInitialCommonState(initialState));
-
-		return subscriptionsStore;
+		return newStore;
 	} catch (err) {
 		renderError(err as Error, null);
 		throw err;
