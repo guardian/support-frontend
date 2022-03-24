@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { renderError } from 'helpers/rendering/render';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { setInitialCommonState } from './commonState/actions';
@@ -32,6 +32,8 @@ export type SubscriptionsStore = typeof subscriptionsStore;
 export function addPageReducer(
 	newReducer?: SubscriptionsReducer,
 ): SubscriptionsStore {
+	// For context on why we are re-creating the store at runtime
+	// https://github.com/guardian/support-frontend/pull/3595#discussion_r834202633
 	return configureStore({
 		reducer: {
 			common: commonReducer,

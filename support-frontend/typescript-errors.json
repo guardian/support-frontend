@@ -6,7 +6,7 @@
             "TS7006": 29,
             "TS2322": 48,
             "TS2339": 13,
-            "TS6133": 8,
+            "TS6133": 7,
             "TS2578": 4,
             "TS2305": 9,
             "TS2314": 4,
@@ -94,7 +94,6 @@
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
-            "assets/helpers/redux/subscriptionsStore.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
@@ -629,10 +628,6 @@
         {
             "path": "assets/components/directDebit/helpers/ajax.ts",
             "message": "'isTestUser' is declared but its value is never read."
-        },
-        {
-            "path": "assets/helpers/redux/subscriptionsStore.ts",
-            "message": "'combineReducers' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",

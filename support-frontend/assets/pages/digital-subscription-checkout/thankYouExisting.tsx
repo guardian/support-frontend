@@ -15,7 +15,6 @@ import './digitalSubscriptionCheckout.scss';
 
 setUpTrackingAndConsents();
 
-// ----- Redux Store ----- //
 const countryGroupId = detect();
 
 // ----- Render ----- //
