@@ -172,19 +172,33 @@ export class Frontend extends GuStack {
     const ec2AppAsg = ec2App.autoScalingGroup;
     Tags.of(ec2AppAsg).add("gu:riffraff:new-asg", "true");
 
+    // ---- Alarms ---- //
+
+    // TODO: remove [CDK] prefix. This prefix is needed as the alarms need to have
+    // a different name from the ones in the cloudformation template. We can remove
+    // this after the migration
+    const alarmName = (shortDescription: string) =>
+      `[CDK] URGENT 9-5 - ${this.stage} ${shortDescription}`;
+
+    const alarmDescription = (description: string) =>
+      `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
+
+    const alarmEnabledInProd = this.withStageDependentValue({
+      app,
+      variableName: "AlarmEnabledInProd",
+      stageValues: {
+        [Stage.CODE]: false,
+        [Stage.PROD]: true,
+      },
+    });
+
     new GuAlarm(this, "NoHealthyInstancesAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} no healthy instances for support-frontend`,
-      alarmDescription:
-        "Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      alarmName: alarmName("no healthy instances for support-frontend"),
+      alarmDescription: alarmDescription(
+        "Cannot sell any subscriptions or contributions products"
+      ),
+      actionsEnabled: alarmEnabledInProd,
       threshold: 0.5,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -203,17 +217,13 @@ export class Frontend extends GuStack {
 
     new GuAlarm(this, "ReducedHealthyInstancesAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} reduced number healthy instances for support-frontend`,
-      alarmDescription:
-        "Impact - Imminent issue cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      alarmName: alarmName(
+        "reduced number healthy instances for support-frontend"
+      ),
+      alarmDescription: alarmDescription(
+        "Imminent issue cannot sell any subscriptions or contributions products"
+      ),
+      actionsEnabled: alarmEnabledInProd,
       threshold: minimumProdInstances - 1,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -232,17 +242,13 @@ export class Frontend extends GuStack {
 
     new GuAlarm(this, "High5XXRateAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} support-frontend instances are returning 5XX errors`,
-      alarmDescription:
-        "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      alarmName: alarmName(
+        "support-frontend instances are returning 5XX errors"
+      ),
+      alarmDescription: alarmDescription(
+        "Some or all actions on support website are failing"
+      ),
+      actionsEnabled: alarmEnabledInProd,
       threshold: 3,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -261,17 +267,11 @@ export class Frontend extends GuStack {
 
     new GuAlarm(this, "HighELB5XXRateAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} support-frontend ELB is returning 5XX errors`,
-      alarmDescription:
-        "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      alarmName: alarmName("support-frontend ELB is returning 5XX errors"),
+      alarmDescription: alarmDescription(
+        "Some or all actions on support website are failing"
+      ),
+      actionsEnabled: alarmEnabledInProd,
       threshold: 3,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -289,17 +289,11 @@ export class Frontend extends GuStack {
 
     new GuAlarm(this, "LatencyNotificationAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} support-frontend has high latency`,
-      alarmDescription:
-        "Impact - support-frontend users are seeing slow responses. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      alarmName: alarmName("support-frontend has high latency"),
+      alarmDescription: alarmDescription(
+        "support-frontend users are seeing slow responses"
+      ),
+      actionsEnabled: alarmEnabledInProd,
       threshold: 1,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -319,17 +313,12 @@ export class Frontend extends GuStack {
     // TODO: Do we still need this?
     new GuAlarm(this, "CatalogLoadingFailureAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} support-frontend could not load the Zuora catalog from S3`,
+      alarmName: alarmName(
+        "support-frontend could not load the Zuora catalog from S3"
+      ),
       alarmDescription:
         "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      actionsEnabled: alarmEnabledInProd,
       threshold: 1,
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -365,17 +354,11 @@ export class Frontend extends GuStack {
 
     new GuAlarm(this, "StateMachineUnavailableAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers state machine unavailable`,
-      alarmDescription:
-        "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      alarmName: alarmName("support-workers state machine unavailable"),
+      alarmDescription: alarmDescription(
+        "Cannot sell any subscriptions products"
+      ),
+      actionsEnabled: alarmEnabledInProd,
       threshold: 1,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -389,17 +372,13 @@ export class Frontend extends GuStack {
 
     new GuAlarm(this, "ServerSideCreateFailureAlarm", {
       app,
-      alarmName: `URGENT 9-5 - ${this.stage} support-frontend create recurring product call failed`,
-      alarmDescription:
-        "Impact - Someone pressed buy on a recurring product but received an error. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: this.withStageDependentValue({
-        app,
-        variableName: "NoHealthyInstancesAlarmEnabled",
-        stageValues: {
-          [Stage.CODE]: false,
-          [Stage.PROD]: true,
-        },
-      }),
+      alarmName: alarmName(
+        "support-frontend create recurring product call failed"
+      ),
+      alarmDescription: alarmDescription(
+        "Someone pressed buy on a recurring product but received an error"
+      ),
+      actionsEnabled: alarmEnabledInProd,
       threshold: 1,
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
