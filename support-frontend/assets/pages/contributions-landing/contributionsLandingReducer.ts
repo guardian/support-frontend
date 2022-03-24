@@ -63,6 +63,7 @@ export interface StripeCardFormData {
 	formComplete: boolean;
 	setupIntentClientSecret: string | null;
 	recurringRecaptchaVerified: boolean;
+	// TODO: No non-serialisable values should be in Redux state!! This needs to be refactored
 	// These callbacks must be initialised after the StripeCardForm component has been created
 	createPaymentMethod: ((clientSecret: string | null) => void) | null;
 	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only

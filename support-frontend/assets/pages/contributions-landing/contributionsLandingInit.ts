@@ -1,7 +1,4 @@
 // ----- Imports ----- //
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Store } from 'redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
@@ -31,11 +28,15 @@ import {
 	setContributionTypes,
 	setExistingPaymentMethods,
 } from 'helpers/redux/commonState/actions';
+import type {
+	ContributionsDispatch,
+	ContributionsState,
+	ContributionsStore,
+} from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
-import type { Action as ContribAction } from './contributionsLandingActions';
 import {
 	getUserType,
 	loadAmazonPaySdk,
@@ -49,11 +50,6 @@ import {
 	updateUserFormData,
 } from './contributionsLandingActions';
 import type { State } from './contributionsLandingReducer';
-
-type Action =
-	| ContribAction
-	| PayloadAction<ContributionTypes>
-	| PayloadAction<ExistingPaymentMethod[]>;
 
 // ----- Functions ----- //
 function getInitialPaymentMethod(
@@ -107,7 +103,7 @@ function getInitialContributionType(
 
 function initialisePaymentMethods(
 	state: State,
-	dispatch: ThunkDispatch<State, void, Action>,
+	dispatch: ContributionsDispatch,
 ) {
 	const { currencyId } = state.common.internationalisation;
 	// initiate fetch of existing payment methods
@@ -163,8 +159,8 @@ function initialisePaymentMethods(
 }
 
 function selectInitialAmounts(
-	state: State,
-	dispatch: ThunkDispatch<State, void, Action>,
+	state: ContributionsState,
+	dispatch: ContributionsDispatch,
 	selectedContributionType: ContributionType,
 ) {
 	const { amounts } = state.common;
@@ -227,8 +223,8 @@ function getContributionTypes(state: State): ContributionTypes {
 }
 
 function selectInitialContributionTypeAndPaymentMethod(
-	state: State,
-	dispatch: ThunkDispatch<State, void, Action>,
+	state: ContributionsState,
+	dispatch: ContributionsDispatch,
 	contributionTypes: ContributionTypes,
 ): ContributionType {
 	const { countryId } = state.common.internationalisation;
@@ -265,8 +261,8 @@ function selectInitialContributionTypeAndPaymentMethod(
 	return contributionType;
 }
 
-const init = (store: Store<State, Action>): void => {
-	const dispatch = store.dispatch as ThunkDispatch<State, void, Action>;
+const init = (store: ContributionsStore): void => {
+	const dispatch = store.dispatch;
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
 	const contributionTypes = getContributionTypes(state);

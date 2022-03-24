@@ -1,5 +1,3 @@
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Dispatch } from 'redux';
 import { combineReducers } from 'redux';
 import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
@@ -14,6 +12,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromString } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { Scoped } from 'helpers/subscriptionsForms/scoped';
@@ -234,22 +233,18 @@ const setFormErrorsFor =
 	});
 
 const addressActionCreatorsFor = (scope: AddressType) => ({
-	setCountry:
-		(countryRaw: string) =>
-		(
-			dispatch: Dispatch<SetCountryChangedAction | PayloadAction<IsoCountry>>,
-		) => {
-			const country = fromString(countryRaw);
+	setCountry: (countryRaw: string) => (dispatch: SubscriptionsDispatch) => {
+		const country = fromString(countryRaw);
 
-			if (country) {
-				dispatch(setCountryInternationalisation(country));
-				dispatch({
-					type: 'SET_COUNTRY_CHANGED',
-					country,
-					scope,
-				});
-			}
-		},
+		if (country) {
+			dispatch(setCountryInternationalisation(country));
+			dispatch({
+				type: 'SET_COUNTRY_CHANGED',
+				country,
+				scope,
+			});
+		}
+	},
 	setAddressLineOne: (lineOne: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			scope,
