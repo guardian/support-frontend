@@ -18,7 +18,8 @@ import CheckoutLayout, {
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
+import { StripePaymentElement } from 'components/subscriptionCheckouts/stripeForm/stripePaymentElement';
+// import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { countries } from 'helpers/internationalisation/country';
@@ -211,7 +212,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 						show={props.paymentMethod === Stripe}
 						title="Your card details"
 					>
-						<StripeProviderForCountry
+						<StripePaymentElement
 							country={props.country}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}

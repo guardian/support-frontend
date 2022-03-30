@@ -6,7 +6,7 @@
             "TS7006": 29,
             "TS2322": 48,
             "TS2339": 13,
-            "TS6133": 7,
+            "TS6133": 11,
             "TS2578": 4,
             "TS2305": 9,
             "TS2314": 4,
@@ -16,6 +16,7 @@
             "TS2741": 3,
             "TS2564": 1,
             "TS2739": 3,
+            "TS6192": 1,
             "TS2532": 1,
             "TS2556": 3,
             "TS2569": 2,
@@ -94,6 +95,7 @@
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
+            "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 5,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
@@ -630,6 +632,22 @@
             "message": "'isTestUser' is declared but its value is never read."
         },
         {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
+            "message": "'appropriateErrorMessage' is declared but its value is never read."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
+            "message": "'StripePaymentIntentResult' is declared but its value is never read."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
+            "message": "'routes' is declared but its value is never read."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
+            "message": "'logException' is declared but its value is never read."
+        },
+        {
             "path": "assets/helpers/urls/externalLinks.ts",
             "message": "'product' is declared but its value is never read."
         },
@@ -842,6 +860,12 @@
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
             "message": "Type '{ Stripe: string; PayPal: string; DirectDebit: string; }' is missing the following properties from type 'Record<PaymentMethod, string>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
+        }
+    ],
+    "TS6192": [
+        {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
+            "message": "All imports in import declaration are unused."
         }
     ],
     "TS2532": [
