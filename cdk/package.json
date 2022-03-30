@@ -30,6 +30,9 @@
     "typescript": "~4.4.3"
   },
   "dependencies": {
+    "@aws-cdk/aws-ec2": "1.147.0",
+    "@aws-cdk/aws-cloudwatch": "1.147.0",
+    "@aws-cdk/aws-logs": "1.147.0",
     "@aws-cdk/cloudformation-include": "1.147.0",
     "@aws-cdk/core": "1.147.0",
     "@guardian/cdk": "38.2.0",

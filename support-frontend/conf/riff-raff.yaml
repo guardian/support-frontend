@@ -23,6 +23,7 @@ deployments:
     dependencies: [cfn, assets-static]
     parameters:
       bucket: membership-dist
+      asgMigrationInProgress: true
   storybook-static:
     type: aws-s3
     parameters:
