@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 const cssnano = require('cssnano');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 const { getClassName } = require('./scripts/css');
 const entryPoints = require('./webpack.entryPoints');
@@ -16,7 +16,9 @@ const cssLoaders = [
 	{
 		loader: 'postcss-loader',
 		options: {
-			plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
+			postcssOptions: {
+				plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
+			},
 		},
 	},
 	{
@@ -80,17 +82,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 		new MiniCssExtractPlugin({
 			filename: path.join('stylesheets', cssFilename),
 		}),
-		...(minimizeCss
-			? [
-					new OptimizeCssAssetsPlugin({
-						cssProcessor: cssnano,
-						cssProcessorPluginOptions: {
-							preset: 'default',
-						},
-						canPrint: true,
-					}),
-			  ]
-			: []),
+		...(minimizeCss ? [new CssMinimizerPlugin()] : []),
 		new CleanUpStatsPlugin(),
 	],
 
@@ -190,12 +182,13 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 					{
 						loader: 'css-loader',
 						options: {
-							modules: true,
-							getLocalIdent: (context, localIdentName, localName) =>
-								getClassName(
-									path.relative(__dirname, context.resourcePath),
-									localName,
-								),
+							modules: {
+								getLocalIdent: (context, localIdentName, localName) =>
+									getClassName(
+										path.relative(__dirname, context.resourcePath),
+										localName,
+									),
+							},
 						},
 					},
 					...cssLoaders,
