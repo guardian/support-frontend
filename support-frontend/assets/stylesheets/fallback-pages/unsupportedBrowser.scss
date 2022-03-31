@@ -20,7 +20,7 @@
 
 .unsupported-browser__header-content {
 	@extend .gu-content-margin;
-	padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
+	padding: ($gu-v-spacing * 0.5) 0 $gu-v-spacing;
 	height: 68px;
 
 	@include mq($from: mobileMedium) {
