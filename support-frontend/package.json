@@ -12,7 +12,7 @@
     "build-ssr": "webpack --config webpack.ssr.js && node scripts/ssrScript.js",
     "build-prod-no-test": "npm-run-all clean 'webpack --config webpack.prod.js'",
     "build-prod": "npm-run-all clean test 'webpack --config webpack.prod.js'",
-    "build-github-action": "npm-run-all clean 'webpack --config webpack.prod.js --env.ci=github'",
+    "build-github-action": "npm-run-all clean 'webpack --config webpack.prod.js --env ci=github'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack serve --config webpack.dev.js --port 9211",
     "devrun": "npm-run-all clean webpack-dev-server",
