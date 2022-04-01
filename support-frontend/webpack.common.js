@@ -90,6 +90,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 	entry: entryPoints.common,
 
 	output: {
+		globalObject: 'this',
 		path: path.resolve(__dirname, 'public/compiled-assets'),
 		chunkFilename: `webpack/${jsFilename}`,
 		filename: `javascripts/${jsFilename}`,
