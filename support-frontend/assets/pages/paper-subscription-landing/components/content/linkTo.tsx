@@ -41,8 +41,6 @@ function LinkTo({
 	activeTab?: PaperFulfilmentOptions | null;
 	isPricesTabLink?: boolean;
 }): JSX.Element {
-	console.log('tab --->', tab);
-
 	return (
 		<Link
 			css={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
