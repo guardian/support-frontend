@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { body, from, neutral, space } from '@guardian/source-foundations';
 import { Link } from '@guardian/source-react-components';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { paperSubsUrl } from 'helpers/urls/routes';
 
@@ -10,7 +10,10 @@ const linkColor = css`
 	color: inherit;
 `;
 
-const linkStyles = (tab, activeTab) => css`
+const linkStyles = (
+	tab: PaperFulfilmentOptions,
+	activeTab?: PaperFulfilmentOptions | null,
+) => css`
 	color: ${neutral[100]};
 	${body.small({
 		fontWeight: 'bold',
@@ -34,14 +37,14 @@ function LinkTo({
 }: {
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	tab: PaperFulfilmentOptions;
-	children: Node;
+	children: ReactNode;
 	activeTab?: PaperFulfilmentOptions | null;
 	isPricesTabLink?: boolean;
-}) {
+}): JSX.Element {
 	return (
 		<Link
 			css={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
-			href={paperSubsUrl(tab === 'delivery')}
+			href={paperSubsUrl(tab === 'HomeDelivery')}
 			aria-current={tab === activeTab}
 			onClick={(ev) => {
 				ev.preventDefault();
@@ -57,4 +60,5 @@ LinkTo.defaultProps = {
 	activeTab: null,
 	isPricesTabLink: false,
 };
+
 export default LinkTo;
