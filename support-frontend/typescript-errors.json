@@ -3,12 +3,12 @@
         "byCode": {
             "TS1208": 1,
             "TS2345": 33,
-            "TS7006": 29,
+            "TS7006": 27,
             "TS2322": 48,
             "TS2339": 13,
             "TS6133": 7,
             "TS2578": 4,
-            "TS2305": 9,
+            "TS2305": 8,
             "TS2314": 4,
             "TS7031": 7,
             "TS2769": 7,
@@ -21,7 +21,7 @@
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
-            "TS2367": 4,
+            "TS2367": 3,
             "TS2740": 1,
             "TS7016": 1,
             "TS7017": 1,
@@ -67,7 +67,6 @@
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
@@ -362,14 +361,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Parameter 'component' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Parameter 'tab' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Parameter 'activeTab' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx",
@@ -702,10 +693,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         }
@@ -898,10 +885,6 @@
         {
             "path": "assets/helpers/polyfills/details.ts",
             "message": "This condition will always return 'true' since the types 'Element' and 'Document' have no overlap."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "This condition will always return 'false' since the types 'PaperFulfilmentOptions' and '\"delivery\"' have no overlap."
         },
         {
             "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
