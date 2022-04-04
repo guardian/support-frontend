@@ -10,7 +10,7 @@ type TimeBoundCopy = {
 	copy: ReactNode;
 };
 
-type TimedCopyCollection = Partial<Record<LandingPage, TimeBoundCopy[]>>;
+export type TimedCopyCollection = Partial<Record<LandingPage, TimeBoundCopy[]>>;
 
 const timedCopy: TimedCopyCollection = {
 	digitalSubscription: [
