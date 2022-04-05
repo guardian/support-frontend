@@ -12,12 +12,12 @@ import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import moduleStyles from './summary.module.scss';
 
 // Type declarations
-type DataListItem = {
+interface DataListItem {
 	title: string;
 	value: string;
-};
+}
 
-type SummaryPropTypes = {
+interface SummaryPropTypes {
 	billingPeriod: BillingPeriod;
 	changeSubscription?: string | null;
 	dataList?: DataListItem[];
@@ -27,9 +27,9 @@ type SummaryPropTypes = {
 	title: string;
 	product: SubscriptionProduct;
 	orderIsAGift?: boolean;
-};
+}
 
-type TabletAndDesktopPropTypes = {
+interface TabletAndDesktopPropTypes {
 	billingPeriod: BillingPeriod;
 	changeSubscription?: string | null;
 	dataList: DataListItem[];
@@ -39,9 +39,9 @@ type TabletAndDesktopPropTypes = {
 	title: string;
 	product: SubscriptionProduct;
 	orderIsAGift?: boolean;
-};
+}
 
-type MobilePropTypes = {
+interface MobilePropTypes {
 	billingPeriod: BillingPeriod;
 	changeSubscription?: string | null;
 	description: string | null | undefined;
@@ -51,9 +51,9 @@ type MobilePropTypes = {
 	onClick: () => void;
 	deliveryMethod?: string;
 	paper: boolean;
-};
+}
 
-type ShowDropDownPropTypes = {
+interface ShowDropDownPropTypes {
 	billingPeriod: BillingPeriod;
 	changeSubscription?: string | null;
 	description?: string | null;
@@ -62,16 +62,16 @@ type ShowDropDownPropTypes = {
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	deliveryMethod?: string;
 	showDropDown: boolean;
-};
+}
 
-type HideDropDownPropTypes = {
+interface HideDropDownPropTypes {
 	billingPeriod: BillingPeriod;
 	productPrice: ProductPrice;
 	title: string;
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	paper: boolean;
 	showDropDown: boolean;
-};
+}
 
 // Variable declarations
 const styles = moduleStyles as {
