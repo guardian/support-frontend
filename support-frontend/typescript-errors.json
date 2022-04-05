@@ -13,7 +13,7 @@
             "TS7031": 7,
             "TS2769": 7,
             "TS2304": 5,
-            "TS2741": 5,
+            "TS2741": 3,
             "TS2564": 1,
             "TS2739": 3,
             "TS2556": 3,
@@ -104,8 +104,6 @@
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
@@ -783,14 +781,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
             "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Property 'dataList' is missing in type '{ image: Element; title: string; description: string; productPrice: ProductPrice; billingPeriod: BillingPeriod; changeSubscription: string; product: SubscriptionProduct; }' but required in type 'SummaryPropTypes'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Property 'dataList' is missing in type '{ image: Element; title: string; description: string; productPrice: ProductPrice; billingPeriod: BillingPeriod; changeSubscription: string; product: SubscriptionProduct; orderIsAGift: true; }' but required in type 'SummaryPropTypes'."
         }
     ],
     "TS2564": [

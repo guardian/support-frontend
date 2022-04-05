@@ -20,7 +20,7 @@ type DataListItem = {
 type SummaryPropTypes = {
 	billingPeriod: BillingPeriod;
 	changeSubscription?: string | null;
-	dataList: DataListItem[];
+	dataList?: DataListItem[];
 	description?: string | null;
 	image: JSX.Element | null;
 	productPrice: ProductPrice;
