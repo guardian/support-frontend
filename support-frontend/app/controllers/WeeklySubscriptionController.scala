@@ -45,7 +45,7 @@ class WeeklySubscriptionController(
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
     // We're currently running different default promos in different regions
     val defaultPromotion =
-      if (countryCode == "AU" || countryCode == "NZ") ausPromotion
+      if (List("au","nz").contains(countryCode.toLowerCase)) ausPromotion
       else francePromotion
 
     val queryPromos =
