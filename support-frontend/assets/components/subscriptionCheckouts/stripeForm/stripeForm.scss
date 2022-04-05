@@ -3,7 +3,7 @@
 .StripeElement {
 	border: 2px solid gu-colour(neutral-60);
 	padding: 0.625rem;
-	margin: $gu-v-spacing / 2 0 $gu-v-spacing;
+	margin: $gu-v-spacing * 0.5 0 $gu-v-spacing;
 }
 
 .component-credit-card-price {

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '~stylesheets/gu-sass/gu-sass';
 
 $teal-green: #006d67;
@@ -144,7 +146,7 @@ $teal-green: #006d67;
 	background-color: $teal-green;
 	@include gu-fontset-heading;
 	color: gu-colour(neutral-97);
-	padding: $gu-v-spacing / 3 0 22px;
+	padding: math.div($gu-v-spacing, 3) 0 22px;
 
 	h1 {
 		font-size: 28px;
