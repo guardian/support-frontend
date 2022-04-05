@@ -11,10 +11,11 @@ import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-  AUDCountries,
-  EURCountries,
-  GBPCountries, International,
-  NZDCountries,
+	AUDCountries,
+	EURCountries,
+	GBPCountries,
+	International,
+	NZDCountries,
 } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
@@ -261,7 +262,13 @@ const getSubscriptionCopy = (
 			premiumApp(countryGroupId),
 		];
 	} else if (
-		[EURCountries, AUDCountries, NZDCountries, GBPCountries, International].includes(countryGroupId)
+		[
+			EURCountries,
+			AUDCountries,
+			NZDCountries,
+			GBPCountries,
+			International,
+		].includes(countryGroupId)
 	) {
 		return [
 			guardianWeekly(
