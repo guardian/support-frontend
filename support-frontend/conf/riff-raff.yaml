@@ -24,11 +24,3 @@ deployments:
     parameters:
       bucket: membership-dist
       asgMigrationInProgress: true
-  storybook-static:
-    type: aws-s3
-    parameters:
-      bucket: support-storybook
-      prefixPackage: false
-      prefixStack: false
-      cacheControl: public, max-age=3600
-      publicReadAcl: true

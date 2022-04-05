@@ -19,7 +19,7 @@
 	display: block;
 	text-align: left;
 	@include gu-fontset-explainer;
-	margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing / 2;
+	margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing * 0.5;
 	font-size: 14px;
 
 	.showcase-hero__caption--italics {
@@ -118,12 +118,12 @@
 		}
 
 		@include mq($from: tablet) {
-			padding-left: $gu-h-spacing / 2;
+			padding-left: $gu-h-spacing * 0.5;
 		}
 	}
 
 	.showcase-hero .component-left-margin-section__content {
-		margin: 0 $gu-h-spacing/2;
+		margin: 0 $gu-h-spacing*0.5;
 		border-right: 1px solid rgba(0, 0, 0, 0.1);
 	}
 
@@ -131,7 +131,7 @@
 		display: block;
 		text-align: left;
 		@include gu-fontset-explainer;
-		margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing / 2;
+		margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing * 0.5;
 		font-size: 14px;
 	}
 

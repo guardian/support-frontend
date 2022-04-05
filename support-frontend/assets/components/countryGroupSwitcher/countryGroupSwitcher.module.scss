@@ -11,7 +11,7 @@
 
 	:global(.svg-dropdown-arrow) {
 		position: inline-block;
-		margin-left: $gu-h-spacing/4;
+		margin-left: $gu-h-spacing*0.25;
 		path {
 			fill: currentColor;
 		}

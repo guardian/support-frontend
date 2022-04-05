@@ -27,7 +27,7 @@
 		}
 
 		.component-page-section__body {
-			padding-top: $gu-v-spacing / 2;
+			padding-top: $gu-v-spacing * 0.5;
 			padding-bottom: $gu-v-spacing * 2;
 
 			@include mq($from: desktop) {

@@ -8,7 +8,7 @@
 
 	@include mq($from: mobileLandscape) {
 		margin-left: $gu-h-spacing;
-		margin-right: $gu-h-spacing / 2;
+		margin-right: $gu-h-spacing * 0.5;
 	}
 
 	.component-error-message {
