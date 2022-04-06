@@ -161,7 +161,7 @@ export class Frontend extends GuStack {
     // a different name from the ones in the cloudformation template. We can remove
     // this after the migration
     const alarmName = (shortDescription: string) =>
-      `[CDK] URGENT 9-5 - ${this.stage} ${shortDescription}`;
+      `URGENT 9-5 - ${this.stage} ${shortDescription}`;
 
     const alarmDescription = (description: string) =>
       `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;

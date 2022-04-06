@@ -253,7 +253,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
@@ -657,7 +657,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
@@ -729,7 +729,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
@@ -844,7 +844,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
@@ -1052,7 +1052,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
@@ -1216,7 +1216,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
@@ -1363,7 +1363,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
@@ -1454,7 +1454,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "[CDK] URGENT 9-5 - ",
+              "URGENT 9-5 - ",
               Object {
                 "Ref": "Stage",
               },
