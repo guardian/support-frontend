@@ -1,4 +1,3 @@
-import { join } from "path";
 import {
   ComparisonOperator,
   Metric,
@@ -6,14 +5,13 @@ import {
 } from "@aws-cdk/aws-cloudwatch";
 import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
 import { FilterPattern, LogGroup, MetricFilter } from "@aws-cdk/aws-logs";
-import { CfnInclude } from "@aws-cdk/cloudformation-include";
 import type { App } from "@aws-cdk/core";
-import { Duration, Tags } from "@aws-cdk/core";
+import { Duration } from "@aws-cdk/core";
 import { GuEc2App } from "@guardian/cdk";
 import { AccessScope, Stage } from "@guardian/cdk/lib/constants";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack, GuStageParameter } from "@guardian/cdk/lib/constructs/core";
+import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import {
   GuAllowPolicy,
   GuGetS3ObjectsPolicy,
@@ -23,17 +21,6 @@ import {
 export class Frontend extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
-    const yamlTemplateFilePath = join(
-      __dirname,
-      "../..",
-      "support-frontend/cloud-formation/cfn.yaml"
-    );
-    new CfnInclude(this, "YamlTemplate", {
-      templateFile: yamlTemplateFilePath,
-      parameters: {
-        Stage: GuStageParameter.getInstance(this),
-      },
-    });
 
     const app = "frontend";
 
@@ -167,10 +154,6 @@ export class Frontend extends GuStack {
       },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
     });
-
-    // TODO: remove this tag after the migration
-    const ec2AppAsg = ec2App.autoScalingGroup;
-    Tags.of(ec2AppAsg).add("gu:riffraff:new-asg", "true");
 
     // ---- Alarms ---- //
 
