@@ -3,7 +3,8 @@ name: Build support-frontend
 on:
   pull_request:
     branches: [ main ]
-
+  push:
+    branches: [ main ]
 env:
   GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
 
