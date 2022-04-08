@@ -13,7 +13,9 @@ deployments:
     type: cloud-formation
     app: frontend
     parameters:
-      templatePath: cfn.json
+      templateStagePaths:
+        CODE: Frontend-CODE.template.json
+        PROD: Frontend-PROD.template.json
       amiParameter: AMIFrontend
       amiTags:
         Recipe: bionic-membership-ARM

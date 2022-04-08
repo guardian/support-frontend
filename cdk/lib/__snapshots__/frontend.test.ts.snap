@@ -2,28 +2,6 @@
 
 exports[`The Frontend stack matches the snapshot 1`] = `
 Object {
-  "Mappings": Object {
-    "frontend": Object {
-      "CODE": Object {
-        "AlarmEnabledInProd": false,
-        "MembershipSubPromotions": "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV",
-        "RedemptionCodes": "arn:aws:dynamodb:*:*:table/redemption-codes-DEV",
-        "domainName": "support.code.theguardian.com.origin.membership.guardianapis.com",
-        "hostedZoneId": "Z1E4V12LQGXFEC",
-        "maxInstances": 2,
-        "minInstances": 1,
-      },
-      "PROD": Object {
-        "AlarmEnabledInProd": true,
-        "MembershipSubPromotions": "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-        "RedemptionCodes": "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
-        "domainName": "support.theguardian.com.origin.membership.guardianapis.com",
-        "hostedZoneId": "Z1E4V12LQGXFEC",
-        "maxInstances": 6,
-        "minInstances": 3,
-      },
-    },
-  },
   "Outputs": Object {
     "LoadBalancerFrontendDnsName": Object {
       "Description": "DNS entry for LoadBalancerFrontend",
@@ -50,15 +28,6 @@ Object {
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
     "VpcId": Object {
       "Default": "/account/vpc/primary/id",
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
@@ -83,24 +52,8 @@ Object {
         "LaunchConfigurationName": Object {
           "Ref": "AutoScalingGroupFrontendLaunchConfig038C27B1",
         },
-        "MaxSize": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "maxInstances",
-          ],
-        },
-        "MinSize": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "minInstances",
-          ],
-        },
+        "MaxSize": "6",
+        "MinSize": "3",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -125,7 +78,7 @@ Object {
           Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "Frontend/AutoScalingGroupFrontend",
+            "Value": "Frontend-PROD/AutoScalingGroupFrontend",
           },
           Object {
             "Key": "Stack",
@@ -135,9 +88,7 @@ Object {
           Object {
             "Key": "Stage",
             "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "TargetGroupARNs": Array [
@@ -201,17 +152,9 @@ Object {
                 Object {
                   "Ref": "AWS::Region",
                 },
-                " s3 cp s3://membership-dist/support/",
-                Object {
-                  "Ref": "Stage",
-                },
-                "/frontend/support-frontend_1.0-SNAPSHOT_all.deb /tmp
+                " s3 cp s3://membership-dist/support/PROD/frontend/support-frontend_1.0-SNAPSHOT_all.deb /tmp
     dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application support ",
-                Object {
-                  "Ref": "Stage",
-                },
-                " frontend /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'",
+    /opt/cloudwatch-logs/configure-logs application support PROD frontend /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'",
               ],
             ],
           },
@@ -221,15 +164,7 @@ Object {
     },
     "CatalogLoadingFailureAlarmD11891D9": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -249,18 +184,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend could not load the Zuora catalog from S3",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend could not load the Zuora catalog from S3",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -280,35 +204,11 @@ Object {
     "CertificateFrontendF1E5575F": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "domainName",
-          ],
-        },
+        "DomainName": "support.theguardian.com.origin.membership.guardianapis.com",
         "DomainValidationOptions": Array [
           Object {
-            "DomainName": Object {
-              "Fn::FindInMap": Array [
-                "frontend",
-                Object {
-                  "Ref": "Stage",
-                },
-                "domainName",
-              ],
-            },
-            "HostedZoneId": Object {
-              "Fn::FindInMap": Array [
-                "frontend",
-                Object {
-                  "Ref": "Stage",
-                },
-                "hostedZoneId",
-              ],
-            },
+            "DomainName": "support.theguardian.com.origin.membership.guardianapis.com",
+            "HostedZoneId": "Z1E4V12LQGXFEC",
           },
         ],
         "Tags": Array [
@@ -330,9 +230,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "ValidationMethod": "DNS",
@@ -405,15 +303,7 @@ Object {
               ],
               "Effect": "Allow",
               "Resource": Array [
-                Object {
-                  "Fn::FindInMap": Array [
-                    "frontend",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "MembershipSubPromotions",
-                  ],
-                },
+                "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
                 "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
               ],
             },
@@ -437,15 +327,7 @@ Object {
               "Action": "dynamodb:GetItem",
               "Effect": "Allow",
               "Resource": Array [
-                Object {
-                  "Fn::FindInMap": Array [
-                    "frontend",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "RedemptionCodes",
-                  ],
-                },
+                "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
                 "arn:aws:dynamodb:*:*:table/redemption-codes-UAT",
               ],
             },
@@ -476,11 +358,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/support/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/frontend/*",
+                    "/support/PROD/frontend/*",
                   ],
                 ],
               },
@@ -528,9 +406,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -539,7 +415,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "GuHttpsEgressSecurityGroupFrontendfromFrontendLoadBalancerFrontendSecurityGroup922F1F8790004AAE6BFA": Object {
+    "GuHttpsEgressSecurityGroupFrontendfromFrontendPRODLoadBalancerFrontendSecurityGroup76ED83889000CE3BBBF3": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "FromPort": 9000,
@@ -625,15 +501,7 @@ Object {
     },
     "High5XXRateAlarmA4E3FB07": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -653,18 +521,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend instances are returning 5XX errors",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend instances are returning 5XX errors",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -697,15 +554,7 @@ Object {
     },
     "HighELB5XXRateAlarm9AF3E69E": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -725,18 +574,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend ELB is returning 5XX errors",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend ELB is returning 5XX errors",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -802,9 +640,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
       },
@@ -812,15 +648,7 @@ Object {
     },
     "LatencyNotificationAlarmBF39AEFA": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -840,18 +668,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - support-frontend users are seeing slow responses. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend has high latency",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend has high latency",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -946,9 +763,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "Type": "application",
@@ -957,7 +772,7 @@ Object {
     },
     "LoadBalancerFrontendSecurityGroup3E7708CD": Object {
       "Properties": Object {
-        "GroupDescription": "Automatically created Security Group for ELB FrontendLoadBalancerFrontend0C453B7C",
+        "GroupDescription": "Automatically created Security Group for ELB FrontendPRODLoadBalancerFrontend13B3B84D",
         "SecurityGroupIngress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -986,9 +801,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -997,7 +810,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "LoadBalancerFrontendSecurityGrouptoFrontendGuHttpsEgressSecurityGroupFrontend6AD85AAA900086E6CEC4": Object {
+    "LoadBalancerFrontendSecurityGrouptoFrontendPRODGuHttpsEgressSecurityGroupFrontend9549B0099000AA39C127": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": Object {
@@ -1020,15 +833,7 @@ Object {
     },
     "NoHealthyInstancesAlarm4A3DBA9E": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -1048,18 +853,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " no healthy instances for support-frontend",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD no healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -1109,11 +903,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/support/frontend",
+                    ":parameter/PROD/support/frontend",
                   ],
                 ],
               },
@@ -1136,11 +926,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/support/frontend/*",
+                    ":parameter/PROD/support/frontend/*",
                   ],
                 ],
               },
@@ -1184,15 +970,7 @@ Object {
     },
     "ReducedHealthyInstancesAlarmD9B227CB": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -1212,18 +990,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Imminent issue cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " reduced number healthy instances for support-frontend",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD reduced number healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -1273,10 +1040,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/support/frontend/",
-                    Object {
-                      "Ref": "Stage",
-                    },
+                    ":parameter/support/frontend/PROD",
                   ],
                 ],
               },
@@ -1331,15 +1095,7 @@ Object {
     },
     "ServerSideCreateFailureAlarm3FA2BA71": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -1359,18 +1115,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Someone pressed buy on a recurring product but received an error. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend create recurring product call failed",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend create recurring product call failed",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -1395,18 +1140,7 @@ Object {
             Object {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:s3:::support-admin-console/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/*",
-                  ],
-                ],
-              },
+              "Resource": "arn:aws:s3:::support-admin-console/PROD/*",
             },
           ],
           "Version": "2012-10-17",
@@ -1422,15 +1156,7 @@ Object {
     },
     "StateMachineUnavailableAlarm43BA4A0D": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -1450,32 +1176,11 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-workers state machine unavailable",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-workers state machine unavailable",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 2,
         "MetricName": "state-machine-unavailable",
-        "Namespace": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "support-frontend-",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "Namespace": "support-frontend-PROD",
         "Period": 60,
         "Statistic": "Sum",
         "Threshold": 1,
@@ -1486,31 +1191,11 @@ Object {
     "StateMachineUnavailableMetricFilter0A74A04F": Object {
       "Properties": Object {
         "FilterPattern": "\\"regular-contributions-state-machine-unavailable\\"",
-        "LogGroupName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "support-frontend-",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "LogGroupName": "support-frontend-PROD",
         "MetricTransformations": Array [
           Object {
             "MetricName": "state-machine-unavailable",
-            "MetricNamespace": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "support-frontend-",
-                  Object {
-                    "Ref": "Stage",
-                  },
-                ],
-              ],
-            },
+            "MetricNamespace": "support-frontend-PROD",
             "MetricValue": "1",
           },
         ],
@@ -1558,10 +1243,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":function:stripe-intent-",
-                    Object {
-                      "Ref": "Stage",
-                    },
+                    ":function:stripe-intent-PROD",
                   ],
                 ],
               },
@@ -1606,9 +1288,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "TargetGroupAttributes": Array [
@@ -1663,9 +1343,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
