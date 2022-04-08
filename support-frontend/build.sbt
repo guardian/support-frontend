@@ -69,7 +69,8 @@ riffRaffPackageName := "frontend"
 riffRaffAwsCredentialsProfile := Some("membership") // needed when running locally
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cdk/cdk.out/Frontend.template.json"), "cfn/cfn.json")
+riffRaffArtifactResources += (file("cdk/cdk.out/Frontend-PROD.template.json"), "cfn/Frontend-PROD.template.json")
+riffRaffArtifactResources += (file("cdk/cdk.out/Frontend-CODE.template.json"), "cfn/Frontend-CODE.template.json")
 riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"), "assets-static")
 
 def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
