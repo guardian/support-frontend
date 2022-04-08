@@ -2,85 +2,6 @@
 
 exports[`The Frontend stack matches the snapshot 1`] = `
 Object {
-  "AWSTemplateFormatVersion": "2010-09-09",
-  "Conditions": Object {
-    "CreateCodeResources": Object {
-      "Fn::Equals": Array [
-        Object {
-          "Ref": "Stage",
-        },
-        "CODE",
-      ],
-    },
-    "CreateProdResources": Object {
-      "Fn::Equals": Array [
-        Object {
-          "Ref": "Stage",
-        },
-        "PROD",
-      ],
-    },
-  },
-  "Description": "support-frontend",
-  "Mappings": Object {
-    "Constants": Object {
-      "Alarm": Object {
-        "Process": "Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "Urgent": "URGENT 9-5 -",
-      },
-    },
-    "StageVariables": Object {
-      "CODE": Object {
-        "CertificateARN": "arn:aws:acm:eu-west-1:865473395570:certificate/44e9f40c-c884-40e6-a171-6769e9a8b173",
-        "DynamoDBTables": Array [
-          "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV",
-          "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
-        ],
-        "InstanceType": "t4g.small",
-        "MaxInstances": 2,
-        "MinInstances": 1,
-        "RedemptionTables": Array [
-          "arn:aws:dynamodb:*:*:table/redemption-codes-DEV",
-          "arn:aws:dynamodb:*:*:table/redemption-codes-UAT",
-        ],
-      },
-      "PROD": Object {
-        "CertificateARN": "arn:aws:acm:eu-west-1:865473395570:certificate/9d8ff96c-63d5-425b-88d1-f529770e5b6d",
-        "DynamoDBTables": Array [
-          "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-          "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
-        ],
-        "InstanceType": "t4g.small",
-        "InsufficientInstances": 2,
-        "MaxInstances": 6,
-        "MinInstances": 3,
-        "RedemptionTables": Array [
-          "arn:aws:dynamodb:*:*:table/redemption-codes-UAT",
-          "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
-        ],
-      },
-    },
-    "frontend": Object {
-      "CODE": Object {
-        "AlarmEnabledInProd": false,
-        "MembershipSubPromotions": "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV",
-        "RedemptionCodes": "arn:aws:dynamodb:*:*:table/redemption-codes-DEV",
-        "domainName": "support.code.theguardian.com.origin.membership.guardianapis.com",
-        "hostedZoneId": "Z1E4V12LQGXFEC",
-        "maxInstances": 2,
-        "minInstances": 1,
-      },
-      "PROD": Object {
-        "AlarmEnabledInProd": true,
-        "MembershipSubPromotions": "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-        "RedemptionCodes": "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
-        "domainName": "support.theguardian.com.origin.membership.guardianapis.com",
-        "hostedZoneId": "Z1E4V12LQGXFEC",
-        "maxInstances": 6,
-        "minInstances": 3,
-      },
-    },
-  },
   "Outputs": Object {
     "LoadBalancerFrontendDnsName": Object {
       "Description": "DNS entry for LoadBalancerFrontend",
@@ -93,28 +14,9 @@ Object {
     },
   },
   "Parameters": Object {
-    "AMI": Object {
-      "Default": "ami-0eb88168",
-      "Description": "AMI ID (may be replaced by RiffRaff for latest baked AMI)",
-      "Type": "String",
-    },
     "AMIFrontend": Object {
       "Description": "Amazon Machine Image ID for the app frontend. Use this in conjunction with AMIgo to keep AMIs up to date.",
       "Type": "AWS::EC2::Image::Id",
-    },
-    "App": Object {
-      "Default": "frontend",
-      "Description": "Applied directly as a tag",
-      "Type": "String",
-    },
-    "BastionSecurityGroup": Object {
-      "Description": "Bastion's security group for SSH",
-      "Type": "String",
-    },
-    "CfnVpcId": Object {
-      "Default": "vpc-e6e00183",
-      "Description": "VpcId of your existing Virtual Private Cloud (VPC)",
-      "Type": "String",
     },
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -125,27 +27,6 @@ Object {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
-    },
-    "PrivateVpcSubnets": Object {
-      "Description": "Private subnets to use for EC2 instances",
-      "Type": "List<AWS::EC2::Subnet::Id>",
-    },
-    "PublicVpcSubnets": Object {
-      "Description": "Public subnets to use for the ELB",
-      "Type": "List<AWS::EC2::Subnet::Id>",
-    },
-    "Stack": Object {
-      "Description": "Applied directly as a tag",
-      "Type": "String",
-    },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
     },
     "VpcId": Object {
       "Default": "/account/vpc/primary/id",
@@ -164,378 +45,6 @@ Object {
     },
   },
   "Resources": Object {
-    "AppRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "sts:AssumeRole",
-              ],
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": Array [
-                  "ec2.amazonaws.com",
-                ],
-              },
-            },
-          ],
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Sub": "arn:aws:iam::\${AWS::AccountId}:policy/guardian-ec2-role-for-ssm",
-          },
-        ],
-        "Path": "/",
-        "Policies": Array [
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "s3:GetObject",
-                  "Effect": "Allow",
-                  "Resource": Array [
-                    Object {
-                      "Fn::Sub": "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json",
-                    },
-                    Object {
-                      "Fn::Sub": "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json",
-                    },
-                    Object {
-                      "Fn::Sub": "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json",
-                    },
-                  ],
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "PrivateBucket",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "s3:GetObject",
-                  "Effect": "Allow",
-                  "Resource": Array [
-                    Object {
-                      "Fn::Sub": Array [
-                        "arn:aws:s3:::support-admin-console/\${Stage}/*",
-                        Object {
-                          "Stage": Object {
-                            "Ref": "Stage",
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "SettingsBucket",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "ssm:UpdateInstanceInformation",
-                    "ssmmessages:CreateControlChannel",
-                    "ssmmessages:CreateDataChannel",
-                    "ssmmessages:OpenControlChannel",
-                    "ssmmessages:OpenDataChannel",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": "*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "SSMTunnel",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "ssm:GetParametersByPath",
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::Sub": Array [
-                      "arn:aws:ssm:\${AWS::Region}:\${AWS::AccountId}:parameter/\${Stack}/\${App}/\${Stage}",
-                      Object {
-                        "Stage": Object {
-                          "Ref": "Stage",
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "SSMGet",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "autoscaling:DescribeAutoScalingInstances",
-                    "autoscaling:DescribeAutoScalingGroups",
-                    "ec2:DescribeTags",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": "*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "DescribeASG",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "cloudwatch:PutMetricData",
-                  "Effect": "Allow",
-                  "Resource": "*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "CloudwatchLogs",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "logs:CreateLogGroup",
-                    "logs:CreateLogStream",
-                    "logs:PutLogEvents",
-                    "logs:DescribeLogStreams",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": "arn:aws:logs:*:*:*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "CloudwatchMetrics",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "states:ListStateMachines",
-                    "states:StartExecution",
-                    "states:GetExecutionHistory",
-                    "states:DescribeStateMachine",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": "arn:aws:states:*:*:*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "StateMachines",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "dynamodb:GetItem",
-                    "dynamodb:Scan",
-                    "dynamodb:Query",
-                    "dynamodb:DescribeTable",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::FindInMap": Array [
-                      "StageVariables",
-                      Object {
-                        "Ref": "Stage",
-                      },
-                      "DynamoDBTables",
-                    ],
-                  },
-                },
-              ],
-            },
-            "PolicyName": "DynamoPromotions",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "dynamodb:GetItem",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::FindInMap": Array [
-                      "StageVariables",
-                      Object {
-                        "Ref": "Stage",
-                      },
-                      "RedemptionTables",
-                    ],
-                  },
-                },
-              ],
-            },
-            "PolicyName": "DynamoRedemptions",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "lambda:InvokeFunction",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::Sub": Array [
-                      "arn:aws:lambda:eu-west-1:\${AWS::AccountId}:function:stripe-intent-\${Stage}",
-                      Object {
-                        "Stage": Object {
-                          "Ref": "Stage",
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "StripeSetupIntentLambda",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Object {
-                "Action": "s3:GetObject",
-                "Effect": "Allow",
-                "Resource": Array [
-                  "arn:aws:s3::*:membership-dist/*",
-                ],
-              },
-            },
-            "PolicyName": "s3Deploy",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "AutoScalingGroup": Object {
-      "Properties": Object {
-        "HealthCheckGracePeriod": 300,
-        "HealthCheckType": "ELB",
-        "LaunchConfigurationName": Object {
-          "Ref": "LaunchConfig",
-        },
-        "MaxSize": Object {
-          "Fn::FindInMap": Array [
-            "StageVariables",
-            Object {
-              "Ref": "Stage",
-            },
-            "MaxInstances",
-          ],
-        },
-        "MinSize": Object {
-          "Fn::FindInMap": Array [
-            "StageVariables",
-            Object {
-              "Ref": "Stage",
-            },
-            "MinInstances",
-          ],
-        },
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "App",
-            },
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "PropagateAtLaunch": true,
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "PropagateAtLaunch": true,
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": Object {
-              "Fn::Join": Array [
-                "-",
-                Array [
-                  Object {
-                    "Ref": "Stack",
-                  },
-                  Object {
-                    "Ref": "Stage",
-                  },
-                  Object {
-                    "Ref": "App",
-                  },
-                ],
-              ],
-            },
-          },
-          Object {
-            "Key": "Stack",
-            "PropagateAtLaunch": true,
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "TargetGroupARNs": Array [
-          Object {
-            "Ref": "TargetGroup",
-          },
-        ],
-        "VPCZoneIdentifier": Object {
-          "Ref": "PrivateVpcSubnets",
-        },
-      },
-      "Type": "AWS::AutoScaling::AutoScalingGroup",
-    },
     "AutoScalingGroupFrontendASG567FDA1B": Object {
       "Properties": Object {
         "HealthCheckGracePeriod": 120,
@@ -543,24 +52,8 @@ Object {
         "LaunchConfigurationName": Object {
           "Ref": "AutoScalingGroupFrontendLaunchConfig038C27B1",
         },
-        "MaxSize": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "maxInstances",
-          ],
-        },
-        "MinSize": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "minInstances",
-          ],
-        },
+        "MaxSize": "6",
+        "MinSize": "3",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -583,14 +76,9 @@ Object {
             "Value": "guardian/support-frontend",
           },
           Object {
-            "Key": "gu:riffraff:new-asg",
-            "PropagateAtLaunch": true,
-            "Value": "true",
-          },
-          Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "Frontend/AutoScalingGroupFrontend",
+            "Value": "Frontend-PROD/AutoScalingGroupFrontend",
           },
           Object {
             "Key": "Stack",
@@ -600,9 +88,7 @@ Object {
           Object {
             "Key": "Stage",
             "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "TargetGroupARNs": Array [
@@ -638,9 +124,6 @@ Object {
           "Ref": "AMIFrontend",
         },
         "InstanceType": "t4g.small",
-        "MetadataOptions": Object {
-          "HttpTokens": "required",
-        },
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -666,17 +149,9 @@ Object {
                 Object {
                   "Ref": "AWS::Region",
                 },
-                " s3 cp s3://membership-dist/support/",
-                Object {
-                  "Ref": "Stage",
-                },
-                "/frontend/support-frontend_1.0-SNAPSHOT_all.deb /tmp
+                " s3 cp s3://membership-dist/support/PROD/frontend/support-frontend_1.0-SNAPSHOT_all.deb /tmp
     dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application support ",
-                Object {
-                  "Ref": "Stage",
-                },
-                " frontend /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'",
+    /opt/cloudwatch-logs/configure-logs application support PROD frontend /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'",
               ],
             ],
           },
@@ -684,74 +159,9 @@ Object {
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "CatalogLoadingFailureAlarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - Cannot sell any subscriptions products.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "support-frontend could not load the Zuora catalog from S3",
-            ],
-          ],
-        },
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "Environment",
-            "Value": "PROD",
-          },
-        ],
-        "EvaluationPeriods": 1,
-        "MetricName": "CatalogLoadingFailure",
-        "Namespace": "support-frontend",
-        "Period": 60,
-        "Statistic": "Average",
-        "Threshold": 1,
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "CatalogLoadingFailureAlarmD11891D9": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -771,18 +181,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend could not load the Zuora catalog from S3",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend could not load the Zuora catalog from S3",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -802,35 +201,11 @@ Object {
     "CertificateFrontendF1E5575F": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "domainName",
-          ],
-        },
+        "DomainName": "support.theguardian.com.origin.membership.guardianapis.com",
         "DomainValidationOptions": Array [
           Object {
-            "DomainName": Object {
-              "Fn::FindInMap": Array [
-                "frontend",
-                Object {
-                  "Ref": "Stage",
-                },
-                "domainName",
-              ],
-            },
-            "HostedZoneId": Object {
-              "Fn::FindInMap": Array [
-                "frontend",
-                Object {
-                  "Ref": "Stage",
-                },
-                "hostedZoneId",
-              ],
-            },
+            "DomainName": "support.theguardian.com.origin.membership.guardianapis.com",
+            "HostedZoneId": "Z1E4V12LQGXFEC",
           },
         ],
         "Tags": Array [
@@ -852,9 +227,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "ValidationMethod": "DNS",
@@ -927,15 +300,7 @@ Object {
               ],
               "Effect": "Allow",
               "Resource": Array [
-                Object {
-                  "Fn::FindInMap": Array [
-                    "frontend",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "MembershipSubPromotions",
-                  ],
-                },
+                "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
                 "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
               ],
             },
@@ -959,15 +324,7 @@ Object {
               "Action": "dynamodb:GetItem",
               "Effect": "Allow",
               "Resource": Array [
-                Object {
-                  "Fn::FindInMap": Array [
-                    "frontend",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "RedemptionCodes",
-                  ],
-                },
+                "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
                 "arn:aws:dynamodb:*:*:table/redemption-codes-UAT",
               ],
             },
@@ -982,55 +339,6 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "ElasticLoadBalancer": Object {
-      "Properties": Object {
-        "Name": Object {
-          "Fn::Sub": Array [
-            "\${Stack}-\${Stage}-\${App}",
-            Object {
-              "Stage": Object {
-                "Ref": "Stage",
-              },
-            },
-          ],
-        },
-        "SecurityGroups": Array [
-          Object {
-            "Ref": "LoadBalancerSecurityGroup",
-          },
-        ],
-        "Subnets": Object {
-          "Ref": "PublicVpcSubnets",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": Object {
-              "Ref": "App",
-            },
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
     "GetDistributablePolicyFrontendA36D2A61": Object {
       "Properties": Object {
@@ -1047,11 +355,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/support/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/frontend/*",
+                    "/support/PROD/frontend/*",
                   ],
                 ],
               },
@@ -1099,9 +403,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -1110,7 +412,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "GuHttpsEgressSecurityGroupFrontendfromFrontendLoadBalancerFrontendSecurityGroup922F1F8790004AAE6BFA": Object {
+    "GuHttpsEgressSecurityGroupFrontendfromFrontendPRODLoadBalancerFrontendSecurityGroup76ED83889000CE3BBBF3": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "FromPort": 9000,
@@ -1194,86 +496,9 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "High5XXRateAlarm": Object {
-      "Condition": "CreateProdResources",
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-        "TargetGroup",
-      ],
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - Some or all actions on support website are failing.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "support-frontend instances are returning 5XX errors",
-            ],
-          ],
-        },
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": "ElasticLoadBalancer.LoadBalancerFullName",
-            },
-          },
-          Object {
-            "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": "TargetGroup.TargetGroupFullName",
-            },
-          },
-        ],
-        "EvaluationPeriods": 2,
-        "MetricName": "HTTPCode_Target_5XX_Count",
-        "Namespace": "AWS/ApplicationELB",
-        "Period": 60,
-        "Statistic": "Sum",
-        "Threshold": 3,
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "High5XXRateAlarmA4E3FB07": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -1293,18 +518,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend instances are returning 5XX errors",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend instances are returning 5XX errors",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -1335,80 +549,9 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "HighELB5XXRateAlarm": Object {
-      "Condition": "CreateProdResources",
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-        "TargetGroup",
-      ],
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - Some or all actions on support website are failing.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "support-frontend ELB is returning 5XX errors",
-            ],
-          ],
-        },
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": "ElasticLoadBalancer.LoadBalancerFullName",
-            },
-          },
-        ],
-        "EvaluationPeriods": 2,
-        "MetricName": "HTTPCode_ELB_5XX_Count",
-        "Namespace": "AWS/ApplicationELB",
-        "Period": 60,
-        "Statistic": "Sum",
-        "Threshold": 3,
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "HighELB5XXRateAlarm9AF3E69E": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -1428,18 +571,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend ELB is returning 5XX errors",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend ELB is returning 5XX errors",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -1460,17 +592,6 @@ Object {
         "Threshold": 3,
       },
       "Type": "AWS::CloudWatch::Alarm",
-    },
-    "InstanceProfile": Object {
-      "Properties": Object {
-        "Path": "/",
-        "Roles": Array [
-          Object {
-            "Ref": "AppRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
     },
     "InstanceRoleFrontend9A970131": Object {
       "Properties": Object {
@@ -1516,145 +637,15 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "InstanceSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Open up SSH access and enable HTTP access on the configured port",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "FromPort": 22,
-            "IpProtocol": "tcp",
-            "SourceSecurityGroupId": Object {
-              "Ref": "BastionSecurityGroup",
-            },
-            "ToPort": 22,
-          },
-          Object {
-            "FromPort": 9000,
-            "IpProtocol": "tcp",
-            "SourceSecurityGroupId": Object {
-              "Ref": "LoadBalancerSecurityGroup",
-            },
-            "ToPort": 9000,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "LatencyNotificationAlarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - support-frontend users are seeing slow responses.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "support-frontend has high latency",
-            ],
-          ],
-        },
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": "ElasticLoadBalancer.LoadBalancerFullName",
-            },
-          },
-          Object {
-            "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": "TargetGroup.TargetGroupFullName",
-            },
-          },
-        ],
-        "EvaluationPeriods": 2,
-        "MetricName": "TargetResponseTime",
-        "Namespace": "AWS/ApplicationELB",
-        "Period": 60,
-        "Statistic": "Average",
-        "Threshold": 1,
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "LatencyNotificationAlarmBF39AEFA": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -1674,18 +665,7 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - support-frontend users are seeing slow responses. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend has high latency",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend has high latency",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -1715,52 +695,6 @@ Object {
         "Threshold": 1,
       },
       "Type": "AWS::CloudWatch::Alarm",
-    },
-    "LaunchConfig": Object {
-      "Properties": Object {
-        "AssociatePublicIpAddress": false,
-        "IamInstanceProfile": Object {
-          "Ref": "InstanceProfile",
-        },
-        "ImageId": Object {
-          "Ref": "AMI",
-        },
-        "InstanceType": Object {
-          "Fn::FindInMap": Array [
-            "StageVariables",
-            Object {
-              "Ref": "Stage",
-            },
-            "InstanceType",
-          ],
-        },
-        "SecurityGroups": Array [
-          Object {
-            "Ref": "InstanceSecurityGroup",
-          },
-          Object {
-            "Ref": "NewWazuhSecurityGroup",
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": Object {
-            "Fn::Sub": Array [
-              "#!/bin/bash -ev
-mkdir /etc/gu
-aws --region \${AWS::Region} s3 cp s3://membership-dist/\${Stack}/\${Stage}/\${App}/support-frontend_1.0-SNAPSHOT_all.deb /tmp
-dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
-/opt/cloudwatch-logs/configure-logs application \${Stack} \${Stage} \${App} /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'
-",
-              Object {
-                "Stage": Object {
-                  "Ref": "Stage",
-                },
-              },
-            ],
-          },
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
     "ListenerFrontend190D01D2": Object {
       "Properties": Object {
@@ -1826,9 +760,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "Type": "application",
@@ -1837,7 +769,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
     },
     "LoadBalancerFrontendSecurityGroup3E7708CD": Object {
       "Properties": Object {
-        "GroupDescription": "Automatically created Security Group for ELB FrontendLoadBalancerFrontend0C453B7C",
+        "GroupDescription": "Automatically created Security Group for ELB FrontendPRODLoadBalancerFrontend13B3B84D",
         "SecurityGroupIngress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1866,9 +798,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -1877,7 +807,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "LoadBalancerFrontendSecurityGrouptoFrontendGuHttpsEgressSecurityGroupFrontend6AD85AAA900086E6CEC4": Object {
+    "LoadBalancerFrontendSecurityGrouptoFrontendPRODGuHttpsEgressSecurityGroupFrontend9549B0099000AA39C127": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": Object {
@@ -1898,199 +828,9 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "LoadBalancerListener": Object {
-      "Properties": Object {
-        "Certificates": Array [
-          Object {
-            "CertificateArn": Object {
-              "Fn::FindInMap": Array [
-                "StageVariables",
-                Object {
-                  "Ref": "Stage",
-                },
-                "CertificateARN",
-              ],
-            },
-          },
-        ],
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "TargetGroup",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "ElasticLoadBalancer",
-        },
-        "Port": 443,
-        "Protocol": "HTTPS",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "LoadBalancerSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Permit incoming HTTPS access on port 443, egress to port 9000",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 9000,
-            "IpProtocol": "tcp",
-            "ToPort": 9000,
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "NewWazuhSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 1514,
-            "IpProtocol": "tcp",
-            "ToPort": 1515,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "NoHealthyInstancesAlarm": Object {
-      "Condition": "CreateProdResources",
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-        "TargetGroup",
-      ],
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - Cannot sell any subscriptions or contributions products.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "no healthy instances for support-frontend",
-            ],
-          ],
-        },
-        "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": "ElasticLoadBalancer.LoadBalancerFullName",
-            },
-          },
-          Object {
-            "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": "TargetGroup.TargetGroupFullName",
-            },
-          },
-        ],
-        "EvaluationPeriods": 2,
-        "MetricName": "HealthyHostCount",
-        "Namespace": "AWS/ApplicationELB",
-        "Period": 60,
-        "Statistic": "Average",
-        "Threshold": 0.5,
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "NoHealthyInstancesAlarm4A3DBA9E": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -2110,18 +850,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " no healthy instances for support-frontend",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD no healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -2171,11 +900,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/support/frontend",
+                    ":parameter/PROD/support/frontend",
                   ],
                 ],
               },
@@ -2198,11 +923,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/support/frontend/*",
+                    ":parameter/PROD/support/frontend/*",
                   ],
                 ],
               },
@@ -2244,94 +965,9 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ReducedHealthyInstancesAlarm": Object {
-      "Condition": "CreateProdResources",
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-        "TargetGroup",
-      ],
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - Imminent issue cannot sell any subscriptions or contributions products.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "Reduced number of healthy instances for support-frontend",
-            ],
-          ],
-        },
-        "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": "ElasticLoadBalancer.LoadBalancerFullName",
-            },
-          },
-          Object {
-            "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": "TargetGroup.TargetGroupFullName",
-            },
-          },
-        ],
-        "EvaluationPeriods": 2,
-        "MetricName": "HealthyHostCount",
-        "Namespace": "AWS/ApplicationELB",
-        "Period": 300,
-        "Statistic": "Average",
-        "Threshold": Object {
-          "Fn::FindInMap": Array [
-            "StageVariables",
-            Object {
-              "Ref": "Stage",
-            },
-            "InsufficientInstances",
-          ],
-        },
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "ReducedHealthyInstancesAlarmD9B227CB": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -2351,18 +987,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
         ],
         "AlarmDescription": "Impact - Imminent issue cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " reduced number healthy instances for support-frontend",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD reduced number healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -2412,10 +1037,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/support/frontend/",
-                    Object {
-                      "Ref": "Stage",
-                    },
+                    ":parameter/support/frontend/PROD",
                   ],
                 ],
               },
@@ -2468,75 +1090,9 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ServerSideCreateFailureAlarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - Someone pressed buy on a recurring product but received an error.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "support-frontend create recurring product call failed",
-            ],
-          ],
-        },
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "Stage",
-            "Value": "PROD",
-          },
-        ],
-        "EvaluationPeriods": 1,
-        "MetricName": "ServerSideCreateFailure",
-        "Namespace": "support-frontend",
-        "Period": 60,
-        "Statistic": "Sum",
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "ServerSideCreateFailureAlarm3FA2BA71": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -2556,18 +1112,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
         ],
         "AlarmDescription": "Impact - Someone pressed buy on a recurring product but received an error. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-frontend create recurring product call failed",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-frontend create recurring product call failed",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -2592,18 +1137,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
             Object {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:s3:::support-admin-console/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/*",
-                  ],
-                ],
-              },
+              "Resource": "arn:aws:s3:::support-admin-console/PROD/*",
             },
           ],
           "Version": "2012-10-17",
@@ -2617,81 +1151,9 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
       },
       "Type": "AWS::IAM::Policy",
     },
-    "StateMachineUnavailableAlarm": Object {
-      "Condition": "CreateProdResources",
-      "DependsOn": Array [
-        "StateMachineUnavailableMetric",
-      ],
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-dev",
-          },
-        ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              "Impact - Cannot sell any subscriptions or contributions products.",
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Process",
-                ],
-              },
-            ],
-          ],
-        },
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            " ",
-            Array [
-              Object {
-                "Fn::FindInMap": Array [
-                  "Constants",
-                  "Alarm",
-                  "Urgent",
-                ],
-              },
-              Object {
-                "Ref": "Stage",
-              },
-              "support-workers state machine unavailable",
-            ],
-          ],
-        },
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "EvaluationPeriods": 2,
-        "MetricName": "state-machine-unavailable",
-        "Namespace": Object {
-          "Fn::Sub": Array [
-            "support-frontend-\${Stage}",
-            Object {
-              "Stage": Object {
-                "Ref": "Stage",
-              },
-            },
-          ],
-        },
-        "Period": 60,
-        "Statistic": "Sum",
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "StateMachineUnavailableAlarm43BA4A0D": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "frontend",
-            Object {
-              "Ref": "Stage",
-            },
-            "AlarmEnabledInProd",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -2711,32 +1173,11 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "[CDK] URGENT 9-5 - ",
-              Object {
-                "Ref": "Stage",
-              },
-              " support-workers state machine unavailable",
-            ],
-          ],
-        },
+        "AlarmName": "URGENT 9-5 - PROD support-workers state machine unavailable",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 2,
         "MetricName": "state-machine-unavailable",
-        "Namespace": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "support-frontend-",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "Namespace": "support-frontend-PROD",
         "Period": 60,
         "Statistic": "Sum",
         "Threshold": 1,
@@ -2744,66 +1185,14 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "StateMachineUnavailableMetric": Object {
-      "Properties": Object {
-        "FilterPattern": "\\"regular-contributions-state-machine-unavailable\\"",
-        "LogGroupName": Object {
-          "Fn::Sub": Array [
-            "support-frontend-\${Stage}",
-            Object {
-              "Stage": Object {
-                "Ref": "Stage",
-              },
-            },
-          ],
-        },
-        "MetricTransformations": Array [
-          Object {
-            "MetricName": "state-machine-unavailable",
-            "MetricNamespace": Object {
-              "Fn::Sub": Array [
-                "support-frontend-\${Stage}",
-                Object {
-                  "Stage": Object {
-                    "Ref": "Stage",
-                  },
-                },
-              ],
-            },
-            "MetricValue": "1",
-          },
-        ],
-      },
-      "Type": "AWS::Logs::MetricFilter",
-    },
     "StateMachineUnavailableMetricFilter0A74A04F": Object {
       "Properties": Object {
         "FilterPattern": "\\"regular-contributions-state-machine-unavailable\\"",
-        "LogGroupName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "support-frontend-",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "LogGroupName": "support-frontend-PROD",
         "MetricTransformations": Array [
           Object {
             "MetricName": "state-machine-unavailable",
-            "MetricNamespace": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "support-frontend-",
-                  Object {
-                    "Ref": "Stage",
-                  },
-                ],
-              ],
-            },
+            "MetricNamespace": "support-frontend-PROD",
             "MetricValue": "1",
           },
         ],
@@ -2851,10 +1240,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":function:stripe-intent-",
-                    Object {
-                      "Ref": "Stage",
-                    },
+                    ":function:stripe-intent-PROD",
                   ],
                 ],
               },
@@ -2870,62 +1256,6 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "TargetGroup": Object {
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-      ],
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckPath": "/healthcheck",
-        "HealthCheckPort": "9000",
-        "HealthCheckProtocol": "HTTP",
-        "HealthCheckTimeoutSeconds": 5,
-        "HealthyThresholdCount": 2,
-        "Name": Object {
-          "Fn::Sub": Array [
-            "\${Stack}-\${Stage}-\${App}",
-            Object {
-              "Stage": Object {
-                "Ref": "Stage",
-              },
-            },
-          ],
-        },
-        "Port": 9000,
-        "Protocol": "HTTP",
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "TargetGroupAttributes": Array [
-          Object {
-            "Key": "deregistration_delay.timeout_seconds",
-            "Value": "20",
-          },
-        ],
-        "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "TargetGroupFrontendBE464F1D": Object {
       "Properties": Object {
@@ -2955,9 +1285,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "TargetGroupAttributes": Array [
@@ -3012,9 +1340,7 @@ dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
