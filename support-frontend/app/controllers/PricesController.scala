@@ -47,20 +47,7 @@ object PricesController {
       Canada: CountryGroupPriceData,
   )
 
-  import io.circe.generic.auto._
-  implicit val pricesEncoder = Encoder[Prices]
-}
-
-class PricesController(
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    actionRefiners: CustomActionBuilders,
-    components: ControllerComponents,
-) extends AbstractController(components)
-    with Circe {
-
-  import actionRefiners._
-
-  private def buildRatePlanPriceData(priceSummary: PriceSummary): RatePlanPriceData = {
+  def buildRatePlanPriceData(priceSummary: PriceSummary): RatePlanPriceData = {
     val price = priceSummary.promotions.headOption
       .flatMap(_.discountedPrice)
       .getOrElse(priceSummary.price)
@@ -68,7 +55,7 @@ class PricesController(
     RatePlanPriceData(price.toString)
   }
 
-  private def buildProductPriceData(
+  def buildProductPriceData(
       productPrices: ProductPrices,
       countryGroup: CountryGroup,
       currency: Currency,
@@ -84,6 +71,19 @@ class PricesController(
       Monthly = buildRatePlanPriceData(monthlyPriceSummary),
       Annual = buildRatePlanPriceData(annualPriceSummary),
     )
+
+  import io.circe.generic.auto._
+  implicit val pricesEncoder = Encoder[Prices]
+}
+
+class PricesController(
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    actionRefiners: CustomActionBuilders,
+    components: ControllerComponents,
+) extends AbstractController(components)
+    with Circe {
+
+  import actionRefiners._
 
   private def buildCountryGroupPriceData(
       countryGroup: CountryGroup,
