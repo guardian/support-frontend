@@ -234,4 +234,10 @@ trait Controllers {
     appConfig.stage,
   )
 
+  lazy val pricesController = new PricesController(
+    priceSummaryServiceProvider,
+    actionRefiners,
+    controllerComponents,
+  )
+
 }
