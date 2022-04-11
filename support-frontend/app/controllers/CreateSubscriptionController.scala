@@ -53,7 +53,7 @@ class CreateSubscriptionController(
   import actionRefiners._
 
   def create: EssentialAction =
-    LoggingAndAlarmOnFailure {
+    LoggingAndAlarmOnException {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
         val maybeLoggedInIdentityIdAndEmail =
           request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))

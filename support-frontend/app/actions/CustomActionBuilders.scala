@@ -33,7 +33,7 @@ class CustomActionBuilders(
       cc.parsers.defaultBodyParser,
     )
 
-  case class LoggingAndAlarmOnFailure[A](chainedAction: Action[A]) extends EssentialAction {
+  case class LoggingAndAlarmOnException[A](chainedAction: Action[A]) extends EssentialAction {
 
     def apply(requestHeader: RequestHeader): Accumulator[ByteString, Result] = {
       val accumulator = chainedAction.apply(requestHeader)
