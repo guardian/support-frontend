@@ -5,8 +5,10 @@ import actions.CustomActionBuilders
 import akka.actor.{ActorSystem, Scheduler}
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.config.Stage
 import com.gu.support.workers._
 import config.Configuration.GuardianDomain
 import controllers.CreateSubscriptionController._
@@ -43,6 +45,7 @@ class CreateSubscriptionController(
     testUsers: TestUserService,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
+    stage: Stage,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe {
@@ -105,6 +108,12 @@ class CreateSubscriptionController(
       case Invalid(message) => EitherT.leftT(RequestValidationError(message))
     }
 
+  private def triggerCreateAlarm(message: String) = {
+    SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${message}")
+    val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
+    AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+  }
+
   private def toHttpResponse(
       result: EitherT[Future, CreateSubscriptionError, StatusResponse],
       product: ProductType,
@@ -114,7 +123,9 @@ class CreateSubscriptionController(
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
         error match {
           case err: RequestValidationError => BadRequest(err.message)
-          case _: ServerError => InternalServerError
+          case err: ServerError =>
+            triggerCreateAlarm(err.message)
+            InternalServerError
         }
       },
       { statusResponse =>

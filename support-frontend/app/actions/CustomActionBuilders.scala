@@ -4,12 +4,10 @@ import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
-import com.gu.identity.model.User
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.Stage
 import play.api.libs.streams.Accumulator
-import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 import play.filters.csrf._
 import services.AsyncAuthenticationService
@@ -44,16 +42,6 @@ class CustomActionBuilders(
         byteString
       })
       loggedAccumulator
-        .map { result =>
-          if (result.header.status.toString.head != '2') {
-            SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")
-            val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
-            AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
-            result
-          } else {
-            result
-          }
-        }
         .recoverWith({ case throwable: Throwable =>
           SafeLogger.error(scrub"pushing alarm metric - 5xx response caused by ${throwable}")
           val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
