@@ -122,7 +122,13 @@ class CreateSubscriptionController(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
         error match {
-          case err: RequestValidationError => BadRequest(err.message)
+          case err: RequestValidationError if err.message == InvalidEmailAddress.errorReasonCode =>
+            // Don't alarm for a disallowed email address as we will inform the user on the client
+            // to allow them to correct the issue
+            BadRequest(err.message)
+          case err: RequestValidationError =>
+            triggerCreateAlarm(err.message)
+            BadRequest(err.message)
           case err: ServerError =>
             triggerCreateAlarm(err.message)
             InternalServerError
