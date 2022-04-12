@@ -2,15 +2,17 @@ name: Build support-frontend
 
 on:
   pull_request:
-    branches: [ main ]
-  push:
-    branches: [ main ]
+    branches:
+      - main
+      - rb-dummy-main
 env:
   GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
 
 jobs:
   support_frontend_build:
-    if: github.event.pull_request.head.repo.owner.login == 'guardian'
+    if: >-
+      github.event.pull_request.head.repo.owner.login == 'guardian' && github.event.action == 'opened' ||
+      github.event.pull_request.merged == true
 
     # Required by actions-assume-aws-role
     permissions:
