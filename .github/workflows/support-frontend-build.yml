@@ -14,7 +14,9 @@ env:
 
 jobs:
   support_frontend_build:
-    if: github.event.pull_request.head.repo.owner.login == 'guardian'
+    if: >-
+      github.event.pull_request.head.repo.owner.login == 'guardian' ||
+      github.event_name == 'push'
 
     # Required by actions-assume-aws-role
     permissions:
@@ -24,6 +26,9 @@ jobs:
     name: support-frontend build
     runs-on: ubuntu-latest
     steps:
+      - name: Print GitHub event action
+        run: |
+          echo "${{ github.event.action }}"
       - name: Env
         run: env
 
