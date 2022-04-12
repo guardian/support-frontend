@@ -36,9 +36,6 @@ libraryDependencies ++= Seq(
 
 riffRaffPackageType := assembly.value
 riffRaffManifestProjectName := s"support:support-workers-mono"
-//riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch")
-//riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
-//riffRaffManifestVcsUrl := "git@github.com/guardian/support-frontend.git"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-workers/cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml")
