@@ -114,6 +114,12 @@ export class Frontend extends GuStack {
       }),
     ];
 
+    const alarmName = (shortDescription: string) =>
+      `URGENT 9-5 - ${this.stage} ${shortDescription}`;
+
+    const alarmDescription = (description: string) =>
+      `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
+
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
       app: "frontend",
@@ -123,7 +129,15 @@ export class Frontend extends GuStack {
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
       monitoringConfiguration: {
-        noMonitoring: true,
+        snsTopicName: "reader-revenue-dev",
+        http5xxAlarm: {
+          alarmName: alarmName("support-frontend is returning 5XX errors"),
+          alarmDescription: alarmDescription(
+            "Some or all actions on support website are failing"
+          ),
+          tolerated5xxPercentage: 1,
+        },
+        unhealthyInstancesAlarm: false,
       },
       userData,
       roleConfiguration: {
@@ -135,12 +149,6 @@ export class Frontend extends GuStack {
     });
 
     // ---- Alarms ---- //
-
-    const alarmName = (shortDescription: string) =>
-      `URGENT 9-5 - ${this.stage} ${shortDescription}`;
-
-    const alarmDescription = (description: string) =>
-      `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
 
     new GuAlarm(this, "NoHealthyInstancesAlarm", {
       app,
@@ -186,53 +194,6 @@ export class Frontend extends GuStack {
         },
         statistic: "Average",
         period: Duration.seconds(300),
-      }),
-      snsTopicName: "reader-revenue-dev",
-    });
-
-    new GuAlarm(this, "High5XXRateAlarm", {
-      app,
-      alarmName: alarmName(
-        "support-frontend instances are returning 5XX errors"
-      ),
-      alarmDescription: alarmDescription(
-        "Some or all actions on support website are failing"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 3,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "HTTPCode_Target_5XX_Count",
-        namespace: "AWS/ApplicationELB",
-        dimensionsMap: {
-          LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
-          TargetGroup: ec2App.targetGroup.targetGroupFullName,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      snsTopicName: "reader-revenue-dev",
-    });
-
-    new GuAlarm(this, "HighELB5XXRateAlarm", {
-      app,
-      alarmName: alarmName("support-frontend ELB is returning 5XX errors"),
-      alarmDescription: alarmDescription(
-        "Some or all actions on support website are failing"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 3,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "HTTPCode_ELB_5XX_Count",
-        namespace: "AWS/ApplicationELB",
-        dimensionsMap: {
-          LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
       }),
       snsTopicName: "reader-revenue-dev",
     });
