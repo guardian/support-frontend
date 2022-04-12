@@ -152,7 +152,6 @@ trait Controllers {
     testUsers,
     controllerComponents,
     appConfig.guardianDomain,
-    appConfig.stage,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
