@@ -61,10 +61,10 @@ maintainer := "Membership <membership.dev@theguardian.com>"
 
 riffRaffPackageType := (Debian / packageBin).value
 riffRaffManifestProjectName := "support:frontend-mono"
-riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
-riffRaffManifestBranch := Option(System.getenv("GITHUB_HEAD_REF"))
-  .orElse(Option(System.getenv("BRANCH_NAME")))
-  .getOrElse("unknown_branch")
+//riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
+//riffRaffManifestBranch := Option(System.getenv("GITHUB_HEAD_REF"))
+//  .orElse(Option(System.getenv("BRANCH_NAME")))
+//  .getOrElse("unknown_branch")
 riffRaffPackageName := "frontend"
 riffRaffAwsCredentialsProfile := Some("membership") // needed when running locally
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")

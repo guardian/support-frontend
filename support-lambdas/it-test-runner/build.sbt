@@ -14,14 +14,14 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "io.symphonia" % "lambda-logging" % "1.0.3",
-  "org.scalatest" %% "scalatest" % "3.2.2" // not a "Test" dependency, it's an actual one
+  "org.scalatest" %% "scalatest" % "3.2.2", // not a "Test" dependency, it's an actual one
 )
 
 riffRaffPackageType := assembly.value
 riffRaffManifestProjectName := s"support:it-test-runner"
-riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch")
-riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
-riffRaffManifestVcsUrl := "git@github.com/guardian/support-frontend.git"
+//riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch")
+//riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV")
+//riffRaffManifestVcsUrl := "git@github.com/guardian/support-frontend.git"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-lambdas/it-test-runner/cfn.yaml"), "cfn/cfn.yaml")
