@@ -2,10 +2,9 @@ name: Build support-frontend
 
 on:
   pull_request:
-    branches:
-      - main
-      - rb-dummy-main
-  push:
+    types:
+      - opened
+      - closed
     branches:
       - main
       - rb-dummy-main
@@ -14,7 +13,7 @@ env:
 
 jobs:
   support_frontend_build:
-    # if: github.event.pull_request.head.repo.owner.login == 'guardian'
+    if: (github.event.pull_request.head.repo.owner.login == 'guardian' && github.event.action == 'opened') || github.event.pull_request.merged == true
 
     # Required by actions-assume-aws-role
     permissions:
