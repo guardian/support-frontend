@@ -7,6 +7,7 @@ import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.Stage
+import models.identity.responses.IdentityErrorResponse.IdentityError.InvalidEmailAddress
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import play.filters.csrf._
@@ -33,7 +34,22 @@ class CustomActionBuilders(
       cc.parsers.defaultBodyParser,
     )
 
-  case class LoggingAndAlarmOnException[A](chainedAction: Action[A]) extends EssentialAction {
+  case class LoggingAndAlarmOnFailure[A](chainedAction: Action[A]) extends EssentialAction {
+
+    private def pushAlarmMetric = {
+      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
+      AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+    }
+
+    private def maybePushAlarmMetric(result: Result) =
+      if (
+        result.header.status.toString.head != '2' && !result.header.reasonPhrase.contains(
+          InvalidEmailAddress.errorReasonCode,
+        )
+      ) {
+        SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")
+        pushAlarmMetric
+      }
 
     def apply(requestHeader: RequestHeader): Accumulator[ByteString, Result] = {
       val accumulator = chainedAction.apply(requestHeader)
@@ -42,10 +58,13 @@ class CustomActionBuilders(
         byteString
       })
       loggedAccumulator
+        .map { result =>
+          maybePushAlarmMetric(result)
+          result
+        }
         .recoverWith({ case throwable: Throwable =>
           SafeLogger.error(scrub"pushing alarm metric - 5xx response caused by ${throwable}")
-          val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
-          AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+          pushAlarmMetric
           Future.failed(throwable)
         })
     }
