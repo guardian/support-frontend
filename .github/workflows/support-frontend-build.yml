@@ -2,12 +2,9 @@ name: Build support-frontend
 
 on:
   pull_request:
-    types:
-      - opened
-      - closed
-    branches:
-      - main
-      - rb-dummy-main
+    branches: [ main ]
+  push:
+    branches: [ main ]
 env:
   GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
 
