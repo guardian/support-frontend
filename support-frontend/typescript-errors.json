@@ -3,10 +3,10 @@
         "byCode": {
             "TS1208": 1,
             "TS2345": 35,
-            "TS7006": 23,
+            "TS7006": 22,
             "TS2322": 46,
             "TS2339": 40,
-            "TS6133": 8,
+            "TS6133": 7,
             "TS2578": 4,
             "TS2305": 8,
             "TS2314": 3,
@@ -62,7 +62,6 @@
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
-            "assets/components/subscriptionCheckouts/personalDetails.tsx": 2,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
@@ -296,10 +295,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
             "message": "Parameter 'key' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
@@ -710,10 +705,6 @@
         {
             "path": "assets/components/directDebit/helpers/ajax.ts",
             "message": "'isTestUser' is declared but its value is never read."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "'Option' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",

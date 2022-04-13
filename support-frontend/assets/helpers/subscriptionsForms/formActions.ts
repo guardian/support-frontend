@@ -26,6 +26,7 @@ import {
 } from 'helpers/redux/checkout/personalDetails/actions';
 import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
+import type { FormSubmissionDependentValueThunk } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -182,7 +183,7 @@ const setFormSubmitted = (formSubmitted: boolean): Action => ({
 
 const setUserTypeFromIdentityResponse = (
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-) =>
+): FormSubmissionDependentValueThunk =>
 	setFormSubmissionDependentValue(() =>
 		setUserTypeFromIdentityResponseAction(userTypeFromIdentityResponse),
 	);
@@ -190,38 +191,42 @@ const setUserTypeFromIdentityResponse = (
 const formActionCreators = {
 	setTitle:
 		(title: string) =>
-		(dispatch: SubscriptionsDispatch): void => {
-			dispatch(setTitle(title !== 'Select a title' ? title : ''));
-		},
-	setFirstName: (firstName: string) =>
+		(dispatch: SubscriptionsDispatch): Action =>
+			dispatch(setTitle(title !== 'Select a title' ? title : '')),
+	setFirstName: (firstName: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => setFirstName(firstName)),
-	setLastName: (lastName: string) =>
+	setLastName: (lastName: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => setLastName(lastName)),
-	setEmail: (email: string) =>
+	setEmail: (email: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => setEmail(email)),
-	setConfirmEmail: (email: string) =>
+	setConfirmEmail: (email: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => setConfirmEmail(email)),
 	setTelephone:
 		(telephone: string) =>
-		(dispatch: SubscriptionsDispatch): void => {
-			dispatch(setTelephone(telephone));
-		},
+		(dispatch: SubscriptionsDispatch): Action =>
+			dispatch(setTelephone(telephone)),
 	setTitleGift: (titleGiftRecipient: string): Action => ({
 		type: 'SET_TITLE_GIFT',
 		titleGiftRecipient:
 			titleGiftRecipient !== 'Select a title' ? titleGiftRecipient : null,
 	}),
-	setFirstNameGift: (firstNameGiftRecipient: string) =>
+	setFirstNameGift: (
+		firstNameGiftRecipient: string,
+	): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_FIRST_NAME_GIFT',
 			firstNameGiftRecipient,
 		})),
-	setLastNameGift: (lastNameGiftRecipient: string) =>
+	setLastNameGift: (
+		lastNameGiftRecipient: string,
+	): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_LAST_NAME_GIFT',
 			lastNameGiftRecipient,
 		})),
-	setEmailGift: (emailGiftRecipient: string) =>
+	setEmailGift: (
+		emailGiftRecipient: string,
+	): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_EMAIL_GIFT',
 			emailGiftRecipient,
@@ -236,7 +241,7 @@ const formActionCreators = {
 	}),
 	setPaymentMethod:
 		(paymentMethod: PaymentMethod) =>
-		(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+		(dispatch: Dispatch<Action>, getState: () => CheckoutState): Action => {
 			const state = getState();
 			storage.setSession('selectedPaymentMethod', paymentMethod);
 			sendTrackingEventsOnClick({
@@ -259,7 +264,7 @@ const formActionCreators = {
 	}),
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
-		(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+		(dispatch: Dispatch<Action>, getState: () => CheckoutState): void => {
 			const state = getState();
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
