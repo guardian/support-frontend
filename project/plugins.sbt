@@ -6,7 +6,9 @@ addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.0")
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.13") // when updating major version, also update play-circe version
+addSbtPlugin(
+  "com.typesafe.play" % "sbt-plugin" % "2.8.13",
+) // when updating major version, also update play-circe version
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 
@@ -18,7 +20,7 @@ libraryDependencies += "org.vafer" % "jdeb" % "1.5" artifacts (Artifact("jdeb", 
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
-addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.3")
+addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.1")
 
