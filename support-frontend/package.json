@@ -15,7 +15,7 @@
     "build-github-action": "npm-run-all clean 'webpack --config webpack.prod.js --env ci=github'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack serve --config webpack.dev.js --port 9211",
-    "devrun": "npm-run-all clean webpack-dev-server",
+    "devrun": "NODE_ENV=DEV npm-run-all clean webpack-dev-server",
     "test": "NODE_ENV=test echo 'Running JS tests' && jest",
     "test-watch": "NODE_ENV=test echo 'Running JS tests in watch mode' && jest --watch",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",

@@ -13,5 +13,11 @@ module.exports = merge(common('[name].css', '[name].js', false), {
 				secure: false,
 			},
 		},
+		client: {
+			webSocketURL: 'https://support.thegulocal.com/ws'
+		},
+	},
+	resolve: {
+		fallback: { "crypto": false }
 	},
 });

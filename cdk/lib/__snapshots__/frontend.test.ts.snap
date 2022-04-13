@@ -496,7 +496,7 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "High5XXRateAlarmA4E3FB07": Object {
+    "High5xxPercentageAlarmFrontend168775E5": Object {
       "Properties": Object {
         "ActionsEnabled": true,
         "AlarmActions": Array [
@@ -518,78 +518,87 @@ Object {
           },
         ],
         "AlarmDescription": "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend instances are returning 5XX errors",
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
+        "AlarmName": "URGENT 9-5 - PROD support-frontend is returning 5XX errors",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": Array [
           Object {
-            "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": Array [
-                "LoadBalancerFrontendD42F8E66",
-                "LoadBalancerFullName",
-              ],
-            },
+            "Expression": "100*(m1+m2)/m3",
+            "Id": "expr_1",
+            "Label": "% of 5XX responses served for frontend (load balancer and instances combined)",
           },
           Object {
-            "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": Array [
-                "TargetGroupFrontendBE464F1D",
-                "TargetGroupFullName",
-              ],
+            "Id": "m1",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "LoadBalancer",
+                    "Value": Object {
+                      "Fn::GetAtt": Array [
+                        "LoadBalancerFrontendD42F8E66",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "HTTPCode_ELB_5XX_Count",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
             },
+            "ReturnData": false,
+          },
+          Object {
+            "Id": "m2",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "LoadBalancer",
+                    "Value": Object {
+                      "Fn::GetAtt": Array [
+                        "LoadBalancerFrontendD42F8E66",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "HTTPCode_Target_5XX_Count",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          Object {
+            "Id": "m3",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "LoadBalancer",
+                    "Value": Object {
+                      "Fn::GetAtt": Array [
+                        "LoadBalancerFrontendD42F8E66",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "RequestCount",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
           },
         ],
-        "EvaluationPeriods": 2,
-        "MetricName": "HTTPCode_Target_5XX_Count",
-        "Namespace": "AWS/ApplicationELB",
-        "Period": 60,
-        "Statistic": "Sum",
-        "Threshold": 3,
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "HighELB5XXRateAlarm9AF3E69E": Object {
-      "Properties": Object {
-        "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:aws:sns:",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                ":",
-                Object {
-                  "Ref": "AWS::AccountId",
-                },
-                ":reader-revenue-dev",
-              ],
-            ],
-          },
-        ],
-        "AlarmDescription": "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend ELB is returning 5XX errors",
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": Array [
-                "LoadBalancerFrontendD42F8E66",
-                "LoadBalancerFullName",
-              ],
-            },
-          },
-        ],
-        "EvaluationPeriods": 2,
-        "MetricName": "HTTPCode_ELB_5XX_Count",
-        "Namespace": "AWS/ApplicationELB",
-        "Period": 60,
-        "Statistic": "Sum",
-        "Threshold": 3,
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
