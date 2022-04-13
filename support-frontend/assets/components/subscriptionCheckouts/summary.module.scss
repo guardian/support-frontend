@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '~stylesheets/gu-sass/gu-sass';
 
 .root {
@@ -26,13 +28,13 @@
 .contentShowDetailsNoDecription {
 	display: block;
 	border-bottom: 1px solid gu-colour(neutral-86);
-	margin-bottom: $gu-v-spacing * 2 /3;
+	margin-bottom: math.div($gu-v-spacing * 2, 3);
 	padding-bottom: $gu-v-spacing;
 }
 
 .contentWrapper,
 .content {
-	padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing;
+	padding: $gu-v-spacing*0.5 $gu-h-spacing*0.5 $gu-v-spacing;
 	@include mq($until: tablet) {
 		background: gu-colour(neutral-97);
 	}
@@ -43,7 +45,7 @@
 	grid-template-columns: 40% 55%;
 	text-align: left;
 	border-bottom: 1px solid gu-colour(neutral-86);
-	margin-bottom: $gu-v-spacing * 2 /3;
+	margin-bottom: math.div($gu-v-spacing * 2, 3);
 	padding-bottom: $gu-v-spacing;
 }
 
@@ -61,7 +63,7 @@
 	overflow: hidden;
 	background-color: gu-colour(neutral-97);
 	border-bottom: 1px solid gu-colour(neutral-86);
-	padding: $gu-v-spacing * 3 $gu-h-spacing/2 0;
+	padding: $gu-v-spacing * 3 $gu-h-spacing*0.5 0;
 	@include mq($until: desktop) {
 		display: none;
 	}
@@ -96,7 +98,7 @@
 		top: $gu-v-spacing;
 	}
 	@include mq($until: tablet) {
-		margin-bottom: $gu-v-spacing / 2;
+		margin-bottom: $gu-v-spacing * 0.5;
 		text-align: left;
 	}
 }
@@ -198,7 +200,7 @@
 }
 
 .spaceRight {
-	padding-right: $gu-h-spacing / 3;
+	padding-right: math.div($gu-h-spacing, 3);
 }
 
 .defaultState {

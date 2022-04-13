@@ -3,31 +3,30 @@
         "byCode": {
             "TS1208": 1,
             "TS2345": 33,
-            "TS7006": 29,
-            "TS2322": 48,
+            "TS7006": 26,
+            "TS2322": 44,
             "TS2339": 13,
             "TS6133": 7,
             "TS2578": 4,
-            "TS2305": 9,
-            "TS2314": 4,
+            "TS2305": 8,
+            "TS2314": 3,
             "TS7031": 7,
             "TS2769": 7,
             "TS2304": 5,
             "TS2741": 3,
             "TS2564": 1,
             "TS2739": 3,
-            "TS2532": 1,
             "TS2556": 3,
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
-            "TS2367": 4,
+            "TS2367": 3,
             "TS2740": 1,
             "TS7016": 1,
             "TS7017": 1,
             "TS2554": 6,
-            "TS7034": 4,
-            "TS7005": 9,
+            "TS7034": 3,
+            "TS7005": 4,
             "TS2525": 1,
             "TS7022": 1
         },
@@ -62,19 +61,16 @@
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
-            "assets/components/subscriptionCheckouts/summary.tsx": 6,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/pages/paper-subscription-landing/components/content/linkTo.tsx": 4,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/components/headers/links/links.tsx": 1,
             "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
-            "assets/components/priceLabel/priceLabel.tsx": 1,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
@@ -114,7 +110,6 @@
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
-            "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts": 6,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5
         }
     },
@@ -308,10 +303,6 @@
             "message": "Parameter 'e' implicitly has an 'any' type."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Parameter 'props' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
             "message": "Parameter 'key' implicitly has an 'any' type."
         },
@@ -364,14 +355,6 @@
             "message": "Parameter 'component' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Parameter 'tab' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Parameter 'activeTab' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx",
             "message": "Parameter 'index' implicitly has an 'any' type."
         }
@@ -412,10 +395,6 @@
         {
             "path": "assets/components/page/page.tsx",
             "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/components/priceLabel/priceLabel.tsx",
-            "message": "Type 'false | Record<string, any> | undefined' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -468,18 +447,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Type '{ className: any; productPrice: ProductPrice; billingPeriod: BillingPeriod; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"giftStyles\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Type '{ className: any; productPrice: ProductPrice; billingPeriod: BillingPeriod; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"giftStyles\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Type '{ className: any; productPrice: ProductPrice; billingPeriod: BillingPeriod; giftStyles: any; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"billingPeriod\" | \"productPrice\"> & Partial<Pick<PropTypes, \"orderIsAGift\" | \"giftStyles\">> & Partial<...>'."
         },
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -702,10 +669,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         }
@@ -717,10 +680,6 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
             "message": "Generic type '$Call' requires 1 type argument(s)."
         },
         {
@@ -844,12 +803,6 @@
             "message": "Type '{ Stripe: string; PayPal: string; DirectDebit: string; }' is missing the following properties from type 'Record<PaymentMethod, string>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
         }
     ],
-    "TS2532": [
-        {
-            "path": "assets/components/subscriptionCheckouts/summary.tsx",
-            "message": "Object is possibly 'undefined'."
-        }
-    ],
     "TS2556": [
         {
             "path": "assets/helpers/__tests__/contributionsTests.ts",
@@ -898,10 +851,6 @@
         {
             "path": "assets/helpers/polyfills/details.ts",
             "message": "This condition will always return 'true' since the types 'Element' and 'Document' have no overlap."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/linkTo.tsx",
-            "message": "This condition will always return 'false' since the types 'PaperFulfilmentOptions' and '\"delivery\"' have no overlap."
         },
         {
             "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
@@ -958,10 +907,6 @@
     ],
     "TS7034": [
         {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has type 'any' in some locations where its type cannot be determined."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
             "message": "Variable 'productPrices' implicitly has type 'any' in some locations where its type cannot be determined."
         },
@@ -975,26 +920,6 @@
         }
     ],
     "TS7005": [
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/timeBoundedCopy/timeBoundedCopy.test.ts",
-            "message": "Variable 'testCopy' implicitly has an 'any' type."
-        },
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts",
             "message": "Variable 'productOptions' implicitly has an 'any' type."

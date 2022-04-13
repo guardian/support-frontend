@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-text {
@@ -7,19 +9,19 @@
 		margin-top: $gu-v-spacing;
 	}
 	> .component-text__heading + p {
-		margin-top: ($gu-v-spacing/-2);
+		margin-top: math.div($gu-v-spacing, -2);
 	}
 }
 
 .component-text + .component-text {
-	margin-top: ($gu-v-spacing/-1);
+	margin-top: math.div($gu-v-spacing, -1);
 }
 
 .component-text code {
 	font-family: monospace;
 	background: gu-colour(neutral-93);
 	color: gu-colour(neutral-7);
-	padding: ($gu-v-spacing / 4) ($gu-h-spacing / 4);
+	padding: ($gu-v-spacing * 0.25) ($gu-h-spacing * 0.25);
 }
 
 .component-text a {
@@ -34,7 +36,7 @@
 .component-text__callout {
 	@include gu-fontset-heading;
 	& > strong {
-		padding: 0 ($gu-h-spacing / 4);
+		padding: 0 ($gu-h-spacing * 0.25);
 		background-color: gu-colour(highlight-main);
 		color: gu-colour(neutral-7);
 	}

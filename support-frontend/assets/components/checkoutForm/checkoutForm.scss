@@ -2,7 +2,7 @@
 
 .component-checkout-form-section {
 	max-width: gu-span(5);
-	padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
+	padding: $gu-v-spacing*0.5 $gu-h-spacing*0.5 $gu-v-spacing * 2;
 
 	&:first-child {
 		padding-top: $gu-v-spacing;
@@ -13,7 +13,7 @@
 			margin-top: $gu-v-spacing;
 		}
 		.component-radio-input--group + .component-radio-input--group {
-			margin-top: $gu-v-spacing / 2;
+			margin-top: $gu-v-spacing * 0.5;
 		}
 	}
 }
@@ -45,7 +45,7 @@ div .component-checkout-form-section.component-checkout-form-section--hidden {
 }
 
 .component-general-error-message {
-	margin: 0 ($gu-h-spacing / 2);
+	margin: 0 ($gu-h-spacing * 0.5);
 	max-width: gu-span(5);
 	border: 1px gu-colour(state-error) solid;
 }

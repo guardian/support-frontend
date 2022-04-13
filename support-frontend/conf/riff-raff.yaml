@@ -13,7 +13,10 @@ deployments:
     type: cloud-formation
     app: frontend
     parameters:
-      templatePath: cfn.json
+      templateStagePaths:
+        CODE: Frontend-CODE.template.json
+        PROD: Frontend-PROD.template.json
+      amiParameter: AMIFrontend
       amiTags:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
@@ -23,12 +26,3 @@ deployments:
     dependencies: [cfn, assets-static]
     parameters:
       bucket: membership-dist
-      asgMigrationInProgress: true
-  storybook-static:
-    type: aws-s3
-    parameters:
-      bucket: support-storybook
-      prefixPackage: false
-      prefixStack: false
-      cacheControl: public, max-age=3600
-      publicReadAcl: true

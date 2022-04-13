@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~components/headers/veggieBurgerButton/veggieBurgerButton.scss';
 @import '~components/headers/mobileMenu/mobileMenu.scss';
@@ -27,7 +29,7 @@ $header-links-min-width: gu-span(12);
 	.svg-guardian-logo {
 		display: block;
 		float: right;
-		margin-top: $gu-v-spacing / 2.4;
+		margin-top: math.div($gu-v-spacing, 2.4);
 		margin-bottom: $gu-v-spacing * 1.5;
 		height: 48px;
 		width: auto;
@@ -44,7 +46,7 @@ $header-links-min-width: gu-span(12);
 }
 
 .component-header--padlock {
-	margin-right: $gu-h-spacing / 3;
+	margin-right: math.div($gu-h-spacing, 3);
 	display: inline-block;
 	margin-top: 2px;
 }
@@ -58,7 +60,7 @@ $header-links-min-width: gu-span(12);
 		display: none;
 	}
 	& > .component-veggie-burger-button {
-		margin-left: $gu-h-spacing / 4;
+		margin-left: $gu-h-spacing * 0.25;
 		/*aligned with the logo*/
 		margin-top: 22px;
 		@include mq($from: mobileLandscape) {
@@ -86,7 +88,7 @@ $header-links-min-width: gu-span(12);
 .component-header__wrapper {
 	width: 100%;
 	margin: auto;
-	padding: 0 ($gu-h-spacing / 2);
+	padding: 0 ($gu-h-spacing * 0.5);
 	position: relative;
 	flex: 1 1 auto;
 
@@ -120,7 +122,7 @@ $header-links-min-width: gu-span(12);
 }
 
 .component-header-topnav__utility {
-	padding-top: $gu-v-spacing / 2;
+	padding-top: $gu-v-spacing * 0.5;
 }
 
 .component-header-topnav-logo {
@@ -169,7 +171,7 @@ $header-links-min-width: gu-span(12);
 	.component-header--one-row & {
 		position: absolute;
 		bottom: 0;
-		left: $gu-h-spacing / 2;
+		left: $gu-h-spacing * 0.5;
 		right: gu-span(5);
 	}
 
@@ -189,8 +191,8 @@ $header-links-min-width: gu-span(12);
 		text-decoration: none;
 		display: block;
 		height: $gu-v-spacing * 3.5;
-		padding: ($gu-v-spacing/1.75) ($gu-h-spacing * 1.5) ($gu-v-spacing/1.5)
-			($gu-h-spacing/3);
+		padding: math.div($gu-v-spacing, 1.75) ($gu-h-spacing * 1.5) math.div($gu-v-spacing, 1.5)
+			math.div($gu-h-spacing, 3);
 		overflow: hidden;
 		position: relative;
 		box-shadow: inset 0 0 0 gu-colour(highlight-main);
@@ -283,7 +285,7 @@ $header-links-min-width: gu-span(12);
 					@include mq($until: tablet) {
 						border-left: none;
 						border-top: none;
-						padding-left: $gu-h-spacing / 4;
+						padding-left: $gu-h-spacing * 0.25;
 					}
 				}
 
@@ -307,8 +309,8 @@ $header-links-min-width: gu-span(12);
 	}
 
 	.component-header-topnav-logo {
-		padding-right: $gu-h-spacing / 2;
-		padding-top: $gu-v-spacing / 2;
+		padding-right: $gu-h-spacing * 0.5;
+		padding-top: $gu-v-spacing * 0.5;
 	}
 }
 

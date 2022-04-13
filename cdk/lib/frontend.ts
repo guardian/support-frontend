@@ -1,4 +1,3 @@
-import { join } from "path";
 import {
   ComparisonOperator,
   Metric,
@@ -6,34 +5,39 @@ import {
 } from "@aws-cdk/aws-cloudwatch";
 import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
 import { FilterPattern, LogGroup, MetricFilter } from "@aws-cdk/aws-logs";
-import { CfnInclude } from "@aws-cdk/cloudformation-include";
 import type { App } from "@aws-cdk/core";
-import { Duration, Tags } from "@aws-cdk/core";
+import { Duration } from "@aws-cdk/core";
 import { GuEc2App } from "@guardian/cdk";
-import { AccessScope, Stage } from "@guardian/cdk/lib/constants";
+import { AccessScope } from "@guardian/cdk/lib/constants";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack, GuStageParameter } from "@guardian/cdk/lib/constructs/core";
+import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import {
   GuAllowPolicy,
   GuGetS3ObjectsPolicy,
   GuPutCloudwatchMetricsPolicy,
 } from "@guardian/cdk/lib/constructs/iam";
+import type { GuAsgCapacity } from "@guardian/cdk/lib/types";
+
+interface FrontendProps extends GuStackProps {
+  membershipSubPromotionsTable: string;
+  redemptionCodesTable: string;
+  domainName: string;
+  scaling: GuAsgCapacity;
+  shouldEnableAlarms: boolean;
+}
 
 export class Frontend extends GuStack {
-  constructor(scope: App, id: string, props: GuStackProps) {
+  constructor(scope: App, id: string, props: FrontendProps) {
+    const {
+      membershipSubPromotionsTable,
+      redemptionCodesTable,
+      domainName,
+      scaling,
+      shouldEnableAlarms,
+    } = props;
+
     super(scope, id, props);
-    const yamlTemplateFilePath = join(
-      __dirname,
-      "../..",
-      "support-frontend/cloud-formation/cfn.yaml"
-    );
-    new CfnInclude(this, "YamlTemplate", {
-      templateFile: yamlTemplateFilePath,
-      parameters: {
-        Stage: GuStageParameter.getInstance(this),
-      },
-    });
 
     const app = "frontend";
 
@@ -42,26 +46,6 @@ export class Frontend extends GuStack {
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-frontend_1.0-SNAPSHOT_all.deb /tmp
     dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
     /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'`;
-
-    const membershipSubPromotionsTable = this.withStageDependentValue({
-      app,
-      variableName: "MembershipSubPromotions",
-      stageValues: {
-        // TODO: Should these dynamo tables be region specific?
-        CODE: "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV",
-        PROD: "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-      },
-    });
-
-    const redemptionCodesTable = this.withStageDependentValue({
-      app,
-      variableName: "RedemptionCodes",
-      stageValues: {
-        // TODO: Should these dynamo tables be region specific?
-        CODE: "arn:aws:dynamodb:*:*:table/redemption-codes-DEV",
-        PROD: "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
-      },
-    });
 
     const policies = [
       // TODO: can we 'standardise' the way we load config to use the default permissons from GuEc2App?
@@ -130,67 +114,41 @@ export class Frontend extends GuStack {
       }),
     ];
 
-    const minimumProdInstances = 3;
+    const alarmName = (shortDescription: string) =>
+      `URGENT 9-5 - ${this.stage} ${shortDescription}`;
+
+    const alarmDescription = (description: string) =>
+      `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
 
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
       app: "frontend",
       access: { scope: AccessScope.PUBLIC },
       certificateProps: {
-        [Stage.CODE]: {
-          domainName:
-            "support.code.theguardian.com.origin.membership.guardianapis.com",
-          hostedZoneId: "Z1E4V12LQGXFEC",
-        },
-        [Stage.PROD]: {
-          domainName:
-            "support.theguardian.com.origin.membership.guardianapis.com",
-          hostedZoneId: "Z1E4V12LQGXFEC",
-        },
+        domainName,
+        hostedZoneId: "Z1E4V12LQGXFEC",
       },
       monitoringConfiguration: {
-        noMonitoring: true,
+        snsTopicName: "reader-revenue-dev",
+        http5xxAlarm: {
+          alarmName: alarmName("support-frontend is returning 5XX errors"),
+          alarmDescription: alarmDescription(
+            "Some or all actions on support website are failing"
+          ),
+          tolerated5xxPercentage: 1,
+        },
+        unhealthyInstancesAlarm: false,
       },
       userData,
       roleConfiguration: {
         additionalPolicies: policies,
       },
-      scaling: {
-        PROD: {
-          minimumInstances: minimumProdInstances,
-          maximumInstances: 6,
-        },
-        CODE: {
-          minimumInstances: 1,
-          maximumInstances: 2,
-        },
-      },
+      scaling,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
+      withoutImdsv2: true,
     });
-
-    // TODO: remove this tag after the migration
-    const ec2AppAsg = ec2App.autoScalingGroup;
-    Tags.of(ec2AppAsg).add("gu:riffraff:new-asg", "true");
 
     // ---- Alarms ---- //
-
-    // TODO: remove [CDK] prefix. This prefix is needed as the alarms need to have
-    // a different name from the ones in the cloudformation template. We can remove
-    // this after the migration
-    const alarmName = (shortDescription: string) =>
-      `[CDK] URGENT 9-5 - ${this.stage} ${shortDescription}`;
-
-    const alarmDescription = (description: string) =>
-      `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
-
-    const alarmEnabledInProd = this.withStageDependentValue({
-      app,
-      variableName: "AlarmEnabledInProd",
-      stageValues: {
-        [Stage.CODE]: false,
-        [Stage.PROD]: true,
-      },
-    });
 
     new GuAlarm(this, "NoHealthyInstancesAlarm", {
       app,
@@ -198,7 +156,7 @@ export class Frontend extends GuStack {
       alarmDescription: alarmDescription(
         "Cannot sell any subscriptions or contributions products"
       ),
-      actionsEnabled: alarmEnabledInProd,
+      actionsEnabled: shouldEnableAlarms,
       threshold: 0.5,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -223,8 +181,8 @@ export class Frontend extends GuStack {
       alarmDescription: alarmDescription(
         "Imminent issue cannot sell any subscriptions or contributions products"
       ),
-      actionsEnabled: alarmEnabledInProd,
-      threshold: minimumProdInstances - 1,
+      actionsEnabled: shouldEnableAlarms,
+      threshold: scaling.minimumInstances - 1,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
@@ -240,60 +198,13 @@ export class Frontend extends GuStack {
       snsTopicName: "reader-revenue-dev",
     });
 
-    new GuAlarm(this, "High5XXRateAlarm", {
-      app,
-      alarmName: alarmName(
-        "support-frontend instances are returning 5XX errors"
-      ),
-      alarmDescription: alarmDescription(
-        "Some or all actions on support website are failing"
-      ),
-      actionsEnabled: alarmEnabledInProd,
-      threshold: 3,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "HTTPCode_Target_5XX_Count",
-        namespace: "AWS/ApplicationELB",
-        dimensionsMap: {
-          LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
-          TargetGroup: ec2App.targetGroup.targetGroupFullName,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      snsTopicName: "reader-revenue-dev",
-    });
-
-    new GuAlarm(this, "HighELB5XXRateAlarm", {
-      app,
-      alarmName: alarmName("support-frontend ELB is returning 5XX errors"),
-      alarmDescription: alarmDescription(
-        "Some or all actions on support website are failing"
-      ),
-      actionsEnabled: alarmEnabledInProd,
-      threshold: 3,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "HTTPCode_ELB_5XX_Count",
-        namespace: "AWS/ApplicationELB",
-        dimensionsMap: {
-          LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      snsTopicName: "reader-revenue-dev",
-    });
-
     new GuAlarm(this, "LatencyNotificationAlarm", {
       app,
       alarmName: alarmName("support-frontend has high latency"),
       alarmDescription: alarmDescription(
         "support-frontend users are seeing slow responses"
       ),
-      actionsEnabled: alarmEnabledInProd,
+      actionsEnabled: shouldEnableAlarms,
       threshold: 1,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -318,7 +229,7 @@ export class Frontend extends GuStack {
       ),
       alarmDescription:
         "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: alarmEnabledInProd,
+      actionsEnabled: shouldEnableAlarms,
       threshold: 1,
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -358,7 +269,7 @@ export class Frontend extends GuStack {
       alarmDescription: alarmDescription(
         "Cannot sell any subscriptions products"
       ),
-      actionsEnabled: alarmEnabledInProd,
+      actionsEnabled: shouldEnableAlarms,
       threshold: 1,
       evaluationPeriods: 2,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -378,7 +289,7 @@ export class Frontend extends GuStack {
       alarmDescription: alarmDescription(
         "Someone pressed buy on a recurring product but received an error"
       ),
-      actionsEnabled: alarmEnabledInProd,
+      actionsEnabled: shouldEnableAlarms,
       threshold: 1,
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
