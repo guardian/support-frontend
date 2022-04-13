@@ -5,7 +5,7 @@
 	list-style: none;
 	counter-increment: step-counter;
 	padding-left: $gu-h-spacing;
-	margin-bottom: $gu-v-spacing / 2;
+	margin-bottom: $gu-v-spacing * 0.5;
 	&:before {
 		position: absolute;
 		top: 0;

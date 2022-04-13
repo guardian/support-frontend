@@ -7,13 +7,16 @@ import {
 } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, {
 	Content,
 } from 'components/subscriptionCheckouts/layout';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import type {
+	RedemptionDispatch,
+	RedemptionPageState,
+} from 'helpers/redux/redemptionsStore';
 import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { signOut } from 'helpers/user/user';
 import {
@@ -21,10 +24,6 @@ import {
 	validateUserCode,
 } from 'pages/subscriptions-redemption/api';
 import ProductSummary from 'pages/subscriptions-redemption/components/productSummary/productSummary';
-import type {
-	Action,
-	RedemptionPageState,
-} from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 function mapStateToProps(state: RedemptionPageState) {
 	return {
@@ -49,39 +48,40 @@ function mapStateToProps(state: RedemptionPageState) {
 
 function mapDispatchToProps() {
 	return {
-		setUserCode: (userCode: string) => (dispatch: Dispatch<Action>) =>
+		setUserCode: (userCode: string) => (dispatch: RedemptionDispatch) =>
 			validateUserCode(userCode, dispatch),
 		submitForm:
-			() => (dispatch: Dispatch<Action>, getState: () => RedemptionPageState) =>
+			() =>
+			(dispatch: RedemptionDispatch, getState: () => RedemptionPageState) =>
 				submitCode(dispatch, getState()),
-		setFirstName: (firstName: string) => (dispatch: Dispatch<Action>) =>
+		setFirstName: (firstName: string) => (dispatch: RedemptionDispatch) =>
 			dispatch({
 				type: 'SET_FIRST_NAME',
 				firstName,
 			}),
-		setLastName: (lastName: string) => (dispatch: Dispatch<Action>) =>
+		setLastName: (lastName: string) => (dispatch: RedemptionDispatch) =>
 			dispatch({
 				type: 'SET_LAST_NAME',
 				lastName,
 			}),
-		setEmail: (email: string) => (dispatch: Dispatch<Action>) =>
+		setEmail: (email: string) => (dispatch: RedemptionDispatch) =>
 			dispatch({
 				type: 'SET_EMAIL',
 				email,
 			}),
-		setTelephone: (telephone: string) => (dispatch: Dispatch<Action>) =>
+		setTelephone: (telephone: string) => (dispatch: RedemptionDispatch) =>
 			dispatch({
 				type: 'SET_TELEPHONE',
 				telephone,
 			}),
-		setConfirmEmail: (email: string) => (dispatch: Dispatch<Action>) =>
+		setConfirmEmail: (email: string) => (dispatch: RedemptionDispatch) =>
 			dispatch({
 				type: 'SET_CONFIRM_EMAIL',
 				email,
 			}),
 		fetchAndStoreUserType:
 			(email: string) =>
-			(dispatch: Dispatch<Action>, getState: () => RedemptionPageState) => {
+			(dispatch: RedemptionDispatch, getState: () => RedemptionPageState) => {
 				fetchAndStoreUserType(email)(
 					dispatch,
 					getState,

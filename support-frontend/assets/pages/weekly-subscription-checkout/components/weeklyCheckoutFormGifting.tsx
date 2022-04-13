@@ -9,7 +9,6 @@ import {
 } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import 'redux';
 import Rows from 'components/base/rows';
 import Form, {
@@ -22,7 +21,6 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import GridImage from 'components/gridImage/gridImage';
 import Heading from 'components/heading/heading';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -39,13 +37,12 @@ import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { countries } from 'helpers/internationalisation/country';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
-import type { SetCountryAction } from 'helpers/page/commonActions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
@@ -71,7 +68,6 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import 'helpers/page/commonActions';
 import './weeklyCheckout.scss';
 
 // ----- Styles ----- //
@@ -113,28 +109,30 @@ function mapDispatchToProps() {
 		fetchAndStoreUserType:
 			(email: string) =>
 			(
-				dispatch: Dispatch<Action>,
+				dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) => {
 				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		formIsValid:
-			() => (_: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			() =>
+			(_: SubscriptionsDispatch, getState: () => WithDeliveryCheckoutState) =>
 				withDeliveryFormIsValid(getState()),
 
 		submitForm:
 			() =>
-			(dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			(
+				dispatch: SubscriptionsDispatch,
+				getState: () => WithDeliveryCheckoutState,
+			) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
-		setBillingCountry:
-			(country: string) =>
-			(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
-				setCountry(country)(dispatch),
+		setBillingCountry: (country: string) => (dispatch: SubscriptionsDispatch) =>
+			setCountry(country)(dispatch),
 		validateForm:
 			() =>
 			(
-				dispatch: Dispatch<Action>,
+				dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) => {
 				const state = getState();

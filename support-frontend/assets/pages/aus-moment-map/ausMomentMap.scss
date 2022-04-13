@@ -1,6 +1,8 @@
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~stylesheets/skeleton/skeleton';
 
+$highlight-color: #ffe500;
+
 body {
 	width: 100%;
 	max-width: 100vw;
@@ -171,17 +173,17 @@ body {
 
 		&:hover {
 			.territory-landmass {
-				color: #04ffff;
+				color: $highlight-color;
 			}
 
 			.territory-label-on-landmass {
-				color: gu-colour(neutral-7);
+				color: gu-colour(neutral-20);
 			}
 		}
 	}
 
 	.territory-landmass {
-		color: gu-colour(brand-main);
+		color: gu-colour(neutral-20);
 	}
 
 	.territory-label {
@@ -209,7 +211,7 @@ body {
 
 .territory-selected {
 	.territory-landmass {
-		color: #04ffff;
+		color: $highlight-color;
 	}
 
 	.territory-label-on-landmass {
@@ -490,7 +492,6 @@ span.selected-territory {
 		font-family: $gu-text-egyptian-web;
 		font-size: 24px;
 		font-weight: 800;
-		color: #052962;
 
 		@include mq($from: desktop) {
 			margin: 0;
@@ -634,8 +635,8 @@ span.selected-territory {
 		margin-left: -0.25rem !important;
 
 		span {
-			background-color: gu-colour(neutral-93);
-			color: gu-colour(brand-main);
+			background-color: $highlight-color;
+			color: gu-colour(neutral-20);
 			display: inline;
 			padding: 0.25rem;
 			box-decoration-break: clone;

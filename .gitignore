@@ -35,6 +35,7 @@ support-frontend/conf/ssr-cache/
 support-frontend/public/compiled-assets/
 support-frontend/tools/
 support-frontend/Brewfile.lock.json
+support-frontend/project
 tools/
 
 conf/assets.map

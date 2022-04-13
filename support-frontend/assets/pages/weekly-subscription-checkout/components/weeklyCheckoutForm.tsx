@@ -7,8 +7,8 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source-react-components';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import Rows from 'components/base/rows';
 import Form, {
 	FormSection,
@@ -21,7 +21,6 @@ import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
@@ -33,36 +32,22 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import Summary from 'components/subscriptionCheckouts/summary';
 import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
-import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
-import type { SetCountryAction } from 'helpers/page/commonActions';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
-import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
 	setCsrCustomerData,
 } from 'helpers/subscriptionsForms/formActions';
-import type {
-	FormField,
-	FormFields,
-} from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	validateWithDeliveryForm,
@@ -79,7 +64,6 @@ import {
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
@@ -92,30 +76,6 @@ import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/delive
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
-// ----- Types ----- //
-type PropTypes = FormFields &
-	FormActionCreators & {
-		billingCountry: IsoCountry;
-		deliveryCountry: IsoCountry;
-		signOut: typeof signOut;
-		formErrors: Array<FormError<FormField>>;
-		submissionError: ErrorReason | null;
-		productPrices: ProductPrices;
-		fetchAndStoreUserType: (...args: any[]) => any;
-		submitForm: (...args: any[]) => any;
-		setBillingCountry: (...args: any[]) => any;
-		billingAddressErrors: Array<Record<string, any>>;
-		deliveryAddressErrors: Array<Record<string, any>>;
-		isTestUser: boolean;
-		validateForm: () => (...args: any[]) => any;
-		csrf: Csrf;
-		currencyId: IsoCurrency;
-		payPalHasLoaded: boolean;
-		formIsValid: (...args: any[]) => any;
-		setupRecurringPayPalPayment: (...args: any[]) => any;
-		participations: Participations;
-		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
-	};
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: WithDeliveryCheckoutState) {
@@ -134,7 +94,8 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		billingAddressErrors: state.page.billingAddress.fields.formErrors,
 		isTestUser: state.page.checkout.isTestUser,
 		csrf: state.page.csrf,
-		currencyId: currencyFromCountryCode(deliveryAddress.fields.country),
+		currencyId:
+			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		participations: state.common.abParticipations,
 	};
@@ -147,7 +108,7 @@ function mapDispatchToProps() {
 		fetchAndStoreUserType:
 			(email: string) =>
 			(
-				dispatch: Dispatch<Action>,
+				dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) => {
 				fetchAndStoreUserType(email)(dispatch, getState);
@@ -155,23 +116,24 @@ function mapDispatchToProps() {
 		formIsValid:
 			() =>
 			(
-				_dispatch: Dispatch<Action>,
+				_dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() =>
-			(dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			(
+				dispatch: SubscriptionsDispatch,
+				getState: () => WithDeliveryCheckoutState,
+			) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
-		setBillingCountry:
-			(country: string) =>
-			(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
-				setCountry(country)(dispatch),
+		setBillingCountry: (country: string) => (dispatch: SubscriptionsDispatch) =>
+			setCountry(country)(dispatch),
 		validateForm:
 			() =>
 			(
-				dispatch: Dispatch<Action>,
+				dispatch: SubscriptionsDispatch,
 				getState: () => WithDeliveryCheckoutState,
 			) => {
 				const state = getState();
@@ -189,6 +151,10 @@ function mapDispatchToProps() {
 			setCsrCustomerData('delivery', customerData),
 	};
 }
+
+const connector = connect(mapStateToProps, mapDispatchToProps());
+
+type PropTypes = ConnectedProps<typeof connector>;
 
 // ----- Form Fields ----- //
 const DeliveryAddress = withStore(
@@ -225,7 +191,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingCountry,
 	);
 	return (
-		<Content modifierClasses={['your-details']}>
+		<Content>
 			<Layout
 				aside={
 					<Summary
@@ -259,7 +225,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							id="title"
 							label="Title"
 							optional
-							value={props.title}
+							value={props.title ?? ''}
 							onChange={(e) => props.setTitle(e.target.value)}
 						>
 							<OptionForSelect>Select a title</OptionForSelect>
@@ -296,7 +262,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								error={firstError('billingAddressIsSame', props.formErrors)}
 							>
 								<Radio
-									inputId="qa-billing-address-same"
+									id="qa-billing-address-same"
 									value="yes"
 									label="Yes"
 									name="billingAddressIsSame"
@@ -325,7 +291,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							<RadioGroup
 								id="startDate"
 								error={firstError('startDate', props.formErrors)}
-								legend="Please select the first publication you’d like to receive"
+								label="Please select the first publication you’d like to receive"
+								hideLabel={true}
 							>
 								{days
 									// Don't render input if Christmas day or Christmas eve
@@ -389,6 +356,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							country={props.deliveryCountry}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
+							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
 								...props.billingAddressErrors,
 								...props.deliveryAddressErrors,
@@ -431,6 +399,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
 							amount={price.price}
 							billingPeriod={props.billingPeriod}
+							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
 								...props.billingAddressErrors,
 								...props.deliveryAddressErrors,

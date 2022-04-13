@@ -17,7 +17,7 @@ type PropTypes = {
 	wrapPosition: AsideWrapPosition | null | undefined;
 };
 
-const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
+function CheckoutLayout({ children, aside, wrapPosition }: PropTypes) {
 	const wrapCss = wrapPosition === 'bottom' ? asideBottomCss : asideTopCss;
 	return (
 		<div css={[mainCss, wrapCss]}>
@@ -26,15 +26,17 @@ const CheckoutLayout = ({ children, aside, wrapPosition }: PropTypes) => {
 			{wrapPosition === 'bottom' && <div css={asideCss}>{aside}</div>}
 		</div>
 	);
-};
+}
 
 CheckoutLayout.defaultProps = {
 	wrapPosition: 'top',
 };
 
-const Content = ({ children }: { children: Node }) => (
-	<LeftMarginSection className={styles.wrapper}>{children}</LeftMarginSection>
-);
+function Content({ children }: { children: Node }) {
+	return (
+		<LeftMarginSection className={styles.wrapper}>{children}</LeftMarginSection>
+	);
+}
 
 export { Content };
 export default CheckoutLayout;

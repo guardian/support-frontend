@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
@@ -272,6 +273,14 @@ export type Action =
 	| {
 			type: 'SET_SEPA_ACCOUNT_HOLDER_NAME';
 			accountHolderName: string | null;
+	  }
+	| {
+			type: 'SET_SEPA_ADDRESS_STREET_NAME';
+			addressStreetName?: string;
+	  }
+	| {
+			type: 'SET_SEPA_ADDRESS_COUNTRY';
+			addressCountry?: Country;
 	  };
 
 const setFormIsValid = (isValid: boolean): Action => ({
@@ -631,6 +640,24 @@ const setSepaAccountHolderName =
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_SEPA_ACCOUNT_HOLDER_NAME',
 			accountHolderName,
+		}))(dispatch, getState);
+	};
+
+const setSepaAddressStreetName =
+	(addressStreetName?: string) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_SEPA_ADDRESS_STREET_NAME',
+			addressStreetName,
+		}))(dispatch, getState);
+	};
+
+const setSepaAddressCountry =
+	(addressCountry: Country | null) =>
+	(dispatch: Dispatch, getState: () => State): void => {
+		setFormSubmissionDependentValue(() => ({
+			type: 'SET_SEPA_ADDRESS_COUNTRY',
+			addressCountry,
 		}))(dispatch, getState);
 	};
 
@@ -1160,4 +1187,6 @@ export {
 	loadAmazonPaySdk,
 	setSepaIban,
 	setSepaAccountHolderName,
+	setSepaAddressStreetName,
+	setSepaAddressCountry,
 };

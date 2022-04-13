@@ -4,6 +4,7 @@ on: [pull_request]
 
 jobs:
     typescript_monitor:
+        if: github.event.pull_request.head.repo.owner.login == 'guardian'
         name: Typescript Monitor
         defaults:
           run:

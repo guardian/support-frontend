@@ -7,8 +7,7 @@ import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
-import type { CommonState } from 'helpers/page/commonReducer';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type {
 	DigitalBillingPeriod,
 	DigitalGiftBillingPeriod,
@@ -19,6 +18,8 @@ import {
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import type { CommonState } from 'helpers/redux/commonState/state';
+import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -69,7 +70,7 @@ const reducer = (commonState: CommonState) =>
 		null,
 	);
 
-const store = initRedux(reducer);
+const store = initReduxForSubscriptions(reducer);
 const { countryGroupId, countryId, currencyId } =
 	store.getState().common.internationalisation;
 const { orderIsAGift, productPrices, billingPeriod } =

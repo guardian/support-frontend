@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
@@ -21,7 +22,7 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
-import type { CommonState } from 'helpers/page/commonReducer';
+import type { CommonState } from 'helpers/redux/commonState/state';
 import * as storage from 'helpers/storage/storage';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
@@ -62,6 +63,7 @@ export interface StripeCardFormData {
 	formComplete: boolean;
 	setupIntentClientSecret: string | null;
 	recurringRecaptchaVerified: boolean;
+	// TODO: No non-serialisable values should be in Redux state!! This needs to be refactored
 	// These callbacks must be initialised after the StripeCardForm component has been created
 	createPaymentMethod: ((clientSecret: string | null) => void) | null;
 	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only
@@ -76,6 +78,8 @@ export interface PayPalData {
 export interface SepaData {
 	iban: string | null;
 	accountHolderName: string | null;
+	streetName?: string;
+	country?: Country;
 }
 
 interface FormState {
@@ -193,6 +197,8 @@ function createFormReducer() {
 		sepaData: {
 			iban: null,
 			accountHolderName: null,
+			country: undefined,
+			streetName: undefined,
 		},
 		selectedAmounts: {
 			ONE_OFF: 0,
@@ -391,6 +397,24 @@ function createFormReducer() {
 					sepaData: {
 						...state.sepaData,
 						accountHolderName: action.accountHolderName,
+					},
+				};
+
+			case 'SET_SEPA_ADDRESS_STREET_NAME':
+				return {
+					...state,
+					sepaData: {
+						...state.sepaData,
+						streetName: action.addressStreetName,
+					},
+				};
+
+			case 'SET_SEPA_ADDRESS_COUNTRY':
+				return {
+					...state,
+					sepaData: {
+						...state.sepaData,
+						country: action.addressCountry,
 					},
 				};
 

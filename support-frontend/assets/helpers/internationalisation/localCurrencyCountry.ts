@@ -6,11 +6,11 @@ export type LocalCurrencyCountry = {
 	countryCode: IsoCountry;
 	countryName: string;
 	currency: IsoCurrency;
-	amounts: ContributionAmounts;
-	config: Config;
+	amounts: Omit<ContributionAmounts, 'MONTHLY' | 'ANNUAL'>;
+	config: Omit<Config, 'MONTHLY' | 'ANNUAL'>;
 };
 export const localCurrencyCountries: {
-	[key in IsoCountry | null | undefined]?: LocalCurrencyCountry;
+	[key in IsoCountry]?: LocalCurrencyCountry;
 } = {
 	SE: {
 		countryCode: 'SE',

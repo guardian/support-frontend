@@ -89,11 +89,7 @@ const gridSlots: GridSlots = {
 	},
 };
 
-const ThankYouHero = ({
-	countryGroupId,
-}: {
-	countryGroupId: CountryGroupId;
-}) => {
+function ThankYouHero({ countryGroupId }: { countryGroupId: CountryGroupId }) {
 	const gridImages: GridImages = heroesByCountry[countryGroupId];
 	const sources: GridSource[] = [
 		{ ...gridSlots.mobile, ...gridImages.breakpoints.mobile },
@@ -113,6 +109,6 @@ const ThankYouHero = ({
 			</LeftMarginSection>
 		</div>
 	);
-}; // ----- Export ----- //
+} // ----- Export ----- //
 
 export default ThankYouHero;
