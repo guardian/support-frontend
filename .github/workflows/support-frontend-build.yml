@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - main
-      - rb-dummy-main
 env:
   GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
 
