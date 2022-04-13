@@ -6,6 +6,7 @@ on:
 
 jobs:
     build_check:
+      if: github.event.pull_request.head.repo.owner.login == 'guardian'
       name: Bundle Analyser
       defaults:
         run:

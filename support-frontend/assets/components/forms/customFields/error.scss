@@ -16,7 +16,7 @@
 }
 
 .component-form-error__summary-error {
-	margin-top: $gu-v-spacing / 2;
+	margin-top: $gu-v-spacing * 0.5;
 	a,
 	a:visited {
 		color: inherit;
@@ -50,7 +50,7 @@
 
 .component-form-error__border {
 	border: 4px gu-colour(state-error) solid;
-	padding: $gu-v-spacing / 2 $gu-v-spacing $gu-h-spacing;
+	padding: $gu-v-spacing * 0.5 $gu-v-spacing $gu-h-spacing;
 	// margin-top: $gu-v-spacing;
 	background-color: rgba(199, 0, 0, 0.03);
 }

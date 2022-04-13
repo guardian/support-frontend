@@ -1,13 +1,11 @@
 // ----- Imports ----- //
-import type { Reducer } from 'redux';
-import { combineReducers } from 'redux';
+import { combineReducers } from '@reduxjs/toolkit';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { CommonState } from 'helpers/page/commonReducer';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -40,11 +38,6 @@ export type RedemptionFormState = {
 	checkout: RedemptionCheckoutState;
 };
 
-export type RedemptionPageState = {
-	common: CommonState;
-	page: RedemptionFormState;
-};
-
 // ------- Actions ---------- //
 export type Action =
 	| {
@@ -62,10 +55,6 @@ export type Action =
 	| {
 			type: 'SET_ERROR';
 			error: Option<string>;
-	  }
-	| {
-			type: 'SET_STAGE';
-			stage: Stage;
 	  }
 	| {
 			type: 'SET_FIRST_NAME';
@@ -212,15 +201,12 @@ const error = (
 
 const marketingConsent = marketingConsentReducerFor('MARKETING_CONSENT');
 
-// ----- Export ----- //
-
-export default (): Reducer<RedemptionFormState, Action> =>
-	combineReducers({
-		userCode,
-		readerType,
-		error,
-		csrf,
-		user: createUserReducer(),
-		marketingConsent,
-		checkout: createRedemptionCheckoutReducer(),
-	});
+export const redemptionPageReducer = combineReducers({
+	userCode,
+	readerType,
+	error,
+	csrf,
+	user: createUserReducer(),
+	marketingConsent,
+	checkout: createRedemptionCheckoutReducer(),
+});

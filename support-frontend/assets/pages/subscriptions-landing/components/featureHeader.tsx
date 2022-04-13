@@ -1,11 +1,13 @@
-const FeatureHeader = () => (
-	<div className="subscriptions__feature">
-		<div className="subscriptions__feature-container">
-			<h2 className="subscriptions__feature-text">
-				Support the Guardian with a print or digital subscription
-			</h2>
+function FeatureHeader() {
+	return (
+		<div className="subscriptions__feature">
+			<div className="subscriptions__feature-container">
+				<h2 className="subscriptions__feature-text">
+					Support the Guardian with a print or digital subscription
+				</h2>
+			</div>
 		</div>
-	</div>
-);
+	);
+}
 
 export default FeatureHeader;

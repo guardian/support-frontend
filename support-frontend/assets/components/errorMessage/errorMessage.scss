@@ -43,7 +43,7 @@
 	align-content: center;
 	align-items: center;
 	height: auto;
-	padding: $gu-v-spacing/2 $gu-h-spacing;
+	padding: $gu-v-spacing*0.5 $gu-h-spacing;
 
 	@include mq($from: mobileLandscape) {
 		height: auto;

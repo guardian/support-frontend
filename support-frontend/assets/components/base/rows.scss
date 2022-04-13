@@ -8,7 +8,7 @@
 
 .component-base-rows--small {
 	> * + * {
-		margin-top: $gu-v-spacing / 2;
+		margin-top: $gu-v-spacing * 0.5;
 	}
 }
 

@@ -1,6 +1,7 @@
 package com.gu.support.workers
 
 import cats.syntax.functor._
+import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax._
@@ -55,6 +56,8 @@ case class DirectDebitPaymentFields(
 case class SepaPaymentFields(
     accountHolderName: String,
     iban: String,
+    country: Option[String],
+    streetName: Option[String],
 ) extends PaymentFields
 
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
@@ -76,7 +79,7 @@ object PaymentFields {
     case s: StripeSourcePaymentFields => s.asJson
     case s: StripePaymentMethodPaymentFields => s.asJson
     case d: DirectDebitPaymentFields => d.asJson
-    case s: SepaPaymentFields => s.asJson
+    case s: SepaPaymentFields => s.asJson.deepDropNullValues
     case e: ExistingPaymentFields => e.asJson
     case a: AmazonPayPaymentFields => a.asJson
   }

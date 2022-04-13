@@ -1,24 +1,21 @@
-import { renderPage } from 'helpers/rendering/render';
-import './promotionTerms.scss';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import Footer from 'components/footerCompliant/Footer';
+import Header from 'components/headers/header/header';
+import Page from 'components/page/page';
+import { detect } from 'helpers/internationalisation/countryGroup';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import {
 	DigitalPack,
 	GuardianWeekly,
 } from 'helpers/productPrice/subscriptions';
+import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
-import type { State } from './promotionTermsReducer';
-import reducer from './promotionTermsReducer';
-import Page from 'components/page/page';
-import Footer from 'components/footerCompliant/Footer';
-import Header from 'components/headers/header/header';
-import { Provider } from 'react-redux';
-import { detect } from 'helpers/internationalisation/countryGroup';
+import type { PromotionTermsPropTypes } from './promotionTermsReducer';
+import getPromotionTermsProps from './promotionTermsReducer';
+import './promotionTerms.scss';
 
 setUpTrackingAndConsents();
-// ----- Redux Store ----- //
-const store = initRedux(() => reducer);
 
 function getTermsConditionsLink({ product }: PromotionTerms) {
 	if (product === DigitalPack) {
@@ -31,22 +28,20 @@ function getTermsConditionsLink({ product }: PromotionTerms) {
 }
 
 // ----- Render ----- //
-const PromotionTermsPage = (props: State) => (
-	<Provider store={store}>
+function PromotionTermsPage(props: PromotionTermsPropTypes) {
+	return (
 		<Page
 			header={<Header countryGroupId={detect()} />}
 			footer={
 				<Footer
-					termsConditionsLink={getTermsConditionsLink(
-						props.page.promotionTerms,
-					)}
+					termsConditionsLink={getTermsConditionsLink(props.promotionTerms)}
 				/>
 			}
 		>
-			<PromoDetails {...props.page.promotionTerms} />
-			<LegalTerms {...props.page} />
+			<PromoDetails {...props.promotionTerms} />
+			<LegalTerms {...props} />
 		</Page>
-	</Provider>
-);
+	);
+}
 
-renderPage(PromotionTermsPage(store.getState()), 'promotion-terms');
+renderPage(PromotionTermsPage(getPromotionTermsProps()), 'promotion-terms');

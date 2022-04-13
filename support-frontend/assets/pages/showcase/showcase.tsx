@@ -43,22 +43,24 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 });
 
 // ----- Render ----- //
-const ShowcasePage = () => (
-	<Page header={<CountrySwitcherHeader />} footer={<Footer />}>
-		<Hero countryGroupId={countryGroupId} />
-		<WhySupportMatters />
-		<BreakingHeadlines />
-		<NoOneEdits />
-		<Content id="support">
-			<Heading size={2} className="anchor">
-				Ways you can support the Guardian
-			</Heading>
-		</Content>
-		<CtaSubscribe />
-		<CtaContribute />
-		{countryGroupId === 'GBPCountries' && <OtherProducts />}
-	</Page>
-);
+function ShowcasePage() {
+	return (
+		<Page header={<CountrySwitcherHeader />} footer={<Footer />}>
+			<Hero countryGroupId={countryGroupId} />
+			<WhySupportMatters />
+			<BreakingHeadlines />
+			<NoOneEdits />
+			<Content id="support">
+				<Heading size={2} className="anchor">
+					Ways you can support the Guardian
+				</Heading>
+			</Content>
+			<CtaSubscribe />
+			<CtaContribute />
+			{countryGroupId === 'GBPCountries' && <OtherProducts />}
+		</Page>
+	);
+}
 
 setUpTrackingAndConsents();
 const content = <ShowcasePage />;

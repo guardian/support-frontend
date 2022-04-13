@@ -5,10 +5,11 @@ import Footer from 'components/footerCompliant/Footer';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
-import type { CommonState } from 'helpers/page/commonReducer';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { Paper } from 'helpers/productPrice/subscriptions';
+import type { CommonState } from 'helpers/redux/commonState/state';
+import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import CheckoutForm from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
@@ -37,7 +38,7 @@ const reducer = (commonState: CommonState) =>
 		fulfilmentOption,
 	);
 
-const store = initRedux(reducer);
+const store = initReduxForSubscriptions(reducer);
 const { countryGroupId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();
 // ----- Render ----- //

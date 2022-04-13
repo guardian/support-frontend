@@ -1,11 +1,11 @@
 import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { RedemptionPageState } from 'helpers/redux/redemptionsStore';
 import { setUserTypeFromIdentityResponse } from 'helpers/subscriptionsForms/formActions';
 import type {
 	CheckoutState,
 	WithDeliveryCheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 
 export const fetchAndStoreUserType =
 	(email: string) =>

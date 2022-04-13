@@ -6,11 +6,9 @@ import { PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import * as storage from 'helpers/storage/storage';
-import 'pages/contributions-landing/contributionsLandingActions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { billingPeriodFromContrib, getAmount } from '../../contributions';
 
@@ -256,7 +254,7 @@ const getPayPalOptions = (
 	amount: number,
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
-	updatePayPalButtonReady: (arg0: boolean) => Action,
+	updatePayPalButtonReady: (ready: boolean) => void,
 ): Record<string, unknown> => {
 	function toggleButton(actions: {
 		enable: () => void;

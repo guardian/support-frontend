@@ -1,0 +1,88 @@
+name: Build support-frontend
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+env:
+  GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
+
+jobs:
+  support_frontend_build:
+    if: >-
+      github.event.pull_request.head.repo.owner.login == 'guardian' ||
+      github.event_name == 'push'
+
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
+    name: support-frontend build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env
+        run: env
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      # (Respects .nvmrc)
+      - name: Setup Node
+        uses: guardian/actions-setup-node@v2.4.1
+        with:
+          cache: 'yarn'
+          cache-dependency-path: support-frontend/yarn.lock
+
+      - name: Install
+        run: yarn
+        working-directory: support-frontend
+
+      - name: Build the html used for SSR pages
+        run: yarn run build-ssr
+        working-directory: support-frontend
+
+      - name: Build assets
+        run: yarn run build-prod
+        working-directory: support-frontend
+
+      # The CDK build requires node 16 and currently the rest of the build is on v12
+      - name: Setup Node for CDK
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: cdk/yarn.lock
+
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
+      # Required by sbt riffRaffUpload
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Setup Java 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+            ~/.coursier
+          key: sbt
+
+      - name: Build and upload to RiffRaff
+        run: |
+          export LAST_TEAMCITY_BUILD=10000
+          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
+          sbt "project support-frontend" riffRaffUpload
