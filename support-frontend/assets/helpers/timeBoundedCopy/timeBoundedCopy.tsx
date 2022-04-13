@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
+import type { DateYMDString } from 'helpers/types/DateString';
 import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
 
 type LandingPage = 'digitalSubscription' | 'newspaper' | 'guardianWeekly';
 
 type TimeBoundCopy = {
-	startShowingOn: string;
-	stopShowingOn?: string;
+	startShowingOn: DateYMDString;
+	stopShowingOn?: DateYMDString;
 	copy: ReactNode;
 };
 
@@ -15,8 +15,8 @@ export type TimedCopyCollection = Partial<Record<LandingPage, TimeBoundCopy[]>>;
 const timedCopy: TimedCopyCollection = {
 	digitalSubscription: [
 		{
-			startShowingOn: '2021-12-23',
-			stopShowingOn: '2021-12-31',
+			startShowingOn: '2022-04-14',
+			stopShowingOn: '2022-06-09',
 			copy: (
 				<>
 					<p>
@@ -25,9 +25,8 @@ const timedCopy: TimedCopyCollection = {
 						journalism. It also sustains the independent reporting you love.
 					</p>
 					<p>
-						Plus, revisit the year's most fascinating stories with our special
-						edition '2021 Highs, hits, hopes', available exclusively to
-						subscribers for a limited time.
+						Plus, for a limited time, get inspiration for new ideas to improve
+						your life in our exclusive special edition, Self and Wellbeing.
 					</p>
 				</>
 			),
