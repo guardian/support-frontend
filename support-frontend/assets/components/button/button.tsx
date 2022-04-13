@@ -9,9 +9,9 @@ type PropTypes = SharedButtonPropTypes & {
 	disabled: boolean | null | undefined;
 };
 
-const Button = (props: PropTypes) => (
-	<SharedButton element="button" {...props} />
-);
+function Button(props: PropTypes) {
+	return <SharedButton element="button" {...props} />;
+}
 
 Button.defaultProps = {
 	...defaultProps,

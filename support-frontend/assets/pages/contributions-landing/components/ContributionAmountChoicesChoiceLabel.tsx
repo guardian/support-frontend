@@ -8,11 +8,11 @@ type ContributionAmountLabelProps = {
 	contributionType: ContributionType;
 };
 
-const ContributionAmountChoicesChoiceLabel = ({
+function ContributionAmountChoicesChoiceLabel({
 	formattedAmount,
 	shouldShowFrequencyButtons,
 	contributionType,
-}: ContributionAmountLabelProps) => {
+}: ContributionAmountLabelProps) {
 	let frequencyLabel = '';
 
 	if (shouldShowFrequencyButtons) {
@@ -35,6 +35,6 @@ const ContributionAmountChoicesChoiceLabel = ({
 			{frequencyLabel}
 		</div>
 	);
-};
+}
 
 export default ContributionAmountChoicesChoiceLabel;

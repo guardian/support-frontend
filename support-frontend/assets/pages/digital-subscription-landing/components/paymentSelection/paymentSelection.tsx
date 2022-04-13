@@ -17,42 +17,42 @@ function isAnnualOption(option: Product) {
 	return option.title === 'Annual' || option.title === '12 months';
 }
 
-const PaymentSelection = (
-	{ paymentOptions }: PropTypes, // The following makes sure the Annual payment selection card is on the right hand side
-) => (
-	<div css={paymentSelection}>
-		{/* Spread operator because .sort is mutating */}
-		{[...paymentOptions]
-			.sort((opt1, opt2) => {
-				if (isAnnualOption(opt1)) {
-					return 1;
-				}
-
-				if (isAnnualOption(opt2)) {
-					return -1;
-				}
-
-				return 0;
-			})
-			.map((product: Product) => (
-				<ProductOption
-					cssOverrides={
-						product.label ? productOverrideWithLabel : productOverride
+function PaymentSelection({ paymentOptions }: PropTypes) {
+	return (
+		<div css={paymentSelection}>
+			{/* Spread operator because .sort is mutating */}
+			{[...paymentOptions]
+				.sort((opt1, opt2) => {
+					if (isAnnualOption(opt1)) {
+						return 1;
 					}
-					title={product.title}
-					price={product.price}
-					offerCopy={product.offerCopy}
-					priceCopy={product.priceCopy}
-					buttonCopy={product.buttonCopy}
-					href={product.href}
-					onClick={product.onClick}
-					onView={product.onView}
-					label={product.label}
-					billingPeriod={product.billingPeriod}
-				/>
-			))}
-	</div>
-);
+
+					if (isAnnualOption(opt2)) {
+						return -1;
+					}
+
+					return 0;
+				})
+				.map((product: Product) => (
+					<ProductOption
+						cssOverrides={
+							product.label ? productOverrideWithLabel : productOverride
+						}
+						title={product.title}
+						price={product.price}
+						offerCopy={product.offerCopy}
+						priceCopy={product.priceCopy}
+						buttonCopy={product.buttonCopy}
+						href={product.href}
+						onClick={product.onClick}
+						onView={product.onView}
+						label={product.label}
+						billingPeriod={product.billingPeriod}
+					/>
+				))}
+		</div>
+	);
+}
 
 function DigitalPaymentSelection({
 	countryGroupId,

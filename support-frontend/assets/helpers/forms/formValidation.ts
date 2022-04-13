@@ -60,9 +60,15 @@ export const isSmallerOrEqual: (arg0: number, arg1: string) => boolean = (
 export const maxTwoDecimals: (arg0: string) => boolean = (input) =>
 	new RegExp('^\\d+\\.?\\d{0,2}$').test(input);
 
-export const checkFirstName: (arg0: string | null) => boolean = isNotEmpty;
+export const containsEmoji: (input: string | null) => boolean = (input) =>
+	/\p{Emoji_Presentation}/u.test(input ?? '');
 
-export const checkLastName: (arg0: string | null) => boolean = isNotEmpty;
+export const checkFirstName: (firstName: string | null) => boolean = (
+	firstName,
+) => isNotEmpty(firstName) && !containsEmoji(firstName);
+
+export const checkLastName: (lastName: string | null) => boolean = (lastName) =>
+	isNotEmpty(lastName) && !containsEmoji(lastName);
 
 export const checkBillingState: (arg0: string | null) => boolean = (s) =>
 	typeof s === 'string' && isNotEmpty(s);
@@ -99,11 +105,11 @@ export const amountIsValid = (
 	useLocalCurrency?: boolean | null,
 ): boolean => {
 	const min =
-		useLocalCurrency && localCurrencyCountry
+		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType].min
 			: config[countryGroupId][contributionType].min;
 	const max =
-		useLocalCurrency && localCurrencyCountry
+		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType].max
 			: config[countryGroupId][contributionType].max;
 	return (

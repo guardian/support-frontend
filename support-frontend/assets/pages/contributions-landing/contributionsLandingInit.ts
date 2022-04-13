@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import type { Store } from 'redux';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
@@ -28,17 +27,20 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	setContributionTypes,
 	setExistingPaymentMethods,
-} from 'helpers/page/commonActions';
+} from 'helpers/redux/commonState/actions';
+import type {
+	ContributionsDispatch,
+	ContributionsState,
+	ContributionsStore,
+} from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
-import type { Action } from './contributionsLandingActions';
 import {
 	getUserType,
 	loadAmazonPaySdk,
 	loadPayPalExpressSdk,
-	selectAmount,
 	selectAmounts,
 	setUserTypeFromIdentityResponse,
 	updateContributionTypeAndPaymentMethod,
@@ -101,7 +103,7 @@ function getInitialContributionType(
 
 function initialisePaymentMethods(
 	state: State,
-	dispatch: (...args: any[]) => any,
+	dispatch: ContributionsDispatch,
 ) {
 	const { currencyId } = state.common.internationalisation;
 	// initiate fetch of existing payment methods
@@ -130,14 +132,12 @@ function initialisePaymentMethods(
 								existingDirectDebitON),
 					);
 				dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
-				const firstExistingPaymentMethod =
-					switchedOnExistingPaymentMethods[0] as any;
+				const firstExistingPaymentMethod = switchedOnExistingPaymentMethods[0];
 				const allowDefaultSelectedPaymentMethod =
 					state.common.abParticipations.defaultPaymentMethodTest === 'control';
 
 				if (
 					allowDefaultSelectedPaymentMethod &&
-					firstExistingPaymentMethod &&
 					isUsableExistingPaymentMethod(firstExistingPaymentMethod)
 				) {
 					dispatch(
@@ -159,8 +159,8 @@ function initialisePaymentMethods(
 }
 
 function selectInitialAmounts(
-	state: State,
-	dispatch: (...args: any[]) => any,
+	state: ContributionsState,
+	dispatch: ContributionsDispatch,
 	selectedContributionType: ContributionType,
 ) {
 	const { amounts } = state.common;
@@ -223,8 +223,8 @@ function getContributionTypes(state: State): ContributionTypes {
 }
 
 function selectInitialContributionTypeAndPaymentMethod(
-	state: State,
-	dispatch: (...args: any[]) => any,
+	state: ContributionsState,
+	dispatch: ContributionsDispatch,
 	contributionTypes: ContributionTypes,
 ): ContributionType {
 	const { countryId } = state.common.internationalisation;
@@ -261,8 +261,8 @@ function selectInitialContributionTypeAndPaymentMethod(
 	return contributionType;
 }
 
-const init = (store: Store<State, Action, (...args: any[]) => any>) => {
-	const { dispatch } = store;
+const init = (store: ContributionsStore): void => {
+	const dispatch = store.dispatch;
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
 	const contributionTypes = getContributionTypes(state);
@@ -295,7 +295,7 @@ const init = (store: Store<State, Action, (...args: any[]) => any>) => {
 			billingState: stateField,
 		}),
 	);
-	loadRecaptchaV2();
+	void loadRecaptchaV2();
 };
 
 // ----- Exports ----- //

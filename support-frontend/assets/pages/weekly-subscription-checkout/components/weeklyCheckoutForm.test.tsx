@@ -1,13 +1,14 @@
 import '__mocks__/stripeMock';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import type { Store } from 'redux';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
-import { createCommonReducer } from 'helpers/page/commonReducer';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { setInitialCommonState } from 'helpers/redux/commonState/actions';
+import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
@@ -24,15 +25,16 @@ const pageReducer = (initialState: WithDeliveryCheckoutState) =>
 	);
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
-	return createStore(
-		combineReducers({
+	const store = configureStore({
+		reducer: combineReducers({
 			page: pageReducer(initialState),
-			common: createCommonReducer(initialState.common),
+			common: commonReducer,
 		}),
-		// @ts-expect-error The type mismatch here really doesn't matter in the context of tests
-		initialState,
-		compose(applyMiddleware(thunk)),
-	);
+		// @ts-expect-error - some state properties ignored for testing
+		preloadedState: initialState,
+	});
+	store.dispatch(setInitialCommonState(initialState.common));
+	return store;
 }
 
 function renderWithStore(
@@ -93,14 +95,9 @@ describe('Guardian Weekly checkout form', () => {
 			},
 		};
 
-		window.fetch = () =>
-			// @ts-expect-error Simple fetch mock
-			Promise.resolve({
-				json: () =>
-					Promise.resolve({
-						client_secret: 'super secret',
-					}),
-			});
+		mockFetch({
+			client_secret: 'super secret',
+		});
 
 		renderWithStore(<WeeklyCheckoutForm />, {
 			//  @ts-expect-error Unused common state properties

@@ -8,9 +8,9 @@
 	font-weight: bold;
 	height: $gu-cta-height;
 	min-height: $gu-cta-height;
-	padding: 0 ($gu-cta-height / 2);
+	padding: 0 ($gu-cta-height * 0.5);
 	border: none;
-	border-radius: $gu-cta-height / 2;
+	border-radius: $gu-cta-height * 0.5;
 	box-sizing: border-box;
 	background: transparent;
 	cursor: pointer;
@@ -125,7 +125,7 @@
 .component-button svg {
 	fill: currentColor;
 	position: relative;
-	width: $gu-cta-height / 2;
+	width: $gu-cta-height * 0.5;
 	height: auto;
 }
 
@@ -133,13 +133,13 @@
 	flex-direction: row-reverse;
 
 	svg {
-		margin: 0 ($gu-cta-height / 4) 0 (-$gu-cta-height / 8);
+		margin: 0 ($gu-cta-height * 0.25) 0 (-$gu-cta-height * 0.125);
 	}
 }
 
 .component-button--hasicon-right {
 	svg {
-		margin: 0 (-$gu-cta-height / 8) 0 ($gu-cta-height / 4);
+		margin: 0 (-$gu-cta-height * 0.125) 0 ($gu-cta-height * 0.25);
 	}
 }
 

@@ -13,6 +13,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
+import DefaultPromotions.GuardianWeekly.NonGift._
 
 import scala.concurrent.ExecutionContext
 
@@ -42,11 +43,16 @@ class WeeklySubscriptionController(
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
+    // We're currently running different default promos in different regions
+    val defaultPromotion =
+      if (List("au", "nz").contains(countryCode.toLowerCase)) ausPromotion
+      else francePromotion
+
     val queryPromos =
       request.queryString
         .get("promoCode")
         .map(_.toList)
-        .getOrElse(List(DefaultPromotions.GuardianWeekly.NonGift.jan21Promotion))
+        .getOrElse(List(defaultPromotion))
     val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, GuardianWeekly, countryCode)
 
     Ok(

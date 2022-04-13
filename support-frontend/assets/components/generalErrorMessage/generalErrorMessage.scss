@@ -1,7 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-general-error-message {
-	padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
+	padding: ($gu-v-spacing * 0.5) $gu-h-spacing $gu-v-spacing;
 	color: gu-colour(news-main);
 	background-color: gu-colour(news-faded);
 	margin-bottom: 20px;

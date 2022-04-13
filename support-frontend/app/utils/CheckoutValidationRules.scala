@@ -84,7 +84,7 @@ object PaidProductValidation {
       existingDetails.billingAccountId.nonEmpty.otherwise("existing billing account id missing")
     case AmazonPayPaymentFields(amazonPayBillingAgreementId) =>
       amazonPayBillingAgreementId.nonEmpty.otherwise("amazonPayBillingAgreementId missing")
-    case SepaPaymentFields(accountHolderName, iban) =>
+    case SepaPaymentFields(accountHolderName, iban, country, streetName) =>
       accountHolderName.nonEmpty.otherwise("sepa account holder name missing") and
         iban.nonEmpty.otherwise("sepa iban empty")
   }

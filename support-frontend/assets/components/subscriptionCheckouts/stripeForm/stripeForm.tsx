@@ -15,6 +15,7 @@ import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
+import type { StripePaymentIntentResult } from 'helpers/forms/stripe';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
@@ -178,7 +179,7 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 				props.csrf,
 			),
 		)
-			.then((result) => {
+			.then((result: StripePaymentIntentResult) => {
 				if (result.client_secret) {
 					setSetupIntentClientSecret(result.client_secret);
 				} else {

@@ -1,4 +1,3 @@
-import type { Dispatch } from 'redux';
 import { combineReducers } from 'redux';
 import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
@@ -11,9 +10,9 @@ import {
 import type { RegularPaymentRequestAddress } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromString } from 'helpers/internationalisation/country';
-import type { SetCountryAction } from 'helpers/page/commonActions';
-import { setCountry } from 'helpers/page/commonActions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { Scoped } from 'helpers/subscriptionsForms/scoped';
@@ -234,20 +233,18 @@ const setFormErrorsFor =
 	});
 
 const addressActionCreatorsFor = (scope: AddressType) => ({
-	setCountry:
-		(countryRaw: string) =>
-		(dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => {
-			const country = fromString(countryRaw);
+	setCountry: (countryRaw: string) => (dispatch: SubscriptionsDispatch) => {
+		const country = fromString(countryRaw);
 
-			if (country) {
-				dispatch(setCountry(country));
-				dispatch({
-					type: 'SET_COUNTRY_CHANGED',
-					country,
-					scope,
-				});
-			}
-		},
+		if (country) {
+			dispatch(setCountryInternationalisation(country));
+			dispatch({
+				type: 'SET_COUNTRY_CHANGED',
+				country,
+				scope,
+			});
+		}
+	},
 	setAddressLineOne: (lineOne: string): ((...args: any[]) => any) =>
 		setFormSubmissionDependentValue(() => ({
 			scope,

@@ -12,21 +12,23 @@ type PropTypes = {
 	style: Option<{}>;
 };
 
-const VeggieBurgerButton = ({
+function VeggieBurgerButton({
 	children,
 	label,
 	getRef,
 	...otherProps
-}: PropTypes) => (
-	<button
-		className="component-veggie-burger-button"
-		ref={getRef}
-		{...otherProps}
-	>
-		<span className="visually-hidden">{label}</span>
-		{children}
-	</button>
-);
+}: PropTypes) {
+	return (
+		<button
+			className="component-veggie-burger-button"
+			ref={getRef}
+			{...otherProps}
+		>
+			<span className="visually-hidden">{label}</span>
+			{children}
+		</button>
+	);
+}
 
 VeggieBurgerButton.defaultProps = {
 	'aria-haspopup': null,

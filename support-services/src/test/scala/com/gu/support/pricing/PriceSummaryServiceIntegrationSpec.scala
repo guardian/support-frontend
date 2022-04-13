@@ -19,7 +19,7 @@ class PriceSummaryServiceIntegrationSpec extends AsyncFlatSpec with Matchers wit
   "PriceSummaryService" should "return prices" in {
     val result = service.getPrices(GuardianWeekly, List("WJW7OAJ3A"))
     result.size shouldBe 7
-    result(UK)(Domestic)(NoProductOptions).size shouldBe 3
+    result(UK)(Domestic)(NoProductOptions).size shouldBe 4
   }
 
   it should "return gift prices" in {
