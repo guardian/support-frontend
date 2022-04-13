@@ -15,6 +15,7 @@ import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse.IdentityError
 import models.identity.responses.IdentityErrorResponse.IdentityError.InvalidEmailAddress
 import org.joda.time.DateTime
+import play.api.http.Writeable
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
@@ -108,13 +109,23 @@ class CreateSubscriptionController(
   private def toHttpResponse(
       result: EitherT[Future, CreateSubscriptionError, StatusResponse],
       product: ProductType,
-  )(implicit request: Request[CreateSupportWorkersRequest]): Future[Result] = {
+  )(implicit request: Request[CreateSupportWorkersRequest], writeable: Writeable[String]): Future[Result] = {
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
         error match {
-          case err: RequestValidationError => BadRequest(err.message)
-          case _: ServerError => InternalServerError
+          case err: RequestValidationError =>
+            // Store the error message in the result.header.reasonPhrase this will allow us to
+            // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
+            Result(
+              header = new ResponseHeader(
+                status = BAD_REQUEST,
+                reasonPhrase = Some(err.message),
+              ),
+              body = writeable.toEntity(err.message),
+            )
+          case _: ServerError =>
+            InternalServerError
         }
       },
       { statusResponse =>

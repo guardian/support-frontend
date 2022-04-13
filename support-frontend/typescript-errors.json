@@ -3,18 +3,18 @@
         "byCode": {
             "TS1208": 1,
             "TS2345": 33,
-            "TS7006": 26,
-            "TS2322": 44,
+            "TS7006": 28,
+            "TS2322": 53,
             "TS2339": 13,
             "TS6133": 7,
             "TS2578": 4,
             "TS2305": 8,
             "TS2314": 3,
             "TS7031": 7,
-            "TS2769": 7,
             "TS2304": 5,
             "TS2741": 3,
             "TS2564": 1,
+            "TS2769": 5,
             "TS2739": 3,
             "TS2556": 3,
             "TS2569": 2,
@@ -40,7 +40,7 @@
             "assets/components/marketingConsent/helpers.ts": 1,
             "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
-            "assets/components/subscriptionCheckouts/address/addressFields.tsx": 14,
+            "assets/components/subscriptionCheckouts/address/addressFields.tsx": 15,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
             "assets/helpers/__tests__/promiseTest.ts": 3,
@@ -64,6 +64,7 @@
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
+            "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/components/headers/links/links.tsx": 1,
@@ -71,7 +72,9 @@
             "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
+            "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
+            "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/utilities/utilities.ts": 1,
@@ -79,7 +82,7 @@
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 1,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
+            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 2,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
@@ -100,10 +103,10 @@
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
-            "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
-            "assets/helpers/polyfills/layout.ts": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
+            "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
+            "assets/helpers/polyfills/layout.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
@@ -154,7 +157,7 @@
         },
         {
             "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Argument of type 'typeof MarketingConsent' is not assignable to parameter of type 'ComponentType<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { error: boolean; }>>'."
+            "message": "Argument of type 'typeof MarketingConsent' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { error: boolean; }>>'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
@@ -162,7 +165,7 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Argument of type 'typeof AddressFields' is not assignable to parameter of type 'ComponentType<Matching<{ formErrors: FormErrors; traverseState: (arg0: any) => State; scope: AddressType; country: string; state: string | null; lineOne: Option<string>; lineTwo: Option<...>; postCode: Option<...>; city: Option<...>; countries: Record<...>; } & { ...; }, ClassAttributes<...> & ... 2 more ... & { ......'."
+            "message": "Argument of type 'typeof AddressFields' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ formErrors: FormErrors; traverseState: (arg0: GlobalState) => State; scope: AddressType; country: string; state: string | null; lineOne: Option<string>; lineTwo: Option<...>; postCode: Option<...>; city: Option<...>; countries: Record<...>; } & { ...; }, ClassAttributes<...> & ... 2 ...'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts",
@@ -218,7 +221,7 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'ComponentType<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAgreementI...'."
+            "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAg...'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
@@ -238,7 +241,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouGift.tsx",
-            "message": "Argument of type 'typeof ThankYouGift' is not assignable to parameter of type 'ComponentType<Matching<{ giftDeliveryDate: Option<string>; giftRecipient: Option<string>; } & DispatchProp<AnyAction>, PropTypes>>'."
+            "message": "Argument of type 'typeof ThankYouGift' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ giftDeliveryDate: Option<string>; giftRecipient: Option<string>; } & DispatchProp<AnyAction>, PropTypes>>'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
@@ -331,6 +334,14 @@
             "message": "Parameter 'event' implicitly has an 'any' type."
         },
         {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Parameter 'props' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Parameter 'props' implicitly has an 'any' type."
+        },
+        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Parameter 'searchText' implicitly has an 'any' type."
         },
@@ -366,15 +377,15 @@
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
+            "message": "Type 'string' is not assignable to type 'number'."
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
+            "message": "Type 'string' is not assignable to type 'number'."
         },
         {
             "path": "assets/components/directDebit/directDebitForm/directDebitForm.tsx",
-            "message": "Type 'string' is not assignable to type 'number | undefined'."
+            "message": "Type 'string' is not assignable to type 'number'."
         },
         {
             "path": "assets/components/headers/links/links.tsx",
@@ -397,6 +408,10 @@
             "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
         },
         {
+            "path": "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
+            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
+        },
+        {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Type 'ReactNode' is not assignable to type 'Element'."
         },
@@ -411,6 +426,18 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Type 'string | null' is not assignable to type 'string | number | readonly string[] | undefined'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Type 'ReactNode' is not assignable to type 'Element'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -449,6 +476,10 @@
             "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
+            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
+            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
+        },
+        {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'unknown' is not assignable to type 'string'."
         },
@@ -462,15 +493,15 @@
         },
         {
             "path": "assets/hocs/canShow.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"isShown\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<PropsWithChildren<Props>> & Props & { children?: ReactNode; }'."
+            "message": "Type 'Omit<AugmentedProps<Props>, \"isShown\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
         },
         {
             "path": "assets/hocs/withError.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"error\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<PropsWithChildren<Props>> & Props & { children?: ReactNode; }'."
+            "message": "Type 'Omit<AugmentedProps<Props>, \"error\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
         },
         {
             "path": "assets/hocs/withLabel.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<PropsWithChildren<Props>> & Props & { children?: ReactNode; }'."
+            "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
@@ -482,7 +513,23 @@
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
+            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
             "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"csrf\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Type '{ exact: true; path: string; render: () => Element; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<(_props: PathRouteProps | LayoutRouteProps | IndexRouteProps) => ReactElement<...> | null, PathRouteProps | ... 1 more ... | IndexRouteProps>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Type '{ exact: true; path: string; render: (props: any) => Element; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<(_props: PathRouteProps | LayoutRouteProps | IndexRouteProps) => ReactElement<...> | null, PathRouteProps | ... 1 more ... | IndexRouteProps>'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
+            "message": "Type '{ exact: true; path: string; render: (props: any) => Element; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<(_props: PathRouteProps | LayoutRouteProps | IndexRouteProps) => ReactElement<...> | null, PathRouteProps | ... 1 more ... | IndexRouteProps>'."
         },
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
@@ -717,36 +764,6 @@
             "message": "Binding element 'children' implicitly has an 'any' type."
         }
     ],
-    "TS2769": [
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/polyfills/layout.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "No overload matches this call."
-        }
-    ],
     "TS2304": [
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -789,10 +806,32 @@
             "message": "Property 'selectRef' has no initializer and is not definitely assigned in the constructor."
         }
     ],
+    "TS2769": [
+        {
+            "path": "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts",
+            "message": "No overload matches this call."
+        },
+        {
+            "path": "assets/helpers/polyfills/layout.ts",
+            "message": "No overload matches this call."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "No overload matches this call."
+        },
+        {
+            "path": "assets/helpers/rendering/render.ts",
+            "message": "No overload matches this call."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "No overload matches this call."
+        }
+    ],
     "TS2739": [
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ Stripe: Element; PayPal: Element; DirectDebit: Element; }' is missing the following properties from type 'Record<PaymentMethod, any>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
+            "message": "Type '{ Stripe: Element; PayPal: Element; DirectDebit: Element; }' is missing the following properties from type 'Record<PaymentMethod, Node>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
         },
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
@@ -864,7 +903,7 @@
     "TS2740": [
         {
             "path": "assets/helpers/rendering/render.ts",
-            "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 109 more."
+            "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 113 more."
         }
     ],
     "TS7016": [
