@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "com.gu" %% "acquisitions-value-calculator-client" % "2.0.6",
-  "org.scanamo" %% "scanamo" % "1.0.0-M17",
+  "org.scanamo" %% "scanamo" % "1.0.0-M19",
 )
 assembly / assemblyMergeStrategy := {
   case x if x.endsWith("module-info.class") => MergeStrategy.discard
