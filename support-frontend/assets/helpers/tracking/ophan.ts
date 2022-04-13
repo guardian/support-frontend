@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
-import type { Participations, TestId } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
@@ -74,7 +74,7 @@ type OphanABEvent = {
 	campaignCodes?: string[];
 };
 
-type OphanABPayload = Record<TestId, OphanABEvent>;
+type OphanABPayload = Record<string, OphanABEvent>;
 
 // ----- Functions ----- //
 const trackComponentEvents = (componentEvent: OphanComponentEvent): void =>

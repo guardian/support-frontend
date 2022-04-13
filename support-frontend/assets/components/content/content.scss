@@ -8,8 +8,8 @@
 }
 
 @mixin outset {
-	margin-left: ($gu-h-spacing / 2 * -1);
-	margin-right: ($gu-h-spacing / 2 * -1);
+	margin-left: ($gu-h-spacing * 0.5 * -1);
+	margin-right: ($gu-h-spacing * 0.5 * -1);
 }
 
 @mixin block-colours($border, $bg: null, $text: null) {
@@ -96,13 +96,13 @@
 
 .component-content__content,
 .component-content__content--grey {
-	padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
+	padding: ($gu-v-spacing*0.5) ($gu-h-spacing * 0.5) 0;
 }
 
 .component-footer {
 	.component-content__content,
 	.component-content__content--grey {
-		padding: ($gu-h-spacing / 2);
+		padding: ($gu-h-spacing * 0.5);
 	}
 }
 

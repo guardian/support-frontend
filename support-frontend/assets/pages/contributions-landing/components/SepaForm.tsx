@@ -1,7 +1,15 @@
 import { css } from '@emotion/react';
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import { headline, space } from '@guardian/source-foundations';
-import { TextInput } from '@guardian/source-react-components';
+import {
+	Option as OptionForSelect,
+	Select,
+	TextInput,
+} from '@guardian/source-react-components';
 import { isValidIban } from 'helpers/forms/formValidation';
+import { countries } from 'helpers/internationalisation/country';
+import { sortedOptions } from '../../../components/forms/customFields/sortedOptions';
+
 // -- Styles -- //
 const containerStyles = css`
 	padding-top: ${space[5]}px;
@@ -17,10 +25,15 @@ const fieldsContainerStyles = css`
 		margin-top: ${space[3]}px;
 	}
 `;
+
 // -- Component -- //
 type SepaFormProps = {
 	iban: string | null;
 	accountHolderName: string | null;
+	addressStreetName?: string;
+	addressCountry?: Country;
+	updateAddressStreetName: (addressStreetName: string) => void;
+	updateAddressCountry: (addressCountry: Country) => void;
 	updateIban: (iban: string) => void;
 	updateAccountHolderName: (accountHolderName: string) => void;
 	checkoutFormHasBeenSubmitted: boolean;
@@ -28,6 +41,10 @@ type SepaFormProps = {
 export function SepaForm({
 	iban,
 	accountHolderName,
+	addressStreetName,
+	addressCountry,
+	updateAddressStreetName,
+	updateAddressCountry,
 	updateIban,
 	updateAccountHolderName,
 	checkoutFormHasBeenSubmitted,
@@ -39,14 +56,16 @@ export function SepaForm({
 			<div css={fieldsContainerStyles}>
 				<div>
 					<TextInput
+						optional={false}
+						hideLabel={false}
 						label="Bank account holder name"
-						maxLength="40"
-						value={accountHolderName}
+						maxLength={40}
+						value={accountHolderName ?? undefined}
 						onChange={(e) => updateAccountHolderName(e.target.value)}
 						error={
 							checkoutFormHasBeenSubmitted && !accountHolderName
 								? 'Please provide your account holder name'
-								: null
+								: undefined
 						}
 					/>
 				</div>
@@ -55,18 +74,55 @@ export function SepaForm({
 
 				<div>
 					<TextInput
+						optional={false}
+						hideLabel={false}
 						label="IBAN"
 						pattern="[0-9A-Z ]*"
-						minLength="6"
-						maxLength="34"
-						value={iban}
+						minLength={6}
+						maxLength={34}
+						value={iban ?? undefined}
 						onChange={(e) => updateIban(e.target.value)}
 						error={
 							checkoutFormHasBeenSubmitted && !isValidIban(iban)
 								? 'Please provide a valid IBAN'
-								: null
+								: undefined
 						}
 					/>
+				</div>
+
+				<div>
+					<TextInput
+						optional={false}
+						hideLabel={false}
+						label="Address Line 1"
+						value={addressStreetName ?? undefined}
+						onChange={(e) => updateAddressStreetName(e.target.value)}
+						error={
+							checkoutFormHasBeenSubmitted && !addressStreetName
+								? 'Please enter a billing address'
+								: undefined
+						}
+					/>
+				</div>
+
+				<div />
+
+				<div>
+					<Select
+						optional={false}
+						hideLabel={false}
+						label="Country"
+						value={addressCountry ?? undefined}
+						onChange={(e) => updateAddressCountry(e.target.value)}
+						error={
+							checkoutFormHasBeenSubmitted && !addressCountry
+								? 'Please select a billing country'
+								: undefined
+						}
+					>
+						<OptionForSelect value="">Select a country</OptionForSelect>
+						{sortedOptions(countries)}
+					</Select>
 				</div>
 			</div>
 		</div>

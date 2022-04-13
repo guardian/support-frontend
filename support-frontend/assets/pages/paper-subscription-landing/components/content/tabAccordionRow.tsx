@@ -8,11 +8,11 @@ type TabAccordionRowPropTypes = {
 	label: string;
 	children: React.ReactNode;
 };
-export const TabAccordionRow = ({
+export function TabAccordionRow({
 	trackingId,
 	label,
 	children,
-}: TabAccordionRowPropTypes) => {
+}: TabAccordionRowPropTypes) {
 	const initialRender = React.useRef(true);
 	const [expanded, setExpanded] = React.useState<boolean>(false);
 	React.useEffect(() => {
@@ -37,4 +37,4 @@ export const TabAccordionRow = ({
 			{children}
 		</AccordionRow>
 	);
-};
+}

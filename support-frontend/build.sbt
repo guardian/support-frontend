@@ -43,13 +43,13 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   filters,
-  ws
+  ws,
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 Compile / doc / sources := Seq.empty
 
-Compile / packageDoc / publishArtifact  := false
+Compile / packageDoc / publishArtifact := false
 
 enablePlugins(SystemdPlugin)
 
@@ -62,9 +62,11 @@ maintainer := "Membership <membership.dev@theguardian.com>"
 riffRaffPackageType := (Debian / packageBin).value
 riffRaffManifestProjectName := "support:frontend-mono"
 riffRaffPackageName := "frontend"
+riffRaffAwsCredentialsProfile := Some("membership") // needed when running locally
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (file("cdk/cdk.out/Frontend-PROD.template.json"), "cfn/Frontend-PROD.template.json")
+riffRaffArtifactResources += (file("cdk/cdk.out/Frontend-CODE.template.json"), "cfn/Frontend-CODE.template.json")
 riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"), "assets-static")
 
 def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
@@ -77,16 +79,17 @@ def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   getFiles0(rootFile)
 }
 
-riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static"), "storybook-static")
-
 Universal / javaOptions ++= Seq(
   "-Dpidfile.path=/dev/null",
   "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
   "-J-XX:+PrintGCDateStamps",
-  s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
+  s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
 )
 
 Test / javaOptions += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
-addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
+addCommandAlias(
+  "devrun",
+  "run 9210",
+) // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!

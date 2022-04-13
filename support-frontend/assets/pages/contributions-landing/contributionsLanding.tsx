@@ -12,8 +12,9 @@ import {
 	countryGroups,
 	detect,
 } from 'helpers/internationalisation/countryGroup';
-import { initRedux, setUpTrackingAndConsents } from 'helpers/page/page';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
+import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import * as storage from 'helpers/storage/storage';
@@ -25,7 +26,6 @@ import ContributionThankYouPage from './components/ContributionThankYou/Contribu
 import type { Action } from './contributionsLandingActions';
 import { init as formInit } from './contributionsLandingInit';
 import type { State } from './contributionsLandingReducer';
-import { initReducer } from './contributionsLandingReducer';
 import { setUserStateActions } from './setUserStateActions';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
@@ -39,7 +39,7 @@ setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
-const store = initRedux(() => initReducer());
+const store = initReduxForContributions();
 
 if (!window.guardian.polyfillScriptLoaded) {
 	gaEvent({

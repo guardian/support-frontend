@@ -19,12 +19,12 @@ import type { SubscriptionsLandingPropTypes } from './subscriptionsLandingProps'
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 
 // ----- Render ----- //
-const SubscriptionsLandingPage = ({
+function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
 	pricingCopy,
 	referrerAcquisitions,
-}: SubscriptionsLandingPropTypes) => {
+}: SubscriptionsLandingPropTypes) {
 	const Header = headerWithCountrySwitcherContainer({
 		path: '/subscribe',
 		countryGroupId,
@@ -48,7 +48,7 @@ const SubscriptionsLandingPage = ({
 			/>
 		</Page>
 	);
-};
+}
 
 setUpTrackingAndConsents();
 renderPage(

@@ -1,3 +1,4 @@
+import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { Participations } from 'helpers/abTests/abtest';
 import {
 	fetchJson,
@@ -94,6 +95,8 @@ type RegularDirectDebitPaymentFields = {
 type RegularSepaPaymentFields = {
 	accountHolderName: string;
 	iban: string;
+	country?: Option<Country>;
+	streetName?: Option<string>;
 };
 type CorporateRedemption = {
 	redemptionCode: string;
@@ -169,6 +172,8 @@ export type SepaAuthorisation = {
 	paymentMethod: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
+	country?: Country;
+	streetName?: string;
 };
 export type ExistingCardAuthorisation = {
 	paymentMethod: typeof ExistingCard;
@@ -252,10 +257,19 @@ function regularPaymentFieldsFromAuthorisation(
 			};
 
 		case Sepa:
-			return {
-				accountHolderName: authorisation.accountHolderName,
-				iban: authorisation.iban.replace(/ /g, ''),
-			};
+			if (authorisation.country && authorisation.streetName) {
+				return {
+					accountHolderName: authorisation.accountHolderName,
+					iban: authorisation.iban.replace(/ /g, ''),
+					country: authorisation.country,
+					streetName: authorisation.streetName,
+				};
+			} else {
+				return {
+					accountHolderName: authorisation.accountHolderName,
+					iban: authorisation.iban.replace(/ /g, ''),
+				};
+			}
 
 		case ExistingCard:
 		case ExistingDirectDebit:

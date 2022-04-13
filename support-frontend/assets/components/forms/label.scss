@@ -2,7 +2,7 @@
 
 .component-form-label__label {
 	@include label;
-	margin-bottom: $gu-v-spacing / 2;
+	margin-bottom: $gu-v-spacing * 0.5;
 	display: block;
 	display: flex;
 	align-items: center;
@@ -17,5 +17,5 @@
 
 .component-form-label__footer {
 	@include gu-fontset-body-sans;
-	margin-top: $gu-v-spacing / 2;
+	margin-top: $gu-v-spacing * 0.5;
 }

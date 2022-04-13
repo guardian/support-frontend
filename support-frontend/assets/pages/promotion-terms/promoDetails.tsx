@@ -23,7 +23,7 @@ const landingPageForProduct = (props: PromotionTerms) => {
 	}
 };
 
-export default function PromoDetails(props: PromotionTerms) {
+export default function PromoDetails(props: PromotionTerms): JSX.Element {
 	const validUntil = props.expires ? (
 		<LargeParagraph>
 			<strong>Valid until:</strong> {formatUserDate(props.expires)}

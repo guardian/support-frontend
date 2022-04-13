@@ -2,37 +2,42 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { SetupPayPalRequestType } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type {
+	PayPalCheckoutDetails,
+	SetupPayPalRequestType,
+} from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { getPayPalOptions } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import { updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
 
 type PropTypes = {
-	onPayPalCheckoutCompleted: (...args: any[]) => any;
+	onPayPalCheckoutCompleted: (
+		payPalCheckoutDetails: PayPalCheckoutDetails,
+	) => void;
 	csrf: CsrfState;
 	currencyId: IsoCurrency;
 	hasLoaded: boolean;
 	canOpen: () => boolean;
-	onClick: (...args: any[]) => any;
+	onClick: () => void;
 	formClassName: string;
 	isTestUser: boolean;
 	amount: number;
 	billingPeriod: BillingPeriod;
 	setupRecurringPayPalPayment: SetupPayPalRequestType;
-	updatePayPalButtonReady: (arg0: boolean) => Action; // created in mapDispatchToProps should not be passed into the component
+	updatePayPalButtonReady: (ready: boolean) => void; // created in mapDispatchToProps should not be passed into the component
 };
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
 	updatePayPalButtonReady: (ready: boolean) =>
 		dispatch(updatePayPalButtonReady(ready)),
 });
 
-const PayPalExpressButtonComponent = (props: PropTypes) => {
+function PayPalExpressButtonComponent(props: PropTypes) {
 	// hasLoaded determines whether window.paypal is available
 	if (!props.hasLoaded) {
 		return <AnimatedDots appearance="dark" />;
@@ -59,7 +64,7 @@ const PayPalExpressButtonComponent = (props: PropTypes) => {
 		}),
 		paypalOptions,
 	);
-};
+}
 
 const PayPalExpressButton = connect(
 	null,

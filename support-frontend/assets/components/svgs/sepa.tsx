@@ -8,7 +8,7 @@ export default function SvgSepa(): JSX.Element {
 			className="svg-sepa"
 			aria-hidden="true"
 			focusable="false"
-			fill="#052962"
+			fill="#272727"
 			aria-labelledby="svgDescription"
 			role="img"
 		>

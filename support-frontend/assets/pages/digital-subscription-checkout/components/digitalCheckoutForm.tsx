@@ -1,6 +1,6 @@
 // ----- Imports ----- //
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
@@ -19,36 +19,26 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmitButton';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
-import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { userIsPatron } from 'helpers/patrons';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import {
 	finalPrice,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type {
-	Action,
-	FormActionCreators,
-} from 'helpers/subscriptionsForms/formActions';
+	SubscriptionsDispatch,
+	SubscriptionsState,
+} from 'helpers/redux/subscriptionsStore';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import {
 	formActionCreators,
 	setCsrCustomerData,
 } from 'helpers/subscriptionsForms/formActions';
-import type {
-	FormField,
-	FormFields,
-} from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	checkoutFormIsValid,
@@ -59,40 +49,15 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
 import OrderSummary from 'pages/digital-subscription-checkout/components/orderSummary/orderSummary';
-// ----- Types ----- //
-type PropTypes = FormFields &
-	FormActionCreators & {
-		country: IsoCountry;
-		signOut: typeof signOut;
-		submitForm: (...args: any[]) => any;
-		formErrors: Array<FormError<FormField>>;
-		submissionError: ErrorReason | null;
-		productPrices: ProductPrices;
-		currencyId: IsoCurrency;
-		fetchAndStoreUserType: (...args: any[]) => any;
-		csrf: Csrf;
-		payPalHasLoaded: boolean;
-		isTestUser: boolean;
-		amount: number;
-		billingPeriod: DigitalBillingPeriod;
-		setupRecurringPayPalPayment: (...args: any[]) => any;
-		validateForm: () => (...args: any[]) => any;
-		formIsValid: (...args: any[]) => any;
-		addressErrors: Array<Record<string, any>>;
-		participations: Participations;
-		setCsrCustomerData: (csrCustomerData: CsrCustomerData) => void;
-	};
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: CheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return {
 		...getFormFields(state),
 		country: state.common.internationalisation.countryId,
@@ -109,7 +74,7 @@ function mapStateToProps(state: CheckoutState) {
 			state.common.internationalisation.countryId,
 			state.page.checkout.billingPeriod,
 		).price,
-		billingPeriod: state.page.checkout.billingPeriod,
+		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
 		addressErrors: state.page.billingAddress.fields.formErrors,
 		participations: state.common.abParticipations,
 	};
@@ -121,17 +86,20 @@ function mapDispatchToProps() {
 		...formActionCreators,
 		fetchAndStoreUserType:
 			(email: string) =>
-			(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
 				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		formIsValid:
-			() => (_dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() =>
+			(_dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				checkoutFormIsValid(getState()),
 		submitForm:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() =>
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				submitCheckoutForm(dispatch, getState()),
 		validateForm:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+			() =>
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateCheckoutForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
@@ -150,6 +118,10 @@ function mapDispatchToProps() {
 }
 
 const Address = withStore(countries, 'billing', getBillingAddress);
+
+const connector = connect(mapStateToProps, mapDispatchToProps());
+
+type PropTypes = ConnectedProps<typeof connector>;
 
 // ----- Component ----- //
 function DigitalCheckoutForm(props: PropTypes) {
@@ -190,7 +162,6 @@ function DigitalCheckoutForm(props: PropTypes) {
 							/>
 						}
 						title="Digital Subscription"
-						description="Premium App + The Guardian Daily + Ad-free"
 						productPrice={productPrice}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.digitalSubscriptionLanding}
@@ -244,6 +215,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 							country={props.country}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
+							//  @ts-expect-error -- TODO: fix error types!!
 							allErrors={[...props.addressErrors, ...props.formErrors]}
 							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
@@ -277,6 +249,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
 							amount={props.amount}
 							billingPeriod={props.billingPeriod}
+							//  @ts-expect-error -- TODO: fix error types!!
 							allErrors={[...props.addressErrors, ...props.formErrors]}
 						/>
 					) : null}
@@ -290,9 +263,8 @@ function DigitalCheckoutForm(props: PropTypes) {
 			</CheckoutLayout>
 		</Content>
 	);
-} // ----- Exports ----- //
+}
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps(),
-)(DigitalCheckoutForm);
+// ----- Exports ----- //
+
+export default connector(DigitalCheckoutForm);

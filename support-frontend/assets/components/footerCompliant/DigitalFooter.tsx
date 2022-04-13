@@ -40,10 +40,11 @@ type LinkTypes = {
 	country: IsoCountry;
 };
 
-const MaybeLink = (props: { href: Option<string>; text: string }) =>
-	props.href ? <a href={props.href}>{props.text}</a> : null;
+function MaybeLink(props: { href: Option<string>; text: string }) {
+	return props.href ? <a href={props.href}>{props.text}</a> : null;
+}
 
-const RegularLinks = (props: LinkTypes) => {
+function RegularLinks(props: LinkTypes) {
 	const annualUrl = getPromoUrl(props.productPrices, props.country, Annual);
 	const monthlyUrl = getPromoUrl(props.productPrices, props.country, Monthly);
 	const multipleOffers = !!(annualUrl && monthlyUrl);
@@ -55,9 +56,9 @@ const RegularLinks = (props: LinkTypes) => {
 			&nbsp;offer{multipleOffers ? 's' : ''}
 		</span>
 	);
-};
+}
 
-const GiftLinks = (props: LinkTypes) => {
+function GiftLinks(props: LinkTypes) {
 	const annualUrl = getPromoUrl(props.productPrices, props.country, Annual);
 	const quarterlyUrl = getPromoUrl(
 		props.productPrices,
@@ -73,7 +74,7 @@ const GiftLinks = (props: LinkTypes) => {
 			&nbsp;offer{multipleOffers ? 's' : ''}
 		</span>
 	);
-};
+}
 
 function DigitalFooter({ productPrices, orderIsAGift, country }: PropTypes) {
 	const termsConditionsLink = orderIsAGift

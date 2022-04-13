@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { RedemptionPageState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type { RedemptionPageState } from 'helpers/redux/redemptionsStore';
 
 // ----- State/Props Maps ----- //
 function mapStateToProps(state: RedemptionPageState) {

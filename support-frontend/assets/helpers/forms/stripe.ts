@@ -12,6 +12,11 @@ const stripeCardFormIsIncomplete = (
 ): boolean => paymentMethod === Stripe && !stripeCardFormComplete;
 
 export type StripeAccount = 'ONE_OFF' | 'REGULAR';
+
+export type StripePaymentIntentResult = {
+	client_secret?: string;
+};
+
 const stripeAccountForContributionType: Record<
 	ContributionType,
 	StripeAccount
