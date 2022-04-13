@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "io.symphonia" % "lambda-logging" % "1.0.3",
-  "org.scalatest" %% "scalatest" % "3.2.2", // not a "Test" dependency, it's an actual one
+  "org.scalatest" %% "scalatest" % "3.2.11", // not a "Test" dependency, it's an actual one
 )
 
 riffRaffPackageType := assembly.value
