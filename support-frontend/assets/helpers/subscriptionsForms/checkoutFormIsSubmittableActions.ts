@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { checkoutFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -22,7 +23,10 @@ function enableOrDisableForm() {
 }
 
 function setFormSubmissionDependentValue(setStateValue: () => Action) {
-	return (dispatch: Dispatch<Action>, getState: () => CheckoutState): void => {
+	return (
+		dispatch: SubscriptionsDispatch,
+		getState: () => CheckoutState,
+	): void => {
 		dispatch(setStateValue());
 		enableOrDisableForm()(dispatch, getState);
 	};

@@ -1,3 +1,4 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type { Dispatch } from 'redux';
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
@@ -14,6 +15,16 @@ import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import {
+	setConfirmEmail,
+	setEmail,
+	setFirstName,
+	setLastName,
+	setTelephone,
+	setTitle,
+	setUserTypeFromIdentityResponse as setUserTypeFromIdentityResponseAction,
+} from 'helpers/redux/checkout/personalDetails/actions';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
@@ -25,6 +36,7 @@ import type { AddressType } from './addressType';
 import type { FormField, Stage } from './formFields';
 
 export type Action =
+	| PayloadAction<string>
 	| {
 			type: 'SET_STAGE';
 			stage: Stage;
@@ -171,40 +183,29 @@ const setFormSubmitted = (formSubmitted: boolean): Action => ({
 const setUserTypeFromIdentityResponse = (
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 ) =>
-	setFormSubmissionDependentValue(() => ({
-		type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-		userTypeFromIdentityResponse,
-	}));
+	setFormSubmissionDependentValue(() =>
+		setUserTypeFromIdentityResponseAction(userTypeFromIdentityResponse),
+	);
 
 const formActionCreators = {
-	setTitle: (title: string): Action => ({
-		type: 'SET_TITLE',
-		title: title !== 'Select a title' ? title : null,
-	}),
+	setTitle:
+		(title: string) =>
+		(dispatch: SubscriptionsDispatch): void => {
+			dispatch(setTitle(title !== 'Select a title' ? title : ''));
+		},
 	setFirstName: (firstName: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_FIRST_NAME',
-			firstName,
-		})),
+		setFormSubmissionDependentValue(() => setFirstName(firstName)),
 	setLastName: (lastName: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_LAST_NAME',
-			lastName,
-		})),
+		setFormSubmissionDependentValue(() => setLastName(lastName)),
 	setEmail: (email: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_EMAIL',
-			email,
-		})),
+		setFormSubmissionDependentValue(() => setEmail(email)),
 	setConfirmEmail: (email: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_CONFIRM_EMAIL',
-			email,
-		})),
-	setTelephone: (telephone: string): Action => ({
-		type: 'SET_TELEPHONE',
-		telephone,
-	}),
+		setFormSubmissionDependentValue(() => setConfirmEmail(email)),
+	setTelephone:
+		(telephone: string) =>
+		(dispatch: SubscriptionsDispatch): void => {
+			dispatch(setTelephone(telephone));
+		},
 	setTitleGift: (titleGiftRecipient: string): Action => ({
 		type: 'SET_TITLE_GIFT',
 		titleGiftRecipient:

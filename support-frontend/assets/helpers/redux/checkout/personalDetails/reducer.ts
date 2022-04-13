@@ -4,7 +4,7 @@ import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { Title } from 'helpers/user/details';
 import { initialPersonalDetailsState } from './state';
 
-export const personalDetailsReducer = createSlice({
+export const personalDetailsSlice = createSlice({
 	name: 'personalDetails',
 	initialState: initialPersonalDetailsState,
 	reducers: {
@@ -37,3 +37,5 @@ export const personalDetailsReducer = createSlice({
 		},
 	},
 });
+
+export const personalDetailsReducer = personalDetailsSlice.reducer;

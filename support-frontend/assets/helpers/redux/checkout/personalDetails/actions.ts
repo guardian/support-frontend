@@ -1,4 +1,4 @@
-import { personalDetailsReducer } from './reducer';
+import { personalDetailsSlice } from './reducer';
 
 export const {
 	setTitle,
@@ -9,4 +9,4 @@ export const {
 	setIsSignedIn,
 	setUserTypeFromIdentityResponse,
 	setTelephone,
-} = personalDetailsReducer.actions;
+} = personalDetailsSlice.actions;

@@ -17,14 +17,14 @@ import type { Title } from 'helpers/user/details';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 export type FormFields = {
-	title: Option<Title>;
+	title?: Title;
 	firstName: string;
 	lastName: string;
 	email: string;
-	confirmEmail: Option<string>;
+	confirmEmail?: string;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	telephone: Option<string>;
+	telephone?: string;
 	titleGiftRecipient: Option<Title>;
 	firstNameGiftRecipient: Option<string>;
 	lastNameGiftRecipient: Option<string>;
@@ -59,15 +59,15 @@ export type FormState = FormFields & {
 
 function getFormFields(state: AnyCheckoutState): FormFields {
 	return {
-		title: state.page.checkout.title,
-		firstName: state.page.checkout.firstName,
-		lastName: state.page.checkout.lastName,
-		email: state.page.checkout.email,
-		confirmEmail: state.page.checkout.confirmEmail,
-		isSignedIn: state.page.checkout.isSignedIn,
+		title: state.page.checkoutForm.personalDetails.title,
+		firstName: state.page.checkoutForm.personalDetails.firstName,
+		lastName: state.page.checkoutForm.personalDetails.lastName,
+		email: state.page.checkoutForm.personalDetails.email,
+		confirmEmail: state.page.checkoutForm.personalDetails.confirmEmail,
+		isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
 		userTypeFromIdentityResponse:
-			state.page.checkout.userTypeFromIdentityResponse,
-		telephone: state.page.checkout.telephone,
+			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
+		telephone: state.page.checkoutForm.personalDetails.telephone,
 		titleGiftRecipient: state.page.checkout.titleGiftRecipient,
 		firstNameGiftRecipient: state.page.checkout.firstNameGiftRecipient,
 		lastNameGiftRecipient: state.page.checkout.lastNameGiftRecipient,
