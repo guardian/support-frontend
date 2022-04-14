@@ -13,12 +13,10 @@ export type PersonalDetailsState = {
 };
 
 export const initialPersonalDetailsState: PersonalDetailsState = {
-	title: '',
 	firstName: '',
 	lastName: '',
 	email: '',
 	confirmEmail: '',
 	isSignedIn: false,
 	userTypeFromIdentityResponse: 'noRequestSent',
-	telephone: '',
 };
