@@ -1,6 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
+import type { TypedStartListening } from '@reduxjs/toolkit';
+import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { renderError } from 'helpers/rendering/render';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';
@@ -23,8 +25,24 @@ const baseReducer = {
 	page: subscriptionsPageReducer,
 };
 
+// Listener middleware allows us to specify side-effects for certain actions
+// https://redux-toolkit.js.org/api/createListenerMiddleware
+const listenerMiddleware = createListenerMiddleware();
+
+export type SubscriptionsStartListening = TypedStartListening<
+	SubscriptionsState,
+	SubscriptionsDispatch
+>;
+
+export const startSubscriptionsListening =
+	listenerMiddleware.startListening as SubscriptionsStartListening;
+
 const subscriptionsStore = configureStore({
 	reducer: baseReducer,
+	// Makes devtools work correctly with the re-created store
+	devTools: false,
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 });
 
 export type SubscriptionsStore = typeof subscriptionsStore;
@@ -34,12 +52,16 @@ export function addPageReducer(
 ): SubscriptionsStore {
 	// For context on why we are re-creating the store at runtime
 	// https://github.com/guardian/support-frontend/pull/3595#discussion_r834202633
-	return configureStore({
+	const store = configureStore({
 		reducer: {
 			common: commonReducer,
 			page: newReducer ?? subscriptionsPageReducer,
 		},
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 	});
+	addPersonalDetailsSideEffects(startSubscriptionsListening);
+	return store;
 }
 
 export function initReduxForSubscriptions(

@@ -1,5 +1,4 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Dispatch } from 'redux';
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
@@ -189,22 +188,12 @@ const setUserTypeFromIdentityResponse = (
 	);
 
 const formActionCreators = {
-	setTitle:
-		(title: string) =>
-		(dispatch: SubscriptionsDispatch): Action =>
-			dispatch(setTitle(title !== 'Select a title' ? title : '')),
-	setFirstName: (firstName: string): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => setFirstName(firstName)),
-	setLastName: (lastName: string): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => setLastName(lastName)),
-	setEmail: (email: string): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => setEmail(email)),
-	setConfirmEmail: (email: string): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => setConfirmEmail(email)),
-	setTelephone:
-		(telephone: string) =>
-		(dispatch: SubscriptionsDispatch): Action =>
-			dispatch(setTelephone(telephone)),
+	setTitle,
+	setFirstName,
+	setLastName,
+	setEmail,
+	setConfirmEmail,
+	setTelephone,
 	setTitleGift: (titleGiftRecipient: string): Action => ({
 		type: 'SET_TITLE_GIFT',
 		titleGiftRecipient:
@@ -241,7 +230,10 @@ const formActionCreators = {
 	}),
 	setPaymentMethod:
 		(paymentMethod: PaymentMethod) =>
-		(dispatch: Dispatch<Action>, getState: () => CheckoutState): Action => {
+		(
+			dispatch: SubscriptionsDispatch,
+			getState: () => CheckoutState,
+		): Action => {
 			const state = getState();
 			storage.setSession('selectedPaymentMethod', paymentMethod);
 			sendTrackingEventsOnClick({
@@ -264,7 +256,7 @@ const formActionCreators = {
 	}),
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
-		(dispatch: Dispatch<Action>, getState: () => CheckoutState): void => {
+		(dispatch: SubscriptionsDispatch, getState: () => CheckoutState): void => {
 			const state = getState();
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
@@ -306,26 +298,21 @@ function setCsrCustomerData(
 	addressType: AddressType,
 	csrCustomerData: CsrCustomerData,
 ) {
-	return (dispatch: Dispatch, getState: () => CheckoutState): void => {
+	return (
+		dispatch: SubscriptionsDispatch,
+		getState: () => CheckoutState,
+	): void => {
 		csrCustomerData.customer.email &&
-			formActionCreators.setEmail(csrCustomerData.customer.email)(
-				dispatch,
-				getState,
-			);
+			dispatch(formActionCreators.setEmail(csrCustomerData.customer.email));
 		csrCustomerData.customer.email &&
-			formActionCreators.setConfirmEmail(csrCustomerData.customer.email)(
-				dispatch,
-				getState,
+			dispatch(
+				formActionCreators.setConfirmEmail(csrCustomerData.customer.email),
 			);
 		csrCustomerData.customer.firstName &&
-			formActionCreators.setFirstName(csrCustomerData.customer.firstName)(
-				dispatch,
-				getState,
+			dispatch(
+				formActionCreators.setFirstName(csrCustomerData.customer.firstName),
 			);
-		formActionCreators.setLastName(csrCustomerData.customer.lastName)(
-			dispatch,
-			getState,
-		);
+		dispatch(formActionCreators.setLastName(csrCustomerData.customer.lastName));
 
 		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
 		dispatch(formActionCreators.setSalesforceCaseId(csrCustomerData.caseId));

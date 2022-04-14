@@ -9,7 +9,8 @@ export const personalDetailsSlice = createSlice({
 	initialState: initialPersonalDetailsState,
 	reducers: {
 		setTitle(state, action: PayloadAction<Title>) {
-			state.title = action.payload;
+			const title = action.payload !== 'Select a title' ? action.payload : '';
+			state.title = title;
 		},
 		setFirstName(state, action: PayloadAction<string>) {
 			state.firstName = action.payload;
