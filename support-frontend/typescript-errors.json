@@ -2,11 +2,11 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 35,
+            "TS2345": 34,
             "TS7006": 22,
-            "TS2322": 46,
-            "TS2339": 40,
-            "TS6133": 7,
+            "TS2322": 47,
+            "TS2339": 13,
+            "TS6133": 8,
             "TS2578": 4,
             "TS2305": 8,
             "TS2314": 3,
@@ -49,7 +49,6 @@
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
             "assets/helpers/rendering/render.ts": 8,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
-            "assets/helpers/subscriptionsForms/formReducer.ts": 31,
             "assets/helpers/subscriptionsForms/rules.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
@@ -75,6 +74,7 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
+            "assets/helpers/subscriptionsForms/formReducer.ts": 4,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -92,6 +92,7 @@
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
+            "assets/helpers/subscriptionsForms/formActions.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
@@ -217,10 +218,6 @@
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Argument of type '{ payload: string; type: string; } | SetCountryChangedAction' is not assignable to parameter of type 'SetCountryChangedAction'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/rules.ts",
@@ -451,6 +448,10 @@
             "message": "Type 'null' is not assignable to type 'string | undefined'."
         },
         {
+            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
+            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
+        },
+        {
             "path": "assets/helpers/utilities/utilities.ts",
             "message": "Type 'string | null | undefined' is not assignable to type 'string'."
         },
@@ -589,114 +590,6 @@
             "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'stage' does not exist on type '{ payload: string; type: string; } | { type: \"SET_STAGE\"; stage: Stage; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'title' does not exist on type '{ payload: string; type: string; } | { type: \"SET_TITLE\"; title: Option<string>; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'firstName' does not exist on type '{ payload: string; type: string; } | { type: \"SET_FIRST_NAME\"; firstName: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'lastName' does not exist on type '{ payload: string; type: string; } | { type: \"SET_LAST_NAME\"; lastName: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'email' does not exist on type '{ payload: string; type: string; } | { type: \"SET_EMAIL\"; email: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'email' does not exist on type '{ payload: string; type: string; } | { type: \"SET_CONFIRM_EMAIL\"; email: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'userTypeFromIdentityResponse' does not exist on type '{ payload: string; type: string; } | { type: \"SET_USER_TYPE_FROM_IDENTITY_RESPONSE\"; userTypeFromIdentityResponse: UserTypeFromIdentityResponse; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'telephone' does not exist on type '{ payload: string; type: string; } | { type: \"SET_TELEPHONE\"; telephone: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'titleGiftRecipient' does not exist on type '{ payload: string; type: string; } | { type: \"SET_TITLE_GIFT\"; titleGiftRecipient: Option<string>; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'firstNameGiftRecipient' does not exist on type '{ payload: string; type: string; } | { type: \"SET_FIRST_NAME_GIFT\"; firstNameGiftRecipient: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'lastNameGiftRecipient' does not exist on type '{ payload: string; type: string; } | { type: \"SET_LAST_NAME_GIFT\"; lastNameGiftRecipient: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'emailGiftRecipient' does not exist on type '{ payload: string; type: string; } | { type: \"SET_EMAIL_GIFT\"; emailGiftRecipient: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'startDate' does not exist on type '{ payload: string; type: string; } | { type: \"SET_START_DATE\"; startDate: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'billingPeriod' does not exist on type '{ payload: string; type: string; } | { type: \"SET_BILLING_PERIOD\"; billingPeriod: BillingPeriod; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'paymentMethod' does not exist on type '{ payload: string; type: string; } | { type: \"SET_PAYMENT_METHOD\"; paymentMethod: PaymentMethod; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'errors' does not exist on type '{ payload: string; type: string; } | { type: \"SET_FORM_ERRORS\"; errors: FormError<FormField>[]; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'error' does not exist on type '{ payload: string; type: string; } | { type: \"SET_SUBMISSION_ERROR\"; error: ErrorReason; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'formSubmitted' does not exist on type '{ payload: string; type: string; } | { type: \"SET_FORM_SUBMITTED\"; formSubmitted: boolean; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'isSame' does not exist on type '{ payload: string; type: string; } | { type: \"SET_BILLING_ADDRESS_IS_SAME\"; isSame: boolean; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'orderIsAGift' does not exist on type '{ payload: string; type: string; } | { type: \"SET_ORDER_IS_GIFT\"; orderIsAGift: boolean; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'stripePaymentMethod' does not exist on type '{ payload: string; type: string; } | { type: \"SET_STRIPE_PAYMENT_METHOD\"; stripePaymentMethod: Option<string>; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'instructions' does not exist on type '{ payload: string; type: string; } | { type: \"SET_DELIVERY_INSTRUCTIONS\"; instructions: Option<string>; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'message' does not exist on type '{ payload: string; type: string; } | { type: \"SET_GIFT_MESSAGE\"; message: Option<string>; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'giftDeliveryDate' does not exist on type '{ payload: string; type: string; } | { type: \"SET_GIFT_DELIVERY_DATE\"; giftDeliveryDate: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'addDigital' does not exist on type '{ payload: string; type: string; } | { type: \"SET_ADD_DIGITAL_SUBSCRIPTION\"; addDigital: boolean; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'username' does not exist on type '{ payload: string; type: string; } | { type: \"SET_CSR_USERNAME\"; username: string; }'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Property 'caseId' does not exist on type '{ payload: string; type: string; } | { type: \"SET_SALESFORCE_CASE_ID\"; caseId: string; }'."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
             "message": "Property 'common' does not exist on type 'DefaultRootState'."
         }
@@ -705,6 +598,10 @@
         {
             "path": "assets/components/directDebit/helpers/ajax.ts",
             "message": "'isTestUser' is declared but its value is never read."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/formActions.ts",
+            "message": "'PayloadAction' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",

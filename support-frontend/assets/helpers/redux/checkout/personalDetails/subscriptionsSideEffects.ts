@@ -9,6 +9,7 @@ import {
 	setEmail,
 	setFirstName,
 	setLastName,
+	setUserTypeFromIdentityResponse,
 } from './actions';
 
 export function removeErrorsForField(
@@ -69,6 +70,16 @@ export function addPersonalDetailsSideEffects(
 			listenerApi.dispatch(
 				removeErrorsForField('confirmEmail', listenerApi.getState()),
 			);
+			enableOrDisableForm()(
+				listenerApi.dispatch,
+				listenerApi.getState.bind(listenerApi),
+			);
+		},
+	});
+
+	startListening({
+		actionCreator: setUserTypeFromIdentityResponse,
+		effect(_, listenerApi) {
 			enableOrDisableForm()(
 				listenerApi.dispatch,
 				listenerApi.getState.bind(listenerApi),

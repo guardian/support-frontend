@@ -21,7 +21,6 @@ import {
 	setLastName,
 	setTelephone,
 	setTitle,
-	setUserTypeFromIdentityResponse as setUserTypeFromIdentityResponseAction,
 } from 'helpers/redux/checkout/personalDetails/actions';
 import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
@@ -36,7 +35,6 @@ import type { AddressType } from './addressType';
 import type { FormField, Stage } from './formFields';
 
 export type Action =
-	| PayloadAction<string>
 	| {
 			type: 'SET_STAGE';
 			stage: Stage;
@@ -179,13 +177,6 @@ const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	type: 'SET_FORM_SUBMITTED',
 	formSubmitted,
 });
-
-const setUserTypeFromIdentityResponse = (
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-): FormSubmissionDependentValueThunk =>
-	setFormSubmissionDependentValue(() =>
-		setUserTypeFromIdentityResponseAction(userTypeFromIdentityResponse),
-	);
 
 const formActionCreators = {
 	setTitle,
@@ -349,7 +340,6 @@ export {
 	setFormErrors,
 	setSubmissionError,
 	setFormSubmitted,
-	setUserTypeFromIdentityResponse,
 	setCsrCustomerData,
 	formActionCreators,
 };
