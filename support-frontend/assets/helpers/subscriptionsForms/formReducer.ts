@@ -18,7 +18,7 @@ import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
-import { getUser, isTestUser } from 'helpers/user/user';
+import { isTestUser } from 'helpers/user/user';
 
 function createFormReducer(
 	product: SubscriptionProduct,

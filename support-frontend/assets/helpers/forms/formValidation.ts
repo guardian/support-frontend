@@ -14,7 +14,6 @@ import type {
 	CountryGroup,
 	CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import type { Option } from 'helpers/types/option';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 import {
 	AUDCountries,
