@@ -137,7 +137,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .map(_.toOption.get)
 
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
-    ZuoraDigitalPackConfig(14, 2),
+    ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "", annualChargeId = ""),
     promotionService,
     DateGenerator(saleDate),
     SANDBOX,

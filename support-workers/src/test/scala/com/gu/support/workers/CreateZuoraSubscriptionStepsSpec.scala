@@ -187,7 +187,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         userId = "111222",
       ),
       new DigitalSubscriptionDirectPurchaseBuilder(
-        config = ZuoraDigitalPackConfig(14, 2),
+        config = ZuoraDigitalPackConfig(14, 2, "", ""),
         promotionService = null, // shouldn't be called for subs with no promo code
         DateGenerator(new LocalDate(2020, 6, 15)),
         TouchPointEnvironments.SANDBOX,
