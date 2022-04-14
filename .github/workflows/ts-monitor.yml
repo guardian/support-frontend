@@ -18,10 +18,10 @@ jobs:
         uses: guardian/actions-setup-node@v2.4.1
 
       # Cache npm dependencies using https://github.com/bahmutov/npm-install
-      - name: Cache dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: support-frontend
+      # - name: Cache dependencies
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     working-directory: support-frontend
 
       - name: Check for new errors
         uses: guardian/typescript-monitor-action@main
