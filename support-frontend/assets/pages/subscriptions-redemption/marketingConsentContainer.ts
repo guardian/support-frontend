@@ -10,7 +10,7 @@ import type {
 
 const mapStateToProps = (state: RedemptionPageState) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,
-	email: state.page.checkout.email,
+	email: state.page.checkoutForm.personalDetails.email,
 	csrf: state.page.csrf,
 	error: state.page.marketingConsent.requestPending,
 	requestPending: state.page.marketingConsent.requestPending,

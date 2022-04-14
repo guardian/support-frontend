@@ -111,7 +111,9 @@ function validateFormFields(
 	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
 ) {
-	const formFieldErrors = applyRedemptionRules(state.page.checkout);
+	const formFieldErrors = applyRedemptionRules(
+		state.page.checkoutForm.personalDetails,
+	);
 
 	if (formFieldErrors.length) {
 		dispatch({
