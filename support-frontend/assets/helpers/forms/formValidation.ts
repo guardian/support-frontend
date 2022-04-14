@@ -77,9 +77,9 @@ export const checkEmail: (arg0: string | null) => boolean = (input) =>
 	isNotEmpty(input) && isValidEmail(input);
 
 export const emailAddressesMatch: (
-	arg0: boolean,
-	arg1: string,
-	arg2: Option<string>,
+	isSignedIn: boolean,
+	email: string,
+	confirmEmail?: string,
 ) => boolean = (isSignedIn, email, confirmEmail) =>
 	isSignedIn || email === confirmEmail;
 

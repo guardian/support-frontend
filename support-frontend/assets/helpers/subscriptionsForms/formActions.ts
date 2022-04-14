@@ -40,34 +40,6 @@ export type Action =
 			stage: Stage;
 	  }
 	| {
-			type: 'SET_TITLE';
-			title: Option<string>;
-	  }
-	| {
-			type: 'SET_FIRST_NAME';
-			firstName: string;
-	  }
-	| {
-			type: 'SET_LAST_NAME';
-			lastName: string;
-	  }
-	| {
-			type: 'SET_EMAIL';
-			email: string;
-	  }
-	| {
-			type: 'SET_CONFIRM_EMAIL';
-			email: string;
-	  }
-	| {
-			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE';
-			userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	  }
-	| {
-			type: 'SET_TELEPHONE';
-			telephone: string;
-	  }
-	| {
 			type: 'SET_TITLE_GIFT';
 			titleGiftRecipient: Option<string>;
 	  }

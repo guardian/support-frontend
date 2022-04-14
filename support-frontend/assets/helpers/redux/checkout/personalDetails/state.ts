@@ -1,5 +1,6 @@
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { Title } from 'helpers/user/details';
+import { getUser } from 'helpers/user/user';
 
 export type PersonalDetailsState = {
 	title?: Title;
@@ -12,11 +13,13 @@ export type PersonalDetailsState = {
 	telephone?: string;
 };
 
+const user = getUser();
+
 export const initialPersonalDetailsState: PersonalDetailsState = {
-	firstName: '',
-	lastName: '',
-	email: '',
+	firstName: user.firstName ?? '',
+	lastName: user.lastName ?? '',
+	email: user.email ?? '',
 	confirmEmail: '',
-	isSignedIn: false,
+	isSignedIn: user.isSignedIn,
 	userTypeFromIdentityResponse: 'noRequestSent',
 };

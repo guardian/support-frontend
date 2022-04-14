@@ -2,11 +2,11 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 34,
+            "TS2345": 33,
             "TS7006": 22,
-            "TS2322": 47,
-            "TS2339": 13,
-            "TS6133": 8,
+            "TS2322": 41,
+            "TS2339": 14,
+            "TS6133": 11,
             "TS2578": 4,
             "TS2305": 8,
             "TS2314": 3,
@@ -49,10 +49,9 @@
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
             "assets/helpers/rendering/render.ts": 8,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
-            "assets/helpers/subscriptionsForms/rules.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
-            "assets/pages/contributions-landing/contributionsLandingActions.ts": 3,
+            "assets/pages/contributions-landing/contributionsLandingActions.ts": 2,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
@@ -74,7 +73,6 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
-            "assets/helpers/subscriptionsForms/formReducer.ts": 4,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -87,12 +85,14 @@
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
-            "assets/pages/subscriptions-redemption/api.ts": 1,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
-            "assets/helpers/subscriptionsForms/formActions.ts": 1,
+            "assets/helpers/subscriptionsForms/guestCheckout.ts": 1,
+            "assets/helpers/forms/formValidation.ts": 1,
+            "assets/helpers/subscriptionsForms/formActions.ts": 2,
+            "assets/helpers/subscriptionsForms/formReducer.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
@@ -218,10 +218,6 @@
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/rules.ts",
-            "message": "Argument of type 'string | undefined' is not assignable to parameter of type 'Option<string>'."
         },
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
@@ -436,22 +432,6 @@
             "message": "Type 'unknown' is not assignable to type 'Settings'."
         },
         {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Type 'null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Type 'null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Type 'null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
-            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
-        },
-        {
             "path": "assets/helpers/utilities/utilities.ts",
             "message": "Type 'string | null | undefined' is not assignable to type 'string'."
         },
@@ -482,10 +462,6 @@
         {
             "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
             "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Type 'null' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
@@ -534,10 +510,6 @@
         {
             "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
             "message": "Type '{ ctaButtonText: string; link: string; analyticsTracking: () => void; modifierClasses: string; }' is not assignable to type 'ProductButton'."
-        },
-        {
-            "path": "assets/pages/subscriptions-redemption/api.ts",
-            "message": "Type 'null' is not assignable to type 'string | undefined'."
         }
     ],
     "TS2339": [
@@ -590,6 +562,10 @@
             "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
+            "path": "assets/helpers/subscriptionsForms/guestCheckout.ts",
+            "message": "Property 'isSignedIn' does not exist on type 'FormState | RedemptionCheckoutState'."
+        },
+        {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
             "message": "Property 'common' does not exist on type 'DefaultRootState'."
         }
@@ -600,8 +576,20 @@
             "message": "'isTestUser' is declared but its value is never read."
         },
         {
+            "path": "assets/helpers/forms/formValidation.ts",
+            "message": "'Option' is declared but its value is never read."
+        },
+        {
             "path": "assets/helpers/subscriptionsForms/formActions.ts",
             "message": "'PayloadAction' is declared but its value is never read."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/formActions.ts",
+            "message": "'UserTypeFromIdentityResponse' is declared but its value is never read."
+        },
+        {
+            "path": "assets/helpers/subscriptionsForms/formReducer.ts",
+            "message": "'getUser' is declared but its value is never read."
         },
         {
             "path": "assets/helpers/urls/externalLinks.ts",

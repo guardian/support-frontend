@@ -179,7 +179,6 @@ function buildRegularPaymentRequest(
 	};
 
 	return {
-		title: null,
 		firstName,
 		lastName,
 		billingAddress: {
