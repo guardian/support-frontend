@@ -4,7 +4,7 @@
             "TS1208": 1,
             "TS2345": 33,
             "TS7006": 26,
-            "TS2322": 45,
+            "TS2322": 44,
             "TS2339": 13,
             "TS6133": 7,
             "TS2578": 4,
@@ -74,7 +74,6 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
-            "assets/helpers/subscriptionsForms/submit.ts": 1,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -456,10 +455,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
             "message": "Type 'unknown' is not assignable to type 'Settings'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/submit.ts",
-            "message": "Type '{ productType: \"DigitalPack\"; currency: IsoCurrency; billingPeriod: BillingPeriod; readerType: \"Direct\" | \"Gift\"; amount: number; }' is not assignable to type 'SubscriptionProductFields'."
         },
         {
             "path": "assets/helpers/utilities/utilities.ts",

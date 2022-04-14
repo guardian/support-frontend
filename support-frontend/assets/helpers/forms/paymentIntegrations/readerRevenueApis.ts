@@ -60,6 +60,7 @@ export type DigitalSubscription = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 	readerType: ReaderType;
+	amount?: number;
 };
 export type PaperSubscription = {
 	productType: typeof Paper;
