@@ -72,7 +72,7 @@ class SubscriptionsController(
     val weekly =
       service.getPrices(
         GuardianWeekly,
-        List(DefaultPromotions.GuardianWeekly.NonGift.jan21Promotion),
+        Nil,
       )(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(
         countryGroup.currency,
       )
