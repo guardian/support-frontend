@@ -133,4 +133,27 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
+	sfd_v3: {
+		variants: [
+			{
+				id: 'Control',
+			},
+			{
+				id: 'V1_PARAGRAPH',
+			},
+			{
+				id: 'V2_BULLET',
+			},
+		],
+		// update audiences to exclude aus
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		seed: 14,
+	},
 };
