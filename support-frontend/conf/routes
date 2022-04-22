@@ -168,6 +168,9 @@ POST /direct-debit/check-account                                   controllers.D
 GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
 GET /p/:promoCode                                                 controllers.Promotions.promo(promoCode)
 
+# ----- Prices API ----- #
+GET /prices                                                       controllers.PricesController.getPrices()
+
 # ----- Verification ----- #
 
 GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)

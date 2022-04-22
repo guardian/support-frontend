@@ -43,10 +43,7 @@ class WeeklySubscriptionController(
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
-    // We're currently running different default promos in different regions
-    val defaultPromotion =
-      if (List("au", "nz").contains(countryCode.toLowerCase)) ausPromotion
-      else francePromotion
+    val defaultPromotion = francePromotion
 
     val queryPromos =
       request.queryString
