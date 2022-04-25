@@ -2,6 +2,7 @@ package utils
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.support.acquisitions.AbTest
 import com.gu.support.catalog.{Collection, Domestic, FulfilmentOptions, HomeDelivery, NoFulfilmentOptions, RestOfWorld}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
@@ -18,6 +19,12 @@ object CheckoutValidationRules {
       case (Valid, Valid) => Valid
       case (invalid: Invalid, Valid) => invalid
       case (Valid, invalid: Invalid) => invalid
+    }
+    def or(right: Result): Result = (this, right) match {
+      case (Invalid(leftMessage), Invalid(rightMessage)) => Invalid(leftMessage + " and " + rightMessage)
+      case (Valid, Valid) => Valid
+      case (Invalid(_), Valid) => Valid
+      case (Valid, Invalid(_)) => Valid
     }
   }
   case class Invalid(message: String) extends Result
@@ -155,11 +162,19 @@ object DigitalPackValidation {
         currencyIsSupportedForCountry(country, currency) and
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
+    def isInBenefitsTest(supportAbTests: Set[AbTest]) = supportAbTests
+      .find { test =>
+        test.name == "sfd_v3" && (test.variant == "V2_BULLET" || test.variant == "V1_PARAGRAPH")
+      }
+      .map(_ => Valid)
+      .getOrElse(Invalid("User is not in the benefits test"))
+
     val Purchase = Left
     type Redemption[A, B] = Right[A, B]
 
     (paymentFields, readerType, createSupportWorkersRequest.giftRecipient) match {
-      case (Purchase(paymentFields), ReaderType.Direct, None) => isValidPaidSub(paymentFields)
+      case (Purchase(paymentFields), ReaderType.Direct, None) =>
+        isInBenefitsTest(createSupportWorkersRequest.supportAbTests) or isValidPaidSub(paymentFields)
       case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _, _))) =>
         isValidPaidSub(paymentFields)
       case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption

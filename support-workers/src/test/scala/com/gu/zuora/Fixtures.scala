@@ -83,7 +83,7 @@ object Fixtures {
         RatePlan(config.monthlyContribution.productRatePlanId), // Contribution product
         List(
           RatePlanChargeData(
-            ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 25),
+            RatePlanChargeOverride(config.monthlyContribution.productRatePlanChargeId, 25),
           ),
         ),
         Nil,
@@ -155,7 +155,7 @@ object Fixtures {
         RatePlan(config.monthlyContribution.productRatePlanId),
         List(
           RatePlanChargeData(
-            ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 5),
+            RatePlanChargeOverride(config.monthlyContribution.productRatePlanChargeId, 5),
           ),
         ),
         Nil,
