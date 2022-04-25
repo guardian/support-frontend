@@ -1,14 +1,13 @@
 // ----- Imports ----- //
-// @ts-expect-error - required for hooks
 import { ThemeProvider } from '@emotion/react';
+import { cmp } from '@guardian/consent-management-platform';
 import {
 	ButtonLink,
 	Link,
 	linkThemeBrand,
 } from '@guardian/source-react-components';
-import type { Node } from 'react';
-import { Children, useEffect, useState } from 'react';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { ReactNode } from 'react';
+import { Children } from 'react';
 import { copyrightNotice } from 'helpers/legal';
 import Rows from '../base/rows';
 import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
@@ -25,27 +24,19 @@ import {
 type PropTypes = {
 	centred: boolean;
 	termsConditionsLink: string;
-	children: Node;
+	children: ReactNode;
 };
 
 // ----- Component ----- //
-function Footer({ centred, children, termsConditionsLink }: PropTypes) {
-	const [consentManagementPlatform, setConsentManagementPlatform] =
-		useState(null);
-
+function Footer({
+	centred,
+	children,
+	termsConditionsLink,
+}: PropTypes): JSX.Element {
 	function showPrivacyManager() {
-		if (consentManagementPlatform) {
-			consentManagementPlatform.showPrivacyManager();
-		}
+		cmp.showPrivacyManager();
 	}
 
-	useEffect(() => {
-		if (!getGlobal('ssr')) {
-			import('@guardian/consent-management-platform').then(({ cmp }) => {
-				setConsentManagementPlatform(cmp);
-			});
-		}
-	}, []);
 	return (
 		<footer css={componentFooter} role="contentinfo">
 			<ThemeProvider theme={linkThemeBrand}>

@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 
+import { cmp } from '@guardian/consent-management-platform';
 import ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -33,9 +33,8 @@ function analyticsInitialisation(
 	});
 }
 
-async function consentInitialisation(country: IsoCountry): Promise<void> {
+function consentInitialisation(country: IsoCountry): void {
 	if (shouldInitCmp()) {
-		const { cmp } = await import('@guardian/consent-management-platform');
 		cmp.init({
 			country,
 		});
@@ -51,7 +50,7 @@ function shouldInitCmp(): boolean {
 	 *   - a post deploy user
 	 *   - on the in-Epic checkout page (this page is iframed into dotcom, so doesn't need its own CMP)
 	 */
-	return !getGlobal('ssr') && !isPostDeployUser() && !isInEpicCheckoutPage();
+	return !isPostDeployUser() && !isInEpicCheckoutPage();
 }
 
 function isInEpicCheckoutPage(): boolean {

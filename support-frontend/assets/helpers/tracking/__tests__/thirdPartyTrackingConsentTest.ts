@@ -46,7 +46,7 @@ describe('thirdPartyTrackingConsent', () => {
 						ccpa: {
 							doNotSell: true,
 						},
-					}),
+					} as ConsentState),
 			);
 			await onConsentChangeEvent(dummyCallback, {
 				foo: '12345',
@@ -66,7 +66,7 @@ describe('thirdPartyTrackingConsent', () => {
 						ccpa: {
 							doNotSell: false,
 						},
-					}),
+					} as ConsentState),
 			);
 
 			await onConsentChangeEvent(dummyCallback, {
@@ -102,7 +102,7 @@ describe('thirdPartyTrackingConsent', () => {
 								gdprApplies: undefined,
 								tcString: '',
 							},
-						}),
+						} as unknown as ConsentState),
 				);
 
 				await onConsentChangeEvent(dummyCallback, {
@@ -134,7 +134,7 @@ describe('thirdPartyTrackingConsent', () => {
 								tcString: '',
 								gdprApplies: undefined,
 							},
-						}),
+						} as unknown as ConsentState),
 				);
 
 				await onConsentChangeEvent(dummyCallback, {
@@ -166,7 +166,7 @@ describe('thirdPartyTrackingConsent', () => {
 								tcString: '',
 								gdprApplies: undefined,
 							},
-						}),
+						} as unknown as ConsentState),
 				);
 
 				await onConsentChangeEvent(dummyCallback, {
