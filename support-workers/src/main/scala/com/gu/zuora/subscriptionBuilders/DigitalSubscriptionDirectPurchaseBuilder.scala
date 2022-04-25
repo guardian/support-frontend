@@ -83,6 +83,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       case (Annual, NZD) => 235
       case (Monthly, CAD) => 22
       case (Annual, CAD) => 219
+      case _ => Int.MaxValue
     }
     amount >= requiredAmount
   }
