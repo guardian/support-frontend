@@ -70,6 +70,8 @@ object PaymentFrequency {
 
   case object Quarterly extends PaymentFrequency("QUARTERLY")
 
+  case object SixMonthly extends PaymentFrequency("SIX_MONTHLY")
+
   case object Annually extends PaymentFrequency("ANNUALLY")
 }
 
@@ -86,6 +88,8 @@ object AcquisitionProduct {
   case object Paper extends AcquisitionProduct("PRINT_SUBSCRIPTION")
 
   case object GuardianWeekly extends AcquisitionProduct("PRINT_SUBSCRIPTION")
+
+  case object AppPremiumTier extends AcquisitionProduct("APP_PREMIUM_TIER")
 
 }
 
@@ -152,4 +156,6 @@ object PaymentProvider {
   case object DirectDebit extends PaymentProvider("GOCARDLESS")
 
   case object AmazonPay extends PaymentProvider("AMAZON_PAY")
+
+  case object InAppPurchase extends PaymentProvider("IN_APP_PURCHASE")
 }
