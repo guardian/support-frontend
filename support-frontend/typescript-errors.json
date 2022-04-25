@@ -6,7 +6,7 @@
             "TS7006": 26,
             "TS2322": 44,
             "TS2339": 13,
-            "TS6133": 9,
+            "TS6133": 7,
             "TS2578": 4,
             "TS2305": 8,
             "TS2314": 3,
@@ -85,7 +85,7 @@
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
-            "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 4,
+            "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
@@ -619,14 +619,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
-            "message": "'International' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx",
-            "message": "'NZDCountries' is declared but its value is never read."
         }
     ],
     "TS2578": [

@@ -14,8 +14,6 @@ import {
 	AUDCountries,
 	EURCountries,
 	GBPCountries,
-	International,
-	NZDCountries,
 } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
