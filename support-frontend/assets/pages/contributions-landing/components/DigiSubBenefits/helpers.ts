@@ -4,9 +4,10 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect, glyph } from 'helpers/internationalisation/currency';
 
 type CountryGroupsNotAUD = Exclude<CountryGroupId, 'AUDCountries'>;
-type RegularContribType = Exclude<ContributionType, 'ONE_OFF'>;
+export type RegularContribType = Exclude<ContributionType, 'ONE_OFF'>;
 
 const benefitsThresholdsByCountryGroup: Record<
 	CountryGroupsNotAUD,
@@ -59,6 +60,33 @@ function getThresholdPrice(
 	}
 }
 
+function getContribFrequency(
+	contributionType: ContributionType,
+): string | null {
+	switch (contributionType) {
+		case 'MONTHLY':
+			return 'per month';
+		case 'ANNUAL':
+			return 'per year';
+		default:
+			return null;
+	}
+}
+
+function getBtnThresholdCopy(
+	countryGroupId: CountryGroupId,
+	contributionType: ContributionType,
+): string {
+	const currencyGlyph = glyph(detect(countryGroupId));
+
+	const thresholdPrice =
+		getThresholdPrice(countryGroupId, contributionType) ?? '';
+
+	const frequency = getContribFrequency(contributionType) ?? '';
+
+	return `Change to ${currencyGlyph}${thresholdPrice} ${frequency}`;
+}
+
 function shouldShowBenefitsMessaging(
 	contributionType: ContributionType,
 	selectedAmounts: SelectedAmounts,
@@ -100,4 +128,6 @@ export {
 	benefitsThresholdsByCountryGroup,
 	shouldShowBenefitsMessaging,
 	getThresholdPrice,
+	getContribFrequency,
+	getBtnThresholdCopy,
 };

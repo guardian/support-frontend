@@ -18,7 +18,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import bullets1 from './bullets1.png';
 import bullets2 from './bullets2.png';
-import { getThresholdPrice } from './helpers';
+import { getBtnThresholdCopy, getThresholdPrice } from './helpers';
 
 const container = css`
 	border: 1px solid ${neutral[86]};
@@ -137,15 +137,19 @@ type PropTypes = {
 	countryGroupId: CountryGroupId;
 	showBenefitsMessaging: boolean;
 	contributionType: ContributionType;
+	setSelectedAmount: (
+		amount: number | 'other',
+		contributionType: ContributionType,
+	) => void;
 };
 
 function BenefitsBulletPoints({
 	showBenefitsMessaging,
 	countryGroupId,
 	contributionType,
+	setSelectedAmount,
 }: PropTypes): JSX.Element {
 	const currencyGlyph = glyph(detect(countryGroupId));
-
 	const thresholdPrice =
 		getThresholdPrice(countryGroupId, contributionType) ?? '';
 
@@ -156,6 +160,14 @@ function BenefitsBulletPoints({
 	const paragraph = showBenefitsMessaging
 		? `Thank you for choosing to give ${currencyGlyph}${thresholdPrice} or more each month.`
 		: 'Unlock exclusive extras when you give a little more each month.';
+
+	const btnCopy = getBtnThresholdCopy(countryGroupId, contributionType);
+
+	function handleBtnClick() {
+		if (thresholdPrice) {
+			setSelectedAmount(thresholdPrice, contributionType);
+		}
+	}
 
 	return (
 		<div css={container}>
@@ -180,9 +192,9 @@ function BenefitsBulletPoints({
 						priority="primary"
 						size="default"
 						css={button}
+						onClick={handleBtnClick}
 					>
-						Change to {currencyGlyph}
-						{thresholdPrice} per month
+						{btnCopy}
 					</Button>
 				</ThemeProvider>
 			)}

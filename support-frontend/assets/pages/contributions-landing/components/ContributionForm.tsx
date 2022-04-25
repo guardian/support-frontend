@@ -120,6 +120,10 @@ type PropTypes = {
 	productSetAbTestVariant: boolean;
 	benefitsMessagingAbTestBulletVariant: boolean;
 	benefitsMessagingAbTestParaVariant: boolean;
+	setSelectedAmount: (
+		amount: number | 'other',
+		contributionType: ContributionType,
+	) => void;
 };
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -217,6 +221,12 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	},
 	setSepaAddressCountry: (addressCountry: Country) => {
 		dispatch(setSepaAddressCountry(addressCountry));
+	},
+	setSelectedAmount: (
+		amount: number | 'other',
+		contributionType: ContributionType,
+	) => {
+		dispatch(selectAmount(amount, contributionType));
 	},
 });
 
@@ -401,10 +411,16 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					showBenefitsMessaging={showBenefitsMessaging}
 					countryGroupId={props.countryGroupId}
 					contributionType={props.contributionType}
+					setSelectedAmount={props.setSelectedAmount}
 				/>
 			)}
 			{props.benefitsMessagingAbTestParaVariant && !isAUDCountryGroup && (
-				<BenefitsParagraph showBenefitsMessaging={showBenefitsMessaging} />
+				<BenefitsParagraph
+					showBenefitsMessaging={showBenefitsMessaging}
+					countryGroupId={props.countryGroupId}
+					contributionType={props.contributionType}
+					setSelectedAmount={props.setSelectedAmount}
+				/>
 			)}
 
 			<StripePaymentRequestButton

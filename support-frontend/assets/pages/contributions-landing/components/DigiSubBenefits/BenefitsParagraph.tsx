@@ -11,6 +11,9 @@ import {
 	Button,
 	buttonThemeReaderRevenueBrand,
 } from '@guardian/source-react-components';
+import type { ContributionType } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getBtnThresholdCopy, getThresholdPrice } from './helpers';
 import para1 from './para1.png';
 
 const container = css`
@@ -58,11 +61,21 @@ const imgContainer = css`
 `;
 
 type PropTypes = {
-	// countryGroupId: CountryGroupId;
+	countryGroupId: CountryGroupId;
 	showBenefitsMessaging: boolean;
+	contributionType: ContributionType;
+	setSelectedAmount: (
+		amount: number | 'other',
+		contributionType: ContributionType,
+	) => void;
 };
 
-function BenefitsParagraph({ showBenefitsMessaging }: PropTypes): JSX.Element {
+function BenefitsParagraph({
+	showBenefitsMessaging,
+	countryGroupId,
+	contributionType,
+	setSelectedAmount,
+}: PropTypes): JSX.Element {
 	const titleCopy = showBenefitsMessaging
 		? "You've unlocked the full Guardian experience"
 		: 'Get the full Guardian experience';
@@ -85,6 +98,17 @@ function BenefitsParagraph({ showBenefitsMessaging }: PropTypes): JSX.Element {
 		</p>
 	);
 
+	const btnCopy = getBtnThresholdCopy(countryGroupId, contributionType);
+
+	const thresholdPrice =
+		getThresholdPrice(countryGroupId, contributionType) ?? '';
+
+	function handleBtnClick() {
+		if (thresholdPrice) {
+			setSelectedAmount(thresholdPrice, contributionType);
+		}
+	}
+
 	return (
 		<div css={container}>
 			<div css={imgContainer}>
@@ -99,8 +123,9 @@ function BenefitsParagraph({ showBenefitsMessaging }: PropTypes): JSX.Element {
 						priority="primary"
 						size="default"
 						css={button}
+						onClick={handleBtnClick}
 					>
-						Change to £12 per month
+						{btnCopy}
 					</Button>
 				</ThemeProvider>
 			)}
