@@ -1,12 +1,14 @@
 package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency._
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.workers.Monthly
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
-import com.gu.support.zuora.api._
+import com.gu.support.workers.{Annual, BillingPeriod, Monthly}
+import com.gu.support.zuora.api.{Month, RatePlanChargeData, RatePlanChargeOverride, SubscribeItem}
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
 class DigitalSubscriptionDirectPurchaseBuilder(
@@ -53,20 +55,36 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 
   def overridePricingIfRequired(state: DigitalSubscriptionDirectPurchaseState) = {
     state.product.amount
+      .filter(amount => priceIsHighEnough(amount, state.product.billingPeriod, state.product.currency))
       .map { amount =>
-        // TODO: Limit this specifically to people in the benefits test
         val ratePlanChargeId =
           if (state.product.billingPeriod == Monthly) config.monthlyChargeId else config.annualChargeId
         List(
           RatePlanChargeData(
-            ContributionRatePlanCharge(
+            RatePlanChargeOverride(
               ratePlanChargeId,
-              price = amount,
-            ), // Pass the amount the user selected into Zuora
+              price = amount, // Pass the amount the user selected into Zuora
+            ),
           ),
         )
       }
       .getOrElse(Nil)
+  }
+
+  def priceIsHighEnough(amount: BigDecimal, billingPeriod: BillingPeriod, currency: Currency) = {
+    val requiredAmount = (billingPeriod, currency) match {
+      case (Monthly, GBP) => 12
+      case (Annual, GBP) => 119
+      case (Monthly, USD) => 20
+      case (Annual, USD) => 199
+      case (Monthly, EUR) => 15
+      case (Annual, GBP) => 149
+      case (Monthly, NZD) => 24
+      case (Annual, NZD) => 235
+      case (Monthly, CAD) => 22
+      case (Annual, CAD) => 219
+    }
+    amount >= requiredAmount
   }
 
 }
