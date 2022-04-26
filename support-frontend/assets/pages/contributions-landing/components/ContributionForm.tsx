@@ -173,10 +173,10 @@ const mapStateToProps = (state: State) => ({
 	productSetAbTestVariant:
 		state.common.abParticipations.productSetTest === 'variant',
 	benefitsMessagingAbTestBulletVariant:
-		state.common.abParticipations.sfd_v3 === 'V2_BULLET' &&
+		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
 		state.page.form.contributionType !== 'ONE_OFF',
 	benefitsMessagingAbTestParaVariant:
-		state.common.abParticipations.sfd_v3 === 'V1_PARAGRAPH' &&
+		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
 		state.page.form.contributionType !== 'ONE_OFF',
 });
 

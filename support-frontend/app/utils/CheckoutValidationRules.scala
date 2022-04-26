@@ -164,7 +164,7 @@ object DigitalPackValidation {
 
     def isInBenefitsTest(supportAbTests: Set[AbTest]) = supportAbTests
       .find { test =>
-        test.name == "sfd_v3" && (test.variant == "V2_BULLET" || test.variant == "V1_PARAGRAPH")
+        test.name == "PP_V3" && (test.variant == "V2_BULLET" || test.variant == "V1_PARAGRAPH")
       }
       .map(_ => Valid)
       .getOrElse(Invalid("User is not in the benefits test"))

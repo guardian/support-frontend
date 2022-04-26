@@ -14,6 +14,7 @@ import {
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getBtnThresholdCopy, getThresholdPrice } from './helpers';
+import { useLiveFeedBackContext } from './LiveFeedBackProvider';
 import para1 from './para1.png';
 
 const container = css`
@@ -100,12 +101,15 @@ function BenefitsParagraph({
 
 	const btnCopy = getBtnThresholdCopy(countryGroupId, contributionType);
 
+	const setShowLiveFeedBack = useLiveFeedBackContext()?.setShowLiveFeedBack;
+
 	const thresholdPrice =
 		getThresholdPrice(countryGroupId, contributionType) ?? '';
 
 	function handleBtnClick() {
 		if (thresholdPrice) {
 			setSelectedAmount(thresholdPrice, contributionType);
+			setShowLiveFeedBack?.(true);
 		}
 	}
 

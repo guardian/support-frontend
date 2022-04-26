@@ -133,10 +133,10 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
-	sfd_v3: {
+	PP_V3: {
 		variants: [
 			{
-				id: 'Control',
+				id: 'CONTROL',
 			},
 			{
 				id: 'V1_PARAGRAPH',
@@ -145,15 +145,34 @@ export const tests: Tests = {
 				id: 'V2_BULLET',
 			},
 		],
-		// update audiences to exclude aus
 		audiences: {
-			ALL: {
+			GBPCountries: {
+				offset: 0,
+				size: 1,
+			},
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
+			EURCountries: {
+				offset: 0,
+				size: 1,
+			},
+			International: {
+				offset: 0,
+				size: 1,
+			},
+			NZDCountries: {
+				offset: 0,
+				size: 1,
+			},
+			Canada: {
 				offset: 0,
 				size: 1,
 			},
 		},
 		isActive: true,
-		referrerControlled: false,
+		referrerControlled: true,
 		seed: 14,
 	},
 };

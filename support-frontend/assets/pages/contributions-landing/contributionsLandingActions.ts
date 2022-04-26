@@ -784,8 +784,8 @@ function getBillingCountryAndState(
 
 function getProductOptionsForBenefitsTest(amount: number, state: State) {
 	const inBenefitsTest =
-		state.common.abParticipations.sfd_v3 === 'V2_BULLET' ||
-		state.common.abParticipations.sfd_v3 === 'V1_PARAGRAPH';
+		state.common.abParticipations.PP_V3 === 'V2_BULLET' ||
+		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH';
 	const isRecurring = state.page.form.contributionType != 'ONE_OFF';
 
 	const thresholdPrice = getThresholdPrice(

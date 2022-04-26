@@ -19,6 +19,7 @@ import { detect, glyph } from 'helpers/internationalisation/currency';
 import bullets1 from './bullets1.png';
 import bullets2 from './bullets2.png';
 import { getBtnThresholdCopy, getThresholdPrice } from './helpers';
+import { useLiveFeedBackContext } from './LiveFeedBackProvider';
 
 const container = css`
 	border: 1px solid ${neutral[86]};
@@ -163,9 +164,12 @@ function BenefitsBulletPoints({
 
 	const btnCopy = getBtnThresholdCopy(countryGroupId, contributionType);
 
+	const setShowLiveFeedBack = useLiveFeedBackContext()?.setShowLiveFeedBack;
+
 	function handleBtnClick() {
 		if (thresholdPrice) {
 			setSelectedAmount(thresholdPrice, contributionType);
+			setShowLiveFeedBack?.(true);
 		}
 	}
 
