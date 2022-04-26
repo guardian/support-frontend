@@ -51,7 +51,7 @@ const renderError = (e: Error, id?: string | null): void => {
 };
 
 const renderPage = (
-	content: React.DOMElement<React.DOMAttributes<Element>, Element>,
+	content: React.ReactElement<React.DOMAttributes<Element>>,
 	id: string,
 	callBack?: () => void,
 ): void => {
