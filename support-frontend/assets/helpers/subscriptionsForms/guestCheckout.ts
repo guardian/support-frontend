@@ -1,7 +1,7 @@
 import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { setUserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/actions';
 import type { RedemptionPageState } from 'helpers/redux/redemptionsStore';
-import { setUserTypeFromIdentityResponse } from 'helpers/subscriptionsForms/formActions';
 import type {
 	CheckoutState,
 	WithDeliveryCheckoutState,
@@ -20,7 +20,7 @@ export const fetchAndStoreUserType =
 	): void => {
 		const state = getState();
 		const { csrf } = state.page;
-		const { isSignedIn } = state.page.checkout;
+		const { isSignedIn } = state.page.checkoutForm.personalDetails;
 
 		void getUserTypeFromIdentity(email, isSignedIn, csrf, callback);
 	};
