@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import * as stripeJs from '@stripe/react-stripe-js';
 import type {
-	PaymentIntentResult,
 	PaymentMethod,
 	PaymentRequest,
 	PaymentRequestCompleteStatus,
@@ -12,7 +11,6 @@ import type {
 import { useEffect, useState } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { ContributionType } from 'helpers/contributions';
 import {
@@ -22,7 +20,6 @@ import {
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { amountIsValid, isValidEmail } from 'helpers/forms/formValidation';
 import type {
-	PaymentAuthorisation,
 	PaymentResult,
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -47,18 +44,17 @@ import type { Option } from 'helpers/types/option';
 import { logException } from 'helpers/utilities/logger';
 import {
 	onThirdPartyPaymentAuthorised,
+	setEmail,
+	setFirstName,
 	setHandleStripe3DS,
+	setLastName,
 	paymentWaiting as setPaymentWaiting,
 	setStripePaymentRequestButtonClicked,
 	setStripePaymentRequestButtonError,
 	updateBillingCountry,
 	updateBillingState,
-	updateEmail,
-	updateFirstName,
-	updateLastName,
 	updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { trackComponentEvents } from '../../helpers/tracking/ophan';
 
@@ -112,27 +108,19 @@ const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
-	onPaymentAuthorised: (paymentAuthorisation: PaymentAuthorisation) =>
-		dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation)),
-	updateEmail: (email: string) => dispatch(updateEmail(email)),
-	updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
-	updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
-	updateBillingState: (billingState: StateProvince | null) =>
-		dispatch(updateBillingState(billingState)),
-	updateBillingCountry: (billingCountry: IsoCountry) =>
-		dispatch(updateBillingCountry(billingCountry)),
-	setStripePaymentRequestButtonClicked: (stripeAccount: StripeAccount) =>
-		dispatch(setStripePaymentRequestButtonClicked(stripeAccount)),
-	setAssociatedPaymentMethod: () => dispatch(updatePaymentMethod(Stripe)),
-	setPaymentWaiting: (isWaiting: boolean) =>
-		dispatch(setPaymentWaiting(isWaiting)),
-	setError: (error: ErrorReason, stripeAccount: StripeAccount) =>
-		dispatch(setStripePaymentRequestButtonError(error, stripeAccount)),
-	setHandleStripe3DS: (
-		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
-	) => dispatch(setHandleStripe3DS(handleStripe3DS)),
-});
+const mapDispatchToProps = {
+	onPaymentAuthorised: onThirdPartyPaymentAuthorised,
+	updateEmail: setEmail,
+	updateFirstName: setFirstName,
+	updateLastName: setLastName,
+	updateBillingState,
+	updateBillingCountry,
+	setStripePaymentRequestButtonClicked,
+	setAssociatedPaymentMethod: updatePaymentMethod,
+	setPaymentWaiting,
+	setError: setStripePaymentRequestButtonError,
+	setHandleStripe3DS,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -211,7 +199,7 @@ function updateTotal(props: PropTypes) {
 function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
 	function onClick(event: StripePaymentRequestButtonElementClickEvent) {
 		trackComponentClick('apple-pay-clicked');
-		props.setAssociatedPaymentMethod();
+		props.setAssociatedPaymentMethod(Stripe);
 		props.setStripePaymentRequestButtonClicked(props.stripeAccount);
 
 		const isValid = amountIsValid(

@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';

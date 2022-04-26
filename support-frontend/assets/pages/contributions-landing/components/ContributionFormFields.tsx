@@ -23,22 +23,6 @@ import {
 import type { State } from '../contributionsLandingReducer';
 import ContributionState from './ContributionState';
 
-// ----- Types ----- //
-
-// interface ContributionFormFieldProps {
-// 	firstName: string;
-// 	lastName: string;
-// 	email: string;
-// 	billingState: StateProvince | null;
-// 	checkoutFormHasBeenSubmitted: boolean;
-// 	isSignedIn: boolean;
-// 	setFirstName: (firstName: string) => void;
-// 	setLastName: (lastName: string) => void;
-// 	setEmail: (email: string) => void;
-// 	updateBillingState: (billingState: string) => void;
-// 	contributionType: ContributionType;
-// }
-
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
 const getCheckoutFormValue = (
@@ -74,20 +58,12 @@ const mapStateToProps = (state: State) => ({
 	contributionType: state.page.form.contributionType,
 });
 
-const mapDispatchToProps = (dispatch: ContributionsDispatch) => ({
-	setFirstName: (firstName: string) => {
-		dispatch(setFirstName(firstName));
-	},
-	setLastName: (lastName: string) => {
-		dispatch(setLastName(lastName));
-	},
-	setEmail: (email: string) => {
-		dispatch(setEmail(email));
-	},
-	updateBillingState: (billingState: string) => {
-		dispatch(updateBillingState(billingState === '' ? null : billingState));
-	},
-});
+const mapDispatchToProps = {
+	setFirstName,
+	setLastName,
+	setEmail,
+	updateBillingState,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -184,7 +160,9 @@ function ContributionFormFields({
 			) : null}
 
 			<ContributionState
-				onChange={updateBillingState}
+				onChange={(newBillingState) =>
+					updateBillingState(newBillingState === '' ? null : newBillingState)
+				}
 				selectedState={billingState}
 				isValid={checkBillingState(billingState)}
 				formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
@@ -193,7 +171,4 @@ function ContributionFormFields({
 	);
 }
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(ContributionFormFields);
+export default connector(ContributionFormFields);
