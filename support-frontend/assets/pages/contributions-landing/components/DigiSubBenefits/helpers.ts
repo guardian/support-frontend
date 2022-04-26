@@ -4,6 +4,7 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 
 type CountryGroupsNotAUD = Exclude<CountryGroupId, 'AUDCountries'>;
@@ -73,7 +74,7 @@ function getContribFrequency(
 	}
 }
 
-function getBtnThresholdCopy(
+function priceWithGlyph(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
 ): string {
@@ -82,9 +83,17 @@ function getBtnThresholdCopy(
 	const thresholdPrice =
 		getThresholdPrice(countryGroupId, contributionType) ?? '';
 
+	return `${currencyGlyph}${thresholdPrice}`;
+}
+
+function getBtnThresholdCopy(
+	countryGroupId: CountryGroupId,
+	contributionType: ContributionType,
+): string {
+	const price = priceWithGlyph(countryGroupId, contributionType);
 	const frequency = getContribFrequency(contributionType) ?? '';
 
-	return `Change to ${currencyGlyph}${thresholdPrice} ${frequency}`;
+	return `Change to ${price} ${frequency}`;
 }
 
 function shouldShowBenefitsMessaging(
@@ -93,34 +102,38 @@ function shouldShowBenefitsMessaging(
 	otherAmounts: OtherAmounts,
 	countryGroupId: CountryGroupId,
 ): boolean {
-	if (countryGroupId === 'AUDCountries') return false;
-	if (contributionType === 'MONTHLY') {
-		if (selectedAmounts[contributionType] === 'other') {
-			const monthlyOtherAmount = otherAmounts[contributionType].amount;
-			return monthlyOtherAmount
-				? parseInt(monthlyOtherAmount) >=
-						benefitsThresholdsByCountryGroup[countryGroupId][contributionType]
-				: false;
-		}
+	if (!isNotAustralia(countryGroupId) || !isNotOneOff(contributionType)) {
+		return false;
+	}
+
+	const benefitsThreshold =
+		benefitsThresholdsByCountryGroup[countryGroupId][contributionType];
+
+	if (selectedAmounts[contributionType] === 'other') {
+		const otherAmount = otherAmounts[contributionType].amount;
+		return otherAmount ? parseInt(otherAmount) >= benefitsThreshold : false;
+	}
+
+	return selectedAmounts[contributionType] >= benefitsThreshold;
+}
+
+function shouldShowBenefitsThankYouText(
+	countryId: string,
+	amount: number,
+	contributionType: ContributionType,
+): boolean {
+	const maybeCountryGroup = fromCountry(countryId);
+	const countryGroupNotAUD =
+		maybeCountryGroup && isNotAustralia(maybeCountryGroup);
+	const isNotOneOffContrib = isNotOneOff(contributionType);
+
+	if (maybeCountryGroup && countryGroupNotAUD && isNotOneOffContrib) {
 		return (
-			selectedAmounts[contributionType] >=
-			benefitsThresholdsByCountryGroup[countryGroupId][contributionType]
+			amount >=
+			benefitsThresholdsByCountryGroup[maybeCountryGroup][contributionType]
 		);
 	}
 
-	if (contributionType === 'ANNUAL') {
-		if (selectedAmounts[contributionType] === 'other') {
-			const annualOtherAmount = otherAmounts[contributionType].amount;
-			return annualOtherAmount
-				? parseInt(annualOtherAmount) >=
-						benefitsThresholdsByCountryGroup[countryGroupId][contributionType]
-				: false;
-		}
-		return (
-			selectedAmounts[contributionType] >=
-			benefitsThresholdsByCountryGroup[countryGroupId][contributionType]
-		);
-	}
 	return false;
 }
 
@@ -129,5 +142,7 @@ export {
 	shouldShowBenefitsMessaging,
 	getThresholdPrice,
 	getContribFrequency,
+	priceWithGlyph,
 	getBtnThresholdCopy,
+	shouldShowBenefitsThankYouText as showBenefitsThankYouText,
 };

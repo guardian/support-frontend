@@ -8,7 +8,7 @@
             "TS2339": 13,
             "TS6133": 7,
             "TS2578": 4,
-            "TS2305": 9,
+            "TS2305": 8,
             "TS2314": 3,
             "TS7031": 7,
             "TS2769": 7,
@@ -98,7 +98,6 @@
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/pages/contributions-landing/components/DigiSubBenefits/LiveFeedBack.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
@@ -668,10 +667,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/DigiSubBenefits/LiveFeedBack.tsx",
-            "message": "Module '\"./helpers\"' has no exported member 'priceWithGlyph'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",

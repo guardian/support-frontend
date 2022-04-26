@@ -50,6 +50,7 @@ type ContributionThankYouHeaderProps = {
 	amount: number;
 	currency: IsoCurrency;
 	shouldShowLargeDonationMessage: boolean;
+	showBenefitsThankYouText: boolean;
 };
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
@@ -61,6 +62,7 @@ function ContributionThankYouHeader({
 	amount,
 	currency,
 	shouldShowLargeDonationMessage,
+	showBenefitsThankYouText,
 }: ContributionThankYouHeaderProps): JSX.Element {
 	const title = (): React.ReactNode => {
 		const nameAndTrailingSpace: string =
@@ -92,7 +94,10 @@ function ContributionThankYouHeader({
 				case 'MONTHLY':
 					return (
 						<div>
-							Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
+							Thank you {nameAndTrailingSpace}for{' '}
+							{showBenefitsThankYouText
+								? 'supporting us with'
+								: 'choosing to contribute'}{' '}
 							{currencyAndAmount} each month ❤️
 						</div>
 					);
@@ -100,7 +105,10 @@ function ContributionThankYouHeader({
 				case 'ANNUAL':
 					return (
 						<div>
-							Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
+							Thank you {nameAndTrailingSpace}for{' '}
+							{showBenefitsThankYouText
+								? 'supporting us with'
+								: 'choosing to contribute'}{' '}
 							{currencyAndAmount} each year ❤️
 						</div>
 					);
@@ -126,6 +134,9 @@ function ContributionThankYouHeader({
 			? 'It’s not every day that we receive such a generous contribution – thank you. We would love to stay in touch. So that we can, please pick the add-ons that suit you best. '
 			: 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. ';
 
+		const benefitsThresholdIsMetText =
+			'You have unlocked access to the Guardian’s digital subscription, offering you the best possible experience of our independent journalism. Look out for emails from us shortly, so you can activate your exclusive extras. In the meantime, please select the add-ons that suit you best.';
+
 		function MarketingCopy() {
 			return (
 				<span>
@@ -140,8 +151,10 @@ function ContributionThankYouHeader({
 
 		return (
 			<>
-				{mainText}
-				{contributionType !== 'ONE_OFF' && <MarketingCopy />}
+				{showBenefitsThankYouText ? benefitsThresholdIsMetText : mainText}
+				{!showBenefitsThankYouText && contributionType !== 'ONE_OFF' && (
+					<MarketingCopy />
+				)}
 			</>
 		);
 	}
