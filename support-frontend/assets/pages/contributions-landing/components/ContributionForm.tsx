@@ -129,7 +129,7 @@ const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	email:
 		getCheckoutFormValue(
-			state.page.form.formData.email,
+			state.page.checkoutForm.personalDetails.email,
 			state.page.user.email,
 		) ?? '',
 	otherAmounts: state.page.form.formData.otherAmounts,

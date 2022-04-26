@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import type { PayloadAction } from '@reduxjs/toolkit';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
@@ -91,11 +90,7 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import type {
-	State,
-	Stripe3DSResult,
-	UserFormData,
-} from './contributionsLandingReducer';
+import type { State, UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
@@ -497,20 +492,6 @@ const setAmazonPayBillingAgreementConsentStatus =
 		}))(dispatch, getState);
 	};
 
-// const setUserTypeFromIdentityResponse = setUserTypeFromIdentityResponse;
-// (userTypeFromIdentityResponse: UserTypeFromIdentityResponse) =>
-// (dispatch: Dispatch, getState: () => State): void => {
-// 	// PayPal one-off redirects away from the site before hitting the thank you page, and we'll need userType
-// 	storage.setSession(
-// 		'userTypeFromIdentityResponse',
-// 		userTypeFromIdentityResponse,
-// 	);
-// 	setFormSubmissionDependentValue(() => ({
-// 		type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-// 		userTypeFromIdentityResponse,
-// 	}))(dispatch, getState);
-// };
-
 // We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
 const loadPayPalExpressSdk =
 	(contributionType: ContributionType) =>
@@ -672,7 +653,7 @@ const buildStripeChargeDataFromAuthorisation = (
 			state.page.form.formData.otherAmounts,
 			state.page.form.contributionType,
 		),
-		email: state.page.form.formData.email ?? '',
+		email: state.page.checkoutForm.personalDetails.email,
 		stripePaymentMethod,
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
@@ -766,9 +747,9 @@ function regularPaymentRequestFromAuthorisation(
 		state,
 	);
 	return {
-		firstName: (state.page.form.formData.firstName ?? '').trim(),
-		lastName: (state.page.form.formData.lastName ?? '').trim(),
-		email: (state.page.form.formData.email ?? '').trim(),
+		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
+		lastName: state.page.checkoutForm.personalDetails.lastName.trim(),
+		email: state.page.checkoutForm.personalDetails.email.trim(),
 		billingAddress: {
 			lineOne: null,
 			// required go cardless field
@@ -814,7 +795,7 @@ const amazonPayDataFromAuthorisation = (
 			state.page.form.contributionType,
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
-		email: state.page.form.formData.email ?? '',
+		email: state.page.checkoutForm.personalDetails.email,
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
 		state.common.referrerAcquisitionData,
@@ -942,7 +923,7 @@ const createOneOffPayPalPayment =
 const makeCreateStripePaymentIntentRequest =
 	(
 		data: CreateStripePaymentIntentRequest,
-		handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 		paymentAuthorisation: PaymentAuthorisation,
 	) =>
 	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>

@@ -149,8 +149,8 @@ type ContributionThankYouProps = {
 };
 
 const mapStateToProps = (state: State) => ({
-	email: state.page.form.formData.email ?? '',
-	name: state.page.form.formData.firstName ?? '',
+	email: state.page.checkoutForm.personalDetails.email,
+	name: state.page.checkoutForm.personalDetails.firstName,
 	contributionType: state.page.form.contributionType,
 	amount: getAmount(
 		state.page.form.selectedAmounts,

@@ -3,7 +3,6 @@ import { TextInput } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Signout from 'components/signout/signout';
-import type { ContributionType } from 'helpers/contributions';
 import {
 	checkBillingState,
 	checkEmail,
@@ -11,8 +10,6 @@ import {
 	checkLastName,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
-import type { StateProvince } from 'helpers/internationalisation/country';
-import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	setEmail,
@@ -58,6 +55,7 @@ const mapStateToProps = (state: State) => ({
 	contributionType: state.page.form.contributionType,
 });
 
+// https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object
 const mapDispatchToProps = {
 	setFirstName,
 	setLastName,
