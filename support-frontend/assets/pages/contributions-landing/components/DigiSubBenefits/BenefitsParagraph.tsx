@@ -11,11 +11,11 @@ import {
 	Button,
 	buttonThemeReaderRevenueBrand,
 } from '@guardian/source-react-components';
+import GridImage from 'components/gridImage/gridImage';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getBtnThresholdCopy, getThresholdPrice } from './helpers';
 import { useLiveFeedBackContext } from './LiveFeedBackProvider';
-import para1 from './para1.png';
 
 const container = css`
 	border: 1px solid ${neutral[86]};
@@ -49,16 +49,16 @@ const button = css`
 	margin: ${space[6]}px 0 32px;
 `;
 
-const img = css`
-	width: 60%;
-	height: auto;
-	display: block;
-	margin: auto;
-`;
-
 const imgContainer = css`
 	margin-top: -${space[3]}px;
 	border-bottom: 1px solid ${neutral[86]};
+
+	& img {
+		width: 60%;
+		height: auto;
+		display: block;
+		margin: auto;
+	}
 `;
 
 type PropTypes = {
@@ -116,7 +116,18 @@ function BenefitsParagraph({
 	return (
 		<div css={container}>
 			<div css={imgContainer}>
-				<img css={img} src={para1} />
+				<GridImage
+					classModifiers={['']}
+					gridId={
+						countryGroupId === 'UnitedStates'
+							? 'benefitsPackshotParaMobAndDesktopUS'
+							: 'benefitsPackshotParaMobAndDesktopUK'
+					}
+					srcSizes={[500, 140]}
+					sizes="(min-width: 1140px) 100%,
+                  500px"
+					imgType="png"
+				/>
 			</div>
 			<h3 css={title}>{titleCopy}</h3>
 			{paragraph}

@@ -13,11 +13,10 @@ import {
 	buttonThemeReaderRevenueBrand,
 	SvgCheckmark,
 } from '@guardian/source-react-components';
+import GridImage from 'components/gridImage/gridImage';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
-import bullets1 from './bullets1.png';
-import bullets2 from './bullets2.png';
 import { getBtnThresholdCopy, getThresholdPrice } from './helpers';
 import { useLiveFeedBackContext } from './LiveFeedBackProvider';
 
@@ -60,6 +59,10 @@ const mobileImg = css`
 	margin-left: auto;
 	margin-right: -16px;
 
+	& img {
+		width: 100%;
+	}
+
 	${from.leftCol} {
 		display: none;
 	}
@@ -71,6 +74,10 @@ const desktopImg = css`
 	height: auto;
 	margin-left: auto;
 	margin-right: -${space[6]}px;
+
+	& img {
+		width: 100%;
+	}
 
 	${from.leftCol} {
 		display: block;
@@ -185,8 +192,30 @@ function BenefitsBulletPoints({
 					</p>
 				</div>
 				<div css={imgContainer}>
-					<img css={mobileImg} src={bullets1} />
-					<img css={desktopImg} src={bullets2} />
+					<div css={mobileImg}>
+						<GridImage
+							classModifiers={['']}
+							gridId={'benefitsPackshotBulletsMobUKUS'}
+							srcSizes={[333]}
+							sizes="(max-width: 1140px) 100%,
+                  333px"
+							imgType="png"
+						/>
+					</div>
+					<div css={desktopImg}>
+						<GridImage
+							classModifiers={['']}
+							gridId={
+								countryGroupId === 'UnitedStates'
+									? 'benefitsPackshotBulletsDesktopUS'
+									: 'benefitsPackshotBulletsDesktopUK'
+							}
+							srcSizes={[500, 140]}
+							sizes="(min-width: 1140px) 100%,
+                  500px"
+							imgType="png"
+						/>
+					</div>
 				</div>
 			</div>
 			{!showBenefitsMessaging && (

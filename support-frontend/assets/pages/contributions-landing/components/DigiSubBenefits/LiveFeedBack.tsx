@@ -59,7 +59,6 @@ function LiveFeedBack({
 	const showLiveFeedBack = useLiveFeedBackContext()?.showLiveFeedBack;
 	const setShowLiveFeedBack = useLiveFeedBackContext()?.setShowLiveFeedBack;
 
-	console.log(showLiveFeedBack);
 	const price = priceWithGlyph(countryGroupId, contributionType);
 
 	return (
