@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import { TextInput } from '@guardian/source-react-components';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import Signout from 'components/signout/signout';
 import type { ContributionType } from 'helpers/contributions';
 import {
@@ -12,32 +12,32 @@ import {
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
 import type { StateProvince } from 'helpers/internationalisation/country';
+import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import type { Action } from '../contributionsLandingActions';
 import {
+	setEmail,
+	setFirstName,
+	setLastName,
 	updateBillingState,
-	updateEmail,
-	updateFirstName,
-	updateLastName,
 } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
 import ContributionState from './ContributionState';
 
 // ----- Types ----- //
 
-interface ContributionFormFieldProps {
-	firstName: string;
-	lastName: string;
-	email: string;
-	billingState: StateProvince | null;
-	checkoutFormHasBeenSubmitted: boolean;
-	isSignedIn: boolean;
-	updateFirstName: (firstName: string) => void;
-	updateLastName: (lastName: string) => void;
-	updateEmail: (email: string) => void;
-	updateBillingState: (billingState: string) => void;
-	contributionType: ContributionType;
-}
+// interface ContributionFormFieldProps {
+// 	firstName: string;
+// 	lastName: string;
+// 	email: string;
+// 	billingState: StateProvince | null;
+// 	checkoutFormHasBeenSubmitted: boolean;
+// 	isSignedIn: boolean;
+// 	setFirstName: (firstName: string) => void;
+// 	setLastName: (lastName: string) => void;
+// 	setEmail: (email: string) => void;
+// 	updateBillingState: (billingState: string) => void;
+// 	contributionType: ContributionType;
+// }
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
@@ -50,17 +50,17 @@ const getCheckoutFormValue = (
 const mapStateToProps = (state: State) => ({
 	firstName:
 		getCheckoutFormValue(
-			state.page.form.formData.firstName,
+			state.page.checkoutForm.personalDetails.firstName,
 			state.page.user.firstName,
 		) ?? '',
 	lastName:
 		getCheckoutFormValue(
-			state.page.form.formData.lastName,
+			state.page.checkoutForm.personalDetails.lastName,
 			state.page.user.lastName,
 		) ?? '',
 	email:
 		getCheckoutFormValue(
-			state.page.form.formData.email,
+			state.page.checkoutForm.personalDetails.email,
 			state.page.user.email,
 		) ?? '',
 	checkoutFormHasBeenSubmitted:
@@ -70,24 +70,28 @@ const mapStateToProps = (state: State) => ({
 			state.page.form.formData.billingState,
 			state.page.user.stateField,
 		) ?? '',
-	isSignedIn: state.page.user.isSignedIn,
+	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
 	contributionType: state.page.form.contributionType,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
-	updateFirstName: (firstName: string) => {
-		dispatch(updateFirstName(firstName));
+const mapDispatchToProps = (dispatch: ContributionsDispatch) => ({
+	setFirstName: (firstName: string) => {
+		dispatch(setFirstName(firstName));
 	},
-	updateLastName: (lastName: string) => {
-		dispatch(updateLastName(lastName));
+	setLastName: (lastName: string) => {
+		dispatch(setLastName(lastName));
 	},
-	updateEmail: (email: string) => {
-		dispatch(updateEmail(email));
+	setEmail: (email: string) => {
+		dispatch(setEmail(email));
 	},
 	updateBillingState: (billingState: string) => {
 		dispatch(updateBillingState(billingState === '' ? null : billingState));
 	},
 });
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type ContributionFormFieldProps = ConnectedProps<typeof connector>;
 
 // ----- Render ----- //
 
@@ -99,9 +103,9 @@ function ContributionFormFields({
 	checkoutFormHasBeenSubmitted,
 	isSignedIn,
 	contributionType,
-	updateFirstName,
-	updateLastName,
-	updateEmail,
+	setFirstName,
+	setLastName,
+	setEmail,
 	updateBillingState,
 }: ContributionFormFieldProps) {
 	return (
@@ -120,7 +124,7 @@ function ContributionFormFields({
 					type="email"
 					autoComplete="email"
 					supporting="example@domain.com"
-					onChange={(e) => updateEmail(e.target.value)}
+					onChange={(e) => setEmail(e.target.value)}
 					pattern={emailRegexPattern}
 					error={
 						checkoutFormHasBeenSubmitted && !checkEmail(email)
@@ -146,7 +150,7 @@ function ContributionFormFields({
 							value={firstName}
 							autoComplete="given-name"
 							autoCapitalize="words"
-							onChange={(e) => updateFirstName(e.target.value)}
+							onChange={(e) => setFirstName(e.target.value)}
 							error={
 								checkoutFormHasBeenSubmitted && !checkFirstName(firstName)
 									? 'Please provide a valid first name'
@@ -167,7 +171,7 @@ function ContributionFormFields({
 							value={lastName}
 							autoComplete="family-name"
 							autoCapitalize="words"
-							onChange={(e) => updateLastName(e.target.value)}
+							onChange={(e) => setLastName(e.target.value)}
 							error={
 								checkoutFormHasBeenSubmitted && !checkLastName(lastName)
 									? 'Please provide a valid last name'

@@ -22,6 +22,8 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
+import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
+import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import * as storage from 'helpers/storage/storage';
 import { createUserReducer } from 'helpers/user/userReducer';
@@ -111,6 +113,9 @@ interface FormState {
 
 interface PageState {
 	form: FormState;
+	checkoutForm: {
+		personalDetails: PersonalDetailsState;
+	};
 	user: UserState;
 	csrf: CsrfState;
 	directDebit: DirectDebitState;
@@ -583,6 +588,9 @@ function createFormReducer() {
 function initReducer(): Reducer<PageState> {
 	return combineReducers({
 		form: createFormReducer(),
+		checkoutForm: combineReducers({
+			personalDetails: personalDetailsReducer,
+		}),
 		user: createUserReducer(),
 		directDebit,
 		csrf,
