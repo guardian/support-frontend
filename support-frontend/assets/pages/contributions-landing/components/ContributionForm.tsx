@@ -482,6 +482,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					props.otherAmounts,
 					props.contributionType,
 				)}
+				showBenefitsMessaging={showBenefitsMessaging}
 			/>
 			{props.isWaiting ? (
 				<ProgressMessage message={['Processing transaction', 'Please wait']} />
