@@ -5,12 +5,12 @@ import { marketingConsentReducerFor } from 'components/marketingConsent/marketin
 import csrf from 'helpers/csrf/csrfReducer';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { ReaderType } from 'helpers/productPrice/readerType';
+import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
+import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
-import { getUser } from 'helpers/user/user';
 import type { User } from 'helpers/user/userReducer';
 import { createUserReducer } from 'helpers/user/userReducer';
 
@@ -18,13 +18,6 @@ export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
 
 export type RedemptionCheckoutState = {
 	stage: Stage;
-	firstName: string;
-	lastName: string;
-	email: string;
-	confirmEmail: string;
-	telephone: string;
-	isSignedIn: boolean;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	errors: Array<FormError<FormField>>;
 };
 
@@ -36,6 +29,9 @@ export type RedemptionFormState = {
 	csrf: Csrf;
 	marketingConsent: MarketingConsentState;
 	checkout: RedemptionCheckoutState;
+	checkoutForm: {
+		personalDetails: PersonalDetailsState;
+	};
 };
 
 // ------- Actions ---------- //
@@ -57,46 +53,13 @@ export type Action =
 			error: Option<string>;
 	  }
 	| {
-			type: 'SET_FIRST_NAME';
-			firstName: string;
-	  }
-	| {
-			type: 'SET_LAST_NAME';
-			lastName: string;
-	  }
-	| {
-			type: 'SET_EMAIL';
-			email: string;
-	  }
-	| {
-			type: 'SET_CONFIRM_EMAIL';
-			email: string;
-	  }
-	| {
-			type: 'SET_TELEPHONE';
-			telephone: string;
-	  }
-	| {
-			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE';
-			userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	  }
-	| {
 			type: 'SET_FORM_ERRORS';
 			errors: Array<FormError<FormField>>;
 	  };
 
 function createRedemptionCheckoutReducer() {
-	const user = getUser();
-
 	const initialState: RedemptionCheckoutState = {
 		stage: getGlobal('stage') ?? 'form',
-		firstName: user.firstName ?? '',
-		lastName: user.lastName ?? '',
-		email: user.email ?? '',
-		confirmEmail: '',
-		telephone: '',
-		userTypeFromIdentityResponse: 'noRequestSent',
-		isSignedIn: user.isSignedIn,
 		errors: [],
 	};
 
@@ -111,41 +74,6 @@ function createRedemptionCheckoutReducer() {
 					stage: action.stage,
 				};
 
-			case 'SET_FIRST_NAME':
-				return {
-					...previousState,
-					firstName: action.firstName,
-				};
-
-			case 'SET_LAST_NAME':
-				return {
-					...previousState,
-					lastName: action.lastName,
-				};
-
-			case 'SET_EMAIL':
-				return {
-					...previousState,
-					email: action.email,
-				};
-
-			case 'SET_CONFIRM_EMAIL':
-				return {
-					...previousState,
-					confirmEmail: action.email,
-				};
-
-			case 'SET_TELEPHONE':
-				return {
-					...previousState,
-					telephone: action.telephone,
-				};
-
-			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
-				return {
-					...previousState,
-					userTypeFromIdentityResponse: action.userTypeFromIdentityResponse,
-				};
 			case 'SET_FORM_ERRORS':
 				return {
 					...previousState,
@@ -209,4 +137,7 @@ export const redemptionPageReducer = combineReducers({
 	user: createUserReducer(),
 	marketingConsent,
 	checkout: createRedemptionCheckoutReducer(),
+	checkoutForm: combineReducers({
+		personalDetails: personalDetailsReducer,
+	}),
 });

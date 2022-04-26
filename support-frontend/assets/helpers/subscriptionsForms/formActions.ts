@@ -1,4 +1,3 @@
-import type { Dispatch } from 'redux';
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
@@ -10,11 +9,20 @@ import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringChe
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import {
+	setConfirmEmail,
+	setEmail,
+	setFirstName,
+	setLastName,
+	setTelephone,
+	setTitle,
+} from 'helpers/redux/checkout/personalDetails/actions';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
+import type { FormSubmissionDependentValueThunk } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -28,34 +36,6 @@ export type Action =
 	| {
 			type: 'SET_STAGE';
 			stage: Stage;
-	  }
-	| {
-			type: 'SET_TITLE';
-			title: Option<string>;
-	  }
-	| {
-			type: 'SET_FIRST_NAME';
-			firstName: string;
-	  }
-	| {
-			type: 'SET_LAST_NAME';
-			lastName: string;
-	  }
-	| {
-			type: 'SET_EMAIL';
-			email: string;
-	  }
-	| {
-			type: 'SET_CONFIRM_EMAIL';
-			email: string;
-	  }
-	| {
-			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE';
-			userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	  }
-	| {
-			type: 'SET_TELEPHONE';
-			telephone: string;
 	  }
 	| {
 			type: 'SET_TITLE_GIFT';
@@ -168,59 +148,35 @@ const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	formSubmitted,
 });
 
-const setUserTypeFromIdentityResponse = (
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-) =>
-	setFormSubmissionDependentValue(() => ({
-		type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-		userTypeFromIdentityResponse,
-	}));
-
 const formActionCreators = {
-	setTitle: (title: string): Action => ({
-		type: 'SET_TITLE',
-		title: title !== 'Select a title' ? title : null,
-	}),
-	setFirstName: (firstName: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_FIRST_NAME',
-			firstName,
-		})),
-	setLastName: (lastName: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_LAST_NAME',
-			lastName,
-		})),
-	setEmail: (email: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_EMAIL',
-			email,
-		})),
-	setConfirmEmail: (email: string) =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_CONFIRM_EMAIL',
-			email,
-		})),
-	setTelephone: (telephone: string): Action => ({
-		type: 'SET_TELEPHONE',
-		telephone,
-	}),
+	setTitle,
+	setFirstName,
+	setLastName,
+	setEmail,
+	setConfirmEmail,
+	setTelephone,
 	setTitleGift: (titleGiftRecipient: string): Action => ({
 		type: 'SET_TITLE_GIFT',
 		titleGiftRecipient:
 			titleGiftRecipient !== 'Select a title' ? titleGiftRecipient : null,
 	}),
-	setFirstNameGift: (firstNameGiftRecipient: string) =>
+	setFirstNameGift: (
+		firstNameGiftRecipient: string,
+	): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_FIRST_NAME_GIFT',
 			firstNameGiftRecipient,
 		})),
-	setLastNameGift: (lastNameGiftRecipient: string) =>
+	setLastNameGift: (
+		lastNameGiftRecipient: string,
+	): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_LAST_NAME_GIFT',
 			lastNameGiftRecipient,
 		})),
-	setEmailGift: (emailGiftRecipient: string) =>
+	setEmailGift: (
+		emailGiftRecipient: string,
+	): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_EMAIL_GIFT',
 			emailGiftRecipient,
@@ -235,7 +191,10 @@ const formActionCreators = {
 	}),
 	setPaymentMethod:
 		(paymentMethod: PaymentMethod) =>
-		(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+		(
+			dispatch: SubscriptionsDispatch,
+			getState: () => CheckoutState,
+		): Action => {
 			const state = getState();
 			storage.setSession('selectedPaymentMethod', paymentMethod);
 			sendTrackingEventsOnClick({
@@ -258,7 +217,7 @@ const formActionCreators = {
 	}),
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
-		(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+		(dispatch: SubscriptionsDispatch, getState: () => CheckoutState): void => {
 			const state = getState();
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
@@ -300,26 +259,21 @@ function setCsrCustomerData(
 	addressType: AddressType,
 	csrCustomerData: CsrCustomerData,
 ) {
-	return (dispatch: Dispatch, getState: () => CheckoutState): void => {
+	return (
+		dispatch: SubscriptionsDispatch,
+		getState: () => CheckoutState,
+	): void => {
 		csrCustomerData.customer.email &&
-			formActionCreators.setEmail(csrCustomerData.customer.email)(
-				dispatch,
-				getState,
-			);
+			dispatch(formActionCreators.setEmail(csrCustomerData.customer.email));
 		csrCustomerData.customer.email &&
-			formActionCreators.setConfirmEmail(csrCustomerData.customer.email)(
-				dispatch,
-				getState,
+			dispatch(
+				formActionCreators.setConfirmEmail(csrCustomerData.customer.email),
 			);
 		csrCustomerData.customer.firstName &&
-			formActionCreators.setFirstName(csrCustomerData.customer.firstName)(
-				dispatch,
-				getState,
+			dispatch(
+				formActionCreators.setFirstName(csrCustomerData.customer.firstName),
 			);
-		formActionCreators.setLastName(csrCustomerData.customer.lastName)(
-			dispatch,
-			getState,
-		);
+		dispatch(formActionCreators.setLastName(csrCustomerData.customer.lastName));
 
 		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
 		dispatch(formActionCreators.setSalesforceCaseId(csrCustomerData.caseId));
@@ -356,7 +310,6 @@ export {
 	setFormErrors,
 	setSubmissionError,
 	setFormSubmitted,
-	setUserTypeFromIdentityResponse,
 	setCsrCustomerData,
 	formActionCreators,
 };

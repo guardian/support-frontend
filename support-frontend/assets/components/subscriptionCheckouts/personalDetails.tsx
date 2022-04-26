@@ -5,13 +5,12 @@ import {
 	buttonThemeReaderRevenueBrandAlt,
 	TextInput,
 } from '@guardian/source-react-components';
+import React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { Option } from 'helpers/types/option';
-import 'helpers/subscriptionsForms/formFields';
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -23,24 +22,26 @@ const paragraphWithButton = css`
 	margin-top: ${space[2]}px;
 	${textSans.medium()};
 `;
+
 export type PropTypes = {
 	firstName: string;
-	setFirstName: (...args: any[]) => any;
+	setFirstName: (firstName: string) => void;
 	lastName: string;
-	setLastName: (...args: any[]) => any;
+	setLastName: (lastName: string) => void;
 	email: string;
-	setEmail: (...args: any[]) => any;
-	confirmEmail?: Option<string>;
-	setConfirmEmail?: Option<(...args: any[]) => any>;
-	fetchAndStoreUserType?: Option<(...args: any[]) => any>;
+	setEmail: (email: string) => void;
+	confirmEmail?: string;
+	setConfirmEmail?: (confirmEmail: string) => void;
+	fetchAndStoreUserType?: (email: string) => void;
 	isSignedIn: boolean;
-	telephone: Option<string>;
-	setTelephone: (...args: any[]) => any;
+	telephone?: string;
+	setTelephone: (telephone: string) => void;
 	formErrors: Array<FormError<FormField>>;
-	signOut: (...args: any[]) => any;
+	signOut: () => void;
 };
+
 type SignedInEmailFooterTypes = {
-	handleSignOut: (...args: any[]) => any;
+	handleSignOut: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
@@ -56,7 +57,6 @@ function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
 				<p css={paragraphWithButton}>
 					<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
 						<Button
-							icon={null}
 							type="button"
 							onClick={(e) => props.handleSignOut(e)}
 							priority="tertiary"
@@ -76,25 +76,21 @@ function SignedOutEmailFooter() {
 	return <div css={marginBottom} />;
 }
 
-export default function PersonalDetails(props: PropTypes) {
-	const handleSignOut = (e) => {
+export default function PersonalDetails(props: PropTypes): JSX.Element {
+	const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		props.signOut();
 	};
 
-	const maybeSetEmail = (e) => {
-		if (props.setEmail) {
-			props.setEmail(e.target.value);
-		}
-	};
-
-	const maybeFetchAndStoreUsertype = (e) => {
+	const maybeFetchAndStoreUsertype = (
+		e: React.FocusEvent<HTMLInputElement>,
+	) => {
 		if (props.fetchAndStoreUserType) {
 			props.fetchAndStoreUserType(e.target.value);
 		}
 	};
 
-	const maybeSetConfirmEmail = (e) => {
+	const maybeSetConfirmEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (props.setConfirmEmail) {
 			props.setConfirmEmail(e.target.value);
 		}
@@ -140,7 +136,7 @@ export default function PersonalDetails(props: PropTypes) {
 				label="Email"
 				type="email"
 				value={props.email}
-				onChange={maybeSetEmail}
+				onChange={(e) => props.setEmail(e.target.value)}
 				onBlur={maybeFetchAndStoreUsertype}
 				error={firstError('email', props.formErrors)}
 				pattern={emailRegexPattern}
