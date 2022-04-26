@@ -9,6 +9,7 @@ import SecureTransactionIndicator from 'components/secureTransactionIndicator/se
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type { ContributionType } from 'helpers/contributions';
 import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -31,6 +32,8 @@ import {
 	PreviousGivingHeaderCopy,
 } from './ContributionsFormBlurbPreviousGiving';
 import { ContributionsFormJournalismHighlights } from './ContributionsFormJournalismHighlights';
+import LiveFeedBack from './DigiSubBenefits/LiveFeedBack';
+import LiveFeedBackProvider from './DigiSubBenefits/LiveFeedBackProvider';
 
 // ----- Types ----- //
 
@@ -50,6 +53,7 @@ type PropTypes = {
 	currency: IsoCurrency;
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
+	contributionType: ContributionType;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -63,6 +67,7 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
+	contributionType: state.page.form.contributionType,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
@@ -124,6 +129,9 @@ const styles = {
 		${from.leftCol} {
 			width: 520px;
 		}
+	`,
+	innerFormContainer: css`
+		position: relative;
 	`,
 	highlightsContainer: css`
 		padding-top: ${space[2]}px;
@@ -250,27 +258,36 @@ function withProps(props: PropTypes) {
 						/>
 					) : null}
 
-					<SecureTransactionIndicator modifierClasses={['top']} />
-
-					{props.tickerGoalReached &&
-					campaignSettings &&
-					campaignSettings.tickerSettings &&
-					campaignSettings.goalReachedCopy ? (
-						campaignSettings.goalReachedCopy
-					) : (
-						<div>
-							{countryGroupDetails.formMessage ? (
-								<div className="form-message">
-									{countryGroupDetails.formMessage}
-								</div>
-							) : null}
-
-							<ContributionForm
-								onPaymentAuthorisation={onPaymentAuthorisation}
-								campaignSettings={campaignSettings}
+					<LiveFeedBackProvider>
+						<div css={styles.innerFormContainer}>
+							<LiveFeedBack
+								contributionType={props.contributionType}
+								countryGroupId={props.countryGroupId}
 							/>
+
+							<SecureTransactionIndicator modifierClasses={['top']} />
+
+							{props.tickerGoalReached &&
+							campaignSettings &&
+							campaignSettings.tickerSettings &&
+							campaignSettings.goalReachedCopy ? (
+								campaignSettings.goalReachedCopy
+							) : (
+								<div>
+									{countryGroupDetails.formMessage ? (
+										<div className="form-message">
+											{countryGroupDetails.formMessage}
+										</div>
+									) : null}
+
+									<ContributionForm
+										onPaymentAuthorisation={onPaymentAuthorisation}
+										campaignSettings={campaignSettings}
+									/>
+								</div>
+							)}
 						</div>
-					)}
+					</LiveFeedBackProvider>
 				</div>
 
 				{props.shouldShowRichLandingPage ? (
