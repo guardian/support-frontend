@@ -283,7 +283,7 @@ const init = (store: ContributionsStore): void => {
 		contributionTypes,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
-	const { firstName, lastName, email, stateField } = state.page.user;
+	const { email, stateField } = state.page.user;
 	// For PayPal one-off we need to get userType from session after the thankyou page redirect
 	const userType = storage.getSession('userTypeFromIdentityResponse');
 
@@ -298,9 +298,6 @@ const init = (store: ContributionsStore): void => {
 
 	dispatch(
 		updateUserFormData({
-			firstName,
-			lastName,
-			email,
 			billingState: stateField,
 		}),
 	);

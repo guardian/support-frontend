@@ -55,7 +55,6 @@ const mapStateToProps = (state: State) => ({
 	contributionType: state.page.form.contributionType,
 });
 
-// https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object
 const mapDispatchToProps = {
 	setFirstName,
 	setLastName,
