@@ -23,14 +23,17 @@ const container = css`
 	padding: 0 ${space[4]}px;
 
 	${from.desktop} {
-		// margin-top: ${space[6]}px;
 		padding: 0 28px;
 	}
 `;
 
 const title = css`
-	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
+	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
 	margin: ${space[3]}px 0 6px;
+
+	${from.leftCol} {
+		max-width: 310px;
+	}
 `;
 
 const body = (unlockedBenefits: boolean) => css`
@@ -46,7 +49,8 @@ const highlighted = css`
 const button = css`
 	width: 100%;
 	justify-content: space-around;
-	margin: ${space[6]}px 0 32px;
+	margin: ${space[6]}px 0 ${space[5]}px;
+	color: ${neutral[7]};
 `;
 
 const imgContainer = css`

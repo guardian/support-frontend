@@ -26,14 +26,17 @@ const container = css`
 	padding: 0 ${space[4]}px;
 
 	${from.desktop} {
-		// margin-top: ${space[6]}px;
 		padding: 0 ${space[6]}px;
 	}
 `;
 
 const title = css`
-	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
+	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
 	margin: ${space[3]}px 0 6px;
+
+	${from.tablet} {
+		max-width: 185px;
+	}
 `;
 
 const body = css`
@@ -49,7 +52,8 @@ const highlighted = css`
 const button = css`
 	width: 100%;
 	justify-content: space-around;
-	margin: ${space[6]}px 0 33px;
+	margin: ${space[6]}px 0 ${space[5]}px;
+	color: ${neutral[7]};
 `;
 
 const mobileImg = css`
@@ -57,10 +61,14 @@ const mobileImg = css`
 	width: 107px;
 	height: auto;
 	margin-left: auto;
-	margin-right: -16px;
+	margin-right: -${space[4]}px;
 
 	& img {
 		width: 100%;
+	}
+
+	${from.desktop} {
+		margin-right: -${space[6]}px;
 	}
 
 	${from.leftCol} {
@@ -77,6 +85,7 @@ const desktopImg = css`
 
 	& img {
 		width: 100%;
+		display: block;
 	}
 
 	${from.leftCol} {
@@ -84,22 +93,21 @@ const desktopImg = css`
 	}
 `;
 
-const imgContainer = css`
-	// width: 60%;
+const imgContainer = (showBenefitsMessaging: boolean) => css`
 	margin-top: -${space[2]}px;
-	margin-left: ${space[2]}px;
+	margin-left: ${space[3]}px;
 
 	${from.mobileMedium} {
-		margin-left: 41px;
+		margin-left: ${showBenefitsMessaging ? '58px' : '49px'};
 		margin-top: -${space[4]}px;
 	}
 
 	${from.tablet} {
-		margin-left: ${space[5]}px;
+		margin-left: ${showBenefitsMessaging ? '28px' : `${space[5]}px`};
 	}
 
 	${from.desktop} {
-		margin-left: 47px;
+		margin-left: ${showBenefitsMessaging ? '65px' : '47px'};
 	}
 
 	${from.leftCol} {
@@ -110,9 +118,10 @@ const imgContainer = css`
 const checkmark = css`
 	vertical-align: top;
 	padding-right: 10px;
+	line-height: 0;
 
 	${from.desktop} {
-		padding-right: ${space[4]}px;
+		padding-right: ${space[3]}px;
 	}
 
 	svg {
@@ -120,9 +129,27 @@ const checkmark = css`
 	}
 `;
 
+const checklistItem = css`
+	display: inline-block;
+
+	& p {
+		line-height: 1.15;
+	}
+`;
+
 const table = css`
 	padding-top: ${space[4]}px;
 	margin-bottom: 28px;
+
+	& tr:not(:last-child) {
+		border-bottom: 6px solid transparent;
+	}
+
+	${from.desktop} {
+		& tr:not(:last-child) {
+			border-bottom: ${space[2]}px solid transparent;
+		}
+	}
 `;
 
 const flexContainer = css`
@@ -134,7 +161,7 @@ const hr = css`
 	border: none;
 	height: 1px;
 	background-color: #dcdcdc;
-	margin: ${space[6]}px 0;
+	margin: ${space[5]}px 0;
 `;
 
 const boldText = css`
@@ -191,7 +218,7 @@ function BenefitsBulletPoints({
 						</span>
 					</p>
 				</div>
-				<div css={imgContainer}>
+				<div css={imgContainer(showBenefitsMessaging)}>
 					<div css={mobileImg}>
 						<GridImage
 							classModifiers={['']}
@@ -235,9 +262,9 @@ function BenefitsBulletPoints({
 			<table css={table}>
 				<tr>
 					<td css={checkmark}>
-						<SvgCheckmark size="small" />
+						<SvgCheckmark size="xsmall" />
 					</td>
-					<td>
+					<td css={checklistItem}>
 						<p>
 							<span css={boldText}>Ad-free reading</span> on all your devices
 						</p>
@@ -245,9 +272,9 @@ function BenefitsBulletPoints({
 				</tr>
 				<tr>
 					<td css={checkmark}>
-						<SvgCheckmark size="small" />
+						<SvgCheckmark size="xsmall" />
 					</td>
-					<td>
+					<td css={checklistItem}>
 						<p>
 							Premium access to{' '}
 							<span css={boldText}>our award-winning news app,</span> for the
@@ -257,9 +284,9 @@ function BenefitsBulletPoints({
 				</tr>
 				<tr>
 					<td css={checkmark}>
-						<SvgCheckmark size="small" />
+						<SvgCheckmark size="xsmall" />
 					</td>
-					<td>
+					<td css={checklistItem}>
 						<p>
 							<span css={boldText}>Weekly newsletter</span> from a senior editor
 							giving you the inside track on the week's top stories
