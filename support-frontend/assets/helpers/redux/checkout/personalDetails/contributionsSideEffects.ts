@@ -1,3 +1,4 @@
+import { isAnyOf } from '@reduxjs/toolkit';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
@@ -8,48 +9,25 @@ import {
 	setUserTypeFromIdentityResponse,
 } from './actions';
 
+const shouldCheckFormEnabled = isAnyOf(
+	setEmail,
+	setFirstName,
+	setLastName,
+	setUserTypeFromIdentityResponse,
+);
+
 export function addPersonalDetailsSideEffects(
 	startListening: ContributionsStartListening,
 ): void {
 	startListening({
-		actionCreator: setFirstName,
-		effect(_, listenerApi) {
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
-		},
-	});
-
-	startListening({
-		actionCreator: setLastName,
-		effect(_, listenerApi) {
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
-		},
-	});
-
-	startListening({
-		actionCreator: setEmail,
+		matcher: shouldCheckFormEnabled,
 		effect(action, listenerApi) {
-			storage.setSession('gu.email', action.payload);
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
-		},
-	});
-
-	startListening({
-		actionCreator: setUserTypeFromIdentityResponse,
-		effect(action, listenerApi) {
-			storage.setSession('userTypeFromIdentityResponse', action.payload);
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
+			if (setUserTypeFromIdentityResponse.match(action)) {
+				storage.setSession('userTypeFromIdentityResponse', action.payload);
+			} else if (setEmail.match(action)) {
+				storage.setSession('gu.email', action.payload);
+			}
+			listenerApi.dispatch(enableOrDisableForm());
 		},
 	});
 }

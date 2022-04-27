@@ -1,4 +1,5 @@
 import type { AnyAction } from '@reduxjs/toolkit';
+import { isAnyOf } from '@reduxjs/toolkit';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import { enableOrDisableForm } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
@@ -22,68 +23,37 @@ export function removeErrorsForField(
 	};
 }
 
+const shouldCheckFormEnabled = isAnyOf(
+	setConfirmEmail,
+	setEmail,
+	setFirstName,
+	setLastName,
+	setUserTypeFromIdentityResponse,
+);
+
+const actionCreatorFieldNames: Record<string, FormField> = {
+	[setConfirmEmail.type]: 'confirmEmail',
+	[setEmail.type]: 'email',
+	[setFirstName.type]: 'firstName',
+	[setLastName.type]: 'lastName',
+};
+
 export function addPersonalDetailsSideEffects(
 	startListening: SubscriptionsStartListening,
 ): void {
 	startListening({
-		actionCreator: setFirstName,
-		effect(_, listenerApi) {
-			listenerApi.dispatch(
-				removeErrorsForField('firstName', listenerApi.getState()),
-			);
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
-		},
-	});
+		matcher: shouldCheckFormEnabled,
+		effect(action, listenerApi) {
+			if (!setUserTypeFromIdentityResponse.match(action)) {
+				listenerApi.dispatch(
+					removeErrorsForField(
+						actionCreatorFieldNames[action.type],
+						listenerApi.getState(),
+					),
+				);
+			}
 
-	startListening({
-		actionCreator: setLastName,
-		effect(_, listenerApi) {
-			listenerApi.dispatch(
-				removeErrorsForField('lastName', listenerApi.getState()),
-			);
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
-		},
-	});
-
-	startListening({
-		actionCreator: setEmail,
-		effect(_, listenerApi) {
-			listenerApi.dispatch(
-				removeErrorsForField('email', listenerApi.getState()),
-			);
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
-		},
-	});
-
-	startListening({
-		actionCreator: setConfirmEmail,
-		effect(_, listenerApi) {
-			listenerApi.dispatch(
-				removeErrorsForField('confirmEmail', listenerApi.getState()),
-			);
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
-		},
-	});
-
-	startListening({
-		actionCreator: setUserTypeFromIdentityResponse,
-		effect(_, listenerApi) {
-			enableOrDisableForm()(
-				listenerApi.dispatch,
-				listenerApi.getState.bind(listenerApi),
-			);
+			listenerApi.dispatch(enableOrDisableForm());
 		},
 	});
 }
