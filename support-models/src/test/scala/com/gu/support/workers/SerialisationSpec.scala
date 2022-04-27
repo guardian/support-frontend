@@ -9,6 +9,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   DigitalSubscriptionDirectPurchaseState,
 }
 import com.gu.support.workers.states._
+import com.gu.support.zuora.api.AcquisitionMetadata
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.EitherValues
 import org.scalatest.Inside.inside
@@ -58,6 +59,10 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
         state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
       },
     )
+  }
+
+  "AcquisitionMetadata" should "serialise and deserialise correctly" in {
+    testRoundTripSerialisation(AcquisitionMetadata(receivedDigiSubViaBenefitsTest = Some(true)))
   }
 
   "FailureHandlerState" should "deserialise correctly from any lambda" in {

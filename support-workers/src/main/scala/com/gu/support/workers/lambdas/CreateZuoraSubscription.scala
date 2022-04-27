@@ -38,6 +38,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           state,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
+          zuoraSubscriptionState.acquisitionData,
         )
       case state: DigitalSubscriptionGiftPurchaseState =>
         zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(

@@ -1,14 +1,14 @@
 package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
-import com.gu.i18n.Currency
-import com.gu.i18n.Currency._
+import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
+import com.gu.support.acquisitions.{AbTest, AcquisitionData}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
-import com.gu.support.workers.{Annual, BillingPeriod, Monthly}
-import com.gu.support.zuora.api.{Month, RatePlanChargeData, RatePlanChargeOverride, SubscribeItem}
+import com.gu.support.workers.{DigitalPack, Monthly}
+import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
 class DigitalSubscriptionDirectPurchaseBuilder(
@@ -23,6 +23,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       state: DigitalSubscriptionDirectPurchaseState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
+      acquisitionData: Option[AcquisitionData],
   ): Either[PromoError, SubscribeItem] = {
 
     val productRatePlanId = validateRatePlan(digitalRatePlan(state.product, environment), state.product.describe)
@@ -32,13 +33,14 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,
-      overridePricingIfRequired(state),
+      overridePricingIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = contractAcceptanceDate,
       readerType = state.product.readerType,
       initialTermPeriodType = Month,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
+      acquisitionMetadata = getAcquisitionMetadataIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
     )
 
     applyPromoCodeIfPresent(
@@ -53,39 +55,28 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 
   }
 
-  def overridePricingIfRequired(state: DigitalSubscriptionDirectPurchaseState) = {
-    state.product.amount
-      .filter(amount => priceIsHighEnough(amount, state.product.billingPeriod, state.product.currency))
-      .map { amount =>
-        val ratePlanChargeId =
-          if (state.product.billingPeriod == Monthly) config.monthlyChargeId else config.annualChargeId
-        List(
-          RatePlanChargeData(
-            RatePlanChargeOverride(
-              ratePlanChargeId,
-              price = amount, // Pass the amount the user selected into Zuora
+  def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
+    if (isValidBenefitsTestPurchase(product, maybeAbTests)) {
+      product.amount
+        .map { amount =>
+          val ratePlanChargeId =
+            if (product.billingPeriod == Monthly) config.monthlyChargeId else config.annualChargeId
+          List(
+            RatePlanChargeData(
+              RatePlanChargeOverride(
+                ratePlanChargeId,
+                price = amount, // Pass the amount the user selected into Zuora
+              ),
             ),
-          ),
-        )
-      }
-      .getOrElse(Nil)
-  }
+          )
+        }
+        .getOrElse(Nil)
+    } else Nil
 
-  def priceIsHighEnough(amount: BigDecimal, billingPeriod: BillingPeriod, currency: Currency) = {
-    val requiredAmount = (billingPeriod, currency) match {
-      case (Monthly, GBP) => 12
-      case (Annual, GBP) => 119
-      case (Monthly, USD) => 20
-      case (Annual, USD) => 199
-      case (Monthly, EUR) => 15
-      case (Annual, EUR) => 149
-      case (Monthly, NZD) => 24
-      case (Annual, NZD) => 235
-      case (Monthly, CAD) => 22
-      case (Annual, CAD) => 219
-      case _ => Int.MaxValue
-    }
-    amount >= requiredAmount
-  }
+  def getAcquisitionMetadataIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
+    if (isValidBenefitsTestPurchase(product, maybeAbTests))
+      Some(AcquisitionMetadata(Some(true)))
+    else
+      None
 
 }

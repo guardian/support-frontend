@@ -2,6 +2,7 @@ package utils
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.catalog.{Collection, Domestic, FulfilmentOptions, HomeDelivery, NoFulfilmentOptions, RestOfWorld}
 import com.gu.support.redemptions.RedemptionData
@@ -162,12 +163,16 @@ object DigitalPackValidation {
         currencyIsSupportedForCountry(country, currency) and
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
-    def isInBenefitsTest(supportAbTests: Set[AbTest]) = supportAbTests
-      .find { test =>
-        test.name == "PP_V3" && (test.variant == "V2_BULLET" || test.variant == "V1_PARAGRAPH")
-      }
-      .map(_ => Valid)
-      .getOrElse(Invalid("User is not in the benefits test"))
+    def isInBenefitsTest(supportAbTests: Set[AbTest]) = {
+      if (
+        isValidBenefitsTestPurchase(
+          createSupportWorkersRequest.product.asInstanceOf[DigitalPack],
+          Some(createSupportWorkersRequest.supportAbTests),
+        )
+      ) Valid
+      else
+        Invalid("User is not in the benefits test")
+    }
 
     val Purchase = Left
     type Redemption[A, B] = Right[A, B]
