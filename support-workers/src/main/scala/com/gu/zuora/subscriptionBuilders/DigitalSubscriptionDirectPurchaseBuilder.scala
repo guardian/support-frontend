@@ -40,7 +40,6 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       initialTermPeriodType = Month,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
-      acquisitionMetadata = getAcquisitionMetadataIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
     )
 
     applyPromoCodeIfPresent(
@@ -72,11 +71,5 @@ class DigitalSubscriptionDirectPurchaseBuilder(
         }
         .getOrElse(Nil)
     } else Nil
-
-  def getAcquisitionMetadataIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
-    if (isValidBenefitsTestPurchase(product, maybeAbTests))
-      Some(AcquisitionMetadata(Some(true)))
-    else
-      None
 
 }

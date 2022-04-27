@@ -99,12 +99,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     csrSubscription.subscription.acquisitionCase shouldBe Some("test_case_id")
   }
 
-  "Digital subs from the benefits test" should "have acquisition metadata set to allow us to identify them" in {
-    validMonthlyBenefitsTest.subscriptionData.subscription.acquisitionMetadata shouldBe Some(
-      AcquisitionMetadata(Some(true)),
-    )
-  }
-
   "Valid digital subs from the benefits test" should "have charge overrides" in {
     validMonthlyBenefitsTest.subscriptionData.ratePlanData shouldBe List(
       RatePlanData(

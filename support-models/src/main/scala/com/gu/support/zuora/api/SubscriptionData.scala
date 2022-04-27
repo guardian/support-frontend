@@ -212,7 +212,6 @@ case class Subscription(
     acquisitionSource: Option[AcquisitionSource] = None,
     createdByCsr: Option[String] = None,
     acquisitionCase: Option[String] = None,
-    acquisitionMetadata: Option[AcquisitionMetadata] = None,
 )
 
 object RatePlanChargeData {
@@ -236,22 +235,3 @@ object SubscriptionData {
 }
 
 case class SubscriptionData(ratePlanData: List[RatePlanData], subscription: Subscription)
-
-case class AcquisitionMetadata(receivedDigiSubViaBenefitsTest: Option[Boolean])
-
-object AcquisitionMetadata {
-  // AcquisitionMetadata will be written into a custom field in Zuora as an escaped Json string.
-  // This means that the encoder needs to do that escaping and the decoder needs to convert
-  // back to unescaped json before decoding to an actual object
-  implicit val encoder: Encoder[AcquisitionMetadata] =
-    deriveEncoder[AcquisitionMetadata].mapJson(json => Json.fromString(json.noSpaces))
-
-  implicit val decoder: Decoder[AcquisitionMetadata] = deriveDecoder[AcquisitionMetadata].prepare(cursor =>
-    cursor.withFocus(json =>
-      (for {
-        jsonString <- json.asString
-        parsedJson <- parser.parse(jsonString).toOption
-      } yield parsedJson).getOrElse(json), // If we can't parse the escaped json then just return whatever's there
-    ),
-  )
-}
