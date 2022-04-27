@@ -65,6 +65,7 @@ const mobileImg = css`
 
 	& img {
 		width: 100%;
+		display: block;
 	}
 
 	${from.desktop} {
@@ -133,7 +134,7 @@ const checklistItem = css`
 	display: inline-block;
 
 	& p {
-		line-height: 1.15;
+		line-height: 1.35;
 	}
 `;
 
