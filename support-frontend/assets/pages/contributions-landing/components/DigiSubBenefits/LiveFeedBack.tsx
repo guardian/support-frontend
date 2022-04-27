@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { neutral, success } from '@guardian/source-foundations';
+import { from, neutral, space, success } from '@guardian/source-foundations';
 import { InlineSuccess } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -19,6 +19,19 @@ const slideInFadeOut = keyframes`
     opacity: 0; transform: translateX(0);
   }
 `;
+const slideInFadeOutDesktop = keyframes`
+  25% {
+    transform: translateX(-66px);
+  }
+
+  75%  {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0; transform: translateX(-66px);
+  }
+`;
 
 const inlineSuccessContainer = css`
 	position: sticky;
@@ -26,24 +39,43 @@ const inlineSuccessContainer = css`
 	z-index: 1;
 	transform: translateX(-500px);
 	opacity: 1;
+
+	${from.mobileMedium} {
+		max-width: 316px;
+	}
+
+	${from.mobileLandscape} {
+		max-width: initial;
+	}
 `;
 
 const animate = css`
 	animation-name: ${slideInFadeOut};
 	animation-duration: 5s;
+
+	${from.leftCol} {
+		animation-name: ${slideInFadeOutDesktop};
+	}
 `;
 
 const inlineSuccess = css`
 	position: absolute;
-	border: 4px solid ${success[400]};
+	border-left: 4px solid ${success[400]};
 	background-color: ${neutral[100]};
 	align-items: center;
 	font-weight: bold;
-	padding: 1px 6px 1px 1px;
+	padding: ${space[4]}px 28px ${space[4]}px 20px;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 10px rgb(0 0 0 / 20%);
+
+	${from.leftCol} {
+		padding-right: 30px;
+	}
 
 	& svg {
 		transform: translate(0, 0);
 		align-self: baseline;
+		margin-right: 2px;
 	}
 `;
 

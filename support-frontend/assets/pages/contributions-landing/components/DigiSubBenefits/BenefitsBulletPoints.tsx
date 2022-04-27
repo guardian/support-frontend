@@ -47,12 +47,13 @@ const body = css`
 
 const highlighted = css`
 	background-color: ${brandAlt[400]};
+	font-weight: bold;
 `;
 
 const button = css`
 	width: 100%;
 	justify-content: space-around;
-	margin: ${space[6]}px 0 ${space[5]}px;
+	margin: ${space[5]}px 0;
 	color: ${neutral[7]};
 `;
 
@@ -99,7 +100,7 @@ const imgContainer = (showBenefitsMessaging: boolean) => css`
 	margin-left: ${space[3]}px;
 
 	${from.mobileMedium} {
-		margin-left: ${showBenefitsMessaging ? '58px' : '49px'};
+		margin-left: ${showBenefitsMessaging ? '53px' : '49px'};
 		margin-top: -${space[4]}px;
 	}
 
@@ -108,11 +109,11 @@ const imgContainer = (showBenefitsMessaging: boolean) => css`
 	}
 
 	${from.desktop} {
-		margin-left: ${showBenefitsMessaging ? '65px' : '47px'};
+		margin-left: ${showBenefitsMessaging ? '60px' : '47px'};
 	}
 
 	${from.leftCol} {
-		margin-left: 38px;
+		margin-left: 35px;
 	}
 `;
 
@@ -141,6 +142,7 @@ const checklistItem = css`
 const table = css`
 	padding-top: ${space[4]}px;
 	margin-bottom: 28px;
+	max-width: 390px;
 
 	& tr:not(:last-child) {
 		border-bottom: 6px solid transparent;

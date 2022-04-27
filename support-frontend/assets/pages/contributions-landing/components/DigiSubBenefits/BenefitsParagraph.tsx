@@ -40,16 +40,22 @@ const body = (unlockedBenefits: boolean) => css`
 	${textSans.medium({ lineHeight: 'regular' })};
 	font-size: 17px;
 	margin-bottom: ${unlockedBenefits ? `${space[5]}px` : '0'};
+	margin-right: -${space[1]}px;
+
+	${from.desktop} {
+		margin-bottom: ${unlockedBenefits ? `${space[6]}px` : '0'};
+	}
 `;
 
 const highlighted = css`
 	background-color: ${brandAlt[400]};
+	font-weight: bold;
 `;
 
 const button = css`
 	width: 100%;
 	justify-content: space-around;
-	margin: ${space[6]}px 0 ${space[5]}px;
+	margin: ${space[5]}px 0 28px;
 	color: ${neutral[7]};
 `;
 
