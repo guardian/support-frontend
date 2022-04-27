@@ -78,7 +78,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       case (Monthly, USD) => 20
       case (Annual, USD) => 199
       case (Monthly, EUR) => 15
-      case (Annual, GBP) => 149
+      case (Annual, EUR) => 149
       case (Monthly, NZD) => 24
       case (Annual, NZD) => 235
       case (Monthly, CAD) => 22
