@@ -101,7 +101,6 @@ const getProduct = (
 			currency: currencyId ?? state.common.internationalisation.currencyId,
 			billingPeriod,
 			readerType,
-			amount: 20, //TODO: Put the actual contribution amount here
 		};
 	} else if (product === GuardianWeekly) {
 		return {
