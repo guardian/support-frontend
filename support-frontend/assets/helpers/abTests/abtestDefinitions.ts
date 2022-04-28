@@ -171,7 +171,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: true,
 		seed: 14,
 	},
