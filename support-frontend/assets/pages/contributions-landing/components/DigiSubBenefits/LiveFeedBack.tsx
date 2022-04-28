@@ -88,20 +88,19 @@ function LiveFeedBack({
 	contributionType,
 	countryGroupId,
 }: LiveFeedBackProps): JSX.Element {
-	const showLiveFeedBack = useLiveFeedBackContext()?.showLiveFeedBack;
-	const setShowLiveFeedBack = useLiveFeedBackContext()?.setShowLiveFeedBack;
+	const liveFeedBackContext = useLiveFeedBackContext();
 
 	const price = priceWithGlyph(countryGroupId, contributionType);
 
 	return (
 		<div
 			css={
-				showLiveFeedBack
+				liveFeedBackContext?.showLiveFeedBack
 					? [inlineSuccessContainer, animate]
 					: inlineSuccessContainer
 			}
-			aria-hidden={showLiveFeedBack ? 'false' : 'true'}
-			onAnimationEnd={() => setShowLiveFeedBack?.(false)}
+			aria-hidden={liveFeedBackContext?.showLiveFeedBack ? 'false' : 'true'}
+			onAnimationEnd={() => liveFeedBackContext?.setShowLiveFeedBack(false)}
 		>
 			<InlineSuccess cssOverrides={inlineSuccess} role="alert">
 				Your amout has been changed to {price}
