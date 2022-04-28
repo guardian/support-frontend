@@ -3,8 +3,8 @@
         "byCode": {
             "TS1208": 1,
             "TS2345": 33,
-            "TS7006": 26,
-            "TS2322": 44,
+            "TS7006": 22,
+            "TS2322": 41,
             "TS2339": 13,
             "TS6133": 7,
             "TS2578": 4,
@@ -60,7 +60,6 @@
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
-            "assets/components/subscriptionCheckouts/personalDetails.tsx": 7,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
@@ -287,22 +286,6 @@
             "message": "Parameter 'key' implicitly has an 'any' type."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
             "message": "Parameter 'key' implicitly has an 'any' type."
         },
@@ -435,18 +418,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
             "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioProps'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'null' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>> | undefined'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'Option<string> | undefined' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.tsx",
-            "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",

@@ -14,7 +14,6 @@ import type {
 	CountryGroup,
 	CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import type { Option } from 'helpers/types/option';
 import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 import {
 	AUDCountries,
@@ -77,9 +76,9 @@ export const checkEmail: (arg0: string | null) => boolean = (input) =>
 	isNotEmpty(input) && isValidEmail(input);
 
 export const emailAddressesMatch: (
-	arg0: boolean,
-	arg1: string,
-	arg2: Option<string>,
+	isSignedIn: boolean,
+	email: string,
+	confirmEmail?: string,
 ) => boolean = (isSignedIn, email, confirmEmail) =>
 	isSignedIn || email === confirmEmail;
 

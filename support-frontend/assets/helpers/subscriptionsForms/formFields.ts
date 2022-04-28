@@ -1,12 +1,11 @@
-import type { $Keys } from 'utility-types';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type {
 	AnyCheckoutState,
 	CheckoutState,
@@ -16,15 +15,7 @@ import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-export type FormFields = {
-	title: Option<Title>;
-	firstName: string;
-	lastName: string;
-	email: string;
-	confirmEmail: Option<string>;
-	isSignedIn: boolean;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	telephone: Option<string>;
+export type FormFields = PersonalDetailsState & {
 	titleGiftRecipient: Option<Title>;
 	firstNameGiftRecipient: Option<string>;
 	lastNameGiftRecipient: Option<string>;
@@ -43,8 +34,8 @@ export type FormFields = {
 	csrUsername?: string;
 	salesforceCaseId?: string;
 };
-export type FormField = $Keys<FormFields> | 'recaptcha';
-export type FormState = FormFields & {
+export type FormField = keyof FormFields | 'recaptcha';
+export type FormState = Omit<FormFields, keyof PersonalDetailsState> & {
 	stage: Stage;
 	product: SubscriptionProduct;
 	formErrors: Array<FormError<FormField>>;
@@ -59,15 +50,15 @@ export type FormState = FormFields & {
 
 function getFormFields(state: AnyCheckoutState): FormFields {
 	return {
-		title: state.page.checkout.title,
-		firstName: state.page.checkout.firstName,
-		lastName: state.page.checkout.lastName,
-		email: state.page.checkout.email,
-		confirmEmail: state.page.checkout.confirmEmail,
-		isSignedIn: state.page.checkout.isSignedIn,
+		title: state.page.checkoutForm.personalDetails.title,
+		firstName: state.page.checkoutForm.personalDetails.firstName,
+		lastName: state.page.checkoutForm.personalDetails.lastName,
+		email: state.page.checkoutForm.personalDetails.email,
+		confirmEmail: state.page.checkoutForm.personalDetails.confirmEmail,
+		isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
 		userTypeFromIdentityResponse:
-			state.page.checkout.userTypeFromIdentityResponse,
-		telephone: state.page.checkout.telephone,
+			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
+		telephone: state.page.checkoutForm.personalDetails.telephone,
 		titleGiftRecipient: state.page.checkout.titleGiftRecipient,
 		firstNameGiftRecipient: state.page.checkout.firstNameGiftRecipient,
 		lastNameGiftRecipient: state.page.checkout.lastNameGiftRecipient,
@@ -87,7 +78,7 @@ function getFormFields(state: AnyCheckoutState): FormFields {
 }
 
 function getEmail(state: CheckoutState): string {
-	return state.page.checkout.email;
+	return state.page.checkoutForm.personalDetails.email;
 }
 
 export { getFormFields, getEmail };

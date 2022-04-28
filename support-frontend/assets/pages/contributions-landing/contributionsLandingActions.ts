@@ -822,7 +822,6 @@ function regularPaymentRequestFromAuthorisation(
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
-		telephoneNumber: null,
 		debugInfo: 'contributions does not collect redux state',
 	};
 }

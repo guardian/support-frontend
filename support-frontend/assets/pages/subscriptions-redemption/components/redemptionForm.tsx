@@ -13,6 +13,13 @@ import CheckoutLayout, {
 } from 'components/subscriptionCheckouts/layout';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import {
+	setConfirmEmail,
+	setEmail,
+	setFirstName,
+	setLastName,
+	setTelephone,
+} from 'helpers/redux/checkout/personalDetails/actions';
 import type {
 	RedemptionDispatch,
 	RedemptionPageState,
@@ -33,12 +40,12 @@ function mapStateToProps(state: RedemptionPageState) {
 		readerType: state.page.readerType,
 		csrf: state.page.csrf,
 		error: state.page.error,
-		firstName: state.page.checkout.firstName,
-		lastName: state.page.checkout.lastName,
-		email: state.page.checkout.email,
-		confirmEmail: state.page.checkout.confirmEmail,
-		telephone: state.page.checkout.telephone,
-		isSignedIn: state.page.checkout.isSignedIn,
+		firstName: state.page.checkoutForm.personalDetails.firstName,
+		lastName: state.page.checkoutForm.personalDetails.lastName,
+		email: state.page.checkoutForm.personalDetails.email,
+		confirmEmail: state.page.checkoutForm.personalDetails.confirmEmail,
+		telephone: state.page.checkoutForm.personalDetails.telephone,
+		isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
 		formErrors: state.page.checkout.errors,
 		currencyId: state.common.internationalisation.currencyId,
 		countryId: state.common.internationalisation.countryId,
@@ -54,43 +61,15 @@ function mapDispatchToProps() {
 			() =>
 			(dispatch: RedemptionDispatch, getState: () => RedemptionPageState) =>
 				submitCode(dispatch, getState()),
-		setFirstName: (firstName: string) => (dispatch: RedemptionDispatch) =>
-			dispatch({
-				type: 'SET_FIRST_NAME',
-				firstName,
-			}),
-		setLastName: (lastName: string) => (dispatch: RedemptionDispatch) =>
-			dispatch({
-				type: 'SET_LAST_NAME',
-				lastName,
-			}),
-		setEmail: (email: string) => (dispatch: RedemptionDispatch) =>
-			dispatch({
-				type: 'SET_EMAIL',
-				email,
-			}),
-		setTelephone: (telephone: string) => (dispatch: RedemptionDispatch) =>
-			dispatch({
-				type: 'SET_TELEPHONE',
-				telephone,
-			}),
-		setConfirmEmail: (email: string) => (dispatch: RedemptionDispatch) =>
-			dispatch({
-				type: 'SET_CONFIRM_EMAIL',
-				email,
-			}),
+		setFirstName,
+		setLastName,
+		setEmail,
+		setTelephone,
+		setConfirmEmail,
 		fetchAndStoreUserType:
 			(email: string) =>
 			(dispatch: RedemptionDispatch, getState: () => RedemptionPageState) => {
-				fetchAndStoreUserType(email)(
-					dispatch,
-					getState,
-					(userType) =>
-						void dispatch({
-							type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-							userTypeFromIdentityResponse: userType,
-						}),
-				);
+				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		signOut,
 	};
