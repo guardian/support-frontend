@@ -147,6 +147,8 @@ type ContributionThankYouProps = {
 	paymentMethod: PaymentMethod;
 	countryId: IsoCountry;
 	campaignCode?: string;
+	benefitsMessagingAbTestBulletVariant: boolean;
+	benefitsMessagingAbTestParaVariant: boolean;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -165,6 +167,12 @@ const mapStateToProps = (state: State) => ({
 	paymentMethod: state.page.form.paymentMethod,
 	countryId: state.common.internationalisation.countryId,
 	campaignCode: state.common.referrerAcquisitionData.campaignCode,
+	benefitsMessagingAbTestBulletVariant:
+		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
+		state.page.form.contributionType !== 'ONE_OFF',
+	benefitsMessagingAbTestParaVariant:
+		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
+		state.page.form.contributionType !== 'ONE_OFF',
 });
 
 function ContributionThankYou({
@@ -179,6 +187,8 @@ function ContributionThankYou({
 	paymentMethod,
 	countryId,
 	campaignCode,
+	benefitsMessagingAbTestBulletVariant,
+	benefitsMessagingAbTestParaVariant,
 }: ContributionThankYouProps) {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 
@@ -270,11 +280,12 @@ function ContributionThankYou({
 	const firstColumn = shownComponents.slice(0, numberOfComponentsInFirstColumn);
 	const secondColumn = shownComponents.slice(numberOfComponentsInFirstColumn);
 
-	const showBenefitsThankYouText = shouldShowBenefitsThankYouText(
-		countryId,
-		amount,
-		contributionType,
-	);
+	const userInBenefitsTestVariant =
+		benefitsMessagingAbTestBulletVariant || benefitsMessagingAbTestParaVariant;
+
+	const showBenefitsThankYouText =
+		userInBenefitsTestVariant &&
+		shouldShowBenefitsThankYouText(countryId, amount, contributionType);
 
 	return (
 		<div css={container}>
