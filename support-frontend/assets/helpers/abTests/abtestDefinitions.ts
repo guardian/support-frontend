@@ -133,4 +133,46 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
+	PP_V3: {
+		variants: [
+			{
+				id: 'CONTROL',
+			},
+			{
+				id: 'V1_PARAGRAPH',
+			},
+			{
+				id: 'V2_BULLET',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 1,
+			},
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
+			EURCountries: {
+				offset: 0,
+				size: 1,
+			},
+			International: {
+				offset: 0,
+				size: 1,
+			},
+			NZDCountries: {
+				offset: 0,
+				size: 1,
+			},
+			Canada: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: true,
+		seed: 14,
+	},
 };

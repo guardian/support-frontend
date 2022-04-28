@@ -2,6 +2,8 @@ package utils
 
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
+import com.gu.support.acquisitions.AbTest
 import com.gu.support.catalog.{Collection, Domestic, FulfilmentOptions, HomeDelivery, NoFulfilmentOptions, RestOfWorld}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
@@ -19,13 +21,19 @@ object CheckoutValidationRules {
       case (invalid: Invalid, Valid) => invalid
       case (Valid, invalid: Invalid) => invalid
     }
+    def or(right: Result): Result = (this, right) match {
+      case (Invalid(leftMessage), Invalid(rightMessage)) => Invalid(leftMessage + " and " + rightMessage)
+      case (Valid, Valid) => Valid
+      case (Invalid(_), Valid) => Valid
+      case (Valid, Invalid(_)) => Valid
+    }
   }
   case class Invalid(message: String) extends Result
   case object Valid extends Result
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     (createSupportWorkersRequest.product match {
-      case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d.readerType)
+      case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d)
       case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
       case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
       case _: Contribution =>
@@ -138,7 +146,7 @@ object DigitalPackValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, readerType: ReaderType): Result = {
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, digitalPack: DigitalPack): Result = {
     import createSupportWorkersRequest._
     import createSupportWorkersRequest.billingAddress._
     import createSupportWorkersRequest.product._
@@ -155,11 +163,23 @@ object DigitalPackValidation {
         currencyIsSupportedForCountry(country, currency) and
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
+    def isValidBenefitsTestSub = {
+      if (
+        isValidBenefitsTestPurchase(
+          digitalPack,
+          Some(supportAbTests),
+        )
+      ) Valid
+      else
+        Invalid("User is not in the benefits test")
+    }
+
     val Purchase = Left
     type Redemption[A, B] = Right[A, B]
 
-    (paymentFields, readerType, createSupportWorkersRequest.giftRecipient) match {
-      case (Purchase(paymentFields), ReaderType.Direct, None) => isValidPaidSub(paymentFields)
+    (paymentFields, digitalPack.readerType, createSupportWorkersRequest.giftRecipient) match {
+      case (Purchase(paymentFields), ReaderType.Direct, None) =>
+        isValidBenefitsTestSub or isValidPaidSub(paymentFields)
       case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _, _))) =>
         isValidPaidSub(paymentFields)
       case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption
@@ -167,7 +187,7 @@ object DigitalPackValidation {
         SimpleCheckoutFormValidation.passes(createSupportWorkersRequest)
       case _ =>
         Invalid(
-          s"invalid digital subscription request: paymentFields: $paymentFields, readerType: $readerType, giftRecipient: $giftRecipient",
+          s"invalid digital subscription request: paymentFields: $paymentFields, readerType: $digitalPack.readerType, giftRecipient: $giftRecipient",
         )
     }
   }

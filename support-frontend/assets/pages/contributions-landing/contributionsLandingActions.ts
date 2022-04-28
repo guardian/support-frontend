@@ -83,6 +83,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
+import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import type {
 	State,
@@ -781,6 +782,23 @@ function getBillingCountryAndState(
 	};
 }
 
+function getProductOptionsForBenefitsTest(amount: number, state: State) {
+	const inBenefitsTest =
+		state.common.abParticipations.PP_V3 === 'V2_BULLET' ||
+		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH';
+	const isRecurring = state.page.form.contributionType != 'ONE_OFF';
+
+	const thresholdPrice = getThresholdPrice(
+		state.common.internationalisation.countryGroupId,
+		state.page.form.contributionType,
+	);
+	const amountIsHighEnough = !!(thresholdPrice && amount > thresholdPrice);
+	const shouldGetDigisub = inBenefitsTest && isRecurring && amountIsHighEnough;
+	return shouldGetDigisub
+		? { productType: 'DigitalPack' as const, readerType: 'Direct' as const }
+		: { productType: 'Contribution' as const };
+}
+
 function regularPaymentRequestFromAuthorisation(
 	authorisation: PaymentAuthorisation,
 	state: State,
@@ -789,6 +807,15 @@ function regularPaymentRequestFromAuthorisation(
 		authorisation,
 		state,
 	);
+
+	const amount = getAmount(
+		state.page.form.selectedAmounts,
+		state.page.form.formData.otherAmounts,
+		state.page.form.contributionType,
+	);
+
+	const productOptions = getProductOptionsForBenefitsTest(amount, state);
+
 	return {
 		firstName: (state.page.form.formData.firstName ?? '').trim(),
 		lastName: (state.page.form.formData.lastName ?? '').trim(),
@@ -807,12 +834,8 @@ function regularPaymentRequestFromAuthorisation(
 			country: billingCountry, // required Zuora field
 		},
 		product: {
-			productType: 'Contribution',
-			amount: getAmount(
-				state.page.form.selectedAmounts,
-				state.page.form.formData.otherAmounts,
-				state.page.form.contributionType,
-			),
+			...productOptions,
+			amount,
 			currency: state.common.internationalisation.currencyId,
 			billingPeriod:
 				state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,

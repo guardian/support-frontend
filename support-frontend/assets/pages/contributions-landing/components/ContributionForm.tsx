@@ -64,6 +64,9 @@ import ContributionErrorMessage from './ContributionErrorMessage';
 import ContributionFormFields from './ContributionFormFields';
 import ContributionSubmit from './ContributionSubmit';
 import ContributionTypeTabs from './ContributionTypeTabs';
+import BenefitsBulletPoints from './DigiSubBenefits/BenefitsBulletPoints';
+import BenefitsParagraph from './DigiSubBenefits/BenefitsParagraph';
+import { shouldShowBenefitsMessaging } from './DigiSubBenefits/helpers';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
@@ -115,6 +118,12 @@ type PropTypes = {
 	setSepaAddressStreetName: (streetName: string) => void;
 	setSepaAddressCountry: (addressCountry: Country) => void;
 	productSetAbTestVariant: boolean;
+	benefitsMessagingAbTestBulletVariant: boolean;
+	benefitsMessagingAbTestParaVariant: boolean;
+	setSelectedAmount: (
+		amount: number | 'other',
+		contributionType: ContributionType,
+	) => void;
 };
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -163,6 +172,12 @@ const mapStateToProps = (state: State) => ({
 	sepaData: state.page.form.sepaData,
 	productSetAbTestVariant:
 		state.common.abParticipations.productSetTest === 'variant',
+	benefitsMessagingAbTestBulletVariant:
+		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
+		state.page.form.contributionType !== 'ONE_OFF',
+	benefitsMessagingAbTestParaVariant:
+		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
+		state.page.form.contributionType !== 'ONE_OFF',
 });
 
 const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
@@ -206,6 +221,12 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	},
 	setSepaAddressCountry: (addressCountry: Country) => {
 		dispatch(setSepaAddressCountry(addressCountry));
+	},
+	setSelectedAmount: (
+		amount: number | 'other',
+		contributionType: ContributionType,
+	) => {
+		dispatch(selectAmount(amount, contributionType));
 	},
 });
 
@@ -342,6 +363,14 @@ function ContributionForm(props: PropTypes): JSX.Element {
 	const baseClass = 'form';
 	const classModifiers = ['contribution', 'with-labels'];
 
+	const showBenefitsMessaging = shouldShowBenefitsMessaging(
+		props.contributionType,
+		props.selectedAmounts,
+		props.otherAmounts,
+		props.countryGroupId,
+	);
+	const isAUDCountryGroup = props.countryGroupId === 'AUDCountries';
+
 	function toggleUseLocalCurrency() {
 		props.setUseLocalCurrency(
 			!props.useLocalCurrency,
@@ -376,6 +405,23 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					</CheckboxGroup>
 				)}
 			</div>
+
+			{props.benefitsMessagingAbTestBulletVariant && !isAUDCountryGroup && (
+				<BenefitsBulletPoints
+					showBenefitsMessaging={showBenefitsMessaging}
+					countryGroupId={props.countryGroupId}
+					contributionType={props.contributionType}
+					setSelectedAmount={props.setSelectedAmount}
+				/>
+			)}
+			{props.benefitsMessagingAbTestParaVariant && !isAUDCountryGroup && (
+				<BenefitsParagraph
+					showBenefitsMessaging={showBenefitsMessaging}
+					countryGroupId={props.countryGroupId}
+					contributionType={props.contributionType}
+					setSelectedAmount={props.setSelectedAmount}
+				/>
+			)}
 
 			<StripePaymentRequestButton
 				contributionType={props.contributionType}
@@ -422,6 +468,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 
 				<ContributionSubmit
 					onPaymentAuthorisation={props.onPaymentAuthorisation}
+					showBenefitsMessaging={showBenefitsMessaging}
 				/>
 			</div>
 
@@ -435,6 +482,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					props.otherAmounts,
 					props.contributionType,
 				)}
+				showBenefitsMessaging={showBenefitsMessaging}
 			/>
 			{props.isWaiting ? (
 				<ProgressMessage message={['Processing transaction', 'Please wait']} />

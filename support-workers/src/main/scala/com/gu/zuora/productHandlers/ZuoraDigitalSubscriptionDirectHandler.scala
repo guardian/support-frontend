@@ -2,7 +2,7 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
-import com.gu.support.acquisitions.AbTest
+import com.gu.support.acquisitions.{AbTest, AcquisitionData}
 import com.gu.support.workers.User
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers.states.SendThankYouEmailState
@@ -19,19 +19,17 @@ class ZuoraDigitalSubscriptionDirectHandler(
     user: User,
 ) {
 
-  def isUserInEventsTest(maybeAbTests: Option[Set[AbTest]]) =
-    maybeAbTests.exists(_.toList.exists(test => test.name == "emailDigiSubEventsTest" && test.variant == "variant"))
-
   def subscribe(
       state: DigitalSubscriptionDirectPurchaseState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
-  ): Future[SendThankYouEmailState] =
+      acquisitionData: Option[AcquisitionData],
+  ): Future[SendThankYouEmailState] = {
     for {
       subscribeItem <- Future
         .fromTry(
           digitalSubscriptionDirectPurchaseBuilder
-            .build(state, csrUsername, salesforceCaseId)
+            .build(state, csrUsername, salesforceCaseId, acquisitionData)
             .leftMap(BuildSubscribePromoError)
             .toTry,
         )
@@ -47,5 +45,6 @@ class ZuoraDigitalSubscriptionDirectHandler(
       account.value,
       sub.value,
     )
+  }
 
 }

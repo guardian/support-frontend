@@ -23,6 +23,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
+import { showBenefitsThankYouText as shouldShowBenefitsThankYouText } from '../DigiSubBenefits/helpers';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
@@ -269,6 +270,12 @@ function ContributionThankYou({
 	const firstColumn = shownComponents.slice(0, numberOfComponentsInFirstColumn);
 	const secondColumn = shownComponents.slice(numberOfComponentsInFirstColumn);
 
+	const showBenefitsThankYouText = shouldShowBenefitsThankYouText(
+		countryId,
+		amount,
+		contributionType,
+	);
+
 	return (
 		<div css={container}>
 			<div css={headerContainer}>
@@ -284,6 +291,7 @@ function ContributionThankYou({
 						contributionType,
 						paymentMethod,
 					)}
+					showBenefitsThankYouText={showBenefitsThankYouText}
 				/>
 			</div>
 

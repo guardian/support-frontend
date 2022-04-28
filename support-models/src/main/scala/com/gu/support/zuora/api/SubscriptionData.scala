@@ -8,8 +8,9 @@ import com.gu.support.encoding.CustomCodecs.{monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{Decoder, Encoder, Json, parser}
 import org.joda.time.{LocalDate, Months}
 
 object RatePlanCharge {
@@ -37,10 +38,10 @@ object RatePlanCharge {
     }
   implicit val discountDecoder: Decoder[DiscountRatePlanCharge] = decapitalizingDecoder
 
-  implicit val contributionEncoder: Encoder[ContributionRatePlanCharge] =
-    capitalizingEncoder[ContributionRatePlanCharge]
+  implicit val contributionEncoder: Encoder[RatePlanChargeOverride] =
+    capitalizingEncoder[RatePlanChargeOverride]
       .mapJsonObject(_.add(endDateCondition, Json.fromString(subscriptionEnd)))
-  implicit val contributionDecoder: Decoder[ContributionRatePlanCharge] = decapitalizingDecoder
+  implicit val contributionDecoder: Decoder[RatePlanChargeOverride] = decapitalizingDecoder
 
   implicit val introductoryPriceEncoder: Encoder[IntroductoryPriceRatePlanCharge] =
     capitalizingEncoder[IntroductoryPriceRatePlanCharge]
@@ -49,14 +50,14 @@ object RatePlanCharge {
 
   implicit val encodeRatePlanCharge: Encoder[RatePlanCharge] = Encoder.instance {
     case f: DiscountRatePlanCharge => f.asJson
-    case s: ContributionRatePlanCharge => s.asJson
+    case s: RatePlanChargeOverride => s.asJson
     case i: IntroductoryPriceRatePlanCharge => i.asJson
   }
 
   implicit val decodeRatePlanCharge: Decoder[RatePlanCharge] =
     List[Decoder[RatePlanCharge]](
       Decoder[DiscountRatePlanCharge].widen,
-      Decoder[ContributionRatePlanCharge].widen,
+      Decoder[RatePlanChargeOverride].widen,
       Decoder[IntroductoryPriceRatePlanCharge].widen,
     ).reduceLeft(_ or _)
 }
@@ -71,7 +72,7 @@ case class DiscountRatePlanCharge(
     upToPeriods: Option[Months],
 ) extends RatePlanCharge
 
-case class ContributionRatePlanCharge(
+case class RatePlanChargeOverride(
     productRatePlanChargeId: ProductRatePlanChargeId,
     price: BigDecimal,
 ) extends RatePlanCharge

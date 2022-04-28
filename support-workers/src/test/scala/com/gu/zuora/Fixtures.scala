@@ -4,6 +4,7 @@ import com.gu.config.Configuration
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.stripe.StripeServiceForCurrency
+import com.gu.support.acquisitions.ReferrerAcquisitionData
 import com.gu.support.catalog
 import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.config.TouchPointEnvironments
@@ -83,7 +84,7 @@ object Fixtures {
         RatePlan(config.monthlyContribution.productRatePlanId), // Contribution product
         List(
           RatePlanChargeData(
-            ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 25),
+            RatePlanChargeOverride(config.monthlyContribution.productRatePlanChargeId, 25),
           ),
         ),
         Nil,
@@ -91,6 +92,8 @@ object Fixtures {
     ),
     Subscription(date, date, date, "id123"),
   )
+  val blankReferrerAcquisitionData =
+    ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None)
 
   val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
   val everydayHDProductRatePlanId =
@@ -155,7 +158,7 @@ object Fixtures {
         RatePlan(config.monthlyContribution.productRatePlanId),
         List(
           RatePlanChargeData(
-            ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 5),
+            RatePlanChargeOverride(config.monthlyContribution.productRatePlanChargeId, 5),
           ),
         ),
         Nil,

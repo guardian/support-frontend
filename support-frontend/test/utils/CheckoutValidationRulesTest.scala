@@ -13,6 +13,7 @@ import org.scalatest.matchers.should.Matchers
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules.{Invalid, Valid}
+import utils.TestData.monthlyDirectUSDProduct
 
 class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
 
@@ -50,14 +51,14 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = None),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Canada and there is no state selected" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, state = None),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Australia and there is no state selected" in {
@@ -65,7 +66,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, state = None),
       product = DigitalPack(Currency.AUD, Monthly),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Australia and there is no postcode" in {
@@ -73,7 +74,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
       product = DigitalPack(Currency.AUD, Monthly),
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is United Kingdom and there is no postcode" in {
@@ -81,7 +82,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
       product = DigitalPack(Currency.GBP, Monthly),
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is United States and there is no postcode" in {
@@ -89,7 +90,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
       product = DigitalPack(Currency.USD, Monthly),
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "also fail if the country is Canada and there is no postcode" in {
@@ -97,7 +98,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
       product = DigitalPack(Currency.CAD, Monthly),
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "also allow a missing postcode in other countries" in {
@@ -105,12 +106,12 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Ireland, postCode = None),
       product = DigitalPack(Currency.EUR, Monthly),
     )
-    DigitalPackValidation.passes(requestMissingPostcode, Direct) shouldBe Valid
+    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe Valid
   }
 
   it should "fail if the source payment field received is an empty string" in {
     val requestMissingState = validDigitalPackRequest.copy(paymentFields = Left(StripeSourcePaymentFields("", None)))
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "succeed for a standard country and currency combination" in {
@@ -118,7 +119,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, state = None),
       product = DigitalPack(Currency.GBP, Annual),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe Valid
+    DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe Valid
   }
 
   it should "fail if the country and currency combination is unsupported" in {
@@ -126,7 +127,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = Some("VA")),
       product = DigitalPack(Currency.GBP, Annual),
     )
-    DigitalPackValidation.passes(requestMissingState, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address line or a city for billing address" in {
@@ -139,21 +140,23 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       country = Country.UK,
     )
     val requestMissingAddressLineAndCity = validDigitalPackRequest.copy(billingAddress = badBillingAddress)
-    DigitalPackValidation.passes(requestMissingAddressLineAndCity, Direct) shouldBe an[Invalid]
+    DigitalPackValidation.passes(requestMissingAddressLineAndCity, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
   it should "succeed when there is a valid corporate sub" in {
+    val product = DigitalPack(GBP, Monthly, Corporate)
     val corporateSub = validDigitalPackRequest.copy(
-      product = DigitalPack(GBP, Monthly, Corporate),
+      product = product,
       paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)),
     )
 
-    DigitalPackValidation.passes(corporateSub, Corporate) shouldBe Valid
+    DigitalPackValidation.passes(corporateSub, product) shouldBe Valid
   }
 
   it should "succeed when there is a valid gift sub purchase" in {
+    val product = DigitalPack(USD, Monthly, Gift)
     val giftPurchase = validDigitalPackRequest.copy(
-      product = DigitalPack(USD, Monthly, Gift),
+      product = product,
       giftRecipient = Some(
         GiftRecipientRequest(
           None,
@@ -166,16 +169,17 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
       ),
     )
 
-    DigitalPackValidation.passes(giftPurchase, Gift) shouldBe Valid
+    DigitalPackValidation.passes(giftPurchase, product) shouldBe Valid
   }
 
   it should "succeed when there is a valid gift sub redemption" in {
+    val product = DigitalPack(GBP, Monthly, Gift)
     val giftRedemption = validDigitalPackRequest.copy(
-      product = DigitalPack(GBP, Monthly, Gift),
+      product = product,
       paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)),
     )
 
-    DigitalPackValidation.passes(giftRedemption, Gift) shouldBe Valid
+    DigitalPackValidation.passes(giftRedemption, product) shouldBe Valid
   }
 
 }
@@ -313,11 +317,12 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
 
 object TestData {
 
+  val monthlyDirectUSDProduct = DigitalPack(Currency.USD, Monthly)
   val validDigitalPackRequest = CreateSupportWorkersRequest(
     title = None,
     firstName = "grace",
     lastName = "hopper",
-    product = DigitalPack(Currency.USD, Monthly),
+    product = monthlyDirectUSDProduct,
     firstDeliveryDate = None,
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
