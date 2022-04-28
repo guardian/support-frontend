@@ -792,7 +792,7 @@ function getProductOptionsForBenefitsTest(amount: number, state: State) {
 		state.common.internationalisation.countryGroupId,
 		state.page.form.contributionType,
 	);
-	const amountIsHighEnough = !!(thresholdPrice && amount > thresholdPrice);
+	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
 	const shouldGetDigisub = inBenefitsTest && isRecurring && amountIsHighEnough;
 	return shouldGetDigisub
 		? { productType: 'DigitalPack' as const, readerType: 'Direct' as const }
