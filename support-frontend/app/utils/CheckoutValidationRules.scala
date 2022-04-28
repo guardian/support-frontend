@@ -33,7 +33,7 @@ object CheckoutValidationRules {
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     (createSupportWorkersRequest.product match {
-      case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d.readerType)
+      case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d)
       case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
       case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
       case _: Contribution =>
@@ -146,7 +146,7 @@ object DigitalPackValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, readerType: ReaderType): Result = {
+  def passes(createSupportWorkersRequest: CreateSupportWorkersRequest, digitalPack: DigitalPack): Result = {
     import createSupportWorkersRequest._
     import createSupportWorkersRequest.billingAddress._
     import createSupportWorkersRequest.product._
@@ -163,11 +163,11 @@ object DigitalPackValidation {
         currencyIsSupportedForCountry(country, currency) and
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
-    def isInBenefitsTest(supportAbTests: Set[AbTest]) = {
+    def isValidBenefitsTestSub = {
       if (
         isValidBenefitsTestPurchase(
-          createSupportWorkersRequest.product.asInstanceOf[DigitalPack],
-          Some(createSupportWorkersRequest.supportAbTests),
+          digitalPack,
+          Some(supportAbTests),
         )
       ) Valid
       else
@@ -177,9 +177,9 @@ object DigitalPackValidation {
     val Purchase = Left
     type Redemption[A, B] = Right[A, B]
 
-    (paymentFields, readerType, createSupportWorkersRequest.giftRecipient) match {
+    (paymentFields, digitalPack.readerType, createSupportWorkersRequest.giftRecipient) match {
       case (Purchase(paymentFields), ReaderType.Direct, None) =>
-        isInBenefitsTest(createSupportWorkersRequest.supportAbTests) or isValidPaidSub(paymentFields)
+        isValidBenefitsTestSub or isValidPaidSub(paymentFields)
       case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _, _))) =>
         isValidPaidSub(paymentFields)
       case (_: Redemption[_, _], ReaderType.Corporate, None) => isValidRedemption
@@ -187,7 +187,7 @@ object DigitalPackValidation {
         SimpleCheckoutFormValidation.passes(createSupportWorkersRequest)
       case _ =>
         Invalid(
-          s"invalid digital subscription request: paymentFields: $paymentFields, readerType: $readerType, giftRecipient: $giftRecipient",
+          s"invalid digital subscription request: paymentFields: $paymentFields, readerType: $digitalPack.readerType, giftRecipient: $giftRecipient",
         )
     }
   }
