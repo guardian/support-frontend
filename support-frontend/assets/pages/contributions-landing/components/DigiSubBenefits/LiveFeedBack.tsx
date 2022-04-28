@@ -103,7 +103,7 @@ function LiveFeedBack({
 			onAnimationEnd={() => liveFeedBackContext?.setShowLiveFeedBack(false)}
 		>
 			<InlineSuccess cssOverrides={inlineSuccess} role="alert">
-				Your amout has been changed to {price}
+				Your amount has been changed to {price}
 			</InlineSuccess>
 		</div>
 	);
