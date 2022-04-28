@@ -33,9 +33,7 @@ object DefaultPromotions {
     object NonGift {
       val sixForSix = "6FOR6"
       val tenAnnual = "10ANNUAL"
-      // Note - hardcoded in client as well - assets/pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx
-      val francePromotion = "FR2022"
-      def all = List(sixForSix, tenAnnual, francePromotion)
+      def all = List(sixForSix, tenAnnual)
     }
 
     def all = Gift.all ++ NonGift.all

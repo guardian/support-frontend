@@ -43,13 +43,12 @@ class WeeklySubscriptionController(
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
-    val defaultPromotion = francePromotion
 
     val queryPromos =
       request.queryString
         .get("promoCode")
         .map(_.toList)
-        .getOrElse(List(defaultPromotion))
+        .getOrElse(Nil)
     val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, GuardianWeekly, countryCode)
 
     Ok(
