@@ -22,7 +22,14 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     // if you change the format, you need to make sure support workers and frontend can handle the same state
     testDecoding[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
     testDecoding[CreatePaymentMethodState](createPayPalPaymentMethodContributionJson(Currency.USD))
-    testDecoding[CreatePaymentMethodState](createPayPalPaymentMethodDigitalPackJson)
+    testDecoding[CreatePaymentMethodState](
+      createPayPalPaymentMethodDigitalPackJson,
+      state =>
+        state.product match {
+          case d: DigitalPack => d.amount shouldBe Some(20)
+          case _ => fail()
+        },
+    )
     testDecoding[CreatePaymentMethodState](
       createDirectDebitDigitalPackJson,
       _.acquisitionData.get.ophanIds.pageviewId shouldBe Some("jkcg440imu1c0m8pxpxe"),

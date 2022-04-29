@@ -1,10 +1,10 @@
 package com.gu.zuora.subscriptionBuilders
 
-import com.gu.helpers
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
+import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.PromotionService
@@ -22,6 +22,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
 import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import com.gu.support.zuora.api._
+import com.gu.zuora.Fixtures.blankReferrerAcquisitionData
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -98,6 +99,36 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     csrSubscription.subscription.acquisitionCase shouldBe Some("test_case_id")
   }
 
+  "Valid digital subs from the benefits test" should "have charge overrides" in {
+    validMonthlyBenefitsTest.subscriptionData.ratePlanData shouldBe List(
+      RatePlanData(
+        RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"),
+        List(RatePlanChargeData(RatePlanChargeOverride("monthlyChargeId", 12))),
+        Nil,
+      ),
+    )
+  }
+
+  "Digital subs from the benefits test with amounts which are too low" should "not have charge overrides" in {
+    lowAmountMonthlyBenefitsTest.subscriptionData.ratePlanData shouldBe List(
+      RatePlanData(
+        RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"),
+        Nil,
+        Nil,
+      ),
+    )
+  }
+
+  "Digital subs which are not in the benefits test" should "not have charge overrides even if an amount is present" in {
+    monthlyNotInBenefitsTest.subscriptionData.ratePlanData shouldBe List(
+      RatePlanData(
+        RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"),
+        Nil,
+        Nil,
+      ),
+    )
+  }
+
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
@@ -137,7 +168,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .map(_.toOption.get)
 
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
-    ZuoraDigitalPackConfig(14, 2),
+    ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
     promotionService,
     DateGenerator(saleDate),
     SANDBOX,
@@ -172,6 +203,62 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         ),
         None,
         None,
+        None,
+      )
+      .toOption
+      .get
+
+  lazy val validMonthlyBenefitsTest =
+    subscriptionDirectPurchaseBuilder
+      .build(
+        DigitalSubscriptionDirectPurchaseState(
+          Country.UK,
+          DigitalPack(GBP, Monthly, amount = Some(12)),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
+          None,
+          SalesforceContactRecord("", ""),
+        ),
+        None,
+        None,
+        Some(
+          AcquisitionData(OphanIds(None, None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
+        ),
+      )
+      .toOption
+      .get
+
+  lazy val lowAmountMonthlyBenefitsTest =
+    subscriptionDirectPurchaseBuilder
+      .build(
+        DigitalSubscriptionDirectPurchaseState(
+          Country.UK,
+          DigitalPack(GBP, Monthly, amount = Some(1)),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
+          None,
+          SalesforceContactRecord("", ""),
+        ),
+        None,
+        None,
+        Some(
+          AcquisitionData(OphanIds(None, None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
+        ),
+      )
+      .toOption
+      .get
+
+  lazy val monthlyNotInBenefitsTest =
+    subscriptionDirectPurchaseBuilder
+      .build(
+        DigitalSubscriptionDirectPurchaseState(
+          Country.UK,
+          DigitalPack(GBP, Monthly, amount = Some(12)),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
+          None,
+          SalesforceContactRecord("", ""),
+        ),
+        None,
+        None,
+        None,
       )
       .toOption
       .get
@@ -204,6 +291,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       ),
       Some("Dan Csr"),
       Some("test_case_id"),
+      None,
     )
     .toOption
     .get

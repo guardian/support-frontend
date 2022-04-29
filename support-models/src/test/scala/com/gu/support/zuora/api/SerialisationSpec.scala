@@ -148,8 +148,8 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       )
   }
 
-  "ContributionRatePlanCharge" should "serialise and deserialize correctly" in {
-    testDecoding[ContributionRatePlanCharge](
+  "RatePlanChargeOverride" should "serialise and deserialize correctly" in {
+    testDecoding[RatePlanChargeOverride](
       Fixtures.contributionRatePlanCharge,
       c => {
         c.productRatePlanChargeId shouldBe "12345"
