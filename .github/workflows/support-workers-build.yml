@@ -65,15 +65,18 @@ jobs:
             ~/.coursier
           key: sbt
 
-      # This runs three separate builds
+      # There are three separate build in the support-workers project
       # - the integration tests build which is uploaded so it can be run in a lambda
       # - the support-workers build
-      # = the support-redemptiondb build which supports corporate digisub functionality
-      - name: Build and upload to RiffRaff
-
+      # = the support-redemptiondb build which deploys the dynamo db cfn for corporate digisub functionality
+      - name: Build integration test assembly
         run: |
           export LAST_TEAMCITY_BUILD=10000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt "project support-workers" it:assembly \
-          "project support-workers" test riffRaffUpload \
-          "project support-redemptiondb" riffRaffUpload
+          sbt "project support-workers" it:assembly
+
+      - name: Build and upload support-workers and it tests to RiffRaff
+        run: sbt "project support-workers" riffRaffUpload
+
+      - name: Build and upload support-redemptiondb to RiffRaff
+        run: sbt "project support-redemptiondb" riffRaffUpload
