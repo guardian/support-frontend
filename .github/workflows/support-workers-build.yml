@@ -71,12 +71,18 @@ jobs:
       # = the support-redemptiondb build which deploys the dynamo db cfn for corporate digisub functionality
       - name: Build integration test assembly
         run: |
-          export LAST_TEAMCITY_BUILD=10000
+          export LAST_TEAMCITY_BUILD=12000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
           sbt "project support-workers" it:assembly
 
       - name: Build and upload support-workers and it tests to RiffRaff
-        run: sbt "project support-workers" riffRaffUpload
+        run: |
+          export LAST_TEAMCITY_BUILD=12000
+          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
+          sbt "project support-workers" riffRaffUpload
 
       - name: Build and upload support-redemptiondb to RiffRaff
-        run: sbt "project support-redemptiondb" riffRaffUpload
+        run: |
+          export LAST_TEAMCITY_BUILD=12000
+          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
+          sbt "project support-redemptiondb" riffRaffUpload
