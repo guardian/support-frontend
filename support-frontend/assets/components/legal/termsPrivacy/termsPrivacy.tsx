@@ -27,6 +27,7 @@ type PropTypes = {
 	amount: number;
 	currency: IsoCurrency;
 	showBenefitsMessaging: boolean;
+	userInBenefitsVariant: boolean;
 };
 
 // ----- Component ----- //
@@ -173,7 +174,7 @@ function TermsPrivacy(props: PropTypes): ReactElement {
 	return (
 		<>
 			<div className="component-terms-privacy">
-				{props.contributionType !== 'ONE_OFF' && (
+				{props.contributionType !== 'ONE_OFF' && !props.userInBenefitsVariant && (
 					<div className="component-terms-privacy__change">
 						{recurringCopy()}{' '}
 						<strong>

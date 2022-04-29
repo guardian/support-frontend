@@ -483,6 +483,10 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					props.contributionType,
 				)}
 				showBenefitsMessaging={showBenefitsMessaging}
+				userInBenefitsVariant={
+					props.benefitsMessagingAbTestBulletVariant ||
+					props.benefitsMessagingAbTestParaVariant
+				}
 			/>
 			{props.isWaiting ? (
 				<ProgressMessage message={['Processing transaction', 'Please wait']} />
