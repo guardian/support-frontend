@@ -2,23 +2,15 @@
 import type { ReactElement } from 'react';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
-import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
+import { currencies } from 'helpers/internationalisation/currency';
 import {
 	contributionsTermsLinks,
 	philanthropyContactEmail,
 	privacyLink,
 } from 'helpers/legal';
 import './termsPrivacy.scss';
-import {
-	getDateWithOrdinal,
-	getLongMonth,
-} from 'helpers/utilities/dateFormatting';
 // ---- Types ----- //
 type PropTypes = {
 	countryGroupId: CountryGroupId;
@@ -142,46 +134,9 @@ function TermsPrivacy(props: PropTypes): ReactElement {
 
 	const isUSContributor = props.countryGroupId === 'UnitedStates';
 
-	const recurringCopy = () => {
-		if (Number.isNaN(props.amount)) {
-			return '';
-		}
-
-		const now = new Date();
-		const closestDayCopy =
-			now.getDate() >= 29 ? ', or closest day thereafter' : '';
-		const amountCopy = formatAmount(
-			currencies[props.currency],
-			spokenCurrencies[props.currency],
-			props.amount,
-			false,
-		);
-
-		if (props.contributionType === 'MONTHLY') {
-			return `We will attempt to take payment of ${amountCopy}, on the ${getDateWithOrdinal(
-				now,
-			)} day of every month${closestDayCopy}, from now on until you cancel your contribution. Payments may take up to 6 days to be recorded in your bank account.`;
-		}
-
-		return `We will attempt to take payment of ${amountCopy} on the ${getDateWithOrdinal(
-			now,
-		)} day of ${getLongMonth(
-			now,
-		)} every year, from now until you cancel your contribution. Payments may take up to 6 days to be recorded in your bank account.`;
-	};
-
 	return (
 		<>
 			<div className="component-terms-privacy">
-				{props.contributionType !== 'ONE_OFF' && (
-					<div className="component-terms-privacy__change">
-						{recurringCopy()}{' '}
-						<strong>
-							You can change how much you give or cancel your contributions at
-							any time.
-						</strong>
-					</div>
-				)}
 				<div className="component-terms-privacy__terms">
 					By proceeding, you are agreeing to our {terms}. To find out what
 					personal data we collect and how we use it, please visit our {privacy}
