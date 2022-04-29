@@ -49,6 +49,7 @@ type PropTypes = {
 	billingPeriod: BillingPeriod;
 	amazonPayData: AmazonPayData;
 	showBenefitsMessaging: boolean;
+	userInBenefitsVariant: boolean;
 };
 
 function mapStateToProps(state: State) {
@@ -112,6 +113,7 @@ function ContributionSubmit(props: PropTypes) {
 		props.currency,
 		props.paymentMethod,
 		props.showBenefitsMessaging,
+		props.userInBenefitsVariant,
 	);
 
 	const amazonPayEnabled = () => !props.amazonPayData.fatalError;

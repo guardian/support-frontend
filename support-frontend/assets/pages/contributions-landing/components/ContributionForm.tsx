@@ -469,6 +469,10 @@ function ContributionForm(props: PropTypes): JSX.Element {
 				<ContributionSubmit
 					onPaymentAuthorisation={props.onPaymentAuthorisation}
 					showBenefitsMessaging={showBenefitsMessaging}
+					userInBenefitsVariant={
+						props.benefitsMessagingAbTestBulletVariant ||
+						props.benefitsMessagingAbTestParaVariant
+					}
 				/>
 			</div>
 
