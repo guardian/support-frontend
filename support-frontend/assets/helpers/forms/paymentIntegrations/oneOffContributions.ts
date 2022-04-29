@@ -1,3 +1,4 @@
+import type { PaymentIntentResult } from '@stripe/stripe-js';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { logPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -8,7 +9,6 @@ import 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
-import type { Stripe3DSResult } from 'pages/contributions-landing/contributionsLandingReducer';
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
 
@@ -175,7 +175,7 @@ const postOneOffAmazonPayExecutePaymentRequest = (
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
 const processStripePaymentIntentRequest = (
 	data: CreateStripePaymentIntentRequest,
-	handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+	handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 ): Promise<PaymentResult> =>
 	handleOneOffExecution(
 		postToPaymentApi(data, '/contribute/one-off/stripe/create-payment').then(
@@ -185,7 +185,7 @@ const processStripePaymentIntentRequest = (
 				if (_createIntentResponse.type === 'requiresaction') {
 					// Do 3DS auth and then send back to payment-api for payment confirmation
 					return handleStripe3DS(_createIntentResponse.data.clientSecret).then(
-						(authResult: Stripe3DSResult) => {
+						(authResult: PaymentIntentResult) => {
 							if (authResult.error) {
 								trackComponentClick('stripe-3ds-failure');
 								return {

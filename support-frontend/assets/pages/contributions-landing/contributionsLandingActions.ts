@@ -72,6 +72,12 @@ import {
 } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import {
+	setEmail,
+	setFirstName,
+	setLastName,
+	setUserTypeFromIdentityResponse,
+} from 'helpers/redux/checkout/personalDetails/actions';
 import * as cookie from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
@@ -85,11 +91,7 @@ import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import type {
-	State,
-	Stripe3DSResult,
-	UserFormData,
-} from './contributionsLandingReducer';
+import type { State, UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
@@ -330,37 +332,6 @@ const updateSelectedExistingPaymentMethod = (
 	existingPaymentMethod,
 });
 
-const updateFirstName =
-	(firstName: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_FIRST_NAME',
-			firstName,
-		}))(dispatch, getState);
-	};
-
-const updateLastName =
-	(lastName: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_LAST_NAME',
-			lastName,
-		}))(dispatch, getState);
-	};
-
-const updateEmail =
-	(email: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		// PayPal one-off redirects away from the site before hitting the thank you page
-		// so we need to store the email in the storage so that it is available on the
-		// thank you page in all scenarios.
-		storage.setSession('gu.email', email);
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_EMAIL',
-			email,
-		}))(dispatch, getState);
-	};
-
 const updateRecaptchaToken =
 	(recaptchaToken: string) =>
 	(dispatch: Dispatch, getState: () => State): void => {
@@ -522,20 +493,6 @@ const setAmazonPayBillingAgreementConsentStatus =
 		}))(dispatch, getState);
 	};
 
-const setUserTypeFromIdentityResponse =
-	(userTypeFromIdentityResponse: UserTypeFromIdentityResponse) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		// PayPal one-off redirects away from the site before hitting the thank you page, and we'll need userType
-		storage.setSession(
-			'userTypeFromIdentityResponse',
-			userTypeFromIdentityResponse,
-		);
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-			userTypeFromIdentityResponse,
-		}))(dispatch, getState);
-	};
-
 // We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
 const loadPayPalExpressSdk =
 	(contributionType: ContributionType) =>
@@ -576,7 +533,7 @@ const getUserType =
 			isSignedIn,
 			csrf,
 			(userType: UserTypeFromIdentityResponse) =>
-				setUserTypeFromIdentityResponse(userType)(dispatch, getState),
+				dispatch(setUserTypeFromIdentityResponse(userType)),
 		);
 	};
 
@@ -654,7 +611,7 @@ const setSepaAddressStreetName =
 	};
 
 const setSepaAddressCountry =
-	(addressCountry: Country | null) =>
+	(addressCountry?: Country) =>
 	(dispatch: Dispatch, getState: () => State): void => {
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_SEPA_ADDRESS_COUNTRY',
@@ -697,7 +654,7 @@ const buildStripeChargeDataFromAuthorisation = (
 			state.page.form.formData.otherAmounts,
 			state.page.form.contributionType,
 		),
-		email: state.page.form.formData.email ?? '',
+		email: state.page.checkoutForm.personalDetails.email,
 		stripePaymentMethod,
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
@@ -817,9 +774,9 @@ function regularPaymentRequestFromAuthorisation(
 	const productOptions = getProductOptionsForBenefitsTest(amount, state);
 
 	return {
-		firstName: (state.page.form.formData.firstName ?? '').trim(),
-		lastName: (state.page.form.formData.lastName ?? '').trim(),
-		email: (state.page.form.formData.email ?? '').trim(),
+		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
+		lastName: state.page.checkoutForm.personalDetails.lastName.trim(),
+		email: state.page.checkoutForm.personalDetails.email.trim(),
 		billingAddress: {
 			lineOne: null,
 			// required go cardless field
@@ -861,7 +818,7 @@ const amazonPayDataFromAuthorisation = (
 			state.page.form.contributionType,
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
-		email: state.page.form.formData.email ?? '',
+		email: state.page.checkoutForm.personalDetails.email,
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
 		state.common.referrerAcquisitionData,
@@ -989,7 +946,7 @@ const createOneOffPayPalPayment =
 const makeCreateStripePaymentIntentRequest =
 	(
 		data: CreateStripePaymentIntentRequest,
-		handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 		paymentAuthorisation: PaymentAuthorisation,
 	) =>
 	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
@@ -1165,9 +1122,9 @@ export {
 	updateContributionTypeAndPaymentMethod,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
-	updateFirstName,
-	updateLastName,
-	updateEmail,
+	setFirstName,
+	setLastName,
+	setEmail,
 	updateBillingState,
 	updateBillingCountry,
 	updateUserFormData,

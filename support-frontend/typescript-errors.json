@@ -2,16 +2,16 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 33,
-            "TS7006": 32,
-            "TS2322": 41,
-            "TS2339": 13,
+            "TS2345": 30,
+            "TS7006": 21,
+            "TS2322": 40,
+            "TS2339": 11,
             "TS6133": 7,
             "TS2578": 4,
-            "TS2305": 10,
+            "TS2305": 8,
             "TS2314": 3,
             "TS7031": 7,
-            "TS2769": 7,
+            "TS2769": 5,
             "TS2304": 5,
             "TS2741": 3,
             "TS2564": 1,
@@ -21,8 +21,6 @@
             "TS7053": 3,
             "TS2411": 1,
             "TS2367": 3,
-            "TS2740": 1,
-            "TS7016": 1,
             "TS7017": 1,
             "TS2554": 6,
             "TS7034": 3,
@@ -45,13 +43,10 @@
             "assets/helpers/__tests__/checkoutsTest.ts": 7,
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/contributions.ts": 2,
-            "assets/helpers/identityApis.ts": 1,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
-            "assets/helpers/rendering/render.ts": 8,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
-            "assets/pages/contributions-landing/contributionsLandingActions.ts": 2,
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
@@ -60,7 +55,6 @@
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
-            "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts": 10,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
@@ -98,7 +92,6 @@
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/helpers/redux/subscriptionsStore.ts": 2,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
@@ -202,16 +195,8 @@
             "message": "Argument of type 'string | number | null' is not assignable to parameter of type 'string'."
         },
         {
-            "path": "assets/helpers/identityApis.ts",
-            "message": "Argument of type '(resp: {    userType: UserType;}) => UserType' is not assignable to parameter of type '(value: Record<string, unknown>) => \"current\" | \"new\" | \"guest\" | PromiseLike<\"current\" | \"new\" | \"guest\">'."
-        },
-        {
             "path": "assets/helpers/internationalisation/__tests__/currencyTest.ts",
             "message": "Argument of type '\"ZZ\"' is not assignable to parameter of type 'CountryGroupId'."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Argument of type 'unknown' is not assignable to parameter of type 'Error'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
@@ -228,10 +213,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx",
             "message": "Argument of type 'unknown' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Argument of type '(clientSecret: string) => Promise<PaymentIntentResult>' is not assignable to parameter of type '(clientSecret: string) => Promise<Stripe3DSResult>'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -298,50 +279,6 @@
         {
             "path": "assets/helpers/__tests__/promiseTest.ts",
             "message": "Parameter 'fail' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter '_' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter 'listenerApi' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter '_' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter 'listenerApi' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter '_' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter 'listenerApi' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter '_' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter 'listenerApi' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter '_' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/redux/checkout/personalDetails/subscriptionsSideEffects.ts",
-            "message": "Parameter 'listenerApi' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Parameter 'opts' implicitly has an 'any' type."
         },
         {
             "path": "assets/helpers/rendering/ssrPages.ts",
@@ -498,10 +435,6 @@
             "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"csrf\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLandingActions.ts",
-            "message": "Type 'string | null' is not assignable to type 'string | undefined'."
-        },
-        {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(isSignedIn: boolean) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(isSignedIn: boolean) => Action'."
         },
@@ -577,11 +510,11 @@
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
@@ -590,14 +523,6 @@
         {
             "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
             "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Property 'settings' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
@@ -682,14 +607,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
         {
-            "path": "assets/helpers/redux/subscriptionsStore.ts",
-            "message": "Module '\"@reduxjs/toolkit\"' has no exported member 'TypedStartListening'."
-        },
-        {
-            "path": "assets/helpers/redux/subscriptionsStore.ts",
-            "message": "Module '\"@reduxjs/toolkit\"' has no exported member 'createListenerMiddleware'."
-        },
-        {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         }
@@ -753,14 +670,6 @@
         },
         {
             "path": "assets/helpers/polyfills/layout.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/rendering/render.ts",
             "message": "No overload matches this call."
         },
         {
@@ -855,7 +764,7 @@
         },
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 17 more ...; v2recaptchaPublicKey: string; }'."
+            "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -880,18 +789,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts",
             "message": "This condition will always return 'false' since the types '() => number' and 'number' have no overlap."
-        }
-    ],
-    "TS2740": [
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, dir, and 109 more."
-        }
-    ],
-    "TS7016": [
-        {
-            "path": "assets/helpers/rendering/render.ts",
-            "message": "Could not find a declaration file for module 'preact/debug'. 'support-frontend/node_modules/preact/debug/dist/debug.js' implicitly has an 'any' type."
         }
     ],
     "TS7017": [
