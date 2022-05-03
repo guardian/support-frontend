@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
-import type { Action, Phase } from 'components/directDebit/directDebitActions';
+import type { Phase } from 'components/directDebit/directDebitActions';
 import {
 	closeDirectDebitPopUp,
 	resetDirectDebitFormError,
@@ -10,38 +10,37 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import SvgCross from 'components/svgs/cross';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import './directDebitPopUpForm.scss';
-// ---- Types ----- //
-type PropTypes = {
-	buttonText: string;
-	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
-	isPopUpOpen: boolean;
-	closeDirectDebitPopUp: () => void;
-	phase: Phase;
-};
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state) {
+function mapStateToProps(state: ContributionsState) {
 	return {
 		isPopUpOpen: state.page.directDebit.isPopUpOpen,
 		phase: state.page.directDebit.phase,
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-	return {
-		closeDirectDebitPopUp: () => {
-			dispatch(closeDirectDebitPopUp());
-			dispatch(resetDirectDebitFormError());
-		},
-	};
-}
+const mapDispatchToProps = {
+	closeDirectDebitPopUp,
+	resetDirectDebitFormError,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & {
+	buttonText: string;
+	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
+};
 
 // ----- Component ----- //
-const DirectDebitPopUpForm = (props: PropTypes) => {
-	let content = null;
+function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
+	function closePopup() {
+		props.closeDirectDebitPopUp();
+		props.resetDirectDebitFormError();
+	}
 
 	if (props.isPopUpOpen) {
-		content = (
+		return (
 			<div className="component-direct-debit-pop-up-form">
 				<div className="component-direct-debit-pop-up-form__content">
 					<h1 className="component-direct-debit-pop-up-form__heading">
@@ -50,7 +49,7 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
 					<button
 						id="qa-pay-with-direct-debit-close-pop-up"
 						className="component-direct-debit-pop-up-form__close-button focus-target"
-						onClick={props.closeDirectDebitPopUp}
+						onClick={closePopup}
 					>
 						<span>
 							<SvgCross />
@@ -65,8 +64,8 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
 		);
 	}
 
-	return content;
-};
+	return <></>;
+}
 
 // ----- Auxiliary Components ----- //
 function PageTitle(props: { phase: Phase }) {
@@ -95,7 +94,4 @@ function PageTitle(props: { phase: Phase }) {
 	);
 } // ----- Exports ----- //
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(DirectDebitPopUpForm);
+export default connector(DirectDebitPopUpForm);

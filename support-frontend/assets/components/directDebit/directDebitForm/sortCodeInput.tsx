@@ -9,12 +9,12 @@ type SortCodePropTypes = {
 	phase: Phase;
 	sortCodeArray: string[];
 	onChange: (
-		arg0: SortCodeIndex,
-		arg1: React.SyntheticEvent<HTMLInputElement>,
+		index: SortCodeIndex,
+		event: React.ChangeEvent<HTMLInputElement>,
 	) => void;
 };
 
-function SortCodeInput(props: SortCodePropTypes) {
+function SortCodeInput(props: SortCodePropTypes): JSX.Element {
 	const editable = (
 		<span>
 			<SortCodeField
@@ -62,7 +62,7 @@ function SortCodeInput(props: SortCodePropTypes) {
 function SortCodeField(props: {
 	id: string;
 	value: string;
-	onChange: (arg0: React.SyntheticEvent<HTMLInputElement>) => void;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 	return (
 		<input
