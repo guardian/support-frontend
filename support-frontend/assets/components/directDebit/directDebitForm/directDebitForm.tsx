@@ -1,9 +1,8 @@
 // ----- Imports ----- //
 import * as React from 'react';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import type {
-	Action,
 	Phase,
 	SortCodeIndex,
 } from 'components/directDebit/directDebitActions';
@@ -28,43 +27,11 @@ import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import './directDebitForm.scss';
-// ---- Types ----- //
-type PropTypes = {
-	buttonText: string;
-	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
-	isDDGuaranteeOpen: boolean;
-	sortCodeArray: string[];
-	accountNumber: string;
-	accountHolderName: string;
-	accountHolderConfirmation: boolean;
-	updateSortCode: (
-		index: SortCodeIndex,
-		event: React.SyntheticEvent<HTMLInputElement>,
-	) => void;
-	updateAccountNumber: (
-		accountNumber: React.SyntheticEvent<HTMLInputElement>,
-	) => void;
-	updateAccountHolderName: (
-		accountHolderName: React.SyntheticEvent<HTMLInputElement>,
-	) => void;
-	updateAccountHolderConfirmation: (
-		accountHolderConfirmation: React.SyntheticEvent<HTMLInputElement>,
-	) => void;
-	openDDGuaranteeClicked: () => void;
-	closeDDGuaranteeClicked: () => void;
-	formError: string;
-	phase: Phase;
-	payDirectDebitClicked: () => void;
-	editDirectDebitClicked: () => void;
-	confirmDirectDebitClicked: (
-		onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void,
-	) => void;
-	countryGroupId: CountryGroupId;
-};
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state) {
+function mapStateToProps(state: ContributionsState) {
 	return {
 		isDDGuaranteeOpen: state.page.directDebit.isDDGuaranteeOpen,
 		sortCodeArray: state.page.directDebit.sortCodeArray,
@@ -77,105 +44,92 @@ function mapStateToProps(state) {
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-	return {
-		payDirectDebitClicked: () => {
-			dispatch(payDirectDebitClicked());
-			return false;
-		},
-		editDirectDebitClicked: () => {
-			dispatch(setDirectDebitFormPhase('entry'));
-		},
-		confirmDirectDebitClicked: (
-			onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void,
-		) => {
-			dispatch(confirmDirectDebitClicked(onPaymentAuthorisation));
-			return false;
-		},
-		openDDGuaranteeClicked: () => {
-			dispatch(openDirectDebitGuarantee());
-		},
-		closeDDGuaranteeClicked: () => {
-			dispatch(closeDirectDebitGuarantee());
-		},
-		updateSortCode: (
-			index: SortCodeIndex,
-			event: React.SyntheticEvent<HTMLInputElement>,
-		) => {
-			dispatch(updateSortCode(index, event.target.value));
-		},
-		updateAccountNumber: (event: React.SyntheticEvent<HTMLInputElement>) => {
-			const accountNumber: string = event.target.value;
-			dispatch(updateAccountNumber(accountNumber));
-		},
-		updateAccountHolderName: (
-			event: React.SyntheticEvent<HTMLInputElement>,
-		) => {
-			const accountHolderName: string = event.target.value;
-			dispatch(updateAccountHolderName(accountHolderName));
-		},
-		updateAccountHolderConfirmation: (
-			event: React.SyntheticEvent<HTMLInputElement>,
-		) => {
-			const accountHolderConfirmation: boolean = event.target.checked;
-			dispatch(updateAccountHolderConfirmation(accountHolderConfirmation));
-		},
-	};
-}
+const mapDispatchToProps = {
+	payDirectDebitClicked,
+	setDirectDebitFormPhase,
+	confirmDirectDebitClicked,
+	openDirectDebitGuarantee,
+	closeDirectDebitGuarantee,
+	updateSortCode,
+	updateAccountNumber,
+	updateAccountHolderName,
+	updateAccountHolderConfirmation,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & {
+	buttonText: string;
+	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
+};
 
 // ----- Component ----- //
-const DirectDebitForm = (props: PropTypes) => (
-	<div className="component-direct-debit-form">
-		<AccountHolderNameInput
-			phase={props.phase}
-			onChange={props.updateAccountHolderName}
-			value={props.accountHolderName}
-		/>
+function DirectDebitForm(props: PropTypes) {
+	return (
+		<div className="component-direct-debit-form">
+			<AccountHolderNameInput
+				phase={props.phase}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+					props.updateAccountHolderName(e.target.value)
+				}
+				value={props.accountHolderName}
+			/>
 
-		<AccountNumberInput
-			phase={props.phase}
-			onChange={props.updateAccountNumber}
-			value={props.accountNumber}
-		/>
+			<AccountNumberInput
+				phase={props.phase}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+					props.updateAccountNumber(e.target.value)
+				}
+				value={props.accountNumber}
+			/>
 
-		<SortCodeInput
-			phase={props.phase}
-			onChange={props.updateSortCode}
-			sortCodeArray={props.sortCodeArray}
-		/>
+			<SortCodeInput
+				phase={props.phase}
+				onChange={(
+					index: SortCodeIndex,
+					e: React.ChangeEvent<HTMLInputElement>,
+				) => props.updateSortCode(index, e.target.value)}
+				sortCodeArray={props.sortCodeArray}
+			/>
 
-		<ConfirmationInput
-			phase={props.phase}
-			onChange={props.updateAccountHolderConfirmation}
-			checked={props.accountHolderConfirmation}
-		/>
+			<ConfirmationInput
+				phase={props.phase}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+					props.updateAccountHolderConfirmation(e.target.checked)
+				}
+				checked={props.accountHolderConfirmation}
+			/>
 
-		<PaymentButton
-			buttonText={props.buttonText}
-			phase={props.phase}
-			onPayClick={() => props.payDirectDebitClicked()}
-			onEditClick={() => props.editDirectDebitClicked()}
-			onConfirmClick={() =>
-				props.confirmDirectDebitClicked(props.onPaymentAuthorisation)
-			}
-		/>
+			<PaymentButton
+				buttonText={props.buttonText}
+				phase={props.phase}
+				onPayClick={props.payDirectDebitClicked}
+				onEditClick={() => props.setDirectDebitFormPhase('entry')}
+				onConfirmClick={() =>
+					props.confirmDirectDebitClicked(props.onPaymentAuthorisation)
+				}
+			/>
 
-		<ErrorMessage message={props.formError} svg={<SvgExclamationAlternate />} />
+			<ErrorMessage
+				message={props.formError}
+				svg={<SvgExclamationAlternate />}
+			/>
 
-		<LegalNotice countryGroupId={props.countryGroupId} />
+			<LegalNotice countryGroupId={props.countryGroupId} />
 
-		<DirectDebitGuarantee
-			isDDGuaranteeOpen={props.isDDGuaranteeOpen}
-			openDDGuaranteeClicked={props.openDDGuaranteeClicked}
-			closeDDGuaranteeClicked={props.closeDDGuaranteeClicked}
-		/>
-	</div>
-);
+			<DirectDebitGuarantee
+				isDDGuaranteeOpen={props.isDDGuaranteeOpen}
+				openDirectDebitGuarantee={props.openDirectDebitGuarantee}
+				closeDirectDebitGuarantee={props.closeDirectDebitGuarantee}
+			/>
+		</div>
+	);
+}
 
 // ----- Auxiliary components ----- //
 function AccountNumberInput(props: {
 	phase: Phase;
-	onChange: (...args: any[]) => any;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	value: string;
 }) {
 	const editable = (
@@ -184,8 +138,8 @@ function AccountNumberInput(props: {
 			value={props.value}
 			onChange={props.onChange}
 			pattern="[0-9]*"
-			minLength="6"
-			maxLength="10"
+			minLength={6}
+			maxLength={10}
 			className="component-direct-debit-form__text-field focus-target"
 		/>
 	);
@@ -213,14 +167,14 @@ function AccountNumberInput(props: {
 function AccountHolderNameInput(props: {
 	phase: Phase;
 	value: string;
-	onChange: (...args: any[]) => any;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 	const editable = (
 		<input
 			id="account-holder-name-input"
 			value={props.value}
 			onChange={props.onChange}
-			maxLength="40"
+			maxLength={40}
 			className="component-direct-debit-form__text-field focus-target"
 		/>
 	);
@@ -241,7 +195,7 @@ function AccountHolderNameInput(props: {
 function ConfirmationInput(props: {
 	phase: Phase;
 	checked: boolean;
-	onChange: (...args: any[]) => any;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 	const editable = (
 		<span>
@@ -300,9 +254,9 @@ function ConfirmationInput(props: {
 function PaymentButton(props: {
 	buttonText: string;
 	phase: Phase;
-	onPayClick: (...args: any[]) => any;
-	onEditClick: (...args: any[]) => any;
-	onConfirmClick: (...args: any[]) => any;
+	onPayClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	onEditClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	onConfirmClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
 	if (props.phase === 'entry') {
 		return (
@@ -318,9 +272,8 @@ function PaymentButton(props: {
 				<SvgArrowRightStraight />
 			</button>
 		);
-	}
-
-	if (props.phase === 'confirmation') {
+	} else {
+		// confirmation phase
 		return (
 			<span>
 				<button
@@ -343,8 +296,6 @@ function PaymentButton(props: {
 			</span>
 		);
 	}
-
-	return null;
 }
 
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {
@@ -383,4 +334,4 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 	);
 } // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(DirectDebitForm);
+export default connector(DirectDebitForm);
