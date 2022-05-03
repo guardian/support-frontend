@@ -20,21 +20,33 @@ const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;
 
-function ContributionThankYouSurvey(): JSX.Element {
+const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/VDQ32ND';
+const AUS_SURVEY_LINK =
+	'https://guardiannewsampampmedia.formstack.com/forms/australia_2022';
+
+interface ContributionThankyouSurveyProps {
+	countryId: string;
+}
+
+function ContributionThankYouSurvey({
+	countryId,
+}: ContributionThankyouSurveyProps): JSX.Element {
 	const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
 
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
 	}, []);
 
+	const isAus = countryId === 'AU';
+
+	const heading = isAus
+		? 'Tell us why you value Guardian Australia'
+		: 'Send us your thoughts';
+
 	const actionIcon = <SvgSpeechBubbleWithPlus />;
 	const actionHeader = (
 		<ActionHeader
-			title={
-				hasBeenCompleted
-					? 'Thank you for sharing your thoughts'
-					: 'Send us your thoughts'
-			}
+			title={hasBeenCompleted ? 'Thank you for sharing your thoughts' : heading}
 		/>
 	);
 
@@ -42,6 +54,8 @@ function ContributionThankYouSurvey(): JSX.Element {
 		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
 		setHasBeenCompleted(true);
 	};
+
+	const surveyLink = isAus ? AUS_SURVEY_LINK : SURVEY_LINK;
 
 	const actionBody = (
 		<ActionBody>
@@ -52,21 +66,33 @@ function ContributionThankYouSurvey(): JSX.Element {
 			) : (
 				<>
 					<p>
-						<span css={styles.hideAfterTablet}>
-							Fill out this short form to tell us more about your experience of
-							supporting us today – it only takes a minute.
-						</span>
+						{isAus && (
+							<span>
+								We would love to know more about your decision to support our
+								journalism today. We’ll publish a selection of our favourite
+								messages, so other readers can enjoy them too.
+							</span>
+						)}
 
-						<span css={styles.hideBeforeTablet}>
-							We would love to hear more about your experience of supporting the
-							Guardian today. Please fill out this short form – it only takes a
-							minute.
-						</span>
+						{!isAus && (
+							<>
+								<span css={styles.hideAfterTablet}>
+									Fill out this short form to tell us more about your experience
+									of supporting us today – it only takes a minute.
+								</span>
+
+								<span css={styles.hideBeforeTablet}>
+									We would love to hear more about your experience of supporting
+									the Guardian today. Please fill out this short form – it only
+									takes a minute.
+								</span>
+							</>
+						)}
 					</p>
 					<div css={buttonContainer}>
 						<LinkButton
 							onClick={onClick}
-							href="https://www.surveymonkey.co.uk/r/VDQ32ND"
+							href={surveyLink}
 							target="_blank"
 							rel="noopener noreferrer"
 							priority="primary"
