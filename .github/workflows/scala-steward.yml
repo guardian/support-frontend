@@ -8,9 +8,9 @@ env:
 
 jobs:
   run_sbt_tests:
-    if: github.actor == 'scala-steward'
+    if: github.event.pull_request.head.repo.full_name == 'scala-steward/support-frontend'
 
-    name: support-frontend build
+    name: test Scala Steward
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -23,3 +23,5 @@ jobs:
 
       - name: Build and run tests
         run: sbt test
+
+
