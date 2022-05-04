@@ -1,5 +1,5 @@
-import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import { logException } from 'helpers/utilities/logger';
+import { onConsentChange } from '@guardian/consent-management-platform';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 
 function pathIsValid(): boolean {
 	const locationPath = window.location.pathname;
@@ -35,38 +35,23 @@ function init(): void {
 	 * the window.location.pathname is NOT valid.
 	 *
 	 */
-	if (
-		getGlobal('ssr') ||
-		!isSwitchOn('featureSwitches.enableQuantumMetric') ||
-		!pathIsValid()
-	) {
+	if (!isSwitchOn('featureSwitches.enableQuantumMetric') || !pathIsValid()) {
 		return;
 	}
 
-	/**
-	 * Dynamically load @guardian/consent-management-platform
-	 * on condition we're not server side rendering (ssr) the page.
-	 * @guardian/consent-management-platform breaks ssr otherwise.
-	 */
-	import('@guardian/consent-management-platform')
-		.then(({ onConsentChange }) => {
-			onConsentChange((state) => {
-				// Check users consent state
-				if (
-					state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
-					state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
-					(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
-						state.tcfv2.consents['1'] && // Store and/or access information on a device
-						state.tcfv2.consents['8'] && // Measure content performance
-						state.tcfv2.consents['10']) // Develop and improve products
-				) {
-					addQM();
-				}
-			});
-		})
-		.catch((error) => {
-			logException('Failed to load Quantum Metric', error);
-		});
+	onConsentChange((state) => {
+		// Check users consent state
+		if (
+			state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
+			state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
+			(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
+				state.tcfv2.consents['1'] && // Store and/or access information on a device
+				state.tcfv2.consents['8'] && // Measure content performance
+				state.tcfv2.consents['10']) // Develop and improve products
+		) {
+			addQM();
+		}
+	});
 }
 
 export { init };

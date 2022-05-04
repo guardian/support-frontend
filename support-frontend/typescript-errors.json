@@ -2,13 +2,11 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 28,
+            "TS2345": 27,
             "TS7006": 19,
             "TS2322": 37,
             "TS6133": 7,
-            "TS2578": 4,
-            "TS2305": 8,
-            "TS2339": 7,
+            "TS2305": 7,
             "TS2314": 3,
             "TS7031": 7,
             "TS2769": 5,
@@ -17,12 +15,14 @@
             "TS2564": 1,
             "TS2739": 3,
             "TS2556": 3,
+            "TS2339": 6,
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
             "TS2367": 3,
             "TS7017": 1,
             "TS2554": 6,
+            "TS2578": 3,
             "TS7034": 3,
             "TS7005": 4,
             "TS2525": 1,
@@ -33,7 +33,6 @@
             "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
-            "assets/components/footerCompliant/Footer.tsx": 4,
             "assets/components/marketingConsent/helpers.ts": 1,
             "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
@@ -81,15 +80,10 @@
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
-            "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/helpers/__tests__/urlTest.ts": 1,
-            "assets/helpers/csrf/csrfReducer.ts": 2,
-            "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
@@ -97,11 +91,16 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
+            "assets/helpers/__tests__/urlTest.ts": 1,
+            "assets/helpers/csrf/csrfReducer.ts": 2,
+            "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
+            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
+            "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5
         }
     },
@@ -127,10 +126,6 @@
         {
             "path": "assets/components/directDebit/helpers/ajax.ts",
             "message": "Argument of type '{ method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; credentials: string; body: string; }' is not assignable to parameter of type 'RequestInit'."
-        },
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Argument of type 'CMP' is not assignable to parameter of type 'SetStateAction<null>'."
         },
         {
             "path": "assets/components/marketingConsent/helpers.ts",
@@ -483,29 +478,7 @@
             "message": "'content' is declared but its value is never read."
         }
     ],
-    "TS2578": [
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        }
-    ],
     "TS2305": [
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
         {
             "path": "assets/components/headers/header/mobileMenuToggler.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
@@ -533,36 +506,6 @@
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
-        }
-    ],
-    "TS2339": [
-        {
-            "path": "assets/components/footerCompliant/Footer.tsx",
-            "message": "Property 'showPrivacyManager' does not exist on type 'never'."
-        },
-        {
-            "path": "assets/helpers/__tests__/urlTest.ts",
-            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
-            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
-            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
-            "message": "Property 'common' does not exist on type 'DefaultRootState'."
         }
     ],
     "TS2314": [
@@ -701,6 +644,32 @@
             "message": "A spread argument must either have a tuple type or be passed to a rest parameter."
         }
     ],
+    "TS2339": [
+        {
+            "path": "assets/helpers/__tests__/urlTest.ts",
+            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
+        },
+        {
+            "path": "assets/helpers/csrf/csrfReducer.ts",
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/helpers/csrf/csrfReducer.ts",
+            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
+        },
+        {
+            "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
+            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
+        },
+        {
+            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
+            "message": "Property 'jsdom' does not exist on type 'typeof globalThis'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/thankYouContainer.ts",
+            "message": "Property 'common' does not exist on type 'DefaultRootState'."
+        }
+    ],
     "TS2569": [
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -775,6 +744,20 @@
         {
             "path": "assets/pages/showcase/components/otherProducts.tsx",
             "message": "Expected 1 arguments, but got 0."
+        }
+    ],
+    "TS2578": [
+        {
+            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx",
+            "message": "Unused '@ts-expect-error' directive."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
+            "message": "Unused '@ts-expect-error' directive."
         }
     ],
     "TS7034": [
