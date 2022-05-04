@@ -2,16 +2,14 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 27,
-            "TS7006": 18,
-            "TS2322": 36,
+            "TS2345": 28,
+            "TS7006": 14,
+            "TS2322": 31,
             "TS6133": 7,
             "TS2305": 3,
-            "TS2314": 3,
-            "TS7031": 7,
-            "TS2304": 5,
-            "TS2741": 3,
-            "TS2564": 1,
+            "TS2314": 2,
+            "TS7031": 5,
+            "TS2304": 4,
             "TS2769": 3,
             "TS2739": 3,
             "TS2556": 3,
@@ -23,6 +21,7 @@
             "TS7017": 1,
             "TS2554": 6,
             "TS2578": 7,
+            "TS2741": 2,
             "TS2525": 1,
             "TS7022": 1,
             "TS7034": 1,
@@ -51,7 +50,6 @@
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
-            "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
@@ -67,7 +65,6 @@
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
-            "assets/pages/contributions-landing/components/SepaForm.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 2,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
@@ -78,10 +75,7 @@
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
-            "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
@@ -97,7 +91,9 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
+            "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1
         }
     },
     "TS1208": [
@@ -134,6 +130,10 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
             "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
+            "message": "Argument of type '{ common: CommonState; page: CombinedState<{ csrf: Csrf; marketingConsent: State; billingAddress: CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>; ... 4 more ...; directDebit: DirectDebitState; }>; }' is not assignable to parameter of type 'GlobalState'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
@@ -226,22 +226,6 @@
             "message": "Parameter 'state' implicitly has an 'any' type."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'r' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'key' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/helpers/__tests__/checkoutsTest.ts",
             "message": "Parameter 'key' implicitly has an 'any' type."
         },
@@ -309,10 +293,6 @@
         },
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'Element'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
         },
         {
@@ -338,18 +318,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Type 'Option<string>' is not assignable to type 'string | undefined'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Type 'null' is not assignable to type 'ReactElement<any, string | JSXElementConstructor<any>> | undefined'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Type '{ children: any[]; onChange: (e: ChangeEvent<HTMLSelectElement>) => void; forwardRef: (r: any) => void; id: string; label: string; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & SelectProps'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
@@ -390,10 +358,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
             "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
-            "message": "Type 'ReactNode' is not assignable to type 'Element'."
         },
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
@@ -486,10 +450,6 @@
             "message": "Generic type '$Call' requires 1 type argument(s)."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
-        },
-        {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx",
             "message": "Generic type '$Call' requires 1 type argument(s)."
         }
@@ -506,14 +466,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/addressFields.tsx",
             "message": "Binding element 'city' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Binding element 'onClick' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Binding element 'isLoading' implicitly has an 'any' type."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -534,36 +486,12 @@
             "message": "Cannot find name 'GlobalState'."
         },
         {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Cannot find name 'GlobalState'."
-        },
-        {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Cannot find name 'Stage'."
         },
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Cannot find name 'Stage'."
-        }
-    ],
-    "TS2741": [
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'TextInputProps'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
-            "message": "Property 'isPatron' is missing in type '{ priceDescription: string; promotion: string; orderIsAGift: boolean; digitalGiftBillingPeriod: \"Annual\" | \"Quarterly\"; price: string; }' but required in type 'EndSummaryProps'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
-            "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
-        }
-    ],
-    "TS2564": [
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Property 'selectRef' has no initializer and is not definitely assigned in the constructor."
         }
     ],
     "TS2769": [
@@ -734,6 +662,16 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Unused '@ts-expect-error' directive."
+        }
+    ],
+    "TS2741": [
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
+            "message": "Property 'isPatron' is missing in type '{ priceDescription: string; promotion: string; orderIsAGift: boolean; digitalGiftBillingPeriod: \"Annual\" | \"Quarterly\"; price: string; }' but required in type 'EndSummaryProps'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
+            "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
         }
     ],
     "TS2525": [

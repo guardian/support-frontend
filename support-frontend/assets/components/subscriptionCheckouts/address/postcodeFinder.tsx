@@ -8,18 +8,14 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-import { useRef } from 'preact/hooks';
-import { Component } from 'react';
+import React from 'react';
+import type { ConnectedComponent } from 'react-redux';
 import { connect } from 'react-redux';
-import type {
-	PostcodeFinderActionCreators,
-	PostcodeFinderState,
-} from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import { postcodeFinderActionCreatorsFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
-import 'helpers/subscriptionsForms/addressType';
-import 'components/subscriptionCheckouts/address/postcodeLookup';
 
 const root = css`
 	display: flex;
@@ -36,12 +32,13 @@ const buttonStyles = css`
 `;
 
 // Types
-type PropTypes = PostcodeFinderState &
-	PostcodeFinderActionCreators & {
-		onPostcodeUpdate: (newPostcode: string) => void;
-		onAddressUpdate: (result: PostcodeFinderResult) => void;
-		id: string;
-	};
+type PropTypes = PostcodeFinderState & {
+	setPostcode: (postcode: string) => void;
+	fetchResults: (postcode?: string) => void;
+	onPostcodeUpdate: (newPostcode: string) => void;
+	onAddressUpdate: (result: PostcodeFinderResult) => void;
+	id: string;
+};
 
 // Helpers
 function InputWithButton({
@@ -86,7 +83,6 @@ function InputWithButton({
 }
 
 function PostcodeFinder(props: PropTypes): JSX.Element {
-	const selectRef = useRef(null);
 	const {
 		id,
 		postcode,
@@ -102,10 +98,10 @@ function PostcodeFinder(props: PropTypes): JSX.Element {
 	return (
 		<div>
 			<InputWithButton
-				error={error}
+				error={error ?? ''}
 				label="Postcode"
 				onClick={() => {
-					fetchResults(postcode);
+					fetchResults(postcode ?? '');
 				}}
 				id={id}
 				onChange={(e) => {
@@ -113,106 +109,38 @@ function PostcodeFinder(props: PropTypes): JSX.Element {
 					onPostcodeUpdate(e.target.value);
 				}}
 				isLoading={isLoading}
-				value={postcode}
+				value={postcode ?? ''}
 			/>
 			{results.length > 0 && (
 				<Select
-					onChange={(e) => {
-						if (results[e.currentTarget.value]) {
-							onAddressUpdate(results[e.currentTarget.value]);
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+						const resultIndex = Number.parseInt(e.currentTarget.value);
+						if (results[resultIndex]) {
+							onAddressUpdate(results[resultIndex]);
 						}
-					}}
-					forwardRef={(r) => {
-						selectRef = r;
 					}}
 					id="address"
 					label={`${results.length} addresses found`}
 				>
-					<Option value={null}>Select an address</Option>
-					{results.map((result, key) => (
-						<Option value={key}>
-							{[result.lineOne, result.lineTwo].join(', ')}
-						</Option>
-					))}
+					<Option value={''}>Select an address</Option>
+					<>
+						{results.map((result, key) => (
+							<Option key={result.lineOne} value={key}>
+								{[result.lineOne, result.lineTwo].join(', ')}
+							</Option>
+						))}
+					</>
 				</Select>
 			)}
 		</div>
 	);
 }
 
-// class PostcodeFinder extends Component<PropTypes> {
-// 	componentDidUpdate(prevProps: PropTypes) {
-// 		if (
-// 			this.selectRef &&
-// 			this.props.results.join() !== prevProps.results.join()
-// 		) {
-// 			this.selectRef.focus();
-// 		}
-// 	}
-
-// 	selectRef: Element & {
-// 		focus: (...args: any[]) => any;
-// 	};
-
-// 	render() {
-// 		const {
-// 			id,
-// 			postcode,
-// 			results,
-// 			isLoading,
-// 			setPostcode,
-// 			fetchResults,
-// 			error,
-// 			onPostcodeUpdate,
-// 			onAddressUpdate,
-// 		} = this.props;
-// 		return (
-// 			<div>
-// 				<InputWithButton
-// 					error={error}
-// 					label="Postcode"
-// 					onClick={() => {
-// 						fetchResults(postcode);
-// 					}}
-// 					id={id}
-// 					onChange={(e) => {
-// 						setPostcode(e.target.value);
-// 						onPostcodeUpdate(e.target.value);
-// 					}}
-// 					isLoading={isLoading}
-// 					value={postcode}
-// 				/>
-// 				{results.length > 0 && (
-// 					<Select
-// 						onChange={(e) => {
-// 							if (results[e.currentTarget.value]) {
-// 								onAddressUpdate(results[e.currentTarget.value]);
-// 							}
-// 						}}
-// 						forwardRef={(r) => {
-// 							this.selectRef = r;
-// 						}}
-// 						id="address"
-// 						label={`${results.length} addresses found`}
-// 					>
-// 						<Option value={null}>Select an address</Option>
-// 						{results.map((result, key) => (
-// 							<Option value={key}>
-// 								{[result.lineOne, result.lineTwo].join(', ')}
-// 							</Option>
-// 						))}
-// 					</Select>
-// 				)}
-// 			</div>
-// 		);
-// 	}
-// }
-
 export const withStore = (
 	scope: AddressType,
-	traverseState: (arg0: GlobalState) => PostcodeFinderState,
-) =>
+	mapStateToProps: (state: SubscriptionsState) => PostcodeFinderState,
+): ConnectedComponent<typeof PostcodeFinder, PropTypes> =>
 	connect(
-		traverseState,
+		mapStateToProps,
 		postcodeFinderActionCreatorsFor(scope),
 	)(PostcodeFinder);

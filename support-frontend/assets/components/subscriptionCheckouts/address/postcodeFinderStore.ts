@@ -1,5 +1,4 @@
 import type { Dispatch } from 'redux';
-import type { $Call } from 'utility-types';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
@@ -30,49 +29,50 @@ export type PostcodeFinderActions =
 			postcode: Option<string>;
 	  });
 
-const postcodeFinderActionCreatorsFor = (scope: AddressType) => ({
-	setPostcode: (postcode: string) => ({
-		type: 'SET_POSTCODE_FINDER_POSTCODE',
-		postcode,
-		scope,
-	}),
-	fetchResults:
-		(postcode: Option<string>) =>
-		(dispatch: Dispatch<PostcodeFinderActions>) => {
-			if (!postcode) {
-				dispatch({
-					type: 'SET_POSTCODE_FINDER_ERROR',
-					error: 'Please enter a postcode',
-					scope,
-				});
-			} else {
-				dispatch({
-					type: 'START_POSTCODE_FINDER_FETCH_RESULTS',
-					scope,
-				});
-				getAddressesForPostcode(postcode)
-					.then((results) => {
-						dispatch({
-							type: 'FILL_POSTCODE_FINDER_RESULTS',
-							results,
-							scope,
-						});
-					})
-					.catch((reason) => {
-						dispatch({
-							type: 'SET_POSTCODE_FINDER_ERROR',
-							error: reason.message,
-							scope,
-						});
+function postcodeFinderActionCreatorsFor(scope: AddressType): {
+	setPostcode: (postcode: string) => void;
+	fetchResults: (
+		postcode?: string,
+	) => (dispatch: Dispatch<PostcodeFinderActions>) => void;
+} {
+	return {
+		setPostcode: (postcode: string) => ({
+			type: 'SET_POSTCODE_FINDER_POSTCODE',
+			postcode,
+			scope,
+		}),
+		fetchResults:
+			(postcode?: string) => (dispatch: Dispatch<PostcodeFinderActions>) => {
+				if (!postcode) {
+					dispatch({
+						type: 'SET_POSTCODE_FINDER_ERROR',
+						error: 'Please enter a postcode',
+						scope,
 					});
-			}
-		},
-});
-
-export type PostcodeFinderActionCreators = $Call<
-	typeof postcodeFinderActionCreatorsFor,
-	AddressType
->;
+				} else {
+					dispatch({
+						type: 'START_POSTCODE_FINDER_FETCH_RESULTS',
+						scope,
+					});
+					getAddressesForPostcode(postcode)
+						.then((results) => {
+							dispatch({
+								type: 'FILL_POSTCODE_FINDER_RESULTS',
+								results,
+								scope,
+							});
+						})
+						.catch((reason: Error) => {
+							dispatch({
+								type: 'SET_POSTCODE_FINDER_ERROR',
+								error: reason.message,
+								scope,
+							});
+						});
+				}
+			},
+	};
+}
 
 const initialState = {
 	results: [],
