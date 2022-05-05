@@ -13,6 +13,10 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
+	setFirstName as setFirstNameGift,
+	setTitle as setTitleGift,
+} from 'helpers/redux/checkout/giftingState/actions';
+import {
 	setConfirmEmail,
 	setEmail,
 	setFirstName,
@@ -155,18 +159,8 @@ const formActionCreators = {
 	setEmail,
 	setConfirmEmail,
 	setTelephone,
-	setTitleGift: (titleGiftRecipient: string): Action => ({
-		type: 'SET_TITLE_GIFT',
-		titleGiftRecipient:
-			titleGiftRecipient !== 'Select a title' ? titleGiftRecipient : null,
-	}),
-	setFirstNameGift: (
-		firstNameGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_FIRST_NAME_GIFT',
-			firstNameGiftRecipient,
-		})),
+	setTitleGift,
+	setFirstNameGift,
 	setLastNameGift: (
 		lastNameGiftRecipient: string,
 	): FormSubmissionDependentValueThunk =>

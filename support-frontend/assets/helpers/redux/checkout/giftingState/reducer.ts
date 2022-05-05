@@ -8,7 +8,9 @@ export const giftingSlice = createSlice({
 	initialState: initialGiftingState,
 	reducers: {
 		setTitle(state, action: PayloadAction<Title>) {
-			state.title = action.payload;
+			const newTitle =
+				action.payload !== 'Select a title' ? action.payload : state.title;
+			state.title = newTitle;
 		},
 		setFirstName(state, action: PayloadAction<string>) {
 			state.firstName = action.payload;

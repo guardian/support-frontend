@@ -1,5 +1,6 @@
 import type { AnyAction } from '@reduxjs/toolkit';
 import { isAnyOf } from '@reduxjs/toolkit';
+import { setFirstName as setFirstNameGift } from 'helpers/redux/checkout/giftingState/actions';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import { enableOrDisableForm } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
@@ -29,6 +30,7 @@ const shouldCheckFormEnabled = isAnyOf(
 	setFirstName,
 	setLastName,
 	setUserTypeFromIdentityResponse,
+	setFirstNameGift,
 );
 
 const actionCreatorFieldNames: Record<string, FormField> = {
@@ -36,6 +38,7 @@ const actionCreatorFieldNames: Record<string, FormField> = {
 	[setEmail.type]: 'email',
 	[setFirstName.type]: 'firstName',
 	[setLastName.type]: 'lastName',
+	[setFirstNameGift.type]: 'firstNameGiftRecipient',
 };
 
 export function addPersonalDetailsSideEffects(
@@ -44,6 +47,7 @@ export function addPersonalDetailsSideEffects(
 	startListening({
 		matcher: shouldCheckFormEnabled,
 		effect(action, listenerApi) {
+			// { type: 'gifting/setFirstName', payload: 'Maria' }
 			if (!setUserTypeFromIdentityResponse.match(action)) {
 				listenerApi.dispatch(
 					removeErrorsForField(
