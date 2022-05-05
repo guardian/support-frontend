@@ -28,18 +28,14 @@ export type ProductPrice = {
 	promotions?: Promotion[];
 };
 
-type RecordKey = string | number | symbol;
-
-type PartialRecord<K extends RecordKey, T> = Partial<Record<K, T>>;
-
-export type BillingPeriods = PartialRecord<
+export type BillingPeriods = Record<
 	BillingPeriod,
-	PartialRecord<IsoCurrency, ProductPrice>
+	Record<IsoCurrency, ProductPrice>
 >;
 
-export type CountryGroupPrices = PartialRecord<
+export type CountryGroupPrices = Record<
 	FulfilmentOptions,
-	PartialRecord<ProductOptions, BillingPeriods>
+	Record<ProductOptions, BillingPeriods>
 >;
 
 export type ProductPrices = Record<CountryGroupName, CountryGroupPrices>;

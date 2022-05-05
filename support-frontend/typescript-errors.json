@@ -2,9 +2,9 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 36,
+            "TS2345": 33,
             "TS7006": 22,
-            "TS2322": 44,
+            "TS2322": 41,
             "TS2339": 13,
             "TS6133": 7,
             "TS2578": 4,
@@ -20,7 +20,6 @@
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
-            "TS2532": 21,
             "TS2367": 3,
             "TS2740": 1,
             "TS7016": 1,
@@ -57,7 +56,6 @@
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/pages/promotion-terms/weeklyTerms.tsx": 10,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/directDebit/directDebitPopUpForm/directDebitPopUpForm.tsx": 1,
@@ -75,7 +73,6 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
-            "assets/helpers/productPrice/productPrices.ts": 4,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -85,7 +82,6 @@
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 4,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
@@ -109,9 +105,8 @@
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
-            "assets/helpers/patrons.ts": 6,
-            "assets/helpers/productPrice/paperProductPrices.ts": 4,
             "assets/helpers/polyfills/details.ts": 1,
+            "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1
         }
@@ -250,18 +245,6 @@
         {
             "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
             "message": "Argument of type 'null' is not assignable to parameter of type 'string'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Argument of type 'ProductPrice | undefined' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Argument of type 'ProductPrice | undefined' is not assignable to parameter of type 'ProductPrice'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Argument of type 'ProductPrice | undefined' is not assignable to parameter of type 'ProductPrice'."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
@@ -444,10 +427,6 @@
             "message": "Type 'unknown' is not assignable to type 'Settings'."
         },
         {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Type 'ProductPrice | undefined' is not assignable to type 'ProductPrice'."
-        },
-        {
             "path": "assets/helpers/utilities/utilities.ts",
             "message": "Type 'string | null | undefined' is not assignable to type 'string'."
         },
@@ -506,14 +485,6 @@
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Type 'Partial<Record<BillingPeriod, Partial<Record<IsoCurrency, ProductPrice>>>> | undefined' is not assignable to type 'Record<BillingPeriod, Record<IsoCurrency, ProductPrice>>'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Type 'ProductPrice | undefined' is not assignable to type 'ProductPrice'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -844,92 +815,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/settings.ts",
             "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
-        }
-    ],
-    "TS2532": [
-        {
-            "path": "assets/helpers/patrons.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/patrons.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/patrons.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/patrons.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/patrons.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/patrons.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/paperProductPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "Object is possibly 'undefined'."
         }
     ],
     "TS2367": [

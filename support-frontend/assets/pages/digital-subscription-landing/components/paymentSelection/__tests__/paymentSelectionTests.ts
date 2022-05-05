@@ -13,7 +13,7 @@ describe('PaymentSelection', () => {
 	it('should return the product options based on country', () => {
 		const countryGroup = 'GBPCountries';
 		const expected =
-			productPrices['United Kingdom'].NoFulfilmentOptions?.NoProductOptions;
+			productPrices['United Kingdom'].NoFulfilmentOptions.NoProductOptions;
 		expect(getProductOptions(productPrices, countryGroup)).toEqual(expected);
 	});
 	it('should return a currency glyph for the current country', () => {
@@ -29,15 +29,13 @@ describe('PaymentSelection', () => {
 		const BillingPeriod = 'Monthly';
 		const currencyId = 'GBP';
 		const productOptions =
-			productPrices['United Kingdom'].NoFulfilmentOptions?.NoProductOptions;
+			productPrices['United Kingdom'].NoFulfilmentOptions.NoProductOptions;
 
 		expect(productOptions).toBeDefined();
 
-		if (productOptions) {
-			expect(
-				getProductPrice(productOptions, BillingPeriod, currencyId).price,
-			).toBe(11.99);
-		}
+		expect(
+			getProductPrice(productOptions, BillingPeriod, currencyId).price,
+		).toBe(11.99);
 	});
 	it('should return saving percentage', () => {
 		const annualCost = 100;

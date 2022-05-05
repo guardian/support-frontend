@@ -4,6 +4,7 @@ export const productPrices: ProductPrices = {
 	'New Zealand': {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Annual: {
 					NZD: {
 						price: 235,
@@ -27,6 +28,7 @@ export const productPrices: ProductPrices = {
 						],
 					},
 				},
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Monthly: {
 					NZD: {
 						price: 23.5,
@@ -56,6 +58,7 @@ export const productPrices: ProductPrices = {
 	'United Kingdom': {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Annual: {
 					GBP: {
 						price: 119,
@@ -79,6 +82,7 @@ export const productPrices: ProductPrices = {
 						],
 					},
 				},
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Monthly: {
 					GBP: {
 						price: 11.99,
@@ -108,6 +112,7 @@ export const productPrices: ProductPrices = {
 	Australia: {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Annual: {
 					AUD: {
 						price: 215,
@@ -131,6 +136,7 @@ export const productPrices: ProductPrices = {
 						],
 					},
 				},
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Monthly: {
 					AUD: {
 						price: 21.5,
@@ -160,6 +166,7 @@ export const productPrices: ProductPrices = {
 	Canada: {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Annual: {
 					CAD: {
 						price: 219,
@@ -183,6 +190,7 @@ export const productPrices: ProductPrices = {
 						],
 					},
 				},
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Monthly: {
 					CAD: {
 						price: 21.95,
@@ -212,6 +220,7 @@ export const productPrices: ProductPrices = {
 	'United States': {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Annual: {
 					USD: {
 						price: 199,
@@ -235,6 +244,7 @@ export const productPrices: ProductPrices = {
 						],
 					},
 				},
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Monthly: {
 					USD: {
 						price: 19.99,
@@ -264,6 +274,7 @@ export const productPrices: ProductPrices = {
 	Europe: {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Annual: {
 					EUR: {
 						price: 149,
@@ -287,6 +298,7 @@ export const productPrices: ProductPrices = {
 						],
 					},
 				},
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Monthly: {
 					EUR: {
 						price: 14.99,
@@ -316,6 +328,7 @@ export const productPrices: ProductPrices = {
 	International: {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Annual: {
 					GBP: {
 						price: 119,
@@ -360,6 +373,7 @@ export const productPrices: ProductPrices = {
 						],
 					},
 				},
+				// @ts-expect-error: At least one IsoCurrency be present for each BillingPeriod
 				Monthly: {
 					GBP: {
 						price: 11.99,
