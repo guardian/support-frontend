@@ -26,11 +26,17 @@ type PropTypes = {
 	campaignSettings: CampaignSettings | null;
 	amount: number;
 	currency: IsoCurrency;
+	showBenefitsMessaging: boolean;
+	userInBenefitsVariant: boolean;
 };
 
 // ----- Component ----- //
 function TermsPrivacy(props: PropTypes): ReactElement {
-	const terms = (
+	const terms = props.showBenefitsMessaging ? (
+		<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
+			Terms and Conditions
+		</a>
+	) : (
 		<a href={contributionsTermsLinks[props.countryGroupId]}>
 			Terms and Conditions
 		</a>
@@ -168,7 +174,7 @@ function TermsPrivacy(props: PropTypes): ReactElement {
 	return (
 		<>
 			<div className="component-terms-privacy">
-				{props.contributionType !== 'ONE_OFF' && (
+				{props.contributionType !== 'ONE_OFF' && !props.userInBenefitsVariant && (
 					<div className="component-terms-privacy__change">
 						{recurringCopy()}{' '}
 						<strong>

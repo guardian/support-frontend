@@ -144,9 +144,9 @@ const formIsValidParameters = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	contributionType: state.page.form.contributionType,
 	billingState: state.page.form.formData.billingState,
-	firstName: state.page.form.formData.firstName,
-	lastName: state.page.form.formData.lastName,
-	email: state.page.form.formData.email,
+	firstName: state.page.checkoutForm.personalDetails.firstName,
+	lastName: state.page.checkoutForm.personalDetails.lastName,
+	email: state.page.checkoutForm.personalDetails.email,
 	stripeCardFormOk: !stripeCardFormIsIncomplete(
 		state.page.form.paymentMethod,
 		state.page.form.stripeCardFormData.formComplete,

@@ -78,6 +78,7 @@ trait AppComponents
     payPalOneOffController,
     directDebitController,
     promotionsController,
+    pricesController,
     assetController,
     faviconController,
   )

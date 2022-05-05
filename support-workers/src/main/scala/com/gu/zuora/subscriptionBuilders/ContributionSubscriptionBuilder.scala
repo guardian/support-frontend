@@ -18,7 +18,7 @@ class ContributionSubscriptionBuilder(
       contributionConfig.productRatePlanId,
       List(
         RatePlanChargeData(
-          ContributionRatePlanCharge(
+          RatePlanChargeOverride(
             contributionConfig.productRatePlanChargeId,
             price = state.product.amount,
           ), // Pass the amount the user selected into Zuora

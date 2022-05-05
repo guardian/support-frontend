@@ -4,46 +4,35 @@ import { logException } from 'helpers/utilities/logger';
 import { isSafari } from 'helpers/utilities/userAgent';
 
 // Without this the build-time pre-rendering breaks, because fetch is undefined when running with node
-const safeFetch = (url: string, opts) => {
+const safeFetch = (url: string, opts?: Record<string, string>) => {
 	if (typeof fetch !== 'undefined') {
-		fetch(url, opts);
+		void fetch(url, opts);
 	}
 };
 
-const getElement = (id: string): HTMLElement | null | undefined =>
+const getElement = (id: string): HTMLElement | null =>
 	document.getElementById(id);
 
-const getElementOrBody = (id: string | null | undefined): HTMLElement => {
-	let element;
-
+const getElementOrBody = (id?: string | null): HTMLElement => {
 	if (id) {
-		element = getElement(id);
+		return getElement(id) ?? getElementOrBody();
 	}
-
-	if (!element) {
-		element = document.querySelector('.gu-render-to');
-	}
-
-	if (!element) {
-		element = document.body as any as HTMLElement;
-	}
-
-	return element;
+	return document.querySelector('.gu-render-to') ?? document.body;
 };
 
-const renderError = (e: Error, id: string | null | undefined) => {
+const renderError = (e: Error, id?: string | null): void => {
 	safeFetch(window.guardian.settings.metricUrl, {
 		mode: 'no-cors',
 	}); // ignore result, fire and forget
 
 	const element = getElementOrBody(id);
 	logException(
-		`Fatal error rendering page: ${id || ''}. Error message: ${
+		`Fatal error rendering page: ${id ?? ''}. Error message: ${
 			e.message
 		}. Stack trace: ${e.stack ? e.stack : 'none'}`,
 	);
-	import('pages/error/components/errorPage').then(({ default: ErrorPage }) => {
-		if (element) {
+	void import('pages/error/components/errorPage').then(
+		({ default: ErrorPage }) => {
 			ReactDOM.render(
 				ErrorPage({
 					headings: [
@@ -57,33 +46,34 @@ const renderError = (e: Error, id: string | null | undefined) => {
 				}),
 				element,
 			);
-		}
-	});
+		},
+	);
 };
 
 const renderPage = (
-	content: Record<string, any>,
+	content: React.ReactElement<React.DOMAttributes<Element>>,
 	id: string,
 	callBack?: () => void,
-) => {
+): void => {
 	const element = getElement(id);
 
 	if (element) {
 		delete element.dataset.notHydrated;
 
 		try {
-			if (process.env.NODE_ENV === 'DEV' && !isSafari) {
-				import('preact/debug');
-				import('@axe-core/react').then((axe) => {
+			if (process.env.NODE_ENV === 'development' && !isSafari) {
+				// @ts-expect-error - Not sure why it's not finding typedefs for Preact
+				void import('preact/debug');
+				void import('@axe-core/react').then((axe) => {
 					console.log('Loading react-axe for accessibility analysis');
-					axe.default(React, ReactDOM, 1000);
+					void axe.default(React, ReactDOM, 1000);
 					ReactDOM.render(content, element, callBack);
 				});
 			} else {
 				ReactDOM.render(content, element, callBack);
 			}
 		} catch (e) {
-			renderError(e, id);
+			renderError(e as Error, id);
 		}
 	} else {
 		safeFetch(window.guardian.settings.metricUrl, {

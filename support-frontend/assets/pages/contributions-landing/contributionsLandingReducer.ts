@@ -22,8 +22,9 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
+import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
+import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
-import * as storage from 'helpers/storage/storage';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
@@ -34,9 +35,6 @@ import type { Action } from './contributionsLandingActions';
 // ----- Types ----- //
 
 export interface UserFormData {
-	firstName: string | null;
-	lastName: string | null;
-	email: string | null;
 	billingState: string | null;
 }
 
@@ -111,6 +109,9 @@ interface FormState {
 
 interface PageState {
 	form: FormState;
+	checkoutForm: {
+		personalDetails: PersonalDetailsState;
+	};
 	user: UserState;
 	csrf: CsrfState;
 	directDebit: DirectDebitState;
@@ -159,9 +160,6 @@ function createFormReducer() {
 			buttonReady: false,
 		},
 		formData: {
-			firstName: null,
-			lastName: null,
-			email: storage.getSession('gu.email') ?? null,
 			otherAmounts: {
 				ONE_OFF: {
 					amount: null,
@@ -421,24 +419,6 @@ function createFormReducer() {
 			case 'UPDATE_RECAPTCHA_TOKEN':
 				return { ...state, oneOffRecaptchaToken: action.recaptchaToken };
 
-			case 'UPDATE_FIRST_NAME':
-				return {
-					...state,
-					formData: { ...state.formData, firstName: action.firstName },
-				};
-
-			case 'UPDATE_LAST_NAME':
-				return {
-					...state,
-					formData: { ...state.formData, lastName: action.lastName },
-				};
-
-			case 'UPDATE_EMAIL':
-				return {
-					...state,
-					formData: { ...state.formData, email: action.email },
-				};
-
 			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
 				return {
 					...state,
@@ -583,6 +563,9 @@ function createFormReducer() {
 function initReducer(): Reducer<PageState> {
 	return combineReducers({
 		form: createFormReducer(),
+		checkoutForm: combineReducers({
+			personalDetails: personalDetailsReducer,
+		}),
 		user: createUserReducer(),
 		directDebit,
 		csrf,

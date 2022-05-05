@@ -60,6 +60,7 @@ export type DigitalSubscription = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 	readerType: ReaderType;
+	amount?: number;
 };
 export type PaperSubscription = {
 	productType: typeof Paper;
@@ -133,7 +134,7 @@ type GiftRecipientType = {
 };
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {
-	title?: Option<Title>;
+	title?: Title;
 	firstName: string;
 	lastName: string;
 	billingAddress: RegularPaymentRequestAddress;
@@ -146,7 +147,7 @@ export type RegularPaymentRequest = {
 	ophanIds: OphanIds;
 	referrerAcquisitionData: ReferrerAcquisitionData;
 	supportAbTests: AcquisitionABTest[];
-	telephoneNumber: Option<string>;
+	telephoneNumber?: string;
 	promoCode?: Option<string>;
 	deliveryInstructions?: Option<string>;
 	csrUsername?: string;

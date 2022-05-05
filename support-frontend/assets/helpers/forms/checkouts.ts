@@ -278,6 +278,8 @@ const getContributeButtonCopy = (
 	maybeOtherAmount: string | null,
 	selectedAmounts: SelectedAmounts,
 	currency: IsoCurrency,
+	showBenefitsMessaging: boolean,
+	userInBenefitsVariant: boolean,
 ): string => {
 	const frequency = getFrequency(contributionType);
 	const amount =
@@ -293,7 +295,10 @@ const getContributeButtonCopy = (
 				false,
 		  )
 		: '';
-	return `Contribute ${amountCopy} ${frequency}`;
+
+	const verb =
+		showBenefitsMessaging && userInBenefitsVariant ? 'Pay' : 'Contribute';
+	return `${verb} ${amountCopy} ${frequency}`;
 };
 
 const getContributeButtonCopyWithPaymentType = (
@@ -302,6 +307,8 @@ const getContributeButtonCopyWithPaymentType = (
 	selectedAmounts: SelectedAmounts,
 	currency: IsoCurrency,
 	paymentMethod: PaymentMethod,
+	showBenefitsMessaging: boolean,
+	userInBenefitsVariant: boolean,
 ): string => {
 	const paymentDescriptionCopy = getPaymentDescription(
 		contributionType,
@@ -312,6 +319,8 @@ const getContributeButtonCopyWithPaymentType = (
 		maybeOtherAmount,
 		selectedAmounts,
 		currency,
+		showBenefitsMessaging,
+		userInBenefitsVariant,
 	);
 	return `${contributionButtonCopy} ${paymentDescriptionCopy}`;
 };

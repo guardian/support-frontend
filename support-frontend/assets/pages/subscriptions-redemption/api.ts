@@ -111,7 +111,9 @@ function validateFormFields(
 	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
 ) {
-	const formFieldErrors = applyRedemptionRules(state.page.checkout);
+	const formFieldErrors = applyRedemptionRules(
+		state.page.checkoutForm.personalDetails,
+	);
 
 	if (formFieldErrors.length) {
 		dispatch({
@@ -179,7 +181,6 @@ function buildRegularPaymentRequest(
 	};
 
 	return {
-		title: null,
 		firstName,
 		lastName,
 		billingAddress: {
@@ -220,10 +221,10 @@ function createSubscription(
 	const data = buildRegularPaymentRequest(
 		state.page.userCode ?? '',
 		state.page.readerType,
-		state.page.checkout.firstName,
-		state.page.checkout.lastName,
-		state.page.checkout.email,
-		state.page.checkout.telephone,
+		state.page.checkoutForm.personalDetails.firstName,
+		state.page.checkoutForm.personalDetails.lastName,
+		state.page.checkoutForm.personalDetails.email,
+		state.page.checkoutForm.personalDetails.telephone ?? '',
 		state.common.internationalisation.currencyId,
 		state.common.internationalisation.countryId,
 		state.common.abParticipations,

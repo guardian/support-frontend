@@ -24,6 +24,7 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import {
 	setContributionTypes,
 	setExistingPaymentMethods,
@@ -261,12 +262,20 @@ function selectInitialContributionTypeAndPaymentMethod(
 	return contributionType;
 }
 
+function getStoredEmail(dispatch: ContributionsDispatch): void {
+	const sessionStorageEmail = storage.getSession('gu.email');
+	if (sessionStorageEmail) {
+		dispatch(setEmail(sessionStorageEmail));
+	}
+}
+
 const init = (store: ContributionsStore): void => {
 	const dispatch = store.dispatch;
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
 	const contributionTypes = getContributionTypes(state);
 	dispatch(setContributionTypes(contributionTypes));
+	getStoredEmail(dispatch);
 	initialisePaymentMethods(state, dispatch);
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
@@ -274,7 +283,7 @@ const init = (store: ContributionsStore): void => {
 		contributionTypes,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
-	const { firstName, lastName, email, stateField } = state.page.user;
+	const { email, stateField } = state.page.user;
 	// For PayPal one-off we need to get userType from session after the thankyou page redirect
 	const userType = storage.getSession('userTypeFromIdentityResponse');
 
@@ -289,9 +298,6 @@ const init = (store: ContributionsStore): void => {
 
 	dispatch(
 		updateUserFormData({
-			firstName,
-			lastName,
-			email,
 			billingState: stateField,
 		}),
 	);

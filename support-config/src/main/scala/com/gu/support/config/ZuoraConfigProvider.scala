@@ -9,7 +9,12 @@ case class ZuoraContributionConfig(
     productRatePlanChargeId: ProductRatePlanChargeId,
 )
 
-case class ZuoraDigitalPackConfig(defaultFreeTrialPeriod: Int, paymentGracePeriod: Int)
+case class ZuoraDigitalPackConfig(
+    defaultFreeTrialPeriod: Int,
+    paymentGracePeriod: Int,
+    monthlyChargeId: String,
+    annualChargeId: String,
+)
 
 case class ZuoraConfig(
     url: String,
@@ -47,5 +52,7 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage)
   private def digitalPackFromConfig(config: Config) = ZuoraDigitalPackConfig(
     defaultFreeTrialPeriod = config.getInt("defaultFreeTrialPeriodDays"),
     paymentGracePeriod = config.getInt("paymentGracePeriod"),
+    monthlyChargeId = config.getString("monthly.productRatePlanChargeId"),
+    annualChargeId = config.getString("annual.productRatePlanChargeId"),
   )
 }

@@ -187,7 +187,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         userId = "111222",
       ),
       new DigitalSubscriptionDirectPurchaseBuilder(
-        config = ZuoraDigitalPackConfig(14, 2),
+        config = ZuoraDigitalPackConfig(14, 2, "", ""),
         promotionService = null, // shouldn't be called for subs with no promo code
         DateGenerator(new LocalDate(2020, 6, 15)),
         TouchPointEnvironments.SANDBOX,
@@ -208,7 +208,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
         User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     )
 
-    val result = subscriptionCreator.subscribe(state, None, None)
+    val result = subscriptionCreator.subscribe(state, None, None, None)
 
     result.map { sendThankYouEmailState =>
       withClue(sendThankYouEmailState) {

@@ -14,8 +14,6 @@ import {
 	AUDCountries,
 	EURCountries,
 	GBPCountries,
-	International,
-	NZDCountries,
 } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
@@ -261,15 +259,7 @@ const getSubscriptionCopy = (
 			// paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
 			premiumApp(countryGroupId),
 		];
-	} else if (
-		[
-			EURCountries,
-			AUDCountries,
-			NZDCountries,
-			GBPCountries,
-			International,
-		].includes(countryGroupId)
-	) {
+	} else if (countryGroupId === EURCountries) {
 		return [
 			guardianWeekly(
 				countryGroupId,

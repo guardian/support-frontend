@@ -131,12 +131,9 @@ function buildRegularPaymentRequest(
 	paymentAuthorisation: PaymentAuthorisation,
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
+	const { title, firstName, lastName, email, telephone } =
+		state.page.checkoutForm.personalDetails;
 	const {
-		title,
-		firstName,
-		lastName,
-		email,
-		telephone,
 		titleGiftRecipient,
 		firstNameGiftRecipient,
 		lastNameGiftRecipient,

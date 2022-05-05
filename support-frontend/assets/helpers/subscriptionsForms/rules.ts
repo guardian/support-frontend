@@ -4,7 +4,7 @@ import {
 	checkOptionalEmail,
 	emailAddressesMatch,
 } from 'helpers/forms/formValidation';
-import type { RedemptionCheckoutState } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
+import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { FormField, FormFields } from './formFields';
 import {
 	formError,
@@ -21,7 +21,7 @@ type CheckoutRule = {
 };
 
 function applyRedemptionRules(
-	fields: RedemptionCheckoutState,
+	fields: PersonalDetailsState,
 ): Array<FormError<FormField>> {
 	const redemptionFormRules: CheckoutRule[] = [
 		{

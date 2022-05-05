@@ -18,7 +18,7 @@ import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
-import { getUser, isTestUser } from 'helpers/user/user';
+import { isTestUser } from 'helpers/user/user';
 
 function createFormReducer(
 	product: SubscriptionProduct,
@@ -27,21 +27,11 @@ function createFormReducer(
 	productOption: Option<ProductOptions>,
 	fulfilmentOption: Option<FulfilmentOptions>,
 ) {
-	const user = getUser(); // TODO: Is this unnecessary? It could use the user reducer
-
 	const { productPrices, orderIsAGift } = window.guardian;
 	const initialState: FormState = {
 		stage: 'checkout',
 		product,
-		title: null,
-		email: user.email ?? '',
-		confirmEmail: null,
-		firstName: user.firstName ?? '',
-		lastName: user.lastName ?? '',
-		isSignedIn: user.isSignedIn,
-		userTypeFromIdentityResponse: 'noRequestSent',
 		startDate,
-		telephone: null,
 		billingAddressIsSame: true,
 		billingPeriod: initialBillingPeriod,
 		titleGiftRecipient: null,
@@ -86,47 +76,6 @@ function createFormReducer(
 		switch (action.type) {
 			case 'SET_STAGE':
 				return { ...state, stage: action.stage };
-
-			case 'SET_TITLE':
-				return { ...state, title: action.title };
-
-			case 'SET_FIRST_NAME':
-				return {
-					...state,
-					firstName: action.firstName,
-					formErrors: removeError('firstName', state.formErrors),
-				};
-
-			case 'SET_LAST_NAME':
-				return {
-					...state,
-					lastName: action.lastName,
-					formErrors: removeError('lastName', state.formErrors),
-				};
-
-			case 'SET_EMAIL':
-				return {
-					...state,
-					email: action.email,
-					formErrors: removeError('email', state.formErrors),
-				};
-
-			case 'SET_CONFIRM_EMAIL':
-				return {
-					...state,
-					confirmEmail: action.email,
-					formErrors: removeError('confirmEmail', state.formErrors),
-				};
-
-			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
-				return {
-					...state,
-					userTypeFromIdentityResponse: action.userTypeFromIdentityResponse,
-					formErrors: removeError('email', state.formErrors),
-				};
-
-			case 'SET_TELEPHONE':
-				return { ...state, telephone: action.telephone };
 
 			case 'SET_TITLE_GIFT':
 				return { ...state, titleGiftRecipient: action.titleGiftRecipient };

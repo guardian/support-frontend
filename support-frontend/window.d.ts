@@ -5,6 +5,7 @@ import type {
 	AmazonPaymentsObject,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { StripeKey } from 'helpers/forms/stripe';
+import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { User } from 'helpers/user/userReducer';
 import type { ProductPrices } from './assets/helpers/productPrice/productPrices';
 
@@ -43,6 +44,7 @@ declare global {
 			productPrices: ProductPrices;
 			recaptchaEnabled?: boolean;
 			serversideTests?: Participations | null;
+			settings: Settings;
 			stripeKeyAustralia: StripeKey;
 			stripeKeyDefaultCurrencies: StripeKey;
 			stripeKeyUnitedStates: StripeKey;

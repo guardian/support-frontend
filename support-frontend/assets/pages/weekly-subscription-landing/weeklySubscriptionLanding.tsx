@@ -63,12 +63,6 @@ function WeeklyLandingPage({
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const defaultPromo = (): string => {
 		if (orderIsAGift) return 'GW20GIFT1Y';
-		if (countryGroupId === 'AUDCountries' || countryGroupId === 'NZDCountries')
-			return 'GW25OZ';
-		if (
-			['GBPCountries', 'EURCountries', 'International'].includes(countryGroupId)
-		)
-			return 'FR2022';
 		return '10ANNUAL';
 	};
 	const promoTermsLink = promotionTermsUrl(

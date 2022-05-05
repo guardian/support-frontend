@@ -3,18 +3,18 @@ import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
 type PropTypes = {
 	isDDGuaranteeOpen: boolean;
-	openDDGuaranteeClicked: () => void;
-	closeDDGuaranteeClicked: () => void;
+	openDirectDebitGuarantee: () => void;
+	closeDirectDebitGuarantee: () => void;
 };
 
 function className(baseClass: string, open: boolean) {
 	return classNameWithModifiers(baseClass, open ? ['open'] : ['closed']);
 }
 
-function DirectDebitGuarantee(props: PropTypes) {
+function DirectDebitGuarantee(props: PropTypes): JSX.Element {
 	const onClick = props.isDDGuaranteeOpen
-		? props.closeDDGuaranteeClicked
-		: props.openDDGuaranteeClicked;
+		? props.closeDirectDebitGuarantee
+		: props.openDirectDebitGuarantee;
 	return (
 		<div className="component-direct-debit-guarantee">
 			<p>
