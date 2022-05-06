@@ -9,7 +9,6 @@ import io.circe.generic.semiauto._
 object PaypalJsonDecoder {
 
   import controllers.JsonReadableOps._
-  import com.gu.support.acquisitions.ReferrerAcquisitionData.{abTestDecoder, queryParameterDecoder}
 
   implicit val executePaypalPaymentDataDecoder: Decoder[ExecutePaypalPaymentData] =
     deriveDecoder[ExecutePaypalPaymentData]

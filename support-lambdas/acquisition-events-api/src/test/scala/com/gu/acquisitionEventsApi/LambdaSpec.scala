@@ -2,6 +2,7 @@ package com.gu.acquisitionEventsApi
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.gu.i18n.{Country, OtherCurrency}
+import com.gu.support.acquisitions.QueryParameter
 import com.gu.support.acquisitions.models._
 import com.gu.support.zuora.api.ReaderType
 import io.circe.syntax._
@@ -40,7 +41,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     zuoraAccountNumber = None,
     contributionId = None,
     paymentId = None,
-    queryParameters = Nil,
+    queryParameters = List(QueryParameter("name1", "value1"), QueryParameter("name2", "value2")),
     platform = None,
   )
 
