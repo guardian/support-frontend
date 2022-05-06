@@ -5,7 +5,7 @@ import {
 	getProductPrice,
 	getSavingPercentage,
 } from '../helpers/paymentSelection';
-import { productPrices } from './fixtures/productPrices';
+import { productPrices } from './__fixtures__/productPrices';
 
 jest.mock('ophan');
 
