@@ -35,9 +35,17 @@ function analyticsInitialisation(
 
 function consentInitialisation(country: IsoCountry): void {
 	if (shouldInitCmp()) {
-		cmp.init({
-			country,
-		});
+		try {
+			cmp.init({
+				country,
+			});
+		} catch (e) {
+			if (typeof e === 'string') {
+				console.log(`caught and exception ${e}`);
+			} else if (e instanceof Error) {
+				console.log(`caught and exception ${e.message}`);
+			}
+		}
 	}
 }
 
