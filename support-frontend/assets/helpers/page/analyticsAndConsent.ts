@@ -41,9 +41,11 @@ function consentInitialisation(country: IsoCountry): void {
 			});
 		} catch (e) {
 			if (typeof e === 'string') {
-				console.log(`caught and exception ${e}`);
+				console.log(`An exception was thrown initialising the CMP: ${e}`);
 			} else if (e instanceof Error) {
-				console.log(`caught and exception ${e.message}`);
+				console.log(
+					`An exception was thrown initialising the CMP: ${e.message}`,
+				);
 			}
 		}
 	}
