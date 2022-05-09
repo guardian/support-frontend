@@ -195,9 +195,10 @@ function BenefitsBulletPoints({
 		? "You've unlocked exclusive extras"
 		: 'Get more from your support';
 
+	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
 	const paragraph = showBenefitsMessaging
-		? `Thank you for choosing to give ${currencyGlyph}${thresholdPrice} or more each month.`
-		: 'Unlock exclusive extras when you give a little more each month.';
+		? `Thank you for choosing to give ${currencyGlyph}${thresholdPrice} or more each ${billingPeriod}.`
+		: `Unlock exclusive extras when you give a little more each ${billingPeriod}.`;
 
 	const btnCopy = getBtnThresholdCopy(countryGroupId, contributionType);
 
