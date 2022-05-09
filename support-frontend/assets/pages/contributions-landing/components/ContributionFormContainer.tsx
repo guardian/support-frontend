@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { brand, from, space } from '@guardian/source-foundations';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -210,17 +210,17 @@ function withProps(props: PropTypes) {
 		// This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
 		// back to /thankyou given the current state of the redux store.
 		// The effect is that clicking back in the browser will take the user to the page before they arrived at /contribute
-		return <Redirect to={props.thankYouRoute} push={false} />;
+		return <Navigate to={props.thankYouRoute} replace />;
 	}
 
 	if (props.campaignCodeParameter && !campaignSettings) {
 		// A campaign code was supplied in the url path, but it's not a valid campaign
 		return (
-			<Redirect
+			<Navigate
 				to={`/${
 					countryGroups[props.countryGroupId].supportInternationalisationId
 				}/contribute`}
-				push={false}
+				replace
 			/>
 		);
 	}

@@ -3,8 +3,8 @@
         "byCode": {
             "TS1208": 1,
             "TS2345": 27,
-            "TS7006": 21,
-            "TS2322": 46,
+            "TS7006": 19,
+            "TS2322": 43,
             "TS6133": 7,
             "TS2305": 7,
             "TS2314": 3,
@@ -55,7 +55,6 @@
             "assets/helpers/rendering/ssrPages.ts": 1,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/subscriptions-landing/components/subscriptionsLandingContent.tsx": 1,
             "assets/components/headers/links/links.tsx": 1,
@@ -278,14 +277,6 @@
             "message": "Parameter 'event' implicitly has an 'any' type."
         },
         {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Parameter 'props' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Parameter 'props' implicitly has an 'any' type."
-        },
-        {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Parameter 'searchText' implicitly has an 'any' type."
         },
@@ -438,18 +429,6 @@
         {
             "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
             "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"csrf\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Type '{ exact: true; path: string; render: () => Element; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<(_props: PathRouteProps | LayoutRouteProps | IndexRouteProps) => ReactElement<...> | null, PathRouteProps | ... 1 more ... | IndexRouteProps>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Type '{ exact: true; path: string; render: (props: any) => Element; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<(_props: PathRouteProps | LayoutRouteProps | IndexRouteProps) => ReactElement<...> | null, PathRouteProps | ... 1 more ... | IndexRouteProps>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Type '{ exact: true; path: string; render: (props: any) => Element; }' is not assignable to type 'IntrinsicAttributes & LibraryManagedAttributes<(_props: PathRouteProps | LayoutRouteProps | IndexRouteProps) => ReactElement<...> | null, PathRouteProps | ... 1 more ... | IndexRouteProps>'."
         },
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
