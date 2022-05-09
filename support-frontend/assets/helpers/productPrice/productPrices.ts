@@ -28,21 +28,17 @@ export type ProductPrice = {
 	promotions?: Promotion[];
 };
 
-type RecordKey = string | number | symbol;
+export type BillingPeriods = {
+	[K in BillingPeriod]?: { [K in IsoCurrency]?: ProductPrice };
+};
 
-type PartialRecord<K extends RecordKey, T> = Partial<Record<K, T>>;
+export type CountryGroupPrices = {
+	[K in FulfilmentOptions]?: { [K in ProductOptions]?: BillingPeriods };
+};
 
-export type BillingPeriods = PartialRecord<
-	BillingPeriod,
-	PartialRecord<IsoCurrency, ProductPrice>
->;
-
-export type CountryGroupPrices = PartialRecord<
-	FulfilmentOptions,
-	PartialRecord<ProductOptions, BillingPeriods>
->;
-
-export type ProductPrices = Record<CountryGroupName, CountryGroupPrices>;
+export type ProductPrices = {
+	[K in CountryGroupName]: CountryGroupPrices;
+};
 
 const isNumeric = (num?: number | null): num is number =>
 	num !== null && num !== undefined && !Number.isNaN(num);

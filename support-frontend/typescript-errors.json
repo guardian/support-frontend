@@ -449,7 +449,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Type 'Partial<Record<BillingPeriod, Partial<Record<IsoCurrency, ProductPrice>>>> | undefined' is not assignable to type 'Record<BillingPeriod, Record<IsoCurrency, ProductPrice>>'."
+            "message": "Type 'BillingPeriods | undefined' is not assignable to type 'Record<BillingPeriod, Record<IsoCurrency, ProductPrice>>'."
         },
         {
             "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
