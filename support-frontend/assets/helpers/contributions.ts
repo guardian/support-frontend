@@ -1,4 +1,3 @@
-import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
 import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type {
@@ -16,20 +15,25 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { logException } from 'helpers/utilities/logger';
 import { roundDp } from 'helpers/utilities/utilities';
+
 // ----- Types ----- //
 export type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
 	ANNUAL: T;
 };
+
 export type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 	ONE_OFF: T;
 };
-export type RegularContributionType = $Keys<RegularContributionTypeMap<null>>;
-export type ContributionType = $Keys<ContributionTypeMap<null>>;
+
+export type RegularContributionType = keyof RegularContributionTypeMap<null>;
+export type ContributionType = keyof ContributionTypeMap<null>;
 export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
+
 export const contributionTypeIsRecurring = (
 	contributionType: ContributionType,
 ) => contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
+
 export const logInvalidCombination = (
 	contributionType: ContributionType,
 	paymentMethod: PaymentMethod,
@@ -38,6 +42,7 @@ export const logInvalidCombination = (
 		`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`,
 	);
 };
+
 // Legacy type, only used by stripe checkout. Can be cleaned up after stripe checkout fully removed
 export type ThirdPartyPaymentLibraries = {
 	ONE_OFF: {
