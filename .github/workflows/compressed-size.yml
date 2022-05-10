@@ -3,35 +3,34 @@ name: Compressed Size
 on: [pull_request]
 
 jobs:
-    compressed_size:
-        if: github.event.pull_request.head.repo.owner.login == 'guardian'
-        name: Compressed Size
-        defaults:
-          run:
-            working-directory: support-frontend
-        runs-on: ubuntu-latest
-        steps:
+  compressed_size:
+    if: github.event.pull_request.head.repo.owner.login == 'guardian'
+    name: Compressed Size
+    defaults:
+      run:
+        working-directory: support-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Checkout code
-          uses: actions/checkout@v2
+      - name: Install Node
+        uses: guardian/actions-setup-node@v2.4.1
 
-        - name: Install Node
-          uses: guardian/actions-setup-node@main
+      # Cache npm dependencies using https://github.com/bahmutov/npm-install
+      - name: Cache dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: support-frontend
 
-        # Cache npm dependencies using https://github.com/bahmutov/npm-install
-        - name: Cache dependencies
-          uses: bahmutov/npm-install@v1
-          with:
-            working-directory: support-frontend
+      - name: Install
+        run: yarn
 
-        - name: Install
-          run: yarn
-
-        - name: Check compressed size of JS
-          uses: preactjs/compressed-size-action@v2
-          with:
-            repo-token: '${{ secrets.GITHUB_TOKEN }}'
-            cwd: './support-frontend'
-            pattern: './public/compiled-assets/{javascripts,webpack}/*.js'
-            build-script: 'build-github-action'
-            minimum-change-threshold: 500
+      - name: Check compressed size of JS
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          cwd: "./support-frontend"
+          pattern: "./public/compiled-assets/{javascripts,webpack}/*.js"
+          build-script: "build-github-action"
+          minimum-change-threshold: 500
