@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 30,
+            "TS2345": 34,
             "TS7006": 19,
             "TS2322": 40,
             "TS6133": 7,
@@ -19,7 +19,7 @@
             "TS2569": 2,
             "TS7053": 3,
             "TS2411": 1,
-            "TS2532": 21,
+            "TS2532": 24,
             "TS2367": 3,
             "TS7017": 1,
             "TS2554": 6,
@@ -43,6 +43,7 @@
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/contributions.ts": 2,
             "assets/helpers/internationalisation/__tests__/currencyTest.ts": 1,
+            "assets/helpers/productPrice/paperProductPrices.ts": 6,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardForm.tsx": 2,
@@ -50,7 +51,7 @@
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/pages/promotion-terms/weeklyTerms.tsx": 10,
+            "assets/pages/promotion-terms/weeklyTerms.tsx": 12,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
@@ -67,7 +68,7 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
-            "assets/helpers/productPrice/productPrices.ts": 4,
+            "assets/helpers/productPrice/productPrices.ts": 5,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -77,7 +78,7 @@
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
-            "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 4,
+            "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 5,
             "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
@@ -100,8 +101,7 @@
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
-            "assets/helpers/patrons.ts": 6,
-            "assets/helpers/productPrice/paperProductPrices.ts": 4,
+            "assets/helpers/patrons.ts": 7,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
@@ -188,6 +188,14 @@
             "message": "Argument of type '\"ZZ\"' is not assignable to parameter of type 'CountryGroupId'."
         },
         {
+            "path": "assets/helpers/productPrice/paperProductPrices.ts",
+            "message": "Argument of type 'CountryGroupPrices | undefined' is not assignable to parameter of type 'CountryGroupPrices'."
+        },
+        {
+            "path": "assets/helpers/productPrice/paperProductPrices.ts",
+            "message": "Argument of type 'CountryGroupPrices | undefined' is not assignable to parameter of type 'CountryGroupPrices'."
+        },
+        {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
             "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
         },
@@ -230,6 +238,14 @@
         {
             "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
             "message": "Argument of type 'ProductPrice | undefined' is not assignable to parameter of type 'ProductPrice'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
+            "message": "Argument of type 'CountryGroupPrices | undefined' is not assignable to parameter of type 'CountryGroupPrices'."
+        },
+        {
+            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
+            "message": "Argument of type 'CountryGroupPrices | undefined' is not assignable to parameter of type 'CountryGroupPrices'."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
@@ -754,6 +770,10 @@
             "message": "Object is possibly 'undefined'."
         },
         {
+            "path": "assets/helpers/patrons.ts",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
             "path": "assets/helpers/productPrice/paperProductPrices.ts",
             "message": "Object is possibly 'undefined'."
         },
@@ -779,6 +799,14 @@
         },
         {
             "path": "assets/helpers/productPrice/productPrices.ts",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/helpers/productPrice/productPrices.ts",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
             "message": "Object is possibly 'undefined'."
         },
         {

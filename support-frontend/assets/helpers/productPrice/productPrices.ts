@@ -37,7 +37,7 @@ export type CountryGroupPrices = {
 };
 
 export type ProductPrices = {
-	[K in CountryGroupName]: CountryGroupPrices;
+	[K in CountryGroupName]?: CountryGroupPrices;
 };
 
 const isNumeric = (num?: number | null): num is number =>
