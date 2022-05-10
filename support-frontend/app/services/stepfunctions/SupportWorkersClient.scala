@@ -29,7 +29,6 @@ import scala.util.{Failure, Success, Try}
 object CreateSupportWorkersRequest {
 
   import com.gu.support.encoding.CustomCodecs._
-  import com.gu.support.acquisitions.ReferrerAcquisitionData.{abTestEncoder, abTestDecoder}
 
   implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
 

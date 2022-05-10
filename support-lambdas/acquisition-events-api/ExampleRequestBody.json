@@ -1,1 +1,40 @@
-{"eventTimeStamp":"2018-12-13T14:15:04.165Z","product":{"RecurringContribution":{}},"amount":1.0,"country":{"alpha2":"GB","name":"United Kingdom","statesByCode":{}},"currency":{"GBP":{}},"componentId":"MY_COMPONENT_ID","componentType":null,"campaignCode":"MY_CAMPAIGN_CODE","source":null,"referrerUrl":"referrer-url","abTests":[],"paymentFrequency":{"Monthly":{}},"paymentProvider":{"Stripe":{}},"printOptions":null,"browserId":null,"identityId":null,"pageViewId":null,"referrerPageViewId":null,"labels":[],"promoCode":null,"reusedExistingPaymentMethod":false,"readerType":"Direct","acquisitionType":{"Purchase":{}},"zuoraSubscriptionNumber":null,"zuoraAccountNumber":null,"contributionId":null,"paymentId":null,"queryParameters":[],"platform":null}
+{
+  "eventTimeStamp": "2018-12-13T14:15:04.165Z",
+  "product": "RECURRING_CONTRIBUTION",
+  "amount": 1,
+  "country": "GB",
+  "currency": "BHD",
+  "componentId": "MY_COMPONENT_ID",
+  "componentType": null,
+  "campaignCode": "MY_CAMPAIGN_CODE",
+  "source": null,
+  "referrerUrl": "referrer-url",
+  "abTests": [],
+  "paymentFrequency": "MONTHLY",
+  "paymentProvider": "STRIPE",
+  "printOptions": null,
+  "browserId": null,
+  "identityId": null,
+  "pageViewId": null,
+  "referrerPageViewId": null,
+  "labels": [],
+  "promoCode": null,
+  "reusedExistingPaymentMethod": false,
+  "readerType": "Direct",
+  "acquisitionType": "Purchase",
+  "zuoraSubscriptionNumber": null,
+  "zuoraAccountNumber": null,
+  "contributionId": null,
+  "paymentId": null,
+  "queryParameters": [
+    {
+      "name": "name1",
+      "value": "value1"
+    },
+    {
+      "name": "name2",
+      "value": "value2"
+    }
+  ],
+  "platform": null
+}

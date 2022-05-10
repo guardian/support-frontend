@@ -10,10 +10,18 @@ case class AbTest(
     variant: String,
 )
 
+object AbTest {
+  implicit val codec: Codec[AbTest] = deriveCodec
+}
+
 case class QueryParameter(
     name: String,
     value: String,
 )
+
+object QueryParameter {
+  implicit val codec: Codec[QueryParameter] = deriveCodec
+}
 
 /** Model for acquisition data passed by the referrer.
   */
@@ -34,10 +42,6 @@ case class ReferrerAcquisitionData(
 )
 
 object ReferrerAcquisitionData {
-  implicit val queryParameterDecoder = deriveDecoder[QueryParameter]
-  implicit val queryParameterEncoder = deriveEncoder[QueryParameter]
-  implicit val abTestDecoder = deriveDecoder[AbTest]
-  implicit val abTestEncoder = deriveEncoder[AbTest]
 
   implicit val referrerAcquisitionDataDecoder: Decoder[ReferrerAcquisitionData] = deriveDecoder[ReferrerAcquisitionData]
 

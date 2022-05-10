@@ -1,20 +1,15 @@
 package com.gu.acquisitionEventsApi
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
-import com.gu.i18n.{Country, Currency}
-import com.gu.support.acquisitions.models.{
-  AcquisitionDataRow,
-  AcquisitionProduct,
-  AcquisitionType,
-  PaymentFrequency,
-  PaymentProvider,
-}
+import com.gu.i18n.{Country, OtherCurrency}
+import com.gu.support.acquisitions.QueryParameter
+import com.gu.support.acquisitions.models._
 import com.gu.support.zuora.api.ReaderType
-import org.joda.time.DateTime
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.flatspec.AnyFlatSpec
 import io.circe.syntax._
+import org.joda.time.DateTime
 import org.scalatest.Ignore
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 @Ignore
 class LambdaSpec extends AnyFlatSpec with Matchers {
@@ -23,7 +18,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     product = AcquisitionProduct.RecurringContribution,
     amount = Some(1.0),
     country = Country.UK,
-    currency = Currency.GBP,
+    currency = OtherCurrency("BHD", "ب.د"),
     componentId = Some("MY_COMPONENT_ID"),
     componentType = None,
     campaignCode = Some("MY_CAMPAIGN_CODE"),
@@ -46,7 +41,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     zuoraAccountNumber = None,
     contributionId = None,
     paymentId = None,
-    queryParameters = Nil,
+    queryParameters = List(QueryParameter("name1", "value1"), QueryParameter("name2", "value2")),
     platform = None,
   )
 
