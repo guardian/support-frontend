@@ -1,7 +1,7 @@
 package model.acquisition
 
 import com.gu.i18n.Currency._
-import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.i18n.{Country, CountryGroup, Currency, OtherCurrency}
 import com.gu.support.acquisitions.models.PaymentProvider.{
   AmazonPay,
   PayPal,
@@ -19,10 +19,6 @@ import model.Currency.{
   GBP => ModelGBP,
   NZD => ModelNZD,
   USD => ModelUSD,
-  SEK => ModelSEK,
-  CHF => ModelCHF,
-  NOK => ModelNOK,
-  DKK => ModelDKK,
 }
 import model.db.ContributionData
 import model.stripe.StripePaymentMethod
@@ -159,9 +155,5 @@ object AcquisitionDataRowBuilder {
       case ModelAUD => AUD
       case ModelCAD => CAD
       case ModelNZD => NZD
-      case ModelSEK => SEK
-      case ModelCHF => CHF
-      case ModelNOK => NOK
-      case ModelDKK => DKK
     }
 }

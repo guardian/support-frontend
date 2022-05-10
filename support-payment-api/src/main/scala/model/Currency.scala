@@ -23,14 +23,6 @@ object Currency extends Enum[Currency] with CirceEnum[Currency] {
 
   case object NZD extends Currency
 
-  case object SEK extends Currency
-
-  case object CHF extends Currency
-
-  case object NOK extends Currency
-
-  case object DKK extends Currency
-
   def exceedsMaxAmount(amount: BigDecimal, currency: Currency): Boolean = {
     val maxAmount = currency match {
       case AUD => 16000

@@ -2,11 +2,13 @@ package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{AbTest, QueryParameter}
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.zuora.api.ReaderType
+import io.circe.{Decoder, Encoder}
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import io.circe.generic.auto._
-import io.circe.{Decoder, Encoder}
 
 import scala.util.{Failure, Success, Try}
 
@@ -52,14 +54,17 @@ object AcquisitionDataRow {
   implicit val encodeDateTime: Encoder[DateTime] =
     Encoder.encodeString.contramap[DateTime](dt => ISODateTimeFormat.dateTime().print(dt))
 
-  implicit val decoder = Decoder[AcquisitionDataRow]
-  implicit val encoder = Encoder[AcquisitionDataRow]
+  implicit val codec = deriveCodec[AcquisitionDataRow]
 }
 
 case class PrintOptions(
     product: PrintProduct,
     deliveryCountry: Country,
 )
+
+object PrintOptions {
+  implicit val codec: Codec[PrintOptions] = deriveCodec
+}
 
 sealed abstract class PaymentFrequency(val value: String)
 
@@ -73,6 +78,15 @@ object PaymentFrequency {
   case object SixMonthly extends PaymentFrequency("SIX_MONTHLY")
 
   case object Annually extends PaymentFrequency("ANNUALLY")
+
+  def fromString(code: String): Option[PaymentFrequency] = {
+    List(OneOff, Monthly, Annually, Quarterly, SixMonthly).find(_.value == code)
+  }
+
+  implicit val decoder: Decoder[PaymentFrequency] =
+    Decoder.decodeString.emap(code => PaymentFrequency.fromString(code).toRight(s"unrecognised billing period '$code'"))
+
+  implicit val encoder: Encoder[PaymentFrequency] = Encoder.encodeString.contramap[PaymentFrequency](_.value)
 }
 
 sealed abstract class AcquisitionProduct(val value: String)
@@ -90,6 +104,17 @@ object AcquisitionProduct {
   case object GuardianWeekly extends AcquisitionProduct("PRINT_SUBSCRIPTION")
 
   case object AppPremiumTier extends AcquisitionProduct("APP_PREMIUM_TIER")
+
+  def fromString(code: String): Option[AcquisitionProduct] = {
+    List(Contribution, RecurringContribution, DigitalSubscription, Paper, GuardianWeekly, AppPremiumTier).find(
+      _.value == code,
+    )
+  }
+
+  implicit val decoder: Decoder[AcquisitionProduct] =
+    Decoder.decodeString.emap(code => AcquisitionProduct.fromString(code).toRight(s"unrecognised product '$code'"))
+
+  implicit val encoder: Encoder[AcquisitionProduct] = Encoder.encodeString.contramap[AcquisitionProduct](_.value)
 
 }
 
@@ -138,6 +163,38 @@ object PrintProduct {
   case object VoucherSundayPlus extends PrintProduct("VOUCHER_SUNDAY_PLUS")
 
   case object GuardianWeekly extends PrintProduct("GUARDIAN_WEEKLY")
+
+  def fromString(code: String): Option[PrintProduct] = {
+    List(
+      HomeDeliveryEveryday,
+      HomeDeliveryEverydayPlus,
+      HomeDeliverySixday,
+      HomeDeliverySixdayPlus,
+      HomeDeliveryWeekend,
+      HomeDeliveryWeekendPlus,
+      HomeDeliverySaturday,
+      HomeDeliverySaturdayPlus,
+      HomeDeliverySunday,
+      HomeDeliverySundayPlus,
+      VoucherEveryday,
+      VoucherEverydayPlus,
+      VoucherSixday,
+      VoucherSixdayPlus,
+      VoucherWeekend,
+      VoucherWeekendPlus,
+      VoucherSaturday,
+      VoucherSaturdayPlus,
+      VoucherSunday,
+      VoucherSundayPlus,
+      GuardianWeekly,
+    ).find(_.value == code)
+  }
+
+  implicit val decoder: Decoder[PrintProduct] =
+    Decoder.decodeString.emap(code => PrintProduct.fromString(code).toRight(s"unrecognised print product '$code'"))
+
+  implicit val encoder: Encoder[PrintProduct] = Encoder.encodeString.contramap[PrintProduct](_.value)
+
 }
 
 sealed abstract class PaymentProvider(val value: String)
@@ -158,4 +215,17 @@ object PaymentProvider {
   case object AmazonPay extends PaymentProvider("AMAZON_PAY")
 
   case object InAppPurchase extends PaymentProvider("IN_APP_PURCHASE")
+
+  def fromString(code: String): Option[PaymentProvider] = {
+    List(Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa, PayPal, DirectDebit, AmazonPay, InAppPurchase)
+      .find(_.value == code)
+  }
+
+  implicit val decoder: Decoder[PaymentProvider] =
+    Decoder.decodeString.emap(code =>
+      PaymentProvider.fromString(code).toRight(s"unrecognised payment provider '$code'"),
+    )
+
+  implicit val encoder: Encoder[PaymentProvider] = Encoder.encodeString.contramap[PaymentProvider](_.value)
+
 }
