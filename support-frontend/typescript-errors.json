@@ -4,7 +4,7 @@
             "TS1208": 1,
             "TS2345": 27,
             "TS7006": 19,
-            "TS2322": 40,
+            "TS2322": 39,
             "TS6133": 8,
             "TS2305": 7,
             "TS2314": 3,
@@ -77,7 +77,6 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx": 5,
-            "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 1,
             "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx": 2,
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
             "assets/helpers/urls/externalLinks.ts": 3,
@@ -443,10 +442,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'Omit<Pick<PropTypes, \"image\" | \"total\" | \"productPrices\" | \"billingPeriod\" | \"fulfilmentOption\" | \"productOption\" | \"digiSubPrice\" | \"includesDigiSub\"> & Partial<...> & Partial<...>, \"productPrices\" | ... 2 more ... | \"productOption\">'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
-            "message": "Type 'SerializedStyles' is not assignable to type 'string'."
         },
         {
             "path": "assets/pages/subscriptions-landing/components/subscriptionsProduct.tsx",
