@@ -8,7 +8,6 @@ import { extendedGlyph } from 'helpers/internationalisation/currency';
 import {
 	Annual,
 	postIntroductorySixForSixBillingPeriod,
-	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
 import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';

@@ -5,7 +5,7 @@
             "TS2345": 27,
             "TS7006": 19,
             "TS2322": 39,
-            "TS6133": 8,
+            "TS6133": 7,
             "TS2305": 7,
             "TS2314": 3,
             "TS7031": 7,
@@ -82,7 +82,6 @@
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
-            "assets/pages/promotion-terms/weeklyTerms.tsx": 1,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
@@ -484,10 +483,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "'content' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/promotion-terms/weeklyTerms.tsx",
-            "message": "'Quarterly' is declared but its value is never read."
         }
     ],
     "TS2305": [
