@@ -1,19 +1,17 @@
 import AnchorButton from 'components/button/anchorButton';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
 	title: string;
 	subtitle: string;
 	description: string;
-	isFeature: Option<boolean>;
-	offer?: Option<string>;
+	isFeature?: boolean;
+	offer?: string;
 	buttons: ProductButton[];
 };
 
 const getButtonAppearance = (
-	isFeature: boolean | null,
+	isFeature: boolean | undefined,
 	index: number,
 	hierarchy: string | undefined,
 ) => {

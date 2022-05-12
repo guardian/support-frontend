@@ -42,13 +42,16 @@ import {
 	paperSubsUrl,
 } from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
+
 // types
 export type ProductButton = {
 	ctaButtonText: string;
 	link: string;
-	analyticsTracking: (...args: any[]) => any;
+	analyticsTracking: () => void;
 	hierarchy?: string;
+	modifierClasses?: string;
 };
+
 export type ProductCopy = {
 	title: string;
 	subtitle: Option<string>;
