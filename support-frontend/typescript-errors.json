@@ -5,7 +5,7 @@
             "TS2345": 27,
             "TS7006": 19,
             "TS2322": 43,
-            "TS6133": 7,
+            "TS6133": 8,
             "TS2305": 7,
             "TS2314": 3,
             "TS7031": 7,
@@ -23,6 +23,7 @@
             "TS7017": 1,
             "TS2554": 6,
             "TS2578": 8,
+            "TS6192": 1,
             "TS7034": 3,
             "TS7005": 4,
             "TS2525": 1,
@@ -81,7 +82,7 @@
             "assets/pages/subscriptions-landing/copy/subscriptionCopy.tsx": 2,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 2,
             "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
@@ -108,6 +109,7 @@
             "assets/pages/paper-subscription-landing/components/content/tabAccordionRow.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 1,
             "assets/pages/digital-subscription-landing/components/paymentSelection/__tests__/paymentSelectionTests.ts": 5
         }
     },
@@ -444,7 +446,7 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"promotion\" | \"price\" | \"priceDescription\" | \"digitalGiftBillingPeriod\" | \"isPatron\">'."
+            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"price\" | \"promotion\" | \"priceDescription\" | \"digitalGiftBillingPeriod\" | \"isPatron\">'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",
@@ -502,7 +504,11 @@
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "'dispatch' is declared but its value is never read."
+            "message": "'Dispatch' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
+            "message": "'Action' is declared but its value is never read."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
@@ -801,6 +807,12 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Unused '@ts-expect-error' directive."
+        }
+    ],
+    "TS6192": [
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
+            "message": "All imports in import declaration are unused."
         }
     ],
     "TS7034": [

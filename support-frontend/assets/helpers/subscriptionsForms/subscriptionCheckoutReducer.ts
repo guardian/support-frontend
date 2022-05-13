@@ -18,6 +18,7 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
+import { productReducer } from 'helpers/redux/checkout/product/reducer';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
@@ -79,6 +80,7 @@ function createReducer(
 		),
 		checkoutForm: combineReducers({
 			personalDetails: personalDetailsReducer,
+			product: productReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,
