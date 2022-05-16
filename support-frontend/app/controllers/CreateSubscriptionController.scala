@@ -10,7 +10,7 @@ import com.gu.monitoring.SafeLogger._
 import com.gu.support.workers._
 import config.Configuration.GuardianDomain
 import controllers.CreateSubscriptionController._
-import io.circe.{Decoder, Encoder}
+import io.circe.Encoder
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
@@ -28,7 +28,6 @@ import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.{Failure, Success}
 import scala.util.chaining._
 
 object CreateSubscriptionController {
@@ -151,31 +150,35 @@ class CreateSubscriptionController(
       deriveEncoder[CheckoutCompleteCookieBody]
   }
   private def checkoutCompleteCookies(productType: ProductType, userEmail: String): List[Cookie] = {
-    val pendingUserType: Future[Option[String]] = identityService.getUserType(userEmail).fold(
-      err => {
-        SafeLogger.error(scrub"Failed to retrieve user type for $userEmail: $err")
-        None
-      },
-      response => {
-        SafeLogger.info(s"Successfully retrieved user type for $userEmail")
-        SafeLogger.info(s"USERTYPE: ${response.userType}")
-        Some(response.userType)
-      },
-    )
+    val pendingUserType: Future[Option[String]] = identityService
+      .getUserType(userEmail)
+      .fold(
+        err => {
+          SafeLogger.error(scrub"Failed to retrieve user type for $userEmail: $err")
+          None
+        },
+        response => {
+          SafeLogger.info(s"Successfully retrieved user type for $userEmail")
+          SafeLogger.info(s"USERTYPE: ${response.userType}")
+          Some(response.userType)
+        },
+      )
 
     Await.result(pendingUserType, Duration(2, SECONDS)) match {
       case Some(userType) =>
-        List(Cookie(
-          name = "GU_CO_COMPLETE",
-          value = CheckoutCompleteCookieBody(
-            userType = userType,
-            product = productType.toString,
-          ).asJson.noSpaces,
-          maxAge = Some(1209600), // fourteen days
-          secure = true,
-          httpOnly = false,
-          domain = Some(guardianDomain.value)
-        ))
+        List(
+          Cookie(
+            name = "GU_CO_COMPLETE",
+            value = CheckoutCompleteCookieBody(
+              userType = userType,
+              product = productType.toString,
+            ).asJson.noSpaces,
+            maxAge = Some(1209600), // fourteen days
+            secure = true,
+            httpOnly = false,
+            domain = Some(guardianDomain.value),
+          ),
+        )
       case None => List.empty
     }
   }
@@ -213,7 +216,7 @@ class CreateSubscriptionController(
         value = value,
         secure = true,
         httpOnly = false,
-        domain = Some(guardianDomain.value)
+        domain = Some(guardianDomain.value),
       )
     }
 
