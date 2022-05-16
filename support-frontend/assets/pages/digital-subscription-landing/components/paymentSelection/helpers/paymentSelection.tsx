@@ -47,7 +47,7 @@ export const getProductOptions = (
 		productPrices[countryGroupName]?.NoFulfilmentOptions?.NoProductOptions;
 
 	if (productOptions) {
-		return productOptions;
+		// return productOptions;
 	}
 
 	throw new Error('getProductOptions: product options unavailable');
