@@ -144,21 +144,13 @@ class CreateSubscriptionController(
 
   case class CheckoutCompleteCookieBody(
       userType: String,
-      product: String
+      product: String,
   )
   object CheckoutCompleteCookieBody {
-    implicit val decoder: Decoder[CheckoutCompleteCookieBody] =
-      deriveDecoder[CheckoutCompleteCookieBody]
     implicit val encoder: Encoder[CheckoutCompleteCookieBody] =
       deriveEncoder[CheckoutCompleteCookieBody]
   }
-  private def checkoutCompleteCookie(productType: ProductType, userEmail: String): Option[Cookie] = {
-    val products: Map[String, String] = Map(
-      "Contribution" -> "RECURRING_CONTRIBUTION",
-      "DigitalPack" -> "DIGITAL_SUBSCRIPTION",
-      "Paper" -> "PRINT_SUBSCRIPTION",
-    )
-
+  private def checkoutCompleteCookies(productType: ProductType, userEmail: String): List[Cookie] = {
     val pendingUserType: Future[Option[String]] = identityService.getUserType(userEmail).fold(
       err => {
         SafeLogger.error(scrub"Failed to retrieve user type for $userEmail: $err")
@@ -173,18 +165,18 @@ class CreateSubscriptionController(
 
     Await.result(pendingUserType, Duration(2, SECONDS)) match {
       case Some(userType) =>
-        Some(Cookie(
+        List(Cookie(
           name = "GU_CO_COMPLETE",
           value = CheckoutCompleteCookieBody(
             userType = userType,
-            product = products(productType.toString)
-          ).asJson.toString(),
+            product = productType.toString,
+          ).asJson.noSpaces,
           maxAge = Some(1209600), // fourteen days
           secure = true,
           httpOnly = false,
           domain = Some(guardianDomain.value)
         ))
-      case None => None
+      case None => List.empty
     }
   }
 
@@ -225,7 +217,7 @@ class CreateSubscriptionController(
       )
     }
 
-    standardAndProductCookies :+ checkoutCompleteCookie(product, userEmail)
+    standardAndProductCookies ++ checkoutCompleteCookies(product, userEmail)
   }
 
   private def buildSupportWorkersUser(
