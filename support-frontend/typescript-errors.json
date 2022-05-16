@@ -4,7 +4,7 @@
             "TS1208": 1,
             "TS2345": 27,
             "TS7006": 19,
-            "TS2322": 39,
+            "TS2322": 38,
             "TS6133": 7,
             "TS2305": 7,
             "TS2314": 3,
@@ -20,10 +20,10 @@
             "TS7053": 3,
             "TS2411": 1,
             "TS2367": 2,
-            "TS2532": 7,
             "TS7017": 1,
             "TS2554": 6,
             "TS2578": 2,
+            "TS2532": 3,
             "TS2525": 1,
             "TS7022": 1,
             "TS7034": 1,
@@ -66,7 +66,6 @@
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
-            "assets/helpers/productPrice/productPrices.ts": 5,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
@@ -369,10 +368,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
             "message": "Type 'unknown' is not assignable to type 'Settings'."
-        },
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Type 'ProductPrice | undefined' is not assignable to type 'ProductPrice'."
         },
         {
             "path": "assets/helpers/utilities/utilities.ts",
@@ -717,36 +712,6 @@
             "message": "This condition will always return 'false' since the types '() => number' and 'number' have no overlap."
         }
     ],
-    "TS2532": [
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/helpers/productPrice/productPrices.ts",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Object is possibly 'undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
-            "message": "Object is possibly 'undefined'."
-        }
-    ],
     "TS7017": [
         {
             "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
@@ -787,6 +752,20 @@
         {
             "path": "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
             "message": "Unused '@ts-expect-error' directive."
+        }
+    ],
+    "TS2532": [
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
+            "message": "Object is possibly 'undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/paymentSelection/helpers/paymentSelection.tsx",
+            "message": "Object is possibly 'undefined'."
         }
     ],
     "TS2525": [

@@ -61,9 +61,17 @@ function getProductPrice(
 	productOption: ProductOptions = NoProductOptions,
 ): ProductPrice {
 	const countryGroup = getCountryGroup(country);
-	return productPrices[countryGroup.name][fulfilmentOption][productOption][
-		billingPeriod
-	][countryGroup.currency];
+
+	const productPrice =
+		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
+			billingPeriod
+		]?.[countryGroup.currency];
+
+	if (productPrice) {
+		return productPrice;
+	}
+
+	throw new Error('getProductPrice: product price unavailable');
 }
 
 function finalPrice(

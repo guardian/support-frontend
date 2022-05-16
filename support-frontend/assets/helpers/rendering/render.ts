@@ -64,11 +64,15 @@ const renderPage = (
 			if (process.env.NODE_ENV === 'development' && !isSafari) {
 				// @ts-expect-error - Not sure why it's not finding typedefs for Preact
 				void import('preact/debug');
-				void import('@axe-core/react').then((axe) => {
-					console.log('Loading react-axe for accessibility analysis');
-					void axe.default(React, ReactDOM, 1000);
-					ReactDOM.render(content, element, callBack);
-				});
+				void import('@axe-core/react')
+					.then((axe) => {
+						console.log('Loading react-axe for accessibility analysis');
+						void axe.default(React, ReactDOM, 1000);
+						ReactDOM.render(content, element, callBack);
+					})
+					.catch((e) => {
+						renderError(e as Error, id);
+					});
 			} else {
 				ReactDOM.render(content, element, callBack);
 			}
