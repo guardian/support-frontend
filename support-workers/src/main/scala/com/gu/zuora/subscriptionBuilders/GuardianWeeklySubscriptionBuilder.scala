@@ -6,7 +6,7 @@ import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, Prom
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
 import com.gu.support.workers.{BillingPeriod, SixWeekly}
-import com.gu.support.zuora.api.ReaderType.{Direct, Patron}
+import com.gu.support.zuora.api.ReaderType.{Direct, Patron, Gift}
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
@@ -37,7 +37,7 @@ class GuardianWeeklySubscriptionBuilder(
     } else recurringProductRatePlanId
 
     val (initialTerm, autoRenew, initialTermPeriodType) =
-      if (readerType == ReaderType.Gift)
+      if (readerType == Gift)
         (
           initialTermInDays(contractEffectiveDate, state.firstDeliveryDate, state.product.billingPeriod.monthsInPeriod),
           false,
@@ -94,7 +94,7 @@ class GuardianWeeklySubscriptionBuilder(
 
   private[this] def overrideReaderTypeIfRequired(state: GuardianWeeklyState): ReaderType = {
     if (state.giftRecipient.isDefined) {
-      ReaderType.Gift
+      Gift
     } else if (state.promoCode.exists(_.endsWith("PATRON"))) {
       Patron
     } else {
