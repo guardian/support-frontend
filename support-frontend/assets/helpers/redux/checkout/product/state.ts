@@ -21,13 +21,15 @@ export type GuardianProduct =
 	| ContributionType
 	| 'NoProduct';
 
+// TODO: Fix the type difference between pre-selected amounts and custom amounts
+// Probably best to handle everything as strings
 export type AmountChange = {
 	contributionType: ContributionType;
-	amount: number;
+	amount: string | 'other';
 };
 
 export type ProductState = {
-	product: GuardianProduct;
+	productType: GuardianProduct;
 	productOption: ProductOptions;
 	fulfilmentOption: FulfilmentOptions;
 	billingPeriod: BillingPeriod;
@@ -45,7 +47,7 @@ export type ProductState = {
 const currency = getCurrency(detectCountryGroup());
 
 export const initialProductState: ProductState = {
-	product: 'NoProduct',
+	productType: 'NoProduct',
 	productOption: 'NoProductOptions',
 	fulfilmentOption: 'NoFulfilmentOptions',
 	billingPeriod: 'Monthly',

@@ -16,8 +16,8 @@ export const productSlice = createSlice({
 	name: 'product',
 	initialState: initialProductState,
 	reducers: {
-		setProduct(state, action: PayloadAction<GuardianProduct>) {
-			state.product = action.payload;
+		setProductType(state, action: PayloadAction<GuardianProduct>) {
+			state.productType = action.payload;
 		},
 		setProductOption(state, action: PayloadAction<ProductOptions>) {
 			state.productOption = action.payload;
@@ -36,11 +36,11 @@ export const productSlice = createSlice({
 		},
 		setSelectedAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
-			state.selectedAmounts[contributionType] = amount;
+			state.selectedAmounts[contributionType] = Number.parseInt(amount);
 		},
 		setOtherAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
-			state.otherAmounts[contributionType].amount = amount.toString();
+			state.otherAmounts[contributionType].amount = amount;
 		},
 		setCurrency(state, action: PayloadAction<IsoCurrency>) {
 			state.currency = action.payload;

@@ -7,14 +7,14 @@ import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsSto
 import {
 	setBillingPeriod,
 	setDiscountedPrice,
-	setProduct,
 	setProductOption,
 	setProductPrices,
+	setProductType,
 	setSelectedProductPrice,
 } from './actions';
 
 const mayChangeProductPrice = isAnyOf(
-	setProduct,
+	setProductType,
 	setBillingPeriod,
 	setProductOption,
 	setProductPrices,
@@ -28,7 +28,7 @@ export function addProductSideEffects(
 		effect(_, listenerApi) {
 			const { common, page } = listenerApi.getState();
 			const { product } = page.checkoutForm;
-			if (product.product !== 'NoProduct') {
+			if (product.productType !== 'NoProduct') {
 				const selectedProductPrice = getProductPrice(
 					product.productPrices,
 					common.internationalisation.countryId,

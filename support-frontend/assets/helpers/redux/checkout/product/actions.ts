@@ -1,7 +1,7 @@
 import { productSlice } from './reducer';
 
 export const {
-	setProduct,
+	setProductType,
 	setProductOption,
 	setFulfilmentOption,
 	setBillingPeriod,
