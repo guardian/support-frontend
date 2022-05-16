@@ -4,10 +4,11 @@ import com.gu.helpers.DateGenerator
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
 import com.gu.support.acquisitions.{AbTest, AcquisitionData}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
-import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers.{DigitalPack, Monthly}
+import com.gu.support.zuora.api.ReaderType.Patron
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
@@ -32,11 +33,11 @@ class DigitalSubscriptionDirectPurchaseBuilder(
     val contractAcceptanceDate = todaysDate.plusDays(config.defaultFreeTrialPeriod + config.paymentGracePeriod)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
-      productRatePlanId,
-      overridePricingIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
+      productRatePlanId = productRatePlanId,
+      ratePlanCharges = overridePricingIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = contractAcceptanceDate,
-      readerType = state.product.readerType,
+      readerType = overrideReaderTypeIfRequired(state.promoCode, state.product.readerType),
       initialTermPeriodType = Month,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
@@ -52,6 +53,10 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
     }
 
+  }
+
+  def overrideReaderTypeIfRequired(promoCode: Option[PromoCode], readerType: ReaderType): ReaderType = {
+    if (promoCode.exists(_.endsWith("PATRON"))) Patron else readerType
   }
 
   def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
@@ -71,5 +76,4 @@ class DigitalSubscriptionDirectPurchaseBuilder(
         }
         .getOrElse(Nil)
     } else Nil
-
 }
