@@ -135,6 +135,7 @@ export class Frontend extends GuStack {
           alarmDescription: alarmDescription(
             "Some or all actions on support website are failing"
           ),
+          actionsEnabled: shouldEnableAlarms,
           tolerated5xxPercentage: 1,
         },
         unhealthyInstancesAlarm: false,

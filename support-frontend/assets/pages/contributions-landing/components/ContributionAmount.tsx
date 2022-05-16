@@ -1,4 +1,6 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
 import { TextInput } from '@guardian/source-react-components';
 import { connect } from 'react-redux';
 import type {
@@ -27,6 +29,19 @@ import {
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
+
+const otherAmoutInputCss = css`
+	padding-left: ${space[5]}px;
+`;
+
+const otherAmoutGlphCss = css`
+	position: absolute;
+	font-weight: bold;
+	bottom: 22px; // half of the fixed height of the input element we get from source
+	transform: translateY(50%);
+	padding-left: ${space[2]}px;
+`;
+
 // ----- Types ----- //
 type PropTypes = {
 	countryGroupId: CountryGroupId;
@@ -111,7 +126,7 @@ function ContributionAmount(props: PropTypes) {
 		false,
 	);
 	const otherAmount = props.otherAmounts[props.contributionType].amount;
-	const otherLabelSymbol: string = currencies[props.currency].glyph;
+	const otherAmountGlyph: string = currencies[props.currency].glyph;
 	const { checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked } =
 		props;
 	const canShowOtherAmountErrorMessage =
@@ -160,13 +175,15 @@ function ContributionAmount(props: PropTypes) {
 						'contribution-other-amount',
 					])}
 				>
+					<p css={otherAmoutGlphCss}>{otherAmountGlyph}</p>
 					<TextInput
 						id="contributionOther"
+						cssOverrides={otherAmoutInputCss}
 						label={`Other amount`}
-						value={`${otherLabelSymbol}${otherAmount ?? ''}`}
+						value={`${otherAmount ?? ''}`}
 						onChange={(e) =>
 							props.updateOtherAmount(
-								e.target.value.slice(1),
+								e.target.value.replace(/[^0-9]/g, ''),
 								props.contributionType,
 							)
 						}

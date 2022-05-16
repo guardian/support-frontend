@@ -13,7 +13,6 @@ object StripeJsonDecoder {
 
   import controllers.JsonReadableOps._
   import StripePublicKey.decoder
-  import com.gu.support.acquisitions.ReferrerAcquisitionData.{abTestDecoder, queryParameterDecoder}
 
   // This will decode Stripe charge data in the format expected by the old contributions-frontend API.
   private val legacyStripeChargeDataDecoder: Decoder[LegacyStripeChargeRequest] = Decoder.instance { cursor =>

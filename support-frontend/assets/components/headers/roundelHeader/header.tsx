@@ -16,11 +16,13 @@ type PropTypes = {
 };
 
 // ----- Render ----- //
-const renderCountryGroup =
-	(selectedCountryGroup: CountryGroup) => (countryGroup: CountryGroup) =>
-		(
+const renderCountryGroup = (selectedCountryGroup: CountryGroup) =>
+	function (countryGroup: CountryGroup) {
+		return (
 			<li className="countryGroups__item">
-				<a href={`/${countryGroup.supportInternationalisationId}/contribute`}>
+				<a
+					href={`/${countryGroup.supportInternationalisationId}/contribute${window.location.search}`}
+				>
 					{countryGroup.name} ({currencies[countryGroup.currency].extendedGlyph}
 					)
 					{countryGroup === selectedCountryGroup ? (
@@ -31,6 +33,7 @@ const renderCountryGroup =
 				</a>
 			</li>
 		);
+	};
 
 function RoundelHeader(props: PropTypes): ReactElement {
 	return (

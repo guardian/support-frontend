@@ -4,6 +4,7 @@ import cats.syntax.either._
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
+import com.gu.aws.CredentialsProvider
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 import com.gu.support.acquisitions.BigQueryConfig
 import scala.util.Try
@@ -13,6 +14,7 @@ object SSMService {
 
   val client = AWSSimpleSystemsManagementClientBuilder
     .standard()
+    .withCredentials(CredentialsProvider)
     .withRegion(Regions.EU_WEST_1)
     .build()
 

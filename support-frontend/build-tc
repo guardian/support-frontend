@@ -34,9 +34,5 @@ yarn run build-prod
 
 (
   cd ../cdk
-  nvm install
-  nvm use
-  # nvm alters PATH so we need to ensure the ci script uses the correct version of node
-  export PATH
   ./script/ci
 )
