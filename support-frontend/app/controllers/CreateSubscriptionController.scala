@@ -26,7 +26,8 @@ import services.{IdentityService, TestUserService}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.{Failure, Success}
 import scala.util.chaining._
 
@@ -152,13 +153,13 @@ class CreateSubscriptionController(
       deriveEncoder[CheckoutCompleteCookieBody]
   }
   private def checkoutCompleteCookie(productType: ProductType, userEmail: String): Option[Cookie] = {
-    val products: Map[Object, String] = Map(
-      Contribution -> "RECURRING_CONTRIBUTION",
-      DigitalPack -> "DIGITAL_SUBSCRIPTION",
-      Paper -> "PRINT_SUBSCRIPTION",
+    val products: Map[String, String] = Map(
+      "Contribution" -> "RECURRING_CONTRIBUTION",
+      "DigitalPack" -> "DIGITAL_SUBSCRIPTION",
+      "Paper" -> "PRINT_SUBSCRIPTION",
     )
 
-    val userType: Future[Option[String]] = identityService.getUserType(userEmail).fold(
+    val pendingUserType: Future[Option[String]] = identityService.getUserType(userEmail).fold(
       err => {
         SafeLogger.error(scrub"Failed to retrieve user type for $userEmail: $err")
         None
@@ -170,26 +171,21 @@ class CreateSubscriptionController(
       },
     )
 
-    userType.onComplete {
-      case Success(userTypeResult) =>
-        return Some(Cookie(
+    Await.result(pendingUserType, Duration(2, SECONDS)) match {
+      case Some(userType) =>
+        Some(Cookie(
           name = "GU_CO_COMPLETE",
           value = CheckoutCompleteCookieBody(
-            userType = userTypeResult.get,
-            product = products(productType)
+            userType = userType,
+            product = products(productType.toString)
           ).asJson.toString(),
           maxAge = Some(1209600), // fourteen days
           secure = true,
           httpOnly = false,
           domain = Some(guardianDomain.value)
         ))
-      case Failure(_) =>
-        SafeLogger.error {
-          scrub"Failed to create 'GU_CO_COMPLETE' cookie"
-        }
+      case None => None
     }
-
-    None
   }
 
   private def cookies(product: ProductType, userEmail: String) = {
@@ -218,15 +214,18 @@ class CreateSubscriptionController(
       case _: Paper => List.empty
       case _: GuardianWeekly => List.empty
     }
-    (standardCookies ++ productCookies).map { case (name, value) =>
+
+    val standardAndProductCookies = (standardCookies ++ productCookies).map { case (name, value) =>
       Cookie(
         name = name,
         value = value,
         secure = true,
         httpOnly = false,
-        domain = Some(guardianDomain.value),
+        domain = Some(guardianDomain.value)
       )
-    } ++ checkoutCompleteCookie(product, userEmail)
+    }
+
+    standardAndProductCookies :+ checkoutCompleteCookie(product, userEmail)
   }
 
   private def buildSupportWorkersUser(
