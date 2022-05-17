@@ -1,17 +1,16 @@
-import * as React from 'react';
 // components
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
 import FeatureHeader from './featureHeader';
 import SubscriptionsProduct from './subscriptionsProduct';
 
-const isFeature = (index) => index === 0; // make the first card a feature
+const isFeature = (index: number) => index === 0; // make the first card a feature
 
-const SubscriptionsLandingContent: React.FC<SubscriptionsLandingPropTypes> = ({
+function SubscriptionsLandingContent({
 	countryGroupId,
 	pricingCopy,
 	participations,
-}: SubscriptionsLandingPropTypes) => {
+}: SubscriptionsLandingPropTypes): JSX.Element | null {
 	if (!pricingCopy) {
 		return null;
 	}
@@ -35,7 +34,7 @@ const SubscriptionsLandingContent: React.FC<SubscriptionsLandingPropTypes> = ({
 						description={product.description}
 						productImage={product.productImage}
 						buttons={product.buttons}
-						offer={product.offer ?? null}
+						offer={product.offer}
 						isFeature={isFeature(index)}
 						classModifier={product.classModifier ?? []}
 						participations={participations}
@@ -44,6 +43,6 @@ const SubscriptionsLandingContent: React.FC<SubscriptionsLandingPropTypes> = ({
 			</div>
 		</div>
 	);
-};
+}
 
 export default SubscriptionsLandingContent;
