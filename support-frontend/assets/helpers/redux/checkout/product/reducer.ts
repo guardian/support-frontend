@@ -8,7 +8,6 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AmountChange, GuardianProduct } from './state';
 import { initialProductState } from './state';
 
@@ -50,12 +49,6 @@ export const productSlice = createSlice({
 		},
 		setDiscountedPrice(state, action: PayloadAction<ProductPrice>) {
 			state.discountedProductPrice = action.payload;
-		},
-		setSavingVsRetail(state, action: PayloadAction<number>) {
-			state.savingVsRetail = action.payload;
-		},
-		setPromotions(state, action: PayloadAction<Promotion[]>) {
-			state.promotions = action.payload;
 		},
 	},
 });

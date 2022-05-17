@@ -13,7 +13,6 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getCurrency } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 export type GuardianProduct =
@@ -40,8 +39,6 @@ export type ProductState = {
 	currency: IsoCurrency;
 	orderIsAGift: boolean;
 	discountedProductPrice?: ProductPrice;
-	savingVsRetail?: number;
-	promotions?: Promotion[];
 };
 
 const currency = getCurrency(detectCountryGroup());

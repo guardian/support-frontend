@@ -12,6 +12,4 @@ export const {
 	setCurrency,
 	setOrderIsAGift,
 	setDiscountedPrice,
-	setSavingVsRetail,
-	setPromotions,
 } = productSlice.actions;
