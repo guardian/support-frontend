@@ -1,21 +1,19 @@
 import AnchorButton from 'components/button/anchorButton';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
 	title: string;
 	subtitle: string;
 	description: string;
-	isFeature: Option<boolean>;
-	offer?: Option<string>;
+	isFeature?: boolean;
+	offer?: string;
 	buttons: ProductButton[];
 };
 
 const getButtonAppearance = (
-	isFeature: boolean | null,
 	index: number,
-	hierarchy: string | undefined,
+	isFeature?: boolean,
+	hierarchy?: string,
 ) => {
 	if (isFeature && index === 0) {
 		return 'primary';
@@ -61,7 +59,7 @@ function SubscriptionsProductDescription({
 					<AnchorButton
 						href={button.link}
 						onClick={button.analyticsTracking}
-						appearance={getButtonAppearance(isFeature, index, button.hierarchy)}
+						appearance={getButtonAppearance(index, isFeature, button.hierarchy)}
 						modifierClasses={['subscriptions__product-button']}
 					>
 						{button.ctaButtonText}

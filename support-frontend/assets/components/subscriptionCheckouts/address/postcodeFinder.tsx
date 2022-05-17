@@ -42,18 +42,21 @@ type PropTypes = PostcodeFinderState &
 function InputWithButton({ onClick, isLoading, ...props }) {
 	return (
 		<div css={root}>
-			<TextInput
-				{...props}
-				onKeyPress={(e) => {
-					if (e.key && e.key === 'Enter') {
-						e.preventDefault();
-						onClick();
-					}
-				}}
-				css={inputStyles}
-				name="postcode"
-				width={10}
-			/>
+			<div>
+				<TextInput
+					{...props}
+					onKeyPress={(e) => {
+						if (e.key && e.key === 'Enter') {
+							e.preventDefault();
+							onClick();
+						}
+					}}
+					css={inputStyles}
+					name="postcode"
+					width={10}
+				/>
+			</div>
+
 			{!isLoading && (
 				<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
 					<Button
