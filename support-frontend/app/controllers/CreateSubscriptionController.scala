@@ -115,32 +115,37 @@ class CreateSubscriptionController(
       product: ProductType,
       userEmail: String,
   )(implicit request: Request[CreateSupportWorkersRequest], writeable: Writeable[String]): Future[Result] = {
-    result.fold(
-      { error =>
-        SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
-        error match {
-          case err: RequestValidationError =>
-            // Store the error message in the result.header.reasonPhrase this will allow us to
-            // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
-            Result(
-              header = new ResponseHeader(
-                status = BAD_REQUEST,
-                reasonPhrase = Some(err.message),
-              ),
-              body = writeable.toEntity(err.message),
-            )
-          case _: ServerError =>
-            InternalServerError
-        }
-      },
-      { statusResponse =>
-        SafeLogger.info(
-          s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}",
-        )
-        cookies(product, userEmail)
-          .map(cookies => Accepted(statusResponse.asJson).withCookies(cookies: _*))
-      },
-    )
+    result
+      .fold(
+        { error =>
+          SafeLogger.error(
+            scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error",
+          )
+          val errResult = error match {
+            case err: RequestValidationError =>
+              // Store the error message in the result.header.reasonPhrase this will allow us to
+              // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
+              Result(
+                header = new ResponseHeader(
+                  status = BAD_REQUEST,
+                  reasonPhrase = Some(err.message),
+                ),
+                body = writeable.toEntity(err.message),
+              )
+            case _: ServerError =>
+              InternalServerError
+          }
+          Future.successful(errResult)
+        },
+        { statusResponse =>
+          SafeLogger.info(
+            s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}",
+          )
+          cookies(product, userEmail)
+            .map(cookies => Accepted(statusResponse.asJson).withCookies(cookies: _*))
+        },
+      )
+      .flatten
   }
 
   case class CheckoutCompleteCookieBody(
