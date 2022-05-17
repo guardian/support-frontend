@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 14,
+            "TS2345": 13,
             "TS7006": 4,
             "TS2769": 2,
             "TS2305": 1,
@@ -21,7 +21,6 @@
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
-            "assets/components/marketingConsent/helpers.ts": 1,
             "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
@@ -56,10 +55,6 @@
         {
             "path": "assets/components/directDebit/__tests__/directDebitReducerTest.ts",
             "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/marketingConsent/helpers.ts",
-            "message": "Argument of type '{ method: string; headers: { 'Content-Type': string; 'Csrf-Token': string; }; credentials: string; body: string; }' is not assignable to parameter of type 'RequestInit'."
         },
         {
             "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",

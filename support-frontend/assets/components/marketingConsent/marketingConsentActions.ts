@@ -17,7 +17,13 @@ export type Action =
 	  };
 
 // ----- Action Creators ----- //
-function marketingConsentActionsFor(scope: string): Record<string, any> {
+interface MarketingConsentActions {
+	setAPIError: (error: boolean) => Action;
+	setConfirmMarketingConsent: (confirmOptIn: boolean) => Action;
+	setRequestPending: (requestPending: boolean) => Action;
+}
+
+function marketingConsentActionsFor(scope: string): MarketingConsentActions {
 	return {
 		setAPIError(error: boolean): Action {
 			return {

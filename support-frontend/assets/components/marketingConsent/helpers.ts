@@ -1,27 +1,30 @@
 // ----- Imports ----- //
+import type { Dispatch } from 'redux';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
+import type { Action } from './marketingConsentActions';
 import { marketingConsentActionsFor } from './marketingConsentActions';
 
 // ----- Functions ----- //
-const requestData = (email: string, csrf: CsrfState) => ({
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-		'Csrf-Token': csrf.token || '',
-	},
-	credentials: 'same-origin',
-	body: JSON.stringify({
-		email,
-	}),
-});
+const requestData = (email: string, csrf: CsrfState) =>
+	({
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Csrf-Token': csrf.token ?? '',
+		},
+		credentials: 'same-origin',
+		body: JSON.stringify({
+			email,
+		}),
+	} as const);
 
 // Fire and forget, as we don't want to interrupt the flow
 function sendMarketingPreferencesToIdentity(
 	optIn: boolean,
 	email: string,
-	dispatch: (...args: any[]) => any,
+	dispatch: Dispatch<Action>,
 	csrf: CsrfState,
 	scope: string,
 ): void {
