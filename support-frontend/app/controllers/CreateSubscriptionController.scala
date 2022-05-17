@@ -26,6 +26,7 @@ import services.{IdentityService, TestUserService}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
+import java.net.URLEncoder
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.chaining._
@@ -136,7 +137,8 @@ class CreateSubscriptionController(
         SafeLogger.info(
           s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}",
         )
-        Accepted(statusResponse.asJson).withCookies(cookies(product, userEmail): _*)
+        cookies(product, userEmail)
+          .map(cookies => Accepted(statusResponse.asJson).withCookies(cookies: _*))
       },
     )
   }
@@ -149,41 +151,38 @@ class CreateSubscriptionController(
     implicit val encoder: Encoder[CheckoutCompleteCookieBody] =
       deriveEncoder[CheckoutCompleteCookieBody]
   }
-  private def checkoutCompleteCookies(productType: ProductType, userEmail: String): List[Cookie] = {
-    val pendingUserType: Future[Option[String]] = identityService
+  private def checkoutCompleteCookies(productType: ProductType, userEmail: String): Future[List[Cookie]] = {
+    identityService
       .getUserType(userEmail)
       .fold(
         err => {
           SafeLogger.error(scrub"Failed to retrieve user type for $userEmail: $err")
-          None
+          SafeLogger.error(scrub"Failed to create GU_CO_COMPLETE cookie")
+          List.empty
         },
         response => {
           SafeLogger.info(s"Successfully retrieved user type for $userEmail")
           SafeLogger.info(s"USERTYPE: ${response.userType}")
-          Some(response.userType)
+          val cookieValue: String = CheckoutCompleteCookieBody(
+            userType = response.userType,
+            product = productType.toString,
+          ).asJson.noSpaces
+
+          List(
+            Cookie(
+              name = "GU_CO_COMPLETE",
+              value = URLEncoder.encode(cookieValue, "UTF-8"),
+              maxAge = Some(1209600), // fourteen days
+              secure = true,
+              httpOnly = false,
+              domain = Some(guardianDomain.value),
+            ),
+          )
         },
       )
-
-    Await.result(pendingUserType, Duration(2, SECONDS)) match {
-      case Some(userType) =>
-        List(
-          Cookie(
-            name = "GU_CO_COMPLETE",
-            value = CheckoutCompleteCookieBody(
-              userType = userType,
-              product = productType.toString,
-            ).asJson.noSpaces,
-            maxAge = Some(1209600), // fourteen days
-            secure = true,
-            httpOnly = false,
-            domain = Some(guardianDomain.value),
-          ),
-        )
-      case None => List.empty
-    }
   }
 
-  private def cookies(product: ProductType, userEmail: String) = {
+  private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
     // Setting the user attributes cookies used by frontend. See:
     // https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
     val standardCookies = List(
@@ -220,7 +219,7 @@ class CreateSubscriptionController(
       )
     }
 
-    standardAndProductCookies ++ checkoutCompleteCookies(product, userEmail)
+    checkoutCompleteCookies(product, userEmail).map(_ ++ standardAndProductCookies)
   }
 
   private def buildSupportWorkersUser(
