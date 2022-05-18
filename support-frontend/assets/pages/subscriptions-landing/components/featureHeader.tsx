@@ -1,4 +1,4 @@
-function FeatureHeader() {
+function FeatureHeader(): JSX.Element {
 	return (
 		<div className="subscriptions__feature">
 			<div className="subscriptions__feature-container">
