@@ -219,15 +219,6 @@ body {
 	}
 }
 
-.map-caption {
-	font-family: $gu-text-sans-web;
-	font-size: 17.5px;
-	text-align: center;
-	@include mq($until: desktop) {
-		display: none;
-	}
-}
-
 h2.blurb,
 h2.selected-territory {
 	text-align: left;
