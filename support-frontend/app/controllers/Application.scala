@@ -231,7 +231,7 @@ class Application(
   }
 
   val ausMomentMapSocialImageUrl =
-    "https://i.guim.co.uk/img/media/31c2f7e33af84e7743e2d9f79454ff5d59e34e5b/0_1_1000_525/1000.png?quality=85&s=c3ca1b1fccb1c6c318f4cd71c2ea1ce2"
+    "https://i.guim.co.uk/img/media/3c2c30cccd48c91f55217bd0d961dbd20cf07274/0_0_1000_525/1000.png?quality=85&s=b1394cf888724cd40646850b807659f0"
 
   def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
