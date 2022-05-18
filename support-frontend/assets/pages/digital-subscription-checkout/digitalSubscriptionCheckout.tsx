@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
-import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
@@ -30,6 +29,7 @@ import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
 import ThankYouPendingContent from './thankYouPendingContent';
 import 'stylesheets/skeleton/skeleton.scss';
 import './digitalSubscriptionCheckout.scss';
+import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 
 // ----- Redux Store ----- //
 function getInitialBillingPeriod(
