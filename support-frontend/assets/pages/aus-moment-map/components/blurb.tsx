@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { from } from '@guardian/source-foundations';
-import * as React from 'preact/compat';
 import { SocialLinks } from 'pages/aus-moment-map/components/socialLinks';
 
 const mobileTabletOnly = css`
@@ -17,22 +16,6 @@ const desktopOnly = css`
 		display: block;
 	}
 `;
-
-const enableSupporterCount = true as boolean;
-
-const useSupportersCount = () => {
-	const [supportersCount, setSupportersCount] = React.useState(0);
-	const supportersCountEndpoint = '/supporters-ticker.json';
-
-	React.useEffect(() => {
-		if (enableSupporterCount) {
-			void fetch(supportersCountEndpoint)
-				.then((response) => response.json())
-				.then((data: { total: number }) => setSupportersCount(data.total));
-		}
-	}, []);
-	return supportersCount;
-};
 
 type PropTypes = {
 	slim?: boolean;
@@ -51,7 +34,6 @@ function getCopyParagraph(desktop = false) {
 
 // ----- Render ----- //
 export function Blurb(props: PropTypes): JSX.Element {
-	const supportersCount = useSupportersCount();
 	return (
 		<div className="blurb-wrapper">
 			<div>
@@ -66,16 +48,6 @@ export function Blurb(props: PropTypes): JSX.Element {
 						<p className="blurb" css={desktopOnly}>
 							{getCopyParagraph(true)}
 						</p>
-						{enableSupporterCount && (
-							<>
-								<p className="supporters-total">
-									{supportersCount.toLocaleString()}
-								</p>
-								<p className="supporters-total-caption">
-									Total supporters in Australia
-								</p>
-							</>
-						)}
 					</div>
 				)}
 			</div>
