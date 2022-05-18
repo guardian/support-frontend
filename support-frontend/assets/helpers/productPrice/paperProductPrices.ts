@@ -39,18 +39,24 @@ function getSavingsForFulfilmentOption(
 	fulfilmentOption: FulfilmentOptions,
 ) {
 	return ActivePaperProductTypes.map((productOption) => {
-		const price = prices[fulfilmentOption][productOption].Monthly.GBP;
-		return price.savingVsRetail ?? 0;
+		const price = prices[fulfilmentOption]?.[productOption]?.Monthly?.GBP;
+		return price?.savingVsRetail ?? 0;
 	});
 }
 
-function getMaxSavingVsRetail(productPrices: ProductPrices): number {
+function getMaxSavingVsRetail(
+	productPrices: ProductPrices,
+): number | undefined {
 	const countryPrices = productPrices['United Kingdom'];
-	const allSavings = getSavingsForFulfilmentOption(
-		countryPrices,
-		Collection,
-	).concat(getSavingsForFulfilmentOption(countryPrices, HomeDelivery));
-	return Math.max(...allSavings);
+
+	if (countryPrices) {
+		const allSavings = getSavingsForFulfilmentOption(
+			countryPrices,
+			Collection,
+		).concat(getSavingsForFulfilmentOption(countryPrices, HomeDelivery));
+
+		return Math.max(...allSavings);
+	}
 }
 
 function getPriceWithDiscount(

@@ -31,6 +31,7 @@ type PropTypes = {
 	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;
 };
+
 const fitHeadline = css`
 	h1 {
 		${between.mobileMedium.and.tablet} {
@@ -134,15 +135,15 @@ const defaultCopy = (
 	</>
 );
 
-function PaperHero({ productPrices, promotionCopy }: PropTypes) {
-	const maxSavingVsRetail = productPrices
-		? getMaxSavingVsRetail(productPrices)
-		: 0;
+function PaperHero({
+	productPrices,
+	promotionCopy,
+}: PropTypes): JSX.Element | null {
+	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
-	const defaultRoundelText = (
+	const defaultRoundelText = roundel.length ? (
 		<>
 			{/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
-			{/* eslint-disable-next-line jsx-a11y/aria-role */}
 			<div role="text" css={roundelLines}>
 				{roundel.map((text, index) => {
 					if (index === 1) {
@@ -153,14 +154,15 @@ function PaperHero({ productPrices, promotionCopy }: PropTypes) {
 				})}
 			</div>
 		</>
-	);
-	const title = promotionCopy.title || defaultTitle;
+	) : null;
+
+	const title = promotionCopy.title ?? defaultTitle;
 	const copy =
 		promotionHTML(promotionCopy.description, {
 			tag: 'p',
-		}) || defaultCopy;
+		}) ?? defaultCopy;
 	const roundelText =
-		promotionHTML(promotionCopy.roundel) || defaultRoundelText;
+		promotionHTML(promotionCopy.roundel) ?? defaultRoundelText;
 	return (
 		<PageTitle
 			title="Newspaper subscription"
@@ -182,9 +184,11 @@ function PaperHero({ productPrices, promotionCopy }: PropTypes) {
 					}
 					hideRoundelBelow="mobileMedium"
 					roundelElement={
-						<HeroRoundel cssOverrides={roundelOffset}>
-							{roundelText}
-						</HeroRoundel>
+						roundelText ? (
+							<HeroRoundel cssOverrides={roundelOffset}>
+								{roundelText}
+							</HeroRoundel>
+						) : null
 					}
 				>
 					<section css={heroCopy}>
