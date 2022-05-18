@@ -26,10 +26,10 @@ import CheckoutForm from 'pages/digital-subscription-checkout/components/digital
 import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
+import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import ThankYouPendingContent from './thankYouPendingContent';
 import 'stylesheets/skeleton/skeleton.scss';
 import './digitalSubscriptionCheckout.scss';
-import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 
 // ----- Redux Store ----- //
 function getInitialBillingPeriod(
