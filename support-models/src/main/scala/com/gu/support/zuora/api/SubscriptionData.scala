@@ -128,6 +128,10 @@ object ReaderType {
     val value = "Unknown"
   }
 
+  def impliedByPromoCode(promoCode: PromoCode): Option[ReaderType] = Option.when(promoCode.endsWith("PATRON"))(Patron)
+
+  def impliedBySomePromoCode(promoCode: Option[PromoCode]): Option[ReaderType] = promoCode.flatMap(impliedByPromoCode)
+
   def fromString(s: String): ReaderType =
     s match {
       case Gift.value => Gift

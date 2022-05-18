@@ -37,7 +37,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       ratePlanCharges = overridePricingIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = contractAcceptanceDate,
-      readerType = overrideReaderTypeIfRequired(state.promoCode, state.product.readerType),
+      readerType = ReaderType.impliedBySomePromoCode(state.promoCode) getOrElse state.product.readerType,
       initialTermPeriodType = Month,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
@@ -53,10 +53,6 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
     }
 
-  }
-
-  def overrideReaderTypeIfRequired(promoCode: Option[PromoCode], readerType: ReaderType): ReaderType = {
-    if (promoCode.exists(_.endsWith("PATRON"))) Patron else readerType
   }
 
   def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
