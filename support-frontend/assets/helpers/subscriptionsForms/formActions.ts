@@ -13,7 +13,10 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
+	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
+	setGiftDeliveryDate,
+	setGiftMessage,
 	setLastName as setLastNameGift,
 	setTitle as setTitleGift,
 } from 'helpers/redux/checkout/giftingState/actions';
@@ -163,13 +166,7 @@ const formActionCreators = {
 	setTitleGift,
 	setFirstNameGift,
 	setLastNameGift,
-	setEmailGift: (
-		emailGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_EMAIL_GIFT',
-			emailGiftRecipient,
-		})),
+	setEmailGift,
 	setStartDate: (startDate: string): Action => ({
 		type: 'SET_START_DATE',
 		startDate,
@@ -222,14 +219,8 @@ const formActionCreators = {
 		type: 'SET_DELIVERY_INSTRUCTIONS',
 		instructions,
 	}),
-	setGiftMessage: (message: string | null): Action => ({
-		type: 'SET_GIFT_MESSAGE',
-		message,
-	}),
-	setDigitalGiftDeliveryDate: (giftDeliveryDate: string): Action => ({
-		type: 'SET_GIFT_DELIVERY_DATE',
-		giftDeliveryDate,
-	}),
+	setGiftMessage,
+	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
 	setAddDigitalSubscription: (addDigital: boolean): Action => ({
 		type: 'SET_ADD_DIGITAL_SUBSCRIPTION',
 		addDigital,

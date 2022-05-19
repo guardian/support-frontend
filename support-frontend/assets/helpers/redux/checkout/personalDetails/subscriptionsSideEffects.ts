@@ -1,7 +1,9 @@
 import type { AnyAction } from '@reduxjs/toolkit';
 import { isAnyOf } from '@reduxjs/toolkit';
 import {
+	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
+	setGiftDeliveryDate,
 	setLastName as setLastNameGift,
 } from 'helpers/redux/checkout/giftingState/actions';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
@@ -35,6 +37,8 @@ const shouldCheckFormEnabled = isAnyOf(
 	setUserTypeFromIdentityResponse,
 	setFirstNameGift,
 	setLastNameGift,
+	setEmailGift,
+	setGiftDeliveryDate,
 );
 
 const actionCreatorFieldNames: Record<string, FormField> = {
@@ -44,6 +48,8 @@ const actionCreatorFieldNames: Record<string, FormField> = {
 	[setLastName.type]: 'lastName',
 	[setFirstNameGift.type]: 'firstNameGiftRecipient',
 	[setLastNameGift.type]: 'lastNameGiftRecipient',
+	[setEmailGift.type]: 'emailGiftRecipient',
+	[setGiftDeliveryDate.type]: 'giftDeliveryDate',
 };
 
 export function addPersonalDetailsSideEffects(
