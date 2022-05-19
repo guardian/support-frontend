@@ -64,11 +64,11 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
   it should "generate the right json for direct subs" in {
     val expectedJson = parse("""{
         |"To" : {
-        |  "Address" : "test@gu.com",
+        |  "Address" : "test@theguardian.com",
         |  "ContactAttributes" : {
         |    "SubscriberAttributes" : {
         |      "first_name" : "Mickey",
-        |      "emailaddress" : "test@gu.com",
+        |      "emailaddress" : "test@theguardian.com",
         |      "mandateid" : "65HK26E",
         |      "subscription_details" : "£119.90 for the first year",
         |      "date_of_first_payment" : "Monday, 14 January 2019",
@@ -93,7 +93,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
       SANDBOX,
     ).build(
       SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
-        User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
+        User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
@@ -114,7 +114,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |  "ContactAttributes" : {
         |    "SubscriberAttributes" : {
         |      "first_name" : "Mickey",
-        |      "emailaddress" : "test@gu.com",
+        |      "emailaddress" : "test@theguardian.com",
         |      "subscription_details" : "Group subscription",
         |      "zuorasubscriberid" : "subscription number",
         |      "last_name" : "Mouse"
@@ -145,13 +145,13 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
   it should "generate the right json for gift redemption subs" in {
     val expectedJson = parse("""{
         |  "To" : {
-        |    "Address" : "test@gu.com",
+        |    "Address" : "test@theguardian.com",
         |    "ContactAttributes" : {
         |      "SubscriberAttributes" : {
         |        "gift_recipient_first_name" : "Mickey",
         |        "subscription_details" : "3 month digital subscription",
         |        "gift_end_date" : "Thursday, 18 February 2021",
-        |        "gift_recipient_email" : "test@gu.com",
+        |        "gift_recipient_email" : "test@theguardian.com",
         |        "gift_start_date" : "Wednesday, 18 November 2020"
         |      }
         |    }
@@ -171,7 +171,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
       SANDBOX,
     ).build(
       SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-        User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
+        User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
         "subno",
         TermDates(
