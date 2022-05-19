@@ -25,7 +25,13 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
     val actual = decode[GiftRecipient](json)
     actual should be(
       Right(
-        GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@theguardian.com", None, new LocalDate(2020, 10, 2)),
+        GiftRecipient.DigitalSubscriptionGiftRecipient(
+          "bob",
+          "builder",
+          "bob@theguardian.com",
+          None,
+          new LocalDate(2020, 10, 2),
+        ),
       ),
     )
   }
@@ -95,7 +101,9 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "roundtrip ok" in {
-    testRoundTripSerialisation(GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@theguardian.com")))
+    testRoundTripSerialisation(
+      GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@theguardian.com")),
+    )
     testRoundTripSerialisation(
       GiftRecipient.DigitalSubscriptionGiftRecipient(
         "bob",
@@ -112,7 +120,13 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
       WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@theguardian.com")),
     )
     testRoundTripSerialisationViaParent[GiftRecipient, DigitalSubscriptionGiftRecipient](
-      DigitalSubscriptionGiftRecipient("bob", "builder", "bob@theguardian.com", Some("message"), new LocalDate(2020, 10, 2)),
+      DigitalSubscriptionGiftRecipient(
+        "bob",
+        "builder",
+        "bob@theguardian.com",
+        Some("message"),
+        new LocalDate(2020, 10, 2),
+      ),
     )
   }
 
