@@ -110,7 +110,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
   it should "generate the right json for corporate subs" in {
     val expectedJson = parse("""{
         |"To" : {
-        |  "Address" : "test@gu.com",
+        |  "Address" : "test@theguardian.com",
         |  "ContactAttributes" : {
         |    "SubscriberAttributes" : {
         |      "first_name" : "Mickey",
@@ -131,7 +131,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
       SANDBOX,
     ).build(
       SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-        User("1234", "test@gu.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
+        User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
         "A-S00045678",
         "subscription number",
