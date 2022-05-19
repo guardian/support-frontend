@@ -18,13 +18,12 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
 
   def getOrCreateUserFromEmail(
       email: String,
-      firstName: String,
-      lastName: String,
+      firstName: Option[String],
   )(implicit ec: ExecutionContext) = {
     getUserIdFromEmail(email)
       .recoverWith {
         case err: IdentityErrorResponse if err.errors.headOption.map(_.message).contains("Not found") =>
-          createUserIdFromEmailUser(email, firstName, lastName)
+          createUserIdFromEmailUser(email, firstName)
       }
   }
 
@@ -39,14 +38,13 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
 
   def createUserIdFromEmailUser(
       email: String,
-      firstName: String,
-      lastName: String,
+      firstName: Option[String],
   )(implicit ec: ExecutionContext) = {
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
-        firstName = firstName,
-        secondName = lastName,
+        firstName = firstName.getOrElse(""),
+        secondName = "",
       ),
     )
     postJson[GuestRegistrationResponse](

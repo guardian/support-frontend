@@ -17,7 +17,7 @@ class StripeServiceSpec extends AsyncFlatSpec with Matchers {
       .fromParameterStore(DEV)
       .flatMap { config =>
         val stripeService = new StripeService(config, configurableFutureRunner(60.seconds))
-        stripeService.getSubscriptions().map { response =>
+        stripeService.getSubscriptions(1).map { response =>
           response.data.length should be > 0
           response.data.head.customer.email.length should be > 0
           response.data.head.status shouldBe "active"

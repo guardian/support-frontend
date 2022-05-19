@@ -5,7 +5,7 @@ import io.circe.generic.semiauto.deriveDecoder
 
 case class StripeSubscription(id: String, customer: StripeCustomer, status: String)
 
-case class StripeCustomer(id: String, email: String)
+case class StripeCustomer(id: String, name: Option[String], email: String)
 
 case class StripeSubscriptionsResponse(data: List[StripeSubscription])
 
