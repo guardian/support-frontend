@@ -68,7 +68,7 @@ type Addresses = {
 function getAddresses(state: AnyCheckoutState): Addresses {
 	if (isPhysicalProduct(state.page.checkout.product)) {
 		const deliveryAddressFields = getDeliveryAddressFields(
-			state as any as WithDeliveryCheckoutState,
+			state as unknown as WithDeliveryCheckoutState,
 		);
 		return {
 			deliveryAddress: deliveryAddressFields,
@@ -202,7 +202,7 @@ function onPaymentAuthorised(
 	dispatch: Dispatch<Action>,
 	state: AnyCheckoutState,
 	currencyId?: Option<IsoCurrency>,
-) {
+): void {
 	const data = buildRegularPaymentRequest(
 		state,
 		paymentAuthorisation,
@@ -295,7 +295,7 @@ function trackSubmitAttempt(
 	paymentMethod: PaymentMethod | null | undefined,
 	productType: SubscriptionProduct,
 	productOption: ProductOptions,
-) {
+): void {
 	const componentId =
 		productOption === NoProductOptions
 			? `subs-checkout-submit-${productType}-${paymentMethod ?? ''}`
@@ -358,13 +358,16 @@ function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
 function submitWithDeliveryForm(
 	dispatch: Dispatch<Action>,
 	state: WithDeliveryCheckoutState,
-) {
+): void {
 	if (validateWithDeliveryForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}
 }
 
-function submitCheckoutForm(dispatch: Dispatch<Action>, state: CheckoutState) {
+function submitCheckoutForm(
+	dispatch: Dispatch<Action>,
+	state: CheckoutState,
+): void {
 	if (validateCheckoutForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}

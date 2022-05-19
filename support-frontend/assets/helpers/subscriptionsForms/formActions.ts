@@ -30,8 +30,6 @@ import {
 } from 'helpers/redux/checkout/personalDetails/actions';
 import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
-import type { FormSubmissionDependentValueThunk } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';

@@ -10,10 +10,7 @@ export type GiftingState = {
 };
 
 export const initialGiftingState: GiftingState = {
-	title: '',
 	firstName: '',
 	lastName: '',
 	email: '',
-	giftMessage: '',
-	giftDeliveryDate: '',
 };
