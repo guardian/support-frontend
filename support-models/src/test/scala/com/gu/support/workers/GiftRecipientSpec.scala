@@ -61,7 +61,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
     val data = GiftRecipient.DigitalSubscriptionGiftRecipient(
       "bob",
       "builder",
-      "bob@gu.com",
+      "bob@theguardian.com",
       Some("message"),
       new LocalDate(2020, 10, 2),
     )
@@ -71,7 +71,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "giftRecipientType": "DigitalSubscription",
         |  "firstName": "bob",
         |  "lastName": "builder",
-        |  "email": "bob@gu.com",
+        |  "email": "bob@theguardian.com",
         |  "message": "message",
         |  "deliveryDate" : "2020-10-02"
         |}
@@ -100,7 +100,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
       GiftRecipient.DigitalSubscriptionGiftRecipient(
         "bob",
         "builder",
-        "bob@gu.com",
+        "bob@theguardian.com",
         Some("message"),
         new LocalDate(2020, 10, 2),
       ),
@@ -112,7 +112,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
       WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@theguardian.com")),
     )
     testRoundTripSerialisationViaParent[GiftRecipient, DigitalSubscriptionGiftRecipient](
-      DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
+      DigitalSubscriptionGiftRecipient("bob", "builder", "bob@theguardian.com", Some("message"), new LocalDate(2020, 10, 2)),
     )
   }
 
