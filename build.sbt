@@ -86,6 +86,7 @@ lazy val root = (project in file("."))
     `support-workers`,
     `supporter-product-data`,
     `supporter-product-data-dynamo`,
+    `stripe-patrons-data`,
     `support-models`,
     `support-config`,
     `support-internationalisation`,
@@ -167,6 +168,18 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
   )
   .dependsOn(`module-aws`)
   .aggregate(`module-aws`)
+
+lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .configs(IntegrationTest)
+  .settings(
+    integrationTestSettings,
+    scalafmtSettings,
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
+  .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)

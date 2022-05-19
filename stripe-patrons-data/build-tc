@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+# build scala
+cd ..
+./sbt "project stripe-patrons-data" test riffRaffUpload

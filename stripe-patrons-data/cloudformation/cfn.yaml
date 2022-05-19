@@ -1,0 +1,400 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Product data information for supporters."
+
+Parameters:
+  Stage:
+    Description: Stage name
+    Type: String
+    AllowedValues:
+      - PROD
+      - UAT
+      - DEV
+    Default: DEV
+
+Conditions:
+  CreateProdResources: !Equals [!Ref "Stage", "PROD"]
+
+Mappings:
+  StageVariables:
+    DEV:
+      S3Bucket: stripe-patrons-data-export-dev
+      # Every 10 mins between 7am and 7pm Mon-Fri
+      scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
+    UAT:
+      S3Bucket: stripe-patrons-data-export-uat
+      scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
+    PROD:
+      S3Bucket: stripe-patrons-data-export-prod
+      # Every 5 mins
+      scheduleRate: "cron(*/5 * ? * * *)"
+
+Resources:
+
+  SupporterProductExportBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        !FindInMap [StageVariables, !Ref Stage, S3Bucket]
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteAllOldFiles
+            Status: Enabled
+            ExpirationInDays: 14
+
+  SupporterProductDataLambdaRole:
+    Type: AWS::IAM::Role
+    DependsOn: SupporterProductExportBucket
+    Properties:
+      RoleName: !Sub SupportProductData-${Stage}
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: LambdaPolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - lambda:InvokeFunction
+                Resource: "*"
+        - PolicyName: WorkBucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:AbortMultipartUpload
+                  - s3:DeleteObject
+                  - s3:GetObject
+                  - s3:GetObjectAcl
+                  - s3:GetBucketAcl
+                  - s3:ListBucket
+                  - s3:PutObject
+                  - s3:GetObjectVersion
+                  - s3:DeleteObjectVersion
+                Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}/*
+        - PolicyName: ListWorkBucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !Sub arn:aws:s3:::${SupporterProductExportBucket}
+        - PolicyName: SSMConfigParams
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParametersByPath
+                  - ssm:PutParameter
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/stripe-patrons-data/*
+        - PolicyName: DynamoTable
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+                - dynamodb:BatchGetItem
+                - dynamodb:DescribeTable
+              Resource:
+                Fn::ImportValue:
+                  !Sub stripe-patrons-data-tables-${Stage}-SupporterProductDataTable
+
+  QueryZuoraLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub support-SupporterProductDataQueryZuora-${Stage}
+      Description: "Trigger zuora export"
+      Handler: "com.gu.lambdas.QueryZuoraLambda::handleRequest"
+      Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
+      Code:
+        S3Bucket: stripe-patrons-data-dist
+        S3Key: !Sub support/${Stage}/stripe-patrons-data/stripe-patrons-data.jar
+      MemorySize: 512
+      Runtime: "java8.al2"
+      Timeout: 300
+      Environment:
+        Variables:
+          'Stage': !Sub ${Stage}
+
+  FetchResultsLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub support-SupporterProductDataFetchResults-${Stage}
+      Description: "Fetch zuora export results"
+      Handler: "com.gu.lambdas.FetchStripeSubscriptionsLambda::handleRequest"
+      Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
+      Code:
+        S3Bucket: stripe-patrons-data-dist
+        S3Key: !Sub support/${Stage}/stripe-patrons-data/stripe-patrons-data.jar
+      MemorySize: 512
+      Runtime: "java8.al2"
+      Timeout: 300
+      Environment:
+        Variables:
+          'Stage': !Sub ${Stage}
+
+  UpdateDynamoLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub support-SupporterProductDataUpdateDynamo-${Stage}
+      Description: "Update DynamoDB with the results of the Zuora query"
+      Handler: "com.gu.lambdas.UpdateDynamoLambda::handleRequest"
+      Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
+      Code:
+        S3Bucket: stripe-patrons-data-dist
+        S3Key: !Sub support/${Stage}/stripe-patrons-data/stripe-patrons-data.jar
+      MemorySize: 4096
+      Runtime: "java8.al2"
+      Timeout: 600
+      Environment:
+        Variables:
+          'Stage': !Sub ${Stage}
+
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: "Allow"
+          Principal:
+            Service: !Sub states.${AWS::Region}.amazonaws.com
+          Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: "*"
+
+  SupporterProductData:
+    Type: "AWS::StepFunctions::StateMachine"
+    Properties:
+      StateMachineName: !Sub stripe-patrons-data-${Stage}
+      DefinitionString:
+        !Sub
+        - |-
+          {
+            "StartAt": "QueryZuora",
+            "States": {
+              "QueryZuora": {
+                "Type": "Task",
+                "Resource": "${querierArn}",
+                "Next": "WaitSomeTime",
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 30,
+                    "MaxAttempts": 3
+                  }]
+              },
+              "WaitSomeTime": {
+                "Type": "Wait",
+                "Seconds": 30,
+                "Next": "FetchResults"
+              },
+              "FetchResults": {
+                "Type": "Task",
+                "Resource": "${fetcherArn}",
+                "Next": "CheckForNewSubscriptions",
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 60,
+                    "MaxAttempts": 20,
+                    "BackoffRate": 1.0
+                  }]
+              },
+              "CheckForNewSubscriptions": {
+                "Type": "Choice",
+                "Choices": [
+                  {
+                      "Variable": "$.recordCount",
+                      "NumericEquals": 0,
+                      "Next": "NoNewSubscriptions"
+                  }
+                ],
+                "Default": "UpdateDynamo"
+              },
+              "NoNewSubscriptions": {
+                "Type": "Pass",
+                "End": true
+              },
+              "UpdateDynamo": {
+                "Type": "Task",
+                "Resource": "${dynamoArn}",
+                "Next": "CheckProcessingComplete",
+                "Retry": [
+                   {
+                    "ErrorEquals": ["States.ALL"],
+                    "IntervalSeconds": 30,
+                    "MaxAttempts": 3,
+                    "BackoffRate": 1.0
+                  }]
+              },
+              "CheckProcessingComplete": {
+                "Type": "Choice",
+                "Choices": [
+                  {
+                      "Variable": "$.recordCount",
+                      "NumericGreaterThanPath": "$.processedCount",
+                      "Next": "UpdateDynamo"
+                  }
+                ],
+                "Default": "ProcessingComplete"
+              },
+              "ProcessingComplete": {
+                "Type": "Pass",
+                "End": true
+              }
+            }
+          }
+        - {
+          querierArn: !GetAtt [ QueryZuoraLambda, Arn ],
+          fetcherArn: !GetAtt [ FetchResultsLambda, Arn ],
+          dynamoArn: !GetAtt [ UpdateDynamoLambda, Arn ]
+        }
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
+  SupporterProductDataScheduledRule:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Description: "Trigger regular data synchronisation from Zuora"
+      ScheduleExpression: !FindInMap [StageVariables, !Ref Stage, scheduleRate]
+      State: "ENABLED"
+      Targets:
+        -
+          Arn: !Ref SupporterProductData
+          Id: !Sub trigger_supporter_product_data_state_machine-${Stage}
+          Input: |
+            {
+              "queryType":"incremental"
+            }
+          RoleArn: !GetAtt [ SupporterProductDataTriggerRole, Arn ]
+
+  SupporterProductDataTriggerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - events.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: TriggerStateMchine
+          PolicyDocument:
+            Version : "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - states:StartExecution
+                Resource: !Ref SupporterProductData
+
+  SupporterProductDataAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Join
+        - ' '
+        - - 'URGENT 9-5 -'
+          - !Ref 'Stage'
+          - 'Failed to extract supporter product data from Zuora'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - New subscribers will not get their digital benefits.'
+          - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
+      MetricName: ExecutionsFailed
+      Namespace: AWS/States
+      Dimensions:
+        - Name: StateMachineArn
+          Value: !Ref SupporterProductData
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 60
+      Statistic: Sum
+      TreatMissingData: notBreaching
+    DependsOn: SupporterProductData
+
+  CsvReadAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Join
+        - ' '
+        - - 'URGENT 9-5 -'
+          - !Ref 'Stage'
+          - 'There was a csv read failure when loading supporter product data into DynamoDB'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - On or more subscriber will not get their digital benefits'
+          - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
+      MetricName: CsvReadFailure
+      Namespace: supporter-product-data
+      Dimensions:
+        - Name: Environment
+          Value: PROD
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Average
+
+  DynamoWriteAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Join
+        - ' '
+        - - 'URGENT 9-5 -'
+          - !Ref 'Stage'
+          - 'There was a DynamoDB write failure when loading supporter product data into DynamoDB'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - On or more subscriber will not get their digital benefits'
+          - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
+      MetricName: DynamoWriteFailure
+      Namespace: supporter-product-data
+      Dimensions:
+        - Name: Environment
+          Value: PROD
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Average

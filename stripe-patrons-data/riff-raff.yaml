@@ -1,0 +1,18 @@
+stacks: [support]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: stripe-patrons-data
+    parameters:
+      templatePath: cfn.yaml
+  stripe-patrons-data:
+    type: aws-lambda
+    parameters:
+      bucket: stripe-patrons-data-dist
+      functionNames:
+        - "-SupporterProductDataQueryZuora-"
+        - "-SupporterProductDataFetchResults-"
+        - "-SupporterProductDataUpdateDynamo-"
+      fileName: stripe-patrons-data.jar
+    dependencies: [cfn]
