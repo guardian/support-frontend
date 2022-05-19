@@ -14,6 +14,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	setFirstName as setFirstNameGift,
+	setLastName as setLastNameGift,
 	setTitle as setTitleGift,
 } from 'helpers/redux/checkout/giftingState/actions';
 import {
@@ -161,13 +162,7 @@ const formActionCreators = {
 	setTelephone,
 	setTitleGift,
 	setFirstNameGift,
-	setLastNameGift: (
-		lastNameGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_LAST_NAME_GIFT',
-			lastNameGiftRecipient,
-		})),
+	setLastNameGift,
 	setEmailGift: (
 		emailGiftRecipient: string,
 	): FormSubmissionDependentValueThunk =>
