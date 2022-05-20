@@ -4,8 +4,8 @@
             "TS1208": 1,
             "TS2345": 21,
             "TS6133": 8,
-            "TS2322": 35,
-            "TS7006": 15,
+            "TS7006": 14,
+            "TS2322": 33,
             "TS2305": 3,
             "TS2314": 3,
             "TS7031": 7,
@@ -50,10 +50,9 @@
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
-            "assets/components/marketingConsent/marketingConsent.tsx": 1,
+            "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/page/page.tsx": 1,
             "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
-            "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx": 12,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
             "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
@@ -62,7 +61,6 @@
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/SepaForm.tsx": 1,
             "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 2,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
@@ -218,11 +216,65 @@
             "message": "'React' is declared but its value is never read."
         }
     ],
-    "TS2322": [
+    "TS7006": [
         {
-            "path": "assets/components/marketingConsent/marketingConsent.tsx",
-            "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
+            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
+            "message": "Parameter 'state' implicitly has an 'any' type."
         },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'r' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'result' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
+            "message": "Parameter 'key' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/__tests__/checkoutsTest.ts",
+            "message": "Parameter 'key' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/__tests__/promiseTest.ts",
+            "message": "Parameter 'done' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/helpers/__tests__/promiseTest.ts",
+            "message": "Parameter 'fail' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'searchText' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'content' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'node' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'element' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'originalState' implicitly has an 'any' type."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Parameter 'component' implicitly has an 'any' type."
+        }
+    ],
+    "TS2322": [
         {
             "path": "assets/components/page/page.tsx",
             "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
@@ -312,10 +364,6 @@
             "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
         },
         {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
-            "message": "Type '{ children: string; type: \"button\"; onClick: () => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
-        },
-        {
             "path": "assets/pages/contributions-landing/components/SepaForm.tsx",
             "message": "Type 'ReactNode' is not assignable to type 'Element'."
         },
@@ -358,68 +406,6 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'Omit<Pick<PropTypes, \"image\" | \"total\" | \"productPrices\" | \"billingPeriod\" | \"fulfilmentOption\" | \"productOption\" | \"digiSubPrice\" | \"includesDigiSub\"> & Partial<...> & Partial<...>, \"productPrices\" | ... 2 more ... | \"productOption\">'."
-        }
-    ],
-    "TS7006": [
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'e' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'r' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'result' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
-            "message": "Parameter 'key' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/__tests__/checkoutsTest.ts",
-            "message": "Parameter 'key' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/__tests__/promiseTest.ts",
-            "message": "Parameter 'done' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/__tests__/promiseTest.ts",
-            "message": "Parameter 'fail' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx",
-            "message": "Parameter 'response' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'searchText' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'content' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'node' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'element' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'originalState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
         }
     ],
     "TS2305": [
