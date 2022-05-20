@@ -1,19 +1,26 @@
 // ----- Imports ----- //
+
 import type { ContributionType } from 'helpers/contributions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
+
 // ---- Types ----- //
+
 type PropTypes = {
 	contributionType: ContributionType;
 	isRecurringContributor: boolean;
 	checkoutFormHasBeenSubmitted: boolean;
 };
+
 // ----- Component ----- //
-export function ExistingRecurringContributorErrorMessage(props: PropTypes) {
+
+export function ExistingRecurringContributorErrorMessage(
+	props: PropTypes,
+): JSX.Element | null {
 	const manageUrl =
 		'https://manage.theguardian.com/contributions?INTCMP=existing-contributor-from-support';
 
-	const onClick = (event) => {
+	const onClick = (event: React.MouseEvent) => {
 		event.preventDefault();
 		trackComponentClick('send-to-mma-already-contributor');
 		window.location.assign(manageUrl);

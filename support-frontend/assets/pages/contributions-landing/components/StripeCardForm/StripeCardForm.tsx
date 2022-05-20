@@ -7,7 +7,11 @@ import {
 	CardNumberElement,
 } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
-import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
+import type {
+	PaymentIntentResult,
+	StripeElementChangeEvent,
+	StripeError,
+} from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
@@ -38,10 +42,7 @@ import {
 	setStripeSetupIntentClientSecret,
 	updateRecaptchaToken,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type {
-	State,
-	Stripe3DSResult,
-} from 'pages/contributions-landing/contributionsLandingReducer';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
 import { StripeCardFormField } from './StripeCardFormField';
@@ -82,7 +83,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 		createStripePaymentMethod: (clientSecret: string | null) => void,
 	) => dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
 	setHandleStripe3DS: (
-		handleStripe3DS: (clientSecret: string) => Promise<Stripe3DSResult>,
+		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 	) => dispatch(setHandleStripe3DS(handleStripe3DS)),
 	setStripeCardFormComplete: (isComplete: boolean) =>
 		dispatch(setStripeCardFormComplete(isComplete)),
@@ -262,7 +263,7 @@ function CardForm(props: PropTypes) {
 					),
 				)
 					.then((json) => {
-						if (json.client_secret) {
+						if (json.client_secret && typeof json.client_secret === 'string') {
 							trackComponentLoad('contributions-recaptcha-verified');
 							props.setStripeSetupIntentClientSecret(json.client_secret);
 						} else {

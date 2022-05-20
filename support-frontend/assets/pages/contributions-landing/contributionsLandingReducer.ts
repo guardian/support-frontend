@@ -50,13 +50,6 @@ export interface StripePaymentRequestButtonData {
 	paymentError: ErrorReason | null;
 }
 
-export interface Stripe3DSResult {
-	error?: Record<string, any>;
-	paymentIntent: {
-		id: string;
-	};
-}
-
 export interface StripeCardFormData {
 	formComplete: boolean;
 	setupIntentClientSecret: string | null;

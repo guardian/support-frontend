@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-// @ts-expect-error
+
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -10,36 +10,42 @@ import Page from 'components/page/page';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { getPromotionCopy } from 'helpers/productPrice/promotions';
-import { renderPage } from 'helpers/rendering/render';
-import 'stylesheets/skeleton/skeleton.scss';
-import './paperSubscriptionLanding.scss';
-import { paperSubsUrl } from 'helpers/urls/routes';
-import PaperHero from './components/hero/hero';
-import Prices from './components/paperPrices';
-import Tabs from './components/tabs';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
+import { getPromotionCopy } from 'helpers/productPrice/promotions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { renderPage } from 'helpers/rendering/render';
+import { paperSubsUrl } from 'helpers/urls/routes';
+import PaperHero from './components/hero/hero';
+import Prices from './components/paperPrices';
+import Tabs from './components/tabs';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
+import 'stylesheets/skeleton/skeleton.scss';
+import './paperSubscriptionLanding.scss';
+
 // ----- Collection or delivery ----- //
+
 const reactElementId = 'paper-subscription-landing-page';
+
 // ----- Redux Store ----- //
+
 const paperSubsFooter = (
 	<Footer termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions" />
 );
+
 // ----- Render ----- //
+
 // ID for Selenium tests
 const pageQaId = 'qa-paper-subscriptions';
 
-const PaperLandingPage = ({
+function PaperLandingPage({
 	productPrices,
 	promotionCopy,
-}: PaperLandingPropTypes) => {
+}: PaperLandingPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
@@ -61,11 +67,7 @@ const PaperLandingPage = ({
 			product: 'Paper',
 			componentType: 'ACQUISITIONS_BUTTON',
 		})();
-		window.history.replaceState(
-			{},
-			null,
-			paperSubsUrl(newTab === HomeDelivery),
-		);
+		window.history.replaceState({}, '', paperSubsUrl(newTab === HomeDelivery));
 	}
 
 	return (
@@ -101,7 +103,7 @@ const PaperLandingPage = ({
 			</FullWidthContainer>
 		</Page>
 	);
-};
+}
 
 setUpTrackingAndConsents();
 const content = <PaperLandingPage {...paperLandingProps()} />;

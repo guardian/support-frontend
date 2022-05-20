@@ -27,7 +27,6 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 			page: pageReducer(initialState.common),
 			common: commonReducer,
 		}),
-		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
 	});
 	store.dispatch(setInitialCommonState(initialState.common));
