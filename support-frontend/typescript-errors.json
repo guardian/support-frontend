@@ -4,9 +4,9 @@
             "TS1208": 1,
             "TS2345": 27,
             "TS7006": 18,
-            "TS2322": 39,
+            "TS2322": 36,
             "TS6133": 7,
-            "TS2305": 6,
+            "TS2305": 3,
             "TS2314": 3,
             "TS7031": 7,
             "TS2304": 5,
@@ -56,9 +56,6 @@
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/components/headers/links/links.tsx": 1,
-            "assets/components/headers/mobileMenu/mobileMenu.tsx": 2,
-            "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx": 2,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
             "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
@@ -78,7 +75,6 @@
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
-            "assets/components/headers/header/mobileMenuToggler.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
@@ -300,18 +296,6 @@
             "message": "Type 'typeof MockDate' is not assignable to type 'DateConstructor'."
         },
         {
-            "path": "assets/components/headers/links/links.tsx",
-            "message": "Type '\"_blank\" | null' is not assignable to type 'HTMLAttributeAnchorTarget | undefined'."
-        },
-        {
-            "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
-            "message": "Type '{ width: number; } | null | undefined' is not assignable to type 'CSSProperties | undefined'."
-        },
-        {
-            "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
-            "message": "Type '{ children: any[]; 'aria-haspopup': Option<string>; onClick: Option<(...args: any[]) => any>; style: Option<{}>; className: string; ref: Option<(...args: any[]) => any>; }' is not assignable to type 'ClassAttributes<HTMLButtonElement> & ButtonHTMLAttributes<HTMLButtonElement> & { css?: Interpolation<Theme>; }'."
-        },
-        {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
             "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
         },
@@ -483,18 +467,6 @@
         }
     ],
     "TS2305": [
-        {
-            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/headers/mobileMenu/mobileMenu.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/headers/veggieBurgerButton/veggieBurgerButton.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
         {
             "path": "assets/components/product/productOptionSmall.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."

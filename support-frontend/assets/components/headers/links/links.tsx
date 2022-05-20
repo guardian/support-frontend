@@ -1,6 +1,4 @@
 import cx from 'classnames';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	countryGroups,
@@ -10,6 +8,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { routes } from 'helpers/urls/routes';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
+
 // types
 type HeaderNavLink = {
 	href: string;
@@ -20,11 +19,13 @@ type HeaderNavLink = {
 	include?: CountryGroupId[];
 	additionalClasses?: string;
 };
+
 type PropTypes = {
 	location: 'desktop' | 'mobile';
-	countryGroupId: CountryGroupId | null | undefined;
-	getRef: Option<(arg0: Element | null | undefined) => void>;
+	countryGroupId?: CountryGroupId;
+	getRef?: (element: Element | null) => void;
 };
+
 const links: HeaderNavLink[] = [
 	{
 		href: routes.showcase,
@@ -74,18 +75,18 @@ const links: HeaderNavLink[] = [
 ];
 
 function internationalisationID(
-	countryGroupId: CountryGroupId | null | undefined = null,
-): string | null | undefined {
+	countryGroupId?: CountryGroupId,
+): string | null {
 	if (countryGroupId != null) {
 		const group = countryGroups[countryGroupId];
-		return group ? group.supportInternationalisationId : null;
+		return group.supportInternationalisationId;
 	}
 
 	return null;
 }
 
 // Export
-const Links = ({ location, getRef, countryGroupId }: PropTypes) => {
+function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
 	return (
@@ -138,7 +139,7 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => {
 									})}
 									className="component-header-links__link"
 									href={href}
-									target={opensInNewWindow ? '_blank' : null}
+									target={opensInNewWindow ? '_blank' : ''}
 								>
 									{text}
 								</a>
@@ -148,9 +149,10 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => {
 			</ul>
 		</nav>
 	);
-};
+}
 
 Links.defaultProps = {
 	getRef: null,
 };
+
 export default Links;
