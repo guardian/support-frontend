@@ -32,13 +32,22 @@ const buttonStyles = css`
 `;
 
 // Types
-type PropTypes = PostcodeFinderState & {
-	setPostcode: (postcode: string) => void;
-	fetchResults: (postcode?: string) => void;
+
+export type PostcodeFinderAdditionalProps = {
 	onPostcodeUpdate: (newPostcode: string) => void;
 	onAddressUpdate: (result: PostcodeFinderResult) => void;
 	id: string;
 };
+
+// TODO: Sort this out with ConnectedProps once we've fixed the address Redux mess
+type PostcodeFinderDispatchProps = {
+	setPostcode: (postcode: string) => void;
+	fetchResults: (postcode?: string) => void;
+};
+
+export type PostcodeFinderProps = PostcodeFinderState &
+	PostcodeFinderDispatchProps &
+	PostcodeFinderAdditionalProps;
 
 // Helpers
 function InputWithButton({
@@ -82,7 +91,7 @@ function InputWithButton({
 	);
 }
 
-function PostcodeFinder(props: PropTypes): JSX.Element {
+function PostcodeFinder(props: PostcodeFinderProps): JSX.Element {
 	const {
 		id,
 		postcode,
@@ -136,10 +145,12 @@ function PostcodeFinder(props: PropTypes): JSX.Element {
 	);
 }
 
+export type PostcodeFinderComponentType = typeof PostcodeFinder;
+
 export const withStore = (
 	scope: AddressType,
 	mapStateToProps: (state: SubscriptionsState) => PostcodeFinderState,
-): ConnectedComponent<typeof PostcodeFinder, PropTypes> =>
+): ConnectedComponent<PostcodeFinderComponentType, PostcodeFinderProps> =>
 	connect(
 		mapStateToProps,
 		postcodeFinderActionCreatorsFor(scope),

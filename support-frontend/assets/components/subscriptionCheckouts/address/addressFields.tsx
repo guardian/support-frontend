@@ -5,10 +5,10 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-import { Component } from 'react';
-import * as React from 'react';
+import { useEffect, useState } from 'preact/hooks';
+import React from 'react';
+import type { ConnectedComponent } from 'react-redux';
 import { connect } from 'react-redux';
-import type { $Call } from 'utility-types';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import 'helpers/subscriptionsForms/addressType';
@@ -25,29 +25,34 @@ import {
 	getStateFormErrors,
 	isPostcodeOptional,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type {
+	PostcodeFinderComponentType,
+	PostcodeFinderProps,
+} from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { canShow } from 'hocs/canShow';
+import type { PostcodeFinderResult } from './postcodeLookup';
 
-type StatePropTypes<GlobalState> = FormFields & {
+type StatePropTypes = FormFields & {
 	countries: Record<string, string>;
 	scope: AddressType;
-	traverseState: (arg0: GlobalState) => AddressState;
+	traverseState: (arg0: SubscriptionsState) => AddressState;
 	formErrors: Array<FormError<FormField>>;
 };
 
-type PropTypes<GlobalState> = AddressActionCreators &
-	StatePropTypes<GlobalState>;
+type PropTypes = AddressActionCreators & StatePropTypes;
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -56,171 +61,163 @@ const marginBottom = css`
 const MaybeSelect = canShow(Select);
 const MaybeInput = canShow(TextInput);
 
-class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
-	static shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
-		return country === 'US' || country === 'CA' || country === 'AU';
+function shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
+	return country === 'US' || country === 'CA' || country === 'AU';
+}
+
+function shouldShowStateInput(country: Option<IsoCountry>): boolean {
+	return country !== 'GB' && !shouldShowStateDropdown(country);
+}
+
+function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
+	switch (country) {
+		case 'US':
+			return sortedOptions(usStates);
+
+		case 'CA':
+			return sortedOptions(caStates);
+
+		case 'AU':
+			return sortedOptions(auStates);
+
+		default:
+			return null;
 	}
+}
 
-	static shouldShowStateInput(country: Option<IsoCountry>): boolean {
-		return country !== 'GB' && !AddressFields.shouldShowStateDropdown(country);
-	}
+function AddressFields({ scope, traverseState, ...props }: PropTypes) {
+	const [PostcodeFinder, createPostCodeFinder] = useState<ConnectedComponent<
+		PostcodeFinderComponentType,
+		PostcodeFinderProps
+	> | null>(null);
+	const previousScope = usePrevious(scope);
 
-	static statesForCountry(country: Option<IsoCountry>): React.ReactNode {
-		switch (country) {
-			case 'US':
-				return sortedOptions(usStates);
-
-			case 'CA':
-				return sortedOptions(caStates);
-
-			case 'AU':
-				return sortedOptions(auStates);
-
-			default:
-				return null;
+	useEffect(() => {
+		if (previousScope !== scope) {
+			createPostCodeFinder(
+				postcodeFinderWithStore(scope, (state) =>
+					getPostcodeForm(traverseState(state)),
+				),
+			);
 		}
-	}
+	}, [previousScope, scope]);
 
-	constructor(props: PropTypes<GlobalState>) {
-		super(props);
-		this.regeneratePostcodeFinder();
-	}
+	return (
+		<div>
+			<Select
+				css={marginBottom}
+				id={`${scope}-country`}
+				label="Country"
+				value={props.country}
+				onChange={(e) => props.setCountry(e.target.value)}
+				error={firstError('country', props.formErrors)}
+			>
+				<OptionForSelect value="">Select a country</OptionForSelect>
+				{sortedOptions(props.countries)}
+			</Select>
+			{PostcodeFinder && props.country === 'GB' ? (
+				// @ts-expect-error TODO: when we fix the address scope mechanism we can have nice prop types
+				<PostcodeFinder
+					id={`${scope}-postcode`}
+					onPostcodeUpdate={props.setPostcode}
+					onAddressUpdate={({
+						lineOne,
+						lineTwo,
+						city,
+					}: PostcodeFinderResult) => {
+						if (lineOne) {
+							props.setAddressLineOne(lineOne);
+						}
 
-	componentDidUpdate(prevProps: PropTypes<GlobalState>) {
-		if (prevProps.scope !== this.props.scope) {
-			this.regeneratePostcodeFinder();
-		}
-	}
+						if (lineTwo) {
+							props.setAddressLineTwo(lineTwo);
+						}
 
-	regeneratePostcodeFinder() {
-		/*
-    this is done to prevent preact from re-rendering the whole component on each keystroke sadface
-    */
-		const { scope, traverseState } = this.props;
-		this.PostcodeFinder = postcodeFinderWithStore(scope, (state) =>
-			getPostcodeForm(traverseState(state)),
-		);
-	}
-
-	PostcodeFinder: $Call<
-		typeof postcodeFinderWithStore,
-		AddressType,
-		() => PostcodeFinderState
-	>;
-
-	render() {
-		const { scope, ...props } = this.props;
-		const { PostcodeFinder } = this;
-		return (
-			<div>
-				<Select
-					css={marginBottom}
-					id={`${scope}-country`}
-					label="Country"
-					value={props.country}
-					onChange={(e) => props.setCountry(e.target.value)}
-					error={firstError('country', props.formErrors)}
-				>
-					<OptionForSelect value="">Select a country</OptionForSelect>
-					{sortedOptions(props.countries)}
-				</Select>
-				{props.country === 'GB' ? (
-					<PostcodeFinder
-						id={`${scope}-postcode`}
-						onPostcodeUpdate={props.setPostcode}
-						onAddressUpdate={({ lineOne, lineTwo, city }) => {
-							if (lineOne) {
-								props.setAddressLineOne(lineOne);
-							}
-
-							if (lineTwo) {
-								props.setAddressLineTwo(lineTwo);
-							}
-
-							if (city) {
-								props.setTownCity(city);
-							}
-						}}
-					/>
-				) : null}
-				<TextInput
-					css={marginBottom}
-					id={`${scope}-lineOne`}
-					label="Address Line 1"
-					type="text"
-					value={props.lineOne}
-					onChange={(e) => props.setAddressLineOne(e.target.value)}
-					error={firstError('lineOne', props.formErrors)}
+						if (city) {
+							props.setTownCity(city);
+						}
+					}}
 				/>
-				<TextInput
-					css={marginBottom}
-					id={`${scope}-lineTwo`}
-					label="Address Line 2"
-					optional
-					type="text"
-					value={props.lineTwo}
-					onChange={(e) => props.setAddressLineTwo(e.target.value)}
-					error={firstError('lineTwo', props.formErrors)}
-				/>
-				<TextInput
-					css={marginBottom}
-					id={`${scope}-city`}
-					label="Town/City"
-					type="text"
-					maxlength={40}
-					value={props.city}
-					onChange={(e) => props.setTownCity(e.target.value)}
-					error={firstError('city', props.formErrors)}
-				/>
-				<MaybeSelect
-					css={marginBottom}
-					id={`${scope}-stateProvince`}
-					label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-					value={props.state}
-					onChange={(e) => props.setState(e.target.value)}
-					error={firstError('state', props.formErrors)}
-					isShown={AddressFields.shouldShowStateDropdown(props.country)}
-				>
+			) : null}
+			<TextInput
+				css={marginBottom}
+				id={`${scope}-lineOne`}
+				label="Address Line 1"
+				type="text"
+				value={props.lineOne ?? ''}
+				onChange={(e) => props.setAddressLineOne(e.target.value)}
+				error={firstError('lineOne', props.formErrors)}
+			/>
+			<TextInput
+				css={marginBottom}
+				id={`${scope}-lineTwo`}
+				label="Address Line 2"
+				optional
+				type="text"
+				value={props.lineTwo ?? ''}
+				onChange={(e) => props.setAddressLineTwo(e.target.value)}
+				error={firstError('lineTwo', props.formErrors)}
+			/>
+			<TextInput
+				css={marginBottom}
+				id={`${scope}-city`}
+				label="Town/City"
+				type="text"
+				maxLength={40}
+				value={props.city ?? ''}
+				onChange={(e) => props.setTownCity(e.target.value)}
+				error={firstError('city', props.formErrors)}
+			/>
+			<MaybeSelect
+				css={marginBottom}
+				id={`${scope}-stateProvince`}
+				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
+				value={props.state ?? ''}
+				onChange={(e) => props.setState(e.target.value)}
+				error={firstError('state', props.formErrors)}
+				isShown={shouldShowStateDropdown(props.country)}
+			>
+				<>
 					<OptionForSelect value="">{`Select a ${
 						props.country === 'CA' ? 'province/territory' : 'state'
 					}`}</OptionForSelect>
-					{AddressFields.statesForCountry(props.country)}
-				</MaybeSelect>
-				<MaybeInput
-					css={marginBottom}
-					id={`${scope}-stateProvince`}
-					label="State"
-					value={props.state}
-					onChange={(e) => props.setState(e.target.value)}
-					error={firstError('state', props.formErrors)}
-					optional
-					isShown={AddressFields.shouldShowStateInput(props.country)}
-				/>
-				<TextInput
-					css={marginBottom}
-					id={`${scope}-postcode`}
-					label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
-					type="text"
-					optional={isPostcodeOptional(props.country)}
-					value={props.postCode}
-					onChange={(e) => props.setPostcode(e.target.value)}
-					error={firstError('postCode', props.formErrors)}
-				/>
-			</div>
-		);
-	}
+					{statesForCountry(props.country)}
+				</>
+			</MaybeSelect>
+			<MaybeInput
+				css={marginBottom}
+				id={`${scope}-stateProvince`}
+				label="State"
+				value={props.state ?? ''}
+				onChange={(e) => props.setState(e.target.value)}
+				error={firstError('state', props.formErrors)}
+				optional
+				isShown={shouldShowStateInput(props.country)}
+			/>
+			<TextInput
+				css={marginBottom}
+				id={`${scope}-postcode`}
+				label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
+				type="text"
+				optional={isPostcodeOptional(props.country)}
+				value={props.postCode ?? ''}
+				onChange={(e) => props.setPostcode(e.target.value)}
+				error={firstError('postCode', props.formErrors)}
+			/>
+		</div>
+	);
 }
 
 export const withStore = (
 	countries: Record<string, string>,
 	scope: AddressType,
-	traverseState: (arg0: GlobalState) => AddressState,
-) =>
+	traverseState: (state: SubscriptionsState) => AddressState,
+): ConnectedComponent<typeof AddressFields, PropTypes> =>
 	connect(
-		(state: GlobalState) => ({
+		(state: SubscriptionsState) => ({
 			countries,
 			...getFormFields(traverseState(state)),
-			formErrors: getStateFormErrors(traverseState(state)) || [],
+			formErrors: getStateFormErrors(traverseState(state)),
 			traverseState,
 			scope,
 		}),
