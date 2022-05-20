@@ -5,8 +5,7 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-import { useMemo } from 'preact/hooks';
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { ConnectedComponent } from 'react-redux';
 import { connect } from 'react-redux';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
@@ -32,8 +31,8 @@ import {
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
-import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
@@ -43,7 +42,7 @@ import type { PostcodeFinderResult } from './postcodeLookup';
 type StatePropTypes = FormFields & {
 	countries: Record<string, string>;
 	scope: AddressType;
-	traverseState: (arg0: SubscriptionsState) => AddressState;
+	traverseState: (state: WithDeliveryCheckoutState) => AddressState;
 	formErrors: Array<FormError<FormField>>;
 };
 
@@ -199,10 +198,10 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 export const withStore = (
 	countries: Record<string, string>,
 	scope: AddressType,
-	traverseState: (state: SubscriptionsState) => AddressState,
-): ConnectedComponent<typeof AddressFields, Record<string, unknown>> =>
+	traverseState: (state: WithDeliveryCheckoutState) => AddressState,
+): ConnectedComponent<typeof AddressFields, Record<string, never>> =>
 	connect(
-		(state: SubscriptionsState) => ({
+		(state: WithDeliveryCheckoutState) => ({
 			countries,
 			...getFormFields(traverseState(state)),
 			formErrors: getStateFormErrors(traverseState(state)),

@@ -14,8 +14,8 @@ import { connect } from 'react-redux';
 import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import { postcodeFinderActionCreatorsFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 const root = css`
 	display: flex;
@@ -33,19 +33,19 @@ const buttonStyles = css`
 
 // Types
 
+// TODO: This can all be one props type in the future once this component stops talking to Redux
 export type PostcodeFinderAdditionalProps = {
 	onPostcodeUpdate: (newPostcode: string) => void;
 	onAddressUpdate: (result: PostcodeFinderResult) => void;
 	id: string;
 };
 
-// TODO: Sort this out with ConnectedProps once we've fixed the address Redux mess
 type PostcodeFinderDispatchProps = {
 	setPostcode: (postcode: string) => void;
 	fetchResults: (postcode?: string) => void;
 };
 
-export type PostcodeFinderProps = PostcodeFinderState &
+type PostcodeFinderProps = PostcodeFinderState &
 	PostcodeFinderDispatchProps &
 	PostcodeFinderAdditionalProps;
 
@@ -147,7 +147,7 @@ export type PostcodeFinderComponentType = typeof PostcodeFinder;
 
 export function withStore(
 	scope: AddressType,
-	mapStateToProps: (state: SubscriptionsState) => PostcodeFinderState,
+	mapStateToProps: (state: WithDeliveryCheckoutState) => PostcodeFinderState,
 ): ConnectedComponent<
 	PostcodeFinderComponentType,
 	PostcodeFinderAdditionalProps
