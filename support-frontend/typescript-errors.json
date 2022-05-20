@@ -19,7 +19,6 @@
             "TS2304": 2,
             "TS2554": 6,
             "TS2578": 7,
-            "TS2740": 8,
             "TS2741": 2,
             "TS2314": 1,
             "TS2525": 1,
@@ -47,10 +46,10 @@
             "assets/pages/digital-subscription-checkout/thankYouContainer.ts": 2,
             "assets/pages/digital-subscription-checkout/thankYouGift.tsx": 1,
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 3,
+            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx": 1,
             "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx": 2,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 3,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 3,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx": 1,
+            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx": 1,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/datePicker/datePickerHelpers.test.ts": 2,
             "assets/helpers/rendering/ssrPages.ts": 1,
@@ -74,7 +73,7 @@
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 2,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
@@ -94,7 +93,6 @@
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1
@@ -602,40 +600,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Unused '@ts-expect-error' directive."
-        }
-    ],
-    "TS2740": [
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.tsx",
-            "message": "Type '{}' is missing the following properties from type 'ActionCreators': setCountry, setAddressLineOne, setAddressLineTwo, setTownCity, and 2 more."
         }
     ],
     "TS2741": [

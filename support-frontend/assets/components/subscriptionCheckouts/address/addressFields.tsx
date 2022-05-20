@@ -26,8 +26,8 @@ import {
 	isPostcodeOptional,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type {
+	PostcodeFinderAdditionalProps,
 	PostcodeFinderComponentType,
-	PostcodeFinderProps,
 } from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { usePrevious } from 'helpers/customHooks/usePrevious';
@@ -52,7 +52,7 @@ type StatePropTypes = FormFields & {
 	formErrors: Array<FormError<FormField>>;
 };
 
-type PropTypes = AddressActionCreators & StatePropTypes;
+type PropTypes = StatePropTypes & AddressActionCreators;
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -88,7 +88,7 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 	const [PostcodeFinder, createPostCodeFinder] = useState<ConnectedComponent<
 		PostcodeFinderComponentType,
-		PostcodeFinderProps
+		PostcodeFinderAdditionalProps
 	> | null>(null);
 	const previousScope = usePrevious(scope);
 
@@ -116,7 +116,6 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 				{sortedOptions(props.countries)}
 			</Select>
 			{PostcodeFinder && props.country === 'GB' ? (
-				// @ts-expect-error TODO: when we fix the address scope mechanism we can have nice prop types
 				<PostcodeFinder
 					id={`${scope}-postcode`}
 					onPostcodeUpdate={props.setPostcode}
@@ -212,7 +211,7 @@ export const withStore = (
 	countries: Record<string, string>,
 	scope: AddressType,
 	traverseState: (state: SubscriptionsState) => AddressState,
-): ConnectedComponent<typeof AddressFields, PropTypes> =>
+): ConnectedComponent<typeof AddressFields, Record<string, unknown>> =>
 	connect(
 		(state: SubscriptionsState) => ({
 			countries,

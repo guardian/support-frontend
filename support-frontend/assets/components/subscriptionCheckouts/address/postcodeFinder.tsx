@@ -150,7 +150,10 @@ export type PostcodeFinderComponentType = typeof PostcodeFinder;
 export const withStore = (
 	scope: AddressType,
 	mapStateToProps: (state: SubscriptionsState) => PostcodeFinderState,
-): ConnectedComponent<PostcodeFinderComponentType, PostcodeFinderProps> =>
+): ConnectedComponent<
+	PostcodeFinderComponentType,
+	PostcodeFinderAdditionalProps
+> =>
 	connect(
 		mapStateToProps,
 		postcodeFinderActionCreatorsFor(scope),
