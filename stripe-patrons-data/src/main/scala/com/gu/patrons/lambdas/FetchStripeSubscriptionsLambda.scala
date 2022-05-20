@@ -18,23 +18,23 @@ class FetchStripeSubscriptionsLambda extends Handler[FetchResultsState, Unit] {
     Future.successful(())
 }
 
-object FetchStripeSubscriptionsLambda {
-  def fetchStripeSubscriptionsLambda = {
-    val runner = configurableFutureRunner(60.seconds)
-    for {
-      stripeConfig <- StripePatronsConfig.fromParameterStore(DEV)
-      stripeService = new StripeService(stripeConfig, runner)
-      subscriptions <- stripeService.getSubscriptions(3)
-
-      identityConfig <- PatronsIdentityConfig.fromParameterStore(DEV)
-      identityService = new PatronsIdentityService(identityConfig, runner)
-      identityIdsWithStatuses <- Future.sequence(
-        subscriptions.data.map(subscription =>
-          identityService
-            .getOrCreateUserFromEmail(subscription.customer.email, subscription.customer.name)
-            .map(id => IdentityIdWithStatus(id, subscription.status)),
-        ),
-      )
-    } yield identityIdsWithStatuses
-  }
-}
+//object FetchStripeSubscriptionsLambda {
+//  def fetchStripeSubscriptionsLambda = {
+//    val runner = configurableFutureRunner(60.seconds)
+//    for {
+//      stripeConfig <- StripePatronsConfig.fromParameterStore(DEV)
+//      stripeService = new StripeService(stripeConfig, runner)
+//      subscriptions <- stripeService.getSubscriptions(3)
+//
+//      identityConfig <- PatronsIdentityConfig.fromParameterStore(DEV)
+//      identityService = new PatronsIdentityService(identityConfig, runner)
+//      identityIdsWithStatuses <- Future.sequence(
+//        subscriptions.data.map(subscription =>
+//          identityService
+//            .getOrCreateUserFromEmail(subscription.customer.email, subscription.customer.name)
+//            .map(id => IdentityIdWithStatus(id, subscription.status)),
+//        ),
+//      )
+//    } yield identityIdsWithStatuses
+//  }
+//}

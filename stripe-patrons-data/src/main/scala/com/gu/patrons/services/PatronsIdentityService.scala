@@ -1,12 +1,13 @@
 package com.gu.patrons.services
 
+import cats.data.OptionT
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.patrons.conf.PatronsIdentityConfig
 import com.gu.patrons.model.identity._
 import com.gu.rest.WebServiceHelper
 import io.circe.syntax.EncoderOps
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHttpClient)
     extends WebServiceHelper[IdentityErrorResponse] {
@@ -19,22 +20,23 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
   def getOrCreateUserFromEmail(
       email: String,
       firstName: Option[String],
-  )(implicit ec: ExecutionContext) = {
-    getUserIdFromEmail(email)
-      .recoverWith {
-        case err: IdentityErrorResponse if err.errors.headOption.map(_.message).contains("Not found") =>
-          createUserIdFromEmailUser(email, firstName)
-      }
+  )(implicit ec: ExecutionContext): Future[String] = {
+    OptionT(getUserIdFromEmail(email))
+      .getOrElseF(createUserIdFromEmailUser(email, firstName))
   }
 
   def getUserIdFromEmail(
       email: String,
-  )(implicit ec: ExecutionContext) =
+  )(implicit ec: ExecutionContext): Future[Option[String]] =
     get[UserResponse](
       "user",
       Map("X-GU-ID-Client-Access-Token" -> s"Bearer ${config.apiClientToken}"),
       Map("emailAddress" -> email),
-    ).map(_.user.id)
+    ).map(response => Some(response.user.id))
+      .recover {
+        case err: IdentityErrorResponse if err.errors.headOption.map(_.message).contains("Not found") =>
+          None
+      }
 
   def createUserIdFromEmailUser(
       email: String,
@@ -52,6 +54,7 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
       body.asJson,
       Map("X-GU-ID-Client-Access-Token" -> s"Bearer ${config.apiClientToken}"),
       Map("accountVerificationEmail" -> "true"),
-    ).map(_.guestRegistrationRequest.userId)
+    ).map(response => response.guestRegistrationRequest.userId)
+
   }
 }

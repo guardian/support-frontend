@@ -1,9 +1,8 @@
 package com.gu.patrons.services
 
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.patrons.conf.{PatronsIdentityConfig, StripePatronsConfig}
+import com.gu.patrons.conf.PatronsIdentityConfig
 import com.gu.patrons.model.identity.IdentityErrorResponse
-import com.gu.rest.WebServiceClientError
 import com.gu.supporterdata.model.Stage.DEV
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -17,7 +16,7 @@ class PatronsIdentityServiceSpec extends AsyncFlatSpec with Matchers {
   "PatronsIdentityService" should "get an identity id from an email address" in {
     PatronsIdentityConfig.fromParameterStore(DEV).flatMap { config =>
       val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
-      service.getUserIdFromEmail("rupert.bates@guardian.co.uk").map(id => id.length should be > 0)
+      service.getUserIdFromEmail("rupert.bates@guardian.co.uk").map(id => id.isDefined shouldBe true)
     }
   }
 
@@ -44,7 +43,7 @@ class PatronsIdentityServiceSpec extends AsyncFlatSpec with Matchers {
       val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
       val email = s"${UUID.randomUUID()}@gu.com"
       service
-        .getOrCreateUserFromEmail(email, "", "")
+        .getOrCreateUserFromEmail(email, None)
         .map(id => id.length should be > 0)
     }
   }

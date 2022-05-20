@@ -4,6 +4,10 @@ import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
 
+scalacOptions ++= Seq(
+  "-Ymacro-annotations",
+)
+
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,

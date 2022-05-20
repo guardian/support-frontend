@@ -16,11 +16,21 @@ class StripeService(val config: StripePatronsConfig, client: FutureHttpClient)(i
     "Authorization" -> s"Bearer ${config.apiKey}",
   )
 
-  def getSubscriptions(pageSize: Int): Future[StripeSubscriptionsResponse] =
+  def getSubscriptions(
+      pageSize: Int = 10,
+      startingAfterId: Option[String] = None,
+      status: String = "active",
+  ): Future[StripeSubscriptionsResponse] = {
+    val startingAfter = startingAfterId.map(id => Map("starting_after" -> id))
     get[StripeSubscriptionsResponse](
       s"subscriptions",
       authHeader,
-      Map("expand[]" -> "data.customer", "limit" -> pageSize.toString),
+      Map(
+        "expand[]" -> "data.customer",
+        "status" -> status,
+        "limit" -> pageSize.toString,
+      ) ++ startingAfter.getOrElse(Nil),
     )
+  }
+
 }
-object StripeService {}

@@ -1,13 +1,17 @@
 package com.gu.patrons.model
 
 import io.circe.Decoder
+import io.circe.generic.extras.{Configuration, ConfiguredJsonCodec}
 import io.circe.generic.semiauto.deriveDecoder
 
+@ConfiguredJsonCodec
 case class StripeSubscription(id: String, customer: StripeCustomer, status: String)
 
+@ConfiguredJsonCodec
 case class StripeCustomer(id: String, name: Option[String], email: String)
 
-case class StripeSubscriptionsResponse(data: List[StripeSubscription])
+@ConfiguredJsonCodec
+case class StripeSubscriptionsResponse(data: List[StripeSubscription], hasMore: Boolean)
 
 //See docs here: https://stripe.com/docs/api/curl#errors
 case class StripeError(
@@ -27,15 +31,15 @@ case class StripeError(
 }
 
 object StripeSubscription {
-  implicit val decoder: Decoder[StripeSubscription] = deriveDecoder
+  implicit val customConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 }
 
 object StripeCustomer {
-  implicit val decoder: Decoder[StripeCustomer] = deriveDecoder
+  implicit val customConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 }
 
 object StripeSubscriptionsResponse {
-  implicit val decoder: Decoder[StripeSubscriptionsResponse] = deriveDecoder
+  implicit val customConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 }
 
 object StripeError {

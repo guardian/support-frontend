@@ -23,7 +23,6 @@ class ConfigServiceSpec extends AsyncFlatSpec with Matchers {
       .map { config =>
         config.apiClientToken.length should be > 0
         config.apiUrl shouldBe "https://idapi.code.dev-theguardian.com"
-        config.testUserSecret.length should be > 0
       }
   }
 

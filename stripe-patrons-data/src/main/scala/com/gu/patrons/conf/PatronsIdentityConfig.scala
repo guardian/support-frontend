@@ -5,7 +5,7 @@ import com.gu.supporterdata.model.Stage
 
 import scala.concurrent.ExecutionContext
 
-case class PatronsIdentityConfig(apiUrl: String, apiClientToken: String, testUserSecret: String)
+case class PatronsIdentityConfig(apiUrl: String, apiClientToken: String)
 
 object PatronsIdentityConfig extends ConfigService {
   def fromParameterStore(stage: Stage)(implicit ec: ExecutionContext) = {
@@ -13,7 +13,6 @@ object PatronsIdentityConfig extends ConfigService {
       PatronsIdentityConfig(
         findParameterOrThrow("api-url", params),
         findParameterOrThrow("api-token", params),
-        findParameterOrThrow("test-users-secret", params),
       )
     }
   }
