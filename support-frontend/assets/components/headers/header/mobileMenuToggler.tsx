@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { useRef, useState } from 'preact/hooks';
+import { useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
