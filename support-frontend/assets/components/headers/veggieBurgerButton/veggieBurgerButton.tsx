@@ -1,4 +1,4 @@
-import type { AriaAttributes, ReactNode } from 'react';
+import type { AriaAttributes, ReactNode, Ref } from 'react';
 import './veggieBurgerButton.scss';
 
 type PropTypes = {
@@ -6,20 +6,20 @@ type PropTypes = {
 	label: string;
 	'aria-haspopup'?: AriaAttributes['aria-haspopup'];
 	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	getRef?: (element: HTMLButtonElement | null) => void;
+	ref?: Ref<HTMLButtonElement>;
 	style?: Record<string, string | number>;
 };
 
 function VeggieBurgerButton({
 	children,
 	label,
-	getRef,
+	ref,
 	...otherProps
 }: PropTypes): JSX.Element {
 	return (
 		<button
 			className="component-veggie-burger-button"
-			ref={getRef}
+			ref={ref}
 			{...otherProps}
 		>
 			<span className="visually-hidden">{label}</span>

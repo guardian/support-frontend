@@ -4,10 +4,9 @@
             "TS1208": 1,
             "TS2345": 27,
             "TS7006": 18,
-            "TS2322": 37,
+            "TS2322": 36,
             "TS6133": 7,
-            "TS2305": 4,
-            "TS2416": 1,
+            "TS2305": 3,
             "TS2314": 3,
             "TS7031": 7,
             "TS2304": 5,
@@ -57,7 +56,6 @@
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton.tsx": 2,
             "assets/pages/contributions-landing/components/ExistingRecurringContributorErrorMessage.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
-            "assets/components/headers/header/mobileMenuToggler.tsx": 3,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
             "assets/components/page/page.tsx": 1,
             "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
@@ -298,10 +296,6 @@
             "message": "Type 'typeof MockDate' is not assignable to type 'DateConstructor'."
         },
         {
-            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
-            "message": "Type 'null' is not assignable to type 'Position | undefined'."
-        },
-        {
             "path": "assets/components/marketingConsent/marketingConsent.tsx",
             "message": "Type '{ children: string; appearance: \"green\"; iconSide: \"right\"; \"aria-label\": string; onClick: () => void; icon: Element; }' is not assignable to type 'IntrinsicAttributes & Pick<PropTypes, \"children\" | \"getRef\" | \"postDeploymentTestID\"> & Partial<Pick<PropTypes, \"type\" | \"disabled\" | ... 4 more ... | \"icon\">> & Partial<...>'."
         },
@@ -474,10 +468,6 @@
     ],
     "TS2305": [
         {
-            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
             "path": "assets/components/product/productOptionSmall.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
         },
@@ -488,12 +478,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
             "message": "Module '\"react\"' has no exported member 'Node'."
-        }
-    ],
-    "TS2416": [
-        {
-            "path": "assets/components/headers/header/mobileMenuToggler.tsx",
-            "message": "Property 'state' in type 'MobileMenuToggler' is not assignable to the same property in base type 'Component<{ utility: Node; links: Node; }, { menuOpen: boolean; buttonPosition: Position; }, any>'."
         }
     ],
     "TS2314": [
