@@ -10,7 +10,7 @@ class PromotionTermsSpec extends AsyncFlatSpec with Matchers {
   "PromotionTerms object" should "be able to extract the promotion terms from a Promotion" in {
     val promotionTerms = PromotionTerms
       .promotionTermsFromPromotion(PROD)(
-        PromotionWithCode(DefaultPromotions.GuardianWeekly.NonGift.tenAnnual, guardianWeeklyAnnual),
+        PromotionWithCode(DefaultPromotionsService.GuardianWeekly.NonGift.tenAnnual, guardianWeeklyAnnual),
       )
     promotionTerms.productRatePlans.length shouldBe 2
   }

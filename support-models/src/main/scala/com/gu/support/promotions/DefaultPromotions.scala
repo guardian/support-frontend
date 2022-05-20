@@ -32,12 +32,7 @@ object DefaultPromotions {
     }
     object NonGift {
       val sixForSix = "6FOR6"
-      val tenAnnual = "10ANNUAL"
-      val ausElection = "AUELECT50"
-      def all = List(sixForSix, ausElection, tenAnnual)
     }
-
-    def all = Gift.all ++ NonGift.all
   }
 
 }

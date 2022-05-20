@@ -6,8 +6,8 @@ import assets.AssetsResolver
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.DefaultPromotions
+import services.pricing.PriceSummaryServiceProvider
+import com.gu.support.promotions.{DefaultPromotions}
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
 import play.api.mvc._
@@ -53,12 +53,7 @@ class WeeklySubscriptionFormController(
     val csrf = CSRF.getToken.value
 
     val uatMode = testUsers.isTestUser(request)
-    val defaultPromos =
-      if (orderIsAGift)
-        DefaultPromotions.GuardianWeekly.Gift.all
-      else
-        DefaultPromotions.GuardianWeekly.NonGift.all
-    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++ defaultPromos
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val readerType = if (orderIsAGift) Gift else Direct
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
 

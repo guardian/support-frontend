@@ -6,7 +6,7 @@ import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.PayPalConfigProvider
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import com.gu.support.promotions._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.StringsConfig

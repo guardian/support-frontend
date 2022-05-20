@@ -3,7 +3,7 @@ package com.gu.support.promotions
 import com.gu.support.catalog._
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.config.TouchPointEnvironments.PROD
-import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
+import com.gu.support.promotions.DefaultPromotionsService.GuardianWeekly.NonGift
 import com.gu.support.workers.Annual
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}

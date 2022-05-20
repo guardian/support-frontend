@@ -6,7 +6,7 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.pricing.PriceSummaryServiceProvider
+import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
 import play.api.mvc._

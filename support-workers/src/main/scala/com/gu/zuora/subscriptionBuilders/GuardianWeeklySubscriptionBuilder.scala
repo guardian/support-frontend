@@ -2,7 +2,7 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
+import com.gu.support.promotions.{DefaultPromotionsService, PromoCode, PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
 import com.gu.support.workers.{BillingPeriod, SixWeekly}
@@ -92,7 +92,7 @@ class GuardianWeeklySubscriptionBuilder(
   }
 
   private[this] def isIntroductoryPromotion(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode]) =
-    maybePromoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix) && billingPeriod == SixWeekly
+    maybePromoCode.contains(DefaultPromotionsService.GuardianWeekly.NonGift.sixForSix) && billingPeriod == SixWeekly
 
 }
 object GuardianWeeklySubscriptionBuilder {

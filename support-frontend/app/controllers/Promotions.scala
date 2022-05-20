@@ -6,7 +6,7 @@ import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper}
 import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.pricing.PriceSummaryServiceProvider
+import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.{PromoCode, PromotionServiceProvider, PromotionTerms}
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}

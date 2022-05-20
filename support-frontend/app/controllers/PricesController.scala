@@ -2,21 +2,14 @@ package controllers
 
 import actions.CustomActionBuilders
 import com.gu.i18n.{CountryGroup, Currency}
-import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider, ProductPrices}
+import services.pricing.{PriceSummary, PriceSummaryServiceProvider, ProductPrices}
 import io.circe.Encoder
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import PricesController._
 import com.gu.i18n.Currency.{AUD, CAD, EUR, GBP, NZD, USD}
-import com.gu.support.catalog.{
-  DigitalPack,
-  Domestic,
-  FulfilmentOptions,
-  GuardianWeekly,
-  NoFulfilmentOptions,
-  NoProductOptions,
-}
+import com.gu.support.catalog.{DigitalPack, Domestic, FulfilmentOptions, GuardianWeekly, NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers.{Annual, Monthly}
 import com.gu.support.zuora.api.ReaderType.Direct
@@ -91,7 +84,7 @@ class PricesController(
   ): CountryGroupPriceData = {
     val guardianWeeklyProductPrices = priceSummaryServiceProvider
       .forUser(false)
-      .getPrices(GuardianWeekly, DefaultPromotions.GuardianWeekly.NonGift.all, Direct)
+      .getPrices(GuardianWeekly, Nil, Direct)
     val digisubProductPrices = priceSummaryServiceProvider
       .forUser(false)
       .getPrices(DigitalPack, DefaultPromotions.DigitalSubscription.all, Direct)

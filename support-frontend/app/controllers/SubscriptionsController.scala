@@ -8,7 +8,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.catalog._
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider}
+import services.pricing.{PriceSummary, PriceSummaryServiceProvider}
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift.ausElection
 import com.gu.support.workers.Monthly
