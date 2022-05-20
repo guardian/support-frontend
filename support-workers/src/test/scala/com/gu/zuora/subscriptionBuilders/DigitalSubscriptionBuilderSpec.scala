@@ -132,6 +132,48 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     )
   }
 
+  "SubscriptionData for a Monthly subscription with a non-Patron PromoCode" should "be correct" in {
+    val aPromotion = mock[Promotion]
+    val pwc = PromotionWithCode("NOTAPATRONPROMO", aPromotion)
+
+    when(promotionService.findPromotion(ArgumentMatchers.eq("NOTAPATRONPROMO"))).thenReturn(Right(pwc))
+
+    when(
+      promotionService.applyPromotion(
+        ArgumentMatchers.eq(pwc),
+        ArgumentMatchers.eq(Country.UK),
+        ArgumentMatchers.eq("2c92c0f84bbfec8b014bc655f4852d9d"),
+        any(),
+        ArgumentMatchers.eq(false),
+      ),
+    ).thenAnswer { i =>
+      {
+        val sd = i.getArgument[SubscriptionData](3)
+        val patchedSubscription = sd.subscription.copy(promoCode = Some(pwc.promoCode))
+        Right(sd.copy(subscription = patchedSubscription))
+      }
+    }
+
+    monthlyWithPromo.subscriptionData shouldBe SubscriptionData(
+      List(RatePlanData(RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"), List(), List())),
+      Subscription(
+        contractAcceptanceDate = saleDate.plusDays(16),
+        contractEffectiveDate = saleDate,
+        termStartDate = saleDate,
+        createdRequestId = "f7651338-5d94-4f57-85fd-262030de9ad5",
+        autoRenew = true,
+        initialTermPeriodType = Month,
+        initialTerm = 12,
+        renewalTerm = 12,
+        termType = "TERMED",
+        readerType = ReaderType.Direct,
+        promoCode = Some("NOTAPATRONPROMO"),
+        redemptionCode = None,
+        corporateAccountId = None,
+      ),
+    )
+  }
+
   "SubscriptionData for a Monthly subscription with a Patron PromoCode" should "be correct" in {
     val aPromotion = mock[Promotion]
     val pwc = PromotionWithCode("FOOPATRON", aPromotion)
@@ -341,6 +383,23 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     .toOption
     .get
     .subscriptionData
+
+  lazy val monthlyWithPromo =
+    subscriptionDirectPurchaseBuilder
+      .build(
+        DigitalSubscriptionDirectPurchaseState(
+          Country.UK,
+          DigitalPack(GBP, Monthly),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
+          Some("NOTAPATRONPROMO"),
+          SalesforceContactRecord("", ""),
+        ),
+        None,
+        None,
+        None,
+      )
+      .toOption
+      .get
 
   lazy val monthlyPatron =
     subscriptionDirectPurchaseBuilder

@@ -27,7 +27,7 @@ class GuardianWeeklySubscriptionBuilder(
 
     val contractEffectiveDate = dateGenerator.today
 
-    val readerType = determineReaderType(state)
+    val readerType = if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct
 
     val recurringProductRatePlanId =
       validateRatePlan(weeklyRatePlan(state.product, environment, readerType), state.product.describe)
@@ -50,7 +50,7 @@ class GuardianWeeklySubscriptionBuilder(
       recurringProductRatePlanId,
       contractAcceptanceDate = state.firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
-      readerType = readerType,
+      readerType = ReaderType.impliedBySomePromoCode(state.promoCode) getOrElse readerType,
       autoRenew = autoRenew,
       initialTerm = initialTerm,
       initialTermPeriodType = initialTermPeriodType,
@@ -89,14 +89,6 @@ class GuardianWeeklySubscriptionBuilder(
         Some(state.paymentMethod),
         Some(soldToContact),
       )
-    }
-  }
-
-  private[this] def determineReaderType(state: GuardianWeeklyState): ReaderType = {
-    if (state.giftRecipient.isDefined) {
-      Gift
-    } else {
-      ReaderType.impliedBySomePromoCode(state.promoCode) getOrElse Direct
     }
   }
 
