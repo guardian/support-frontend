@@ -1,6 +1,7 @@
 package com.gu.patrons.services
 
 import com.gu.patrons.model.{StripeSubscription, StripeSubscriptionsResponse}
+import com.gu.supporterdata.model.SupporterRatePlanItem
 
 import scala.annotation.tailrec
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,38 +28,25 @@ class StripeIterable(stripeService: StripeService, identityService: PatronsIdent
   def processSubs(list: List[StripeSubscription]): Unit =
     list
       .filterNot(sub =>
-        sub.customer.email.contains("@guardian.co.uk") || sub.customer.email
-          .contains("@theguardian.com") || sub.status == "active",
+        sub.customer.email.contains("@guardian.co.uk") || sub.customer.email.contains("@theguardian.com"),
       )
       .foreach { sub =>
         identityService
-          .getOrCreateUserFromEmail(sub.customer.email, sub.customer.name)
-          // .getUserIdFromEmail(sub.customer.email)
-          .map(identityId => System.out.println(s"${sub.customer.email} $identityId ${sub.status}"))
+          // .getOrCreateUserFromEmail(sub.customer.email, sub.customer.name)
+          .getUserIdFromEmail(sub.customer.email)
+          .map { identityId =>
+            System.out.println(
+              s"${sub.customer.email} $identityId ${sub.status} ${sub.created.toString} ${sub.currentPeriodEnd.toString}",
+            )
+            SupporterRatePlanItem(
+              sub.id,
+              identityId.getOrElse(""),
+              None,
+              "guardian_patron",
+              "Guardian Patron",
+              sub.currentPeriodEnd,
+              sub.created,
+            )
+          }
       }
-
-//    final def processFutureResponse(
-//      hasMore: Boolean = true,
-//      lastId: Option[String] = None,
-//    ): Future[Unit] = {
-//      if (!hasMore)
-//        Future.successful(())
-//      else
-//        stripeService.getSubscriptions(startingAfterId = lastId).flatMap { response =>
-//          processSubs(response.data)
-//          processFutureResponse(response.hasMore, Some(response.data.last.id))
-//        }
-//    }
-
-//  def processResponse(stripeSubscriptionsResponse: StripeSubscriptionsResponse) = {
-//    processSubs(stripeSubscriptionsResponse.data)
-//    if (stripeSubscriptionsResponse.hasMore) {
-//      // TODO tailrec
-//      processFutureResponse(
-//        stripeService.getSubscriptions(startingAfterId = Some(stripeSubscriptionsResponse.data.last.id)),
-//      )
-//    } else
-//      Future.successful(())
-//  }
-
 }
