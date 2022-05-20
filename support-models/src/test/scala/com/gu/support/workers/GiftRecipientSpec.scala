@@ -18,14 +18,20 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "giftRecipientType": "DigitalSubscription",
         |  "firstName": "bob",
         |  "lastName": "builder",
-        |  "email": "bob@gu.com",
+        |  "email": "bob@theguardian.com",
         |  "deliveryDate": "2020-10-02"
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
     actual should be(
       Right(
-        GiftRecipient.DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", None, new LocalDate(2020, 10, 2)),
+        GiftRecipient.DigitalSubscriptionGiftRecipient(
+          "bob",
+          "builder",
+          "bob@theguardian.com",
+          None,
+          new LocalDate(2020, 10, 2),
+        ),
       ),
     )
   }
@@ -50,18 +56,18 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "giftRecipientType": "Weekly",
         |  "firstName": "bob",
         |  "lastName": "builder",
-        |  "email": "bob@gu.com"
+        |  "email": "bob@theguardian.com"
         |}
         |""".stripMargin
     val actual = decode[GiftRecipient](json)
-    actual should be(Right(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@gu.com"))))
+    actual should be(Right(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@theguardian.com"))))
   }
 
   it should "serialise DS" in {
     val data = GiftRecipient.DigitalSubscriptionGiftRecipient(
       "bob",
       "builder",
-      "bob@gu.com",
+      "bob@theguardian.com",
       Some("message"),
       new LocalDate(2020, 10, 2),
     )
@@ -71,7 +77,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "giftRecipientType": "DigitalSubscription",
         |  "firstName": "bob",
         |  "lastName": "builder",
-        |  "email": "bob@gu.com",
+        |  "email": "bob@theguardian.com",
         |  "message": "message",
         |  "deliveryDate" : "2020-10-02"
         |}
@@ -80,7 +86,7 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "serialise Weekly gift" in {
-    val data = GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com"))
+    val data = GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@theguardian.com"))
     val expected =
       """
         |{
@@ -88,19 +94,21 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
         |  "title": "Mx",
         |  "firstName": "bob",
         |  "lastName": "builder",
-        |  "email": "bob@gu.com"
+        |  "email": "bob@theguardian.com"
         |}
         |""".stripMargin
     data.asJson should be(parse(expected).right.get)
   }
 
   it should "roundtrip ok" in {
-    testRoundTripSerialisation(GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com")))
+    testRoundTripSerialisation(
+      GiftRecipient.WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@theguardian.com")),
+    )
     testRoundTripSerialisation(
       GiftRecipient.DigitalSubscriptionGiftRecipient(
         "bob",
         "builder",
-        "bob@gu.com",
+        "bob@theguardian.com",
         Some("message"),
         new LocalDate(2020, 10, 2),
       ),
@@ -109,10 +117,16 @@ class GiftRecipientSpec extends AnyFlatSpec with Matchers {
 
   it should "roundtrip ok via parent" in {
     testRoundTripSerialisationViaParent[GiftRecipient, WeeklyGiftRecipient](
-      WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@gu.com")),
+      WeeklyGiftRecipient(Some(Title.Mx), "bob", "builder", Some("bob@theguardian.com")),
     )
     testRoundTripSerialisationViaParent[GiftRecipient, DigitalSubscriptionGiftRecipient](
-      DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
+      DigitalSubscriptionGiftRecipient(
+        "bob",
+        "builder",
+        "bob@theguardian.com",
+        Some("message"),
+        new LocalDate(2020, 10, 2),
+      ),
     )
   }
 
