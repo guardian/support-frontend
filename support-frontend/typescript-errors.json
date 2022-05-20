@@ -5,7 +5,7 @@
             "TS2345": 18,
             "TS6133": 7,
             "TS7006": 10,
-            "TS2322": 21,
+            "TS2322": 17,
             "TS2305": 3,
             "TS2769": 3,
             "TS2739": 3,
@@ -47,16 +47,13 @@
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/page/page.tsx": 1,
-            "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
-            "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/canShow.tsx": 1,
             "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 2,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
@@ -241,20 +238,12 @@
             "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
         },
         {
-            "path": "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
-        },
-        {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
             "message": "Type '{ children: Element[]; legend: string; role: \"radiogroup\"; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioGroupProps'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
             "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioProps'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
         },
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -279,14 +268,6 @@
         {
             "path": "assets/hocs/withLabel.tsx",
             "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
-            "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"csrf\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
         },
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
