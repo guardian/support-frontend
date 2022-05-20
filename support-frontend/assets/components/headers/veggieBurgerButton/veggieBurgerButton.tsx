@@ -1,15 +1,13 @@
-import type { Node } from 'react';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
+import type { AriaAttributes, ReactNode } from 'react';
 import './veggieBurgerButton.scss';
 
 type PropTypes = {
-	children: Node;
+	children: ReactNode;
 	label: string;
-	'aria-haspopup': Option<string>;
-	onClick: Option<(...args: any[]) => any>;
-	getRef: Option<(...args: any[]) => any>;
-	style: Option<{}>;
+	'aria-haspopup'?: AriaAttributes['aria-haspopup'];
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	getRef?: (element: HTMLButtonElement | null) => void;
+	style?: Record<string, string | number>;
 };
 
 function VeggieBurgerButton({
@@ -17,7 +15,7 @@ function VeggieBurgerButton({
 	label,
 	getRef,
 	...otherProps
-}: PropTypes) {
+}: PropTypes): JSX.Element {
 	return (
 		<button
 			className="component-veggie-burger-button"
@@ -31,10 +29,7 @@ function VeggieBurgerButton({
 }
 
 VeggieBurgerButton.defaultProps = {
-	'aria-haspopup': null,
-	// eslint-disable-line react/default-props-match-prop-types
-	onClick: null,
-	style: null,
-	getRef: null,
+	'aria-haspopup': false,
 };
+
 export default VeggieBurgerButton;
