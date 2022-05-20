@@ -91,19 +91,17 @@ function InputWithButton({
 	);
 }
 
-function PostcodeFinder(props: PostcodeFinderProps): JSX.Element {
-	const {
-		id,
-		postcode,
-		results,
-		isLoading,
-		setPostcode,
-		fetchResults,
-		error,
-		onPostcodeUpdate,
-		onAddressUpdate,
-	} = props;
-
+function PostcodeFinder({
+	id,
+	postcode,
+	results,
+	isLoading,
+	setPostcode,
+	fetchResults,
+	error,
+	onPostcodeUpdate,
+	onAddressUpdate,
+}: PostcodeFinderProps): JSX.Element {
 	return (
 		<div>
 			<InputWithButton
@@ -147,14 +145,15 @@ function PostcodeFinder(props: PostcodeFinderProps): JSX.Element {
 
 export type PostcodeFinderComponentType = typeof PostcodeFinder;
 
-export const withStore = (
+export function withStore(
 	scope: AddressType,
 	mapStateToProps: (state: SubscriptionsState) => PostcodeFinderState,
 ): ConnectedComponent<
 	PostcodeFinderComponentType,
 	PostcodeFinderAdditionalProps
-> =>
-	connect(
+> {
+	return connect(
 		mapStateToProps,
 		postcodeFinderActionCreatorsFor(scope),
 	)(PostcodeFinder);
+}

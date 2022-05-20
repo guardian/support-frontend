@@ -5,7 +5,7 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-import { useEffect, useState } from 'preact/hooks';
+import { useMemo } from 'preact/hooks';
 import React from 'react';
 import type { ConnectedComponent } from 'react-redux';
 import { connect } from 'react-redux';
@@ -25,12 +25,7 @@ import {
 	getStateFormErrors,
 	isPostcodeOptional,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import type {
-	PostcodeFinderAdditionalProps,
-	PostcodeFinderComponentType,
-} from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
@@ -86,21 +81,15 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 }
 
 function AddressFields({ scope, traverseState, ...props }: PropTypes) {
-	const [PostcodeFinder, createPostCodeFinder] = useState<ConnectedComponent<
-		PostcodeFinderComponentType,
-		PostcodeFinderAdditionalProps
-	> | null>(null);
-	const previousScope = usePrevious(scope);
-
-	useEffect(() => {
-		if (previousScope !== scope) {
-			createPostCodeFinder(
-				postcodeFinderWithStore(scope, (state) =>
-					getPostcodeForm(traverseState(state)),
-				),
-			);
-		}
-	}, [previousScope, scope]);
+	// TODO: No need to memoise once we can make this an unconnected component that only accepts props,
+	// rather than requiring a store connection and address type scope
+	const PostcodeFinder = useMemo(
+		() =>
+			postcodeFinderWithStore(scope, (state) =>
+				getPostcodeForm(traverseState(state)),
+			),
+		[scope],
+	);
 
 	return (
 		<div>
@@ -115,7 +104,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
 			</Select>
-			{PostcodeFinder && props.country === 'GB' ? (
+			{props.country === 'GB' ? (
 				<PostcodeFinder
 					id={`${scope}-postcode`}
 					onPostcodeUpdate={props.setPostcode}
