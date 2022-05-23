@@ -3,7 +3,7 @@ package com.gu.acquisitions
 import com.gu.i18n.Country
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, QueryParameter}
 import com.gu.support.catalog._
-import com.gu.support.promotions.{DefaultPromotionsService, PromoCode}
+import com.gu.support.promotions.{DefaultPromotions, PromoCode}
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.workers.{
@@ -254,7 +254,7 @@ object AcquisitionDataRowBuilder {
   private def isSixForSix(state: SendAcquisitionEventState) =
     state.sendThankYouEmailState match {
       case s: SendThankYouEmailGuardianWeeklyState =>
-        s.product.billingPeriod == SixWeekly && s.promoCode.contains(DefaultPromotionsService.GuardianWeekly.NonGift.sixForSix)
+        s.product.billingPeriod == SixWeekly && s.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
       case _ => false
     }
 
