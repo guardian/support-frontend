@@ -9,7 +9,7 @@
             "TS2314": 2,
             "TS7031": 7,
             "TS2304": 5,
-            "TS2741": 3,
+            "TS2741": 2,
             "TS2564": 1,
             "TS2769": 3,
             "TS2305": 1,
@@ -68,7 +68,6 @@
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/components/subscriptionCheckouts/address/postcodeFinderStore.ts": 1,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
@@ -480,10 +479,6 @@
         {
             "path": "assets/components/subscriptionCheckouts/address/postcodeFinder.tsx",
             "message": "Property 'label' is missing in type '{ onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void; css: SerializedStyles; name: string; width: 10; }' but required in type 'TextInputProps'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
-            "message": "Property 'isPatron' is missing in type '{ priceDescription: string; promotion: string; orderIsAGift: boolean; digitalGiftBillingPeriod: \"Annual\" | \"Quarterly\"; price: string; }' but required in type 'EndSummaryProps'."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
