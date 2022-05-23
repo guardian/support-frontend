@@ -4,7 +4,7 @@
             "TS1208": 1,
             "TS2345": 21,
             "TS6133": 8,
-            "TS2322": 36,
+            "TS2322": 35,
             "TS7006": 15,
             "TS2305": 3,
             "TS2314": 3,
@@ -47,7 +47,7 @@
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 2,
+            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/marketingConsent/marketingConsent.tsx": 1,
@@ -338,10 +338,6 @@
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "Type 'string | undefined' is not assignable to type 'string | null'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",

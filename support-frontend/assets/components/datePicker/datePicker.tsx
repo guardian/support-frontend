@@ -47,7 +47,7 @@ const marginTop = css`
 	margin-top: ${space[5]}px;
 `;
 type PropTypes = {
-	value: string | null;
+	value?: string;
 	onChange: (...args: any[]) => any;
 };
 type StateTypes = {
