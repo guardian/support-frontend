@@ -3,6 +3,10 @@
 export interface AmazonLoginObject {
 	setClientId: (clientId: string) => void;
 	setSandboxMode: (sandboxMode: boolean) => void;
+	authorize: (
+		login: { scope: string; popup: boolean },
+		cb: (response: { error?: string }) => void,
+	) => void;
 }
 
 export interface AmazonObject {

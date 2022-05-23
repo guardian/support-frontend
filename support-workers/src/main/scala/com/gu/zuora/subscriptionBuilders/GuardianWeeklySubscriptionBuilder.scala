@@ -6,6 +6,7 @@ import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, Prom
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
 import com.gu.support.workers.{BillingPeriod, SixWeekly}
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
@@ -36,7 +37,7 @@ class GuardianWeeklySubscriptionBuilder(
     } else recurringProductRatePlanId
 
     val (initialTerm, autoRenew, initialTermPeriodType) =
-      if (readerType == ReaderType.Gift)
+      if (readerType == Gift)
         (
           initialTermInDays(contractEffectiveDate, state.firstDeliveryDate, state.product.billingPeriod.monthsInPeriod),
           false,
@@ -49,7 +50,7 @@ class GuardianWeeklySubscriptionBuilder(
       recurringProductRatePlanId,
       contractAcceptanceDate = state.firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
-      readerType = readerType,
+      readerType = ReaderType.impliedBySomePromoCode(state.promoCode) getOrElse readerType,
       autoRenew = autoRenew,
       initialTerm = initialTerm,
       initialTermPeriodType = initialTermPeriodType,

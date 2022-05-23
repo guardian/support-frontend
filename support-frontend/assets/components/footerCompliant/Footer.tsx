@@ -38,7 +38,7 @@ function Footer({
 	}
 
 	return (
-		<footer css={componentFooter} role="contentinfo">
+		<footer id="qa-footer" css={componentFooter} role="contentinfo">
 			<ThemeProvider theme={linkThemeBrand}>
 				{Children.count(children) > 0 && (
 					<FooterContent
