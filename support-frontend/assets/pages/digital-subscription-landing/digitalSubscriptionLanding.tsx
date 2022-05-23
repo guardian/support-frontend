@@ -7,7 +7,6 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { Provider } from 'react-redux';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
-import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import InteractiveTable from 'components/interactiveTable/interactiveTable';
 import Block from 'components/page/block';
@@ -42,6 +41,7 @@ import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContain
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
+import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import {
 	footer,
 	getRows,

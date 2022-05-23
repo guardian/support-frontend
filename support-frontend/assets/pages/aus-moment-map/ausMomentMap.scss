@@ -70,6 +70,12 @@ body {
 	}
 }
 
+.testimonial-cta-header {
+	padding: 2px;
+	background-color: #ffe500;
+	box-shadow: 2px 0 0 #ffe500, -2px 0 0 #ffe500;
+}
+
 .testimonial-cta-primary-link-button {
 	margin-top: 16px;
 }
@@ -589,6 +595,8 @@ span.selected-territory {
 .testimonial-cta {
 	margin-top: 12px;
 	padding: 12px;
+	border: 1px solid #0d295d;
+	background-color: #e5e5e5;
 
 	h3 {
 		font-family: $gu-headline;
@@ -602,14 +610,8 @@ span.selected-territory {
 	}
 }
 
-.testimonial-cta-primary {
-	background-color: #f1f8fc;
-	border: 1px solid #052962;
-}
 
 .testimonial-cta-secondary {
-	background-color: gu-colour(neutral-97);
-	border: 1px solid gu-colour(neutral-86);
 	@include mq($from: tablet) {
 		display: none;
 	}
