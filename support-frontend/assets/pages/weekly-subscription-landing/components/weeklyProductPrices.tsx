@@ -52,7 +52,7 @@ const getCurrencySymbol = (currencyId: IsoCurrency): string =>
 const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 	getCurrencySymbol(currencyId) + fixDecimals(price);
 
-const getPromotionLabel = (promotion: Promotion | null) => {
+const getPromotionLabel = (promotion?: Promotion) => {
 	if (!promotion || !promotion.discount) {
 		return null;
 	}
@@ -142,12 +142,12 @@ const getProducts = ({
 	});
 };
 
-const WeeklyProductPrices: React.FC<WeeklyProductPricesProps> = ({
+function WeeklyProductPrices({
 	countryId,
 	productPrices,
 	orderIsAGift,
 	participations,
-}: WeeklyProductPricesProps) => {
+}: WeeklyProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
@@ -159,6 +159,8 @@ const WeeklyProductPrices: React.FC<WeeklyProductPricesProps> = ({
 		participations,
 	});
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
-}; // ----- Exports ----- //
+}
+
+// ----- Exports ----- //
 
 export default WeeklyProductPrices;

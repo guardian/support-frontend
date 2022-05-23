@@ -10,13 +10,13 @@ describe('datePickerHelpers', () => {
 	const RealDate = Date;
 
 	class MockDate extends Date {
-		constructor(param) {
-			super(param || '2020-05-14T11:01:58.135Z');
+		constructor(param?: number | string | Date) {
+			super(param ?? '2020-05-14T11:01:58.135Z');
 		}
 	}
 
 	beforeEach(() => {
-		global.Date = MockDate;
+		global.Date = MockDate as DateConstructor;
 	});
 	afterEach(() => {
 		global.Date = RealDate;
