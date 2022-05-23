@@ -1,20 +1,20 @@
 // ----- Imports ----- //
-// @ts-expect-error - required for hooks
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
+
 // ----- Types ----- //
 type PropTypes = {
-	id: string | null | undefined;
-	header: Node;
-	footer: Node | null;
-	children: Node;
-	classModifiers: Array<string | null | undefined>;
-	backgroundImageSrc: string | null | undefined;
+	id?: string;
+	header: ReactNode;
+	footer?: ReactNode;
+	children: ReactNode;
+	classModifiers?: string[];
+	backgroundImageSrc?: string;
 }; // ----- Component ----- //
 
-export default function Page(props: PropTypes) {
+export default function Page(props: PropTypes): JSX.Element {
 	const backgroundImage = props.backgroundImageSrc ? (
 		<div className="background-image-container">
 			<img
@@ -40,7 +40,10 @@ export default function Page(props: PropTypes) {
 	return (
 		<div
 			id={props.id}
-			className={classNameWithModifiers('gu-content', props.classModifiers)}
+			className={classNameWithModifiers(
+				'gu-content',
+				props.classModifiers ?? [],
+			)}
 		>
 			<CsrBanner />
 			{props.header}
@@ -54,8 +57,5 @@ export default function Page(props: PropTypes) {
 } // ----- Default Props ----- //
 
 Page.defaultProps = {
-	id: null,
-	footer: null,
 	classModifiers: [],
-	backgroundImageSrc: null,
 };
