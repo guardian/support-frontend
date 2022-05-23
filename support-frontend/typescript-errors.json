@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 21,
+            "TS2345": 19,
             "TS6133": 8,
             "TS2322": 35,
             "TS7006": 15,
@@ -30,7 +30,6 @@
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
-            "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
             "assets/components/marketingConsent/helpers.ts": 1,
@@ -99,14 +98,6 @@
         }
     ],
     "TS2345": [
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
-        },
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
-        },
         {
             "path": "assets/components/directDebit/__tests__/directDebitReducerTest.ts",
             "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
