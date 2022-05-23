@@ -6,12 +6,12 @@
             "TS6133": 7,
             "TS7006": 10,
             "TS2305": 3,
-            "TS2322": 18,
             "TS2769": 3,
             "TS2739": 3,
             "TS2556": 3,
             "TS2339": 5,
             "TS2569": 2,
+            "TS2322": 14,
             "TS7053": 3,
             "TS2411": 1,
             "TS2367": 2,
@@ -49,18 +49,6 @@
             "assets/components/product/productOptionSmall.tsx": 1,
             "assets/components/subscriptionCheckouts/layout.tsx": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
-            "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
-            "assets/helpers/checkoutForm/checkoutForm.ts": 3,
-            "assets/helpers/globalsAndSwitches/globals.ts": 2,
-            "assets/helpers/utilities/utilities.ts": 1,
-            "assets/hocs/canShow.tsx": 1,
-            "assets/hocs/withError.tsx": 1,
-            "assets/hocs/withLabel.tsx": 1,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 2,
-            "assets/pages/contributions-landing/setUserStateActions.ts": 3,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
@@ -68,6 +56,15 @@
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
             "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
+            "assets/helpers/checkoutForm/checkoutForm.ts": 3,
+            "assets/helpers/globalsAndSwitches/globals.ts": 2,
+            "assets/helpers/utilities/utilities.ts": 1,
+            "assets/hocs/canShow.tsx": 1,
+            "assets/hocs/withError.tsx": 1,
+            "assets/hocs/withLabel.tsx": 1,
+            "assets/pages/contributions-landing/setUserStateActions.ts": 3,
+            "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
+            "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
@@ -247,80 +244,6 @@
             "message": "Module '\"react\"' has no exported member 'Node'."
         }
     ],
-    "TS2322": [
-        {
-            "path": "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
-        },
-        {
-            "path": "assets/helpers/checkoutForm/checkoutForm.ts",
-            "message": "Type 'unknown' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/helpers/globalsAndSwitches/globals.ts",
-            "message": "Type 'unknown' is not assignable to type 'Settings'."
-        },
-        {
-            "path": "assets/helpers/utilities/utilities.ts",
-            "message": "Type 'string | null | undefined' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/hocs/canShow.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"isShown\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
-        },
-        {
-            "path": "assets/hocs/withError.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"error\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
-        },
-        {
-            "path": "assets/hocs/withLabel.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
-            "message": "Type '{ stripeKey: string; isTestUser: boolean; }' is not assignable to type 'IntrinsicAttributes & Omit<{ contributionType: keyof RegularContributionTypeMap<null> | \"ONE_OFF\"; checkoutFormHasBeenSubmitted: boolean; ... 9 more ...; isTestUser: boolean; } & { ...; } & { ...; }, \"csrf\" | ... 19 more ... | \"setStripeRecurringRecaptchaVerified\">'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
-            "message": "Type '(isSignedIn: boolean) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(isSignedIn: boolean) => Action'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
-            "message": "Type '() => (arg0: (...args: any[]) => any) => void' is not assignable to type '() => Action'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
-            "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"promotion\" | \"price\" | \"priceDescription\" | \"digitalGiftBillingPeriod\" | \"isPatron\">'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",
-            "message": "Type '\"normal\"' is not assignable to type 'FontWeight | undefined'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'Omit<Pick<PropTypes, \"image\" | \"total\" | \"productPrices\" | \"billingPeriod\" | \"fulfilmentOption\" | \"productOption\" | \"digiSubPrice\" | \"includesDigiSub\"> & Partial<...> & Partial<...>, \"productPrices\" | ... 2 more ... | \"productOption\">'."
-        }
-    ],
     "TS2769": [
         {
             "path": "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts",
@@ -393,6 +316,64 @@
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'HTMLFormControlsCollection' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators."
+        }
+    ],
+    "TS2322": [
+        {
+            "path": "assets/helpers/checkoutForm/checkoutForm.ts",
+            "message": "Type 'unknown' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/helpers/globalsAndSwitches/globals.ts",
+            "message": "Type 'unknown' is not assignable to type 'Settings'."
+        },
+        {
+            "path": "assets/helpers/utilities/utilities.ts",
+            "message": "Type 'string | null | undefined' is not assignable to type 'string'."
+        },
+        {
+            "path": "assets/hocs/canShow.tsx",
+            "message": "Type 'Omit<AugmentedProps<Props>, \"isShown\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
+        },
+        {
+            "path": "assets/hocs/withError.tsx",
+            "message": "Type 'Omit<AugmentedProps<Props>, \"error\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
+        },
+        {
+            "path": "assets/hocs/withLabel.tsx",
+            "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
+            "message": "Type '(isSignedIn: boolean) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(isSignedIn: boolean) => Action'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
+            "message": "Type '() => (arg0: (...args: any[]) => any) => void' is not assignable to type '() => Action'."
+        },
+        {
+            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
+            "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
+            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"promotion\" | \"price\" | \"priceDescription\" | \"digitalGiftBillingPeriod\" | \"isPatron\">'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",
+            "message": "Type '\"normal\"' is not assignable to type 'FontWeight | undefined'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
+            "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
+        },
+        {
+            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
+            "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
+        },
+        {
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
+            "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'Omit<Pick<PropTypes, \"image\" | \"total\" | \"productPrices\" | \"billingPeriod\" | \"fulfilmentOption\" | \"productOption\" | \"digiSubPrice\" | \"includesDigiSub\"> & Partial<...> & Partial<...>, \"productPrices\" | ... 2 more ... | \"productOption\">'."
         }
     ],
     "TS7053": [
