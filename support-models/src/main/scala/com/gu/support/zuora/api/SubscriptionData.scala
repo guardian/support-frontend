@@ -121,9 +121,16 @@ object ReaderType {
   case object Agent extends ReaderType {
     val value = "Agent"
   }
+  case object Patron extends ReaderType {
+    val value = "Patron"
+  }
   case object Unknown extends ReaderType {
     val value = "Unknown"
   }
+
+  def impliedByPromoCode(promoCode: PromoCode): Option[ReaderType] = Option.when(promoCode.endsWith("PATRON"))(Patron)
+
+  def impliedBySomePromoCode(promoCode: Option[PromoCode]): Option[ReaderType] = promoCode.flatMap(impliedByPromoCode)
 
   def fromString(s: String): ReaderType =
     s match {
@@ -131,6 +138,7 @@ object ReaderType {
       case Agent.value => Agent
       case Corporate.value => Corporate
       case Direct.value => Direct
+      case Patron.value => Patron
       case _ => Unknown
     }
 
