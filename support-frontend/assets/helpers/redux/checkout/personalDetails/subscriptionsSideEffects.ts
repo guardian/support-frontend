@@ -58,7 +58,6 @@ export function addPersonalDetailsSideEffects(
 	startListening({
 		matcher: shouldCheckFormEnabled,
 		effect(action, listenerApi) {
-			// { type: 'gifting/setFirstName', payload: 'Maria' }
 			if (!setUserTypeFromIdentityResponse.match(action)) {
 				listenerApi.dispatch(
 					removeErrorsForField(
