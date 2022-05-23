@@ -44,9 +44,8 @@ class WeeklySubscriptionController(
 
     val queryPromos =
       request.queryString
-        .get("promoCode")
-        .map(_.toList)
-        .getOrElse(priceSummaryServiceProvider.forUser(false).getDefaultPromoCodes(GuardianWeekly))
+        .getOrElse("promoCode", Nil)
+        .toList
     val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, GuardianWeekly, countryCode)
 
     Ok(
