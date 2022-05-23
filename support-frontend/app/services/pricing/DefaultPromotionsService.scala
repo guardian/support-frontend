@@ -54,7 +54,7 @@ class DefaultPromotionsServiceS3(
     system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minute) { () =>
       update()
         .fold(
-          err => logger.error(s"Error fetching default promos from S3: ${err.getMessage}", err),
+          err => logger.error(s"Error fetching default promos from $s3Uri: ${err.getMessage}", err),
           _ => (),
         )
     }

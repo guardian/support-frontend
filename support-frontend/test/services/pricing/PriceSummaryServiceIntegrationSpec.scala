@@ -1,8 +1,10 @@
 package services.pricing
 
+import akka.actor.ActorSystem
+import com.gu.aws.AwsS3Client
 import com.gu.i18n.CountryGroup.{UK, US}
 import com.gu.support.catalog._
-import com.gu.support.config.TouchPointEnvironments
+import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.PromotionServiceSpec
 import com.gu.support.workers.{Annual, Quarterly}
 import com.gu.support.zuora.api.ReaderType.Gift
@@ -13,9 +15,8 @@ import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
 class PriceSummaryServiceIntegrationSpec extends AsyncFlatSpec with Matchers with LazyLogging {
-  val defaultPromotionsService = new DefaultPromotionsService {
-    def getPromos(product: Product): List[String] = Nil
-  }
+  val actorSystem = ActorSystem("test")
+  val defaultPromotionsService = new DefaultPromotionsServiceS3(AwsS3Client, Stages.DEV, actorSystem)
   val service =
     new PriceSummaryService(
       PromotionServiceSpec.serviceWithDynamo,
