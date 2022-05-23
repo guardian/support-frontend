@@ -7,7 +7,7 @@ import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
 import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
-import com.gu.support.promotions.ServicesFixtures.discountPromoCode
+import com.gu.support.promotions.ServicesFixtures.{discountPromoCode, tenAnnual}
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
@@ -19,12 +19,18 @@ import org.scalatest.matchers.should.Matchers
 
 class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
-  val tenAnnual = "10ANNUAL"
+  val defaultPromotionsService = new DefaultPromotionsService {
+    def getPromos(product: Product): List[String] = Nil
+  }
 
   "PriceSummaryService" should "return prices" in {
 
     val service =
-      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+      new PriceSummaryService(
+        PromotionServiceSpec.serviceWithFixtures,
+        defaultPromotionsService,
+        CatalogServiceSpec.serviceWithFixtures,
+      )
 
     val paper = service.getPrices(Paper, List(discountPromoCode))
     paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 57.99
@@ -45,7 +51,11 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
   it should "find the correct plans for the ReaderType" in {
     val service =
-      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+      new PriceSummaryService(
+        PromotionServiceSpec.serviceWithFixtures,
+        defaultPromotionsService,
+        CatalogServiceSpec.serviceWithFixtures,
+      )
 
     val dsGifts = service.getPrices(DigitalPack, Nil, Gift)
     dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Quarterly)(GBP).price shouldBe 36
@@ -63,7 +73,11 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
   it should "return correct prices for Guardian Weekly" in {
     val service =
-      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+      new PriceSummaryService(
+        PromotionServiceSpec.serviceWithFixtures,
+        defaultPromotionsService,
+        CatalogServiceSpec.serviceWithFixtures,
+      )
 
     val guardianWeekly =
       service.getPrices(GuardianWeekly, List(discountPromoCode, tenAnnual, NonGift.sixForSix))
@@ -155,7 +169,11 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
   it should "find the retail saving for print products" in {
     val service =
-      new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+      new PriceSummaryService(
+        PromotionServiceSpec.serviceWithFixtures,
+        defaultPromotionsService,
+        CatalogServiceSpec.serviceWithFixtures,
+      )
     val prices = service.getPricesForCountryGroup(Paper, UK, Nil)
     prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe Some(41)
     succeed

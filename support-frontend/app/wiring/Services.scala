@@ -6,7 +6,7 @@ import com.gu.aws.AwsS3Client
 import com.gu.okhttp.RequestRunners
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.getaddressio.GetAddressIOService
-import services.pricing.{DefaultPromotionsService, PriceSummaryServiceProvider}
+import services.pricing.{DefaultPromotionsServiceS3, PriceSummaryServiceProvider}
 import com.gu.support.promotions.PromotionServiceProvider
 import com.gu.support.redemption.corporate.{DynamoTableAsyncProvider, RedemptionTable}
 import com.gu.zuora.ZuoraGiftLookupServiceProvider
@@ -52,7 +52,7 @@ trait Services {
 
   lazy val allSettingsProvider: AllSettingsProvider = AllSettingsProvider.fromConfig(appConfig).valueOr(throw _)
 
-  lazy val defaultPromotionsService = new DefaultPromotionsService(s3Client, appConfig.stage, actorSystem)
+  lazy val defaultPromotionsService = new DefaultPromotionsServiceS3(s3Client, appConfig.stage, actorSystem)
 
   lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
     new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider, defaultPromotionsService)

@@ -5,8 +5,10 @@ import com.gu.support.config.{PriceSummaryConfig, PriceSummaryConfigProvider}
 import com.gu.support.promotions.PromotionService
 import com.gu.support.touchpoint.TouchpointServiceProvider
 
-class PriceSummaryServiceProvider(priceSummaryConfigProvider: PriceSummaryConfigProvider, defaultPromotionsService: DefaultPromotionsService)
-    extends TouchpointServiceProvider[PriceSummaryService, PriceSummaryConfig](priceSummaryConfigProvider) {
+class PriceSummaryServiceProvider(
+    priceSummaryConfigProvider: PriceSummaryConfigProvider,
+    defaultPromotionsService: DefaultPromotionsService,
+) extends TouchpointServiceProvider[PriceSummaryService, PriceSummaryConfig](priceSummaryConfigProvider) {
   override protected def createService(config: PriceSummaryConfig): PriceSummaryService = {
     val promotionService = new PromotionService(config.promotionsConfig)
     val catalogService = CatalogService(config.catalogConfig.environment)

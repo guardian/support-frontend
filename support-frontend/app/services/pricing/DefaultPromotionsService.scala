@@ -9,32 +9,37 @@ import io.circe.generic.auto._
 import akka.actor.ActorSystem
 import com.gu.support.catalog.{GuardianWeekly, Product}
 import com.typesafe.scalalogging.LazyLogging
-import services.pricing.DefaultPromotionsService.{DefaultPromotions, buildS3Uri}
+import services.pricing.DefaultPromotionsService.DefaultPromotions
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 import scala.util.Try
 
+trait DefaultPromotionsService {
+  def getPromos(product: Product): List[String]
+}
+
 object DefaultPromotionsService {
   case class DefaultPromotions(guardianWeekly: List[String])
 
   implicit val decoder = Decoder[DefaultPromotions]
+}
 
-  def buildS3Uri(stage: Stage): AmazonS3URI = {
+class DefaultPromotionsServiceS3(
+    client: AwsS3Client,
+    stage: Stage,
+    system: ActorSystem,
+)(implicit ec: ExecutionContext)
+    extends DefaultPromotionsService
+    with LazyLogging {
+
+  private val s3Uri = {
     val env = TouchPointEnvironments.fromStage(stage)
     new AmazonS3URI(s"s3://gu-promotions-tool-private/${env.envValue}/defaultPromos.json")
   }
-}
-
-class DefaultPromotionsService(
-  client: AwsS3Client,
-  stage: Stage,
-  system: ActorSystem
-)(implicit ec: ExecutionContext) extends LazyLogging {
-  private val s3Uri = buildS3Uri(stage)
   private val defaultPromos = new AtomicReference[DefaultPromotions](
-    DefaultPromotions(guardianWeekly = Nil)
+    DefaultPromotions(guardianWeekly = Nil),
   )
 
   private def fetch(): Try[DefaultPromotions] =
@@ -50,7 +55,7 @@ class DefaultPromotionsService(
       update()
         .fold(
           err => logger.error(s"Error fetching default promos from S3: ${err.getMessage}", err),
-          _ => ()
+          _ => (),
         )
     }
 

@@ -13,9 +13,9 @@ import org.joda.time.Months
 import scala.math.BigDecimal.RoundingMode
 
 class PriceSummaryService(
-  promotionService: PromotionService,
-  defaultPromotionsService: DefaultPromotionsService,
-  catalogService: CatalogService
+    promotionService: PromotionService,
+    defaultPromotionsService: DefaultPromotionsService,
+    catalogService: CatalogService,
 ) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 

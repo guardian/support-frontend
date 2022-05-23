@@ -105,6 +105,7 @@ lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(SeleniumTest, IntegrationTest)
+  .configs(SeleniumTest)
   .settings(
     inConfig(SeleniumTest)(Defaults.testTasks),
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
@@ -113,7 +114,13 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     scalafmtSettings,
     integrationTestSettings,
   )
-  .dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
+  .dependsOn(
+    // Include tests from support-services, for use by PriceSummaryServiceSpec
+    `support-services` % "compile->compile;test->test",
+    `support-models`,
+    `support-config`,
+    `support-internationalisation`
+  )
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 lazy val `support-workers` = (project in file("support-workers"))
