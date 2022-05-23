@@ -1,40 +1,37 @@
 package com.gu.patrons.lambdas
 
-import com.amazonaws.services.lambda.runtime.Context
-import com.gu.lambdas.Handler
-import com.gu.model.states.FetchResultsState
+import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.patrons.conf.{PatronsIdentityConfig, StripePatronsConfig}
-import com.gu.patrons.model.IdentityIdWithStatus
-import com.gu.patrons.services.{PatronsIdentityService, StripeService}
-import com.gu.supporterdata.model.Stage.DEV
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.duration._
-
-class FetchStripeSubscriptionsLambda extends Handler[FetchResultsState, Unit] {
-  override protected def handlerFuture(input: FetchResultsState, context: Context) =
-    Future.successful(())
+import com.gu.patrons.conf.{PatronsIdentityConfig, PatronsStripeConfig}
+import com.gu.patrons.model.StageConstructors
+import com.gu.patrons.services.{
+  IdentityDynamoProcessor,
+  PatronsIdentityService,
+  PatronsStripeService,
+  StripeSubscriptionsProcessor,
 }
+import com.gu.supporterdata.services.SupporterDataDynamoService
 
-//object FetchStripeSubscriptionsLambda {
-//  def fetchStripeSubscriptionsLambda = {
-//    val runner = configurableFutureRunner(60.seconds)
-//    for {
-//      stripeConfig <- StripePatronsConfig.fromParameterStore(DEV)
-//      stripeService = new StripeService(stripeConfig, runner)
-//      subscriptions <- stripeService.getSubscriptions(3)
-//
-//      identityConfig <- PatronsIdentityConfig.fromParameterStore(DEV)
-//      identityService = new PatronsIdentityService(identityConfig, runner)
-//      identityIdsWithStatuses <- Future.sequence(
-//        subscriptions.data.map(subscription =>
-//          identityService
-//            .getOrCreateUserFromEmail(subscription.customer.email, subscription.customer.name)
-//            .map(id => IdentityIdWithStatus(id, subscription.status)),
-//        ),
-//      )
-//    } yield identityIdsWithStatuses
-//  }
-//}
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class FetchStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
+
+  override def handleRequest(input: Unit, context: Context) = {
+    val stage = StageConstructors.fromEnvironment
+    val runner = configurableFutureRunner(60.seconds)
+    for {
+      stripeConfig <- PatronsStripeConfig.fromParameterStore(stage)
+      stripeService = new PatronsStripeService(stripeConfig, runner)
+      identityConfig <- PatronsIdentityConfig.fromParameterStore(stage)
+      identityService = new PatronsIdentityService(identityConfig, runner)
+      dynamoService = SupporterDataDynamoService(stage)
+      processor = new StripeSubscriptionsProcessor(
+        stripeService,
+        new IdentityDynamoProcessor(identityService, dynamoService),
+      )
+      _ <- processor.processSubscriptions(100)
+    } yield ()
+  }
+
+}

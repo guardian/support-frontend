@@ -1,13 +1,13 @@
 package com.gu.patrons.services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.patrons.conf.StripePatronsConfig
+import com.gu.patrons.conf.PatronsStripeConfig
 import com.gu.patrons.model.{StripeError, StripeSubscriptionsResponse}
 import com.gu.rest.WebServiceHelper
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class StripeService(val config: StripePatronsConfig, client: FutureHttpClient)(implicit
+class PatronsStripeService(val config: PatronsStripeConfig, client: FutureHttpClient)(implicit
     ec: ExecutionContext,
 ) extends WebServiceHelper[StripeError] {
   override val wsUrl = "https://api.stripe.com/v1"

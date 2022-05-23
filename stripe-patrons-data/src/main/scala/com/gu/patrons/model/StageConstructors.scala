@@ -1,4 +1,4 @@
-package com.gu.model
+package com.gu.patrons.model
 
 import com.gu.supporterdata.model.Stage
 import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}

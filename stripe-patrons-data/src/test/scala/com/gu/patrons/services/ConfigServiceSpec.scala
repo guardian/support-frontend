@@ -1,6 +1,6 @@
 package com.gu.patrons.services
 
-import com.gu.patrons.conf.{PatronsIdentityConfig, StripePatronsConfig}
+import com.gu.patrons.conf.{PatronsIdentityConfig, PatronsStripeConfig}
 import com.gu.supporterdata.model.Stage.DEV
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -9,8 +9,8 @@ import org.scalatest.matchers.should.Matchers
 @IntegrationTest
 class ConfigServiceSpec extends AsyncFlatSpec with Matchers {
 
-  StripePatronsConfig.getClass.getSimpleName should "load config from SSM" in {
-    StripePatronsConfig
+  PatronsStripeConfig.getClass.getSimpleName should "load config from SSM" in {
+    PatronsStripeConfig
       .fromParameterStore(DEV)
       .map { config =>
         config.apiKey.length should be > 0

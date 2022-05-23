@@ -1,6 +1,8 @@
 package com.gu.patrons.services
 
 import cats.data.OptionT
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.patrons.conf.PatronsIdentityConfig
 import com.gu.patrons.model.identity._
@@ -21,6 +23,7 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
       email: String,
       firstName: Option[String],
   )(implicit ec: ExecutionContext): Future[String] = {
+    SafeLogger.info(s"Attempting to find identity id for user $email")
     OptionT(getUserIdFromEmail(email))
       .getOrElseF(createUserIdFromEmailUser(email, firstName))
   }
@@ -32,16 +35,20 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
       "user",
       Map("X-GU-ID-Client-Access-Token" -> s"Bearer ${config.apiClientToken}"),
       Map("emailAddress" -> email),
-    ).map(response => Some(response.user.id))
-      .recover {
-        case err: IdentityErrorResponse if err.errors.headOption.map(_.message).contains("Not found") =>
-          None
-      }
+    ).map { response =>
+      SafeLogger.info(s"Found identity id ${response.user.id} for email $email")
+      Some(response.user.id)
+    }.recover {
+      case err: IdentityErrorResponse if err.errors.headOption.map(_.message).contains("Not found") =>
+        SafeLogger.info(s"Email address $email not found in Identity")
+        None
+    }
 
   def createUserIdFromEmailUser(
       email: String,
       firstName: Option[String],
   )(implicit ec: ExecutionContext) = {
+    SafeLogger.info(s"Attempting to create guest identity account for user $email")
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
@@ -54,7 +61,16 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
       body.asJson,
       Map("X-GU-ID-Client-Access-Token" -> s"Bearer ${config.apiClientToken}"),
       Map("accountVerificationEmail" -> "true"),
-    ).map(response => response.guestRegistrationRequest.userId)
+    ).map { response =>
+      SafeLogger.info(s"Created account with identity id ${response.guestRegistrationRequest.userId} for email $email")
+      response.guestRegistrationRequest.userId
+    }.recover { err =>
+      SafeLogger.error(
+        scrub"Received an error from Identity while trying to create guest identity account for $email",
+        err,
+      )
+      throw err
+    }
 
   }
 }

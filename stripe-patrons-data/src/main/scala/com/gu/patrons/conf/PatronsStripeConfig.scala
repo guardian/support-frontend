@@ -5,17 +5,17 @@ import com.gu.supporterdata.model.Stage
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class StripePatronsConfig(
+case class PatronsStripeConfig(
     apiKey: String,
 )
 
-object StripePatronsConfig extends ConfigService {
+object PatronsStripeConfig extends ConfigService {
   private val stripeConfigPath = "stripe-config"
   def fromParameterStore(
       stage: Stage,
   )(implicit ec: ExecutionContext) = {
     ParameterStoreService(stage).getParametersByPath(stripeConfigPath).map { params =>
-      StripePatronsConfig(
+      PatronsStripeConfig(
         findParameterOrThrow("api-key", params),
       )
     }

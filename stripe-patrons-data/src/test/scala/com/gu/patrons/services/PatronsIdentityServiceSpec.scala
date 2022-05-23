@@ -26,19 +26,17 @@ class PatronsIdentityServiceSpec extends AsyncFlatSpec with Matchers {
       val email = s"${UUID.randomUUID()}@gu.com"
       service
         .getUserIdFromEmail(email)
-        .map { id =>
-          System.out.println("This email shouldn't exist!")
-          fail("This email shouldn't exist!")
-        }
-        .recover {
-          case err: IdentityErrorResponse if err.errors.headOption.map(_.message).contains("Not found") =>
+        .map {
+          case Some(_) =>
+            fail("This email shouldn't exist!")
+          case None =>
             succeed
         }
     }
   }
 
   // Ignored as we don't want to create a guest account in Identity every time this test runs
-  "PatronsIdentityService" should "create a guest account for an unknown email address" in {
+  "PatronsIdentityService" should "create a guest account for an unknown email address" ignore {
     PatronsIdentityConfig.fromParameterStore(DEV).flatMap { config =>
       val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
       val email = s"${UUID.randomUUID()}@gu.com"
