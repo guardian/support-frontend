@@ -35,7 +35,7 @@ class PriceSummaryService(
 
   def getDefaultPromoCodes(product: Product): List[String] = defaultPromotionsService.getPromos(product)
 
-  private def getPricesForCountryGroup[T <: Product](
+  def getPricesForCountryGroup[T <: Product](
       product: T,
       countryGroup: CountryGroup,
       promotions: List[PromotionWithCode],

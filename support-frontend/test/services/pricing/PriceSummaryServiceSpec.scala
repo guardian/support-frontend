@@ -1,14 +1,14 @@
-package com.gu.support.pricing
+package services.pricing
 
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup.{Europe, UK, US}
 import com.gu.i18n.Currency.{EUR, GBP, USD}
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
-import com.gu.support.promotions.DefaultPromotionsService.GuardianWeekly.NonGift
+import services.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
+import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.promotions.ServicesFixtures.discountPromoCode
-import com.gu.support.promotions.{DefaultPromotionsService, DiscountBenefit, PromotionServiceSpec}
+import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
 import org.joda.time.Months
@@ -18,6 +18,8 @@ import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
+
+  val tenAnnual = "10ANNUAL"
 
   "PriceSummaryService" should "return prices" in {
 
@@ -64,7 +66,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
       new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
     val guardianWeekly =
-      service.getPrices(GuardianWeekly, List(discountPromoCode, NonGift.tenAnnual, NonGift.sixForSix))
+      service.getPrices(GuardianWeekly, List(discountPromoCode, tenAnnual, NonGift.sixForSix))
 
     // Quarterly should have the discount promotion only
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 1
@@ -86,7 +88,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
-      .find(_.promoCode == NonGift.tenAnnual)
+      .find(_.promoCode == tenAnnual)
       .value
       .discountedPrice shouldBe Some(135.00)
 

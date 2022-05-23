@@ -1,4 +1,4 @@
-package com.gu.support.pricing
+package services.pricing
 
 import com.gu.i18n.CountryGroup.{UK, US}
 import com.gu.support.catalog._

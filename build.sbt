@@ -104,13 +104,14 @@ lazy val root = (project in file("."))
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(SeleniumTest)
+  .configs(SeleniumTest, IntegrationTest)
   .settings(
     inConfig(SeleniumTest)(Defaults.testTasks),
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalafmtSettings,
+    integrationTestSettings,
   )
   .dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
