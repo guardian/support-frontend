@@ -5,7 +5,7 @@
             "TS2345": 18,
             "TS6133": 7,
             "TS7006": 10,
-            "TS2322": 17,
+            "TS2322": 15,
             "TS2305": 3,
             "TS2769": 3,
             "TS2739": 3,
@@ -51,8 +51,6 @@
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/utilities/utilities.ts": 1,
-            "assets/hocs/canShow.tsx": 1,
-            "assets/hocs/withError.tsx": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
@@ -256,14 +254,6 @@
         {
             "path": "assets/helpers/utilities/utilities.ts",
             "message": "Type 'string | null | undefined' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/hocs/canShow.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"isShown\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
-        },
-        {
-            "path": "assets/hocs/withError.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"error\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
         },
         {
             "path": "assets/hocs/withLabel.tsx",
