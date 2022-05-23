@@ -8,6 +8,6 @@ class DigitalPackGiftProductPage(implicit val webDriver: WebDriver) extends Page
 
   override def path = "/uk/subscribe/digital/gift"
 
-  override def elementQuery = id("qa-component-customer-service")
+  override def elementQuery = id("qa-footer")
 
 }

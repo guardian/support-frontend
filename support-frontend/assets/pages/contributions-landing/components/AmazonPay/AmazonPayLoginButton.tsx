@@ -1,8 +1,12 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import type { Dispatch } from 'redux';
 import Button from 'components/button/button';
 import AnimatedDots from 'components/spinners/animatedDots';
-import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
+import type {
+	AmazonLoginObject,
+	AmazonPayData,
+} from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -21,12 +25,12 @@ const mapStateToProps = (state: State) => ({
 	amazonPayData: state.page.form.amazonPayData,
 });
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
 	setAmazonPayHasAccessToken: () => dispatch(setAmazonPayHasAccessToken),
 });
 
 class AmazonPayLoginButtonComponent extends Component<PropTypes> {
-	loginPopup = (amazonLoginObject: Record<string, any>) => (): void => {
+	loginPopup = (amazonLoginObject: AmazonLoginObject) => (): void => {
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
 			scope: 'profile postal_code payments:widget payments:shipping_address',
