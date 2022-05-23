@@ -60,12 +60,12 @@ export function Header(): JSX.Element {
 	return (
 		<div id="header-wrapper">
 			<div>
-				<div id="header">Do something powerful today</div>
+				<div id="header">Join the fight for progress</div>
 				<ThemeProvider theme={buttonThemeBrand}>
 					<LinkButton
 						priority="tertiary"
 						size="small"
-						href={contributeUrl('Aus_Moment_2021_map_header')}
+						href={contributeUrl('AUSELECTION2022_SUPPORTERMAP_header')}
 						target="_blank"
 						rel="noopener noreferrer"
 					>

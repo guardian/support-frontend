@@ -43,6 +43,11 @@
     "Opera >= 54"
   ],
   "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)",
+      "!**/__fixtures__/**"
+    ],
     "transform": {
       ".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
     },

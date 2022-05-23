@@ -26,17 +26,12 @@ type PropTypes = {
 	campaignSettings: CampaignSettings | null;
 	amount: number;
 	currency: IsoCurrency;
-	showBenefitsMessaging: boolean;
 	userInBenefitsVariant: boolean;
 };
 
 // ----- Component ----- //
 function TermsPrivacy(props: PropTypes): ReactElement {
-	const terms = props.showBenefitsMessaging ? (
-		<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
-			Terms and Conditions
-		</a>
-	) : (
+	const terms = (
 		<a href={contributionsTermsLinks[props.countryGroupId]}>
 			Terms and Conditions
 		</a>

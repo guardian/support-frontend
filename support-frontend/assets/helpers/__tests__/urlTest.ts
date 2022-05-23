@@ -10,7 +10,7 @@ const { jsdom } = global;
 describe('url', () => {
 	describe('addQueryParamsToURL', () => {
 		it('should add a query param to an absolute URL', () => {
-			const startingUrl = 'https://gu.com/index?hello=world';
+			const startingUrl = 'https://www.theguardian.com/index?hello=world';
 			const params = {
 				spam: 'eggs',
 			};
@@ -18,7 +18,7 @@ describe('url', () => {
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
 		it('should add a query param to an absolute URL [undefined case]', () => {
-			const startingUrl = 'https://gu.com/index?hello=world';
+			const startingUrl = 'https:///www.theguardian.com/index?hello=world';
 			const params = {
 				spam: 'eggs',
 				homer: undefined,
@@ -27,7 +27,7 @@ describe('url', () => {
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
 		it('should add multiple query params to an absolute URL', () => {
-			const startingUrl = 'https://gu.com/index?hello=world';
+			const startingUrl = 'https:///www.theguardian.com/index?hello=world';
 			const params = {
 				spam: 'eggs',
 				answer: '42',
@@ -36,7 +36,7 @@ describe('url', () => {
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
 		it('should add multiple query params to an absolute URL [null case]', () => {
-			const startingUrl = 'https://gu.com/index?hello=world';
+			const startingUrl = 'https:///www.theguardian.com/index?hello=world';
 			const params = {
 				spam: 'eggs',
 				homer: null,
@@ -46,7 +46,7 @@ describe('url', () => {
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
 		it('should add a query param to a relative URL', () => {
-			const startingUrl = 'https://gu.com?hello=world';
+			const startingUrl = 'https:///www.theguardian.com?hello=world';
 			const params = {
 				spam: 'eggs',
 			};
@@ -54,7 +54,7 @@ describe('url', () => {
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
 		it('should not change a URL with null params', () => {
-			const startingUrl = 'https://gu.com?hello=world';
+			const startingUrl = 'https:///www.theguardian.com?hello=world';
 			const params = {
 				spam: null,
 			};

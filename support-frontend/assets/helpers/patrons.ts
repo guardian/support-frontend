@@ -19,19 +19,10 @@ export function getPromotions(
 	if (!productPrices || !currencyId || !billingPeriod) return;
 
 	const countryGroupName: CountryGroupName = countryGroups[countryGroupId].name;
-	const productOptions =
-		productPrices[countryGroupName][NoFulfilmentOptions][NoProductOptions];
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- can be undefined on Digi Subs Gifting LP
-	if (!productOptions[billingPeriod]) {
-		return;
-	}
-
-	const productPrice = productOptions[billingPeriod][currencyId];
-
-	if (productPrice.promotions) {
-		return productPrice.promotions;
-	}
+	return productPrices[countryGroupName]?.[NoFulfilmentOptions]?.[
+		NoProductOptions
+	]?.[billingPeriod]?.[currencyId]?.promotions;
 }
 
 export function userIsPatron(promotions: Promotion[] | undefined): boolean {

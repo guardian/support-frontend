@@ -229,7 +229,6 @@ function withProps(props: PropTypes) {
 		props.referrerAcquisitionData,
 	);
 	const lastOneOffContribution = useLastOneOffContribution(props.isSignedIn);
-	const AUDCountries = props.countryGroupId === 'AUDCountries';
 
 	return (
 		<div
@@ -303,21 +302,15 @@ function withProps(props: PropTypes) {
 									<PreviousGivingHeaderCopy userName={props.userName} />
 								}
 								bodyCopy={
-									AUDCountries ? (
-										<PreviousGivingBodyCopy
-											lastOneOffContribution={lastOneOffContribution}
-										/>
-									) : (
-										''
-									)
+									<PreviousGivingBodyCopy
+										lastOneOffContribution={lastOneOffContribution}
+									/>
 								}
 							/>
 						) : (
 							<ContributionFormBlurb
 								headerCopy={countryGroupDetails.headerCopy}
-								bodyCopy={
-									AUDCountries ? countryGroupDetails.contributeCopy : ''
-								}
+								bodyCopy={countryGroupDetails.contributeCopy}
 							/>
 						)}
 					</div>

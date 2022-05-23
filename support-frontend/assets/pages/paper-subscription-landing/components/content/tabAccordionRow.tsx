@@ -1,6 +1,5 @@
-// @ts-expect-error - required for hooks
 import { AccordionRow } from '@guardian/source-react-components';
-import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type TabAccordionRowPropTypes = {
@@ -12,10 +11,10 @@ export function TabAccordionRow({
 	trackingId,
 	label,
 	children,
-}: TabAccordionRowPropTypes) {
-	const initialRender = React.useRef(true);
-	const [expanded, setExpanded] = React.useState<boolean>(false);
-	React.useEffect(() => {
+}: TabAccordionRowPropTypes): JSX.Element {
+	const initialRender = useRef(true);
+	const [expanded, setExpanded] = useState<boolean>(false);
+	useEffect(() => {
 		// don't call sendTrackingEventsOnClick on initialRender
 		if (initialRender.current) {
 			initialRender.current = false;

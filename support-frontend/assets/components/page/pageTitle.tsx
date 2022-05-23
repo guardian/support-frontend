@@ -19,7 +19,7 @@ type ThemeType = 'showcase' | 'digital' | 'weekly' | 'paper';
 type PropTypes = {
 	title: string;
 	theme: ThemeType;
-	cssOverrides?: string;
+	cssOverrides?: SerializedStyles;
 	children: ReactNode;
 };
 const themeColors: Record<ThemeType, string> = {
