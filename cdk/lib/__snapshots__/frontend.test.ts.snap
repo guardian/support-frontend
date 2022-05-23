@@ -974,6 +974,27 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "PromoToolBucketE9531506": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::gu-promotions-tool-private/*/defaultPromos.json",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PromoToolBucketE9531506",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleFrontend9A970131",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "ReducedHealthyInstancesAlarmD9B227CB": Object {
       "Properties": Object {
         "ActionsEnabled": true,

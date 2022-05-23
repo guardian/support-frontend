@@ -67,6 +67,10 @@ export class Frontend extends GuStack {
         bucketName: "support-admin-console",
         paths: [`${this.stage}/*`],
       }),
+      new GuGetS3ObjectsPolicy(this, "PromoToolBucket", {
+        bucketName: "gu-promotions-tool-private",
+        paths: ["*/defaultPromos.json"],
+      }),
       new GuPutCloudwatchMetricsPolicy(this),
       // TODO: should we move logs to kinesis?
       new GuAllowPolicy(this, "CloudwatchMetrics", {
