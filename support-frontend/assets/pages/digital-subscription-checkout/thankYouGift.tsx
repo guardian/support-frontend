@@ -157,7 +157,7 @@ const blueLinkLine = css`
 `;
 // ----- Types ----- //
 export type PropTypes = {
-	giftDeliveryDate: string;
+	giftDeliveryDate?: string;
 	giftRecipient: string;
 	marketingConsent: React.ReactNode;
 	pending?: boolean;
@@ -167,16 +167,18 @@ export type PropTypes = {
 // ----- Map state to props ----- //
 function mapStateToProps(state: CheckoutState) {
 	return {
-		giftDeliveryDate: state.page.checkout.giftDeliveryDate,
-		giftRecipient: state.page.checkout.firstNameGiftRecipient,
+		giftDeliveryDate: state.page.checkoutForm.gifting.giftDeliveryDate,
+		giftRecipient: state.page.checkoutForm.gifting.firstName,
 	};
 }
 
-const GreenCheckMark = () => (
-	<div css={greenCircle}>
-		<SvgCheckmark />
-	</div>
-);
+function GreenCheckMark(): JSX.Element {
+	return (
+		<div css={greenCircle}>
+			<SvgCheckmark />
+		</div>
+	);
+}
 
 function ThankYouGift(props: PropTypes) {
 	const date = props.giftDeliveryDate ? new Date(props.giftDeliveryDate) : null;
@@ -325,6 +327,6 @@ function ThankYouGift(props: PropTypes) {
 
 ThankYouGift.defaultProps = {
 	pending: false,
-}; // ----- Export ----- //
+};
 
 export default connect(mapStateToProps)(ThankYouGift);
