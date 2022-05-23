@@ -24,8 +24,7 @@ class PriceSummaryService(
       promoCodes: List[PromoCode],
       readerType: ReaderType = Direct,
   ): ProductPrices = {
-    val defaultPromos = defaultPromotionsService.getPromos(product)
-    println(defaultPromos)
+    val defaultPromos = getDefaultPromoCodes(product)
     val promotions = promotionService.findPromotions(promoCodes ++ defaultPromos)
     product
       .supportedCountries(catalogService.environment)

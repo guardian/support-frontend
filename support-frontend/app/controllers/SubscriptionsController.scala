@@ -10,7 +10,6 @@ import com.gu.support.catalog._
 import com.gu.support.encoding.Codec.deriveCodec
 import services.pricing.{PriceSummary, PriceSummaryServiceProvider}
 import com.gu.support.promotions.DefaultPromotions
-import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift.ausElection
 import com.gu.support.workers.Monthly
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
@@ -70,11 +69,10 @@ class SubscriptionsController(
       Map.empty
 
     val fulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
-    val guardianWeeklyPromos = List(ausElection)
     val weekly =
       service.getPrices(
         GuardianWeekly,
-        guardianWeeklyPromos,
+        Nil,
       )(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(
         countryGroup.currency,
       )
