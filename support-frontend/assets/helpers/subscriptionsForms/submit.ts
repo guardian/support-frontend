@@ -34,6 +34,7 @@ import {
 	isPhysicalProduct,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
+import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	setFormSubmitted,
@@ -67,7 +68,7 @@ type Addresses = {
 function getAddresses(state: AnyCheckoutState): Addresses {
 	if (isPhysicalProduct(state.page.checkout.product)) {
 		const deliveryAddressFields = getDeliveryAddressFields(
-			state as any as WithDeliveryCheckoutState,
+			state as unknown as WithDeliveryCheckoutState,
 		);
 		return {
 			deliveryAddress: deliveryAddressFields,
@@ -126,6 +127,24 @@ const getPromoCode = (promotions?: Promotion[]) => {
 	return promotion ? promotion.promoCode : null;
 };
 
+function getGiftRecipient(giftingState: GiftingState) {
+	const { title, firstName, lastName, email, giftMessage, giftDeliveryDate } =
+		giftingState;
+	if (firstName && lastName) {
+		return {
+			giftRecipient: {
+				title,
+				firstName,
+				lastName,
+				email,
+				message: giftMessage,
+				deliveryDate: giftDeliveryDate,
+			},
+		};
+	}
+	return {};
+}
+
 function buildRegularPaymentRequest(
 	state: AnyCheckoutState,
 	paymentAuthorisation: PaymentAuthorisation,
@@ -134,12 +153,6 @@ function buildRegularPaymentRequest(
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
 	const {
-		titleGiftRecipient,
-		firstNameGiftRecipient,
-		lastNameGiftRecipient,
-		emailGiftRecipient,
-		giftMessage,
-		giftDeliveryDate,
 		billingPeriod,
 		fulfilmentOption,
 		productOption,
@@ -161,19 +174,7 @@ function buildRegularPaymentRequest(
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 	const promoCode = getPromoCode(price.promotions);
-	const giftRecipient =
-		!!firstNameGiftRecipient && !!lastNameGiftRecipient
-			? {
-					giftRecipient: {
-						title: titleGiftRecipient,
-						firstName: firstNameGiftRecipient,
-						lastName: lastNameGiftRecipient,
-						email: emailGiftRecipient,
-						message: giftMessage,
-						deliveryDate: giftDeliveryDate,
-					},
-			  }
-			: {};
+	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	return {
 		title,
 		firstName: firstName.trim(),
@@ -201,7 +202,7 @@ function onPaymentAuthorised(
 	dispatch: Dispatch<Action>,
 	state: AnyCheckoutState,
 	currencyId?: Option<IsoCurrency>,
-) {
+): void {
 	const data = buildRegularPaymentRequest(
 		state,
 		paymentAuthorisation,
@@ -294,7 +295,7 @@ function trackSubmitAttempt(
 	paymentMethod: PaymentMethod | null | undefined,
 	productType: SubscriptionProduct,
 	productOption: ProductOptions,
-) {
+): void {
 	const componentId =
 		productOption === NoProductOptions
 			? `subs-checkout-submit-${productType}-${paymentMethod ?? ''}`
@@ -357,13 +358,16 @@ function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
 function submitWithDeliveryForm(
 	dispatch: Dispatch<Action>,
 	state: WithDeliveryCheckoutState,
-) {
+): void {
 	if (validateWithDeliveryForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}
 }
 
-function submitCheckoutForm(dispatch: Dispatch<Action>, state: CheckoutState) {
+function submitCheckoutForm(
+	dispatch: Dispatch<Action>,
+	state: CheckoutState,
+): void {
 	if (validateCheckoutForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}

@@ -125,12 +125,12 @@ export type RegularPaymentRequestAddress = {
 	city: Option<string>;
 };
 type GiftRecipientType = {
-	title?: Option<Title>;
+	title?: Title;
 	firstName: string;
 	lastName: string;
-	email?: Option<string>;
-	message: Option<string>;
-	deliveryDate: Option<string>;
+	email?: string;
+	message?: string;
+	deliveryDate?: string;
 };
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {

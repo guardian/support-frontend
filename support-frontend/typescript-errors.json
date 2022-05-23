@@ -2,8 +2,8 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 20,
-            "TS6133": 8,
+            "TS2345": 18,
+            "TS6133": 7,
             "TS7006": 10,
             "TS2322": 21,
             "TS2305": 3,
@@ -29,7 +29,6 @@
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
-            "assets/components/datePicker/datePicker.tsx": 2,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/directDebit/helpers/ajax.ts": 2,
             "assets/components/marketingConsent/helpers.ts": 1,
@@ -45,7 +44,6 @@
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/page/page.tsx": 1,
@@ -92,14 +90,6 @@
         }
     ],
     "TS2345": [
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
-        },
-        {
-            "path": "assets/components/datePicker/datePicker.tsx",
-            "message": "Argument of type '{ [x: string]: string | false; dateError: string; dateValidated: false; }' is not assignable to parameter of type 'StateTypes | ((prevState: Readonly<StateTypes>, props: Readonly<PropTypes>) => StateTypes | Pick<StateTypes, keyof StateTypes> | null) | Pick<...> | null'."
-        },
         {
             "path": "assets/components/directDebit/__tests__/directDebitReducerTest.ts",
             "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
@@ -193,10 +183,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
             "message": "'renderControl' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.tsx",
-            "message": "'dispatch' is declared but its value is never read."
         },
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",

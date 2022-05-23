@@ -34,10 +34,6 @@ function createFormReducer(
 		startDate,
 		billingAddressIsSame: true,
 		billingPeriod: initialBillingPeriod,
-		titleGiftRecipient: null,
-		firstNameGiftRecipient: null,
-		lastNameGiftRecipient: null,
-		emailGiftRecipient: null,
 		paymentMethod: null,
 		formErrors: [],
 		submissionError: null,
@@ -51,8 +47,6 @@ function createFormReducer(
 		stripePaymentMethod: null,
 		deliveryInstructions: null,
 		debugInfo: '',
-		giftMessage: null,
-		giftDeliveryDate: null,
 	};
 
 	const getFulfilmentOption = (
@@ -76,30 +70,6 @@ function createFormReducer(
 		switch (action.type) {
 			case 'SET_STAGE':
 				return { ...state, stage: action.stage };
-
-			case 'SET_TITLE_GIFT':
-				return { ...state, titleGiftRecipient: action.titleGiftRecipient };
-
-			case 'SET_FIRST_NAME_GIFT':
-				return {
-					...state,
-					firstNameGiftRecipient: action.firstNameGiftRecipient,
-					formErrors: removeError('firstNameGiftRecipient', state.formErrors),
-				};
-
-			case 'SET_LAST_NAME_GIFT':
-				return {
-					...state,
-					lastNameGiftRecipient: action.lastNameGiftRecipient,
-					formErrors: removeError('lastNameGiftRecipient', state.formErrors),
-				};
-
-			case 'SET_EMAIL_GIFT':
-				return {
-					...state,
-					emailGiftRecipient: action.emailGiftRecipient,
-					formErrors: removeError('emailGiftRecipient', state.formErrors),
-				};
 
 			case 'SET_START_DATE':
 				return { ...state, startDate: action.startDate };
@@ -152,16 +122,6 @@ function createFormReducer(
 
 			case 'SET_DELIVERY_INSTRUCTIONS':
 				return { ...state, deliveryInstructions: action.instructions };
-
-			case 'SET_GIFT_MESSAGE':
-				return { ...state, giftMessage: action.message };
-
-			case 'SET_GIFT_DELIVERY_DATE':
-				return {
-					...state,
-					giftDeliveryDate: action.giftDeliveryDate,
-					formErrors: removeError('giftDeliveryDate', state.formErrors),
-				};
 
 			case 'SET_ADD_DIGITAL_SUBSCRIPTION':
 				return {

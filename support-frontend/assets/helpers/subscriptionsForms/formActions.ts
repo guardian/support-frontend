@@ -13,6 +13,14 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
+	setEmail as setEmailGift,
+	setFirstName as setFirstNameGift,
+	setGiftDeliveryDate,
+	setGiftMessage,
+	setLastName as setLastNameGift,
+	setTitle as setTitleGift,
+} from 'helpers/redux/checkout/giftingState/actions';
+import {
 	setConfirmEmail,
 	setEmail,
 	setFirstName,
@@ -22,8 +30,6 @@ import {
 } from 'helpers/redux/checkout/personalDetails/actions';
 import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
-import type { FormSubmissionDependentValueThunk } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -155,32 +161,10 @@ const formActionCreators = {
 	setEmail,
 	setConfirmEmail,
 	setTelephone,
-	setTitleGift: (titleGiftRecipient: string): Action => ({
-		type: 'SET_TITLE_GIFT',
-		titleGiftRecipient:
-			titleGiftRecipient !== 'Select a title' ? titleGiftRecipient : null,
-	}),
-	setFirstNameGift: (
-		firstNameGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_FIRST_NAME_GIFT',
-			firstNameGiftRecipient,
-		})),
-	setLastNameGift: (
-		lastNameGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_LAST_NAME_GIFT',
-			lastNameGiftRecipient,
-		})),
-	setEmailGift: (
-		emailGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_EMAIL_GIFT',
-			emailGiftRecipient,
-		})),
+	setTitleGift,
+	setFirstNameGift,
+	setLastNameGift,
+	setEmailGift,
 	setStartDate: (startDate: string): Action => ({
 		type: 'SET_START_DATE',
 		startDate,
@@ -233,14 +217,8 @@ const formActionCreators = {
 		type: 'SET_DELIVERY_INSTRUCTIONS',
 		instructions,
 	}),
-	setGiftMessage: (message: string | null): Action => ({
-		type: 'SET_GIFT_MESSAGE',
-		message,
-	}),
-	setDigitalGiftDeliveryDate: (giftDeliveryDate: string): Action => ({
-		type: 'SET_GIFT_DELIVERY_DATE',
-		giftDeliveryDate,
-	}),
+	setGiftMessage,
+	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
 	setAddDigitalSubscription: (addDigital: boolean): Action => ({
 		type: 'SET_ADD_DIGITAL_SUBSCRIPTION',
 		addDigital,

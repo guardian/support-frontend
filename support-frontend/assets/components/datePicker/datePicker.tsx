@@ -1,5 +1,5 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { border, space } from '@guardian/source-foundations';
+import { neutral, space } from '@guardian/source-foundations';
 import {
 	Button,
 	buttonThemeBrandAlt,
@@ -41,14 +41,14 @@ const inputLayoutWithMargin = css`
 `;
 const validationButton = css`
 	margin-top: ${space[5]}px;
-	border: 2px ${border.primary} solid;
+	border: 2px ${neutral[60]} solid;
 `;
 const marginTop = css`
 	margin-top: ${space[5]}px;
 `;
 type PropTypes = {
-	value: string | null;
-	onChange: (...args: any[]) => any;
+	value?: string;
+	onChange: (value: string) => void;
 };
 type StateTypes = {
 	day: string;
@@ -72,13 +72,14 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 		};
 	}
 
-	componentDidMount() {
+	componentDidMount(): void {
 		this.handleCalendarDate(new Date(Date.now()));
 	}
 
-	getDateString = () =>
+	getDateString = (): string =>
 		`${this.state.year}-${this.state.month}-${this.state.day}`;
-	getDateConfirmationText = () => {
+
+	getDateConfirmationText = (): string => {
 		const { value } = this.props;
 
 		if (!value) {
@@ -90,15 +91,20 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 		const valueDate = new Date(`${value}T00:00:00`);
 		const today = new Date();
 		const confirmedDate = today > valueDate ? today : valueDate;
+
 		return `${confirmedDate.getDate()} ${
 			monthText[confirmedDate.getMonth()]
 		} ${confirmedDate.getFullYear()}`;
 	};
-	checkDateIsValid = (e: Record<string, any>) => {
+
+	checkDateIsValid = (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+	): void => {
 		e.preventDefault();
 		const date = new Date(this.getDateString());
 		const dateIsNotADate = !DateUtils.isDate(date);
 		const latestAvailableDate = getLatestAvailableDateText();
+
 		this.setState({
 			dateValidated: true,
 			dateError: '',
@@ -114,16 +120,19 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 			);
 		}
 	};
-	handleError = (error: string) => {
-		this.setState({
+
+	handleError = (error: string): void => {
+		this.setState((prevState) => ({
+			...prevState,
 			dateError: error,
 			day: '',
 			month: '',
 			year: '',
-		});
+		}));
 		this.updateStartDate();
 	};
-	handleCalendarDate = (date: Date) => {
+
+	handleCalendarDate = (date: Date): void => {
 		if (dateIsOutsideRange(date)) {
 			return;
 		}
@@ -140,28 +149,28 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 			this.updateStartDate,
 		);
 	};
-	handleInput = (value: string, field: string) => {
+
+	handleInput = (value: string, field: keyof StateTypes): void => {
 		if (/^[0-9]+$/.test(value)) {
-			this.setState(
-				{
-					[field]: value,
-					dateError: '',
-					dateValidated: false,
-				},
-				this.updateStartDate,
-			);
+			this.setState((prevState) => ({
+				...prevState,
+				[field]: value,
+				dateError: '',
+				dateValidated: false,
+			}));
+			this.updateStartDate();
 		} else {
-			this.setState(
-				{
-					[field]: '',
-					dateError: '',
-					dateValidated: false,
-				},
-				this.updateStartDate,
-			);
+			this.setState((prevState) => ({
+				...prevState,
+				[field]: '',
+				dateError: '',
+				dateValidated: false,
+			}));
+			this.updateStartDate();
 		}
 	};
-	updateStartDate = () => {
+
+	updateStartDate = (): void => {
 		const dateString = this.getDateString();
 
 		if (DateUtils.isDate(new Date(dateString))) {
@@ -171,11 +180,12 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 		return this.props.onChange('');
 	};
 
-	render() {
+	render(): JSX.Element {
 		const { state } = this;
 		const today = Date.now();
 		const currentMonth = new Date(today);
 		const threeMonthRange = DateUtils.addMonths(currentMonth, 3);
+
 		return (
 			<div>
 				<fieldset
