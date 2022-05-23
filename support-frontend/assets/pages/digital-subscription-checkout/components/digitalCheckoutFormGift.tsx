@@ -277,7 +277,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						errorReason={props.submissionError}
 						errorHeading={submissionErrorHeading}
 					/>
-					<EndSummaryMobile orderIsAGift />
+					<EndSummaryMobile />
 					<DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>
 			</CheckoutLayout>
