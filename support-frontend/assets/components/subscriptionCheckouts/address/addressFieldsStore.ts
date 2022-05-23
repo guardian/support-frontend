@@ -1,7 +1,9 @@
+import type { CombinedState, Reducer } from 'redux';
 import { combineReducers } from 'redux';
-import type { $Keys } from 'utility-types';
-// ----- Imports ----- //
-import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import type {
+	PostcodeFinderActions,
+	PostcodeFinderState,
+} from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import { postcodeFinderReducerFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import {
 	M25_POSTCODE_PREFIXES,
@@ -14,6 +16,7 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import type { FormSubmissionDependentValueThunk } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import type { Scoped } from 'helpers/subscriptionsForms/scoped';
 import type { FormError, Rule } from 'helpers/subscriptionsForms/validation';
@@ -27,9 +30,10 @@ import {
 	validate,
 } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
+
 // ----- Types ----- //
 export type FormFields = RegularPaymentRequestAddress;
-export type FormField = $Keys<FormFields>;
+export type FormField = keyof FormFields;
 export type FormErrors = Array<FormError<FormField>>;
 type AddressFieldsState = FormFields & {
 	formErrors: FormErrors;
@@ -99,7 +103,7 @@ export const isHomeDeliveryInM25 = (
 	fulfilmentOption: Option<FulfilmentOptions>,
 	postcode: Option<string>,
 	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
-) => {
+): boolean => {
 	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
 		return postcodeIsWithinDeliveryArea(postcode, allowedPrefixes);
 	}
@@ -245,7 +249,7 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
 			});
 		}
 	},
-	setAddressLineOne: (lineOne: string): ((...args: any[]) => any) =>
+	setAddressLineOne: (lineOne: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			scope,
 			type: 'SET_ADDRESS_LINE_1',
@@ -256,19 +260,19 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
 		type: 'SET_ADDRESS_LINE_2',
 		lineTwo,
 	}),
-	setTownCity: (city: string): ((...args: any[]) => any) =>
+	setTownCity: (city: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			scope,
 			type: 'SET_TOWN_CITY',
 			city,
 		})),
-	setState: (state: string): ((...args: any[]) => any) =>
+	setState: (state: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_STATE',
 			state,
 			scope,
 		})),
-	setPostcode: (postCode: string): ((...args: any[]) => any) =>
+	setPostcode: (postCode: string): FormSubmissionDependentValueThunk =>
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_POSTCODE',
 			postCode,
@@ -276,12 +280,28 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
 		})),
 });
 
-export type ActionCreators = ReturnType<typeof addressActionCreatorsFor>;
+export type ActionCreators = {
+	setCountry: (countryRaw: string) => void;
+	setAddressLineOne: (lineOne: string) => void;
+	setAddressLineTwo: (lineTwo: string) => void;
+	setTownCity: (city: string) => void;
+	setState: (state: string) => void;
+	setPostcode: (postCode: string) => void;
+};
 
 // ----- Reducer ----- //
 export type AddressReducer = ReturnType<typeof addressReducerFor>;
 
-function addressReducerFor(scope: AddressType, initialCountry: IsoCountry) {
+function addressReducerFor(
+	scope: AddressType,
+	initialCountry: IsoCountry,
+): Reducer<
+	CombinedState<{
+		fields: AddressFieldsState;
+		postcode: PostcodeFinderState;
+	}>,
+	Action | PostcodeFinderActions
+> {
 	const initialState = {
 		country: initialCountry,
 		lineOne: null,
