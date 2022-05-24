@@ -15,9 +15,6 @@ import {
 import { directDebitReducer as reducer } from '../directDebitReducer';
 // ----- Tests ----- //
 describe('direct debit reducer tests', () => {
-	it('should return the initial state', () => {
-		expect(reducer(undefined, {})).toMatchSnapshot();
-	});
 	it('should handle DIRECT_DEBIT_POP_UP_OPEN', () => {
 		const action = openDirectDebitPopUp();
 		const newState = reducer(undefined, action);
