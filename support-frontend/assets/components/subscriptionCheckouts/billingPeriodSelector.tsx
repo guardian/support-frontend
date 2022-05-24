@@ -5,10 +5,7 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { billingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getAppliedPromoDescription,
-	getPriceDescription,
-} from 'helpers/productPrice/priceDescriptions';
+import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
@@ -19,13 +16,17 @@ type PropTypes = {
 	fulfilmentOption?: FulfilmentOptions;
 	pricingCountry: IsoCountry;
 	selected: BillingPeriod;
-	onChange: (arg0: BillingPeriod) => Action;
+	onChange: (period: BillingPeriod) => Action;
 };
 
-function BillingPeriodSelector(props: PropTypes) {
+function BillingPeriodSelector(props: PropTypes): JSX.Element {
 	return (
 		<FormSection title="How often would you like to pay?">
-			<RadioGroup legend="How often would you like to pay?" role="radiogroup">
+			<RadioGroup
+				label="How often would you like to pay?"
+				hideLabel
+				role="radiogroup"
+			>
 				{props.billingPeriods.map((billingPeriod) => {
 					const productPrice = getProductPrice(
 						props.productPrices,
@@ -38,7 +39,6 @@ function BillingPeriodSelector(props: PropTypes) {
 							label={billingPeriodTitle(billingPeriod)}
 							value={billingPeriodTitle(billingPeriod)}
 							supporting={getPriceDescription(productPrice, billingPeriod)}
-							offer={getAppliedPromoDescription(productPrice)}
 							name="billingPeriod"
 							checked={billingPeriod === props.selected}
 							onChange={() => props.onChange(billingPeriod)}
@@ -53,4 +53,5 @@ function BillingPeriodSelector(props: PropTypes) {
 BillingPeriodSelector.defaultProps = {
 	fulfilmentOption: NoFulfilmentOptions,
 };
+
 export { BillingPeriodSelector };
