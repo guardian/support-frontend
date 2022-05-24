@@ -44,9 +44,9 @@ describe('deliveryDays', () => {
 		});
 		it('should not offer the 27th of December as a possible delivery date', () => {
 			const days = getWeeklyDays(ninthOfDecember);
-			expect(days.find((d) => d.getDate() === 27 && d.getMonth === 1)).toEqual(
-				undefined,
-			);
+			expect(
+				days.find((d) => d.getDate() === 27 && d.getMonth() === 1),
+			).toEqual(undefined);
 			expect(days.length).toEqual(5);
 		});
 	});
