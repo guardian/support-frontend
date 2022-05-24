@@ -4,26 +4,21 @@
             "TS1208": 1,
             "TS2345": 18,
             "TS6133": 7,
-            "TS7006": 10,
-            "TS2322": 17,
-            "TS2769": 3,
+            "TS7006": 4,
+            "TS2322": 13,
+            "TS2769": 2,
             "TS2305": 1,
             "TS2739": 3,
             "TS2556": 3,
             "TS2339": 5,
             "TS2569": 2,
-            "TS7053": 3,
+            "TS7053": 2,
             "TS2411": 1,
             "TS2367": 2,
             "TS7017": 1,
             "TS2304": 2,
             "TS2554": 6,
-            "TS2578": 4,
-            "TS2525": 1,
-            "TS7022": 1,
-            "TS7031": 2,
-            "TS7034": 1,
-            "TS7005": 1,
+            "TS2578": 3,
             "TS2741": 1
         },
         "byPath": {
@@ -43,17 +38,14 @@
             "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
+            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 1,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
             "assets/components/page/page.tsx": 1,
-            "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx": 1,
             "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx": 2,
-            "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx": 1,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/helpers/globalsAndSwitches/globals.ts": 2,
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/withLabel.tsx": 1,
-            "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
@@ -68,7 +60,6 @@
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1
@@ -176,8 +167,8 @@
             "message": "'renderControl' is declared but its value is never read."
         },
         {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "'content' is declared but its value is never read."
+            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
+            "message": "'BillingPeriod' is declared but its value is never read."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
@@ -200,30 +191,6 @@
         {
             "path": "assets/helpers/__tests__/promiseTest.ts",
             "message": "Parameter 'fail' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'searchText' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'content' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'node' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'element' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'originalState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Parameter 'component' implicitly has an 'any' type."
         }
     ],
     "TS2322": [
@@ -232,20 +199,12 @@
             "message": "Type 'string | null | undefined' is not assignable to type 'string | undefined'."
         },
         {
-            "path": "assets/components/StripePaymentRequestButton/StripePaymentRequestButtonContainer.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
-        },
-        {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
             "message": "Type '{ children: Element[]; legend: string; role: \"radiogroup\"; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioGroupProps'."
         },
         {
             "path": "assets/components/subscriptionCheckouts/billingPeriodSelector.tsx",
             "message": "Type '{ label: string; value: string; supporting: string; offer: string; name: string; checked: boolean; onChange: () => Action; }' is not assignable to type 'IntrinsicAttributes & { css?: Interpolation<Theme>; } & RadioProps'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/stripeForm/stripeProviderForCountry.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
         },
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -262,10 +221,6 @@
         {
             "path": "assets/hocs/withLabel.tsx",
             "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/StripeCardForm/StripeCardFormContainer.tsx",
-            "message": "Type '{ children: Element; stripe: Stripe | null; options: {}; }' is not assignable to type 'IntrinsicAttributes & ElementsProps'."
         },
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
@@ -290,10 +245,6 @@
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Type '{ image: Element; total: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; includesDigiSub: boolean; digiSubPrice: string; changeSubscription: string; }' is not assignable to type 'Omit<Pick<PropTypes, \"image\" | \"total\" | \"productPrices\" | \"billingPeriod\" | \"fulfilmentOption\" | \"productOption\" | \"digiSubPrice\" | \"includesDigiSub\"> & Partial<...> & Partial<...>, \"productPrices\" | ... 2 more ... | \"productOption\">'."
         }
     ],
     "TS2769": [
@@ -303,10 +254,6 @@
         },
         {
             "path": "assets/helpers/polyfills/layout.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "No overload matches this call."
         }
     ],
@@ -384,10 +331,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/globals.ts",
             "message": "Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ SixdayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; SundayPlus: { Monthly: { GBP: { price: number; savingVsRetail: number; currency: string; fixedTerm: boolean; promotions: never[]; }; }; }; ... 7 more ...; EverydayPlus: { ...; ...'."
         }
     ],
     "TS2411": [
@@ -450,10 +393,6 @@
     ],
     "TS2578": [
         {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
             "message": "Unused '@ts-expect-error' directive."
         },
@@ -464,40 +403,6 @@
         {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Unused '@ts-expect-error' directive."
-        }
-    ],
-    "TS2525": [
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Initializer provides no value for this binding element and the binding element has no default value."
-        }
-    ],
-    "TS7022": [
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "'initialState' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer."
-        }
-    ],
-    "TS7031": [
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Binding element 'initialState' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Binding element 'children' implicitly has an 'any' type."
-        }
-    ],
-    "TS7034": [
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Variable 'props' implicitly has type 'any' in some locations where its type cannot be determined."
-        }
-    ],
-    "TS7005": [
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
-            "message": "Variable 'props' implicitly has an 'any' type."
         }
     ],
     "TS2741": [
