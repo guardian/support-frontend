@@ -17,7 +17,7 @@
             "TS7017": 1,
             "TS2304": 2,
             "TS2554": 6,
-            "TS6133": 6,
+            "TS6133": 5,
             "TS2578": 1
         },
         "byPath": {
@@ -49,7 +49,6 @@
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/helpers/urls/externalLinks.ts": 3,
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx": 1,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1
         }
     },
@@ -325,10 +324,6 @@
         {
             "path": "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx",
             "message": "'renderControl' is declared but its value is never read."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.tsx",
-            "message": "'BillingPeriod' is declared but its value is never read."
         },
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
