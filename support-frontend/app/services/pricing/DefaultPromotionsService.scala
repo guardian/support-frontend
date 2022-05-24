@@ -53,7 +53,7 @@ class DefaultPromotionsServiceS3(
   private def update(): Try[Unit] = fetch().map(newPromos => defaultPromoCodes.set(newPromos))
 
   private def startPollingS3(): Unit =
-    system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minute) { () =>
+    system.scheduler.scheduleWithFixedDelay(0.minutes, 10.minutes) { () =>
       update() match {
         case Failure(err) =>
           AwsCloudWatchMetricPut(cloudwatchClient)(defaultPromotionsLoadingFailure(stage))
