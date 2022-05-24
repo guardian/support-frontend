@@ -13,15 +13,12 @@ function getGlobal<T>(path = ''): T | null {
 	const value = path
 		.replace(/\[(.+?)\]/g, '.$1')
 		.split('.')
-		.reduce<unknown>(
-			(config: Record<string, unknown> | unknown, key: string) => {
-				if (isRecord(config)) {
-					return config[key];
-				}
-				return config;
-			},
-			window.guardian,
-		);
+		.reduce<unknown>((config: unknown, key: string) => {
+			if (isRecord(config)) {
+				return config[key];
+			}
+			return config;
+		}, window.guardian);
 
 	if (value) {
 		return value as T;
