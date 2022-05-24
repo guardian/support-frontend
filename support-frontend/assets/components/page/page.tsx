@@ -10,7 +10,7 @@ type PropTypes = {
 	header: ReactNode;
 	footer?: ReactNode;
 	children: ReactNode;
-	classModifiers?: string[];
+	classModifiers: string[];
 	backgroundImageSrc?: string;
 }; // ----- Component ----- //
 
@@ -40,10 +40,7 @@ export default function Page(props: PropTypes): JSX.Element {
 	return (
 		<div
 			id={props.id}
-			className={classNameWithModifiers(
-				'gu-content',
-				props.classModifiers ?? [],
-			)}
+			className={classNameWithModifiers('gu-content', props.classModifiers)}
 		>
 			<CsrBanner />
 			{props.header}
