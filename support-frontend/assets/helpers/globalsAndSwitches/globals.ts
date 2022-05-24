@@ -1,24 +1,36 @@
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import 'helpers/globalsAndSwitches/settings';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import type { Option } from 'helpers/types/option';
 import type { ConfiguredRegionAmounts } from '../contributions';
 
-function getGlobal<T>(path = ''): Option<T> {
+function isRecord(
+	item: Record<string, unknown> | unknown,
+): item is Record<string, unknown> {
+	return item != null && !Array.isArray(item) && typeof item === 'object';
+}
+
+function getGlobal<T>(path = ''): T | null {
 	const value = path
 		.replace(/\[(.+?)\]/g, '.$1')
 		.split('.')
-		.reduce((o, key: any) => o && o[key], window.guardian);
+		.reduce<unknown>(
+			(config: Record<string, unknown> | unknown, key: string) => {
+				if (isRecord(config)) {
+					return config[key];
+				}
+				return config;
+			},
+			window.guardian,
+		);
 
 	if (value) {
-		return value as any as T;
+		return value as T;
 	}
 
 	return null;
 }
 
-const emptyConfiguredRegionAmounts: ConfiguredRegionAmounts = {
+export const emptyConfiguredRegionAmounts: ConfiguredRegionAmounts = {
 	control: {
 		ONE_OFF: {
 			amounts: [],
@@ -36,43 +48,42 @@ const emptyConfiguredRegionAmounts: ConfiguredRegionAmounts = {
 };
 
 const getSettings = (): Settings => {
-	const globalSettings = getGlobal('settings');
-	return (
-		globalSettings || {
-			switches: {
-				experiments: {},
-			},
-			amounts: {
-				GBPCountries: emptyConfiguredRegionAmounts,
-				UnitedStates: emptyConfiguredRegionAmounts,
-				EURCountries: emptyConfiguredRegionAmounts,
-				AUDCountries: emptyConfiguredRegionAmounts,
-				International: emptyConfiguredRegionAmounts,
-				NZDCountries: emptyConfiguredRegionAmounts,
-				Canada: emptyConfiguredRegionAmounts,
-			},
-			contributionTypes: {
-				GBPCountries: [],
-				UnitedStates: [],
-				EURCountries: [],
-				AUDCountries: [],
-				International: [],
-				NZDCountries: [],
-				Canada: [],
-			},
-			metricUrl: '',
-		}
-	);
+	const globalSettings = getGlobal<Settings>('settings');
+	const defaultSettings = {
+		switches: {
+			experiments: {},
+		},
+		amounts: {
+			GBPCountries: emptyConfiguredRegionAmounts,
+			UnitedStates: emptyConfiguredRegionAmounts,
+			EURCountries: emptyConfiguredRegionAmounts,
+			AUDCountries: emptyConfiguredRegionAmounts,
+			International: emptyConfiguredRegionAmounts,
+			NZDCountries: emptyConfiguredRegionAmounts,
+			Canada: emptyConfiguredRegionAmounts,
+		},
+		contributionTypes: {
+			GBPCountries: [],
+			UnitedStates: [],
+			EURCountries: [],
+			AUDCountries: [],
+			International: [],
+			NZDCountries: [],
+			Canada: [],
+		},
+		metricUrl: '',
+	};
+	return globalSettings ?? defaultSettings;
 };
 
-const getProductPrices = (): ProductPrices | null | undefined =>
-	getGlobal('productPrices');
+const getProductPrices = (): ProductPrices | null =>
+	getGlobal<ProductPrices>('productPrices');
 
-const getPromotionCopy = (): PromotionCopy | null | undefined =>
-	getGlobal('promotionCopy');
+const getPromotionCopy = (): PromotionCopy | null =>
+	getGlobal<PromotionCopy>('promotionCopy');
 
 const isSwitchOn = (switchName: string): boolean => {
-	const sw = getGlobal(`settings.switches.${switchName}`);
+	const sw = getGlobal<Status>(`settings.switches.${switchName}`);
 	return !!(sw && sw === 'On');
 };
 
