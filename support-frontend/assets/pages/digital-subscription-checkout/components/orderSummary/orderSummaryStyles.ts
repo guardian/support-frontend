@@ -1,29 +1,27 @@
 import { css } from '@emotion/react';
 import {
-	background,
 	between,
 	body,
-	border,
-	brandAltBackground,
+	brandAlt,
 	from,
 	headline,
 	neutral,
 	space,
-	text,
 	textSans,
 	until,
 } from '@guardian/source-foundations';
 
 export const wrapper = css`
-	background-color: ${background.primary};
-	color: ${text.primary};
+	background-color: ${neutral[100]};
+	color: ${neutral[7]};
 	${until.desktop} {
 		padding: ${space[3]}px;
 	}
 	${until.tablet} {
-		box-shadow: 0 4px 4px ${border.secondary};
+		box-shadow: 0 4px 4px ${neutral[86]};
 	}
 `;
+
 export const topLine = css`
 	display: flex;
 	justify-content: space-between;
@@ -40,7 +38,7 @@ export const topLine = css`
 	a:visited {
 		display: block;
 		${textSans.small()};
-		color: ${text.primary};
+		color: ${neutral[7]};
 		${from.desktop} {
 			${textSans.medium({
 				fontWeight: 'bold',
@@ -52,6 +50,7 @@ export const topLine = css`
 		display: block;
 	}
 `;
+
 export const sansTitle = css`
 	${textSans.medium({
 		fontWeight: 'bold',
@@ -62,6 +61,7 @@ export const sansTitle = css`
 		})};
 	}
 `;
+
 export const contentBlock = css`
 	display: flex;
 	width: 100%;
@@ -70,6 +70,7 @@ export const contentBlock = css`
 		display: block;
 	}
 `;
+
 export const imageContainer = css`
 	display: inline-flex;
 	align-items: flex-start;
@@ -94,6 +95,7 @@ export const imageContainer = css`
 		}
 	}
 `;
+
 export const textBlock = css`
 	margin-left: ${space[3]}px;
 
@@ -122,7 +124,7 @@ export const textBlock = css`
 		max-width: 240px;
 	}
 	span {
-		background-color: ${brandAltBackground.primary};
+		background-color: ${brandAlt[400]};
 		padding: 2px;
 		${textSans.small({
 			fontWeight: 'bold',
@@ -134,7 +136,7 @@ export const textBlock = css`
 	}
 	p {
 		${body.small({
-			fontWeight: 'normal',
+			fontWeight: 'regular',
 		})};
 		line-height: 135%;
 		${from.desktop} {
@@ -142,6 +144,7 @@ export const textBlock = css`
 		}
 	}
 `;
+
 export const endSummary = css`
 	display: none;
 
