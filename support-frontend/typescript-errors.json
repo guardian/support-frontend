@@ -2,7 +2,7 @@
     "errorCounts": {
         "byCode": {
             "TS1208": 1,
-            "TS2345": 15,
+            "TS2345": 14,
             "TS7006": 4,
             "TS2769": 2,
             "TS2305": 1,
@@ -10,14 +10,13 @@
             "TS2556": 3,
             "TS2339": 5,
             "TS2569": 2,
-            "TS2322": 7,
+            "TS2322": 5,
             "TS2411": 1,
             "TS2367": 1,
             "TS7017": 1,
             "TS2304": 2,
             "TS2554": 6,
-            "TS6133": 5,
-            "TS2578": 1
+            "TS6133": 5
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
@@ -30,7 +29,6 @@
             "assets/helpers/__tests__/promiseTest.ts": 3,
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
-            "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx": 4,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
@@ -112,10 +110,6 @@
         {
             "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
             "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAg...'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Argument of type '{ positive: true; negative: false; }' is not assignable to parameter of type 'SetStateAction<{ positive: boolean; negative: boolean; open: boolean; }>'."
         }
     ],
     "TS7006": [
@@ -232,14 +226,6 @@
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Type 'SerializedStyles | null' is not assignable to type 'SerializedStyles'."
         }
     ],
     "TS2411": [
@@ -316,12 +302,6 @@
         {
             "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
             "message": "'React' is declared but its value is never read."
-        }
-    ],
-    "TS2578": [
-        {
-            "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Unused '@ts-expect-error' directive."
         }
     ]
 }
