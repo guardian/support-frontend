@@ -19,10 +19,10 @@ function Dot() {
 function EndSummary({
 	promotion,
 	priceDescription,
-	orderIsAGift = false,
+	orderIsAGift,
 	digitalGiftBillingPeriod,
 	price,
-	isPatron = false,
+	isPatron,
 }: EndSummaryProps) {
 	const giftText = getGiftOrderSummaryText(digitalGiftBillingPeriod, price);
 	return (
@@ -89,7 +89,7 @@ function NonGiftSummary(props: NonGiftSummaryTypes) {
 				<div css={styles.listMain}>{props.promotion}</div>
 				<span css={styles.subText}>{props.priceDescription}</span>
 			</li>
-			{props.isPatron && (
+			{!props.isPatron && (
 				<>
 					<li>
 						<Dot />

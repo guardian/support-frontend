@@ -16,6 +16,8 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import { giftingReducer } from 'helpers/redux/checkout/giftingState/reducer';
+import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
@@ -32,6 +34,7 @@ export type ReduxState<PageState> = {
 
 export type CheckoutFormState = {
 	personalDetails: PersonalDetailsState;
+	gifting: GiftingState;
 };
 
 export type CheckoutState = ReduxState<{
@@ -79,6 +82,7 @@ function createReducer(
 		),
 		checkoutForm: combineReducers({
 			personalDetails: personalDetailsReducer,
+			gifting: giftingReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,

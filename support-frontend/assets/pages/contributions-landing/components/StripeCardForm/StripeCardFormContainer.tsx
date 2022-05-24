@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+
 import { Elements } from '@stripe/react-stripe-js';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type { ContributionType } from 'helpers/contributions';
@@ -13,9 +14,9 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import StripeCardForm from './StripeCardForm';
 import './stripeCardForm.scss';
+
 // ----- Types -----//
 
-/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
 	country: IsoCountry;
 	currency: IsoCurrency;
@@ -24,7 +25,7 @@ type PropTypes = {
 	paymentMethod: PaymentMethod;
 };
 
-function StripeCardFormContainer(props: PropTypes) {
+function StripeCardFormContainer(props: PropTypes): JSX.Element | null {
 	const stripeAccount =
 		stripeAccountForContributionType[props.contributionType];
 	const stripeKey = getStripeKey(
@@ -50,10 +51,7 @@ function StripeCardFormContainer(props: PropTypes) {
 						stripe={stripeObjects[stripeAccount]}
 						options={elementsOptions}
 					>
-						<StripeCardForm
-							stripeKey={stripeKey}
-							isTestUser={props.isTestUser}
-						/>
+						<StripeCardForm stripeKey={stripeKey} />
 					</Elements>
 				</div>
 			);

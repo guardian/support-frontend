@@ -15,27 +15,35 @@ import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-export type FormFields = PersonalDetailsState & {
-	titleGiftRecipient: Option<Title>;
-	firstNameGiftRecipient: Option<string>;
-	lastNameGiftRecipient: Option<string>;
-	emailGiftRecipient: Option<string>;
-	billingPeriod: BillingPeriod;
-	paymentMethod: Option<PaymentMethod>;
-	startDate: Option<string>;
-	billingAddressIsSame: boolean;
-	fulfilmentOption: FulfilmentOptions;
-	product: SubscriptionProduct;
-	productOption: ProductOptions;
-	orderIsAGift?: boolean;
-	deliveryInstructions: Option<string>;
-	giftMessage: Option<string>;
-	giftDeliveryDate: Option<string>;
-	csrUsername?: string;
-	salesforceCaseId?: string;
+
+type GiftingFields = {
+	titleGiftRecipient?: Title;
+	firstNameGiftRecipient: string;
+	lastNameGiftRecipient: string;
+	emailGiftRecipient: string;
+	giftMessage?: string;
+	giftDeliveryDate?: string;
 };
+
+export type FormFields = PersonalDetailsState &
+	GiftingFields & {
+		billingPeriod: BillingPeriod;
+		paymentMethod: Option<PaymentMethod>;
+		startDate: Option<string>;
+		billingAddressIsSame: boolean;
+		fulfilmentOption: FulfilmentOptions;
+		product: SubscriptionProduct;
+		productOption: ProductOptions;
+		orderIsAGift?: boolean;
+		deliveryInstructions: Option<string>;
+		csrUsername?: string;
+		salesforceCaseId?: string;
+	};
 export type FormField = keyof FormFields | 'recaptcha';
-export type FormState = Omit<FormFields, keyof PersonalDetailsState> & {
+export type FormState = Omit<
+	FormFields,
+	keyof PersonalDetailsState | keyof GiftingFields
+> & {
 	stage: Stage;
 	product: SubscriptionProduct;
 	formErrors: Array<FormError<FormField>>;
@@ -59,10 +67,10 @@ function getFormFields(state: AnyCheckoutState): FormFields {
 		userTypeFromIdentityResponse:
 			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 		telephone: state.page.checkoutForm.personalDetails.telephone,
-		titleGiftRecipient: state.page.checkout.titleGiftRecipient,
-		firstNameGiftRecipient: state.page.checkout.firstNameGiftRecipient,
-		lastNameGiftRecipient: state.page.checkout.lastNameGiftRecipient,
-		emailGiftRecipient: state.page.checkout.emailGiftRecipient,
+		titleGiftRecipient: state.page.checkoutForm.gifting.title,
+		firstNameGiftRecipient: state.page.checkoutForm.gifting.firstName,
+		lastNameGiftRecipient: state.page.checkoutForm.gifting.lastName,
+		emailGiftRecipient: state.page.checkoutForm.gifting.email,
 		startDate: state.page.checkout.startDate,
 		billingPeriod: state.page.checkout.billingPeriod,
 		paymentMethod: state.page.checkout.paymentMethod,
@@ -72,8 +80,8 @@ function getFormFields(state: AnyCheckoutState): FormFields {
 		billingAddressIsSame: state.page.checkout.billingAddressIsSame,
 		orderIsAGift: state.page.checkout.orderIsAGift,
 		deliveryInstructions: state.page.checkout.deliveryInstructions,
-		giftMessage: state.page.checkout.giftMessage,
-		giftDeliveryDate: state.page.checkout.giftDeliveryDate,
+		giftMessage: state.page.checkoutForm.gifting.giftMessage,
+		giftDeliveryDate: state.page.checkoutForm.gifting.giftDeliveryDate,
 	};
 }
 

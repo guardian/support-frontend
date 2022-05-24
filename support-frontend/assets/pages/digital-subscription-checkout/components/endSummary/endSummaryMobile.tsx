@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { background, border, from, space } from '@guardian/source-foundations';
-import type { Option } from 'helpers/types/option';
 import EndSummary from 'pages/digital-subscription-checkout/components/endSummary/endSummary';
 import 'helpers/types/option';
 
@@ -18,19 +17,13 @@ const endSummaryMobile = css`
 		display: none;
 	}
 `;
-type PropTypes = {
-	orderIsAGift?: Option<boolean>;
-};
 
-function EndSummaryMobile(props: PropTypes) {
+function EndSummaryMobile(): JSX.Element {
 	return (
 		<span css={endSummaryMobile}>
-			<EndSummary orderIsAGift={props.orderIsAGift} />
+			<EndSummary />
 		</span>
 	);
 }
 
-EndSummaryMobile.defaultProps = {
-	orderIsAGift: false,
-};
 export default EndSummaryMobile;

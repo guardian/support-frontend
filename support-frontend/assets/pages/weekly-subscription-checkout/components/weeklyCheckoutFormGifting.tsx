@@ -240,11 +240,11 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							{options(titles)}
 						</Select>
 						<PersonalDetailsGift
-							firstNameGiftRecipient={props.firstNameGiftRecipient ?? ''}
+							firstNameGiftRecipient={props.firstNameGiftRecipient}
 							setFirstNameGift={props.setFirstNameGift}
-							lastNameGiftRecipient={props.lastNameGiftRecipient ?? ''}
+							lastNameGiftRecipient={props.lastNameGiftRecipient}
 							setLastNameGift={props.setLastNameGift}
-							emailGiftRecipient={props.emailGiftRecipient ?? ''}
+							emailGiftRecipient={props.emailGiftRecipient}
 							setEmailGift={props.setEmailGift}
 							formErrors={props.formErrors}
 						/>

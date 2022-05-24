@@ -157,8 +157,8 @@ const blueLinkLine = css`
 `;
 // ----- Types ----- //
 export type PropTypes = {
-	giftDeliveryDate: string | null;
-	giftRecipient: string | null;
+	giftDeliveryDate?: string;
+	giftRecipient?: string;
 	marketingConsent: React.ReactNode;
 	pending?: boolean;
 	countryGroupId: CountryGroupId;
@@ -167,12 +167,12 @@ export type PropTypes = {
 // ----- Map state to props ----- //
 function mapStateToProps(state: CheckoutState) {
 	return {
-		giftDeliveryDate: state.page.checkout.giftDeliveryDate,
-		giftRecipient: state.page.checkout.firstNameGiftRecipient,
+		giftDeliveryDate: state.page.checkoutForm.gifting.giftDeliveryDate,
+		giftRecipient: state.page.checkoutForm.gifting.firstName,
 	};
 }
 
-function GreenCheckMark() {
+function GreenCheckMark(): JSX.Element {
 	return (
 		<div css={greenCircle}>
 			<SvgCheckmark />
@@ -191,19 +191,7 @@ function ThankYouGift(props: PropTypes) {
 				<CheckoutLayout
 					aside={
 						<OrderSummaryThankYou
-							image={
-								<GridImage
-									gridId={
-										props.countryGroupId === 'AUDCountries'
-											? 'editionsPackshotAusShort'
-											: 'editionsPackshotShort'
-									}
-									srcSizes={[1000, 500]}
-									sizes="(max-width: 740px) 50vw, 500"
-									imgType="png"
-									altText=""
-								/>
-							}
+							countryGroupId={props.countryGroupId}
 							title="Digital Gift Subscription"
 							pending={props.pending}
 						/>
@@ -327,6 +315,6 @@ function ThankYouGift(props: PropTypes) {
 
 ThankYouGift.defaultProps = {
 	pending: false,
-}; // ----- Export ----- //
+};
 
 export default connect(mapStateToProps)(ThankYouGift);

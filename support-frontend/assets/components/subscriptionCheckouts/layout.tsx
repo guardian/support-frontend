@@ -1,4 +1,4 @@
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import {
 	asideBottomCss,
@@ -8,16 +8,22 @@ import {
 	mainCss,
 	stickyCss,
 } from 'components/subscriptionCheckouts/layoutStyles';
-import styles from './layout.module.scss';
+import moduleStyles from './layout.module.scss';
+
+const styles = moduleStyles as { wrapper: string };
 
 type AsideWrapPosition = 'top' | 'bottom';
 type PropTypes = {
-	children: Node;
-	aside: Node;
+	children: ReactNode;
+	aside: ReactNode;
 	wrapPosition: AsideWrapPosition | null | undefined;
 };
 
-function CheckoutLayout({ children, aside, wrapPosition }: PropTypes) {
+function CheckoutLayout({
+	children,
+	aside,
+	wrapPosition,
+}: PropTypes): JSX.Element {
 	const wrapCss = wrapPosition === 'bottom' ? asideBottomCss : asideTopCss;
 	return (
 		<div css={[mainCss, wrapCss]}>
@@ -32,11 +38,12 @@ CheckoutLayout.defaultProps = {
 	wrapPosition: 'top',
 };
 
-function Content({ children }: { children: Node }) {
+function Content({ children }: { children: ReactNode }): JSX.Element {
 	return (
 		<LeftMarginSection className={styles.wrapper}>{children}</LeftMarginSection>
 	);
 }
 
 export { Content };
+
 export default CheckoutLayout;

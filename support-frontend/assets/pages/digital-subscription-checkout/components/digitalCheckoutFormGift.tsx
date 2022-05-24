@@ -88,7 +88,7 @@ function mapDispatchToProps() {
 	return {
 		...formActionCreators,
 		formIsValid:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() => (_dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
 				checkoutFormIsValid(getState()),
 		submitForm:
 			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
@@ -167,11 +167,11 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 				>
 					<FormSection title="Gift recipient's details">
 						<PersonalDetailsDigitalGift
-							firstNameGiftRecipient={props.firstNameGiftRecipient ?? ''}
+							firstNameGiftRecipient={props.firstNameGiftRecipient}
 							setFirstNameGift={props.setFirstNameGift}
-							lastNameGiftRecipient={props.lastNameGiftRecipient ?? ''}
+							lastNameGiftRecipient={props.lastNameGiftRecipient}
 							setLastNameGift={props.setLastNameGift}
-							emailGiftRecipient={props.emailGiftRecipient ?? ''}
+							emailGiftRecipient={props.emailGiftRecipient}
 							setEmailGift={props.setEmailGift}
 							formErrors={props.formErrors}
 						/>
@@ -277,7 +277,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						errorReason={props.submissionError}
 						errorHeading={submissionErrorHeading}
 					/>
-					<EndSummaryMobile orderIsAGift />
+					<EndSummaryMobile />
 					<DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>
 			</CheckoutLayout>

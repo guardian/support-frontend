@@ -4,15 +4,15 @@ import {
 	buttonThemeReaderRevenue,
 	LinkButton,
 } from '@guardian/source-react-components';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 export type ProductSmall = {
 	offerCopy: string;
-	priceCopy: Node;
+	priceCopy: ReactNode;
 	buttonCopy: string;
 	href: string;
-	onClick: (...args: any[]) => any;
+	onClick: () => void;
 	cssOverrides?: string | string[];
 	billingPeriod: BillingPeriod;
 };
@@ -47,7 +47,7 @@ const buttonStyles = css`
 	justify-content: center;
 `;
 
-function ProductOptionSmall(props: ProductSmall) {
+function ProductOptionSmall(props: ProductSmall): JSX.Element {
 	return (
 		<span css={[productOptionSmallStyles, props.cssOverrides]}>
 			<p css={offerCopyStyles}>{props.offerCopy}</p>
@@ -69,4 +69,5 @@ ProductOptionSmall.defaultProps = {
 	offerCopy: '',
 	cssOverrides: '',
 };
+
 export default ProductOptionSmall;
