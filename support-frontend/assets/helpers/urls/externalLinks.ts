@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Participations } from 'helpers/abTests/abtest';
+
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type {
@@ -8,12 +8,11 @@ import type {
 } from 'helpers/productPrice/billingPeriods';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { deriveSubsAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Option } from 'helpers/types/option';
 import { getBaseDomain, getOrigin } from 'helpers/urls/url';
 
 // ----- Types ----- //
+
 export type MemProduct = 'events';
 export type SubsUrls = {
 	[key in SubscriptionProduct]: string;
@@ -23,7 +22,7 @@ export type SubsUrls = {
 };
 
 // ----- Setup ----- //
-const subsUrl = `https://subscribe.${getBaseDomain()}`;
+
 const patronsUrl = 'https://patrons.theguardian.com';
 const profileUrl = `https://profile.${getBaseDomain()}`;
 const manageUrl = `https://manage.${getBaseDomain()}`;
@@ -42,6 +41,7 @@ const memUrls: Record<MemProduct, string> = {
 };
 
 // ----- Functions ----- //
+
 // Creates URLs for the membership site from promo codes and intCmp.
 function getMemLink(product: MemProduct, intCmp?: string | null): string {
 	const params = new URLSearchParams();
@@ -55,44 +55,8 @@ function getPatronsLink(intCmp: string | null | undefined): string {
 	return `${patronsUrl}?${params.toString()}`;
 }
 
-function buildParamString(
-	product: SubscriptionProduct,
-	countryGroupId: CountryGroupId,
-	intCmp: string | null | undefined,
-	referrerAcquisitionData: ReferrerAcquisitionData | null,
-): string {
-	const params = new URLSearchParams(window.location.search);
-	const maybeCustomIntcmp = intCmp ?? defaultIntCmp;
-	params.set('INTCMP', maybeCustomIntcmp);
-
-	if (referrerAcquisitionData) {
-		params.set('acquisitionData', JSON.stringify(referrerAcquisitionData));
-	}
-
-	return params.toString();
-}
-
-function getLegacyPaperAndDigitalLink(
-	countryGroupId: CountryGroupId,
-	intCmp: string | null | undefined,
-	referrerAcquisitionData: ReferrerAcquisitionData,
-	nativeAbParticipations: Participations,
-): string {
-	const acquisitionData = deriveSubsAcquisitionData(
-		referrerAcquisitionData,
-		nativeAbParticipations,
-	);
-	return `${subsUrl}/p/GXX83X?${buildParamString(
-		'PaperAndDigital',
-		countryGroupId,
-		intCmp,
-		acquisitionData,
-	)}`;
-}
-
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
-	countryGroupId: CountryGroupId,
 	billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
 	promoCode: Option<string>,
 	orderIsAGift: boolean,
@@ -154,9 +118,10 @@ const getProfileUrl = (path: string) => (returnUrl?: string | null) => {
 
 const getSignoutUrl = getProfileUrl('signout');
 const getReauthenticateUrl = getProfileUrl('reauthenticate');
+
 // ----- Exports ----- //
+
 export {
-	getLegacyPaperAndDigitalLink,
 	getMemLink,
 	getPatronsLink,
 	getDigitalCheckout,
