@@ -6,7 +6,7 @@ import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.{CatalogService, Everyday, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
-import com.gu.support.promotions.{DefaultPromotionsService, PromotionService}
+import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.corporate.{
@@ -116,7 +116,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a 6 for 6 Guardian Weekly subscription" in {
     createZuoraHelper
       .createSubscription(
-        createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotionsService.GuardianWeekly.NonGift.sixForSix)),
+        createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)),
       )
       .map(_ should matchPattern {
         case s: SendThankYouEmailGuardianWeeklyState
