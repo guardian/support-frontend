@@ -1,3 +1,4 @@
+import { userIsPatron } from 'helpers/patrons';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
@@ -20,12 +21,14 @@ function mapStateToProps(state: CheckoutState): EndSummaryProps {
 		billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
 	const digitalGiftBillingPeriod =
 		billingPeriod === 'Annual' ? billingPeriod : 'Quarterly';
+
 	return {
 		priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
 		promotion: getPromotion(productPrice) ?? '',
 		orderIsAGift: orderIsAGift ?? false,
 		digitalGiftBillingPeriod,
 		price: showPrice(productPrice),
+		isPatron: userIsPatron(productPrice.promotions),
 	};
 }
 

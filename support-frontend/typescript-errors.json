@@ -5,27 +5,26 @@
             "TS2345": 18,
             "TS6133": 7,
             "TS7006": 10,
-            "TS2305": 3,
             "TS2769": 3,
+            "TS2305": 1,
             "TS2739": 3,
             "TS2556": 3,
             "TS2339": 5,
             "TS2569": 2,
-            "TS2322": 12,
+            "TS2322": 11,
             "TS7053": 3,
             "TS2411": 1,
             "TS2367": 2,
             "TS7017": 1,
             "TS2304": 2,
             "TS2554": 6,
-            "TS2578": 5,
-            "TS2741": 2,
-            "TS2314": 1,
+            "TS2578": 4,
             "TS2525": 1,
             "TS7022": 1,
             "TS7031": 2,
             "TS7034": 1,
-            "TS7005": 1
+            "TS7005": 1,
+            "TS2741": 1
         },
         "byPath": {
             "assets/__mocks__/imageMock.ts": 1,
@@ -46,11 +45,9 @@
             "assets/pages/contributions-landing/components/ContributionTypeTabs.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx": 16,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1,
-            "assets/components/product/productOptionSmall.tsx": 1,
-            "assets/components/subscriptionCheckouts/layout.tsx": 1,
-            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/polyfills/layout.ts": 1,
+            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/helpers/__tests__/contributionsTests.ts": 3,
             "assets/helpers/__tests__/urlTest.ts": 1,
             "assets/helpers/csrf/csrfReducer.ts": 2,
@@ -61,7 +58,6 @@
             "assets/helpers/utilities/utilities.ts": 1,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts": 1,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/helpers/polyfills/details.ts": 1,
@@ -69,11 +65,8 @@
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 1,
             "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 1,
             "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts": 1,
-            "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1,
-            "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx": 1
+            "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1
         }
     },
     "TS1208": [
@@ -228,20 +221,6 @@
             "message": "Parameter 'component' implicitly has an 'any' type."
         }
     ],
-    "TS2305": [
-        {
-            "path": "assets/components/product/productOptionSmall.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/layout.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        }
-    ],
     "TS2769": [
         {
             "path": "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts",
@@ -254,6 +233,12 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "No overload matches this call."
+        }
+    ],
+    "TS2305": [
+        {
+            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
+            "message": "Module '\"react\"' has no exported member 'Node'."
         }
     ],
     "TS2739": [
@@ -344,10 +329,6 @@
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummaryMobile.tsx",
-            "message": "Type '{ orderIsAGift: Option<boolean> | undefined; }' is not assignable to type 'IntrinsicAttributes & Omit<EndSummaryProps, \"orderIsAGift\" | \"promotion\" | \"price\" | \"priceDescription\" | \"digitalGiftBillingPeriod\" | \"isPatron\">'."
         },
         {
             "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryStyles.ts",
@@ -452,28 +433,8 @@
             "message": "Unused '@ts-expect-error' directive."
         },
         {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
             "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Unused '@ts-expect-error' directive."
-        }
-    ],
-    "TS2741": [
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/endSummary/endSummarySelector.ts",
-            "message": "Property 'isPatron' is missing in type '{ priceDescription: string; promotion: string; orderIsAGift: boolean; digitalGiftBillingPeriod: \"Annual\" | \"Quarterly\"; price: string; }' but required in type 'EndSummaryProps'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
-            "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
-        }
-    ],
-    "TS2314": [
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/orderSummary/orderSummaryThankYou.tsx",
-            "message": "Generic type '$Call' requires 1 type argument(s)."
         }
     ],
     "TS2525": [
@@ -508,6 +469,12 @@
         {
             "path": "assets/pages/paper-subscription-checkout/components/orderSummary/orderSummary.test.tsx",
             "message": "Variable 'props' implicitly has an 'any' type."
+        }
+    ],
+    "TS2741": [
+        {
+            "path": "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts",
+            "message": "Property 'NoProductOptions' is missing in type '{ Saturday: string; SaturdayPlus: string; Sunday: string; SundayPlus: string; Weekend: string; WeekendPlus: string; Sixday: string; SixdayPlus: string; Everyday: string; EverydayPlus: string; }' but required in type 'Record<ProductOptions, string>'."
         }
     ]
 }

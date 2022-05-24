@@ -191,19 +191,7 @@ function ThankYouGift(props: PropTypes) {
 				<CheckoutLayout
 					aside={
 						<OrderSummaryThankYou
-							image={
-								<GridImage
-									gridId={
-										props.countryGroupId === 'AUDCountries'
-											? 'editionsPackshotAusShort'
-											: 'editionsPackshotShort'
-									}
-									srcSizes={[1000, 500]}
-									sizes="(max-width: 740px) 50vw, 500"
-									imgType="png"
-									altText=""
-								/>
-							}
+							countryGroupId={props.countryGroupId}
 							title="Digital Gift Subscription"
 							pending={props.pending}
 						/>
