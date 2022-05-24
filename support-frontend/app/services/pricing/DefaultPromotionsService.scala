@@ -14,7 +14,7 @@ import services.pricing.DefaultPromotionsService.DefaultPromotions
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 trait DefaultPromotionsService {
   def getPromoCodes(product: Product): List[String]
@@ -52,11 +52,10 @@ class DefaultPromotionsServiceS3(
 
   private def startPollingS3(): Unit =
     system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minute) { () =>
-      update()
-        .fold(
-          err => logger.error(s"Error fetching default promos from $s3Uri: ${err.getMessage}", err),
-          _ => (),
-        )
+      update() match {
+        case Failure(err) => logger.error(s"Error fetching default promos from $s3Uri: ${err.getMessage}", err)
+        case Success(_) => ()
+      }
     }
 
   def getPromoCodes(product: Product): List[String] =
