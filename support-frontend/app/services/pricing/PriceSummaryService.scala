@@ -32,7 +32,7 @@ class PriceSummaryService(
       .toMap
   }
 
-  def getDefaultPromoCodes(product: Product): List[String] = defaultPromotionsService.getPromos(product)
+  def getDefaultPromoCodes(product: Product): List[String] = defaultPromotionsService.getPromoCodes(product)
 
   def getPricesForCountryGroup[T <: Product](
       product: T,

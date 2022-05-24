@@ -17,7 +17,7 @@ import scala.concurrent.duration.DurationInt
 import scala.util.Try
 
 trait DefaultPromotionsService {
-  def getPromos(product: Product): List[String]
+  def getPromoCodes(product: Product): List[String]
 }
 
 object DefaultPromotionsService {
@@ -38,7 +38,7 @@ class DefaultPromotionsServiceS3(
     val env = TouchPointEnvironments.fromStage(stage)
     new AmazonS3URI(s"s3://gu-promotions-tool-private/${env.envValue}/defaultPromos.json")
   }
-  private val defaultPromos = new AtomicReference[DefaultPromotions](
+  private val defaultPromoCodes = new AtomicReference[DefaultPromotions](
     DefaultPromotions(guardianWeekly = Nil),
   )
 
@@ -48,7 +48,7 @@ class DefaultPromotionsServiceS3(
       defaultPromos <- decode[DefaultPromotions](raw).toTry
     } yield defaultPromos
 
-  private def update(): Try[Unit] = fetch().map(newPromos => defaultPromos.set(newPromos))
+  private def update(): Try[Unit] = fetch().map(newPromos => defaultPromoCodes.set(newPromos))
 
   private def startPollingS3(): Unit =
     system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minute) { () =>
@@ -59,9 +59,9 @@ class DefaultPromotionsServiceS3(
         )
     }
 
-  def getPromos(product: Product): List[String] =
+  def getPromoCodes(product: Product): List[String] =
     product match {
-      case GuardianWeekly => defaultPromos.get().guardianWeekly
+      case GuardianWeekly => defaultPromoCodes.get().guardianWeekly
       case _ => Nil
     }
 
