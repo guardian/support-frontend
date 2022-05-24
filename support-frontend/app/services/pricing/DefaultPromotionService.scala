@@ -11,29 +11,29 @@ import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.defaultPromotionsLoadingFailure
 import com.gu.support.catalog.{GuardianWeekly, Product}
 import com.typesafe.scalalogging.LazyLogging
-import services.pricing.DefaultPromotionsService.DefaultPromotions
+import services.pricing.DefaultPromotionService.DefaultPromotions
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success, Try}
 
-trait DefaultPromotionsService {
+trait DefaultPromotionService {
   def getPromoCodes(product: Product): List[String]
 }
 
-object DefaultPromotionsService {
+object DefaultPromotionService {
   case class DefaultPromotions(guardianWeekly: List[String])
 
   implicit val decoder = Decoder[DefaultPromotions]
 }
 
-class DefaultPromotionsServiceS3(
+class DefaultPromotionServiceS3(
     client: AwsS3Client,
     stage: Stage,
     system: ActorSystem,
 )(implicit ec: ExecutionContext)
-    extends DefaultPromotionsService
+    extends DefaultPromotionService
     with LazyLogging {
 
   private val s3Uri = {

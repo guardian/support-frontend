@@ -14,7 +14,7 @@ import scala.math.BigDecimal.RoundingMode
 
 class PriceSummaryService(
     promotionService: PromotionService,
-    defaultPromotionsService: DefaultPromotionsService,
+    defaultPromotionService: DefaultPromotionService,
     catalogService: CatalogService,
 ) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
@@ -32,7 +32,7 @@ class PriceSummaryService(
       .toMap
   }
 
-  def getDefaultPromoCodes(product: Product): List[String] = defaultPromotionsService.getPromoCodes(product)
+  def getDefaultPromoCodes(product: Product): List[String] = defaultPromotionService.getPromoCodes(product)
 
   def getPricesForCountryGroup[T <: Product](
       product: T,

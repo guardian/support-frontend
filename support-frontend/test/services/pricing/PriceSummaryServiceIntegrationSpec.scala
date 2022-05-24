@@ -16,7 +16,7 @@ import org.scalatest.matchers.should.Matchers
 @IntegrationTest
 class PriceSummaryServiceIntegrationSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   val actorSystem = ActorSystem("test")
-  val defaultPromotionsService = new DefaultPromotionsServiceS3(AwsS3Client, Stages.DEV, actorSystem)
+  val defaultPromotionsService = new DefaultPromotionServiceS3(AwsS3Client, Stages.DEV, actorSystem)
   val service =
     new PriceSummaryService(
       PromotionServiceSpec.serviceWithDynamo,
