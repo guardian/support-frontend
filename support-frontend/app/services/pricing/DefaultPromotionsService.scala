@@ -27,12 +27,12 @@ object DefaultPromotionsService {
 }
 
 class DefaultPromotionsServiceS3(
-    client: AwsS3Client,
-    stage: Stage,
-    system: ActorSystem,
+  client: AwsS3Client,
+  stage: Stage,
+  system: ActorSystem,
 )(implicit ec: ExecutionContext)
-    extends DefaultPromotionsService
-    with LazyLogging {
+  extends DefaultPromotionsService
+  with LazyLogging {
 
   private val s3Uri = {
     val env = TouchPointEnvironments.fromStage(stage)
