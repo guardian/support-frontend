@@ -105,14 +105,13 @@ lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(SeleniumTest, IntegrationTest)
-  .configs(SeleniumTest)
   .settings(
+    integrationTestSettings,
     inConfig(SeleniumTest)(Defaults.testTasks),
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalafmtSettings,
-    integrationTestSettings,
   )
   .dependsOn(
     // Include tests from support-services, for use by PriceSummaryServiceSpec
