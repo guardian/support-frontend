@@ -1,12 +1,14 @@
 package services.pricing
 
 import com.amazonaws.services.s3.AmazonS3URI
-import com.gu.aws.AwsS3Client
+import com.gu.aws.{AwsCloudWatchMetricPut, AwsS3Client}
 import com.gu.support.config.{Stage, TouchPointEnvironments}
 import io.circe._
 import io.circe.parser._
 import io.circe.generic.auto._
 import akka.actor.ActorSystem
+import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
+import com.gu.aws.AwsCloudWatchMetricSetup.defaultPromotionsLoadingFailure
 import com.gu.support.catalog.{GuardianWeekly, Product}
 import com.typesafe.scalalogging.LazyLogging
 import services.pricing.DefaultPromotionsService.DefaultPromotions
@@ -27,12 +29,12 @@ object DefaultPromotionsService {
 }
 
 class DefaultPromotionsServiceS3(
-  client: AwsS3Client,
-  stage: Stage,
-  system: ActorSystem,
+    client: AwsS3Client,
+    stage: Stage,
+    system: ActorSystem,
 )(implicit ec: ExecutionContext)
-  extends DefaultPromotionsService
-  with LazyLogging {
+    extends DefaultPromotionsService
+    with LazyLogging {
 
   private val s3Uri = {
     val env = TouchPointEnvironments.fromStage(stage)
@@ -53,7 +55,9 @@ class DefaultPromotionsServiceS3(
   private def startPollingS3(): Unit =
     system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minute) { () =>
       update() match {
-        case Failure(err) => logger.error(s"Error fetching default promos from $s3Uri: ${err.getMessage}", err)
+        case Failure(err) =>
+          AwsCloudWatchMetricPut(cloudwatchClient)(defaultPromotionsLoadingFailure(stage))
+          logger.error(s"Error fetching default promos from $s3Uri: ${err.getMessage}", err)
         case Success(_) => ()
       }
     }

@@ -261,6 +261,45 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "DefaultPromotionsLoadingFailureAlarm31718167": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":reader-revenue-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Impact - cannot display default product promotions on the support site",
+        "AlarmName": "URGENT 9-5 - PROD support-frontend could not load default promo codes from S3",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "Environment",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "DefaultPromotionsLoadingFailure",
+        "Namespace": "support-frontend",
+        "Period": 60,
+        "Statistic": "Average",
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "DescribeEC2PolicyFF5F9295": Object {
       "Properties": Object {
         "PolicyDocument": Object {
