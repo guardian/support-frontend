@@ -18,7 +18,7 @@
             "TS7017": 1,
             "TS2304": 2,
             "TS2554": 6,
-            "TS2578": 3,
+            "TS2578": 1,
             "TS2741": 1
         },
         "byPath": {
@@ -60,8 +60,6 @@
             "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/weekly-subscription-checkout/helpers/__tests__/deliveryDays.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1,
             "assets/pages/paper-subscription-checkout/helpers/orderSummaryText.ts": 1
         }
     },
@@ -394,14 +392,6 @@
     "TS2578": [
         {
             "path": "assets/pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Unused '@ts-expect-error' directive."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
             "message": "Unused '@ts-expect-error' directive."
         }
     ],
