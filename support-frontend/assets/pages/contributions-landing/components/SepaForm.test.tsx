@@ -21,8 +21,8 @@ describe('Direct debit form', () => {
 		);
 	});
 
-	describe('SEPA Form PII fields are in Quantum Metrics Blocklist', () => {
-		it("successfully moves to the review stage, showing the user's details", () => {
+	describe('SEPA Form', () => {
+		it('PII fields are in Quantum Metrics Blocklist', () => {
 			const elementTestIds = [
 				'sepa-account-holder-name-input',
 				'sepa-account-number',
