@@ -1,10 +1,9 @@
 import '__mocks__/stripeMock';
-import type { Store } from '@reduxjs/toolkit';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { digitalProducts } from '__mocks__/productInfoMocks';
+import { renderWithStore } from '__test-utils__/render';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -29,29 +28,10 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 			page: pageReducer(initialState.common),
 			common: commonReducer,
 		}),
-		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
 	});
 	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
-}
-
-function renderWithStore(
-	component: React.ReactElement,
-	{
-		initialState,
-		store = initialState ? setUpStore(initialState) : undefined,
-		...renderOptions
-	}: { initialState?: WithDeliveryCheckoutState; store?: Store } = {},
-) {
-	function Wrapper({ children }: { children?: React.ReactNode }) {
-		return <>{store && <Provider store={store}>{children}</Provider>}</>;
-	}
-
-	return render(component, {
-		wrapper: Wrapper,
-		...renderOptions,
-	});
 }
 
 describe('Digital checkout form', () => {
@@ -94,6 +74,8 @@ describe('Digital checkout form', () => {
 		renderWithStore(<DigitalCheckoutForm />, {
 			// @ts-expect-error -- Type mismatch is unimportant for tests
 			initialState,
+			// @ts-expect-error -- Type mismatch is unimportant for tests
+			store: setUpStore(initialState),
 		});
 	});
 	describe('Payment methods', () => {

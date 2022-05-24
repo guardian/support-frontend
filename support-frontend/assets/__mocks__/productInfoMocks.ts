@@ -1,4 +1,6 @@
-export const paperProducts = {
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+
+export const paperProducts: ProductPrices = {
 	'United Kingdom': {
 		Collection: {
 			SixdayPlus: {
@@ -214,7 +216,8 @@ export const paperProducts = {
 		},
 	},
 };
-export const digitalProducts = {
+
+export const digitalProducts: ProductPrices = {
 	'New Zealand': {
 		NoFulfilmentOptions: {
 			NoProductOptions: {
@@ -526,7 +529,8 @@ export const digitalProducts = {
 		},
 	},
 };
-export const weeklyProducts = {
+
+export const weeklyProducts: ProductPrices = {
 	'New Zealand': {
 		Domestic: {
 			NoProductOptions: {

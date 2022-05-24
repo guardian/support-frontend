@@ -1,8 +1,8 @@
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import 'components/gridImage/gridImage';
 import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -14,10 +14,7 @@ import type {
 	ActivePaperProducts,
 	ProductOptions,
 } from 'helpers/productPrice/productOptions';
-import type {
-	ProductPrice,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -26,11 +23,7 @@ import {
 	getPriceSummary,
 } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 
-type PropTypes = {
-	fulfilmentOption: FulfilmentOptions;
-	productOption: ActivePaperProducts;
-	billingPeriod: BillingPeriod;
-	productPrices: ProductPrices;
+export type OrderSummaryProps = {
 	digiSubPrice: string;
 	image: JSX.Element | null;
 	includesDigiSub: boolean;
@@ -60,6 +53,10 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		productPrices: state.page.checkout.productPrices,
 	};
 }
+
+const connector = connect(mapStateToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & OrderSummaryProps;
 
 function PaperOrderSummary(props: PropTypes) {
 	const rawTotal = getPriceSummary(
@@ -176,4 +173,4 @@ PaperOrderSummary.defaultProps = {
 	startDate: '',
 };
 
-export default connect(mapStateToProps)(PaperOrderSummary);
+export default connector(PaperOrderSummary);
