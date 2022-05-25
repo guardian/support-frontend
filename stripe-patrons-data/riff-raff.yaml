@@ -1,18 +1,21 @@
 stacks: [support]
 regions: [eu-west-1]
+allowedStages:
+  - CODE
+  - PROD
 deployments:
   cfn:
     type: cloud-formation
     app: stripe-patrons-data
     parameters:
-      templatePath: cfn.yaml
+      templateStagePaths:
+        CODE: StripePatronsData-CODE.template.json
+        PROD: StripePatronsData-PROD.template.json
   stripe-patrons-data:
     type: aws-lambda
     parameters:
-      bucket: stripe-patrons-data-dist
-      functionNames:
-        - "-SupporterProductDataQueryZuora-"
-        - "-SupporterProductDataFetchResults-"
-        - "-SupporterProductDataUpdateDynamo-"
+      bucket: membership-dist
+      functionNames: [stripe-patrons-data-]
       fileName: stripe-patrons-data.jar
+      prefixStack: false
     dependencies: [cfn]

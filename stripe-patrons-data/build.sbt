@@ -27,7 +27,12 @@ riffRaffPackageType := assembly.value
 riffRaffManifestProjectName := s"support:stripe-patrons-data"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("stripe-patrons-data/cloudformation/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (
+  file("cdk/cdk.out/StripePatronsData-PROD.template.json"), "cfn/StripePatronsData-PROD.template.json"
+)
+riffRaffArtifactResources += (
+  file("cdk/cdk.out/StripePatronsData-CODE.template.json"), "cfn/StripePatronsData-CODE.template.json"
+)
 assemblyJarName := s"${name.value}.jar"
 assembly / assemblyMergeStrategy := {
   case PathList("models", xs @ _*) => MergeStrategy.discard
@@ -41,37 +46,17 @@ assembly / assemblyMergeStrategy := {
 }
 
 lazy val deployToCode =
-  inputKey[Unit]("Directly update AWS lambda code from DEV instead of via RiffRaff for faster feedback loop")
+  inputKey[Unit]("Directly update AWS lambda code from local instead of via RiffRaff for faster feedback loop")
 
 deployToCode := {
   import scala.sys.process._
   val s3Bucket = "stripe-patrons-data-dist"
-  val s3Path = "support/DEV/stripe-patrons-data/stripe-patrons-data.jar"
+  val s3Path = "support/CODE/stripe-patrons-data/stripe-patrons-data.jar"
   (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
   List(
-    "-SupporterProductDataQueryZuora-",
-    "-SupporterProductDataFetchResults-",
-    "-SupporterProductDataUpdateDynamo-",
+    "-stripe-patrons-data-CODE",
   ).foreach(functionPartial =>
-    s"aws lambda update-function-code --function-name support${functionPartial}DEV --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
-  )
-
-}
-
-lazy val deployToProd =
-  inputKey[Unit]("Directly update AWS lambda code to PROD instead of via RiffRaff for faster feedback loop")
-
-deployToProd := {
-  import scala.sys.process._
-  val s3Bucket = "stripe-patrons-data-dist"
-  val s3Path = "support/PROD/stripe-patrons-data/stripe-patrons-data.jar"
-  (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
-  List(
-    "-SupporterProductDataQueryZuora-",
-    "-SupporterProductDataFetchResults-",
-    "-SupporterProductDataUpdateDynamo-",
-  ).foreach(functionPartial =>
-    s"aws lambda update-function-code --function-name support${functionPartial}PROD --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
+    s"aws lambda update-function-code --function-name support${functionPartial} --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
   )
 
 }
