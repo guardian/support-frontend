@@ -267,7 +267,7 @@ export class Frontend extends GuStack {
         dimensionsMap: {
           Environment: "PROD",
         },
-        statistic: "Average",
+        statistic: "Sum",
         period: Duration.seconds(60),
       }),
       snsTopicName: "reader-revenue-dev",

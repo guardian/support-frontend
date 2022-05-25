@@ -295,7 +295,7 @@ Object {
         "MetricName": "DefaultPromotionsLoadingFailure",
         "Namespace": "support-frontend",
         "Period": 60,
-        "Statistic": "Average",
+        "Statistic": "Sum",
         "Threshold": 1,
       },
       "Type": "AWS::CloudWatch::Alarm",
