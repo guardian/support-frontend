@@ -41,9 +41,17 @@ import { getDigitalCheckout } from 'helpers/urls/externalLinks';
 export const getProductOptions = (
 	productPrices: ProductPrices,
 	countryGroupId: CountryGroupId,
-): Record<BillingPeriod, Record<IsoCurrency, ProductPrice>> =>
-	productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions
-		.NoProductOptions;
+): BillingPeriods => {
+	const countryGroupName = countryGroups[countryGroupId].name;
+	const productOptions =
+		productPrices[countryGroupName]?.NoFulfilmentOptions?.NoProductOptions;
+
+	if (productOptions) {
+		return productOptions;
+	}
+
+	throw new Error('getProductOptions: product options unavailable');
+};
 
 export const getCurrencySymbol = (currencyId: IsoCurrency): string =>
 	currencies[currencyId].glyph;
@@ -57,7 +65,15 @@ export const getProductPrice = (
 	productOptions: BillingPeriods,
 	billingPeriod: BillingPeriod,
 	currencyId: IsoCurrency,
-): ProductPrice => productOptions[billingPeriod][currencyId];
+): ProductPrice => {
+	const productPrice = productOptions[billingPeriod]?.[currencyId];
+
+	if (productPrice) {
+		return productPrice;
+	}
+
+	throw new Error('getProductPrice: product price unavailable');
+};
 
 export const getSavingPercentage = (
 	annualCost: number,

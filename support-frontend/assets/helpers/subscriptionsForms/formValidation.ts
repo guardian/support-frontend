@@ -5,6 +5,7 @@ import {
 	applyDeliveryAddressRules,
 	setFormErrorsFor as setAddressFormErrorsFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { setFormErrors } from 'helpers/subscriptionsForms/formActions';
 import type {
@@ -104,8 +105,13 @@ function validateWithDeliveryForm(
 	return allErrors.length === 0;
 }
 
-const checkoutFormIsValid = (state: CheckoutState) =>
-	checkoutValidation(state).length === 0;
+const checkoutFormIsValid = (state: CheckoutState) => {
+	if (state.page.checkout.product === DigitalPack) {
+		return checkoutValidation(state).length === 0;
+	}
+	// @ts-expect-error -- TODO revist this after we have improved the address state types
+	return withDeliveryValidation(state).length === 0;
+};
 
 const withDeliveryFormIsValid = (state: WithDeliveryCheckoutState) =>
 	withDeliveryValidation(state).length === 0;

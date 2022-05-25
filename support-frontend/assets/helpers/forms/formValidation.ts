@@ -26,10 +26,10 @@ import type { LocalCurrencyCountry } from '../internationalisation/localCurrency
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
 
-export const isEmpty: (arg0: string | null) => boolean = (input) =>
+export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 	typeof input === 'undefined' || input == null || input.trim().length === 0;
 
-export const isNotEmpty: (arg0: string | null) => boolean = (input) =>
+export const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
 	!isEmpty(input);
 
 export const isNotTooFarInTheFuture: (arg0: Date) => boolean = (date) => {
@@ -85,7 +85,7 @@ export const emailAddressesMatch: (
 export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
 	isEmpty(input) || isValidEmail(input);
 
-export const checkGiftStartDate: (arg0: string | null) => boolean = (
+export const checkGiftStartDate: (giftDeliveryDate?: string) => boolean = (
 	rawDate,
 ) => {
 	const date = rawDate ? new Date(rawDate) : null;

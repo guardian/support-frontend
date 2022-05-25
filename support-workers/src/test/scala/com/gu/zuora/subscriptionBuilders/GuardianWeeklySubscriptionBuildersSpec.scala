@@ -6,14 +6,18 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
-import com.gu.support.promotions.PromotionService
+import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
 import com.gu.support.zuora.api.AcquisitionSource.CSR
+import com.gu.support.zuora.api.ReaderType.{Direct, Patron}
 import com.gu.support.zuora.api.{Day, Month, SubscriptionData}
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import org.joda.time.LocalDate
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._
@@ -78,6 +82,56 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     csrSubscription.subscription.acquisitionCase shouldBe Some("test_case_id")
   }
 
+  it should "have the Direct readerType when given random promo" in {
+    val aPromotion = mock[Promotion]
+    val pwc = PromotionWithCode("NOTAPATRONPROMO", aPromotion)
+
+    when(promotionService.findPromotion(ArgumentMatchers.eq("NOTAPATRONPROMO"))).thenReturn(Right(pwc))
+
+    when(
+      promotionService.applyPromotion(
+        ArgumentMatchers.eq(pwc),
+        ArgumentMatchers.eq(Country.UK),
+        ArgumentMatchers.eq("2c92c0f965dc30640165f150c0956859"),
+        any(),
+        ArgumentMatchers.eq(false),
+      ),
+    ).thenAnswer { i =>
+      {
+        val sd = i.getArgument[SubscriptionData](3)
+        val patchedSubscription = sd.subscription.copy(promoCode = Some(pwc.promoCode))
+        Right(sd.copy(subscription = patchedSubscription))
+      }
+    }
+
+    nonGiftPromo.subscription.readerType shouldBe Direct
+  }
+
+  it should "have the Patron readerType when given Patron promo" in {
+    val aPromotion = mock[Promotion]
+    val pwc = PromotionWithCode("FOOPATRON", aPromotion)
+
+    when(promotionService.findPromotion(ArgumentMatchers.eq("FOOPATRON"))).thenReturn(Right(pwc))
+
+    when(
+      promotionService.applyPromotion(
+        ArgumentMatchers.eq(pwc),
+        ArgumentMatchers.eq(Country.UK),
+        ArgumentMatchers.eq("2c92c0f965dc30640165f150c0956859"),
+        any(),
+        ArgumentMatchers.eq(false),
+      ),
+    ).thenAnswer { i =>
+      {
+        val sd = i.getArgument[SubscriptionData](3)
+        val patchedSubscription = sd.subscription.copy(promoCode = Some(pwc.promoCode))
+        Right(sd.copy(subscription = patchedSubscription))
+      }
+    }
+
+    nonGiftPatron.subscription.readerType shouldBe Patron
+  }
+
   lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
@@ -126,29 +180,31 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     .get
     .subscriptionData
 
+  val nonGiftState = GuardianWeeklyState(
+    User(
+      "1234",
+      "hi@gu.com",
+      None,
+      "bob",
+      "smith",
+      Address(None, None, None, None, None, Country.UK),
+      Some(Address(None, None, None, None, None, Country.UK)),
+    ),
+    None,
+    weekly,
+    PayPalReferenceTransaction("baid", "hi@gu.com"),
+    firstDeliveryDate,
+    None,
+    SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+  );
+
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     SANDBOX,
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    GuardianWeeklyState(
-      User(
-        "1234",
-        "hi@gu.com",
-        None,
-        "bob",
-        "smith",
-        Address(None, None, None, None, None, Country.UK),
-        Some(Address(None, None, None, None, None, Country.UK)),
-      ),
-      None,
-      weekly,
-      PayPalReferenceTransaction("baid", "hi@gu.com"),
-      firstDeliveryDate,
-      None,
-      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ),
+    nonGiftState,
     None,
     None,
   ).toOption
@@ -184,4 +240,29 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     .get
     .subscriptionData
 
+  lazy val nonGiftPatron = new GuardianWeeklySubscriptionBuilder(
+    promotionService,
+    SANDBOX,
+    DateGenerator(saleDate),
+    subscribeItemBuilder,
+  ).build(
+    nonGiftState.copy(promoCode = Some("FOOPATRON")),
+    None,
+    None,
+  ).toOption
+    .get
+    .subscriptionData
+
+  lazy val nonGiftPromo = new GuardianWeeklySubscriptionBuilder(
+    promotionService,
+    SANDBOX,
+    DateGenerator(saleDate),
+    subscribeItemBuilder,
+  ).build(
+    nonGiftState.copy(promoCode = Some("NOTAPATRONPROMO")),
+    None,
+    None,
+  ).toOption
+    .get
+    .subscriptionData
 }

@@ -157,8 +157,8 @@ const blueLinkLine = css`
 `;
 // ----- Types ----- //
 export type PropTypes = {
-	giftDeliveryDate: string;
-	giftRecipient: string;
+	giftDeliveryDate?: string;
+	giftRecipient?: string;
 	marketingConsent: React.ReactNode;
 	pending?: boolean;
 	countryGroupId: CountryGroupId;
@@ -167,16 +167,18 @@ export type PropTypes = {
 // ----- Map state to props ----- //
 function mapStateToProps(state: CheckoutState) {
 	return {
-		giftDeliveryDate: state.page.checkout.giftDeliveryDate,
-		giftRecipient: state.page.checkout.firstNameGiftRecipient,
+		giftDeliveryDate: state.page.checkoutForm.gifting.giftDeliveryDate,
+		giftRecipient: state.page.checkoutForm.gifting.firstName,
 	};
 }
 
-const GreenCheckMark = () => (
-	<div css={greenCircle}>
-		<SvgCheckmark />
-	</div>
-);
+function GreenCheckMark(): JSX.Element {
+	return (
+		<div css={greenCircle}>
+			<SvgCheckmark />
+		</div>
+	);
+}
 
 function ThankYouGift(props: PropTypes) {
 	const date = props.giftDeliveryDate ? new Date(props.giftDeliveryDate) : null;
@@ -189,19 +191,7 @@ function ThankYouGift(props: PropTypes) {
 				<CheckoutLayout
 					aside={
 						<OrderSummaryThankYou
-							image={
-								<GridImage
-									gridId={
-										props.countryGroupId === 'AUDCountries'
-											? 'editionsPackshotAusShort'
-											: 'editionsPackshotShort'
-									}
-									srcSizes={[1000, 500]}
-									sizes="(max-width: 740px) 50vw, 500"
-									imgType="png"
-									altText=""
-								/>
-							}
+							countryGroupId={props.countryGroupId}
 							title="Digital Gift Subscription"
 							pending={props.pending}
 						/>
@@ -261,7 +251,7 @@ function ThankYouGift(props: PropTypes) {
 									<img src={gift} alt="" />
 								</div>
 								<div css={giftStep}>
-									{props.giftRecipient || 'Your recipient'} will receive an
+									{props.giftRecipient ?? 'Your recipient'} will receive an
 									email on the date you&apos;ve chosen with the link to redeem
 									the gift.
 								</div>
@@ -276,7 +266,7 @@ function ThankYouGift(props: PropTypes) {
 									<img src={person} alt="" />
 								</div>
 								<div css={giftStep}>
-									After redemption, {props.giftRecipient || 'your recipient'}{' '}
+									After redemption, {props.giftRecipient ?? 'your recipient'}{' '}
 									will have to register or sign into their account and the
 									subscription will be activated.
 								</div>
@@ -291,7 +281,7 @@ function ThankYouGift(props: PropTypes) {
 									<img src={phone} alt="" />
 								</div>
 								<div css={giftStep}>
-									{props.giftRecipient || 'Your recipient'} will download the
+									{props.giftRecipient ?? 'Your recipient'} will download the
 									smartphone and tablet apps and can sign in on the web to enjoy
 									all the benefits of being a subscriber.
 								</div>
@@ -325,6 +315,6 @@ function ThankYouGift(props: PropTypes) {
 
 ThankYouGift.defaultProps = {
 	pending: false,
-}; // ----- Export ----- //
+};
 
 export default connect(mapStateToProps)(ThankYouGift);

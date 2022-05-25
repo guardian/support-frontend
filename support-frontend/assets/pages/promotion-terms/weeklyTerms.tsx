@@ -8,7 +8,6 @@ import { extendedGlyph } from 'helpers/internationalisation/currency';
 import {
 	Annual,
 	postIntroductorySixForSixBillingPeriod,
-	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
 import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -50,11 +49,10 @@ const orderedCountryGroupNames: NameAndSaving[] = [
 		saving: null,
 	},
 ];
-const shortTermDescription =
-	postIntroductorySixForSixBillingPeriod === Quarterly
-		? 'Quarterly (13 weeks)'
-		: 'Monthly (4 weeks)';
-export default function WeeklyTerms(props: PromotionTermsPropTypes) {
+const shortTermDescription = 'Monthly (4 weeks)';
+export default function WeeklyTerms(
+	props: PromotionTermsPropTypes,
+): JSX.Element {
 	const includes6For6 =
 		props.promotionTerms.productRatePlans.filter((ratePlan) =>
 			ratePlan.includes('6 for 6'),
@@ -76,11 +74,11 @@ function getCountryPrice(
 	const fulfilmentOption =
 		countryGroupName === International ? RestOfWorld : Domestic;
 	const shortTermPrice =
-		prices[fulfilmentOption][NoProductOptions][
+		prices[fulfilmentOption]?.[NoProductOptions]?.[
 			postIntroductorySixForSixBillingPeriod
-		][currency];
+		]?.[currency];
 	const annualPrice =
-		prices[fulfilmentOption][NoProductOptions][Annual][currency];
+		prices[fulfilmentOption]?.[NoProductOptions]?.[Annual]?.[currency];
 	return {
 		currencyGlyph,
 		shortTermPrice,
@@ -104,13 +102,13 @@ function StandardCountryPrice(
 		nameAndSaving.name,
 		prices,
 	);
-	return (
+	return shortTermPrice && annualPrice ? (
 		<SansParagraph>
 			<strong>{nameAndSaving.name}:</strong> {shortTermDescription} subscription
 			rate {showPrice(shortTermPrice)}, or annual rate {showPrice(annualPrice)}
 			{getSaving(nameAndSaving.saving)}
 		</SansParagraph>
-	);
+	) : null;
 }
 
 function SixForSixCountryPrice(
@@ -121,14 +119,14 @@ function SixForSixCountryPrice(
 		nameAndSaving.name,
 		prices,
 	);
-	return (
+	return currencyGlyph && shortTermPrice ? (
 		<SansParagraph>
 			<strong>{nameAndSaving.name}:</strong> Offer is {currencyGlyph}6 for the
 			first 6 issues followed by {shortTermDescription.toLowerCase()}
 			subscription payments of {showPrice(shortTermPrice)} thereafter
 			{getSaving(nameAndSaving.saving)}
 		</SansParagraph>
-	);
+	) : null;
 }
 
 function StandardTerms(props: PromotionTermsPropTypes) {
@@ -142,12 +140,13 @@ function StandardTerms(props: PromotionTermsPropTypes) {
 			<SansParagraph>
 				You must be 18+ to be eligible for a Guardian Weekly subscription.
 			</SansParagraph>
-			{orderedCountryGroupNames.map((nameAndSaving) =>
-				StandardCountryPrice(
-					nameAndSaving,
-					props.productPrices[nameAndSaving.name],
-				),
-			)}
+			{orderedCountryGroupNames.map((nameAndSaving) => {
+				const countryGroupPrices = props.productPrices[nameAndSaving.name];
+
+				return countryGroupPrices
+					? StandardCountryPrice(nameAndSaving, countryGroupPrices)
+					: null;
+			})}
 		</div>
 	);
 }
@@ -165,12 +164,13 @@ function SixForSix(props: PromotionTermsPropTypes) {
 				be 18+ to be eligible for this offer. Guardian Weekly reserve the right
 				to end this offer at any time.
 			</SansParagraph>
-			{orderedCountryGroupNames.map((nameAndSaving) =>
-				SixForSixCountryPrice(
-					nameAndSaving,
-					props.productPrices[nameAndSaving.name],
-				),
-			)}
+			{orderedCountryGroupNames.map((nameAndSaving) => {
+				const countryGroupPrices = props.productPrices[nameAndSaving.name];
+
+				return countryGroupPrices
+					? SixForSixCountryPrice(nameAndSaving, countryGroupPrices)
+					: null;
+			})}
 		</div>
 	);
 }

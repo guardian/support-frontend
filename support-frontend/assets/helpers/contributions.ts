@@ -32,12 +32,12 @@ export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
 export const contributionTypeIsRecurring = (
 	contributionType: ContributionType,
-) => contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
+): boolean => contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
 
 export const logInvalidCombination = (
 	contributionType: ContributionType,
 	paymentMethod: PaymentMethod,
-) => {
+): void => {
 	logException(
 		`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`,
 	);
@@ -55,39 +55,50 @@ export type ThirdPartyPaymentLibraries = {
 		Stripe: ThirdPartyPaymentLibrary | null;
 	};
 };
+
 export type AmountSelection = {
 	amounts: number[];
 	defaultAmount: number;
 };
+
 export type ContributionAmounts = {
 	[type in ContributionType]: AmountSelection;
 };
+
 export type AmountsTestVariant = {
 	name: string;
 	amounts: ContributionAmounts;
 };
+
 export type AmountsTest = {
 	name: string;
 	isLive: boolean;
 	variants: AmountsTestVariant[];
 	seed: number;
 };
+
 export type ConfiguredRegionAmounts = {
 	control: ContributionAmounts;
 	test?: AmountsTest;
 };
+
 export type ConfiguredAmounts = Record<CountryGroupId, ConfiguredRegionAmounts>;
+
 export type ContributionTypeSetting = {
 	contributionType: ContributionType;
 	isDefault?: boolean;
 };
+
 export type ContributionTypes = Record<
 	CountryGroupId,
 	ContributionTypeSetting[]
 >;
+
 type ParseError = 'ParseError';
+
 export type ValidationError = 'TooMuch' | 'TooLittle';
 export type ContributionError = ParseError | ValidationError;
+
 export type ParsedContribution =
 	| {
 			valid: true;
@@ -96,6 +107,7 @@ export type ParsedContribution =
 	| {
 			error: ParseError;
 	  };
+
 export type Config = Record<
 	ContributionType,
 	{
@@ -106,28 +118,32 @@ export type Config = Record<
 		default: number; // TODO - remove this field once old payment flow has gone
 	}
 >;
+
 export type OtherAmounts = Record<
 	ContributionType,
 	{
 		amount: string | null;
 	}
 >;
+
 export type SelectedAmounts = Record<ContributionType, number | 'other'>;
 
 const getAmount = (
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,
 	contributionType: ContributionType,
-) =>
-	parseFloat(
-		selectedAmounts[contributionType] === 'other'
-			? otherAmounts[contributionType].amount
-			: selectedAmounts[contributionType],
+): number => {
+	const selectedAmount = selectedAmounts[contributionType];
+	const otherAmount = otherAmounts[contributionType].amount ?? '';
+
+	return parseFloat(
+		selectedAmount === 'other' ? otherAmount : selectedAmount.toString(),
 	);
+};
 
 // ----- Setup ----- //
 
-const numbersInWords = {
+const numbersInWords: Record<string, string> = {
 	'1': 'one',
 	'2': 'two',
 	'5': 'five',
@@ -179,6 +195,7 @@ const defaultConfig: Config = {
 		default: 50,
 	},
 };
+
 const config: Record<CountryGroupId, Config> = {
 	GBPCountries: defaultConfig,
 	AUDCountries: {
@@ -455,6 +472,7 @@ type Radio = {
 	text: string;
 	accessibilityHint?: string | null | undefined;
 };
+
 const contributionTypeRadios = [
 	{
 		value: 'ONE_OFF',
@@ -485,7 +503,7 @@ function getContributionAmountRadios(
 		accessibilityHint: getAmountA11yHint(
 			contributionType,
 			currencyId,
-			numbersInWords[amount],
+			numbersInWords[amount.toString()],
 		),
 	}));
 }

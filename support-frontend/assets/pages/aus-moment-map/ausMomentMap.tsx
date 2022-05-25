@@ -166,9 +166,6 @@ function AusMomentMap(): JSX.Element {
 						}}
 						ref={mapRef}
 					/>
-					<p className="map-caption">
-						Tap the map to read messages from supporters
-					</p>
 					<motion.div
 						className="left-padded-inner"
 						transition={animationTransition}

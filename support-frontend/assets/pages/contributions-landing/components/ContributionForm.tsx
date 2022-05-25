@@ -486,7 +486,6 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					props.otherAmounts,
 					props.contributionType,
 				)}
-				showBenefitsMessaging={showBenefitsMessaging}
 				userInBenefitsVariant={
 					props.benefitsMessagingAbTestBulletVariant ||
 					props.benefitsMessagingAbTestParaVariant

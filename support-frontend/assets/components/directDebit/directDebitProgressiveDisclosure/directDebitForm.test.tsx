@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { fireEvent, render, screen } from '@testing-library/react';
-import * as React from 'react';
+import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { Provider } from 'react-redux';
-import type { Store } from 'redux';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
+import { renderWithStore } from '__test-utils__/render';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -34,24 +32,6 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 	});
 	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
-}
-
-function renderWithStore(
-	component: React.ReactElement,
-	{
-		initialState,
-		store = initialState ? setUpStore(initialState) : undefined,
-		...renderOptions
-	}: { initialState?: WithDeliveryCheckoutState; store?: Store } = {},
-) {
-	function Wrapper({ children }: { children?: React.ReactNode }) {
-		return <>{store && <Provider store={store}>{children}</Provider>}</>;
-	}
-
-	return render(component, {
-		wrapper: Wrapper,
-		...renderOptions,
-	});
 }
 
 async function fillOutForm(
@@ -156,6 +136,8 @@ describe('Direct debit form', () => {
 			{
 				//  @ts-expect-error Unused common state properties
 				initialState,
+				//  @ts-expect-error Unused common state properties
+				store: setUpStore(initialState),
 			},
 		);
 	});

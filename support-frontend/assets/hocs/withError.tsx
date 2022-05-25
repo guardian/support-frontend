@@ -1,19 +1,26 @@
 // ----- Imports ----- //
-import * as React from 'react';
+import React from 'react';
 import type { PropsForHoc } from 'components/forms/customFields/error';
 import { Error } from 'components/forms/customFields/error';
+
 // ----- Types ----- //
-type AugmentedProps<Props> = Props & PropsForHoc;
-type In<Props> = React.ComponentType<Props>;
-type Out<Props> = React.ComponentType<AugmentedProps<Props>>;
+type AugmentedProps<T> = T & PropsForHoc;
+
+type ComponentToWrap<T> = React.ComponentType<T>;
+
+type WithErrorComponent<T> = React.ComponentType<AugmentedProps<T>>;
 
 // ----- Component ----- //
-function withError<Props>(Component: In<Props>): Out<Props> {
-	return ({ error, ...props }: AugmentedProps<Props>) => (
-		<Error error={error}>
-			<Component {...props} />
-		</Error>
-	);
+function withError<Props>(
+	Component: ComponentToWrap<Props>,
+): WithErrorComponent<Props> {
+	return function (props: AugmentedProps<Props>): JSX.Element {
+		return (
+			<Error error={props.error}>
+				<Component {...props} />
+			</Error>
+		);
+	};
 }
 
 // ----- Exports ----- //

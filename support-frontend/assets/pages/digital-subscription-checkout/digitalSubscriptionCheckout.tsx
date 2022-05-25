@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
-import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
@@ -27,6 +26,7 @@ import CheckoutForm from 'pages/digital-subscription-checkout/components/digital
 import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
+import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import ThankYouPendingContent from './thankYouPendingContent';
 import 'stylesheets/skeleton/skeleton.scss';
 import './digitalSubscriptionCheckout.scss';

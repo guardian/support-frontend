@@ -59,7 +59,7 @@ function DigitalPaymentSelection({
 	currencyId,
 	productPrices,
 	orderIsAGift,
-}: PaymentSelectionPropTypes) {
+}: PaymentSelectionPropTypes): JSX.Element {
 	const paymentOptions = getPaymentOptions({
 		countryGroupId,
 		currencyId,

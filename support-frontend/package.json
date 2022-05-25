@@ -43,6 +43,11 @@
     "Opera >= 54"
   ],
   "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)",
+      "!**/__fixtures__/**"
+    ],
     "transform": {
       ".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
     },
@@ -97,7 +102,7 @@
     "@juggle/resize-observer": "^3.3.1",
     "@reduxjs/toolkit": "^1.8.1",
     "@sentry/browser": "^5.4.0",
-    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/react-stripe-js": "^1.8.0",
     "@stripe/stripe-js": "^1.8.0",
     "@types/dompurify": "^2.3.1",
     "@types/seedrandom": "^3.0.1",
