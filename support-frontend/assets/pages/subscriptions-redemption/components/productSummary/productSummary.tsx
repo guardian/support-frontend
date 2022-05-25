@@ -1,7 +1,9 @@
 import GridImage from 'components/gridImage/gridImage';
 import * as styles from 'pages/subscriptions-redemption/components/productSummary/productSummaryStyles';
 
-const Dot = () => <div css={styles.dot} />;
+function Dot() {
+	return <div css={styles.dot} />;
+}
 
 function ProductSummary() {
 	return (

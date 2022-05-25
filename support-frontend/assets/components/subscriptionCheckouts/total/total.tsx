@@ -27,7 +27,7 @@ const getPrice = (promotion: Promotion | undefined, price: number): number => {
 	return price;
 };
 
-const Total = ({ price, currency, promotions }: Props) => {
+function Total({ price, currency, promotions }: Props) {
 	const glyph = extendedGlyph(currency);
 	const appliedPromotion = getAppliedPromo(promotions);
 	const formattedPrice = displayPrice(glyph, getPrice(appliedPromotion, price));
@@ -39,7 +39,7 @@ const Total = ({ price, currency, promotions }: Props) => {
 			</div>
 		</div>
 	);
-};
+}
 
 Total.defaultProps = {
 	promotions: [],
