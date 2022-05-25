@@ -1,4 +1,4 @@
-package com.gu.support
+package services
 
 import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.support.catalog.{FulfilmentOptions, ProductOptions}

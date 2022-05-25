@@ -1,8 +1,8 @@
-package com.gu.support.pricing
+package services.pricing
 
 import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.support.catalog._
-import com.gu.support.pricing.PriceSummaryService.{getDiscountedPrice, getNumberOfDiscountedPeriods}
+import services.pricing.PriceSummaryService.{getDiscountedPrice, getNumberOfDiscountedPeriods}
 import com.gu.support.promotions._
 import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.BillingPeriod
@@ -12,8 +12,11 @@ import org.joda.time.Months
 
 import scala.math.BigDecimal.RoundingMode
 
-class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService)
-    extends TouchpointService {
+class PriceSummaryService(
+    promotionService: PromotionService,
+    defaultPromotionService: DefaultPromotionService,
+    catalogService: CatalogService,
+) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
   def getPrices[T <: Product](
@@ -21,12 +24,15 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       promoCodes: List[PromoCode],
       readerType: ReaderType = Direct,
   ): ProductPrices = {
-    val promotions = promotionService.findPromotions(promoCodes)
+    val defaultPromos = getDefaultPromoCodes(product)
+    val promotions = promotionService.findPromotions(promoCodes ++ defaultPromos)
     product
       .supportedCountries(catalogService.environment)
       .map(countryGroup => countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions, readerType))
       .toMap
   }
+
+  def getDefaultPromoCodes(product: Product): List[String] = defaultPromotionService.getPromoCodes(product)
 
   def getPricesForCountryGroup[T <: Product](
       product: T,

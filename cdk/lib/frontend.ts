@@ -67,6 +67,10 @@ export class Frontend extends GuStack {
         bucketName: "support-admin-console",
         paths: [`${this.stage}/*`],
       }),
+      new GuGetS3ObjectsPolicy(this, "PromoToolBucket", {
+        bucketName: "gu-promotions-tool-private",
+        paths: ["*/defaultPromos.json"],
+      }),
       new GuPutCloudwatchMetricsPolicy(this),
       // TODO: should we move logs to kinesis?
       new GuAllowPolicy(this, "CloudwatchMetrics", {
@@ -241,6 +245,29 @@ export class Frontend extends GuStack {
           Environment: "PROD",
         },
         statistic: "Average",
+        period: Duration.seconds(60),
+      }),
+      snsTopicName: "reader-revenue-dev",
+    });
+
+    new GuAlarm(this, "DefaultPromotionsLoadingFailureAlarm", {
+      app,
+      alarmName: alarmName(
+        "support-frontend could not load default promo codes from S3"
+      ),
+      alarmDescription:
+        "Impact - cannot display default product promotions on the support site",
+      actionsEnabled: shouldEnableAlarms,
+      threshold: 1,
+      evaluationPeriods: 1,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      metric: new Metric({
+        metricName: "DefaultPromotionsLoadingFailure",
+        namespace: "support-frontend",
+        dimensionsMap: {
+          Environment: "PROD",
+        },
+        statistic: "Sum",
         period: Duration.seconds(60),
       }),
       snsTopicName: "reader-revenue-dev",

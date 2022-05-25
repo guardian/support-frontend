@@ -7,7 +7,7 @@ packageSummary := "Support Play APP"
 
 SeleniumTest / testOptions := Seq(Tests.Filter(seleniumTestFilter))
 
-Test / testOptions := Seq(Tests.Filter(unitTestFilter))
+Test / testOptions ++= Seq(Tests.Filter(unitTestFilter))
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",

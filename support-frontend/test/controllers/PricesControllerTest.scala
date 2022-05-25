@@ -3,7 +3,7 @@ package controllers
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{Domestic, NoProductOptions}
-import com.gu.support.pricing.{PriceSummary, ProductPrices, PromotionSummary}
+import services.pricing.{PriceSummary, ProductPrices, PromotionSummary}
 import com.gu.support.promotions.{DiscountBenefit, PromotionCopy}
 import com.gu.support.workers.{Annual, Monthly}
 import controllers.PricesController.{ProductPriceData, RatePlanPriceData}

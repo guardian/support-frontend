@@ -8,10 +8,9 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.catalog._
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider}
+import services.pricing.{PriceSummary, PriceSummaryServiceProvider}
 import com.gu.support.promotions.DefaultPromotions
-import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift.ausElection
-import com.gu.support.workers.Monthly
+import com.gu.support.workers.{Annual, Monthly}
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
@@ -69,13 +68,14 @@ class SubscriptionsController(
     } else
       Map.empty
 
-    val fulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
-    val guardianWeeklyPromos = List(ausElection)
+    val guardianWeeklyFulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
+    // The client currently only supports monthly
+    val guardianWeeklyBillingPeriod = postIntroductorySixForSixBillingPeriod
     val weekly =
       service.getPrices(
         GuardianWeekly,
-        guardianWeeklyPromos,
-      )(countryGroup)(fulfilmentOptions)(NoProductOptions)(postIntroductorySixForSixBillingPeriod)(
+        Nil,
+      )(countryGroup)(guardianWeeklyFulfilmentOptions)(NoProductOptions)(guardianWeeklyBillingPeriod)(
         countryGroup.currency,
       )
 

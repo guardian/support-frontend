@@ -6,7 +6,7 @@ import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.i18n.Country.UK
 import com.gu.support.catalog.Paper
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.pricing.PriceSummaryServiceProvider
+import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.DefaultPromotions
 import config.StringsConfig
 import play.api.mvc._

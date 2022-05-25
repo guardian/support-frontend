@@ -6,7 +6,7 @@ import assets.AssetsResolver
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.Paper
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.pricing.PriceSummaryServiceProvider
+import services.pricing.PriceSummaryServiceProvider
 import config.RecaptchaConfigProvider
 import play.api.mvc._
 import play.twirl.api.Html

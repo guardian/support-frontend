@@ -3,7 +3,6 @@ package com.gu.support.promotions
 import com.gu.support.catalog._
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.config.TouchPointEnvironments.PROD
-import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.workers.Annual
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
@@ -20,6 +19,8 @@ object ServicesFixtures {
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
   val duplicatedPromoCode = "DUPLICATED_CODE"
+  val tenAnnual = "10ANNUAL"
+  val sixForSix = "6FOR6"
 
   val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
   val validProductRatePlanId = validProductRatePlanIds.head
@@ -46,7 +47,7 @@ object ServicesFixtures {
       .getProductRatePlans(TouchPointEnvironments.PROD)
       .filter(ratePlan => ratePlan.billingPeriod == Annual && ratePlan.readerType == Direct)
       .map(_.id),
-    NonGift.tenAnnual,
+    tenAnnual,
     Some(DiscountBenefit(10, Some(Months.TWELVE))),
   )
   val guardianWeeklyAnnualGift = guardianWeeklyAnnual.copy(
@@ -58,7 +59,7 @@ object ServicesFixtures {
         .toSet,
     ),
   )
-  val guardianWeeklyWithCode = PromotionWithCode(NonGift.tenAnnual, guardianWeeklyAnnual)
+  val guardianWeeklyWithCode = PromotionWithCode(tenAnnual, guardianWeeklyAnnual)
   val duplicate1 = promotion(validProductRatePlanIds, duplicatedPromoCode, discountBenefit)
   val duplicate2 = promotion(validProductRatePlanIds, duplicatedPromoCode, freeTrial = freeTrialBenefit)
 

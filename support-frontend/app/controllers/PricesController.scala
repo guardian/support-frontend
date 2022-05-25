@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import com.gu.i18n.{CountryGroup, Currency}
-import com.gu.support.pricing.{PriceSummary, PriceSummaryServiceProvider, ProductPrices}
+import services.pricing.{PriceSummary, PriceSummaryServiceProvider, ProductPrices}
 import io.circe.Encoder
 import io.circe.syntax._
 import play.api.libs.circe.Circe
@@ -91,7 +91,7 @@ class PricesController(
   ): CountryGroupPriceData = {
     val guardianWeeklyProductPrices = priceSummaryServiceProvider
       .forUser(false)
-      .getPrices(GuardianWeekly, DefaultPromotions.GuardianWeekly.NonGift.all, Direct)
+      .getPrices(GuardianWeekly, Nil, Direct)
     val digisubProductPrices = priceSummaryServiceProvider
       .forUser(false)
       .getPrices(DigitalPack, DefaultPromotions.DigitalSubscription.all, Direct)

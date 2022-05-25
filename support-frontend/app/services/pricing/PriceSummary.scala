@@ -1,4 +1,4 @@
-package com.gu.support.pricing
+package services.pricing
 
 import com.gu.i18n.Currency
 import com.gu.support.promotions._

@@ -5,15 +5,13 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.DefaultPromotions
+import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.StringsConfig
 import play.api.mvc._
 import play.twirl.api.Html
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
-import DefaultPromotions.GuardianWeekly.NonGift._
 
 import scala.concurrent.ExecutionContext
 
@@ -43,14 +41,14 @@ class WeeklySubscriptionController(
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
-    val defaultPromo = List(ausElection)
 
     val queryPromos =
       request.queryString
-        .get("promoCode")
-        .map(_.toList)
-        .getOrElse(defaultPromo)
-    val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, GuardianWeekly, countryCode)
+        .getOrElse("promoCode", Nil)
+        .toList
+    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(GuardianWeekly)
+    val maybePromotionCopy =
+      landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryCode)
 
     Ok(
       views.html.main(
@@ -89,14 +87,8 @@ class WeeklySubscriptionController(
   )
 
   private def productPrices(queryPromos: List[String], orderIsAGift: Boolean) = {
-    val defaultPromos =
-      if (orderIsAGift)
-        DefaultPromotions.GuardianWeekly.Gift.all
-      else
-        DefaultPromotions.GuardianWeekly.NonGift.all
-    val promoCodes = defaultPromos ++ queryPromos
     val readerType = if (orderIsAGift) Gift else Direct
-    priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes, readerType)
+    priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, queryPromos, readerType)
   }
 
 }
