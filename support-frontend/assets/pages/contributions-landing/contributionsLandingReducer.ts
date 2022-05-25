@@ -24,6 +24,8 @@ import type {
 } from 'helpers/internationalisation/country';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
+import { productReducer } from 'helpers/redux/checkout/product/reducer';
+import type { ProductState } from 'helpers/redux/checkout/product/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
@@ -104,6 +106,7 @@ interface PageState {
 	form: FormState;
 	checkoutForm: {
 		personalDetails: PersonalDetailsState;
+		product: ProductState;
 	};
 	user: UserState;
 	csrf: CsrfState;
@@ -558,6 +561,7 @@ function initReducer(): Reducer<PageState> {
 		form: createFormReducer(),
 		checkoutForm: combineReducers({
 			personalDetails: personalDetailsReducer,
+			product: productReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,

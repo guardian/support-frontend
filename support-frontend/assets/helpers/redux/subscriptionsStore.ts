@@ -3,6 +3,7 @@ import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { renderError } from 'helpers/rendering/render';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
+import { addProductSideEffects } from './checkout/product/subscriptionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';
@@ -61,6 +62,7 @@ export function addPageReducer(
 			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 	});
 	addPersonalDetailsSideEffects(startSubscriptionsListening);
+	addProductSideEffects(startSubscriptionsListening);
 	return store;
 }
 

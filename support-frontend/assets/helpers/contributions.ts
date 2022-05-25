@@ -1,4 +1,3 @@
-import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
 import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type {
@@ -27,8 +26,8 @@ export type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 	ONE_OFF: T;
 };
 
-export type RegularContributionType = $Keys<RegularContributionTypeMap<null>>;
-export type ContributionType = $Keys<ContributionTypeMap<null>>;
+export type RegularContributionType = keyof RegularContributionTypeMap<null>;
+export type ContributionType = keyof ContributionTypeMap<null>;
 export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
 export const contributionTypeIsRecurring = (
