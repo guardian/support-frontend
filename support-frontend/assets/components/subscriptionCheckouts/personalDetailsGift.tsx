@@ -11,20 +11,21 @@ const marginBotom = css`
 `;
 export type PropTypes = {
 	firstNameGiftRecipient: string;
-	setFirstNameGift: (...args: any[]) => any;
+	setFirstNameGift: (firstName: string) => void;
 	lastNameGiftRecipient: string;
-	setLastNameGift: (...args: any[]) => any;
+	setLastNameGift: (lastName: string) => void;
 	emailGiftRecipient: string;
-	setEmailGift: (...args: any[]) => any;
+	setEmailGift: (email: string) => void;
 	formErrors: Array<FormError<FormField>>;
 };
 
-function PersonalDetailsGift(props: PropTypes) {
+function PersonalDetailsGift(props: PropTypes): JSX.Element {
 	return (
 		<div>
 			<TextInput
 				css={marginBotom}
 				id="firstNameGiftRecipient"
+				data-qm-masking="blocklist"
 				label="First name"
 				type="text"
 				value={props.firstNameGiftRecipient}
@@ -34,6 +35,7 @@ function PersonalDetailsGift(props: PropTypes) {
 			<TextInput
 				css={marginBotom}
 				id="lastNameGiftRecipient"
+				data-qm-masking="blocklist"
 				label="Last name"
 				type="text"
 				value={props.lastNameGiftRecipient}
@@ -43,6 +45,7 @@ function PersonalDetailsGift(props: PropTypes) {
 			<TextInput
 				css={marginBotom}
 				id="emailGiftRecipient"
+				data-qm-masking="blocklist"
 				label="Email"
 				type="email"
 				optional
@@ -54,12 +57,13 @@ function PersonalDetailsGift(props: PropTypes) {
 	);
 }
 
-function PersonalDetailsDigitalGift(props: PropTypes) {
+function PersonalDetailsDigitalGift(props: PropTypes): JSX.Element {
 	return (
 		<div>
 			<TextInput
 				css={marginBotom}
 				id="firstNameGiftRecipient"
+				data-qm-masking="blocklist"
 				label="First name"
 				type="text"
 				value={props.firstNameGiftRecipient}
@@ -69,6 +73,7 @@ function PersonalDetailsDigitalGift(props: PropTypes) {
 			<TextInput
 				css={marginBotom}
 				id="lastNameGiftRecipient"
+				data-qm-masking="blocklist"
 				label="Last name"
 				type="text"
 				value={props.lastNameGiftRecipient}
@@ -78,6 +83,7 @@ function PersonalDetailsDigitalGift(props: PropTypes) {
 			<TextInput
 				css={marginBotom}
 				id="emailGiftRecipient"
+				data-qm-masking="blocklist"
 				label="Email"
 				type="email"
 				onChange={(e) => props.setEmailGift(e.target.value)}

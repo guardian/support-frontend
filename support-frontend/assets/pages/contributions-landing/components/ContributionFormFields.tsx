@@ -92,6 +92,7 @@ function ContributionFormFields({
 			>
 				<TextInput
 					id="contributionEmail"
+					data-qm-masking="blocklist"
 					label="Email address"
 					value={email}
 					type="email"
@@ -119,6 +120,7 @@ function ContributionFormFields({
 					>
 						<TextInput
 							id="contributionFirstName"
+							data-qm-masking="blocklist"
 							label="First name"
 							value={firstName}
 							autoComplete="given-name"
@@ -140,6 +142,7 @@ function ContributionFormFields({
 					>
 						<TextInput
 							id="contributionLastName"
+							data-qm-masking="blocklist"
 							label="Last name"
 							value={lastName}
 							autoComplete="family-name"

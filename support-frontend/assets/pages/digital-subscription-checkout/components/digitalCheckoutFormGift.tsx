@@ -187,6 +187,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						<TextArea
 							css={controlTextAreaResizing}
 							id="gift-message"
+							data-qm-masking="blocklist"
 							label="Gift message"
 							maxLength={300}
 							value={props.giftMessage ?? ''}

@@ -95,6 +95,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			<Select
 				css={marginBottom}
 				id={`${scope}-country`}
+				data-qm-masking="blocklist"
 				label="Country"
 				value={props.country}
 				onChange={(e) => props.setCountry(e.target.value)}
@@ -105,7 +106,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			</Select>
 			{props.country === 'GB' ? (
 				<PostcodeFinder
-					id={`${scope}-postcode`}
+					id={`${scope}-postcode-lookup`}
 					onPostcodeUpdate={props.setPostcode}
 					onAddressUpdate={({
 						lineOne,
@@ -129,6 +130,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			<TextInput
 				css={marginBottom}
 				id={`${scope}-lineOne`}
+				data-qm-masking="blocklist"
 				label="Address Line 1"
 				type="text"
 				value={props.lineOne ?? ''}
@@ -138,6 +140,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			<TextInput
 				css={marginBottom}
 				id={`${scope}-lineTwo`}
+				data-qm-masking="blocklist"
 				label="Address Line 2"
 				optional
 				type="text"
@@ -148,6 +151,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			<TextInput
 				css={marginBottom}
 				id={`${scope}-city`}
+				data-qm-masking="blocklist"
 				label="Town/City"
 				type="text"
 				maxLength={40}
@@ -158,6 +162,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			<MaybeSelect
 				css={marginBottom}
 				id={`${scope}-stateProvince`}
+				data-qm-masking="blocklist"
 				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
 				value={props.state ?? ''}
 				onChange={(e) => props.setState(e.target.value)}
@@ -174,6 +179,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			<MaybeInput
 				css={marginBottom}
 				id={`${scope}-stateProvince`}
+				data-qm-masking="blocklist"
 				label="State"
 				value={props.state ?? ''}
 				onChange={(e) => props.setState(e.target.value)}
@@ -184,6 +190,7 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			<TextInput
 				css={marginBottom}
 				id={`${scope}-postcode`}
+				data-qm-masking="blocklist"
 				label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
 				type="text"
 				optional={isPostcodeOptional(props.country)}

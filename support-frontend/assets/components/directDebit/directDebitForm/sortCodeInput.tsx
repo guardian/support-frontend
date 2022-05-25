@@ -67,6 +67,7 @@ function SortCodeField(props: {
 	return (
 		<input
 			id={props.id}
+			data-qm-masking="blocklist"
 			value={props.value}
 			onChange={props.onChange}
 			type="tel"

@@ -111,6 +111,7 @@ function PostcodeFinder({
 					fetchResults(postcode ?? '');
 				}}
 				id={id}
+				data-qm-masking="blocklist"
 				onChange={(e) => {
 					setPostcode(e.target.value);
 					onPostcodeUpdate(e.target.value);
