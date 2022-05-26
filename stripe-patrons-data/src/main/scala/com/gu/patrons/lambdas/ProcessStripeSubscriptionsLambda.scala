@@ -3,6 +3,7 @@ package com.gu.patrons.lambdas
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.patrons.conf.{PatronsIdentityConfig, PatronsStripeConfig}
+import com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda.processSubscriptions
 import com.gu.patrons.model.StageConstructors
 import com.gu.patrons.services.{
   IdentityDynamoProcessor,
@@ -12,12 +13,22 @@ import com.gu.patrons.services.{
 }
 import com.gu.supporterdata.services.SupporterDataDynamoService
 
-import scala.concurrent.duration.DurationInt
+import scala.concurrent.duration.{Duration, DurationInt, MILLISECONDS}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Await, Future}
 
-class FetchStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
+class ProcessStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
 
   override def handleRequest(input: Unit, context: Context) = {
+    Await.result(
+      processSubscriptions,
+      Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS),
+    )
+  }
+}
+
+object ProcessStripeSubscriptionsLambda {
+  def processSubscriptions = {
     val stage = StageConstructors.fromEnvironment
     val runner = configurableFutureRunner(60.seconds)
     for {
@@ -33,5 +44,4 @@ class FetchStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
       _ <- processor.processSubscriptions(100)
     } yield ()
   }
-
 }

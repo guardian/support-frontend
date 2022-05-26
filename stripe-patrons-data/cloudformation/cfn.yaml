@@ -142,7 +142,7 @@ Resources:
       FunctionName:
         !Sub support-SupporterProductDataFetchResults-${Stage}
       Description: "Fetch zuora export results"
-      Handler: "com.gu.lambdas.FetchStripeSubscriptionsLambda::handleRequest"
+      Handler: "com.gu.lambdas.ProcessStripeSubscriptionsLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: stripe-patrons-data-dist
