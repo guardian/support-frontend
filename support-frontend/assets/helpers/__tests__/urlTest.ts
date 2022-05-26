@@ -1,12 +1,18 @@
 // ----- Imports ----- //
+
+import type { JSDOM } from 'jsdom';
 import {
 	addQueryParamsToURL,
 	getAbsoluteURL,
 	getAllQueryParams,
 	getAllQueryParamsWithExclusions,
 } from '../urls/url';
+
 // ----- Tests ----- //
-const { jsdom } = global;
+
+// @ts-expect-error -- This is added to the global scope by the test setup
+const jsdom = global.jsdom as JSDOM;
+
 describe('url', () => {
 	describe('addQueryParamsToURL', () => {
 		it('should add a query param to an absolute URL', () => {
@@ -17,6 +23,7 @@ describe('url', () => {
 			const expectedUrl = `${startingUrl}&spam=eggs`;
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
+
 		it('should add a query param to an absolute URL [undefined case]', () => {
 			const startingUrl = 'https:///www.theguardian.com/index?hello=world';
 			const params = {
@@ -26,6 +33,7 @@ describe('url', () => {
 			const expectedUrl = `${startingUrl}&spam=eggs`;
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
+
 		it('should add multiple query params to an absolute URL', () => {
 			const startingUrl = 'https:///www.theguardian.com/index?hello=world';
 			const params = {
@@ -35,6 +43,7 @@ describe('url', () => {
 			const expectedUrl = `${startingUrl}&spam=eggs&answer=42`;
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
+
 		it('should add multiple query params to an absolute URL [null case]', () => {
 			const startingUrl = 'https:///www.theguardian.com/index?hello=world';
 			const params = {
@@ -45,6 +54,7 @@ describe('url', () => {
 			const expectedUrl = `${startingUrl}&spam=eggs&answer=42`;
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
+
 		it('should add a query param to a relative URL', () => {
 			const startingUrl = 'https:///www.theguardian.com?hello=world';
 			const params = {
@@ -53,6 +63,7 @@ describe('url', () => {
 			const expectedUrl = `${startingUrl}&spam=eggs`;
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
+
 		it('should not change a URL with null params', () => {
 			const startingUrl = 'https:///www.theguardian.com?hello=world';
 			const params = {
@@ -60,6 +71,7 @@ describe('url', () => {
 			};
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(startingUrl);
 		});
+
 		it('should add multiple query params to a relative URL', () => {
 			const startingUrl = '/index?hello=world';
 			const params = {
@@ -69,11 +81,13 @@ describe('url', () => {
 			const expectedUrl = `${startingUrl}&spam=eggs&answer=42`;
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
+
 		it('should return the existing URL if no params are passed', () => {
 			const startingUrl = '/index?hello=world';
 			const params = {};
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(startingUrl);
 		});
+
 		it('should add params if none exist', () => {
 			const startingUrl = 'https://gu.com/index';
 			const params = {
@@ -84,8 +98,10 @@ describe('url', () => {
 			expect(addQueryParamsToURL(startingUrl, params)).toEqual(expectedUrl);
 		});
 	});
+
 	describe('getAllQueryParams', () => {
 		const baseUrl = 'https://support.thegulocal.com/uk';
+
 		it('should return an array of query params', () => {
 			jsdom.reconfigure({
 				url: `${baseUrl}?foo=bar&spam=eggs`,
@@ -95,6 +111,7 @@ describe('url', () => {
 				['spam', 'eggs'],
 			]);
 		});
+
 		it('should return an empty array if there are no params', () => {
 			jsdom.reconfigure({
 				url: `${baseUrl}`,
@@ -105,6 +122,7 @@ describe('url', () => {
 			});
 			expect(getAllQueryParams()).toEqual([]);
 		});
+
 		it('should ignore malformed params', () => {
 			jsdom.reconfigure({
 				url: `${baseUrl}?foo&spam=eggs`,
@@ -112,6 +130,7 @@ describe('url', () => {
 			expect(getAllQueryParams()).toEqual([['spam', 'eggs']]);
 		});
 	});
+
 	describe('getAllQueryParamsWithExclusions', () => {
 		const baseUrl = 'https://support.thegulocal.com/uk';
 		it('should exclude query params', () => {
@@ -123,6 +142,7 @@ describe('url', () => {
 			]);
 		});
 	});
+
 	describe('getAbsoluteURL', () => {
 		it('should return the absolute URL if you call it without any path (with path in the original URL)', () => {
 			const origin = 'https://support.theguardian.com';
@@ -132,6 +152,7 @@ describe('url', () => {
 			});
 			expect(getAbsoluteURL()).toEqual(origin);
 		});
+
 		it('should return the absolute URL (including path) if you call it wit a path', () => {
 			const origin = 'https://support.theguardian.com';
 			const path = 'uk';
@@ -141,6 +162,7 @@ describe('url', () => {
 			});
 			expect(getAbsoluteURL('/example')).toEqual(expectedURL);
 		});
+
 		it('should return the absolute URL if you call it without any path (no path in the original URL)', () => {
 			const origin = 'https://support.theguardian.com/';
 			const expected = 'https://support.theguardian.com';
@@ -149,6 +171,7 @@ describe('url', () => {
 			});
 			expect(getAbsoluteURL()).toEqual(expected);
 		});
+
 		it('should return the absolute URL (including path) if you call it wit a path', () => {
 			const origin = 'https://support.theguardian.com';
 			const expectedURL = `${origin}/example`;

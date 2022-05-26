@@ -1,4 +1,6 @@
 // ----- Imports ----- //
+
+import type { JSDOM } from 'jsdom';
 import {
 	AUDCountries,
 	detect,
@@ -9,8 +11,11 @@ import {
 	UnitedStates,
 } from '../countryGroup';
 
-const { jsdom } = global;
+// @ts-expect-error -- This is added to the global scope by the test setup
+const jsdom = global.jsdom as JSDOM;
+
 // ----- Tests ----- //
+
 describe('detect countryGroup', () => {
 	it('should return the correct country group from the path', () => {
 		jsdom.reconfigure({
@@ -34,6 +39,7 @@ describe('detect countryGroup', () => {
 		});
 		expect(detect()).toEqual(International);
 	});
+
 	it('should return the correct country group from the query parameter', () => {
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/examplePath?countryGroup=GBPCountries',
@@ -56,6 +62,7 @@ describe('detect countryGroup', () => {
 		});
 		expect(detect()).toEqual(International);
 	});
+
 	it('should return the correct country group from GU_country cookie', () => {
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/examplePath',
@@ -78,6 +85,7 @@ describe('detect countryGroup', () => {
 		document.cookie = 'GU_country=BR';
 		expect(detect()).toEqual(International);
 	});
+
 	it('should return the correct country group from GU_geo_country cookie', () => {
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/examplePath',
@@ -101,6 +109,7 @@ describe('detect countryGroup', () => {
 		document.cookie = 'GU_geo_country=BR';
 		expect(detect()).toEqual(International);
 	});
+
 	it('should return the GBPCountries by default', () => {
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/examplePath',
@@ -109,6 +118,7 @@ describe('detect countryGroup', () => {
 		document.cookie = 'GU_geo_country=42';
 		expect(detect()).toEqual(GBPCountries);
 	});
+
 	it('should find the correct country group from the name', () => {
 		expect(fromCountryGroupName('United Kingdom').name).toEqual(
 			'United Kingdom',
