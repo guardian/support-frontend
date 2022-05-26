@@ -82,9 +82,13 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
       val expected = ProductPriceData(
         Monthly = RatePlanPriceData(
           price = "6.25",
+          currency = "£",
+          priceSummary = None,
         ),
         Annual = RatePlanPriceData(
           price = "135.0",
+          currency = "£",
+          priceSummary = None,
         ),
       )
 
@@ -93,6 +97,74 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
         CountryGroup.UK,
         GBP,
         Domestic,
+        false,
+      )
+
+      result mustEqual (Some(expected))
+    }
+
+    "transform ProductPrices including PriceSummary" in {
+      val expected = ProductPriceData(
+        Monthly = RatePlanPriceData(
+          price = "6.25",
+          currency = "£",
+          priceSummary = Some(
+            PriceSummary(
+              price = 12.5,
+              savingVsRetail = None,
+              currency = GBP,
+              fixedTerm = false,
+              promotions = List(
+                PromotionSummary(
+                  "Jan 22 - GW Discount Campaign",
+                  "Save 50% for 3 months",
+                  "GWJAN22SALE",
+                  Some(6.25),
+                  Some(3),
+                  Some(DiscountBenefit(50.0, Some(Months.THREE))),
+                  None,
+                  None,
+                  None,
+                  None, // no landing page text
+                ),
+              ),
+            ),
+          ),
+        ),
+        Annual = RatePlanPriceData(
+          price = "135.0",
+          currency = "£",
+          priceSummary = Some(
+            PriceSummary(
+              price = 150,
+              savingVsRetail = None,
+              currency = GBP,
+              fixedTerm = false,
+              promotions = List(
+                PromotionSummary(
+                  "10% Off Annual Guardian Weekly Subs",
+                  "Subscribe for 12 months and save 10%",
+                  "10ANNUAL",
+                  Some(135.00),
+                  Some(1),
+                  Some(DiscountBenefit(10.0, Some(Months.TWELVE))),
+                  None,
+                  None,
+                  None,
+                  None, // no landing page text
+                ),
+              ),
+            ),
+          ),
+        ),
+      )
+
+      val result = PricesController.buildProductPriceData(
+        guardianWeeklyProductPrices,
+        CountryGroup.UK,
+        GBP,
+        Domestic,
+        true,
       )
 
       result mustEqual (Some(expected))

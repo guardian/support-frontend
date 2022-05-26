@@ -22,7 +22,11 @@ import com.gu.support.workers.{Annual, Monthly}
 import com.gu.support.zuora.api.ReaderType.Direct
 
 object PricesController {
-  case class RatePlanPriceData(price: String)
+  case class RatePlanPriceData(
+      price: String, // the offered price on the site right now
+      currency: String, // never quote a price without a currency, even if grouped
+      priceSummary: Option[PriceSummary],
+  )
 
   case class ProductPriceData(
       Monthly: RatePlanPriceData,
@@ -47,12 +51,18 @@ object PricesController {
       Canada: CountryGroupPriceData,
   )
 
-  def buildRatePlanPriceData(priceSummary: PriceSummary): RatePlanPriceData = {
-    val price = priceSummary.promotions.headOption
+  private def buildRatePlanPriceData(priceSummary: PriceSummary, includeSummary: Boolean): RatePlanPriceData = {
+    val topPromotion = priceSummary.promotions.headOption
+    val price = topPromotion
       .flatMap(_.discountedPrice)
       .getOrElse(priceSummary.price)
 
-    RatePlanPriceData(price.toString)
+    RatePlanPriceData(
+      price = price.toString,
+      currency = priceSummary.currency.identifier,
+      priceSummary =
+        Option.when(includeSummary)(priceSummary.copy(promotions = topPromotion.map(_.copy(landingPage = None)).toList)),
+    )
   }
 
   def buildProductPriceData(
@@ -60,6 +70,7 @@ object PricesController {
       countryGroup: CountryGroup,
       currency: Currency,
       fulfilmentOptions: FulfilmentOptions,
+      includeSummary: Boolean,
   ): Option[ProductPriceData] =
     for {
       countryGroupPrices <- productPrices.get(countryGroup)
@@ -68,8 +79,8 @@ object PricesController {
       monthlyPriceSummary <- productOptionPrices.get(Monthly).flatMap(_.get(currency))
       annualPriceSummary <- productOptionPrices.get(Annual).flatMap(_.get(currency))
     } yield ProductPriceData(
-      Monthly = buildRatePlanPriceData(monthlyPriceSummary),
-      Annual = buildRatePlanPriceData(annualPriceSummary),
+      Monthly = buildRatePlanPriceData(monthlyPriceSummary, includeSummary),
+      Annual = buildRatePlanPriceData(annualPriceSummary, includeSummary),
     )
 
   import io.circe.generic.auto._
@@ -88,6 +99,7 @@ class PricesController(
   private def buildCountryGroupPriceData(
       countryGroup: CountryGroup,
       currency: Currency,
+      includeSummary: Boolean,
   ): CountryGroupPriceData = {
     val guardianWeeklyProductPrices = priceSummaryServiceProvider
       .forUser(false)
@@ -97,21 +109,29 @@ class PricesController(
       .getPrices(DigitalPack, DefaultPromotions.DigitalSubscription.all, Direct)
 
     CountryGroupPriceData(
-      GuardianWeekly = buildProductPriceData(guardianWeeklyProductPrices, countryGroup, currency, Domestic),
-      Digisub = buildProductPriceData(digisubProductPrices, countryGroup, currency, NoFulfilmentOptions),
+      GuardianWeekly =
+        buildProductPriceData(guardianWeeklyProductPrices, countryGroup, currency, Domestic, includeSummary),
+      Digisub = buildProductPriceData(digisubProductPrices, countryGroup, currency, NoFulfilmentOptions, includeSummary),
+    )
+  }
+
+  private def getPrices(includeSummary: Boolean): Prices = {
+    Prices(
+      GBPCountries = buildCountryGroupPriceData(CountryGroup.UK, GBP, includeSummary),
+      UnitedStates = buildCountryGroupPriceData(CountryGroup.US, USD, includeSummary),
+      EURCountries = buildCountryGroupPriceData(CountryGroup.Europe, EUR, includeSummary),
+      AUDCountries = buildCountryGroupPriceData(CountryGroup.Australia, AUD, includeSummary),
+      International = buildCountryGroupPriceData(CountryGroup.RestOfTheWorld, USD, includeSummary),
+      NZDCountries = buildCountryGroupPriceData(CountryGroup.NewZealand, NZD, includeSummary),
+      Canada = buildCountryGroupPriceData(CountryGroup.Canada, CAD, includeSummary),
     )
   }
 
   def getPrices: Action[AnyContent] = CachedAction() {
-    val prices = Prices(
-      GBPCountries = buildCountryGroupPriceData(CountryGroup.UK, GBP),
-      UnitedStates = buildCountryGroupPriceData(CountryGroup.US, USD),
-      EURCountries = buildCountryGroupPriceData(CountryGroup.Europe, EUR),
-      AUDCountries = buildCountryGroupPriceData(CountryGroup.Australia, AUD),
-      International = buildCountryGroupPriceData(CountryGroup.RestOfTheWorld, USD),
-      NZDCountries = buildCountryGroupPriceData(CountryGroup.NewZealand, NZD),
-      Canada = buildCountryGroupPriceData(CountryGroup.Canada, CAD),
-    )
-    Ok(prices.asJson)
+    Ok(getPrices(false).asJson)
+  }
+
+  def getPricesWithSummary: Action[AnyContent] = CachedAction() {
+    Ok(getPrices(true).asJson)
   }
 }

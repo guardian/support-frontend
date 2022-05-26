@@ -170,6 +170,7 @@ GET /p/:promoCode                                                 controllers.Pr
 
 # ----- Prices API ----- #
 GET /prices                                                       controllers.PricesController.getPrices()
+GET /pricesWithSummary                                            controllers.PricesController.getPricesWithSummary()
 
 # ----- Verification ----- #
 
