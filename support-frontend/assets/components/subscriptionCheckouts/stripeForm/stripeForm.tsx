@@ -50,7 +50,7 @@ type CardFieldData = {
 	errorIncomplete: string;
 };
 
-type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
+export type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
 
 type CardFieldsData = Record<CardFieldName, CardFieldData>;
 
