@@ -7,12 +7,10 @@
             "TS2769": 1,
             "TS2305": 1,
             "TS2739": 3,
-            "TS7016": 3,
             "TS2569": 2,
-            "TS2322": 6,
+            "TS2322": 5,
             "TS2339": 2,
             "TS2411": 1,
-            "TS2367": 1,
             "TS7017": 1,
             "TS2304": 2,
             "TS2554": 6,
@@ -28,11 +26,7 @@
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
-            "assets/helpers/__tests__/urlTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
-            "assets/helpers/polyfills/details.ts": 2,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/helpers/csrf/csrfReducer.ts": 2,
@@ -105,20 +99,6 @@
             "message": "Type '{ Stripe: string; PayPal: string; DirectDebit: string; }' is missing the following properties from type 'Record<PaymentMethod, string>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
         }
     ],
-    "TS7016": [
-        {
-            "path": "assets/helpers/__tests__/urlTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        }
-    ],
     "TS2569": [
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -133,10 +113,6 @@
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'unknown' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/helpers/polyfills/details.ts",
-            "message": "Type 'EventTarget | null' is not assignable to type 'Element | null'."
         },
         {
             "path": "assets/hocs/withLabel.tsx",
@@ -169,12 +145,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/settings.ts",
             "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
-        }
-    ],
-    "TS2367": [
-        {
-            "path": "assets/helpers/polyfills/details.ts",
-            "message": "This condition will always return 'true' since the types 'Element' and 'Document' have no overlap."
         }
     ],
     "TS7017": [

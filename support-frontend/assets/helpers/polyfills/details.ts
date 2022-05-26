@@ -8,17 +8,25 @@ function toggleDetailsState(details: Element) {
 	}
 }
 
-function handleEvent(event: UIEvent) {
-	let targetNode: Element | null = event.target;
+function isNode(element: EventTarget): element is Node {
+	return 'nodeName' in element && 'parentElement' in element;
+}
 
-	if (targetNode) {
-		while (
-			targetNode.nodeName.toLowerCase() !== 'summary' &&
-			targetNode !== document &&
-			targetNode.parentElement
-		) {
-			targetNode = targetNode.parentElement;
-		}
+function findSummaryNode(maybeSummary: Node): Node {
+	let targetNode = maybeSummary;
+	while (
+		targetNode !== document &&
+		targetNode.nodeName.toLowerCase() !== 'summary' &&
+		targetNode.parentElement
+	) {
+		targetNode = targetNode.parentElement;
+	}
+	return targetNode;
+}
+
+function handleEvent(event: UIEvent) {
+	if (event.target && isNode(event.target)) {
+		const targetNode = findSummaryNode(event.target);
 
 		if (
 			targetNode.nodeName.toLowerCase() === 'summary' &&
