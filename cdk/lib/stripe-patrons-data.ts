@@ -15,7 +15,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
       fileName: `${appName}.jar`,
       functionName: `${appName}-${scope.stage}`,
       handler:
-        "com.gu.patrons.lambdas.FetchStripeSubscriptionsLambda::handleRequest",
+        "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
       monitoringConfiguration: { noMonitoring: true },
       rules: [{ schedule: Schedule.rate(Duration.minutes(10)) }],
       runtime: Runtime.JAVA_11,
