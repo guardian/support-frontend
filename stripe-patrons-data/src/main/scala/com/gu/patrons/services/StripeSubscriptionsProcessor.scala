@@ -20,29 +20,33 @@ class StripeSubscriptionsProcessor(
 
   final def processFutureResponse(eventualResponse: Future[StripeSubscriptionsResponse]): Future[Unit] = {
     eventualResponse.flatMap { response =>
-      processSubs(response.data)
-      if (response.hasMore)
-        processFutureResponse(
-          stripeService.getSubscriptions(startingAfterId = Some(response.data.last.id)),
-        )
-      else
-        Future.successful(())
+      processSubs(response.data).map(_ =>
+        if (response.hasMore)
+          processFutureResponse(
+            stripeService.getSubscriptions(startingAfterId = Some(response.data.last.id)),
+          )
+        else
+          Future.successful(()),
+      )
     }
   }
 
-  def processSubs(list: List[StripeSubscription]): Unit =
-    list
-      .filterNot(sub =>
-        sub.customer.email.contains("@guardian.co.uk") || sub.customer.email.contains("@theguardian.com"),
-      )
-      .distinctBy(
-        _.customer.email, // I think this is probably only an issue in dev, but there can be multiple subs with the same email
-      )
-      .foreach(subscriptionProcessor.processSubscription)
+  def processSubs(list: List[StripeSubscription]) = {
+    Future.sequence(
+      list
+        .filterNot(sub =>
+          sub.customer.email.contains("@guardian.co.uk") || sub.customer.email.contains("@theguardian.com"),
+        )
+        .distinctBy(
+          _.customer.email, // I think this is probably only an issue in dev, but there can be multiple subs with the same email
+        )
+        .map(subscriptionProcessor.processSubscription),
+    )
+  }
 }
 
 trait SubscriptionProcessor {
-  def processSubscription(subscription: StripeSubscription)
+  def processSubscription(subscription: StripeSubscription): Future[Unit]
 }
 
 class IdentityDynamoProcessor(
@@ -50,12 +54,12 @@ class IdentityDynamoProcessor(
     supporterDataDynamoService: SupporterDataDynamoService,
 ) extends SubscriptionProcessor {
   import scala.concurrent.ExecutionContext.Implicits.global
-  override def processSubscription(subscription: StripeSubscription): Unit =
+  override def processSubscription(subscription: StripeSubscription) =
     for {
       identityId <- identityService.getOrCreateUserFromEmail(subscription.customer.email, subscription.customer.name)
       dynamoResponse <- writeToDynamo(identityId, subscription)
+      _ = logDynamoResult(subscription.customer.email, dynamoResponse)
     } yield {
-      logDynamoResult(subscription.customer.email, dynamoResponse)
       ()
     }
 

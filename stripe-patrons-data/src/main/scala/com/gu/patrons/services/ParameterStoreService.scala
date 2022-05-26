@@ -23,7 +23,7 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
     case DEV => "CODE"
     case _ => stage.value
   }
-  val configRoot = s"/${parameterKeyFromStage(stage)}/support/stripe-patrons-data/"
+  val configRoot = s"/${parameterKeyFromStage(stage)}/support/stripe-patrons-data"
 
   def getParametersByPath(path: String)(implicit executionContext: ExecutionContext) = {
     val request: GetParametersByPathRequest = new GetParametersByPathRequest()

@@ -28,7 +28,7 @@ class StripeSubscriptionsProcessorSpec extends AsyncFlatSpec with Matchers {
   }
 
   class LoggingSubscriptionProcessor(identityService: PatronsIdentityService) extends SubscriptionProcessor {
-    override def processSubscription(subscription: StripeSubscription): Unit =
+    override def processSubscription(subscription: StripeSubscription) =
       identityService
         .getUserIdFromEmail(subscription.customer.email)
         .map(maybeIdentityId =>
