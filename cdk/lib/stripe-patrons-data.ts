@@ -25,14 +25,14 @@ class StripePatronsDataLambda extends GuScheduledLambda {
       return stage == "CODE" ? "DEV" : stage;
     }
 
-    // this.addToRolePolicy(
-    //   new PolicyStatement({
-    //     actions: ["ssm:GetParametersByPath"],
-    //     resources: [
-    //       `arn:aws:ssm:${scope.region}:${scope.account}:parameter/${appName}/${scope.stage}}`,
-    //     ],
-    //   })
-    // );
+    this.addToRolePolicy(
+      new PolicyStatement({
+        actions: ["ssm:GetParametersByPath"],
+        resources: [
+          `arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/support/${appName}/*`,
+        ],
+      })
+    );
     this.addToRolePolicy(
       new PolicyStatement({
         actions: [
