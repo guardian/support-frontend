@@ -9,26 +9,28 @@ function toggleDetailsState(details: Element) {
 }
 
 function handleEvent(event: UIEvent) {
-	let targetNode: Element = event.target as any;
+	let targetNode: Element | null = event.target;
 
-	while (
-		targetNode.nodeName.toLowerCase() !== 'summary' &&
-		targetNode !== document &&
-		targetNode.parentElement
-	) {
-		targetNode = targetNode.parentElement;
-	}
+	if (targetNode) {
+		while (
+			targetNode.nodeName.toLowerCase() !== 'summary' &&
+			targetNode !== document &&
+			targetNode.parentElement
+		) {
+			targetNode = targetNode.parentElement;
+		}
 
-	if (
-		targetNode.nodeName.toLowerCase() === 'summary' &&
-		targetNode.parentElement &&
-		targetNode.parentElement.nodeName.toLowerCase() === 'details'
-	) {
-		toggleDetailsState(targetNode.parentElement);
+		if (
+			targetNode.nodeName.toLowerCase() === 'summary' &&
+			targetNode.parentElement &&
+			targetNode.parentElement.nodeName.toLowerCase() === 'details'
+		) {
+			toggleDetailsState(targetNode.parentElement);
+		}
 	}
 }
 
-function polyfillDetails() {
+function polyfillDetails(): void {
 	document.addEventListener('click', handleEvent, true);
 	document.addEventListener(
 		'keypress',

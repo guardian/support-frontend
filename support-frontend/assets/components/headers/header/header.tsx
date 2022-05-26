@@ -3,8 +3,6 @@ import { Component } from 'react';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ElementResizer } from 'helpers/polyfills/layout';
-import { onElementResize } from 'helpers/polyfills/layout';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import MobileMenuToggler from './mobileMenuToggler';
@@ -97,37 +95,39 @@ export default class Header extends Component<PropTypes, State> {
 	};
 
 	componentDidMount(): void {
+		const { menuRef, logoRef, containerRef } = this;
 		if (
 			this.props.display === 'navigation' &&
-			this.menuRef &&
-			this.logoRef &&
-			this.containerRef
+			menuRef &&
+			logoRef &&
+			containerRef
 		) {
-			this.observer = onElementResize(
-				[this.logoRef, this.menuRef, this.containerRef],
-				([logoRef, menuRef, containerRef]) => {
-					this.setState(
-						getMenuStateMetrics({
-							menuRef,
-							logoRef,
-							containerRef,
-						}),
-					);
-				},
-			);
+			this.observer = new window.ResizeObserver(() => {
+				this.setState(
+					getMenuStateMetrics({
+						menuRef,
+						logoRef,
+						containerRef,
+					}),
+				);
+			});
+
+			this.observer.observe(menuRef);
+			this.observer.observe(logoRef);
+			this.observer.observe(containerRef);
 		}
 	}
 
 	componentWillUnmount(): void {
 		if (this.observer) {
-			this.observer.stopListening();
+			this.observer.disconnect();
 		}
 	}
 
 	logoRef: Element | null | undefined;
 	menuRef: Element | null | undefined;
 	containerRef: Element | null | undefined;
-	observer: ElementResizer | null | undefined;
+	observer: ResizeObserver | null | undefined;
 
 	render(): JSX.Element {
 		const { utility, display, countryGroupId } = this.props;
