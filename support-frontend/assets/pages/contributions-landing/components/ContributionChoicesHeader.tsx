@@ -15,8 +15,10 @@ const container = css`
 	}
 `;
 
-const ContributionAmountRecurringNotification = ({
+function ContributionAmountRecurringNotification({
 	children,
-}: ContributionAmountLabelProps) => <div css={container}>{children}</div>;
+}: ContributionAmountLabelProps) {
+	return <div css={container}>{children}</div>;
+}
 
 export default ContributionAmountRecurringNotification;
