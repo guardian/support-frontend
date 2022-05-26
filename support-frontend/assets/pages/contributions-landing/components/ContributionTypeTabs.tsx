@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
+import type { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { connect } from 'react-redux';
 import type {
 	ContributionType,
@@ -50,7 +51,7 @@ const mapStateToProps = (state: State) => ({
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 	onSelectContributionType: (
 		contributionType: ContributionType,
 		switches: Switches,
@@ -131,44 +132,6 @@ function ContributionTypeTabs(props: PropTypes) {
 				},
 			)}
 		</ChoiceCardGroup>
-	);
-
-	// leaving in place as this is still in active development:
-	const renderControl = () => (
-		<ul className="form__radio-group-list form__radio-group-list--border">
-			{contributionTypes.map(
-				(contributionTypeSetting: ContributionTypeSetting) => {
-					const { contributionType } = contributionTypeSetting;
-					return (
-						<li className="form__radio-group-item">
-							<input
-								id={`contributionType-${contributionType}`}
-								className="form__radio-group-input"
-								type="radio"
-								name="contributionType"
-								value={contributionType}
-								onChange={() =>
-									props.onSelectContributionType(
-										contributionType,
-										props.switches,
-										props.countryId,
-										props.countryGroupId,
-										props.useLocalCurrency,
-									)
-								}
-								checked={props.contributionType === contributionType}
-							/>
-							<label
-								htmlFor={`contributionType-${contributionType}`}
-								className="form__radio-group-label"
-							>
-								{toHumanReadableContributionType(contributionType)}
-							</label>
-						</li>
-					);
-				},
-			)}
-		</ul>
 	);
 
 	if (
