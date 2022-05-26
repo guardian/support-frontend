@@ -135,6 +135,7 @@ function AccountNumberInput(props: {
 	const editable = (
 		<input
 			id="account-number-input"
+			data-qm-masking="blocklist"
 			value={props.value}
 			onChange={props.onChange}
 			pattern="[0-9]*"
@@ -172,6 +173,7 @@ function AccountHolderNameInput(props: {
 	const editable = (
 		<input
 			id="account-holder-name-input"
+			data-qm-masking="blocklist"
 			value={props.value}
 			onChange={props.onChange}
 			maxLength={40}

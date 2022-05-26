@@ -70,6 +70,7 @@ function Form(props: PropTypes): JSX.Element {
 			<div css={spaceBetween}>
 				<TextInput
 					id="account-holder-name-input"
+					data-qm-masking="blocklist"
 					value={props.accountHolderName}
 					autoComplete="off"
 					onChange={(e) =>
@@ -88,6 +89,7 @@ function Form(props: PropTypes): JSX.Element {
 			<div css={spaceBetween}>
 				<TextInput
 					id="sort-code-input"
+					data-qm-masking="blocklist"
 					label="Sort code"
 					autoComplete="off"
 					type="text"
@@ -107,6 +109,7 @@ function Form(props: PropTypes): JSX.Element {
 			<div css={spaceBetween}>
 				<TextInput
 					id="account-number-input"
+					data-qm-masking="blocklist"
 					value={props.accountNumber}
 					autoComplete="off"
 					onChange={(e) =>

@@ -223,6 +223,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						<Select
 							css={marginBottom}
 							id="title"
+							data-qm-masking="blocklist"
 							label="Title"
 							optional
 							value={props.title ?? ''}

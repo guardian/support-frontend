@@ -231,6 +231,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						<Select
 							css={marginBottom}
 							id="title"
+							data-qm-masking="blocklist"
 							label="Title"
 							optional
 							value={props.titleGiftRecipient ?? undefined}
@@ -308,6 +309,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						<Select
 							css={marginBottom}
 							id="title"
+							data-qm-masking="blocklist"
 							label="Title"
 							optional
 							value={props.title ?? undefined}
