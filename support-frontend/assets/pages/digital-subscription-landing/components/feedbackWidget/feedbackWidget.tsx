@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-// @ts-expect-error - required for hooks
+
 import { ThemeProvider } from '@emotion/react';
 import {
 	Button,
@@ -20,18 +20,18 @@ import {
 import { SvgThumbsDown } from './thumbsDown';
 import { SvgThumbsUp } from './thumbsUp';
 
-function FeedbackWidget({ display }: { display: boolean }) {
+function FeedbackWidget({ display }: { display: boolean }): JSX.Element {
 	const [showWidget, setShowWidget] = useState<boolean>(display);
 	const [clicked, setClicked] = useState({
 		positive: false,
 		negative: false,
 		open: false,
 	});
-	const positiveButtonCss = clicked.positive ? clickedCss : null;
-	const negativeButtonCss = clicked.negative ? clickedCss : null;
+
 	useEffect(() => {
 		setShowWidget(display);
 	}, [display]);
+
 	return (
 		<aside css={[wrapper, showWidget ? '' : hideWidget]}>
 			<fieldset role="group">
@@ -49,7 +49,9 @@ function FeedbackWidget({ display }: { display: boolean }) {
 								hideLabel
 								aria-label="Is this page helpful? Yes, this page has the information I am looking for"
 								icon={<SvgThumbsUp />}
-								cssOverrides={[positiveButtonCss, buttonStyles]}
+								cssOverrides={
+									clicked.positive ? [clickedCss, buttonStyles] : buttonStyles
+								}
 								onClick={() => {
 									sendTrackingEventsOnClick({
 										id: 'ds_landing_page_survey_positive',
@@ -57,6 +59,7 @@ function FeedbackWidget({ display }: { display: boolean }) {
 										componentType: 'SURVEYS_QUESTIONS',
 									})();
 									setClicked({
+										...clicked,
 										positive: true,
 										negative: false,
 									});
@@ -71,7 +74,9 @@ function FeedbackWidget({ display }: { display: boolean }) {
 								hideLabel
 								aria-label="Is this page helpful? No, this page does not have the information I am looking for"
 								icon={<SvgThumbsDown />}
-								cssOverrides={[negativeButtonCss, buttonStyles]}
+								cssOverrides={
+									clicked.negative ? [clickedCss, buttonStyles] : buttonStyles
+								}
 								onClick={() => {
 									sendTrackingEventsOnClick({
 										id: 'ds_landing_page_survey_negative',
