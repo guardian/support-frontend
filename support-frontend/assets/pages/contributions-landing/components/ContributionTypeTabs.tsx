@@ -133,44 +133,6 @@ function ContributionTypeTabs(props: PropTypes) {
 		</ChoiceCardGroup>
 	);
 
-	// leaving in place as this is still in active development:
-	const renderControl = () => (
-		<ul className="form__radio-group-list form__radio-group-list--border">
-			{contributionTypes.map(
-				(contributionTypeSetting: ContributionTypeSetting) => {
-					const { contributionType } = contributionTypeSetting;
-					return (
-						<li className="form__radio-group-item">
-							<input
-								id={`contributionType-${contributionType}`}
-								className="form__radio-group-input"
-								type="radio"
-								name="contributionType"
-								value={contributionType}
-								onChange={() =>
-									props.onSelectContributionType(
-										contributionType,
-										props.switches,
-										props.countryId,
-										props.countryGroupId,
-										props.useLocalCurrency,
-									)
-								}
-								checked={props.contributionType === contributionType}
-							/>
-							<label
-								htmlFor={`contributionType-${contributionType}`}
-								className="form__radio-group-label"
-							>
-								{toHumanReadableContributionType(contributionType)}
-							</label>
-						</li>
-					);
-				},
-			)}
-		</ul>
-	);
-
 	if (
 		contributionTypes.length === 1 &&
 		contributionTypes[0].contributionType === 'ONE_OFF'

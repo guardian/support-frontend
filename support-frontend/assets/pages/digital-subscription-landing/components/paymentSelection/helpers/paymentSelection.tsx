@@ -203,12 +203,7 @@ const getHeroCtaProps = (
 		};
 
 		return {
-			href: getDigitalCheckout(
-				countryGroupId,
-				digitalBillingPeriod,
-				promoCode,
-				false,
-			),
+			href: getDigitalCheckout(digitalBillingPeriod, promoCode, false),
 			onClick,
 			priceCopy: getPriceDescription(
 				productPrice,
@@ -305,7 +300,6 @@ const getPaymentOptions = ({
 					title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
 					price: getDisplayPrice(currencyId, fullPrice),
 					href: getDigitalCheckout(
-						countryGroupId,
 						billingPeriodForHref,
 						promoCode,
 						orderIsAGift,
@@ -325,7 +319,6 @@ const getPaymentOptions = ({
 						getFirstValidPrice(promotionalPrice, fullPrice),
 					),
 					href: getDigitalCheckout(
-						countryGroupId,
 						billingPeriodForHref,
 						promoCode,
 						orderIsAGift,
