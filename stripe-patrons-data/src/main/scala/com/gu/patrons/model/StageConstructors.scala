@@ -11,7 +11,7 @@ object StageConstructors {
 
   def fromEnvironment: Stage =
     (for {
-      stageAsString <- Option(System.getenv("Stage"))
+      stageAsString <- Option(System.getenv("STAGE"))
       stage <- fromString(stageAsString)
     } yield stage).getOrElse(Stage.DEV)
 

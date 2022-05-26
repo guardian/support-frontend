@@ -19,9 +19,6 @@ class StripePatronsDataLambda extends GuScheduledLambda {
       monitoringConfiguration: { noMonitoring: true },
       rules: [{ schedule: Schedule.rate(Duration.minutes(10)) }],
       runtime: Runtime.JAVA_11,
-      environment: {
-        Stage: scope.stage,
-      },
     });
 
     function environmentFromStage(stage: string) {
