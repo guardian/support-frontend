@@ -1,18 +1,15 @@
 // ----- Imports ----- //
 import type { Action } from './csrfActions';
+
 // ----- Types ----- //
 export type Csrf = {
 	token: string | null | undefined;
 };
+
 // ----- Setup ----- //
-const initialState: Csrf =
-	window.guardian && window.guardian.csrf
-		? {
-				token: window.guardian.csrf.token,
-		  }
-		: {
-				token: null,
-		  }; // ----- Reducer ----- //
+const initialState: Csrf = window.guardian.csrf ?? { token: null };
+
+// ----- Reducer ----- //
 
 export default function csrfReducer(
 	state: Csrf = initialState,

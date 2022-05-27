@@ -6,57 +6,74 @@ import {
 	SvgDirectDebit,
 	SvgPayPal,
 } from '@guardian/source-react-components';
-import type { Node } from 'react';
+import type { ReactNode } from 'react';
 import Rows from 'components/base/rows';
-import 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import 'helpers/forms/paymentMethods';
+import type { SubscriptionsPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { Option } from 'helpers/types/option';
 
 type PropTypes = {
-	availablePaymentMethods: PaymentMethod[];
+	availablePaymentMethods: SubscriptionsPaymentMethod[];
 	paymentMethod: Option<PaymentMethod>;
-	setPaymentMethod: (...args: any[]) => any;
+	setPaymentMethod: (method: PaymentMethod) => void;
 	validationError: string | undefined;
 };
+
 type RadioWithImagePropTypes = {
 	id: string;
-	image: Node;
+	image: ReactNode;
 	label: string;
 	name: string;
 	checked: boolean;
-	onChange: (...args: any[]) => any;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
 const radioWithImageStyles = css`
 	display: inline-flex;
 	justify-content: space-between;
 	align-items: center;
 `;
+
 const paymentIcon = css`
 	min-width: 30px;
 	max-width: 40px;
 `;
 
-function RadioWithImage(props: RadioWithImagePropTypes) {
+function RadioWithImage({
+	id,
+	image,
+	label,
+	checked,
+	name,
+	onChange,
+}: RadioWithImagePropTypes) {
 	return (
 		<div css={radioWithImageStyles}>
-			<Radio {...props} />
-			<div css={paymentIcon}>{props.image}</div>
+			<Radio
+				id={id}
+				label={label}
+				checked={checked}
+				name={name}
+				onChange={onChange}
+			/>
+			<div css={paymentIcon}>{image}</div>
 		</div>
 	);
 }
 
-const paymentMethodIcons: Record<PaymentMethod, Node> = {
+const paymentMethodIcons: Record<SubscriptionsPaymentMethod, ReactNode> = {
 	Stripe: <SvgCreditCard />,
 	PayPal: <SvgPayPal />,
 	DirectDebit: <SvgDirectDebit />,
 };
-const paymentMethodIds: Record<PaymentMethod, string> = {
+
+const paymentMethodIds: Record<SubscriptionsPaymentMethod, string> = {
 	Stripe: 'qa-credit-card',
 	PayPal: 'qa-paypal',
 	DirectDebit: 'qa-direct-debit',
 };
-const paymentMethodText: Record<PaymentMethod, string> = {
+
+const paymentMethodText: Record<SubscriptionsPaymentMethod, string> = {
 	Stripe: 'Credit/Debit card',
 	PayPal: 'PayPal',
 	DirectDebit: 'Direct debit',
@@ -67,7 +84,7 @@ function PaymentMethodSelector({
 	paymentMethod,
 	setPaymentMethod,
 	validationError,
-}: PropTypes) {
+}: PropTypes): JSX.Element {
 	return (
 		<Rows gap="large">
 			<RadioGroup

@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type {
 	AmazonObject,
 	AmazonPaymentsObject,
@@ -23,6 +24,7 @@ declare global {
 				default: string;
 				uat: string;
 			};
+			csrf?: Csrf;
 			email?: string;
 			enableContributionsCampaign: boolean;
 			forceContributionsCampaign: boolean;
