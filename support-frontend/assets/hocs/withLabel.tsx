@@ -1,32 +1,25 @@
 // ----- Imports ----- //
-import * as React from 'react';
+import type { ComponentType } from 'react';
 import type { PropsForHoc } from 'components/forms/label';
 import { Label } from 'components/forms/label';
 import 'helpers/types/option';
 
 // ----- Types ----- //
-type AugmentedProps<Props> = Props & PropsForHoc;
-type In<Props> = React.ComponentType<Props>;
-type Out<Props> = React.ComponentType<AugmentedProps<Props>>;
+type AugmentedProps<T> = T & PropsForHoc;
+type ComponentToWrap<T> = ComponentType<T>;
+type ComponentWithLabel<T> = ComponentType<AugmentedProps<T>>;
 
 // ----- Component ----- //
-function withLabel<
-	Props extends {
-		id?: string;
-	},
->(Component: In<Props>): Out<Props> {
-	return function ({
-		label,
-		optional,
-		footer,
-		...props
-	}: AugmentedProps<Props>) {
+function withLabel<Props>(
+	Component: ComponentToWrap<Props>,
+): ComponentWithLabel<Props> {
+	return function (props: AugmentedProps<Props>) {
 		return (
 			<Label
 				htmlFor={props.id}
-				footer={footer}
-				label={label}
-				optional={optional}
+				footer={props.footer}
+				label={props.label}
+				optional={props.optional}
 			>
 				<Component {...props} />
 			</Label>

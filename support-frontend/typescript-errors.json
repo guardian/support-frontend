@@ -2,11 +2,10 @@
     "errorCounts": {
         "byCode": {
             "TS2569": 2,
-            "TS2322": 5
+            "TS2322": 4
         },
         "byPath": {
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
-            "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3
         }
     },
@@ -24,10 +23,6 @@
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'unknown' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/hocs/withLabel.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
         },
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",

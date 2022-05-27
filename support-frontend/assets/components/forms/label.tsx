@@ -5,6 +5,7 @@ import './label.scss';
 // ----- Types ----- //
 export type PropsForHoc = {
 	label: string;
+	id?: string;
 	optional?: boolean;
 	footer?: ReactNode;
 	labelId?: string;
