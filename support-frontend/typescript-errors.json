@@ -1,51 +1,19 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS7006": 1,
-            "TS2345": 2,
-            "TS2769": 1,
             "TS2305": 1,
             "TS2739": 3,
             "TS2569": 2,
             "TS2322": 4,
-            "TS2339": 2,
-            "TS2411": 1,
-            "TS6133": 1
+            "TS2339": 2
         },
         "byPath": {
-            "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
-            "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
-            "assets/helpers/csrf/csrfReducer.ts": 2,
-            "assets/helpers/globalsAndSwitches/settings.ts": 1,
-            "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1
+            "assets/helpers/csrf/csrfReducer.ts": 2
         }
     },
-    "TS7006": [
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        }
-    ],
-    "TS2345": [
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Argument of type 'typeof MarketingConsent' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { error: boolean; }>>'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAg...'."
-        }
-    ],
-    "TS2769": [
-        {
-            "path": "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts",
-            "message": "No overload matches this call."
-        }
-    ],
     "TS2305": [
         {
             "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
@@ -102,18 +70,6 @@
         {
             "path": "assets/helpers/csrf/csrfReducer.ts",
             "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
-        }
-    ],
-    "TS2411": [
-        {
-            "path": "assets/helpers/globalsAndSwitches/settings.ts",
-            "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
-        }
-    ],
-    "TS6133": [
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "'React' is declared but its value is never read."
         }
     ]
 }
