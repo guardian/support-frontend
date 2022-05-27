@@ -3,14 +3,13 @@
         "byCode": {
             "TS2345": 6,
             "TS7006": 1,
-            "TS2769": 2,
+            "TS2769": 1,
             "TS2305": 1,
             "TS2739": 3,
             "TS2569": 2,
             "TS2322": 5,
             "TS2339": 2,
             "TS2411": 1,
-            "TS2367": 1,
             "TS7017": 1,
             "TS2304": 2,
             "TS2554": 6,
@@ -24,14 +23,12 @@
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
-            "assets/helpers/polyfills/layout.ts": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
-            "assets/helpers/polyfills/details.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1
         }
@@ -71,10 +68,6 @@
     "TS2769": [
         {
             "path": "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/helpers/polyfills/layout.ts",
             "message": "No overload matches this call."
         }
     ],
@@ -144,12 +137,6 @@
         {
             "path": "assets/helpers/globalsAndSwitches/settings.ts",
             "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
-        }
-    ],
-    "TS2367": [
-        {
-            "path": "assets/helpers/polyfills/details.ts",
-            "message": "This condition will always return 'true' since the types 'Element' and 'Document' have no overlap."
         }
     ],
     "TS7017": [
