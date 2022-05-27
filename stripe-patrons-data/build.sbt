@@ -9,18 +9,12 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1",
-  "com.stripe" % "stripe-java" % "20.119.0",
 )
 
 riffRaffPackageType := assembly.value

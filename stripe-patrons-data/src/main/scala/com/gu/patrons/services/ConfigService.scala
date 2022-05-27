@@ -8,7 +8,7 @@ trait ConfigService extends StrictLogging {
 
   protected def findParameterOrThrow(name: String, params: List[Parameter]) =
     findParameterValue(name, params).getOrElse(
-      throw new RuntimeException(s"Missing config value for parameter $name in PatronsStripeConfig"),
+      throw new RuntimeException(s"Missing config value for parameter $name"),
     )
 
   protected def findParameterValue(name: String, params: List[Parameter]) =

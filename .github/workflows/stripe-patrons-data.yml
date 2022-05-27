@@ -25,7 +25,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      # The CDK build requires node 16 and currently the rest of the build is on v12
       - name: Setup Node for CDK
         uses: actions/setup-node@v2
         with:
