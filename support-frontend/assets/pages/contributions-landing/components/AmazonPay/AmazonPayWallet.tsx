@@ -24,11 +24,11 @@ import './AmazonPay.scss';
 
 type PropTypes = {
 	amazonPayData: AmazonPayData;
-	setAmazonPayWalletIsStale: (arg0: boolean) => Action;
-	setAmazonPayOrderReferenceId: (arg0: string) => Action;
-	setAmazonPayPaymentSelected: (arg0: boolean) => Action;
-	setAmazonPayBillingAgreementId: (arg0: string) => Action;
-	setAmazonPayBillingAgreementConsentStatus: (arg0: boolean) => Action;
+	setAmazonPayWalletIsStale: (isStale: boolean) => void;
+	setAmazonPayOrderReferenceId: (referenceId: string) => void;
+	setAmazonPayPaymentSelected: (paymentSelected: boolean) => void;
+	setAmazonPayBillingAgreementId: (agreementId: string) => void;
+	setAmazonPayBillingAgreementConsentStatus: (consentStatus: boolean) => void;
 	isTestUser: boolean;
 	contributionType: ContributionType;
 	checkoutFormHasBeenSubmitted: boolean;
