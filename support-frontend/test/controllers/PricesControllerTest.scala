@@ -100,7 +100,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
         false,
       )
 
-      result mustEqual (Some(expected))
+      result mustBe Some(expected)
     }
 
     "transform ProductPrices including PriceSummary" in {
@@ -167,7 +167,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
         true,
       )
 
-      result mustEqual (Some(expected))
+      result mustBe Some(expected)
     }
   }
 }

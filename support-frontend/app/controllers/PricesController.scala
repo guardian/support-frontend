@@ -127,11 +127,8 @@ class PricesController(
     )
   }
 
-  def getPrices: Action[AnyContent] = CachedAction() {
-    Ok(getPrices(false).asJson)
-  }
-
-  def getPricesWithSummary: Action[AnyContent] = CachedAction() {
-    Ok(getPrices(true).asJson)
+  def getPrices: Action[AnyContent] = NoCacheAction() { implicit request =>
+    val includeSummary = request.getQueryString("include-summary").nonEmpty
+    Ok(getPrices(includeSummary).asJson)
   }
 }
