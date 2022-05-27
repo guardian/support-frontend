@@ -49,19 +49,10 @@ trait SubscriptionProcessor {
   def processSubscription(subscription: StripeSubscription): Future[Unit]
 }
 
-class IdentityDynamoProcessor(
-    identityService: PatronsIdentityService,
+abstract class DynamoProcessor(
     supporterDataDynamoService: SupporterDataDynamoService,
 ) extends SubscriptionProcessor {
   import scala.concurrent.ExecutionContext.Implicits.global
-  override def processSubscription(subscription: StripeSubscription) =
-    for {
-      identityId <- identityService.getOrCreateUserFromEmail(subscription.customer.email, subscription.customer.name)
-      dynamoResponse <- writeToDynamo(identityId, subscription)
-      _ = logDynamoResult(subscription.customer.email, dynamoResponse)
-    } yield {
-      ()
-    }
 
   def writeToDynamo(identityId: String, sub: StripeSubscription) = {
     System.out.println(
@@ -88,4 +79,34 @@ class IdentityDynamoProcessor(
       SafeLogger.info(
         s"Error response from Dynamo for ${email}. Status code was ${updateDynamoState.sdkHttpResponse().statusCode()}",
       )
+}
+
+class CreateMissingIdentityProcessor(
+    identityService: PatronsIdentityService,
+    supporterDataDynamoService: SupporterDataDynamoService,
+) extends DynamoProcessor(supporterDataDynamoService) {
+  import scala.concurrent.ExecutionContext.Implicits.global
+
+  override def processSubscription(subscription: StripeSubscription) =
+    for {
+      identityId <- identityService.getOrCreateUserFromEmail(subscription.customer.email, subscription.customer.name)
+      dynamoResponse <- writeToDynamo(identityId, subscription)
+      _ = logDynamoResult(subscription.customer.email, dynamoResponse)
+    } yield {
+      ()
+    }
+}
+
+class SkipMissingIdentityProcessor(
+    identityService: PatronsIdentityService,
+    supporterDataDynamoService: SupporterDataDynamoService,
+) extends DynamoProcessor(supporterDataDynamoService) {
+  import scala.concurrent.ExecutionContext.Implicits.global
+
+  override def processSubscription(subscription: StripeSubscription) =
+    identityService.getUserIdFromEmail(subscription.customer.email).map {
+      case Some(identityId) =>
+        writeToDynamo(identityId, subscription).map(response => logDynamoResult(subscription.customer.email, response))
+      case None => Future.successful(())
+    }
 }

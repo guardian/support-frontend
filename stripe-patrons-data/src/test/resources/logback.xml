@@ -9,7 +9,7 @@
     </filter>
 
     <encoder>
-      <pattern>%.-6level supporter-product-data - %msg%n</pattern>
+      <pattern>%.-6level stripe-patrons-data - %msg%n</pattern>
     </encoder>
   </appender>
 
