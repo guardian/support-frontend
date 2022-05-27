@@ -32,7 +32,7 @@ object Fixtures {
         "delinquent": false,
         "description": null,
         "discount": null,
-        "email": "lovely_husb_steve@gmail.com",
+        "email": "fake.address@gmail.com",
         "invoice_prefix": "348460FF",
         "invoice_settings": {
           "custom_fields": null,

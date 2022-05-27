@@ -14,7 +14,7 @@ import scala.concurrent.duration.DurationInt
 @IntegrationTest
 class StripeSubscriptionsProcessorSpec extends AsyncFlatSpec with Matchers {
   "StripeSubscriptionsProcessor" should "process subscriptions from Stripe" in {
-    val stage = PROD
+    val stage = DEV
     val runner = configurableFutureRunner(60.seconds)
     for {
       stripeConfig <- PatronsStripeConfig.fromParameterStore(stage)

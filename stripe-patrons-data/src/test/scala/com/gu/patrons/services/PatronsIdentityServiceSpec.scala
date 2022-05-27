@@ -16,7 +16,7 @@ class PatronsIdentityServiceSpec extends AsyncFlatSpec with Matchers {
   "PatronsIdentityService" should "get an identity id from an email address" in {
     PatronsIdentityConfig.fromParameterStore(DEV).flatMap { config =>
       val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
-      service.getUserIdFromEmail("rupert.bates@guardian.co.uk").map(id => id.isDefined shouldBe true)
+      service.getUserIdFromEmail("test@guardian.co.uk").map(id => id.isDefined shouldBe true)
     }
   }
 
