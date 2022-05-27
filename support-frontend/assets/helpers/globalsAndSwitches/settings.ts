@@ -8,7 +8,7 @@ export type Status = 'On' | 'Off';
 
 export type SwitchObject = Record<string, Status>;
 
-export type Switches = {
+export type Switches = Record<string, SwitchObject> & {
 	experiments: Record<
 		string,
 		{
@@ -17,7 +17,6 @@ export type Switches = {
 			state: Status;
 		}
 	>;
-	[key: string]: SwitchObject;
 };
 
 export type Settings = {
