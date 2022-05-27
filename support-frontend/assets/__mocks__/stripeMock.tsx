@@ -67,3 +67,5 @@ jest.mock('@stripe/react-stripe-js', () => {
 		useElements: mockElements,
 	};
 });
+
+export {};

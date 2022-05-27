@@ -9,3 +9,5 @@ require('./favicons/120x120.png');
 require('./favicons/144x144.png');
 
 require('./favicons/152x152.png');
+
+export {};

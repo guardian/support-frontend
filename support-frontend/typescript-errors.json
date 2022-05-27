@@ -1,7 +1,6 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS1208": 1,
             "TS2345": 6,
             "TS7006": 1,
             "TS2769": 2,
@@ -18,7 +17,6 @@
             "TS6133": 1
         },
         "byPath": {
-            "assets/__mocks__/imageMock.ts": 1,
             "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
             "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
             "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
@@ -38,12 +36,6 @@
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1
         }
     },
-    "TS1208": [
-        {
-            "path": "assets/__mocks__/imageMock.ts",
-            "message": "'imageMock.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module."
-        }
-    ],
     "TS2345": [
         {
             "path": "assets/components/directDebit/__tests__/directDebitReducerTest.ts",
