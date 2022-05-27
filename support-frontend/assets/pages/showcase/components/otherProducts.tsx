@@ -3,7 +3,7 @@ import Text from 'components/text/text';
 import { getMemLink, getPatronsLink } from 'helpers/urls/externalLinks';
 import OtherProduct from './otherProduct';
 
-export default function OtherProducts() {
+export default function OtherProducts(): JSX.Element {
 	return (
 		<Content modifierClasses={['other-products']}>
 			<Text title="Other ways you can support us">
