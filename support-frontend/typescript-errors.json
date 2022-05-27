@@ -4,11 +4,8 @@
             "TS2345": 6,
             "TS7006": 1,
             "TS2769": 1,
-            "TS2305": 1,
-            "TS2739": 3,
             "TS2569": 2,
             "TS2322": 5,
-            "TS2339": 2,
             "TS2411": 1,
             "TS7017": 1,
             "TS2304": 2,
@@ -23,11 +20,9 @@
             "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
             "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
-            "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
-            "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
             "assets/pages/showcase/components/otherProducts.tsx": 1,
             "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1
@@ -71,26 +66,6 @@
             "message": "No overload matches this call."
         }
     ],
-    "TS2305": [
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Module '\"react\"' has no exported member 'Node'."
-        }
-    ],
-    "TS2739": [
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ Stripe: Element; PayPal: Element; DirectDebit: Element; }' is missing the following properties from type 'Record<PaymentMethod, Node>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ Stripe: string; PayPal: string; DirectDebit: string; }' is missing the following properties from type 'Record<PaymentMethod, string>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx",
-            "message": "Type '{ Stripe: string; PayPal: string; DirectDebit: string; }' is missing the following properties from type 'Record<PaymentMethod, string>': Sepa, ExistingCard, ExistingDirectDebit, AmazonPay, None"
-        }
-    ],
     "TS2569": [
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -121,16 +96,6 @@
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        }
-    ],
-    "TS2339": [
-        {
-            "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
-        },
-        {
-            "path": "assets/helpers/csrf/csrfReducer.ts",
-            "message": "Property 'csrf' does not exist on type '{ amazonPayClientId: { default: string; uat: string; }; amazonPaySellerId: { default: string; uat: string; }; email?: string | undefined; enableContributionsCampaign: boolean; forceContributionsCampaign: boolean; ... 18 more ...; v2recaptchaPublicKey: string; }'."
         }
     ],
     "TS2411": [
