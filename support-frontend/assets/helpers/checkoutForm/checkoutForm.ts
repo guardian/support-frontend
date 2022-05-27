@@ -1,32 +1,4 @@
-export type UserFormFieldAttribute = {
-	id: string;
-	value: string;
-};
-export function formFieldIsValid(id: string) {
-	const element = document.getElementById(id);
-
-	if (element && element instanceof HTMLInputElement) {
-		return element.validity.valid;
-	}
-
-	return false;
-}
-export function shouldShowError(
-	field: UserFormFieldAttribute,
-	checkoutFormHasBeenSubmitted: boolean,
-): boolean {
-	return checkoutFormHasBeenSubmitted && !formFieldIsValid(field.id);
-}
-export const formInputs = (formClassName: string): HTMLInputElement[] => {
-	const form = document.querySelector(`.${formClassName}`);
-
-	if (form) {
-		return [...form.getElementsByTagName('input')];
-	}
-
-	return [];
-};
-export const getForm: (arg0: string) => Record<string, any> | null = (
+export const getForm: (arg0: string) => HTMLElement | null = (
 	formName: string,
 ) => document.querySelector(`.${formName}`);
 
@@ -40,12 +12,12 @@ const getInvalidReason = (validityState: ValidityState) => {
 	return '';
 };
 
-export const invalidReason = (form: Record<string, any> | null): string => {
+export const invalidReason = (form: Record<string, unknown> | null): string => {
 	try {
 		let invalidReasonString = '';
 
 		if (form instanceof HTMLFormElement) {
-			[...form.elements].forEach((element) => {
+			Array.from(form.elements).forEach((element) => {
 				if (
 					(element instanceof HTMLInputElement ||
 						element instanceof HTMLSelectElement) &&
@@ -62,15 +34,6 @@ export const invalidReason = (form: Record<string, any> | null): string => {
 
 		return invalidReasonString;
 	} catch (e) {
-		return e;
+		return 'unknown';
 	}
 };
-export const formElementIsValid = (formElement: Record<string, any> | null) => {
-	if (formElement && formElement instanceof HTMLFormElement) {
-		return formElement.checkValidity();
-	}
-
-	return false;
-};
-export const formIsValid = (formClassName: string) =>
-	formElementIsValid(getForm(formClassName));

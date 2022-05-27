@@ -1,29 +1,13 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS2569": 2,
-            "TS2322": 4
+            "TS2322": 3
         },
         "byPath": {
-            "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3
         }
     },
-    "TS2569": [
-        {
-            "path": "assets/helpers/checkoutForm/checkoutForm.ts",
-            "message": "Type 'HTMLCollectionOf<HTMLInputElement>' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators."
-        },
-        {
-            "path": "assets/helpers/checkoutForm/checkoutForm.ts",
-            "message": "Type 'HTMLFormControlsCollection' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators."
-        }
-    ],
     "TS2322": [
-        {
-            "path": "assets/helpers/checkoutForm/checkoutForm.ts",
-            "message": "Type 'unknown' is not assignable to type 'string'."
-        },
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(isSignedIn: boolean) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(isSignedIn: boolean) => Action'."
