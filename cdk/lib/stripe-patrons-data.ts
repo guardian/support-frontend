@@ -17,12 +17,16 @@ class StripePatronsDataLambda extends GuScheduledLambda {
       handler:
         "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
       monitoringConfiguration: { noMonitoring: true },
-      rules: [{ schedule: Schedule.rate(Duration.minutes(10)) }],
+      rules: [{ schedule: scheduleRateForEnvironment(scope.stage) }],
       runtime: Runtime.JAVA_11,
     });
 
     function environmentFromStage(stage: string) {
       return stage == "CODE" ? "DEV" : stage;
+    }
+
+    function scheduleRateForEnvironment(stage: string) {
+      return Schedule.rate(Duration.minutes(stage == "PROD" ? 15 : 3600));
     }
 
     this.addToRolePolicy(
