@@ -49,7 +49,7 @@ function getMemLink(product: MemProduct, intCmp?: string | null): string {
 	return `${memUrls[product]}?${params.toString()}`;
 }
 
-function getPatronsLink(intCmp: string | null | undefined): string {
+function getPatronsLink(intCmp?: string): string {
 	const params = new URLSearchParams();
 	params.append('INTCMP', intCmp ?? defaultIntCmp);
 	return `${patronsUrl}?${params.toString()}`;

@@ -1,71 +1,15 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS2345": 6,
-            "TS7006": 1,
-            "TS2769": 1,
             "TS2569": 2,
-            "TS2322": 5,
-            "TS2411": 1,
-            "TS7017": 1,
-            "TS2304": 2,
-            "TS2554": 6,
-            "TS6133": 1
+            "TS2322": 5
         },
         "byPath": {
-            "assets/components/directDebit/__tests__/directDebitReducerTest.ts": 1,
-            "assets/components/marketingConsent/marketingConsentPaper.tsx": 2,
-            "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts": 1,
-            "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts": 1,
-            "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts": 9,
-            "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx": 1,
-            "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
             "assets/hocs/withLabel.tsx": 1,
-            "assets/pages/contributions-landing/setUserStateActions.ts": 3,
-            "assets/helpers/globalsAndSwitches/settings.ts": 1,
-            "assets/pages/showcase/components/otherProducts.tsx": 1,
-            "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx": 1
+            "assets/pages/contributions-landing/setUserStateActions.ts": 3
         }
     },
-    "TS2345": [
-        {
-            "path": "assets/components/directDebit/__tests__/directDebitReducerTest.ts",
-            "message": "Argument of type '{}' is not assignable to parameter of type 'Action'."
-        },
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Argument of type 'typeof MarketingConsent' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ confirmOptIn: any; email: string; csrf: any; } & { onClick: (email: string, csrf: Csrf) => void; }, ButtonPropTypes & { error: boolean; }>>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/address/__tests__/addressFieldsStore.ts",
-            "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/addressSearch/__tests__/addressFieldsStore.ts",
-            "message": "Argument of type '{ fields: { country: string; city: null; lineOne: null; lineTwo: null; postCode: null; state: null; formErrors: never[]; }; }' is not assignable to parameter of type 'CombinedState<{ fields: AddressFieldsState; postcode: PostcodeFinderState; }>'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Argument of type '{ field: string; message: string; }[]' is not assignable to parameter of type 'FormError<FormField>[]'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/AmazonPay/AmazonPayWallet.tsx",
-            "message": "Argument of type '(props: PropTypes) => Element | null' is not assignable to parameter of type 'JSXElementConstructor<Matching<{ amazonPayData: AmazonPayData; checkoutFormHasBeenSubmitted: boolean; } & { setAmazonPayWalletIsStale: (isReady: boolean) => Action; setAmazonPayOrderReferenceId: (orderReferenceId: string) => void; setAmazonPayPaymentSelected: (paymentSelected: boolean) => void; setAmazonPayBillingAg...'."
-        }
-    ],
-    "TS7006": [
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Parameter 'state' implicitly has an 'any' type."
-        }
-    ],
-    "TS2769": [
-        {
-            "path": "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts",
-            "message": "No overload matches this call."
-        }
-    ],
     "TS2569": [
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
@@ -96,60 +40,6 @@
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        }
-    ],
-    "TS2411": [
-        {
-            "path": "assets/helpers/globalsAndSwitches/settings.ts",
-            "message": "Property 'experiments' of type 'Record<string, { name: string; description: string; state: Status; }>' is not assignable to 'string' index type 'SwitchObject'."
-        }
-    ],
-    "TS7017": [
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature."
-        }
-    ],
-    "TS2304": [
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Cannot find name 'Stage'."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Cannot find name 'Stage'."
-        }
-    ],
-    "TS2554": [
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 3 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/helpers/subscriptionsForms/__tests__/subscriptionCheckoutReducerTest.ts",
-            "message": "Expected 6 arguments, but got 1."
-        },
-        {
-            "path": "assets/pages/showcase/components/otherProducts.tsx",
-            "message": "Expected 1 arguments, but got 0."
-        }
-    ],
-    "TS6133": [
-        {
-            "path": "assets/pages/weekly-subscription-landing/components/weeklyProductPrices.tsx",
-            "message": "'React' is declared but its value is never read."
         }
     ]
 }

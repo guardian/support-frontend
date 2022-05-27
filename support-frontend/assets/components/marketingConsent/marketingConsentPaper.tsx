@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+
 import { css, ThemeProvider } from '@emotion/react';
 import { from, headline, space, textSans } from '@guardian/source-foundations';
 import {
@@ -14,6 +15,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getEmail } from 'helpers/subscriptionsForms/formFields';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Action } from 'helpers/user/userActions';
 import { logException } from 'helpers/utilities/logger';
 
@@ -55,19 +57,22 @@ const maxWidth = css`
 const marginForButton = css`
 	margin: ${space[5]}px 0 0;
 `;
+
 // ----- Types ----- //
+
 type ButtonPropTypes = {
 	confirmOptIn: boolean | null | undefined;
 	email: string;
 	csrf: CsrfState;
-	onClick: (arg0: string | null | undefined, arg1: CsrfState) => void;
+	onClick: (email: string, csrf: CsrfState) => void;
 	requestPending: boolean;
 };
+
 type PropTypes = ButtonPropTypes & {
 	error: boolean;
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: CheckoutState) => ({
 	confirmOptIn: state.page.marketingConsent.confirmOptIn,
 	email: getEmail(state),
 	csrf: state.page.csrf,
