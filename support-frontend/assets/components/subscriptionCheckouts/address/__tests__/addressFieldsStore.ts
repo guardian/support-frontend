@@ -1,16 +1,19 @@
 // ----- Imports ----- //
+
 import {
 	addressActionCreatorsFor,
 	addressReducerFor,
 	applyBillingAddressRules,
+	isHomeDeliveryInM25,
 	isPostcodeOptional,
 	isStateNullable,
 	setFormErrorsFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { isHomeDeliveryInM25 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 jest.mock('ophan', () => () => ({}));
+
 // ----- Tests ----- //
+
 describe('address form fields functionality', () => {
 	it('can check if a postcode is optional', () => {
 		let postcodeIsOptional = isPostcodeOptional('GB');
@@ -18,12 +21,14 @@ describe('address form fields functionality', () => {
 		postcodeIsOptional = isPostcodeOptional('HK');
 		expect(postcodeIsOptional).toBe(true);
 	});
+
 	it('can check if a state is nullable', () => {
 		let stateIsNullable = isStateNullable('GB');
 		expect(stateIsNullable).toBe(true);
 		stateIsNullable = isStateNullable('AU');
 		expect(stateIsNullable).toBe(false);
 	});
+
 	it('can set errors for billing and delivery addresses', () => {
 		const billingCallback = setFormErrorsFor('billing');
 		expect(typeof billingCallback).toBe('function');
@@ -44,6 +49,7 @@ describe('address form fields functionality', () => {
 			],
 		});
 	});
+
 	it('can apply a series of address rules to form fields', () => {
 		const addresRulesAppliedBilling = applyBillingAddressRules(
 			{
@@ -68,6 +74,7 @@ describe('address form fields functionality', () => {
 			},
 		]);
 	});
+
 	it('can aggregate a series of actions', () => {
 		const actionsForDeliveryAddresses = addressActionCreatorsFor('delivery');
 		expect(actionsForDeliveryAddresses).toHaveProperty('setCountry');
@@ -79,6 +86,7 @@ describe('address form fields functionality', () => {
 			'function',
 		);
 	});
+
 	it('can manufacture new state', () => {
 		const deliveryAddressFormReducer = addressReducerFor('delivery', 'GB');
 		const newState = deliveryAddressFormReducer(
@@ -91,6 +99,12 @@ describe('address form fields functionality', () => {
 					postCode: null,
 					state: null,
 					formErrors: [],
+				},
+				postcode: {
+					results: [],
+					isLoading: false,
+					postcode: null,
+					error: null,
 				},
 			},
 			{
@@ -120,6 +134,7 @@ describe('address form fields functionality', () => {
 		});
 	});
 });
+
 describe('addressFieldStore', () => {
 	describe('isHomeDeliveryInM25 ', () => {
 		// - this is a "form error" check so when this function returns "false" there is an error
@@ -134,6 +149,7 @@ describe('addressFieldStore', () => {
 			);
 			expect(result).toBeTruthy();
 		});
+
 		it('should return false when the order is a home delivery and the postcode is outside the M25', () => {
 			const fulfilmentOption = 'HomeDelivery';
 			const postcode = 'DA11 7NP';
@@ -145,6 +161,7 @@ describe('addressFieldStore', () => {
 			);
 			expect(result).toBeFalsy();
 		});
+
 		it('should return true when the fulfilment option is not home delivery', () => {
 			// this error is not applicable if the fulfilment option is not home delivery
 			const fulfilmentOption = 'Collection';
