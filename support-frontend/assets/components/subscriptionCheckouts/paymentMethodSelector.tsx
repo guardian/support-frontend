@@ -9,10 +9,11 @@ import {
 import type { ReactNode } from 'react';
 import Rows from 'components/base/rows';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { SubscriptionsPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { Option } from 'helpers/types/option';
 
 type PropTypes = {
-	availablePaymentMethods: PaymentMethod[];
+	availablePaymentMethods: SubscriptionsPaymentMethod[];
 	paymentMethod: Option<PaymentMethod>;
 	setPaymentMethod: (method: PaymentMethod) => void;
 	validationError: string | undefined;
@@ -60,37 +61,22 @@ function RadioWithImage({
 	);
 }
 
-const paymentMethodIcons: Record<PaymentMethod, ReactNode> = {
+const paymentMethodIcons: Record<SubscriptionsPaymentMethod, ReactNode> = {
 	Stripe: <SvgCreditCard />,
 	PayPal: <SvgPayPal />,
 	DirectDebit: <SvgDirectDebit />,
-	Sepa: '',
-	ExistingCard: '',
-	ExistingDirectDebit: '',
-	AmazonPay: '',
-	None: '',
 };
 
-const paymentMethodIds: Record<PaymentMethod, string> = {
+const paymentMethodIds: Record<SubscriptionsPaymentMethod, string> = {
 	Stripe: 'qa-credit-card',
 	PayPal: 'qa-paypal',
 	DirectDebit: 'qa-direct-debit',
-	Sepa: '',
-	ExistingCard: '',
-	ExistingDirectDebit: '',
-	AmazonPay: '',
-	None: '',
 };
 
-const paymentMethodText: Record<PaymentMethod, string> = {
+const paymentMethodText: Record<SubscriptionsPaymentMethod, string> = {
 	Stripe: 'Credit/Debit card',
 	PayPal: 'PayPal',
 	DirectDebit: 'Direct debit',
-	Sepa: '',
-	ExistingCard: '',
-	ExistingDirectDebit: '',
-	AmazonPay: '',
-	None: '',
 };
 
 function PaymentMethodSelector({
