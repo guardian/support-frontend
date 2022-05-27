@@ -7,7 +7,7 @@
             "TS2305": 1,
             "TS2739": 3,
             "TS2569": 2,
-            "TS2322": 5,
+            "TS2322": 4,
             "TS2339": 2,
             "TS2411": 1,
             "TS6133": 1
@@ -18,7 +18,6 @@
             "assets/components/subscriptionCheckouts/addressSearch/addressResultsHelpers.ts": 1,
             "assets/components/subscriptionCheckouts/paymentMethodSelector.tsx": 4,
             "assets/helpers/checkoutForm/checkoutForm.ts": 3,
-            "assets/hocs/withLabel.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3,
             "assets/helpers/csrf/csrfReducer.ts": 2,
             "assets/helpers/globalsAndSwitches/settings.ts": 1,
@@ -81,10 +80,6 @@
         {
             "path": "assets/helpers/checkoutForm/checkoutForm.ts",
             "message": "Type 'unknown' is not assignable to type 'string'."
-        },
-        {
-            "path": "assets/hocs/withLabel.tsx",
-            "message": "Type 'Omit<AugmentedProps<Props>, \"footer\" | \"label\" | \"optional\">' is not assignable to type 'IntrinsicAttributes & WithConditionalCSSProp<Props> & Props'."
         },
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
