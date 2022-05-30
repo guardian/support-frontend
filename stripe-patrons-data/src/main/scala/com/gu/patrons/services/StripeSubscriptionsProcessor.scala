@@ -97,6 +97,8 @@ class CreateMissingIdentityProcessor(
     }
 }
 
+// If we want to only add patrons who already have an identity account to the datastore and skip those who don't
+// we can use this processor rather than the CreateMissingIdentityProcessor class above
 class SkipMissingIdentityProcessor(
     identityService: PatronsIdentityService,
     supporterDataDynamoService: SupporterDataDynamoService,
