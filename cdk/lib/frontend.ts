@@ -140,7 +140,7 @@ export class Frontend extends GuStack {
             "Some or all actions on support website are failing"
           ),
           actionsEnabled: shouldEnableAlarms,
-          tolerated5xxPercentage: 1,
+          tolerated5xxPercentage: 5,
         },
         unhealthyInstancesAlarm: false,
       },
