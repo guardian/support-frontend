@@ -10,7 +10,7 @@ printErrorsForCommit() {
   grep -E '"TS[^"]*": [0-9]+' <<< "$data" \
     | sed 's/^[^:]*: //' \
     | sed 's/,//' \
-    | awk "{ sum += \$1 } END { print \"${date}000,\" sum  \",$commit\"}"
+    | awk "BEGIN { sum = 0 } { sum += \$1 } END { print \"${date}000,\" sum  \",$commit\"}"
 }
 
 commitdatelist=$(

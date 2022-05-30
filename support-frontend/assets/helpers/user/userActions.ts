@@ -1,3 +1,5 @@
+import type { Dispatch } from 'redux';
+
 // ----- Types ----- //
 export type Action =
 	| {
@@ -71,7 +73,11 @@ export type UserSetStateActions = {
 	// When we change either of these in the context of the contributions landing page,
 	// we need to dispatch some additional actions to update some state in the
 	// contributions landing page state as well as update the user state, hence the union type.
-	setIsSignedIn: (isSignedIn: boolean) => Action;
-	setIsRecurringContributor: () => Action;
-	setStateField: (stateField: string) => Action;
+	setIsSignedIn: (
+		isSignedIn: boolean,
+	) => Action | ((dispatch: Dispatch) => void);
+	setIsRecurringContributor: () => Action | ((dispatch: Dispatch) => void);
+	setStateField: (
+		stateField: string,
+	) => Action | ((dispatch: Dispatch) => void);
 };
