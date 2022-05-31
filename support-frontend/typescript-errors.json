@@ -1,101 +1,12 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS2345": 4,
-            "TS7016": 3,
-            "TS2305": 2,
-            "TS2724": 1,
-            "TS2339": 1,
-            "TS2769": 3,
-            "TS2322": 8
+            "TS2322": 3
         },
         "byPath": {
-            "assets/components/marketingConsent/marketingConsentPaper.tsx": 1,
-            "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainer.ts": 1,
-            "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx": 1,
-            "assets/helpers/__tests__/urlTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
-            "assets/pages/contributions-landing/components/ContributionFormContainer.tsx": 1,
-            "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouPage.tsx": 1,
-            "assets/pages/contributions-landing/contributionsLanding.tsx": 5,
-            "assets/pages/contributions-landing/setUserStateActions.ts": 3,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx": 1,
-            "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx": 1,
-            "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx": 1,
-            "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx": 1
+            "assets/pages/contributions-landing/setUserStateActions.ts": 3
         }
     },
-    "TS2345": [
-        {
-            "path": "assets/components/marketingConsent/marketingConsentPaper.tsx",
-            "message": "Argument of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>' is not assignable to parameter of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>'"
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainer.ts",
-            "message": "Argument of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>' is not assignable to parameter of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>'"
-        },
-        {
-            "path": "assets/components/subscriptionCheckouts/thankYou/marketingConsentContainerGift.ts",
-            "message": "Argument of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>' is not assignable to parameter of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>'"
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouMarketingConsent.tsx",
-            "message": "Argument of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>' is not assignable to parameter of type 'import(\"support-frontend/assets/helpers/user/userActions\").Action>'"
-        }
-    ],
-    "TS7016": [
-        {
-            "path": "assets/helpers/__tests__/urlTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        }
-    ],
-    "TS2305": [
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionFormContainer.tsx",
-            "message": "Module '\"react-router-dom\"' has no exported member 'Navigate'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/components/ContributionThankYou/ContributionThankYouPage.tsx",
-            "message": "Module '\"react-router-dom\"' has no exported member 'Navigate'."
-        }
-    ],
-    "TS2724": [
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "'\"react-router-dom\"' has no exported member named 'Routes'. Did you mean 'Route'?"
-        }
-    ],
-    "TS2339": [
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "Property 'campaignCode' does not exist on type '{}'."
-        }
-    ],
-    "TS2769": [
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "No overload matches this call."
-        },
-        {
-            "path": "assets/pages/contributions-landing/contributionsLanding.tsx",
-            "message": "No overload matches this call."
-        }
-    ],
     "TS2322": [
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
@@ -108,26 +19,6 @@
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutForm.test.tsx",
-            "message": "Type 'WithDeliveryCheckoutState' is not assignable to type '{ readonly [$CombinedState]?: undefined; page?: { readonly [$CombinedState]?: undefined; csrf: { token: string | null | undefined; }; marketingConsent: { error: boolean; confirmOptIn: boolean | ... 1 more ... | undefined; requestPending: boolean; }; ... 5 more ...; directDebit: { ...; }; } | undefined; common?: { .....'."
-        },
-        {
-            "path": "assets/pages/digital-subscription-checkout/components/digitalCheckoutFormGift.test.tsx",
-            "message": "Type 'WithDeliveryCheckoutState' is not assignable to type '{ readonly [$CombinedState]?: undefined; page?: { readonly [$CombinedState]?: undefined; csrf: { token: string | null | undefined; }; marketingConsent: { error: boolean; confirmOptIn: boolean | ... 1 more ... | undefined; requestPending: boolean; }; ... 5 more ...; directDebit: { ...; }; } | undefined; common?: { .....'."
-        },
-        {
-            "path": "assets/pages/paper-subscription-checkout/components/paperCheckoutForm.test.tsx",
-            "message": "Type 'WithDeliveryCheckoutState' is not assignable to type '{ readonly [$CombinedState]?: undefined; page?: { readonly [$CombinedState]?: undefined; csrf: { token: string | null | undefined; }; marketingConsent: { error: boolean; confirmOptIn: boolean | ... 1 more ... | undefined; requestPending: boolean; }; ... 5 more ...; directDebit: { ...; }; } | undefined; common?: { .....'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutForm.test.tsx",
-            "message": "Type 'WithDeliveryCheckoutState' is not assignable to type '{ readonly [$CombinedState]?: undefined; page?: { readonly [$CombinedState]?: undefined; csrf: { token: string | null | undefined; }; marketingConsent: { error: boolean; confirmOptIn: boolean | ... 1 more ... | undefined; requestPending: boolean; }; ... 5 more ...; directDebit: { ...; }; } | undefined; common?: { .....'."
-        },
-        {
-            "path": "assets/pages/weekly-subscription-checkout/components/weeklyCheckoutFormGifting.test.tsx",
-            "message": "Type 'WithDeliveryCheckoutState' is not assignable to type '{ readonly [$CombinedState]?: undefined; page?: { readonly [$CombinedState]?: undefined; csrf: { token: string | null | undefined; }; marketingConsent: { error: boolean; confirmOptIn: boolean | ... 1 more ... | undefined; requestPending: boolean; }; ... 5 more ...; directDebit: { ...; }; } | undefined; common?: { .....'."
         }
     ]
 }
