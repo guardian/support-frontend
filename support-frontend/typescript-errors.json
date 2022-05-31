@@ -1,30 +1,12 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS7016": 3,
             "TS2322": 3
         },
         "byPath": {
-            "assets/helpers/__tests__/urlTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryGroupTest.ts": 1,
-            "assets/helpers/internationalisation/__tests__/countryTest.ts": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3
         }
     },
-    "TS7016": [
-        {
-            "path": "assets/helpers/__tests__/urlTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryGroupTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        },
-        {
-            "path": "assets/helpers/internationalisation/__tests__/countryTest.ts",
-            "message": "Could not find a declaration file for module 'jsdom'. 'support-frontend/node_modules/jsdom/lib/api.js' implicitly has an 'any' type."
-        }
-    ],
     "TS2322": [
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
