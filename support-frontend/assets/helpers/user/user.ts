@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Dispatch } from 'redux';
+import type { ThunkDispatch } from 'redux-thunk';
 import * as cookie from 'helpers/storage/cookie';
 import { get as getCookie } from 'helpers/storage/cookie';
 import { getSession } from 'helpers/storage/storage';
@@ -7,7 +7,7 @@ import type { Option } from 'helpers/types/option';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
 import { routes } from 'helpers/urls/routes';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
-import type { UserSetStateActions } from 'helpers/user/userActions';
+import type { Action, UserSetStateActions } from 'helpers/user/userActions';
 
 export type User = {
 	firstName: Option<string>;
@@ -82,7 +82,7 @@ const getEmailValidatedFromUserCookie = (
 };
 
 const init = (
-	dispatch: Dispatch,
+	dispatch: ThunkDispatch<User, void, Action>,
 	actions: UserSetStateActions = defaultUserActionFunctions,
 ): void => {
 	const {

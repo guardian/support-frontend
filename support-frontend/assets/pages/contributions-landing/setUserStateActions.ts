@@ -1,13 +1,15 @@
+import type { ThunkDispatch } from 'redux-thunk';
 import { stateProvinceFieldFromString } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
-import type { UserSetStateActions } from 'helpers/user/userActions';
+import type { Action, UserSetStateActions } from 'helpers/user/userActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 
 // ----- Actions Creators ----- //
 const setIsSignedIn =
-	(isSignedIn: boolean): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(isSignedIn: boolean) =>
+	(dispatch: ThunkDispatch<ContributionsState, void, Action>) => {
 		dispatch(
 			setFormSubmissionDependentValue(() => ({
 				type: 'SET_IS_SIGNED_IN',
@@ -17,8 +19,8 @@ const setIsSignedIn =
 	};
 
 const setIsRecurringContributor =
-	(): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
+	() =>
+	(dispatch: ThunkDispatch<ContributionsState, void, Action>): void => {
 		dispatch(
 			setFormSubmissionDependentValue(() => ({
 				type: 'SET_IS_RECURRING_CONTRIBUTOR',
@@ -28,8 +30,8 @@ const setIsRecurringContributor =
 
 const setStateFieldSafely =
 	(pageCountryGroupId: CountryGroupId) =>
-	(unsafeState: string): ((arg0: (...args: any[]) => any) => void) =>
-	(dispatch: (...args: any[]) => any): void => {
+	(unsafeState: string) =>
+	(dispatch: ThunkDispatch<ContributionsState, void, Action>): void => {
 		const stateField = stateProvinceFieldFromString(
 			pageCountryGroupId,
 			unsafeState,
