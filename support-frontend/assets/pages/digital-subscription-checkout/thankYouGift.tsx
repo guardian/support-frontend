@@ -200,7 +200,7 @@ function ThankYouGift(props: PropTypes) {
 					<div css={topPageSection}>
 						<GreenCheckMark />
 						<h1 css={pageHeading}>Thank you for your order</h1>
-						<div css={blueSans}>
+						<div css={blueSans} data-qm-masking="blocklist">
 							{props.pending
 								? `Your digital subscription order ${
 										props.giftRecipient ? `for ${props.giftRecipient}` : ''
@@ -251,9 +251,11 @@ function ThankYouGift(props: PropTypes) {
 									<img src={gift} alt="" />
 								</div>
 								<div css={giftStep}>
-									{props.giftRecipient ?? 'Your recipient'} will receive an
-									email on the date you&apos;ve chosen with the link to redeem
-									the gift.
+									<span data-qm-masking="blocklist">
+										{props.giftRecipient ?? 'Your recipient'}
+									</span>{' '}
+									will receive an email on the date you&apos;ve chosen with the
+									link to redeem the gift.
 								</div>
 							</li>
 							<li>
@@ -266,7 +268,10 @@ function ThankYouGift(props: PropTypes) {
 									<img src={person} alt="" />
 								</div>
 								<div css={giftStep}>
-									After redemption, {props.giftRecipient ?? 'your recipient'}{' '}
+									After redemption,{' '}
+									<span data-qm-masking="blocklist">
+										{props.giftRecipient ?? 'your recipient'}
+									</span>{' '}
 									will have to register or sign into their account and the
 									subscription will be activated.
 								</div>
@@ -281,9 +286,11 @@ function ThankYouGift(props: PropTypes) {
 									<img src={phone} alt="" />
 								</div>
 								<div css={giftStep}>
-									{props.giftRecipient ?? 'Your recipient'} will download the
-									smartphone and tablet apps and can sign in on the web to enjoy
-									all the benefits of being a subscriber.
+									<span data-qm-masking="blocklist">
+										{props.giftRecipient ?? 'Your recipient'}
+									</span>{' '}
+									will download the smartphone and tablet apps and can sign in
+									on the web to enjoy all the benefits of being a subscriber.
 								</div>
 							</li>
 						</ul>
