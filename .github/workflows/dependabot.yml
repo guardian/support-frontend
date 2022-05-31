@@ -1,0 +1,55 @@
+name: Test Dependabot PRs
+
+on:
+  pull_request:
+
+env:
+  GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
+
+jobs:
+  run_node_tests:
+    if: github.actor == 'dependabot[bot]'
+    name: test dependabot
+    runs-on: ubuntu-latest
+    steps:
+    # ---- Logging ---- #
+      - name: Env
+        run: env
+
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo $JSON
+        env:
+          JSON: ${{ toJSON(github) }}
+
+    # ---- Setup ---- #
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: guardian/actions-setup-node@v2.4.1
+        with:
+          cache: 'yarn'
+          cache-dependency-path: support-frontend/yarn.lock
+
+      - name: Install - support-frontend
+        run: yarn
+        working-directory: support-frontend
+
+      - name: Install - CDK
+        run: yarn
+        working-directory: cdk
+
+    # ---- Test ---- #
+      - name: Test - support-frontend
+        run: yarn run test
+        working-directory: support-frontend
+
+      - name: Test - CDK
+        run: yarn run test
+        working-directory: cdk
+
+
+
+
+
