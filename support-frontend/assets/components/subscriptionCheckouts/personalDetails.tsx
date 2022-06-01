@@ -58,6 +58,7 @@ function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
 					<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
 						<Button
 							type="button"
+							data-testid="sign-out"
 							onClick={(e) => props.handleSignOut(e)}
 							priority="tertiary"
 							size="small"

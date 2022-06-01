@@ -89,6 +89,34 @@ describe('Personal Details', () => {
 		expect(element).not.toBeInTheDocument();
 	});
 
+	it('does not render SignedInEmailFooter if isSignedIn false', () => {
+		renderPersonalDetails(defaultProps);
+
+		const element = screen.queryByTestId('sign-out');
+		expect(element).not.toBeInTheDocument();
+	});
+
+	it('does render SignedInEmailFooter if isSignedIn true', () => {
+		renderPersonalDetails({
+			...defaultProps,
+			isSignedIn: true,
+		});
+
+		const element = screen.queryByTestId('sign-out');
+		expect(element).toBeInTheDocument();
+	});
+
+	it('handleSignOut on Sign out button click', () => {
+		renderPersonalDetails({
+			...defaultProps,
+			isSignedIn: true,
+		});
+
+		const element = screen.getByTestId('sign-out');
+		fireEvent.click(element);
+		expect(signOut).toHaveBeenCalled();
+	});
+
 	describe('onChange handlers', () => {
 		const elementsToTest = [
 			{
