@@ -155,4 +155,42 @@ describe('Personal Details', () => {
 			});
 		});
 	});
+
+	describe('Error messages', () => {
+		const formErrors: Array<FormError<FormField>> = [
+			{
+				field: 'firstName',
+				message: 'Please enter a first name.',
+			},
+			{
+				field: 'lastName',
+				message: 'Please enter a last name.',
+			},
+			{
+				field: 'email',
+				message: 'Please enter a valid email address.',
+			},
+		];
+
+		it('does not show error messages when no formErrors in props', () => {
+			renderPersonalDetails(defaultProps);
+
+			formErrors.forEach(({ message }) => {
+				const element = screen.queryByText(message);
+				expect(element).not.toBeInTheDocument();
+			});
+		});
+
+		it('shows error messages when formErrors in props', () => {
+			renderPersonalDetails({
+				...defaultProps,
+				formErrors,
+			});
+
+			formErrors.forEach(({ message }) => {
+				const element = screen.queryByText(message);
+				expect(element).toBeInTheDocument();
+			});
+		});
+	});
 });
