@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+
 import { css, ThemeProvider } from '@emotion/react';
 import { body, from, headline, space } from '@guardian/source-foundations';
 import {
@@ -6,7 +7,6 @@ import {
 	LinkButton,
 	SvgArrowDownStraight,
 } from '@guardian/source-react-components';
-import * as React from 'react';
 import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
@@ -131,12 +131,12 @@ const getFirstParagraph = (
 	);
 };
 
-const WeeklyHero: React.FC<PropTypes> = ({
+function WeeklyHero({
 	orderIsAGift,
 	countryGroupId,
 	promotionCopy,
 	participations,
-}) => {
+}: PropTypes): JSX.Element {
 	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
 
 	const defaultRoundelText =
@@ -215,6 +215,6 @@ const WeeklyHero: React.FC<PropTypes> = ({
 			</CentredContainer>
 		</PageTitle>
 	);
-};
+}
 
 export { WeeklyHero };

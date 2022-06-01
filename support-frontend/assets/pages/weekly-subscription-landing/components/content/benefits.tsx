@@ -1,9 +1,8 @@
-import * as React from 'react';
 import { List } from 'components/list/list';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
-const Benefits: React.FC = () => {
+function Benefits(): JSX.Element {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -35,6 +34,6 @@ const Benefits: React.FC = () => {
 			]}
 		/>
 	);
-};
+}
 
 export default Benefits;

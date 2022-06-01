@@ -1,8 +1,8 @@
 // ----- Imports ----- //
+
 import { css } from '@emotion/react';
 import { until } from '@guardian/source-foundations';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
-import * as React from 'react';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -67,7 +67,7 @@ const isSelected = (
 	return amount === defaultAmount;
 };
 
-const ContributionAmountChoices: React.FC<ContributionAmountChoicesProps> = ({
+function ContributionAmountChoices({
 	validAmounts,
 	defaultAmount,
 	countryGroupId,
@@ -77,7 +77,7 @@ const ContributionAmountChoices: React.FC<ContributionAmountChoicesProps> = ({
 	selectedAmounts,
 	currency,
 	shouldShowFrequencyButtons,
-}: ContributionAmountChoicesProps) => {
+}: ContributionAmountChoicesProps): JSX.Element {
 	const isOtherAmountFullWidth = validAmounts.length % 2 === 0;
 	return (
 		<ChoiceCardGroup
@@ -129,6 +129,6 @@ const ContributionAmountChoices: React.FC<ContributionAmountChoicesProps> = ({
 			/>
 		</ChoiceCardGroup>
 	);
-};
+}
 
 export default ContributionAmountChoices;

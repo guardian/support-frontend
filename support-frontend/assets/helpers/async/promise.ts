@@ -8,7 +8,9 @@ function repeatPromise<A>(n: number, p: () => Promise<A>): Promise<A> {
 // Runs a promise `i` milliseconds in the future
 function sleepPromise<A>(i: number, p: () => Promise<A>): Promise<A> {
 	return new Promise((resolve, reject) => {
-		setTimeout(() => p().then(resolve, reject), i);
+		setTimeout(() => {
+			p().then(resolve, reject);
+		}, i);
 	});
 }
 

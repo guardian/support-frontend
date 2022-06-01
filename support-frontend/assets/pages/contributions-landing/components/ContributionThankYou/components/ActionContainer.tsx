@@ -48,16 +48,18 @@ type ActionContainerProps = {
 	body: React.ReactNode;
 };
 
-const ActionContainer: React.FC<ActionContainerProps> = ({
+function ActionContainer({
 	icon,
 	header,
 	body,
-}: ActionContainerProps) => (
-	<section css={container}>
-		<div css={iconContainer}>{icon}</div>
-		<div css={headerContainer}>{header}</div>
-		<div css={bodyContainer}>{body}</div>
-	</section>
-);
+}: ActionContainerProps): JSX.Element {
+	return (
+		<section css={container}>
+			<div css={iconContainer}>{icon}</div>
+			<div css={headerContainer}>{header}</div>
+			<div css={bodyContainer}>{body}</div>
+		</section>
+	);
+}
 
 export default ActionContainer;

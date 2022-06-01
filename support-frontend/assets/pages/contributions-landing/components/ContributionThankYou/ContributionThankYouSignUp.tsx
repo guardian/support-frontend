@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source-foundations';
 import { useEffect } from 'react';
-import * as React from 'react';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import ActionBody from './components/ActionBody';
 import ActionContainer from './components/ActionContainer';
@@ -14,7 +13,7 @@ const listContainer = css`
 	margin-top: ${space[4]}px;
 `;
 
-const ContributionThankYouSignUp: React.FC = () => {
+function ContributionThankYouSignUp(): JSX.Element {
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SIGN_UP);
 	}, []);
@@ -47,6 +46,6 @@ const ContributionThankYouSignUp: React.FC = () => {
 			body={actionBody}
 		/>
 	);
-};
+}
 
 export default ContributionThankYouSignUp;

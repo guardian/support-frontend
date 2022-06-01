@@ -34,6 +34,6 @@ export const generateReferralCode = (
 	campaignCode: string,
 ): string => {
 	const code = newReferralCode();
-	postReferralCode(referralCodeEndpoint, code, email, campaignCode);
+	void postReferralCode(referralCodeEndpoint, code, email, campaignCode);
 	return code;
 };
