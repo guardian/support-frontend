@@ -111,6 +111,8 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       email: String,
       firstName: String,
       lastName: String,
+      pageViewId: Option[String],
+      referer: Option[String],
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] = {
     // Try to fetch the user's information with their email address and if it does not exist
     // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
@@ -118,7 +120,9 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     // We try to fetch the user information at the start of each attempt in case a previous `createUser`
     // call succeeded but timed out before returning a valid response
     EitherTRetry.retry(
-      getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email, firstName, lastName)),
+      getUserIdFromEmail(email).leftFlatMap(_ =>
+        createUserIdFromEmailUser(email, firstName, lastName, pageViewId, referer),
+      ),
       delay = 500.milliseconds,
       retries = 2,
     )
@@ -151,6 +155,8 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       email: String,
       firstName: String,
       lastName: String,
+      pageViewId: Option[String],
+      referer: Option[String],
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] = {
     val body = CreateGuestAccountRequestBody(
       email,
@@ -171,7 +177,13 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .withBody(body)
         .withRequestTimeout(3.seconds)
         .withMethod("POST")
-        .withQueryStringParameters(("accountVerificationEmail", "true")),
+        .withQueryStringParameters(
+          ("accountVerificationEmail", "true"),
+          List(
+            pageViewId.map(viewId => ("refViewId", viewId)),
+            referer.map(refUrl => ("ref", refUrl)),
+          ).flatten: _*,
+        ),
     ) { resp =>
       resp.json
         .validate[GuestRegistrationResponse]
