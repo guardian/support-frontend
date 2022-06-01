@@ -104,6 +104,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 	const confirmEmailInput = props.isSignedIn ? null : (
 		<TextInput
 			id="confirm-email"
+			data-testid="confirm-email"
 			data-qm-masking="blocklist"
 			label="Confirm email"
 			type="email"
@@ -118,6 +119,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 			<TextInput
 				css={marginBottom}
 				id="first-name"
+				data-testid="first-name"
 				data-qm-masking="blocklist"
 				label="First name"
 				type="text"
@@ -128,6 +130,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 			<TextInput
 				css={marginBottom}
 				id="last-name"
+				data-testid="last-name"
 				data-qm-masking="blocklist"
 				label="Last name"
 				type="text"
@@ -138,6 +141,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 			<TextInput
 				css={marginBottom}
 				id="email"
+				data-testid="email"
 				data-qm-masking="blocklist"
 				label="Email"
 				type="email"
@@ -152,6 +156,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 			{emailFooter}
 			<TextInput
 				id="telephone"
+				data-testid="telephone"
 				data-qm-masking="blocklist"
 				label="Telephone"
 				optional
@@ -164,6 +169,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 		</div>
 	);
 }
+
 PersonalDetails.defaultProps = {
 	confirmEmail: null,
 	setConfirmEmail: null,
