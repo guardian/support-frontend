@@ -13,8 +13,9 @@ env:
 jobs:
   support_frontend_build:
     if: >-
-      github.event.pull_request.head.repo.owner.login == 'guardian' ||
-      github.event_name == 'push'
+      (github.actor != 'dependabot[bot]') &&
+        (github.event.pull_request.head.repo.owner.login == 'guardian' ||
+          github.event_name == 'push')
 
     # Required by actions-assume-aws-role
     permissions:
@@ -73,6 +74,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+
       - uses: actions/cache@v2
         with:
           path: |
