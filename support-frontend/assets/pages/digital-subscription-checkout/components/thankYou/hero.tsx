@@ -1,16 +1,17 @@
 // ----- Imports ----- //
+
 import type {
 	GridImage,
 	GridSlot,
 	Source as GridSource,
 } from 'components/gridPicture/gridPicture';
 import GridPicture from 'components/gridPicture/gridPicture';
-import type { ImageId as GridId } from 'helpers/images/theGrid';
-import 'helpers/images/theGrid';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import type { ImageId as GridId } from 'helpers/images/theGrid';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import 'helpers/internationalisation/countryGroup';
+
 // ----- Setup ----- //
+
 type GridImages = {
 	breakpoints: {
 		mobile: GridImage;
@@ -89,7 +90,11 @@ const gridSlots: GridSlots = {
 	},
 };
 
-function ThankYouHero({ countryGroupId }: { countryGroupId: CountryGroupId }) {
+function ThankYouHero({
+	countryGroupId,
+}: {
+	countryGroupId: CountryGroupId;
+}): JSX.Element {
 	const gridImages: GridImages = heroesByCountry[countryGroupId];
 	const sources: GridSource[] = [
 		{ ...gridSlots.mobile, ...gridImages.breakpoints.mobile },
@@ -109,6 +114,8 @@ function ThankYouHero({ countryGroupId }: { countryGroupId: CountryGroupId }) {
 			</LeftMarginSection>
 		</div>
 	);
-} // ----- Export ----- //
+}
+
+// ----- Export ----- //
 
 export default ThankYouHero;
