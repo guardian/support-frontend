@@ -7,7 +7,6 @@ import {
 	SvgTwitter,
 } from '@guardian/source-react-components';
 import { useEffect } from 'react';
-import * as React from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	trackComponentClick,
@@ -48,14 +47,12 @@ type ContributionThankYouSocialShareProps = {
 	countryId: IsoCountry;
 };
 
-const ContributionThankYouSocialShare: React.FC<
-	ContributionThankYouSocialShareProps
-> = ({
+function ContributionThankYouSocialShare({
 	email,
 	createReferralCodes,
 	campaignCode,
 	countryId,
-}: ContributionThankYouSocialShareProps) => {
+}: ContributionThankYouSocialShareProps): JSX.Element {
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SOCIAL);
 	}, []);
@@ -142,6 +139,6 @@ const ContributionThankYouSocialShare: React.FC<
 			body={actionBody}
 		/>
 	);
-};
+}
 
 export default ContributionThankYouSocialShare;

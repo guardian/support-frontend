@@ -5,7 +5,6 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { useEffect } from 'react';
-import * as React from 'react';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -23,7 +22,7 @@ const buttonContainer = css`
 const AUS_MAP_URL =
 	'https://support.theguardian.com/aus-map?INTCMP=thankyou-page-aus-map-cta';
 
-const ContributionThankYouAusMap: React.FC = () => {
+function ContributionThankYouAusMap(): JSX.Element {
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_AUS_MAP);
 	}, []);
@@ -64,6 +63,6 @@ const ContributionThankYouAusMap: React.FC = () => {
 			body={actionBody}
 		/>
 	);
-};
+}
 
 export default ContributionThankYouAusMap;
