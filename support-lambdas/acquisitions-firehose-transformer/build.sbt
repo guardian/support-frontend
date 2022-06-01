@@ -6,7 +6,7 @@ description := "A Firehose transformation lambda for serialising the acquisition
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-events" % "2.2.4",
   "ch.qos.logback" % "logback-classic" % "1.1.7",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "com.gu" %% "acquisitions-value-calculator-client" % "2.0.6",

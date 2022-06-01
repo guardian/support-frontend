@@ -71,7 +71,7 @@ lazy val releaseSettings = Seq(
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
   scalatest % "test",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
 )
 
 lazy val root = (project in file("."))
