@@ -1,20 +1,12 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS6133": 1,
             "TS2322": 3
         },
         "byPath": {
-            "assets/components/subscriptionCheckouts/personalDetails.test.tsx": 1,
             "assets/pages/contributions-landing/setUserStateActions.ts": 3
         }
     },
-    "TS6133": [
-        {
-            "path": "assets/components/subscriptionCheckouts/personalDetails.test.tsx",
-            "message": "'before' is declared but its value is never read."
-        }
-    ],
     "TS2322": [
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",

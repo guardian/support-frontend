@@ -1,12 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { before, forEach } from 'lodash';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import PersonalDetails from './personalDetails';
 
 describe('Personal Details', () => {
-	const isSignedIn = false;
-	const formErrors: Array<FormError<FormField>> = [];
 	const setFirstName = jest.fn();
 	const setLastName = jest.fn();
 	const setEmail = jest.fn();
@@ -19,6 +16,8 @@ describe('Personal Details', () => {
 		lastName: '',
 		email: '',
 		confirmEmail: '',
+		isSignedIn: false,
+		formErrors: [],
 	};
 
 	const renderPersonalDetails = ({
@@ -26,11 +25,15 @@ describe('Personal Details', () => {
 		lastName,
 		email,
 		confirmEmail,
+		isSignedIn,
+		formErrors,
 	}: {
 		firstName: string;
 		lastName: string;
 		email: string;
 		confirmEmail: string;
+		isSignedIn: boolean;
+		formErrors: Array<FormError<FormField>>;
 	}) => {
 		render(
 			<PersonalDetails
@@ -69,6 +72,23 @@ describe('Personal Details', () => {
 		});
 	});
 
+	it('does render confirm email when isSignedIn false', () => {
+		renderPersonalDetails(defaultProps);
+
+		const element = screen.queryByTestId('confirm-email');
+		expect(element).toBeInTheDocument();
+	});
+
+	it('does not render confirm email when isSignedIn true', () => {
+		renderPersonalDetails({
+			...defaultProps,
+			isSignedIn: true,
+		});
+
+		const element = screen.queryByTestId('confirm-email');
+		expect(element).not.toBeInTheDocument();
+	});
+
 	describe('onChange handlers', () => {
 		const elementsToTest = [
 			{
@@ -98,7 +118,7 @@ describe('Personal Details', () => {
 			},
 		];
 
-		forEach(elementsToTest, ({ elementTestId, value, onChangeHandler }) => {
+		elementsToTest.forEach(({ elementTestId, value, onChangeHandler }) => {
 			it(`${elementTestId} onChange handler called`, () => {
 				renderPersonalDetails(defaultProps);
 				const element = screen.getByTestId(elementTestId);
