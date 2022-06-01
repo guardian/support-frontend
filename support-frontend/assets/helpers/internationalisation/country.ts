@@ -1,9 +1,9 @@
-import type { $Keys } from 'utility-types';
 // ----- Imports ----- //
+
+import type { $Keys } from 'utility-types';
 import * as cookie from 'helpers/storage/cookie';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
-import 'helpers/types/option';
 import {
 	AUDCountries,
 	Canada,
@@ -15,7 +15,9 @@ import {
 	UnitedStates,
 } from './countryGroup';
 import type { CountryGroupId } from './countryGroup';
+
 // ----- Setup ----- //
+
 const usStates: Record<string, string> = {
 	AK: 'Alaska',
 	AL: 'Alabama',
@@ -398,10 +400,12 @@ const stripePaymentRequestAllowedCountries = [
 	'SK',
 	'US',
 ];
-export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
-	stripePaymentRequestAllowedCountries.includes(country);
+export const isInStripePaymentRequestAllowedCountries = (
+	country: IsoCountry,
+): boolean => stripePaymentRequestAllowedCountries.includes(country);
 
 // ----- Functions ----- /
+
 function stateProvinceFromMap(
 	l: string,
 	states: Record<string, string>,
@@ -559,7 +563,7 @@ function fromGeolocation(): IsoCountry | null | undefined {
 	return null;
 }
 
-function setCountry(country: IsoCountry) {
+function setCountry(country: IsoCountry): void {
 	cookie.set('GU_country', country, 7);
 }
 

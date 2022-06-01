@@ -1,8 +1,11 @@
 // ----- Imports ----- //
+
 import { Component } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './contributionTicker.scss';
+
 // ---- Types ----- //
+
 type DataFromServer = {
 	total: number;
 	goal: number;
@@ -31,6 +34,7 @@ type PropTypes = TickerSettings & {
 };
 
 // ---- Helpers ----- //
+
 const getInitialTickerValues = (
 	tickerCountType: TickerCountType,
 ): Promise<DataFromServer> =>
@@ -60,7 +64,9 @@ grows nearer to 0 which represents 100% fulfilled.
 const percentageToTranslate = (total: number, end: number) => {
 	const percentage = (total / end) * 100 - 100;
 	return percentage > 0 ? 0 : percentage;
-}; // ----- Component ----- //
+};
+
+// ----- Component ----- //
 
 export default class ContributionTicker extends Component<
 	PropTypes,
@@ -78,7 +84,7 @@ export default class ContributionTicker extends Component<
 	}
 
 	componentDidMount(): void {
-		getInitialTickerValues(this.props.tickerCountType).then(
+		void getInitialTickerValues(this.props.tickerCountType).then(
 			({ total, goal }) => {
 				/* ***************************************************************
       Starting the initial count at 80% of its total instead of 0
@@ -117,7 +123,7 @@ export default class ContributionTicker extends Component<
 		);
 	}
 
-	increaseTextCounter = (dataFromServer: DataFromServer) => () => {
+	increaseTextCounter = (dataFromServer: DataFromServer) => (): void => {
 		const nextCount = this.state.count + Math.floor(this.state.count / 100);
 		const finishedCounting =
 			nextCount <= this.state.count || // count isn't going up because total is too small
@@ -134,7 +140,8 @@ export default class ContributionTicker extends Component<
 			window.requestAnimationFrame(this.increaseTextCounter(dataFromServer));
 		}
 	};
-	renderContributedSoFar = () => {
+
+	renderContributedSoFar = (): JSX.Element => {
 		if (!this.state.goalReached) {
 			return (
 				<div className="contributions-landing-ticker__so-far">
@@ -177,7 +184,7 @@ export default class ContributionTicker extends Component<
 		return <div className="contributions-landing-ticker__so-far" />;
 	};
 
-	render() {
+	render(): JSX.Element {
 		const goal = this.state.dataFromServer ? this.state.dataFromServer.goal : 0;
 		const total = this.state.dataFromServer
 			? this.state.dataFromServer.total
