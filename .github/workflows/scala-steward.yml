@@ -24,4 +24,6 @@ jobs:
       - name: Build and run tests
         run: sbt test
 
-
+      - name: Build support-workers integration test assembly
+        run: |
+          sbt "project support-workers" it:assembly
