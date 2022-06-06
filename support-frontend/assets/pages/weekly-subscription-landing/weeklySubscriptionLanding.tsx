@@ -58,7 +58,6 @@ function WeeklyLandingPage({
 	if (!productPrices) {
 		return null;
 	}
-
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;

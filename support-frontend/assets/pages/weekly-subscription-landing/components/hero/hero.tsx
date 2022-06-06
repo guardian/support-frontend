@@ -19,10 +19,6 @@ import {
 	detect,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import {
-	fromCountryGroupId,
-	glyph,
-} from 'helpers/internationalisation/currency';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -62,23 +58,6 @@ const weeklyHeroParagraph = css`
 	/* apply the same margin to paragraphs parsed from markdown from promo codes */
 	& p:not(:last-of-type) {
 		margin-bottom: ${space[9]}px;
-	}
-`;
-const roundelCentreLine = css`
-	${headline.xxsmall({
-		fontWeight: 'bold',
-	})}
-
-	${from.tablet} {
-		${headline.medium({
-			fontWeight: 'bold',
-		})}
-	}
-
-	${from.tablet} {
-		${headline.large({
-			fontWeight: 'bold',
-		})}
 	}
 `;
 const showOnMobile = css`
@@ -132,42 +111,12 @@ const getFirstParagraph = (
 	);
 };
 
-const WeeklyHero: React.FC<PropTypes> = ({
-	orderIsAGift,
-	countryGroupId,
-	promotionCopy,
-	participations,
-}) => {
-	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
-
-	const defaultRoundelText =
-		participations.sixForSixSuppression === 'variant' ? (
-			<>
-				<div role="text">
-					Save
-					<br />
-					up to 34%
-					<br />a year
-				</div>
-			</>
-		) : (
-			<>
-				{
-					// role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element
-				}
-				<div role="text">
-					Try
-					<div css={roundelCentreLine}>6 issues</div>
-					for {glyph(currencyId)}6
-				</div>
-			</>
-		);
-
+const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
+	const defaultRoundelText = 'Save up to 34% a year';
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
-	const roundelText =
-		promotionHTML(promotionCopy.roundel) ?? defaultRoundelText;
+	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
 
 	return (
 		<PageTitle

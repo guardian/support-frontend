@@ -1,43 +1,73 @@
 import { css } from '@emotion/react';
-import {
-	// brandAlt,
-	from,
-	// headline,
-	// neutral,
-	// space,
-} from '@guardian/source-foundations';
+import { from } from '@guardian/source-foundations';
 import type { ReactElement, ReactNode } from 'react';
 import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 
 const offerStraplineStyles = css`
+	font-family: GuardianTextSans, 'Helvetica Neue', Helvetica, Arial,
+		'Lucida Grande', sans-serif;
+	font-size: 17px;
+	font-weight: bold;
+	padding: 4px 10px 8px;
 	max-width: 100%;
 	width: fit-content;
 	margin-bottom: 0;
 	background-color: ${offerStraplineBlue};
 
+	${from.phablet} {
+		padding: 4px 20px 8px;
+	}
 	${from.tablet} {
+		font-size: 20px;
+		padding: 4px 20px 12px;
+		max-width: 50%;
+	}
+	${from.desktop} {
+		font-size: 24px;
+		max-width: 50%;
+	}
+`;
+
+const offerStraplineLongCopyStyles = css`
+	font-family: GuardianTextSans, 'Helvetica Neue', Helvetica, Arial,
+		'Lucida Grande', sans-serif;
+	font-size: 17px;
+	font-weight: bold;
+	padding: 4px 10px 8px;
+	width: 100%;
+	margin-bottom: 0;
+	background-color: ${offerStraplineBlue};
+
+	${from.phablet} {
+		max-width: 100%;
+		width: fit-content;
+		padding: 4px 20px 8px;
+	}
+	${from.tablet} {
+		font-size: 20px;
+		padding: 4px 20px 12px;
+		max-width: 50%;
+	}
+	${from.desktop} {
+		font-size: 24px;
 		max-width: 50%;
 	}
 `;
 
 type PropTypes = {
-	// children?: ReactNode;
 	copy?: ReactNode;
 };
 
-function OfferStrapline({
-	// children,
-	// cssOverrides,
-	// theme = 'base',
-	copy,
-}: PropTypes): ReactElement {
-	// RJR comment: I refuse to believe this is the best way to make sure the last word doesn't fall onto its own line! But I don't know how else to get React to accept '&nbsp;' being inserted between the last word and its predecessor...
+function OfferStrapline({ copy }: PropTypes): ReactElement {
+	// Requirement: last line must include a minimum of 2 words
 	const noWidowWord = (c: ReactNode) => {
 		if (typeof c === 'string') {
 			const trimmedCopy = c.trim();
+			const copyLength = trimmedCopy.length;
 			const wordArray: string[] = trimmedCopy.split(' ');
 			if (wordArray.length > 1) {
 				const lastWord: string | undefined = wordArray.pop();
+
 				if (lastWord) {
 					const processedWords = `${wordArray.join(' ')}&nbsp;${lastWord}`;
 					const getResult = () => {
@@ -45,29 +75,29 @@ function OfferStrapline({
 					};
 					return (
 						<div
-							css={offerStraplineStyles}
+							css={
+								copyLength > 32
+									? offerStraplineLongCopyStyles
+									: offerStraplineStyles
+							}
 							dangerouslySetInnerHTML={getResult()}
 						/>
 					);
 				}
 			}
 		}
-		return <div css={offerStraplineStyles}>c</div>;
+		return <div css={offerStraplineStyles}>{c}</div>;
 	};
 
-	// const testCopy =
-	//     "Some really long and boring text about not much at all except that it's really, really long and tedious";
-
+	// Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
 	if (copy) {
-		// return noWidowWord(testCopy);
+		// For testing requirement
+		// return noWidowWord('Lorem ipsum dolor sit amet, consectetur adipiscing elit');
+
 		return noWidowWord(copy);
 	} else {
 		return <></>;
 	}
 }
-
-// HeroRoundel.defaultProps = {
-// 	theme: 'base',
-// };
 
 export default OfferStrapline;
