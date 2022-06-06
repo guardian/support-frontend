@@ -11,6 +11,7 @@ import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
+import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -174,6 +175,7 @@ const WeeklyHero: React.FC<PropTypes> = ({
 			theme="weekly"
 		>
 			<CentredContainer>
+				<OfferStrapline copy={roundelText}></OfferStrapline>
 				<Hero
 					image={
 						<GridImage
@@ -186,7 +188,7 @@ const WeeklyHero: React.FC<PropTypes> = ({
 							altText="A collection of Guardian Weekly magazines"
 						/>
 					}
-					roundelText={orderIsAGift ? null : roundelText}
+					roundelText={null}
 				>
 					<section css={weeklyHeroCopy}>
 						{orderIsAGift ? (

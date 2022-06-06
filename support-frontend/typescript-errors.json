@@ -1,10 +1,12 @@
 {
     "errorCounts": {
         "byCode": {
-            "TS2322": 3
+            "TS2322": 3,
+            "TS6133": 2
         },
         "byPath": {
-            "assets/pages/contributions-landing/setUserStateActions.ts": 3
+            "assets/pages/contributions-landing/setUserStateActions.ts": 3,
+            "assets/pages/paper-subscription-landing/components/hero/hero.tsx": 2
         }
     },
     "TS2322": [
@@ -19,6 +21,16 @@
         {
             "path": "assets/pages/contributions-landing/setUserStateActions.ts",
             "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
+        }
+    ],
+    "TS6133": [
+        {
+            "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
+            "message": "'HeroRoundel' is declared but its value is never read."
+        },
+        {
+            "path": "assets/pages/paper-subscription-landing/components/hero/hero.tsx",
+            "message": "'roundelOffset' is declared but its value is never read."
         }
     ]
 }

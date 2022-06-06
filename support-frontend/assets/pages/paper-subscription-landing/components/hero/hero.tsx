@@ -18,6 +18,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import HeroRoundel, { roundelSizeMob } from 'components/page/heroRoundel';
+import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -170,6 +171,7 @@ function PaperHero({
 			cssOverrides={fitHeadline}
 		>
 			<CentredContainer>
+				<OfferStrapline copy={roundelText}></OfferStrapline>
 				<Hero
 					image={
 						<GridImage
@@ -183,13 +185,7 @@ function PaperHero({
 						/>
 					}
 					hideRoundelBelow="mobileMedium"
-					roundelElement={
-						roundelText ? (
-							<HeroRoundel cssOverrides={roundelOffset}>
-								{roundelText}
-							</HeroRoundel>
-						) : null
-					}
+					roundelElement={null}
 				>
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
