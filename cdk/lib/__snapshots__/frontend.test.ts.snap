@@ -636,7 +636,7 @@ Object {
             "ReturnData": false,
           },
         ],
-        "Threshold": 1,
+        "Threshold": 5,
         "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",
