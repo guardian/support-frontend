@@ -627,16 +627,17 @@ function detect(
 	];
 	let country: IsoCountry | null = null;
 
-	targetCountryGroups.forEach((targetCountryGroupId) => {
+	for (const targetCountryGroupId of targetCountryGroups) {
 		const candidateCountry = handleCountryForCountryGroup(
 			targetCountryGroupId,
 			countryGroupId,
 		);
 
-		if (candidateCountry !== null && country === null) {
+		if (candidateCountry !== null) {
 			country = candidateCountry;
+			break;
 		}
-	});
+	}
 
 	if (country === null) {
 		country =

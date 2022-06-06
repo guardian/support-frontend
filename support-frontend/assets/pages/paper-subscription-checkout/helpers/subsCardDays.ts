@@ -104,14 +104,10 @@ const monthText = [
 const milsInADay = 1000 * 60 * 60 * 24;
 
 const getFormattedStartDate = (startDate: Date): string => {
-	if (startDate) {
-		const machineDateArray = formatMachineDate(startDate).split('-');
-		return `${machineDateArray[2]} ${monthText[startDate.getMonth()]} ${
-			machineDateArray[0]
-		}`;
-	}
-
-	return 'date to be confirmed';
+	const machineDateArray = formatMachineDate(startDate).split('-');
+	return `${machineDateArray[2]} ${monthText[startDate.getMonth()]} ${
+		machineDateArray[0]
+	}`;
 };
 
 const getPaymentStartDate = (
