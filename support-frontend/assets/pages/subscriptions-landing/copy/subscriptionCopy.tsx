@@ -86,7 +86,7 @@ function getGuardianWeeklyOfferCopy(
 		return undefined;
 	}
 
-	const currency = glyph(fromCountryGroupId(countryGroupId) ?? 'GBP');
+	const currency = glyph(fromCountryGroupId(countryGroupId));
 	return `6 issues for ${currency}6`;
 }
 
