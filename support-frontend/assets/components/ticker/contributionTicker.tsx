@@ -42,9 +42,9 @@ const getInitialTickerValues = (
 		tickerCountType === 'money' ? '/ticker.json' : '/supporters-ticker.json',
 	)
 		.then((resp) => resp.json())
-		.then((data) => {
-			const total = parseInt(data.total, 10);
-			const goal = parseInt(data.goal, 10);
+		.then((data: DataFromServer) => {
+			const total = Math.floor(data.total);
+			const goal = Math.floor(data.goal);
 			return {
 				total,
 				goal,
@@ -158,7 +158,7 @@ export default class ContributionTicker extends Component<
 			);
 		}
 
-		if (this.state.goalReached && this.props.tickerEndType === 'unlimited') {
+		if (this.props.tickerEndType === 'unlimited') {
 			return (
 				<div className="contributions-landing-ticker__so-far">
 					<div className="contributions-landing-ticker__count">
@@ -171,17 +171,13 @@ export default class ContributionTicker extends Component<
 			);
 		}
 
-		if (this.state.goalReached && this.props.tickerEndType === 'hardstop') {
-			return (
-				<div className="contributions-landing-ticker__so-far">
-					<div className="contributions-landing-ticker__count">
-						{this.props.copy.goalReachedPrimary}
-					</div>
+		return (
+			<div className="contributions-landing-ticker__so-far">
+				<div className="contributions-landing-ticker__count">
+					{this.props.copy.goalReachedPrimary}
 				</div>
-			);
-		}
-
-		return <div className="contributions-landing-ticker__so-far" />;
+			</div>
+		);
 	};
 
 	render(): JSX.Element {
