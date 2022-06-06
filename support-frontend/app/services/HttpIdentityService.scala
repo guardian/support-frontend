@@ -178,8 +178,8 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .withRequestTimeout(3.seconds)
         .withMethod("POST")
         .withQueryStringParameters(
-					List(
-						Some(("accountVerificationEmail", "true")),
+          List(
+            Some(("accountVerificationEmail", "true")),
             pageViewId.map(viewId => ("refViewId", viewId)),
             referer.map(refUrl => ("ref", refUrl)),
           ).flatten: _*,
