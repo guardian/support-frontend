@@ -28,6 +28,7 @@ const offerStraplineStyles = css`
 	}
 `;
 
+// Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
 const offerStraplineLongCopyStyles = css`
 	font-family: GuardianTextSans, 'Helvetica Neue', Helvetica, Arial,
 		'Lucida Grande', sans-serif;
@@ -89,11 +90,7 @@ function OfferStrapline({ copy }: PropTypes): ReactElement {
 		return <div css={offerStraplineStyles}>{c}</div>;
 	};
 
-	// Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
 	if (copy) {
-		// For testing requirement
-		// return noWidowWord('Lorem ipsum dolor sit amet, consectetur adipiscing elit');
-
 		return noWidowWord(copy);
 	} else {
 		return <></>;
