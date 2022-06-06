@@ -9,11 +9,11 @@ import type {
 } from 'helpers/redux/redemptionsStore';
 
 const mapStateToProps = (state: RedemptionPageState) => ({
-	confirmOptIn: state.page.marketingConsent.confirmOptIn,
+	confirmOptIn: state.page.checkoutForm.marketingConsent.confirmOptIn,
 	email: state.page.checkoutForm.personalDetails.email,
 	csrf: state.page.csrf,
-	error: state.page.marketingConsent.requestPending,
-	requestPending: state.page.marketingConsent.requestPending,
+	error: state.page.checkoutForm.marketingConsent.requestPending,
+	requestPending: state.page.checkoutForm.marketingConsent.requestPending,
 });
 
 function mapDispatchToProps(dispatch: RedemptionDispatch) {
@@ -28,7 +28,6 @@ function mapDispatchToProps(dispatch: RedemptionDispatch) {
 				email,
 				dispatch,
 				csrf,
-				'MARKETING_CONSENT',
 			);
 		},
 	};

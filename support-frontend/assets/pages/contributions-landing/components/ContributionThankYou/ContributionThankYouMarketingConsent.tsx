@@ -42,13 +42,7 @@ const mapStateToProps = () => ({});
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
 	return {
 		subscribeToNewsLetter: (email: string, csrf: Csrf) => {
-			sendMarketingPreferencesToIdentity(
-				true,
-				email,
-				dispatch,
-				csrf,
-				'MARKETING_CONSENT',
-			);
+			sendMarketingPreferencesToIdentity(true, email, dispatch, csrf);
 		},
 	};
 }

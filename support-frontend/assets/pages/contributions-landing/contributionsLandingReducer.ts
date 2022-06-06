@@ -22,6 +22,8 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
+import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
+import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
@@ -29,8 +31,6 @@ import type { ProductState } from 'helpers/redux/checkout/product/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
-import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
-import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { Action } from './contributionsLandingActions';
 
@@ -107,11 +107,11 @@ interface PageState {
 	checkoutForm: {
 		personalDetails: PersonalDetailsState;
 		product: ProductState;
+		marketingConsent: MarketingConsentState;
 	};
 	user: UserState;
 	csrf: CsrfState;
 	directDebit: DirectDebitState;
-	marketingConsent: MarketingConsentState;
 }
 
 export interface State {
@@ -562,11 +562,11 @@ function initReducer(): Reducer<PageState> {
 		checkoutForm: combineReducers({
 			personalDetails: personalDetailsReducer,
 			product: productReducer,
+			marketingConsent: marketingConsentReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,
 		csrf,
-		marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
 	});
 }
 

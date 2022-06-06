@@ -1,10 +1,13 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import {
+	setApiError,
+	setConfirmMarketingConsent,
+	setRequestPending,
+} from 'helpers/redux/checkout/marketingConsent/actions';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import type { Action } from './marketingConsentActions';
-import { marketingConsentActionsFor } from './marketingConsentActions';
 
 // ----- Functions ----- //
 const requestData = (email: string, csrf: CsrfState) =>
@@ -24,13 +27,9 @@ const requestData = (email: string, csrf: CsrfState) =>
 function sendMarketingPreferencesToIdentity(
 	optIn: boolean,
 	email: string,
-	dispatch: Dispatch<Action>,
+	dispatch: Dispatch,
 	csrf: CsrfState,
-	scope: string,
 ): void {
-	const { setConfirmMarketingConsent, setAPIError, setRequestPending } =
-		marketingConsentActionsFor(scope);
-
 	if (!optIn) {
 		dispatch(setConfirmMarketingConsent(false));
 		return;
@@ -45,7 +44,7 @@ function sendMarketingPreferencesToIdentity(
 				dispatch(setConfirmMarketingConsent(optIn));
 			} else {
 				logException('Marketing preference API returned an error');
-				dispatch(setAPIError(true));
+				dispatch(setApiError(true));
 			}
 		})
 		.catch(() => {
@@ -53,7 +52,7 @@ function sendMarketingPreferencesToIdentity(
 			logException(
 				'Error while trying to interact with the marketing preference API',
 			);
-			dispatch(setAPIError(true));
+			dispatch(setApiError(true));
 		});
 }
 
