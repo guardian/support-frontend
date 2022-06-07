@@ -27,15 +27,13 @@ const buttonStyles = css`
 `;
 
 // Types
-export type PostcodeFinderAdditionalProps = {
+type PostcodeFinderProps = PostcodeFinderState & {
 	id: string;
 	onPostcodeUpdate: (newPostcode: string) => void;
 	onAddressUpdate: (result: PostcodeFinderResult) => void;
 	setPostcode: (postcode: string) => void;
 	fetchResults: (postcode?: string) => void;
 };
-
-type PostcodeFinderProps = PostcodeFinderState & PostcodeFinderAdditionalProps;
 
 // Helpers
 function InputWithButton({
@@ -131,5 +129,3 @@ export function PostcodeFinder({
 		</div>
 	);
 }
-
-export type PostcodeFinderComponentType = typeof PostcodeFinder;

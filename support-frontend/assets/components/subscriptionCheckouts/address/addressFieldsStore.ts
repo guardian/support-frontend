@@ -34,7 +34,8 @@ import type { Option } from 'helpers/types/option';
 // ----- Types ----- //
 export type FormFields = RegularPaymentRequestAddress;
 export type FormField = keyof FormFields;
-export type FormErrors = Array<FormError<FormField>>;
+
+type FormErrors = Array<FormError<FormField>>;
 type AddressFieldsState = FormFields & {
 	formErrors: FormErrors;
 };
@@ -75,8 +76,6 @@ export type Action =
 	  });
 
 // ----- Selectors ----- //
-const getPostcodeForm = (state: State): PostcodeFinderState => state.postcode;
-
 const getStateFormErrors = (state: State): FormErrors =>
 	state.fields.formErrors;
 
@@ -236,7 +235,7 @@ const setFormErrorsFor =
 		errors,
 	});
 
-const addressActionCreatorsFor = (scope: AddressType) => ({
+const addressActionCreatorsFor = (scope: AddressType): ActionCreators => ({
 	setCountry: (countryRaw: string) => (dispatch: SubscriptionsDispatch) => {
 		const country = fromString(countryRaw);
 
@@ -379,7 +378,6 @@ export {
 	addressReducerFor,
 	getFormFields,
 	getStateFormErrors,
-	getPostcodeForm,
 	setFormErrorsFor,
 	addressActionCreatorsFor,
 	isPostcodeOptional,
