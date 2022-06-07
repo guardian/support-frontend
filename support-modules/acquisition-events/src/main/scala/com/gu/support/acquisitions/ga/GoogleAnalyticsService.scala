@@ -1,8 +1,8 @@
 package com.gu.support.acquisitions.ga
 
 import cats.data.EitherT
-import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
-import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
+// import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
+// import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService.buildBody
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
@@ -25,6 +25,8 @@ import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
+import com.gu.acquisitionsValueCalculator.AnnualisedValueTwoCalculator
+import com.gu.acquisitionsValueCalculator.{ AcquisitionModel, PrintOptionsModel }
 
 trait GoogleAnalyticsService {
   def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit
@@ -68,7 +70,7 @@ object GoogleAnalyticsService extends LazyLogging {
     val amount = acquisition.amount.getOrElse[BigDecimal](0.0)
     val acquisitionModel = AcquisitionModel(
       amount.toDouble,
-      acquisition.product.value,
+      acquisition.product,
       acquisition.currency.iso,
       acquisition.paymentFrequency.value,
       acquisition.paymentProvider.map(_.toString),
@@ -76,7 +78,7 @@ object GoogleAnalyticsService extends LazyLogging {
         PrintOptionsModel(printOptions.product.value, printOptions.deliveryCountry.alpha2),
       ),
     )
-    EitherT(AnnualisedValueService.getAsyncAV(acquisitionModel, "ophan"))
+    EitherT(AnnualisedValueTwoCalculator.getAnnualisedValue(acquisitionModel))
   }
 
   private[ga] def getSuccessfulSubscriptionSignUpMetric(conversionCategory: ConversionCategory) =
