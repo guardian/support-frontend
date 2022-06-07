@@ -60,7 +60,9 @@ class CreateSubscriptionController(
         val errorOrStatusResponse = for {
           userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
             case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
-            case None => getOrCreateIdentityUser(request.body).leftMap(mapIdentityErrorToCreateSubscriptionError)
+            case None =>
+              getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+                .leftMap(mapIdentityErrorToCreateSubscriptionError)
           }
           _ <- validate(request)
           supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
@@ -93,9 +95,16 @@ class CreateSubscriptionController(
 
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
+      referer: Option[String],
   ): EitherT[Future, IdentityError, IdentityIdAndEmail] = {
     implicit val scheduler: Scheduler = system.scheduler
-    val identityId = identityService.getOrCreateUserFromEmail(body.email, body.firstName, body.lastName)
+    val identityId = identityService.getOrCreateUserFromEmail(
+      body.email,
+      body.firstName,
+      body.lastName,
+      body.ophanIds.pageviewId,
+      referer,
+    )
 
     identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }
