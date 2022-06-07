@@ -1,0 +1,28 @@
+name: support-frontend - eslint
+
+on:
+  push:
+    paths:
+      - support-frontend/**
+
+jobs:
+  support_frontend_build:
+    name: support-frontend - eslint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: guardian/actions-setup-node@v2.4.1
+        with:
+          cache: 'yarn'
+          cache-dependency-path: support-frontend/yarn.lock
+
+      - name: Install
+        run: yarn
+        working-directory: support-frontend
+
+      - name: Lint check
+        run: yarn lint:check
+        working-directory: support-frontend
