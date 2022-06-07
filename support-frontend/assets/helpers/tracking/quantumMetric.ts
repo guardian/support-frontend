@@ -25,7 +25,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 	Object.keys(participations).forEach((testId) => {
 		const value = `${testId}-${participations[testId]}`;
 		/**
-		 * Quantum Metric's sets up QuantumMetricAPI
+		 * Quantum Metric's script sets up QuantumMetricAPI
 		 * We need to check it is defined and ready before we can
 		 * send events to it. If it is not ready we add the events to
 		 * a valueQueue to be processed later.
