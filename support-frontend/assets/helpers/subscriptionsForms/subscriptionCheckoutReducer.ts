@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
-import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import type {
 	FormFields as AddressFormFields,
 	AddressReducer,
@@ -18,6 +16,8 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { giftingReducer } from 'helpers/redux/checkout/giftingState/reducer';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
+import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
+import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
@@ -36,6 +36,7 @@ export type ReduxState<PageState> = {
 export type CheckoutFormState = {
 	personalDetails: PersonalDetailsState;
 	gifting: GiftingState;
+	marketingConsent: MarketingConsentState;
 };
 
 export type CheckoutState = ReduxState<{
@@ -43,7 +44,6 @@ export type CheckoutState = ReduxState<{
 	checkoutForm: CheckoutFormState;
 	user: User;
 	csrf: CsrfState;
-	marketingConsent: MarketingConsentState;
 	billingAddress: AddressState;
 	deliveryAddress?: AddressState;
 	directDebit: DirectDebitState;
@@ -53,7 +53,6 @@ export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
 	csrf: CsrfState;
-	marketingConsent: MarketingConsentState;
 	billingAddress: AddressState;
 	deliveryAddress: AddressState;
 	fulfilmentOption: Option<FulfilmentOptions>;
@@ -85,12 +84,12 @@ function createReducer(
 			personalDetails: personalDetailsReducer,
 			product: productReducer,
 			gifting: giftingReducer,
+			marketingConsent: marketingConsentReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,
 		...addressReducers,
 		csrf,
-		marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
 	});
 }
 
