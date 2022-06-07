@@ -9,13 +9,8 @@ import {
 	TextInput,
 } from '@guardian/source-react-components';
 import React from 'react';
-import type { ConnectedComponent } from 'react-redux';
-import { connect } from 'react-redux';
 import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
-import { postcodeFinderActionCreatorsFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import type { AddressType } from 'helpers/subscriptionsForms/addressType';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 const root = css`
 	display: flex;
@@ -32,22 +27,15 @@ const buttonStyles = css`
 `;
 
 // Types
-
-// TODO: This can all be one props type in the future once this component stops talking to Redux
 export type PostcodeFinderAdditionalProps = {
+	id: string;
 	onPostcodeUpdate: (newPostcode: string) => void;
 	onAddressUpdate: (result: PostcodeFinderResult) => void;
-	id: string;
-};
-
-type PostcodeFinderDispatchProps = {
 	setPostcode: (postcode: string) => void;
 	fetchResults: (postcode?: string) => void;
 };
 
-type PostcodeFinderProps = PostcodeFinderState &
-	PostcodeFinderDispatchProps &
-	PostcodeFinderAdditionalProps;
+type PostcodeFinderProps = PostcodeFinderState & PostcodeFinderAdditionalProps;
 
 // Helpers
 function InputWithButton({
@@ -91,7 +79,7 @@ function InputWithButton({
 	);
 }
 
-function PostcodeFinder({
+export function PostcodeFinder({
 	id,
 	postcode,
 	results,
@@ -145,16 +133,3 @@ function PostcodeFinder({
 }
 
 export type PostcodeFinderComponentType = typeof PostcodeFinder;
-
-export function withStore(
-	scope: AddressType,
-	mapStateToProps: (state: WithDeliveryCheckoutState) => PostcodeFinderState,
-): ConnectedComponent<
-	PostcodeFinderComponentType,
-	PostcodeFinderAdditionalProps
-> {
-	return connect(
-		mapStateToProps,
-		postcodeFinderActionCreatorsFor(scope),
-	)(PostcodeFinder);
-}
