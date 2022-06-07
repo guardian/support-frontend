@@ -44,7 +44,7 @@ function SubscriptionsSurvey(): JSX.Element | null {
 	const title = 'Tell us about your subscription';
 	const message =
 		'Please take this short survey to tell us why you purchased your subscription.';
-	return surveyLink ? (
+	return (
 		<Content>
 			<section css={maxWidth}>
 				<h3 css={subHeading}>{title}</h3>
@@ -66,7 +66,7 @@ function SubscriptionsSurvey(): JSX.Element | null {
 				</ThemeProvider>
 			</section>
 		</Content>
-	) : null;
+	);
 }
 
 export default SubscriptionsSurvey;

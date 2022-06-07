@@ -8,6 +8,7 @@ import type {
 	PayPalCheckoutDetails,
 	SetupPayPalRequestType,
 } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -38,11 +39,11 @@ type PropTypes = {
 	setupRecurringPayPalPayment: SetupPayPalRequestType;
 	payPalHasLoaded: boolean;
 	isTestUser: boolean;
-	onPaymentAuthorised: (...args: any[]) => any;
+	onPaymentAuthorised: (paymentAuth: PaymentAuthorisation) => void;
 	amount: number;
 	billingPeriod: BillingPeriod;
-	validateForm: (...args: any[]) => any;
-	formIsValid: (...args: any[]) => any;
+	validateForm: () => void;
+	formIsValid: () => boolean;
 	allErrors: Array<FormError<FormField>>;
 };
 

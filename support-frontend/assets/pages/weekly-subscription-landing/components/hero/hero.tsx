@@ -137,7 +137,7 @@ function WeeklyHero({
 	promotionCopy,
 	participations,
 }: PropTypes): JSX.Element {
-	const currencyId = fromCountryGroupId(countryGroupId) ?? 'GBP';
+	const currencyId = fromCountryGroupId(countryGroupId);
 
 	const defaultRoundelText =
 		participations.sixForSixSuppression === 'variant' ? (
