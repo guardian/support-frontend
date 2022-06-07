@@ -122,7 +122,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		deliveryAddressErrors: state.page.billingAddress.fields.formErrors,
 		isTestUser: state.page.checkout.isTestUser,
 		country: state.common.internationalisation.countryId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		currencyId: state.common.internationalisation.currencyId,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		total: getPriceWithDiscount(

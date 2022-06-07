@@ -526,7 +526,7 @@ const getUserType =
 	(email: string) =>
 	(dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
-		const { csrf } = state.page;
+		const { csrf } = state.page.checkoutForm;
 		const { isSignedIn } = state.page.user;
 		void getUserTypeFromIdentity(
 			email,
@@ -977,7 +977,7 @@ function recurringPaymentAuthorisationHandler(
 			routes.recurringContribCreate,
 			request,
 			state.common.abParticipations,
-			state.page.csrf,
+			state.page.checkoutForm.csrf,
 		),
 		paymentAuthorisation,
 	)(dispatch, () => state);

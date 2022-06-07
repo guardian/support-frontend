@@ -93,7 +93,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
 		billingAddressErrors: state.page.billingAddress.fields.formErrors,
 		isTestUser: state.page.checkout.isTestUser,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		currencyId:
 			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
