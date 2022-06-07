@@ -101,4 +101,4 @@ function init(participations: Participations): void {
 	});
 }
 
-export { init, sendEventABTestParticipations };
+export { init };
