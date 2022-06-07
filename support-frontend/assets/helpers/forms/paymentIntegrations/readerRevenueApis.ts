@@ -6,7 +6,6 @@ import {
 	requestOptions,
 } from 'helpers/async/fetch';
 import { logPromise, pollUntilPromise } from 'helpers/async/promise';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
 	AmazonPay,
@@ -31,6 +30,7 @@ import type {
 	GuardianWeekly,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type {
 	AcquisitionABTest,
 	OphanIds,
