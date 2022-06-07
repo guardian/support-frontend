@@ -7,7 +7,7 @@ import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
+import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -24,6 +24,8 @@ import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 import AppsSection from './appsSection';
 import { HeroPicture } from './heroPicture';
 import SubscriptionsSurvey from './subscriptionSurvey';
+
+const styles = moduleStyles as { hero: string };
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: WithDeliveryCheckoutState) {

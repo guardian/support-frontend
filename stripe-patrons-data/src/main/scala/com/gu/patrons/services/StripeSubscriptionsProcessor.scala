@@ -55,7 +55,7 @@ abstract class DynamoProcessor(
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def writeToDynamo(identityId: String, sub: StripeSubscription) = {
-    System.out.println(
+    SafeLogger.info(
       s"Attempting to write subscription (${sub.customer.email}, $identityId) to Dynamo",
     )
     supporterDataDynamoService

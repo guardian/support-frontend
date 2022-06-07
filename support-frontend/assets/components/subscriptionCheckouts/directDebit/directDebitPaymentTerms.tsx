@@ -1,9 +1,8 @@
 import { css } from '@emotion/react';
 import { border, from, space } from '@guardian/source-foundations';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
+import type { Option } from 'helpers/types/option';
 import DirectDebitTerms from './directDebitTerms';
 
 const directDebitSection = css`
@@ -27,7 +26,7 @@ const borderTop = css`
 `;
 export default function DirectDebitPaymentTerms(props: {
 	paymentMethod: Option<PaymentMethod>;
-}) {
+}): JSX.Element | null {
 	return props.paymentMethod === DirectDebit ? (
 		<span css={directDebitSection}>
 			<span css={borderTop}>

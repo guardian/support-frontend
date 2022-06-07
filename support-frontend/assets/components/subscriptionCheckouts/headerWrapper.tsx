@@ -1,17 +1,20 @@
 // ----- Imports ----- //
+
 import { connect } from 'react-redux';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { Stage } from 'helpers/subscriptionsForms/formFields';
-import 'helpers/subscriptionsForms/formFields';
 import Header from 'components/headers/header/header';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Stage } from 'helpers/subscriptionsForms/formFields';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+
 // ----- Types ----- //
+
 type PropTypes = {
 	stage: Stage;
 	countryGroupId: CountryGroupId;
 };
 
 // ----- State/Props Maps ----- //
+
 function mapStateToProps(state: WithDeliveryCheckoutState) {
 	return {
 		stage: state.page.checkout.stage,
@@ -20,6 +23,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 }
 
 // ----- Component ----- //
+
 function HeaderWrapper(props: PropTypes) {
 	return (
 		<Header
@@ -27,6 +31,8 @@ function HeaderWrapper(props: PropTypes) {
 			countryGroupId={props.countryGroupId}
 		/>
 	);
-} // ----- Export ----- //
+}
+
+// ----- Export ----- //
 
 export default connect(mapStateToProps)(HeaderWrapper);

@@ -33,5 +33,5 @@ export const digitalLandingProps = (): DigitalLandingPropTypes => ({
 	participations: initAbTests(countryId, countryGroupId, getSettings()),
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
-	orderIsAGift: getGlobal('orderIsAGift') || false,
+	orderIsAGift: getGlobal('orderIsAGift') ?? false,
 });

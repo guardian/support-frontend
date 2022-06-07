@@ -43,18 +43,6 @@ riffRaffArtifactResources += (file(
   "support-workers/target/scala-2.13/support-workers-it.jar",
 ), "it-tests/support-workers-it.jar")
 assemblyJarName := s"${name.value}.jar"
-assembly / assemblyMergeStrategy := {
-  case PathList("models", xs @ _*) => MergeStrategy.discard
-  case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
-  case x if x.endsWith("module-info.class") => MergeStrategy.discard
-  case "mime.types" => MergeStrategy.first
-  case str if str.contains("simulacrum") => MergeStrategy.first
-  case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
-  case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
-  case y =>
-    val oldStrategy = (assembly / assemblyMergeStrategy).value
-    oldStrategy(y)
-}
 
 Project.inConfig(IntegrationTest)(baseAssemblySettings)
 IntegrationTest / assembly / assemblyJarName := s"${name.value}-it.jar"

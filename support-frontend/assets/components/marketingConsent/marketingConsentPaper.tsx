@@ -73,7 +73,7 @@ type PropTypes = ButtonPropTypes & {
 };
 
 const mapStateToProps = (state: CheckoutState) => ({
-	confirmOptIn: state.page.marketingConsent.confirmOptIn,
+	confirmOptIn: state.page.checkoutForm.marketingConsent.confirmOptIn,
 	email: getEmail(state),
 	csrf: state.page.csrf,
 });
@@ -90,7 +90,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 				email,
 				dispatch,
 				csrf,
-				'MARKETING_CONSENT',
 			);
 		},
 	};

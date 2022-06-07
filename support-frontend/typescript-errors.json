@@ -1,24 +1,6 @@
 {
     "errorCounts": {
-        "byCode": {
-            "TS2322": 3
-        },
-        "byPath": {
-            "assets/pages/contributions-landing/setUserStateActions.ts": 3
-        }
-    },
-    "TS2322": [
-        {
-            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
-            "message": "Type '(isSignedIn: boolean) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(isSignedIn: boolean) => Action'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
-            "message": "Type '() => (arg0: (...args: any[]) => any) => void' is not assignable to type '() => Action'."
-        },
-        {
-            "path": "assets/pages/contributions-landing/setUserStateActions.ts",
-            "message": "Type '(unsafeState: string) => (arg0: (...args: any[]) => any) => void' is not assignable to type '(stateField: string) => Action'."
-        }
-    ]
+        "byCode": {},
+        "byPath": {}
+    }
 }

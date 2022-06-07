@@ -13,8 +13,9 @@ env:
 jobs:
   payment_api_build:
     if: >-
-      github.event.pull_request.head.repo.owner.login == 'guardian' ||
-      github.event_name == 'push'
+      (github.actor != 'dependabot[bot]') &&
+        (github.event.pull_request.head.repo.owner.login == 'guardian' ||
+          github.event_name == 'push')
 
     # Required by actions-assume-aws-role
     permissions:

@@ -22,11 +22,6 @@ describe('detect currency', () => {
 		mockCurrency = null;
 		expect(detect(UnitedStates)).toEqual('USD');
 	});
-	it('should return GBP if the country group is not recognised', () => {
-		mockCurrency = null;
-		// @ts-expect-error - We would like to test the function behaviour with an incorrect input
-		expect(detect('ZZ')).toEqual('GBP');
-	});
 	it('should return the currency from the query parameter (USD)', () => {
 		mockCurrency = 'USD';
 		expect(detect(GBPCountries)).toEqual('USD');

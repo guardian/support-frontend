@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+
 import { css, ThemeProvider } from '@emotion/react';
 import { from, headline, space, textSans } from '@guardian/source-foundations';
 import {
@@ -38,12 +39,12 @@ const marginForButton = css`
 	margin: ${space[5]}px 0 0;
 `;
 
-function SubscriptionsSurvey() {
+function SubscriptionsSurvey(): JSX.Element | null {
 	const surveyLink = 'https://www.surveymonkey.co.uk/r/Q37XNTV';
 	const title = 'Tell us about your subscription';
 	const message =
 		'Please take this short survey to tell us why you purchased your subscription.';
-	return surveyLink ? (
+	return (
 		<Content>
 			<section css={maxWidth}>
 				<h3 css={subHeading}>{title}</h3>
@@ -65,7 +66,7 @@ function SubscriptionsSurvey() {
 				</ThemeProvider>
 			</section>
 		</Content>
-	) : null;
+	);
 }
 
 export default SubscriptionsSurvey;

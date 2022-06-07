@@ -15,7 +15,7 @@ export type DirectDebitState = {
 const initialState: DirectDebitState = {
 	isPopUpOpen: false,
 	isDDGuaranteeOpen: false,
-	sortCodeArray: Array(3).fill(''),
+	sortCodeArray: Array<string>(3).fill(''),
 	sortCodeString: '',
 	accountNumber: '',
 	accountHolderName: '',

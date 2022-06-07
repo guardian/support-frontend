@@ -20,6 +20,7 @@ module.exports = {
 					},
 				],
 				'@emotion/pkg-renaming': 'error',
+        '@typescript-eslint/no-unused-vars': ["error", { "ignoreRestSiblings": true }],
 			},
 		},
 	],
