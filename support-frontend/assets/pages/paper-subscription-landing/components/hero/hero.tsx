@@ -102,7 +102,7 @@ function PaperHero({
 }: PropTypes): JSX.Element | null {
 	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
-	const defaultRoundelText = roundel.length ? roundel.join(' ') : null;
+	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
 
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy =
@@ -113,7 +113,7 @@ function PaperHero({
 	return (
 		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
-				<OfferStrapline copy={roundelText}></OfferStrapline>
+				<OfferStrapline copy={roundelText} />
 				<Hero
 					image={
 						<GridImage
@@ -127,7 +127,7 @@ function PaperHero({
 						/>
 					}
 					hideRoundelBelow="mobileMedium"
-					roundelElement={null}
+					roundelElement={undefined}
 				>
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>

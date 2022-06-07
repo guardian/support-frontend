@@ -124,7 +124,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 			theme="weekly"
 		>
 			<CentredContainer>
-				<OfferStrapline copy={roundelText}></OfferStrapline>
+				<OfferStrapline copy={roundelText} orderIsAGift={orderIsAGift} />
 				<Hero
 					image={
 						<GridImage
@@ -137,7 +137,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 							altText="A collection of Guardian Weekly magazines"
 						/>
 					}
-					roundelText={null}
+					roundelText={undefined}
 				>
 					<section css={weeklyHeroCopy}>
 						{orderIsAGift ? (
