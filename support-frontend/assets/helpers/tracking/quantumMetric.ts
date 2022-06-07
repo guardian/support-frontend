@@ -1,46 +1,87 @@
 import { onConsentChange } from '@guardian/consent-management-platform';
+import { loadScript } from '@guardian/libs';
+import type { Participations } from 'helpers/abTests/abtest';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { logException } from 'helpers/utilities/logger';
 
-function pathIsValid(): boolean {
-	const locationPath = window.location.pathname;
-	// Contribution landing page and thank you page (all regions)
-	const contributionsRegex = /\/contribute|thankyou?(\?.*)?$/;
-	// Non-Gifting Digi Subs landing page, checkout and thank you page (all regions)
-	const digiSubRegex = /\/subscribe\/digital(\/checkout|\/thankyou)?(\?.*)?$/;
+type SendEventABTestId = 30;
 
-	return [contributionsRegex, digiSubRegex].some(
-		(pathRegEx) => locationPath.match(pathRegEx) != null,
-	);
-}
+export type SendEventId = SendEventABTestId;
 
-function addQM(): void {
-	const qtm = document.createElement('script');
-	qtm.type = 'text/javascript';
-	qtm.async = true;
-	qtm.src =
-		'https://assets.quantummetric.com/instrumentation/1.33.0/quantum-gnm.js';
-	qtm.integrity =
-		'sha384-aRs7c9S69dV9fGKEfDLqj7QsQUJo2KAfdXtqKIAxOuiCLWgCcVvQnQdq7rTcAhbR';
-	qtm.crossOrigin = 'anonymous';
-	const d = document.getElementsByTagName('script')[0];
-	if (!window.QuantumMetricAPI && d.parentNode) {
-		d.parentNode.insertBefore(qtm, d);
+function sendEvent(
+	id: SendEventId,
+	isConversion: boolean,
+	value: string,
+): void {
+	if (window.QuantumMetricAPI?.isOn()) {
+		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
 	}
 }
 
-function init(): void {
+function sendEventABTestParticipations(participations: Participations): void {
+	const sendEventABTestId: SendEventId = 30;
+	const valueQueue: string[] = [];
+
+	Object.keys(participations).forEach((testId) => {
+		const value = `${testId}-${participations[testId]}`;
+		/**
+		 * Quantum Metric's sets up QuantumMetricAPI
+		 * We need to check it is defined and ready before we can
+		 * send events to it. If it is not ready we add the events to
+		 * a valueQueue to be processed later.
+		 */
+		if (window.QuantumMetricAPI?.isOn()) {
+			sendEvent(sendEventABTestId, false, value);
+		} else {
+			valueQueue.push(value);
+		}
+	});
+
 	/**
-	 * Return immediately if we're Server Side Rendering OR
-	 * The feature switch is off OR
-	 * the window.location.pathname is NOT valid.
-	 *
+	 * If valueQueue is populated QuantumMetricAPI was not ready to be
+	 * sent events, in this scenario we poll a function that checks if
+	 * QuantumMetricAPI is available. Once it's available we process the
+	 * queue of values to be sent with sendEvent.
 	 */
-	if (!isSwitchOn('featureSwitches.enableQuantumMetric') || !pathIsValid()) {
+	if (valueQueue.length) {
+		const waitForQuantumMetricAPi = setInterval(() => {
+			if (window.QuantumMetricAPI?.isOn()) {
+				valueQueue.forEach((value) => {
+					sendEvent(sendEventABTestId, false, value);
+				});
+				clearInterval(waitForQuantumMetricAPi);
+			}
+		}, 100);
+	}
+}
+
+function addQM(): Promise<void> {
+	return new Promise((resolve) => {
+		loadScript(
+			'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js',
+			{
+				async: true,
+				integrity:
+					'sha384-jL1rlM/U30WWRsDEQDalNiDV8FOjayD5RCgzkywrohMqg6oME3zbszWB31/40MAD',
+				crossOrigin: 'anonymous',
+			},
+		)
+			.then(() => {
+				resolve();
+			})
+			.catch(() => {
+				logException('Failed to load Quantum Metric');
+			});
+	});
+}
+
+function init(participations: Participations): void {
+	// return immediately if the feature switch is OFF
+	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
 		return;
 	}
-
+	// Check users consent state before adding script
 	onConsentChange((state) => {
-		// Check users consent state
 		if (
 			state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
 			state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
@@ -49,9 +90,15 @@ function init(): void {
 				state.tcfv2.consents['8'] && // Measure content performance
 				state.tcfv2.consents['10']) // Develop and improve products
 		) {
-			addQM();
+			void addQM().then(() => {
+				/**
+				 * Quantum Metric's script has loaded so we can attempt to
+				 * send user AB test participations via the sendEvent function.
+				 */
+				sendEventABTestParticipations(participations);
+			});
 		}
 	});
 }
 
-export { init };
+export { init, sendEventABTestParticipations };
