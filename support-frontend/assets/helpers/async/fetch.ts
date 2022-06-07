@@ -1,4 +1,3 @@
-import 'helpers/csrf/csrfReducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 
 type Credentials = 'omit' | 'same-origin' | 'include';
