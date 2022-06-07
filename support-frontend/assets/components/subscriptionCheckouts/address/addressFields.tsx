@@ -38,7 +38,7 @@ type StatePropTypes = FormFields & {
 
 type PropTypes = StatePropTypes &
 	AddressActionCreators & {
-		setPostcode: (postcode: string) => void;
+		setPostcodeForFinder: (postcode: string) => void;
 		fetchResults: (postcode?: string) => void;
 	};
 
@@ -91,7 +91,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 			{props.country === 'GB' ? (
 				<PostcodeFinder
 					{...props.postcodeState}
-					setPostcode={props.setPostcode}
+					setPostcode={props.setPostcodeForFinder}
 					fetchResults={props.fetchResults}
 					id={`${scope}-postcode-lookup`}
 					onPostcodeUpdate={props.setPostcode}

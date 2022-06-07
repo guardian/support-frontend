@@ -235,7 +235,7 @@ const setFormErrorsFor =
 		errors,
 	});
 
-const addressActionCreatorsFor = (scope: AddressType): ActionCreators => ({
+const addressActionCreatorsFor = (scope: AddressType) => ({
 	setCountry: (countryRaw: string) => (dispatch: SubscriptionsDispatch) => {
 		const country = fromString(countryRaw);
 
