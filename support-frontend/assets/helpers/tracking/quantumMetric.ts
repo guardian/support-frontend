@@ -55,23 +55,17 @@ function sendEventABTestParticipations(participations: Participations): void {
 	}
 }
 
-function addQM(): Promise<void> {
-	return new Promise((resolve) => {
-		loadScript(
-			'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js',
-			{
-				async: true,
-				integrity:
-					'sha384-jL1rlM/U30WWRsDEQDalNiDV8FOjayD5RCgzkywrohMqg6oME3zbszWB31/40MAD',
-				crossOrigin: 'anonymous',
-			},
-		)
-			.then(() => {
-				resolve();
-			})
-			.catch(() => {
-				logException('Failed to load Quantum Metric');
-			});
+function addQM() {
+	return loadScript(
+		'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js',
+		{
+			async: true,
+			integrity:
+				'sha384-jL1rlM/U30WWRsDEQDalNiDV8FOjayD5RCgzkywrohMqg6oME3zbszWB31/40MAD',
+			crossOrigin: 'anonymous',
+		},
+	).catch(() => {
+		logException('Failed to load Quantum Metric');
 	});
 }
 
