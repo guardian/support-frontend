@@ -96,6 +96,7 @@
     "@emotion/serialize": "^0.11.16",
     "@emotion/utils": "^1.1.0",
     "@guardian/consent-management-platform": "^10.5.0",
+    "@guardian/libs": "^5.1.0",
     "@guardian/pasteup": "1.0.0-alpha.7",
     "@guardian/source-foundations": "^4.1.0",
     "@guardian/source-react-components": "^4.0.3",
@@ -207,6 +208,7 @@
     "webpack-manifest-plugin": "^5.0.0",
     "webpack-merge": "^5.8.0",
     "webpack-stats-plugin": "^0.3.2",
+    "web-vitals": "^2.0.0",
     "yargs": "^17.4.0"
   },
   "resolutions": {
