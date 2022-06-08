@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, textSans } from '@guardian/source-foundations';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement } from 'react';
 import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 
 // Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
@@ -48,21 +48,19 @@ type PropTypes = {
 
 function OfferStrapline({ copy, orderIsAGift }: PropTypes): ReactElement {
 	// Requirement: last line must include a minimum of 2 words
-	const noWidowWord = (c: ReactNode) => {
-		if (typeof c === 'string') {
-			const trimmedCopy = c.trim();
-			const copyLength = trimmedCopy.length;
-			const wordArray: string[] = trimmedCopy.split(' ');
-			if (wordArray.length > 1) {
-				const lastWord: string | undefined = wordArray.pop();
-				return (
-					<div css={offerStraplineStyles(copyLength > 32)}>
-						<span>
-							{wordArray.join(' ')}&nbsp;{lastWord}
-						</span>
-					</div>
-				);
-			}
+	const noWidowWord = (c: string) => {
+		const trimmedCopy = c.trim();
+		const copyLength = trimmedCopy.length;
+		const wordArray: string[] = trimmedCopy.split(' ');
+		if (wordArray.length > 1) {
+			const lastWord: string | undefined = wordArray.pop();
+			return (
+				<div css={offerStraplineStyles(copyLength > 32)}>
+					<span>
+						{wordArray.join(' ')}&nbsp;{lastWord}
+					</span>
+				</div>
+			);
 		}
 		return <div css={offerStraplineStyles(false)}>{c}</div>;
 	};
