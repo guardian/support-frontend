@@ -2,8 +2,6 @@ package com.gu.support.acquisitions.ga
 
 import cats.data.EitherT
 import com.gu.support.acquisitions.calculator.{AcquisitionModel, AnnualisedValueTwoCalculator, PrintOptionsModel}
-// import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
-// import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService.buildBody
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
